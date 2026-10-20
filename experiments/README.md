@@ -24,7 +24,7 @@ The site ranks published records locally with BM25 term matching, including scop
 
 Hosted AI is prepared through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
 
-The service is not active until its verified URL is set in `data/assistant.json`. Empty registries and unmatched queries do not call inference. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
+The verified service URL is set in `data/assistant.json`. Empty registries and unmatched queries do not call inference. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
 
 ## Check the implementation
 

@@ -2,6 +2,8 @@
 
 This replaces the browser model download. Visitors submit the same idea-search form; the page shows retrieved records immediately and adds a short cited comparison when the service is available. There are no model controls, visitor accounts or API-key fields.
 
+Production endpoint: `https://liberpedia-ideas.josephelliott127.workers.dev/ask`. Workers Free was verified in the dashboard before deployment.
+
 ## Deploy once
 
 1. Use a Cloudflare account on **Workers Free**, not Workers Paid. The free plan currently includes 10,000 AI neurons per day. Once exhausted, AI calls fail rather than incur paid overage. Do not upgrade or attach paid AI Gateway credits as part of this setup.
