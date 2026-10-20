@@ -6988,6 +6988,46 @@ The first rune has index zero, but it uses the first prime. If p_(n) denotes the
 
 For example, subtracting the key index 1 from the rune TH gives (2 − 1) mod 29 = 1, which is U. Subtracting one from TH’s prime value instead gives 4, which is neither its new alphabet index under that rule nor a rune’s prime value. The operation must say which column it uses.
 
+Alphabet, palette and observed support
+
+The alphabet is the complete set of 29 rune symbols. In a prime-value experiment, the palette is the corresponding set of 29 allowed prime numbers. A page’s support is the subset actually present on that page. Repeating a rune changes its frequency but does not add another member to the support.
+
+	Object	Example	What it retains
+
+	Rune sequence	F–U–F–TH	Order and repetition: four symbols
+
+	Rune support	{F, U, TH}	Which symbols occur: three types
+
+	Prime-value support	{2, 3, 5}	The same three types represented by their prime values
+
+	Frequencies	F: 2, U: 1, TH: 1	How often each type occurs, without its positions
+
+
+A claim about a full alphabet can be stronger than a claim about a page’s support. For example, an output rule may fail on a rune that never occurs on the tested page. The page-support experiment measures this distinction: the archived LP2-55 stream uses 25 rune types, whereas 53 other nonempty LP2-00–55 pages use all 29. This is a property of the stated transcription, not a claim about what the unseen plaintext contains.
+
+Collisions, injectivity and permutations
+
+A collision occurs when two different inputs give the same output. A map is injective on a chosen input set if no such collision occurs there. You must name that input set: a rule can be injective on the observed runes but fail on the whole alphabet.
+
+	Rule and input set	Outputs	Conclusion
+
+	Send both F and U to F	F → F; U → F	Collision: not injective
+
+	Swap F and U on {F, U}	F → U; U → F	Injective; the output set equals the input set
+
+	Send F to T and fix U, on {F, U}	F → T; U → U	Injective, but the output set {T, U} differs from the input set
+
+
+A permutation of a finite set rearranges that same set: every member appears exactly once among the outputs. The swap above is a permutation of {F, U}; the third rule is not. A bijection pairs every member of a specified input set with exactly one distinct member of a specified output set, covering both sets. Thus the third rule is a bijection from {F, U} to {T, U}, even though it is not a permutation of {F, U}.
+
+For the full 29-prime palette, requiring 29 distinct outputs all inside that same 29-element set forces a permutation. For a page containing only 25 prime values, requiring 25 distinct outputs inside the full palette does not force the output subset to equal the input subset. This is the difference between the full-palette affine baseline and its page-specific variant.
+
+Why a missing rune can matter
+
+On LP2-55, one allowed affine rule changes F to T and fixes every observed odd prime. T is absent from the input, so no observed input already maps to T. Extend that same rule to the full alphabet and T maps to itself too: F → T and T → T now collide. A test confined to the page and a test covering the full alphabet therefore reach different conclusions without contradicting each other.
+
+Neither injectivity nor a lack of collisions proves a decryption. These properties only describe what the rule does to the specified symbols. To judge a proposed reading, also examine the key, boundaries, validation criteria and evidence beyond the text used to choose the rule; see evaluating candidate readings.
+
 Count symbols, not Latin characters
 TH, EO, NG and other multi-letter labels each denote a single rune. U/V and C/K renderings also require the stated convention. Work from runes when computing sums and offsets.
 
@@ -7035,6 +7075,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/alphabet
 - prime values and prime indices
   https://jelliottdev.github.io/reference/articles/prime-indices.html
+- page-support experiment; page-specific variant
+  https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
+- full-palette affine baseline
+  https://jelliottdev.github.io/#/experiments/literal-prime-affine
+- evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
 - modular arithmetic
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 - literal readings
