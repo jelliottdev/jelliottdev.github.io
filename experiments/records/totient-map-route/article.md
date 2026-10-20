@@ -52,6 +52,22 @@ We recomputed all 16 primary transitions, treating OF and THE separately and usi
 
 A signature constrains a key without identifying its runes. For example, (0,0,0) is shared by 4,096 ordered triples of positive rune indices; (1,0,1) by 1,296. These counts enumerate indices 1–28 only. They exclude F=0, for which the standard positive-integer totient is not defined here. They are not counts of reachable nodes: geometric restrictions can reduce the candidates considerably.
 
+### Check one transition by hand: WEATHER → TURNS
+
+WEATHER occupies absolute positions 365–369, where position is `27 × (row − 1) + column`. Its original key-node center is (14,5), position 356, and contains OE with rune index 22. The cumulative phase total before this transition is 2, so the direct-position mode with offset 1 applies.
+
+| Quantity | Calculation | Result |
+| --- | --- | --- |
+| Next phase | `(1 + μ(365) + μ(366) + μ(367) + μ(368) + μ(369)) mod 3` = `(1 + 1 − 1 − 1 + 0 + 0) mod 3` | 0 |
+| Next outer state | Quarter-turned positions are 365, 392, 419, 446, 473; minimum 365 has μ = 1. Update `(1 + 1) mod 2`. | 0 |
+| Next signature | Phase 0 and outer state 0 force the middle component to 0. | (0,0,0) |
+| Next axis | `μ(365 + 356) + μ(gcd(473,361))` = `μ(721) + μ(1)` = 1 + 1 | Positive: vertical |
+| Next boundary role | Three-quarter-turned endpoint has position 257. `(μ(257) + φ(22)) mod 2` = `(−1 + 10) mod 2` | 1: beginning |
+
+For a vertical block, the minimum quarter-turned position corresponds to its bottommost cell. Calling that cell the beginning therefore predicts upward reading. The supplied TURNS block does read upward, from (14,19) to (10,19), and its key has signature (0,0,0). These properties agree; the calculation still does not choose column 19, the block's starting row, its length, or the exact key.
+
+Every transition now has the same level of detail in the report's `calculation` object: coordinates, transformed positions, individual Möbius values, cumulative state, gcd arguments and boundary selection. The independent checker reconstructs these entries by rotating coordinates directly instead of using the replay's formulas for rotated absolute positions.
+
 ## A controlled ambiguity: three SOON nodes
 
 The source documents L–C–EA, L–I–EA and L–EO–EA. Their center indices 5, 10 and 12 all have totient 4. All therefore derive L–R–EA, align to EA–L–R, and turn the same X–D–W–H ciphertext into SOON.
@@ -79,7 +95,7 @@ python experiments/records/totient-map-route/check.py
 
 The first command rebuilds the report and coverage image in memory and compares them with the saved versions. It checks all selected key nodes and subtractions, recomputes transition matches, enumerates signature classes, and repeats the mirror controls. Running without `--check` writes the report and coverage image. The explanatory node-choice diagram is an authored illustration of the reported three-node comparison.
 
-The second command independently derives totients through prime factorization, checks all 65 recorded rune subtractions and node-derived keys, and compares totients with coprime counting for 1–729. It does not independently rediscover the route or certify the author's navigation choices. The JSON report includes all rune traces, transition inputs/results, the 99 control counts, reused cells, and phase-rotation ablations. Those ablations deliberately change the phase rule; they are sensitivity checks, not alternatives permitted by the fixed phase formula.
+The second command independently derives totients through prime factorization, checks all 65 recorded rune subtractions and node-derived keys, and compares totients with coprime counting for 1–729. It also independently verifies all 16 transition calculation records, all 18 key-node midpoints, and rotation identities for all 729 cells. It does not independently rediscover the route or certify the author's navigation choices. The JSON report includes all rune traces, transition inputs/results, the 99 control counts, reused cells, and phase-rotation ablations. Those ablations deliberately change the phase rule; they are sensitivity checks, not alternatives permitted by the fixed phase formula.
 
 ## What would strengthen the claim
 

@@ -5,7 +5,7 @@ from functools import lru_cache
 from itertools import product
 from math import gcd
 from pathlib import Path
-import hashlib,json,random
+import json,random
 ROOT=Path(__file__).resolve().parents[3]
 HERE=Path(__file__).resolve().parent
 NAMES='F U TH O R C G W H N I J EO P X S T B E M L NG OE D A AE Y IA EA'.split()
@@ -69,6 +69,7 @@ def build():
     primary=[x for x in results if x['primary']];S=0;a=0;transitions=[]
     for current,nxt in zip(primary,primary[1:]):
       cells=[x['cell'] for x in current['trace']];begin,end=cells[0],cells[-1];center=current['node_center']
+      outer_before=a
       reflected=7<=S<21;offset=1 if S<7 or 14<=S<21 else 0
       phase=(offset+sum(mu(730-n0(x) if reflected else n0(x)) for x in cells))%3
       m=min(map(n1,cells));a=(a+mu(m))%2;middle=(phase-2*a)%3;prediction=[a,-1 if middle==2 else middle,a]
@@ -77,6 +78,49 @@ def build():
       boundary=(mu(n3(end))+phi(grid[n0(center)-1]))%2
       next_cells=[x['cell'] for x in nxt['trace']];selected=min(next_cells,key=n1);observed_boundary=int(selected==next_cells[0])
       transitions.append(dict(current=current['label'],next=nxt['label'],cumulative_before=S,mode=('reflected' if reflected else 'direct')+f'+{offset}',predicted_signature=prediction,observed_signature=nxt['signature'],signature_match=prediction==nxt['signature'],axis_score=score,predicted_axis=predicted_axis,observed_axis=axis(next_cells),axis_match=predicted_axis==axis(next_cells),predicted_boundary=boundary,observed_boundary=observed_boundary,boundary_match=boundary==observed_boundary))
+      # Preserve the inputs to each formula, not only the final match flags.
+      # This ledger lets a reader check any transition with a calculator.
+      positions=[n0(cell) for cell in cells]
+      transformed=[730-n if reflected else n for n in positions]
+      axis_argument=730-n0(begin)+n0(center)
+      axis_gcd=gcd(n1(end),730-n0(end))
+      transitions[-1]['calculation']={
+          'current_cells':cells,
+          'original_node_center':center,
+          'original_center_index':grid[n0(center)-1],
+          'phase':{
+              'positions':positions,
+              'transformed_positions':transformed,
+              'mobius_values':[mu(n) for n in transformed],
+              'offset':offset,
+              'result':phase,
+              'cumulative_after':S+phase,
+          },
+          'outer_state':{
+              'before':outer_before,
+              'quarter_turned_positions':[n1(cell) for cell in cells],
+              'minimum':m,
+              'mobius_at_minimum':mu(m),
+              'after':a,
+          },
+          'axis':{
+              'reflected_beginning':730-n0(begin),
+              'node_position':n0(center),
+              'sum_argument':axis_argument,
+              'quarter_turned_endpoint':n1(end),
+              'reflected_endpoint':730-n0(end),
+              'gcd':axis_gcd,
+              'mobius_terms':[mu(axis_argument),mu(axis_gcd)],
+          },
+          'boundary':{
+              'three_quarter_turned_endpoint':n3(end),
+              'endpoint_mobius':mu(n3(end)),
+              'center_totient':phi(grid[n0(center)-1]),
+              'next_cells':next_cells,
+              'selected_next_cell':selected,
+              'encoding':'1 = beginning, 0 = end',
+          },
+      }
       S+=phase
     # Signature is a lossy constraint: enumerate all positive-index ordered triples.
     counts=Counter(tuple(sig(k)) for k in product(range(1,29),repeat=3))
