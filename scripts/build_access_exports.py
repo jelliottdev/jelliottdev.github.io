@@ -245,6 +245,9 @@ files[-1].update(title='Known-reading trace sources and parameters (JSON)', guid
 
 register('data/evidence/visual-measurements.json','Visual measurement conventions')
 register('data/evidence/lp2-56-dot-measurement.json','LP2-56 dot pixel measurements')
+for page_id in ('lp2-33','lp2-39'):
+ register(f'data/evidence/{page_id}-dot-measurement.json','Visual measurement conventions')
+ files[-1].update(title=f'{page_id.upper()} three-dot pixel measurements (JSON)', guide='dots', aliases=['dot spacing','three dots','dot centers'])
 register('data/evidence/editorial-page-notes.json','Editorial visual observations')
 # Published comparison of archived and known decoded rune sums.
 sum_path='data/evidence/known-reading-page-sums.json'

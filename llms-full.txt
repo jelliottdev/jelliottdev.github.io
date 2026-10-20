@@ -14692,6 +14692,57 @@ LP2-33 has three conspicuous black dots between two blocks of text. LP2-39 also 
 Three large separated dots between the text blocks on LP2-33. Page record · Original JPEG
 [Image: Three separated dots within the layout of LP2-39.]
 Three separated dots within the layout of LP2-39. Page record · Original JPEG
+Comparing the three-dot spacing
+
+LP2-33 and LP2-39 have differently sized dots, but their adjacent center-distance ratios are close under the same measurement rule. This is a measurable similarity to investigate. It is not an exact geometric identity or a decoded message.
+
+[Image: The three separated dots on LP2-33, in original left-to-right order]
+LP2-33, original-image window [700, 1680, 1030, 130]. Each strip fits the available width, so these previews do not share a pixel scale.
+[Image: The three separated dots on LP2-39, in original left-to-right order]
+LP2-39, original-image window [1250, 1640, 520, 100]. Each strip fits the available width, so these previews do not share a pixel scale.
+Convert the original JPEG to grayscale, select values strictly below 128, group eight-connected pixels, and retain components of at least 20 pixels. Each window contains exactly three retained components, with no discarded small components. Order them by increasing x-coordinate and label them L, M and R. A center here means the arithmetic mean of selected pixel indices, not a guessed center of an ideal circle.
+
+Centroids in original-image pixels; coordinates rounded to three decimals
+	Page	L (x, y)	M (x, y)	R (x, y)
+
+	LP2-33	(766.301, 1743.934)	(1183.773, 1743.941)	(1662.000, 1743.941)
+
+	LP2-39	(1297.500, 1693.000)	(1493.500, 1693.000)	(1718.000, 1693.000)
+
+
+	Page	Distance L–M	Distance M–R	M–R / L–M
+
+	LP2-33	417.471803	478.226708	1.145531
+
+	LP2-39	196	224.5	1.145408
+
+
+Distances use the Euclidean formula sqrt((x₂ − x₁)² + (y₂ − y₁)²) on the six-decimal centroids in the exported measurements. The ratios differ by about 0.0001224. Translation, rotation and uniform scaling preserve a distance ratio; stretching horizontal and vertical axes independently does not generally preserve distances. A claimed overlay must state which transformations it allows and how much mismatch it accepts.
+
+For LP2-39, this centroid convention gives 224.5 / 196, not 224 / 196 = 8/7. The half-pixel arises because the first two measured components are 32 pixels wide while the third is 33 pixels wide. Using the left edges instead gives 224 / 196. Edge spacing and center spacing are different quantities; neither should be substituted silently to obtain a preferred fraction.
+
+Reproduce the spacing
+
+Extract reference data and original images into the same folder. With Python and Pillow installed, run:
+
+python scripts/measure_region.py lp2-33 --rect 700 1680 1030 130 --threshold 128 --minimum-area 20 --connectivity 8
+python scripts/measure_region.py lp2-39 --rect 1250 1640 520 100 --threshold 128 --minimum-area 20 --connectivity 8
+
+Compare the output with the complete LP2-33 measurement and LP2-39 measurement. These record original-image hashes, pixel areas, bounding boxes, centroids, software version and settings. To calculate the table from either saved JSON file:
+
+import json
+from math import dist
+from pathlib import Path
+
+for page in ("lp2-33", "lp2-39"):
+    report = json.loads(Path(f"data/evidence/{page}-dot-measurement.json").read_text())
+    centers = sorted((c["centroid"] for c in report["components"]), key=lambda p: p[0])
+    assert len(centers) == 3
+    left, right = (dist(a, b) for a, b in zip(centers, centers[1:]))
+    print(page, left, right, right / left)
+
+This audit uses one stated threshold and center definition. It has not tested sensitivity across thresholds, matched astronomical coordinates, overlaid dots onto rune positions, or searched other manuscript patterns. Those are separate tests. The LP2-56 five-dot measurement provides another recorded input for a carefully specified comparison.
+
 LP2-39: are the first two dots mirrors?
 
 Yes, within the measured dot rectangles. In the archived LP2-39 JPEG, horizontally reflecting the left dot makes every decoded RGB pixel in its 32 × 33 rectangle equal to the corresponding pixel in the middle dot. Comparing the same rectangles without reflection gives 470 differing pixels out of 1,056, with a maximum channel difference of 11 on the 0–255 scale.
@@ -14807,7 +14858,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp2-56.jpg
 - Complete page
   https://jelliottdev.github.io/#/reader/lp2-56
-- Measure these five dots
+- Measure these five dots; LP2-56 five-dot measurement
   https://jelliottdev.github.io/reference/articles/image-regions.html#measure-dots
 - hash-target guide
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
@@ -14817,10 +14868,22 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-33.html
 - LP2-39; Page record
   https://jelliottdev.github.io/reference/lp2-39.html
-- Three large separated dots between the text blocks on LP2-33.; Original JPEG
+- Three large separated dots between the text blocks on LP2-33.; Original JPEG; The three separated dots on LP2-33, in original left-to-right order
   https://jelliottdev.github.io/images/lp2-33.jpg
-- Three separated dots within the layout of LP2-39.; Original JPEG; Left dot on LP2-39, enlarged in its original orientation; Middle dot on LP2-39, enlarged in its original orientation; original LP2-39 JPEG
+- Three separated dots within the layout of LP2-39.; Original JPEG; The three separated dots on LP2-39, in original left-to-right order; Left dot on LP2-39, enlarged in its original orientation; Middle dot on LP2-39, enlarged in its original orientation; original LP2-39 JPEG
   https://jelliottdev.github.io/images/lp2-39.jpg
+- LP2-33
+  https://jelliottdev.github.io/#/reader/lp2-33
+- LP2-39
+  https://jelliottdev.github.io/#/reader/lp2-39
+- reference data
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original images
+  https://jelliottdev.github.io/downloads/original-images.zip
+- LP2-33 measurement
+  https://jelliottdev.github.io/data/evidence/lp2-33-dot-measurement.json
+- LP2-39 measurement
+  https://jelliottdev.github.io/data/evidence/lp2-39-dot-measurement.json
 - image measurement rules; image regions and measurement rules; image regions and connected components
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - search space and bounds
