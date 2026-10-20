@@ -1,6 +1,38 @@
-
+<p><strong>Vigenère</strong> applies a repeating sequence of shifts. A single fixed shift treats every rune the same way; a repeating key lets the shift depend on the rune’s position in the key cycle. The known Welcome reading gives a concrete example using the 29-rune alphabet.</p>
 <h2 id="formula">Specify direction and key</h2><p>This wiki uses p = (c − k[j mod L]) mod 29, where L is key length and j counts consumed key positions. The <a href="#/page/lp1-03">welcome</a> uses [23, 10, 1, 10, 9, 10, 16, 26], labeled DIVINITY. The <a href="#/page/lp1-14">second koan</a> has its own key and interruption list in the parameters.</p><p>A walkthrough may express decryption as addition of complementary values. Subtracting 23 modulo 29 equals adding 6. The same keyword with the wrong direction can produce the wrong result.</p>
-<h2 id="replicate">How to replicate</h2><pre><code>python scripts/reproduce_reading.py welcome
+<h2 id="key">Read the key as rune indices</h2>
+<p>The Welcome key has eight positions: <code>D I U I N I T Y</code> in literal rune labels, conventionally rendered DIVINITY in English. The U/V convention does not add a new rune. Using the <a href="#/alphabet">alphabet reference</a> gives:</p>
+<pre><code>Key position:  0   1  2   3  4   5   6   7
+Rune label:    D   I  U   I  N   I   T   Y
+Index:        23  10  1  10  9  10  16  26</code></pre>
+<p>After key position 7, the next consumed key position returns to 0. This is what <code>j mod L</code> does when L is 8. These are alphabet indices, not the corresponding prime values. Substituting prime values would define a different key sequence.</p>
+<h2 id="example">Follow the start of the Welcome</h2>
+<p>The first eight positions of LP1-03 have no recorded interruption. Their trace is:</p>
+<div class="table-wrap"><table><thead><tr><th>Rune position</th><th>Input index</th><th>Subtract key</th><th>Output index</th><th>Label</th></tr></thead><tbody>
+<tr><td>0</td><td>1</td><td>23</td><td>7</td><td>W</td></tr>
+<tr><td>1</td><td>28</td><td>10</td><td>18</td><td>E</td></tr>
+<tr><td>2</td><td>21</td><td>1</td><td>20</td><td>L</td></tr>
+<tr><td>3</td><td>15</td><td>10</td><td>5</td><td>C</td></tr>
+<tr><td>4</td><td>12</td><td>9</td><td>3</td><td>O</td></tr>
+<tr><td>5</td><td>0</td><td>10</td><td>19</td><td>M</td></tr>
+<tr><td>6</td><td>5</td><td>16</td><td>18</td><td>E</td></tr>
+<tr><td>7</td><td>4</td><td>26</td><td>7</td><td>W</td></tr>
+</tbody></table></div>
+<p>The first calculation is <code>(1 − 23) mod 29 = 7</code>, labeled W. The first seven outputs spell WELCOME; the eighth W belongs to the continuing text. A word boundary does not restart the key. See the <a href="#/wiki/reading-welcome">complete Welcome reading</a> for the full sequence and contextual English.</p>
+<p>This self-contained Python example reproduces just those eight positions:</p>
+<pre><code>key = [23, 10, 1, 10, 9, 10, 16, 26]
+cipher = [1, 28, 21, 15, 12, 0, 5, 4]
+plain = [(c - key[j % len(key)]) % 29 for j, c in enumerate(cipher)]
+assert plain == [7, 18, 20, 5, 3, 19, 18, 7]
+assert [(p + key[j % len(key)]) % 29
+        for j, p in enumerate(plain)] == cipher
+print(plain)</code></pre>
+<p>For the full page, use the script below rather than extending this short loop without interruption handling. Its simple <code>enumerate</code> counter works here because none of the selected positions is copied.</p>
+<h2 id="replicate">How to replicate</h2><p>Use Python 3 from the repository or the extracted <a href="downloads/reference-data.zip">reference-data ZIP</a>. No additional package or hosted AI service is needed.</p><pre><code>python scripts/reproduce_reading.py welcome
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py second-koan</code></pre><p>Use the <a href="data/evidence/reading-methods.json">complete parameters</a>. The welcome spans LP1-03–04 without resetting the key; the second koan spans LP1-14–15. Punctuation does not advance the key.</p>
-<h2 id="alignment">Interruptions affect alignment</h2><p>Specified runes are copied without consuming a key value. These <a href="#/wiki/interruptions">interruptions</a> were aligned to known readings. They are not a rule to skip every F or permission to add skips until an output looks English.</p><p>If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
+<h2 id="alignment">Interruptions affect alignment</h2><p>Specified runes are copied without consuming a key value. These <a href="#/wiki/interruptions">interruptions</a> were aligned to known readings. They are not a rule to skip every F or permission to add skips until an output looks English.</p>
+<p>The Welcome makes this distinction visible in adjacent positions. At rune position 47, input F (index 0) is transformed with key value 26 into O (index 3). At position 48, another input F is copied unchanged, consuming no key value. Position 49 then uses key value 23, the start of the next cycle, and produces A. Identical input symbols therefore receive different treatment because the control specifies a position, not a blanket rule for the symbol F.</p>
+<p>For ordinary runes, j advances once per rune; punctuation consumes no key position, and the recorded copied runes do not advance j either. After the first interruption, the physical rune position and consumed-key count differ. A multi-letter output label is still one rune and consumes at most one key position.</p>
+<p>If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune. The <a href="#/wiki/index-of-coincidence?section=columns">column-IoC explanation</a> describes why repeating keys motivate a periodic analysis, but such an analysis must use the same advancement convention.</p>
+<h2 id="sources">Sources and verification</h2><p><a href="data/evidence/reading-methods.json">Control parameters and interruption provenance</a> · <a href="scripts/reproduce_reading.py">Reproduction script</a> · <a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. The eight-rune example and positions 47–49 were checked against the Welcome trace on 20 October 2026. Recipes reproduce published controls; they are not new solutions.</p>
