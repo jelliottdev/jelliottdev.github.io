@@ -42,3 +42,18 @@ Ordinary-prime variant: only the schedule changes from the prime-minus-one basel
 Fibonacci variant: same search settings, F_0=0. Verified residue period 14; all 3190 configurations reproduce but yield 1540 distinct page outputs. No nine-opening matches. Offset expansion alone adds no coverage. Consecutive-integer totients are now recorded separately; broader justified plaintext criteria remain open.
 
 Consecutive-integer totient variant: phi(1) onward, same 29 offsets and two signs. All 3190 outputs distinct within page; zero fixed-opening matches. Every totient independently checked by gcd counting. Phi of primes is the prime-minus-one baseline, not another result. Other totient inputs and boundary rules remain untested.
+
+## 464-word structure: follow-up questions
+
+Baseline published as lp1-word-length-balance: all 464 supplied rune-word lengths reproduce (1,796 runes; R=0.25150357; 54/49,999 lower-tail shuffles; corrected p=0.0011). We retain headings and interrupting F, join line/page wraps within each section, keep internal apostrophes inside words. Fixed original order, 16 columns, unrestricted word-length permutations. Original discovery and observed R were known before simulation; this is a conditional reproduction, not an exploration-adjusted discovery claim.
+
+Keep related questions as scoped variants, not a combined result:
+- Shuffle within each of the four sections to preserve their distinct length distributions and slot counts.
+- Compare all 24 section orders and declared alternative widths; account for selection if reporting the best arrangement. Unequal column sizes require an explicitly appropriate statistic.
+- Decompose section contributions without presenting descriptive cancellation as a new significance test.
+- Define deletion versus fixed-position masking before testing sentence removal; compare against all eligible windows and disclose selection.
+- Independently reconstruct the proposed 928-word carrier; distinguish rune-words from red decimal labels and verify page numbering.
+- Count unchanged input/output runes from aligned decoding traces; distinguish word counts, rune counts and skipped F. A grille still needs a fixed placement and readout rule.
+- Corpus comparisons need exact source editions, rune conversion and tokenization. Overlapping windows are dependent; their fraction is not automatically a population-level p-value.
+
+Additional supplied proposals await review: 301/prime-ordinal arithmetic now specifies binary inversion (must specify bit width), Unicode claims, 4x4 numerical spiral routes and forced prime-step changes; do not silently substitute the previously discussed decimal interpretation. Source screenshots and named attachments not actually supplied are not available evidence.

@@ -6501,6 +6501,9 @@ Changing the success rule after seeing an output enlarges the opportunity to fin
 The six-arrangement null-model example shows this numerically. For statistical comparisons, apply the same selection procedure to the reference trials. In the periodic IoC experiment, each shuffle searches all periods 2–20 and keeps its maximum, just as the observed page does. Comparing an observed maximum with a single arbitrarily chosen null period would answer a different question.
 
 
+The 464-word column-balance experiment illustrates a different boundary: its low shuffle-tail estimate reproduces for the selected arrangement, but does not account for the exploration that selected it. A fixed simulation plan cannot retroactively remove earlier selection.
+
+
 Write the claim at the same scale as the evidence
 
 	Too broad	A checkable claim
@@ -6535,6 +6538,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html#selection
 - periodic IoC experiment
   https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
+- 464-word column-balance experiment
+  https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reproduce a published experiment
@@ -17944,6 +17949,165 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "# Historical Emerson book-cipher control\n\n## Purpose and what this does not test\n\nA book cipher needs a source edition and counting conventions, not just a book title. This record reproduces the documented 2014 opening-image coordinates against the frozen Emerson Self-Reliance PDF derivative. It gives newcomers a working control and a trace they can inspect before proposing new book-cipher experiments.\n\n**The answer was known before this rerun.** This is a historical replication, not blind discovery, an independent confirmation of source selection, or a decipherment of an unsolved manuscript page. No hidden-service address was visited.\n\n## Frozen plan and prior reconstruction history\n\nThe rerun plan and wrapper were committed as `1f67f70` before this execution. Source files, the existing lookup script and the known result were hashed in the plan. An earlier reconstruction had corrected the treatment of embedded verse after inspecting mismatches: the verse remains inside prose paragraph 36 rather than creating extra paragraphs. That earlier adjustment is disclosed in the existing evidence manifest and is not presented here as a rule discovered independently.\n\nThe PDF is the contemporary snapshot linked in the historical walkthrough. Its hash is fixed, but the original creator's exact edition is not authenticated by this reproduction.\n\n## Counting conventions\n\nRe-extract the pinned PDF with pypdf 6.19.0 in layout mode. Begin at the first prose paragraph, exclude numeric page footers, and use four-space prose indentation to begin paragraphs. Seven-space verse remains in its surrounding paragraph. Apply Unicode NFKC normalization and join wrapped lines according to the stored extraction rule. All 50 extracted paragraphs must match the frozen derivative.\n\nCoordinates are one-based paragraph:sentence:word:letter positions. Sentences split at `.`, `!` and `?`; words split on whitespace with edge punctuation removed; only ASCII letters count inside the selected word. Single-character entries are copied literally. These are the documented reconstruction conventions, not a universal natural-language sentence parser.\n\n## Result\n\nThe complete trace matches the archived control. Fifteen coordinate lookups and seven literal characters reconstruct:\n\n```\nauqgnxjtvdbll3pv.onion\n```\n\nThis is a historical output string. Reproducing it says nothing about any current service at that name. The supported claim is only that these exact inputs and rules reproduce the recorded trace.\n\n## Complete coordinate trace\n\n| Entry | Printed PDF page | Selected word | Output |\n| --- | --- | --- | --- |\n| 1:2:3:1 | 1 | always | a |\n| 3:3:13:5 | 2 | genius | u |\n| 45:5:2:3 | 19 | acquires | q |\n| 20:3:20:5 | 9 | among | g |\n| 8:3:8:6 | 5 | action | n |\n| 48:5:14:2 | 20 | experience | x |\n| 21:13:4:1 | 9 | justice | j |\n| 25:1:7:4 | 12 | truth | t |\n| 15:9:3:4 | 7 | above | v |\n| 1:1:16:3 | 1 | and | d |\n| 4:3:3:1 | 2 | being | b |\n| 8:3:26:4 | 5 | daily | l |\n| 47:3:3:5 | 19 | equality | l |\n| 3 | Literal | Copied directly | 3 |\n| 13:2:5:4 | 6 | corpse | p |\n| 1:4:16:4 | 1 | private | v |\n| . | Literal | Copied directly | . |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n| i | Literal | Copied directly | i |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n\nThe first coordinate, 1:2:3:1, selects the third word of the second sentence in paragraph 1: `always`. Its first letter is `a`. The JSON output includes each full selected sentence, so a reader can check the counting rather than trusting the final string alone.\n\n## Reproduce from files\n\nUse Python 3.12.10 and pypdf 6.19.0. Install the exact dependency in your preferred environment:\n\n```\npython -m pip install pypdf==6.19.0\npython experiments/records/emerson-book-cipher-control/run.py --check\n```\n\nDependency installation needs package access; the actual experiment makes no network request. The wrapper checks every frozen input hash, invokes the existing reproduction script with `--check-pdf`, compares all 50 paragraphs, and checks the complete output trace. It then compares the new report with the saved one. Missing dependencies or changed inputs fail visibly.\n\nTo save a separate report:\n\n```\npython experiments/records/emerson-book-cipher-control/run.py --output my-emerson-control.json\n```\n\nExisting output files are never overwritten. [Download the complete trace](experiments/records/emerson-book-cipher-control/results.json). [Download the pinned PDF](exports/sources/emerson-self-reliance.pdf) and [paragraph derivative](exports/sources/emerson-paragraphs.json). The [coordinate payload](exports/steganography/opening-2014.body.txt) is the extracted message body; extraction and signature verification are separate steps described in the opening-image guide.\n\nFor a standard-library-only replay of the frozen paragraphs, run `python scripts/reproduce_emerson.py` without `--check-pdf`. That shorter check does not re-extract the PDF and must not be reported as having done so.\n\n## Retest and review\n\nCodex ran the PDF reconstruction and lookup twice on 20 October 2026. Both produced the same 50 paragraphs and identical complete trace. No counting rule or source changed during this rerun. The diagram was generated afterward from the saved first lookup. Human review remains pending, and the lookup implementation is the existing historical reproduction code rather than a newly independent decoder.\n\n## Family and future variants\n\nA different edition, paragraph convention or source text needs a separate variant with the exact change recorded. An attempt to apply a book cipher to an unsolved LP2 page also needs an independently defined source of coordinates and a success criterion. This historical control is useful for checking an implementation; it does not establish that such a transfer has already been tested.\n\nSee [book-cipher conventions](#/wiki/book-ciphers), [Emerson and the historical source](#/wiki/emerson-self-reliance), and [the opening image](#/wiki/opening-2014).\n",
   "article_path": "experiments/records/emerson-book-cipher-control/article.md",
   "script_sha256": "7de9e9ddc294d4a29b7df1a017dd0c4b77a5a3eae8a10b88d1b851343cded07c"
+}
+
+---
+
+{
+  "id": "lp1-word-length-balance",
+  "title": "LP1: the 464-word table and column balance",
+  "status": "published",
+  "question": "Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?",
+  "summary": "All 464 supplied lengths reproduce from archived runes. Sixteen column means have R=0.25150357; 54 of 49,999 unrestricted shuffles are at least as flat (corrected p=0.0011). This selected arrangement does not establish authorial intent.",
+  "tags": [
+    "464 words",
+    "word lengths",
+    "column means",
+    "sixteen columns",
+    "29 rows",
+    "balance",
+    "unreasonable things",
+    "shuffle test",
+    "variance",
+    "Warning",
+    "Welcome",
+    "koans"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "representation": "Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.",
+    "procedure": "Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.",
+    "parameters": "16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.",
+    "exclusions": "Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption."
+  },
+  "outcome": "supported",
+  "finding": "All 464 word lengths reproduce from the archived runes. The sixteen column averages are unusually even under the stated shuffle model: their variance is 25.15% of its expectation. Only 54 of 49,999 shuffles were at least as even (corrected lower-tail p=0.0011). A full rerun and independent checks agree.",
+  "limitations": "This is an explored, selected arrangement. The p-value does not adjust for the original search and is not the probability of coincidence or intent. Unrestricted shuffling destroys sentence and section structure; it is not a coherent-prose comparison. Reported corpus and carrier findings remain unverified. Human review pending.",
+  "next_steps": "Treat within-section shuffles as a family variant. Declare width/order selection before scanning; separately reproduce corpus conversion, sentence-removal and carrier claims with exact inputs and bounds.",
+  "family": {
+    "id": "lp1-word-length-balance",
+    "title": "LP1 word lengths and column balance",
+    "question": "How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?",
+    "baseline": "lp1-word-length-balance"
+  },
+  "variant": {
+    "label": "Baseline: 16 columns, unrestricted word-length shuffles",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — full rerun; independent token scanner and rational variance; exhaustive toy null expectations; first 32 null scores independently calculated; complete tail audit; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp1-word-length-balance/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp1-word-length-balance/check.py",
+    "script": "experiments/records/lp1-word-length-balance/run.py",
+    "script_sha256": "5e09fe97ea9b825c2ea4c844a8579df1c05fa9f9544b0db949647083578d367a",
+    "inputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/plan.json",
+        "sha256": "a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/submitted-lengths.json",
+        "sha256": "5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/check.py",
+        "sha256": "c523e511e55b073cde38b6cd8c8a9092df9f7ec640c1d3aae54baa961f38d642"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/plot.py",
+        "sha256": "4c720bf656e18a45035bf830407f6295cf56a02cec739703ae8778696e592e18"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/results.json",
+        "sha256": "caa45886bb5a1b225c98948893c78b28addaa1f09eab1eacd97bbf056a4ba8b0"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/words.json",
+        "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/length-table.csv",
+        "sha256": "e9ef00ac28815887fb38a8127858343fd660eb48235e8dc36f92dad89cea3143"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/column-means.svg",
+        "sha256": "6775165dc345cfb42d1893528f3ea29460de0dba060150d4be66ff4ce5827bf9"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived transcription and source provenance",
+      "url": "https://jelliottdev.github.io/#/conventions"
+    },
+    {
+      "label": "Search space, bounds and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-word-length-balance/column-means.svg",
+      "caption": "Mean rune-word length in each of 16 columns, with 29 words per column. The dashed line is the overall mean. This depicts the observed arrangement, not its null distribution or evidence of deliberate construction."
+    }
+  ],
+  "article": "## Question\n\nDo the original-order rune-word lengths from the Warning, Welcome, first koan and second koan give unusually similar means in sixteen columns, compared with unrestricted permutations of those same lengths?\n\nThis record reproduces a supplied numerical observation. The arrangement and approximate result were already known. It tests one stated comparison, not whether the authors intentionally designed the text this way.\n\n## Reconstruct the object before testing it\n\nUse the archived ciphertext, in manuscript order. Count runes, not Latin letters: a rune labeled TH still has length one. Include headings and the interrupting F runes. Remove slash and newline wrapping, concatenate successive pages within each section, and retain other word boundaries. An internal apostrophe belongs to the same word and contributes no rune.\n\n| Section | Pages | Words | Runes |\n| --- | --- | --- | --- |\n| Warning | LP1-01 | 45 | 184 |\n| Welcome | LP1-03–04 | 124 | 515 |\n| First koan | LP1-06–09 | 208 | 778 |\n| Second koan | LP1-14–15 | 87 | 319 |\n| Total | Nine pages | 464 | 1796 |\n\nAll 464 reconstructed lengths match the supplied vector exactly. Treating the apostrophe in DON'T as a word separator instead produces 465 tokens: two pieces of lengths three and one replace one four-rune word. That would shift all later column assignments.\n\nThe table is filled across each row from left to right, sixteen words at a time. There are 29 rows. Word 1 goes in row 1, column 1; word 16 in row 1, column 16; word 17 in row 2, column 1. Section boundaries do not reset the column counter.\n\nThe full [29-by-16 length table](experiments/records/lp1-word-length-balance/length-table.csv) is downloadable. The [word ledger](experiments/records/lp1-word-length-balance/words.json) gives each word's original ciphertext, rune length, section, contributing pages, row and column. A word crossing a page boundary records both pages. Neither file silently substitutes contextual English.\n\n## Statistic and exact expectation\n\nLet N = 464, k = 16 columns and m = 29 words per column. For column j, let S_j be its total rune count and M_j = S_j / m its mean word length. Let M be the overall mean word length, 1796/464.\n\nUse the population variance across the sixteen column means:\n\n```\nV = sum((M_j - M)^2) / k\nR = V / E[V under the declared shuffle model]\n```\n\nEach shuffle uniformly permutes the same list of 464 lengths. It keeps the overall distribution and total rune count but destroys word order, sentence structure and section membership. Duplicate lengths remain duplicate observations; there is no sampling of newly invented words.\n\nFor population variance sigma² of the fixed 464 lengths, the finite-population expectation is:\n\n```\nE[V] = sigma² × (k - 1) / (N - 1)\n```\n\nWhy? Each column is a sample of m positions without replacement. Its mean has variance sigma² × (N-m)/(m(N-1)). The grand mean is fixed, so averaging the squared deviations of the column means has this same expectation; N = km gives the expression above. Independence between columns is not assumed.\n\nThe script uses exact rational arithmetic for this expectation and the observed ratio. For shuffle comparisons it uses an integer multiple of V, avoiding floating-point decisions at the tail boundary.\n\n## Findings\n\nThe sixteen column totals are:\n\n```\n113, 105, 119, 111, 112, 118, 110, 111,\n112, 112, 109, 101, 109, 126, 111, 117\n```\n\nEach total is divided by 29 to get its mean. Their deviations from the mean column total, 112.25, have squared sum 501.\n\n| Quantity | Result |\n| --- | --- |\n| Observed variance of column means | 501/13456 |\n| Exact shuffle expectation | 922305/6230128 |\n| R | 77321/307435 = 0.25150356986029565 |\n| Shuffles | 49,999 |\n| Seed | 330146 |\n| Shuffles with variance no greater than observed | 54 |\n| Corrected lower-tail Monte Carlo estimate | (54 + 1)/(49,999 + 1) = 0.0011 |\n\nThe observed variance is about 25.15% of this model's expectation. It falls in the lower tail of the specified comparison, below the predeclared 0.05 threshold. The ratio and expectation are exact; the tail probability is estimated by simulation. Its Monte Carlo standard error is roughly 0.00015, not zero.\n\nThe [results file](experiments/records/lp1-word-length-balance/results.json) includes every simulated integer score, not only the tail count. The chart shows the observed column means. It does not plot the null distribution.\n\n## What this does and does not establish\n\nThe counts, ordering and stated ratio reproduce from the archived runes. Under unrestricted permutations of this fixed multiset, arrangements at least this flat were uncommon in our run.\n\nThis is not a test against ordinary English. Unrestricted shuffling discards linguistic and section structure; an unusual result under that model need not be unusual among coherent texts. It is also not the probability that the observation is a coincidence, that the text was deliberately constructed, or that this arrangement is useful for decryption.\n\nThe original observation resulted from exploration. We knew the selected four sections, width and approximate ratio before this run. The plan was committed before this simulation, but that does not make the original discovery prospective. The reported tail estimate does not account for all earlier choices of populations, widths, orders and statistics.\n\nThe supplied Alice, Gateless Gate and other-LP window counts have not been reproduced here. Exact corpora and conversion rules would be needed. Overlapping windows are dependent, so a fraction of matching windows is not automatically an independent-trial significance calculation.\n\nKeeping punctuation and word boundaries fixed while applying one-output-rune-per-input-rune substitutions preserves these lengths. Decoding does not provide independent confirmation of the same length pattern. Read [cipher invariants](#/wiki/cipher-invariants) and [search space and bounds](#/wiki/search-space) before extending the claim.\n\n## Reproduce and inspect\n\nExtract this experiment's ZIP with its directory structure intact. Python 3 is sufficient; there are no third-party dependencies or network calls.\n\n```\npython experiments/records/lp1-word-length-balance/run.py --check\npython experiments/records/lp1-word-length-balance/check.py\n```\n\nThe first command repeats all 49,999 shuffles and compares the complete results and word ledger. The independent checker uses a character scanner rather than the runner's regular expression, compares every token and length, calculates the observed variance directly from rational column means, and validates the null expectation by exhaustively enumerating two four-element teaching populations. It also independently calculates the first 32 null scores and audits the full saved tail count. A full rerun agreed.\n\nTo regenerate the CSV and chart from the saved outputs:\n\n```\npython experiments/records/lp1-word-length-balance/plot.py\n```\n\nComputational review is complete; human review is pending. The scripts and fixed input hashes define this result. The supplied vector is included only as a comparison target, not used to generate the measured lengths.\n\n## Related questions remain separate\n\nA within-section shuffle is a natural sensitivity test: preserve each section's length distribution while changing its internal order. Other variants can compare section orders, widths or removal rules, with a declared selection procedure.\n\nSection-contribution ledgers, sentence-removal scans, unchanged-rune grilles and the proposed 928-word carrier answer different questions. They are not findings of this record. In particular, 464 is a word count and 1,796 is a rune count; subtracting a count of unchanged runes from 464 would mix units.\n\n## Sources and selection history\n\nInputs are the nine archived LP1 transcription files, with SHA-256 hashes in the plan and record. The complete supplied numerical vector is preserved in submitted-lengths.json. No missing screenshots, spreadsheets or named attachments were treated as available data. The initial count and exact-R reconstruction preceded the frozen simulation plan; that exploratory step is disclosed rather than described as a blind test.\n",
+  "article_path": "experiments/records/lp1-word-length-balance/article.md",
+  "script_sha256": "5e09fe97ea9b825c2ea4c844a8579df1c05fa9f9544b0db949647083578d367a"
 }
 
 ---

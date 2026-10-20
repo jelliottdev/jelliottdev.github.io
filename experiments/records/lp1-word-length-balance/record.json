@@ -1,4 +1,153 @@
 {
   "id": "lp1-word-length-balance",
-  "status": "draft"
+  "title": "LP1: the 464-word table and column balance",
+  "status": "published",
+  "question": "Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?",
+  "summary": "All 464 supplied lengths reproduce from archived runes. Sixteen column means have R=0.25150357; 54 of 49,999 unrestricted shuffles are at least as flat (corrected p=0.0011). This selected arrangement does not establish authorial intent.",
+  "tags": [
+    "464 words",
+    "word lengths",
+    "column means",
+    "sixteen columns",
+    "29 rows",
+    "balance",
+    "unreasonable things",
+    "shuffle test",
+    "variance",
+    "Warning",
+    "Welcome",
+    "koans"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "representation": "Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.",
+    "procedure": "Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.",
+    "parameters": "16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.",
+    "exclusions": "Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption."
+  },
+  "outcome": "supported",
+  "finding": "All 464 word lengths reproduce from the archived runes. The sixteen column averages are unusually even under the stated shuffle model: their variance is 25.15% of its expectation. Only 54 of 49,999 shuffles were at least as even (corrected lower-tail p=0.0011). A full rerun and independent checks agree.",
+  "limitations": "This is an explored, selected arrangement. The p-value does not adjust for the original search and is not the probability of coincidence or intent. Unrestricted shuffling destroys sentence and section structure; it is not a coherent-prose comparison. Reported corpus and carrier findings remain unverified. Human review pending.",
+  "next_steps": "Treat within-section shuffles as a family variant. Declare width/order selection before scanning; separately reproduce corpus conversion, sentence-removal and carrier claims with exact inputs and bounds.",
+  "family": {
+    "id": "lp1-word-length-balance",
+    "title": "LP1 word lengths and column balance",
+    "question": "How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?",
+    "baseline": "lp1-word-length-balance"
+  },
+  "variant": {
+    "label": "Baseline: 16 columns, unrestricted word-length shuffles",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — full rerun; independent token scanner and rational variance; exhaustive toy null expectations; first 32 null scores independently calculated; complete tail audit; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp1-word-length-balance/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/lp1-word-length-balance/check.py",
+    "script": "experiments/records/lp1-word-length-balance/run.py",
+    "script_sha256": "5e09fe97ea9b825c2ea4c844a8579df1c05fa9f9544b0db949647083578d367a",
+    "inputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/plan.json",
+        "sha256": "a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/submitted-lengths.json",
+        "sha256": "5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/check.py",
+        "sha256": "c523e511e55b073cde38b6cd8c8a9092df9f7ec640c1d3aae54baa961f38d642"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/plot.py",
+        "sha256": "4c720bf656e18a45035bf830407f6295cf56a02cec739703ae8778696e592e18"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/results.json",
+        "sha256": "caa45886bb5a1b225c98948893c78b28addaa1f09eab1eacd97bbf056a4ba8b0"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/words.json",
+        "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/length-table.csv",
+        "sha256": "e9ef00ac28815887fb38a8127858343fd660eb48235e8dc36f92dad89cea3143"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/column-means.svg",
+        "sha256": "6775165dc345cfb42d1893528f3ea29460de0dba060150d4be66ff4ce5827bf9"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived transcription and source provenance",
+      "url": "https://jelliottdev.github.io/#/conventions"
+    },
+    {
+      "label": "Search space, bounds and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-word-length-balance/column-means.svg",
+      "caption": "Mean rune-word length in each of 16 columns, with 29 words per column. The dashed line is the overall mean. This depicts the observed arrangement, not its null distribution or evidence of deliberate construction."
+    }
+  ]
 }
