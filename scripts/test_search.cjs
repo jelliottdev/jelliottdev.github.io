@@ -19,6 +19,25 @@ assert.equal(search.relevance('Some Wisdom','','a warning','wisdom warning'),60)
 assert.equal(search.relevance('Some Wisdom','','a warning','"wisdom warning"'),0);
 console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phrases and empty results');
 
+for(const [queries,id,pageIds] of [
+ [['dots','black dots','three dots'],'dots',['lp2-33','lp2-39']],
+ [['mobius','Möbius','moebius','infinity'],'mobius',['lp2-15']],
+ [['cuniform','cuneiform','cuneform','wedge marks'],'cuneiform',['lp2-33','lp2-34']],
+ [['compasses','compass','1033.jpg'],'illustrated-cover',[]],
+ [['ioc','index of coincidence'],'index-of-coincidence',[]]
+]){
+ for(const q of queries){
+  const hits=search.search(db,q);
+  assert.equal(hits[0].href,'#/wiki/'+id,`Recognized subject ${q} must lead to its article`);
+  for(const pid of pageIds)assert(hits.slice(0,5).some(h=>h.page?.id===pid),`${q}: ${pid} must be directly available`);
+  assert.equal(new Set(hits.filter(h=>h.page).map(h=>h.page.id)).size,hits.filter(h=>h.page).length,'No duplicate page hits');
+ }
+}
+for(const q of ['cuni','moeb','compass'])assert(search.search(db,q).length,'Spelling variants must work while typing');
+assert.equal(search.search(db,'spirals')[0].href,'#/wiki/visual-index?section=spirals');
+assert.equal(search.search(db,'branches')[0].href,'#/wiki/visual-index?section=branches');
+console.log('PASS: visual names, spelling variants, partial aliases, direct page results, and subject anchors');
+
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
 const vm=require('node:vm');

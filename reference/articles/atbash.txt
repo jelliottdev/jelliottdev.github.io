@@ -5,6 +5,8 @@ Reverse the rune alphabet, with an extra shift where the control specifies one.
 The mapping
 Ordinary Atbash gives p = 28 − c. Index 0 maps to 28, 1 to 27, and 14 to itself. Applying it twice returns the original index. It reverses the alphabet mapping, not rune order within a line.
 The warning uses ordinary Atbash. The first koan, LP1-06–09, uses p = (28 − c + 3) mod 29. For c = 0 this produces index 2, because 31 mod 29 = 2.
+Ordinary Atbash: pairs at opposite ends of the alphabetᚠ F · 0↔ᛠ EA · 28ᚢ U · 1↔ᛡ IA · 27ᛉ X · 14↔ᛉ X · 14
+Each pair’s indices add to 28. The middle rune maps to itself. These examples show symbol substitutions, not a reversal of the order of text.
 
 How to replicate
 python scripts/reproduce_reading.py warning

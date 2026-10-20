@@ -33,3 +33,12 @@ Reader verification: narrow 320 and 390 CSS-pixel screens, 1440 desktop comparis
 ## Wiki search
 
 Header suggestions and submitted results share local ranking. Exact identifiers lead to manuscript records; guide titles and title prefixes outrank incidental body mentions. A query such as Atbash must put its method article ahead of general introduction pages. The results page has one query field (the header), a ranked list with explicit content types, optional type tabs, and collapsed manuscript filters. Page filters do not suppress unrelated guide results. Search suggestions link directly to destinations and offer all results; Escape, Tab, arrow keys and pointer dismissal remain usable. Suggestion height follows the visible viewport when the phone keyboard appears. The ordinary wiki search remains separate from evidence of completed experiments.
+
+
+## Illustrated discovery
+
+The home page starts with reader/page/quick-start links and a six-subject image index, then separates readings and interpretation, decoding and measurement, and experiments. Sidebar groups follow those tasks. Release page grids stay collapsed until requested.
+
+Article metadata owns curated `aliases`, optional `alias_sections`, and `feature_pages`. The last field lists pages where the feature is illustrated, not every page in a named section. Exact aliases outrank incidental prose and expose those manuscript pages directly; prefix matching supports typing. Accent normalization accepts Möbius, while deliberate spelling variants accept cuniform. Do not silently equate descriptive names with deciphered meanings. Header and submitted search use the same ranking; preserve the mobile composition and pointer-gesture handling.
+
+The illustrated index uses lazy-loaded existing thumbnails. Detail articles link complete original images with captions and downloads. Never change original image bytes to make a feature easier to see. Page comparisons state when previews are cropped and distinguish observed placement from interpretation.

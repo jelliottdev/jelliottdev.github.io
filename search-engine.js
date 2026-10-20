@@ -25,14 +25,36 @@
   if(has(summary,q))return 300;
   return has(title+' '+summary+' '+body,q)?60:0;
  }
+ // Curated names and spelling variants belong to the article metadata. They
+ // identify a subject; they never turn an interpretation into a page fact.
+ function aliasScore(aliases,q){
+  const n=norm(q);
+  if(!n)return 0;
+  if((aliases||[]).some(a=>norm(a)===n))return 1100;
+  if(n.length>=3&&(aliases||[]).some(a=>norm(a).startsWith(n)))return 780;
+  return 0;
+ }
  function search(db,q){
   if(!norm(q))return [];
   const hits=[];
-  for(const a of db.articles||[]){const score=relevance(a.title,a.summary,a.text,q);if(score)hits.push({type:'guide',title:a.title,text:a.summary,href:'#/wiki/'+a.id,score});}
+  const features=new Map();
+  for(const a of db.articles||[]){
+   const alias=aliasScore(a.aliases,q),score=Math.max(alias,relevance(a.title,a.summary,a.text,q));
+   const section=alias?(a.alias_sections||{})[norm(q)]:null;
+   if(score)hits.push({type:'guide',title:a.title,text:a.summary,href:'#/wiki/'+a.id+(section?'?section='+encodeURIComponent(section):''),score});
+   if(alias)for(const id of a.feature_pages||[])if(!features.has(id))features.set(id,a);
+  }
   for(const p of db.pages||[]){const hit=page(p,q);if(hit)hits.push({type:'page',title:p.id.toUpperCase()+(p.title?' · '+p.title:''),text:hit.text,href:'#/page/'+p.id+'?'+(hit.row?'line='+hit.row+'&mode='+hit.mode:'section='+hit.section),score:hit.score,page:p});}
+  for(const [id,a] of features){
+   const p=(db.pages||[]).find(p=>p.id===id);if(!p)continue;
+   const existing=hits.find(h=>h.page?.id===id);
+   if(existing&&existing.score>=700)continue;
+   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score:700,page:p};
+   if(existing)Object.assign(existing,feature);else hits.push(feature);
+  }
   for(const t of db.topics||[]){const score=relevance(t.title,t.summary,t.terms,q);if(score)hits.push({type:'topic',title:t.title,text:t.summary,href:'#/topics?topic='+t.id,score:score===1200?1100:score-40});}
   for(const r of db.sources||[]){if(has(decodeURI(r.url).replaceAll('-',' '),q))hits.push({type:'source',title:decodeURI(new URL(r.url).pathname),text:new URL(r.url).hostname,href:r.url,score:10});}
   return hits.sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title));
  }
- const api={norm,terms,has,page,suggest,relevance,search};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WikiSearch=api;
+ const api={norm,terms,has,page,suggest,relevance,aliasScore,search};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WikiSearch=api;
 })(globalThis);
