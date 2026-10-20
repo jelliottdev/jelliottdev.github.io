@@ -79,17 +79,53 @@ Follow the red numbers across pages
 
 This sequence is useful for recording layout before testing a method. A page break, a new text block, and a printed number are separate observations. If you propose restarting a key at one of them, say which one and record its exact rune position. The visual sequence alone does not tell us whether any key should restart. See key advancement and counting conventions and red text and color boundaries.
 
-How to compare repeated marks
-The two detail views above use 420 × 440 pixel windows in their respective 2400 × 3600 originals. Coordinates below start at the upper-left corner, with x increasing rightward and y downward. Right and bottom bounds are excluded, as in the image-region convention.
-	Page	Left, top	Right, bottom	Position on sheet
+Are the repeated marks identical?
+
+The six windows on LP2-34–39 have exactly the same decoded RGB pixels. The LP2-33 window differs from each of them at 43,601 of 184,800 pixel positions. This is a comparison of fixed rectangles in the archived originals, including their surrounding whitespace.
+
+	Comparison	Pairs checked	Result
+
+	Every pair among LP2-34–39	15	All corresponding RGB values equal.
+
+	LP2-33 against each of LP2-34–39	6	43,601 differing pixels in each comparison.
+
+
+A pixel counts as different when at least one of its red, green or blue channel values differs. There is no tolerance, rotation, reflection, resizing or search for a better alignment. All seven complete JPEG files have different SHA-256 hashes: equal decoded windows do not mean identical page files.
+
+The exact windows
+
+Each rectangle is 420 × 440 pixels in a 2400 × 3600 original. Coordinates start at the upper-left corner; x increases rightward and y downward. Right and bottom bounds are excluded, following the image-region convention. The two enlarged details at the top of this guide show these windows on pages 33 and 34.
+
+	Pages	Left, top	Right, bottom	Position
+
 	LP2-33	1000, 3030	1420, 3470	Below the text
-	LP2-34	1000, 130	1420, 570	Above the text
-These are display windows, not measurements of the exact ink boundary. Equal window dimensions make the views easier to compare, but do not establish pixel equality. Open the complete sheets to examine their surrounding text and margins.
-Download the original JPEGs from the page records.
-Record a rectangle around each mark in original-image pixels. Include enough surrounding whitespace to preserve orientation.
-Compare both appearance and placement. Scaling a preview for display is not evidence that the source marks have identical dimensions.
-If testing pixel equality, state the alignment, scale, threshold, and compression tolerance. Visual similarity alone does not establish identical bytes.
-The image-region guide explains coordinate and threshold conventions. This article records location and appearance; it does not claim a completed pixel-equality test or a decipherment.
+
+	LP2-34–39	1000, 130	1420, 570	Above the text
+
+
+These are comparison windows, not measurements of the exact ink boundary. Their coordinates were chosen after visual inspection, and preliminary equality was observed before the report script was written. This is a descriptive measurement, not a statistical test of an independently selected hypothesis.
+
+Repeat the pixel comparison
+
+Download the reference-data ZIP and original-images ZIP. Extract both into the same folder, preserving their directories. The script needs Python 3 and Pillow; see running the reproduction scripts for setup help. Run these commands from that folder:
+
+python -m pip install Pillow
+python scripts/measure_cuneiform_windows.py --check
+
+The check decodes the seven original JPEGs, compares all 21 pairs, and checks the source-file hashes and measured results against the saved report. It prints PASS only when they agree. It does not modify the images.
+
+Inspect or download the complete comparison report (JSON) and measurement script. The report records every rectangle, source hash, decoded-window hash, differing-pixel count and maximum channel difference. To save a new report without replacing the reference:
+
+python scripts/measure_cuneiform_windows.py --output my-cuneiform-comparison.json
+
+The recorded decoder was Pillow 11.3.0 with JPEG codec 8.0. A different version is allowed, but any changed decoded pixels or original-file hashes will fail the check. If that happens, compare decoder versions and verify the downloaded files before interpreting it as a manuscript difference.
+
+What the equality tells us
+
+The six upper-page windows share the same decoded pixel content in this archive. That is stronger than saying they look similar, but it does not identify a historical sign, translate it, or establish how the pages were constructed. The unequal LP2-33 window also does not prove a different sign: placement, surrounding pixels, compression or small visual changes can affect an exact comparison.
+
+No alignment search or comparison outside these rectangles was performed. A claim about the whole motif, its origin or its meaning needs additional evidence. Keep such proposals separate from this repeatable image measurement.
+
 Sources
 Cicada Solvers’ LP2 index supplies the community section names and ranges. The page links above provide original images, checksums, and pinned archive sources. Section names are descriptive navigation labels, not decrypted headings.
 
@@ -166,8 +202,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - red text and color boundaries; rubrication and color boundaries
   https://jelliottdev.github.io/reference/articles/rubrication.html
-- image-region convention; image-region guide
+- image-region convention
   https://jelliottdev.github.io/reference/articles/image-regions.html
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images ZIP
+  https://jelliottdev.github.io/downloads/original-images.zip
+- running the reproduction scripts
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- complete comparison report (JSON)
+  https://jelliottdev.github.io/exports/cuneiform-window-comparison.json
+- measurement script
+  https://jelliottdev.github.io/scripts/measure_cuneiform_windows.py
 - Cicada Solvers’ LP2 index
   https://www.cicadasolvers.com/wiki/liber-primus/lp2/
 

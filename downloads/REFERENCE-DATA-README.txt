@@ -85,6 +85,11 @@ Inspect recorded visual measurements:
   Guide: reference/articles/image-regions.txt
   The ordinary command checks saved records, not newly measured image pixels.
 
+Compare fixed cuneiform windows (requires original-images.zip and Pillow):
+  python scripts/measure_cuneiform_windows.py --check
+  Guide: reference/articles/cuneiform.txt
+  This remeasures decoded pixels and checks the recorded file hashes and results.
+
 SAVE A RESULT
   python scripts/reproduce_reading.py warning --output warning.txt
   python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
@@ -118,7 +123,7 @@ convenient access after extraction.
 
 Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
-inspect_visual_records.py and measure_region.py also require Pillow. extract_payload.py requires
+inspect_visual_records.py, measure_region.py and measure_cuneiform_windows.py also require Pillow. extract_payload.py requires
 OutGuess, and signature verification requires GnuPG. See the included guides.
 
 DRAW THE ATBASH MAPPING

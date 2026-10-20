@@ -150,6 +150,8 @@ for record in read('data/evidence/artwork-sources.json')['records']:
                   guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
 # Human task names make tools discoverable without knowing their filenames.
+register('exports/cuneiform-window-comparison.json','Image window comparison')
+files[-1].update(title='Cuneiform marks: exact pixel comparisons',guide='cuneiform',pages=['lp2-'+str(n) for n in range(33,40)],aliases=['identical cuneiform marks','repeated image pixels','cuneiform comparison'])
 script_details = {
  'plot_rune_lags.py': ('Draw the lag coincidence chart', 'rune-lag-matches', ['lag chart','lag matches','shift coincidences']),
  'rune_lag_matches.py': ('Count equal runes at fixed distances', 'rune-lag-matches', ['lag coincidences','lag matches','shift coincidences']),
@@ -165,6 +167,7 @@ script_details = {
  'reproduce_prime_sums.py': ('Reproduce known-reading prime sums', 'prime-sums', ['Gematria Primus', 'spelling sums', 'emirps']),
  'check_number_examples.py': ('Check prime values and ordinal examples', 'prime-indices', ['3012828529', 'nth prime', 'prime ordinal']),
  'rune_ioc.py': ('Measure the index of coincidence', 'index-of-coincidence', ['IoC', 'matching pairs', 'rune frequencies']),
+ 'measure_cuneiform_windows.py': ('Compare the repeated cuneiform image windows', 'cuneiform', ['pixel equality', 'identical marks', 'cuneiform comparison']),
  'measure_region.py': ('Measure an original image region', 'image-regions', ['dot centers', 'centroids', 'pixel areas', 'connected components']),
  'inspect_visual_records.py': ('Inspect visual records and recount pixels', 'image-regions', ['dots', 'connected components', 'image measurements', 'punctuation']),
  'extract_payload.py': ('Extract an OutGuess payload', 'outguess', ['steganography', 'hidden JPEG message']),
@@ -172,7 +175,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:
@@ -401,6 +404,11 @@ Inspect recorded visual measurements:
   Guide: reference/articles/image-regions.txt
   The ordinary command checks saved records, not newly measured image pixels.
 
+Compare fixed cuneiform windows (requires original-images.zip and Pillow):
+  python scripts/measure_cuneiform_windows.py --check
+  Guide: reference/articles/cuneiform.txt
+  This remeasures decoded pixels and checks the recorded file hashes and results.
+
 SAVE A RESULT
   python scripts/reproduce_reading.py warning --output warning.txt
   python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
@@ -434,7 +442,7 @@ convenient access after extraction.
 
 Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
-inspect_visual_records.py and measure_region.py also require Pillow. extract_payload.py requires
+inspect_visual_records.py, measure_region.py and measure_cuneiform_windows.py also require Pillow. extract_payload.py requires
 OutGuess, and signature verification requires GnuPG. See the included guides.
 
 DRAW THE ATBASH MAPPING
@@ -469,7 +477,7 @@ for experiment in read('data/experiments.json')['records']:
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Structured experiment record'})
- if name=='reference-data':roles.update({'Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
