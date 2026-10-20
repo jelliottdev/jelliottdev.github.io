@@ -113,6 +113,7 @@ register('exports/figures/rune-frequencies.svg','Analysis figure')
 register('exports/figures/atbash-pairs.svg','Analysis figure')
 register('exports/figures/second-koan-argument.svg','Analysis figure')
 register('exports/figures/prime-sum-claims.svg','Analysis figure')
+register('exports/figures/relief-printing.svg','Analysis figure')
 register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
