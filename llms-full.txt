@@ -16495,6 +16495,48 @@ python scripts/export_alphanumeric_grids.py --format csv
 
 Both commands print to standard output. The script rejects malformed rows or changed page dimensions rather than silently publishing an incomplete grid. It checks the archived structure; visual verification of ambiguous glyphs remains a separate task.
 
+A reproducible binary representation
+
+A proposed approach converts these entries to binary and arranges the bits as black and white cells. Before testing such an image, specify the digit alphabet, token boundaries, bit width and layout. “Convert base 60 to binary” does not fix all of those choices.
+
+The following audit uses this explicit alphabet, with values 0 through 59 assigned from left to right:
+
+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx
+
+Each two-character token is interpreted separately as 60 × first_digit + second_digit. Under this convention, every archived entry is valid and its value is between 0 and 255. There are still 161 distinct values among 256 entries: this interpretation preserves the exact token distinctions. It is a valid representation of the transcription, not proof that this is the intended encoding.
+
+	Token	Calculation	Decimal	Eight bits
+	3N	3 × 60 + 23	203	11001011
+	04	0 × 60 + 4	4	00000100
+	4F	4 × 60 + 15	255	11111111
+
+Eight unsigned bits represent values 0–255. The value 256 already needs nine bits. This matters when comparing these tokens with unrelated decimal numbers elsewhere in the manuscript: sharing a rendering method does not mean those numbers fit the same width.
+
+Preserve every bit and every row
+
+Encode each value in exactly eight bits, with the most significant bit first. Keep the original eight tokens per row, placing each token’s eight bits horizontally. The 32 manuscript rows then produce a 64-column by 32-row bit array. Pages LP2-49, 50 and 51 occupy rows 1–10, 11–23 and 24–32 respectively. A one is black and a zero is white; no row is omitted, no bits are truncated, and no rotations or reflections are applied.
+
+[Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
+A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
+
+This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
+
+Removing spaces and interpreting all 512 characters as one enormous base-60 integer is a third operation. It uses powers of 60 across the entire string instead of treating each two-character token as a separate byte. Likewise, wrapping the resulting bits at a different width, adding padding, reversing bit order or joining other manuscript numbers creates additional variants. Record each change; do not silently replace one representation with another.
+
+Reproduce the conversion
+
+Run python scripts/audit_grid_binary.py --check from the repository or extracted reference-data bundle. The standard-library script reads the coordinate-bearing token export, checks the byte range, preserves row boundaries, and verifies both the JSON report and exact SVG. It makes no network calls.
+
+The report includes each original token, page coordinate, decimal value and eight-bit spelling, plus the source-export hash and resulting byte-stream hash. Save fresh files with python scripts/audit_grid_binary.py --output my-grid.json --svg my-grid.svg; the script refuses to replace existing files. It does not invoke a QR or Data Matrix decoder.
+
+What a barcode experiment would need
+
+The supplied exploration reports attempts at QR-like and Data Matrix-like layouts, but the full plotting script and referenced result images were not included. Its later comments also identify changed bases, inconsistent bit widths and whitespace mistakes. Those reports do not define one fully reproducible negative test, and they do not rule out every barcode proposal.
+
+A clean experiment would freeze the transcription and conversion first, then list the candidate widths, padding rules, page combinations, rotations, reflections and bit polarities. Specify the decoder and version, settings, and what counts as a valid payload. Preserve outputs and errors for every candidate, and use known valid symbols to confirm the decoder works. A visual resemblance alone is not a decoded result.
+
+Keep related variants in one experiment family, with the changed variables and total candidates visible. The rendering above supplies one fixed input representation for that work; it does not claim that a barcode search has been completed. See search space and bounds and documenting a reproducible attempt.
+
 Originals and data
 
 The page records for LP2-49, LP2-50, and LP2-51 link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are 49 JSON, 50 JSON, and 51 JSON. Return to the illustrated index to compare other manuscript details.
@@ -16526,6 +16568,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/alphanumeric-grids.csv
 - export script
   https://jelliottdev.github.io/scripts/export_alphanumeric_grids.py
+- 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order; Download the SVG
+  https://jelliottdev.github.io/exports/figures/grid-binary.svg
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- standard-library script
+  https://jelliottdev.github.io/scripts/audit_grid_binary.py
+- JSON report
+  https://jelliottdev.github.io/exports/grid-binary-audit.json
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- documenting a reproducible attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
 - 49 JSON
   https://jelliottdev.github.io/data/pages/lp2-49.json
 - 50 JSON

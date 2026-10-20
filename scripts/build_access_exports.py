@@ -125,6 +125,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'grid-binary.svg': {'title':'Declared base-60 binary grid (SVG)', 'guide':'alphanumeric-grids','aliases':['binary grid','base60 binary']},
  'gap-file-sizes.svg': {'title':'LP2 file sizes by reported gap group (SVG)', 'guide':'line-gaps','aliases':['big gaps','line spacing','file sizes']},
  'doublets.svg': {'title':'Doublet counts by rune (SVG)', 'guide':'doublets','aliases':['doublets','421','equal adjacent runes']},
  'word-lengths.svg': {'title':'Rune-token lengths in LP2-00 to LP2-55 (SVG)', 'guide':'word-lengths','aliases':['word length histogram','runeglish','2896 tokens']},
@@ -153,6 +154,7 @@ for record in read('data/evidence/artwork-sources.json')['records']:
                   guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
 # Human task names make tools discoverable without knowing their filenames.
+register('exports/grid-binary-audit.json','Grid binary audit')
 register('exports/jpeg-byte-audit.json','JPEG byte audit')
 register('exports/gap-file-sizes.json','Gap file-size audit')
 register('exports/cuneiform-window-comparison.json','Image window comparison')
@@ -164,6 +166,7 @@ register('exports/unsolved-doublets.json','Doublet audit')
 files[-1].update(guide='doublets',aliases=['doublets','421','doublet positions'])
 script_details = {
  'plot_gap_file_sizes.py': ('Plot the gap-group file-size audit', 'line-gaps', ['big gaps','file size chart']),
+ 'audit_grid_binary.py': ('Reproduce the declared base-60 binary grid', 'alphanumeric-grids', ['binary grid','base60 binary','eight bit tokens']),
  'audit_jpeg_bytes.py': ('Audit JPEG byte distributions and frame headers', 'jpeg-byte-distribution', ['hex distribution','null pages','grayscale']),
  'audit_gap_file_sizes.py': ('Audit reported gap-group file sizes', 'line-gaps', ['big gaps','line spacing','JPEG file size']),
  'audit_lp2_40_crib.py': ('Audit the proposed LP2-40 FOR EVERY arithmetic', 'mobius-function', ['FOR EVERY','crib fitting','Mobius running key']),
@@ -191,7 +194,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:
@@ -503,7 +506,7 @@ for experiment in read('data/experiments.json')['records']:
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Structured experiment record'})
- if name=='reference-data':roles.update({'JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
