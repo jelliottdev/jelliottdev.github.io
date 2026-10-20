@@ -31,7 +31,6 @@ def run():
         for line_no,line in enumerate(text.splitlines(),1):
             row=[values[c] for c in line if c in values]
             if row:rows.append((line_no,row))
-        if not rows:raise ValueError('No rune rows in '+pid)
         pages.append((pid,rows));inputs.append({'path':path.relative_to(ROOT).as_posix(),'sha256':sha(raw)})
     flags=sieve(max(sum(sum(row) for _,row in rows) for _,rows in pages))
     observed=[]
