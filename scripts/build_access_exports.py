@@ -56,6 +56,7 @@ for article in sorted((root/'reference').glob('*.txt')):
 for article in articles:
  for suffix in ['html','txt']:register(f'reference/articles/{article["id"]}.{suffix}','Reference article')
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
+register('data/index.json','Page and alphabet index')
 register('data/articles.json','Reference article index')
 register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
@@ -83,10 +84,35 @@ guide_links='\n\n## Guides and reproduction\n'+''.join(f'- [{a["title"]}]({base}
 save('llms.txt',(root/'llms.txt').read_text(encoding='utf-8')+guide_links)
 save('reference/index.html',(root/'reference/index.html').read_text(encoding='utf-8').replace('</body>', '').replace('</html>','')+'<h2>Guides and methods</h2><ul>'+''.join(f'<li><a href="articles/{a["id"]}.html">{html.escape(a["title"])}</a></li>' for a in articles)+'</ul></html>')
 register('llms-full.txt','Complete plain-text page references')
+save('downloads/REFERENCE-DATA-README.txt','''Liberpedia reference-data bundle
+
+Extract this ZIP into an empty folder, keeping its directory structure.
+From that folder, with Python 3, run:
+
+  python scripts/reproduce_reading.py --check-all
+  python scripts/reproduce_prime_sums.py
+  python scripts/rune_ioc.py --check
+  python scripts/reproduce_cover_chain.py
+  python scripts/inspect_visual_records.py
+
+These checks use the included archived texts, records, parameters and evidence.
+No network or AI service is needed. CONTENTS.json lists member hashes and roles.
+
+Original JPEGs are provided separately in original-images.zip. Extract that ZIP
+into the SAME folder if you want image-based checks. The --pixels option of
+inspect_visual_records.py also requires Pillow. extract_payload.py requires
+OutGuess, and signature verification requires GnuPG. See the included guides.
+
+This is a data and reproduction bundle, not a complete offline website.
+Article source links and wiki navigation may require the live site.
+Draft experiment records are not included; published records are included.
+The complete repository is available from the GitHub Code download menu.
+''')
+register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Original JPEG'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions'})
+ if name=='reference-data':roles.update({'Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
  reusable=False
