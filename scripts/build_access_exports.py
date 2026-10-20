@@ -70,7 +70,9 @@ for article in sorted((root/'reference').glob('*.txt')):
  register('reference/'+article.name,'Reference article')
  documents.append(article.read_text(encoding='utf-8'))
 for article in articles:
- for suffix in ['html','txt']:register(f'reference/articles/{article["id"]}.{suffix}','Reference article')
+ for suffix in ['html','txt']:
+  register(f'reference/articles/{article["id"]}.{suffix}','Reference article')
+  files[-1].update(title=article['title'],aliases=article.get('aliases',[]),guide=article['id'])
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
 register('data/index.json','Page and alphabet index')
 register('data/articles.json','Reference article index')
@@ -83,6 +85,9 @@ register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
  assert files[-1]['sha256']==record['sha256']
+ files[-1].update(title=record['title']+' — Tate collection metadata',
+                  aliases=[record['accession'],'William Blake','Tate','museum catalogue','compasses'],
+                  guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
 for script in ['rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
