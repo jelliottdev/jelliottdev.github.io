@@ -146,9 +146,17 @@ class ArticleExports(unittest.TestCase):
                                   '<h3 id="minor">Minor</h3><h2>No ID</h2>')
         self.assertIn('href="#part%20two">Read A &amp; B</a>', result)
         self.assertIn('<summary>On this page</summary>', result)
-        self.assertNotIn('Minor', result)
+        self.assertIn('<ul class="guide-contents-list"><li><a href="#minor">Minor</a></li></ul></li>', result)
         self.assertNotIn('No ID', result)
         self.assertEqual(article_contents('<p>No sections</p>'), '')
+
+    def test_subsections_attach_to_their_own_section(self):
+        result = article_contents('<h3 id="intro">Intro</h3><h2 id="a">A</h2>'
+                                  '<h3 id="a1">A one</h3><h2 id="b">B</h2>'
+                                  '<h3 id="b1">B one</h3>')
+        self.assertIn('<li><a href="#intro">Intro</a></li>', result)
+        self.assertIn('<li><a href="#a">A</a><ul class="guide-contents-list"><li><a href="#a1">A one</a></li></ul></li>', result)
+        self.assertIn('<li><a href="#b">B</a><ul class="guide-contents-list"><li><a href="#b1">B one</a></li></ul></li>', result)
 
     def test_backlinks_include_sections_without_prefix_collisions(self):
         body = """<a href="#/wiki/atbash?section=example">Example</a>

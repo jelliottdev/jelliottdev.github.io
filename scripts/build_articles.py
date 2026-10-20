@@ -95,18 +95,18 @@ class Headings(HTMLParser):
         self.feed(body)
 
     def handle_starttag(self, tag, attrs):
-        if tag == "h2":
+        if tag in ("h2", "h3"):
             identifier = dict(attrs).get("id")
-            self.current = [identifier, []] if identifier else None
+            self.current = [identifier, [], tag] if identifier else None
 
     def handle_data(self, data):
         if self.current is not None:
             self.current[1].append(data)
 
     def handle_endtag(self, tag):
-        if tag == "h2" and self.current is not None:
-            identifier, parts = self.current
-            self.items.append((identifier, "".join(parts).strip()))
+        if self.current is not None and tag == self.current[2]:
+            identifier, parts, level = self.current
+            self.items.append((identifier, "".join(parts).strip(), level))
             self.current = None
 
 
@@ -114,8 +114,21 @@ def article_contents(body):
     headings = Headings(body).items
     if not headings:
         return ""
-    links = "".join(f'<a href="#{quote(identifier, safe="-_")}">{html.escape(label)}</a>'
-                    for identifier, label in headings)
+    groups = []
+    for identifier, label, level in headings:
+        entry = (identifier, label, [])
+        if level == "h3" and groups:
+            groups[-1][2].append(entry)
+        else:
+            groups.append(entry)
+
+    def render(entries):
+        return '<ul class="guide-contents-list">' + "".join(
+            f'<li><a href="#{quote(identifier, safe="-_")}">{html.escape(label)}</a>'
+            + (render(children) if children else "") + '</li>'
+            for identifier, label, children in entries) + '</ul>'
+
+    links = render(groups)
     return ('<details class="standalone-contents"><summary>On this page</summary>'
             '<nav aria-label="Article sections">' + links + '</nav></details>')
 
