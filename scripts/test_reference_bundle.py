@@ -62,6 +62,21 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        grid = json.loads(subprocess.check_output(
+            [sys.executable, "scripts/export_alphanumeric_grids.py"], cwd=target))
+        assert grid == json.loads((target / "exports/alphanumeric-grids.json").read_text(encoding="utf-8"))
+        assert len(grid["records"]) == 256
+        assert grid["records"][13]["token"] == "04"
+        assert grid["records"][19]["token"] == "0X"
+        assert grid["records"][22]["token"] == "0x"
+        assert grid["records"][80] == {"page": "lp2-50", "row": 1, "column": 1, "sequence": 81, "token": "2M"}
+        assert grid["records"][184]["page"] == "lp2-51"
+        grid_csv = subprocess.check_output(
+            [sys.executable, "scripts/export_alphanumeric_grids.py", "--format", "csv"], cwd=target)
+        assert grid_csv.replace(b"\r\n", b"\n") == (target / "exports/alphanumeric-grids.csv").read_bytes()
+        for source in grid["sources"]:
+            assert hashlib.sha256((target / source["path"]).read_bytes()).hexdigest() == source["record_sha256"]
+        print("PASS: grid export reproduces coordinates, source hashes, case and leading zeroes")
         sums = json.loads(subprocess.check_output(
             [sys.executable, "scripts/reproduce_prime_sums.py", "--json"], cwd=target))
         compared = {row["page"]: row for row in sums["page_sums"]}

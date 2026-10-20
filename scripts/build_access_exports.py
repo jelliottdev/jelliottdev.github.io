@@ -4,6 +4,7 @@ import json,hashlib,zipfile,html,csv,io
 from urllib.parse import urljoin
 from build_articles import manuscript_reference_html, guide_discovery_index
 from rune_ioc import csv_report
+from export_alphanumeric_grids import report as grid_report, csv_report as grid_csv
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -171,6 +172,14 @@ sum_writer.writeheader();sum_writer.writerows(sum_records)
 save('exports/known-reading-page-sums.csv',sum_csv.getvalue())
 register('exports/known-reading-page-sums.csv','Known-reading page-sum comparison')
 files[-1].update(title='Archived and decoded page sums (CSV)',guide='prime-sums',aliases=['prime sums','prime sum comparison','ciphertext sums','plaintext sums','known reading totals','spreadsheet'])
+grid_data = grid_report(root)
+for extension, content in [('json', json.dumps(grid_data,ensure_ascii=False,indent=2)+'\n'), ('csv', grid_csv(grid_data))]:
+ path = 'exports/alphanumeric-grids.'+extension
+ save(path,content)
+ register(path,'Alphanumeric grid transcription')
+ files[-1].update(title='LP2-49–51 grid entries ('+extension.upper()+')',guide='alphanumeric-grids',aliases=['alphanumeric grids','256 entries','grid coordinates','letter number grids'])
+register('scripts/export_alphanumeric_grids.py','Reproduction script')
+files[-1].update(title='Export alphanumeric grid coordinates',guide='alphanumeric-grids',aliases=['alphanumeric grids','256 entries','grid coordinates'])
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 save('exports/rune-ioc.csv', csv_report(read('data/evidence/rune-ioc.json')))
 register('exports/rune-ioc.csv','Archived rune IoC baseline')
@@ -343,7 +352,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.add('Topic discovery index')
- if name=='reference-data':roles.update({'Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')

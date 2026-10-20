@@ -14493,6 +14493,21 @@ total 256
 
 This check reproduces the dimensions of the stored transcription. It does not independently verify every glyph or prove that a particular traversal is intended. If you alter the transcription format, revisit the row-selection expression rather than assuming an unchanged count means an unchanged grid.
 
+Download entries with coordinates
+
+Use the structured JSON export for scripts or the CSV export for a table. Each entry keeps its page, grid row, column, sequence position, and original two-character token. Rows and columns start at one; the surrounding runic rows are not included in the grid row numbers.
+
+The sequence follows pages 49, 50, and 51, reading each grid left to right and top to bottom. This is a reproducible export order, not a demonstrated cipher traversal. The JSON also records source-file and transcription checksums. Neither export normalizes case or removes leading zeroes.
+
+When importing the CSV into a spreadsheet, set the token column to Text. Automatic number conversion can turn 04 into 4. Use the JSON when you need strings preserved without spreadsheet import settings.
+
+Regenerate either format using the export script:
+
+python scripts/export_alphanumeric_grids.py --format json
+python scripts/export_alphanumeric_grids.py --format csv
+
+Both commands print to standard output. The script rejects malformed rows or changed page dimensions rather than silently publishing an incomplete grid. It checks the archived structure; visual verification of ambiguous glyphs remains a separate task.
+
 Originals and data
 
 The page records for LP2-49, LP2-50, and LP2-51 link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are 49 JSON, 50 JSON, and 51 JSON. Return to the illustrated index to compare other manuscript details.
@@ -14516,6 +14531,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp2-49
 - transcription guide
   https://jelliottdev.github.io/reference/articles/transliteration.html
+- structured JSON export
+  https://jelliottdev.github.io/exports/alphanumeric-grids.json
+- CSV export
+  https://jelliottdev.github.io/exports/alphanumeric-grids.csv
+- export script
+  https://jelliottdev.github.io/scripts/export_alphanumeric_grids.py
 - 49 JSON
   https://jelliottdev.github.io/data/pages/lp2-49.json
 - 50 JSON
