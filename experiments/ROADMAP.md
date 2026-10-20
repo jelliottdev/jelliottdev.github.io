@@ -2,6 +2,8 @@
 
 Internal work queue. This is not a published result or a combined reader-facing article. Each approach needs its own bounded experiment page; group variations within the relevant family. Do not make ten empty placeholders or present plans as tests.
 
+Within-segment reversal now has its own record in the reading-route family. Two predeclared line-boundary conventions give 110 distinct page outputs and zero matches to nine fixed beginnings. Full traces audited with regex spans and reflected positions; complete rerun agrees. Word-order reversal and broader language ranking remain untested.
+
 1. Direct reading and Atbash reuse.
 2. Constant shifts of the 29-rune alphabet.
 3. Whole-stream, row-wise and word-wise reversal (separate conventions).
