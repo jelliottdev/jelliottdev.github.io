@@ -97,7 +97,24 @@ All twelve prefixes contain ᛂ (U+16C2), which is absent from our stored 29-run
 	10016-8.txt	34
 
 
-Within these prefixes, U+16C2 is the only character outside the stored alphabet; each occurrence is in a different token. This is an input-compatibility result, not a measurement of how much any reported probability changes.
+Within these prefixes, U+16C2 is the only character outside the stored alphabet; each occurrence is in a different token. A symbol-inventory difference alone does not invalidate a word-length comparison. If the converter intends this character to stand for one rune, a one-for-one relabeling leaves every token length unchanged. Determining the intended convention still requires the converter’s provenance.
+
+Relabeling and deleting are different operations
+
+We replayed two explicit variants on the same twelve prefixes. Replacing each out-of-alphabet character by one stored rune preserves every length, as expected. Deleting it shortens 10–51 tokens per prefix. This second variant illustrates the effect of filtering to the stored alphabet; it is not a proposed correction to the corpus.
+
+For example, 10014-8.txt has 51 affected tokens in its first 2,902 token slots. The deletion variant removes 51 counted units and leaves six slots empty:
+
+	Counting convention	Length 2	Length 3	Empty slots
+
+	Original characters	668	498	0
+
+	One-for-one relabeling	668	498	0
+
+	Delete U+16C2; retain slots	669	516	6
+
+
+The table retains the original 2,902 slots so that the comparison isolates character deletion. Dropping the six empty slots would change the denominator to 2,896; refilling the sample with later tokens would change its membership as well. Neither additional operation is included here. Across the twelve prefixes, deletion changes the length-two count by −1 to +5 and the length-three count by −5 to +18. A mean reduction or a histogram change is not itself a statistical significance result. The report retains both complete histograms for every file.
 
 To reproduce, obtain a local clone of the pinned corpus repository, then run the command below from a Liberpedia checkout. The script reads committed Git bytes, avoiding checkout newline conversion. It does not execute the corpus’s code. A partial clone may need network access to fetch missing source blobs.
 

@@ -30,12 +30,30 @@ def audit(repo):
         tokens = [token for token in raw.decode('utf-8').split(' ') if token]
         prefix = tokens[:2902]
         outside = Counter(c for token in prefix for c in token if c not in alphabet)
+        lengths = [len(t) for t in prefix]
+        # Sensitivity variants preserve the selected token slots. These are
+        # not claims about the unknown original conversion convention.
+        renamed = [len(''.join(c if c in alphabet else alphabet[0] for c in t)) for t in prefix]
+        deleted = [sum(c in alphabet for c in t) for t in prefix]
+        assert renamed == lengths
+        def histogram(values):
+            return {str(k): v for k, v in sorted(Counter(values).items())}
         rows.append({
             'file': name, 'sha256': hashlib.sha256(raw).hexdigest(),
             'bytes': len(raw), 'tokens': len(tokens),
             'prefix_eligible': len(tokens) >= 2902,
             'prefix_non_alphabet': dict(sorted(outside.items())),
             'prefix_non_alphabet_tokens': sum(any(c not in alphabet for c in t) for t in prefix),
+            'length_sensitivity': {
+                'original_histogram': histogram(lengths),
+                'one_symbol_replacement_preserves_every_length': renamed == lengths,
+                'deletion_histogram': histogram(deleted),
+                'deletion_empty_token_slots': deleted.count(0),
+                'deleted_units': sum(lengths) - sum(deleted),
+                'mean_length_reduction': (sum(lengths) - sum(deleted)) / len(prefix),
+                'two_symbol_token_count_change': deleted.count(2) - lengths.count(2),
+                'three_symbol_token_count_change': deleted.count(3) - lengths.count(3),
+            },
         })
     return {
         'revision': REVISION, 'file_count': len(names),
@@ -43,6 +61,7 @@ def audit(repo):
         'prefix_tokens': 2902, 'alphabet': alphabet,
         'counting_rule': 'UTF-8 decode; split on literal space; discard empty tokens; count Unicode code points',
         'scope': 'Deterministic convenience sample, not random or representative; no corpus probabilities reproduced',
+        'sensitivity_convention': 'Replace each non-alphabet character by one rune, or delete it while preserving token slots; neither variant asserts the intended conversion',
         'files': rows,
     }
 
