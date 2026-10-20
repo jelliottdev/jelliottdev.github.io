@@ -10975,6 +10975,48 @@ This example explains an operation, not a tested claim about the manuscript. To 
 
 To inspect order-dependent local patterns, use repeated rune sequences. Its script lists overlapping bigrams and trigrams with exact positions and input hashes.
 
+Compare with every rearrangement
+
+For this toy example, define the comparison model precisely: retain four Fs and three Us, treat every distinct ordering as equally likely, and measure pooled IoC at the fixed period 2. There are 7! / (4! × 3!) = 35 distinct orderings. This is an assumption about the comparison process, not a claim about how manuscript text was generated.
+
+	Pooled IoC	Orderings	Share of 35
+	1/3	18	18/35
+	4/9	12	12/35
+	2/3	4	4/35
+	1	1	1/35
+
+The example’s observed rate, 4/9, is met or exceeded by 12 + 4 + 1 = 17 orderings. Its exact upper-tail probability, including ties, is therefore 17/35 ≈ 0.486 under this model. It is not unusual by that comparison. This probability concerns the statistic under the declared rearrangement model; it is not the probability that a cipher hypothesis is true or false.
+
+Averaging over all 35 scores gives 3/7, the whole-stream IoC. The column lengths stay fixed while the symbols move. Every eligible pair of positions has the same expected match probability, 3/7, even though individual arrangements have different column rates.
+
+Reproduce the exact table
+
+Append this to the small example above, which defines pooled and imports Counter and Fraction. Choosing the four F positions enumerates each distinct ordering once; there is no random seed or simulation error.
+
+from itertools import combinations
+
+distribution = Counter()
+for f_positions in combinations(range(7), 4):
+    symbols = ["U"] * 7
+    for i in f_positions:
+        symbols[i] = "F"
+    distribution[pooled(symbols, 2)] += 1
+
+assert distribution == {
+    Fraction(1, 3): 18, Fraction(4, 9): 12,
+    Fraction(2, 3): 4, Fraction(1, 1): 1,
+}
+total = sum(distribution.values())
+observed = Fraction(4, 9)
+tail = sum(count for score, count in distribution.items()
+           if score >= observed)
+assert sum(score * count for score, count in distribution.items()) / total == Fraction(3, 7)
+print("Orderings:", total)
+print("At least observed:", tail)
+print("Upper tail:", Fraction(tail, total))
+
+Expected output: Orderings: 35, At least observed: 17, and Upper tail: 17/35. If you select the best of several periods, this fixed-period table no longer evaluates that selection. Each comparison ordering must undergo the same period search; see null models and selection.
+
 What does changing the offset actually do?
 
 First distinguish a change of labels from a change of input. If every position i stays in the calculation and its column is (i + offset) mod period, changing the offset only renames the columns. The groups of symbols do not change. Their pooled IoC, and the ordinary mean of their defined IoCs, therefore remain unchanged.
@@ -11020,10 +11062,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - repeated rune sequences
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
-- key advancement and boundaries
-  https://jelliottdev.github.io/reference/articles/interruptions.html
+- small example above
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#toy-code
 - null models and selection
   https://jelliottdev.github.io/reference/articles/null-models.html
+- key advancement and boundaries
+  https://jelliottdev.github.io/reference/articles/interruptions.html
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 
