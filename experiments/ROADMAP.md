@@ -31,4 +31,6 @@ Prime-minus-one baseline: 29 offsets, both directions, 55 nonempty LP2 pages; 31
 
 Ordinary-prime variant: only the schedule changes from the prime-minus-one baseline; all 3190 cases retested and compared. Zero fixed-opening matches. Every candidate differs by its sign modulo 29, so an all-constant-shifts search would duplicate coverage. Separate result page, same family.
 
-Fibonacci variant: same search settings, F_0=0. Verified residue period 14; all 3190 configurations reproduce but yield 1540 distinct page outputs. No nine-opening matches. Offset expansion alone adds no coverage. Totient schedules and broader justified plaintext criteria remain open.
+Fibonacci variant: same search settings, F_0=0. Verified residue period 14; all 3190 configurations reproduce but yield 1540 distinct page outputs. No nine-opening matches. Offset expansion alone adds no coverage. Consecutive-integer totients are now recorded separately; broader justified plaintext criteria remain open.
+
+Consecutive-integer totient variant: phi(1) onward, same 29 offsets and two signs. All 3190 outputs distinct within page; zero fixed-opening matches. Every totient independently checked by gcd counting. Phi of primes is the prime-minus-one baseline, not another result. Other totient inputs and boundary rules remain untested.

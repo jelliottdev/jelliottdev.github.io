@@ -30,6 +30,7 @@ assert (phi_n, d, c, pow(c, d, n)) == (8, 3, 8, 2)</code></pre>
 <tr><td>Consecutive integers starting at 2</td><td>2, 3, 4, 5, 6</td><td>1, 2, 2, 4, 2</td></tr>
 </tbody></table></div>
 <p>The first two shifts agree, but the third already differs. “Use totients” therefore leaves an essential question unanswered: totients of which input sequence? It also differs from the <a href="#/wiki/prime-indices">prime-counting function</a>, which counts how many primes are at most a given number.</p>
+<h2 id="experiment">A recorded consecutive-integer test</h2><p>The <a href="#/experiments/lp2-totient-openings">consecutive-integer totient experiment</a> starts at φ(1) and tests offsets 0–28, both addition and subtraction, on LP2-00–55 without interruptions. Its 3190 distinct page outputs do not match any of nine declared 12-rune openings. This is a narrow opening test, not a general rejection of totient-based decoding. The record provides a counting diagram, complete candidate outputs and a checker that calculates every totient directly from greatest common divisors.</p>
 <h2 id="replicate">How to reproduce the identity</h2><pre><code>from math import gcd
 def phi(n):
     return sum(gcd(k, n) == 1 for k in range(1, n + 1))

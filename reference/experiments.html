@@ -3214,6 +3214,440 @@
   &quot;article&quot;: &quot;# Prime-valued archived row sums\n\n## Question and motivation\n\nGematria Primus assigns a prime value to each rune. Adding the values in a row can itself produce a prime. The presence of some such sums is not enough to show that the boundaries were designed to produce them.\n\nThis test asks whether the archived row boundaries across LP2-00–55 produce an unusually large total number of prime sums compared with shuffled text. It uses one combined statistic, rather than selecting promising pages or rows after inspection.\n\n## Plan and eligible input\n\nThe plan and initial runner were committed as `f1779dc` before execution. Each archived transcription line containing at least one recognized rune defines a row. Include headings, remove non-alphabet characters, and apply no correction or decryption. Rows with no recognized runes do not receive a Gematria Primus sum.\n\nThe first invocation stopped before computing a result because LP2-50 has no runic rows. Commit `ec18a8f` removed an unnecessary requirement that every page contribute a row. The input rule itself did not change: rows without recognized runes were already excluded. LP2-50 remains in every dataset with a zero eligible-row count; its alphanumeric grid is not interpreted as runes. This implementation correction occurred before the first completed statistical result.\n\nThe final input has 594 eligible rows across 55 rune-bearing pages, with LP2-50 retained as the zero-row page in the declared 56-page scope.\n\n## Statistic and comparison model\n\nFor each row, sum the Gematria Primus values of its runes. Count how many sums are prime, then add those counts across all selected pages. That combined count is the single test statistic.\n\nFor each simulated dataset, independently shuffle the full rune stream within each page. Partition the shuffled stream using that page&#x27;s original row lengths. This preserves page-level rune counts and every row length, but does not preserve words, local ordering or each row&#x27;s original composition.\n\nRepeat for 999 datasets using Python&#x27;s `random.Random(330133)`. Count null totals greater than or equal to the observed total, including ties. Use the plus-one Monte Carlo correction:\n\n```\np = (1 + shuffled totals at least observed) / (1 + 999)\n```\n\nThe declared test is one-sided: an excess of prime-valued row sums. It is not a test for a deficit, nor a two-sided test for any deviation. The threshold is 0.05. Per-page counts are retained for inspection but are not separate significance tests.\n\n## Result\n\n| Quantity | Observed or simulated value |\n| --- | --- |\n| Eligible rows | 594 |\n| Observed prime-valued sums | 76 |\n| Shuffled total range | 60–115 |\n| Mean shuffled total | 83.786 |\n| Shuffled totals at least 76 | 843 of 999 |\n| Corrected one-sided p | 0.844 |\n| Below the declared 0.05 threshold | No |\n\nThe observed count does not provide evidence of an excess under this model. The relatively high p-value does not establish randomness, disprove deliberate numerical design, or make the null model true.\n\nThe approximate Monte Carlo standard error is 0.0115, computed from the simulated tail frequency 843/999. This is simulation uncertainty, not a probability that a proposed encoding exists.\n\n## Files and how to reproduce\n\nUse Python 3.12.10; all scripts use the standard library.\n\n```\npython experiments/records/lp2-row-prime-sums/run.py --check\npython experiments/records/lp2-row-prime-sums/check.py\n```\n\nThe first command reruns every observed row calculation and all 999 full-dataset shuffles, then compares every saved field. The separate checker uses trial division instead of the runner&#x27;s sieve for all observed sums and the first three simulated datasets. It also audits the totals, tail decisions and correction across all saved trials.\n\n[Download all observed row sums as CSV](experiments/records/lp2-row-prime-sums/observed-rows.csv). The archived line number is one-based and includes the source file&#x27;s line numbering. A zero-row page has no CSV row; it remains explicit in the JSON&#x27;s page list.\n\n[Download the complete report](experiments/records/lp2-row-prime-sums/results.json). It retains every observed row and all 999 per-page null-count vectors, aligned with `null_page_order`. The histogram and CSV are generated from this saved report:\n\n```\npython experiments/records/lp2-row-prime-sums/plot.py\n```\n\nTo save a fresh result separately, run the main script with `--output my-row-primes.json`. It refuses to overwrite an existing result. No network connection or AI service is used.\n\n## Retest and review\n\nCodex repeated the full run and performed the independent checks on 20 October 2026. All observed sums and simulated records reproduced exactly. Apart from the pre-result zero-row handling correction described above, no statistic, input rule, seed, threshold, tail or null model changed. Human review remains pending.\n\n## Limits and next variants\n\nThis analysis uses archived transcription boundaries, not a new visual verification of every printed row. Transcription errors, heading treatment or a different boundary convention could change the calculation.\n\nIt does not test emirps, reversals of decimal sums, prime ordinals, decoded readings, selected words, arbitrary regions, or the possibility that a few specific rows were deliberately chosen. It also does not correct for historical investigations or future choices among alternative statistics. The pages and statistic were selected because prime sums were already a topic of interest; this is not a blind discovery.\n\nA different boundary rule or numerical property belongs in a separately planned variant. Keep the original result available rather than enlarging the search until an attractive pattern appears.\n\nSee [prime sums](#/wiki/prime-sums), [null models](#/wiki/null-models), and [documenting a reproducible attempt](#/wiki/reproducibility).\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-row-prime-sums/article.md&quot;,
   &quot;script_sha256&quot;: &quot;4d1b3194349677e880d2ba59248945b31387c9ef6ce4e92e4cb05f009c5f8be1&quot;
+}</pre></article><article id="lp2-totient-openings"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-totient-openings&quot;,
+  &quot;title&quot;: &quot;LP2-00–55: totients of consecutive integers&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does uninterrupted consecutive-integer totient arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?&quot;,
+  &quot;summary&quot;: &quot;Starting with phi(1), 29 offsets and both arithmetic directions produce 3190 distinct page outputs. None matches nine fixed 12-rune openings. Totients of primes would duplicate the prime-minus-one baseline instead.&quot;,
+  &quot;tags&quot;: [
+    &quot;totient&quot;,
+    &quot;Euler totient&quot;,
+    &quot;phi&quot;,
+    &quot;phi(n)&quot;,
+    &quot;consecutive integers&quot;,
+    &quot;numerical keystream&quot;,
+    &quot;coprime&quot;,
+    &quot;offset&quot;,
+    &quot;known plaintext&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;representation&quot;: &quot;All recognized runes in archived order, including headings. Ignore other characters. Empty pages contribute no candidates.&quot;,
+    &quot;procedure&quot;: &quot;Apply consecutive-integer totient shifts phi(j+s+1) modulo 29, with phi(1)=1 and both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.&quot;,
+    &quot;parameters&quot;: &quot;Offsets 0–28 inclusive; two directions; independent page reset; one term per rune; no interruptions. 55 rune-bearing pages, 3190 candidates, 28710 comparisons.&quot;,
+    &quot;exclusions&quot;: &quot;Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;Zero exact opening matches among 3190 distinct page outputs and 28710 comparisons. The full rerun matches, and the separate checker derives every applied totient through gcd counting and audits every candidate.&quot;,
+  &quot;limitations&quot;: &quot;Only nine fixed initial openings and offsets 0–28, without language scoring or interruptions. This applies phi to consecutive positive integers, not rune values or sums. Computational review only; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Specify any different inputs to phi explicitly. Totients of consecutive primes repeat the baseline; later offsets, interruption rules and broader plaintext criteria require separately declared tests.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;numerical-keystream-openings&quot;,
+    &quot;title&quot;: &quot;Numerical keystreams and known openings&quot;,
+    &quot;question&quot;: &quot;Do declared numerical schedules recover fixed known openings under explicit offset and advancement rules?&quot;,
+    &quot;baseline&quot;: &quot;lp2-prime-minus-one-openings&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Consecutive-integer totients; all other search settings fixed&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Apply prime-minus-one shifts modulo 29, with both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.&quot;,
+        &quot;after&quot;: &quot;Apply consecutive-integer totient shifts phi(j+s+1) modulo 29, with phi(1)=1 and both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.&quot;,
+        &quot;reason&quot;: &quot;Replace prime-minus-one terms with totients of consecutive positive integers starting at 1, including composites. Preserve page selection, offsets, signs, advancement and opening criteria.&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex — full rerun, independent gcd-based totients and complete candidate audit; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-totient-openings/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12.10, standard library. Independent audit: python experiments/records/lp2-totient-openings/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-totient-openings/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;c3ec24c0961e29b34f6c2592eea5c5b18a72f5ff77dd1df759af3fcd1408661f&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/warning.csv&quot;,
+        &quot;sha256&quot;: &quot;ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/welcome.csv&quot;,
+        &quot;sha256&quot;: &quot;db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/some-wisdom.csv&quot;,
+        &quot;sha256&quot;: &quot;c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/first-koan.csv&quot;,
+        &quot;sha256&quot;: &quot;85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/loss-of-divinity.csv&quot;,
+        &quot;sha256&quot;: &quot;695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/second-koan.csv&quot;,
+        &quot;sha256&quot;: &quot;8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/instruction.csv&quot;,
+        &quot;sha256&quot;: &quot;dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-56.csv&quot;,
+        &quot;sha256&quot;: &quot;5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-57.csv&quot;,
+        &quot;sha256&quot;: &quot;197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-56.txt&quot;,
+        &quot;sha256&quot;: &quot;6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-prime-minus-one-openings/plan.json&quot;,
+        &quot;sha256&quot;: &quot;5399318b4b458819ec2687c6b803857d7ebb5b5d053aaa336cbbfd71626f7508&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/plan.json&quot;,
+        &quot;sha256&quot;: &quot;125bdbfa768da195fe7bc836c8f2611e8c0e3b8995005036170dd097aa296a7d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/check.py&quot;,
+        &quot;sha256&quot;: &quot;7fe64c64833d775d10c43d6796a89c6381d2d8d5d73253e9b916e000b05baaac&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/plot.py&quot;,
+        &quot;sha256&quot;: &quot;de29d449721ea3a7f1ede2b50c0aa561a631345c01aef5763368b28db223d20b&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/results.json&quot;,
+        &quot;sha256&quot;: &quot;f4f369eb03f15589f0cc640926215389e2060740e5138ad59fdc593fdadd0108&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/counting.svg&quot;,
+        &quot;sha256&quot;: &quot;11c27b4b9b6e5b23bd954f87fc57f3024a472f6b28df40d15c8babc89637d505&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-totient-openings/counting.svg&quot;,
+      &quot;caption&quot;: &quot;Totients count coprime integers: four for 8 and six for 9. The illustration checks those counts against the saved schedule; it is not a decryption.&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-prime-minus-one-openings&quot;,
+    &quot;lp2-prime-openings&quot;,
+    &quot;lp2-fibonacci-openings&quot;
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Totient definition, examples and phi(prime) identity&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/totient&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Prime-minus-one baseline and common opening criterion&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Totients of consecutive integers\n\n“Try the totient function” leaves an important choice unresolved: the totients of which numbers? This experiment uses consecutive positive integers, beginning with φ(1), rather than consecutive primes.\n\nAll 3190 planned page/offset/direction configurations completed and produced 3190 distinct page outputs. None began with one of the nine declared 12-rune openings. This is an exact-opening result, not an assessment of general readability.\n\n## What changes from the baseline?\n\nThe [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings) applies the sequence 1, 2, 4, 6, 10… derived from successive primes. This variant changes only that schedule:\n\n```text\nInput integer:  1  2  3  4  5  6  7  8  9 10\nTotient:        1  1  2  2  4  2  6  4  6  4\n```\n\nThe totient φ(n) counts integers k from 1 through n whose greatest common divisor with n is 1. Thus φ(8) = 4 because 1, 3, 5 and 7 qualify. For n = 9, the six qualifying integers are 1, 2, 4, 5, 7 and 8. They do not all have to be prime; they must be coprime to the chosen n. The convention φ(1) = 1 is included.\n\nFor a prime p, every integer from 1 through p−1 is coprime to p. Therefore φ(p) = p−1. Applying φ to consecutive primes would reproduce the baseline schedule and is not a separate experiment under otherwise identical rules.\n\nSee the [totient guide](#/wiki/totient) for the definition, factorization formula and connection to the known LP2-56 recipe.\n\n## Exact transformation\n\nFor rune position j, starting offset s and direction d:\n\n```text\noutput[j] = (input[j] + d × φ(j+s+1)) mod 29\nd = −1 for subtraction, +1 for addition\n```\n\nPositions and offsets are zero-based. Offset zero starts at φ(1); offset one starts at φ(2). Both start with the value 1, but their later terms differ. A matching first value does not make two schedules identical.\n\n| Setting | Declared choice |\n| --- | --- |\n| Pages | LP2-00–55; LP2-50 has no recognized runes and contributes no candidates |\n| Input | All archived runes in order, including headings |\n| Starting offsets | Every integer 0–28, selecting initial inputs 1–29 |\n| Arithmetic | Addition and subtraction modulo 29 |\n| Advancement | One term per recognized rune; non-rune characters consume no terms |\n| Boundaries | Reset at each page, not at words or rows; no interruptions |\n| Acceptance | Exact first-12-index match to a declared known opening |\n\nEach of the 55 nonempty pages has 58 configurations, for 3190 in total. The complete output tuple is retained for every configuration. Checking those tuples found no repeated outputs within a page in this particular bounded search. That observation is not a proof that arbitrary later totient offsets must all differ.\n\n## The opening criterion\n\nThe references are the first 12 output indices from Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. Their vectors and source-trace hashes are fixed in the plan.\n\nThere were 28,710 exact comparisons and zero matches. The code does not reward partial words or rank how English-like a candidate appears. A valid plaintext with a different beginning would fail this criterion.\n\n## Controls and retest\n\nThe plan and runner were committed as c84258a before execution. No input conventions, offset bounds or acceptance rules changed after inspecting the search results.\n\nThe runner uses a totient sieve: it starts with each integer n and removes the fraction divisible by each distinct prime factor. The separate checker takes a deliberately different route, calculating gcd(k,n) for every k from 1 through n and counting the ones. It verifies every generated totient needed by the search, not just the small examples.\n\nA hand arithmetic control subtracts 1, 1, 2, 2 from indices 25, 11, 22, 15 to obtain 24, 10, 20, 13 modulo 29. This is not presented as a known reading. The checker then verifies all candidate outputs by undoing their arithmetic, checks the complete configuration set, audits the opening vectors against their source CSVs, and counts distinct page outputs. A full second execution reproduces the saved JSON exactly.\n\nReview is computational; human review remains pending.\n\n## Reproduce\n\nFrom the repository root, with Python 3.12:\n\n```sh\npython experiments/records/lp2-totient-openings/run.py --check\npython experiments/records/lp2-totient-openings/check.py\n```\n\nTo save a fresh result at a path that does not already exist:\n\n```sh\npython experiments/records/lp2-totient-openings/run.py --output totient-rerun.json\n```\n\nThe scripts use the standard library and local files, without network or model calls. The result stores the applied totient sequence, page lengths, all complete candidates and their match decisions.\n\n## What this leaves open\n\nLater offsets, different beginnings, interruptions, heading removal, transposition and combined transformations remain outside the test. Applying φ directly to rune values, prime sums or another derived input would also be a different procedure.\n\nThe manuscript’s reference to the totient makes it a reasonable function to examine; it does not determine those choices. A future record should state its inputs as precisely as its formula. This family now documents prime-minus-one, ordinary primes, Fibonacci and consecutive-integer totients under a common narrow opening criterion; it does not exhaust numerical ciphers.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-totient-openings/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;c3ec24c0961e29b34f6c2592eea5c5b18a72f5ff77dd1df759af3fcd1408661f&quot;
 }</pre></article><article id="outguess-default-key"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;outguess-default-key&quot;,
   &quot;title&quot;: &quot;Original JPEGs: default-key OutGuess sweep&quot;,
