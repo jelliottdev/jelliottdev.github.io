@@ -31,12 +31,16 @@ def concordance(controls, query, prefix=False, context=10):
         raise ValueError("Duplicate section IDs would double-count the readings.")
     hits = []
     for c in controls:
+        spans = list(WORD.finditer(c["reading"]))
         tokens = words(c["reading"])
         for i in range(len(tokens) - len(needle) + 1):
             match = (tokens[i].startswith(needle[0]) if prefix
                      else tokens[i:i + len(needle)] == needle)
             if match:
                 end = i + len(needle)
+                source_start, source_end = spans[i].start(), spans[end - 1].end()
+                excerpt_start = spans[max(0, i - context)].start()
+                excerpt_end = spans[min(len(spans), end + context) - 1].end()
                 hits.append({
                     "section": c["id"],
                     "section_pages": c["pages"],
@@ -45,6 +49,10 @@ def concordance(controls, query, prefix=False, context=10):
                     "matched": " ".join(tokens[i:end]),
                     "before": " ".join(tokens[max(0, i - context):i]),
                     "after": " ".join(tokens[end:end + context]),
+                    "source_start": source_start,
+                    "source_end": source_end,
+                    "matched_source": c["reading"][source_start:source_end],
+                    "source_excerpt": c["reading"][excerpt_start:excerpt_end],
                     "reading_url": "https://jelliottdev.github.io/#/wiki/reading-" + c["id"],
                 })
     return hits
@@ -70,6 +78,7 @@ def main():
         "representation": "Contextual English; section-level attribution, not exact page placement",
         "tokenization": "ASCII letters/digits; internal apostrophes retained and normalized; other punctuation ignored",
         "position_convention": "One-based contextual word positions; not rune offsets",
+        "source_offset_convention": "Zero-based Unicode character offsets into the section reading; end exclusive",
         "query": args.query,
         "mode": "word-prefix" if args.prefix else "exact-token-phrase",
         "context_words_per_side": args.context,

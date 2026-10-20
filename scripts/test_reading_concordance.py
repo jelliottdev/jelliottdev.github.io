@@ -32,6 +32,20 @@ class ReadingConcordance(unittest.TestCase):
         with self.assertRaises(ValueError):
             concordance([{"id": "same"}, {"id": "same"}], "word")
 
+    def test_original_excerpt_and_character_positions(self):
+        reading = "☀ Before: Don’t,\nSTOP! After."
+        hit = concordance([{"id": "a", "pages": ["a"], "reading": reading}],
+                          "don't stop", context=1)[0]
+        self.assertEqual(hit["matched_source"], "Don’t,\nSTOP")
+        self.assertEqual(hit["source_excerpt"], "Before: Don’t,\nSTOP! After")
+        self.assertEqual(reading[hit["source_start"]:hit["source_end"]],
+                         hit["matched_source"])
+        self.assertEqual(hit["source_start"], 10)
+        self.assertEqual((hit["word_start"], hit["word_end"]), (2, 3))
+        zero = concordance([{"id": "a", "pages": [], "reading": reading}],
+                           "stop", context=0)[0]
+        self.assertEqual(zero["source_excerpt"], "STOP")
+
 
 if __name__ == "__main__":
     unittest.main()

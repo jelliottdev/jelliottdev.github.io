@@ -43,6 +43,14 @@ The JSON output includes the query, matching mode, tokenization rule, source-fil
 
 The hash identifies the exact contextual compilation searched. It is not a signature or evidence that the contextual rendering is an original manuscript file. Read the checksum guide for that distinction.
 
+Keep the original wording when comparing passages
+
+Search matching ignores case and most punctuation, but those details can matter when discussing a passage. Each JSON hit therefore also includes matched_source, the matched words with their original capitalization, punctuation and whitespace, and source_excerpt, the surrounding words preserved in the same way. “Original” here means the stored contextual reading, not the manuscript’s rune stream.
+
+For example, searching don't stop can match Don’t, STOP. The normalized match is DON'T STOP, while matched_source retains Don’t, STOP. This lets you find a phrase flexibly without silently rewriting it when you inspect the result.
+
+The fields source_start and source_end locate that match inside the section’s reading string. They count Unicode characters from zero, with the end excluded: in Python, reading[source_start:source_end] recovers matched_source. They are not UTF-8 byte offsets or positions on the manuscript image. The excerpt starts at the first included word and ends at the last included word; punctuation between those words is preserved, but punctuation outside those boundaries is not included.
+
 Check the implementation
 
 python scripts/test_reading_concordance.py
