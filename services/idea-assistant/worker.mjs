@@ -3,24 +3,36 @@ import AssistantSearch from '../../assistant-search.js';
 
 const REGISTRY = 'https://jelliottdev.github.io/data/experiments.json';
 const MODEL = '@cf/google/gemma-4-26b-a4b-it';
-let cachedRecords, expires = 0;
-
-async function records() {
-  if (cachedRecords && Date.now() < expires) return cachedRecords;
-  const response=await fetch(REGISTRY,{signal:AbortSignal.timeout(8000),cache:'no-cache'});
-  if(!response.ok)throw Error('Registry unavailable');
-  const data=await response.json();
-  if(!Array.isArray(data.records))throw Error('Invalid registry');
-  const experiments=AssistantSearch.experimentDocs(data.records);
-  let documents=[];
-  if(experiments.length){
-    const reference=await fetch('https://jelliottdev.github.io/data/assistant-index.json',{signal:AbortSignal.timeout(8000),cache:'no-cache'});
-    if(reference.ok){const index=await reference.json();documents=index.documents||[];}
-  }
-  cachedRecords = [...documents,...experiments];
-  expires = Date.now() + 300000;
-  return cachedRecords;
+export function createRecordLoader(fetcher=fetch, now=()=>Date.now()) {
+  let cachedRecords, expires=0, loading;
+  return async function loadRecords() {
+    if(cachedRecords && now()<expires)return cachedRecords;
+    if(loading)return loading;
+    loading=(async()=>{
+      const response=await fetcher(REGISTRY,{signal:AbortSignal.timeout(8000),cache:'no-cache'});
+      if(!response.ok)throw Error('Registry unavailable');
+      const data=await response.json();
+      if(!Array.isArray(data.records))throw Error('Invalid registry');
+      const experiments=AssistantSearch.experimentDocs(data.records);
+      let documents=[];
+      if(experiments.length){
+        // Page context is optional. Its outage must not hide complete experiment evidence.
+        try {
+          const reference=await fetcher('https://jelliottdev.github.io/data/assistant-index.json',{signal:AbortSignal.timeout(8000),cache:'no-cache'});
+          if(reference.ok){
+            const index=await reference.json();
+            if(Array.isArray(index.documents))documents=index.documents;
+          }
+        } catch {/* Continue with experiment scopes when supporting context is unavailable. */}
+      }
+      cachedRecords=[...documents,...experiments];
+      expires=now()+300000;
+      return cachedRecords;
+    })();
+    try {return await loading;} finally {loading=undefined;}
+  };
 }
+const records=createRecordLoader();
 
 async function readQuery(request) {
   if (!request.headers.get('content-type')?.startsWith('application/json')) throw Error('Expected JSON');

@@ -19,6 +19,8 @@ The configured model is `@cf/google/gemma-4-26b-a4b-it`, currently available on 
 
 The Worker retrieves the public experiment registry and a compact supporting-page index, cached for five minutes. It ranks **techniques first**, after removing page references from the query. A page match alone never triggers inference. At most two complete experiment scopes and two relevant excerpts from explicitly named pages are sent to the model. Page evidence is supporting context, not evidence of a test. Retrieval is lexical, not an exhaustive semantic or novelty check.
 
+Concurrent cold requests share one index load. A failed or malformed optional supporting-page index leaves the experiment records usable; a failed experiment registry still stops comparison rather than substituting page context for evidence. The next load after the five-minute expiry picks up published record changes. Loader tests simulate refreshes, failures and recovery without network access.
+
 Only published experiment records are eligible. Empty registries, page-only requests and unmatched techniques do not spend inference. Experiment scope is never silently truncated to fit a prompt. Context is bounded to 11,000 characters and output to 700 tokens (requested prose limit: 220 words). Thinking is disabled. Citations are checked for valid source numbers, which does not prove factual entailment. Markdown rendering escapes HTML and only links to evidence-owned wiki routes.
 
 Repeated requests reuse answers in three ways: a bounded browser-memory cache (20 entries, one hour), bounded Worker memory (100 entries, one hour), and the Cloudflare Cache API (up to 24 hours). Cache keys hash the exact whitespace-normalized question, selected pages, evidence contents, model and prompt version; case is preserved for cryptographic questions. Changed evidence invalidates an answer. Edge cache entries are local to a Cloudflare data center and may be evicted; this is not a global or guaranteed hit rate. Equal concurrent requests share one inference within an isolate. Three concurrent generations per isolate and a 60-second outage cooldown reduce retry storms; these are not account-wide limits.
@@ -30,6 +32,8 @@ The configured rate limit permits six requests per minute per IP at a Cloudflare
 Questions and retrieved text are sent to Cloudflare. The Worker does not log request bodies; observability is disabled. Answers and their source excerpts are temporarily cached and can be reused for the same question. The cache URL contains a SHA-256 digest, not the question; generated answer text can nevertheless reflect the submitted question. The form advises users not to include private information, and the coverage disclosure explains reuse. Cloudflare's service policies still apply.
 
 ## Validation
+
+20 October 2026: deployed optional-context failure handling and shared index loads as Worker version `4cb2c95a-8273-4480-a1ae-46eaffdfcde2`. Mocked tests cover current published records, complete evidence preservation, five-minute refresh, load failures and retries. Wrangler confirmed deployment with the existing AI and rate-limit bindings. No hosted inference request was made for this deployment; it is not a new model-quality evaluation.
 
 Run `node services/idea-assistant/test-worker.mjs` and `node scripts/test_assistant.cjs` from the repository root. Tests use a fake inference binding and never consume hosted quota. Complete a real deployed integration check before enabling the endpoint. Do not call the hosted assistant operational while `endpoint` is null.
 
