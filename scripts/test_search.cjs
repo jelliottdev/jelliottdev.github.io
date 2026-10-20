@@ -129,6 +129,9 @@ for(const [query,id,section] of [
  ['diagonal pixels','image-regions','diagonal-example'],
  ['flood fill','image-regions','component-code'],
  ['crop rectangle','image-regions','coordinates'],
+ ['rune count vs character count','transliteration','counting-example'],
+ ['counting runes','transliteration','counting-example'],
+ ['TH and NG','transliteration','counting-example'],
  ['maximum empirical entropy','rune-entropy','finite-length'],
 ])assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
 console.log('PASS: measurement and grid terminology opens worked examples directly');

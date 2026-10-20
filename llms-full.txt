@@ -892,6 +892,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 
 ## Related guides
 
+Transliteration and literal readings: https://jelliottdev.github.io/reference/articles/transliteration.html
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
@@ -3085,6 +3086,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 ## Related guides
 
+Transliteration and literal readings: https://jelliottdev.github.io/reference/articles/transliteration.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Rune-frequency entropy: balance without order: https://jelliottdev.github.io/reference/articles/rune-entropy.html
 Repeated rune sequences: bigrams and trigrams: https://jelliottdev.github.io/reference/articles/rune-ngrams.html
@@ -6172,6 +6174,51 @@ Compare the right outputs
 Begin with the image and archived rune text. Record corrections before applying a cipher. Compare a literal output with the page-level control, not a normalized paragraph spanning several pages. Preserve spelling when testing prime sums.
 On LP1-10, a documented I/E order correction matters. The script swaps runes at zero-based ordinals 116 and 117; it does not rewrite every similar sequence. See the transcription guide.
 The worked trace guide follows the first two warning runes from input indices to literal labels.
+One row, several different counts
+
+The first row of LP2-31 shows why a character count is not automatically a rune count. This page has no known reading in the source snapshot; the Latin labels below remain ciphertext labels.
+
+[Image: First row of LP2-31, with black runes, small separators and a compact punctuation cluster.]
+Original-image rectangle [570, 640, 1260, 180]. Open the complete page.
+
+Compare the representations
+
+Archived rune row:
+ᚦᚳᛒᛝᛏᛉᛡᛞ-ᛋᛡ-ᚩᚠ.ᛈᛖᛞᛋᛁ-ᛚᛁᚻᚾᛝᚱ-/
+
+Latin labels, with archive delimiters retained:
+THCBNGTXIAD-SIA-OF.PEDSI-LIHNNGR-/
+
+The archive row has 29 Unicode characters: 23 rune symbols, four hyphens, one period and one slash. This count excludes the newline that separates rows in the text file. The final slash records a line boundary; it is not an additional rune drawn at the right edge of the image. The other delimiter names follow the archive’s transcription convention.
+
+The first four runes have labels TH · C · B · NG. Those are four symbols but six Latin letters. Concatenating the labels as THCBNG loses their individual boundaries unless the mapping is kept alongside them. Indexing that string one English letter at a time would therefore change the unit being analyzed. See rune indices and prime values.
+
+Reproduce the counts
+
+From an extracted reference-data bundle or repository checkout, save this as a Python file in the root directory and run it there. It uses only Python’s standard library and reads the preserved transcription:
+
+import json
+from collections import Counter
+from pathlib import Path
+
+index = json.loads(Path("data/index.json").read_text(encoding="utf-8"))
+labels = {item["rune"]: item["latin"] for item in index["alphabet"]}
+row = Path("text/lp2-31.txt").read_text(encoding="utf-8").splitlines()[0]
+runes = [char for char in row if char in labels]
+other = Counter(char for char in row if char not in labels)
+print("Archived characters:", len(row))
+print("Runes:", len(runes))
+print("Other characters:", dict(other))
+print("First four labels:", [labels[char] for char in runes[:4]])
+
+Expected output:
+Archived characters: 29
+Runes: 23
+Other characters: {'-': 4, '.': 1, '/': 1}
+First four labels: ['TH', 'C', 'B', 'NG']
+
+Selecting only runes is appropriate for the published rune-frequency calculation. It is not a faithful copy of every visible feature. Keep the original row when testing punctuation, spacing or boundaries, and state whether a key advances on runes only or on another declared unit. A transcriber’s separator does not decide that rule for you. See printed marks and exported characters.
+
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
@@ -6182,10 +6229,24 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/spelling
 - LP1-10
   https://jelliottdev.github.io/reference/lp1-10.html
-- transcription guide
+- transcription guide; archive’s transcription convention
   https://jelliottdev.github.io/#/conventions
 - worked trace guide
   https://jelliottdev.github.io/reference/articles/running-scripts.html
+- LP2-31
+  https://jelliottdev.github.io/reference/lp2-31.html
+- First row of LP2-31, with black runes, small separators and a compact punctuation cluster.
+  https://jelliottdev.github.io/images/lp2-31.jpg
+- Open the complete page
+  https://jelliottdev.github.io/#/reader/lp2-31
+- rune indices and prime values
+  https://jelliottdev.github.io/reference/articles/rune-values.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- rune-frequency calculation
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- printed marks and exported characters
+  https://jelliottdev.github.io/reference/articles/dots.html#notation
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
@@ -12504,6 +12565,7 @@ Published measurements for the opening pages
 The printed mark and the exported character
 In the archive notation, a comma represents a three-dot symbol; a period is a clause separator, and an ampersand is a paragraph separator. These are editorial conventions. They are not instructions to insert the prime value of a comma, reset a key, or skip a rune.
 One exported character can stand for visually different marks. Before a punctuation-based experiment, identify the exact image regions and the precise sequence you are testing. Otherwise a result may describe the transcriber’s decisions rather than the printed manuscript.
+The LP2-31 row example compares an original row, archive punctuation and expanded Latin labels, with reproducible counts.
 Inspect and reproduce
 Open an opening-page record and expand “Recorded punctuation regions.”
 Use “Inspect region” to compare the stored rectangle against the full image.
@@ -12593,6 +12655,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-01.html
 - LP2-02
   https://jelliottdev.github.io/reference/lp2-02.html
+- LP2-31 row example
+  https://jelliottdev.github.io/reference/articles/transliteration.html#counting-example
 - punctuation review record
   https://jelliottdev.github.io/data/evidence/current-LP2-reviewed-mark-profile-v1.json
 - The repeated cuneiform-like mark

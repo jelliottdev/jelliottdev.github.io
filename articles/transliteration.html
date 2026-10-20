@@ -1,3 +1,31 @@
 
 <h2 id="layers">Different text layers</h2><p>A transcription records runes. A transliteration replaces each rune with a Latin label. A cipher transformation may produce plaintext rune indices, whose labels form a literal decoded reading. Contextual English can normalize spelling or interpret those labels. It is an editorial layer.</p><p>Transliterating encrypted runes does not decrypt them. Conversely, <a href="#/wiki/direct-reading">direct-reading sections</a> need no nontrivial substitution.</p>
-<h2 id="replicate">Compare the right outputs</h2><p>Begin with the image and archived rune text. Record corrections before applying a cipher. Compare a literal output with the page-level control, not a normalized paragraph spanning several pages. Preserve spelling when testing <a href="#/spelling">prime sums</a>.</p><p>On <a href="#/page/lp1-10?section=corrections">LP1-10</a>, a documented I/E order correction matters. The script swaps runes at zero-based ordinals 116 and 117; it does not rewrite every similar sequence. See the <a href="#/conventions">transcription guide</a>.</p><p>The <a href="#/wiki/running-scripts">worked trace guide</a> follows the first two warning runes from input indices to literal labels.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
+<h2 id="replicate">Compare the right outputs</h2><p>Begin with the image and archived rune text. Record corrections before applying a cipher. Compare a literal output with the page-level control, not a normalized paragraph spanning several pages. Preserve spelling when testing <a href="#/spelling">prime sums</a>.</p><p>On <a href="#/page/lp1-10?section=corrections">LP1-10</a>, a documented I/E order correction matters. The script swaps runes at zero-based ordinals 116 and 117; it does not rewrite every similar sequence. See the <a href="#/conventions">transcription guide</a>.</p><p>The <a href="#/wiki/running-scripts">worked trace guide</a> follows the first two warning runes from input indices to literal labels.</p><h2 id="counting-example">One row, several different counts</h2>
+<p>The first row of <a href="#/page/lp2-31?section=transcription">LP2-31</a> shows why a character count is not automatically a rune count. This page has no known reading in the source snapshot; the Latin labels below remain ciphertext labels.</p>
+<figure class="evidence-figure"><a href="images/lp2-31.jpg" style="display:block;overflow:hidden;aspect-ratio:1260/180"><img src="images/lp2-31.jpg" width="2400" height="3600" loading="lazy" style="display:block;width:190.476190%;max-width:none;max-height:none;height:auto;margin-left:-45.238095%;margin-top:-50.793651%" alt="First row of LP2-31, with black runes, small separators and a compact punctuation cluster."></a><figcaption>Original-image rectangle <code>[570, 640, 1260, 180]</code>. <a href="#/reader/lp2-31">Open the complete page</a>.</figcaption></figure>
+<h3 id="row-layers">Compare the representations</h3>
+<p><strong>Archived rune row:</strong></p><pre class="rune-line"><code>ᚦᚳᛒᛝᛏᛉᛡᛞ-ᛋᛡ-ᚩᚠ.ᛈᛖᛞᛋᛁ-ᛚᛁᚻᚾᛝᚱ-/</code></pre>
+<p><strong>Latin labels, with archive delimiters retained:</strong></p><pre><code>THCBNGTXIAD-SIA-OF.PEDSI-LIHNNGR-/</code></pre>
+<p>The archive row has <strong>29 Unicode characters</strong>: 23 rune symbols, four hyphens, one period and one slash. This count excludes the newline that separates rows in the text file. The final slash records a line boundary; it is not an additional rune drawn at the right edge of the image. The other delimiter names follow the <a href="#/conventions">archive’s transcription convention</a>.</p>
+<p>The first four runes have labels <code>TH · C · B · NG</code>. Those are four symbols but six Latin letters. Concatenating the labels as <code>THCBNG</code> loses their individual boundaries unless the mapping is kept alongside them. Indexing that string one English letter at a time would therefore change the unit being analyzed. See <a href="#/wiki/rune-values">rune indices and prime values</a>.</p>
+<h3 id="count-row">Reproduce the counts</h3>
+<p>From an extracted <a href="downloads/reference-data.zip">reference-data bundle</a> or repository checkout, save this as a Python file in the root directory and run it there. It uses only Python’s standard library and reads the preserved transcription:</p>
+<pre><code>import json
+from collections import Counter
+from pathlib import Path
+
+index = json.loads(Path("data/index.json").read_text(encoding="utf-8"))
+labels = {item["rune"]: item["latin"] for item in index["alphabet"]}
+row = Path("text/lp2-31.txt").read_text(encoding="utf-8").splitlines()[0]
+runes = [char for char in row if char in labels]
+other = Counter(char for char in row if char not in labels)
+print("Archived characters:", len(row))
+print("Runes:", len(runes))
+print("Other characters:", dict(other))
+print("First four labels:", [labels[char] for char in runes[:4]])</code></pre>
+<p>Expected output:</p><pre><code>Archived characters: 29
+Runes: 23
+Other characters: {'-': 4, '.': 1, '/': 1}
+First four labels: ['TH', 'C', 'B', 'NG']</code></pre>
+<p>Selecting only runes is appropriate for the published <a href="#/wiki/index-of-coincidence">rune-frequency calculation</a>. It is not a faithful copy of every visible feature. Keep the original row when testing punctuation, spacing or boundaries, and state whether a key advances on runes only or on another declared unit. A transcriber’s separator does not decide that rule for you. See <a href="#/wiki/dots?section=notation">printed marks and exported characters</a>.</p>
+<h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
