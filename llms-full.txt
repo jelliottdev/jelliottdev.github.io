@@ -6529,6 +6529,8 @@ For a worked descriptive analysis, use the index-of-coincidence baseline: exact 
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The linked known-reading recipes provide controls. The 58-case example demonstrates candidate generation. It does not test a plaintext hypothesis or report a decipherment.
 
+For interpreting candidate outputs, see evaluating candidate readings: an exact opening match, a language ranking and a complete decryption require different evidence.
+
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
@@ -6558,6 +6560,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+- evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
 
 Article: https://jelliottdev.github.io/reference/articles/reproducibility.html
 
@@ -10702,6 +10706,8 @@ For repeating-period questions, use periodic IoC: it explains column assignment,
 
 Before using a measurement to rank candidate solutions
 
+Evaluating candidate readings explains the difference between matching a known opening, ranking language-like output and reproducing a full reading. Its worked examples show why an opening test can reject readable text and accept a string whose remainder is meaningless.
+
 Read what cipher operations preserve. A measurement that stays unchanged under every candidate transformation cannot distinguish those candidates. Whole-stream IoC, for example, cannot rank a set of pure transpositions of the same rune stream.
 
 Also distinguish an observed value from evidence that it is unusual. A repeated pair is an observation; claiming it occurs more often than expected requires a stated comparison model. Selecting the best result from many lengths, keys or page subsets is itself part of the procedure and must be accounted for in that comparison. The reproducibility guide explains how to bound a proposed test and report its limitations.
@@ -10792,6 +10798,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - periodic IoC
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html
+- Evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
 - reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reference-data bundle
@@ -16381,6 +16389,99 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 
 Article: https://jelliottdev.github.io/reference/articles/reclining-figure.html
+
+
+---
+
+Evaluating candidate readings
+
+Distinguish a known-opening match, a language ranking and a complete reading, and interpret the limits of each test.
+
+A script can generate thousands of candidate readings without telling us whether any is a decryption. To interpret its result, first ask what the script was instructed to recognize. Matching a fixed beginning, receiving a high language score and reproducing a complete reading are different achievements.
+
+What an opening test answers
+
+Several experiments in this wiki compare the first twelve output rune indices with nine beginnings taken from known readings. The numerical-sequence family, for example, uses Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. These are exact vectors stored in each plan, with hashes identifying their source traces.
+
+This asks a useful, limited question: does this declared transformation produce one of those particular beginnings at the start of this input? It does not ask whether the output contains any possible English sentence. There is no established requirement that an unsolved page must repeat a known opening.
+
+The comparison is in runes, not twelve Latin characters. A rune label such as TH can contain more than one letter. See rune counts and character counts before attempting to reproduce the comparison from a displayed transliteration.
+
+A match can be too narrow for the conclusion
+
+The following invented examples use ordinary characters so the distinction is visible. Suppose the test accepts any string beginning with THE , while the complete reference is THE DOOR IS OPEN. None of these strings is a manuscript result.
+
+	Candidate	Opening test	What remains unknown
+
+	THE DOOR IS OPEN	Passes	This also equals the supplied full reference, but that requires a separate comparison.
+
+	THE XXXX XX XXXX	Passes	The opening test says nothing about the remainder.
+
+	PLEASE OPEN THE DOOR	Fails	The readable sentence begins differently. This test was not designed to recognize it.
+
+
+The second row is a correct positive result for the stated prefix test. The error would be reporting it as a complete decryption. Likewise, the third row is a correct negative for that prefix; the error would be treating it as proof that the text cannot be readable.
+
+Read the actual result with its scope
+
+
+Prime-minus-one shifts
+3190 configurations on 55 nonempty LP2 pages produced no matches to the nine declared beginnings. The tested offsets, directions and uninterrupted advancement are part of that result.
+
+Fibonacci shifts
+3190 configurations produced 1540 distinct full page outputs. The repeated configurations do not add different candidates; neither count is a count of independent statistical observations.
+
+Row and column reading routes
+Sixteen declared routes per nonempty page produced no matches to the same nine beginnings. This does not cover arbitrary transpositions or a second cipher applied after rearrangement.
+
+
+A precise report says “no declared opening matched under these rules.” It should not shorten this to “Fibonacci does not work” or “transposition was ruled out.” Conversely, keeping a method open is not evidence in its favor: it identifies what the recorded test has not settled.
+
+What a broader language test would need
+
+A language score could rank candidates that begin differently. To make that ranking reproducible, a new experiment would need to publish the scoring rule as carefully as the cipher operation. It should specify:
+
+
+The representation. Decide whether the model scores rune indices, literal rune labels or interpreted English. Specify how spaces, punctuation and multi-letter labels are handled. Do not silently repair spelling before scoring.
+
+The reference material. Identify the corpus, its version and hash, and the exact conversion into the scored alphabet. Separate material used to build or tune the score from material reserved to check its behavior.
+
+The rule. Publish the formula or executable model, treatment of unseen sequences, length normalization and any acceptance threshold. “Looks like English” is not a reproducible numeric criterion.
+
+The search. Record all keys, offsets, page subsets and score variants examined. A favorable score selected from many candidates needs a comparison that includes that selection process; see chance comparisons.
+
+The controls. Show whether known readings score sensibly, and what happens to appropriate altered or shuffled inputs. A reading used to choose the score cannot also serve as untouched evidence that the chosen score generalizes.
+
+
+The highest-scoring candidate always exists when a finite nonempty set has numeric scores. Its rank alone does not tell us that the candidate is meaningful. Publish the competing outputs and score differences, rather than showing only the winner.
+
+These requirements describe a possible follow-up, not a language-ranking experiment already completed by the records linked above. The fixed-opening searches retain their original acceptance rule and results.
+
+If a candidate looks promising
+
+Save the complete output and the exact settings before making interpretive changes. Check the transcription against the image, then apply the same declared rule to the rest of the stated input. Mark every exception, skipped rune and inserted word. A short attractive phrase should not hide unexplained text elsewhere.
+
+Distinguish a control from a prediction. Recovering a known reading can show that an implementation handles a documented method. If you designed a rule around that reading, recovering it does not independently establish the rule on an unsolved page. A useful follow-up specifies what additional text or feature the rule should explain before inspecting that result.
+
+When changing a criterion or boundary rule after seeing an output, preserve the original record and describe the change in a related experiment. The reproducibility guide explains how to retain the inputs, commands and limits. Have we tried it? keeps those separate records together as a family without turning a narrow negative result into a universal verdict.
+
+Sources, related references, and files
+- rune counts and character counts
+  https://jelliottdev.github.io/reference/articles/transliteration.html#counting-example
+- Prime-minus-one shifts
+  https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
+- Fibonacci shifts
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
+- Row and column reading routes
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
+- chance comparisons
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- reproducibility guide
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/candidate-readings.html
 
 
 ---
