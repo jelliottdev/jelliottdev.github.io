@@ -1,4 +1,127 @@
 {
   "id": "lp2-54-55-autokey-reset",
-  "status": "draft"
+  "title": "LP2-54–55: reset ciphertext state at selected F runes",
+  "status": "published",
+  "question": "Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?",
+  "summary": "Period 13 with no interruptions is the unique maximum, IoC=332/6992. 543/999 conditional shuffles reach at least that maximum; corrected p=0.544. No evidence of excess under this model.",
+  "tags": [
+    "autokey",
+    "ciphertext autokey",
+    "F skips",
+    "F interruptions",
+    "interrupters",
+    "interruptors",
+    "period 13",
+    "period 26",
+    "54 55",
+    "pooled IoC",
+    "reset state"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Archived rune indices, headings retained, punctuation removed; concatenate LP2-54 then LP2-55 without resetting state.",
+    "procedure": "P_i=(C_i-previous_ciphertext) mod 29; update previous_ciphertext=C_i. Unselected F behaves normally. Score the compact output after selected Fs are removed. Selected F is emitted unchanged, excluded from scored output, and sets previous ciphertext to zero. Sum ordered equal-symbol pairs within residue columns divided by sum ordered pairs within those columns. Maximize across all masks and periods; exact ratio comparisons. Keep all six F positions fixed. Independently permute the remaining non-F ciphertext multiset, freshly copied each trial. Repeat the complete mask-and-period search for each trial. This conditions on F positions, rune counts and length; it is not an English-text model.",
+    "parameters": "Initial ciphertext state 0; modulus 29; all 64 subsets of six F positions; all periods 2–30 inclusive; 1,856 configurations per input. 999 shuffles; random.Random seed 330154; upper tail with ties and (count+1)/1000. Threshold 0.05. Bonferroni correction for the two planned reset/skip variants.",
+    "exclusions": "Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search."
+  },
+  "outcome": "not-supported",
+  "finding": "Period 13 is the largest observed score, but the winning configuration selects no interruptions. Its pooled IoC is about 0.04748. The complete mask-and-period search reaches at least this value in 543 of 999 shuffled inputs (corrected p=0.544); the peak is not unusual under this comparison.",
+  "limitations": "New explicit implementation, not a rerun of unavailable source scripts. The null fixes F locations and rune counts while destroying other order. This tests one chosen statistic and scope; it does not rule out autokey, interruptions or period 13 in general. Both modes have the same observed winner and are not independent confirmations. Human review pending.",
+  "next_steps": "Keep changed interruption symbols, primers, heading rules, page resets or period ranges as separately declared variants. Establish language-score controls before treating transformed output as plaintext.",
+  "family": {
+    "id": "lp2-54-55-ciphertext-interruptions",
+    "title": "LP2-54–55: ciphertext autokey and F interruptions",
+    "question": "Do bounded F-interruption models produce unusually high periodic IoC after accounting for mask and period selection?",
+    "baseline": "lp2-54-55-autokey-reset"
+  },
+  "variant": {
+    "label": "Baseline: reset previous ciphertext to zero",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — full rerun, 2,048 toy mask/mode controls, independent pairwise oracle for all observed scores, two independent complete null searches, winning trace inversion and saved-tail audit; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-54-55-autokey-reset/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent checker: python experiments/records/lp2-54-55-autokey-reset/check.py. A full rerun may take around a minute or longer depending on the computer.",
+    "script": "experiments/records/lp2-54-55-autokey-reset/run.py",
+    "script_sha256": "71af5f8e5e0b05e6294eda373276532bad6cadda9cc68955ab1ab3531fe76716",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/plan.json",
+        "sha256": "8313cc32abd419078a81cdcaf790517167103ce9adc59cd9b6eea68a3a9e5a1b"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/check.py",
+        "sha256": "f6e6123980b07da93d0e119cefd6bd4881b92da0ab2d29c9293e5edb43e26944"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/engine.py",
+        "sha256": "8058c0f36500e0191841afe709d940e69f9be6c788dcb767ff30f11682008c13"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/check_shared.py",
+        "sha256": "a61610638513fd7c97ec98680e72143fda50cb027ca472f2f2513a85b5f6d3ca"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/plot.py",
+        "sha256": "df600b3c8f028fdf80adb79f53724fdd8f485737894343b807585e72976525a2"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/results.json",
+        "sha256": "39f178b4450f2fd78ab94b37ebf1c275b588277b5aabc80818103be9e5a1ecfb"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/period-profile.csv",
+        "sha256": "9d2ed13f1a1e7c9b12c0f17ac243e2ddfa32914d92e68ddc9abf0ccb0d9f0b80"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-autokey-reset/period-profile.svg",
+        "sha256": "df3ff85d0d4f37895a639abd973b2704a09c86b7d1c84f475c8932b9e6c75026"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Keystream positions and interruptions",
+      "url": "https://jelliottdev.github.io/#/wiki/interruptions"
+    },
+    {
+      "label": "Pooled periodic IoC and its limits",
+      "url": "https://jelliottdev.github.io/#/wiki/index-of-coincidence"
+    },
+    {
+      "label": "Search space and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [
+    "lp2-54-55-autokey-skip"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-54-55-autokey-reset/period-profile.svg",
+      "caption": "Observed pooled IoC by period: no interruptions versus the best of all 64 F masks. Each point on the upper curve can use a different mask. The statistical test compares the maximum over the entire search, not each point separately."
+    }
+  ]
 }
