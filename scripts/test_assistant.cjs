@@ -117,6 +117,12 @@ experimentContext.footer=()=>'';
 vm.runInContext('experimentRecords=published',experimentContext);
 for(const record of published){
  const rendered=experimentContext.experimentArticle(record);
+ const sectionIDs=[...rendered.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ for(const match of rendered.matchAll(/href="(#\/experiments\/[^"]+\?section=([^"]+))" data-anchor="([^"]+)"/g)){
+  assert.equal(match[2],match[3]);
+  assert(sectionIDs.includes(match[2]),'Experiment section links must have a rendered destination');
+ }
+ assert(rendered.includes(`href="#/experiments/${record.id}?section=experiment-reproduce"`));
  assert(rendered.indexOf('id="experiment-finding"')<rendered.indexOf('id="experiment-scope"'));
  const downloads=experimentContext.experimentDownloads(record);
  assert(downloads.includes(`href="${record.reproduction.script}" download`));

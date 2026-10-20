@@ -100,7 +100,7 @@ document.addEventListener('click',e=>{
  const a=e.target.closest('[data-anchor]');if(!a||e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
  const target=document.getElementById(a.dataset.anchor);if(!target)return;
  e.preventDefault();
- const routeSection=/^#\/(?:wiki|overview)(?:[/?]|$)/.test(a.getAttribute('href')||'');
+ const routeSection=/^#\/(?:wiki|overview|experiments)(?:[/?]|$)/.test(a.getAttribute('href')||'');
  if(routeSection){const contents=a.closest('details.mobile-article-contents');if(contents)contents.open=false;}
  target.scrollIntoView({behavior:'auto'});
  if(a.classList.contains('skip'))main.focus();

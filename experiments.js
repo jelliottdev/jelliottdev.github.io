@@ -81,9 +81,13 @@ function experimentArticle(r){
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
+  const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
+  const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Experiments')+`<article class="reading-width experiment-article">
     <p><a href="#/experiments">← Have we tried it?</a></p>
     <p class="lede">${esc(r.question)}</p>
+    <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
+    <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Finding</h2><p>${esc(r.finding)}</p>
       <h3>What this does and does not establish</h3><p>${esc(r.limitations)}</p>
       <p class="small muted">${esc(r.review.reviewer)}</p>
@@ -98,10 +102,10 @@ function experimentArticle(r){
       ${experimentDownloads(r)}
       <details><summary>All files &amp; SHA-256 checksums</summary><p class="hash">Script SHA-256: ${esc(r.script_sha256)}</p><h3>Inputs</h3>${fileList(r.reproduction.inputs)}<h3>Outputs</h3>${fileList(r.reproduction.outputs)}</details>
     </section>
-    ${experimentFamily(r)}
-    <h2>Remaining work</h2><p>${esc(r.next_steps)}</p>
+    ${r.family?`<div id="experiment-family">${experimentFamily(r)}</div>`:''}
+    <h2 id="experiment-remaining">Remaining work</h2><p>${esc(r.next_steps)}</p>
     <details class="experiment-account"><summary>Full account: method, results, and retest</summary><div class="experiment-prose">${renderExperimentMarkdown(r.article,[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)])}</div></details>
-    <h2>Sources</h2><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
+    <h2 id="experiment-sources">Sources</h2><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     ${related.length?`<h2>Related experiments</h2><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}${footer()}</article>`;
 }
 
