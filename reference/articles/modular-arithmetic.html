@@ -5,9 +5,9 @@
 <tr><td>28 + 1</td><td>29</td><td>Subtract 29</td><td>0</td></tr>
 <tr><td>0 − 1</td><td>−1</td><td>Add 29</td><td>28</td></tr>
 <tr><td>3 − 10</td><td>−7</td><td>Add 29</td><td>22</td></tr>
-<tr><td>21 − 256</td><td>−235</td><td>Add 8 × 29</td><td>26</td></tr>
+<tr><td>21 − 256</td><td>−235</td><td>Add 9 × 29</td><td>26</td></tr>
 </tbody></table></div>
-<p>The final row is a calculation from the <a href="prime-minus-one.html#first-runes">LP2-56 trace</a>. Adding 29 only once would leave a negative number there. A modulo operation handles however many complete turns are needed.</p>
+<p>The final row is a calculation from the <a href="prime-minus-one.html#first-runes">LP2-56 trace</a>. Eight additions of 29 leave −3; the ninth reaches 26. Adding 29 only once would also leave a negative number. A modulo operation handles however many complete turns are needed.</p>
 <h2 id="equivalent">Different numbers can describe the same shift</h2>
 <p>A shift by 31 is equivalent to a shift by 2 because <code>31 = 29 + 2</code>. Subtracting 23 is equivalent to adding 6 because <code>−23 + 29 = 6</code>. This explains how two walkthroughs can describe the same operation using different signed amounts.</p>
 <p>Equivalence depends on the entire formula. Adding 23 and subtracting 23 are generally different. For input index 0, they produce 23 and 6 respectively. Do not change the direction while keeping the same key values and expect the same reading.</p>
