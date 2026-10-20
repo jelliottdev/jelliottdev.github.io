@@ -34,6 +34,29 @@ Where does a word or phrase occur in the known readings?
 Search contextual sections, or locate literal decoded wording on an exact page across line breaks. Reports distinguish word, character, and literal-line positions from rune offsets. Unsolved ciphertext is not searched as unknown English.
 
 
+Understand your result
+
+Keep the output beside the exact command that produced it. Then choose the question that matches what surprised you:
+
+
+Two pages have the same IoC but different entropy. Is that an error?
+Not necessarily. The worked six-symbol examples have equal matching-pair totals but different entropies. These scores summarize the same counts in different ways.
+
+Why does a squared-frequency calculation disagree with IoC?
+Check whether the calculation allows the same position to be selected twice. The pair-grid diagram shows which cells IoC excludes and how to convert between the two rates.
+
+Entropy is below the uniform maximum. Does that show a pattern?
+A finite random sample can have uneven counts. The two-symbol example distinguishes the source's entropy, the measured value, and the largest value the sample length permits.
+
+I rearranged the runes, but the score did not change. Why?
+Whole-stream IoC and single-rune entropy ignore order. A pure rearrangement preserves their inputs; it cannot improve either score. An order-sensitive measurement answers a different question.
+
+There is a peak at one distance. Is that the key length?
+The lag report counts matches and keeps each denominator. Interpreting the largest peak also requires a comparison model that accounts for all distances searched; see chance comparisons and selection.
+
+
+None of these answers replaces checking the transcription. If the rune count itself differs, return to input layers and boundaries before comparing statistics.
+
 Download reusable data
 
 These files let you inspect a published calculation or start a comparison without copying values from a table. Keep the source layer and counting unit attached to the data.
@@ -97,7 +120,7 @@ These guides document methods and reproducible examples. To find whether a parti
 If your measurement suggests a hypothesis, preserve its scope and write a new reproducible record. A lack of a matching published record means the wiki does not document that test; it does not establish that nobody has tried it elsewhere.
 
 Sources, related references, and files
-- Do runes match at a particular distance?
+- Do runes match at a particular distance?; There is a peak at one distance. Is that the key length?
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
 - How evenly are symbol frequencies distributed?
   https://jelliottdev.github.io/reference/articles/rune-entropy.html
@@ -115,6 +138,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#repetition
 - Where does a word or phrase occur in the known readings?
   https://jelliottdev.github.io/reference/articles/reading-concordance.html
+- Two pages have the same IoC but different entropy. Is that an error?
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html#ioc-comparison
+- Why does a squared-frequency calculation disagree with IoC?
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html#pair-grid
+- Entropy is below the uniform maximum. Does that show a pattern?
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html#random-samples
+- I rearranged the runes, but the score did not change. Why?; what cipher operations preserve
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- chance comparisons and selection; Comparing patterns with chance
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- input layers and boundaries
+  https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#inputs
 - CSV
   https://jelliottdev.github.io/exports/rune-ioc.csv
 - JSON
@@ -151,12 +186,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/downloads
 - Archived runes, corrected runes, decoded rune labels and contextual English
   https://jelliottdev.github.io/reference/articles/transliteration.html
-- what cipher operations preserve
-  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
-- Comparing patterns with chance
-  https://jelliottdev.github.io/reference/articles/null-models.html
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the setup walkthrough
