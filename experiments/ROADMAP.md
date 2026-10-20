@@ -14,3 +14,5 @@ Internal work queue. This is not a published result or a combined reader-facing 
 10. Image/steganography checks on original bytes, with tool versions and payload verification.
 
 The fixed-alphabet warning-prefix baseline covers a single narrowly defined criterion relevant to items 1–3. It is not a general completion of these subjects. The periodic-IoC baseline covers LP2-31 periods 2–20 only. Continue building independently useful records, without inflating the registry with duplicates or a record per parameter value.
+
+OutGuess default-key baseline: all 77 declared images attempted twice; ten controls reproduce, 21 outputs remain unverified, five retrievals are rejected and 41 abnormal exits remain unresolved. Next useful variant: same key and images with another documented build. Do not classify failed extractions as clean negative results.
