@@ -1,7 +1,7 @@
 """Publish stable reader exports, a file catalog, and non-JavaScript AI references."""
 from pathlib import Path
 import json,hashlib,zipfile,html
-from build_articles import linked_reference_text
+from build_articles import manuscript_reference_html
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -65,7 +65,7 @@ for summary in index['pages']:
  save(f'reference/{pid}.md',text);register(f'reference/{pid}.md','Plain-text page reference',p);documents.append(text)
  # Standalone HTML contains the full reference text, usable without the app runtime.
  title=html.escape(pid.upper()+' — Liberpedia')
- save(f'reference/{pid}.html',f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><body><nav><a href="../index.html#/page/{pid}">Open wiki page</a> · <a href="{pid}.md">Plain text</a> · <a href="../data/pages/{pid}.json">JSON</a> · <a href="index.html">All page references</a></nav><main><pre style="white-space:pre-wrap;overflow-wrap:anywhere;font:16px/1.6 system-ui;max-width:85ch">{linked_reference_text(text)}</pre></main></body></html>')
+ save(f'reference/{pid}.html',f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav aria-label="Reference navigation"><a href="../index.html#/page/{pid}">Open wiki page</a> · <a href="{pid}.md">Plain text</a> · <a href="../data/pages/{pid}.json">JSON</a> · <a href="index.html">All page references</a></nav>{manuscript_reference_html(text)}</main></body></html>')
 for article in sorted((root/'reference').glob('*.txt')):
  register('reference/'+article.name,'Reference article')
  documents.append(article.read_text(encoding='utf-8'))

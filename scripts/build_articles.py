@@ -20,6 +20,23 @@ def linked_reference_text(text):
     parts.append(html.escape(text[position:]))
     return "".join(parts)
 
+def manuscript_reference_html(text):
+    """Render only the heading structure emitted by our manuscript exporter."""
+    title, separator, remainder = text.partition("\n\n")
+    if not title.startswith("# ") or not separator:
+        raise ValueError("Expected a generated manuscript reference heading")
+    parts = re.split(r"(?m)^## ([^\n]+)\n\n", remainder)
+    sections = []
+    for index in range(1, len(parts), 2):
+        identifier = "record-section-" + str((index + 1) // 2)
+        sections.append(f'<section><h2 id="{identifier}">{html.escape(parts[index])}</h2>'
+                        f'<div class="reference-text">{linked_reference_text(parts[index + 1])}</div>'
+                        '</section>')
+    body = "".join(sections)
+    return (f'<h1>{html.escape(title[2:])}</h1>' + article_contents(body)
+            + f'<div class="reference-text">{linked_reference_text(parts[0])}</div>'
+            + body)
+
 class Text(HTMLParser):
     blocks = {"p", "h1", "h2", "h3", "h4", "li", "pre", "tr",
               "dt", "dd", "figure", "figcaption", "blockquote"}

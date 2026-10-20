@@ -1,8 +1,23 @@
 """Checks that non-JavaScript references remain usable as instructions."""
 import unittest
-from build_articles import Text, reference_url, linked_articles, article_contents, linked_reference_text
+from build_articles import (Text, reference_url, linked_articles, article_contents,
+                            linked_reference_text, manuscript_reference_html)
 
 class ArticleExports(unittest.TestCase):
+    def test_manuscript_sections_are_native_and_keep_literal_text(self):
+        original = ('# LP2-57\n\nIntro\n\n## Archived transcription\n\n'
+                    'ᚠᚢᚦ-ᚩ/\n  ᚱᚳ.\n\n## Sources & scope\n\n'
+                    'https://example.org/original.jpg\n<script>unsafe()</script>\n')
+        rendered = manuscript_reference_html(original)
+        self.assertIn('<h1>LP2-57</h1>', rendered)
+        self.assertIn('<h2 id="record-section-1">Archived transcription</h2>', rendered)
+        self.assertIn('href="#record-section-2">Sources &amp; scope</a>', rendered)
+        self.assertIn('ᚠᚢᚦ-ᚩ/\n  ᚱᚳ.\n\n</div>', rendered)
+        self.assertNotIn('<script>', rendered)
+        self.assertNotIn('## Archived', rendered)
+        with self.assertRaises(ValueError):
+            manuscript_reference_html('Not a generated reference')
+
     def test_reference_urls_are_clickable_without_changing_preserved_text(self):
         original = ('Runes: ᚠᚢᚦ\nGuide: https://example.org/guide?a=1&b=2#part\n'
                     '<script>unsafe()</script>\nImage: https://example.org/image.jpg\n'
