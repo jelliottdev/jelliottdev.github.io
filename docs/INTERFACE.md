@@ -42,3 +42,8 @@ The home page starts with reader/page/quick-start links and a six-subject image 
 Article metadata owns curated `aliases`, optional `alias_sections` and `alias_pages`, and `feature_pages`. The last field lists pages where the feature is illustrated, not every page in a named section. `alias_pages` narrows a particular phrase: five-dot and three-dot searches must not inherit each other’s page lists. Exact feature-page matches outrank duplicate topic entries, while the dedicated article remains first. Exact aliases outrank incidental prose and expose those manuscript pages directly; prefix matching supports typing. Accent normalization accepts Möbius, while deliberate spelling variants accept cuniform. Do not silently equate descriptive names with deciphered meanings. Header and submitted search use the same ranking; preserve the mobile composition and pointer-gesture handling.
 
 The illustrated index uses lazy-loaded existing thumbnails. Detail articles link complete original images with captions and downloads. Never change original image bytes to make a feature easier to see. Page comparisons state when previews are cropped and distinguish observed placement from interpretation.
+
+## Article section links
+
+Guide contents links carry the complete wiki route and section parameter, so copied links and new tabs preserve the destination. Normal activation scrolls without rerendering the article, updates the current URL, and moves keyboard focus to the heading. Mobile contents closes before scrolling to avoid a layout shift. Reloading a section URL restores that heading below the sticky header. Modifier clicks keep native browser behavior.
+

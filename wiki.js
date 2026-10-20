@@ -4,7 +4,7 @@ function wikiPage(id='') {
  if(!id){
  const groups=[...new Set(articles.map(a=>a.category||'Reference'))];
  return head('Guides and methods','Background, worked examples, and reproduction instructions')+
- `<article class="reading-width"><p>New to the manuscript? Begin with <a href="#/wiki/quick-start">Start solving</a>. Follow a known result, look up an unfamiliar term, or learn how to preserve evidence.</p><nav class="section-nav" aria-label="Guide categories">${groups.map((g,i)=>`<a href="#guide-group-${i}" data-anchor="guide-group-${i}">${esc(g)}</a>`).join('')}</nav>${groups.map((g,i)=>`<section id="guide-group-${i}"><h2>${esc(g)}</h2><dl class="article-directory guide-directory">${articles.filter(a=>(a.category||'Reference')===g).map(a=>`<div><dt><a href="#/wiki/${a.id}">${esc(a.title)}</a></dt><dd>${esc(a.summary)}</dd></div>`).join('')}</dl></section>`).join('')}${footer()}</article>`;
+ `<article class="reading-width"><p>New to the manuscript? Begin with <a href="#/wiki/quick-start">Start solving</a>. Follow a known result, look up an unfamiliar term, or learn how to preserve evidence.</p><nav class="section-nav" aria-label="Guide categories">${groups.map((g,i)=>`<a href="#/wiki?section=guide-group-${i}" data-anchor="guide-group-${i}">${esc(g)}</a>`).join('')}</nav>${groups.map((g,i)=>`<section id="guide-group-${i}"><h2>${esc(g)}</h2><dl class="article-directory guide-directory">${articles.filter(a=>(a.category||'Reference')===g).map(a=>`<div><dt><a href="#/wiki/${a.id}">${esc(a.title)}</a></dt><dd>${esc(a.summary)}</dd></div>`).join('')}</dl></section>`).join('')}${footer()}</article>`;
  }
  const a=articles.find(a=>a.id===id);
  if(!a)throw Error('This guide does not exist. Open Guides and methods to find an article.');
@@ -13,9 +13,9 @@ function wikiPage(id='') {
  const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  return head(a.title,esc(a.summary),'Guides and methods')+`<div class="article-grid"><article class="wiki-article">
  <p class="small"><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p>
- <details class="mobile-article-contents"><summary>On this page</summary>${headings.map(h=>`<a href="#${h.id}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</details>
+ <details class="mobile-article-contents"><summary>On this page</summary>${headings.map(h=>`<a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</details>
  ${a.html}${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}${footer()}</article>
- <aside class="contents"><strong>On this page</strong>${headings.map(h=>`<a href="#${h.id}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</aside></div>`;
+ <aside class="contents"><strong>On this page</strong>${headings.map(h=>`<a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</aside></div>`;
 }
 function payloadSection(p){
  const r=db.payloads.records.find(r=>r.page===p.id);
