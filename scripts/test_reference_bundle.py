@@ -62,6 +62,14 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        sums = json.loads(subprocess.check_output(
+            [sys.executable, "scripts/reproduce_prime_sums.py", "--json"], cwd=target))
+        compared = {row["page"]: row for row in sums["page_sums"]}
+        assert len(compared) == 17
+        assert [compared["lp1-01"][key] for key in
+                ["rune_count", "archived_sum", "decoded_sum", "difference"]] == [184, 11417, 7409, -4008]
+        assert compared["lp2-57"]["archived_sum"] == compared["lp2-57"]["decoded_sum"] == 3968
+        print("PASS: archived and decoded whole-page sums reproduce from the extracted bundle")
         # A self-consistent ZIP can still contain an older script or page record.
         # The square guide now promises both manuscript calculations and token pairs.
         for path in ["scripts/check_number_examples.py", "data/pages/lp1-05.json",

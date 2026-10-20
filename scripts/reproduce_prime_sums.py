@@ -62,6 +62,22 @@ def verify():
             runes = "".join(RUNES[next(indices)] if char in by_rune else char for char in raw)
             decoded[page_id] = runes.replace("/\n", "").replace("/", "").replace("\n", "")
 
+    page_sums = []
+    for page_id, decoded_text in decoded.items():
+        source = ROOT / f"text/{page_id}.txt"
+        raw = source.read_text(encoding="utf-8")
+        archived = record(raw)
+        plain = record(decoded_text)
+        page = read(f"data/pages/{page_id}.json")
+        if archived["sum"] != page["prime_sum"] or len(archived["runes"]) != page["rune_count"]:
+            raise ValueError(f"Archived metadata mismatch: {page_id}")
+        if len(archived["runes"]) != len(plain["runes"]):
+            raise ValueError(f"Known decoding changed rune count: {page_id}")
+        page_sums.append({"page": page_id, "rune_count": len(plain["runes"]),
+                          "archived_sum": archived["sum"], "decoded_sum": plain["sum"],
+                          "difference": plain["sum"] - archived["sum"],
+                          "transcription_sha256": hashlib.sha256(source.read_bytes()).hexdigest()})
+
     words = []
     for expected in evidence["words"]:
         page_id = expected["page"]
@@ -98,6 +114,7 @@ def verify():
         change["alternative"] = describe_sum(change["original"] + change["delta"])
     return {"scope": "Known decoded runes; rune-only sums; archived LP2-57 period boundaries.",
             "verified_literal_pages": len(decoded), "verified_word_occurrences": len(words),
+            "page_sums": page_sums,
             "words": words, "lp2_57_segments": clauses,
             "lp2_57_heading_and_body": describe_sum(sum(c["sum"] for c in clauses)),
             "counterfactuals": changes,
