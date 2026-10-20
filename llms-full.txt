@@ -31,6 +31,16 @@ Reading status is dated to the 2026-10-05 source snapshot, not asserted live. Vi
 
 This is a static read-only site; there are no authentication requirements or API keys for these files. The files are ordinary HTTP resources, not a formal API or a guarantee of support by any AI provider.
 
+## Retrieve by question
+
+- Visual feature or unfamiliar term: match the compact guide index's aliases, then fetch that guide's text_url. alias_urls identify specific sections. If an alias has alias_pages, use those page IDs before the guide's broader pages list; feature_pages identifies illustrated occurrences. Inspect the original image before making a new visual claim. A guide mentioning a page is not evidence that every feature discussed appears there.
+- Exact manuscript wording: fetch data/pages/<page-id>.json and select the declared text layer. Use reading.literal for decoded labels and reading.section_pages for the scope of contextual English. Do not compute rune sums from expanded contextual spelling.
+- Known-reading arithmetic: use the [trace manifest](https://jelliottdev.github.io/exports/readings/manifest.json). Each record gives its CSV path, row count, output hash, exact control, and source hashes. Select the control whose pages include the requested page; a section CSV can contain several pages, so filter its page column. Resolve manifest paths against the site root. The [column guide](https://jelliottdev.github.io/reference/articles/running-scripts.html#trace) explains counters and blank fields. These reproduce established controls; they are not experimental evidence for another page.
+- Hidden message: use the [payload manifest](https://jelliottdev.github.io/data/evidence/embedded-payloads.json). Its records identify the carrier page and separate raw extraction, signed block, body, and decoded-byte paths. Follow only the fields present in that record. Do not substitute a thumbnail or screenshot for the original carrier JPEG.
+- Has a technique been tested: search the reviewed experiment registry first and compare its recorded inputs, parameters, bounds, and results. Guide matches, known readings, or page descriptions provide context but do not establish that the requested experiment was run. Report an absent match as undocumented in this registry, not disproven or never attempted.
+
+Fetch the smallest relevant record or guide first. llms-full.txt is an optional bulk export, not a prerequisite for answering a page question. Ordinary static-file retrieval does not call the site's hosted idea checker. Use catalog hashes when checking downloaded bytes, and cite the specific record or guide rather than this discovery file.
+
 
 ---
 
