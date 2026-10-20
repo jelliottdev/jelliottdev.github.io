@@ -105,14 +105,23 @@ register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 register('data/evidence/signature-checks.json','Isolated signature verification results')
 register('data/evidence/known-readings.json','Known-reading provenance')
 # The standalone index must expose the same authored knowledge as the wiki.
-groups=list(dict.fromkeys(a.get('category','Reference') for a in articles))
+categories=read('data/guide-categories.json')
+register('data/guide-categories.json','Guide category organization')
+present=list(dict.fromkeys(a.get('category','Reference') for a in articles))
+groups=[g for g in categories if g['title'] in present]
+groups += [dict(title=title,id=f'other-{i}',description='') for i,title in
+           enumerate(t for t in present if t not in {g['title'] for g in categories})]
 reference_index='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liberpedia reference index</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav><a href="../index.html#/overview">Open the wiki</a></nav><h1>Liberpedia reference index</h1><p>Read manuscript records and guides without JavaScript. Each article also has a plain-text version.</p><p>New here? Begin with <a href="articles/quick-start.html">Start solving</a>. Looking for the compasses image? Open the <a href="articles/illustrated-cover.html">illustrated cover</a>.</p><nav aria-label="Reference sections"><a href="#guides">Guides and methods</a> · <a href="#manuscript">Manuscript pages</a></nav><section id="guides"><h2>Guides and methods</h2>'
+reference_index+='<nav class="section-nav" aria-label="Guide categories">'+''.join(
+ '<a href="#guides-'+html.escape(g['id'],quote=True)+'">'+html.escape(g['title'])+'</a>' for g in groups)+'</nav>'
 for group in groups:
- reference_index+='<h3>'+html.escape(group)+'</h3><dl class="article-directory">'
+ reference_index+='<section id="guides-'+html.escape(group['id'],quote=True)+'"><h3>'+html.escape(group['title'])+'</h3>'
+ if group['description']:reference_index+='<p>'+html.escape(group['description'])+'</p>'
+ reference_index+='<dl class="article-directory">'
  for a in articles:
-  if a.get('category','Reference')!=group:continue
+  if a.get('category','Reference')!=group['title']:continue
   reference_index+='<dt><a href="articles/'+a['id']+'.html">'+html.escape(a['title'])+'</a></dt><dd>'+html.escape(a['summary'])+' <a href="articles/'+a['id']+'.txt">Plain text</a></dd>'
- reference_index+='</dl>'
+ reference_index+='</dl></section>'
 reference_index+='</section><section id="manuscript"><h2>Manuscript pages</h2><p>Both releases use zero-based numbering. The earlier illustrated cover is separate from these 75 records.</p>'
 for release in ['LP1','LP2']:
  reference_index+='<h3>'+release+'</h3><ul>'

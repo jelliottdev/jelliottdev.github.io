@@ -53,3 +53,5 @@ The directory begins with getting started and complete readings, followed by met
 
 Category destinations use stable names rather than their display position. Preserve the original nine `guide-group-0` through `guide-group-8` bookmarks as aliases; both former artwork categories now lead to the consolidated artwork section. Unconfigured categories must remain visible rather than silently dropping new articles.
 
+`data/guide-categories.json` owns the category order, descriptions, stable IDs, and legacy aliases. Both the wiki and the generated standalone reference index use this file. The standalone index uses native fragment links and must remain navigable without JavaScript.
+

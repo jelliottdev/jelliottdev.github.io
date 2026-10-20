@@ -1,18 +1,8 @@
 /* Authored reference articles. Never treated as completed experiment records. */
-const guideCategories = [
- {title:'Getting started',id:'getting-started',legacy:[0],description:'Learn the page conventions, run the scripts, and record work that others can reproduce.'},
- {title:'Complete known readings',id:'known-readings',legacy:[8],description:'Read each decoded section with its literal output, manuscript images, and reproduction instructions.'},
- {title:'Runes and cipher methods',id:'cipher-methods',legacy:[1],description:'Understand rune representations and follow the transformations used in known readings.'},
- {title:'Numbers and arithmetic',id:'numbers',legacy:[2],description:'Distinguish prime values, indices, sums, and arithmetic functions before using them in a proposal.'},
- {title:'Analysis and reproduction',id:'analysis',legacy:[5],description:'Measure rune distributions and repeats, understand what a statistic can show, and reproduce the calculation.'},
- {title:'Hidden content and verification',id:'hidden-content',legacy:[3],description:'Extract embedded messages, follow the earlier puzzle chains, and verify files and signatures.'},
- {title:'Page studies',id:'page-studies',legacy:[],description:'Inspect particular headings, number panels, title images, and unresolved page details.'},
- {title:'Philosophy and literary references',id:'philosophy',legacy:[4],description:'Compare manuscript passages and outside works, keeping interpretation separate from source attribution.'},
- {title:'Artwork and visual features',id:'artwork',legacy:[6,7],description:'Find a drawing or motif, inspect the preserved image, and follow the evidence for artwork identifications.'}
-];
 function wikiPage(id='') {
  const articles=db.articles;
  if(!id){
+ const guideCategories=db.guideCategories;
  const known=new Set(guideCategories.map(g=>g.title));
  const extra=[...new Set(articles.map(a=>a.category||'Reference'))].filter(g=>!known.has(g));
  const groups=[...guideCategories,...extra.map((title,i)=>({title,id:`other-${i}`,legacy:[],description:''}))].filter(g=>articles.some(a=>(a.category||'Reference')===g.title));
