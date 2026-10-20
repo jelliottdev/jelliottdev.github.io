@@ -164,13 +164,13 @@ register('data/evidence/editorial-page-notes.json','Editorial visual observation
 sum_path='data/evidence/known-reading-page-sums.json'
 sum_records=read(sum_path)['records']
 register(sum_path,'Known-reading page-sum comparison')
-files[-1].update(title='Archived and decoded page sums (JSON)',guide='prime-sums',aliases=['ciphertext sums','plaintext sums','known reading totals'])
+files[-1].update(title='Archived and decoded page sums (JSON)',guide='prime-sums',aliases=['prime sums','prime sum comparison','ciphertext sums','plaintext sums','known reading totals'])
 sum_csv=io.StringIO(newline='')
 sum_writer=csv.DictWriter(sum_csv,fieldnames=['page','rune_count','archived_sum','decoded_sum','difference','transcription_sha256'],lineterminator='\n')
 sum_writer.writeheader();sum_writer.writerows(sum_records)
 save('exports/known-reading-page-sums.csv',sum_csv.getvalue())
 register('exports/known-reading-page-sums.csv','Known-reading page-sum comparison')
-files[-1].update(title='Archived and decoded page sums (CSV)',guide='prime-sums',aliases=['ciphertext sums','plaintext sums','known reading totals','spreadsheet'])
+files[-1].update(title='Archived and decoded page sums (CSV)',guide='prime-sums',aliases=['prime sums','prime sum comparison','ciphertext sums','plaintext sums','known reading totals','spreadsheet'])
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 save('exports/rune-ioc.csv', csv_report(read('data/evidence/rune-ioc.json')))
 register('exports/rune-ioc.csv','Archived rune IoC baseline')
