@@ -75,6 +75,44 @@ class RegistryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'SHA-256 mismatch'):
             self.run_build()
 
+    def add_plan_fixture(self, input_digest=None, report_digest=None, declare_dependency=True):
+        prefix = 'experiments/records/test-record/'
+        original = self.record['reproduction']['inputs'][0]
+        plan = {'inputs': [{'path': original['path'],
+                            'sha256': input_digest or original['sha256']}]}
+        plan_path = self.root / prefix / 'plan.json'
+        plan_path.write_text(json.dumps(plan), encoding='utf-8')
+        plan_digest = hashlib.sha256(plan_path.read_bytes()).hexdigest()
+        results_path = self.root / prefix / 'results.json'
+        results_path.write_text(json.dumps({'plan_sha256': report_digest or plan_digest,
+                                           'measurement': 42}), encoding='utf-8')
+        self.record['reproduction']['inputs'] = ([original] if declare_dependency else []) + [
+            {'path': prefix+'plan.json', 'sha256': plan_digest}]
+        self.record['reproduction']['outputs'] = [
+            {'path': prefix+'results.json',
+             'sha256': hashlib.sha256(results_path.read_bytes()).hexdigest()}]
+
+    def test_matching_plan_and_report_provenance(self):
+        self.add_plan_fixture()
+        self.assertEqual(len(self.run_build()), 1)
+
+    def test_stale_plan_dependency_despite_current_record_hashes(self):
+        self.add_plan_fixture(input_digest='0'*64)
+        with self.assertRaisesRegex(ValueError, 'Plan input SHA-256 mismatch'):
+            self.run_build()
+        self.assertFalse((self.root / 'data/experiments.json').exists())
+
+    def test_stale_report_plan_despite_current_record_hashes(self):
+        self.add_plan_fixture(report_digest='0'*64)
+        with self.assertRaisesRegex(ValueError, 'Saved report plan SHA-256 mismatch'):
+            self.run_build()
+        self.assertFalse((self.root / 'data/experiments.json').exists())
+
+    def test_plan_dependency_missing_from_bundle_declaration(self):
+        self.add_plan_fixture(declare_dependency=False)
+        with self.assertRaisesRegex(ValueError, 'Plan dependency must be a declared input'):
+            self.run_build()
+
     def test_invalid_scope_and_missing_review_rejected(self):
         for change in ('scope', 'review', 'related'):
             record = copy.deepcopy(self.record)

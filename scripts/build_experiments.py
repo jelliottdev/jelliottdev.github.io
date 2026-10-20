@@ -27,6 +27,33 @@ def local(root, path):
     return file
 
 
+def validate_plan_provenance(root, identifier, reproduction):
+    """Check conventional JSON plan/report links without executing experiment code."""
+    plan_path = f'experiments/records/{identifier}/plan.json'
+    declared_inputs = {entry['path']: entry for entry in reproduction['inputs']}
+    if not (root / plan_path).is_file():
+        return
+    require(plan_path in declared_inputs, 'Plan must be a declared hashed input: ' + plan_path)
+    plan_bytes = local(root, plan_path).read_bytes()
+    plan = json.loads(plan_bytes)
+    require(isinstance(plan, dict), 'Plan must be a JSON object: ' + plan_path)
+    dependencies = plan.get('inputs', [])
+    require(isinstance(dependencies, list), 'Plan inputs must be a list: ' + plan_path)
+    for dependency in dependencies:
+        require(isinstance(dependency, dict), 'Invalid plan dependency: ' + plan_path)
+        name = dependency.get('path')
+        data = local(root, name).read_bytes()
+        require(name in declared_inputs, 'Plan dependency must be a declared input: ' + name)
+        require(hashlib.sha256(data).hexdigest() == dependency.get('sha256'),
+                'Plan input SHA-256 mismatch: ' + plan_path + ' -> ' + name)
+    results_path = f'experiments/records/{identifier}/results.json'
+    if results_path in {entry['path'] for entry in reproduction['outputs']}:
+        results = json.loads(local(root, results_path).read_bytes())
+        if isinstance(results, dict) and 'plan_sha256' in results:
+            require(results['plan_sha256'] == hashlib.sha256(plan_bytes).hexdigest(),
+                    'Saved report plan SHA-256 mismatch: ' + results_path)
+
+
 def build(root=ROOT):
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
@@ -75,6 +102,7 @@ def build(root=ROOT):
                 data = local(root, file.get('path')).read_bytes()
                 require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                         'SHA-256 mismatch: ' + str(file.get('path')))
+        validate_plan_provenance(root, identifier, reproduction)
         require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),
                 'Scope artifacts must be declared hashed inputs')
         for visual in d.get('visuals', []):

@@ -12,7 +12,7 @@ The registry contains bounded, reproducible experiments. Earlier work is not aut
 6. Retest and review the precise claims, populate the actual reviewer and retest date, and change `status` to `published`. Computational review must identify the agent and explicitly state that human review is pending; never present it as independent human review. Publication means the documented result is available, not that its interpretation is endorsed.
 7. Run `python scripts/build_experiments.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing.
 
-Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. It does not run scripts or certify findings.
+Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. For a conventional `plan.json`, it also requires the plan and its listed dependencies to be declared hashed inputs, checks their recorded digests, and checks `plan_sha256` when present in a declared `results.json`. This catches stale nested references even when the outer record hashes match. It does not run scripts or certify findings; other plan/report formats still need their own validation.
 
 ## Record vocabulary
 
