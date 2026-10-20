@@ -22,7 +22,7 @@ function overview(){
  <section class="home-visual"><div class="home-section-heading"><h2>Find it by sight</h2><a href="#/wiki/visual-index">Full illustrated index →</a></div>
  <div class="feature-gallery">${features.map(([id,image,title,caption])=>`<a class="feature-entry" data-feature="${id}" href="#/wiki/${id}"><span class="feature-preview"><img src="${image}" alt="" loading="lazy"></span><strong>${title}</strong><span>${caption}</span></a>`).join('')}</div></section>
  <div class="home-subjects">
- <section><h2>Read & understand</h2><dl><dt><a href="#/readings">Known readings</a></dt><dd>Complete sections, with the method used to read each one.</dd><dt><a href="#/wiki/philosophical-themes">Philosophy & referenced works</a></dt><dd>Self-knowledge, divinity, koans, Blake, and Emerson.</dd><dt><a href="#/wiki/koans">The two koans</a></dt><dd>Read the dialogues and follow their questions.</dd></dl></section>
+ <section><h2>Read & understand</h2><dl><dt><a href="#/readings">Known readings</a></dt><dd>Complete sections, with the method used to read each one.</dd><dt><a href="#/wiki/philosophical-themes">Philosophical themes</a></dt><dd>Knowledge, identity, divinity, and emergence across the readings.</dd><dt><a href="#/wiki/works-and-influences">Referenced works & influences</a></dt><dd>Emerson, Blake, Carroll, and the cover artworks, with evidence for each connection.</dd><dt><a href="#/wiki/koans">The two koans</a></dt><dd>Read the dialogues and follow their questions.</dd></dl></section>
  <section><h2>Decode & measure</h2><dl><dt><a href="#/wiki">Cipher methods & guides</a></dt><dd>Worked examples and instructions for reproducing results.</dd><dt><a href="#/alphabet">Gematria Primus</a></dt><dd>Look up a rune’s label, index, and prime value.</dd><dt><a href="#/spelling">Spelling & prime sums</a></dt><dd>Compare exact spellings and check the arithmetic.</dd><dt><a href="#/wiki/index-of-coincidence">Index of coincidence</a></dt><dd>Measure repeated symbols and understand the limits.</dd></dl></section>
  <section><h2>Investigate an idea</h2><dl><dt><a href="#/experiments">Have we tried it?</a></dt><dd>Look for a documented test of a technique and compare its scope. Reviewed records are still being prepared.</dd><dt><a href="#/wiki/reproducibility">Document an experiment</a></dt><dd>State the question, preserve the inputs, and make the result repeatable.</dd><dt><a href="#/downloads">Download source files</a></dt><dd>Original images, text, scripts, and checksums.</dd></dl></section>
  </div>
@@ -58,6 +58,13 @@ $('#zoom-in').onclick=()=>zoomImage(1.5);$('#zoom-out').onclick=()=>zoomImage(1/
 function setNavigation(open){$('#sidebar').classList.toggle('open',open);$('#menu').setAttribute('aria-expanded',String(open));$('#nav-backdrop').hidden=!open;document.body.classList.toggle('nav-open',open);const modal=open&&matchMedia('(max-width:760px)').matches;main.inert=modal;}
 $('#menu').onclick=()=>setNavigation(!$('#sidebar').classList.contains('open'));
 $('#nav-backdrop').onclick=()=>setNavigation(false);
+$('#sidebar').addEventListener('click',e=>{
+ const anchor=e.target.closest('a');
+ if(!anchor||e.button>0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
+ const wasOpen=$('#sidebar').classList.contains('open');
+ setNavigation(false);
+ if(wasOpen&&anchor.hash===location.hash)main.focus({preventScroll:true});
+});
 // Visible header controls remain usable while the mobile drawer is open.
 $('.topbar').addEventListener('focusin',e=>{if(e.target!==$('#menu')&&$('#sidebar').classList.contains('open'))setNavigation(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#sidebar').classList.contains('open')){setNavigation(false);$('#menu').focus();}if(e.key==='Tab'&&document.body.classList.contains('nav-open')&&matchMedia('(max-width:760px)').matches){const items=[$('#menu'),...$('#sidebar').querySelectorAll('a,summary'),...$('.topbar').querySelectorAll('a,input,button:not(#menu)')].filter(el=>el.getClientRects().length);const current=items.indexOf(document.activeElement);e.preventDefault();items[(current+(e.shiftKey?-1:1)+items.length)%items.length].focus()}});
