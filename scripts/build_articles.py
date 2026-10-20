@@ -171,6 +171,11 @@ def guide_discovery_index(articles):
     return {
         "schema": "liberpedia-guide-index-v1",
         "scope": "Guide discovery only. Inclusion is not evidence that an experiment was performed.",
+        "page_fields": {
+            "pages": "All manuscript pages associated with the guide, including contextual references.",
+            "feature_pages": "Curated pages where the guide subject is illustrated; not every page in a named group.",
+            "alias_pages": "Page IDs for a particular search phrase. Prefer these over the broad pages list when that phrase matches. Keys match case- and accent-insensitively.",
+        },
         "guides": [{
             "id": a["id"], "title": a["title"], "summary": a["summary"],
             "category": a.get("category", "Reference"),
@@ -182,6 +187,8 @@ def guide_discovery_index(articles):
                 for alias, section in a.get("alias_sections", {}).items()
             },
             "pages": a.get("pages", []),
+            "feature_pages": a.get("feature_pages", []),
+            "alias_pages": a.get("alias_pages", {}),
         } for a in articles],
     }
 

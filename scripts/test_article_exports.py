@@ -18,7 +18,8 @@ class ArticleExports(unittest.TestCase):
     def test_compact_discovery_preserves_aliases_without_article_bodies(self):
         source = [{"id": "example", "title": "Example", "summary": "Explanation",
                    "aliases": ["φ(n)"], "alias_sections": {"φ(n)": "part two"},
-                   "pages": ["lp1-05"], "html": "<p>Do not duplicate</p>",
+                   "pages": ["lp1-05", "lp2-56"], "feature_pages": ["lp1-05"],
+                   "alias_pages": {"φ(n)": ["lp2-56"]}, "html": "<p>Do not duplicate</p>",
                    "text": "Do not duplicate"}]
         result = guide_discovery_index(source)
         row = result["guides"][0]
@@ -27,7 +28,10 @@ class ArticleExports(unittest.TestCase):
                          "https://jelliottdev.github.io/reference/articles/example.html#part%20two")
         self.assertEqual(row["text_url"],
                          "https://jelliottdev.github.io/reference/articles/example.txt")
-        self.assertEqual(row["pages"], ["lp1-05"])
+        self.assertEqual(row["pages"], ["lp1-05", "lp2-56"])
+        self.assertEqual(row["feature_pages"], ["lp1-05"])
+        self.assertEqual(row["alias_pages"], {"φ(n)": ["lp2-56"]})
+        self.assertIn("particular search phrase", result["page_fields"]["alias_pages"])
         self.assertNotIn("html", row)
         self.assertNotIn("text", row)
         self.assertIn("not evidence", result["scope"])
