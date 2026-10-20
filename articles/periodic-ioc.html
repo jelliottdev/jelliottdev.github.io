@@ -45,5 +45,28 @@ for text in ("FUFUFFU", "FFUUFFU"):
 FFUUFFU whole: 3/7 period 2: 1/3</code></pre>
 <p>This example explains an operation, not a tested claim about the manuscript. To apply it, declare the actual rune stream, headings, interruptions, page boundaries, periods and scoring rule first. If you choose the maximum over several periods, each randomized comparison must repeat that same search to evaluate the selected maximum. Comparing the winning period only with a single-period reference would omit the advantage gained by trying many candidates.</p>
 <p>To inspect order-dependent local patterns, use <a href="#/wiki/rune-ngrams">repeated rune sequences</a>. Its script lists overlapping bigrams and trigrams with exact positions and input hashes.</p>
+<h2 id="offsets">What does changing the offset actually do?</h2>
+<p>First distinguish a change of labels from a change of input. If every position i stays in the calculation and its column is <code>(i + offset) mod period</code>, changing the offset only renames the columns. The groups of symbols do not change. Their pooled IoC, and the ordinary mean of their defined IoCs, therefore remain unchanged.</p>
+<p>For the seven-symbol example and period 2:</p>
+<div class="table-wrap"><table><thead><tr><th>Column-label offset</th><th>Column 0</th><th>Column 1</th></tr></thead><tbody><tr><td>0</td><td>F F F U</td><td>U U F</td></tr><tr><td>1</td><td>U U F</td><td>F F F U</td></tr></tbody></table></div>
+<p>Both assignments still have 8 matching pairs out of 18 within-column ordered pairs: pooled IoC is 4/9. Searching both offsets under this statistic repeats the same calculation in a different order. It cannot identify which key symbol belongs to the first rune. Actual decoding with a specified key is a different operation, for which key phase can matter.</p>
+<h3 id="input-offsets">Dropping a prefix changes the input</h3>
+<p>If “offset 1” means discarding the first F, the retained stream is <code>U F U F F U</code>. Its two columns are <code>U U F</code> and <code>F F U</code>, giving pooled IoC 1/3. That change comes from removing a symbol, not from discovering a better name for a column. Record the retained positions and their new length when comparing such trials.</p>
+<p>A reset at each page boundary is different again. Carrying a period across a three-rune page places the next page’s first rune in column 1 when the period is 2; resetting places it in column 0. If each preceding page length is a multiple of the period, carrying and resetting assign the same columns. See <a href="#/wiki/interruptions">key advancement and boundaries</a> before translating either convention into a decoding rule.</p>
+<h3 id="offset-check">Check the distinction in Python</h3>
+<p>Append this to the example above. It reuses <code>pairs</code>, <code>rate</code>, and <code>pooled</code>:</p>
+<pre><code>def phase_pooled(symbols, period, offset):
+    columns = [[] for _ in range(period)]
+    for i, symbol in enumerate(symbols):
+        columns[(i + offset) % period].append(symbol)
+    counts = [pairs(column) for column in columns]
+    return rate((sum(a for a, b in counts),
+                 sum(b for a, b in counts)))
+
+text = "FUFUFFU"
+assert phase_pooled(text, 2, 0) == Fraction(4, 9)
+assert phase_pooled(text, 2, 1) == Fraction(4, 9)
+assert pooled(text[1:], 2) == Fraction(1, 3)
+print("Relabeling preserves 4/9; removing the prefix gives 1/3.")</code></pre>
 <h2 id="next">Apply the distinction carefully</h2>
 <p>For actual archived inputs and the matching-pair definition, use the <a href="#/wiki/index-of-coincidence">whole-page baseline</a>. For comparison design, see <a href="#/wiki/null-models">null models and selection</a>. For a complete record of a proposed test, follow <a href="#/wiki/reproducibility">documenting a reproducible attempt</a>. This teaching example is not a published experiment record.</p>
