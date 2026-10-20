@@ -66,6 +66,15 @@ def main():
             [sys.executable, "scripts/export_alphanumeric_grids.py"], cwd=target))
         assert grid == json.loads((target / "exports/alphanumeric-grids.json").read_text(encoding="utf-8"))
         assert len(grid["records"]) == 256
+        from collections import Counter
+        counts = Counter(row["token"] for row in grid["records"])
+        inv = grid["inventory"]
+        assert (len(counts), inv["distinct_tokens"], inv["singleton_tokens"], inv["repeated_tokens"]) == (161, 161, 92, 69)
+        assert {row["token"]: row["count"] for row in inv["frequencies"]} == counts
+        for frequency in inv["frequencies"]:
+            assert len(frequency["sequence_positions"]) == frequency["count"]
+            assert all(grid["records"][n - 1]["token"] == frequency["token"] for n in frequency["sequence_positions"])
+
         assert grid["records"][13]["token"] == "04"
         assert grid["records"][19]["token"] == "0X"
         assert grid["records"][22]["token"] == "0x"

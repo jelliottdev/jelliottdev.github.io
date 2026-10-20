@@ -50,7 +50,28 @@ def report(root=ROOT):
         "coordinates": "One-based grid rows and columns; runic rows are not counted.",
         "sequence": "One-based, left to right then top to bottom, pages 49, 50, 51. Export order is not a claimed cipher traversal.",
         "sources": sources,
+        "inventory": inventory(records),
         "records": records,
+    }
+
+
+def inventory(records):
+    """Count exact strings; sequence positions refer back to exported records."""
+    positions = {}
+    for record in records:
+        positions.setdefault(record["token"], []).append(record["sequence"])
+    frequencies = [
+        {"token": token, "count": len(indices), "sequence_positions": indices}
+        for token, indices in sorted(positions.items(), key=lambda item: (-len(item[1]), item[0]))
+    ]
+    return {
+        "comparison": "Exact case-sensitive two-character strings, across all three pages.",
+        "entries": len(records),
+        "distinct_tokens": len(positions),
+        "singleton_tokens": sum(len(indices) == 1 for indices in positions.values()),
+        "repeated_tokens": sum(len(indices) > 1 for indices in positions.values()),
+        "maximum_frequency": max((len(indices) for indices in positions.values()), default=0),
+        "frequencies": frequencies,
     }
 
 
