@@ -74,3 +74,13 @@ for(const render of [Markdown.render,experimentContext.renderExperimentMarkdown]
  assert(escaped.includes('&lt;script&gt;'));assert(!escaped.includes('<script>'));
 }
 console.log('PASS: malformed comparison and experiment tables retain all cells as escaped source text.');
+
+const familyFixtures=[{id:'one',family:{id:'f',title:'Family',question:'Question?'}},{id:'other'},{id:'two',family:{id:'f',title:'Family',question:'Question?'}}];
+const grouped=experimentContext.experimentGroups(familyFixtures,r=>`<p>${r.id}</p>`);
+assert.equal((grouped.match(/class="experiment-family"/g)||[]).length,2);
+assert(grouped.indexOf('<p>two</p>')<grouped.indexOf('<p>other</p>'));
+const chart='experiments/records/example/chart.svg';
+assert(experimentContext.renderExperimentMarkdown(`![Data chart](${chart})`,[chart]).includes('<img'));
+assert(!experimentContext.renderExperimentMarkdown(`![Data chart](${chart})`).includes('<img'));
+assert(!experimentContext.renderExperimentMarkdown('![Unsafe](https://example.com/chart.svg)').includes('<img'));
+console.log('PASS: family grouping preserves members; figures require declared local files.');

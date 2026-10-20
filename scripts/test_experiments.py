@@ -45,7 +45,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(len(self.run_build()), 1)
         self.record['status'] = 'draft'
         self.assertEqual(self.run_build(), [])
-        self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text())
+        self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
 
     def test_changed_script_or_missing_reviewed_hash_rejected(self):
         reviewed_hash = self.record['reproduction'].pop('script_sha256')
@@ -73,6 +73,35 @@ class RegistryTests(unittest.TestCase):
             if change == 'related': record['related'] = ['missing']
             with self.subTest(change=change), self.assertRaises(ValueError):
                 self.run_build(record)
+
+    def test_family_baseline_and_variant_differences(self):
+        self.record['family'] = {'id': 'test-family', 'title': 'Pair counts',
+                                 'question': 'Does ordering matter?', 'baseline': 'test-record'}
+        self.record['variant'] = {'label': 'Baseline', 'changes': []}
+        self.run_build()
+        variant = copy.deepcopy(self.record)
+        variant['id'] = 'test-variant'
+        prefix = 'experiments/records/test-variant/'
+        folder = self.root / prefix
+        folder.mkdir()
+        for name in ('run.py', 'article.md'):
+            (folder / name).write_bytes((self.root / 'experiments/records/test-record' / name).read_bytes())
+        variant['reproduction']['script'] = prefix + 'run.py'
+        variant['scope']['parameters'] = 'two rows'
+        variant['variant'] = {'label': 'Two-row variant', 'changes': [
+            {'field': 'parameters', 'before': 'one row', 'after': 'two rows',
+             'reason': 'Check sensitivity to the selected region.'}]}
+        path = folder / 'record.json'
+        path.write_text(json.dumps(variant))
+        self.assertEqual(len(self.run_build()), 2)
+        for mutation in ('missing', 'wrong', 'baseline'):
+            bad = copy.deepcopy(variant)
+            if mutation == 'missing': bad['variant']['changes'] = []
+            if mutation == 'wrong': bad['variant']['changes'][0]['before'] = 'invented'
+            if mutation == 'baseline': bad['family']['baseline'] = 'missing'
+            path.write_text(json.dumps(bad))
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                self.run_build()
 
     def test_path_escape_rejected(self):
         self.record['reproduction']['inputs'][0]['path'] = '../outside.txt'

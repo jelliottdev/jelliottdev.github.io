@@ -1,6 +1,6 @@
 # LP2-31: periodic IoC for periods 2–20
 
-**Draft for human review.** The script has been run and independently checked, but this record is not yet a published result in “Have we tried it?”
+**Computationally checked; human review pending.** Codex reran the script and reviewed the separate position-pair oracle on 20 October 2026. This is a bounded statistical result, not a decipherment or a human-reviewed conclusion.
 
 ## Question
 
@@ -18,8 +18,10 @@ The input is the complete archived rune stream, including headings. Remove every
 
 For period k, put positions with the same remainder modulo k in the same column. Count matching ordered pairs in each column and add them. Divide by the total number of ordered pairs available within all columns:
 
-    pooled IoC(k) = sum over columns and symbols of n(c,s)*(n(c,s)-1)
-                    / sum over columns of N(c)*(N(c)-1)
+```
+pooled IoC(k) = sum over columns and symbols of n(c,s)*(n(c,s)-1)
+                / sum over columns of N(c)*(N(c)-1)
+```
 
 This weights columns by their number of pairs; it is not the unweighted mean of column IoCs. No pairs between different columns count.
 
@@ -27,7 +29,9 @@ Take the maximum over all 19 periods. Shuffle the original rune list afresh for 
 
 The random generator is Python's `random.Random(330131)`, using `shuffle`. Exact rational comparisons include ties. The Monte Carlo value is:
 
-    (1 + number of shuffled maxima >= observed maximum) / (999 + 1)
+```
+(1 + number of shuffled maxima >= observed maximum) / (999 + 1)
+```
 
 All observed period scores are retained. Each shuffled trial stores all 19 numerators, aligned with the observed periods. Their denominators do not depend on rune order and are stored once in the observed rows. The trial maximum is also stored as an exact fraction.
 
@@ -35,26 +39,35 @@ All observed period scores are retained. Each shuffled trial stores all 19 numer
 
 From the repository root, using Python 3.12.10 and its standard library:
 
-    python experiments/records/lp2-31-periodic-ioc/check.py
-    python experiments/records/lp2-31-periodic-ioc/run.py --check
+```
+python experiments/records/lp2-31-periodic-ioc/check.py
+python experiments/records/lp2-31-periodic-ioc/run.py --check
+```
 
 The independent check enumerates pairs of positions directly, instead of counting frequencies in columns. It checks a constant string, an alternating string, and every tested period of the actual page. The alternating control has pooled IoC 1 at period 2.
 
 The full rerun compares every stored field, including all shuffle scores and input hashes. It should report exact reproduction and:
 
-    n: 269
-    best_periods: [13]
-    exceedances: 213
-    monte_carlo_p: 0.214
-    below_threshold: false
+```
+n: 269
+best_periods: [13]
+exceedances: 213
+monte_carlo_p: 0.214
+below_threshold: false
+```
 
 To save a separate report:
 
-    python experiments/records/lp2-31-periodic-ioc/run.py --output my-periodic-ioc.json
+```
+python experiments/records/lp2-31-periodic-ioc/run.py --output my-periodic-ioc.json
+```
 
 An existing output file is never overwritten. No network service, model, API key or third-party package is used. A changed input hash or random-generator behavior can prevent byte-for-byte reproduction; investigate rather than replacing the expected output automatically.
 
 ## Results
+
+![Observed pooled IoC by period. The highest bar is period 13; the maximum-adjusted shuffle comparison is p = 0.214.](experiments/records/lp2-31-periodic-ioc/period-scan.svg)
+
 
 Period 13 has the unique largest observed score: 216 / 5300 = 0.04075471698. Its columns contain 20 or 21 runes.
 
@@ -79,3 +92,11 @@ No shift or Vigenère key is inferred. The period-13 peak is retained as a descr
 - [Reproducibility requirements](https://jelliottdev.github.io/#/wiki/reproducibility)
 
 The whole-page baseline does not test ordering: shuffling preserves global IoC. This experiment adds an order-sensitive column statistic and a declared shuffle comparison. No earlier experiment is imported as a completed run.
+
+## Retest and changes after inspection
+
+On 20 October 2026, the independent position-pair check passed, and all observed and simulated numerical fields reproduced exactly. The only difference from the first saved output was the SHA-256 of `data/index.json`, whose page metadata had since changed. The plan and rune input hashes were unchanged. No period range, threshold, seed, sample count, or scoring rule was changed.
+
+The original report is preserved as [original output](experiments/records/lp2-31-periodic-ioc/results-original.json). The [current report](experiments/records/lp2-31-periodic-ioc/results.json) records the current input hash. The checked script reproduces the current report exactly, including all 999 trials. The [chart script](experiments/records/lp2-31-periodic-ioc/plot.py) reads that report without running another experiment.
+
+This record is the baseline for the periodic-IoC shuffle family. Future variants must identify each changed scope field and give their own plan, output and interpretation. There are no completed variants yet. Human review is still pending; the computational review was performed by Codex, not by an independent human researcher.

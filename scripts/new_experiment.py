@@ -15,6 +15,8 @@ if target.exists():
     parser.error('That ID already exists; no files were changed.')
 record = {
     'id': args.id, 'title': '', 'status': 'draft', 'question': '', 'summary': '', 'tags': [],
+    'family': {'id': args.id, 'title': '', 'question': '', 'baseline': args.id},
+    'variant': {'label': 'Baseline', 'changes': []},
     'scope': {'pages': [], 'representation': '', 'procedure': '', 'parameters': '', 'exclusions': ''},
     'outcome': 'inconclusive', 'finding': '', 'limitations': '', 'next_steps': '',
     'reproduction': {'command': f'python experiments/records/{args.id}/run.py',

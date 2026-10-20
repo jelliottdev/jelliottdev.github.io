@@ -1,6 +1,6 @@
 # Experiment records
 
-The registry starts empty. Earlier work is not automatically a published experiment. Write a clear script, retest it, and review its precise claims before publishing.
+The registry contains bounded, reproducible experiments. Earlier work is not automatically a published experiment. Write a clear script, retest it, and review its precise claims before publishing.
 
 ## Add an idea
 
@@ -9,7 +9,7 @@ The registry starts empty. Earlier work is not automatically a published experim
 3. Replace `run.py` with a readable reproducible script. Use explicit inputs, deterministic ordering, a documented seed where relevant, and machine-readable output. Include dependency versions. The generated stub deliberately refuses to run.
 4. Fill `record.json`. Specify exact pages, transcription choice, transformations, parameter ranges, and exclusions. List every input and output with its SHA-256.
 5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
-6. Have a human review the record, populate reviewer and retest date, and change `status` to `published`.
+6. Retest and review the precise claims, populate the actual reviewer and retest date, and change `status` to `published`. Computational review must identify the agent and explicitly state that human review is pending; never present it as independent human review. Publication means the documented result is available, not that its interpretation is endorsed.
 7. Run `python scripts/build_experiments.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing.
 
 Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. It does not run scripts or certify findings.
@@ -49,3 +49,15 @@ Use ordinary Markdown links for HTTPS sources and wiki routes, for example `[Atb
 Simple pipe tables render in the full account. Give a header row, a separator row (`| --- | --- |`), and one row per result; leave a blank line afterward. Use the surrounding prose to state units, scope, and whether values are observed or expected. Tables scroll within the article on narrow screens. Put examples containing literal pipe characters in fenced code blocks rather than inside table cells.
 
 If header, separator, or data rows have different cell counts, the full table is shown as escaped text with an explanation. Extra cells are never discarded to make the table fit. Correct the Markdown before publishing.
+
+## Experiment families and variants
+
+Group tests by a shared scientific question and method, not merely a keyword or page. Every new record has `family` (`id`, `title`, `question`, `baseline`) and `variant` (`label`, `changes`). All members repeat identical family metadata; the baseline names a published record. Older independent records remain readable.
+
+The baseline has an empty `changes` list. For a variant, list every changed scope field once: `pages`, `representation`, `procedure`, `parameters`, or `exclusions`. Each entry has `field`, the exact `before` and `after` values from the two records, and a `reason`. The builder rejects missing, invented, or inaccurate differences. Changing several variables is permitted but must be visible; it cannot isolate the effect of one variable.
+
+An identical rerun belongs in the original record's retest history. A new parameter sweep belongs in one planned record with its full result table, not dozens of records selected after seeing favorable values. Preserve the original plan and outputs when recording exploratory follow-ups. A fundamentally different question or method needs a new family; use `related` for connections across families.
+
+Each variant retains its own findings and limitations. Search groups matching members by family but does not treat an untested sibling as tested. The full record compares all published family members. A baseline alone is explicitly labeled as having no completed variants.
+
+Standalone Markdown images may reference declared local SVG, PNG, JPG, or WebP outputs, with descriptive alt text. Generate analytical charts from the stored results and include the plotting script among the hashed inputs. Do not use an illustrative diagram as experimental evidence.

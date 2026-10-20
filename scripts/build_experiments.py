@@ -71,6 +71,11 @@ def build(root=ROOT):
                 data = local(root, file.get('path')).read_bytes()
                 require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                         'SHA-256 mismatch: ' + str(file.get('path')))
+        for visual in d.get('visuals', []):
+            text(visual.get('caption'), 'visual caption')
+            require(visual.get('path') in [f['path'] for f in reproduction['outputs']]
+                    and re.fullmatch(r'[a-zA-Z0-9_./-]+\.(svg|png|jpg|webp)', visual['path']),
+                    'Visual must be a declared image output')
         require(isinstance(d.get('sources'), list) and d['sources'], 'Provide source references')
         for source in d['sources']:
             text(source.get('label'), 'source label')
@@ -87,6 +92,41 @@ def build(root=ROOT):
     for d in records:
         require(all(x in ids and x != d['id'] for x in d['related']),
                 'Related IDs must name other published records')
+    by_id = {r['id']: r for r in records}
+    for r in records:
+        family = r.get('family')
+        if family is None:  # Older independent records remain readable.
+            continue
+        require(isinstance(family, dict), 'Invalid experiment family')
+        for key in ('id', 'title', 'question', 'baseline'):
+            text(family.get(key), 'family.' + key)
+        require(re.fullmatch(r'[a-z][a-z0-9-]*', family['id']), 'Invalid family ID')
+        baseline = by_id.get(family['baseline'])
+        require(baseline and baseline.get('family') == family,
+                'Family baseline must be published with identical family metadata')
+        variant = r.get('variant', {})
+        text(variant.get('label'), 'variant.label')
+        changes = variant.get('changes')
+        require(isinstance(changes, list), 'List variant changes')
+        expected = {k for k in baseline['scope'] if baseline['scope'][k] != r['scope'][k]}
+        require(len(changes) == len(expected), 'List every scope difference exactly once')
+        seen = set()
+        for change in changes:
+            field = change.get('field')
+            require(field in expected and field not in seen, 'Invalid or duplicate changed field')
+            seen.add(field)
+            require(change.get('before') == baseline['scope'][field] and
+                    change.get('after') == r['scope'][field], 'Variant comparison must match recorded scope')
+            text(change.get('reason'), 'Reason for variant')
+        require(r['id'] == family['baseline'] or expected,
+                'A variant needs a scope change; document an identical retest in the original record')
+    families = {}
+    for r in records:
+        if r.get('family'):
+            f = r['family']
+            require(f['id'] not in families or families[f['id']] == f,
+                    'Conflicting family metadata')
+            families[f['id']] = f
     (root / 'data/experiments.json').write_text(json.dumps({
         'schema': 'liberpedia-experiments-v1', 'records': records
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')

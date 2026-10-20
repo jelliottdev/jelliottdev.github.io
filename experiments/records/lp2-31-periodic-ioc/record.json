@@ -1,7 +1,7 @@
 {
   "id": "lp2-31-periodic-ioc",
   "title": "LP2-31: periodic IoC for periods 2-20",
-  "status": "draft",
+  "status": "published",
   "question": "Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?",
   "summary": "Period 13 is the observed peak, but 213 of 999 shuffled maxima are at least as large; corrected Monte Carlo p=0.214.",
   "tags": [
@@ -24,7 +24,7 @@
   "outcome": "inconclusive",
   "finding": "269 archived runes; unique maximum at period 13, 216/5300. Across 999 shuffles, 213 maxima meet or exceed it; p=0.214, not below the declared 0.05 threshold.",
   "limitations": "Only LP2-31, complete archived stream, periods 2-20. Null preserves counts but not local structure. No adjustment for page selection or prior work. No cipher classification or key recovered.",
-  "next_steps": "Human review of the plan, pair-count oracle, null model, full output and bounded wording before publication. Any changed scope needs a new declared experiment.",
+  "next_steps": "Human review remains open. Other pages, transcription choices, period ranges, and null models require separately planned variants in this family.",
   "reproduction": {
     "command": "python experiments/records/lp2-31-periodic-ioc/run.py --check",
     "environment": "Python 3.12.10, standard library, Windows; independent check: python experiments/records/lp2-31-periodic-ioc/check.py",
@@ -40,19 +40,38 @@
       },
       {
         "path": "data/index.json",
-        "sha256": "418a9356dc0658ce036b032a7666162d2c7e1f13a9d7eff08c909ba1f3dd0513"
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/check.py",
+        "sha256": "7da17c783178d0642c47a2fc7fb9df603595203c570a610d0213eba292f4d07f"
+      },
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/plot.py",
+        "sha256": "a19ced343d4ade6fabb577886af5caf34d5ea639fbb9ea2d209fcd207ede1fac"
       }
     ],
     "outputs": [
       {
         "path": "experiments/records/lp2-31-periodic-ioc/results.json",
+        "sha256": "9a35c8217dd4d731ebbef61ebdbe15081d1b39de9e6a7538bf95ec102662c4b5"
+      },
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/results-original.json",
         "sha256": "097abd65834c3962946b308affdfa468f253802dc90a5503f8632bfdef0b3e0b"
+      },
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/period-scan.svg",
+        "sha256": "8833de6298316791d0cff991246e60faf1cddd007ebd525f15657ee037fdaeb9"
       }
-    ]
+    ],
+    "script_sha256": "0a777f1dabf5de58798024f11daca98d38d9efb6bcce2a53526a847ab3ce9f60"
   },
   "review": {
-    "reviewer": "",
-    "retested_on": ""
+    "reviewer": "Codex — computational retest and code review; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
   },
   "sources": [
     {
@@ -64,5 +83,21 @@
       "url": "https://jelliottdev.github.io/#/wiki/index-of-coincidence"
     }
   ],
-  "related": []
+  "related": [],
+  "family": {
+    "id": "periodic-ioc-shuffle",
+    "title": "Periodic IoC with a shuffle comparison",
+    "question": "Does the largest column-coincidence score exceed random reorderings of the same rune counts?",
+    "baseline": "lp2-31-periodic-ioc"
+  },
+  "variant": {
+    "label": "Baseline: LP2-31, periods 2–20",
+    "changes": []
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-31-periodic-ioc/period-scan.svg",
+      "caption": "Observed column IoC. Period 13 is the peak, but 213 of 999 shuffled maxima are at least this large (corrected p = 0.214)."
+    }
+  ]
 }
