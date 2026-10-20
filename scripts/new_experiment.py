@@ -29,8 +29,16 @@ target.mkdir(parents=True)
 ## Question
 State one testable question.
 
+## Rationale
+Explain why this question is worth testing. Link the observation or earlier work that motivated it.
+
 ## Scope
 Specify pages, input representation, transformations, parameter ranges, and exclusions.
+
+## Plan before running
+Record the planned input hashes, candidate count, success criterion, and stopping rule.
+Separate choices fixed before inspection from exploratory choices.
+For random sampling, specify the seed, trial count, null model, and uncertainty calculation.
 
 ## Method
 Explain each step, the controls, and the decision criteria.
@@ -40,6 +48,16 @@ Give the command, dependencies, inputs, and expected output.
 
 ## Results
 Record actual output with units, counts, and links to machine-readable results.
+State how many cases completed, which failed, and whether the run reached its planned stopping point.
+Do not fill this section with expected or invented results.
+
+## Changes after inspecting results
+Record changed boundaries, exceptions, scores, or parameter ranges and why they changed.
+Keep prior outputs identifiable. Write "None" only if no changes were made.
+
+## Retest
+Identify the reviewer, retest date, command, and exact outputs compared.
+Leave this unfinished until a retest has actually happened.
 
 ## Interpretation and limitations
 Separate what the run shows from what remains untested.

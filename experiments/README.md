@@ -5,7 +5,7 @@ The registry starts empty. Earlier work is not automatically a published experim
 ## Add an idea
 
 1. Run `python scripts/new_experiment.py your-short-id` to create a draft.
-2. Write `article.md`: question, rationale, scope, method, results, limitations, and remaining work.
+2. Write the question, rationale, scope, and pre-run plan in `article.md`. Declare the success criterion and stopping rule before inspecting results. After running, fill in actual results, changes made after inspection, retest details, and limitations.
 3. Replace `run.py` with a readable reproducible script. Use explicit inputs, deterministic ordering, a documented seed where relevant, and machine-readable output. Include dependency versions. The generated stub deliberately refuses to run.
 4. Fill `record.json`. Specify exact pages, transcription choice, transformations, parameter ranges, and exclusions. List every input and output with its SHA-256.
 5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
