@@ -66,6 +66,12 @@ def main():
             [sys.executable, "scripts/reproduce_prime_sums.py", "--json"], cwd=target))
         compared = {row["page"]: row for row in sums["page_sums"]}
         assert len(compared) == 17
+        published = json.loads((target / "data/evidence/known-reading-page-sums.json").read_text(encoding="utf-8"))
+        assert published["records"] == sums["page_sums"]
+        import csv
+        with (target / "exports/known-reading-page-sums.csv").open(encoding="utf-8", newline="") as stream:
+            csv_rows = list(csv.DictReader(stream))
+        assert csv_rows == [{key: str(value) for key, value in row.items()} for row in sums["page_sums"]]
         assert [compared["lp1-01"][key] for key in
                 ["rune_count", "archived_sum", "decoded_sum", "difference"]] == [184, 11417, 7409, -4008]
         assert compared["lp2-57"]["archived_sum"] == compared["lp2-57"]["decoded_sum"] == 3968
