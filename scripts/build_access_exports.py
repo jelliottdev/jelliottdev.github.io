@@ -138,37 +138,81 @@ save('llms.txt',(root/'llms.txt').read_text(encoding='utf-8')+guide_links)
 register('llms-full.txt','Complete plain-text page references')
 save('downloads/REFERENCE-DATA-README.txt','''Liberpedia reference-data bundle
 
-Extract this ZIP into an empty folder, keeping its directory structure.
-From that folder, with Python 3, run:
+START WITH ONE KNOWN READING
+Extract this ZIP into an empty folder and keep its folders together. Open a
+terminal in that folder. Use Python 3: on Windows try py --version; on macOS or
+Linux try python3 --version. Below, replace python with the command that works.
 
+  python scripts/reproduce_reading.py warning
+
+This decodes LP1-01 with Atbash and checks the literal result against its saved
+control. Unusual spellings are preserved intentionally. For setup and a
+rune-by-rune explanation, open reference/articles/running-scripts.txt.
+
+CHOOSE A TASK
+Check every known reading (nine sections, 17 pages):
   python scripts/reproduce_reading.py --check-all
-  python scripts/reproduce_prime_sums.py
+  Guide: reference/articles/running-scripts.txt
+
+Find a word or phrase in the contextual English readings:
+  python scripts/reading_concordance.py circumference --prefix
+  Guide: reference/articles/reading-concordance.txt
+  This searches known readings, not unsolved ciphertext or hidden messages.
+
+Measure rune frequencies and matching pairs:
+  python scripts/rune_ioc.py lp2-31
   python scripts/rune_ioc.py --check
+  Guide: reference/articles/index-of-coincidence.txt
+  The first measures one archived page; the second verifies the saved baseline.
+  A descriptive statistic is not a cipher identification or a significance test.
+
+Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
+  Guide: reference/articles/rune-ngrams.txt
+  Reports overlapping repeats and source positions under its stated boundaries.
+
+Reproduce numerical examples:
+  python scripts/reproduce_prime_sums.py
+  python scripts/check_number_examples.py
+  Guides: reference/articles/prime-sums.txt and prime-indices.txt
+
+Reproduce the earlier puzzle chains:
   python scripts/reproduce_cover_chain.py
   python scripts/reproduce_cover_rsa.py
   python scripts/reproduce_emerson.py
+  Guides: reference/articles/cover-chain.txt, cover-rsa.txt,
+  and emerson-self-reliance.txt
+  These replay historical results from local evidence; they do not contact the
+  historical addresses or discover new solutions.
+
+Inspect recorded visual measurements:
   python scripts/inspect_visual_records.py
-  python scripts/check_number_examples.py
-  python scripts/reading_concordance.py circumference --prefix
+  Guide: reference/articles/image-regions.txt
+  The ordinary command checks saved records, not newly measured image pixels.
 
-These checks use the included archived texts, records, parameters and evidence.
-No network or AI service is needed. CONTENTS.json lists member hashes and roles.
-
-To save a known reading or its rune-by-rune trace as UTF-8:
+SAVE A RESULT
   python scripts/reproduce_reading.py warning --output warning.txt
   python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
-These create files in your current folder and refuse to overwrite existing files.
+  python scripts/reading_concordance.py circumference --prefix --json --output circumference.json
+  python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
+These create UTF-8 files in your current folder and refuse to overwrite existing
+files. For the concordance, --json selects JSON; the filename alone does not.
+Preserve the input hashes and counting rules alongside any interpretation.
+
+WHAT IS INCLUDED
+The commands above use the included archived texts, records, parameters and
+evidence. No network or AI service is needed. CONTENTS.json lists member hashes
+and roles. START-HERE.txt duplicates downloads/REFERENCE-DATA-README.txt for
+convenient access after extraction.
 
 Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
 inspect_visual_records.py also requires Pillow. extract_payload.py requires
 OutGuess, and signature verification requires GnuPG. See the included guides.
 
-Optional frequency chart:
+OPTIONAL FREQUENCY CHART
   python -m pip install matplotlib
   python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg
-
 Only the installation step may need network access. The plot reads local saved
 counts and refuses to overwrite an existing output. Matplotlib is not needed
 for rune_ioc.py --check. A ready-made chart is included at
@@ -185,6 +229,9 @@ for name,roles in [('original-images',{'Original JPEG','Historical illustrated c
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
+ if name=='reference-data':
+  instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
+  selected.append({**instructions,'path':'START-HERE.txt','source_path':instructions['path']})
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
  reusable=False
  if (root/path).exists():
@@ -194,7 +241,7 @@ for name,roles in [('original-images',{'Original JPEG','Historical illustrated c
   with zipfile.ZipFile(root/path,'w',zipfile.ZIP_DEFLATED) as z:
    for f in selected:
     info=zipfile.ZipInfo(f['path'],(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
-    z.writestr(info,(root/f['path']).read_bytes())
+    z.writestr(info,(root/f.get('source_path',f['path'])).read_bytes())
    info=zipfile.ZipInfo('CONTENTS.json',(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
    z.writestr(info,contents)
  with zipfile.ZipFile(root/path) as z:

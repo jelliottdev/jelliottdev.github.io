@@ -26,6 +26,7 @@ def main():
             ["scripts/reading_concordance.py", "circumference", "--prefix", "--json"],
             ["scripts/reproduce_reading.py", "--check-all"],
             ["scripts/reproduce_prime_sums.py"],
+            ["scripts/check_number_examples.py"],
             ["scripts/rune_ioc.py", "--check"],
             ["scripts/test_rune_ngrams.py"],
             ["scripts/rune_ngrams.py", "lp2-31", "--length", "2"],
@@ -59,6 +60,8 @@ def main():
         print("PASS: UTF-8 reading/trace files match stdout; existing files and invalid requests preserved.")
         assert (target / "data/evidence/signature-checks.json").is_file()
         assert (target / "downloads/REFERENCE-DATA-README.txt").is_file()
+        assert (target / "START-HERE.txt").read_bytes() == (
+            target / "downloads/REFERENCE-DATA-README.txt").read_bytes()
 
 
 if __name__ == "__main__":
