@@ -2,6 +2,29 @@
 <h2 id="inputs">Choose the input layer</h2>
 <p>The page record’s ordinary prime sum describes its archived runes. For an encrypted page, this is a ciphertext sum. The examples here instead use the <strong>known decoded rune sequence</strong>, with the documented correction and cipher rules applied. These are different quantities even when both are called “the page sum.”</p>
 <p>Use the rune’s <a href="#/wiki/rune-values">Gematria Primus prime value</a>, not its zero-based cipher index. Count each rune once. The rule here excludes spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG denotes one rune; it must not automatically become two individual letter-runes.</p>
+<h2 id="archived">Reproduce the sum displayed on a page</h2>
+<p>The metadata beside each manuscript image reports the archived rune count and prime sum. For <a href="#/page/lp2-31">LP2-31</a>, these are <strong>269 runes</strong> and <strong>13,680</strong>. They describe the encrypted transcription, not a proposed plaintext.</p>
+<p>Use this Python 3 example from the repository root or extracted <a href="downloads/reference-data.zip">reference-data bundle</a>. Change <code>page_id</code> to another page with an archived rune transcription. The script reads the archive text, looks up each rune’s prime value, and checks both results against the page record:</p>
+<pre><code>import json
+from pathlib import Path
+
+page_id = "lp2-31"
+index = json.loads(Path("data/index.json").read_text(encoding="utf-8"))
+primes = {item["rune"]: item["prime"] for item in index["alphabet"]}
+text = Path(f"text/{page_id}.txt").read_text(encoding="utf-8")
+unknown = {char for char in text if "\u16a0" &lt;= char &lt;= "\u16ff"} - primes.keys()
+if unknown:
+    raise ValueError(f"Unknown runic symbols: {unknown}")
+values = [primes[char] for char in text if char in primes]
+page = json.loads(Path(f"data/pages/{page_id}.json").read_text(encoding="utf-8"))
+if len(values) != page["rune_count"] or sum(values) != page["prime_sum"]:
+    raise ValueError("Calculated values differ from the page record")
+print("Archived runes:", len(values))
+print("Archived prime sum:", sum(values))</code></pre>
+<p>Expected output:</p><pre><code>Archived runes: 269
+Archived prime sum: 13680</code></pre>
+<p>Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing. This checks the published metadata against its transcription and alphabet; it is not an independent verification of the image transcription.</p>
+<p>A sum preserves no ordering information: rearranging the same runes gives the same total. Matching 13,680 therefore cannot establish that two transcriptions are identical or that a rearrangement is correct. Use the exact source file and <a href="#/wiki/checksums">its checksum</a> to identify the input; use <a href="#/wiki/cipher-invariants">cipher invariants</a> to understand which transformations can change the statistic. The <a href="#/wiki/transliteration?section=counting-example">first-row example</a> explains why Latin-letter counts differ from rune counts.</p>
 <h2 id="command">Run the read-only check</h2>
 <pre><code>python scripts/reproduce_prime_sums.py
 python scripts/reproduce_prime_sums.py --json</code></pre>

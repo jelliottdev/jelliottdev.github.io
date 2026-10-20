@@ -10,6 +10,37 @@ The page record’s ordinary prime sum describes its archived runes. For an encr
 
 Use the rune’s Gematria Primus prime value, not its zero-based cipher index. Count each rune once. The rule here excludes spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG denotes one rune; it must not automatically become two individual letter-runes.
 
+Reproduce the sum displayed on a page
+
+The metadata beside each manuscript image reports the archived rune count and prime sum. For LP2-31, these are 269 runes and 13,680. They describe the encrypted transcription, not a proposed plaintext.
+
+Use this Python 3 example from the repository root or extracted reference-data bundle. Change page_id to another page with an archived rune transcription. The script reads the archive text, looks up each rune’s prime value, and checks both results against the page record:
+
+import json
+from pathlib import Path
+
+page_id = "lp2-31"
+index = json.loads(Path("data/index.json").read_text(encoding="utf-8"))
+primes = {item["rune"]: item["prime"] for item in index["alphabet"]}
+text = Path(f"text/{page_id}.txt").read_text(encoding="utf-8")
+unknown = {char for char in text if "\u16a0" <= char <= "\u16ff"} - primes.keys()
+if unknown:
+    raise ValueError(f"Unknown runic symbols: {unknown}")
+values = [primes[char] for char in text if char in primes]
+page = json.loads(Path(f"data/pages/{page_id}.json").read_text(encoding="utf-8"))
+if len(values) != page["rune_count"] or sum(values) != page["prime_sum"]:
+    raise ValueError("Calculated values differ from the page record")
+print("Archived runes:", len(values))
+print("Archived prime sum:", sum(values))
+
+Expected output:
+Archived runes: 269
+Archived prime sum: 13680
+
+Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing. This checks the published metadata against its transcription and alphabet; it is not an independent verification of the image transcription.
+
+A sum preserves no ordering information: rearranging the same runes gives the same total. Matching 13,680 therefore cannot establish that two transcriptions are identical or that a rearrangement is correct. Use the exact source file and its checksum to identify the input; use cipher invariants to understand which transformations can change the statistic. The first-row example explains why Latin-letter counts differ from rune counts.
+
 Run the read-only check
 
 python scripts/reproduce_prime_sums.py
@@ -92,8 +123,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/spelling
 - Gematria Primus prime value
   https://jelliottdev.github.io/reference/articles/rune-values.html
-- reference-data ZIP
+- LP2-31
+  https://jelliottdev.github.io/reference/lp2-31.html
+- reference-data bundle; reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- its checksum; file checksums
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- cipher invariants; what cipher operations preserve
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- first-row example
+  https://jelliottdev.github.io/reference/articles/transliteration.html#counting-example
 - script setup
   https://jelliottdev.github.io/reference/articles/running-scripts.html
 - the published arithmetic evidence; Exact sum evidence
@@ -110,10 +149,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - primality and divinity
   https://jelliottdev.github.io/reference/articles/primality-and-divinity.html
-- what cipher operations preserve
-  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
-- file checksums
-  https://jelliottdev.github.io/reference/articles/checksums.html
 - selection effects and reproducible scope
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Read-only reproduction script
