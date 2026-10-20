@@ -44,6 +44,12 @@ The recorded control copies zero-based rune position 56, an F with index 0, and 
 
 The shift after 262 is 268, from the next prime 269. Copying the F leaves that next shift available for rune position 57. Applying a zero shift to F while still consuming the next prime would produce the same F at position 56 but change every later alignment. The output at the interruption alone cannot distinguish the two rules.
 
+Read the prime-stream counter
+
+The CSV columns key_position_before and key_position_after count consumed prime shifts here. At rune positions 55, 56, and 57, they show 55→56, 56→56, and 56→57. The unchanged middle counter confirms that the copied F leaves the next prime unused.
+
+key_slot_before is blank throughout this control. That column describes a repeating Vigenère key; the consecutive-prime stream has no repeating key length to reduce the counter by. Do not interpret a blank slot as slot zero, and do not use the input rune ordinal as the prime-stream position after the interruption.
+
 This interruption position is a parameter of the published reproduction control, recorded through alignment with the archived known reading. It is not inferred automatically by this script and is not a rule to copy every F on an unsolved page. See keystream positions and interruptions.
 
 How to replicate LP2-56

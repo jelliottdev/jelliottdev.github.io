@@ -189,6 +189,18 @@ def main():
             assert after - before == (0 if row["copied"] == "True" else 1)
             assert int(row["key_slot_before"]) == before % 8
         print("PASS: Welcome trace records paused and advanced key counters across both pages")
+        prime_trace = list(csv.DictReader(io.StringIO(subprocess.check_output(
+            [sys.executable, "scripts/reproduce_reading.py", "lp2-56", "--trace"], cwd=target).decode("utf-8"))))
+        assert [(r["key_position_before"], r["key_position_after"], r["subtracted_value"])
+                for r in prime_trace[55:58]] == [("55", "56", "262"), ("56", "56", ""), ("56", "57", "268")]
+        assert all(row["key_slot_before"] == "" for row in prime_trace)
+        for section in ["warning", "some-wisdom", "first-koan"]:
+            rows = csv.DictReader(io.StringIO(subprocess.check_output(
+                [sys.executable, "scripts/reproduce_reading.py", section, "--trace"], cwd=target).decode("utf-8")))
+            assert all(all(row[field] == "" for field in ["key_position_before", "key_position_after", "key_slot_before"])
+                       for row in rows)
+        print("PASS: prime-stream interruption keeps its next prime; non-keystream methods leave counters blank")
+
         for flags, name in [([], "warning.txt"), (["--trace"], "warning.csv")]:
             command = [sys.executable, "scripts/reproduce_reading.py", "warning", *flags]
             expected = subprocess.run(command, cwd=target, capture_output=True, check=True).stdout

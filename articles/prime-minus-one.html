@@ -19,6 +19,9 @@
 <tr><td>58</td><td>10</td><td>270</td><td>1 / U</td></tr>
 </tbody></table></div>
 <p>The shift after 262 is 268, from the next prime 269. Copying the F leaves that next shift available for rune position 57. Applying a zero shift to F while still consuming the next prime would produce the same F at position 56 but change every later alignment. The output at the interruption alone cannot distinguish the two rules.</p>
+<h3 id="trace-counters">Read the prime-stream counter</h3>
+<p>The CSV columns <code>key_position_before</code> and <code>key_position_after</code> count consumed prime shifts here. At rune positions 55, 56, and 57, they show 55→56, 56→56, and 56→57. The unchanged middle counter confirms that the copied F leaves the next prime unused.</p>
+<p><code>key_slot_before</code> is blank throughout this control. That column describes a repeating Vigenère key; the consecutive-prime stream has no repeating key length to reduce the counter by. Do not interpret a blank slot as slot zero, and do not use the input rune ordinal as the prime-stream position after the interruption.</p>
 <p>This interruption position is a parameter of the published reproduction control, recorded through alignment with the archived known reading. It is not inferred automatically by this script and is not a rule to copy every F on an unsolved page. See <a href="#/wiki/interruptions">keystream positions and interruptions</a>.</p>
 <h2 id="replicate">How to replicate LP2-56</h2><p>Use Python 3 from the repository or extracted <a href="downloads/reference-data.zip">reference-data ZIP</a>. No additional package or AI service is needed.</p><pre><code>python scripts/reproduce_reading.py lp2-56
 python scripts/reproduce_reading.py lp2-56 --trace</code></pre><p>Start at prime 2. Copy zero-based rune ordinal 56 without advancing the prime sequence. Preserve punctuation. Compare with <a href="#/page/lp2-56?section=reading">the literal reading</a>.</p>
