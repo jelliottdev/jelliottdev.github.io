@@ -1,0 +1,17 @@
+<p>A book cipher turns coordinates into text by looking them up in a shared source. The source can be an essay, poem or other document; it need not be a whole book. To reproduce a result, knowing the title is not enough. You also need the edition and the rules used to count its parts.</p>
+<h2 id="lookup">How a four-part lookup works</h2>
+<p>In a paragraph:sentence:word:letter scheme, <code>2:1:3:2</code> means: select paragraph 2, then its first sentence, then its third word, then the second letter of that word. This assumes one-based counting, where the first item is numbered 1.</p>
+<p>For a small invented example, let paragraph 2 begin <q>We study runes.</q> The third word is <em>runes</em>, so the second letter is <strong>u</strong>. The coordinates identify nested locations; they are not numbers to add together.</p>
+<p>The archived 2014 opening puzzle uses this kind of rule with <a href="#/wiki/emerson-self-reliance">Emerson’s Self-Reliance</a>. That guide walks through its first coordinate against the referenced PDF and distinguishes that check from a full reproduction.</p>
+<h2 id="conventions">Decide what counts before extracting</h2>
+<dl><dt>Starting point</dt><dd>State whether titles, opening quotations and notes are included. Starting at the first prose paragraph can differ from starting at the first text on the page.</dd>
+<dt>Paragraph boundaries</dt><dd>Preserve actual paragraph divisions. A page or display line ending may interrupt a paragraph without creating a new one.</dd>
+<dt>Sentence boundaries</dt><dd>Specify how punctuation and abbreviations are handled. Splitting blindly at every period can create false sentences.</dd>
+<dt>Word and letter boundaries</dt><dd>Record how hyphens, apostrophes, punctuation and accented letters are treated. Counting characters in a raw file is not necessarily counting letters in the printed word.</dd>
+<dt>Literal characters</dt><dd>A clue may print some digits or punctuation directly. Identify those separately instead of forcing every item through the coordinate rule.</dd></dl>
+<h2 id="trace">What a reproducible trace should show</h2>
+<p>For each coordinate, record the selected paragraph, sentence, word and letter, plus the resulting output character. Include the source URL, a file checksum, and any transcription changes. A reader should be able to inspect one disagreeing character without rerunning an opaque decoder.</p>
+<p>If a coordinate points beyond a sentence or word, report it as out of range. Wrapping around, skipping a heading or switching editions introduces another rule. Such a rule may be worth testing, but it must be stated rather than hidden inside a correction.</p>
+<h2 id="testing">Using a possible literary reference</h2>
+<p>A recognizable quotation or artwork can suggest a source to investigate. It does not identify the indexing scheme. Before trying many passages and counting conventions, write down the source, coordinates, transformations and success criterion. Otherwise a promising fragment may simply be the best-looking result among many undocumented choices.</p>
+<p>The <a href="#/wiki/reproducibility">experiment-writing guide</a> explains how to preserve that scope. Use <a href="#/experiments">Have we tried it?</a> to look for a documented test of the same technique and inputs, rather than treating any mention of the source as evidence that the test was performed.</p>
