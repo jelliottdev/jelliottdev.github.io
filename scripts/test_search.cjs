@@ -49,6 +49,7 @@ for(const [queries,id,section,pages] of [
  [['reclining figure'],'mobius','closing-page',['lp2-22']],
  [['blurry tree'],'branches','tree-comparison',['lp2-32']],
  [['faint tree'],'branches','tree-comparison',['lp2-55']],
+ [['spread wings','spread-wing insect'],'insects','spread-wings',['lp1-05']],
 ]){
  for(const query of queries){
   const hits=search.search(db,query);
