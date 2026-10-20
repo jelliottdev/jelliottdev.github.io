@@ -49,6 +49,8 @@ def main():
             ["scripts/test_rune_entropy.py"],
             ["scripts/rune_entropy.py", "lp2-31"],
             ["scripts/test_rune_ngrams.py"],
+            ["scripts/test_rune_lag_matches.py"],
+            ["scripts/rune_lag_matches.py", "lp2-31", "--max-lag", "4"],
             ["scripts/rune_ngrams.py", "lp2-31", "--length", "2"],
             ["scripts/reproduce_cover_chain.py"],
             ["scripts/reproduce_cover_rsa.py"],

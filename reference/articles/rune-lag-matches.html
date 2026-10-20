@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rune matches at a distance: lag coincidences — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/rune-lag-matches">Open in wiki</a> · <a href="rune-lag-matches.txt">Plain text</a></nav><h1>Rune matches at a distance: lag coincidences</h1><p>Compare runes at fixed distances, reproduce exact pair counts, and distinguish descriptive peaks from evidence of a period.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#example">A five-symbol example</a></li><li><a href="#run">Reproduce the manuscript calculation</a></li><li><a href="#scope">What exactly is counted?</a></li><li><a href="#comparison">What would a shuffled stream give?</a></li><li><a href="#limits">What the result cannot decide</a></li><li><a href="#checks">Files and checks</a></li></ul></nav></details><p>A lag is a distance between positions in a sequence. At lag 2, compare each rune with the rune two places later. Counting equal pairs gives an order-dependent description of the text: rearranging the same symbols can change the result, even when <a href="index-of-coincidence.html">whole-page IoC</a> stays unchanged.</p>
+<h2 id="example">A five-symbol example</h2>
+<p>For the teaching sequence <code>ABABA</code>, lag 2 makes three comparisons:</p>
+<pre><code>Position:   0  1  2  3  4
+Sequence:   A  B  A  B  A
+
+Compare 0 with 2: A = A
+Compare 1 with 3: B = B
+Compare 2 with 4: A = A
+
+Matches: 3 out of 3</code></pre>
+<p>There is no comparison from the final A back to the beginning. This tool does not wrap around. Its complete result for the example is:</p>
+<table><thead><tr><th>Lag</th><th>Equal pairs</th><th>Pairs compared</th><th>Rate</th></tr></thead><tbody><tr><td>1</td><td>0</td><td>4</td><td>0</td></tr><tr><td>2</td><td>3</td><td>3</td><td>1</td></tr><tr><td>3</td><td>0</td><td>2</td><td>0</td></tr><tr><td>4</td><td>1</td><td>1</td><td>1</td></tr></tbody></table>
+<p>The rate at lag 4 is also 1, but rests on just one pair. Always keep the denominator beside the rate. A large value supported by very few comparisons is not equivalent to a persistent pattern across many positions.</p>
+<h2 id="run">Reproduce the manuscript calculation</h2>
+<p>Extract the <a href="../../downloads/reference-data.zip">reference-data bundle</a> with its folders intact. Python 3 and its standard library are sufficient:</p>
+<pre><code>python scripts/rune_lag_matches.py lp2-31 --max-lag 4
+python scripts/rune_lag_matches.py lp2-31 --max-lag 20 --output lp2-31-lags.json
+python scripts/test_rune_lag_matches.py</code></pre>
+<p>The first command reports <code>0/268</code>, <code>9/267</code>, <code>5/266</code>, and <code>10/265</code> for lags 1–4. The JSON also gives reduced fractions and decimal rates. These are descriptive counts from the archived 269-rune stream, not a newly established key period or solution.</p>
+<p>The default maximum lag is 20; explicitly choose a smaller value for a shorter stream. Valid lags run from 1 to one less than the rune count. The output option refuses to overwrite an existing file. The script uses <code>rune_ngrams.py</code> from the same bundle to identify runes; keep that helper beside it.</p>
+<h2 id="scope">What exactly is counted?</h2>
+<p>The script retains archived runes in order, including headings, and removes non-runes. Pairs may therefore cross word, line, and paragraph breaks, but never page boundaries. It performs no spelling conversion, correction, decoding, or interruption skipping. The report records the input file, its SHA-256, the alphabet, and its hash.</p>
+<p>For a stream of length <code>n</code> and a lag <code>d</code>, the denominator is <code>n − d</code>. The numerator counts indices <code>i = 0, …, n − d − 1</code> for which <code>x[i] = x[i+d]</code>. These are forward pairs counted once. They are different from the all-position ordered pairs in the ordinary IoC formula.</p>
+<h2 id="comparison">What would a shuffled stream give?</h2>
+<p>Under a uniform random rearrangement preserving the symbol counts, any two distinct positions have expected equality rate <code>Σ c(c−1) / [n(n−1)]</code>. Each fixed-lag pair uses two distinct positions, so averaging their equality indicators gives that same expectation. This derives an expected rate, not a distribution of possible peaks.</p>
+<p>The report includes this fraction as <code>shuffle_expected_rate_fraction</code>. It is not a p-value, a confidence interval, or a threshold for a meaningful result. Pairs can overlap, and results at different lags share the same input. If you select the largest result after scanning many lags, a chance comparison must repeat that selection procedure. See <a href="null-models.html">null models and selection</a>.</p>
+<h2 id="limits">What the result cannot decide</h2>
+<p>An elevated lag can motivate a more specific test; it does not identify a cipher or key length by itself. Changing the heading policy, page boundaries, or skipped positions changes the sequence being measured. Record those choices before comparing reports.</p>
+<p>Renaming symbols consistently leaves equality unchanged. Reversing the whole stream also preserves the count at each lag, because it pairs the same positions in the opposite direction. This statistic therefore cannot choose between a stream and its reversal. For local repeated patterns and their source positions, use <a href="rune-ngrams.html">the n-gram tool</a>; for the broader principle, read <a href="cipher-invariants.html">what operations preserve</a>.</p>
+<h2 id="checks">Files and checks</h2>
+<p><a href="../../scripts/rune_lag_matches.py" download>Calculation script</a> · <a href="../../scripts/test_rune_lag_matches.py" download>Checks</a>. Tests cover the hand example, valid lag bounds, symbol renaming, reversal, and the expected rate averaged over all six distinct arrangements of AABB. The archived-page check verifies the 269-rune scope and its comparison denominators. These validate the stated calculation, not the original photographic transcription.</p>
+<h2>Manuscript pages discussed</h2><p><a href="../lp2-31.html">LP2-31</a></p><h2>Guides linking here</h2><ul><li><a href="analysis-and-measurement.html">Statistics and measurements</a></li><li><a href="index-of-coincidence.html">Index of coincidence: a reproducible rune baseline</a></li></ul></main></body></html>
