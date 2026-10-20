@@ -133,6 +133,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'crib-pattern.svg': {'title':'LP2-42 repeated-rune crib patterns (SVG)', 'guide':'cipher-invariants', 'aliases':['crib pattern','word pattern','equality pattern'], 'pages':['lp2-42'], 'release':'LP2'},
  'fft-bins.svg': {'title':'Synthetic tone: FFT grid and record duration (SVG)', 'guide':'audio-frequency', 'aliases':['FFT','frequency bins','zero padding']},
  'grid-binary.svg': {'title':'Declared base-60 binary grid (SVG)', 'guide':'alphanumeric-grids','aliases':['binary grid','base60 binary']},
  'gap-file-sizes.svg': {'title':'LP2 file sizes by reported gap group (SVG)', 'guide':'line-gaps','aliases':['big gaps','line spacing','file sizes']},

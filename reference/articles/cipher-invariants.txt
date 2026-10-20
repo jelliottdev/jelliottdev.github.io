@@ -86,6 +86,51 @@ assert sorted(Counter(source).values()) == sorted(Counter(uniform_shift).values(
 assert ioc(source) == ioc(reversed_order) == ioc(uniform_shift) == Fraction(2, 5)
 assert ioc(varying_shift) == Fraction(1, 5)
 
+Check a proposed word by its repeated runes
+
+A crib is a proposed piece of plaintext at a specified location. For a fixed one-to-one substitution, a crib must preserve the exact pattern of equal symbols: two ciphertext positions are equal if and only if their proposed plaintext positions are equal. This is stronger than checking word length or the number of distinct runes.
+
+The archived LP2-42 token ᛖᛡᛖᛡᚦ has labels E IA E IA TH. Number distinct symbols in order of first appearance, starting at zero: its pattern is 0 1 0 1 2. Positions 1 and 3 must agree, positions 2 and 4 must agree, and the last symbol must differ from both. The examples below use hypothetical rune labels, not proposed English readings.
+
+[Image: LP2-42 token E IA E IA TH has equality pattern 0 1 0 1 2. F U F U TH is compatible. F U F TH O is inconsistent because IA would map to two symbols. F F F F U merges E and IA and fails one-to-one mapping.]
+Equal positions must stay equal; different symbols must stay different. Colors are only a visual aid—the labels and pattern numbers provide the same information. Download diagram (SVG).
+
+Why both directions matter
+
+A fixed function gives the same output every time it sees the same input. That rules out the second candidate in the diagram: the two IA runes cannot become U and TH under one fixed map. Requiring the function to be one-to-one also prevents different inputs from sharing an output. That rules out the third candidate, where E and IA both become F.
+
+Conversely, if the two equality patterns agree, pairing the aligned symbols defines a consistent one-to-one map on the symbols actually used. When both sequences use the same 29-symbol alphabet, this partial map can be completed to an alphabet permutation by pairing the unused inputs and outputs. Thus pattern equality is both necessary and sufficient for some fixed alphabet permutation to fit this one alignment. It does not establish that the permutation fits another word, that the text is meaningful, or that a more restricted cipher such as Atbash fits.
+
+Check multiple cribs together with one shared mapping. Two words may each pass separately yet demand different outputs for the same ciphertext rune. A rejection also applies only to the stated alignment, rune tokenization, and cipher model. A position-dependent key, transposition, or a many-to-one map changes the assumptions. Do not expand TH into two Latin letters before checking a one-rune substitution.
+
+Reproduce the LP2-42 example
+
+Run this from the repository or extracted reference-data ZIP. The source slice uses zero-based Unicode character offsets 229–233 in the archived UTF-8 text, before removing line markers. It is token 2313 in the word-length ledger. This is a check of the archived transcription, not a fresh visual reading of the manuscript.
+
+from pathlib import Path
+
+def pattern(symbols):
+    seen = {}
+    return tuple(seen.setdefault(symbol, len(seen)) for symbol in symbols)
+
+def compatible(cipher, plain):
+    return len(cipher) == len(plain) and pattern(cipher) == pattern(plain)
+
+raw = Path("text/lp2-42.txt").read_bytes().decode("utf-8")
+cipher = raw[229:234]
+assert cipher == "ᛖᛡᛖᛡᚦ"
+assert pattern(cipher) == (0, 1, 0, 1, 2)
+assert compatible(cipher, ["F", "U", "F", "U", "TH"])
+assert not compatible(cipher, ["F", "U", "F", "TH", "O"])
+assert not compatible(cipher, ["F", "F", "F", "F", "U"])
+# Individually compatible cribs can conflict when combined.
+assert compatible([0], [5]) and compatible([0], [6])
+assert not compatible([0, 0], [5, 6])
+print("PASS: fixed one-to-one substitution pattern checks")
+
+A pass is a compatibility result, not a decryption. For how to state the acceptance rule of a larger search, see candidate readings and acceptance tests. This example does not run a dictionary search or assign a probability to a match.
+
+
 Choose a test that can change
 
 For a transposition search, length and rune counts are integrity checks. To compare candidate orders, examine something sensitive to order, such as repeated neighboring pairs, the distribution within specified columns, or a fully stated language score. A promising score still needs controls for how many arrangements were tried.
@@ -141,6 +186,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
 - IoC formula; IoC guide
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- LP2-42
+  https://jelliottdev.github.io/reference/lp2-42.html
+- LP2-42 token E IA E IA TH has equality pattern 0 1 0 1 2. F U F U TH is compatible. F U F TH O is inconsistent because IA would map to two symbols. F F F F U merges E and IA and fails one-to-one mapping.; Download diagram (SVG)
+  https://jelliottdev.github.io/exports/figures/crib-pattern.svg
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- word-length ledger
+  https://jelliottdev.github.io/exports/unsolved-word-tokens.json
+- candidate readings and acceptance tests
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
 - transposition search
   https://jelliottdev.github.io/reference/articles/transposition.html
 - the reproduction guide
