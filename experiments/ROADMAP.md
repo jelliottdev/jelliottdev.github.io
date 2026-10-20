@@ -57,3 +57,9 @@ Keep related questions as scoped variants, not a combined result:
 - Corpus comparisons need exact source editions, rune conversion and tokenization. Overlapping windows are dependent; their fraction is not automatically a population-level p-value.
 
 Additional supplied proposals await review: 301/prime-ordinal arithmetic now specifies binary inversion (must specify bit width), Unicode claims, 4x4 numerical spiral routes and forced prime-step changes; do not silently substitute the previously discussed decimal interpretation. Source screenshots and named attachments not actually supplied are not available evidence.
+
+## Ciphertext autokey and F interruptions on LP2-54–55
+
+Intake reviewed; no completed experiment yet. The full archived streams contain 308 runes and six F occurrences, supporting a 64-subset mask space. The source discussion distinguishes resetting the ciphertext state to F=0 from retaining the previous non-interrupt ciphertext value. In both cases, remove selected interruptions from the measured output, and resume ordinary ciphertext feedback after the next non-interrupt symbol. Plaintext feedback is a different cipher.
+
+Before testing the reported period-13/26 features, specify heading inclusion, page joining, initial state, adjacent-interruption behavior, output-position counting, IoC weighting, period range, and how the mask/period search is repeated in each null trial. Use a small reversible teaching example to catch the persistent-lag bug: with modulus ten, initial state zero and the third plaintext position skipped, 12034 encrypts to 13060. The original script files and plots are only referenced in the supplied text, so a new implementation must be labeled as an explicit new test, not an exact rerun of those unavailable files.
