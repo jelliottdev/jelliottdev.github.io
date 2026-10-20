@@ -21,7 +21,7 @@ console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phra
 
 for(const [queries,id,pageIds] of [
  [['dots','black dots'],'dots',['lp2-07','lp2-33','lp2-39']],
- [['five dots'],'dots',['lp2-07','lp2-23']],
+ [['five dots'],'dots',['lp2-07','lp2-23','lp2-56']],
  [['three dots'],'dots',['lp2-33','lp2-39']],
  [['mobius','Möbius','moebius','infinity'],'mobius',['lp2-15']],
  [['cuniform','cuneiform','cuneform','wedge marks'],'cuneiform',['lp2-33','lp2-34']],
@@ -49,6 +49,7 @@ for(const [queries,id,section,pages] of [
  [['reclining figure'],'mobius','closing-page',['lp2-22']],
  [['blurry tree'],'branches','tree-comparison',['lp2-32']],
  [['faint tree'],'branches','tree-comparison',['lp2-55']],
+ [['dots below hash','hash page dots'],'dots','hash-page-dots',['lp2-56']],
  [['spread wings','spread-wing insect'],'insects','spread-wings',['lp1-05']],
 ]){
  for(const query of queries){
