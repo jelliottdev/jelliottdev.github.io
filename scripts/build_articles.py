@@ -35,8 +35,13 @@ def reference_url(target):
 
 def build():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
+    reading_index = ROOT / "articles/readings/index.json"
+    if reading_index.exists():
+        articles += json.loads(reading_index.read_text(encoding="utf-8"))
+    def source(a):
+        return ROOT / "articles" / a.get("source", a["id"] + ".html")
     for a in articles:
-        body = (ROOT / f'articles/{a["id"]}.html').read_text(encoding="utf-8")
+        body = source(a).read_text(encoding="utf-8")
         parser = Text()
         parser.feed(body)
         a["html"] = body
@@ -48,7 +53,7 @@ def build():
         standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
         standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
         related = [b for b in articles if b["id"] != a["id"] and
-                   f'href="#/wiki/{a["id"]}"' in (ROOT / f'articles/{b["id"]}.html').read_text(encoding="utf-8")]
+                   f'href="#/wiki/{a["id"]}"' in source(b).read_text(encoding="utf-8")]
         if a.get("pages"):
             standalone += '<h2>Manuscript pages discussed</h2><p>' + " · ".join(f'<a href="../{pid}.html">{pid.upper()}</a>' for pid in a["pages"]) + '</p>'
         if related:

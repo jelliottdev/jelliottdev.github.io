@@ -38,6 +38,7 @@ in the historical address.
 ## Rebuild and verification
 
 ```sh
+python scripts/build_reading_guides.py
 python scripts/build_articles.py
 python scripts/build_assistant.py
 python scripts/build_access_exports.py
@@ -56,3 +57,7 @@ message, eight payload manifests, 135 authored links, and all 425 catalog entrie
 were checked. Brave checks covered guide navigation, the chapter-title payload,
 search discovery, and a 390-pixel phone viewport. No live inference was used for
 this content batch.
+
+## Complete-section guides
+
+`build_reading_guides.py` generates `articles/readings/` from the nine published controls and page records. Never hand-edit these generated bodies. The builder asserts that all pages agree on section membership, order, and contextual text. Literal outputs retain their page boundaries; contextual English stays a separate whole-section rendering. The ordinary guide builder then includes these records in navigation, backlinks, search, and standalone exports.
