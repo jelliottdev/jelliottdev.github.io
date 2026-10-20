@@ -18715,6 +18715,41 @@ A substituted rune can change frequency counts and prime sums. An inserted or de
 
 This guide and tool provide a comparison workflow, not a claim that every page has been manually reverified. Consult the individual page's archived and reviewed views for existing visual-review records. Related: file integrity · image coordinates · documenting an experiment.
 
+
+Which pages have a reviewed text layer?
+
+The current published records contain eight separate reviewed-text layers. Seven change only non-rune characters; one changes the rune sequence. The other 67 records do not contain a separate reviewed layer. These are counts of published data layers, not counts of pages certified as correct or incorrect.
+
+	Page	Recorded change	Effect to check
+
+	LP1-10	Exchange the archived I/E order at zero-based rune positions 116–117; the reviewed word is BELIEUE.	Order-dependent operations change. The two-rune sum and whole-page frequency counts do not.
+
+	LP2-05, LP2-11	Insert an archived-notation word delimiter.	Token boundaries and word-based operations may change.
+
+	LP2-07, LP2-15, LP2-38	Insert an archived-notation clause separator.	Clause segmentation and separator-driven reset rules may change.
+
+	LP2-35	Insert an apostrophe in the notation.	Depends on whether the parser retains or splits at that mark.
+
+	LP2-37	Remove four editorial delimiters in the visual-mark profile.	Boundary-dependent counts may change; the rune-only stream is unchanged.
+
+
+For the seven punctuation-only changes, any calculation using exactly the same rune-only stream receives the same symbols in the same order. This includes whole-page rune frequencies and rune-only n-grams. It does not cover word lengths, punctuation measurements, or a cipher whose key resets at a delimiter. For LP1-10, swapping two runes preserves their combined prime sum but can change local sums and ordered sequences.
+
+A correction is not a whole-page certification
+
+A reviewed layer preserves the documented correction alongside the archive. It does not claim that every rune, dot, color and line on that page has been independently checked. Conversely, no separate layer can mean that no correction was published; it does not establish that nobody inspected the page. The next step toward comprehensive review is to record the region and features examined, including unchanged and uncertain readings.
+
+Use the complete 75-page inventory to inspect layer status, correction notes and exact text hashes. The inventory classifies the stored text; it does not perform a fresh image review. A text hash here is computed from the UTF-8 encoding of the page record’s decoded text, not from a screenshot or an arbitrary downloaded file.
+
+Reproduce the inventory
+
+Extract the reference-data bundle, or use the repository, then run:
+
+python scripts/transcription_coverage.py --check
+python scripts/transcription_coverage.py
+
+The standard-library script compares exact text and rune streams separately, records each page-record hash and verifies the saved inventory. Before interpreting a difference, open the linked original page and read the correction note. To compare two actual files, use the comparison commands earlier in this guide.
+
 Sources, related references, and files
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
@@ -18736,6 +18771,26 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - documenting an experiment
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- LP1-10
+  https://jelliottdev.github.io/reference/lp1-10.html
+- LP2-05
+  https://jelliottdev.github.io/reference/lp2-05.html
+- LP2-11
+  https://jelliottdev.github.io/reference/lp2-11.html
+- LP2-07
+  https://jelliottdev.github.io/reference/lp2-07.html
+- LP2-15
+  https://jelliottdev.github.io/reference/lp2-15.html
+- LP2-38
+  https://jelliottdev.github.io/reference/lp2-38.html
+- LP2-35
+  https://jelliottdev.github.io/reference/lp2-35.html
+- LP2-37
+  https://jelliottdev.github.io/reference/lp2-37.html
+- complete 75-page inventory
+  https://jelliottdev.github.io/exports/transcription-coverage.json
+- standard-library script
+  https://jelliottdev.github.io/scripts/transcription_coverage.py
 
 Article: https://jelliottdev.github.io/reference/articles/transcription-checking.html
 
