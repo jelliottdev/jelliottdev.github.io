@@ -48,8 +48,9 @@
   for(const [id,a] of features){
    const p=(db.pages||[]).find(p=>p.id===id);if(!p)continue;
    const existing=hits.find(h=>h.page?.id===id);
-   if(existing&&existing.score>=700)continue;
-   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score:700,page:p};
+   const score=aliasScore(a.aliases,q)>=1100?900:700;
+   if(existing&&existing.score>=score)continue;
+   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score,page:p};
    if(existing)Object.assign(existing,feature);else hits.push(feature);
   }
   for(const t of db.topics||[]){const score=relevance(t.title,t.summary,t.terms,q);if(score)hits.push({type:'topic',title:t.title,text:t.summary,href:'#/topics?topic='+t.id,score:score===1200?1100:score-40});}

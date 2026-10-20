@@ -21,12 +21,14 @@ console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phra
 
 for(const [queries,id,pageIds] of [
  [['dots','black dots'],'dots',['lp2-07','lp2-33','lp2-39']],
- [['five dots'],'dots',['lp2-07']],
+ [['five dots'],'dots',['lp2-07','lp2-23']],
  [['three dots'],'dots',['lp2-33','lp2-39']],
  [['mobius','Möbius','moebius','infinity'],'mobius',['lp2-15']],
  [['cuniform','cuneiform','cuneform','wedge marks'],'cuneiform',['lp2-33','lp2-34']],
  [['compasses','compass','1033.jpg'],'illustrated-cover',[]],
- [['ioc','index of coincidence'],'index-of-coincidence',[]]
+ [['ioc','index of coincidence'],'index-of-coincidence',[]],
+ [['mayfly','mayflies'],'insects',['lp2-24','lp2-25']],
+ [['wing','detached wing'],'wing-and-tree',['lp2-27']]
 ]){
  for(const q of queries){
   const hits=search.search(db,q);
