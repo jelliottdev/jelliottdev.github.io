@@ -69,3 +69,7 @@ Authored manuscript images and thumbnails must include their native width and he
 Region inspection fits the recorded rectangle within both viewport dimensions and outlines its original-image bounds. The surrounding original remains visible with a light shade; the outline scales with zoom and clears when opening an image without a selected region.
 
 Guide contents include authored H2 sections and H3 subsections in a nested list. The desktop list scrolls within the viewport; the mobile list remains a collapsed disclosure and closes after selecting a destination.
+
+## Literal tokens and code sizing
+
+Article and standalone-reference code uses an explicit monospace font stack. Inline tokens inherit the surrounding text size; script blocks stay at 14px on phones as well as desktop. Wrapped blocks must fit a 320px viewport, and unwrapped blocks scroll horizontally within their container. Runic transcription blocks retain their larger historic-script typography.
