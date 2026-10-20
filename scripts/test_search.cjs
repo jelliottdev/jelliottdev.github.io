@@ -231,3 +231,14 @@ for (const [query, section] of [
 for (const query of ['plant border','plant borders','paired plants'])
  assert.equal(search.search(db,query)[0].href,'#/wiki/branches?section=paired-plants',query);
 console.log('PASS: alphanumeric arrays, repeats, downloads and plant borders have distinct destinations');
+
+// Encoding terminology must not be displaced by coincidental rune labels.
+for (const [query, section] of [['base 16','encoding'],['base16','encoding'],['hex to decimal','place-values'],['0x prefix','boundaries'],['decode hex','replicate']])
+ assert.equal(search.search(db,query)[0].href,`#/wiki/hexadecimal?section=${section}`,query);
+for (const query of ['hex image','hex JPEG','hidden rune image']) {
+ const hits=search.search(db,query);
+ assert.equal(hits[0].href,'#/wiki/lp1-03-embedded-image?section=image',query);
+ assert(hits.slice(1,5).some(hit=>hit.page?.id==='lp1-03'),query+' must expose the enclosing manuscript page');
+}
+assert.equal(search.search(db,'0x')[0].page?.id,'lp2-49','Literal grid tokens retain their manuscript match');
+console.log('PASS: hex encoding terms and hidden-image searches keep distinct destinations');
