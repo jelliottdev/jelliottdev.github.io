@@ -205,6 +205,16 @@ save('exports/rune-ioc.csv', csv_report(read('data/evidence/rune-ioc.json')))
 register('exports/rune-ioc.csv','Archived rune IoC baseline')
 files[-1].update(title='Whole-page rune statistics (CSV)',guide='index-of-coincidence',
                 aliases=['IoC spreadsheet','page comparison','rune frequencies','CSV'])
+dataset_pages = {
+ 'Known-reading page-sum comparison': [r['page'] for r in sum_records],
+ 'Archived rune IoC baseline': [r['page'] for r in read('data/evidence/rune-ioc.json')['records']],
+}
+for item in files:
+ if item['role'] in dataset_pages:
+  item['pages'] = dataset_pages[item['role']]
+  item['releases'] = sorted({page.split('-')[0].upper() for page in item['pages']})
+ if item['path'] == 'data/evidence/rune-ioc.json':
+  item.update(title='Whole-page rune statistics (JSON)',guide='index-of-coincidence',aliases=['IoC','page comparison','rune frequencies'])
 register('data/evidence/signature-checks.json','Isolated signature verification results')
 register('data/evidence/known-readings.json','Known-reading provenance')
 # The standalone index must expose the same authored knowledge as the wiki.
