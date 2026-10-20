@@ -82,6 +82,8 @@ A hash check and a signature check answer different questions
 
 A catalogue match checks whether your file agrees with the recorded bytes. Its value depends on which catalogue or source you chose to trust: replacing a file and its expected checksum together would still produce a match. A signature check instead verifies the signed content against a public key, whose provenance must also be established. Neither check proves that an interpretation or proposed cipher solution is correct.
 
+Cleartext PGP verification normalizes certain formatting, including line endings. A valid signature can therefore coexist with a different whole-file hash. See the signed-text rules and dash escaping before comparing these two kinds of result.
+
 LP2-56: exact target, algorithm assumptions, and input bytes.
 The puzzle’s hash target
 LP2-56 refers to a page identified by a hash. SHA-512 has 128 hexadecimal digits; it differs from this wiki’s SHA-256 distribution checksums. A hash is not normally reversible into its input. Candidate checks need the correct bytes and serialization.
@@ -104,6 +106,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - signature check; signatures
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- the signed-text rules and dash escaping
+  https://jelliottdev.github.io/reference/articles/pgp-signatures.html#cleartext
 - LP2-56: exact target, algorithm assumptions, and input bytes
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - LP2-56

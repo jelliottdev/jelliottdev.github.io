@@ -7376,6 +7376,29 @@ Some versions reject historical SHA-1 signatures by policy. If that is the repor
 
 The earlier extraction manifest records the compatibility mode used in that run. A fresh isolated check with GnuPG 2.5.21 on Windows, --no-options, and no compatibility override verified all eight extracted signed blocks plus the reconstructed cover-chain message. The nine-file verification record stores input hashes, status lines, options and version. Do not assume a flag is necessary simply because another verification run used it.
 --homedir selects the separate keyring directory; --no-options avoids reading the default options file. See GnuPG configuration options and digest compatibility options.
+Why a valid signature is not a whole-file checksum
+
+The preserved messages use a cleartext signed-message wrapper: readable text appears before an armored signature block. Its verification rules normalize the signed text. OpenPGP’s Cleartext Signature Framework specifies canonical CRLF line endings and excludes trailing spaces and tabs on each line from the signature calculation. The separator newline immediately before the signature block is also excluded.
+
+As a result, two files can have different raw-byte SHA-256 checksums while representing the same text for cleartext-signature verification. This is not permission to edit the archive: preserve the original and use the catalogue checksum when the question is whether you have those exact bytes.
+
+Why some lines begin with an extra dash and space
+
+A body line beginning with a hyphen is prefixed with -  in the cleartext wrapper, so it cannot be confused with a wrapper delimiter. For example, the body text -example appears as - -example. Verification uses the unescaped text. This rule is called dash escaping; it is not an extra cipher layer.
+
+Leave the preserved .signed.asc file intact and let GnuPG parse it. If you extract a body for another operation, retain that derivative separately and document the extraction rule.
+
+	Question	Check to use
+
+	Do I have the exact archived signed-block file?	Compare its size and SHA-256 with that file’s catalogue entry.
+
+	Does the cleartext signature verify against this key?	Use GnuPG on the complete signed block and inspect the fingerprint and result.
+
+	Did I decode the extracted hexadecimal body correctly?	Check the derivative’s declared bytes, length and hash under the chain recipe.
+
+
+These checks complement each other. The cleartext rules above do not mean that arbitrary edits, different words or changed payload digits preserve a signature. They also do not describe every possible OpenPGP signature format.
+
 Different files, different purposes
 The manifest separately hashes full extractions, signed blocks, and bodies. Verifying an edited body is not equivalent to verifying the preserved signed block. See extraction and checksums.
 Sources and verification
@@ -7392,6 +7415,10 @@ Sources, related references, and files
   https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html
 - digest compatibility options
   https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html
+- OpenPGP’s Cleartext Signature Framework
+  https://www.rfc-editor.org/rfc/rfc9580.html#section-7
+- chain recipe
+  https://jelliottdev.github.io/reference/articles/cover-chain.html
 - manifest
   https://jelliottdev.github.io/data/evidence/embedded-payloads.json
 - extraction
@@ -7490,6 +7517,8 @@ A hash check and a signature check answer different questions
 
 A catalogue match checks whether your file agrees with the recorded bytes. Its value depends on which catalogue or source you chose to trust: replacing a file and its expected checksum together would still produce a match. A signature check instead verifies the signed content against a public key, whose provenance must also be established. Neither check proves that an interpretation or proposed cipher solution is correct.
 
+Cleartext PGP verification normalizes certain formatting, including line endings. A valid signature can therefore coexist with a different whole-file hash. See the signed-text rules and dash escaping before comparing these two kinds of result.
+
 LP2-56: exact target, algorithm assumptions, and input bytes.
 The puzzle’s hash target
 LP2-56 refers to a page identified by a hash. SHA-512 has 128 hexadecimal digits; it differs from this wiki’s SHA-256 distribution checksums. A hash is not normally reversible into its input. Candidate checks need the correct bytes and serialization.
@@ -7512,6 +7541,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - signature check; signatures
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- the signed-text rules and dash escaping
+  https://jelliottdev.github.io/reference/articles/pgp-signatures.html#cleartext
 - LP2-56: exact target, algorithm assumptions, and input bytes
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - LP2-56
