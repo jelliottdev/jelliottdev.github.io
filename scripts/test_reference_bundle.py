@@ -23,6 +23,7 @@ def main():
             bundle.extractall(target)
         for command in [
             ["scripts/test_verify_bundle.py"],
+            ["scripts/plot_atbash_pairs.py", "--output", "test-atbash.svg"],
             ["scripts/verify_bundle.py", "REFERENCE-DATA-CONTENTS.json"],
             ["scripts/test_reading_concordance.py"],
             ["scripts/reading_concordance.py", "circumference", "--prefix", "--json"],
