@@ -22,6 +22,8 @@ def main():
                 assert hashlib.sha256(bundle.read(item["path"])).hexdigest() == item["sha256"]
             bundle.extractall(target)
         for command in [
+            ["scripts/test_reading_concordance.py"],
+            ["scripts/reading_concordance.py", "circumference", "--prefix", "--json"],
             ["scripts/reproduce_reading.py", "--check-all"],
             ["scripts/reproduce_prime_sums.py"],
             ["scripts/rune_ioc.py", "--check"],
