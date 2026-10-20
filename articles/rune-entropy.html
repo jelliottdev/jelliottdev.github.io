@@ -33,6 +33,31 @@ python scripts/rune_entropy.py lp2-31 --output lp2-31-entropy.json</code></pre>
 <tr><td>269</td><td>Eight counts of 10; 21 counts of 9</td><td>About 4.856332 bits</td></tr>
 </tbody></table></div>
 <p>The alphabet remains all 29 runes, even if a short sample contains fewer distinct runes. Neither this maximum nor the gap below it is an expected random value or a significance test. Random sampling can produce uneven counts; a probability claim needs a specified <a href="#/wiki/null-models">null model</a>. Empty input has no empirical distribution, so its maximum is also reported as <code>null</code>.</p>
+<h2 id="ioc-comparison">Can two texts have the same IoC but different entropy?</h2>
+<p>Yes. Both measurements use symbol frequencies, but they compress those frequencies in different ways. IoC counts matching pairs; entropy uses logarithms of the observed proportions. One score does not generally determine the other.</p>
+<p>Compare these two invented six-symbol strings. They are teaching examples, not manuscript readings. Their lengths and matching-pair totals are identical:</p>
+<div class="table-wrap"><table><thead><tr><th>Input</th><th>Counts</th><th>IoC</th><th>Entropy</th></tr></thead><tbody>
+<tr><td><code>AAABBB</code></td><td>3, 3</td><td>2/5</td><td>1 bit</td></tr>
+<tr><td><code>AAAABC</code></td><td>4, 1, 1</td><td>2/5</td><td>About 1.251629 bits</td></tr>
+</tbody></table></div>
+<p>The matching-pair totals are <code>3 × 2 + 3 × 2 = 12</code> and <code>4 × 3 + 1 × 0 + 1 × 0 = 12</code>. Each string has <code>6 × 5 = 30</code> ordered pairs of distinct positions, so both IoCs are <code>12/30 = 2/5</code>.</p>
+<p>The second string contains a more dominant symbol, but also two less frequent alternatives instead of one. Its entropy is higher, while IoC ties. Sorting pages by entropy therefore need not produce the reverse of their IoC ranking. Higher entropy here does not establish a better decryption, more meaningful text or a more secure cipher.</p>
+<h3 id="ioc-comparison-code">Check the comparison</h3>
+<p>Run this self-contained Python example. It calculates IoC as an exact fraction and entropy with base-two logarithms:</p>
+<pre><code>from collections import Counter
+from fractions import Fraction
+from math import log2
+
+for text in ("AAABBB", "AAAABC"):
+    counts = Counter(text).values()
+    n = len(text)
+    ioc = Fraction(sum(c * (c - 1) for c in counts), n * (n - 1))
+    entropy = -sum((c / n) * log2(c / n) for c in counts)
+    print(text, "IoC:", ioc, "entropy:", f"{entropy:.6f}")</code></pre>
+<p>Expected output:</p>
+<pre><code>AAABBB IoC: 2/5 entropy: 1.000000
+AAAABC IoC: 2/5 entropy: 1.251629</code></pre>
+<p>Adding the 26 or 27 unused runes to the count array changes neither result: zero counts contribute nothing. Both examples therefore fit within the same 29-symbol alphabet. Their order can be rearranged without changing either score. For selecting candidate transformations, consult <a href="#/wiki/cipher-invariants">which properties each operation preserves</a>; for interpreting an unusual value, specify a <a href="#/wiki/null-models">comparison model</a>.</p>
 <h2 id="limits">What it cannot distinguish</h2>
 <p>A pure transposition preserves every count, so it preserves this entropy. A fixed one-to-one substitution relabels the same counts and also preserves it. Therefore this score cannot choose among those transformations of the same input. See <a href="#/wiki/cipher-invariants">cipher invariants</a>.</p>
 <p>This is not an entropy-rate estimate: it does not model how a symbol depends on preceding symbols. The alternating example above has a predictable pattern despite its balanced counts. Use <a href="#/wiki/rune-ngrams">repeated sequences</a> to inspect adjacency, and specify a <a href="#/wiki/null-models">comparison model</a> before claiming statistical surprise. A frequency summary alone does not measure meaning, compressibility under a particular compressor, or resistance to cryptanalysis.</p>
