@@ -91,5 +91,32 @@ python scripts/export_alphanumeric_grids.py --format csv</code></pre>
 <p>The supplied exploration reports attempts at QR-like and Data Matrix-like layouts, but the full plotting script and referenced result images were not included. Its later comments also identify changed bases, inconsistent bit widths and whitespace mistakes. Those reports do not define one fully reproducible negative test, and they do not rule out every barcode proposal.</p>
 <p>A clean experiment would freeze the transcription and conversion first, then list the candidate widths, padding rules, page combinations, rotations, reflections and bit polarities. Specify the decoder and version, settings, and what counts as a valid payload. Preserve outputs and errors for every candidate, and use known valid symbols to confirm the decoder works. A visual resemblance alone is not a decoded result.</p>
 <p>Keep related variants in one experiment family, with the changed variables and total candidates visible. The rendering above supplies one fixed input representation for that work; it does not claim that a barcode search has been completed. See <a href="#/wiki/search-space">search space and bounds</a> and <a href="#/wiki/reproducibility">documenting a reproducible attempt</a>.</p>
+<h2 id="prefix-groups">Do the entries beginning with 4 form a special group?</h2>
+<p>They form a visibly restricted group in the archived transcription: 17 entries begin with 4, and their second characters are drawn from <code>056789ABDEF</code>. That is <strong>11 distinct suffixes</strong>. The other 239 entries begin with 0, 1, 2 or 3 and collectively use 59 distinct suffixes.</p>
+<div class="table-wrap"><table><thead><tr><th>First character</th><th>Entries</th><th>Distinct second characters</th></tr></thead><tbody>
+<tr><td>0</td><td>60</td><td>36</td></tr><tr><td>1</td><td>58</td><td>36</td></tr><tr><td>2</td><td>65</td><td>41</td></tr><tr><td>3</td><td>56</td><td>37</td></tr><tr><td>4</td><td>17</td><td>11</td></tr>
+</tbody></table></div>
+<p>Distinct counts do not add across groups: the same suffix can appear after several different first characters. For example, the combined 0–3 set has 59 characters, not 36 + 36 + 41 + 37. Relative to the case-sensitive 62-character set <code>0–9 A–Z a–z</code>, its missing characters are f, y and z. Relative to the declared base-60 alphabet above, y and z were never allowed, and only f is unobserved.</p>
+<h3 id="byte-restriction">The byte-range explanation</h3>
+<p>Under the stated interpretation <code>value = 60 × first + second</code>, an unsigned byte must satisfy <code>0 ≤ value ≤ 255</code>. A first digit of 4 contributes 240, leaving <code>0 ≤ second ≤ 15</code>. With this alphabet, values 0–15 are exactly <code>0–9 A–F</code>. Prefixes 0–3 allow every suffix value 0–59. Thus a smaller suffix alphabet after 4 is already required by this particular byte interpretation.</p>
+<p>The observed group omits <code>1 2 3 4 C</code> from those 16 allowed suffixes. Five missing symbols is different from five distinct observed symbols. Neither the missing set nor the 17 occurrences is forced by the byte bound; both remain observations. To assess surprise, specify a model for the input bytes and account for how the missing set was selected. The range argument does not prove that the manuscript encodes bytes, and it does not rule out a separate role for the 4-prefixed entries.</p>
+<p>A <a href="https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/README.md">published alternative-grid proposal</a> lists 139 entries for prefixes 0–3 and a distinct count of five for prefix 4. The archived recount gives 239 and 11 respectively. This corrects those two summary figures; it does not retest that proposal’s directional prime search or its claims about absent four-digit strings.</p>
+<h3 id="prefix-reproduce">Reproduce the groups</h3>
+<p>Use the <a href="downloads/reference-data.zip">reference-data bundle</a>, preserving its folders, and run this standard-library Python snippet from the extracted root:</p>
+<pre><code>import json
+from pathlib import Path
+
+rows = json.loads(Path(&quot;exports/alphanumeric-grids.json&quot;).read_text())[&quot;records&quot;]
+tokens = [row[&quot;token&quot;] for row in rows]
+for prefix in &quot;01234&quot;:
+    suffixes = [token[1] for token in tokens if token[0] == prefix]
+    print(prefix, len(suffixes), len(set(suffixes)), &quot;&quot;.join(sorted(set(suffixes))))
+low = [token[1] for token in tokens if token[0] in &quot;0123&quot;]
+high = [token[1] for token in tokens if token[0] == &quot;4&quot;]
+assert len(low) == 239 and len(set(low)) == 59
+assert len(high) == 17 and len(set(high)) == 11
+print(&quot;Missing from hexadecimal suffixes:&quot;, &quot;&quot;.join(c for c in &quot;0123456789ABCDEF&quot; if c not in high))
+</code></pre>
+<p>The final line reports <code>1234C</code>. For source coordinates and every original token, use the <a href="exports/alphanumeric-grids.json" download>complete grid export</a>. Case and leading zeroes remain significant throughout.</p>
 <h2 id="sources">Originals and data</h2>
 <p>The page records for <a href="#/page/lp2-49">LP2-49</a>, <a href="#/page/lp2-50">LP2-50</a>, and <a href="#/page/lp2-51">LP2-51</a> link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are <a href="data/pages/lp2-49.json" download>49 JSON</a>, <a href="data/pages/lp2-50.json" download>50 JSON</a>, and <a href="data/pages/lp2-51.json" download>51 JSON</a>. Return to the <a href="#/wiki/visual-index">illustrated index</a> to compare other manuscript details.</p>

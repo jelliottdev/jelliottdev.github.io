@@ -16998,6 +16998,49 @@ A clean experiment would freeze the transcription and conversion first, then lis
 
 Keep related variants in one experiment family, with the changed variables and total candidates visible. The rendering above supplies one fixed input representation for that work; it does not claim that a barcode search has been completed. See search space and bounds and documenting a reproducible attempt.
 
+Do the entries beginning with 4 form a special group?
+
+They form a visibly restricted group in the archived transcription: 17 entries begin with 4, and their second characters are drawn from 056789ABDEF. That is 11 distinct suffixes. The other 239 entries begin with 0, 1, 2 or 3 and collectively use 59 distinct suffixes.
+
+	First character	Entries	Distinct second characters
+
+	0	60	36
+	1	58	36
+	2	65	41
+	3	56	37
+	4	17	11
+
+
+Distinct counts do not add across groups: the same suffix can appear after several different first characters. For example, the combined 0–3 set has 59 characters, not 36 + 36 + 41 + 37. Relative to the case-sensitive 62-character set 0–9 A–Z a–z, its missing characters are f, y and z. Relative to the declared base-60 alphabet above, y and z were never allowed, and only f is unobserved.
+
+The byte-range explanation
+
+Under the stated interpretation value = 60 × first + second, an unsigned byte must satisfy 0 ≤ value ≤ 255. A first digit of 4 contributes 240, leaving 0 ≤ second ≤ 15. With this alphabet, values 0–15 are exactly 0–9 A–F. Prefixes 0–3 allow every suffix value 0–59. Thus a smaller suffix alphabet after 4 is already required by this particular byte interpretation.
+
+The observed group omits 1 2 3 4 C from those 16 allowed suffixes. Five missing symbols is different from five distinct observed symbols. Neither the missing set nor the 17 occurrences is forced by the byte bound; both remain observations. To assess surprise, specify a model for the input bytes and account for how the missing set was selected. The range argument does not prove that the manuscript encodes bytes, and it does not rule out a separate role for the 4-prefixed entries.
+
+A published alternative-grid proposal lists 139 entries for prefixes 0–3 and a distinct count of five for prefix 4. The archived recount gives 239 and 11 respectively. This corrects those two summary figures; it does not retest that proposal’s directional prime search or its claims about absent four-digit strings.
+
+Reproduce the groups
+
+Use the reference-data bundle, preserving its folders, and run this standard-library Python snippet from the extracted root:
+
+import json
+from pathlib import Path
+
+rows = json.loads(Path("exports/alphanumeric-grids.json").read_text())["records"]
+tokens = [row["token"] for row in rows]
+for prefix in "01234":
+    suffixes = [token[1] for token in tokens if token[0] == prefix]
+    print(prefix, len(suffixes), len(set(suffixes)), "".join(sorted(set(suffixes))))
+low = [token[1] for token in tokens if token[0] in "0123"]
+high = [token[1] for token in tokens if token[0] == "4"]
+assert len(low) == 239 and len(set(low)) == 59
+assert len(high) == 17 and len(set(high)) == 11
+print("Missing from hexadecimal suffixes:", "".join(c for c in "0123456789ABCDEF" if c not in high))
+
+The final line reports 1234C. For source coordinates and every original token, use the complete grid export. Case and leading zeroes remain significant throughout.
+
 Originals and data
 
 The page records for LP2-49, LP2-50, and LP2-51 link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are 49 JSON, 50 JSON, and 51 JSON. Return to the illustrated index to compare other manuscript details.
@@ -17019,7 +17062,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp2-51.jpg
 - surrounding runic pages
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
-- JSON export; structured JSON export
+- JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
 - original image
   https://jelliottdev.github.io/#/reader/lp2-49
@@ -17041,6 +17084,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- published alternative-grid proposal
+  https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/README.md
 - 49 JSON
   https://jelliottdev.github.io/data/pages/lp2-49.json
 - 50 JSON
