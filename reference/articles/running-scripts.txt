@@ -1,0 +1,126 @@
+Running the reproduction scripts
+
+Set up the repository, verify a known reading, understand a rune-by-rune trace, and diagnose common errors.
+
+The reproduction scripts let you check a published reading against exact stored outputs. Start with the warning on LP1-01: it uses a short Atbash transformation and needs no external Python packages. These scripts reproduce documented controls; they do not search for new solutions.
+
+1. Get the whole repository
+
+Open the Liberpedia repository, choose Code → Download ZIP, and extract it. Open the extracted folder containing scripts, text, and data. An image bundle or an individually downloaded script is not enough: the reading script also needs the archived transcriptions, method parameters, and expected readings.
+
+Alternatively, clone the repository if you already use Git:
+
+git clone https://github.com/jelliottdev/jelliottdev.github.io.git
+cd jelliottdev.github.io
+
+Open a terminal in that folder. On Windows, File Explorer’s “Open in Terminal” command can open the selected folder. The commands below assume this working directory. If your path contains spaces, put quotation marks around it when using cd.
+
+2. Check Python
+
+You need Python 3. On Windows, try py --version; on macOS or Linux, try python3 --version. If neither command is available, install Python from the official Python downloads or your operating system’s package manager, then reopen your terminal. A command that prints a Python 2 version is not suitable.
+
+	Terminal	First control
+	Windows PowerShell	py scripts/reproduce_reading.py warning
+	macOS / Linux	python3 scripts/reproduce_reading.py warning
+	If python already selects Python 3	python scripts/reproduce_reading.py warning
+
+The wiki’s other recipes use python as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. No API key, model download, or hosted AI request is involved.
+
+3. Check the expected result
+
+python scripts/reproduce_reading.py --list
+python scripts/reproduce_reading.py warning
+python scripts/reproduce_reading.py --check-all
+
+--list prints nine named section controls. warning prints === LP1-01 === followed by its literal reading, after checking it against the stored page output. --check-all should finish with:
+
+PASS: 17 literal page readings match the published controls exactly.
+
+Nine sections and 17 pages are different counts: several sections span multiple images. This check covers the known runic-page outputs in the repository, not all 75 images, their hidden payloads, or unsolved ciphertext. The complete warning guide shows both the literal output and contextual English. Do not normalize spellings before comparing literal outputs.
+
+4. Read a rune-by-rune trace
+
+python scripts/reproduce_reading.py warning --trace
+
+The output is CSV: one row per recognized rune, with a header naming each field. The first two rows are:
+
+page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied
+lp1-01,0,0,ᚱ,4,,24,A,False
+lp1-01,1,1,ᛝ,21,,7,W,False
+
+Atbash maps index x to 28 − x. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are zero-based alphabet indices, not prime values. A two-letter Latin label such as NG still represents one rune.
+
+	Field	Meaning
+
+	page_rune_ordinal	Zero-based rune position within the page; resets at each new page.
+
+	section_rune_ordinal	Position under the control’s section/boundary rule. It can continue across pages.
+
+	input_index, output_index	Positions in the 29-rune alphabet before and after the transformation.
+
+	subtracted_value	The applied Vigenère or prime-minus-one amount. Blank for Atbash, direct reading, or a copied interruption; blank is not a recorded zero.
+
+	latin	The output rune’s Latin label, before contextual English editing.
+
+	copied	Whether this position is listed as an interruption in the control. False does not mean the index changed: direct readings also have false entries.
+
+
+Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run python scripts/reproduce_reading.py welcome --trace and follow keystream positions and interruptions. The specific LP1-10 correction is applied before transformation and trace output; see transcription layers.
+
+Which tools need extra software?
+
+	Task	Requirements	Instructions
+
+	Known rune readings	Python 3, standard library only	Warning control
+
+	Reconstruct the exported cover chain	Python 3, standard library only; uses stored extractions	Cover chain
+
+	Check visual-record structure	Python 3, standard library only	Opening-page inventory
+
+	Recount image pixels with --pixels	Python 3 and Pillow	Image regions and measurement rules
+
+	Extract hidden JPEG payloads again	Python wrapper plus an OutGuess executable	OutGuess extraction
+
+	Verify signed messages	GnuPG and the documented public key	PGP signatures
+
+
+When a command fails
+
+“Command not found” or “not recognized”: check the Python command first. If it names outguess or gpg, that is a separate executable, not a missing rune dataset.
+
+“Can’t open file” for the script: check the terminal’s current folder. You need the extracted repository root, not its parent or the still-compressed ZIP.
+
+A missing text/ or data/ file: obtain the complete repository. The script locates these directories relative to its own file.
+
+Boxes instead of runes: the terminal font may lack runic characters. Check the numeric indices and Latin labels, and compare with the browser reader. Missing glyphs alone do not establish bad input bytes.
+
+“Output differs” or a hash mismatch: preserve the full error and identify the affected file. Compare with an unchanged copy and the checksums. Do not change the expected output merely to make the check pass.
+
+Keep the result reproducible
+
+Record the repository commit, Python version, command, and output. In a Git checkout, git rev-parse HEAD prints the commit ID. For a ZIP download, retain the archive and its checksum; do not claim a commit ID you have not verified. When you move from a control to a new hypothesis, follow documenting a reproducible attempt. A passing control is a starting point, not evidence that the same method solves another page.
+
+Implementation and verification
+
+The commands and trace fields above are documented from the reproduction script and its control parameters. The first trace rows and all 17 literal page outputs were checked locally on 19 October 2026. Operating-system launch commands are alternatives; this verification used Python 3.12 on Windows.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/reference/articles/atbash.html
+https://github.com/jelliottdev/jelliottdev.github.io
+https://www.python.org/downloads/
+https://jelliottdev.github.io/reference/articles/reading-warning.html
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+https://jelliottdev.github.io/reference/articles/image-regions.html
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/checksums.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/scripts/reproduce_reading.py
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+
+Article: https://jelliottdev.github.io/reference/articles/running-scripts.html
