@@ -16,7 +16,9 @@ jobs:
         with:
           node-version: '22'
       - run: node services/idea-assistant/test-worker.mjs
+      - run: node scripts/test_assistant.cjs
       - run: python scripts/test_experiments.py
       - run: python scripts/build_experiments.py
+      - run: python scripts/build_assistant.py
       - name: Check that published exports match reviewed records
-        run: git diff --exit-code -- data/experiments.json reference/experiments.html
+        run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json

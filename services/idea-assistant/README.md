@@ -17,22 +17,29 @@ The configured model is `@cf/google/gemma-4-26b-a4b-it`, currently available on 
 
 ## Behavior and limits
 
-The Worker retrieves only the public Liberpedia registry, cached for five minutes. It ranks records with the same lexical retrieval as the site, passes up to three complete scopes/findings/limitations to the model, and rejects missing or out-of-range citation numbers. Citation validation does not prove factual entailment. Real answer-quality review is needed once records exist.
+The Worker retrieves the public experiment registry and a compact supporting-page index, cached for five minutes. It ranks **techniques first**, after removing page references from the query. A page match alone never triggers inference. At most two complete experiment scopes and two relevant excerpts from explicitly named pages are sent to the model. Page evidence is supporting context, not evidence of a test. Retrieval is lexical, not an exhaustive semantic or novelty check.
 
-Only published records are eligible. Empty or unmatched requests do not spend inference. Input and output are bounded; large record contexts fall back to the full records rather than silently truncating scope. The browser times out and falls back to ordinary results when needed.
+Only published experiment records are eligible. Empty registries, page-only requests and unmatched techniques do not spend inference. Experiment scope is never silently truncated to fit a prompt. Context is bounded to 11,000 characters and output to 700 tokens (requested prose limit: 220 words). Thinking is disabled. Citations are checked for valid source numbers, which does not prove factual entailment. Markdown rendering escapes HTML and only links to evidence-owned wiki routes.
 
-The configured rate limit permits six requests per minute per IP at a Cloudflare location. This is not a global quota or a guarantee against abuse; Origin checks are also not authentication. Workers Free provides the cost ceiling. Anonymous public access can exhaust the free allowance, in which case the site keeps serving search results. No automatic paid fallback is configured.
+Repeated requests reuse answers in three ways: a bounded browser-memory cache (20 entries, one hour), bounded Worker memory (100 entries, one hour), and the Cloudflare Cache API (up to 24 hours). Cache keys hash the exact whitespace-normalized question, selected pages, evidence contents, model and prompt version; case is preserved for cryptographic questions. Changed evidence invalidates an answer. Edge cache entries are local to a Cloudflare data center and may be evicted; this is not a global or guaranteed hit rate. Equal concurrent requests share one inference within an isolate. Three concurrent generations per isolate and a 60-second outage cooldown reduce retry storms; these are not account-wide limits.
 
-Queries and retrieved text are sent to Cloudflare for processing. The Worker does not store queries or log request bodies; observability is disabled. Cloudflare's service policies still apply. A short disclosure appears below the form when the hosted endpoint is configured.
+The browser only requests inference on explicit submission when related experiments exist. It does not call the model on keystrokes, route opening, page selection, or ordinary wiki navigation. Repeat submission is disabled while waiting. Stopping the wait cancels the browser request but cannot promise to cancel already-started inference or refund quota.
+
+The configured rate limit permits six requests per minute per IP at a Cloudflare location. This is not a global quota or a guarantee against abuse; Origin checks are also not authentication. Workers Free provides the cost ceiling. Anonymous public access can exhaust the free allowance, in which case source records remain usable. No automatic paid fallback is configured.
+
+Questions and retrieved text are sent to Cloudflare. The Worker does not log request bodies; observability is disabled. Answers and their source excerpts are temporarily cached and can be reused for the same question. The cache URL contains a SHA-256 digest, not the question; generated answer text can nevertheless reflect the submitted question. The form advises users not to include private information, and the coverage disclosure explains reuse. Cloudflare's service policies still apply.
 
 ## Validation
 
-Run `node services/idea-assistant/test-worker.mjs` from the repository root. Tests use a fake inference binding and never consume hosted quota. Complete a real deployed integration check before enabling the endpoint. Do not call the hosted assistant operational while `endpoint` is null.
+Run `node services/idea-assistant/test-worker.mjs` and `node scripts/test_assistant.cjs` from the repository root. Tests use a fake inference binding and never consume hosted quota. Complete a real deployed integration check before enabling the endpoint. Do not call the hosted assistant operational while `endpoint` is null.
+
+One remote synthetic-fixture smoke test on 19 October 2026 used one model generation: approximately 3.3 seconds cold and 0.7 seconds for a cached repeat. The answer correctly distinguished one synthetic row from all manuscript rows. This is not a latency benchmark or an evaluation on real experiment records. The public registry remained empty.
 
 Official documentation checked 19 October 2026:
 
 - [AI bindings: no secret keys required](https://developers.cloudflare.com/workers-ai/configuration/bindings/)
 - [Free allowance and hard limit](https://developers.cloudflare.com/workers-ai/platform/pricing/)
+- [Cache API and data-center locality](https://developers.cloudflare.com/workers/runtime-apis/cache/)
 - [Rate-limit binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
 
 Puter requires visitor sign-in and uses visitor allowances/billing. Pollinations generation now requires keys. Neither meets the requested friction-free visitor experience as directly as a hosted binding on the free plan.

@@ -10,7 +10,7 @@ The registry starts empty. Earlier work is not automatically a published experim
 4. Fill `record.json`. Specify exact pages, transcription choice, transformations, parameter ranges, and exclusions. List every input and output with its SHA-256.
 5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
 6. Have a human review the record, populate reviewer and retest date, and change `status` to `published`.
-7. Run `python scripts/build_experiments.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing.
+7. Run `python scripts/build_experiments.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing.
 
 Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. It does not run scripts or certify findings.
 
@@ -20,11 +20,11 @@ Drafts never enter the public search index. Files committed to a public reposito
 
 ## Search and optional AI
 
-The site ranks published records locally with BM25 term matching, including scope and limitations. This is lexical retrieval, not exhaustive detection of equivalent ideas. No hit means no matching **documented** experiment. Compare pages, input representation, and parameter bounds yourself.
+The site ranks published techniques locally with BM25 term matching, including scope and limitations. Page references are removed from the technique query; a page number alone is never a matching experiment. Selected pages provide scope context, not substitute results. This is lexical retrieval, not exhaustive detection of equivalent ideas. No hit means no matching **documented** experiment. Compare pages, input representation, and parameter bounds yourself.
 
-Hosted AI is prepared through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
+Hosted AI is deployed through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
 
-The verified service URL is set in `data/assistant.json`. Empty registries and unmatched queries do not call inference. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
+The verified service URL is set in `data/assistant.json`. Empty registries and unmatched techniques do not call inference. Answers use complete experiment scopes; excerpts from explicitly named manuscript pages can supply supporting context. Only pressing Check idea can start inference. Repeated answers are cached against the question and exact evidence; changed source contents invalidate the server cache. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
 
 ## Check the implementation
 

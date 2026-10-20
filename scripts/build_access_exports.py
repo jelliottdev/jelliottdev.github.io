@@ -36,6 +36,7 @@ for article in sorted((root/'reference').glob('*.txt')):
  register('reference/'+article.name,'Reference article')
  documents.append(article.read_text(encoding='utf-8'))
 register('data/experiments.json','Experiment registry')
+register('data/assistant-index.json','Assistant source excerpts')
 register('experiments/README.md','Experiment contribution guide')
 for experiment in read('data/experiments.json')['records']:
  for path in {experiment['article_path'],experiment['reproduction']['script'],*[f['path'] for f in experiment['reproduction']['inputs']],*[f['path'] for f in experiment['reproduction']['outputs']]}:
@@ -49,7 +50,7 @@ save('llms.txt','# Liberpedia\n\nA source-based manuscript reference with 75 pag
 save('llms-full.txt',(root/'llms.txt').read_text(encoding='utf-8')+'\n\n---\n\n'+'\n\n---\n\n'.join(documents))
 register('llms-full.txt','Complete plain-text page references')
 # Bundles preserve each member's exact bytes and repository-relative path.
-for name,roles in [('original-images',{'Original JPEG'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Experiment registry','Experiment contribution guide','Experiment file'})]:
+for name,roles in [('original-images',{'Original JPEG'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  with zipfile.ZipFile(root/path,'w',zipfile.ZIP_DEFLATED) as z:
   for f in selected:z.write(root/f['path'],f['path'])
