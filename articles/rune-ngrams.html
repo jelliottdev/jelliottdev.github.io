@@ -16,7 +16,7 @@
 python scripts/rune_ngrams.py lp2-31 --length 3
 python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json</code></pre>
 <p>The output is UTF-8 JSON with the actual runes visible in its strings. Terminal output and the saved report use the same LF line endings. A terminal font without Runic characters may show boxes; inspect the saved UTF-8 file in a suitable editor rather than replacing the symbols. Length defaults to 3 and accepts integers from 1 through 12. An existing output file is never replaced. A page with no archived rune transcription produces an explanatory error.</p>
-<p>Each report records the source file’s SHA-256, the ordered alphabet’s SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are <strong>zero-based rune ordinals after filtering</strong>, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words.</p>
+<p>Each report records the source file’s SHA-256, the complete ordered alphabet and its SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are <strong>zero-based rune ordinals after filtering</strong>, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words. The <code>alphabet</code> array lets you recover each rune from its zero-based index without a separate lookup file. Its hash covers the UTF-8 concatenation of the runes, without separators.</p>
 <h2 id="lp2-31">Worked manuscript example: LP2-31</h2>
 <p>For <a href="#/page/lp2-31">LP2-31</a>, the archived stream contains 269 runes. Its source SHA-256 is <code>493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68</code>.</p>
 <div class="table-wrap"><table><thead><tr><th>Window length</th><th>Total windows</th><th>Distinct patterns occurring at least twice</th></tr></thead><tbody>
@@ -33,10 +33,11 @@ python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json</co
 <h2 id="source-positions">Find an occurrence in the original text file</h2>
 <p>Each pattern’s <code>occurrences</code> list maps the filtered rune positions back to the unchanged transcription. For the R–E pattern in the example above:</p>
 <div class="table-wrap"><table><thead><tr><th>Start rune</th><th>Source line / column</th><th>Source characters</th><th>Exact source slice</th></tr></thead><tbody>
-<tr><td>84</td><td>4 / 20</td><td>[109, 111)</td><td><code>ᚱᛖ</code></td></tr>
-<tr><td>162</td><td>8 / 6</td><td>[214, 217)</td><td><code>ᚱ-ᛖ</code></td></tr>
-<tr><td>233</td><td>11 / 11</td><td>[310, 312)</td><td><code>ᚱᛖ</code></td></tr>
+<tr><td>84</td><td><a href="#/page/lp2-31?line=4&amp;mode=runes">4 / 20</a></td><td>[109, 111)</td><td><code>ᚱᛖ</code></td></tr>
+<tr><td>162</td><td><a href="#/page/lp2-31?line=8&amp;mode=runes">8 / 6</a></td><td>[214, 217)</td><td><code>ᚱ-ᛖ</code></td></tr>
+<tr><td>233</td><td><a href="#/page/lp2-31?line=11&amp;mode=runes">11 / 11</a></td><td>[310, 312)</td><td><code>ᚱᛖ</code></td></tr>
 </tbody></table></div>
+<p>The line/column links above open the corresponding transcription row in the page record. For these three occurrences, the source line and displayed text row have been checked to agree. The highlighted row is the whole row, not a marked character range; use the column and exact slice to locate the pair. Open <a href="#/reader/lp2-31">the manuscript reader</a> to compare with the original image.</p>
 <p>The second occurrence crosses a hyphen, the archive’s <a href="#/wiki/transliteration">word-separator notation</a>. Filtering makes these runes adjacent, but the preserved source slice keeps the separator visible. All three match the declared rune-stream rule; they would not all qualify under a rule that forbids crossing word boundaries.</p>
 <p><code>source_start</code> and <code>source_end</code> count Unicode characters from zero. The end is excluded: <code>[214, 217)</code> means characters 214, 215 and 216. <code>source_line</code> and <code>source_column</code> count from one. An LF newline starts a new source line; each Unicode character counts as one column, even if a tab or symbol takes a different visual width in an editor. These are neither UTF-8 byte offsets nor pixel positions.</p>
 <p>To check the second occurrence directly, run this from the extracted bundle or repository:</p>

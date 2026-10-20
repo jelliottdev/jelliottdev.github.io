@@ -35,7 +35,7 @@ python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
 
 The output is UTF-8 JSON with the actual runes visible in its strings. Terminal output and the saved report use the same LF line endings. A terminal font without Runic characters may show boxes; inspect the saved UTF-8 file in a suitable editor rather than replacing the symbols. Length defaults to 3 and accepts integers from 1 through 12. An existing output file is never replaced. A page with no archived rune transcription produces an explanatory error.
 
-Each report records the source file’s SHA-256, the ordered alphabet’s SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are zero-based rune ordinals after filtering, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words.
+Each report records the source file’s SHA-256, the complete ordered alphabet and its SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are zero-based rune ordinals after filtering, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words. The alphabet array lets you recover each rune from its zero-based index without a separate lookup file. Its hash covers the UTF-8 concatenation of the runes, without separators.
 
 Worked manuscript example: LP2-31
 
@@ -73,6 +73,8 @@ Each pattern’s occurrences list maps the filtered rune positions back to the u
 
 	233	11 / 11	[310, 312)	ᚱᛖ
 
+
+The line/column links above open the corresponding transcription row in the page record. For these three occurrences, the source line and displayed text row have been checked to agree. The highlighted row is the whole row, not a marked character range; use the column and exact slice to locate the pair. Open the manuscript reader to compare with the original image.
 
 The second occurrence crosses a hyphen, the archive’s word-separator notation. Filtering makes these runes adjacent, but the preserved source slice keeps the separator visible. All three match the declared rune-stream rule; they would not all qualify under a rule that forbids crossing word boundaries.
 
@@ -112,6 +114,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/running-scripts.html
 - LP2-31
   https://jelliottdev.github.io/reference/lp2-31.html
+- 4 / 20
+  https://jelliottdev.github.io/reference/lp2-31.html
+- 8 / 6
+  https://jelliottdev.github.io/reference/lp2-31.html
+- 11 / 11
+  https://jelliottdev.github.io/reference/lp2-31.html
+- the manuscript reader
+  https://jelliottdev.github.io/#/reader/lp2-31
 - word-separator notation
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - cipher invariants
