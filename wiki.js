@@ -17,9 +17,13 @@ function wikiPage(id='') {
   const wrapper=doc.createElement('div');wrapper.className='copyable-block';
   const tools=doc.createElement('div');tools.className='block-tools';
   const status=doc.createElement('span');status.setAttribute('role','status');
+  const wrap=doc.createElement('button');wrap.type='button';wrap.dataset.wrapBlock='';
+  wrap.textContent='Wrap lines';wrap.setAttribute('aria-pressed','true');
+  wrap.setAttribute('aria-label',`Wrap lines in text block ${i+1}`);
+  pre.tabIndex=0;pre.setAttribute('aria-label',`Text block ${i+1}`);
   const button=doc.createElement('button');button.type='button';button.dataset.copyBlock='';
   button.textContent='Copy';button.setAttribute('aria-label',`Copy text block ${i+1}`);
-  tools.append(status,button);pre.replaceWith(wrapper);wrapper.append(tools,pre);
+  tools.append(status,wrap,button);pre.replaceWith(wrapper);wrapper.append(tools,pre);
  });
  const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  return head(a.title,esc(a.summary),'Guides and methods')+`<div class="article-grid"><article class="wiki-article">
@@ -29,6 +33,14 @@ function wikiPage(id='') {
  <aside class="contents"><strong>On this page</strong>${headings.map(h=>`<a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</aside></div>`;
 }
 document.addEventListener('click',async event=>{
+ const wrap=event.target.closest('[data-wrap-block]');
+ if(wrap){
+  const block=wrap.closest('.copyable-block');
+  const enabled=wrap.getAttribute('aria-pressed')!=='true';
+  wrap.setAttribute('aria-pressed',String(enabled));
+  block.classList.toggle('unwrapped',!enabled);
+  return;
+ }
  const button=event.target.closest('[data-copy-block]');if(!button)return;
  const block=button.closest('.copyable-block'),pre=block?.querySelector('pre');
  if(!pre)return;
