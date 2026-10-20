@@ -189,7 +189,7 @@ Under the stated interpretation value = 60 × first + second, an unsigned byte m
 
 The observed group omits 1 2 3 4 C from those 16 allowed suffixes. Five missing symbols is different from five distinct observed symbols. Neither the missing set nor the 17 occurrences is forced by the byte bound; both remain observations. To assess surprise, specify a model for the input bytes and account for how the missing set was selected. The range argument does not prove that the manuscript encodes bytes, and it does not rule out a separate role for the 4-prefixed entries.
 
-A published alternative-grid proposal lists 139 entries for prefixes 0–3 and a distinct count of five for prefix 4. The archived recount gives 239 and 11 respectively. This corrects those two summary figures; it does not retest that proposal’s directional prime search or its claims about absent four-digit strings.
+A published alternative-grid proposal lists 139 entries for prefixes 0–3 and a distinct count of five for prefix 4. The archived recount gives 239 and 11 respectively. This corrects those two summary figures. The directional prime-search reconstruction separately checks its occurrence counts and missing values.
 
 Reproduce the groups
 
@@ -210,6 +210,9 @@ assert len(high) == 17 and len(set(high)) == 11
 print("Missing from hexadecimal suffixes:", "".join(c for c in "0123456789ABCDEF" if c not in high))
 
 The final line reports 1234C. For source coordinates and every original token, use the complete grid export. Case and leading zeroes remain significant throughout.
+
+Directional prime search
+The dedicated reconstruction reproduces 191 occurrences of 46 distinct decimal primes along four-cell paths. It includes all coordinates, the three missing values, leading-zero and page-boundary rules, and a downloadable script. A reproduced pattern is separate from a probability or decryption claim.
 
 Originals and data
 
@@ -256,6 +259,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - published alternative-grid proposal
   https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/README.md
+- directional prime-search reconstruction
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#prime-paths
+- dedicated reconstruction
+  https://jelliottdev.github.io/reference/articles/grid-prime-paths.html
 - 49 JSON
   https://jelliottdev.github.io/data/pages/lp2-49.json
 - 50 JSON

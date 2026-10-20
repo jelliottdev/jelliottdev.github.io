@@ -1,0 +1,69 @@
+Directional prime paths in the 256-entry grid
+
+Reconstruct 191 prime occurrences, inspect every path and distinguish the missing-value observation from a chance claim.
+
+This study tests the first characters of the 256 two-character entries on LP2-49–51. Start with the grid inventory for the source images, token conventions and byte-representation proposal. The search below uses a different operation: four neighboring first characters form a decimal numeral.
+
+Reconstructing the directional prime search
+
+The published prime-path CSV can be reproduced from this archive. The result is 191 occurrences of 46 distinct decimal primes, rather than 191 different primes. The independently generated occurrences agree with all 191 source records’ coordinates, extracted suffix strings, decimal values, base-4 values and base-4 primality flags.
+
+Exact rules and bounds
+
+Stack the original grid rows in page order 49, 50, 51, making 32 rows and eight columns. Do not rearrange them into a 16 × 16 square.
+From each cell, consider four consecutive cells along each of the eight straight directions: horizontal, vertical or diagonal. Keep only paths whose four cells lie inside the rectangle. No wrapping or turns.
+Read the first character of each token. Reject the whole path if it contains 4; do not delete that cell and join its neighbors.
+Interpret the resulting four-position string as a decimal integer, allowing leading zeroes. Keep it if that decimal integer is prime.
+For each retained path, record the four second characters. Separately reinterpret the first-character string in base 4 and test that value for primality.
+
+	Quantity	Count
+
+	Directed four-cell paths inside the rectangle	1,364
+	Rejected because a cell starts with 4	306
+	Paths eligible for the decimal test	1,058
+	Decimal-prime occurrences	191
+	Distinct decimal primes found	46
+	Prime occurrences with a leading zero	60
+	Prime occurrences crossing a page boundary	40
+	Occurrences also prime after base-4 reinterpretation	147
+
+
+The path count can also be checked without reading the digits: 2 × 32 × 5 + 2 × 29 × 8 + 4 × 29 × 5 = 1,364. The terms count horizontal, vertical and diagonal directions respectively, including reversed paths. Page boundaries are not barriers in this search.
+
+A concrete path: 0002
+
+On LP2-49, take grid coordinates (row, column) (7,2) → (6,3) → (5,4) → (4,5). The tokens are 0G → 0S → 0d → 2U. Their first characters form 0002, whose decimal value is the prime 2; their second characters give GSdU. This extraction is reproducible, but the four letters are not thereby established as plaintext.
+
+The report uses zero-based (x,y) coordinates with y increasing downward, plus the original page coordinates for each cell. It labels directions with an explicit step vector. The upstream CSV calls increasing y “North”; the label does not change the coordinate sequence, but relying on compass names alone can reverse an attempted replication.
+
+Which primes are missing?
+
+There are 256 four-position strings over 0, 1, 2 and 3, including strings beginning with zero. Of their decimal interpretations, 49 are prime. The grid search encounters 46 of those values; the absent three are 1033, 2213 and 3301. Reinterpreting these three strings in base 4 gives 79, 167 and 241, which are also prime.
+
+Decimal and base-4 primality are different filters. For example, 313 is prime in decimal, but 0313 in base 4 is 55, which is composite. The 191-occurrence result does not require both tests to pass. Excluding leading zeroes, stopping at page boundaries, changing the layout or requiring prime values in both bases would define different searches.
+
+The missing set is reproduced; its chance probability and intentional significance are not established. A statistical follow-up must state what it randomizes—whole tokens, first characters alone, or another model—and whether it tests these specific three omissions or any striking set found after searching. Repeated and reversed paths overlap, so 1,364 paths are not 1,364 independent trials. See null models and selection.
+
+Reproduce and inspect every occurrence
+
+python scripts/grid_prime_paths.py --check
+
+Run from the repository or extracted reference-data bundle. The standard-library script reads the archived grid export and recomputes all paths. The complete report contains source checksums, the 49-value frequency table, all 191 hits, their four tokens and page coordinates. Run without an option to print JSON or with --write to regenerate the report.
+
+The upstream CSV compared on 20 October 2026 is pinned to commit 72f92e7ac8acf9b2e660e23d654107652cb00fb0; its SHA-256 is 9e2fe52283e59b6782d559b61ce0487c845212ecd84fd9dd1d4e4b9a150d10c6. The local reproduction makes no network requests and does not depend on that CSV. No cipher key or recovered message is claimed.
+
+Sources, related references, and files
+- grid inventory
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
+- published prime-path CSV
+  https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/resources/find_a_word_primes.csv
+- null models and selection
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- standard-library script
+  https://jelliottdev.github.io/scripts/grid_prime_paths.py
+- complete report
+  https://jelliottdev.github.io/exports/grid-prime-paths.json
+
+Article: https://jelliottdev.github.io/reference/articles/grid-prime-paths.html
