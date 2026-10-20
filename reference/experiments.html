@@ -5858,6 +5858,105 @@
   &quot;article&quot;: &quot;# How much freedom remains in a magic square?\n\n## Question\nDoes a fixed line sum, half-turn symmetry and one fixed entry determine the rest of a five-by-five magic square?\n\nNo. Under precisely these conditions, five rational degrees of freedom remain. We also construct positive-integer alternatives to both LP1 examples, keeping any one chosen cell unchanged. This tests uniqueness of numerical grids, not a cipher or the authors’ intentions.\n\n## Why this matters\nIt is tempting to count twelve line-sum equations, subtract twelve from the number of cells, and conclude that almost everything is forced. That subtraction only works for independent equations. For example, the sum of all row totals already equals the sum of all column totals. Symmetry creates further dependencies.\n\nA **degree of freedom** is an independent parameter that can vary while all the equations remain satisfied. It is not a count of solutions and does not mean that every integer assigned to those parameters produces an allowed square.\n\n## Scope and plan\nThe [recorded plan](experiments/records/magic-square-freedom/plan.json) specifies orders 3, 5 and 7, with four symmetry conditions each. Every row, column and both main diagonals have the same fixed sum. We distinguish:\n\n- No additional symmetry.\n- Half-turn symmetry: the cell at row r, column c equals its opposite after a 180-degree rotation.\n- Transpose symmetry: swapping row and column leaves the entry unchanged.\n- Both symmetries together.\n\nThe actual LP1-05 converted square and LP1-16 printed square have half-turn symmetry. Neither is transpose-symmetric: compare their cells at row 1, column 2 and row 2, column 1. Imposing transpose symmetry would therefore change the model and exclude both observed grids.\n\nThe supplied discussion had already proposed uniqueness, retracted that claim, and suggested possible dimensions. Those claims were known before calculation. This is a deterministic audit, not a blind prediction or significance test. The plan was written before running but was not externally timestamped or preregistered.\n\n## Method\nLet A be an existing square and D a change to it. The square A+D retains the same line sums exactly when every row, column and diagonal of D sums to zero. The same symmetry equations apply to D. Keeping one cell unchanged adds the equation that its change is zero.\n\nThe script forms these linear equations and reduces them with exact rational arithmetic. Rank counts the independent equations; dimension equals the number of cells minus rank. The saved nullspace basis describes all rational changes satisfying the equations. A uniform rational grid with entry equal to the line sum divided by the order supplies a solution for every prescribed rational sum, so the reported affine dimensions are not dimensions of an empty set.\n\nFor each of the 25 cell positions in each actual five-by-five square, the script selects the first basis vector that preserves that cell, clears denominators, and divides out the common integer factor. It tries adding that primitive change, then subtracting it. It stops after those two possibilities; this is not an exhaustive positive-integer enumeration.\n\n## Results\nAll twelve comparison models completed. These dimensions assume a fixed common line sum:\n\n| Order | No symmetry | Half-turn | Transpose | Both |\n| --- | --- | --- | --- | --- |\n| 3 | 2 | 0 | 1 | 0 |\n| 5 | 14 | 6 | 8 | 4 |\n| 7 | 34 | 16 | 19 | 10 |\n\nFor order five, fixing any one cell reduces the half-turn dimension from six to five. For order seven it reduces sixteen to fifteen. This is not a statement about an audited historical seven-by-seven square; order seven here is a mathematical comparison. For order three, the half-turn model already has dimension zero: with a fixed sum, it forces the uniform rational square.\n\nEvery one of the **50 fixed-cell tests** produced a different positive-integer square. Each preserves its original line sum and half-turn symmetry, and keeps the chosen entry unchanged. The complete [results and witnesses](experiments/records/magic-square-freedom/results.json) include all cases, bases, positions and input hashes.\n\n### An example you can check by hand\nKeep the center 809 in LP1-16. Add 1 to row 2, column 1 and row 4, column 5; subtract 1 from row 2, column 5 and row 4, column 1. Leave every other cell alone.\n\n```text\n 434 1311 312  278  966\n 205  812 934  280 1070\n 626  620 809  620  626\n1070  280 934  812  205\n 966  278 312 1311  434\n```\n\nEach affected row and column gains one and loses one. Neither diagonal changes. Opposite entries still agree, all entries remain positive, and every line still sums to 3301. Thus the center value 809 cannot uniquely determine the original grid under these rules. These numbers are a constructed counterexample, not a transcription correction.\n\n## Reproduce\nPython 3.12 standard library; no network, packages or AI calls. From the repository root, run:\n\n```sh\npython experiments/records/magic-square-freedom/run.py --check\npython experiments/records/magic-square-freedom/check.py\n```\n\nThe first command recomputes every case and compares the complete report. The second independently constructs the equations and checks rank modulo two large primes. It directly verifies every rational null vector and its independence. A matching modular rank gives a lower bound; the independent null vectors give the matching upper bound, certifying the rational rank. It also checks every positive-integer counterexample by summing its actual rows, columns and diagonals and comparing opposite cells.\n\nUse `--write` instead of `--check` to regenerate results. Preserve the old output if changing the plan or input transcriptions.\n\n## Retest and changes\nOn 20 October 2026, Codex recomputed the saved result and ran the separate checker. All twelve ranks, fixed-cell dimensions and fifty witnesses passed. This is computational review by the same agent; independent human review is pending. No model, bounds or criterion changed after inspecting the results.\n\n## What remains open\nThis disproves uniqueness under the stated constraints. It does not count all positive-integer solutions, impose prime patterns or distinct entries, reconstruct a historical server validator, or show which values the authors deliberately selected. A rational basis is not automatically a basis for all integer solutions: clearing each vector’s denominators is enough to construct these witnesses, but is not an integer-lattice enumeration method.\n\nAn extra requirement can shrink the space. To test one, state it as a separate variant and show exactly which constraints changed. A theory that fixes many cells, restricts values to a list, or imposes a primality pattern is not ruled out by this result.\n\nSee [the magic-square guide](#/wiki/magic-squares) for the original images and rune-value conversion, and [search space and bounds](#/wiki/search-space) for why a claim must name the space it covers.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/magic-square-freedom/article.md&quot;,
   &quot;script_sha256&quot;: &quot;83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce&quot;
+}</pre></article><article id="n-rune-gaps"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;n-rune-gaps&quot;,
+  &quot;title&quot;: &quot;LP2-00–02: N-rune distances and prime-value labels&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Which prime-value labels result from successive N-rune gaps under two distance definitions and two page-boundary rules?&quot;,
+  &quot;summary&quot;: &quot;Four configurations preserve every gap. LP2-00 gives F R O . M under position distance; a later S appears only across the LP2-01/02 boundary. This is not a recovered reading.&quot;,
+  &quot;tags&quot;: [
+    &quot;N rune&quot;,
+    &quot;rune gaps&quot;,
+    &quot;prime distances&quot;,
+    &quot;FROM&quot;,
+    &quot;signpost&quot;,
+    &quot;0-2&quot;,
+    &quot;interrupter distances&quot;,
+    &quot;Gematria Primus&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;
+    ],
+    &quot;representation&quot;: &quot;All recognized runes in archived order including headings; punctuation and whitespace excluded. Target N only.&quot;,
+    &quot;procedure&quot;: &quot;Measure successive N distances, map exact GP prime values to labels, and retain every unmatched distance as a dot token.&quot;,
+    &quot;parameters&quot;: &quot;Two distance conventions (position difference; intervening runes) by two boundaries (page reset; join 00,01,02). Four configurations, eight output streams. No filtering of unmatched gaps.&quot;,
+    &quot;exclusions&quot;: &quot;Other runes, punctuation-based gaps, heading removal, anagrams, significance testing and interpretation of signpost artwork.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;LP2-00 position distances begin 2,11,7,4,71, giving F R O . M. Joined pages add cross-page distances 40 and 53; only 53 maps to S. Intervening-rune counts give different labels.&quot;,
+  &quot;limitations&quot;: &quot;Exploratory reconstruction after the proposal and initial output were seen. No null model or independent plaintext criterion. A fragment is not evidence of a complete cipher. Computational review; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Specify any alternative filtering or target rune as a separate bounded variant. A significance study must repeat the same selection process on declared controls.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;rune-gap-extractions&quot;,
+    &quot;title&quot;: &quot;Rune-gap extractions&quot;,
+    &quot;question&quot;: &quot;What follows from declared target runes, distance definitions and boundary rules?&quot;,
+    &quot;baseline&quot;: &quot;n-rune-gaps&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;N only; four distance/boundary configurations&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; full rerun and independent split-based endpoint audit; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/n-rune-gaps/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12.10, standard library. Independent checker: python experiments/records/n-rune-gaps/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/n-rune-gaps/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;8799dc0e20c2ca50dc36862486827617ec48f48d4140cd632846cb33c9ee8474&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/n-rune-gaps/plan.json&quot;,
+        &quot;sha256&quot;: &quot;9fd6fd63a6a40788e0edb6612b0fd73dffb23c91820b3f10306ba0e0fd325699&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/n-rune-gaps/check.py&quot;,
+        &quot;sha256&quot;: &quot;1874a3f86116167448695c18a681f3c678ee7856d696df99f2ef2a29a1314d08&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/n-rune-gaps/results.json&quot;,
+        &quot;sha256&quot;: &quot;8f33132567fa23434d3f6a28109a1425fc5bbc964241c9d55a33b375a72bf64d&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Opening pages, original images and transcription context&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-00&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Gematria Primus alphabet and values&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/alphabet&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;article&quot;: &quot;# N-rune gaps on LP2-00–02\n\nThis experiment reconstructs a proposed extraction from distances between successive N runes. It compares four configurations: position distance or intervening-rune count, each with page resets or cross-page continuation. It does not test whether the signpost artwork instructs this operation.\n\n## Inputs and scope\n\nUse the archived rune-only streams from LP2-00, LP2-01 and LP2-02, including headings. Preserve rune order; discard punctuation and whitespace for the distance calculation. There are 262, 266 and 201 runes respectively, with 12, 8 and 8 occurrences of N.\n\nThe proposal and initial output were known before the plan was written. This is an exploratory reproduction, not a preregistered confirmation. No other target rune or parameter search is included.\n\n## Two definitions of distance\n\nIf N occurs at rune positions 22 and 24, the position distance is 2, but only one rune lies between the two Ns. The first definition maps 2 to F through its Gematria Primus prime value. The second produces 1, which has no GP prime-value mapping.\n\nFor each adjacent pair of Ns, retain the exact distance and both source locations. Map a distance only when it equals one of the 29 GP prime values. Keep all other distances as a dot token. These dots mark unmatched observations; they are not manuscript punctuation. No gap is deleted or rearranged.\n\nPage resets produce 11, 7 and 7 gaps. Joining all three streams produces 27 gaps, including the two cross-page gaps. The four configurations yield eight reported streams because reset configurations return one stream per page.\n\n## Complete outputs\n\nEach space separates one gap observation. Do not read spacing as recovered word boundaries.\n\n### reset-at-page / position-distance / lp2-00\n\n```text\nF R O . M . . . . . I\n```\n\n### reset-at-page / position-distance / lp2-01\n\n```text\n. O . . . . .\n```\n\n### reset-at-page / position-distance / lp2-02\n\n```text\n. . . . . . .\n```\n\n### reset-at-page / intervening-runes / lp2-00\n\n```text\n. . . U . R . U P U .\n```\n\n### reset-at-page / intervening-runes / lp2-01\n\n```text\n. . . . X N R\n```\n\n### reset-at-page / intervening-runes / lp2-02\n\n```text\n. . I G . I .\n```\n\n### join-pages / position-distance / lp2-00, lp2-01, lp2-02\n\n```text\nF R O . M . . . . . I . . O . . . . . S . . . . . . .\n```\n\n### join-pages / intervening-runes / lp2-00, lp2-01, lp2-02\n\n```text\n. . . U . R . U P U . . . . . . X N R . . . I G . I .\n```\n\n## What the apparent fragment depends on\n\nLP2-00 starts with position distances 2, 11, 7, 4 and 71. Their output is F, R, O, dot, M. A contiguous FROM requires discarding the unmatched distance 4. That is a different extraction rule from retaining every observation.\n\nThe joined position-distance stream adds a distance of 40 across LP2-00 to LP2-01, which stays a dot, and 53 across LP2-01 to LP2-02, which maps to S. The S therefore does not arise within LP2-02 under the page-reset rule. Every endpoint is in results.json, with one-based page-local rune ordinals and zero-based source-character offsets.\n\nThe outputs reproduce a fragment that can invite an English reading after selection. They do not provide a full reading or establish an intended cipher. No p-value is calculated: accounting for choices among target runes, distance conventions, page boundaries and output selection would require a separate search and control model.\n\n## Reproduce and inspect\n\nRun from the repository or the extracted experiment ZIP, retaining its folder layout:\n\n```text\npython experiments/records/n-rune-gaps/run.py --check\npython experiments/records/n-rune-gaps/check.py\n```\n\nPython 3 is sufficient. The first command regenerates all outputs and compares them with the saved report. The second independently splits the rune streams at N and checks gap lengths, mappings, source locations and cross-page flags. No network or model calls are made.\n\nThe result is inconclusive about a cipher, while the extraction itself is reproducible. Human review is pending. Further tests must state any changed target, omitted heading, character representation or filtering rule; record such changes within the same experiment family rather than presenting them as confirmations of this scope.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/n-rune-gaps/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;8799dc0e20c2ca50dc36862486827617ec48f48d4140cd632846cb33c9ee8474&quot;
 }</pre></article><article id="outguess-default-key"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;outguess-default-key&quot;,
   &quot;title&quot;: &quot;Original JPEGs: default-key OutGuess sweep&quot;,

@@ -1,0 +1,97 @@
+{
+  "id": "n-rune-gaps",
+  "title": "LP2-00–02: N-rune distances and prime-value labels",
+  "status": "published",
+  "question": "Which prime-value labels result from successive N-rune gaps under two distance definitions and two page-boundary rules?",
+  "summary": "Four configurations preserve every gap. LP2-00 gives F R O . M under position distance; a later S appears only across the LP2-01/02 boundary. This is not a recovered reading.",
+  "tags": [
+    "N rune",
+    "rune gaps",
+    "prime distances",
+    "FROM",
+    "signpost",
+    "0-2",
+    "interrupter distances",
+    "Gematria Primus"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "representation": "All recognized runes in archived order including headings; punctuation and whitespace excluded. Target N only.",
+    "procedure": "Measure successive N distances, map exact GP prime values to labels, and retain every unmatched distance as a dot token.",
+    "parameters": "Two distance conventions (position difference; intervening runes) by two boundaries (page reset; join 00,01,02). Four configurations, eight output streams. No filtering of unmatched gaps.",
+    "exclusions": "Other runes, punctuation-based gaps, heading removal, anagrams, significance testing and interpretation of signpost artwork."
+  },
+  "outcome": "inconclusive",
+  "finding": "LP2-00 position distances begin 2,11,7,4,71, giving F R O . M. Joined pages add cross-page distances 40 and 53; only 53 maps to S. Intervening-rune counts give different labels.",
+  "limitations": "Exploratory reconstruction after the proposal and initial output were seen. No null model or independent plaintext criterion. A fragment is not evidence of a complete cipher. Computational review; human review pending.",
+  "next_steps": "Specify any alternative filtering or target rune as a separate bounded variant. A significance study must repeat the same selection process on declared controls.",
+  "family": {
+    "id": "rune-gap-extractions",
+    "title": "Rune-gap extractions",
+    "question": "What follows from declared target runes, distance definitions and boundary rules?",
+    "baseline": "n-rune-gaps"
+  },
+  "variant": {
+    "label": "N only; four distance/boundary configurations",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; full rerun and independent split-based endpoint audit; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/n-rune-gaps/run.py --check",
+    "environment": "Python 3.12.10, standard library. Independent checker: python experiments/records/n-rune-gaps/check.py",
+    "script": "experiments/records/n-rune-gaps/run.py",
+    "script_sha256": "8799dc0e20c2ca50dc36862486827617ec48f48d4140cd632846cb33c9ee8474",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "experiments/records/n-rune-gaps/plan.json",
+        "sha256": "9fd6fd63a6a40788e0edb6612b0fd73dffb23c91820b3f10306ba0e0fd325699"
+      },
+      {
+        "path": "experiments/records/n-rune-gaps/check.py",
+        "sha256": "1874a3f86116167448695c18a681f3c678ee7856d696df99f2ef2a29a1314d08"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/n-rune-gaps/results.json",
+        "sha256": "8f33132567fa23434d3f6a28109a1425fc5bbc964241c9d55a33b375a72bf64d"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Opening pages, original images and transcription context",
+      "url": "https://jelliottdev.github.io/#/page/lp2-00"
+    },
+    {
+      "label": "Gematria Primus alphabet and values",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
+  ],
+  "related": []
+}
