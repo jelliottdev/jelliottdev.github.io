@@ -370,6 +370,7 @@ WELCOME WELCOME,  PILGRIM,  TO  THE  GREAT  JOURNEY  TOWARD  THE  END  OF  ALL  
 
 Vigenère on the rune alphabet: https://jelliottdev.github.io/reference/articles/vigenere.html
 Keystream positions and interruptions: https://jelliottdev.github.io/reference/articles/interruptions.html
+Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 Welcome, Pilgrim: complete reading: https://jelliottdev.github.io/reference/articles/reading-welcome.html
 
 ## Sources
@@ -811,6 +812,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
+Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 The Loss of Divinity: complete reading: https://jelliottdev.github.io/reference/articles/reading-loss-of-divinity.html
 
 ## Sources
@@ -1252,6 +1254,7 @@ AN  INSTRUCTION KWESTION  ALL  THINGS DISCOVER  TRUTH  INSIDE  YOURSELF FOLLOW  
 ## Related guides
 
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
+Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 An Instruction: complete reading: https://jelliottdev.github.io/reference/articles/reading-instruction.html
 
 ## Sources
@@ -3852,6 +3855,7 @@ PARABLE LIKE THE INSTAR TUNNELING TO THE SURFACE WE MUST SHED OUR OWN CIRCUMFERE
 
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Emirps and decimal reversal: https://jelliottdev.github.io/reference/articles/emirps.html
+Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 Parable: complete reading: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 
 ## Sources
@@ -4920,6 +4924,7 @@ Keep the result reproducible
 
 Record the repository commit, Python version, command, and output. In a Git checkout, git rev-parse HEAD prints the commit ID. For a ZIP download, retain the archive and its checksum; do not claim a commit ID you have not verified. When you move from a control to a new hypothesis, follow documenting a reproducible attempt. A passing control is a starting point, not evidence that the same method solves another page.
 
+Reproducing rune prime sums provides a read-only command and explicit spelling comparisons.
 Implementation and verification
 
 The commands and trace fields above are documented from the reproduction script and its control parameters. The first trace rows and all 17 literal page outputs were checked locally on 19 October 2026. Operating-system launch commands are alternatives; this verification used Python 3.12 on Windows.
@@ -4940,6 +4945,7 @@ https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/checksums.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/reference/articles/prime-sums.html
 https://jelliottdev.github.io/scripts/reproduce_reading.py
 https://jelliottdev.github.io/data/evidence/reading-methods.json
 
@@ -5036,6 +5042,7 @@ TH, EO, NG and other multi-letter labels each denote a single rune. U/V and C/K 
 Reproduce a small example
 For F–U–TH, the indices are [0, 1, 2] and the prime sum is 2 + 3 + 5 = 10. Atbash transforms the indices to [28, 27, 26]; it does not reverse the digits of the sum.
 Next: modular arithmetic, literal readings, and worked spelling sums.
+Reproducing rune prime sums provides a read-only command and explicit spelling comparisons.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
@@ -5045,6 +5052,7 @@ https://jelliottdev.github.io/reference/articles/prime-indices.html
 https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 https://jelliottdev.github.io/reference/articles/transliteration.html
 https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/reference/articles/prime-sums.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
 Article: https://jelliottdev.github.io/reference/articles/rune-values.html
@@ -5690,6 +5698,7 @@ assert emirp(7649)
 assert not emirp(11)
 Converting the reversed digits to an integer removes leading zeros. This convention must be stated if applying reversal to strings that are not already prime numbers. See prime indices and selection effects.
 
+Reproducing rune prime sums provides a read-only command and explicit spelling comparisons.
 Sources and evidence
 Exact sentence sums and conventions · Checked numerical examples. No authorial purpose follows from the emirp property alone.
 
@@ -5697,6 +5706,7 @@ Sources, related references, and files
 https://jelliottdev.github.io/#/spelling
 https://jelliottdev.github.io/reference/articles/prime-indices.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/reference/articles/prime-sums.html
 https://jelliottdev.github.io/data/evidence/spelling-sums.json
 https://jelliottdev.github.io/scripts/check_number_examples.py
 
@@ -6047,6 +6057,88 @@ https://jelliottdev.github.io/scripts/inspect_visual_records.py
 https://jelliottdev.github.io/reference/articles/checksums.html
 
 Article: https://jelliottdev.github.io/reference/articles/image-regions.html
+
+
+---
+
+Reproducing rune prime sums
+
+Compute exact sentence and word totals, test explicit spelling changes, and keep arithmetic separate from intent.
+
+A prime-sum claim is a claim about a particular sequence of runes under a particular counting rule. Before asking why a spelling was chosen, establish which text was counted and whether the claimed total can be reproduced. The spelling reference discusses individual cases; this guide walks through the calculation.
+
+Choose the input layer
+
+The page record’s ordinary prime sum describes its archived runes. For an encrypted page, this is a ciphertext sum. The examples here instead use the known decoded rune sequence, with the documented correction and cipher rules applied. These are different quantities even when both are called “the page sum.”
+
+Use the rune’s Gematria Primus prime value, not its zero-based cipher index. Count each rune once. The rule here excludes spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG denotes one rune; it must not automatically become two individual letter-runes.
+
+Run the read-only check
+
+python scripts/reproduce_prime_sums.py
+python scripts/reproduce_prime_sums.py --json
+
+Run from the complete repository using Python 3. See script setup if this is your first command. The first prints a concise report. The second prints the full rune sequences, prime values, totals and counterfactual results as JSON. Neither command changes files, accesses the network, or calls an AI.
+
+The script re-decodes the nine documented controls, verifies all 17 literal page readings, reconstructs the rune stream from the per-rune trace, and compares the ten selected word occurrences and four LP2-57 segments with the published arithmetic evidence. The ten occurrences are the examples selected for the spelling article, not an exhaustive sample of all manuscript words. This shares the known-reading implementation; it is not an independent photographic transcription.
+
+LP2-57: boundaries change the claim
+
+For LP2-57, remove archive line-wrap markers and divide at the archive’s periods. This gives a heading followed by three body segments:
+
+	Segment	Sum	Reversal	Result
+	PARABLE heading	449	944	Prime sum, composite reversal
+	First body sentence	1259	9521	Emirp
+	Second body sentence	1031	1301	Emirp
+	Third body sentence	1229	9221	Emirp
+
+An emirp must be prime, and its decimal reversal must be a different prime. Combining heading and body gives 449 + 1259 + 1031 + 1229 = 3968, which is even and greater than 2, hence composite. Including the heading therefore changes the proposition from three emirp sentence sums to a composite page total. There is no contradiction: the boundaries differ.
+
+What does a spelling change actually do?
+
+Start with the exact original sequence, specify an alternate sequence, and subtract their totals. For a replacement of one rune by several, the change is the sum of the inserted rune values minus the removed rune value.
+
+TUNNELNG → a separate I before NG: adding I contributes 31. The first LP2-57 sentence changes from 1259 to 1290. The alternate total is composite. NG/ING is a multi-letter rune convention, so this comparison does not establish that the original is a spelling error.
+
+CWESTIAN with one IA/IO rune → separate I and O: remove 107 and add 31 + 7. The change is −69; the word total becomes 347 − 69 = 278, composite. Simply relabeling C as K or IA as IO changes no rune and therefore no sum.
+
+WIDSOM → WISDOM: exchanging D and S changes no values or multiplicities. The total remains 270. A reordering cannot make this additive total prime.
+
+BELIEUE ↔ BELEIUE: exchanging I and E also preserves the total, 369. The documented transcription correction is important for source fidelity and order-sensitive ciphers; it does not tune the additive sum.
+
+These alternatives are explicitly constructed comparisons. They are not additional text found on the manuscript.
+
+A quick arithmetic check
+
+Only the F rune has the even prime value 2; every other rune value is odd. The sum is odd exactly when the number of non-F runes is odd. An even total greater than 2 cannot be prime. This provides a quick necessary check before trial division, not a sufficient test: many odd totals are composite.
+
+Adding I flips parity because 31 is odd. Reordering a word cannot change parity or any other property of its additive total. Keeping those invariants explicit helps distinguish a meaningful numerical change from a visually different spelling with identical arithmetic.
+
+What this says about purpose
+
+The reproducible observation is that the three body sums are emirps under the declared convention. The counterfactuals show that some alternate encodings lose a property, while reorderings and aliases do not affect it. Neither statement alone identifies the author’s reason for choosing a spelling.
+
+A proposed purpose such as marking sentence boundaries or providing a consistency check needs a separately stated rule and a complete set of cases. It should explain which units are meant to satisfy the rule and which choices were allowed. Selecting only successful words, or adding a delimiter value after seeing a composite total, changes the test. See selection effects and reproducible scope. This guide does not assign a probability that the observed totals were intentional.
+
+Sources and verification
+
+Read-only reproduction script · Known-reading implementation · Method parameters · Exact sum evidence · Complete LP2-57 reading. The calculations and trace reconstruction were checked on 19 October 2026. Successful verification supports the declared arithmetic and recorded inputs; it does not validate every glyph against the original image or establish a new decryption.
+
+Sources, related references, and files
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/reference/articles/running-scripts.html
+https://jelliottdev.github.io/data/evidence/spelling-sums.json
+https://jelliottdev.github.io/reference/lp2-57.html
+https://jelliottdev.github.io/reference/articles/emirps.html
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/scripts/reproduce_prime_sums.py
+https://jelliottdev.github.io/scripts/reproduce_reading.py
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
+
+Article: https://jelliottdev.github.io/reference/articles/prime-sums.html
 
 
 ---
