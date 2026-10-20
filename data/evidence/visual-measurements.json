@@ -1,0 +1,50 @@
+{
+  "schema": "liberpedia-visual-measurements-v1",
+  "checked_on": "2026-10-19",
+  "scope": "Recount of colors and punctuation components within published bounding rectangles. Not new segmentation, a full glyph audit, or a cipher experiment.",
+  "script": "scripts/inspect_visual_records.py",
+  "pixel_dependency": "Pillow; verification used 11.3.0",
+  "rectangle_convention": "[x,y,width,height] in original JPEG pixels; origin top-left",
+  "punctuation_method": "Pillow L grayscale <140; eight-connected components; retain area >=20 pixels within each stored bounding rectangle.",
+  "color_method": "Foreground weighted RGB brightness <140. Red dominance R-max(G,B)>70. Fraction >0.9 is red, <0.1 is dark, otherwise mixed/uncertain.",
+  "sources": [
+    {
+      "page": "lp2-00",
+      "image_path": "images/lp2-00.jpg",
+      "image_sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e",
+      "record_path": "data/pages/lp2-00.json",
+      "glyph_regions": 262,
+      "punctuation_regions": 58,
+      "punctuation_component_counts": {
+        "1": 56,
+        "13": 1,
+        "4": 1
+      }
+    },
+    {
+      "page": "lp2-01",
+      "image_path": "images/lp2-01.jpg",
+      "image_sha256": "f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f",
+      "record_path": "data/pages/lp2-01.json",
+      "glyph_regions": 266,
+      "punctuation_regions": 62,
+      "punctuation_component_counts": {
+        "1": 57,
+        "4": 5
+      }
+    },
+    {
+      "page": "lp2-02",
+      "image_path": "images/lp2-02.jpg",
+      "image_sha256": "74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34",
+      "record_path": "data/pages/lp2-02.json",
+      "glyph_regions": 201,
+      "punctuation_regions": 38,
+      "punctuation_component_counts": {
+        "1": 36,
+        "4": 1,
+        "13": 1
+      }
+    }
+  ]
+}

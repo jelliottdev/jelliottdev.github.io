@@ -1,0 +1,53 @@
+LP2-00–02: text and image measurements
+
+Rune regions, ink classes, punctuation shapes, and the limits of the stored visual survey.
+
+LP2-00, LP2-01, and LP2-02 are the first three images of the second release. Their combined archive indices are 17–19. The source snapshot does not give them a known plaintext. Studying them together does not establish a shared key or a reset rule.
+
+What has been measured
+	Page	Rune regions	Red runes	Dark runes	Punctuation regions
+
+	LP2-00	262	13	249	58
+
+	LP2-01	266	0	266	62
+
+	LP2-02	201	0	201	38
+
+These are 729 stored rune regions and 158 punctuation regions. A region is a measurement unit, not necessarily a separate linguistic character. Rune counts refer to the archived transcription and its mapped image regions.
+
+Punctuation has its own color and shape
+LP2-00 has 56 one-component punctuation regions, one four-component region, and one thirteen-component region. One of its one-component marks and its thirteen-component mark are classified red. LP2-01 has 57 one-component and five four-component regions, all dark. LP2-02 has 36 one-component regions, one four-component region, and one thirteen-component region; the thirteen-component region is red.
+Thus LP2-02 has no red rune regions but does have red punctuation. The recorded component count describes connected foreground pixels under a threshold, not the number of sentences, cipher shifts, or semantic separators. See image regions and connected components.
+
+Layout details that affect inspection
+LP2-00’s oversized opening S rune extends alongside the first three text rows. Its stored rectangle is [599, 664, 153, 501] in original-image pixels. Treating each horizontal row as independent can miss that shared visual context.
+LP2-01’s recorded tenth visual row contains C/OE glyphs touching at their feet. Overlapping inspection rectangles preserve their context. A touching shape does not automatically merge the two transcription symbols.
+
+Do not equate transcript punctuation with pixel shape
+The archived ASCII notation can use the same period character for marks with different visual component counts. A period in exported text therefore does not prove that every corresponding mark has the same appearance. Keep transcription conventions, image observations, and a proposed reset rule separate.
+
+How to inspect and reproduce the inventory
+Open a page record and expand its recorded rune or punctuation regions.
+Select “Inspect region” to view the recorded rectangle against the original image.
+Use the page JSON’s visual.glyphs and visual.punctuation arrays to inspect the stored data.
+Run the checks below from the repository root.
+# Structural checks and stored counts; Python standard library:
+python scripts/inspect_visual_records.py
+# Fresh color/component recount within stored rectangles; requires Pillow:
+python scripts/inspect_visual_records.py --pixels
+If Pillow is not installed, install it with python -m pip install Pillow in your chosen Python environment. The pixel check verifies the original JPEG hashes before reading them. It does not generate new segmentation, decide which rune a shape represents, or test a cipher.
+
+Evidence and limits
+Measurement conventions and checked scope · Reproduction script · LP2-00 source record · LP2-01 source record · LP2-02 source record. Color classes and component counts were reproduced inside the published rectangles on 19 October 2026. This does not make the visual inventory exhaustive or establish a relationship with LP2-15’s number panel.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp2-00.html
+https://jelliottdev.github.io/reference/lp2-01.html
+https://jelliottdev.github.io/reference/lp2-02.html
+https://jelliottdev.github.io/reference/articles/image-regions.html
+https://jelliottdev.github.io/#/conventions
+https://jelliottdev.github.io/data/evidence/visual-measurements.json
+https://jelliottdev.github.io/scripts/inspect_visual_records.py
+https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+
+Article: https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html

@@ -1280,6 +1280,8 @@ Recorded ink colors: The stored visual survey classifies 13 rune regions as red 
 
 Oversized opening rune: The opening S rune extends alongside the first three text rows. Its rectangle is recorded separately from the ordinary first-row glyphs.
 
+Punctuation measurements: The 58 stored punctuation regions contain 56 regions with 1 connected component, 1 region with 4 connected components, 1 region with 13 connected components. 2 punctuation regions are classified red. Components are thresholded pixel groups, not a linguistic interpretation. Recounted within the stored rectangles on 19 October 2026.
+
 ## Archived transcription
 
 ᛋᚻᛖᚩᚷᛗᛡᚠ-ᛋᚣᛖᛝᚳ.ᚦᛄᚷᚫ-ᚠᛄᛟ-/
@@ -1295,6 +1297,11 @@ Oversized opening rune: The opening S rune extends alongside the first three tex
 ᛇᚻ-ᛞᛝᚷ-ᛟᛝᛚᚢᚱᚾᛏ-ᚫᛋᚣᚢᚻᚱᛏ-ᚻᚳ-ᛋᛟ/
 ᛏᛟᛝᚢᚱ-ᛋ-ᚠᚩᛖᚹᛠᛟᛚᚠᚫ-ᛗᚱᛝ-ᛞᚪᛗᚱ-ᚹ/
 
+
+## Related guides
+
+LP2-00–02: text and image measurements: https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+Image regions and connected components: https://jelliottdev.github.io/reference/articles/image-regions.html
 
 ## Sources
 
@@ -1323,6 +1330,8 @@ Recorded ink colors: The stored visual survey classifies 0 rune regions as red a
 
 Touching glyphs: The recorded tenth visual row contains C/OE glyphs that touch at their feet. Overlapping inspection regions preserve their context.
 
+Punctuation measurements: The 62 stored punctuation regions contain 57 regions with 1 connected component, 5 regions with 4 connected components. 0 punctuation regions are classified red. Components are thresholded pixel groups, not a linguistic interpretation. Recounted within the stored rectangles on 19 October 2026.
+
 ## Archived transcription
 
 ᚪᛁᛗᛋᚾ-ᛋᛟᚱᚢᚹᛋᛚᛡ.ᛟᚪᚫᛝᛋᛞᛈᛏ-ᚳᚱᚦ/
@@ -1338,6 +1347,11 @@ Touching glyphs: The recorded tenth visual row contains C/OE glyphs that touch a
 ᚣᚻ-ᚠᛖᛄᛠᚾ-ᛟᚫ-ᚢᚪ-ᚻᚱ-ᛖᛠᚦᚠᛄᚪ-ᛚᛉ/
 ᛋᛏ-ᛗᚠᛚᚠᛏ-ᚷᛁᚦ-ᚢᛚᚷ-ᛉᛠᛏᛋᛚᛄᛈ-ᛚᛉᛁ/
 
+
+## Related guides
+
+LP2-00–02: text and image measurements: https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+Image regions and connected components: https://jelliottdev.github.io/reference/articles/image-regions.html
 
 ## Sources
 
@@ -1364,6 +1378,8 @@ Human reader: https://jelliottdev.github.io/#/reader/lp2-02
 
 Recorded ink colors: The stored visual survey classifies 0 rune regions as red and 201 as dark. These are measurements of the reviewed image regions, not interpretations of the colors.
 
+Punctuation measurements: The 38 stored punctuation regions contain 36 regions with 1 connected component, 1 region with 4 connected components, 1 region with 13 connected components. 1 punctuation region is classified red. Components are thresholded pixel groups, not a linguistic interpretation. Recounted within the stored rectangles on 19 October 2026.
+
 ## Archived transcription
 
 ᛟᛗ-ᚢ.ᚻᛏ-ᛒᛇᛚᛞᚻᛒᛗ-ᛠᚱᛒ-ᚾᚻᛒᛖᚷᛇ-/
@@ -1378,6 +1394,11 @@ Recorded ink colors: The stored visual survey classifies 0 rune regions as red a
 &
 $
 
+
+## Related guides
+
+LP2-00–02: text and image measurements: https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+Image regions and connected components: https://jelliottdev.github.io/reference/articles/image-regions.html
 
 ## Sources
 
@@ -5798,6 +5819,97 @@ https://jelliottdev.github.io/exports/steganography/lp1-03.body.txt
 https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 
 Article: https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
+
+
+---
+
+LP2-00–02: text and image measurements
+
+Rune regions, ink classes, punctuation shapes, and the limits of the stored visual survey.
+
+LP2-00, LP2-01, and LP2-02 are the first three images of the second release. Their combined archive indices are 17–19. The source snapshot does not give them a known plaintext. Studying them together does not establish a shared key or a reset rule.
+
+What has been measured
+	Page	Rune regions	Red runes	Dark runes	Punctuation regions
+
+	LP2-00	262	13	249	58
+
+	LP2-01	266	0	266	62
+
+	LP2-02	201	0	201	38
+
+These are 729 stored rune regions and 158 punctuation regions. A region is a measurement unit, not necessarily a separate linguistic character. Rune counts refer to the archived transcription and its mapped image regions.
+
+Punctuation has its own color and shape
+LP2-00 has 56 one-component punctuation regions, one four-component region, and one thirteen-component region. One of its one-component marks and its thirteen-component mark are classified red. LP2-01 has 57 one-component and five four-component regions, all dark. LP2-02 has 36 one-component regions, one four-component region, and one thirteen-component region; the thirteen-component region is red.
+Thus LP2-02 has no red rune regions but does have red punctuation. The recorded component count describes connected foreground pixels under a threshold, not the number of sentences, cipher shifts, or semantic separators. See image regions and connected components.
+
+Layout details that affect inspection
+LP2-00’s oversized opening S rune extends alongside the first three text rows. Its stored rectangle is [599, 664, 153, 501] in original-image pixels. Treating each horizontal row as independent can miss that shared visual context.
+LP2-01’s recorded tenth visual row contains C/OE glyphs touching at their feet. Overlapping inspection rectangles preserve their context. A touching shape does not automatically merge the two transcription symbols.
+
+Do not equate transcript punctuation with pixel shape
+The archived ASCII notation can use the same period character for marks with different visual component counts. A period in exported text therefore does not prove that every corresponding mark has the same appearance. Keep transcription conventions, image observations, and a proposed reset rule separate.
+
+How to inspect and reproduce the inventory
+Open a page record and expand its recorded rune or punctuation regions.
+Select “Inspect region” to view the recorded rectangle against the original image.
+Use the page JSON’s visual.glyphs and visual.punctuation arrays to inspect the stored data.
+Run the checks below from the repository root.
+# Structural checks and stored counts; Python standard library:
+python scripts/inspect_visual_records.py
+# Fresh color/component recount within stored rectangles; requires Pillow:
+python scripts/inspect_visual_records.py --pixels
+If Pillow is not installed, install it with python -m pip install Pillow in your chosen Python environment. The pixel check verifies the original JPEG hashes before reading them. It does not generate new segmentation, decide which rune a shape represents, or test a cipher.
+
+Evidence and limits
+Measurement conventions and checked scope · Reproduction script · LP2-00 source record · LP2-01 source record · LP2-02 source record. Color classes and component counts were reproduced inside the published rectangles on 19 October 2026. This does not make the visual inventory exhaustive or establish a relationship with LP2-15’s number panel.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp2-00.html
+https://jelliottdev.github.io/reference/lp2-01.html
+https://jelliottdev.github.io/reference/lp2-02.html
+https://jelliottdev.github.io/reference/articles/image-regions.html
+https://jelliottdev.github.io/#/conventions
+https://jelliottdev.github.io/data/evidence/visual-measurements.json
+https://jelliottdev.github.io/scripts/inspect_visual_records.py
+https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+
+Article: https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+
+
+---
+
+Image regions and connected components
+
+Understand pixel rectangles, thresholded shapes, and recorded color classes.
+
+An image region specifies where a measurement was made. Keeping the rectangle, original image, and measurement rule together lets another person inspect the same pixels.
+
+Reading a rectangle
+The wiki uses [x, y, width, height] in original-image pixels. The origin is the top-left; x increases rightward and y downward. For [599, 664, 153, 501], the region starts at x = 599, y = 664 and covers 153 columns and 501 rows. In a half-open crop convention, the right and bottom bounds are 752 and 1165.
+A thumbnail or resized preview uses different display coordinates. Use the original JPEG or the wiki’s region inspector rather than copying screen coordinates into a dataset.
+
+Connected components
+A connected component is a group of selected pixels joined by the chosen neighborhood rule. Eight-connectivity includes horizontal, vertical, and diagonal neighbors. Four-connectivity excludes diagonal neighbors; the same image can produce different counts under those definitions.
+The published opening-page measurement uses foreground grayscale below 140 and retains eight-connected groups containing at least 20 pixels. Tiny isolated specks are excluded by that area threshold. A count of 13 means thirteen qualifying groups under this rule, not necessarily thirteen intentional dots.
+
+Color classification
+Within a stored rectangle, foreground pixels use the weighted brightness test 0.299R + 0.587G + 0.114B < 140. A foreground pixel is red-dominant when R − max(G,B) > 70. A red-dominant fraction above 90% gives “red”; below 10% gives “dark”; intermediate cases are “mixed/uncertain.” These labels summarize pixels under a rule, not a chemical analysis of ink.
+
+What a successful recount establishes
+Matching a recorded count confirms that the stated operation reproduces it on the stored rectangle and exact image bytes. It does not prove that the rectangle includes every relevant mark or that two overlapping rectangles should be interpreted as one character. Segmentation, symbol identification, and cipher interpretation are separate decisions.
+
+Reproduce the published examples
+Follow the LP2-00–02 inventory and run python scripts/inspect_visual_records.py --pixels. The measurement manifest records the scope and input hashes; the script shows the exact implementation. Keep file integrity separate from a claim about meaning.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
+https://jelliottdev.github.io/data/evidence/visual-measurements.json
+https://jelliottdev.github.io/scripts/inspect_visual_records.py
+https://jelliottdev.github.io/reference/articles/checksums.html
+
+Article: https://jelliottdev.github.io/reference/articles/image-regions.html
 
 
 ---
