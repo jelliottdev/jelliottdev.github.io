@@ -183,67 +183,14 @@ Before making a significance claim, specify a null model that matches the actual
 
 This baseline reports descriptive measurements only. It supplies no p-values, cipher classification, key-length estimate or new solution. A technique search belongs in Have we tried it? only when its scope and results are documented through the experiment process.
 
-A worked example: splitting a trial period into columns
+Periodic and column IoC
+The dedicated periodic-IoC guide splits a seven-symbol example into columns and compares an ordinary mean with a pooled pair rate. Whole-page and column measurements use different sets of pairs.
 
-In a simple repeating-key cipher, positions separated by one key period use the same key symbol. Testing a period of two therefore groups positions 0, 2, 4, … into one column and positions 1, 3, 5, … into another. If the proposed period and key-advance rule are right, each column receives a constant shift, which preserves its IoC. This explains why column measurements can be useful; it does not make the highest-scoring trial period the correct one.
+Shuffling a column analysis
+Compare two arrangements of the same symbols to see why shuffling can change column IoC while leaving the whole-page value unchanged.
 
-Use the invented sequence F U F U F F U. These are seven single-symbol labels for a teaching example, not text from a Liber Primus page. Indexing starts at zero:
-
-	Column	Positions	Symbols	Matching ordered pairs	All ordered pairs	IoC
-
-	0	0, 2, 4, 6	F F F U	6	12	1/2
-
-	1	1, 3, 5	U U F	2	6	1/3
-
-
-There are two different ways to combine these values. The ordinary mean gives each column equal weight: (1/2 + 1/3) / 2 = 5/12 ≈ 0.4167. A pooled pair rate gives each eligible within-column pair equal weight: (6 + 2) / (12 + 6) = 4/9 ≈ 0.4444. The larger column has twice as many ordered pairs, so it contributes twice the weight to the pooled rate.
-
-Pooled column IoC =
-    sum(column matching-pair counts)
-    / sum(column ordered-pair counts)
-
-Neither number is the whole-sequence IoC. Across all seven positions there are four F symbols and three U symbols, giving (4 × 3 + 3 × 2) / (7 × 6) = 3/7. The whole-sequence denominator includes pairs whose positions belong to different columns. The pooled column denominator excludes them.
-
-Why shuffling matters for columns but not the total
-
-Rearrange the same seven symbols as F F U U F F U. The whole-sequence counts stay four F and three U, so whole-sequence IoC remains 3/7. But the two columns become F U F U and F U F; both have IoC 1/3, and their pooled rate is also 1/3.
-
-This is the distinction a shuffle experiment uses. It preserves the global symbol distribution while changing where symbols fall. A randomization test of column structure can compare an observed column statistic with shuffled versions. It cannot test whether the global IoC itself is unusual under that same shuffle, because that statistic never changes.
-
-For unequal column sizes, specify whether you use the ordinary mean or the pooled rate. A column with fewer than two symbols has no pair and contributes zero to both pooled counts; if every column is that short, the pooled rate is undefined. Very short columns also give unstable estimates, so adding more trial periods is not automatically adding more information.
-
-Reproduce the small example
-
-Save this self-contained Python example as ioc-columns-example.py and run python ioc-columns-example.py. It uses exact fractions and no manuscript inputs or external packages.
-
-from collections import Counter
-from fractions import Fraction
-
-def pairs(symbols):
-    n = len(symbols)
-    matching = sum(c * (c - 1) for c in Counter(symbols).values())
-    return matching, n * (n - 1)
-
-def rate(counts):
-    matching, total = counts
-    return Fraction(matching, total) if total else None
-
-def pooled(symbols, period):
-    columns = [pairs(symbols[j::period]) for j in range(period)]
-    return rate((sum(a for a, b in columns),
-                 sum(b for a, b in columns)))
-
-for text in ("FUFUFFU", "FFUUFFU"):
-    print(text, "whole:", rate(pairs(text)), "period 2:", pooled(text, 2))
-
-Expected output:
-
-FUFUFFU whole: 3/7 period 2: 4/9
-FFUUFFU whole: 3/7 period 2: 1/3
-
-This example explains an operation, not a tested claim about the manuscript. To apply it, declare the actual rune stream, headings, interruptions, page boundaries, periods and scoring rule first. If you choose the maximum over several periods, each randomized comparison must repeat that same search to evaluate the selected maximum. Comparing the winning period only with a single-period reference would omit the advantage gained by trying many candidates.
-
-To inspect order-dependent local patterns, use repeated rune sequences. Its script lists overlapping bigrams and trigrams with exact positions and input hashes.
+Reproduce the column example
+Run the exact-fraction Python example. It uses invented inputs and does not publish an experiment result.
 
 Sources and verification
 
@@ -300,8 +247,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments
 - experiment process
   https://jelliottdev.github.io/reference/articles/reproducibility.html
-- repeated rune sequences
-  https://jelliottdev.github.io/reference/articles/rune-ngrams.html
+- dedicated periodic-IoC guide
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#columns
+- Compare two arrangements of the same symbols
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#shuffle
+- Run the exact-fraction Python example
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#toy-code
 - The Index of Coincidence and Its Applications in Cryptanalysis
   https://www.nsa.gov/portals/75/documents/news-features/declassified-documents/friedman-documents/publications/folder_233/41761039080018.pdf
 - single-rune entropy
