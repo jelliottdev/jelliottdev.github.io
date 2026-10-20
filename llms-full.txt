@@ -5755,6 +5755,13 @@ This confirms that the supplied recipes reproduce the stored known outputs. It d
 
 Working from a phone? You can do the first arithmetic check without installing anything. In the worked warning example, the first rune has index 4. Subtracting it from 28 gives 24, the label A. The next input index is 21, giving 7, or W. Follow the table against the original image, then read the complete passage. Save the script run for when you have a Python environment.
 
+Optional second check: one row of the number grid
+Open LP1-05 and find the five-by-five grid below the text. Its first row mixes four printed numbers with one rune word. In the known reading that word is labeled SHADOWS.
+Leave the printed entries 272, 138, 131 and 151 unchanged.
+Use the worked rune-cell table to check the word’s seven rune values. Their sum is 341.
+Add the row: 272 + 138 + 341 + 131 + 151 = 1033.
+This verifies one row, not the whole square. The full explanation shows all five rows, five columns and two main diagonals. If you have Python, python scripts/check_number_examples.py reproduces those checks from the included page and alphabet records.
+The important distinction is the input: the printed decimal numbers stay as numbers, while rune words are replaced by additive prime values. Do not apply a prime-index lookup to every entry or replace the words with ordinary English spelling. Those would be different procedures.
 New to the terminal? Running the reproduction scripts walks through setup, expected results, trace columns, and common errors.
 3. Learn the other layers
 Rune indices and prime values: cipher arithmetic versus prime sums.
@@ -5765,7 +5772,7 @@ Spelling and prime sums: a reproducible numerical property versus an explanation
 For the ideas behind the decoded passages, follow the philosophy reading route, then compare the William Blake parallel. These guides distinguish the manuscript words, interpretation, and possible outside sources.
 
 4. Make an idea testable
-Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, carrying through punctuation, with no skipped runes” specifies one test. It does not establish that this is the correct method.
+Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, advancing the prime sequence only for runes, continuing across punctuation without resetting, and skipping no runes” specifies one test. It does not establish that this is the correct method.
 Check Have we tried it? for the technique and scope. The registry is awaiting reviewed records; an empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
 
 Choose one first investigation
@@ -5778,7 +5785,7 @@ You do not need to learn every technique at once. Choose a route that produces a
 
 	Inspect artwork	Compare the insect drawings	Page IDs, visible similarities and differences, and any named comparison source
 
-	Check arithmetic	Reproduce one recorded prime sum	The original rune sequence, chosen boundaries, values, and total
+	Check arithmetic	Reproduce LP1-05’s mixed-grid conversion	The original cells, rune-value substitutions, and all twelve line sums
 
 	Measure a text	Reproduce LP2-31’s IoC	The input hash, rune counts, exact fraction, and a statement of what it cannot establish
 
@@ -5828,6 +5835,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - worked warning example
   https://jelliottdev.github.io/reference/articles/atbash.html#worked
+- LP1-05
+  https://jelliottdev.github.io/#/reader/lp1-05
+- worked rune-cell table
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#rune-cells
+- full explanation; Reproduce LP1-05’s mixed-grid conversion
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#historical
 - Running the reproduction scripts
   https://jelliottdev.github.io/reference/articles/running-scripts.html
 - Rune indices and prime values
@@ -5850,8 +5863,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/testing-knowledge.html
 - Compare the insect drawings
   https://jelliottdev.github.io/reference/articles/insects.html
-- Reproduce one recorded prime sum
-  https://jelliottdev.github.io/reference/articles/prime-sums.html
 - Reproduce LP2-31’s IoC; the index-of-coincidence baseline
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - what your operation preserves
