@@ -19,7 +19,35 @@ Where it appeared in the puzzle
 
 The archived 2014 walkthrough places this image on the first onion site, auqgnxjtvdbll3pv.onion. The recorded HTML page title is For Every Thing That Lives Is Holy. This gives the collage another connection to Blake, alongside the closely related sentence in the manuscript’s Welcome section. See William Blake and Liber Primus for the wording in context.
 
-The same walkthrough records an OutGuess message in this JPEG: a signed greeting, RSA parameters including e = 65537, and an encrypted message. It describes the RSA step as leading to the next onion site. This entry preserves the image, but has not independently repeated that extraction or RSA step; the walkthrough is the source for this account.
+The hidden message, reproduced
+
+On 20 October 2026, default-key OutGuess extraction from this exact JPEG recovered 1,498 bytes. The extracted message begins with a greeting, supplies RSA values e and n, and contains an encrypted block labelled Crypt::RSA::ES::OAEP. The clear-signed message verified with GnuPG 2.5.21 against the recorded Cicada public key, using an isolated keyring and no legacy-digest override.
+
+Download the full extraction · Signed message · Read the message body
+
+The three downloads serve different purposes. The extraction preserves every recovered byte. The signed file isolates the PGP block for verification. The body is a readable derivative with PGP framing and dash escaping removed; use the signed file, not this derivative, to check the signature.
+
+How to reproduce the extraction
+
+Extract the reference-data ZIP and original-images ZIP into the same folder. Install OutGuess separately, then run this command from that folder. The wrapper checks the JPEG before extracting and refuses to overwrite an existing output file.
+
+python scripts/extract_payload.py 1033 --outguess outguess --output illustrated-cover.bin
+
+It should report 1,498 verified bytes and this SHA-256:
+
+65ff60bfa019e424ce2ae23994f19af5692f7e12e6bc177830b42a154985defd
+
+If OutGuess is not on your executable search path, replace the second outguess with its full path. See OutGuess extraction for the underlying operation and Running the reproduction scripts for terminal setup.
+
+Next, follow the isolated-keyring instructions to import and check the public key. With that keyring prepared, verify this message:
+
+gpg --no-options --homedir verify-keyring --no-auto-key-retrieve --status-fd 1 --verify exports/steganography/1033.signed.asc
+
+The VALIDSIG line should identify 6D854CD7933322A601C3286D181F01E57A35090F. The evidence record preserves separate hashes, tool identification and the verification status output.
+
+What remains beyond this check
+
+Extracting the message does not decrypt the encrypted block. Verifying its signature establishes that the signed text matches the recorded key, not the identity of a person or the authenticity of every pixel in the JPEG. The archived walkthrough describes RSA decryption leading to the next onion site; that decryption has not been independently reproduced for this entry.
 
 Why it is separate from page 00
 
@@ -47,11 +75,17 @@ https://www.britishmuseum.org/collection/object/P_1936-1116-32
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 https://jelliottdev.github.io/reference/articles/reading-welcome.html
 https://jelliottdev.github.io/reference/articles/william-blake.html
+https://jelliottdev.github.io/exports/steganography/1033.outguess.bin
+https://jelliottdev.github.io/exports/steganography/1033.signed.asc
+https://jelliottdev.github.io/exports/steganography/1033.body.txt
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/downloads/original-images.zip
 https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/running-scripts.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/#/reader/lp1-00
 https://jelliottdev.github.io/reference/articles/cover-chain.html
 https://jelliottdev.github.io/reference/articles/title-pages.html
 https://raw.githubusercontent.com/scream314/cicada3301/10733feb487bb8beb9966d534727ee5897aa54fc/assets/2014/stage02/auqgnxjtvdbll3pv.onion/1033.jpg
-https://jelliottdev.github.io/downloads/original-images.zip
 
 Article: https://jelliottdev.github.io/reference/articles/illustrated-cover.html
