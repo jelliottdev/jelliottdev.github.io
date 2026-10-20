@@ -5,6 +5,31 @@ Identify exact bytes without confusing integrity, signatures, and decryption.
 What a checksum establishes
 SHA-256 maps bytes to a 256-bit digest, displayed as 64 hex digits. A matching digest identifies expected bytes under the hash’s security assumptions, not their creator. Changed line endings can change a text file’s hash.
 
+Choose the exact file you mean to check
+
+The original JPEG, its thumbnail, a screenshot of the reader, and an image re-saved by an editor can all show the same page while having different bytes. For image analysis or OutGuess extraction, start with the original file linked by the page record. A screenshot is not a replacement for it.
+
+	File you have	Compare against
+
+	An original manuscript JPEG	That image’s entry in the catalogue
+
+	A downloaded ZIP	The ZIP’s own checksum; after extraction, each member has its own checksum
+
+	An extracted signed message	The signed-block entry, not the enclosing JPEG or message-body entry
+
+	A text transcription	The same archived, corrected, or reading version—not a different text layer
+
+
+Renaming a file does not change its content hash. Resaving it, changing text encoding, or converting LF line endings to CRLF can. File size is a useful preliminary check, but equal sizes alone do not establish equal contents.
+
+Verify directly in the browser
+
+Open Downloads and locate “Verify a downloaded file.”
+Select the file you actually saved. The verifier computes SHA-256 locally in the browser and compares its hash and byte count against the catalogue.
+Read the returned path, not just the word “Verified.” It identifies the catalogue entry whose bytes matched.
+
+The file is not uploaded by this verifier. A “No exact match” result means no matching entry was found in this catalogue. It does not by itself say that the file is malicious or that an alternative archive is false. Check the intended version, whether the download finished, and whether an application modified the file.
+
 Check a download
 # PowerShell
 Get-FileHash images/lp1-00.jpg -Algorithm SHA256
@@ -14,6 +39,33 @@ sha256sum images/lp1-00.jpg
 shasum -a 256 images/lp1-00.jpg
 Compare with the catalog or download entry. Hash the actual file, not its displayed preview.
 
+Run from a folder containing images/lp1-00.jpg, or replace the path with your actual download location. The preserved LP1-00 original is 168,876 bytes and its expected SHA-256 is:
+
+184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7
+
+Hexadecimal letter case does not change the digest value; PowerShell may display uppercase. Compare all 64 digits. A leading or trailing excerpt of the digest is not the full check.
+
+Why invisible text changes matter
+
+The byte sequence 41 0a is A followed by LF. 41 0d 0a is A followed by CRLF. An editor may display them as the same line, but their hashes differ. This small Python 3 example makes the distinction visible:
+
+from hashlib import sha256
+
+lf = b"A\n"
+crlf = b"A\r\n"
+print(lf.hex(" "), len(lf))
+print(crlf.hex(" "), len(crlf))
+assert lf != crlf
+assert sha256(lf).digest() != sha256(crlf).digest()
+# 41 0a 2
+# 41 0d 0a 3
+
+Keep the original byte file and any normalized text as separate artifacts. When documenting an experiment, name the version used and record its checksum before applying transformations. See reproducibility.
+
+A hash check and a signature check answer different questions
+
+A catalogue match checks whether your file agrees with the recorded bytes. Its value depends on which catalogue or source you chose to trust: replacing a file and its expected checksum together would still produce a match. A signature check instead verifies the signed content against a public key, whose provenance must also be established. Neither check proves that an interpretation or proposed cipher solution is correct.
+
 LP2-56: exact target, algorithm assumptions, and input bytes.
 The puzzle’s hash target
 LP2-56 refers to a page identified by a hash. SHA-512 has 128 hexadecimal digits; it differs from this wiki’s SHA-256 distribution checksums. A hash is not normally reversible into its input. Candidate checks need the correct bytes and serialization.
@@ -22,11 +74,13 @@ Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
 Sources, related references, and files
+https://jelliottdev.github.io/#/downloads
 https://jelliottdev.github.io/data/catalog.json
 https://jelliottdev.github.io/#/downloads/lp1-00
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 https://jelliottdev.github.io/reference/lp2-56.html
-https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
