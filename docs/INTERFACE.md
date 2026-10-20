@@ -39,7 +39,7 @@ Header suggestions and submitted results share local ranking. Exact identifiers 
 
 ## Illustrated discovery
 
-The home page starts with reader/page/quick-start links and a six-subject image index, then separates readings and interpretation, decoding and measurement, and experiments. Sidebar groups follow those tasks. Release page grids stay collapsed until requested.
+The home page starts with reader/page/quick-start links and a six-subject image index with compact links to further visual subjects, then separates readings and interpretation, decoding and measurement, and experiments. Sidebar groups follow those tasks. Release page grids stay collapsed until requested.
 
 Article metadata owns curated `aliases`, optional `alias_sections` and `alias_pages`, and `feature_pages`. The last field lists pages where the feature is illustrated, not every page in a named section. `alias_pages` narrows a particular phrase: five-dot and three-dot searches must not inherit each other’s page lists. Exact feature-page matches outrank duplicate topic entries, while the dedicated article remains first. Exact aliases outrank incidental prose and expose those manuscript pages directly; prefix matching supports typing. Accent normalization accepts Möbius, while deliberate spelling variants accept cuniform. Do not silently equate descriptive names with deciphered meanings. Header and submitted search use the same ranking; preserve the mobile composition and pointer-gesture handling.
 
