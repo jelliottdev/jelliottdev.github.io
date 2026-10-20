@@ -70,3 +70,22 @@ for name in ['corpus/rune-review/source-correction-registry-v1.json','corpus/run
     copy(name,'data/evidence/'+Path(name).name)
 write('data/manifest.json',{'images':{p['id']:p['image_sha256'] for p in pages},'source_commits':{m['source']:m['commit'] for m in pages[0]['mirrors']},'excludes':['Experimental cipher runs','Unverified theories','Private research conversations'],'notes':'Image copies verified against source SHA-256. Thumbnails are cropped derivatives. Transcriptions retain archive conventions; documented corrections are separately exposed.'})
 print(f'Built {len(pages)} pages, {len(source_records)} source references, {len(solved)} known page readings.')
+
+reading_source=source/'solutions/current-solved-reading-v1.json'
+reading_record=read('solutions/current-solved-reading-v1.json')
+write('data/evidence/known-readings.json',{'schema':'wiki-known-readings-v1','source_record':'solutions/current-solved-reading-v1.json','source_sha256':hashlib.sha256(reading_source.read_bytes()).hexdigest(),'compiled_utc':reading_record['created_utc'],'scope':reading_record['scope'],'note':'Extracted known readings and recorded methods, not experimental cipher outputs. Contextual English and literal transliteration are distinct representations. This extract is not a fresh photographic audit.','controls':[{k:c[k] for k in ['id','pages','method','reading','corrections','decoded_pages']} for c in reading_record['controls']]})
+
+# Search summaries and source filename cross-reference.
+index=json.loads((dest/'data/index.json').read_text(encoding='utf-8'))
+originals={p['id']:p for p in pages}
+for item in index['pages']:
+    p=json.loads((dest/f"data/pages/{item['id']}.json").read_text(encoding='utf-8'))
+    item.update({'combined_index':originals[item['id']]['combined_index'],'source_names':[{'name':m['source'],'filename':m['source_url'].rsplit('/',1)[1],'url':m['source_url']} for m in originals[item['id']]['mirrors']],'correction_count':len(p['corrections']),'section':p['reading']['section'] if p['reading'] else None,'method':p['reading']['method'] if p['reading'] else None,'notes_text':' '.join(n['title']+' '+n['text'] for n in p['notes']),'correction_text':' '.join(c['note'] for c in p['corrections']),'literal':p['reading']['literal'] if p['reading'] else ''})
+    item['contextual']=p['reading']['reading'] if p['reading'] else ''
+    item['transcription_search']=p['raw']+' '+' '.join(l['latin'] for l in p['lines'])
+    item['search']+=' '+item['notes_text']+' '+item['correction_text']+' '+(item['section'] or '')+' '+(item['method'] or '')
+write('data/index.json',index)
+
+method_source=source/'solutions/known-controls.json'
+method_record=read('solutions/known-controls.json')
+write('data/evidence/reading-methods.json',{'source_sha256':hashlib.sha256(method_source.read_bytes()).hexdigest(),'scope':method_record['scope'],'interruption_provenance':method_record['interruption_provenance'],'walkthrough_url':'https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md','controls':[{k:c[k] for k in ['id','pages','method','key','skip','start','shift','boundary']} for c in method_record['controls']]})
