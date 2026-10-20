@@ -41,7 +41,7 @@ function experimentBrowse(records){
     families.get(key).push(record);
   }
   const title=group=>group[0].family?.title||group[0].title;
-  return `<h2>Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p>
+  return `<h2 id="browse-experiments">Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p><p class="small muted">Published means the result is documented, not that a proposed decryption is endorsed. Each record identifies its computational and human review status. <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p>
     <div class="experiment-browser">${[...families.values()].sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
       const family=group[0].family;
       const members=[...group].sort((a,b)=>Number(b.id===family?.baseline)-Number(a.id===family?.baseline)||a.title.localeCompare(b.title));
