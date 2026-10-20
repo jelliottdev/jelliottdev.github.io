@@ -6897,9 +6897,9 @@ gpg --no-options --homedir verify-keyring --no-auto-key-retrieve --status-fd 1 -
 
 The VALIDSIG line should identify 6D854CD7933322A601C3286D181F01E57A35090F. The evidence record preserves separate hashes, tool identification and the verification status output.
 
-What remains beyond this check
+Continue to RSA decryption
 
-Extracting the message does not decrypt the encrypted block. Verifying its signature establishes that the signed text matches the recorded key, not the identity of a person or the authenticity of every pixel in the JPEG. The archived walkthrough describes RSA decryption leading to the next onion site; that decryption has not been independently reproduced for this entry.
+Extracting the message does not decrypt the encrypted block. Verifying its signature establishes that the signed text matches the recorded key, not the identity of a person or the authenticity of every pixel in the JPEG. The RSA reproduction guide now recovers the historical next address from all three encrypted blocks, using published factors. It explains the envelope, arithmetic and legacy padding, with a script and recorded outputs.
 
 Why it is separate from page 00
 
@@ -6935,6 +6935,7 @@ https://jelliottdev.github.io/downloads/original-images.zip
 https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/cover-rsa.html
 https://jelliottdev.github.io/#/reader/lp1-00
 https://jelliottdev.github.io/reference/articles/cover-chain.html
 https://jelliottdev.github.io/reference/articles/title-pages.html
@@ -7057,6 +7058,70 @@ https://jelliottdev.github.io/reference/articles/blake-nebuchadnezzar.html
 https://jelliottdev.github.io/reference/articles/william-blake.html
 
 Article: https://jelliottdev.github.io/reference/articles/blake-ancient-of-days.html
+
+
+---
+
+Decrypting the illustrated cover’s RSA message
+
+Reproduce the three historical RSA blocks and understand the Crypt::RSA 1.99 padding difference.
+
+The 1033.jpg cover hides a signed message containing an RSA public key and encrypted data. This guide reproduces the historical decryption using published factors. It recovers a navigation address from the 2014 puzzle; it does not solve an unknown manuscript page.
+
+Run the reproduction
+
+Extract the reference-data ZIP. From the extracted folder, run:
+
+python scripts/reproduce_cover_rsa.py
+
+The script needs only Python 3’s standard library. It reads the included verified message body and makes no network requests. Its output lists three blocks, their recovered bytes and successful RSA round-trip checks. The complete plaintext is:
+
+\ncu343l33nqaekrnw.onion\n\n
+
+Here \n denotes a newline byte. The address is historical output, not a service contacted by this reproduction. Download the recorded result or inspect the script.
+
+What the key numbers mean
+
+The signed body gives e = 65537 and a modulus n. The modulus is the integer that defines the range of RSA arithmetic; this one is 432 bits long. The public exponent e specifies the public modular-power operation. To undo it, this reproduction uses two published factors, p and q, whose product equals n.
+
+Connor Tumbleson’s reconstruction supplies those factors. The script checks their product against the modulus read from the message, calculates phi = (p - 1)(q - 1), and obtains the private exponent as the modular inverse d = e⁻¹ mod phi. Supplying the factors avoids repeating factor discovery. The fast runtime of this script therefore says nothing about how long factoring took.
+
+Unwrap the message in the right order
+
+Base64: decode the printable encrypted block into bytes.
+Checksum: compare the attached MD5 value with the compressed bytes. This is the historical format’s integrity check, not a substitute for the PGP signature.
+Compression: decompress the zlib stream.
+Content frame: read the length-prefixed field named Cyphertext, preserving that spelling. It holds 162 bytes: three 54-byte RSA blocks.
+RSA: for each ciphertext integer c, calculate m = cᵈ mod n. Re-encrypt m and require the original c.
+Padding: decode the legacy OAEP structure and concatenate the three recovered message fragments.
+
+Why an ordinary OAEP decoder can fail
+
+OAEP adds structured padding before RSA encryption. Recovering the modular integer is only part of decryption; the padding must also be decoded using the same rules as the sender.
+
+The message names Crypt::RSA::ES::OAEP, version 1.99. In that release’s DataFormat.pm, the SHA-1 mask generator uses counters 0, 20, 40 and so on. Standard MGF1 advances by one instead. This small implementation difference changes the mask bytes and causes a standard decoder to reject this message’s padding. The reproduction follows the named legacy implementation and checks the empty-label hash and padding delimiter in every block.
+
+On 20 October 2026, a separate PyCryptodome 3.23.0 OAEP decoder with the legacy mask rule matched all three fragments. Its default mask rejected all three. This is a compatibility finding about this historical message, not a reason to use these old rules for new encryption.
+
+Sources and scope
+
+Input: the extracted message body, with its hash checked before decoding. Signature and extraction evidence: cover provenance. Implementation reference: Crypt::RSA 1.99 source archive, especially DataFormat.pm and ES/OAEP.pm. The result record includes the archive checksum and block-level outputs.
+
+The complete path is now OutGuess extraction, signature verification, then this RSA replay. These operations establish different things: recovered carrier bytes, a valid signed message, and a matching historical plaintext.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/illustrated-cover.html
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/data/evidence/cover-rsa.json
+https://jelliottdev.github.io/scripts/reproduce_cover_rsa.py
+https://connortumbleson.com/2021/02/15/the-cicada-3301-mystery-puzzle-3-part1/
+https://jelliottdev.github.io/exports/steganography/1033.body.txt
+https://jelliottdev.github.io/data/evidence/illustrated-cover.json
+https://cpan.metacpan.org/authors/id/V/VI/VIPUL/Crypt-RSA-1.99.tar.gz
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+
+Article: https://jelliottdev.github.io/reference/articles/cover-rsa.html
 
 
 ---
