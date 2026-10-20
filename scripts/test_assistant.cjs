@@ -60,3 +60,17 @@ assert(tableAccount.includes('href="#/wiki/atbash"'));
 assert(tableAccount.endsWith('<p>After.</p>'));
 assert(!experimentContext.renderExperimentMarkdown('```\n| A | B |\n| --- | --- |\n```').includes('<table>'));
 console.log('PASS: experiment tables preserve inline syntax, escape HTML, and leave fenced examples literal.');
+
+for(const render of [Markdown.render,experimentContext.renderExperimentMarkdown]){
+ for(const input of ['| A | B |\n| --- | --- |\n| 1 | 2 | EXTRA |',
+                     '| A | B |\n| --- | --- |\n| MISSING |',
+                     '| A | B | C |\n| --- | --- |\n| 1 | 2 | 3 |']){
+  const result=render(input);
+  assert(!result.includes('<table>'));
+  assert(result.includes(input),'Malformed tables must retain every source character');
+  assert(result.includes('column counts differ'));
+ }
+ const escaped=render('| A | B |\n| --- | --- |\n| 1 | 2 | <script> |');
+ assert(escaped.includes('&lt;script&gt;'));assert(!escaped.includes('<script>'));
+}
+console.log('PASS: malformed comparison and experiment tables retain all cells as escaped source text.');

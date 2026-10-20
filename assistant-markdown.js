@@ -27,9 +27,11 @@
       if(code!==null){code.push(line);continue;}
       if(!line.trim()){close();continue;}
       if(line.includes('|')&&i+1<lines.length&&/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])){
-        close();const headers=cells(line);i++;
+        close();const headers=cells(line),raw=[line,lines[i+1]];
+        let valid=cells(lines[i+1]).length===headers.length;i++;
         let rows='';while(i+1<lines.length&&lines[i+1].includes('|')&&lines[i+1].trim()){
-          const row=cells(lines[++i]);rows+='<tr>'+headers.map((_,n)=>'<td>'+inline(row[n]||'')+'</td>').join('')+'</tr>';}
+          const row=cells(lines[++i]);raw.push(lines[i]);valid=valid&&row.length===headers.length;rows+='<tr>'+headers.map((_,n)=>'<td>'+inline(row[n]||'')+'</td>').join('')+'</tr>';}
+        if(!valid){out.push('<p class="small muted">Table shown as text because its column counts differ.</p><pre tabindex="0"><code>'+esc(raw.join('\n'))+'</code></pre>');continue;}
         out.push('<div class="answer-table" role="region" aria-label="Answer comparison table" tabindex="0"><table><thead><tr>'+headers.map(h=>'<th scope="col">'+inline(h)+'</th>').join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>');continue;
       }
       const heading=line.match(/^(#{1,6})\s+(.+)$/);

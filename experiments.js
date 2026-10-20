@@ -53,12 +53,15 @@ function renderExperimentMarkdown(markdown,files=[]){
     if(inCode){code.push(line);continue;}
     if(!line.trim()){flush();closeList();continue;}
     if(line.includes('|')&&i+1<lines.length&&/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])){
-      flush();closeList();const headers=cells(line);i++;
+      flush();closeList();const headers=cells(line),raw=[line,lines[i+1]];
+      let valid=cells(lines[i+1]).length===headers.length;i++;
       const rows=[];
       while(i+1<lines.length&&lines[i+1].trim()&&lines[i+1].includes('|')){
-        const values=cells(lines[++i]);
+        const values=cells(lines[++i]);raw.push(lines[i]);
+        valid=valid&&values.length===headers.length;
         rows.push('<tr>'+headers.map((_,column)=>'<td>'+inline(values[column]||'')+'</td>').join('')+'</tr>');
       }
+      if(!valid){html.push('<p class="small muted">Table shown as text because its column counts differ.</p><pre class="reading-text" tabindex="0">'+esc(raw.join('\n'))+'</pre>');continue;}
       html.push('<div class="table-wrap" role="region" aria-label="Experiment data table" tabindex="0"><table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
       continue;
     }
