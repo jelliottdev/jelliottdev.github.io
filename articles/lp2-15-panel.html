@@ -1,0 +1,22 @@
+<p><a href="#/page/lp2-15">LP2-15</a> contains a red runic heading, a 4 × 4 decimal panel, and an open-loop drawing below it. Its combined archive index is 32. Use the release ID when citing it: LP1-15 is a different image with a known keyed reading.</p>
+<h2 id="panel">The exact number panel</h2><div class="table-wrap"><table><caption>Values in image order; row and column positions are one-based here.</caption><thead><tr><th>Row</th><th>Column 1</th><th>Column 2</th><th>Column 3</th><th>Column 4</th></tr></thead><tbody>
+<tr><th>1</th><td>3258</td><td>3222</td><td>3152</td><td>3038</td></tr>
+<tr><th>2</th><td>3278</td><td><strong>3299 (red)</strong></td><td>3298</td><td>2838</td></tr>
+<tr><th>3</th><td>3288</td><td>3294</td><td>3296</td><td>2472</td></tr>
+<tr><th>4</th><td>4516</td><td>1206</td><td>708</td><td>1820</td></tr>
+</tbody></table></div><p>3299 is the only red number. 708 is the only three-digit entry. Preserve 4516 as printed; its being larger than 3301 is not a reason to change it. The <a href="data/pages/lp2-15.json">structured page record</a> stores the matrix in its <code>numbers</code> field.</p>
+<h2 id="totals">Straightforward arithmetic</h2><p>The row sums are 12670, 12713, 12350, and 8250. The column sums are 14340, 11021, 10454, and 10168. The two main diagonals sum to 11673 and 14146. All sixteen entries sum to 45983.</p><p>These unequal totals mean that the printed panel is not a <a href="#/wiki/magic-squares">magic square</a> under the ordinary equal-line-sums definition. This says nothing about a proposed transformation of the entries; a transformed panel would be a different object and require its own stated rule.</p>
+<h2 id="heading">The heading is not a known plaintext</h2><p>The recorded heading has nine runes in groups of four and five: <code>F U L M / A EA Y OE A</code>. EA and OE each label a single rune. These are <a href="#/wiki/transliteration">transliteration labels</a>, not an English translation. The source snapshot does not establish “CRYING” or another plaintext for this heading.</p>
+<h2 id="drawing">The drawing below the panel</h2><p>The page annotation describes two open lobes with a crossing, resembling an infinity sign; visible gaps remain. Shape resemblance does not establish that the author intended a particular Unicode character, its code point, or a numerical transformation of that code point. Keep the observed drawing separate from those proposed operations.</p>
+<h2 id="replicate">How to reproduce the totals</h2><pre><code>import json
+from pathlib import Path
+p = json.loads(Path("data/pages/lp2-15.json").read_text(encoding="utf-8"))
+a = p["numbers"]
+assert len(a) == 4 and all(len(row) == 4 for row in a)
+print("rows", [sum(row) for row in a])
+print("columns", [sum(row[c] for row in a) for c in range(4)])
+print("diagonals", sum(a[i][i] for i in range(4)),
+      sum(a[i][3-i] for i in range(4)))
+print("total", sum(map(sum, a)))</code></pre><p>This is a check of the published transcription, not a cipher experiment or a new image audit. Compare the matrix to the <a href="#/reader/lp2-15">original in the reader</a> before using it as an input.</p>
+<h2 id="related">Following a numerical idea</h2><p>The <a href="#/wiki/prime-indices">prime-index guide</a> checks the arithmetic involving 3299, 30557, 9467, and 98597. The <a href="#/wiki/emirps">emirp guide</a> distinguishes decimal reversal from mirroring and unspecified “inversion.” A valid calculation does not by itself connect LP2-15 with LP2-00–02. Record that proposed connection as a hypothesis with explicit operations and scope.</p>
+<h2 id="sources">Sources</h2><p><a href="#/page/lp2-15">Original image, annotations, and archive provenance</a> · <a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#32jpg---15jpg">Pinned number and rune transcription</a>. Visual observations follow the existing page annotations; the totals above are derived arithmetic.</p>

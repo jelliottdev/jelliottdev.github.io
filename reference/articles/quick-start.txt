@@ -3,25 +3,47 @@ Start solving: a practical introduction
 Find the right pages, reproduce known results, and turn an idea into a test someone else can repeat.
 
 Liber Primus combines visible artwork, rune text, numbers, and hidden file content. Learn how these layers differ before treating them as one cipher. A title image can have no runic paragraph and still carry a signed OutGuess message.
+
 1. Know the collection
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
+
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow Atbash. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
+
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
 Run these from a downloaded or cloned repository with Python 3. They use the standard library and make no AI requests. The first prints a literal reading; the second checks all 17 known runic-page outputs. Download the full repository from GitHub’s Code menu: the script needs its text and parameter files.
+
 3. Learn the other layers
 Rune indices and prime values: cipher arithmetic versus prime sums.
 Vigenère: keys, direction, and continuity across pages.
 The cover payload chain: OutGuess, hexadecimal, XOR, signatures, and transposition.
 Spelling and prime sums: a reproducible numerical property versus an explanation of a spelling’s purpose.
+
 4. Make an idea testable
 Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, carrying through punctuation, with no skipped runes” specifies one test. It does not establish that this is the correct method.
 Check Have we tried it? for the technique and scope. The registry is awaiting reviewed records; an empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
+
 Ready to contribute
 You should be able to identify an exact image, distinguish raw from corrected transcription, reproduce a known reading, and explain what would count against your hypothesis. You do not need to understand every cipher before inspecting a well-defined detail.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/quick-start.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/pages/LP1
+https://jelliottdev.github.io/#/pages/LP2
+https://jelliottdev.github.io/reference/lp2-31.html
+https://jelliottdev.github.io/#/numbering
+https://jelliottdev.github.io/#/reader/lp1-01
+https://jelliottdev.github.io/reference/articles/atbash.html
+https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/#/experiments
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/quick-start.html

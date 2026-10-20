@@ -3,18 +3,31 @@ Prime values and prime indices
 Distinguish a prime from its ordinal, and reproduce the 3299 and 9467 calculations.
 
 A prime’s value and its position in the ordered list of primes are different numbers. Specify which operation you mean before combining a prime with a page number or rune value.
+
 Value versus ordinal
 Write pn for the nth prime, using one-based indexing: p1 = 2, p2 = 3, p3 = 5. Looking up p3299 gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
 The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value pi+1. Confusing these conventions introduces an off-by-one error.
+
 The 3299 and 9467 examples
 The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 = 30,557 and p9467 = 98,597 are exact. Their product is:
 98597 × 30557 = 3012828529
-9857 × 30557 =  301200349
+ 9857 × 30557 =  301200349
 The second expression omits a 9 and gives a different answer. Preserve the operands as well as the final sequence when describing a hypothesis. These calculations establish arithmetic, not a relationship between manuscript pages.
+
+LP2-15: the complete number panel, heading, and drawing.
 How to replicate
 python scripts/check_number_examples.py
 The script enumerates primes by exact trial division and checks the examples. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.
+
 Sources
 Original page and provenance · Arithmetic source code. Prime notation is a mathematical definition; the page’s printed number does not itself specify this lookup operation.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/prime-indices.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/reference/lp2-15.html
+https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+https://jelliottdev.github.io/reference/articles/emirps.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/scripts/check_number_examples.py
+
+Article: https://jelliottdev.github.io/reference/articles/prime-indices.html

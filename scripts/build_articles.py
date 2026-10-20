@@ -3,6 +3,8 @@ from pathlib import Path
 from html.parser import HTMLParser
 import html
 import json
+import re
+from urllib.parse import urljoin
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -10,11 +12,26 @@ class Text(HTMLParser):
     def __init__(self):
         super().__init__()
         self.parts = []
+        self.links = []
     def handle_data(self, data):
         self.parts.append(data)
     def handle_starttag(self, tag, attrs):
         if tag in {"p", "h2", "h3", "li", "pre", "tr"}:
             self.parts.append("\n")
+        if tag in {"td", "th"}:
+            self.parts.append("\t")
+        values = dict(attrs)
+        target = values.get("href") if tag == "a" else values.get("src") if tag == "img" else None
+        if target and target not in self.links:
+            self.links.append(target)
+
+def reference_url(target):
+    """Prefer standalone guide/page references over JavaScript routes."""
+    if target.startswith("#/wiki/"):
+        return "https://jelliottdev.github.io/reference/articles/" + target.split("/")[2] + ".html"
+    if target.startswith("#/page/"):
+        return "https://jelliottdev.github.io/reference/" + target.split("/")[2].split("?")[0] + ".html"
+    return urljoin("https://jelliottdev.github.io/", target)
 
 def build():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
@@ -23,9 +40,19 @@ def build():
         parser = Text()
         parser.feed(body)
         a["html"] = body
-        a["text"] = "\n".join(line.strip() for line in "".join(parser.parts).splitlines() if line.strip())
+        # Preserve Python indentation and tabular boundaries in downloadable text.
+        a["text"] = "".join(parser.parts).strip()
+        a["references"] = [reference_url(link) for link in parser.links]
         title = html.escape(a["title"])
         standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
+        standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
+        standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
+        related = [b for b in articles if b["id"] != a["id"] and
+                   f'href="#/wiki/{a["id"]}"' in (ROOT / f'articles/{b["id"]}.html').read_text(encoding="utf-8")]
+        if a.get("pages"):
+            standalone += '<h2>Manuscript pages discussed</h2><p>' + " · ".join(f'<a href="../{pid}.html">{pid.upper()}</a>' for pid in a["pages"]) + '</p>'
+        if related:
+            standalone += '<h2>Guides linking here</h2><ul>' + ''.join(f'<li><a href="{b["id"]}.html">{html.escape(b["title"])}</a></li>' for b in related) + '</ul>'
         out = ROOT / "reference/articles"
         out.mkdir(parents=True, exist_ok=True)
         (out / f'{a["id"]}.html').write_text(
@@ -34,7 +61,8 @@ def build():
             '<body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · '
             f'<a href="../../index.html#/wiki/{a["id"]}">Open in wiki</a> · <a href="{a["id"]}.txt">Plain text</a></nav>'
             f'<h1>{title}</h1><p>{html.escape(a["summary"])}</p>{standalone}</main></body></html>', encoding="utf-8", newline="\n")
-        (out / f'{a["id"]}.txt').write_text(a["title"] + "\n\n" + a["summary"] + "\n\n" + a["text"] + "\n\nSource links and downloads: https://jelliottdev.github.io/reference/articles/" + a["id"] + ".html\n", encoding="utf-8", newline="\n")
+        links = "\n".join(a["references"])
+        (out / f'{a["id"]}.txt').write_text(a["title"] + "\n\n" + a["summary"] + "\n\n" + a["text"] + "\n\nSources, related references, and files\n" + links + "\n\nArticle: https://jelliottdev.github.io/reference/articles/" + a["id"] + ".html\n", encoding="utf-8", newline="\n")
     (ROOT / "data/articles.json").write_text(json.dumps(articles, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Built {len(articles)} searchable articles and standalone HTML/text copies.")
 

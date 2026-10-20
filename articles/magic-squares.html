@@ -8,7 +8,7 @@
 <h2 id="payloads">The later LP1 payloads</h2><p><a href="#/page/lp1-10?section=embedded">LP1-10</a> through <a href="#/page/lp1-13?section=embedded">LP1-13</a> contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:</p><pre><code>10 12 10
 12 14 12
 10 12 10</code></pre><p>Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.</p><p>The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.</p>
-<h2 id="replicate">How to check a square</h2><pre><code>n = len(square)
+<p>The <a href="#/wiki/lp2-15-panel">LP2-15 decimal panel</a> is another distinct arrangement; its printed row and column sums are unequal.</p><h2 id="replicate">How to check a square</h2><pre><code>n = len(square)
 assert n and all(len(row) == n for row in square)
 sums = [sum(row) for row in square]
 sums += [sum(row[c] for row in square) for c in range(n)]

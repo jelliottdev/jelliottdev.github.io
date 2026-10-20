@@ -5,8 +5,10 @@ Which symbols consume the next key or prime value?
 Keep separate counters
 The rune ordinal identifies a rune in the input section. The keystream position identifies the next shift. Both normally advance for each rune. At a recorded interruption, the rune is copied and its ordinal advances, but the keystream does not.
 Spaces, line breaks, punctuation and decimal digits do not consume rune positions in these controls. Position 56 means the 57th rune, not the 56th file character.
+
 Recorded examples
 The welcome list is [48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514] across its two pages. LP2-56 copies ordinal 56. The parameter file records all lists and whether sequences carry or reset at boundaries.
+
 Inspect alignment
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py lp2-56 --trace
@@ -16,4 +18,10 @@ A new skip list is an additional hypothesis. If chosen after viewing the output,
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/interruptions.html
+Sources, related references, and files
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/interruptions.html

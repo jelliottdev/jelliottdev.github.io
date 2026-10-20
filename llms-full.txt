@@ -1974,6 +1974,7 @@ $
 ## Related guides
 
 Prime values and prime indices: https://jelliottdev.github.io/reference/articles/prime-indices.html
+The LP2-15 number panel and heading: https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
 
 ## Sources
 
@@ -4711,28 +4712,50 @@ Start solving: a practical introduction
 Find the right pages, reproduce known results, and turn an idea into a test someone else can repeat.
 
 Liber Primus combines visible artwork, rune text, numbers, and hidden file content. Learn how these layers differ before treating them as one cipher. A title image can have no runic paragraph and still carry a signed OutGuess message.
+
 1. Know the collection
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
+
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow Atbash. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
+
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
 Run these from a downloaded or cloned repository with Python 3. They use the standard library and make no AI requests. The first prints a literal reading; the second checks all 17 known runic-page outputs. Download the full repository from GitHub’s Code menu: the script needs its text and parameter files.
+
 3. Learn the other layers
 Rune indices and prime values: cipher arithmetic versus prime sums.
 Vigenère: keys, direction, and continuity across pages.
 The cover payload chain: OutGuess, hexadecimal, XOR, signatures, and transposition.
 Spelling and prime sums: a reproducible numerical property versus an explanation of a spelling’s purpose.
+
 4. Make an idea testable
 Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, carrying through punctuation, with no skipped runes” specifies one test. It does not establish that this is the correct method.
 Check Have we tried it? for the technique and scope. The registry is awaiting reviewed records; an empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
+
 Ready to contribute
 You should be able to identify an exact image, distinguish raw from corrected transcription, reproduce a known reading, and explain what would count against your hypothesis. You do not need to understand every cipher before inspecting a well-defined detail.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/quick-start.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/pages/LP1
+https://jelliottdev.github.io/#/pages/LP2
+https://jelliottdev.github.io/reference/lp2-31.html
+https://jelliottdev.github.io/#/numbering
+https://jelliottdev.github.io/#/reader/lp1-01
+https://jelliottdev.github.io/reference/articles/atbash.html
+https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/#/experiments
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/quick-start.html
 
 
 ---
@@ -4744,13 +4767,21 @@ Keep manuscript symbols separate from the decisions made while interpreting them
 Different text layers
 A transcription records runes. A transliteration replaces each rune with a Latin label. A cipher transformation may produce plaintext rune indices, whose labels form a literal decoded reading. Contextual English can normalize spelling or interpret those labels. It is an editorial layer.
 Transliterating encrypted runes does not decrypt them. Conversely, direct-reading sections need no nontrivial substitution.
+
 Compare the right outputs
 Begin with the image and archived rune text. Record corrections before applying a cipher. Compare a literal output with the page-level control, not a normalized paragraph spanning several pages. Preserve spelling when testing prime sums.
 On LP1-10, a documented I/E order correction matters. The script swaps runes at zero-based ordinals 116 and 117; it does not rewrite every similar sequence. See the transcription guide.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/transliteration.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/direct-reading.html
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/reference/lp1-10.html
+https://jelliottdev.github.io/#/conventions
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/transliteration.html
 
 
 ---
@@ -4761,8 +4792,10 @@ Make the question, inputs, transformations, and limits checkable.
 
 Define the claim
 Name page IDs, regions, input hashes, transcription versions, transformation order, key space, offsets, and boundary rules. State which parameters were fixed in advance and which were selected after viewing outputs.
+
 Use known controls
 A control has an expected result. Reproducing the warning checks an Atbash implementation; reproducing LP2-56 checks a particular prime schedule. One control does not validate every method or transcription.
+
 What to record
 The question and bounded tested scope.
 Input paths, hashes, and explicit corrections.
@@ -4770,16 +4803,28 @@ A readable script, requirements, and copyable command.
 Parameter bounds, random seeds, and candidate counts.
 Expected and actual outputs, with the matching criterion.
 What was not tested and what would change the conclusion.
+
 Selection changes the evidence
 Trying many spellings, boundaries, reversals and offsets creates opportunities for chance patterns. A probability claim must account for the selection process. A null model is the comparison process expected without the proposed mechanism; preserve relevant properties such as symbol counts or region lengths. There is no universal coincidence probability for an unspecified search.
 Report “no match under these parameters,” not “the technique cannot work.” Label patterns selected after inspection as candidates for independent testing. See spelling and sums.
+
 Worked distinctions: emirps and prime-index calculations.
 The research registry
 Have we tried it? compares techniques and scope in published records. Background pages do not count as experiments. The registry remains empty while records are prepared and retested. The contribution format describes publication requirements.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/reproducibility.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/atbash.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/reference/articles/emirps.html
+https://jelliottdev.github.io/reference/articles/prime-indices.html
+https://jelliottdev.github.io/#/experiments
+https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/reproducibility.html
 
 
 ---
@@ -4791,16 +4836,26 @@ The same rune has an alphabet position and a separate Gematria Primus prime valu
 Two mappings, two jobs
 The alphabet has 29 symbols. Its zero-based indices run from 0 to 28. Its prime values are the first 29 primes, from 2 to 109. F has index 0 and prime value 2; U has index 1 and prime value 3; TH has index 2 and prime value 5.
 Known substitution ciphers use indices modulo 29. A Gematria Primus sum adds the prime values. Replacing one operation with the other changes the hypothesis.
+
 See prime values and prime indices for the indexing convention and larger-number examples.
 Count symbols, not Latin characters
 TH, EO, NG and other multi-letter labels each denote a single rune. U/V and C/K renderings also require the stated convention. Work from runes when computing sums and offsets.
+
 Reproduce a small example
 For F–U–TH, the indices are [0, 1, 2] and the prime sum is 2 + 3 + 5 = 10. Atbash transforms the indices to [28, 27, 26]; it does not reverse the digits of the sum.
 Next: modular arithmetic, literal readings, and worked spelling sums.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/rune-values.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/reference/articles/prime-indices.html
+https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/#/spelling
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/rune-values.html
 
 
 ---
@@ -4811,18 +4866,26 @@ How shifts wrap around the rune alphabet, including negative results.
 
 What “mod 29” means
 Two integers are equal modulo 29 when their difference is a multiple of 29. For rune indices, choose the representative from 0 through 28. Moving forward from 28 by one returns to 0; moving backward from 0 by one returns to 28.
+
 Worked steps
 If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. Adding 29 to −7 gives the same index. A shift by 31 is equivalent to a shift by 2.
 # Python:
 assert (3 - 10) % 29 == 22
 # JavaScript needs normalization of its signed remainder:
 # ((3 - 10) % 29 + 29) % 29
+
 What this does not decide
 Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See Vigenère, prime-minus-one, and keystream positions.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 
 
 ---
@@ -4834,17 +4897,26 @@ Reverse the rune alphabet, with an extra shift where the control specifies one.
 The mapping
 Ordinary Atbash gives p = 28 − c. Index 0 maps to 28, 1 to 27, and 14 to itself. Applying it twice returns the original index. It reverses the alphabet mapping, not rune order within a line.
 The warning uses ordinary Atbash. The first koan, LP1-06–09, uses p = (28 − c + 3) mod 29. For c = 0 this produces index 2, because 31 mod 29 = 2.
+
 How to replicate
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py first-koan
 python scripts/reproduce_reading.py warning --trace
 The trace exposes each rune’s operation and result. Punctuation remains in place. Compare with the exact controls and known readings.
+
 What passing a control means
 A matching output confirms that your convention reproduces that passage. It does not establish that an unsolved page uses Atbash. Keep ordinary and shifted variants distinct in a test record.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/atbash.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/reference/lp1-06.html
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/#/readings
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/atbash.html
 
 
 ---
@@ -4856,18 +4928,27 @@ A repeating key supplies a shift at each consumed rune position.
 Specify direction and key
 This wiki uses p = (c − k[j mod L]) mod 29, where L is key length and j counts consumed key positions. The welcome uses [23, 10, 1, 10, 9, 10, 16, 26], labeled DIVINITY. The second koan has its own key and interruption list in the parameters.
 A walkthrough may express decryption as addition of complementary values. Subtracting 23 modulo 29 equals adding 6. The same keyword with the wrong direction can produce the wrong result.
+
 How to replicate
 python scripts/reproduce_reading.py welcome
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py second-koan
 Use the complete parameters. The welcome spans LP1-03–04 without resetting the key; the second koan spans LP1-14–15. Punctuation does not advance the key.
+
 Interruptions affect alignment
 Specified runes are copied without consuming a key value. These interruptions were aligned to known readings. They are not a rule to skip every F or permission to add skips until an output looks English.
 If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/vigenere.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-03.html
+https://jelliottdev.github.io/reference/lp1-14.html
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/vigenere.html
 
 
 ---
@@ -4879,8 +4960,10 @@ Which symbols consume the next key or prime value?
 Keep separate counters
 The rune ordinal identifies a rune in the input section. The keystream position identifies the next shift. Both normally advance for each rune. At a recorded interruption, the rune is copied and its ordinal advances, but the keystream does not.
 Spaces, line breaks, punctuation and decimal digits do not consume rune positions in these controls. Position 56 means the 57th rune, not the 56th file character.
+
 Recorded examples
 The welcome list is [48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514] across its two pages. LP2-56 copies ordinal 56. The parameter file records all lists and whether sequences carry or reset at boundaries.
+
 Inspect alignment
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py lp2-56 --trace
@@ -4890,7 +4973,13 @@ A new skip list is an additional hypothesis. If chosen after viewing the output,
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/interruptions.html
+Sources, related references, and files
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/interruptions.html
 
 
 ---
@@ -4902,17 +4991,25 @@ Reproduce LP2-56 with a prime sequence and one recorded interruption.
 The transformation
 Take prime[j] from 2, 3, 5, 7, 11, … and compute p = (c − (prime[j] − 1)) mod 29. The first shifts are 1, 2, 4, 6, 10, …. This is not the prime value assigned to the ciphertext rune.
 At j = 0, index 0 becomes 28; at j = 1, index 0 would become 27. These are arithmetic examples, not assertions about the page’s first two runes.
+
 The historical name φ(prime), or Euler’s totient of a prime, gives exactly these shifts.
 How to replicate LP2-56
 python scripts/reproduce_reading.py lp2-56
 python scripts/reproduce_reading.py lp2-56 --trace
 Start at prime 2. Copy zero-based rune ordinal 56 without advancing the prime sequence. Preserve punctuation. Compare with the literal reading.
+
 The hash reference
 The decoded text refers to a page identified by a long hash. Reproducing that text is not the same as locating the referenced page. See the exact hash target and its unresolved input conventions.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/totient.html
+https://jelliottdev.github.io/reference/lp2-56.html
+https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 
 
 ---
@@ -4922,23 +5019,36 @@ Euler’s totient and prime-minus-one
 Why φ(p) equals p − 1 for primes, and what that means for LP2-56.
 
 Euler’s totient function, written φ(n), counts the integers from 1 through n that are relatively prime to n. Two integers are relatively prime when their greatest common divisor is 1. “Relatively prime” does not mean that both integers are themselves prime.
+
 Small examples
 For n = 8, the qualifying integers are 1, 3, 5, and 7, so φ(8) = 4. For a prime p, every integer from 1 through p − 1 is relatively prime to p. Therefore φ(p) = p − 1. In particular, φ(2), φ(3), φ(5), φ(7) are 1, 2, 4, 6.
+
 Why the LP2-56 method has two names
 The archived walkthrough describes LP2-56 using “phi(prime).” The prime-minus-one guide uses the equivalent expression p − 1. These are the same shifts when the input sequence consists of primes. Substituting φ(n) for consecutive integers n would produce a different sequence.
+
 How to reproduce the identity
 from math import gcd
 def phi(n):
-return sum(gcd(k, n) == 1 for k in range(1, n + 1))
+    return sum(gcd(k, n) == 1 for k in range(1, n + 1))
 assert phi(8) == 4
 assert [phi(p) for p in [2, 3, 5, 7]] == [1, 2, 4, 6]
 This deliberately simple implementation is useful for small examples. Reproduce the actual page with python scripts/reproduce_reading.py lp2-56, including its recorded interruption and modulo-29 arithmetic.
+
 What the identity does not determine
 It does not specify the starting prime, direction, reset behavior, or copied rune positions. Those parameters remain part of the keystream convention.
+
 Sources
 Pinned LP2-56 walkthrough · Exact reproduction parameters.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/totient.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp2-56.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#73jpg---56jpg
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+
+Article: https://jelliottdev.github.io/reference/articles/totient.html
 
 
 ---
@@ -4955,12 +5065,19 @@ python scripts/reproduce_reading.py loss-of-divinity
 python scripts/reproduce_reading.py instruction
 python scripts/reproduce_reading.py lp2-57
 These cover LP1-05, LP1-10–13, LP1-16 and LP2-57. The loss-of-divinity control includes the documented correction.
+
 Readable does not mean exhausted
 Several direct-reading pages also have OutGuess payloads. Visual details and numerical patterns need their own evidence.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/direct-reading.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/lp1-10.html
+https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/direct-reading.html
 
 
 ---
@@ -4971,18 +5088,25 @@ Reorder symbols without substituting their values.
 
 Preserve symbols, change positions
 A permutation uses every position once, preserving length and symbol counts. Atbash and Vigenère change values; a pure transposition does not.
+
 The historical column operation
 Set rows to the five strings in the cover-chain grid:
 order = [2, 8, 9, 1, 12, 13, 11, 4, 5, 7, 3, 0, 6, 10]
 assert sorted(order) == list(range(14))
 assert len(rows) == 5 and all(len(row) == 14 for row in rows)
 result = "".join(rows[r][c] for r in range(5) for c in order)
+
 Define the search space
 Record grid dimensions, fill and read directions, padding, and permutation. Fourteen columns admit 14! = 87,178,291,200 orders. A fragment selected after many choices needs stronger support than a prediction from an independently specified order. See controls and scope.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/transposition.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/transposition.html
 
 
 ---
@@ -4993,20 +5117,33 @@ Recover hidden bytes from the original JPEG before interpreting them.
 
 Steganography, not a rune cipher
 OutGuess retrieves data hidden in an image carrier. Resizing, resaving, screenshotting or recompressing a JPEG can change its bytes. Use the original JPEG, not a thumbnail.
+
 How to replicate
 Install or build OutGuess for your operating system. No executable is bundled here. From the repository root, use an executable on PATH or supply its path:
 python scripts/extract_payload.py lp1-00 --outguess outguess --output cover.bin
 The wrapper checks the image hash, retrieves the default-key payload, and checks its expected hash before writing a new file. It refuses to overwrite a destination. The underlying operation is:
 outguess -r -k "Default key" images/lp1-00.jpg cover.bin
 The cover’s full extraction is 2,899 bytes. Checksums and the exact verified build are in the manifest. Compare output bytes, not merely a success message.
+
 Keep the layers separate
 Preserve the full extraction. The exported signed block supports PGP verification; the body is a separate derivative. On the cover, that body is hexadecimal. Follow the three-image chain to interpret it.
+
 Coverage and tool source
 Eight documented extractions were reproduced on 19 October 2026. This does not rule out other keys or hiding methods. The upstream repository is archived, not actively maintained. Pinned source · Payload inventory.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/outguess.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/downloads
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/hexadecimal.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://github.com/resurrecting-open-source-projects/outguess/tree/24810e14327c2bbeedeaadd3e24491f2a4425c02
+https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/outguess.html
 
 
 ---
@@ -5016,19 +5153,22 @@ Embedded OutGuess payloads
 Eight LP1 images with reproduced extractions and verified signatures.
 
 The visible manuscript and JPEG carrier have distinct layers. The cover and chapter-title images participate in a hidden-message chain.
+
 Verified inventory
-ImageBytesFilesProvenance
-LP1-002,899Extraction · Signed block · BodySource
-LP1-012,899Extraction · Signed block · BodySource
-LP1-022,899Extraction · Signed block · BodySource
-LP1-0331,809Extraction · Signed block · BodySource
-LP1-101,234Extraction · Signed block · BodySource
-LP1-111,234Extraction · Signed block · BodySource
-LP1-121,234Extraction · Signed block · BodySource
-LP1-131,234Extraction · Signed block · BodySource
+	Image	Bytes	Files	Provenance
+	LP1-00	2,899	Extraction · Signed block · Body	Source
+	LP1-01	2,899	Extraction · Signed block · Body	Source
+	LP1-02	2,899	Extraction · Signed block · Body	Source
+	LP1-03	31,809	Extraction · Signed block · Body	Source
+	LP1-10	1,234	Extraction · Signed block · Body	Source
+	LP1-11	1,234	Extraction · Signed block · Body	Source
+	LP1-12	1,234	Extraction · Signed block · Body	Source
+	LP1-13	1,234	Extraction · Signed block · Body	Source
 Default-key extraction and signature checks were repeated on 19 October 2026. The manifest records hashes and verification modes. This positive inventory does not rule out other hidden data.
+
 Cover, warning, and chapter title
 LP1-00, LP1-01 and LP1-02 contain signed hex bodies. Decode and XOR them to recover another signed message. Follow the complete chain; examining one body alone misses that relationship.
+
 Welcome: LP1-03
 The body begins “Let the text guide you,” followed by a good-luck message and a hex-encoded JPEG. The embedded image is distinct from the visible manuscript image. Preserve the signed body separately from the decoded derivative. Full body.
 JPEG decoded from the signed body; a derivative, not the carrier page.
@@ -5037,16 +5177,67 @@ from pathlib import Path
 body = Path("exports/steganography/lp1-03.body.txt").read_text()
 image = bytes.fromhex(body[body.index("ffd8ffe"):])
 with open("embedded.jpg", "xb") as f:
-f.write(image)
+    f.write(image)
 LP1-10 through LP1-13
 These historical instructions discuss a Tor hidden service, CGI uploads, three magic squares, and working alone. They are source documents, not current wiki setup instructions. Decorative borders use 3s on LP1-10 and LP1-11, 0s on LP1-12, and 1s on LP1-13. Similar prose does not make signed files byte-identical.
+
 Magic squares: definitions, historical examples, and the payload number arrangement.
 Reproduce, then interpret
 Follow extraction, checksum verification, and signature verification as separate steps. This makes disagreements traceable to an operation and a file.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-00.html
+https://jelliottdev.github.io/exports/steganography/lp1-00.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-00.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-00.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/00.jpg.asc
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/exports/steganography/lp1-01.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-01.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-01.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/01.jpg.asc
+https://jelliottdev.github.io/reference/lp1-02.html
+https://jelliottdev.github.io/exports/steganography/lp1-02.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-02.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-02.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/02.jpg.asc
+https://jelliottdev.github.io/reference/lp1-03.html
+https://jelliottdev.github.io/exports/steganography/lp1-03.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-03.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-03.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/03.jpg.asc
+https://jelliottdev.github.io/reference/lp1-10.html
+https://jelliottdev.github.io/exports/steganography/lp1-10.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-10.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-10.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/10.jpg.asc
+https://jelliottdev.github.io/reference/lp1-11.html
+https://jelliottdev.github.io/exports/steganography/lp1-11.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-11.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-11.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/11.jpg.asc
+https://jelliottdev.github.io/reference/lp1-12.html
+https://jelliottdev.github.io/exports/steganography/lp1-12.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-12.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-12.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/12.jpg.asc
+https://jelliottdev.github.io/reference/lp1-13.html
+https://jelliottdev.github.io/exports/steganography/lp1-13.outguess.bin
+https://jelliottdev.github.io/exports/steganography/lp1-13.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-13.body.txt
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/messages/2014/liber_primus/13.jpg.asc
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/exports/steganography/lp1-03.embedded.jpg
+https://jelliottdev.github.io/reference/articles/magic-squares.html
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/checksums.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 
 
 ---
@@ -5057,18 +5248,24 @@ An encoding of bytes, not by itself an encryption method.
 
 Two digits per byte
 Hexadecimal uses 0–9 and a–f for values 0–15. Each digit encodes four bits; two encode one byte. Hex 41 is decimal 65, the ASCII byte for A. Leading zeros matter.
+
 Decode a cover body
 from pathlib import Path
 body = Path("exports/steganography/lp1-00.body.txt").read_text()
 data = bytes.fromhex(body)
 assert len(data) == 991
 Whitespace may separate digits. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is bytewise XOR.
+
 Do not decode prose as hex
 LP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/hexadecimal.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/hexadecimal.html
 
 
 ---
@@ -5078,26 +5275,41 @@ Exclusive OR (XOR)
 The bitwise operation used to combine the three cover-chain payloads.
 
 Exclusive OR, usually written XOR or ⊕, compares bits. Two equal bits give 0; two different bits give 1. Programming languages commonly use ^ for this operation on integers.
+
 A byte example
 00001111   (hex 0f)
 00110011   (hex 33)
 --------
 00111100   (hex 3c)
 XOR is not addition with carries and is not alphabet arithmetic modulo 29. It works independently at each bit position.
+
 The three-image chain
 The signed bodies from LP1-00, LP1-01, and LP1-02 are first decoded from hexadecimal. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.
+
 How to replicate
 assert len(a) == len(b) == len(c)
 combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
 # Full checked reproduction:
 # python scripts/reproduce_cover_chain.py
 The length check prevents silent truncation by zip. Do not pad, cycle, or trim these documented inputs. Follow the complete recipe for the resulting signature and transposition.
+
 Useful identities and their limits
 A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.
+
 Sources
 Pinned 2014 walkthrough · Input and output hashes.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/xor.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+https://jelliottdev.github.io/reference/lp1-00.html
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/reference/lp1-02.html
+https://jelliottdev.github.io/reference/articles/hexadecimal.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+
+Article: https://jelliottdev.github.io/reference/articles/xor.html
 
 
 ---
@@ -5108,12 +5320,14 @@ The cover, warning, and chapter title combine into a signed message and a transp
 
 Three inputs
 LP1-00, Liber Primus, LP1-01, the warning, and LP1-02, Chapter 1 — Intus carry OutGuess payloads. Extract and verify them. Their 1,982-digit bodies decode to three 991-byte streams.
+
 XOR corresponding bytes
 What XOR means, with a worked byte example.
 XOR produces a 0 bit when input bits agree and 1 when they differ. Compute result[i] = A[i] XOR B[i] XOR C[i] on decoded bytes, not on hexadecimal text characters. For example, 0x0f XOR 0x33 = 0x3c.
 python scripts/reproduce_cover_chain.py
 python scripts/reproduce_cover_chain.py --output combined.asc
 The script checks input and output hashes and refuses to overwrite files. Its 991-byte result is another signed message, requiring its own signature check.
+
 Read the columns
 Remove spaces from the first two ciphertext lines and arrange the 70 characters in five rows of fourteen:
 IDGTKUMLOOARWO
@@ -5123,13 +5337,25 @@ LNJ7TFYVOIUAUS
 NOCO5JI4MEODZZ
 Within each row, take columns in zero-based order 2, 8, 9, 1, 12, 13, 11, 4, 5, 7, 3, 0, 6, 10. Concatenate the five reordered rows from top to bottom. This transposition gives:
 GOODWORKULTIMATETRUTHISTHEULTIMATEILLUSIONJOINUSATFV7LYUCMEOZZD5J4ONIO
+
 Preserve the literal ending
 The exact output ends in ONIO. The historical walkthrough restores a final N to render fv7lyucmeozzd5j4.onion. That character is an interpretation, not a permutation output. This is a historical address, not a claim of current reachability.
 The supplied permutation reproduces the known result. It does not show that a unique ordering can be inferred without clues or applied to another page.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/cover-chain.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-00.html
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/reference/lp1-02.html
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/xor.html
+https://jelliottdev.github.io/exports/steganography/cover-chain.signed.asc
+https://jelliottdev.github.io/reference/articles/transposition.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/cover-chain.html
 
 
 ---
@@ -5141,6 +5367,7 @@ Verify archived messages and state what verification establishes.
 Signature validity and identity
 A valid signature ties a signed message to a key. It does not decrypt its body, sign every byte of the enclosing JPEG, or by itself identify a real-world author. Historical association with Cicada is a separate provenance claim.
 The full primary fingerprint of the exported key is 6D854CD7933322A601C3286D181F01E57A35090F. Check the key itself, not its filename or short ID.
+
 Verify in a separate keyring
 Install GnuPG, create an empty directory named verify-keyring, and run from the repository root:
 gpg --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
@@ -5148,14 +5375,23 @@ gpg --homedir verify-keyring --fingerprint
 gpg --homedir verify-keyring --verify exports/steganography/lp1-00.signed.asc
 gpg --homedir verify-keyring --verify exports/steganography/cover-chain.signed.asc
 Compare the full fingerprint. A good signature and unknown trust can coexist: validity differs from identity-trust assignments. No private key is required.
+
 Legacy digest compatibility
 Some versions reject historical SHA-1 signatures by policy. If that is the reported cause, repeat this isolated check with --allow-weak-digest-algos on that command only. Record the flag; do not change global settings or treat SHA-1 as suitable for new signatures.
+
 Different files, different purposes
 The manifest separately hashes full extractions, signed blocks, and bodies. Verifying an edited body is not equivalent to verifying the preserved signed block. See extraction and checksums.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+Sources, related references, and files
+https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/checksums.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+
+Article: https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 
 
 ---
@@ -5166,6 +5402,7 @@ Identify exact bytes without confusing integrity, signatures, and decryption.
 
 What a checksum establishes
 SHA-256 maps bytes to a 256-bit digest, displayed as 64 hex digits. A matching digest identifies expected bytes under the hash’s security assumptions, not their creator. Changed line endings can change a text file’s hash.
+
 Check a download
 # PowerShell
 Get-FileHash images/lp1-00.jpg -Algorithm SHA256
@@ -5174,6 +5411,7 @@ sha256sum images/lp1-00.jpg
 # macOS
 shasum -a 256 images/lp1-00.jpg
 Compare with the catalog or download entry. Hash the actual file, not its displayed preview.
+
 LP2-56: exact target, algorithm assumptions, and input bytes.
 The puzzle’s hash target
 LP2-56 refers to a page identified by a hash. SHA-512 has 128 hexadecimal digits; it differs from this wiki’s SHA-256 distribution checksums. A hash is not normally reversible into its input. Candidate checks need the correct bytes and serialization.
@@ -5181,7 +5419,16 @@ See signatures for signed evidence and prime-minus-one for reproducing the text 
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/checksums.html
+Sources, related references, and files
+https://jelliottdev.github.io/data/catalog.json
+https://jelliottdev.github.io/#/downloads/lp1-00
+https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+https://jelliottdev.github.io/reference/lp2-56.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+
+Article: https://jelliottdev.github.io/reference/articles/checksums.html
 
 
 ---
@@ -5191,21 +5438,34 @@ Prime values and prime indices
 Distinguish a prime from its ordinal, and reproduce the 3299 and 9467 calculations.
 
 A prime’s value and its position in the ordered list of primes are different numbers. Specify which operation you mean before combining a prime with a page number or rune value.
+
 Value versus ordinal
 Write pn for the nth prime, using one-based indexing: p1 = 2, p2 = 3, p3 = 5. Looking up p3299 gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
 The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value pi+1. Confusing these conventions introduces an off-by-one error.
+
 The 3299 and 9467 examples
 The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 = 30,557 and p9467 = 98,597 are exact. Their product is:
 98597 × 30557 = 3012828529
-9857 × 30557 =  301200349
+ 9857 × 30557 =  301200349
 The second expression omits a 9 and gives a different answer. Preserve the operands as well as the final sequence when describing a hypothesis. These calculations establish arithmetic, not a relationship between manuscript pages.
+
+LP2-15: the complete number panel, heading, and drawing.
 How to replicate
 python scripts/check_number_examples.py
 The script enumerates primes by exact trial division and checks the examples. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.
+
 Sources
 Original page and provenance · Arithmetic source code. Prime notation is a mathematical definition; the page’s printed number does not itself specify this lookup operation.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/prime-indices.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/reference/lp2-15.html
+https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+https://jelliottdev.github.io/reference/articles/emirps.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/scripts/check_number_examples.py
+
+Article: https://jelliottdev.github.io/reference/articles/prime-indices.html
 
 
 ---
@@ -5215,25 +5475,36 @@ Emirps and decimal reversal
 Check reversed primes without conflating reversal, mirroring, and prime lookup.
 
 An emirp is a prime whose decimal digits, reversed, form a different prime. Both primality and the difference condition matter. This is a property of a number’s decimal representation, not a cipher by itself.
+
 Examples and non-examples
 13 and 31 form an emirp pair. 11 is prime but palindromic, so it is not an emirp under this definition. 23 is prime, but its reverse 32 is composite. The pair 7649 and 9467 passes both prime checks.
 Keep decimal reversal distinct from mirroring an image, reversing rune order, complementing digits, and taking a prime ordinal. Decimal reversal of 8734 is 4378. A transformation from 8734 to 7649 therefore needs a separately specified rule; “invert” alone does not define it.
+
 Where this matters in the manuscript
 The spelling and prime-sum article computes the three LP2-57 body sentence totals under a declared rune-only convention and checks their reversals. The boundaries and counting convention belong to the claim. Finding an emirp after changing a boundary is a different test.
+
 How to replicate the predicate
 from math import isqrt
 def prime(n):
-return n >= 2 and all(n % d for d in range(2, isqrt(n) + 1))
+    return n >= 2 and all(n % d for d in range(2, isqrt(n) + 1))
 def emirp(n):
-reverse = int(str(n)[::-1]) if n >= 0 else -1
-return n != reverse and prime(n) and prime(reverse)
+    reverse = int(str(n)[::-1]) if n >= 0 else -1
+    return n != reverse and prime(n) and prime(reverse)
 assert emirp(7649)
 assert not emirp(11)
 Converting the reversed digits to an integer removes leading zeros. This convention must be stated if applying reversal to strings that are not already prime numbers. See prime indices and selection effects.
+
 Sources and evidence
 Exact sentence sums and conventions · Checked numerical examples. No authorial purpose follows from the emirp property alone.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/emirps.html
+Sources, related references, and files
+https://jelliottdev.github.io/#/spelling
+https://jelliottdev.github.io/reference/articles/prime-indices.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/data/evidence/spelling-sums.json
+https://jelliottdev.github.io/scripts/check_number_examples.py
+
+Article: https://jelliottdev.github.io/reference/articles/emirps.html
 
 
 ---
@@ -5243,16 +5514,19 @@ Magic squares in the 2014 puzzle
 Definitions, the historical 1033 square, and the later signed instructions.
 
 A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.
+
 Magic does not always mean normal
 A normal order-n magic square uses each integer from 1 to n² exactly once. A general magic square need not use that range or distinct entries. Keep the definition separate from any additional rules in a historical challenge.
+
 A documented 1033 square
 The archived 2014 walkthrough records this order-5 square during an earlier puzzle stage:
 272 138 341 131 151
 366 199 130 320  18
 226 245  91 245 226
-18 320 130 199 366
+ 18 320 130 199 366
 151 131 341 138 272
 All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.
+
 The later LP1 payloads
 LP1-10 through LP1-13 contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:
 10 12 10
@@ -5260,19 +5534,30 @@ LP1-10 through LP1-13 contain signed instructions referring to three magic squar
 10 12 10
 Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.
 The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.
+
+The LP2-15 decimal panel is another distinct arrangement; its printed row and column sums are unequal.
 How to check a square
 n = len(square)
 assert n and all(len(row) == n for row in square)
 sums = [sum(row) for row in square]
 sums += [sum(row[c] for row in square) for c in range(n)]
 sums += [sum(square[i][i] for i in range(n)),
-sum(square[i][n-1-i] for i in range(n))]
+         sum(square[i][n-1-i] for i in range(n))]
 is_magic = len(set(sums)) == 1
 Run python scripts/check_number_examples.py to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.
+
 Sources
 Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/magic-squares.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-10.html
+https://jelliottdev.github.io/reference/lp1-13.html
+https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+https://jelliottdev.github.io/exports/steganography/lp1-10.body.txt
+https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+
+Article: https://jelliottdev.github.io/reference/articles/magic-squares.html
 
 
 ---
@@ -5282,6 +5567,7 @@ The LP2-56 hash target
 The exact printed value, its representation, and the assumptions a candidate check must state.
 
 LP2-56 has a known reading titled “An End.” Its text refers to a page in the deep web that hashes to the hexadecimal value printed between the runic passages. Decoding the surrounding runes and finding the referenced page are separate tasks.
+
 The literal target
 The archived transcription preserves five printed rows:
 36367763ab73783c7af284446c
@@ -5290,9 +5576,11 @@ d4618dee09a8425893dc7500b
 464fdaf1672d7bef5e891c6e227
 4568926a49fb4f45132c2a8b4
 Concatenating the rows yields 128 hexadecimal characters, representing 64 bytes, or 512 bits. The rows are presentation breaks; preserving them in a text file is different from the single digest string used for comparison.
+
 Length is evidence of format, not proof of an algorithm
 A SHA-512 digest has this length. The quoted decoded instruction does not name SHA-512 or define which bytes of a “page” should be hashed. Length alone cannot distinguish all algorithms that produce 512-bit outputs. State SHA-512 explicitly as an assumption when testing a candidate.
 A URL string, an HTTP response body, an HTML source file, rendered text, and a screenshot are different inputs. Their hashes need not agree. Encoding, line endings, compression handling, and trailing newlines also matter. Do not silently normalize a candidate after a mismatch.
+
 Extract the target from the shipped reading
 import json, re
 from pathlib import Path
@@ -5304,9 +5592,83 @@ assert len(rows) == 5 and len(target) == 128
 assert len(bytes.fromhex(target)) == 64
 print(target)
 This extracts a preserved target. It does not discover a destination, query a network, or test candidate pages. Use the reading recipe to reproduce the surrounding text independently.
+
 Record exactly what a candidate check establishes
 A mismatch excludes the tested bytes under the chosen algorithm. It does not exclude every version of a site, every serialization, or every algorithm. A reported match should include the exact candidate bytes, their provenance, the hashing operation, and an independently repeatable comparison. See checksums and reproducibility.
+
 Sources and status
 Original image and reading · Structured record · Pinned walkthrough. The source snapshot establishes the known reading; this article does not assert that the referenced page has been located.
 
-Source links and downloads: https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp2-56.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/reference/articles/checksums.html
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/#/reader/lp2-56
+https://jelliottdev.github.io/data/pages/lp2-56.json
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#73jpg---56jpg
+
+Article: https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+
+
+---
+
+The LP2-15 number panel and heading
+
+The exact 4 × 4 matrix, checked totals, red entry, heading, and open-loop drawing.
+
+LP2-15 contains a red runic heading, a 4 × 4 decimal panel, and an open-loop drawing below it. Its combined archive index is 32. Use the release ID when citing it: LP1-15 is a different image with a known keyed reading.
+
+The exact number panelValues in image order; row and column positions are one-based here.
+	Row	Column 1	Column 2	Column 3	Column 4
+
+	1	3258	3222	3152	3038
+
+	2	3278	3299 (red)	3298	2838
+
+	3	3288	3294	3296	2472
+
+	4	4516	1206	708	1820
+
+3299 is the only red number. 708 is the only three-digit entry. Preserve 4516 as printed; its being larger than 3301 is not a reason to change it. The structured page record stores the matrix in its numbers field.
+
+Straightforward arithmetic
+The row sums are 12670, 12713, 12350, and 8250. The column sums are 14340, 11021, 10454, and 10168. The two main diagonals sum to 11673 and 14146. All sixteen entries sum to 45983.
+These unequal totals mean that the printed panel is not a magic square under the ordinary equal-line-sums definition. This says nothing about a proposed transformation of the entries; a transformed panel would be a different object and require its own stated rule.
+
+The heading is not a known plaintext
+The recorded heading has nine runes in groups of four and five: F U L M / A EA Y OE A. EA and OE each label a single rune. These are transliteration labels, not an English translation. The source snapshot does not establish “CRYING” or another plaintext for this heading.
+
+The drawing below the panel
+The page annotation describes two open lobes with a crossing, resembling an infinity sign; visible gaps remain. Shape resemblance does not establish that the author intended a particular Unicode character, its code point, or a numerical transformation of that code point. Keep the observed drawing separate from those proposed operations.
+
+How to reproduce the totals
+import json
+from pathlib import Path
+p = json.loads(Path("data/pages/lp2-15.json").read_text(encoding="utf-8"))
+a = p["numbers"]
+assert len(a) == 4 and all(len(row) == 4 for row in a)
+print("rows", [sum(row) for row in a])
+print("columns", [sum(row[c] for row in a) for c in range(4)])
+print("diagonals", sum(a[i][i] for i in range(4)),
+      sum(a[i][3-i] for i in range(4)))
+print("total", sum(map(sum, a)))
+This is a check of the published transcription, not a cipher experiment or a new image audit. Compare the matrix to the original in the reader before using it as an input.
+
+Following a numerical idea
+The prime-index guide checks the arithmetic involving 3299, 30557, 9467, and 98597. The emirp guide distinguishes decimal reversal from mirroring and unspecified “inversion.” A valid calculation does not by itself connect LP2-15 with LP2-00–02. Record that proposed connection as a hypothesis with explicit operations and scope.
+
+Sources
+Original image, annotations, and archive provenance · Pinned number and rune transcription. Visual observations follow the existing page annotations; the totals above are derived arithmetic.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp2-15.html
+https://jelliottdev.github.io/data/pages/lp2-15.json
+https://jelliottdev.github.io/reference/articles/magic-squares.html
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/#/reader/lp2-15
+https://jelliottdev.github.io/reference/articles/prime-indices.html
+https://jelliottdev.github.io/reference/articles/emirps.html
+https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#32jpg---15jpg
+
+Article: https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
