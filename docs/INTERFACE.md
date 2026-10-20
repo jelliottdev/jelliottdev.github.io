@@ -19,3 +19,13 @@ Experiment search is not a novelty oracle. Empty registry, no lexical match, ind
 The system currently has no published experiment records. Hosted AI quality and performance evaluation remains required once records are available. Browser tests use isolated synthetic records; these must never be published as research.
 
 Checked during the October 2026 update: home, catalogue, search, reader, downloads, prime-sum article, topics, experiments and manuscript pages at 320, 390, 768 and 1440 CSS pixels; drawer keyboard behavior; original download hash; offline file verification; search deep links; and empty/populated experiment UI using test fixtures.
+
+## Manuscript reader
+
+The reader is a reading workspace rather than an article header followed by a long stack of panels. Its identity comes from the original manuscript sheet on a neutral paper surround, with the transcription alongside on desktop. Blue-grey controls reuse the wiki palette; serif type belongs to headings and readings, while controls remain sans serif. No animation or ornamental graphics are needed.
+
+The first choice is the manuscript page, then image, text, or desktop comparison. On phones the image and transcription occupy the same place in the flow; page navigation and view switches stay available while scrolling. Switching views returns to the top so a long image cannot leave the transcription offscreen. Text version and size persist across page navigation when applicable; unavailable versions fall back to the page's actual text. Visible Latin titles, archived runes, reviewed text and decoded readings remain distinct. Whole-section readings explicitly identify their scope.
+
+Keep original JPEG and checksummed file links together after the reading surface. Page records contain the deeper annotations and sources. Image enlargement supports fit-page, fit-width, zoom and native overflow panning; the dialog fills a phone viewport and closes with Escape or its Close control. Never disable browser zoom.
+
+Reader verification: narrow 320 and 390 CSS-pixel screens, 1440 desktop comparison, release boundaries, first/last pages, title-page mode fallback, persisted text mode, original-image enlargement and panning. This is browser viewport verification, not a physical-device certification.
