@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Doublets and the 4–2–1 count pattern — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · <a href="../index.html#guides-analysis">Analysis and reproduction</a> · <a href="../../index.html#/wiki/doublets">Open in wiki</a> · <a href="doublets.txt">Plain text</a></nav><h1>Doublets and the 4–2–1 count pattern</h1><p>Locate all 86 equal adjacent rune pairs, compare boundary rules, and distinguish the observed count pattern from cipher and probability claims.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#counts">What the archived pages contain</a></li><li><a href="#421">The three 4–2–1 groups</a></li><li><a href="#expectation">Low compared with which model?</a></li><li><a href="#autokey">Why ciphertext autokey comes up</a></li><li><a href="#reproduce">Reproduce the counts</a></li><li><a href="#related">Continue from the observation</a></li></ul></nav></details><p>A <strong>doublet</strong> is a pair of equal adjacent symbols, such as F–F. In a rune stream, adjacency depends on what you remove: two runes separated by a word boundary become neighbors if that boundary is discarded. A count should therefore state its alphabet, pages and boundary rules before drawing conclusions.</p>
+<h2 id="counts">What the archived pages contain</h2>
+<p>Keeping only the 29 alphabet runes in LP2-00–55, including headings, gives <strong>12,956 runes and 86 doublets</strong>. Windows overlap: F–F–F contributes two F–F pairs. LP2-50 contains no alphabet runes under this rule, leaving 55 nonempty page streams.</p>
+<div class="table-wrap"><table><thead><tr><th>Boundary rule</th><th>Adjacent pairs</th><th>Doublets</th><th>Rate</th></tr></thead><tbody><tr><td>Keep page boundaries</td><td>12,901</td><td>86</td><td>0.667%</td></tr><tr><td>Join all filtered pages</td><td>12,955</td><td>86</td><td>0.664%</td></tr></tbody></table></div>
+<p>Joining the 55 nonempty streams adds 54 pairs; none is a doublet. This does not make the conventions interchangeable: they have different denominators and different shuffle models. Both remove non-runes within a page, so they can count pairs across words, lines, headings and paragraph breaks. Neither is a word-internal count.</p>
+<figure class="evidence-figure"><img src="../../exports/figures/doublets.svg" width="360" height="640" loading="lazy" alt="Doublet counts in the 29-rune alphabet order; O R C, J EO P and OE D A each have counts 4, 2, 1. The total is 86."><figcaption>The observed diagonal of the bigram count table: each bar counts one rune followed by itself. Blue marks the three 4–2–1 groups. <a href="../../exports/unsolved-doublets.json" download>Download all counts and source locations</a>.</figcaption></figure>
+<h2 id="421">The three 4–2–1 groups</h2>
+<p>The count vector, in the stored <a href="../../index.html#/alphabet">Gematria Primus alphabet order</a>, is:</p>
+<pre><code>F U TH
+4 2  4
+
+O R C
+4 2 1
+
+G W H N I
+5 6 2 4 2
+
+J EO P
+4  2 1
+
+X S T B E M L NG
+6 3 2 0 4 2 3  2
+
+OE D A
+ 4 2 1
+
+AE Y IA EA
+ 7 2  2  3</code></pre>
+<p>The three contiguous 4–2–1 windows begin at zero-based alphabet indices <strong>3, 11 and 22</strong>. The groups have 3, 5 and 8 other alphabet entries before them when you count the initial segment and then the gaps between the groups. Their start-to-start distances are 8 and 11, not 3, 5 and 8. State which quantity you mean when discussing a Fibonacci pattern.</p>
+<p>These counts reproduce the observation. They do not establish that 421 was deliberately encoded, that O–R–C is plaintext, or that a Fibonacci rule decrypts a page. Sorting by count or changing the alphabet order changes the pattern being inspected. A chance calculation must specify whether 421, this order, these gap lengths and this page set were fixed beforehand or selected after looking at the data.</p>
+<p>The report identifies every occurrence by page, zero-based rune ordinal, original character offset, line and column. A location in a joined chapter or an alternative page order will have a different ordinal. Use the source coordinates before comparing an unexplained list of indices.</p>
+<h2 id="expectation">Low compared with which model?</h2>
+<p>For a stream of N runes with frequencies f₁, f₂, …, the probability that a particular neighboring pair matches under a uniform random permutation of those runes is <code>Σ fᵢ(fᵢ−1) / [N(N−1)]</code>. There are N−1 neighboring positions, so the expected total is <code>Σ fᵢ(fᵢ−1) / N</code>. Overlapping pairs need not be independent for this expectation: we add their individual expectations.</p>
+<p>Shuffling within each page separately gives an expected total of <strong>439.166</strong>, compared with the observed 86. Shuffling the entire joined stream gives <strong>446.668</strong>. These are two different reference models. The script retains exact fractions as well as decimal approximations.</p>
+<p>An expectation is not a p-value. This audit has not computed a tail probability, searched candidate ciphers or adjusted for selecting an interesting pattern. Randomly permuting runes also does not model English grammar, word boundaries or every possible cipher. See <a href="null-models.html">null models and selection</a> before using the size of this difference as evidence for a particular explanation.</p>
+<h2 id="autokey">Why ciphertext autokey comes up</h2>
+<p>For the specific additive rule <code>Cᵢ = Pᵢ + Cᵢ₋₁ (mod 29)</code>, subtract the previous ciphertext value: <code>Pᵢ = Cᵢ − Cᵢ₋₁</code>. At every ordinary feedback step, <code>Cᵢ = Cᵢ₋₁</code> exactly when <code>Pᵢ = 0</code>. Thus the number of internal ciphertext doublets equals the number of zero-valued recovered symbols at those steps.</p>
+<p>This identity holds for <em>any</em> input stream decoded by that rule. Observing few zeros after this subtraction does not independently confirm autokey; it restates the original doublet count. The initial symbol depends on a stated initial value, and resets or interruptions change which positions obey the rule. In the wiki’s zero-based alphabet, F has value zero, but a different alphabet assignment would change that label.</p>
+<p>The rule <code>Cᵢ = Cᵢ₋₁ − Pᵢ</code> has the same zero condition. The different rule <code>Cᵢ = Pᵢ − Cᵢ₋₁</code> instead gives <code>Pᵢ = 2Cᵢ₋₁</code> at a doublet. Names such as “subtractive autokey” are insufficient: write the equation. Multiplication introduces another condition: <code>Cᵢ = PᵢCᵢ₋₁</code> makes a doublet imply Pᵢ=1 only when Cᵢ₋₁ is nonzero modulo 29. A zero state breaks that inference and cannot be inverted by division.</p>
+<p>The existing <a href="../../index.html#/experiments/lp2-54-55-autokey-reset">F-reset</a> and <a href="../../index.html#/experiments/lp2-54-55-autokey-skip">F-skip</a> experiments test specified feedback and periodic-IoC rules on LP2-54–55. They do not test all mechanisms that could reduce doublets across LP2-00–55. Deletion, inserted separators, reordering and adaptive keys are different hypotheses requiring their own invertibility rules and bounds.</p>
+<h2 id="reproduce">Reproduce the counts</h2>
+<p>Download the <a href="../../downloads/reference-data.zip">reference-data bundle</a> or use the repository. Python 3.12 and its standard library are sufficient. Run from the extracted root:</p>
+<pre><code>python scripts/rune_doublets.py --check
+python scripts/test_rune_doublets.py</code></pre>
+<p><a href="../../scripts/rune_doublets.py" download>Counting and chart script</a> · <a href="../../scripts/test_rune_doublets.py" download>Independent checks</a> · <a href="../../exports/unsolved-doublets.json" download>Counts and complete position ledger</a>. Use <code>--write</code> to regenerate the report and chart. The report hashes all 56 text files and the alphabet index. Unknown Runic Unicode characters cause an error rather than disappearing silently.</p>
+<p>The checker recounts pairs through overlapping regular-expression matches, verifies every recorded source coordinate, and compares the shuffle expectation against exhaustive permutations of small synthetic examples. These checks reproduce the archived transcription; they do not independently resolve ambiguous handwriting.</p>
+<h2 id="related">Continue from the observation</h2>
+<p>Read <a href="rune-ngrams.html">n-grams</a> for other repeated windows, <a href="rune-lag-matches.html">lag matches</a> for equal runes farther apart, and <a href="word-lengths.html">word lengths</a> for the effect of token boundaries. A <a href="cipher-invariants.html">fixed reversible substitution</a> renames symbols but preserves equality at each position; it cannot change the total number of doublets.</p>
+<p>This is a descriptive audit with explicit comparison expectations, reproduced on 20 October 2026. No new cipher-search result or adjusted probability is claimed.</p>
+<h2>Guides linking here</h2><ul><li><a href="analysis-and-measurement.html">Statistics and measurements</a></li><li><a href="rune-ngrams.html">Repeated rune sequences: bigrams and trigrams</a></li></ul></main></body></html>

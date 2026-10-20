@@ -1,0 +1,3373 @@
+{
+  "scope": "LP2-00--55, headings included; retain only alphabet runes; overlapping windows.",
+  "boundary_modes": {
+    "page": "Never pair across pages; within-page non-runes are removed.",
+    "joined": "Concatenate all filtered pages in numerical order, including across empty pages."
+  },
+  "expectation": "Uniform random permutations preserving each stream's rune counts. Sum f*(f-1)/N per nonempty stream. This is an expectation, not a p-value.",
+  "input_sha256": {
+    "data/index.json": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775",
+    "text/lp2-00.txt": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966",
+    "text/lp2-01.txt": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89",
+    "text/lp2-02.txt": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa",
+    "text/lp2-03.txt": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e",
+    "text/lp2-04.txt": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea",
+    "text/lp2-05.txt": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314",
+    "text/lp2-06.txt": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04",
+    "text/lp2-07.txt": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d",
+    "text/lp2-08.txt": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4",
+    "text/lp2-09.txt": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa",
+    "text/lp2-10.txt": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270",
+    "text/lp2-11.txt": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb",
+    "text/lp2-12.txt": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186",
+    "text/lp2-13.txt": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a",
+    "text/lp2-14.txt": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c",
+    "text/lp2-15.txt": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8",
+    "text/lp2-16.txt": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa",
+    "text/lp2-17.txt": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807",
+    "text/lp2-18.txt": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188",
+    "text/lp2-19.txt": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254",
+    "text/lp2-20.txt": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce",
+    "text/lp2-21.txt": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558",
+    "text/lp2-22.txt": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93",
+    "text/lp2-23.txt": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692",
+    "text/lp2-24.txt": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771",
+    "text/lp2-25.txt": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7",
+    "text/lp2-26.txt": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a",
+    "text/lp2-27.txt": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc",
+    "text/lp2-28.txt": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed",
+    "text/lp2-29.txt": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd",
+    "text/lp2-30.txt": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461",
+    "text/lp2-31.txt": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68",
+    "text/lp2-32.txt": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc",
+    "text/lp2-33.txt": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db",
+    "text/lp2-34.txt": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219",
+    "text/lp2-35.txt": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f",
+    "text/lp2-36.txt": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505",
+    "text/lp2-37.txt": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271",
+    "text/lp2-38.txt": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844",
+    "text/lp2-39.txt": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640",
+    "text/lp2-40.txt": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133",
+    "text/lp2-41.txt": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e",
+    "text/lp2-42.txt": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457",
+    "text/lp2-43.txt": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268",
+    "text/lp2-44.txt": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c",
+    "text/lp2-45.txt": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513",
+    "text/lp2-46.txt": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f",
+    "text/lp2-47.txt": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e",
+    "text/lp2-48.txt": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4",
+    "text/lp2-49.txt": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553",
+    "text/lp2-50.txt": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970",
+    "text/lp2-51.txt": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a",
+    "text/lp2-52.txt": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca",
+    "text/lp2-53.txt": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e",
+    "text/lp2-54.txt": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb",
+    "text/lp2-55.txt": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+  },
+  "alphabet": [
+    {
+      "rune": "ᚠ",
+      "latin": "F"
+    },
+    {
+      "rune": "ᚢ",
+      "latin": "U"
+    },
+    {
+      "rune": "ᚦ",
+      "latin": "TH"
+    },
+    {
+      "rune": "ᚩ",
+      "latin": "O"
+    },
+    {
+      "rune": "ᚱ",
+      "latin": "R"
+    },
+    {
+      "rune": "ᚳ",
+      "latin": "C"
+    },
+    {
+      "rune": "ᚷ",
+      "latin": "G"
+    },
+    {
+      "rune": "ᚹ",
+      "latin": "W"
+    },
+    {
+      "rune": "ᚻ",
+      "latin": "H"
+    },
+    {
+      "rune": "ᚾ",
+      "latin": "N"
+    },
+    {
+      "rune": "ᛁ",
+      "latin": "I"
+    },
+    {
+      "rune": "ᛄ",
+      "latin": "J"
+    },
+    {
+      "rune": "ᛇ",
+      "latin": "EO"
+    },
+    {
+      "rune": "ᛈ",
+      "latin": "P"
+    },
+    {
+      "rune": "ᛉ",
+      "latin": "X"
+    },
+    {
+      "rune": "ᛋ",
+      "latin": "S"
+    },
+    {
+      "rune": "ᛏ",
+      "latin": "T"
+    },
+    {
+      "rune": "ᛒ",
+      "latin": "B"
+    },
+    {
+      "rune": "ᛖ",
+      "latin": "E"
+    },
+    {
+      "rune": "ᛗ",
+      "latin": "M"
+    },
+    {
+      "rune": "ᛚ",
+      "latin": "L"
+    },
+    {
+      "rune": "ᛝ",
+      "latin": "NG"
+    },
+    {
+      "rune": "ᛟ",
+      "latin": "OE"
+    },
+    {
+      "rune": "ᛞ",
+      "latin": "D"
+    },
+    {
+      "rune": "ᚪ",
+      "latin": "A"
+    },
+    {
+      "rune": "ᚫ",
+      "latin": "AE"
+    },
+    {
+      "rune": "ᚣ",
+      "latin": "Y"
+    },
+    {
+      "rune": "ᛡ",
+      "latin": "IA"
+    },
+    {
+      "rune": "ᛠ",
+      "latin": "EA"
+    }
+  ],
+  "page": {
+    "runes": 12956,
+    "windows": 12901,
+    "doublets": 86,
+    "rate": "86/12901",
+    "shuffle_expected_doublets": "790733564274986554821785325533651573683/1800534879667010247989186295406664595",
+    "shuffle_expected_doublets_decimal": 439.16592408430563,
+    "count_vector": [
+      4,
+      2,
+      4,
+      4,
+      2,
+      1,
+      5,
+      6,
+      2,
+      4,
+      2,
+      4,
+      2,
+      1,
+      6,
+      3,
+      2,
+      0,
+      4,
+      2,
+      3,
+      2,
+      4,
+      2,
+      1,
+      7,
+      2,
+      2,
+      3
+    ],
+    "421_start_indices_zero_based": [
+      3,
+      11,
+      22
+    ],
+    "occurrences": [
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 121,
+          "source_offset_zero_based": 157,
+          "line_one_based": 6,
+          "column_one_based": 18
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 122,
+          "source_offset_zero_based": 159,
+          "line_one_based": 6,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 206,
+          "source_offset_zero_based": 270,
+          "line_one_based": 10,
+          "column_one_based": 13
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 207,
+          "source_offset_zero_based": 271,
+          "line_one_based": 10,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-01",
+          "rune_index_zero_based": 193,
+          "source_offset_zero_based": 252,
+          "line_one_based": 9,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-01",
+          "rune_index_zero_based": 194,
+          "source_offset_zero_based": 253,
+          "line_one_based": 9,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-02",
+          "rune_index_zero_based": 124,
+          "source_offset_zero_based": 158,
+          "line_one_based": 6,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-02",
+          "rune_index_zero_based": 125,
+          "source_offset_zero_based": 160,
+          "line_one_based": 6,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 52,
+          "source_offset_zero_based": 65,
+          "line_one_based": 3,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 53,
+          "source_offset_zero_based": 66,
+          "line_one_based": 3,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 179,
+          "source_offset_zero_based": 235,
+          "line_one_based": 11,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 180,
+          "source_offset_zero_based": 236,
+          "line_one_based": 11,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 264,
+          "line_one_based": 12,
+          "column_one_based": 10
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 203,
+          "source_offset_zero_based": 265,
+          "line_one_based": 12,
+          "column_one_based": 11
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛝ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 32,
+          "source_offset_zero_based": 41,
+          "line_one_based": 2,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛝ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 33,
+          "source_offset_zero_based": 43,
+          "line_one_based": 2,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 123,
+          "line_one_based": 5,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 125,
+          "line_one_based": 5,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-06",
+          "rune_index_zero_based": 120,
+          "source_offset_zero_based": 161,
+          "line_one_based": 8,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-06",
+          "rune_index_zero_based": 121,
+          "source_offset_zero_based": 162,
+          "line_one_based": 8,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 106,
+          "source_offset_zero_based": 141,
+          "line_one_based": 6,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 107,
+          "source_offset_zero_based": 142,
+          "line_one_based": 6,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 141,
+          "source_offset_zero_based": 186,
+          "line_one_based": 8,
+          "column_one_based": 5
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 142,
+          "source_offset_zero_based": 187,
+          "line_one_based": 8,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 196,
+          "line_one_based": 8,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 198,
+          "line_one_based": 8,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 62,
+          "source_offset_zero_based": 80,
+          "line_one_based": 3,
+          "column_one_based": 25
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 63,
+          "source_offset_zero_based": 81,
+          "line_one_based": 3,
+          "column_one_based": 26
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚣ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 111,
+          "source_offset_zero_based": 146,
+          "line_one_based": 6,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚣ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 112,
+          "source_offset_zero_based": 147,
+          "line_one_based": 6,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 215,
+          "source_offset_zero_based": 281,
+          "line_one_based": 10,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 216,
+          "source_offset_zero_based": 282,
+          "line_one_based": 10,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-10",
+          "rune_index_zero_based": 182,
+          "source_offset_zero_based": 248,
+          "line_one_based": 9,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-10",
+          "rune_index_zero_based": 183,
+          "source_offset_zero_based": 250,
+          "line_one_based": 9,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚢ",
+          "page": "lp2-11",
+          "rune_index_zero_based": 79,
+          "source_offset_zero_based": 104,
+          "line_one_based": 4,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᚢ",
+          "page": "lp2-11",
+          "rune_index_zero_based": 80,
+          "source_offset_zero_based": 105,
+          "line_one_based": 4,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-12",
+          "rune_index_zero_based": 206,
+          "source_offset_zero_based": 278,
+          "line_one_based": 10,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-12",
+          "rune_index_zero_based": 207,
+          "source_offset_zero_based": 279,
+          "line_one_based": 10,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-16",
+          "rune_index_zero_based": 89,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-16",
+          "rune_index_zero_based": 90,
+          "source_offset_zero_based": 116,
+          "line_one_based": 4,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛡ",
+          "page": "lp2-18",
+          "rune_index_zero_based": 86,
+          "source_offset_zero_based": 113,
+          "line_one_based": 4,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᛡ",
+          "page": "lp2-18",
+          "rune_index_zero_based": 87,
+          "source_offset_zero_based": 114,
+          "line_one_based": 4,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 17,
+          "source_offset_zero_based": 20,
+          "line_one_based": 1,
+          "column_one_based": 21
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 18,
+          "source_offset_zero_based": 21,
+          "line_one_based": 1,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛗ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 44,
+          "source_offset_zero_based": 55,
+          "line_one_based": 2,
+          "column_one_based": 25
+        },
+        "right": {
+          "rune": "ᛗ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 45,
+          "source_offset_zero_based": 56,
+          "line_one_based": 2,
+          "column_one_based": 26
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚻ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 109,
+          "source_offset_zero_based": 140,
+          "line_one_based": 5,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚻ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 110,
+          "source_offset_zero_based": 141,
+          "line_one_based": 5,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 150,
+          "source_offset_zero_based": 194,
+          "line_one_based": 7,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 195,
+          "line_one_based": 7,
+          "column_one_based": 21
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛞ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 211,
+          "source_offset_zero_based": 277,
+          "line_one_based": 10,
+          "column_one_based": 11
+        },
+        "right": {
+          "rune": "ᛞ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 212,
+          "source_offset_zero_based": 278,
+          "line_one_based": 10,
+          "column_one_based": 12
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-20",
+          "rune_index_zero_based": 241,
+          "source_offset_zero_based": 319,
+          "line_one_based": 11,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-20",
+          "rune_index_zero_based": 242,
+          "source_offset_zero_based": 320,
+          "line_one_based": 11,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-21",
+          "rune_index_zero_based": 158,
+          "source_offset_zero_based": 201,
+          "line_one_based": 7,
+          "column_one_based": 24
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-21",
+          "rune_index_zero_based": 159,
+          "source_offset_zero_based": 202,
+          "line_one_based": 7,
+          "column_one_based": 25
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-22",
+          "rune_index_zero_based": 100,
+          "source_offset_zero_based": 129,
+          "line_one_based": 5,
+          "column_one_based": 11
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-22",
+          "rune_index_zero_based": 101,
+          "source_offset_zero_based": 130,
+          "line_one_based": 5,
+          "column_one_based": 12
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-23",
+          "rune_index_zero_based": 127,
+          "source_offset_zero_based": 163,
+          "line_one_based": 7,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-23",
+          "rune_index_zero_based": 128,
+          "source_offset_zero_based": 164,
+          "line_one_based": 7,
+          "column_one_based": 7
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 51,
+          "source_offset_zero_based": 68,
+          "line_one_based": 3,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 52,
+          "source_offset_zero_based": 69,
+          "line_one_based": 3,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛡ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 58,
+          "source_offset_zero_based": 77,
+          "line_one_based": 3,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛡ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 78,
+          "line_one_based": 3,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 105,
+          "source_offset_zero_based": 136,
+          "line_one_based": 5,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 106,
+          "source_offset_zero_based": 137,
+          "line_one_based": 5,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 116,
+          "source_offset_zero_based": 151,
+          "line_one_based": 6,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 117,
+          "source_offset_zero_based": 153,
+          "line_one_based": 6,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 250,
+          "source_offset_zero_based": 331,
+          "line_one_based": 12,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 251,
+          "source_offset_zero_based": 332,
+          "line_one_based": 12,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 30,
+          "source_offset_zero_based": 41,
+          "line_one_based": 2,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 31,
+          "source_offset_zero_based": 42,
+          "line_one_based": 2,
+          "column_one_based": 13
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚢ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 115,
+          "line_one_based": 5,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚢ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 117,
+          "line_one_based": 5,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 234,
+          "source_offset_zero_based": 303,
+          "line_one_based": 11,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 235,
+          "source_offset_zero_based": 304,
+          "line_one_based": 11,
+          "column_one_based": 7
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 60,
+          "source_offset_zero_based": 77,
+          "line_one_based": 3,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 61,
+          "source_offset_zero_based": 78,
+          "line_one_based": 3,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 102,
+          "source_offset_zero_based": 132,
+          "line_one_based": 5,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 103,
+          "source_offset_zero_based": 133,
+          "line_one_based": 5,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 14,
+          "source_offset_zero_based": 15,
+          "line_one_based": 1,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 15,
+          "source_offset_zero_based": 17,
+          "line_one_based": 1,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 83,
+          "source_offset_zero_based": 110,
+          "line_one_based": 5,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 84,
+          "source_offset_zero_based": 111,
+          "line_one_based": 5,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 89,
+          "source_offset_zero_based": 116,
+          "line_one_based": 5,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 90,
+          "source_offset_zero_based": 117,
+          "line_one_based": 5,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚱ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 122,
+          "source_offset_zero_based": 164,
+          "line_one_based": 7,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚱ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 123,
+          "source_offset_zero_based": 165,
+          "line_one_based": 7,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚳ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 228,
+          "source_offset_zero_based": 298,
+          "line_one_based": 11,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚳ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 229,
+          "source_offset_zero_based": 299,
+          "line_one_based": 11,
+          "column_one_based": 21
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 87,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 88,
+          "source_offset_zero_based": 116,
+          "line_one_based": 4,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛇ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 113,
+          "source_offset_zero_based": 151,
+          "line_one_based": 5,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛇ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 114,
+          "source_offset_zero_based": 152,
+          "line_one_based": 5,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 139,
+          "source_offset_zero_based": 188,
+          "line_one_based": 7,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 140,
+          "source_offset_zero_based": 189,
+          "line_one_based": 7,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛗ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 201,
+          "source_offset_zero_based": 268,
+          "line_one_based": 9,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᛗ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 270,
+          "line_one_based": 9,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 73,
+          "source_offset_zero_based": 94,
+          "line_one_based": 4,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 74,
+          "source_offset_zero_based": 96,
+          "line_one_based": 4,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛇ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 261,
+          "source_offset_zero_based": 343,
+          "line_one_based": 12,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛇ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 262,
+          "source_offset_zero_based": 344,
+          "line_one_based": 12,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 29,
+          "source_offset_zero_based": 36,
+          "line_one_based": 2,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 30,
+          "source_offset_zero_based": 38,
+          "line_one_based": 2,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 103,
+          "source_offset_zero_based": 129,
+          "line_one_based": 5,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 104,
+          "source_offset_zero_based": 131,
+          "line_one_based": 5,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛏ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 209,
+          "line_one_based": 11,
+          "column_one_based": 7
+        },
+        "right": {
+          "rune": "ᛏ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 210,
+          "line_one_based": 11,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛞ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 181,
+          "source_offset_zero_based": 246,
+          "line_one_based": 12,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛞ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 182,
+          "source_offset_zero_based": 247,
+          "line_one_based": 12,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚻ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 21,
+          "source_offset_zero_based": 27,
+          "line_one_based": 1,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᚻ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 22,
+          "source_offset_zero_based": 31,
+          "line_one_based": 2,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚱ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 134,
+          "source_offset_zero_based": 176,
+          "line_one_based": 6,
+          "column_one_based": 30
+        },
+        "right": {
+          "rune": "ᚱ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 135,
+          "source_offset_zero_based": 179,
+          "line_one_based": 7,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚪ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 210,
+          "source_offset_zero_based": 277,
+          "line_one_based": 10,
+          "column_one_based": 13
+        },
+        "right": {
+          "rune": "ᚪ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 211,
+          "source_offset_zero_based": 279,
+          "line_one_based": 10,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 254,
+          "line_one_based": 9,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 255,
+          "line_one_based": 9,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 264,
+          "line_one_based": 10,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 203,
+          "source_offset_zero_based": 265,
+          "line_one_based": 10,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛏ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 264,
+          "source_offset_zero_based": 344,
+          "line_one_based": 12,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᛏ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 265,
+          "source_offset_zero_based": 346,
+          "line_one_based": 12,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 19,
+          "source_offset_zero_based": 25,
+          "line_one_based": 1,
+          "column_one_based": 26
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 20,
+          "source_offset_zero_based": 26,
+          "line_one_based": 1,
+          "column_one_based": 27
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 69,
+          "source_offset_zero_based": 89,
+          "line_one_based": 4,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 70,
+          "source_offset_zero_based": 90,
+          "line_one_based": 4,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 227,
+          "source_offset_zero_based": 296,
+          "line_one_based": 11,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 228,
+          "source_offset_zero_based": 297,
+          "line_one_based": 11,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-39",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 257,
+          "line_one_based": 11,
+          "column_one_based": 26
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-39",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 259,
+          "line_one_based": 11,
+          "column_one_based": 28
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛁ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 45,
+          "source_offset_zero_based": 60,
+          "line_one_based": 3,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᛁ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 46,
+          "source_offset_zero_based": 61,
+          "line_one_based": 3,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 268,
+          "source_offset_zero_based": 352,
+          "line_one_based": 12,
+          "column_one_based": 24
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 269,
+          "source_offset_zero_based": 353,
+          "line_one_based": 12,
+          "column_one_based": 25
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-42",
+          "rune_index_zero_based": 21,
+          "source_offset_zero_based": 26,
+          "line_one_based": 1,
+          "column_one_based": 27
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-42",
+          "rune_index_zero_based": 22,
+          "source_offset_zero_based": 27,
+          "line_one_based": 1,
+          "column_one_based": 28
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 27
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 118,
+          "line_one_based": 5,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 193,
+          "line_one_based": 7,
+          "column_one_based": 18
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 153,
+          "source_offset_zero_based": 194,
+          "line_one_based": 7,
+          "column_one_based": 19
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 251,
+          "line_one_based": 9,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 253,
+          "line_one_based": 9,
+          "column_one_based": 19
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛁ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 74,
+          "line_one_based": 3,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᛁ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 60,
+          "source_offset_zero_based": 75,
+          "line_one_based": 3,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 70,
+          "source_offset_zero_based": 89,
+          "line_one_based": 4,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 71,
+          "source_offset_zero_based": 90,
+          "line_one_based": 4,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 193,
+          "line_one_based": 7,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 195,
+          "line_one_based": 7,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 263,
+          "source_offset_zero_based": 340,
+          "line_one_based": 12,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 264,
+          "source_offset_zero_based": 341,
+          "line_one_based": 12,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 139,
+          "source_offset_zero_based": 185,
+          "line_one_based": 7,
+          "column_one_based": 5
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 140,
+          "source_offset_zero_based": 186,
+          "line_one_based": 7,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 225,
+          "source_offset_zero_based": 297,
+          "line_one_based": 11,
+          "column_one_based": 3
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 226,
+          "source_offset_zero_based": 299,
+          "line_one_based": 11,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-46",
+          "rune_index_zero_based": 110,
+          "source_offset_zero_based": 143,
+          "line_one_based": 5,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-46",
+          "rune_index_zero_based": 111,
+          "source_offset_zero_based": 146,
+          "line_one_based": 6,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛈ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 95,
+          "source_offset_zero_based": 122,
+          "line_one_based": 5,
+          "column_one_based": 3
+        },
+        "right": {
+          "rune": "ᛈ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 96,
+          "source_offset_zero_based": 123,
+          "line_one_based": 5,
+          "column_one_based": 4
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 155,
+          "source_offset_zero_based": 200,
+          "line_one_based": 7,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 156,
+          "source_offset_zero_based": 202,
+          "line_one_based": 7,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-48",
+          "rune_index_zero_based": 67,
+          "source_offset_zero_based": 92,
+          "line_one_based": 4,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-48",
+          "rune_index_zero_based": 68,
+          "source_offset_zero_based": 93,
+          "line_one_based": 4,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-51",
+          "rune_index_zero_based": 0,
+          "source_offset_zero_based": 227,
+          "line_one_based": 11,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-51",
+          "rune_index_zero_based": 1,
+          "source_offset_zero_based": 228,
+          "line_one_based": 11,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚣ",
+          "page": "lp2-52",
+          "rune_index_zero_based": 167,
+          "source_offset_zero_based": 218,
+          "line_one_based": 8,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᚣ",
+          "page": "lp2-52",
+          "rune_index_zero_based": 168,
+          "source_offset_zero_based": 219,
+          "line_one_based": 8,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛝ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 19,
+          "source_offset_zero_based": 24,
+          "line_one_based": 2,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᛝ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 20,
+          "source_offset_zero_based": 26,
+          "line_one_based": 2,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 155,
+          "source_offset_zero_based": 203,
+          "line_one_based": 8,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 156,
+          "source_offset_zero_based": 205,
+          "line_one_based": 8,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-55",
+          "rune_index_zero_based": 58,
+          "source_offset_zero_based": 74,
+          "line_one_based": 3,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-55",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 75,
+          "line_one_based": 3,
+          "column_one_based": 16
+        }
+      }
+    ]
+  },
+  "joined": {
+    "runes": 12956,
+    "windows": 12955,
+    "doublets": 86,
+    "rate": "86/12955",
+    "shuffle_expected_doublets": "2893513/6478",
+    "shuffle_expected_doublets_decimal": 446.6676443346712,
+    "count_vector": [
+      4,
+      2,
+      4,
+      4,
+      2,
+      1,
+      5,
+      6,
+      2,
+      4,
+      2,
+      4,
+      2,
+      1,
+      6,
+      3,
+      2,
+      0,
+      4,
+      2,
+      3,
+      2,
+      4,
+      2,
+      1,
+      7,
+      2,
+      2,
+      3
+    ],
+    "421_start_indices_zero_based": [
+      3,
+      11,
+      22
+    ],
+    "occurrences": [
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 121,
+          "source_offset_zero_based": 157,
+          "line_one_based": 6,
+          "column_one_based": 18
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 122,
+          "source_offset_zero_based": 159,
+          "line_one_based": 6,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 206,
+          "source_offset_zero_based": 270,
+          "line_one_based": 10,
+          "column_one_based": 13
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-00",
+          "rune_index_zero_based": 207,
+          "source_offset_zero_based": 271,
+          "line_one_based": 10,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-01",
+          "rune_index_zero_based": 193,
+          "source_offset_zero_based": 252,
+          "line_one_based": 9,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-01",
+          "rune_index_zero_based": 194,
+          "source_offset_zero_based": 253,
+          "line_one_based": 9,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-02",
+          "rune_index_zero_based": 124,
+          "source_offset_zero_based": 158,
+          "line_one_based": 6,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-02",
+          "rune_index_zero_based": 125,
+          "source_offset_zero_based": 160,
+          "line_one_based": 6,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 52,
+          "source_offset_zero_based": 65,
+          "line_one_based": 3,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 53,
+          "source_offset_zero_based": 66,
+          "line_one_based": 3,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 179,
+          "source_offset_zero_based": 235,
+          "line_one_based": 11,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 180,
+          "source_offset_zero_based": 236,
+          "line_one_based": 11,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 264,
+          "line_one_based": 12,
+          "column_one_based": 10
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-03",
+          "rune_index_zero_based": 203,
+          "source_offset_zero_based": 265,
+          "line_one_based": 12,
+          "column_one_based": 11
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛝ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 32,
+          "source_offset_zero_based": 41,
+          "line_one_based": 2,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛝ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 33,
+          "source_offset_zero_based": 43,
+          "line_one_based": 2,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 123,
+          "line_one_based": 5,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-04",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 125,
+          "line_one_based": 5,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-06",
+          "rune_index_zero_based": 120,
+          "source_offset_zero_based": 161,
+          "line_one_based": 8,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-06",
+          "rune_index_zero_based": 121,
+          "source_offset_zero_based": 162,
+          "line_one_based": 8,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 106,
+          "source_offset_zero_based": 141,
+          "line_one_based": 6,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 107,
+          "source_offset_zero_based": 142,
+          "line_one_based": 6,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 141,
+          "source_offset_zero_based": 186,
+          "line_one_based": 8,
+          "column_one_based": 5
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 142,
+          "source_offset_zero_based": 187,
+          "line_one_based": 8,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 196,
+          "line_one_based": 8,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-08",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 198,
+          "line_one_based": 8,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 62,
+          "source_offset_zero_based": 80,
+          "line_one_based": 3,
+          "column_one_based": 25
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 63,
+          "source_offset_zero_based": 81,
+          "line_one_based": 3,
+          "column_one_based": 26
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚣ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 111,
+          "source_offset_zero_based": 146,
+          "line_one_based": 6,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚣ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 112,
+          "source_offset_zero_based": 147,
+          "line_one_based": 6,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 215,
+          "source_offset_zero_based": 281,
+          "line_one_based": 10,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-09",
+          "rune_index_zero_based": 216,
+          "source_offset_zero_based": 282,
+          "line_one_based": 10,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-10",
+          "rune_index_zero_based": 182,
+          "source_offset_zero_based": 248,
+          "line_one_based": 9,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-10",
+          "rune_index_zero_based": 183,
+          "source_offset_zero_based": 250,
+          "line_one_based": 9,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚢ",
+          "page": "lp2-11",
+          "rune_index_zero_based": 79,
+          "source_offset_zero_based": 104,
+          "line_one_based": 4,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᚢ",
+          "page": "lp2-11",
+          "rune_index_zero_based": 80,
+          "source_offset_zero_based": 105,
+          "line_one_based": 4,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-12",
+          "rune_index_zero_based": 206,
+          "source_offset_zero_based": 278,
+          "line_one_based": 10,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-12",
+          "rune_index_zero_based": 207,
+          "source_offset_zero_based": 279,
+          "line_one_based": 10,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-16",
+          "rune_index_zero_based": 89,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-16",
+          "rune_index_zero_based": 90,
+          "source_offset_zero_based": 116,
+          "line_one_based": 4,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛡ",
+          "page": "lp2-18",
+          "rune_index_zero_based": 86,
+          "source_offset_zero_based": 113,
+          "line_one_based": 4,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᛡ",
+          "page": "lp2-18",
+          "rune_index_zero_based": 87,
+          "source_offset_zero_based": 114,
+          "line_one_based": 4,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 17,
+          "source_offset_zero_based": 20,
+          "line_one_based": 1,
+          "column_one_based": 21
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 18,
+          "source_offset_zero_based": 21,
+          "line_one_based": 1,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛗ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 44,
+          "source_offset_zero_based": 55,
+          "line_one_based": 2,
+          "column_one_based": 25
+        },
+        "right": {
+          "rune": "ᛗ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 45,
+          "source_offset_zero_based": 56,
+          "line_one_based": 2,
+          "column_one_based": 26
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚻ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 109,
+          "source_offset_zero_based": 140,
+          "line_one_based": 5,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚻ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 110,
+          "source_offset_zero_based": 141,
+          "line_one_based": 5,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 150,
+          "source_offset_zero_based": 194,
+          "line_one_based": 7,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 195,
+          "line_one_based": 7,
+          "column_one_based": 21
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛞ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 211,
+          "source_offset_zero_based": 277,
+          "line_one_based": 10,
+          "column_one_based": 11
+        },
+        "right": {
+          "rune": "ᛞ",
+          "page": "lp2-19",
+          "rune_index_zero_based": 212,
+          "source_offset_zero_based": 278,
+          "line_one_based": 10,
+          "column_one_based": 12
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-20",
+          "rune_index_zero_based": 241,
+          "source_offset_zero_based": 319,
+          "line_one_based": 11,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-20",
+          "rune_index_zero_based": 242,
+          "source_offset_zero_based": 320,
+          "line_one_based": 11,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-21",
+          "rune_index_zero_based": 158,
+          "source_offset_zero_based": 201,
+          "line_one_based": 7,
+          "column_one_based": 24
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-21",
+          "rune_index_zero_based": 159,
+          "source_offset_zero_based": 202,
+          "line_one_based": 7,
+          "column_one_based": 25
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-22",
+          "rune_index_zero_based": 100,
+          "source_offset_zero_based": 129,
+          "line_one_based": 5,
+          "column_one_based": 11
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-22",
+          "rune_index_zero_based": 101,
+          "source_offset_zero_based": 130,
+          "line_one_based": 5,
+          "column_one_based": 12
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-23",
+          "rune_index_zero_based": 127,
+          "source_offset_zero_based": 163,
+          "line_one_based": 7,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-23",
+          "rune_index_zero_based": 128,
+          "source_offset_zero_based": 164,
+          "line_one_based": 7,
+          "column_one_based": 7
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 51,
+          "source_offset_zero_based": 68,
+          "line_one_based": 3,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 52,
+          "source_offset_zero_based": 69,
+          "line_one_based": 3,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛡ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 58,
+          "source_offset_zero_based": 77,
+          "line_one_based": 3,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛡ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 78,
+          "line_one_based": 3,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 105,
+          "source_offset_zero_based": 136,
+          "line_one_based": 5,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 106,
+          "source_offset_zero_based": 137,
+          "line_one_based": 5,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 116,
+          "source_offset_zero_based": 151,
+          "line_one_based": 6,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 117,
+          "source_offset_zero_based": 153,
+          "line_one_based": 6,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 250,
+          "source_offset_zero_based": 331,
+          "line_one_based": 12,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-24",
+          "rune_index_zero_based": 251,
+          "source_offset_zero_based": 332,
+          "line_one_based": 12,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 30,
+          "source_offset_zero_based": 41,
+          "line_one_based": 2,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 31,
+          "source_offset_zero_based": 42,
+          "line_one_based": 2,
+          "column_one_based": 13
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚢ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 115,
+          "line_one_based": 5,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚢ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 117,
+          "line_one_based": 5,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 234,
+          "source_offset_zero_based": 303,
+          "line_one_based": 11,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-25",
+          "rune_index_zero_based": 235,
+          "source_offset_zero_based": 304,
+          "line_one_based": 11,
+          "column_one_based": 7
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛋ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 60,
+          "source_offset_zero_based": 77,
+          "line_one_based": 3,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᛋ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 61,
+          "source_offset_zero_based": 78,
+          "line_one_based": 3,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 102,
+          "source_offset_zero_based": 132,
+          "line_one_based": 5,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-26",
+          "rune_index_zero_based": 103,
+          "source_offset_zero_based": 133,
+          "line_one_based": 5,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛚ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 14,
+          "source_offset_zero_based": 15,
+          "line_one_based": 1,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛚ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 15,
+          "source_offset_zero_based": 17,
+          "line_one_based": 1,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 83,
+          "source_offset_zero_based": 110,
+          "line_one_based": 5,
+          "column_one_based": 8
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 84,
+          "source_offset_zero_based": 111,
+          "line_one_based": 5,
+          "column_one_based": 9
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 89,
+          "source_offset_zero_based": 116,
+          "line_one_based": 5,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 90,
+          "source_offset_zero_based": 117,
+          "line_one_based": 5,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚱ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 122,
+          "source_offset_zero_based": 164,
+          "line_one_based": 7,
+          "column_one_based": 4
+        },
+        "right": {
+          "rune": "ᚱ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 123,
+          "source_offset_zero_based": 165,
+          "line_one_based": 7,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚳ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 228,
+          "source_offset_zero_based": 298,
+          "line_one_based": 11,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚳ",
+          "page": "lp2-27",
+          "rune_index_zero_based": 229,
+          "source_offset_zero_based": 299,
+          "line_one_based": 11,
+          "column_one_based": 21
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 87,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 88,
+          "source_offset_zero_based": 116,
+          "line_one_based": 4,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛇ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 113,
+          "source_offset_zero_based": 151,
+          "line_one_based": 5,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛇ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 114,
+          "source_offset_zero_based": 152,
+          "line_one_based": 5,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 139,
+          "source_offset_zero_based": 188,
+          "line_one_based": 7,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 140,
+          "source_offset_zero_based": 189,
+          "line_one_based": 7,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛗ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 201,
+          "source_offset_zero_based": 268,
+          "line_one_based": 9,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᛗ",
+          "page": "lp2-29",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 270,
+          "line_one_based": 9,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 73,
+          "source_offset_zero_based": 94,
+          "line_one_based": 4,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 74,
+          "source_offset_zero_based": 96,
+          "line_one_based": 4,
+          "column_one_based": 16
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛇ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 261,
+          "source_offset_zero_based": 343,
+          "line_one_based": 12,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛇ",
+          "page": "lp2-30",
+          "rune_index_zero_based": 262,
+          "source_offset_zero_based": 344,
+          "line_one_based": 12,
+          "column_one_based": 29
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 29,
+          "source_offset_zero_based": 36,
+          "line_one_based": 2,
+          "column_one_based": 6
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 30,
+          "source_offset_zero_based": 38,
+          "line_one_based": 2,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 103,
+          "source_offset_zero_based": 129,
+          "line_one_based": 5,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-32",
+          "rune_index_zero_based": 104,
+          "source_offset_zero_based": 131,
+          "line_one_based": 5,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛏ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 209,
+          "line_one_based": 11,
+          "column_one_based": 7
+        },
+        "right": {
+          "rune": "ᛏ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 210,
+          "line_one_based": 11,
+          "column_one_based": 8
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛞ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 181,
+          "source_offset_zero_based": 246,
+          "line_one_based": 12,
+          "column_one_based": 16
+        },
+        "right": {
+          "rune": "ᛞ",
+          "page": "lp2-33",
+          "rune_index_zero_based": 182,
+          "source_offset_zero_based": 247,
+          "line_one_based": 12,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚻ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 21,
+          "source_offset_zero_based": 27,
+          "line_one_based": 1,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᚻ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 22,
+          "source_offset_zero_based": 31,
+          "line_one_based": 2,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚱ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 134,
+          "source_offset_zero_based": 176,
+          "line_one_based": 6,
+          "column_one_based": 30
+        },
+        "right": {
+          "rune": "ᚱ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 135,
+          "source_offset_zero_based": 179,
+          "line_one_based": 7,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚪ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 210,
+          "source_offset_zero_based": 277,
+          "line_one_based": 10,
+          "column_one_based": 13
+        },
+        "right": {
+          "rune": "ᚪ",
+          "page": "lp2-34",
+          "rune_index_zero_based": 211,
+          "source_offset_zero_based": 279,
+          "line_one_based": 10,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 254,
+          "line_one_based": 9,
+          "column_one_based": 23
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 255,
+          "line_one_based": 9,
+          "column_one_based": 24
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛄ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 202,
+          "source_offset_zero_based": 264,
+          "line_one_based": 10,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᛄ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 203,
+          "source_offset_zero_based": 265,
+          "line_one_based": 10,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛏ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 264,
+          "source_offset_zero_based": 344,
+          "line_one_based": 12,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᛏ",
+          "page": "lp2-35",
+          "rune_index_zero_based": 265,
+          "source_offset_zero_based": 346,
+          "line_one_based": 12,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 19,
+          "source_offset_zero_based": 25,
+          "line_one_based": 1,
+          "column_one_based": 26
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 20,
+          "source_offset_zero_based": 26,
+          "line_one_based": 1,
+          "column_one_based": 27
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚠ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 69,
+          "source_offset_zero_based": 89,
+          "line_one_based": 4,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚠ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 70,
+          "source_offset_zero_based": 90,
+          "line_one_based": 4,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 227,
+          "source_offset_zero_based": 296,
+          "line_one_based": 11,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-36",
+          "rune_index_zero_based": 228,
+          "source_offset_zero_based": 297,
+          "line_one_based": 11,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-39",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 257,
+          "line_one_based": 11,
+          "column_one_based": 26
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-39",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 259,
+          "line_one_based": 11,
+          "column_one_based": 28
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛁ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 45,
+          "source_offset_zero_based": 60,
+          "line_one_based": 3,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᛁ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 46,
+          "source_offset_zero_based": 61,
+          "line_one_based": 3,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 268,
+          "source_offset_zero_based": 352,
+          "line_one_based": 12,
+          "column_one_based": 24
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-41",
+          "rune_index_zero_based": 269,
+          "source_offset_zero_based": 353,
+          "line_one_based": 12,
+          "column_one_based": 25
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-42",
+          "rune_index_zero_based": 21,
+          "source_offset_zero_based": 26,
+          "line_one_based": 1,
+          "column_one_based": 27
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-42",
+          "rune_index_zero_based": 22,
+          "source_offset_zero_based": 27,
+          "line_one_based": 1,
+          "column_one_based": 28
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛠ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 91,
+          "source_offset_zero_based": 115,
+          "line_one_based": 4,
+          "column_one_based": 27
+        },
+        "right": {
+          "rune": "ᛠ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 92,
+          "source_offset_zero_based": 118,
+          "line_one_based": 5,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚾ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 193,
+          "line_one_based": 7,
+          "column_one_based": 18
+        },
+        "right": {
+          "rune": "ᚾ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 153,
+          "source_offset_zero_based": 194,
+          "line_one_based": 7,
+          "column_one_based": 19
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 195,
+          "source_offset_zero_based": 251,
+          "line_one_based": 9,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-43",
+          "rune_index_zero_based": 196,
+          "source_offset_zero_based": 253,
+          "line_one_based": 9,
+          "column_one_based": 19
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛁ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 74,
+          "line_one_based": 3,
+          "column_one_based": 19
+        },
+        "right": {
+          "rune": "ᛁ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 60,
+          "source_offset_zero_based": 75,
+          "line_one_based": 3,
+          "column_one_based": 20
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚫ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 70,
+          "source_offset_zero_based": 89,
+          "line_one_based": 4,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᚫ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 71,
+          "source_offset_zero_based": 90,
+          "line_one_based": 4,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛟ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 151,
+          "source_offset_zero_based": 193,
+          "line_one_based": 7,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᛟ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 152,
+          "source_offset_zero_based": 195,
+          "line_one_based": 7,
+          "column_one_based": 17
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛉ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 263,
+          "source_offset_zero_based": 340,
+          "line_one_based": 12,
+          "column_one_based": 14
+        },
+        "right": {
+          "rune": "ᛉ",
+          "page": "lp2-44",
+          "rune_index_zero_based": 264,
+          "source_offset_zero_based": 341,
+          "line_one_based": 12,
+          "column_one_based": 15
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 139,
+          "source_offset_zero_based": 185,
+          "line_one_based": 7,
+          "column_one_based": 5
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 140,
+          "source_offset_zero_based": 186,
+          "line_one_based": 7,
+          "column_one_based": 6
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚩ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 225,
+          "source_offset_zero_based": 297,
+          "line_one_based": 11,
+          "column_one_based": 3
+        },
+        "right": {
+          "rune": "ᚩ",
+          "page": "lp2-45",
+          "rune_index_zero_based": 226,
+          "source_offset_zero_based": 299,
+          "line_one_based": 11,
+          "column_one_based": 5
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛖ",
+          "page": "lp2-46",
+          "rune_index_zero_based": 110,
+          "source_offset_zero_based": 143,
+          "line_one_based": 5,
+          "column_one_based": 28
+        },
+        "right": {
+          "rune": "ᛖ",
+          "page": "lp2-46",
+          "rune_index_zero_based": 111,
+          "source_offset_zero_based": 146,
+          "line_one_based": 6,
+          "column_one_based": 1
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛈ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 95,
+          "source_offset_zero_based": 122,
+          "line_one_based": 5,
+          "column_one_based": 3
+        },
+        "right": {
+          "rune": "ᛈ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 96,
+          "source_offset_zero_based": 123,
+          "line_one_based": 5,
+          "column_one_based": 4
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 155,
+          "source_offset_zero_based": 200,
+          "line_one_based": 7,
+          "column_one_based": 20
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-47",
+          "rune_index_zero_based": 156,
+          "source_offset_zero_based": 202,
+          "line_one_based": 7,
+          "column_one_based": 22
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-48",
+          "rune_index_zero_based": 67,
+          "source_offset_zero_based": 92,
+          "line_one_based": 4,
+          "column_one_based": 2
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-48",
+          "rune_index_zero_based": 68,
+          "source_offset_zero_based": 93,
+          "line_one_based": 4,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚹ",
+          "page": "lp2-51",
+          "rune_index_zero_based": 0,
+          "source_offset_zero_based": 227,
+          "line_one_based": 11,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᚹ",
+          "page": "lp2-51",
+          "rune_index_zero_based": 1,
+          "source_offset_zero_based": 228,
+          "line_one_based": 11,
+          "column_one_based": 2
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚣ",
+          "page": "lp2-52",
+          "rune_index_zero_based": 167,
+          "source_offset_zero_based": 218,
+          "line_one_based": 8,
+          "column_one_based": 17
+        },
+        "right": {
+          "rune": "ᚣ",
+          "page": "lp2-52",
+          "rune_index_zero_based": 168,
+          "source_offset_zero_based": 219,
+          "line_one_based": 8,
+          "column_one_based": 18
+        }
+      },
+      {
+        "left": {
+          "rune": "ᛝ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 19,
+          "source_offset_zero_based": 24,
+          "line_one_based": 2,
+          "column_one_based": 1
+        },
+        "right": {
+          "rune": "ᛝ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 20,
+          "source_offset_zero_based": 26,
+          "line_one_based": 2,
+          "column_one_based": 3
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚷ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 155,
+          "source_offset_zero_based": 203,
+          "line_one_based": 8,
+          "column_one_based": 12
+        },
+        "right": {
+          "rune": "ᚷ",
+          "page": "lp2-54",
+          "rune_index_zero_based": 156,
+          "source_offset_zero_based": 205,
+          "line_one_based": 8,
+          "column_one_based": 14
+        }
+      },
+      {
+        "left": {
+          "rune": "ᚦ",
+          "page": "lp2-55",
+          "rune_index_zero_based": 58,
+          "source_offset_zero_based": 74,
+          "line_one_based": 3,
+          "column_one_based": 15
+        },
+        "right": {
+          "rune": "ᚦ",
+          "page": "lp2-55",
+          "rune_index_zero_based": 59,
+          "source_offset_zero_based": 75,
+          "line_one_based": 3,
+          "column_one_based": 16
+        }
+      }
+    ]
+  }
+}

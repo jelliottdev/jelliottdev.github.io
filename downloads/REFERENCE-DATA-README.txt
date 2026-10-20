@@ -90,6 +90,11 @@ Compare fixed cuneiform windows (requires original-images.zip and Pillow):
   Guide: reference/articles/cuneiform.txt
   This remeasures decoded pixels and checks the recorded file hashes and results.
 
+Audit equal adjacent runes (no significance test):
+  python scripts/rune_doublets.py --check
+  python scripts/test_rune_doublets.py
+  Guide: reference/articles/doublets.txt
+
 Reconstruct unsolved word-length counts (no English corpus test):
   python scripts/rune_word_lengths.py --check
   python scripts/test_rune_word_lengths.py
