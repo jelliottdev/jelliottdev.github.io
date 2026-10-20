@@ -35,6 +35,20 @@ What does a spelling change actually do?
 
 Start with the exact original sequence, specify an alternate sequence, and subtract their totals. For a replacement of one rune by several, the change is the sum of the inserted rune values minus the removed rune value.
 
+Worked example: CWESTIAN
+
+The second word of the Instruction reading on LP1-16 contains seven runes. In the labels used by the arithmetic evidence, they are C, W, E, S, T, IA and N. The final three Latin letters in “TIAN” therefore do not represent three separate runes: IA is one alphabet entry worth 107.
+
+C    W    E    S    T    IA    N
+13 + 19 + 67 + 53 + 59 + 107 + 29 = 347
+
+Reverse the decimal digits: 347 → 743
+Both are prime, and they are different: 347 is an emirp.
+
+Now construct an alternative that represents the sound with separate I and O runes. Keep every other rune fixed. Their combined value is 31 + 7 = 38, so replacing 107 with 38 gives 347 − 107 + 38 = 278. This is a real arithmetic difference. Writing the original rune’s label as IO instead of IA, or C as K, would leave the underlying seven runes and their sum unchanged. See transliteration conventions before comparing Latin spellings.
+
+Compare the other cases
+
 TUNNELNG → a separate I before NG: adding I contributes 31. The first LP2-57 sentence changes from 1259 to 1290. The alternate total is composite. NG/ING is a multi-letter rune convention, so this comparison does not establish that the original is a spelling error.
 
 CWESTIAN with one IA/IO rune → separate I and O: remove 107 and add 31 + 7. The change is −69; the word total becomes 347 − 69 = 278, composite. Simply relabeling C as K or IA as IO changes no rune and therefore no sum.
@@ -57,6 +71,14 @@ For the manuscript’s philosophical use of the term, see primality and divinity
 
 The reproducible observation is that the three body sums are emirps under the declared convention. The counterfactuals show that some alternate encodings lose a property, while reorderings and aliases do not affect it. Neither statement alone identifies the author’s reason for choosing a spelling.
 
+Could a prime sum act as a consistency check?
+
+That is one possible purpose: if a reader knew in advance that each sentence should have an emirp sum, a sentence with a composite sum would signal a mismatch with that rule. The reader could then check the transcription, rune interpretation and sentence boundary. In the first LP2-57 sentence, inserting a separate I changes 1259 to 1290, so this proposed check would reject that particular insertion.
+
+Passing would be much weaker evidence. “The sum is an emirp” accepts many different totals. Even an exact expected total accepts any rearrangement of the same runes. WIDSOM and WISDOM both total 270: a sum cannot tell which order the manuscript uses. It also loses information beyond order. For example, the synthetic two-rune sequences U–O and TH–TH both total 10: 3 + 7 = 5 + 5. These are different rune collections with the same length and total, not manuscript words or a proposed reading.
+
+A useful check therefore needs an independently justified expectation, not just a property discovered after trying different boundaries. It can help reject some candidate transcriptions; it cannot recover the wording by itself. Compare what cipher operations preserve and file checksums, which address a different question: whether the file bytes match a specified reference.
+
 A proposed purpose such as marking sentence boundaries or providing a consistency check needs a separately stated rule and a complete set of cases. It should explain which units are meant to satisfy the rule and which choices were allowed. Selecting only successful words, or adding a delimiter value after seeing a composite total, changes the test. See selection effects and reproducible scope. This guide does not assign a probability that the observed totals were intentional.
 
 Sources and verification
@@ -71,8 +93,12 @@ https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/data/evidence/spelling-sums.json
 https://jelliottdev.github.io/reference/lp2-57.html
 https://jelliottdev.github.io/reference/articles/emirps.html
+https://jelliottdev.github.io/reference/articles/reading-instruction.html
+https://jelliottdev.github.io/reference/lp1-16.html
 https://jelliottdev.github.io/reference/articles/transliteration.html
 https://jelliottdev.github.io/reference/articles/primality-and-divinity.html
+https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+https://jelliottdev.github.io/reference/articles/checksums.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
 https://jelliottdev.github.io/scripts/reproduce_prime_sums.py
 https://jelliottdev.github.io/scripts/reproduce_reading.py
