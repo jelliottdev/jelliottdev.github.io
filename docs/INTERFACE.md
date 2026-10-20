@@ -1,5 +1,7 @@
 # Liberpedia interface
 
+The experiment index browses published records through native, keyboard-operable family disclosures. Families sort by title; each family shows its baseline before variants and retains one direct link to every separate experiment. Keep summaries and variant labels here, with full review metadata on the result page. Search matches remain expanded scope comparisons rather than inheriting collapsed browse controls. Check narrow 320px and 390px layouts when changing this browser; generic summary-span float styles must not reposition family titles or counts.
+
 Liberpedia is a manuscript reference for researchers who need to locate a page, inspect exact text and images, trace a claim, or compare a proposed experiment with documented work.
 
 The home page is an editorial index: manuscript releases, reference articles, specific page details, and research records. Its visual identity comes from the manuscript image, serif headings, blue links, a restrained ink palette, and aligned article lists. Avoid ornamental runes, grandiose copy, unrelated illustrations, dashboard statistics, and repeated interface explanations. Clean does not mean visually unfinished.

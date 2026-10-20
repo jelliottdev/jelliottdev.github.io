@@ -93,6 +93,14 @@ assert(experimentContext.experimentScopeLinks(artifactRecord).includes('href="ex
 assert(!experimentContext.experimentScopeLinks(artifactRecord).includes('#/page/'));
 console.log('PASS: artifact-only controls retain file targets without inventing manuscript-page coverage.');
 const published=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/experiments.json'),'utf8')).records;
+const browse=experimentContext.experimentBrowse(published);
+assert.equal((browse.match(/<details class="experiment-browse-family">/g)||[]).length,new Set(published.map(r=>r.family?.id||r.id)).size);
+for(const record of published)assert.equal(browse.split(`href="#/experiments/${record.id}"`).length-1,1,'Each record has one direct browse link');
+assert(!browse.includes('<details class="experiment-browse-family" open'),'Browse families start collapsed');
+assert(browse.indexOf('href="#/experiments/lp2-prime-minus-one-openings"')<browse.indexOf('href="#/experiments/lp2-fibonacci-openings"'),'Baseline precedes its variants');
+assert(!browse.includes('Retested '),'Full review metadata belongs to the record rather than every browse entry');
+assert(!experimentContext.experimentBrowse([{id:'safe',title:'<img src=x>',summary:'<script>unsafe</script>'}]).includes('<script>'));
+console.log('PASS: family browsing retains one direct link per record, baseline order and escaped content.');
 experimentContext.published=published;
 experimentContext.head=()=>'';
 experimentContext.footer=()=>'';

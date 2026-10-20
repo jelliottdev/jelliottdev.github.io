@@ -33,6 +33,25 @@ function experimentGroups(records, render){
     return `<section class="experiment-family">${f?`<h3>${esc(f.title)}</h3><p>${esc(f.question)}</p>`:''}${group.map(render).join('')}</section>`;
   }).join('');
 }
+function experimentBrowse(records){
+  const families=new Map();
+  for(const record of records){
+    const key=record.family?.id||record.id;
+    if(!families.has(key))families.set(key,[]);
+    families.get(key).push(record);
+  }
+  const title=group=>group[0].family?.title||group[0].title;
+  return `<h2>Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p>
+    <div class="experiment-browser">${[...families.values()].sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
+      const family=group[0].family;
+      const members=[...group].sort((a,b)=>Number(b.id===family?.baseline)-Number(a.id===family?.baseline)||a.title.localeCompare(b.title));
+      return `<details class="experiment-browse-family"><summary><span>${esc(title(group))}</span><span class="small muted">${members.length} ${members.length===1?'record':'records'}</span></summary>
+        ${family?`<p class="small muted">${esc(family.question)}</p>`:''}
+        <ul>${members.map(record=>`<li><h3><a href="#/experiments/${record.id}">${esc(record.title)}</a></h3>
+          ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
+          <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
+    }).join('')}</div>`;
+}
 function experimentFamily(r){
   if(!r.family)return '';
   const f=r.family,members=experimentRecords.filter(x=>x.family?.id===f.id);

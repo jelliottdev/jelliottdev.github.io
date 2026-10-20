@@ -96,7 +96,7 @@ function renderIdeaChecker(endpoint,query){
   function draw(searchNow,requestAI=false){
     reset();const idea=input.value.trim(),matches=searchNow?AssistantSearch.experiments(documents(),idea,pages()):[];
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported. This does not tell us whether your technique has been tried elsewhere.</p>';
-    else if(!searchNow||!idea)results.innerHTML=`<h2>Published experiments</h2>${experimentGroups(experimentRecords,r=>`<p><a href="#/experiments/${r.id}">${esc(r.title)}</a><br><span class="small muted">${esc(r.summary)}</span><br><span class="small muted">${esc(r.review.reviewer)}</span></p>`)}`;
+    else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
     else if(!matches.length)results.innerHTML='<h2>No matching documented technique</h2><p>Try the operation, cipher, key, or transformation rather than only a page number. This index does not cover all previous research.</p>';
     else results.innerHTML=`<h2>${matches.length} related ${matches.length===1?'record':'records'}</h2><p class="small muted">Compare the method and exclusions before treating a record as the same test.</p>${experimentGroups(matches.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]))}`;
     if(matches.length&&endpoint){
