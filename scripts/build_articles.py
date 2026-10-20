@@ -36,6 +36,14 @@ def reference_url(target):
         return "https://jelliottdev.github.io/reference/" + target.split("/")[2].split("?")[0] + ".html"
     return urljoin("https://jelliottdev.github.io/", target)
 
+def linked_articles(body):
+    """Collect exact guide destinations, including links to guide sections."""
+    parser = Text()
+    parser.feed(body)
+    return sorted({link[len("#/wiki/"):].split("?")[0].split("#")[0]
+                   for link in parser.links if link.startswith("#/wiki/")
+                   and link[len("#/wiki/"):].split("?")[0].split("#")[0]})
+
 def build():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
     reading_index = ROOT / "articles/readings/index.json"
@@ -43,14 +51,17 @@ def build():
         articles += json.loads(reading_index.read_text(encoding="utf-8"))
     def source(a):
         return ROOT / "articles" / a.get("source", a["id"] + ".html")
+    bodies = {a["id"]: source(a).read_text(encoding="utf-8") for a in articles}
+    outgoing = {aid: linked_articles(body) for aid, body in bodies.items()}
     for a in articles:
-        body = source(a).read_text(encoding="utf-8")
+        body = bodies[a["id"]]
         parser = Text()
         parser.feed(body)
         a["html"] = body
         # Preserve Python indentation and tabular boundaries in downloadable text.
         a["text"] = "".join(parser.parts).strip()
         a["references"] = [reference_url(link) for link in parser.links]
+        a["linked_articles"] = outgoing[a["id"]]
         title = html.escape(a["title"])
         standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
         standalone = standalone.replace('src="images/', 'src="../../images/').replace('href="images/', 'href="../../images/').replace('href="downloads/', 'href="../../downloads/')
@@ -59,7 +70,7 @@ def build():
         standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
         standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
         related = [b for b in articles if b["id"] != a["id"] and
-                   f'href="#/wiki/{a["id"]}"' in source(b).read_text(encoding="utf-8")]
+                   a["id"] in outgoing[b["id"]]]
         if a.get("pages"):
             standalone += '<h2>Manuscript pages discussed</h2><p>' + " · ".join(f'<a href="../{pid}.html">{pid.upper()}</a>' for pid in a["pages"]) + '</p>'
         if related:

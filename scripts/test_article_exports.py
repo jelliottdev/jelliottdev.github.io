@@ -1,8 +1,16 @@
 """Checks that non-JavaScript references remain usable as instructions."""
 import unittest
-from build_articles import Text, reference_url
+from build_articles import Text, reference_url, linked_articles
 
 class ArticleExports(unittest.TestCase):
+    def test_backlinks_include_sections_without_prefix_collisions(self):
+        body = """<a href="#/wiki/atbash?section=example">Example</a>
+        <a href='#/wiki/atbash'>Guide</a>
+        <a href="#/wiki/atbash-extra">Different guide</a>
+        <a href="#/page/lp1-01">Page</a>
+        <p>Text mentioning #/wiki/vigenere is not a link.</p>"""
+        self.assertEqual(linked_articles(body), ["atbash", "atbash-extra"])
+
     def test_preserves_runnable_indentation(self):
         parser = Text()
         parser.feed('<pre><code>def example():\n    return 42\nassert example() == 42</code></pre>')

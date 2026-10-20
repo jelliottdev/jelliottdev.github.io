@@ -10,7 +10,7 @@ function wikiPage(id='') {
  if(!a)throw Error('This guide does not exist. Open Guides and methods to find an article.');
  const doc=new DOMParser().parseFromString(a.html,'text/html');
  const headings=[...doc.querySelectorAll('h2[id]')];
- const backlinks=articles.filter(b=>b.id!==id&&b.html.includes(`href="#/wiki/${id}"`));
+ const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  return head(a.title,esc(a.summary),'Guides and methods')+`<div class="article-grid"><article class="wiki-article">
  <p class="small"><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p>
  <details class="mobile-article-contents"><summary>On this page</summary>${headings.map(h=>`<a href="#${h.id}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</details>
