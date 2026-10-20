@@ -20,6 +20,7 @@ jobs:
       - run: node scripts/test_search.cjs
       - run: node scripts/test_page_links.cjs
       - run: node scripts/test_guide_index.cjs
+      - run: node scripts/test_article_loading.cjs
       - run: python scripts/test_experiments.py
       - run: python scripts/build_experiments.py
       - run: python scripts/build_assistant.py
@@ -41,4 +42,4 @@ jobs:
       - run: python scripts/inspect_visual_records.py
       - run: python scripts/test_visual_report.py
       - name: Check that published exports match reviewed records
-        run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json reference/articles articles/readings
+        run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings

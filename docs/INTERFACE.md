@@ -32,6 +32,8 @@ Reader verification: narrow 320 and 390 CSS-pixel screens, 1440 desktop comparis
 
 ## Wiki search
 
+Initial loading uses `data/article-search.json`, which preserves article text and discovery metadata but omits HTML bodies. Opening a guide loads its authored HTML once per visit; concurrent requests share the load, failed loads can be retried, and stale route responses must not replace the current page. Keep the complete `data/articles.json` export for external consumers. Both indexes are generated together from the same article sources.
+
 Header suggestions and submitted results share local ranking. Exact identifiers lead to manuscript records; guide titles and title prefixes outrank incidental body mentions. A query such as Atbash must put its method article ahead of general introduction pages. The results page has one query field (the header), a ranked list with explicit content types, optional type tabs, and collapsed manuscript filters. Page filters do not suppress unrelated guide results. Search suggestions link directly to destinations and offer all results; Escape, Tab, arrow keys and pointer dismissal remain usable. Suggestion height follows the visible viewport when the phone keyboard appears. The ordinary wiki search remains separate from evidence of completed experiments.
 
 

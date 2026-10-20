@@ -76,6 +76,7 @@ for article in articles:
  documents.append((root/f'reference/articles/{article["id"]}.txt').read_text(encoding='utf-8'))
 register('data/index.json','Page and alphabet index')
 register('data/articles.json','Reference article index')
+register('data/article-search.json','Reference article index')
 save('data/guide-index.json',json.dumps(guide_discovery_index(articles),ensure_ascii=False,indent=2)+'\n')
 register('data/guide-index.json','Compact guide discovery index')
 register('data/evidence/embedded-payloads.json','Embedded payload evidence')

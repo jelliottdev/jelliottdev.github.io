@@ -227,6 +227,10 @@ def build():
                           for ref in reference_details)
         (out / f'{a["id"]}.txt').write_text(a["title"] + "\n\n" + a["summary"] + "\n\n" + a["text"] + "\n\nSources, related references, and files\n" + links + "\n\nArticle: https://jelliottdev.github.io/reference/articles/" + a["id"] + ".html\n", encoding="utf-8", newline="\n")
     (ROOT / "data/articles.json").write_text(json.dumps(articles, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    search_articles = [{key: value for key, value in a.items() if key != "html"} for a in articles]
+    (ROOT / "data/article-search.json").write_text(
+        json.dumps(search_articles, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8", newline="\n")
     print(f"Built {len(articles)} searchable articles and standalone HTML/text copies.")
 
 if __name__ == "__main__":

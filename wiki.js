@@ -1,4 +1,19 @@
 /* Authored reference articles. Never treated as completed experiment records. */
+const wikiArticleLoads=new Map();
+async function ensureWikiArticle(id){
+ if(!id)return;
+ const article=db.articles.find(a=>a.id===id);
+ if(!article)throw Error('This guide does not exist. Open Guides and methods to find an article.');
+ if(typeof article.html==='string')return;
+ if(!wikiArticleLoads.has(id)){
+  const pending=fetch('articles/'+(article.source||id+'.html'),{cache:'no-cache'})
+   .then(response=>{if(!response.ok)throw Error('This guide could not be loaded. Please retry.');return response.text()})
+   .then(body=>{article.html=body})
+   .finally(()=>wikiArticleLoads.delete(id));
+  wikiArticleLoads.set(id,pending);
+ }
+ await wikiArticleLoads.get(id);
+}
 function wikiPage(id='') {
  const articles=db.articles;
  if(!id){
