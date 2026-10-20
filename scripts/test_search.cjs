@@ -50,7 +50,7 @@ for(const [query,id,section] of [
  ['N05059','blake-nebuchadnezzar','collection'],
  ['nebuchadnezar','blake-nebuchadnezzar','subject'],
  ['Book of Daniel','blake-nebuchadnezzar','daniel'],
- ['Urizen','blake-ancient-of-days','frontispiece'],
+ ['Urizen','urizen','character'],
  ['Europe a Prophecy','blake-ancient-of-days','frontispiece'],
  ['foolish consistency','emerson-self-reliance','passages'],
  ['koan meaning','koans','term'],
