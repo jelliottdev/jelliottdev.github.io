@@ -16,7 +16,7 @@ Phone priorities are selecting a page, reading, inspecting an image, downloading
 
 Experiment search is not a novelty oracle. Empty registry, no lexical match, index-load failure, hosted-service loading, cancellation and generation failure need distinct messages. Hosted AI must not download a model onto the visitor’s device or replace source records. Generated comparisons remain drafts with links to retrieved records.
 
-The system currently has no published experiment records. Hosted AI quality and performance evaluation remains required once records are available. Browser tests use isolated synthetic records; these must never be published as research.
+The registry contains published, bounded experiment records. Hosted AI answer quality still needs separate evaluation; deterministic retrieval and browser tests do not establish model quality. Browser regression fixtures must never be published as research.
 
 Checked during the October 2026 update: home, catalogue, search, reader, downloads, prime-sum article, topics, experiments and manuscript pages at 320, 390, 768 and 1440 CSS pixels; drawer keyboard behavior; original download hash; offline file verification; search deep links; and empty/populated experiment UI using test fixtures.
 
@@ -85,3 +85,5 @@ Article breadcrumbs name the authored subject category and link to its subject i
 Scoped download URLs (`#/downloads/<query>`) open at Individual files with the query already applied. General Downloads opens at the bundle introduction. Explicit section parameters take precedence. Preserve the focused heading below the sticky header so keyboard and phone users can reach filtered files without crossing the bundle instructions.
 
 Experiment discovery groups matching records by scientific family without merging findings. Full records compare published variants against the declared baseline, naming every changed scope field. Preserve visible computational-versus-human review status. One baseline must not imply that planned variants have been completed. Family comparisons use full-width entries with exact before/after scope in disclosures, so long methods do not become narrow text columns on phones.
+
+Experiment detail pages put the finding and limitations before the exact scope. Keep computational review visible. Reproduction offers the reference bundle, relevant original-image bundle, and direct individual plan, checker and result downloads. A lone run script must not be presented as sufficient to reproduce a test. Keep every declared file and checksum available, including binary outputs, but do not bury the primary results inside the checksum disclosure. Family comparisons follow the record itself; do not repeat family siblings again under Related experiments.

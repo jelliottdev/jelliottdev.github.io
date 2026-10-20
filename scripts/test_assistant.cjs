@@ -92,3 +92,22 @@ assert.equal(Search.experiments(artifactDocs,'LP2-31').length,0);
 assert(experimentContext.experimentScopeLinks(artifactRecord).includes('href="exports/source.pdf"'));
 assert(!experimentContext.experimentScopeLinks(artifactRecord).includes('#/page/'));
 console.log('PASS: artifact-only controls retain file targets without inventing manuscript-page coverage.');
+const published=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/experiments.json'),'utf8')).records;
+experimentContext.published=published;
+experimentContext.head=()=>'';
+experimentContext.footer=()=>'';
+vm.runInContext('experimentRecords=published',experimentContext);
+for(const record of published){
+ const rendered=experimentContext.experimentArticle(record);
+ assert(rendered.indexOf('id="experiment-finding"')<rendered.indexOf('id="experiment-scope"'));
+ const downloads=experimentContext.experimentDownloads(record);
+ assert(downloads.includes(`href="${record.reproduction.script}" download`));
+ for(const output of record.reproduction.outputs.filter(f=>/\.(json|csv|tsv|txt)$/.test(f.path))){
+  assert(downloads.includes(`href="${output.path}" download`),'A readable result must be directly downloadable');
+ }
+ assert(rendered.includes('href="downloads/reference-data.zip" download'));
+ assert.equal(rendered.includes('href="downloads/original-images.zip" download'),record.reproduction.inputs.some(f=>/\.(jpe?g|png)$/i.test(f.path)));
+ const family=rendered.indexOf('aria-label="Experiment family comparison"');
+ if(family>=0)assert(family>rendered.indexOf('id="experiment-reproduce"'));
+}
+console.log('PASS: published records lead with findings; result downloads and required bundles remain accessible.');
