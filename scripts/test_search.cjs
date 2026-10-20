@@ -20,7 +20,9 @@ assert.equal(search.relevance('Some Wisdom','','a warning','"wisdom warning"'),0
 console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phrases and empty results');
 
 for(const [queries,id,pageIds] of [
- [['dots','black dots','three dots'],'dots',['lp2-33','lp2-39']],
+ [['dots','black dots'],'dots',['lp2-07','lp2-33','lp2-39']],
+ [['five dots'],'dots',['lp2-07']],
+ [['three dots'],'dots',['lp2-33','lp2-39']],
  [['mobius','Möbius','moebius','infinity'],'mobius',['lp2-15']],
  [['cuniform','cuneiform','cuneform','wedge marks'],'cuneiform',['lp2-33','lp2-34']],
  [['compasses','compass','1033.jpg'],'illustrated-cover',[]],
@@ -34,8 +36,8 @@ for(const [queries,id,pageIds] of [
  }
 }
 for(const q of ['cuni','moeb','compass'])assert(search.search(db,q).length,'Spelling variants must work while typing');
-assert.equal(search.search(db,'spirals')[0].href,'#/wiki/visual-index?section=spirals');
-assert.equal(search.search(db,'branches')[0].href,'#/wiki/visual-index?section=branches');
+assert.equal(search.search(db,'spirals')[0].href,'#/wiki/spirals');
+assert.equal(search.search(db,'branches')[0].href,'#/wiki/branches');
 console.log('PASS: visual names, spelling variants, partial aliases, direct page results, and subject anchors');
 
 // Exercise the actual header input handler with an Android-style composing event.
@@ -95,3 +97,6 @@ sandbox.document.activeElement=input;input.listeners.focus();
 panel.listeners.click({target:{closest:()=>({getAttribute:()=> '#/wiki/reading-second-koan'})},preventDefault(){}});
 assert.equal(sandbox.location.hash,'#/wiki/reading-second-koan');
 console.log('PASS: blur/composition before tap, cancelled gestures, and keyboard activation');
+
+assert(!search.search(db,'five dots').some(h=>h.page?.id==='lp2-33'));
+assert(!search.search(db,'three dots').some(h=>h.page?.id==='lp2-07'));

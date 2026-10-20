@@ -4,7 +4,7 @@ from html.parser import HTMLParser
 import html
 import json
 import re
-from urllib.parse import urljoin
+from urllib.parse import urljoin, parse_qs, quote
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,7 +28,10 @@ class Text(HTMLParser):
 def reference_url(target):
     """Prefer standalone guide/page references over JavaScript routes."""
     if target.startswith("#/wiki/"):
-        return "https://jelliottdev.github.io/reference/articles/" + target.split("/")[2] + ".html"
+        article, _, query = target.split("/")[2].partition("?")
+        section = parse_qs(query).get("section", [""])[0]
+        return ("https://jelliottdev.github.io/reference/articles/" + article + ".html"
+                + ("#" + quote(section, safe="-_") if section else ""))
     if target.startswith("#/page/"):
         return "https://jelliottdev.github.io/reference/" + target.split("/")[2].split("?")[0] + ".html"
     return urljoin("https://jelliottdev.github.io/", target)
@@ -52,6 +55,7 @@ def build():
         standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
         standalone = standalone.replace('src="images/', 'src="../../images/').replace('href="images/', 'href="../../images/').replace('href="downloads/', 'href="../../downloads/')
         standalone = standalone.replace('src="thumbs/', 'src="../../thumbs/')
+        standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)\?section=([^"]+)"', r'href="\1.html#\2"', standalone)
         standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
         standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
         related = [b for b in articles if b["id"] != a["id"] and

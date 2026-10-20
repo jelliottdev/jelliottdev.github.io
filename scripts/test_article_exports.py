@@ -18,6 +18,8 @@ class ArticleExports(unittest.TestCase):
     def test_links_resolve_to_standalone_references(self):
         self.assertEqual(reference_url("#/wiki/outguess"),
                          "https://jelliottdev.github.io/reference/articles/outguess.html")
+        self.assertEqual(reference_url("#/wiki/visual-index?section=spiral-branches"),
+                         "https://jelliottdev.github.io/reference/articles/visual-index.html#spiral-branches")
         self.assertEqual(reference_url("#/page/lp2-56?section=reading"),
                          "https://jelliottdev.github.io/reference/lp2-56.html")
         self.assertEqual(reference_url("data/catalog.json"),
