@@ -34,6 +34,40 @@ python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg</code><
 <h2 id="reference">What is the reference level?</h2>
 <p>For independent, uniformly distributed symbols from a 29-symbol alphabet, the expected match probability is <code>1/29 ≈ 0.03448276</code>. This follows by adding the 29 possible matching outcomes, each with probability <code>(1/29)²</code>. A finite sample need not equal this expectation. An observed value below it is possible; LP2-31 is one example.</p>
 <p>The report also supplies <code>scaled_ioc_29 = 29 × IoC</code>, whose uniform independent expectation is 1. Always state whether a number is scaled. Do not compare this rune statistic directly with an English A–Z benchmark: the alphabet, multi-letter symbols, encoding and inclusion rules differ.</p>
+<h2 id="finite-sample">Why the uniform reference is not a minimum</h2>
+<p>Consider the two-symbol sequence <code>F U</code>. Each symbol occurs equally often, yet its IoC is zero: drawing two distinct positions must give different symbols. By contrast, two independent draws from a source that chooses F or U with equal probability match with probability <code>1/2</code>. Equal counts in a fixed sample and equal probabilities in a generating process are different conditions.</p>
+<p>For a fixed length <code>N</code> and an alphabet of <code>K</code> symbols, the lowest possible IoC comes from spreading the counts as evenly as the integer length permits. Write <code>N = Kq + r</code>, where <code>q</code> is the quotient and <code>r</code> the remainder. Then <code>r</code> symbols occur <code>q + 1</code> times and the other <code>K − r</code> occur <code>q</code> times. Some counts may be zero when the text is shorter than the alphabet.</p>
+<pre><code>Minimum matching ordered pairs =
+    r × q × (q + 1) + (K − r) × q × (q − 1)
+Minimum IoC = minimum matching pairs / (N × (N − 1))</code></pre>
+<p>Why does balancing minimize the count? If one symbol occurs at least twice more often than another, moving one occurrence from the larger count to the smaller reduces the sum of matching pairs. Repeating that step ends when no two counts differ by more than one. This proves a bound over possible count distributions; it does not say that any particular cipher should produce the minimizing distribution.</p>
+<h3>Compare the three values for LP2-31</h3>
+<p>LP2-31 has 269 archived runes. Dividing by 29 gives a quotient of 9 and remainder of 8, so the most balanced distribution has eight counts of 10 and twenty-one counts of 9.</p>
+<div class="table-wrap"><table><thead><tr><th>Comparison</th><th>Unscaled IoC</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Finite-sample minimum</td><td>2232 / 72092 ≈ 0.03096044</td><td>Lowest possible value for 269 positions and 29 available symbols.</td></tr>
+<tr><td>Observed LP2-31</td><td>2376 / 72092 ≈ 0.03295789</td><td>Calculated from the archived rune counts.</td></tr>
+<tr><td>Uniform independent expectation</td><td>1 / 29 ≈ 0.03448276</td><td>Average match probability under independent, equally probable symbols.</td></tr>
+</tbody></table></div>
+<p>The observed value lies between the minimum and the independent expectation. That placement alone is not a significance test: it supplies neither a tail probability nor a measure of how often such a value occurs under a specified model. In particular, being below <code>1/29</code> is not evidence by itself of a deliberate balancing procedure.</p>
+<h3>Reproduce the comparison</h3>
+<pre><code>import json
+from fractions import Fraction
+from pathlib import Path
+
+report = json.loads(Path("data/evidence/rune-ioc.json").read_text(encoding="utf-8"))
+page = next(p for p in report["records"] if p["page"] == "lp2-31")
+n, k = page["n"], len(page["counts"])
+q, r = divmod(n, k)
+minimum_pairs = r * q * (q + 1) + (k - r) * q * (q - 1)
+minimum = Fraction(minimum_pairs, n * (n - 1))
+observed = Fraction(page["numerator"], page["denominator"])
+expected = Fraction(1, k)
+assert (n, k, minimum_pairs) == (269, 29, 2232)
+assert minimum &lt; observed &lt; expected
+for name, value in (("minimum", minimum), ("observed", observed),
+                    ("independent expectation", expected)):
+    print(name, value, f"{float(value):.8f}")</code></pre>
+<p>This example reads the saved baseline. Run <code>python scripts/rune_ioc.py --check</code> first to verify that baseline against the archived inputs. For fewer than two symbols, IoC remains undefined; the formula must not be used with a zero denominator.</p>
 <h2 id="limits">What it can and cannot distinguish</h2>
 <p>Reordering a fixed set of symbols leaves its frequency counts unchanged. A transposition therefore preserves whole-stream IoC. A one-to-one substitution renames symbols but preserves their multiplicities, so it also preserves IoC. This includes <a href="#/wiki/atbash">Atbash</a> and a constant <a href="#/wiki/modular-arithmetic">modular shift</a>. Equality of IoC does not establish which of these transformations, if any, was used.</p>
 <p>A changing substitution, such as a repeating-key <a href="#/wiki/vigenere">Vigenère</a> operation, can change the distribution. A value near the uniform reference is nevertheless not proof of Vigenère, randomness or strong encryption. A higher value does not prove plaintext or a monoalphabetic cipher. Different processes can produce similar frequency distributions.</p>
