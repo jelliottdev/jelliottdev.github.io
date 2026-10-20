@@ -12,6 +12,58 @@ Connected components
 A connected component is a group of selected pixels joined by the chosen neighborhood rule. Eight-connectivity includes horizontal, vertical, and diagonal neighbors. Four-connectivity excludes diagonal neighbors; the same image can produce different counts under those definitions.
 The published opening-page measurement uses foreground grayscale below 140 and retains eight-connected groups containing at least 20 pixels. Tiny isolated specks are excluded by that area threshold. A count of 13 means thirteen qualifying groups under this rule, not necessarily thirteen intentional dots.
 
+The same pixels, two different counts
+
+In this invented three-by-three mask, # marks a selected foreground pixel and . marks background. It is a teaching example, not a manuscript crop.
+
+# . .
+. # .
+. . #
+
+	Neighborhood rule	Connections in this mask	Components
+
+	Four-connected	Only shared horizontal or vertical edges count. None of the selected pixels share an edge.	3 components, each of area 1
+
+	Eight-connected	Corner neighbors also connect. The middle pixel connects both outer pixels.	1 component of area 3
+
+
+Connectivity is transitive: the two outer pixels need not touch each other to belong to the same group. A path through the middle pixel is enough. This is why a thin diagonal bridge can merge what a person sees as separate marks.
+
+Reproduce the small mask
+
+This Python 3 example counts all selected pixels, with no minimum-area filter. It needs no image package:
+
+def component_areas(points, diagonal=False):
+    remaining = set(points)
+    neighbors = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    if diagonal:
+        neighbors += [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+    areas = []
+    while remaining:
+        pending = [remaining.pop()]
+        area = 0
+        while pending:
+            x, y = pending.pop()
+            area += 1
+            for dx, dy in neighbors:
+                neighbor = (x + dx, y + dy)
+                if neighbor in remaining:
+                    remaining.remove(neighbor)
+                    pending.append(neighbor)
+        areas.append(area)
+    return sorted(areas)
+
+pixels = {(0, 0), (1, 1), (2, 2)}
+assert component_areas(pixels) == [1, 1, 1]
+assert component_areas(pixels, diagonal=True) == [3]
+assert component_areas(set()) == []
+print("Four-connected:", component_areas(pixels))
+print("Eight-connected:", component_areas(pixels, diagonal=True))
+
+Each selected pixel is removed from the remaining set when it is assigned to a component, so it cannot be counted twice. The reported areas total three under either rule. Connectivity changes grouping, not how many foreground pixels exist.
+
+The real opening-page rule additionally discards components smaller than 20 pixels. Applied to this tiny teaching mask, that filter would retain zero components under either connectivity rule. Always report the neighborhood, brightness threshold and minimum area together; “three dots” is not a complete measurement specification.
+
 Color classification
 Within a stored rectangle, foreground pixels use the weighted brightness test 0.299R + 0.587G + 0.114B < 140. A foreground pixel is red-dominant when R − max(G,B) > 70. A red-dominant fraction above 90% gives “red”; below 10% gives “dark”; intermediate cases are “mixed/uncertain.” These labels summarize pixels under a rule, not a chemical analysis of ink.
 
