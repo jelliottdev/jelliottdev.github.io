@@ -1,0 +1,88 @@
+{
+  "id": "mixed-square-word-sums",
+  "title": "LP1-05: candidate word sums and rune segmentation",
+  "status": "published",
+  "question": "Do the sixteen supplied Latin word candidates admit the claimed GP sums, and are those sums forced by their spellings?",
+  "summary": "Sixteen fixed candidates admit their proposed totals; THAN has two rune-label segmentations and AETHEREAL eight. All 24 segmentations are retained.",
+  "tags": [
+    "Obscura",
+    "magic square",
+    "word sums",
+    "number to word",
+    "AETHEREAL",
+    "THAN",
+    "Gematria Primus",
+    "dictionary lookup"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-05"
+    ],
+    "representation": "Sixteen supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+    "procedure": "Enumerate all segmentations, sum prime values, and compare each with its supplied target.",
+    "parameters": "Fixed 16 candidates; 24 complete segmentations; no dictionary expansion.",
+    "exclusions": "Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance."
+  },
+  "outcome": "inconclusive",
+  "finding": "All sixteen supplied totals are achievable. THAN also admits 208; AETHEREAL admits eight totals, only one equal to 366. Matching sums do not recover a unique word or demonstrate a cipher.",
+  "limitations": "Selected candidate list; no unbiased match-rate estimate, dictionary search or manuscript decryption. Computational review; human review pending.",
+  "next_steps": "Group alternate vocabulary or transliteration rules as explicit variants. Define a separate bounded transform before using candidates as cipher keys.",
+  "family": {
+    "id": "word-sum-substitutions",
+    "title": "Word-sum substitutions",
+    "question": "Which candidate words fit specified rune-value totals, under which representations?",
+    "baseline": "mixed-square-word-sums"
+  },
+  "variant": {
+    "label": "Sixteen supplied words; all exact-label segmentations",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent exhaustive cut-mask check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/mixed-square-word-sums/run.py --check",
+    "environment": "Python 3.12.10 standard library; independent check: python experiments/records/mixed-square-word-sums/check.py",
+    "script": "experiments/records/mixed-square-word-sums/run.py",
+    "script_sha256": "fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "experiments/records/mixed-square-word-sums/plan.json",
+        "sha256": "2876ae51235d3a54f1f4feb07f4690119c37a1fa22f4713352d160ebfe9ca26f"
+      },
+      {
+        "path": "experiments/records/mixed-square-word-sums/check.py",
+        "sha256": "9c9b117f3c4db570b538b6d4cc5ac65b8a366e9eb2b00cadb91b678e9a2d7739"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/mixed-square-word-sums/results.json",
+        "sha256": "05a5c5befb01aee48af8644c1764269c54fa56bfb62706e302b57c0ddfa35a7a"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "LP1-05 original image and archived text",
+      "url": "https://jelliottdev.github.io/#/page/lp1-05"
+    },
+    {
+      "label": "Mixed-square conversion and equal-sum pairs",
+      "url": "https://jelliottdev.github.io/#/wiki/magic-squares?section=rune-cells"
+    }
+  ],
+  "related": [
+    "magic-square-freedom"
+  ],
+  "article": "# Candidate words for the LP1-05 mixed square\n\nThis experiment checks sixteen supplied word-and-total pairs. It asks whether each spelling can be segmented into Gematria Primus rune labels to produce the proposed number. It does not try the words as keys or replace text on unsolved pages.\n\n## Scope and normalization\n\nThe list was fixed before enumeration. Uppercase each word and replace V with U; make no other spelling substitutions. Enumerate every exact segmentation into the 29 Latin rune labels in the archived alphabet. For example, TH can be one rune label or the two labels T and H. These are spelling segmentations, not a phonetic transcription algorithm.\n\nThere are 16 candidates and 24 total segmentations. Every candidate has exactly one segmentation matching its supplied total. Fourteen candidates have only one possible segmentation under these rules; THAN has two and AETHEREAL has eight. The candidate list was supplied because its sums were of interest, so the 16 matches are not an unbiased success rate or a chance probability.\n\n## Matching segmentations\n\nEach row below records the exact rune labels needed. VOID is retained as the submitted word, with V explicitly normalized to U.\n\n| Candidate | Rune labels | Sum |\n| --- | --- | --- |\n| OR | O · R | 18 |\n| FORM | F · O · R · M | 91 |\n| VOID | U · O · I · D | 130 |\n| THAN | TH · A · N | 131 |\n| WHEN | W · H · E · N | 138 |\n| FIND | F · I · N · D | 151 |\n| BUFFERS | B · U · F · F · E · R · S | 199 |\n| MOURNFUL | M · O · U · R · N · F · U · L | 199 |\n| MOBIUS | M · O · B · I · U · S | 226 |\n| OBSCURA | O · B · S · C · U · R · A | 245 |\n| IMPOSE | I · M · P · O · S · E | 272 |\n| CARNAL | C · A · R · N · A · L | 320 |\n| ANALOG | A · N · A · L · O · G | 320 |\n| SHADOWS | S · H · A · D · O · W · S | 341 |\n| CABAL | C · A · B · A · L | 341 |\n| AETHEREAL | AE · TH · E · R · EA · L | 366 |\n\n## What the Latin spellings leave undecided\n\nTHAN gives **131** with TH–A–N, but **208** with T–H–A–N. AETHEREAL has the following eight exact-label segmentations:\n\n| Rune labels | Sum |\n| --- | --- |\n| A · E · TH · E · R · E · A · L | 484 |\n| A · E · TH · E · R · EA · L | 429 |\n| A · E · T · H · E · R · E · A · L | 561 |\n| A · E · T · H · E · R · EA · L | 506 |\n| AE · TH · E · R · E · A · L | 421 |\n| AE · TH · E · R · EA · L | 366 |\n| AE · T · H · E · R · E · A · L | 498 |\n| AE · T · H · E · R · EA · L | 443 |\n\nWhen the original manuscript supplies rune symbols, use those symbols directly. The ambiguity here arises when converting a Latin candidate back into runes. Choosing the segmentation because it hits a target is a search choice and must be recorded; the Latin word alone does not fix the sum.\n\n## Why equal totals do not recover words\n\nThe [mixed-square guide](#/wiki/magic-squares?section=sum-collisions) already shows distinct printed words sharing values: BUFFERS and MOURNFUL both give 199, CARNAL and ANALOG both give 320, and SHADOWS and CABAL both give 341. A sum discards order and other information. A number-to-word replacement can therefore have multiple candidates even in this small supplied list.\n\nIf every cell of a magic square is replaced by a word with exactly the same numerical total, all its line sums remain unchanged by construction. Preserving 1033 would check the replacements' arithmetic; it would not independently select the words or establish a hidden sentence. The [known conversion](#/wiki/magic-squares?section=rune-cells) goes from visible runes to numbers; reversing that process is a different problem.\n\n## Reproduce\n\nRun the producer and independent checker from the extracted experiment bundle or repository:\n\n```text\npython experiments/records/mixed-square-word-sums/run.py --check\npython experiments/records/mixed-square-word-sums/check.py\n```\n\nWithout `--check`, the producer prints all results as JSON. The producer recursively matches alphabet labels at the start of each remaining suffix. The independent checker instead tries every cut/no-cut pattern between Latin letters, keeps only pieces in the alphabet, and compares the complete set of segmentations and sums. Both use the same declared alphabet; agreement is not an independent verification of that alphabet against the manuscript.\n\nThe plan fixes the words and target totals. The JSON retains every segmentation, including nonmatching ones. No dictionary, language model, network access or paid service is needed.\n\n## Limits and related experiments\n\nThis is an arithmetic audit of a selected list, not an exhaustive dictionary search, plaintext result or test of authorial intent. It does not establish that an unsolved rune word with one of these totals should be decrypted using the corresponding candidate. That would require a defined transform, alignment, key-advance rule and scoring criterion.\n\nA future variant can change the vocabulary or transliteration rules while preserving this baseline. A dictionary search must pin the dictionary and report all matching entries, not just appealing words. A cipher search must state its [search space and bounds](#/wiki/search-space) separately. The [magic-square freedom experiment](#/experiments/magic-square-freedom) concerns numerical constraints; it answers a different question.\n",
+  "article_path": "experiments/records/mixed-square-word-sums/article.md",
+  "script_sha256": "fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc"
+}

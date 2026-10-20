@@ -5858,6 +5858,93 @@
   &quot;article&quot;: &quot;# How much freedom remains in a magic square?\n\n## Question\nDoes a fixed line sum, half-turn symmetry and one fixed entry determine the rest of a five-by-five magic square?\n\nNo. Under precisely these conditions, five rational degrees of freedom remain. We also construct positive-integer alternatives to both LP1 examples, keeping any one chosen cell unchanged. This tests uniqueness of numerical grids, not a cipher or the authors’ intentions.\n\n## Why this matters\nIt is tempting to count twelve line-sum equations, subtract twelve from the number of cells, and conclude that almost everything is forced. That subtraction only works for independent equations. For example, the sum of all row totals already equals the sum of all column totals. Symmetry creates further dependencies.\n\nA **degree of freedom** is an independent parameter that can vary while all the equations remain satisfied. It is not a count of solutions and does not mean that every integer assigned to those parameters produces an allowed square.\n\n## Scope and plan\nThe [recorded plan](experiments/records/magic-square-freedom/plan.json) specifies orders 3, 5 and 7, with four symmetry conditions each. Every row, column and both main diagonals have the same fixed sum. We distinguish:\n\n- No additional symmetry.\n- Half-turn symmetry: the cell at row r, column c equals its opposite after a 180-degree rotation.\n- Transpose symmetry: swapping row and column leaves the entry unchanged.\n- Both symmetries together.\n\nThe actual LP1-05 converted square and LP1-16 printed square have half-turn symmetry. Neither is transpose-symmetric: compare their cells at row 1, column 2 and row 2, column 1. Imposing transpose symmetry would therefore change the model and exclude both observed grids.\n\nThe supplied discussion had already proposed uniqueness, retracted that claim, and suggested possible dimensions. Those claims were known before calculation. This is a deterministic audit, not a blind prediction or significance test. The plan was written before running but was not externally timestamped or preregistered.\n\n## Method\nLet A be an existing square and D a change to it. The square A+D retains the same line sums exactly when every row, column and diagonal of D sums to zero. The same symmetry equations apply to D. Keeping one cell unchanged adds the equation that its change is zero.\n\nThe script forms these linear equations and reduces them with exact rational arithmetic. Rank counts the independent equations; dimension equals the number of cells minus rank. The saved nullspace basis describes all rational changes satisfying the equations. A uniform rational grid with entry equal to the line sum divided by the order supplies a solution for every prescribed rational sum, so the reported affine dimensions are not dimensions of an empty set.\n\nFor each of the 25 cell positions in each actual five-by-five square, the script selects the first basis vector that preserves that cell, clears denominators, and divides out the common integer factor. It tries adding that primitive change, then subtracting it. It stops after those two possibilities; this is not an exhaustive positive-integer enumeration.\n\n## Results\nAll twelve comparison models completed. These dimensions assume a fixed common line sum:\n\n| Order | No symmetry | Half-turn | Transpose | Both |\n| --- | --- | --- | --- | --- |\n| 3 | 2 | 0 | 1 | 0 |\n| 5 | 14 | 6 | 8 | 4 |\n| 7 | 34 | 16 | 19 | 10 |\n\nFor order five, fixing any one cell reduces the half-turn dimension from six to five. For order seven it reduces sixteen to fifteen. This is not a statement about an audited historical seven-by-seven square; order seven here is a mathematical comparison. For order three, the half-turn model already has dimension zero: with a fixed sum, it forces the uniform rational square.\n\nEvery one of the **50 fixed-cell tests** produced a different positive-integer square. Each preserves its original line sum and half-turn symmetry, and keeps the chosen entry unchanged. The complete [results and witnesses](experiments/records/magic-square-freedom/results.json) include all cases, bases, positions and input hashes.\n\n### An example you can check by hand\nKeep the center 809 in LP1-16. Add 1 to row 2, column 1 and row 4, column 5; subtract 1 from row 2, column 5 and row 4, column 1. Leave every other cell alone.\n\n```text\n 434 1311 312  278  966\n 205  812 934  280 1070\n 626  620 809  620  626\n1070  280 934  812  205\n 966  278 312 1311  434\n```\n\nEach affected row and column gains one and loses one. Neither diagonal changes. Opposite entries still agree, all entries remain positive, and every line still sums to 3301. Thus the center value 809 cannot uniquely determine the original grid under these rules. These numbers are a constructed counterexample, not a transcription correction.\n\n## Reproduce\nPython 3.12 standard library; no network, packages or AI calls. From the repository root, run:\n\n```sh\npython experiments/records/magic-square-freedom/run.py --check\npython experiments/records/magic-square-freedom/check.py\n```\n\nThe first command recomputes every case and compares the complete report. The second independently constructs the equations and checks rank modulo two large primes. It directly verifies every rational null vector and its independence. A matching modular rank gives a lower bound; the independent null vectors give the matching upper bound, certifying the rational rank. It also checks every positive-integer counterexample by summing its actual rows, columns and diagonals and comparing opposite cells.\n\nUse `--write` instead of `--check` to regenerate results. Preserve the old output if changing the plan or input transcriptions.\n\n## Retest and changes\nOn 20 October 2026, Codex recomputed the saved result and ran the separate checker. All twelve ranks, fixed-cell dimensions and fifty witnesses passed. This is computational review by the same agent; independent human review is pending. No model, bounds or criterion changed after inspecting the results.\n\n## What remains open\nThis disproves uniqueness under the stated constraints. It does not count all positive-integer solutions, impose prime patterns or distinct entries, reconstruct a historical server validator, or show which values the authors deliberately selected. A rational basis is not automatically a basis for all integer solutions: clearing each vector’s denominators is enough to construct these witnesses, but is not an integer-lattice enumeration method.\n\nAn extra requirement can shrink the space. To test one, state it as a separate variant and show exactly which constraints changed. A theory that fixes many cells, restricts values to a list, or imposes a primality pattern is not ruled out by this result.\n\nSee [the magic-square guide](#/wiki/magic-squares) for the original images and rune-value conversion, and [search space and bounds](#/wiki/search-space) for why a claim must name the space it covers.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/magic-square-freedom/article.md&quot;,
   &quot;script_sha256&quot;: &quot;83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce&quot;
+}</pre></article><article id="mixed-square-word-sums"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;mixed-square-word-sums&quot;,
+  &quot;title&quot;: &quot;LP1-05: candidate word sums and rune segmentation&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the sixteen supplied Latin word candidates admit the claimed GP sums, and are those sums forced by their spellings?&quot;,
+  &quot;summary&quot;: &quot;Sixteen fixed candidates admit their proposed totals; THAN has two rune-label segmentations and AETHEREAL eight. All 24 segmentations are retained.&quot;,
+  &quot;tags&quot;: [
+    &quot;Obscura&quot;,
+    &quot;magic square&quot;,
+    &quot;word sums&quot;,
+    &quot;number to word&quot;,
+    &quot;AETHEREAL&quot;,
+    &quot;THAN&quot;,
+    &quot;Gematria Primus&quot;,
+    &quot;dictionary lookup&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-05&quot;
+    ],
+    &quot;representation&quot;: &quot;Sixteen supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.&quot;,
+    &quot;procedure&quot;: &quot;Enumerate all segmentations, sum prime values, and compare each with its supplied target.&quot;,
+    &quot;parameters&quot;: &quot;Fixed 16 candidates; 24 complete segmentations; no dictionary expansion.&quot;,
+    &quot;exclusions&quot;: &quot;Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;All sixteen supplied totals are achievable. THAN also admits 208; AETHEREAL admits eight totals, only one equal to 366. Matching sums do not recover a unique word or demonstrate a cipher.&quot;,
+  &quot;limitations&quot;: &quot;Selected candidate list; no unbiased match-rate estimate, dictionary search or manuscript decryption. Computational review; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Group alternate vocabulary or transliteration rules as explicit variants. Define a separate bounded transform before using candidates as cipher keys.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;word-sum-substitutions&quot;,
+    &quot;title&quot;: &quot;Word-sum substitutions&quot;,
+    &quot;question&quot;: &quot;Which candidate words fit specified rune-value totals, under which representations?&quot;,
+    &quot;baseline&quot;: &quot;mixed-square-word-sums&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Sixteen supplied words; all exact-label segmentations&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent exhaustive cut-mask check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/mixed-square-word-sums/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12.10 standard library; independent check: python experiments/records/mixed-square-word-sums/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/mixed-square-word-sums/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/mixed-square-word-sums/plan.json&quot;,
+        &quot;sha256&quot;: &quot;2876ae51235d3a54f1f4feb07f4690119c37a1fa22f4713352d160ebfe9ca26f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/mixed-square-word-sums/check.py&quot;,
+        &quot;sha256&quot;: &quot;9c9b117f3c4db570b538b6d4cc5ac65b8a366e9eb2b00cadb91b678e9a2d7739&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/mixed-square-word-sums/results.json&quot;,
+        &quot;sha256&quot;: &quot;05a5c5befb01aee48af8644c1764269c54fa56bfb62706e302b57c0ddfa35a7a&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;LP1-05 original image and archived text&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp1-05&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Mixed-square conversion and equal-sum pairs&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/magic-squares?section=rune-cells&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;magic-square-freedom&quot;
+  ],
+  &quot;article&quot;: &quot;# Candidate words for the LP1-05 mixed square\n\nThis experiment checks sixteen supplied word-and-total pairs. It asks whether each spelling can be segmented into Gematria Primus rune labels to produce the proposed number. It does not try the words as keys or replace text on unsolved pages.\n\n## Scope and normalization\n\nThe list was fixed before enumeration. Uppercase each word and replace V with U; make no other spelling substitutions. Enumerate every exact segmentation into the 29 Latin rune labels in the archived alphabet. For example, TH can be one rune label or the two labels T and H. These are spelling segmentations, not a phonetic transcription algorithm.\n\nThere are 16 candidates and 24 total segmentations. Every candidate has exactly one segmentation matching its supplied total. Fourteen candidates have only one possible segmentation under these rules; THAN has two and AETHEREAL has eight. The candidate list was supplied because its sums were of interest, so the 16 matches are not an unbiased success rate or a chance probability.\n\n## Matching segmentations\n\nEach row below records the exact rune labels needed. VOID is retained as the submitted word, with V explicitly normalized to U.\n\n| Candidate | Rune labels | Sum |\n| --- | --- | --- |\n| OR | O · R | 18 |\n| FORM | F · O · R · M | 91 |\n| VOID | U · O · I · D | 130 |\n| THAN | TH · A · N | 131 |\n| WHEN | W · H · E · N | 138 |\n| FIND | F · I · N · D | 151 |\n| BUFFERS | B · U · F · F · E · R · S | 199 |\n| MOURNFUL | M · O · U · R · N · F · U · L | 199 |\n| MOBIUS | M · O · B · I · U · S | 226 |\n| OBSCURA | O · B · S · C · U · R · A | 245 |\n| IMPOSE | I · M · P · O · S · E | 272 |\n| CARNAL | C · A · R · N · A · L | 320 |\n| ANALOG | A · N · A · L · O · G | 320 |\n| SHADOWS | S · H · A · D · O · W · S | 341 |\n| CABAL | C · A · B · A · L | 341 |\n| AETHEREAL | AE · TH · E · R · EA · L | 366 |\n\n## What the Latin spellings leave undecided\n\nTHAN gives **131** with TH–A–N, but **208** with T–H–A–N. AETHEREAL has the following eight exact-label segmentations:\n\n| Rune labels | Sum |\n| --- | --- |\n| A · E · TH · E · R · E · A · L | 484 |\n| A · E · TH · E · R · EA · L | 429 |\n| A · E · T · H · E · R · E · A · L | 561 |\n| A · E · T · H · E · R · EA · L | 506 |\n| AE · TH · E · R · E · A · L | 421 |\n| AE · TH · E · R · EA · L | 366 |\n| AE · T · H · E · R · E · A · L | 498 |\n| AE · T · H · E · R · EA · L | 443 |\n\nWhen the original manuscript supplies rune symbols, use those symbols directly. The ambiguity here arises when converting a Latin candidate back into runes. Choosing the segmentation because it hits a target is a search choice and must be recorded; the Latin word alone does not fix the sum.\n\n## Why equal totals do not recover words\n\nThe [mixed-square guide](#/wiki/magic-squares?section=sum-collisions) already shows distinct printed words sharing values: BUFFERS and MOURNFUL both give 199, CARNAL and ANALOG both give 320, and SHADOWS and CABAL both give 341. A sum discards order and other information. A number-to-word replacement can therefore have multiple candidates even in this small supplied list.\n\nIf every cell of a magic square is replaced by a word with exactly the same numerical total, all its line sums remain unchanged by construction. Preserving 1033 would check the replacements&#x27; arithmetic; it would not independently select the words or establish a hidden sentence. The [known conversion](#/wiki/magic-squares?section=rune-cells) goes from visible runes to numbers; reversing that process is a different problem.\n\n## Reproduce\n\nRun the producer and independent checker from the extracted experiment bundle or repository:\n\n```text\npython experiments/records/mixed-square-word-sums/run.py --check\npython experiments/records/mixed-square-word-sums/check.py\n```\n\nWithout `--check`, the producer prints all results as JSON. The producer recursively matches alphabet labels at the start of each remaining suffix. The independent checker instead tries every cut/no-cut pattern between Latin letters, keeps only pieces in the alphabet, and compares the complete set of segmentations and sums. Both use the same declared alphabet; agreement is not an independent verification of that alphabet against the manuscript.\n\nThe plan fixes the words and target totals. The JSON retains every segmentation, including nonmatching ones. No dictionary, language model, network access or paid service is needed.\n\n## Limits and related experiments\n\nThis is an arithmetic audit of a selected list, not an exhaustive dictionary search, plaintext result or test of authorial intent. It does not establish that an unsolved rune word with one of these totals should be decrypted using the corresponding candidate. That would require a defined transform, alignment, key-advance rule and scoring criterion.\n\nA future variant can change the vocabulary or transliteration rules while preserving this baseline. A dictionary search must pin the dictionary and report all matching entries, not just appealing words. A cipher search must state its [search space and bounds](#/wiki/search-space) separately. The [magic-square freedom experiment](#/experiments/magic-square-freedom) concerns numerical constraints; it answers a different question.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/mixed-square-word-sums/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc&quot;
 }</pre></article><article id="n-rune-gaps"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;n-rune-gaps&quot;,
   &quot;title&quot;: &quot;LP2-00–02: N-rune distances and prime-value labels&quot;,
