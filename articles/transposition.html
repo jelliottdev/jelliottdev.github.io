@@ -42,4 +42,29 @@ print(result)</code></pre>
 <p>The total length and each symbol’s count must remain the same. Consequently, a <a href="#/wiki/prime-sums">sum of fixed rune values</a> and whole-stream <a href="#/wiki/index-of-coincidence">IoC</a> remain unchanged too. These are useful checks: if a purported rearrangement changes one of them, it also changed, added, or removed symbols.</p>
 <p>What can change is adjacency and location. Word-like sequences, repeated neighboring pairs, column statistics, and which symbols fall on a particular row can all change. An improvement in one of those measurements must be evaluated against the choices tried; preserving the global counts does not guarantee meaningful output.</p>
 <p>These statements assume a fixed symbol sequence. Adding padding to fill a grid, dropping a final partial row, or splitting a multi-letter rune label into separate Latin characters changes the input. For rune work, choose the actual rune as the unit; see <a href="#/wiki/transliteration">transcription layers</a>. The historical example above instead rearranges the Latin characters of an extracted message.</p>
+<h2 id="partial-row">When the last row is incomplete</h2>
+<p>This is an invented example, not a proposed manuscript decoding. Put <code>ABCDEFGHI</code> into rows of width four:</p>
+<pre><code>A B C D
+E F G H
+I</code></pre>
+<p>The final row has one occupied position. Using the earlier order <code>[2, 0, 3, 1]</code>, one explicit rule is to visit those columns in each row and skip positions that do not exist. The rows then become <code>CADB</code>, <code>GEHF</code>, and <code>I</code>. The combined output is <code>CADBGEHFI</code>: all nine original characters occur once.</p>
+<div class="table-wrap"><table><thead><tr><th>Last-row decision</th><th>Result under this row readout</th><th>Effect on the input</th></tr></thead><tbody>
+<tr><td>Keep occupied positions; skip absent cells</td><td><code>CADBGEHFI</code></td><td>Preserves all nine characters.</td></tr>
+<tr><td>Pad the row as <code>I···</code></td><td><code>CADBGEHF·I··</code></td><td>Adds three placeholder characters. Here · is an invented pad symbol.</td></tr>
+<tr><td>Discard the incomplete row</td><td><code>CADBGEHF</code></td><td>Removes the original I.</td></tr>
+</tbody></table></div>
+<p>Neither padding nor deletion is a pure permutation of the original nine-character sequence. A padding rule also needs a removal rule when decoding; deleting every occurrence of the pad character can erase real data if that character was already present.</p>
+<h3 id="partial-code">Reproduce the occupied-position rule</h3>
+<pre><code>from collections import Counter
+
+source = "ABCDEFGHI"
+width = 4
+order = [2, 0, 3, 1]
+rows = [source[i:i + width] for i in range(0, len(source), width)]
+result = "".join(row[c] for row in rows for c in order if c &lt; len(row))
+assert result == "CADBGEHFI"
+assert len(result) == len(source)
+assert Counter(result) == Counter(source)
+print(result)</code></pre>
+<p>The condition checks whether a position exists; it does not discard any character based on its value. Column-first traversal of this same ragged grid would give <code>CGAEIDHBF</code>, so the fill direction and read direction still matter. The fourteen-column historical example above has five complete rows and does not require any of these short-row choices.</p>
 <h2 id="search">Define the search space</h2><p>Record grid dimensions, fill and read directions, padding, and permutation. Fourteen columns admit 14! = 87,178,291,200 orders. A fragment selected after many choices needs stronger support than a prediction from an independently specified order. See <a href="#/wiki/reproducibility">controls and scope</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>

@@ -6827,6 +6827,43 @@ What can change is adjacency and location. Word-like sequences, repeated neighbo
 
 These statements assume a fixed symbol sequence. Adding padding to fill a grid, dropping a final partial row, or splitting a multi-letter rune label into separate Latin characters changes the input. For rune work, choose the actual rune as the unit; see transcription layers. The historical example above instead rearranges the Latin characters of an extracted message.
 
+When the last row is incomplete
+
+This is an invented example, not a proposed manuscript decoding. Put ABCDEFGHI into rows of width four:
+
+A B C D
+E F G H
+I
+
+The final row has one occupied position. Using the earlier order [2, 0, 3, 1], one explicit rule is to visit those columns in each row and skip positions that do not exist. The rows then become CADB, GEHF, and I. The combined output is CADBGEHFI: all nine original characters occur once.
+
+	Last-row decision	Result under this row readout	Effect on the input
+
+	Keep occupied positions; skip absent cells	CADBGEHFI	Preserves all nine characters.
+
+	Pad the row as I···	CADBGEHF·I··	Adds three placeholder characters. Here · is an invented pad symbol.
+
+	Discard the incomplete row	CADBGEHF	Removes the original I.
+
+
+Neither padding nor deletion is a pure permutation of the original nine-character sequence. A padding rule also needs a removal rule when decoding; deleting every occurrence of the pad character can erase real data if that character was already present.
+
+Reproduce the occupied-position rule
+
+from collections import Counter
+
+source = "ABCDEFGHI"
+width = 4
+order = [2, 0, 3, 1]
+rows = [source[i:i + width] for i in range(0, len(source), width)]
+result = "".join(row[c] for row in rows for c in order if c < len(row))
+assert result == "CADBGEHFI"
+assert len(result) == len(source)
+assert Counter(result) == Counter(source)
+print(result)
+
+The condition checks whether a position exists; it does not discard any character based on its value. Column-first traversal of this same ragged grid would give CGAEIDHBF, so the fill direction and read direction still matter. The fourteen-column historical example above has five complete rows and does not require any of these short-row choices.
+
 Define the search space
 Record grid dimensions, fill and read directions, padding, and permutation. Fourteen columns admit 14! = 87,178,291,200 orders. A fragment selected after many choices needs stronger support than a prediction from an independently specified order. See controls and scope.
 Sources and verification
