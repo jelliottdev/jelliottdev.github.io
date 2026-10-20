@@ -103,6 +103,16 @@ class RegistryTests(unittest.TestCase):
             with self.subTest(mutation=mutation), self.assertRaises(ValueError):
                 self.run_build()
 
+    def test_artifact_scope_requires_hashed_inputs(self):
+        self.record['scope']['pages'] = []
+        with self.assertRaisesRegex(ValueError, 'pages or source artifacts'):
+            self.run_build()
+        self.record['scope']['artifacts'] = [self.record['reproduction']['inputs'][0]['path']]
+        self.assertEqual(len(self.run_build()), 1)
+        self.record['scope']['artifacts'] = ['undeclared.pdf']
+        with self.assertRaisesRegex(ValueError, 'declared hashed inputs'):
+            self.run_build()
+
     def test_path_escape_rejected(self):
         self.record['reproduction']['inputs'][0]['path'] = '../outside.txt'
         with self.assertRaisesRegex(ValueError, 'escapes repository'):

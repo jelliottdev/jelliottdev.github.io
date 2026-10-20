@@ -84,3 +84,11 @@ assert(experimentContext.renderExperimentMarkdown(`![Data chart](${chart})`,[cha
 assert(!experimentContext.renderExperimentMarkdown(`![Data chart](${chart})`).includes('<img'));
 assert(!experimentContext.renderExperimentMarkdown('![Unsafe](https://example.com/chart.svg)').includes('<img'));
 console.log('PASS: family grouping preserves members; figures require declared local files.');
+
+const artifactRecord={id:'artifact-control',status:'published',title:'Emerson book cipher',question:'Reproduce the historical lookup?',scope:{pages:[],artifacts:['exports/source.pdf'],procedure:'Book cipher lookup'},tags:['Emerson'],summary:'Historical source only',finding:'Control reproduced',limitations:'No manuscript-page test'};
+const artifactDocs=Search.experimentDocs([artifactRecord]);
+assert.equal(Search.experiments(artifactDocs,'Emerson book cipher LP2-31')[0].pageOverlap,false);
+assert.equal(Search.experiments(artifactDocs,'LP2-31').length,0);
+assert(experimentContext.experimentScopeLinks(artifactRecord).includes('href="exports/source.pdf"'));
+assert(!experimentContext.experimentScopeLinks(artifactRecord).includes('#/page/'));
+console.log('PASS: artifact-only controls retain file targets without inventing manuscript-page coverage.');

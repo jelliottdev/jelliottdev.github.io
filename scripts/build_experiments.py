@@ -42,8 +42,12 @@ def build(root=ROOT):
             text(d.get(key), f'{identifier}.{key}')
         require(d.get('outcome') in ('supported', 'not-supported', 'inconclusive'), 'Invalid outcome')
         scope = d.get('scope', {})
-        require(isinstance(scope.get('pages'), list) and scope['pages']
+        require(isinstance(scope.get('pages'), list)
                 and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
+        artifacts = scope.get('artifacts', [])
+        require(isinstance(artifacts, list) and all(isinstance(x, str) for x in artifacts),
+                'Scope artifacts must be a list of local input paths')
+        require(scope['pages'] or artifacts, 'Scope needs pages or source artifacts')
         for key in ('representation', 'procedure', 'parameters', 'exclusions'):
             text(scope.get(key), 'scope.' + key)
         for key in ('tags', 'related'):
@@ -71,6 +75,8 @@ def build(root=ROOT):
                 data = local(root, file.get('path')).read_bytes()
                 require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                         'SHA-256 mismatch: ' + str(file.get('path')))
+        require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),
+                'Scope artifacts must be declared hashed inputs')
         for visual in d.get('visuals', []):
             text(visual.get('caption'), 'visual caption')
             require(visual.get('path') in [f['path'] for f in reproduction['outputs']]

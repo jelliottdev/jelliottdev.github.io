@@ -20,3 +20,5 @@ OutGuess default-key baseline: all 77 declared images attempted twice; ten contr
 Known Vigenère key baseline: two recorded vectors, all 21 phases, both directions, LP2-00–55; 2352 candidates, nine fixed 12-rune openings, no exact matches. No interruption search or general language score. Treat new alignment hypotheses and key lists as declared variants.
 
 Periodic-IoC family now has a within-row-shuffle variant: same LP2-31 input, score and periods; p=0.246 versus whole-page p=0.214. Both above 0.05. This is a declared sensitivity comparison, not independent confirmation.
+
+Book-cipher control: frozen Emerson PDF re-extracted with pypdf 6.19.0; all 50 paragraphs and 15 lookups plus seven literals reproduce. Known-result historical control only; unsolved-page applications remain untested.

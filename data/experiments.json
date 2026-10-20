@@ -2,6 +2,119 @@
   "schema": "liberpedia-experiments-v1",
   "records": [
     {
+      "id": "emerson-book-cipher-control",
+      "title": "Emerson book cipher: historical control reproduction",
+      "status": "published",
+      "question": "Do the archived opening-image coordinates reproduce the documented historical string with the frozen Emerson PDF derivative and its declared conventions?",
+      "summary": "The pinned PDF re-extracts to all 50 stored paragraphs. Fifteen coordinate lookups plus seven literal characters reproduce the documented historical string and complete trace.",
+      "tags": [
+        "book cipher",
+        "Emerson",
+        "Self-Reliance",
+        "paragraph sentence word letter",
+        "opening image",
+        "2014",
+        "historical control"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "exports/steganography/opening-2014.body.txt",
+          "exports/sources/emerson-self-reliance.pdf"
+        ],
+        "representation": "Frozen opening-image coordinate payload, pinned Emerson PDF, and its 50-paragraph derivative; exact source hashes. Historical reconstruction conventions retained.",
+        "procedure": "Re-extract PDF with pypdf 6.19.0, compare all paragraphs, parse four-part one-based coordinates and literal characters, and compare the complete lookup trace with the known control.",
+        "parameters": "50 paragraphs; 15 lookups; seven literal characters; one source edition and convention set. Two complete runs. Known answer exposed before testing.",
+        "exclusions": "Other editions, other texts, arbitrary coordinate searches, unsolved-page transfer and validation of any current network destination."
+      },
+      "outcome": "supported",
+      "finding": "All 50 paragraphs and the complete 22-character trace reproduce: auqgnxjtvdbll3pv.onion. Supported only as a historical control under the declared conventions.",
+      "limitations": "Not blind discovery. Earlier paragraph handling was corrected after mismatches; that rule is frozen here. Creator edition not authenticated. No unsolved-page transfer or network destination tested. Human review pending.",
+      "next_steps": "Use the control to verify implementations. Different editions or coordinate conventions require variants; unsolved-page hypotheses require separately justified coordinates and criteria.",
+      "family": {
+        "id": "emerson-book-cipher-reproduction",
+        "title": "Emerson book-cipher reproduction",
+        "question": "Which exact source and counting conventions reproduce the historical opening-image coordinates?",
+        "baseline": "emerson-book-cipher-control"
+      },
+      "variant": {
+        "label": "Baseline: pinned PDF and recorded conventions",
+        "changes": []
+      },
+      "review": {
+        "reviewer": "Codex — two complete PDF/trace reruns; human review pending",
+        "retested_on": "2026-10-20",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/emerson-book-cipher-control/run.py --check",
+        "environment": "Python 3.12.10; pypdf 6.19.0. Network-free rerun once dependencies are installed.",
+        "script": "experiments/records/emerson-book-cipher-control/run.py",
+        "script_sha256": "7de9e9ddc294d4a29b7df1a017dd0c4b77a5a3eae8a10b88d1b851343cded07c",
+        "inputs": [
+          {
+            "path": "scripts/reproduce_emerson.py",
+            "sha256": "5074ccdfceb377e31bcbd1421fa4fdf42e06f66bbdda6ddc113455633c8beb2e"
+          },
+          {
+            "path": "data/evidence/emerson-book-cipher.json",
+            "sha256": "c4388c38cf6cdc9885b127b4cc228115b46d968779f700c6ff811c60ab87f2b8"
+          },
+          {
+            "path": "exports/sources/emerson-self-reliance.pdf",
+            "sha256": "fee032e9ff4f2429fccc120831f9ad7a6d27d36f70828f037c191d5f34900abd"
+          },
+          {
+            "path": "exports/sources/emerson-paragraphs.json",
+            "sha256": "f7cbcaac8a9e75e58122b6b526e4da740bf4f94a746ceb3315c6c1b07305eba6"
+          },
+          {
+            "path": "exports/steganography/opening-2014.body.txt",
+            "sha256": "eae028cde5bb5f28459c5b88e201c05ad27c8dba3d81a2d0c3e1e4c99286f733"
+          },
+          {
+            "path": "experiments/records/emerson-book-cipher-control/plan.json",
+            "sha256": "1bef32b4ea6758bed5cfd3bdc6ad435afdf2b92e3154522fdff5dead08b3ee92"
+          },
+          {
+            "path": "experiments/records/emerson-book-cipher-control/plot.py",
+            "sha256": "956793775b022552960e6ccf88bc13cc41b9235bb6e28e7b3f434f75e151fa84"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/emerson-book-cipher-control/results.json",
+            "sha256": "118f02a5d853590dc363c360fca3ed039fc9aeeb9e866f8e18b8142e2577c969"
+          },
+          {
+            "path": "experiments/records/emerson-book-cipher-control/lookup.svg",
+            "sha256": "603260192bd11938c9feb33d75d87af996f0d448c3c87829da5ddb283c6ad592"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Emerson source and reconstruction record",
+          "url": "https://jelliottdev.github.io/#/wiki/emerson-self-reliance"
+        },
+        {
+          "label": "Referenced PDF source",
+          "url": "https://math.dartmouth.edu/~doyle/docs/self/self.pdf"
+        }
+      ],
+      "related": [],
+      "visuals": [
+        {
+          "path": "experiments/records/emerson-book-cipher-control/lookup.svg",
+          "caption": "One actual coordinate lookup from the saved control: 1:2:3:1 selects the word “always” and outputs “a”. The complete record retains all 15 lookups and seven literal characters."
+        }
+      ],
+      "article": "# Historical Emerson book-cipher control\n\n## Purpose and what this does not test\n\nA book cipher needs a source edition and counting conventions, not just a book title. This record reproduces the documented 2014 opening-image coordinates against the frozen Emerson Self-Reliance PDF derivative. It gives newcomers a working control and a trace they can inspect before proposing new book-cipher experiments.\n\n**The answer was known before this rerun.** This is a historical replication, not blind discovery, an independent confirmation of source selection, or a decipherment of an unsolved manuscript page. No hidden-service address was visited.\n\n## Frozen plan and prior reconstruction history\n\nThe rerun plan and wrapper were committed as `1f67f70` before this execution. Source files, the existing lookup script and the known result were hashed in the plan. An earlier reconstruction had corrected the treatment of embedded verse after inspecting mismatches: the verse remains inside prose paragraph 36 rather than creating extra paragraphs. That earlier adjustment is disclosed in the existing evidence manifest and is not presented here as a rule discovered independently.\n\nThe PDF is the contemporary snapshot linked in the historical walkthrough. Its hash is fixed, but the original creator's exact edition is not authenticated by this reproduction.\n\n## Counting conventions\n\nRe-extract the pinned PDF with pypdf 6.19.0 in layout mode. Begin at the first prose paragraph, exclude numeric page footers, and use four-space prose indentation to begin paragraphs. Seven-space verse remains in its surrounding paragraph. Apply Unicode NFKC normalization and join wrapped lines according to the stored extraction rule. All 50 extracted paragraphs must match the frozen derivative.\n\nCoordinates are one-based paragraph:sentence:word:letter positions. Sentences split at `.`, `!` and `?`; words split on whitespace with edge punctuation removed; only ASCII letters count inside the selected word. Single-character entries are copied literally. These are the documented reconstruction conventions, not a universal natural-language sentence parser.\n\n## Result\n\nThe complete trace matches the archived control. Fifteen coordinate lookups and seven literal characters reconstruct:\n\n```\nauqgnxjtvdbll3pv.onion\n```\n\nThis is a historical output string. Reproducing it says nothing about any current service at that name. The supported claim is only that these exact inputs and rules reproduce the recorded trace.\n\n## Complete coordinate trace\n\n| Entry | Printed PDF page | Selected word | Output |\n| --- | --- | --- | --- |\n| 1:2:3:1 | 1 | always | a |\n| 3:3:13:5 | 2 | genius | u |\n| 45:5:2:3 | 19 | acquires | q |\n| 20:3:20:5 | 9 | among | g |\n| 8:3:8:6 | 5 | action | n |\n| 48:5:14:2 | 20 | experience | x |\n| 21:13:4:1 | 9 | justice | j |\n| 25:1:7:4 | 12 | truth | t |\n| 15:9:3:4 | 7 | above | v |\n| 1:1:16:3 | 1 | and | d |\n| 4:3:3:1 | 2 | being | b |\n| 8:3:26:4 | 5 | daily | l |\n| 47:3:3:5 | 19 | equality | l |\n| 3 | Literal | Copied directly | 3 |\n| 13:2:5:4 | 6 | corpse | p |\n| 1:4:16:4 | 1 | private | v |\n| . | Literal | Copied directly | . |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n| i | Literal | Copied directly | i |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n\nThe first coordinate, 1:2:3:1, selects the third word of the second sentence in paragraph 1: `always`. Its first letter is `a`. The JSON output includes each full selected sentence, so a reader can check the counting rather than trusting the final string alone.\n\n## Reproduce from files\n\nUse Python 3.12.10 and pypdf 6.19.0. Install the exact dependency in your preferred environment:\n\n```\npython -m pip install pypdf==6.19.0\npython experiments/records/emerson-book-cipher-control/run.py --check\n```\n\nDependency installation needs package access; the actual experiment makes no network request. The wrapper checks every frozen input hash, invokes the existing reproduction script with `--check-pdf`, compares all 50 paragraphs, and checks the complete output trace. It then compares the new report with the saved one. Missing dependencies or changed inputs fail visibly.\n\nTo save a separate report:\n\n```\npython experiments/records/emerson-book-cipher-control/run.py --output my-emerson-control.json\n```\n\nExisting output files are never overwritten. [Download the complete trace](experiments/records/emerson-book-cipher-control/results.json). [Download the pinned PDF](exports/sources/emerson-self-reliance.pdf) and [paragraph derivative](exports/sources/emerson-paragraphs.json). The [coordinate payload](exports/steganography/opening-2014.body.txt) is the extracted message body; extraction and signature verification are separate steps described in the opening-image guide.\n\nFor a standard-library-only replay of the frozen paragraphs, run `python scripts/reproduce_emerson.py` without `--check-pdf`. That shorter check does not re-extract the PDF and must not be reported as having done so.\n\n## Retest and review\n\nCodex ran the PDF reconstruction and lookup twice on 20 October 2026. Both produced the same 50 paragraphs and identical complete trace. No counting rule or source changed during this rerun. The diagram was generated afterward from the saved first lookup. Human review remains pending, and the lookup implementation is the existing historical reproduction code rather than a newly independent decoder.\n\n## Family and future variants\n\nA different edition, paragraph convention or source text needs a separate variant with the exact change recorded. An attempt to apply a book cipher to an unsolved LP2 page also needs an independently defined source of coordinates and a success criterion. This historical control is useful for checking an implementation; it does not establish that such a transfer has already been tested.\n\nSee [book-cipher conventions](#/wiki/book-ciphers), [Emerson and the historical source](#/wiki/emerson-self-reliance), and [the opening image](#/wiki/opening-2014).\n",
+      "article_path": "experiments/records/emerson-book-cipher-control/article.md",
+      "script_sha256": "7de9e9ddc294d4a29b7df1a017dd0c4b77a5a3eae8a10b88d1b851343cded07c"
+    },
+    {
       "id": "lp2-31-periodic-ioc",
       "title": "LP2-31: periodic IoC for periods 2-20",
       "status": "published",

@@ -61,3 +61,7 @@ An identical rerun belongs in the original record's retest history. A new parame
 Each variant retains its own findings and limitations. Search groups matching members by family but does not treat an untested sibling as tested. The full record compares all published family members. A baseline alone is explicitly labeled as having no completed variants.
 
 Standalone Markdown images may reference declared local SVG, PNG, JPG, or WebP outputs, with descriptive alt text. Generate analytical charts from the stored results and include the plotting script among the hashed inputs. Do not use an illustrative diagram as experimental evidence.
+
+## Source-file scopes
+
+Experiments on historical clues or editions need not invent a manuscript page association. Set `scope.pages` to an empty list and list exact source paths in `scope.artifacts`; every artifact must also be a declared hashed input. At least one page or artifact is required. State explicitly whether the record is a known-result control or an unsolved-page test. Source-file matches do not establish that the method was tried on any manuscript page.

@@ -42,7 +42,7 @@ function renderIdeaChecker(endpoint,query){
   function sourceExcerpt(s){
     if(s.kind==='experiment'){
       let r;try{r=JSON.parse(s.text);}catch{return '<p>Open the record to inspect its scope.</p>';}
-      return '<dl class="idea-result-scope">'+[['Pages',(r.scope.pages||[]).join(', ').toUpperCase()],['Input',r.scope.representation],['Method',r.scope.procedure],['Bounds',r.scope.parameters],['Excluded',r.scope.exclusions],['Finding',r.finding],['Limits',r.limitations]].map(([key,value])=>`<dt>${key}</dt><dd>${esc(value||'Not specified')}</dd>`).join('')+'</dl>';
+      return '<dl class="idea-result-scope">'+[['Targets',[...(r.scope.pages||[]).map(p=>p.toUpperCase()),...(r.scope.artifacts||[])].join(', ')],['Input',r.scope.representation],['Method',r.scope.procedure],['Bounds',r.scope.parameters],['Excluded',r.scope.exclusions],['Finding',r.finding],['Limits',r.limitations]].map(([key,value])=>`<dt>${key}</dt><dd>${esc(value||'Not specified')}</dd>`).join('')+'</dl>';
     }
     return `<div class="source-excerpt">${esc(s.text||'Open the page to inspect its evidence.')}</div>`;
   }
@@ -91,7 +91,7 @@ function renderIdeaChecker(endpoint,query){
     else if(!matches.length)results.innerHTML='<h2>No matching documented technique</h2><p>Try the operation, cipher, key, or transformation rather than only a page number. This index does not cover all previous research.</p>';
     else results.innerHTML=`<h2>${matches.length} related ${matches.length===1?'record':'records'}</h2><p class="small muted">These are technique matches, not a verdict that your idea is a duplicate.</p>${experimentGroups(matches.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>{
       const pageOverlap=matches.find(m=>m.document.id===r.id).pageOverlap;
-      return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><dl class="idea-result-scope"><dt>Tested</dt><dd>${r.scope.pages.map(id=>`<a href="#/page/${id}">${esc(id.toUpperCase())}</a>`).join(', ')} · ${esc(r.scope.representation)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl><p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}${(pages().length||AssistantSearch.pageIds(idea).length)&&!pageOverlap?' · Different page scope':''}</p></article>`;
+      return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><dl class="idea-result-scope"><dt>Tested</dt><dd>${experimentScopeLinks(r)} · ${esc(r.scope.representation)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl><p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}${(pages().length||AssistantSearch.pageIds(idea).length)&&!pageOverlap?' · Different page scope':''}</p></article>`;
     })}`;
     if(matches.length&&endpoint){
       const cached=ideaAnswers.get(cacheKey());
