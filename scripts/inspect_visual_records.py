@@ -10,11 +10,16 @@ from collections import Counter
 import argparse
 import hashlib
 import json
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 BRIGHTNESS_LIMIT = 140
 MINIMUM_AREA = 20
 RED_MARGIN = 70
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
 
 def components(points):
     remaining = set(points)
@@ -57,25 +62,32 @@ def main():
         record_bytes = (ROOT / record_path).read_bytes()
         page = json.loads(record_bytes)
         glyphs, marks = page["visual"]["glyphs"], page["visual"]["punctuation"]
-        assert [g["ordinal"] for g in glyphs] == list(range(page["rune_count"]))
+        require([g["ordinal"] for g in glyphs] == list(range(page["rune_count"])),
+                f"{pid}: glyph ordinals do not match rune_count")
         width, height = page["image_dimensions"]
         if args.pixels:
             path = ROOT / f"images/{pid}.jpg"
-            assert hashlib.sha256(path.read_bytes()).hexdigest() == page["image_sha256"]
+            require(hashlib.sha256(path.read_bytes()).hexdigest() == page["image_sha256"],
+                    f"{pid}: original image SHA-256 mismatch")
             with Image.open(path) as original:
                 image = original.convert("RGB")
-            assert image.size == (width, height)
-        for region in glyphs + marks:
+            require(image.size == (width, height), f"{pid}: image dimensions mismatch")
+        for region_index, region in enumerate(glyphs + marks):
+            label = f"{pid}: region {region_index} (glyphs followed by punctuation)"
             x, y, w, h = region["rectangle"]
-            assert x >= 0 and y >= 0 and w > 0 and h > 0
-            assert x+w <= width and y+h <= height
+            require(all(type(value) is int for value in (x, y, w, h)),
+                    f"{label}: rectangle coordinates must be integers")
+            require(x >= 0 and y >= 0 and w > 0 and h > 0,
+                    f"{label}: rectangle must have nonnegative origin and positive size")
+            require(x+w <= width and y+h <= height, f"{label}: rectangle exceeds image bounds")
             if args.pixels:
                 crop = image.crop((x, y, x+w, y+h))
-                assert color(crop) == region["ink_class"], (pid, "color", region)
+                require(color(crop) == region["ink_class"], f"{label}: ink class mismatch")
                 if "component_count" in region:
                     pixels = crop.convert("L")
                     points = {(xx, yy) for yy in range(h) for xx in range(w) if pixels.getpixel((xx, yy)) < BRIGHTNESS_LIMIT}
-                    assert components(points) == region["component_count"], (pid, "components", region)
+                    require(components(points) == region["component_count"],
+                            f"{label}: component count mismatch")
         results.append(dict(page=pid,
                             record_path=record_path,
                             record_sha256=hashlib.sha256(record_bytes).hexdigest(),
@@ -106,4 +118,8 @@ def main():
                       "pixel_recount": args.pixels, "pages": results}, indent=2))
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (OSError, ValueError, KeyError, TypeError, ImportError) as error:
+        print(f"Visual verification failed: {error}", file=sys.stderr)
+        sys.exit(1)
