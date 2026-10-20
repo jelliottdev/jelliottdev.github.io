@@ -147,9 +147,13 @@ Extract this ZIP into an empty folder and keep its folders together. Open a
 terminal in that folder. Use Python 3: on Windows try py --version; on macOS or
 Linux try python3 --version. Below, replace python with the command that works.
 
+  python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
   python scripts/reproduce_reading.py warning
 
-This decodes LP1-01 with Atbash and checks the literal result against its saved
+The first command checks the extracted files against the included manifest.
+Continue when it reports zero problems; otherwise investigate the named files.
+See VERIFY THE EXTRACTED FILES below for the limits of that check.
+The second command decodes LP1-01 with Atbash and checks the literal result against its saved
 control. Unusual spellings are preserved intentionally. For setup and a
 rune-by-rune explanation, open reference/articles/running-scripts.txt.
 
@@ -180,6 +184,13 @@ Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
   Guide: reference/articles/rune-ngrams.txt
   Reports overlapping repeats and source positions under its stated boundaries.
+
+Generate a bounded set of shift candidates:
+  python scripts/enumerate_shifts.py lp2-31 --output my-shifts.json
+  Guide: reference/articles/reproducibility.txt (Generate the 58 cases yourself)
+  Saves all 29 shifts for original and reversed rune order, with the input hash.
+  This is candidate generation: no score, match test, or conclusion is supplied.
+  An output file is required. Existing files are never replaced.
 
 Reproduce numerical examples:
   python scripts/reproduce_prime_sums.py
@@ -229,6 +240,14 @@ Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
 inspect_visual_records.py also requires Pillow. extract_payload.py requires
 OutGuess, and signature verification requires GnuPG. See the included guides.
+
+DRAW THE ATBASH MAPPING
+  python scripts/plot_atbash_pairs.py --output my-atbash-pairs.svg
+This uses the standard library and included alphabet, with no extra packages.
+Open the SVG in a browser. The chart pairs indices i and 28-i; it illustrates
+ordinary Atbash, not the additional shift used by the first koan.
+A ready-made copy is at exports/figures/atbash-pairs.svg.
+Guide: reference/articles/atbash.txt
 
 OPTIONAL FREQUENCY CHART
   python -m pip install matplotlib
