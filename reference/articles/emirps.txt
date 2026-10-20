@@ -11,6 +11,49 @@ Keep decimal reversal distinct from mirroring an image, reversing rune order, co
 Where this matters in the manuscript
 The spelling and prime-sum article computes the three LP2-57 body sentence totals under a declared rune-only convention and checks their reversals. The boundaries and counting convention belong to the claim. Finding an emirp after changing a boundary is a different test.
 
+The infinity character and 8734
+
+The Unicode Mathematical Operators chart lists the infinity character as U+221E. The digits after U+ are hexadecimal: E represents fourteen. Converting the code point to decimal gives:
+
+0x221E = 2 × 16³ + 2 × 16² + 1 × 16 + 14 = 8734
+
+That conversion is exact for the Unicode character ∞. Choosing that character to represent the open crossed-loop drawing on LP2-15 is a separate hypothesis. A picture in a JPEG does not inherently have a Unicode code point, even when it resembles a familiar symbol.
+
+	Specified operation	Result
+
+	Convert hexadecimal 221E to decimal	8734
+
+	Reverse the decimal digits of 8734	4378
+
+	Replace each decimal digit d with 9 − d	1265
+
+	Negate the integer 8734	−8734
+
+	Reverse the decimal digits of 7649	9467
+
+
+These are different operations, although several might informally be called “inverting.” None of the first four gives 7649. A proposed route from 8734 to 7649 therefore needs its own explicit transformation; the fact that 7649 and 9467 are both prime does not supply that missing step.
+
+A code point is not a byte sequence
+
+The same infinity character has code-point value 8734 and UTF-8 bytes E2 88 9E. The former is a number assigned to the character; the latter is one encoding of it. Reversing decimal digits, reversing hexadecimal characters, and reversing encoded bytes are distinct tests. Always record which representation is being used before applying a numerical operation.
+
+This Python 3 check reproduces the character conversion, byte encoding, and two decimal transformations without any external package:
+
+symbol = "\u221e"
+value = ord(symbol)
+reverse = int(str(value)[::-1])
+complement = "".join(str(9 - int(d)) for d in str(value))
+print(value)                          # 8734
+print(symbol.encode("utf-8").hex(" ")) # e2 88 9e
+print(reverse)                        # 4378
+print(complement)                     # 1265
+assert value == int("221E", 16) == 8734
+assert reverse == 4378
+assert complement == "1265"
+
+For the later, independently checkable steps of the 301 calculation, see the two nth-prime lookups and their product. Keeping a correct multiplication separate from an unspecified earlier transformation makes the hypothesis easier to investigate.
+
 How to replicate the predicate
 from math import isqrt
 def prime(n):
@@ -28,6 +71,9 @@ Exact sentence sums and conventions · Checked numerical examples. No authorial 
 
 Sources, related references, and files
 https://jelliottdev.github.io/#/spelling
+https://www.unicode.org/charts/PDF/U2200.pdf
+https://jelliottdev.github.io/reference/articles/mobius.html
+https://jelliottdev.github.io/reference/articles/prime-indices.html#examples
 https://jelliottdev.github.io/reference/articles/prime-indices.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
 https://jelliottdev.github.io/reference/articles/prime-sums.html
