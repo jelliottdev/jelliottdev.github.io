@@ -24,3 +24,5 @@ Regenerate after data changes, in this order:
 The archive importer invokes both steps automatically. Text file line endings must remain LF so served bytes agree with checksums. Verify catalog hashes against the Git blobs before pushing, not just against the working directory. If an exported record changes, rebuild all affected manifests and bundles.
 
 Validation includes a real browser download compared with its original-image hash, local verification of both correct and modified files with zero upload requests, no-JavaScript reading, desktop/mobile reader and downloads, and verification of every bundled member.
+
+When reference article copy or method details change, run `node scripts/export_articles.cjs` against the local preview before rebuilding access exports. It requires Playwright (or an absolute `PLAYWRIGHT_MODULE` path) and installed Edge; `WIKI_BASE_URL` defaults to `http://127.0.0.1:8765/`. It expands details sections before extracting text, so machine readers receive the same full content available to human readers. Page-record exports themselves need only Python.

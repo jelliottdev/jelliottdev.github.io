@@ -19,3 +19,7 @@ Original image hashes and pinned public source commits appear in `data/manifest.
 To regenerate from the corresponding research archive, install Pillow and run `python scripts/import_archive.py PATH_TO_ARCHIVE .`. The archive is not bundled. The importer verifies all image checksums before copying. Preserve the distinction between archived text and corrected derivatives.
 
 Original manuscript and third-party archive material retain their respective rights; this repository does not assert authorship or grant a blanket license over them.
+
+## Reader, downloads, and AI access
+
+The Reader provides original images beside labeled text versions. Downloads include individual originals and derivatives, verified ZIP bundles, and local SHA-256 checking. Machine readers can use `llms.txt`, `llms-full.txt`, `data/catalog.json`, and the static `reference/` documents without JavaScript. See [access documentation](docs/ACCESS.md) for regeneration and verification.
