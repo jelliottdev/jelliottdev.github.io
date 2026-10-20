@@ -1,0 +1,79 @@
+Hashes, addresses and retrieving the target
+
+Separate exact-byte checks, protocol encodings and network retrieval; understand what Tor chronology and GNUnet identifiers do and do not establish.
+
+The LP2-56 target gives a value to compare with a page’s hash. It does not directly supply a location or specify the page’s exact byte representation. Keep three questions separate: what is the content, how is it identified, and where can it be obtained?
+
+Choose the question before choosing the test
+
+	Question	What a test needs	What a negative result covers
+	Does this saved file match?	Exact bytes, declared hash algorithm and target	Those bytes under that algorithm
+	Does a specified protocol encoding match?	Exact file, encoder version, parameters and output field	That file and encoding
+	Can this network identifier retrieve content?	A complete identifier, compatible client, bounded attempt and logs	That retrieval attempt under its recorded conditions
+
+For example, encoding 75 manuscript images and 11 archived responses would be an 86-file candidate test if all inputs and operations were documented. Even a fully reproduced mismatch for all 86 would not establish that an unknown target cannot be hosted on the same network. Conversely, a retrieval timeout would not show that a correctly constructed candidate has the wrong digest.
+
+Moving content does not necessarily change its hash
+
+If two local files contain exactly the same bytes, the same deterministic hash algorithm produces the same digest for both. Their filenames and hosting addresses do not enter the calculation unless they are deliberately included in the input.
+
+This gives a useful distinction for old puzzle material: a page’s original address might stop working while a byte-identical copy remains verifiable elsewhere. That is a possibility, not evidence that a copy exists. Visually similar pages are not necessarily byte-identical: a rewritten link, an inserted banner or a changed newline can alter the input. See checksums and the local candidate checker.
+
+Onion versions and chronology
+
+The Tor Project’s deprecation announcement dates the stable release supporting v3 onion services to 9 January 2018 and describes removal of v2 support during 2021. A v3 address therefore should not be treated as an ordinary deployed address supplied in the 2014 release. This chronology does not prevent older content from being served later at a new address.
+
+Neither observation identifies the LP2-56 target as an onion service. The known instruction says “deep web”; the printed target is a hexadecimal value, and the decoded text does not establish a host, network protocol or migration history. A claim that the puzzle is now impossible because of v2 retirement needs more than the retirement date: it would need a demonstrated dependency on an unavailable resource.
+
+Why one digest is not a complete GNUnet CHK
+
+The GNUnet file-sharing documentation describes this structure:
+
+gnunet://fs/chk/KEYHASH.QUERYHASH.SIZE
+
+	Field	Role in the documented format
+	KEYHASH	Decrypts the top block; derived from that block’s plaintext
+	QUERYHASH	Identifies the encrypted top block for retrieval
+	SIZE	File length, used to determine the block-tree shape
+
+The documentation describes files as trees of encrypted blocks. Consequently, a file’s ordinary SHA-512 digest is not automatically either CHK field. A single printed hexadecimal value does not supply both fields and a size. A proposal must state which field it represents and how the remaining information is obtained.
+
+This is an explanation of the cited current documentation, not a reproduction of GNUnet 0.10.1. A historical encoder test must pin that implementation and its rules. This page neither makes a network request to GNUnet nor reports a verified match or mismatch for its encoder.
+
+What a useful experiment record should preserve
+
+A candidate-file test should include a manifest of exact bytes, an algorithm name, the precise comparison field, and every output. Record a byte transformation as an additional candidate: raw response bytes, extracted text and normalized text are different inputs. Do not describe them simply as different “SHA-512 methods.”
+
+A protocol-encoding test also needs the software revision, build and options, reference vectors, and checks across the relevant block-size or tree-depth boundaries. Agreement between two implementations is useful, but both could share a mistaken interpretation. Comparison with the specified reference tool strengthens the result.
+
+A network-retrieval test needs the complete identifier, client version, date, duration and observable outcome. Distinguish an invalid identifier, connection failure, timeout, partial transfer and complete retrieval. Even successful retrieval must be followed by the declared content check.
+
+Reports without the actual input manifest and output files remain leads for retesting. They do not become reproduced experiments merely because they quote a package hash or describe a successful reference-tool comparison. The experiment registry is reserved for the concrete, bounded records; search space and bounds explains how to phrase their conclusions.
+
+Sources and relation to LP2-56
+
+GNUnet file-sharing documentation supports the CHK explanation. Tor’s v2 deprecation announcement supports the stated chronology. The known An End reading supplies the puzzle instruction. These sources do not identify the target’s algorithm or hosting network.
+
+Sources, related references, and files
+- LP2-56 target
+  https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+- checksums
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- local candidate checker
+  https://jelliottdev.github.io/reference/articles/lp2-56-target.html#candidate
+- Tor Project’s deprecation announcement; Tor’s v2 deprecation announcement
+  https://blog.torproject.org/v2-deprecation-timeline/
+- printed target
+  https://jelliottdev.github.io/reference/articles/lp2-56-target.html#literal
+- GNUnet file-sharing documentation
+  https://docs.gnunet.org/master/users/fs.html#content-hash-key-chk
+- experiment registry
+  https://jelliottdev.github.io/#/experiments
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- GNUnet file-sharing documentation
+  https://docs.gnunet.org/master/users/fs.html
+- The known An End reading
+  https://jelliottdev.github.io/reference/articles/reading-lp2-56.html
+
+Article: https://jelliottdev.github.io/reference/articles/hashes-and-addresses.html
