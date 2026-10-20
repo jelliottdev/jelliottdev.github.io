@@ -64,6 +64,8 @@ The prime-minus-one reuse experiment tests LP2-00â€“55 with starting offsets 0â€
 What if I subtract the primes themselves?
 With the same input and key advancement, replacing each prime minus one with the prime lowers every subtraction output by one alphabet position modulo 29. With addition, it raises every output by one. The ordinary-prime variant records that comparison separately and verifies the relation for every candidate. If a search already tries all 29 constant output shifts, these two schedules cover the same outputs; counting both as independent coverage would be misleading.
 
+A separately recorded Fibonacci variant uses the same opening criterion and boundary rules. Its shifts repeat every 14 terms modulo 29: 3190 configurations yield 1540 distinct page outputs. The record explains the repeated-pair check and why larger offsets add no new phases under those rules.
+
 The hash reference
 The decoded text refers to a page identified by a long hash. Reproducing that text is not the same as locating the referenced page. See the exact hash target and its unresolved input conventions.
 Sources and verification
@@ -86,6 +88,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
 - ordinary-prime variant
   https://jelliottdev.github.io/#/experiments/lp2-prime-openings
+- Fibonacci variant
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - the exact hash target and its unresolved input conventions
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - Exact control parameters and interruption provenance

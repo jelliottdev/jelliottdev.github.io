@@ -7168,6 +7168,8 @@ The prime-minus-one reuse experiment tests LP2-00–55 with starting offsets 0�
 What if I subtract the primes themselves?
 With the same input and key advancement, replacing each prime minus one with the prime lowers every subtraction output by one alphabet position modulo 29. With addition, it raises every output by one. The ordinary-prime variant records that comparison separately and verifies the relation for every candidate. If a search already tries all 29 constant output shifts, these two schedules cover the same outputs; counting both as independent coverage would be misleading.
 
+A separately recorded Fibonacci variant uses the same opening criterion and boundary rules. Its shifts repeat every 14 terms modulo 29: 3190 configurations yield 1540 distinct page outputs. The record explains the repeated-pair check and why larger offsets add no new phases under those rules.
+
 The hash reference
 The decoded text refers to a page identified by a long hash. Reproducing that text is not the same as locating the referenced page. See the exact hash target and its unresolved input conventions.
 Sources and verification
@@ -7190,6 +7192,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
 - ordinary-prime variant
   https://jelliottdev.github.io/#/experiments/lp2-prime-openings
+- Fibonacci variant
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - the exact hash target and its unresolved input conventions
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - Exact control parameters and interruption provenance
@@ -18039,6 +18043,444 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "# Fixed alphabet transformations and the warning opening\n\n## Why test this?\n\nA newcomer can reasonably try reusing the warning's Atbash method, shifting the rune alphabet, or reversing the text. These are small, finite searches. The difficult part is deciding what counts as success without picking an attractive fragment after looking at the output.\n\nThis test uses one deliberately narrow criterion: the first 12 decoded rune indices must equal the first 12 decoded runes of LP1-01's warning. The criterion is motivated by an existing reading, but there is no evidence that an unsolved page must repeat that opening. This is not an English detector.\n\n## Plan and scope\n\nThe plan and runner were committed as `faab48f` before the first execution. All 56 archived pages LP2-00–55 are included, corresponding to their unsolved status in the source snapshot. This is not a claim about their present-day solving status.\n\nFor every page, keep all recognized runes, including headings, and remove other characters. Use indices 0–28. Try both original and whole-stream reversed order. For each order, evaluate both multipliers a = 1 and a = -1 with every additive offset b = 0–28, using `(a * index + b) % 29`.\n\nThe positive multiplier covers all constant shifts. The negative multiplier covers alphabet reversal with every shift; ordinary Atbash is a = -1, b = 28. The identity is included. Reversing a complete stream is not the same as reversing individual rows or words.\n\n| Transformation class | Orders | Offsets | Pages | Cases | Exact matches |\n| --- | --- | --- | --- | --- | --- |\n| Constant shift | 2 | 29 | 56 | 3248 | 0 |\n| Reversed alphabet plus offset | 2 | 29 | 56 | 3248 | 0 |\n| Total |  |  |  | 6496 | 0 |\n\nThese are parameter cases, not a promise that every resulting string is distinct.\n\n## Result and interpretation\n\nAll 6496 cases completed. No output began with the specified 12-rune warning prefix. Every full candidate sequence is retained in the JSON output, not only its prefix or an attractive excerpt. Each case records the page, order, multiplier, offset, output indices, and exact-match flag.\n\nThis finding is negative only for the declared opening at position zero. It does not rule out meaningful text beginning differently, a heading that needs separate treatment, another region, or an arbitrary substitution. There is no significance estimate because this is an exhaustive exact-match query, not a statistical test of whether the text is English.\n\n## Reproduce and inspect\n\nUse Python 3.12.10 and the repository checkout:\n\n```\npython experiments/records/lp2-alphabet-warning-prefix/run.py --check\npython experiments/records/lp2-alphabet-warning-prefix/check.py\n```\n\nThe first command regenerates and compares every candidate, input hash, and match flag. The second uses a separately constructed alphabet-walk lookup to verify all output indices and confirms that every parameter tuple is unique. It also checks the known warning's opening A,W,A against indices 24,7,24. Neither command uses a network service.\n\n[Download all candidate outputs](experiments/records/lp2-alphabet-warning-prefix/results.json). To save a fresh report, run the runner with `--output my-prefix-scan.json`; it refuses to overwrite an existing file. Read `alphabet` to map output indices back to runes. Latin transliteration involves additional conventions and is not applied here.\n\n## Retest and changes after inspection\n\nCodex reran the complete scan and the separate oracle on 20 October 2026. All 6496 candidates reproduced exactly. No input-selection rule, prefix length, transformation, or stopping rule changed after the first result. The independent oracle was added after the first run as a verification step, not used to select results. Human review remains pending.\n\n## Next variants\n\nA different known opening, prefix position, heading convention, or transformation range must be declared as a new variant with the changes visible. Do not append extra guesses to this baseline and report only the final combined search. An exact match in any later variant would still require checking the rest of the page.\n",
   "article_path": "experiments/records/lp2-alphabet-warning-prefix/article.md",
   "script_sha256": "0d5d6e1e90d6f2d990f962cde6be26747dc3730415d676b5227a63b8427b53fe"
+}
+
+---
+
+{
+  "id": "lp2-fibonacci-openings",
+  "title": "LP2-00–55: Fibonacci shifts and repeated phases",
+  "status": "published",
+  "question": "Does uninterrupted Fibonacci arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?",
+  "summary": "3190 configurations produce 1540 distinct page outputs and no exact matches to nine known openings. Fibonacci shifts repeat every 14 terms modulo 29, so several tested offsets are equivalent.",
+  "tags": [
+    "Fibonacci",
+    "Fibonacci sequence",
+    "numerical keystream",
+    "sequence",
+    "offset",
+    "period 14",
+    "modulo 29",
+    "repeated phases",
+    "known plaintext"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "All recognized runes in archived order, including headings. Ignore other characters. Empty pages contribute no candidates.",
+    "procedure": "Apply Fibonacci shifts F_0=0, F_1=1, F_(n+2)=F_(n+1)+F_n modulo 29, with both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.",
+    "parameters": "Offsets 0–28 inclusive; two directions; independent page reset; one term per rune; no interruptions. 55 rune-bearing pages, 3190 candidates, 28710 comparisons.",
+    "exclusions": "Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring."
+  },
+  "outcome": "not-supported",
+  "finding": "Zero fixed-opening matches among 1540 distinct page outputs. All 3190 nominal configurations reproduce. The independent checker verifies the exact 14-term residue cycle and every repeated-offset equivalence.",
+  "limitations": "Only nine fixed 12-rune beginnings; no general language score or interruptions. Repeated configurations are not extra coverage or independent evidence. The experiment does not establish Fibonacci numbers as an intended manuscript key. Computational review only; human review pending.",
+  "next_steps": "Do not extend the starting-offset range under unchanged rules: all 14 phases are covered. Declare different seeds, interruptions, boundary rules or plaintext criteria separately.",
+  "family": {
+    "id": "numerical-keystream-openings",
+    "title": "Numerical keystreams and known openings",
+    "question": "Do declared numerical schedules recover fixed known openings under explicit offset and advancement rules?",
+    "baseline": "lp2-prime-minus-one-openings"
+  },
+  "variant": {
+    "label": "Fibonacci; all other search settings fixed",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Apply prime-minus-one shifts modulo 29, with both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.",
+        "after": "Apply Fibonacci shifts F_0=0, F_1=1, F_(n+2)=F_(n+1)+F_n modulo 29, with both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.",
+        "reason": "Replace prime-minus-one terms with Fibonacci terms starting at F_0=0. Keep pages, offsets, signs, advancement and openings fixed. Audit duplicate outputs because the residue cycle repeats after 14 terms."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — full rerun, fast-doubling audit and complete duplicate-output check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-fibonacci-openings/run.py --check",
+    "environment": "Python 3.12.10, standard library. Independent audit: python experiments/records/lp2-fibonacci-openings/check.py",
+    "script": "experiments/records/lp2-fibonacci-openings/run.py",
+    "script_sha256": "09caa98d544adea0c3cd79f736d114295ec798e3be4f249fbbad8ea03ed075b5",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/lp2-56.csv",
+        "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
+      },
+      {
+        "path": "experiments/records/lp2-prime-minus-one-openings/plan.json",
+        "sha256": "5399318b4b458819ec2687c6b803857d7ebb5b5d053aaa336cbbfd71626f7508"
+      },
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/plan.json",
+        "sha256": "b1dc072070c582e32ee9cd3e16af91cd269a06236b8b652919d56ca6dd11ace7"
+      },
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/check.py",
+        "sha256": "0121421c0fbd1c2aa31f75c6e2e1e72e28c21057a7b26a066054b24b7082279a"
+      },
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/plot.py",
+        "sha256": "b59cd99fac11270ced3a8509cbb79a12fd98ad8133534bf05dfac20df798640d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/results.json",
+        "sha256": "995ad5da8192cc2b64feb2100603a617771e89db6477dc460d9d134a8474cb3e"
+      },
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/cycle.svg",
+        "sha256": "16af803c1eccd846d5a082c605899f853266bca4f9d89de4d719573766e7c783"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-fibonacci-openings/cycle.svg",
+      "caption": "The 14-term Fibonacci residue cycle modulo 29. A return of the pair 0, 1 repeats the entire schedule; larger offsets do not necessarily add different candidates."
+    }
+  ],
+  "related": [
+    "lp2-prime-minus-one-openings",
+    "lp2-prime-openings",
+    "lp2-known-vigenere-keys"
+  ],
+  "sources": [
+    {
+      "label": "Prime-minus-one baseline and common opening criterion",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings"
+    },
+    {
+      "label": "Recorded candidate outputs and residue cycle",
+      "url": "https://jelliottdev.github.io/experiments/records/lp2-fibonacci-openings/results.json"
+    }
+  ],
+  "article": "# Fibonacci shifts and known openings\n\nThis variant replaces the prime-minus-one schedule with Fibonacci numbers while preserving the baseline's pages, offsets, arithmetic directions, advancement and exact-opening rule. It has its own result page because changing a sequence is a different test, even when the surrounding procedure stays fixed.\n\nAll 3190 planned configurations completed. They produced **1540 distinct page outputs**, none of which matched one of the nine declared 12-rune openings. The distinction between configurations and outputs matters: many starting offsets repeat the same transformation.\n\n## Define the sequence before using it\n\nThis test uses F_0 = 0, F_1 = 1, and each subsequent term is the sum of the previous two:\n\n```text\n0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...\n```\n\nFor input rune index c at position j, starting offset s, and direction d:\n\n```text\noutput[j] = (c + d × F_(j+s)) mod 29\nd = −1 for subtraction, +1 for addition\n```\n\nOffset zero starts with 0, 1, 1, 2. Offset one starts with 1, 1, 2, 3. Stating the initial terms avoids the ambiguity between conventions that begin the written list with 0, 1 or 1, 1.\n\nThe input is the full archived rune stream, including headings. Every recognized rune consumes one term. Non-rune characters do not. The schedule restarts at each page and does not restart at a word or row.\n\n## Why 29 starting offsets do not mean 29 different phases\n\nOnly the remainder modulo 29 affects an output rune. The first 14 Fibonacci remainders are:\n\n```text\n0, 1, 1, 2, 3, 5, 8, 13, 21, 5, 26, 2, 28, 1\n```\n\nThe next two remainders are 0 and 1, the starting pair. A single repeated value would not be enough to establish a cycle: the recurrence needs two successive values. Once the pair repeats, all later values follow the same recurrence and repeat too.\n\nThe checker verifies that no earlier pair equals the initial pair. The exact period is therefore 14 for this sequence modulo 29. Offsets 0, 14 and 28 are equivalent; offsets 1 and 15 are equivalent; and so on.\n\nThe offset range 0–28 was retained to isolate the schedule change from the [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings). It already includes every phase of this Fibonacci residue cycle. Larger starting offsets cannot add outputs under these same rules. That conclusion would need reconsideration if a proposed method used unreduced term values to control some additional operation.\n\n## What was compared\n\n| Item | Scope |\n| --- | --- |\n| Pages | LP2-00–55; LP2-50 has no recognized runes and contributes no candidates |\n| Offsets | Every integer 0–28 |\n| Directions | Addition and subtraction |\n| Boundaries | Page reset; uninterrupted rune-by-rune advancement |\n| Match | First 12 output indices equal a fixed known opening |\n| Configurations | 55 nonempty pages × 29 offsets × two directions = 3190 |\n| Distinct page outputs | 1540, counted by comparing complete output tuples within each page |\n\nEach output was compared with the openings of Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. The plan stores the exact vectors and their source-trace hashes.\n\nThe nominal configuration count gives 28,710 comparisons; after removing duplicate page outputs there are 13,860. Neither figure is a count of statistically independent observations. There is no significance test or general English score here.\n\n## Result and its limits\n\nThere were zero exact opening matches. Every complete candidate remains available in the saved result, including the repetitions needed to compare with the declared offset range.\n\nThis excludes only the nine chosen beginnings under the stated transformation. A genuine reading beginning differently would not match. Interruptions, heading removal, reversals, altered Fibonacci seeds, additional constant shifts and combinations with another cipher were not tested.\n\nThe sequence is being tested as a conventional candidate idea. This record does not identify a manuscript instruction requiring Fibonacci numbers or establish them as an intended key.\n\n## Controls and retest\n\nThe plan and runner were committed as 3c9a990 before the page search ran. The residue-cycle calculation was checked while specifying the plan, without examining candidate page outputs. No scope or acceptance rule changed after the search.\n\nA hand control subtracts 0, 1, 1, 2 from indices 25, 11, 22, 15, producing 25, 10, 21, 13 modulo 29. This checks arithmetic; it is not a known plaintext.\n\nThe runner generates Fibonacci integers by repeated addition. The separate checker uses fast doubling:\n\n```text\nGiven a = F_k and b = F_(k+1):\nF_(2k)   = a × (2b − a)\nF_(2k+1) = a² + b²\n```\n\nIt verifies every saved term and candidate through inverse arithmetic, audits the complete configuration set, checks the reference openings against their source CSVs, and verifies every offset against its equivalent offset modulo 14. It also counts distinct full output tuples independently. A complete second execution reproduces the saved result exactly. Human review remains pending.\n\n## Reproduce\n\nFrom the repository root with Python 3.12:\n\n```sh\npython experiments/records/lp2-fibonacci-openings/run.py --check\npython experiments/records/lp2-fibonacci-openings/check.py\n```\n\nTo save a fresh result without replacing the reviewed output:\n\n```sh\npython experiments/records/lp2-fibonacci-openings/run.py --output fibonacci-rerun.json\n```\n\nAll commands use local files and the standard library. The output file must not already exist. Inspect `residue_cycle`, `distinct_page_outputs`, and each candidate's page, offset, sign, complete output indices and matching-opening list.\n\nFor the interpretation of the common opening rule, compare the [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings). The [ordinary-prime variant](#/experiments/lp2-prime-openings) illustrates a different source of duplicate coverage: schedules that differ only by a constant output shift.\n",
+  "article_path": "experiments/records/lp2-fibonacci-openings/article.md",
+  "script_sha256": "09caa98d544adea0c3cd79f736d114295ec798e3be4f249fbbad8ea03ed075b5"
 }
 
 ---
