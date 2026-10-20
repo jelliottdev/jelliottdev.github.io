@@ -25,7 +25,8 @@ const vm=require('node:vm');
 function target(){return {style:{},listeners:{},attrs:{},addEventListener(name,fn){this.listeners[name]=fn},setAttribute(name,value){this.attrs[name]=value},getBoundingClientRect(){return {bottom:100}},contains(){return false}}}
 const input=target(),form=target(),panel=target();input.value='Atba';
 form.append=()=>{};panel.hidden=true;
-const sandbox={db,WikiSearch:search,esc:String,marked:String,excerpt:String,
+let poll=null;
+const sandbox={setInterval:fn=>{poll=fn;return 1},clearInterval:()=>{poll=null},queueMicrotask:fn=>fn(),db,WikiSearch:search,esc:String,marked:String,excerpt:String,
  $:s=>({'#search':input,'#search-form':form,'#search-suggestions':panel}[s]),
  document:{createElement:()=>panel,addEventListener(){}},
  window:{visualViewport:{height:430,addEventListener(){}}},innerHeight:430};
@@ -40,3 +41,13 @@ assert.equal(input.attrs['aria-expanded'],'true');
 input.value='';input.listeners.input({isComposing:true});
 assert.equal(panel.hidden,true,'Clearing composing text must hide suggestions');
 console.log('PASS: composing input shows suggestions without blur or text mutation');
+
+// Missing or delayed IME events: changed text must still render while focused.
+sandbox.document.activeElement=input;input.listeners.focus();
+input.value='Atbash';poll();
+assert.equal(panel.hidden,false);
+assert.match(panel.innerHTML,/#\/wiki\/atbash/);
+const rendered=panel.innerHTML;panel.innerHTML='unchanged';poll();
+assert.equal(panel.innerHTML,'unchanged','Unchanged input must not repeat the search');
+input.listeners.blur();assert.equal(poll,null,'Stop the fallback when focus leaves');
+console.log('PASS: eventless value changes update while focused; unchanged text does no work');
