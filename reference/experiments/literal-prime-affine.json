@@ -1,0 +1,93 @@
+{
+  "id": "literal-prime-affine",
+  "title": "Literal prime alphabet: affine permutations for every modulus above 109",
+  "status": "published",
+  "question": "Can a fixed affine map modulo any integer greater than 109 nontrivially permute the full 29-prime alphabet?",
+  "summary": "An exhaustive anchor and divisor certificate leaves only identity. Includes all-modulus reasoning, independent checks and counterexamples for relaxed assumptions.",
+  "tags": [
+    "literal primes",
+    "prime palette",
+    "affine",
+    "modulus",
+    "bijection",
+    "full alphabet",
+    "all moduli",
+    "C07"
+  ],
+  "family": {
+    "id": "literal-prime-maps",
+    "title": "Literal-prime alphabet transformations",
+    "question": "Which fixed maps preserve the literal Gematria Primus prime palette?",
+    "baseline": "literal-prime-affine"
+  },
+  "variant": {
+    "label": "Full-palette affine maps; all integer moduli above 109",
+    "changes": []
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "data/index.json"
+    ],
+    "representation": "The 29 stored Gematria Primus prime values, from 2 through 109; literal values, not rune indices.",
+    "procedure": "Enumerate distinct anchor outputs of 2 and 3; reduce each nonidentity branch to divisors of nonzero witness differences; verify full palette equality.",
+    "parameters": "All integer m>109; all coefficient residues a,b modulo m; 812 distinct anchor pairs; no language score.",
+    "exclusions": "Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys."
+  },
+  "outcome": "not-supported",
+  "finding": "No nonidentity permutation exists within scope: 812 anchor pairs reduce to the identity branch and 13,212 candidate maps with no survivors.",
+  "limitations": "Full literal-prime alphabet only; not rune indices, partial page support, noninjective maps or position-dependent rules. Human review pending. No proof-assistant rerun.",
+  "next_steps": "Test actual partial-page supports separately before extending this statement to every page.",
+  "reproduction": {
+    "command": "python experiments/records/literal-prime-affine/run.py --check",
+    "environment": "Python 3 standard library; no network or AI. Independent checker: python experiments/records/literal-prime-affine/check.py",
+    "script": "experiments/records/literal-prime-affine/run.py",
+    "script_sha256": "fba95b035e557f3bba7df7d2a8e7195415caa145da5dd06e01c63ee251c7f94d",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142"
+      },
+      {
+        "path": "experiments/records/literal-prime-affine/check.py",
+        "sha256": "69fa4a582291bbe5b33e225957cd108824011b8d5cbe07c67b7c9ab616881d2a"
+      },
+      {
+        "path": "experiments/records/literal-prime-affine/plan.txt",
+        "sha256": "f2f7218cb896e88359848dcd649b912b7612a56acb91b73e6f095bd0d4ab9b34"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/literal-prime-affine.json",
+        "sha256": "a2d4fe8152507ac0b90300d7ff70ea344cac78109ad3445f76aabaa6d2d24874"
+      },
+      {
+        "path": "exports/figures/literal-prime-affine.svg",
+        "sha256": "7119ed3a3e2bc56e211dc34d704cc4904586b30ccddabe3a14ab9b443c24b420"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent direct modulus-range certificate and exhaustive coefficient controls; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Stored Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/data/index.json"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/literal-prime-affine.svg",
+      "caption": "Two anchor outputs reduce the infinite modulus range to one identity branch and finitely many divisibility candidates."
+    }
+  ],
+  "article": "## What was tested\n\nCan one fixed rule `(a × p + b) mod m` rearrange all 29 Gematria Primus prime values into a different ordering of the same values? Here p is the literal prime, not a rune index. Every output must belong to the same prime alphabet, and distinct inputs must give distinct outputs.\n\nFor **every integer modulus m greater than 109**, the only resulting permutation is the identity: each prime stays itself. This is a fresh reconstruction of the supplied research archive’s C07 claim, not a new discovery or a rerun of its original certificate. No manuscript page or proposed plaintext is used.\n\n## Results\n\n| Check | Result |\n| --- | --- |\n| Distinct images of inputs 2 and 3 | 29 × 28 = 812 choices |\n| Exact integer permutations without modular wrapping | One: a=1, b=0 |\n| Remaining anchor choices | 811 |\n| Candidate maps requiring modular checks | 13,212 |\n| Nonidentity full-alphabet permutations | None |\n\nThis does not exclude shifts modulo 29 on **rune indices**, prime-derived running keys, or position-dependent transformations. It is specifically about a single affine map of the full literal-prime alphabet.\n\n## Why the infinite range is finite to check\n\nLet u be the output of 2 and v the output of 3. Subtract their congruences:\n\n```text\n2a + b ≡ u (mod m)\n3a + b ≡ v (mod m)\na ≡ v − u (mod m)\nb ≡ 3u − 2v (mod m)\n```\n\nNo modular division is needed. Composite moduli and coefficients that are not invertible modulo m are included. For each u,v define the unreduced integer expression `L(p)=u+(p−2)(v−u)`.\n\nIf L sends every prime into the palette as ordinary integers, its nonzero slope makes it injective. Exhaustive anchor checking finds only L(p)=p in this branch. Otherwise choose a palette input p whose integer image L(p) is outside the palette. To obtain an allowed modular output y, **m must divide the nonzero integer L(p)−y**. Enumerating those divisors for all 29 possible targets gives every candidate modulus for that anchor pair.\n\nThe identity works for every m>109 because all primes are canonical residues. Every other branch has a nonzero divisibility witness, so it is finite. There is no unsearched large-modulus tail. The report lists every anchor, witness and candidate modulus.\n\n## A worked branch\n\nSuppose 2 maps to 3 and 3 maps to 5. Then L(p)=2p−1, so L(5)=9 is outside the palette. For any allowed output y from 2 through 109, the nonzero difference 9−y has absolute value at most 100. No modulus above 109 can divide it. This anchor pair therefore has no candidates.\n\nOther pairs have larger differences and require checks. The program applies the reduction to every pair; this example alone is not the proof of the complete result.\n\n## Where the conclusion stops\n\n| Relaxed assumption | Counterexample | Consequence |\n| --- | --- | --- |\n| Drop injectivity | a=0, b=2, m=110 maps every prime to 2 | Output membership alone does not force identity |\n| Use a partial palette | a=109, b=5, m=110 swaps 2 and 3 | The subset {2,3} has a nonidentity permutation |\n\nThe subset example is not a result about any actual manuscript page. A page using fewer than all 29 symbols requires its own support-specific test. Neither counterexample recovers plaintext.\n\n## Reproduce\n\nExtract the experiment bundle with its folders intact:\n\n```text\npython experiments/records/literal-prime-affine/run.py --check\npython experiments/records/literal-prime-affine/check.py\n```\n\nBoth commands use Python’s standard library and make no network or AI requests. The first reconstructs the full report. The second does not import the producer: it checks candidate completeness by scanning each witness’s bounded modulus range directly, then enumerates all coefficient pairs for moduli 110 through 125. Those sixteen controls check the implementation; coverage above them comes from the divisibility argument, not extrapolation. The checker also verifies the two counterexamples.\n\nBoth checks passed on 20 October 2026. The question, planned procedure and controls are in `plan.txt`. No search bounds, scoring rules or exceptions were changed after seeing the result. Source alphabet, scripts and output hashes are included in the record. Computational review is complete within this scope; human review is pending. No Lean or other proof-assistant build is claimed.\n\nSee [rune indices and prime values](#/wiki/rune-values), [prime indices](#/wiki/prime-indices), [cipher invariants](#/wiki/cipher-invariants), and [search space and bounds](#/wiki/search-space) before applying this result to another proposal.\n",
+  "article_path": "experiments/records/literal-prime-affine/article.md",
+  "script_sha256": "fba95b035e557f3bba7df7d2a8e7195415caa145da5dd06e01c63ee251c7f94d"
+}

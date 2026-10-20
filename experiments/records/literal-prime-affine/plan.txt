@@ -1,0 +1,4 @@
+Question: for every integer m > 109, can (a*p+b) mod m permute the full stored 29-prime palette nontrivially?
+Use data/index.json. Enumerate distinct images u,v of inputs 2,3. These determine a=v-u and b=3u-2v modulo m. For each anchor pair, find the first prime input whose unreduced integer image is outside the palette. For every target y, enumerate divisors m>109 of the nonzero difference. Test all resulting maps for full palette equality. Handle exact integer maps without a witness separately.
+Retain every nonidentity survivor; no language scoring. Controls: identity, a constant map without injectivity, a partial-palette nonidentity map, and independent direct coefficient enumeration for moduli 110 through 125.
+Fresh reconstruction of the supplied archive's C07 claim, not an original discovery or a rerun of its certificate.

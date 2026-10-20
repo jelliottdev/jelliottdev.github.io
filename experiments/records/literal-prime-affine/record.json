@@ -1,0 +1,90 @@
+{
+  "id": "literal-prime-affine",
+  "title": "Literal prime alphabet: affine permutations for every modulus above 109",
+  "status": "published",
+  "question": "Can a fixed affine map modulo any integer greater than 109 nontrivially permute the full 29-prime alphabet?",
+  "summary": "An exhaustive anchor and divisor certificate leaves only identity. Includes all-modulus reasoning, independent checks and counterexamples for relaxed assumptions.",
+  "tags": [
+    "literal primes",
+    "prime palette",
+    "affine",
+    "modulus",
+    "bijection",
+    "full alphabet",
+    "all moduli",
+    "C07"
+  ],
+  "family": {
+    "id": "literal-prime-maps",
+    "title": "Literal-prime alphabet transformations",
+    "question": "Which fixed maps preserve the literal Gematria Primus prime palette?",
+    "baseline": "literal-prime-affine"
+  },
+  "variant": {
+    "label": "Full-palette affine maps; all integer moduli above 109",
+    "changes": []
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "data/index.json"
+    ],
+    "representation": "The 29 stored Gematria Primus prime values, from 2 through 109; literal values, not rune indices.",
+    "procedure": "Enumerate distinct anchor outputs of 2 and 3; reduce each nonidentity branch to divisors of nonzero witness differences; verify full palette equality.",
+    "parameters": "All integer m>109; all coefficient residues a,b modulo m; 812 distinct anchor pairs; no language score.",
+    "exclusions": "Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys."
+  },
+  "outcome": "not-supported",
+  "finding": "No nonidentity permutation exists within scope: 812 anchor pairs reduce to the identity branch and 13,212 candidate maps with no survivors.",
+  "limitations": "Full literal-prime alphabet only; not rune indices, partial page support, noninjective maps or position-dependent rules. Human review pending. No proof-assistant rerun.",
+  "next_steps": "Test actual partial-page supports separately before extending this statement to every page.",
+  "reproduction": {
+    "command": "python experiments/records/literal-prime-affine/run.py --check",
+    "environment": "Python 3 standard library; no network or AI. Independent checker: python experiments/records/literal-prime-affine/check.py",
+    "script": "experiments/records/literal-prime-affine/run.py",
+    "script_sha256": "fba95b035e557f3bba7df7d2a8e7195415caa145da5dd06e01c63ee251c7f94d",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142"
+      },
+      {
+        "path": "experiments/records/literal-prime-affine/check.py",
+        "sha256": "69fa4a582291bbe5b33e225957cd108824011b8d5cbe07c67b7c9ab616881d2a"
+      },
+      {
+        "path": "experiments/records/literal-prime-affine/plan.txt",
+        "sha256": "f2f7218cb896e88359848dcd649b912b7612a56acb91b73e6f095bd0d4ab9b34"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/literal-prime-affine.json",
+        "sha256": "a2d4fe8152507ac0b90300d7ff70ea344cac78109ad3445f76aabaa6d2d24874"
+      },
+      {
+        "path": "exports/figures/literal-prime-affine.svg",
+        "sha256": "7119ed3a3e2bc56e211dc34d704cc4904586b30ccddabe3a14ab9b443c24b420"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent direct modulus-range certificate and exhaustive coefficient controls; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Stored Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/data/index.json"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/literal-prime-affine.svg",
+      "caption": "Two anchor outputs reduce the infinite modulus range to one identity branch and finitely many divisibility candidates."
+    }
+  ]
+}
