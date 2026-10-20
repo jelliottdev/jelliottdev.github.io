@@ -10,8 +10,9 @@ for(const q of ['Atba','Atbash','ATBASH']){
  assert.equal(hits[0].href,'#/wiki/atbash',q+' must lead with the method guide');
  assert(hits.findIndex(h=>h.href==='#/wiki/quick-start')>0,'incidental mentions must follow the subject');
 }
-for(const q of ['LP2-31','LP2:31','LP2 page 31'])assert.equal(search.search(db,q)[0].page.id,'lp2-31');
-assert.deepEqual(search.search(db,'page 15').slice(0,2).map(h=>h.page.id),['lp1-15','lp2-15']);
+for(const q of ['LP2-31','LP2:31','LP2 page 31','LP2–31','LP2—31','LP2‑31','LP2−31','LP2 page #31','LP 2 · 31','LP2-page-31'])assert.equal(search.search(db,q)[0].page.id,'lp2-31');
+for(const q of ['page 15','page #15','page # 15'])assert.deepEqual(search.search(db,q).slice(0,2).map(h=>h.page.id),['lp1-15','lp2-15']);
+for(const q of ['LP2–99','LP2 page #310'])assert.equal(search.search(db,q).filter(h=>h.page).length,0,'Do not truncate or invent a page ID: '+q);
 assert.equal(search.search(db,'').length,0);
 assert.equal(search.search(db,'zzzzzznotfound').length,0);
 assert.equal(search.relevance('Atbash','', '','"atbash"'),650);

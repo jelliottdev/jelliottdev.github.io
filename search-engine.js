@@ -1,6 +1,6 @@
 /* Deterministic local search. No network search, query logging, or inferred facts. */
 (function(root){
- const norm=s=>String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[–—_]/g,'-').replace(/\s+/g,' ').trim();
+ const norm=s=>String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[‐‑–—−_]/g,'-').replace(/\s+/g,' ').trim();
  const terms=q=>[...String(q).matchAll(/"([^"]+)"|(\S+)/g)].map(m=>norm(m[1]||m[2])).filter(Boolean);
  // One parsed query can be reused across every field. Keep only the current
  // query, and leave the public terms() result independent and mutable.
@@ -13,7 +13,7 @@
  };
  function page(p,q){
   if(!q.trim())return {score:0,type:'Page record',text:p.title,section:'details'};
-  const n=norm(q),id=n.match(/^lp([12])\s*[-:·]?\s*(?:page\s*)?0*(\d{1,2})$/),generic=n.match(/^page\s*0*(\d{1,2})$/),file=n.match(/^(\d{1,2})\.jpg$/);
+  const n=norm(q),id=n.match(/^lp\s*([12])[\s:·-]*(?:page\s*)?[\s:#·-]*0*(\d{1,2})$/),generic=n.match(/^page\s*#?\s*0*(\d{1,2})$/),file=n.match(/^(\d{1,2})\.jpg$/);
   if(id)return p.id===`lp${id[1]}-${id[2].padStart(2,'0')}`?{score:1000,type:'Page identifier',text:p.id.toUpperCase(),section:'details'}:null;
   if(generic)return p.release_index===Number(generic[1])?{score:900,type:'Release page number',text:`${p.release} page ${p.release_index}; include the release when citing this page.`,section:'details'}:null;
   if(file)return (p.source_names||[]).some(s=>s.filename.toLowerCase()===n)?{score:950,type:'Archive filename',text:`${q} in the pinned combined archive corresponds to ${p.id.toUpperCase()}.`,section:'details'}:null;
