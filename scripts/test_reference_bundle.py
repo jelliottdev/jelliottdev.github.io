@@ -37,6 +37,24 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        for flags, name in [([], "warning.txt"), (["--trace"], "warning.csv")]:
+            command = [sys.executable, "scripts/reproduce_reading.py", "warning", *flags]
+            expected = subprocess.run(command, cwd=target, capture_output=True, check=True).stdout
+            saved = subprocess.run([*command, "--output", name], cwd=target,
+                                   capture_output=True, check=True)
+            assert (target / name).read_bytes() == expected
+            expected.decode("utf-8")  # CSV contains original runes, not replacement characters.
+            repeated = subprocess.run([*command, "--output", name], cwd=target,
+                                      capture_output=True)
+            assert repeated.returncode != 0 and b"Output already exists" in repeated.stderr
+            assert (target / name).read_bytes() == expected
+        for arguments in [["missing-section"], ["--check-all"], ["--list"]]:
+            invalid = subprocess.run([sys.executable, "scripts/reproduce_reading.py",
+                                      *arguments, "--output", "invalid.txt"],
+                                     cwd=target, capture_output=True)
+            assert invalid.returncode != 0
+            assert not (target / "invalid.txt").exists()
+        print("PASS: UTF-8 reading/trace files match stdout; existing files and invalid requests preserved.")
         assert (target / "data/evidence/signature-checks.json").is_file()
         assert (target / "downloads/REFERENCE-DATA-README.txt").is_file()
 

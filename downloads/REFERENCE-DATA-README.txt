@@ -16,6 +16,11 @@ From that folder, with Python 3, run:
 These checks use the included archived texts, records, parameters and evidence.
 No network or AI service is needed. CONTENTS.json lists member hashes and roles.
 
+To save a known reading or its rune-by-rune trace as UTF-8:
+  python scripts/reproduce_reading.py warning --output warning.txt
+  python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
+These create files in your current folder and refuse to overwrite existing files.
+
 Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
 inspect_visual_records.py also requires Pillow. extract_payload.py requires

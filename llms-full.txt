@@ -5519,6 +5519,19 @@ You only need the input index, output index and Latin label to follow this Atbas
 
 Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run python scripts/reproduce_reading.py welcome --trace and follow keystream positions and interruptions. The specific LP1-10 correction is applied before transformation and trace output; see transcription layers.
 
+Save a reading or trace
+
+Use --output to keep the result as a file. The script checks the reading against its stored control before writing anything, saves UTF-8 text, and refuses to replace an existing file.
+
+python scripts/reproduce_reading.py warning --output warning.txt
+python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
+
+The filenames above are created in your terminal’s current folder. You can choose another existing folder; quote the path if it contains spaces. The script does not create missing folders. The text file contains the same page headings and literal reading as the terminal output. The CSV contains only the header and trace rows; the “Saved” confirmation is printed to the terminal, not inserted into the file.
+
+When importing the CSV into a spreadsheet, select UTF-8 and a comma delimiter if asked. Each rune has its own row. A multi-page section such as Welcome keeps the page ID in every row, so the trace can be filtered without losing its page attribution. Keep this original export alongside any spreadsheet you edit.
+
+This option saves a named section, with or without --trace; it does not combine with --list or --check-all. A saved trace documents the known control’s computation, not a new experiment on an unsolved page.
+
 When you are ready to try another method
 
 The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.

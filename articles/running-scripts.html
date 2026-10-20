@@ -38,6 +38,13 @@ lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 <tr><td><code>copied</code></td><td>Whether this position is listed as an interruption in the control. <code>False</code> does not mean the index changed: direct readings also have false entries.</td></tr>
 </tbody></table></div>
 <p>Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run <code>python scripts/reproduce_reading.py welcome --trace</code> and follow <a href="#/wiki/interruptions">keystream positions and interruptions</a>. The specific LP1-10 correction is applied before transformation and trace output; see <a href="#/wiki/transliteration">transcription layers</a>.</p>
+<h2 id="save-output">Save a reading or trace</h2>
+<p>Use <code>--output</code> to keep the result as a file. The script checks the reading against its stored control before writing anything, saves UTF-8 text, and refuses to replace an existing file.</p>
+<pre><code>python scripts/reproduce_reading.py warning --output warning.txt
+python scripts/reproduce_reading.py warning --trace --output warning-trace.csv</code></pre>
+<p>The filenames above are created in your terminal’s current folder. You can choose another existing folder; quote the path if it contains spaces. The script does not create missing folders. The text file contains the same page headings and literal reading as the terminal output. The CSV contains only the header and trace rows; the “Saved” confirmation is printed to the terminal, not inserted into the file.</p>
+<p>When importing the CSV into a spreadsheet, select <strong>UTF-8</strong> and a <strong>comma</strong> delimiter if asked. Each rune has its own row. A multi-page section such as Welcome keeps the page ID in every row, so the trace can be filtered without losing its page attribution. Keep this original export alongside any spreadsheet you edit.</p>
+<p>This option saves a named section, with or without <code>--trace</code>; it does not combine with <code>--list</code> or <code>--check-all</code>. A saved trace documents the known control’s computation, not a new experiment on an unsolved page.</p>
 <h2 id="requirements">When you are ready to try another method</h2>
 <p>The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.</p>
 <p>For image-based work, extract <a href="downloads/original-images.zip">the original-images ZIP</a> into the same folder as the reference data. See the <a href="downloads/REFERENCE-DATA-README.txt">bundle instructions</a> for the complete command list.</p>

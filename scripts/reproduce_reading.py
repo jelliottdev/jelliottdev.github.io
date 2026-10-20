@@ -11,6 +11,7 @@ This reproduces known controls; it is not an automatic solver for unsolved pages
 from pathlib import Path
 import argparse
 import csv
+import io
 import json
 import sys
 
@@ -99,7 +100,11 @@ def main():
     parser.add_argument("--list", action="store_true", help="List the nine known controls")
     parser.add_argument("--trace", action="store_true", help="Write a per-rune CSV trace to stdout")
     parser.add_argument("--check-all", action="store_true", help="Compare all 17 runic page outputs exactly")
+    parser.add_argument("--output", type=Path,
+                        help="Save a section reading or trace as UTF-8; refuse existing files")
     args = parser.parse_args()
+    if args.output and (args.list or args.check_all):
+        parser.error("--output requires a section reading or --trace, not --list or --check-all.")
     controls = json.loads((ROOT / "data/evidence/reading-methods.json").read_text(encoding="utf-8"))["controls"]
     if args.list:
         for row in controls:
@@ -118,17 +123,29 @@ def main():
         parser.error("Choose a section from --list, or use --check-all.")
     output, trace = reproduce(row)
     check(output)
+    rendered = io.StringIO(newline="")
     if args.trace:
-        writer = csv.writer(sys.stdout, lineterminator="\n")
+        writer = csv.writer(rendered, lineterminator="\n")
         writer.writerow(["page", "page_rune_ordinal", "section_rune_ordinal", "input_rune",
                          "input_index", "subtracted_value", "output_index", "latin", "copied"])
         writer.writerows(trace)
     else:
         for page_id, text in output.items():
-            print(f"=== {page_id.upper()} ===\n{text}")
+            print(f"=== {page_id.upper()} ===\n{text}", file=rendered)
+    if args.output:
+        try:
+            with args.output.open("x", encoding="utf-8", newline="") as destination:
+                destination.write(rendered.getvalue())
+        except FileExistsError:
+            parser.error(f"Output already exists: {args.output}. Choose a new filename.")
+        except OSError as error:
+            parser.error(f"Could not save output: {error}")
+        print(f"Saved UTF-8 {'CSV trace' if args.trace else 'reading'}: {args.output}")
+    else:
+        sys.stdout.write(rendered.getvalue())
 
 
 if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stdout.reconfigure(encoding="utf-8", newline="")
     main()
