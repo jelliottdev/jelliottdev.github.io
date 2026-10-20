@@ -6909,6 +6909,11 @@ Specified runes are copied without consuming a key value. These interruptions we
 
 The Welcome makes this distinction visible in adjacent positions. At rune position 47, input F (index 0) is transformed with key value 26 into O (index 3). At position 48, another input F is copied unchanged, consuming no key value. Position 49 then uses key value 23, the start of the next cycle, and produces A. Identical input symbols therefore receive different treatment because the control specifies a position, not a blanket rule for the symbol F.
 
+Watch the key counter pause
+
+[Image: Welcome positions 47 to 49: the consumed-key counter advances from 47 to 48, stays at 48 for the copied F, then advances to 49.]
+The first recorded interruption in the Welcome. A key slot is the consumed-key counter modulo eight; it is not the input rune's ordinal after an interruption. Arithmetic wraps modulo 29. Open full size · Download SVG.
+
 For ordinary runes, j advances once per rune; punctuation consumes no key position, and the recorded copied runes do not advance j either. After the first interruption, the physical rune position and consumed-key count differ. A multi-letter output label is still one rune and consumes at most one key position.
 
 If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune. The column-IoC explanation describes why repeating keys motivate a periodic analysis, but such an analysis must use the same advancement convention.
@@ -6931,6 +6936,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - interruptions
   https://jelliottdev.github.io/reference/articles/interruptions.html
+- Welcome positions 47 to 49: the consumed-key counter advances from 47 to 48, stays at 48 for the copied F, then advances to 49.; Open full size; Download SVG
+  https://jelliottdev.github.io/exports/figures/welcome-key-alignment.svg
 - column-IoC explanation
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html#columns
 - Reproduction script
@@ -7014,7 +7021,7 @@ A page boundary is not automatically a restart
 
 The Welcome control carries its section ordinal across LP1-03 and LP1-04. LP1-03 contributes 251 runes, so LP1-04’s first rune has page ordinal 0 but section ordinal 251. An interruption list defined for the whole section must use the latter counter. Restarting at zero on the second page would apply the list to different runes.
 
-In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26 to output index 3 (O). Ordinal 48 is another F, but is explicitly copied; ordinal 49 then uses shift 23. This is evidence for a specified position list, not a rule that every F is copied. See the Welcome walkthrough.
+In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26 to output index 3 (O). Ordinal 48 is another F, but is explicitly copied; ordinal 49 then uses shift 23. This is evidence for a specified position list, not a rule that every F is copied. See the Welcome counter diagram and walkthrough.
 
 A copied rune still occupies a position in the input. Removing it before counting changes later ordinals. Similarly, counting punctuation or the Latin letters in a multi-letter rune label would create a different coordinate system. Use rune indices and the trace’s named columns rather than offsets in a displayed English sentence.
 
@@ -7032,10 +7039,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - 301 sequence discussion
   https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
-- Welcome walkthrough; Vigenère
-  https://jelliottdev.github.io/reference/articles/vigenere.html
+- Welcome counter diagram and walkthrough
+  https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
 - rune indices
   https://jelliottdev.github.io/reference/articles/rune-values.html
+- Vigenère
+  https://jelliottdev.github.io/reference/articles/vigenere.html
 - prime-minus-one
   https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 - Pinned historical walkthrough
