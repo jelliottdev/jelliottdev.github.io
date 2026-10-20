@@ -65,3 +65,5 @@ Region inspection keeps the page name and selected feature in the viewer heading
 Direct section and topic URLs scroll to the destination and move keyboard focus to its heading (or the destination itself when it has no heading). A missing destination leaves the normal page available. Focusing must not trigger a second scroll or move the content behind the sticky header.
 
 Authored manuscript images and thumbnails must include their native width and height attributes. CSS controls their displayed size and cropping; the attributes preserve the aspect ratio before lazy images load, preventing section destinations from shifting on phones. Do not resize or recompress original image files for this purpose.
+
+Region inspection fits the recorded rectangle within both viewport dimensions and outlines its original-image bounds. The surrounding original remains visible with a light shade; the outline scales with zoom and clears when opening an image without a selected region.

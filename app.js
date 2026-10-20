@@ -53,8 +53,32 @@ if(viewMode==='reviewed')lines=p.reviewed_text.split('\n').filter(l=>l.trim()&&!
 $('#transcription-lines').innerHTML=`<div class="table-wrap"><table class="line-table"><thead><tr><th>Text row</th><th>${viewMode==='latin'?'Latin labels':viewMode==='numbers'?'Zero-based rune indices':viewMode==='reviewed'?'Reviewed rune text':'Archived rune text'}</th><th class="metric">Runes</th></tr></thead><tbody>${lines.map((l,i)=>{let text=l.raw;if(viewMode==='latin')text=l.latin;if(viewMode==='numbers')text=[...l.raw].map(c=>map.has(c)?String(map.get(c).index):c).join(' ');return `<tr id="line-${i+1}"><td class="line-no"><a href="#/page/${p.id}?line=${i+1}">${String(i+1).padStart(2,'0')}</a></td><td class="${['runes','reviewed'].includes(viewMode)?'rune-line':'latin-line'}">${esc(text)}</td><td class="metric">${l.runes}</td></tr>`}).join('')}</tbody></table></div>`;
 document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===viewMode));}
 async function showPage(id,version){let p=cache.get(id);if(!p){const r=await fetch(`data/pages/${encodeURIComponent(id)}.json`,{cache:"no-cache"});if(!r.ok)throw Error('This page record could not be loaded.');p=await r.json();cache.set(id,p)}if(version!==renderId)return;currentPage=p;viewMode='runes';main.innerHTML=pageHTML(p);if(p.raw)drawLines(p);bindCitation();document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{viewMode=b.dataset.mode;drawLines(p)}));$('#open-image').addEventListener('click',()=>openImage());document.querySelectorAll('.inspect').forEach(b=>b.addEventListener('click',()=>openImage(b.dataset.rect.split(',').map(Number),b.dataset.region)));}
-function openImage(rect,region){const img=$('#viewer-image');img.src=`images/${currentPage.id}.jpg`;img.alt=`Original manuscript ${label(currentPage)}`;$('#viewer-title').textContent=label(currentPage)+(rect&&region?' — '+region:'');$('#image-dialog').showModal();const init=()=>{const area=$('#viewer-scroll');zoom=rect?Math.min(2,(area.clientWidth-40)/(rect[2]+120)):Math.min((area.clientWidth-40)/img.naturalWidth,(area.clientHeight-40)/img.naturalHeight);applyZoom();if(rect){area.scrollLeft=Math.max(0,rect[0]*zoom-30);area.scrollTop=Math.max(0,rect[1]*zoom-30)}else{area.scrollTop=0;area.scrollLeft=0}};if(img.complete&&img.naturalWidth)init();else img.onload=init;}
-function applyZoom(){const img=$('#viewer-image');img.style.width=`${img.naturalWidth*zoom}px`;$('#zoom-value').textContent=`${Math.round(zoom*100)}%`;}
+let viewerRect=null;
+function openImage(rect,region){
+ const img=$('#viewer-image');viewerRect=rect||null;
+ img.src=`images/${currentPage.id}.jpg`;img.alt=`Original manuscript ${label(currentPage)}`;
+ $('#viewer-title').textContent=label(currentPage)+(rect&&region?' — '+region:'');
+ $('#image-dialog').showModal();
+ const init=()=>{
+  const area=$('#viewer-scroll');
+  zoom=rect?Math.min(2,(area.clientWidth-48)/rect[2],(area.clientHeight-48)/rect[3]):Math.min((area.clientWidth-40)/img.naturalWidth,(area.clientHeight-40)/img.naturalHeight);
+  applyZoom();area.scrollTop=0;area.scrollLeft=0;
+  if(rect){
+   const box=$('#viewer-region').getBoundingClientRect(),frame=area.getBoundingClientRect();
+   area.scrollLeft=Math.max(0,box.left-frame.left-24);
+   area.scrollTop=Math.max(0,box.top-frame.top-24);
+  }
+ };
+ img.onload=init;
+ if(img.complete&&img.naturalWidth)init();
+}
+function applyZoom(){
+ const img=$('#viewer-image'),stage=$('#viewer-stage'),region=$('#viewer-region');
+ img.style.width=`${img.naturalWidth*zoom}px`;stage.style.width=img.style.width;
+ region.hidden=!viewerRect;
+ if(viewerRect){const [x,y,w,h]=viewerRect;Object.assign(region.style,{left:`${x*zoom}px`,top:`${y*zoom}px`,width:`${w*zoom}px`,height:`${h*zoom}px`});}
+ $('#zoom-value').textContent=`${Math.round(zoom*100)}%`;
+}
 function zoomImage(factor){const area=$('#viewer-scroll'),img=$('#viewer-image'),before=img.getBoundingClientRect(),frame=area.getBoundingClientRect();const x=(frame.left+area.clientWidth/2-before.left)/before.width,y=(frame.top+area.clientHeight/2-before.top)/before.height;zoom=Math.max(.05,Math.min(4,zoom*factor));applyZoom();const after=img.getBoundingClientRect();area.scrollLeft+=after.left+x*after.width-frame.left-area.clientWidth/2;area.scrollTop+=after.top+y*after.height-frame.top-area.clientHeight/2;}
 $('#zoom-in').onclick=()=>zoomImage(1.5);$('#zoom-out').onclick=()=>zoomImage(1/1.5);$('#fit').onclick=()=>{const a=$('#viewer-scroll'),i=$('#viewer-image');zoom=Math.min((a.clientWidth-40)/i.naturalWidth,(a.clientHeight-40)/i.naturalHeight);applyZoom();a.scrollTop=0;a.scrollLeft=0};$('#close-viewer').onclick=()=>$('#image-dialog').close();
 function setNavigation(open){$('#sidebar').classList.toggle('open',open);$('#menu').setAttribute('aria-expanded',String(open));$('#nav-backdrop').hidden=!open;document.body.classList.toggle('nav-open',open);const modal=open&&matchMedia('(max-width:760px)').matches;main.inert=modal;}
