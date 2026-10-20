@@ -1502,6 +1502,7 @@ Image regions and connected components: https://jelliottdev.github.io/reference/
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Dots and punctuation: https://jelliottdev.github.io/reference/articles/dots.html
 Night Thoughts: Young, Blake and a proposed book lookup: https://jelliottdev.github.io/reference/articles/night-thoughts.html
+JPEG byte distributions: zeros, colour and file structure: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 ## Sources
 
@@ -1668,6 +1669,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Spirals and branching borders: https://jelliottdev.github.io/reference/articles/spirals.html
+JPEG byte distributions: zeros, colour and file structure: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 ## Sources
 
@@ -1718,6 +1720,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Line gaps: spacing, punctuation and file sizes: https://jelliottdev.github.io/reference/articles/line-gaps.html
+JPEG byte distributions: zeros, colour and file structure: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 ## Sources
 
@@ -2792,6 +2795,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Insects and wing imagery: https://jelliottdev.github.io/reference/articles/insects.html
+JPEG byte distributions: zeros, colour and file structure: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 ## Sources
 
@@ -2890,6 +2894,7 @@ $
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Insects and wing imagery: https://jelliottdev.github.io/reference/articles/insects.html
+JPEG byte distributions: zeros, colour and file structure: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 ## Sources
 
@@ -17589,6 +17594,9 @@ For related distinctions, see search space and bounds, fixed-window image compar
 
 To regenerate the chart, install Matplotlib and run python scripts/plot_gap_file_sizes.py --output my-gap-size-chart.svg. The plotting script reads the saved report and does not recompute or classify gaps.
 
+
+The related JPEG byte-distribution audit checks the proposed grayscale explanation directly against frame headers. It finds both one-component and three-component images in each modal-byte group.
+
 Sources, related references, and files
 - Original JPEG sizes for all 58 LP2 pages, distinguishing the 16 reported gap pages, 15 comparison pages and 27 unlisted pages
   https://jelliottdev.github.io/exports/figures/gap-file-sizes.svg
@@ -17610,8 +17618,92 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/word-lengths.html
 - plotting script
   https://jelliottdev.github.io/scripts/plot_gap_file_sizes.py
+- JPEG byte-distribution audit
+  https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 Article: https://jelliottdev.github.io/reference/articles/line-gaps.html
+
+
+---
+
+JPEG byte distributions: zeros, colour and file structure
+
+Reproduce the four-page byte-frequency split and test whether it corresponds to grayscale encoding.
+
+A file-byte histogram counts how often each value from 00 to FF occurs in an encoded file. It is not a histogram of rune values, printed colours or decoded pixels. Keeping those representations separate resolves part of a reported distinction between “null” and “random” Liber Primus pages.
+
+The four-page split is reproducible
+
+Counting every byte of the 58 archived LP2 JPEGs gives a precise result: LP2-00, LP2-04, LP2-24 and LP2-26 each have 44 hexadecimal as their uniquely most frequent byte. Every other LP2 file has 00 as its uniquely most frequent byte. This agrees with the supplied four-page grouping without relying on the missing histogram screenshots.
+
+Hexadecimal 44 is decimal 68 and represents D in ASCII. That explains how a byte-frequency display can label the same value “D”; it does not make the compressed image a text message. A count of whole bytes is also different from counting individual hexadecimal digits: the byte 44 contributes one byte observation, or two digit observations under that different measurement.
+
+The most frequent value is called the mode. It need not make up more than half of the data. Across these files, 00 accounts for approximately 0.756%–20.139% of all bytes. None has a literal majority of zero bytes. Likewise, a visually flatter histogram does not establish randomness: this audit makes no randomness claim.
+
+The split does not identify grayscale encoding
+
+The baseline JPEG frame headers record 23 one-component images and 35 three-component images. The two histogram groups cross those categories:
+
+	Most frequent byte	One component	Three components	Total
+	00	22	32	54
+	44	1	3	4
+	Total	23	35	58
+
+LP2-24 is the one-component member of the four-page group. LP2-00, 04 and 26 have three components. Conversely, LP2-03 has three components even though its most frequent byte is 00. The proposed equivalence between “null” and grayscale therefore fails on the stored files.
+
+The JFIF 1.02 specification defines one component as Y and three components as Y, Cb and Cr. A decoder can present the latter as RGB pixels. Component count, decoder output mode and the visible amount of colour are different descriptions: a three-component image can still look nearly monochrome.
+
+Where are the zero bytes?
+
+The report locates the end of the first start-of-scan header and counts zero bytes before that offset. In every file, more than 92.6% of its zero bytes occur after that point. The zeros are therefore not confined to the initial metadata and table headers.
+
+This offset split does not decode the compressed scan, isolate every later marker, or identify why a particular byte is common. Calling all zeros “padding” or assigning them directly to blank paper would go beyond this measurement. An explanation of the encoding pattern would need to inspect the coding tables and compressed data, then test that explanation against controlled re-encodings.
+
+Reproduce the measurements
+
+Run python scripts/audit_jpeg_bytes.py --check from the repository. For a standalone reproduction, extract the reference-data bundle and original-images bundle into the same directory first. The script needs only Python 3 and makes no network requests.
+
+The JSON report contains all 256 counts for each file, byte length, SHA-256 hash, frame dimensions, component count and first scan-data offset. Counts are ordered from 00 through FF. Use --output my-jpeg-byte-audit.json to save a fresh report; existing outputs are protected from overwrite.
+
+The marker reader is intentionally scoped to these baseline JPEG headers. It rejects unsupported framing instead of interpreting arbitrary files as successful measurements. Its component counts and dimensions were independently cross-checked against Pillow for all 58 originals; that cross-check does not require Pillow to run the downloadable audit.
+
+What this establishes—and what remains open
+
+This audit establishes the modal-byte grouping and disproves the simple grayscale explanation. It does not establish a hidden message, author intention, random generation, a date encoded by page numbers, or an exhaustive absence of hidden data. It also does not cover LP1, whose numbering and source-file mapping need a separate specification.
+
+A follow-up experiment should freeze the file set and representation, identify the proposed encoding mechanism, and declare the controls before searching for significance. Keep re-encoded derivatives separate from original files and record the encoder and settings. If investigating steganography, use a specified extraction method and validation criterion; a histogram alone does not extract a payload.
+
+Compare line gaps and file sizes, decoded image-region measurements, search space and bounds, and OutGuess. These examine different evidence and should not be treated as interchangeable tests.
+
+Sources, related references, and files
+- LP2-00
+  https://jelliottdev.github.io/reference/lp2-00.html
+- LP2-04
+  https://jelliottdev.github.io/reference/lp2-04.html
+- LP2-24
+  https://jelliottdev.github.io/reference/lp2-24.html
+- LP2-26
+  https://jelliottdev.github.io/reference/lp2-26.html
+- JFIF 1.02 specification
+  https://www.w3.org/Graphics/JPEG/jfif3.pdf
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images bundle
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/audit_jpeg_bytes.py
+- JSON report
+  https://jelliottdev.github.io/exports/jpeg-byte-audit.json
+- line gaps and file sizes
+  https://jelliottdev.github.io/reference/articles/line-gaps.html
+- decoded image-region measurements
+  https://jelliottdev.github.io/reference/articles/image-regions.html
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- OutGuess
+  https://jelliottdev.github.io/reference/articles/outguess.html
+
+Article: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 
 
 ---
