@@ -125,6 +125,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'fft-bins.svg': {'title':'Synthetic tone: FFT grid and record duration (SVG)', 'guide':'audio-frequency', 'aliases':['FFT','frequency bins','zero padding']},
  'grid-binary.svg': {'title':'Declared base-60 binary grid (SVG)', 'guide':'alphanumeric-grids','aliases':['binary grid','base60 binary']},
  'gap-file-sizes.svg': {'title':'LP2 file sizes by reported gap group (SVG)', 'guide':'line-gaps','aliases':['big gaps','line spacing','file sizes']},
  'doublets.svg': {'title':'Doublet counts by rune (SVG)', 'guide':'doublets','aliases':['doublets','421','equal adjacent runes']},
@@ -168,6 +169,7 @@ files[-1].update(guide='doublets',aliases=['successive doublets','circular dista
 register('exports/unsolved-doublets.json','Doublet audit')
 files[-1].update(guide='doublets',aliases=['doublets','421','doublet positions'])
 script_details = {
+ 'fft_bin_demo.py': ('Reproduce the synthetic FFT bin demonstration', 'audio-frequency', ['audio','1033.59375','FFT']),
  'doublet_distances.py': ('Measure successive-doublet circular distances', 'doublets', ['successive doublets','circular distance','doublet order']),
  'compare_transcriptions.py': ('Compare transcription files and rune streams', 'transcription-checking', ['rune diff','transcription errors','compare transcripts']),
  'plot_gap_file_sizes.py': ('Plot the gap-group file-size audit', 'line-gaps', ['big gaps','file size chart']),
@@ -200,7 +202,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:

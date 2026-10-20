@@ -1,0 +1,33 @@
+<p>A number on a spectrum’s horizontal axis can come from the analysis settings rather than the recording. Before interpreting a frequency as 1033, 3301 or a rune value, distinguish the frequency grid, the strongest measured bin, and an estimate of the underlying tone.</p>
+<p>An FFT (fast Fourier transform) computes how a finite set of sound samples contributes at a grid of frequencies. A bin is one grid position. Hz means cycles per second; the sample rate counts recorded samples per second. A window weights the samples before the transform; the Hann window used below tapers the ends of the excerpt.</p>
+<h2 id="bin-label">Why 1033.59375 Hz appears</h2>
+<p>For sample rate f<sub>s</sub> and FFT length N, bin k has center frequency <code>k × fₛ / N</code>, with k = 0 at zero frequency (DC). At 44,100 samples per second and N = 1,024, adjacent bins are 43.06640625 Hz apart. Bin 24 is therefore <strong>1033.59375 Hz</strong>. This is a property of the grid: it exists even when the input is silence, although silence has no nonzero spectral peak. See the <a href="https://numpy.org/doc/stable/reference/generated/numpy.fft.rfftfreq.html">NumPy frequency-bin definition</a>.</p>
+<pre><code>sample_rate = 44100
+fft_length = 1024
+print(sample_rate / fft_length)       # 43.06640625
+print(24 * sample_rate / fft_length)  # 1033.59375</code></pre>
+<p>Selecting that bin as the largest means its measured magnitude exceeds the other bins under the chosen procedure. It does not mean the physical tone is exactly 1033.59375 Hz, and rounding or truncating the label to 1033 is an additional choice.</p>
+<h2 id="synthetic">A tone that produces the same label</h2>
+<p>The following demonstration generates a pure <strong>1042.85 Hz</strong> sine wave at 44.1 kHz. It does not read an archived audio file. The frequency was selected to illustrate the reported numerical issue, not measured from Cicada’s music.</p>
+<figure class="evidence-figure"><img src="exports/figures/fft-bins.svg" width="500" height="700" loading="lazy" alt="Three spectra of a synthetic 1042.85 Hz sine. Padding the short record makes its broad peak more densely sampled; a longer actual record produces a narrower peak."><figcaption>Each panel uses a symmetric Hann window and normalizes magnitude to its own maximum. Lines connect sampled FFT bins; the dashed line marks the generated frequency. <a href="exports/figures/fft-bins.svg" download>Download figure</a>.</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>Recorded samples</th><th>FFT length</th><th>Largest bin</th><th>Its frequency (Hz)</th></tr></thead><tbody>
+<tr><td>1,024</td><td>1,024</td><td>24</td><td>1033.59375</td></tr>
+<tr><td>1,024</td><td>16,384, zero-padded</td><td>387</td><td>1041.668701171875</td></tr>
+<tr><td>16,384</td><td>16,384</td><td>387</td><td>1041.668701171875</td></tr>
+</tbody></table></div>
+<p>The first row reproduces the surprising label with a tone whose frequency we know is different. The later rows still report bin centers, not an interpolated frequency estimate. Matching a label therefore cannot, by itself, identify an intended number in an unknown recording.</p>
+<h2 id="padding">More bins versus more recorded sound</h2>
+<p>The first two rows use the same 1,024 signal samples, about 23.22 milliseconds. Padding appends zeros after windowing and samples the same short-record spectrum more densely. It adds no recorded sound. The third row contains about 371.52 milliseconds of actual sine-wave samples and has a narrower main peak. These are different changes even though both later rows use the same FFT length.</p>
+<p>Window choice affects the main peak and leakage into nearby frequencies. Frequency-grid spacing is not a complete statement of the ability to separate nearby tones. The <a href="https://docs.scipy.org/doc/scipy/tutorial/signal.html#spectral-analysis">SciPy spectral-analysis tutorial</a> explains windowing, leakage and zero-padding. This example is deliberately a single stationary sine; music, overlapping notes and noise require additional care.</p>
+<h2 id="reproduce">Reproduce the demonstration</h2>
+<p>Extract the <a href="downloads/reference-data.zip">reference-data bundle</a>, then run from its root:</p>
+<pre><code>python -m pip install numpy
+python scripts/fft_bin_demo.py
+
+# Optional: regenerate the figure
+python -m pip install matplotlib
+python scripts/fft_bin_demo.py --plot</code></pre>
+<p>The <a href="scripts/fft_bin_demo.py" download>complete script</a> prints the generated frequency, sample rate, window, sample counts, FFT lengths, bin spacings, maxima and NumPy version. It performs no download or audio decoding. The figure uses each spectrum’s own maximum, so its vertical scales must not be used to compare signal energy.</p>
+<h2 id="real-recording">What a recording-based test needs</h2>
+<p>Keep the exact audio file and its checksum, decoder and version, channel selection, sample rate, segment start and length, window, FFT length, preprocessing, and peak-selection rule. A screenshot without these settings cannot establish a repeatable measurement. If you change the segment, window or frequency tolerance while looking for a familiar number, retain those attempts in the <a href="#/wiki/search-space">search bounds</a>.</p>
+<p>No historical audio peak, musical cipher or absence of hidden content has been verified here. This is a synthetic control for a measurement pitfall. A proposed note-to-rune mapping needs its own symbol definitions, grouping rules and reversible operation; a frequency-axis label does not supply them. See <a href="#/wiki/first-experiment?section=evidence-types">types of experimental evidence</a> and <a href="#/wiki/checksums">file verification</a>.</p>
