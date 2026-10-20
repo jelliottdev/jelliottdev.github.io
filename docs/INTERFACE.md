@@ -47,3 +47,9 @@ The illustrated index uses lazy-loaded existing thumbnails. Detail articles link
 
 Guide contents links carry the complete wiki route and section parameter, so copied links and new tabs preserve the destination. Normal activation scrolls without rerendering the article, updates the current URL, and moves keyboard focus to the heading. Mobile contents closes before scrolling to avoid a layout shift. Reloading a section URL restores that heading below the sticky header. Modifier clicks keep native browser behavior.
 
+## Guide directory
+
+The directory begins with getting started and complete readings, followed by methods, arithmetic, analysis, hidden content, page studies, philosophy, and artwork. Category descriptions explain the reader's task. Artwork belongs in one category; page-specific studies are distinct from arithmetic references. Metadata assigns each guide one primary category, while article links provide cross-subject connections.
+
+Category destinations use stable names rather than their display position. Preserve the original nine `guide-group-0` through `guide-group-8` bookmarks as aliases; both former artwork categories now lead to the consolidated artwork section. Unconfigured categories must remain visible rather than silently dropping new articles.
+

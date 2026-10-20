@@ -1,10 +1,23 @@
 /* Authored reference articles. Never treated as completed experiment records. */
+const guideCategories = [
+ {title:'Getting started',id:'getting-started',legacy:[0],description:'Learn the page conventions, run the scripts, and record work that others can reproduce.'},
+ {title:'Complete known readings',id:'known-readings',legacy:[8],description:'Read each decoded section with its literal output, manuscript images, and reproduction instructions.'},
+ {title:'Runes and cipher methods',id:'cipher-methods',legacy:[1],description:'Understand rune representations and follow the transformations used in known readings.'},
+ {title:'Numbers and arithmetic',id:'numbers',legacy:[2],description:'Distinguish prime values, indices, sums, and arithmetic functions before using them in a proposal.'},
+ {title:'Analysis and reproduction',id:'analysis',legacy:[5],description:'Measure rune distributions and repeats, understand what a statistic can show, and reproduce the calculation.'},
+ {title:'Hidden content and verification',id:'hidden-content',legacy:[3],description:'Extract embedded messages, follow the earlier puzzle chains, and verify files and signatures.'},
+ {title:'Page studies',id:'page-studies',legacy:[],description:'Inspect particular headings, number panels, title images, and unresolved page details.'},
+ {title:'Philosophy and literary references',id:'philosophy',legacy:[4],description:'Compare manuscript passages and outside works, keeping interpretation separate from source attribution.'},
+ {title:'Artwork and visual features',id:'artwork',legacy:[6,7],description:'Find a drawing or motif, inspect the preserved image, and follow the evidence for artwork identifications.'}
+];
 function wikiPage(id='') {
  const articles=db.articles;
  if(!id){
- const groups=[...new Set(articles.map(a=>a.category||'Reference'))];
+ const known=new Set(guideCategories.map(g=>g.title));
+ const extra=[...new Set(articles.map(a=>a.category||'Reference'))].filter(g=>!known.has(g));
+ const groups=[...guideCategories,...extra.map((title,i)=>({title,id:`other-${i}`,legacy:[],description:''}))].filter(g=>articles.some(a=>(a.category||'Reference')===g.title));
  return head('Guides and methods','Background, worked examples, and reproduction instructions')+
- `<article class="reading-width"><p>New to the manuscript? Begin with <a href="#/wiki/quick-start">Start solving</a>. Follow a known result, look up an unfamiliar term, or learn how to preserve evidence.</p><nav class="section-nav" aria-label="Guide categories">${groups.map((g,i)=>`<a href="#/wiki?section=guide-group-${i}" data-anchor="guide-group-${i}">${esc(g)}</a>`).join('')}</nav>${groups.map((g,i)=>`<section id="guide-group-${i}"><h2>${esc(g)}</h2><dl class="article-directory guide-directory">${articles.filter(a=>(a.category||'Reference')===g).map(a=>`<div><dt><a href="#/wiki/${a.id}">${esc(a.title)}</a></dt><dd>${esc(a.summary)}</dd></div>`).join('')}</dl></section>`).join('')}${footer()}</article>`;
+ `<article class="reading-width"><p>New to the manuscript? Begin with <a href="#/wiki/quick-start">Start solving</a>. Follow a known result, look up an unfamiliar term, or learn how to preserve evidence.</p><nav class="section-nav" aria-label="Guide categories">${groups.map(g=>`<a href="#/wiki?section=guides-${g.id}" data-anchor="guides-${g.id}">${esc(g.title)}</a>`).join('')}</nav>${groups.map(g=>`<section id="guides-${g.id}">${g.legacy.map(i=>`<span id="guide-group-${i}" class="guide-category-alias" aria-hidden="true"></span>`).join('')}<h2>${esc(g.title)}</h2>${g.description?`<p>${esc(g.description)}</p>`:''}<dl class="article-directory guide-directory">${articles.filter(a=>(a.category||'Reference')===g.title).map(a=>`<div><dt><a href="#/wiki/${a.id}">${esc(a.title)}</a></dt><dd>${esc(a.summary)}</dd></div>`).join('')}</dl></section>`).join('')}${footer()}</article>`;
  }
  const a=articles.find(a=>a.id===id);
  if(!a)throw Error('This guide does not exist. Open Guides and methods to find an article.');
