@@ -9,6 +9,19 @@ Three inputs
 LP1-00, Liber Primus, LP1-01, the warning, and LP1-02, Chapter 1 — Intus carry OutGuess payloads. Extract and verify them. Their 1,982-digit bodies decode to three 991-byte streams.
 
 Visible headings and the two title pages.
+[Image: LP1-00: title]
+LP1-00: title
+[Image: LP1-01: warning]
+LP1-01: warning
+[Image: LP1-02: chapter title]
+LP1-02: chapter title
+What each stage produces
+	Stage	Output to check
+	Extract and verify the three messages	One signed hexadecimal body from each of LP1-00, LP1-01, and LP1-02
+	Decode hexadecimal	Three separate streams of 991 bytes each
+	XOR equal positions	A reconstructed 991-byte signed message
+	Take its ciphertext and reorder columns	70 characters, retaining the literal ending ONIO
+The visible Welcome text and its Vigenère key are not inputs to this chain. Likewise, the small image embedded in LP1-03 belongs to a different payload. Use exact page IDs when collecting the three source files.
 XOR corresponding bytes
 What XOR means, with a worked byte example.
 XOR produces a 0 bit when input bits agree and 1 when they differ. Compute result[i] = A[i] XOR B[i] XOR C[i] on decoded bytes, not on hexadecimal text characters. For example, 0x0f XOR 0x33 = 0x3c.
@@ -16,6 +29,12 @@ python scripts/reproduce_cover_chain.py
 python scripts/reproduce_cover_chain.py --output combined.asc
 The script checks input and output hashes and refuses to overwrite files. Its 991-byte result is another signed message, requiring its own signature check.
 
+Follow the first byte
+The first decoded bytes are 77, 17, and 4d in hexadecimal. Pairing the same position in each stream gives:
+0x77 XOR 0x17 = 0x60
+0x60 XOR 0x4d = 0x2d
+0x2d is the ASCII hyphen, the first character of the reconstructed PGP header. This checks one position only; the script checks the SHA-256 hash of the complete reconstruction. Decode the hex pairs first: XORing the character codes for the printed digits would use different inputs.
+All three streams must have equal lengths. Do not pad a short stream, cycle it, or quietly discard unmatched bytes. If lengths disagree, check the extracted bodies and their hashes before proceeding.
 Read the columns
 Remove spaces from the first two ciphertext lines and arrange the 70 characters in five rows of fourteen:
 IDGTKUMLOOARWO
@@ -26,6 +45,15 @@ NOCO5JI4MEODZZ
 Within each row, take columns in zero-based order 2, 8, 9, 1, 12, 13, 11, 4, 5, 7, 3, 0, 6, 10. Concatenate the five reordered rows from top to bottom. This transposition gives:
 GOODWORKULTIMATETRUTHISTHEULTIMATEILLUSIONJOINUSATFV7LYUCMEOZZD5J4ONIO
 
+Follow the first four column selections
+The first source row is IDGTKUMLOOARWO. Columns begin at zero, so column 0 contains I, column 1 contains D, and column 2 contains G. Apply the supplied order to that row:
+	Output position	Source column	Character
+	1	2	G
+	2	8	O
+	3	9	O
+	4	1	D
+The first four selected characters spell GOOD. Continue with the remaining ten column indices, then apply the same complete order to each of the next four rows. Here, output positions in the table count from one for readability, while source columns use the zero-based convention required by the script.
+The instruction “read the columns” can otherwise be ambiguous: this recipe reorders characters within each row, then joins the rows. It does not read one entire vertical column from top to bottom before moving to the next.
 Preserve the literal ending
 The exact output ends in ONIO. The historical walkthrough restores a final N to render fv7lyucmeozzd5j4.onion. That character is an interpretation, not a permutation output. This is a historical address, not a claim of current reachability.
 The supplied permutation reproduces the known result. It does not show that a unique ordering can be inferred without clues or applied to another page.
@@ -35,11 +63,11 @@ Pinned historical walkthrough. Recipes reproduce published controls; they are no
 Sources, related references, and files
 - the illustrated cover and its Blake artwork
   https://jelliottdev.github.io/reference/articles/illustrated-cover.html
-- LP1-00, Liber Primus
+- LP1-00, Liber Primus; LP1-00: title
   https://jelliottdev.github.io/reference/lp1-00.html
-- LP1-01, the warning
+- LP1-01, the warning; LP1-01: warning
   https://jelliottdev.github.io/reference/lp1-01.html
-- LP1-02, Chapter 1 — Intus
+- LP1-02, Chapter 1 — Intus; LP1-02: chapter title
   https://jelliottdev.github.io/reference/lp1-02.html
 - OutGuess payloads
   https://jelliottdev.github.io/reference/articles/outguess.html
@@ -47,6 +75,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 - Visible headings and the two title pages
   https://jelliottdev.github.io/reference/articles/title-pages.html
+- LP1-00: title
+  https://jelliottdev.github.io/images/lp1-00.jpg
+- LP1-01: warning
+  https://jelliottdev.github.io/images/lp1-01.jpg
+- LP1-02: chapter title
+  https://jelliottdev.github.io/images/lp1-02.jpg
+- small image embedded in LP1-03
+  https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
 - What XOR means, with a worked byte example
   https://jelliottdev.github.io/reference/articles/xor.html
 - another signed message
