@@ -3,6 +3,7 @@ const fileSize=n=>n>=1048576?`${(n/1048576).toFixed(1)} MB`:n>=1024?`${(n/1024).
 async function readerPage(id,version){
  let p=cache.get(id);if(!p){const response=await fetch(`data/pages/${id}.json`,{cache:"no-cache"});if(!response.ok)throw Error('The reader could not load this page.');p=await response.json();cache.set(id,p)}if(version!==renderId)return;currentPage=p;
  const i=db.pages.findIndex(x=>x.id===id),prev=db.pages[i-1],next=db.pages[i+1];
+ const readingGuide=p.reading&&db.articles.find(a=>a.id==='reading-'+p.reading.section);
  if(!readerView)readerView=matchMedia('(max-width:900px)').matches?'image':'compare';
  main.innerHTML=`<div class="manuscript-reader">
  <header class="reader-heading"><h1>Manuscript reader</h1><a href="${link(p)}">Page record ↗</a></header>
@@ -24,7 +25,9 @@ async function readerPage(id,version){
  <section class="manuscript-text" aria-label="Page text">
  <div class="reader-version"><label for="reader-mode">Text version</label><select id="reader-mode">${p.visible_text?'<option value="visible">Visible Latin text</option>':'<option value="raw">Archived runes</option><option value="latin">Latin rune labels</option>'}${p.reviewed_text?'<option value="reviewed">Reviewed runes</option>':''}${p.reading?'<option value="literal">Literal known reading</option><option value="context">Contextual whole-section reading</option>':''}</select></div>
  <div class="reader-type-size"><label for="reader-size">Text size</label><input id="reader-size" type="range" min="16" max="32" value="${readerSize}"><output id="reader-size-value">${readerSize}px</output></div>
- <p id="reader-text-note" class="small muted"></p><pre id="reader-text"></pre>
+ <p id="reader-text-note" class="small muted"></p>
+ ${readingGuide?`<p class="reader-text-links reader-reading-links"><a href="#/wiki/${esc(readingGuide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(readingGuide.id)}">Read the complete section</a></p>`:''}
+ <pre id="reader-text"></pre>
  <p class="reader-text-links"><a href="${link(p)}?section=transcription">Transcription notes</a> · <a href="${link(p)}?section=page-sources">Sources</a></p>
  </section></div>
  <footer class="reader-resources"><a href="images/${id}.jpg" download="${id}.jpg">Download original JPEG</a><a href="#/downloads/${id}">All page files & checksums</a>${db.payloads.records.some(r=>r.page===id)?`<a href="${link(p)}?section=embedded">Signed OutGuess payload</a>`:''}<span>Page ${i+1} of ${db.pages.length} · <a href="#/numbering">Numbering guide</a></span></footer></div>`;
