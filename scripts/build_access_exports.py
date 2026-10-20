@@ -109,11 +109,16 @@ register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
-register('exports/figures/rune-frequencies.svg','Analysis figure')
-register('exports/figures/atbash-pairs.svg','Analysis figure')
-register('exports/figures/second-koan-argument.svg','Analysis figure')
-register('exports/figures/prime-sum-claims.svg','Analysis figure')
-register('exports/figures/relief-printing.svg','Analysis figure')
+figure_details = {
+ 'rune-frequencies.svg': {'title':'Rune frequency comparison: LP2-31 and LP2-57 (SVG)', 'guide':'index-of-coincidence', 'aliases':['rune frequency chart','letter frequencies','histogram','IoC diagram'], 'pages':['lp2-31','lp2-57'], 'release':'LP2'},
+ 'atbash-pairs.svg': {'title':'Atbash: all 29 rune-index mappings (SVG)', 'guide':'atbash', 'aliases':['Atbash diagram','alphabet reversal','index pairs','28 minus']},
+ 'second-koan-argument.svg': {'title':'Second koan: how the argument works (SVG)', 'guide':'koans', 'aliases':['koan diagram','inner voice','self reference'], 'pages':['lp1-14','lp1-15'], 'release':'LP1'},
+ 'prime-sum-claims.svg': {'title':'Prime sums: arithmetic, pattern, and intention (SVG)', 'guide':'testing-knowledge', 'aliases':['prime sum diagram','spelling diagram','numerical claims','author intention']},
+ 'relief-printing.svg': {'title':'Relief printing: plate and printed marks (SVG)', 'guide':'blake-printmaking', 'aliases':['Blake printing diagram','relief etching','illuminated printing','printing plate','impression']},
+}
+for filename, details in figure_details.items():
+ register('exports/figures/'+filename,'Analysis figure')
+ files[-1].update(details)
 register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
