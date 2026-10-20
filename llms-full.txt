@@ -7247,6 +7247,35 @@ The signed bodies from LP1-00, LP1-01, and LP1-02 are first decoded from hexadec
 
 Follow the first five bytes
 
+Three inputs: count the ones at each bit position
+
+For two bits, XOR means “one or the other, but not both.” When repeated across three inputs, the rule is odd parity: the result is 1 if the number of input ones at that position is odd. It does not mean “exactly one of these three.”
+
+	Number of ones	Example input bits	XOR result
+
+	0	0, 0, 0	0
+
+	1	1, 0, 0	1
+
+	2	1, 1, 0	0
+
+	3	1, 1, 1	1
+
+
+For the last row, evaluate (1 ^ 1) ^ 1 = 0 ^ 1 = 1. The order of the three inputs does not matter. Apply the same rule independently to each of the eight positions in a byte.
+
+Here is the cover chain’s first byte written in binary. Align the columns; do not add carries between them:
+
+LP1-00   01110111   77
+LP1-01   00010111   17
+LP1-02   01001101   4d
+         --------
+XOR      00101101   2d
+
+The rightmost column contains three ones, so its output is 1. The next column contains two ones, so its output is 0. Continue leftward to obtain 00101101. This is the byte value 45 in decimal, written 2d in hexadecimal and interpreted as a hyphen in ASCII. The input and output columns above are bytes, not rune indices or prime sums.
+
+Compare the first five positions
+
 Each row below combines the bytes at one offset in the three decoded streams. Offsets start at zero; all byte values in the table are hexadecimal.
 
 	Offset	LP1-00	LP1-01	LP1-02	XOR output
@@ -7276,7 +7305,8 @@ streams = [
     for page in pages
 ]
 a, b, c = streams
-assert len(a) == len(b) == len(c) == 991
+if not (len(a) == len(b) == len(c) == 991):
+    raise ValueError("Expected three byte streams of length 991")
 combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
 print(combined.splitlines()[0].decode("ascii"))
 assert combined.startswith(b"-----BEGIN PGP SIGNED MESSAGE-----")

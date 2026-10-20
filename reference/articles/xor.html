@@ -5,6 +5,23 @@
 00111100   (hex 3c)</code></pre><p>XOR is not addition with carries and is not alphabet arithmetic <a href="modular-arithmetic.html">modulo 29</a>. It works independently at each bit position.</p>
 <h2 id="chain">The three-image chain</h2><p>The signed bodies from <a href="../lp1-00.html">LP1-00</a>, <a href="../lp1-01.html">LP1-01</a>, and <a href="../lp1-02.html">LP1-02</a> are first decoded from <a href="hexadecimal.html">hexadecimal</a>. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.</p>
 <h2 id="trace">Follow the first five bytes</h2>
+<h3 id="parity">Three inputs: count the ones at each bit position</h3>
+<p>For two bits, XOR means “one or the other, but not both.” When repeated across three inputs, the rule is <strong>odd parity</strong>: the result is 1 if the number of input ones at that position is odd. It does not mean “exactly one of these three.”</p>
+<div class="table-wrap"><table><thead><tr><th>Number of ones</th><th>Example input bits</th><th>XOR result</th></tr></thead><tbody>
+<tr><td>0</td><td><code>0, 0, 0</code></td><td>0</td></tr>
+<tr><td>1</td><td><code>1, 0, 0</code></td><td>1</td></tr>
+<tr><td>2</td><td><code>1, 1, 0</code></td><td>0</td></tr>
+<tr><td>3</td><td><code>1, 1, 1</code></td><td>1</td></tr>
+</tbody></table></div>
+<p>For the last row, evaluate <code>(1 ^ 1) ^ 1 = 0 ^ 1 = 1</code>. The order of the three inputs does not matter. Apply the same rule independently to each of the eight positions in a byte.</p>
+<p>Here is the cover chain’s first byte written in binary. Align the columns; do not add carries between them:</p>
+<pre><code>LP1-00   01110111   77
+LP1-01   00010111   17
+LP1-02   01001101   4d
+         --------
+XOR      00101101   2d</code></pre>
+<p>The rightmost column contains three ones, so its output is 1. The next column contains two ones, so its output is 0. Continue leftward to obtain <code>00101101</code>. This is the byte value 45 in decimal, written <code>2d</code> in hexadecimal and interpreted as a hyphen in ASCII. The input and output columns above are bytes, not rune indices or prime sums.</p>
+<h3 id="byte-table">Compare the first five positions</h3>
 <p>Each row below combines the bytes at one offset in the three decoded streams. Offsets start at zero; all byte values in the table are hexadecimal.</p>
 <div class="table-wrap"><table><thead><tr><th>Offset</th><th>LP1-00</th><th>LP1-01</th><th>LP1-02</th><th>XOR output</th></tr></thead><tbody>
 <tr><td>0</td><td>77</td><td>17</td><td>4d</td><td>2d</td></tr>
@@ -24,7 +41,8 @@ streams = [
     for page in pages
 ]
 a, b, c = streams
-assert len(a) == len(b) == len(c) == 991
+if not (len(a) == len(b) == len(c) == 991):
+    raise ValueError("Expected three byte streams of length 991")
 combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
 print(combined.splitlines()[0].decode("ascii"))
 assert combined.startswith(b"-----BEGIN PGP SIGNED MESSAGE-----")
