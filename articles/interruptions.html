@@ -1,5 +1,48 @@
 
 <h2 id="counters">Keep separate counters</h2><p>The rune ordinal identifies a rune in the input section. The keystream position identifies the next shift. Both normally advance for each rune. At a recorded interruption, the rune is copied and its ordinal advances, but the keystream does not.</p><p>Spaces, line breaks, punctuation and decimal digits do not consume rune positions in these controls. Position 56 means the 57th rune, not the 56th file character.</p>
 <h2 id="examples">Recorded examples</h2><p>The welcome list is [48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514] across its two pages. LP2-56 copies ordinal 56. The <a href="data/evidence/reading-methods.json">parameter file</a> records all lists and whether sequences carry or reset at boundaries.</p>
+<h2 id="choices">What does “skip” mean?</h2>
+<p>In the controls above, it means <strong>copy the rune and leave the next shift unused</strong>. It does not mean delete the rune. Nor does it mean consume a shift while leaving the rune unchanged. These alternatives can produce different output for every subsequent position.</p>
+<p>Consider the artificial input indices <code>10, 0, 10, 10</code>, the repeating key <code>1, 2, 3</code>, and an interruption at input ordinal 1. Subtract shifts modulo 29. The same input and key produce these different results:</p>
+<div class="table-wrap"><table><thead><tr><th>Rule at ordinal 1</th><th>Output indices</th><th>Next shift after the interruption</th></tr></thead><tbody>
+<tr><td>Copy; do not advance key</td><td><code>9, 0, 8, 7</code></td><td>2</td></tr>
+<tr><td>Copy; advance key</td><td><code>9, 0, 7, 9</code></td><td>3</td></tr>
+<tr><td>Delete; do not advance key</td><td><code>9, 8, 7</code></td><td>2, but the output is shorter</td></tr>
+</tbody></table></div>
+<p>Replacing a shift with zero while consuming its key position behaves like the second row, not the first. A proposal that says “use zero on F” must therefore specify whether the original key position is consumed. The <a href="#/wiki/prime-indices?section=digits">301 sequence discussion</a> encounters exactly this ambiguity.</p>
+<h2 id="worked">Follow both counters</h2>
+<p>Here is the first rule step by step. “Key position” is a count of consumed shifts; it is reduced modulo the key length only when selecting a key value.</p>
+<div class="table-wrap"><table><thead><tr><th>Input ordinal</th><th>Input</th><th>Key position before</th><th>Action</th><th>Output</th></tr></thead><tbody>
+<tr><td>0</td><td>10</td><td>0</td><td>Subtract 1</td><td>9</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>Copy; keep key position 1</td><td>0</td></tr>
+<tr><td>2</td><td>10</td><td>1</td><td>Subtract 2</td><td>8</td></tr>
+<tr><td>3</td><td>10</td><td>2</td><td>Subtract 3</td><td>7</td></tr>
+</tbody></table></div>
+<p>This runnable Python 3 example compares the two copy rules. It is a demonstration with artificial indices, not a proposed decoding of an unsolved page.</p>
+<pre><code>def decode(values, key, copied, advance_on_copy=False):
+    output = []
+    key_position = 0
+    for ordinal, value in enumerate(values):
+        if ordinal in copied:
+            output.append(value)
+            if advance_on_copy:
+                key_position += 1
+        else:
+            shift = key[key_position % len(key)]
+            output.append((value - shift) % 29)
+            key_position += 1
+    return output
+
+values, key, copied = [10, 0, 10, 10], [1, 2, 3], {1}
+paused = decode(values, key, copied)
+consumed = decode(values, key, copied, advance_on_copy=True)
+print(paused)    # [9, 0, 8, 7]
+print(consumed)  # [9, 0, 7, 9]
+assert paused == [9, 0, 8, 7]
+assert consumed == [9, 0, 7, 9]</code></pre>
+<h2 id="boundaries">A page boundary is not automatically a restart</h2>
+<p>The Welcome control carries its section ordinal across LP1-03 and LP1-04. LP1-03 contributes 251 runes, so LP1-04’s first rune has page ordinal 0 but section ordinal 251. An interruption list defined for the whole section must use the latter counter. Restarting at zero on the second page would apply the list to different runes.</p>
+<p>In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26 to output index 3 (O). Ordinal 48 is another F, but is explicitly copied; ordinal 49 then uses shift 23. This is evidence for a specified position list, not a rule that every F is copied. See the <a href="#/wiki/vigenere">Welcome walkthrough</a>.</p>
+<p>A copied rune still occupies a position in the input. Removing it before counting changes later ordinals. Similarly, counting punctuation or the Latin letters in a multi-letter rune label would create a different coordinate system. Use <a href="#/wiki/rune-values">rune indices</a> and the trace’s named columns rather than offsets in a displayed English sentence.</p>
 <h2 id="replicate">Inspect alignment</h2><pre><code>python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py lp2-56 --trace</code></pre><p>After a copied rune, the next transformed rune receives the unconsumed shift. See <a href="#/wiki/vigenere">Vigenère</a> and <a href="#/wiki/prime-minus-one">prime-minus-one</a>.</p><h2 id="scope">No universal skip rule</h2><p>A new skip list is an additional hypothesis. If chosen after viewing the output, disclose that choice and test its predictions on independent material.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>

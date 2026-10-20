@@ -6037,6 +6037,70 @@ Spaces, line breaks, punctuation and decimal digits do not consume rune position
 Recorded examples
 The welcome list is [48, 74, 84, 132, 159, 160, 250, 421, 443, 465, 514] across its two pages. LP2-56 copies ordinal 56. The parameter file records all lists and whether sequences carry or reset at boundaries.
 
+What does “skip” mean?
+
+In the controls above, it means copy the rune and leave the next shift unused. It does not mean delete the rune. Nor does it mean consume a shift while leaving the rune unchanged. These alternatives can produce different output for every subsequent position.
+
+Consider the artificial input indices 10, 0, 10, 10, the repeating key 1, 2, 3, and an interruption at input ordinal 1. Subtract shifts modulo 29. The same input and key produce these different results:
+
+	Rule at ordinal 1	Output indices	Next shift after the interruption
+
+	Copy; do not advance key	9, 0, 8, 7	2
+
+	Copy; advance key	9, 0, 7, 9	3
+
+	Delete; do not advance key	9, 8, 7	2, but the output is shorter
+
+
+Replacing a shift with zero while consuming its key position behaves like the second row, not the first. A proposal that says “use zero on F” must therefore specify whether the original key position is consumed. The 301 sequence discussion encounters exactly this ambiguity.
+
+Follow both counters
+
+Here is the first rule step by step. “Key position” is a count of consumed shifts; it is reduced modulo the key length only when selecting a key value.
+
+	Input ordinal	Input	Key position before	Action	Output
+
+	0	10	0	Subtract 1	9
+
+	1	0	1	Copy; keep key position 1	0
+
+	2	10	1	Subtract 2	8
+
+	3	10	2	Subtract 3	7
+
+
+This runnable Python 3 example compares the two copy rules. It is a demonstration with artificial indices, not a proposed decoding of an unsolved page.
+
+def decode(values, key, copied, advance_on_copy=False):
+    output = []
+    key_position = 0
+    for ordinal, value in enumerate(values):
+        if ordinal in copied:
+            output.append(value)
+            if advance_on_copy:
+                key_position += 1
+        else:
+            shift = key[key_position % len(key)]
+            output.append((value - shift) % 29)
+            key_position += 1
+    return output
+
+values, key, copied = [10, 0, 10, 10], [1, 2, 3], {1}
+paused = decode(values, key, copied)
+consumed = decode(values, key, copied, advance_on_copy=True)
+print(paused)    # [9, 0, 8, 7]
+print(consumed)  # [9, 0, 7, 9]
+assert paused == [9, 0, 8, 7]
+assert consumed == [9, 0, 7, 9]
+
+A page boundary is not automatically a restart
+
+The Welcome control carries its section ordinal across LP1-03 and LP1-04. LP1-03 contributes 251 runes, so LP1-04’s first rune has page ordinal 0 but section ordinal 251. An interruption list defined for the whole section must use the latter counter. Restarting at zero on the second page would apply the list to different runes.
+
+In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26 to output index 3 (O). Ordinal 48 is another F, but is explicitly copied; ordinal 49 then uses shift 23. This is evidence for a specified position list, not a rule that every F is copied. See the Welcome walkthrough.
+
+A copied rune still occupies a position in the input. Removing it before counting changes later ordinals. Similarly, counting punctuation or the Latin letters in a multi-letter rune label would create a different coordinate system. Use rune indices and the trace’s named columns rather than offsets in a displayed English sentence.
+
 Inspect alignment
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py lp2-56 --trace
@@ -6048,7 +6112,9 @@ Pinned historical walkthrough. Recipes reproduce published controls; they are no
 
 Sources, related references, and files
 https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
 https://jelliottdev.github.io/reference/articles/vigenere.html
+https://jelliottdev.github.io/reference/articles/rune-values.html
 https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
