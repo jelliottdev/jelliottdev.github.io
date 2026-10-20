@@ -22,6 +22,8 @@ The signed body gives e = 65537 and a modulus n. The modulus is the integer that
 
 Connor Tumbleson’s reconstruction supplies those factors. The script checks their product against the modulus read from the message, calculates phi = (p - 1)(q - 1), and obtains the private exponent as the modular inverse d = e⁻¹ mod phi. Supplying the factors avoids repeating factor discovery. The fast runtime of this script therefore says nothing about how long factoring took.
 
+For a small worked example of that calculation, see the totient and RSA. It explains why the factors must be distinct primes and how a modular inverse differs from division.
+
 Unwrap the message in the right order
 
 Base64: decode the printable encrypted block into bytes.
@@ -56,6 +58,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/reproduce_cover_rsa.py
 - Connor Tumbleson’s reconstruction
   https://connortumbleson.com/2021/02/15/the-cicada-3301-mystery-puzzle-3-part1/
+- the totient and RSA
+  https://jelliottdev.github.io/reference/articles/totient.html#rsa
 - the extracted message body
   https://jelliottdev.github.io/exports/steganography/1033.body.txt
 - cover provenance

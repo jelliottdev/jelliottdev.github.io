@@ -7,6 +7,23 @@
 </tbody></table></div>
 <p>The 9 row demonstrates the meaning of “relatively prime”: 4 and 8 are composite, but both are counted because neither shares a divisor greater than one with 9. The numbers 3, 6, and 9 are excluded because they share the factor 3. The function counts a relationship to n, not how many primes occur below n.</p>
 <p>For prime p, the only positive divisors are 1 and p. An integer k between 1 and p − 1 cannot share the divisor p, so its greatest common divisor with p must be 1. There are exactly p − 1 such integers. This proves the identity used by the LP2-56 method without needing a table of precomputed totients.</p>
+<h2 id="composite">Composite inputs: count the numbers that survive</h2>
+<p>For 15 = 3 × 5, discard numbers divisible by either factor. The survivors are 1, 2, 4, 7, 8, 11, 13, and 14: eight numbers, so φ(15) = 8.</p>
+<div class="table-wrap"><table><caption>Counting from 1 through 15</caption><thead><tr><th>Step</th><th>Count</th></tr></thead><tbody><tr><td>Start with all integers</td><td>15</td></tr><tr><td>Remove multiples of 3</td><td>−5</td></tr><tr><td>Remove multiples of 5</td><td>−3</td></tr><tr><td>Add back 15, removed twice</td><td>+1</td></tr><tr><td>Remaining coprime integers</td><td>8</td></tr></tbody></table></div>
+<p>This gives φ(pq) = pq − q − p + 1 = (p − 1)(q − 1) for two <em>distinct</em> primes p and q. Distinct matters: φ(9) = 6, not (3 − 1)² = 4.</p>
+<h3 id="factorization">The factorization formula</h3>
+<p>For a positive integer n, use <code>φ(n) = n × ∏(1 − 1/p)</code>, with one factor for each <em>distinct prime divisor</em> p. The product symbol ∏ means multiply those factors. For example, φ(12) = 12 × (1 − 1/2) × (1 − 1/3) = 4. Although 12 = 2² × 3, the factor for 2 appears only once. <a href="https://dlmf.nist.gov/27.3#E3">NIST DLMF, equation 27.3.3</a>.</p>
+<p>The totient is multiplicative for coprime inputs: φ(ab) = φ(a)φ(b) when gcd(a, b) = 1. It is not valid for arbitrary a and b; a = b = 3 is the counterexample above. Also φ(1) = 1. <a href="https://dlmf.nist.gov/27.3#E1">NIST DLMF, multiplicative functions</a>.</p>
+<h2 id="rsa">Why the cover’s RSA replay uses the totient</h2>
+<p>The <a href="#/wiki/cover-rsa?section=key">historical cover-message replay</a> uses the product formula for two published prime factors. It then finds a private exponent d for which <code>e × d ≡ 1 (mod φ(n))</code>. This is a modular inverse, not ordinary division by e.</p>
+<p>A small arithmetic example makes the inverse visible: choose n = 15 and e = 3. Since φ(15) = 8, d = 3 works because 3 × 3 = 9 = 1 + 8. For message integer 2, the public operation gives 2³ mod 15 = 8; the private operation recovers 8³ mod 15 = 2.</p>
+<pre><code>from math import gcd
+n, e = 15, 3
+phi_n = sum(gcd(k, n) == 1 for k in range(1, n + 1))
+d = pow(e, -1, phi_n)
+c = pow(2, e, n)
+assert (phi_n, d, c, pow(c, d, n)) == (8, 3, 8, 2)</code></pre>
+<p>This toy example illustrates the arithmetic only. The actual historical message has a much larger modulus, multiple blocks, and a specific padding format; follow the <a href="#/wiki/cover-rsa">RSA reproduction guide</a> for those details. On LP2-56, totients instead supply shifts in a rune sequence. Sharing the same function does not make that page an RSA ciphertext.</p>
 <h2 id="lp2">Why the LP2-56 method has two names</h2><p>The archived walkthrough describes <a href="#/page/lp2-56">LP2-56</a> using “phi(prime).” The <a href="#/wiki/prime-minus-one">prime-minus-one guide</a> uses the equivalent expression p − 1. These are the same shifts when the input sequence consists of primes. Substituting φ(n) for consecutive integers n would produce a different sequence.</p>
 <div class="table-wrap"><table><thead><tr><th>Sequence used as input</th><th>Inputs</th><th>Totients</th></tr></thead><tbody>
 <tr><td>Consecutive primes</td><td>2, 3, 5, 7, 11</td><td>1, 2, 4, 6, 10</td></tr>
