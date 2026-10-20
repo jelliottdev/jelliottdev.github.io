@@ -1,8 +1,32 @@
 import unittest
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
 from rune_ngrams import repeated_windows, report, indexed_runes, occurrence, ROOT
 
 
 class RuneNgrams(unittest.TestCase):
+    def test_cli_utf8_output_matches_saved_file_and_refuses_overwrite(self):
+        command = [sys.executable, str(ROOT / "scripts/rune_ngrams.py"), "lp2-31", "--length", "2"]
+        environment = dict(os.environ, PYTHONIOENCODING="ascii")
+        printed = subprocess.run(command, capture_output=True, env=environment, check=True).stdout
+        decoded = printed.decode("utf-8")
+        self.assertIn("ᚱᛖ", decoded)
+        self.assertNotIn("\\u16", decoded)
+        self.assertNotIn(b"\r\n", printed)
+        self.assertEqual(json.loads(decoded), report("lp2-31", 2))
+        with tempfile.TemporaryDirectory() as folder:
+            output = Path(folder) / "report.json"
+            subprocess.run(command + ["--output", str(output)], capture_output=True,
+                           env=environment, check=True)
+            self.assertEqual(output.read_bytes(), printed)
+            refused = subprocess.run(command + ["--output", str(output)], capture_output=True)
+            self.assertNotEqual(refused.returncode, 0)
+            self.assertEqual(output.read_bytes(), printed)
+
     def test_source_positions_preserve_separators_and_unicode_characters(self):
         text = "🙂ᚠ-/\r\nᚢ.ᚠ"
         symbols, positions = indexed_runes(text, {"ᚠ": 0, "ᚢ": 1})

@@ -7,6 +7,7 @@ import argparse
 from collections import defaultdict
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -109,7 +110,7 @@ def main():
     parser.add_argument("--output", type=Path, help="Save UTF-8 JSON without overwriting")
     args = parser.parse_args()
     try:
-        text = json.dumps(report(args.page, args.length), ensure_ascii=True, indent=2) + "\n"
+        text = json.dumps(report(args.page, args.length), ensure_ascii=False, indent=2) + "\n"
         if args.output:
             with args.output.open("x", encoding="utf-8", newline="") as destination:
                 destination.write(text)
@@ -121,4 +122,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", newline="")
     main()

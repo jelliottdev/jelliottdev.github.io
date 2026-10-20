@@ -9243,7 +9243,7 @@ python scripts/rune_ngrams.py lp2-31 --length 2
 python scripts/rune_ngrams.py lp2-31 --length 3
 python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
 
-The output is JSON. Length defaults to 3 and accepts integers from 1 through 12. An existing output file is never replaced. A page with no archived rune transcription produces an explanatory error.
+The output is UTF-8 JSON with the actual runes visible in its strings. Terminal output and the saved report use the same LF line endings. A terminal font without Runic characters may show boxes; inspect the saved UTF-8 file in a suitable editor rather than replacing the symbols. Length defaults to 3 and accepts integers from 1 through 12. An existing output file is never replaced. A page with no archived rune transcription produces an explanatory error.
 
 Each report records the source file’s SHA-256, the ordered alphabet’s SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are zero-based rune ordinals after filtering, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words.
 
