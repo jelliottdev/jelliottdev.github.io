@@ -10060,7 +10060,16 @@ This deliberately small example makes every choice visible. A manuscript search 
 
 Reproduce both calculations
 
-Paste this into a Python 3 file and run it. Only the standard library is needed. This enumerates a four-symbol teaching example; do not use factorial enumeration on a manuscript-sized stream.
+Download the standalone reproduction script, or extract the reference-data bundle and run the commands below from its folder. Only Python 3 is needed; the script reads no manuscript files and makes no network requests.
+
+python scripts/reproduce_null_example.py
+python scripts/reproduce_null_example.py --json
+
+The first command prints all six arrangements, their equal and unequal neighbor counts, and the selected score. It reports upper tails of 2/6 = 1/3 and 6/6 = 1. The JSON option exposes the same rows and exact fractions for reuse. Both include ties and the observed arrangement.
+
+Read the calculation
+
+The core calculation is shown below. This enumerates a four-symbol teaching example; do not use factorial enumeration on a manuscript-sized stream.
 
 from fractions import Fraction
 from itertools import permutations
@@ -10106,6 +10115,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- the standalone reproduction script
+  https://jelliottdev.github.io/scripts/reproduce_null_example.py
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
 - n-gram guide
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 - Have we tried it?

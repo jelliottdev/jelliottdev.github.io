@@ -24,7 +24,12 @@
 <p>Applying that same choice to every row above gives scores <code>2, 3, 2, 2, 3, 2</code>. All six are at least 2, so the exact upper-tail probability becomes <code>6/6 = 1</code>. With three boundaries, one of the two counts must be at least two. The selection rule guarantees the apparent pattern.</p>
 <p>This deliberately small example makes every choice visible. A manuscript search may select among many window lengths, offsets, keys or regions. If you report the best score from that search, compare it with the best score produced by the <em>same search</em> on each simulated input. Testing only the winning setting afterward omits the opportunities that helped it win. Record any earlier, informal exploration too; a model of two choices does not account for fifty choices you actually inspected.</p>
 <h2 id="reproduce">Reproduce both calculations</h2>
-<p>Paste this into a Python 3 file and run it. Only the standard library is needed. This enumerates a four-symbol teaching example; do not use factorial enumeration on a manuscript-sized stream.</p>
+<p>Download <a href="scripts/reproduce_null_example.py" download>the standalone reproduction script</a>, or extract the <a href="downloads/reference-data.zip">reference-data bundle</a> and run the commands below from its folder. Only Python 3 is needed; the script reads no manuscript files and makes no network requests.</p>
+<pre><code>python scripts/reproduce_null_example.py
+python scripts/reproduce_null_example.py --json</code></pre>
+<p>The first command prints all six arrangements, their equal and unequal neighbor counts, and the selected score. It reports upper tails of <code>2/6 = 1/3</code> and <code>6/6 = 1</code>. The JSON option exposes the same rows and exact fractions for reuse. Both include ties and the observed arrangement.</p>
+<h3 id="calculation">Read the calculation</h3>
+<p>The core calculation is shown below. This enumerates a four-symbol teaching example; do not use factorial enumeration on a manuscript-sized stream.</p>
 <pre><code>from fractions import Fraction
 from itertools import permutations
 

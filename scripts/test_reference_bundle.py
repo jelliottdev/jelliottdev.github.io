@@ -23,6 +23,7 @@ def main():
             bundle.extractall(target)
         for command in [
             ["scripts/test_verify_bundle.py"],
+            ["scripts/reproduce_null_example.py"],
             ["scripts/test_enumerate_shifts.py"],
             ["scripts/plot_atbash_pairs.py", "--output", "test-atbash.svg"],
             ["scripts/verify_bundle.py", "REFERENCE-DATA-CONTENTS.json"],
@@ -47,6 +48,16 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        example = json.loads(subprocess.check_output(
+            [sys.executable, "scripts/reproduce_null_example.py", "--json"], cwd=target))
+        assert [row["arrangement"] for row in example["arrangements"]] == [
+            "AABB", "ABAB", "ABBA", "BAAB", "BABA", "BBAA"]
+        assert [row["equal"] for row in example["arrangements"]] == [2, 0, 1, 1, 0, 2]
+        assert [row["selected"] for row in example["arrangements"]] == [2, 3, 2, 2, 3, 2]
+        tails = example["upper_tails_including_ties"]
+        assert tails["equal"] == dict(observed_score=2, at_least_observed=2, total=6, probability="1/3")
+        assert tails["selected"] == dict(observed_score=2, at_least_observed=6, total=6, probability="1")
+        print("PASS: exact six-arrangement teaching example and JSON tails")
         for flags, name in [([], "warning.txt"), (["--trace"], "warning.csv")]:
             command = [sys.executable, "scripts/reproduce_reading.py", "warning", *flags]
             expected = subprocess.run(command, cwd=target, capture_output=True, check=True).stdout

@@ -99,6 +99,7 @@ for record in read('data/evidence/artwork-sources.json')['records']:
 
 # Human task names make tools discoverable without knowing their filenames.
 script_details = {
+ 'reproduce_null_example.py': ('Reproduce the exact chance-comparison example', 'null-models', ['null model', 'permutation example', 'selection effect', 'AABB']),
  'enumerate_shifts.py': ('Generate fixed-shift candidates', 'reproducibility', ['shift candidates', '58 cases', 'reverse rune order']),
  'plot_atbash_pairs.py': ('Draw the complete Atbash mapping', 'atbash', ['alphabet reversal', 'Atbash chart', 'rune pairs']),
  'verify_bundle.py': ('Verify extracted bundle files', 'checksums', ['file integrity', 'manifest', 'SHA256', 'checksums']),
@@ -116,7 +117,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:
