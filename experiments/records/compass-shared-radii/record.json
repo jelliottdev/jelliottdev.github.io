@@ -1,0 +1,98 @@
+{
+  "id": "compass-shared-radii",
+  "title": "LP2-33 and LP2-39: shared three-circle radii at native scale",
+  "status": "published",
+  "question": "Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?",
+  "summary": "Fresh dot measurements at three thresholds and exact rational bounds exclude shared ordered radii at native scale. Page-specific radii and rescaling remain outside the test.",
+  "tags": [
+    "compass",
+    "three circles",
+    "shared radii",
+    "horizontal dots",
+    "LP2-33",
+    "LP2-39",
+    "circle intersection",
+    "native scale"
+  ],
+  "family": {
+    "id": "compass-circle-geometry",
+    "title": "Compass-circle geometry on manuscript dots",
+    "question": "Which specified circle constructions are compatible with measured dot geometry?",
+    "baseline": "compass-shared-radii"
+  },
+  "variant": {
+    "label": "Shared ordered radii; two original-size page rectangles",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-33",
+      "lp2-39"
+    ],
+    "representation": "Original 2400x3600 JPEGs; four-connected grayscale components; exact pixel-centroid fractions.",
+    "procedure": "Measure three ordered horizontal dots per page at three thresholds; derive exact residual corner bounds and compare with the lower bound imposed by shared radii.",
+    "parameters": "Thresholds 100,140,180; explicit crop boxes; area>200; 0.7<width/height<1.3; fill>0.6. Targets inside [0,2399]x[0,3599]. Same radii at A,B,C across pages.",
+    "exclusions": "Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext."
+  },
+  "outcome": "not-supported",
+  "finding": "At the original image scale, no single ordered set of three radii makes all three circles meet inside both pages. The exact distance bound excludes this construction at all three measured thresholds: 100, 140 and 180.",
+  "limitations": "Fixed measured centers and native pixel scale; no rescaling, radius reassignment, outside-page targets or pairwise/stepping constructions. Threshold checks are not a full uncertainty interval. Human review pending.",
+  "next_steps": "Treat scaled radii, page-specific radii or different target-selection rules as explicit variants with their own bounds and controls.",
+  "reproduction": {
+    "command": "python experiments/records/compass-shared-radii/run.py --check",
+    "environment": "Python 3 with Pillow 11.3.0. Extract original-images.zip into the same folder; the experiment ZIP omits original JPEGs. Checker uses standard library: python experiments/records/compass-shared-radii/check.py. No network or AI during checks.",
+    "script": "experiments/records/compass-shared-radii/run.py",
+    "script_sha256": "af3c634061b78ce6c29d92928d60c335878f90159c6ad5137b209292f8dabccd",
+    "inputs": [
+      {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d"
+      },
+      {
+        "path": "images/lp2-39.jpg",
+        "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00"
+      },
+      {
+        "path": "experiments/records/compass-shared-radii/check.py",
+        "sha256": "443b00c73a6cf94b64474717867cf5bc495443a13f5b6ddd634a49a70dfe1cff"
+      },
+      {
+        "path": "experiments/records/compass-shared-radii/plan.txt",
+        "sha256": "abd0f7cc86318a0dbb997a4ce68fe05e9eebaad66f80845c2955b16d620e6ae4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/compass-shared-radii.json",
+        "sha256": "f4fe54b2f4211d391c03eec4a240347d1c15d9c5de3f86fdad1876f59083260f"
+      },
+      {
+        "path": "exports/figures/compass-shared-radii.svg",
+        "sha256": "05fdfefa63a52063ac2396024e21a319856e588700942c20cb28750d8909002d"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; fresh pixel segmentation and separate exact distance-identity checker; no independent segmentation or human review",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Original LP2-33 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-33.jpg"
+    },
+    {
+      "label": "Original LP2-39 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-39.jpg"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/compass-shared-radii.svg",
+      "caption": "Threshold-140 adjacent dot spacing, using the same horizontal scale on both rows. Vertical positions are separated for readability."
+    }
+  ]
+}

@@ -20028,6 +20028,13 @@ The later signed messages
 
 The 2016 and 2017 messages connect navigation language with an instruction to verify signatures. Inspect the original 2016 carrier image, preserved message files and reproduced checks before interpreting their wording as a cipher hint.
 
+
+A constrained three-circle test on LP2-33 and LP2-39
+
+The shared-radius experiment measures the three horizontal dots on each original page at three grayscale thresholds. At native scale, the same ordered radii cannot meet at an in-page target on both pages. An exact rational distance bound covers every radius triple within that model; it is not a finite-radius scan. The record includes measurement rules, source images, a diagram and a separate checker.
+
+This does not exclude rescaling, different radii on each page, reassignment of radii to dots, pairwise intersections or compass stepping. The thresholds check sensitivity to one measurement choice; they do not establish a full uncertainty bound for the centers.
+
 Sources, related references, and files
 - The archived 1033.jpg collage, with drawing compasses in the upper and lower central panels
   https://jelliottdev.github.io/images/1033.jpg
@@ -20063,6 +20070,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/candidate-readings.html
 - 2016 and 2017 messages
   https://jelliottdev.github.io/reference/articles/later-messages.html
+- shared-radius experiment
+  https://jelliottdev.github.io/#/experiments/compass-shared-radii
 
 Article: https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
 
@@ -21501,6 +21510,110 @@ Sources, related references, and files
 
 Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 
+
+---
+
+{
+  "id": "compass-shared-radii",
+  "title": "LP2-33 and LP2-39: shared three-circle radii at native scale",
+  "status": "published",
+  "question": "Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?",
+  "summary": "Fresh dot measurements at three thresholds and exact rational bounds exclude shared ordered radii at native scale. Page-specific radii and rescaling remain outside the test.",
+  "tags": [
+    "compass",
+    "three circles",
+    "shared radii",
+    "horizontal dots",
+    "LP2-33",
+    "LP2-39",
+    "circle intersection",
+    "native scale"
+  ],
+  "family": {
+    "id": "compass-circle-geometry",
+    "title": "Compass-circle geometry on manuscript dots",
+    "question": "Which specified circle constructions are compatible with measured dot geometry?",
+    "baseline": "compass-shared-radii"
+  },
+  "variant": {
+    "label": "Shared ordered radii; two original-size page rectangles",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-33",
+      "lp2-39"
+    ],
+    "representation": "Original 2400x3600 JPEGs; four-connected grayscale components; exact pixel-centroid fractions.",
+    "procedure": "Measure three ordered horizontal dots per page at three thresholds; derive exact residual corner bounds and compare with the lower bound imposed by shared radii.",
+    "parameters": "Thresholds 100,140,180; explicit crop boxes; area>200; 0.7<width/height<1.3; fill>0.6. Targets inside [0,2399]x[0,3599]. Same radii at A,B,C across pages.",
+    "exclusions": "Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext."
+  },
+  "outcome": "not-supported",
+  "finding": "At the original image scale, no single ordered set of three radii makes all three circles meet inside both pages. The exact distance bound excludes this construction at all three measured thresholds: 100, 140 and 180.",
+  "limitations": "Fixed measured centers and native pixel scale; no rescaling, radius reassignment, outside-page targets or pairwise/stepping constructions. Threshold checks are not a full uncertainty interval. Human review pending.",
+  "next_steps": "Treat scaled radii, page-specific radii or different target-selection rules as explicit variants with their own bounds and controls.",
+  "reproduction": {
+    "command": "python experiments/records/compass-shared-radii/run.py --check",
+    "environment": "Python 3 with Pillow 11.3.0. Extract original-images.zip into the same folder; the experiment ZIP omits original JPEGs. Checker uses standard library: python experiments/records/compass-shared-radii/check.py. No network or AI during checks.",
+    "script": "experiments/records/compass-shared-radii/run.py",
+    "script_sha256": "af3c634061b78ce6c29d92928d60c335878f90159c6ad5137b209292f8dabccd",
+    "inputs": [
+      {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d"
+      },
+      {
+        "path": "images/lp2-39.jpg",
+        "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00"
+      },
+      {
+        "path": "experiments/records/compass-shared-radii/check.py",
+        "sha256": "443b00c73a6cf94b64474717867cf5bc495443a13f5b6ddd634a49a70dfe1cff"
+      },
+      {
+        "path": "experiments/records/compass-shared-radii/plan.txt",
+        "sha256": "abd0f7cc86318a0dbb997a4ce68fe05e9eebaad66f80845c2955b16d620e6ae4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/compass-shared-radii.json",
+        "sha256": "f4fe54b2f4211d391c03eec4a240347d1c15d9c5de3f86fdad1876f59083260f"
+      },
+      {
+        "path": "exports/figures/compass-shared-radii.svg",
+        "sha256": "05fdfefa63a52063ac2396024e21a319856e588700942c20cb28750d8909002d"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; fresh pixel segmentation and separate exact distance-identity checker; no independent segmentation or human review",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Original LP2-33 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-33.jpg"
+    },
+    {
+      "label": "Original LP2-39 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-39.jpg"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/compass-shared-radii.svg",
+      "caption": "Threshold-140 adjacent dot spacing, using the same horizontal scale on both rows. Vertical positions are separated for readability."
+    }
+  ],
+  "article": "## The model being tested\n\nOn each of [LP2-33](#/reader/lp2-33) and [LP2-39](#/reader/lp2-39), label the three horizontal dots A, B and C from left to right. Draw three circles centered at those dots. Can the circles meet at one point on each page if **the same ordered radii** are used on both pages?\n\nThe two target points may differ. The radius at A must be the same on both pages, likewise B and C. Both pages remain at their original 2400 × 3600 pixel scale; no resizing or refitting is allowed. This is one precise compass construction, not a general test of compass-related ideas.\n\n**Result: no**, for the measured dot centers at each of the three declared grayscale thresholds. An exact rational distance bound rules out every possible ordered radius triple within this model. It does not require selecting radii from the number square or searching a finite list.\n\n## Measure the centers first\n\nThe script reads the original JPEGs, converts RGB to Pillow’s L grayscale, and finds four-connected dark components inside two declared crop boxes. Pixel coordinates are zero-based, with integer coordinates at pixel centers. Crop right and bottom edges are exclusive.\n\n| Page | Crop (left, top, right, bottom) |\n| --- | --- |\n| LP2-33 | (576, 1656, 1824, 1836) |\n| LP2-39 | (1200, 1638, 1800, 1746) |\n\nFor each threshold 100, 140 and 180, a pixel is dark if its grayscale value is strictly below the threshold. Retain components with area greater than 200 pixels, width/height strictly between 0.7 and 1.3, and filled area greater than 60% of the bounding rectangle. Exactly three components must survive; otherwise the script stops.\n\nEach center is the arithmetic mean of its component’s pixel coordinates. The report stores integer coordinate sums and areas, so the subsequent calculation uses exact fractions rather than rounded coordinates. This measures a particular thresholded shape; it is not an assertion that the author placed the dot at that exact rational point.\n\nAt threshold 140, the adjacent center separations on LP2-33 are approximately 417.47 and 478.23 pixels. On LP2-39 they are 196 and 224.5 pixels. The diagram uses one horizontal scale for both pages and separates the rows vertically for readability. It does not show the original vertical positions.\n\n## Why three distances impose a constraint\n\nLet Q be the perpendicular projection of B onto the line through A and C. Write `Q=(1−t)A+tC` and `e=B−Q`. The dots are almost collinear; e measures the middle dot’s small displacement from that line. Let `K=t(1−t)|C−A|²`.\n\nIf X is a target point with distances rA, rB and rC from the three dots, expanding the squared distances gives:\n\n```text\nrB² − (1−t)rA² − t rC² + K\n  = 2 e·(Q−X) + |e|²\n```\n\nThe right-hand side is an affine function of X. Its minimum and maximum over a rectangle occur at corners, so evaluating the four page corners gives an exact residual interval. No grid sampling of target points is necessary.\n\nNow compare the two pages. Their shared radii cancel except for `(t₂−t₁)(rA²−rC²)`. Each squared radius lies between zero and the squared page diagonal, because both its center and target lie on the page. Consequently:\n\n```text\n|residual₂ − residual₁|\n  ≥ |K₂ − K₁| − |t₂ − t₁| × (2399² + 3599²)\n```\n\nThe two corner intervals also give an upper bound on that absolute difference. If the lower bound exceeds the upper bound, no target pair with shared radii can exist.\n\n## The bounds\n\nThe table rounds displayed values to two decimal places. Decisions use exact fractions saved in the report; the unit is squared pixels.\n\n| Threshold | Required lower bound | Allowed upper bound | Compatible? |\n| --- | --- | --- | --- |\n| 100 | 153,322.33 | 119.47 | No |\n| 140 | 155,146.71 | 14.17 | No |\n| 180 | 153,854.17 | 11.88 | No |\n\nAll three declared threshold variants give the same exclusion. This is a sensitivity check, not a confidence interval or a complete treatment of measurement error. The argument treats each measured center as fixed; it does not quantify every plausible alternative center, crop or dot-selection rule.\n\n## Reproduce\n\nExtract the experiment bundle, then extract the [original-images ZIP](downloads/original-images.zip) into the same folder so that `images/lp2-33.jpg` and `images/lp2-39.jpg` are available. Original images are separate from the small experiment ZIP. Install Pillow 11.3.0 in your Python environment, then verify the required image hashes and run:\n\n```text\npython scripts/verify_bundle.py EXPERIMENT-compass-shared-radii-IMAGE-INPUTS.json\npython experiments/records/compass-shared-radii/run.py --check\npython experiments/records/compass-shared-radii/check.py\n```\n\nThe producer uses Pillow 11.3.0 and Python’s standard library. Its version is recorded so a different image-decoding environment does not silently claim an exact replay. The checker needs only the standard library. Neither command calls AI or accesses the network.\n\nThe producer reruns component measurement and the rational certificate. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.\n\nBoth checks passed on 20 October 2026. The procedure and controls were recorded in `plan.txt`; the declared thresholds, crops and target rectangle were unchanged after the run. This freshly reconstructs a constrained claim in the supplied research archive; it is not a new discovery. Human review remains pending.\n\n## What remains outside this result\n\nRescaling one page, using different radii on each page, changing which dots receive which radii, placing a target outside the page, stepping a compass between points, or reading pairwise intersections changes the model. Those alternatives are not excluded here. The result supplies no rune selection or plaintext claim.\n\nFor the distinction between an illustration and a specified cipher, see [compass constructions](#/wiki/compass-cipher-tests). For coordinate conventions and original files, see [image regions](#/wiki/image-regions). For how to state this exclusion without overstating it, see [search space and bounds](#/wiki/search-space).\n",
+  "article_path": "experiments/records/compass-shared-radii/article.md",
+  "script_sha256": "af3c634061b78ce6c29d92928d60c335878f90159c6ad5137b209292f8dabccd"
+}
 
 ---
 
