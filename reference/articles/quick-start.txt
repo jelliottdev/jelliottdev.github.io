@@ -18,6 +18,21 @@ LP2-31: a later investigation. Its recorded measurements describe the text; they
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
 
+Start in the browser
+
+No installation is needed for this first check. Atbash reverses the 29-rune alphabet, so an input index c becomes 28 − c. The warning starts with these three runes:
+
+	Input rune	Index	28 − index	Label
+	ᚱ	4	24	A
+	ᛝ	21	7	W
+	ᚱ	4	24	A
+
+Compare the shapes with the original warning image and the alphabet chart. The labels begin A WA…: the opening article and the start of WARNNG. Spaces and punctuation are not rune indices, so they are not transformed by the subtraction.
+
+Continue with the worked Atbash table, or download the complete warning trace (CSV) to inspect every rune. The trace explanation describes its columns and source record. Checking three symbols confirms those three calculations; it does not yet verify the entire page.
+
+Then verify the complete reading with Python
+
 python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
@@ -33,7 +48,6 @@ PASS: 17 literal page readings match the published controls exactly.
 
 This confirms that the supplied recipes reproduce the stored known outputs. It does not independently authenticate the source files or validate a proposed solution to an unsolved page. Use the download catalogue for file hashes and the transliteration guide for the difference between literal labels and contextual English.
 
-Working from a phone? You can do the first arithmetic check without installing anything. In the worked warning example, the first rune has index 4. Subtracting it from 28 gives 24, the label A. The next input index is 21, giving 7, or W. Follow the table against the original image, then read the complete passage. Save the script run for when you have a Python environment.
 
 Optional second check: one row of the number grid
 Open LP1-05 and find the five-by-five grid below the text. Its first row mixes four printed numbers with one rune word. In the known reading that word is labeled SHADOWS.
@@ -120,7 +134,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/numbering
 - illustrated cover with compasses
   https://jelliottdev.github.io/reference/articles/illustrated-cover.html
-- The warning page used for the first reading exercise; the warning in the reader
+- The warning page used for the first reading exercise; the warning in the reader; the original warning image
   https://jelliottdev.github.io/#/reader/lp1-01
 - The warning page used for the first reading exercise
   https://jelliottdev.github.io/thumbs/lp1-01.jpg
@@ -132,8 +146,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reading-warning.html
 - Atbash explanation
   https://jelliottdev.github.io/reference/articles/atbash.html
-- 29-symbol alphabet
+- 29-symbol alphabet; alphabet chart
   https://jelliottdev.github.io/#/alphabet
+- worked Atbash table
+  https://jelliottdev.github.io/reference/articles/atbash.html#worked
+- download the complete warning trace (CSV)
+  https://jelliottdev.github.io/exports/readings/warning.csv
+- trace explanation
+  https://jelliottdev.github.io/reference/articles/reading-warning.html#trace
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the setup check
@@ -142,8 +162,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/downloads
 - transliteration guide
   https://jelliottdev.github.io/reference/articles/transliteration.html
-- worked warning example
-  https://jelliottdev.github.io/reference/articles/atbash.html#worked
 - LP1-05
   https://jelliottdev.github.io/#/reader/lp1-05
 - worked rune-cell table
