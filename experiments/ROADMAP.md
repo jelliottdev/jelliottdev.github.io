@@ -26,3 +26,5 @@ Book-cipher control: frozen Emerson PDF re-extracted with pypdf 6.19.0; all 50 p
 Prime-row baseline: 594 eligible archived rows, 76 prime sums; within-page shuffles preserving row lengths give upper-tail p=0.844. Global excess only; LP2-50 contributes no runic rows. No per-page significance or emirp test.
 
 Reading-route baseline: sixteen row/ordinal-column route configurations on 55 nonempty pages (LP2-50 zero runes); 880 cases, nine fixed openings, zero matches. Full coordinate permutations saved. Does not test physical alignment, arbitrary permutations or combined substitution.
+
+Prime-minus-one baseline: 29 offsets, both directions, 55 nonempty LP2 pages; 3190 candidates and 28710 fixed-opening comparisons, zero matches. All candidates audited; first 56 LP2-56 control runes reproduce. Other schedules belong in separate declared variants, not a combined ten-approach article.
