@@ -1,6 +1,7 @@
 """Publish stable reader exports, a file catalog, and non-JavaScript AI references."""
 from pathlib import Path
 import json,hashlib,zipfile,html
+from urllib.parse import urljoin
 from build_articles import manuscript_reference_html, guide_discovery_index
 from rune_ioc import csv_report
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
@@ -69,6 +70,20 @@ for summary in index['pages']:
  # Standalone HTML contains the full reference text, usable without the app runtime.
  title=html.escape(pid.upper()+' — Liberpedia')
  save(f'reference/{pid}.html',f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav aria-label="Reference navigation"><a href="../index.html#/page/{pid}">Open wiki page</a> · <a href="{pid}.md">Plain text</a> · <a href="../data/pages/{pid}.json">JSON</a> · <a href="index.html">All page references</a></nav>{manuscript_reference_html(text)}</main></body></html>')
+# Keep the non-JavaScript topic reference in sync with the same records as the UI.
+# A saved DOM snapshot can silently omit new topics or preserve a filtered view.
+topics=read('data/topics.json')
+topic_text=['# Liberpedia topic index',
+ 'Artwork, ideas, decoding methods, and source records.',
+ f'{len(topics)} topics. Generated from data/topics.json.']
+for topic in topics:
+ topic_text.extend([
+  '## '+topic['title'], 'Subject: '+topic['category'],
+  'Topic: '+base+'#/topics?topic='+topic['id'], topic['summary'],
+  'Search terms: '+topic.get('terms',''),
+  '\n'.join('- '+link['label']+': '+urljoin(base,link['href']) for link in topic['links']),
+  'Evidence basis: '+topic['basis']])
+save('reference/topics.txt','\n\n'.join(topic_text)+'\n')
 for article in sorted((root/'reference').glob('*.txt')):
  register('reference/'+article.name,'Reference article')
  documents.append(article.read_text(encoding='utf-8'))
