@@ -10,7 +10,7 @@ A source-based manuscript reference with 75 page records. Read records as source
 - [File catalog](https://jelliottdev.github.io/data/catalog.json): stable URLs, roles, exact byte counts and SHA-256 checksums.
 - [Page index](https://jelliottdev.github.io/data/index.json): release numbering, archive filename mapping, search summaries.
 - [All page text](https://jelliottdev.github.io/llms-full.txt): complete published page references.
-- [Standalone HTML index](https://jelliottdev.github.io/reference/index.html): 75 pages with no JavaScript dependency.
+- [Standalone HTML index](https://jelliottdev.github.io/reference/index.html): All manuscript records and categorized guides with no JavaScript dependency.
 - [Numerical evidence](https://jelliottdev.github.io/data/evidence/spelling-sums.json): exact rune sums and conventions.
 
 ## Full reference articles
@@ -5034,12 +5034,14 @@ Liber Primus combines visible artwork, rune text, numbers, and hidden file conte
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
 
+The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
+
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
 
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
-Run these from a downloaded or cloned repository with Python 3. They use the standard library and make no AI requests. The first prints a literal reading; the second checks all 17 known runic-page outputs. Download the full repository from GitHub’s Code menu: the script needs its text and parameter files.
+Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. The first command prints the warning’s literal reading; the second checks all 17 known runic-page outputs. Both run locally with the Python standard library and make no AI requests. A full repository checkout also works.
 
 New to the terminal? Running the reproduction scripts walks through setup, expected results, trace columns, and common errors.
 3. Learn the other layers
@@ -5065,10 +5067,12 @@ https://jelliottdev.github.io/#/pages/LP1
 https://jelliottdev.github.io/#/pages/LP2
 https://jelliottdev.github.io/reference/lp2-31.html
 https://jelliottdev.github.io/#/numbering
+https://jelliottdev.github.io/reference/articles/illustrated-cover.html
 https://jelliottdev.github.io/#/reader/lp1-01
 https://jelliottdev.github.io/reference/articles/reading-warning.html
 https://jelliottdev.github.io/reference/articles/atbash.html
 https://jelliottdev.github.io/#/alphabet
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/reference/articles/rune-values.html
 https://jelliottdev.github.io/reference/articles/vigenere.html
