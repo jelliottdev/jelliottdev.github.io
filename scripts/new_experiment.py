@@ -19,7 +19,7 @@ record = {
     'outcome': 'inconclusive', 'finding': '', 'limitations': '', 'next_steps': '',
     'reproduction': {'command': f'python experiments/records/{args.id}/run.py',
                     'environment': '', 'script': f'experiments/records/{args.id}/run.py',
-                    'inputs': [], 'outputs': []},
+                    'script_sha256': '', 'inputs': [], 'outputs': []},
     'review': {'reviewer': '', 'retested_on': ''}, 'sources': [], 'related': []
 }
 target.mkdir(parents=True)

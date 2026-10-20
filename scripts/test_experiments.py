@@ -30,7 +30,7 @@ class RegistryTests(unittest.TestCase):
             'outcome': 'inconclusive', 'finding': 'A limited result', 'limitations': 'Limited scope',
             'next_steps': 'Review another row', 'review': {'reviewer': 'Test fixture', 'retested_on': '2026-01-01'},
             'reproduction': {'command': 'python '+prefix+'run.py', 'environment': 'Python 3',
-                             'script': prefix+'run.py', 'inputs': [file('input.txt')], 'outputs': [file('output.txt')]},
+                             'script': prefix+'run.py', 'script_sha256': file('run.py')['sha256'], 'inputs': [file('input.txt')], 'outputs': [file('output.txt')]},
             'sources': [{'label': 'Fixture', 'url': 'https://example.com/source'}], 'related': []
         }
 
@@ -46,6 +46,19 @@ class RegistryTests(unittest.TestCase):
         self.record['status'] = 'draft'
         self.assertEqual(self.run_build(), [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text())
+
+    def test_changed_script_or_missing_reviewed_hash_rejected(self):
+        reviewed_hash = self.record['reproduction'].pop('script_sha256')
+        with self.assertRaisesRegex(ValueError, 'Script SHA-256 mismatch'):
+            self.run_build()
+        self.record['reproduction']['script_sha256'] = reviewed_hash
+        script = self.root / self.record['reproduction']['script']
+        script.write_text('print(2)\n', encoding='utf-8')
+        with self.assertRaisesRegex(ValueError, 'Script SHA-256 mismatch'):
+            self.run_build()
+        self.record['reproduction']['script_sha256'] = hashlib.sha256(script.read_bytes()).hexdigest()
+        result = self.run_build()
+        self.assertEqual(result[0]['script_sha256'], self.record['reproduction']['script_sha256'])
 
     def test_changed_result_rejected(self):
         (self.root / self.record['reproduction']['outputs'][0]['path']).write_text('changed')

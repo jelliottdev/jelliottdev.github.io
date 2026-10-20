@@ -59,7 +59,11 @@ def build(root=ROOT):
         require(reproduction['script'].startswith(f'experiments/records/{identifier}/'),
                 'Script must live with its record')
         script = local(root, reproduction['script'])
-        require(b'No experiment implemented.' not in script.read_bytes(), 'Replace the draft script')
+        script_bytes = script.read_bytes()
+        require(b'No experiment implemented.' not in script_bytes, 'Replace the draft script')
+        script_digest = hashlib.sha256(script_bytes).hexdigest()
+        require(script_digest == reproduction.get('script_sha256'),
+                'Script SHA-256 mismatch: retest the script and record its reviewed hash')
         for role in ('inputs', 'outputs'):
             entries = reproduction.get(role)
             require(isinstance(entries, list) and entries, 'List exact ' + role)
@@ -77,7 +81,7 @@ def build(root=ROOT):
                 'Replace the article template with a full account')
         d['article'] = article
         d['article_path'] = f'experiments/records/{identifier}/article.md'
-        d['script_sha256'] = hashlib.sha256(script.read_bytes()).hexdigest()
+        d['script_sha256'] = script_digest
         records.append(d)
     ids = {d['id'] for d in records}
     for d in records:

@@ -29,3 +29,15 @@ The verified service URL is set in `data/assistant.json`. Empty registries and u
 ## Check the implementation
 
 Run `python scripts/test_experiments.py` for publishing validation. For browser regression tests, install Playwright, serve the repository on port 8765, and run `node scripts/test_interface.cjs`. It uses the Edge browser channel; `PLAYWRIGHT_MODULE` can point to an existing Playwright installation and `WIKI_BASE_URL` can select a different preview server. Synthetic experiment records are intercepted in the test browser only. Hosted responses are mocked in UI tests; this does not test model answer quality.
+
+## Preserve the reviewed script
+
+Set `reproduction.script_sha256` to the SHA-256 of the exact script used in the retest. The builder compares this declared digest with the current file; changing the script or leaving the digest empty prevents publication. The generated draft leaves it empty deliberately.
+
+For example, from the repository root:
+
+```sh
+python -c "import hashlib; from pathlib import Path; print(hashlib.sha256(Path('experiments/records/your-short-id/run.py').read_bytes()).hexdigest())"
+```
+
+Replace `your-short-id` with the record ID. Copy the digest only after the retest, along with the corresponding input/output hashes and review details. If the script changes, retest it before updating the recorded hash. Hash verification establishes byte identity, not that a retest occurred or that the findings are correct. List local helper modules and configuration files used by the script among the hashed inputs as well.
