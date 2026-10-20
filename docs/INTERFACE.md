@@ -4,7 +4,7 @@ Liberpedia is a manuscript reference for researchers who need to locate a page, 
 
 The home page is an editorial index: manuscript releases, reference articles, specific page details, and research records. Its visual identity comes from the manuscript image, serif headings, blue links, a restrained ink palette, and aligned article lists. Avoid ornamental runes, grandiose copy, unrelated illustrations, dashboard statistics, and repeated interface explanations. Clean does not mean visually unfinished.
 
-The sidebar groups browsing, reference articles, and source files. On phones it becomes an overlay drawer; it must not push the article down. Search stays visible. Drawer focus, Escape, close-on-navigation, and recovery from errors must work without a mouse. Main article focus follows route navigation. Original-image inspection remains a separate dialog.
+The sidebar groups browsing, reference articles, and source files. On phones it becomes an overlay drawer; it must not push the article down. Search stays visible and usable while the drawer is open. Focusing a header link or search control closes the drawer; only the underlying article becomes inert. Drawer focus, Escape, close-on-navigation, and recovery from errors must work without a mouse. Main article focus follows route navigation. Original-image inspection remains a separate dialog.
 
 Primary paths:
 
