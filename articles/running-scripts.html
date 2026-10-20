@@ -18,6 +18,7 @@ cd jelliottdev.github.io</code></pre>
 <pre><code>python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json</code></pre>
 <p>A successful check reports a file count followed by <code>0 problems.</code> The count can change as the wiki grows. Missing or changed files are listed with <code>FAIL:</code>, and the command exits unsuccessfully. The checker reads files without modifying them; files you add yourself are outside its manifest and are not checked.</p>
 <p>This is a check against the included manifest, not independent proof of who created it. You can also compare the ZIP itself with the <a href="#/downloads">download catalogue</a>. See <a href="#/wiki/checksums?section=bundle">bundle verification</a> for the distinction between checking the archive and checking its contents.</p>
+<p>If two copies disagree, use <a href="#/wiki/transcription-checking">the transcription comparison workflow</a> to locate exact-text and rune-sequence differences before deciding which input to use. A matching hash confirms a copy, not a manual reading of the image.</p>
 <h3 id="decode-warning">Run the known control</h3>
 <p>Run the warning command from the table above. In the examples that follow, <code>python</code> means whichever Python 3 command worked on your machine.</p>
 <pre><code>python scripts/reproduce_reading.py warning</code></pre>

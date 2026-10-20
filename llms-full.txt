@@ -6144,6 +6144,8 @@ A successful check reports a file count followed by 0 problems. The count can ch
 
 This is a check against the included manifest, not independent proof of who created it. You can also compare the ZIP itself with the download catalogue. See bundle verification for the distinction between checking the archive and checking its contents.
 
+If two copies disagree, use the transcription comparison workflow to locate exact-text and rune-sequence differences before deciding which input to use. A matching hash confirms a copy, not a manual reading of the image.
+
 Run the known control
 
 Run the warning command from the table above. In the examples that follow, python means whichever Python 3 command worked on your machine.
@@ -6326,6 +6328,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/downloads
 - bundle verification
   https://jelliottdev.github.io/reference/articles/checksums.html#bundle
+- the transcription comparison workflow
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
 - the complete warning reading; Warning control
   https://jelliottdev.github.io/reference/articles/reading-warning.html
 - zero-based alphabet indices
@@ -18049,6 +18053,90 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
 
 Article: https://jelliottdev.github.io/reference/articles/english-qaballa.html
+
+
+---
+
+Checking and comparing transcriptions
+
+Compare exact files and rune streams, locate disagreements, and document image-backed corrections before rerunning experiments.
+
+A transcription is a reading of an image. Before testing a cipher, establish which transcription your script uses and how it differs from other versions. Matching file hashes prove that the bytes agree; matching rune streams prove that the selected symbols agree. Neither check proves that the symbols were copied correctly from the manuscript.
+
+Three checks, three different questions
+
+	Check	What it establishes	What can still differ
+	Exact file bytes	The two files are identical	Both can contain the same copying error
+	Ordered rune stream	The recognized runes match in sequence	Punctuation, digits, spaces, line endings and other text
+	Image review	A reviewer checked specified marks against a specified image	Unreviewed regions and ambiguous marks
+
+Several repositories may descend from the same source. Agreement among them is then useful for tracking copies, but is not several independent visual checks. Likewise, decoding a solved page into recognizable language can help diagnose a mistake without proving every copied rune or separator correct. Preserve the original evidence when proposing a correction.
+
+Compare two files
+
+Extract the reference-data bundle, keeping its scripts and data folders together. Put the two UTF-8 text files you want to compare in that folder. Run:
+
+python scripts/compare_transcriptions.py old.txt new.txt
+
+Use py or python3 if that is your Python command; see running the scripts. The tool reads both inputs without changing them. It prints JSON containing their SHA-256 hashes, byte and rune counts, non-rune character counts, exact-text changes and rune-only changes. JSON escapes such as \u16a0 represent Unicode characters; they keep the report readable by programs even when a terminal cannot print runes.
+
+For a quick installation check, compare one archived file with itself:
+
+python scripts/compare_transcriptions.py text/lp2-00.txt text/lp2-00.txt
+
+Expect bytes_equal: true, runes_equal: true, and empty change lists. This checks the comparison command, not the accuracy of LP2-00. Run its small regression suite with python scripts/test_compare_transcriptions.py. You can also download the script; it requires the alphabet in data/index.json.
+
+Read a disagreement
+
+Consider two invented examples. They demonstrate the output conventions and are not corrections to a manuscript page.
+
+	Left	Right	Interpretation
+	ᚠ-ᚢ	ᚠ ᚢ	Exact text differs; rune streams agree. The delimiter change still matters to word-based analyses.
+	ᚠ-ᚢ	ᚠ-ᚦ	Second rune differs. The rune range is [1, 2); the source character offset is 2.
+
+Ranges begin at zero and exclude the end position: [1, 2] in the report selects the second rune only. Source offsets count Unicode code points in the exact decoded file, not UTF-8 bytes. File line and column numbers begin at one. An LF newline starts a new file line; the archive's / line-boundary marker does not. Use the transcription conventions to distinguish physical file lines from manuscript rows.
+
+An insertion has an empty left range; a deletion has an empty right range. The nonempty side supplies the positions of the affected symbols. Repeated runs can admit several plausible alignments, so a reported position is a place to inspect, not a unique reconstruction of how the error happened. The tool uses SequenceMatcher with its automatic frequent-symbol suppression disabled, so a small alphabet is not treated as ignorable background.
+
+What the rune-only view leaves out
+
+The tool selects the 29 symbols in the bundled alphabet. It rejects unfamiliar characters in the Unicode Runic block rather than dropping them silently. Other characters remain visible in the exact-text changes and non-rune counts. A Latin transliteration therefore has zero recognized runes: two empty rune streams can compare equal without providing any rune transcription evidence. Always inspect the counts and input type.
+
+No Unicode normalization, spelling repair, punctuation substitution or newline conversion is applied. A byte-order mark and CRLF versus LF line endings consequently remain visible in the exact comparison. That is deliberate: readers can decide which differences matter to a particular experiment, instead of having the script erase the decision.
+
+Review the image and record a correction
+
+Identify the release and page, archived text hash and original JPEG hash. Use the page record's downloads rather than a thumbnail or compressed screenshot.
+Locate the disputed mark using the text offset and its neighboring runes. Record the manuscript row and a rectangle in original-image pixels.
+Show the old symbol and proposed replacement alongside the image detail. Keep uncertain readings as alternatives; a confident-looking AI transcription is not additional source evidence.
+Store the reviewed version separately from the archived input. Include the date, rationale and review scope so others can repeat the check.
+Rerun affected controls and experiments on both versions. Report which counts, alignments or outputs change, including results that remain unchanged.
+
+A substituted rune can change frequency counts and prime sums. An inserted or deleted rune can also shift all later key positions in a continuous cipher. A delimiter-only correction may leave whole-page IoC unchanged while changing word lengths or a word-reset cipher. The effect depends on the experiment's declared input rules.
+
+This guide and tool provide a comparison workflow, not a claim that every page has been manually reverified. Consult the individual page's archived and reviewed views for existing visual-review records. Related: file integrity · image coordinates · documenting an experiment.
+
+Sources, related references, and files
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- running the scripts
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- download the script
+  https://jelliottdev.github.io/scripts/compare_transcriptions.py
+- the transcription conventions
+  https://jelliottdev.github.io/#/conventions
+- IoC
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- word lengths
+  https://jelliottdev.github.io/reference/articles/word-lengths.html
+- file integrity
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- image coordinates
+  https://jelliottdev.github.io/reference/articles/image-regions.html
+- documenting an experiment
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+
+Article: https://jelliottdev.github.io/reference/articles/transcription-checking.html
 
 
 ---

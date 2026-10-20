@@ -33,6 +33,7 @@ Locate the exact page of a literal decoded word:
   JSON output retains the original excerpt and per-page source hashes.
 
 Measure rune frequencies and matching pairs:
+  python scripts/compare_transcriptions.py text/lp2-00.txt text/lp2-00.txt
   python scripts/rune_ioc.py lp2-31
   python scripts/rune_ioc.py --check
   Guide: reference/articles/index-of-coincidence.txt
