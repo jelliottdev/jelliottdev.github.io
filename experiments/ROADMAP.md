@@ -24,3 +24,5 @@ Periodic-IoC family now has a within-row-shuffle variant: same LP2-31 input, sco
 Book-cipher control: frozen Emerson PDF re-extracted with pypdf 6.19.0; all 50 paragraphs and 15 lookups plus seven literals reproduce. Known-result historical control only; unsolved-page applications remain untested.
 
 Prime-row baseline: 594 eligible archived rows, 76 prime sums; within-page shuffles preserving row lengths give upper-tail p=0.844. Global excess only; LP2-50 contributes no runic rows. No per-page significance or emirp test.
+
+Reading-route baseline: sixteen row/ordinal-column route configurations on 55 nonempty pages (LP2-50 zero runes); 880 cases, nine fixed openings, zero matches. Full coordinate permutations saved. Does not test physical alignment, arbitrary permutations or combined substitution.
