@@ -1,0 +1,102 @@
+{
+  "id": "grid-prime-paths",
+  "title": "LP2-49–51: directional prime-path reconstruction",
+  "status": "published",
+  "question": "Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?",
+  "summary": "Reproduces 191 occurrences of 46 distinct decimal primes across 1,364 directed paths. All source CSV coordinates agree; no significance or plaintext claim.",
+  "tags": [
+    "find a word",
+    "191 primes",
+    "missing primes",
+    "1033",
+    "2213",
+    "3301",
+    "alphanumeric grid",
+    "L256",
+    "directional search",
+    "base4"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "First characters of case-preserved two-character tokens, stacked as 32 rows by 8 columns in manuscript order.",
+    "procedure": "Enumerate four-cell straight paths in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+    "parameters": "1,364 directed paths; no wrapping; leading zeroes allowed; page boundaries crossed; no turns or cell deletion.",
+    "exclusions": "Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent."
+  },
+  "outcome": "supported",
+  "finding": "The narrowly specified count claim is reproduced: 191 occurrences, 46 distinct primes, 49-value universe, and missing 1033/2213/3301. Supported describes this recount, not an intentional hidden message.",
+  "limitations": "Chosen exploratory representation. Overlapping paths are dependent. No chance probability, selection correction, key search or plaintext recovery. Human review pending.",
+  "next_steps": "Keep changes to layout, path length, boundary rules or primality base as explicit variants. A statistical follow-up needs a fixed null model and selection accounting.",
+  "family": {
+    "id": "grid-directional-searches",
+    "title": "Directional searches in the alphanumeric grid",
+    "question": "Which values occur or are missing under specified grid layouts and path rules?",
+    "baseline": "grid-prime-paths"
+  },
+  "variant": {
+    "label": "32x8; four cells; decimal-prime filter",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent endpoint enumeration and sieve over archived page records; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-prime-paths/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/grid-prime-paths/check.py",
+    "script": "experiments/records/grid-prime-paths/run.py",
+    "inputs": [
+      {
+        "path": "scripts/grid_prime_paths.py",
+        "sha256": "51c89160f9434dce7aa8d1b5643bd7a2cc9a549be88420b015c4129a2be6a7e3"
+      },
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      },
+      {
+        "path": "experiments/records/grid-prime-paths/check.py",
+        "sha256": "8e24bb8532bf2d9257197639ce66a23e466c7289aef7030cc0c27f576db80c2e"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-prime-paths/results.json",
+        "sha256": "72680f450ebb614628ebf88f6512eb1b2d79ab17d54bfd38f33ba52b257557a5"
+      }
+    ],
+    "script_sha256": "eecd104e27f08f7a110538b77a9f475179a6e2801806ced3ada77d911b851942"
+  },
+  "sources": [
+    {
+      "label": "Detailed reconstruction and exact search rules",
+      "url": "https://jelliottdev.github.io/#/wiki/grid-prime-paths"
+    },
+    {
+      "label": "Pinned published occurrence CSV",
+      "url": "https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/resources/find_a_word_primes.csv"
+    }
+  ],
+  "related": [],
+  "article": "# Directional prime paths: a reproduced count claim\n\nThis record checks a specific observation about the alphanumeric grids on LP2-49–51. It reproduces **191 occurrences of 46 distinct decimal primes**, with **1033, 2213 and 3301 absent** from a 49-value candidate set. “Supported” refers only to that scoped recount. It does not establish deliberate construction, statistical significance or a hidden message.\n\nThe [illustrated grid guide](#/wiki/alphanumeric-grids) identifies the original pages and their token conventions. The [prime-path guide](#/wiki/grid-prime-paths) explains the reconstruction and comparison with the published occurrence CSV. This experiment packages the inputs, complete output and two independent implementations for reuse.\n\n## Fixed search rules\n\nStack the 32 original rows in page order 49, 50, 51, retaining eight columns. Read four consecutive cells in each of eight straight directions. Paths cannot turn or wrap around an edge, but may cross page boundaries. Reverse directions count separately.\n\nTake the first character of each token. Reject any path containing a 4; do not remove the cell and join its neighbors. Interpret the four-position string as a decimal integer, allowing leading zeroes, and retain it if prime. Then record the four suffix characters and, separately, the base-4 interpretation of the digit string.\n\nFor example, LP2-49 grid coordinates (row, column) `(7,2) → (6,3) → (5,4) → (4,5)` contain `0G → 0S → 0d → 2U`. The digit string is `0002`, the decimal value is 2, and the suffix extraction is `GSdU`. Retaining the path does not make those suffixes plaintext.\n\n## Complete result\n\nThere are 1,364 geometrically valid directed paths. Of these, 306 contain a 4 and are rejected, leaving 1,058 eligible paths. The decimal-prime filter retains 191 occurrences, including 60 with leading zeroes and 40 crossing a page boundary. These counts describe overlapping paths, not independent trials.\n\nThere are 256 possible four-position strings over digits 0–3. Their decimal values include 49 primes; 46 occur in the grid. The three missing strings become 79, 167 and 241 respectively when read in base 4. All three conversions are prime, but that is a separate observation: the original filter tests decimal primality. Only 147 of the 191 retained occurrences are prime under both interpretations.\n\nThe JSON contains every retained path, its tokens, original page coordinates, direction vector, digit string, suffix extraction and both numerical interpretations. Its frequency table includes all 49 candidate primes, including zero counts. No appealing suffix string was selected as a successful decryption.\n\n## Reproduce\n\nExtract this experiment’s ZIP with its directory structure intact. Python 3.12 and the standard library are sufficient; no installation, network call, AI service or key is needed.\n\n```text\npython experiments/records/grid-prime-paths/run.py --check\npython experiments/records/grid-prime-paths/check.py\n```\n\nThe producer uses the shared, included `grid_prime_paths.py` helper to enumerate starts and direction vectors from the coordinate-bearing export. Without `--check`, it prints a fresh JSON report.\n\nThe independent checker reads the original archived page records, reconstructs their grid tokens, and enumerates pairs of endpoints instead. It uses a sieve to identify primes rather than the producer’s trial division. It checks the complete set of hits, source coordinates, suffixes, base-4 values and frequency table. Agreement checks the implementations against the same archived transcription; it is not an independent visual reading of every glyph.\n\n## Limits and related variants\n\nChanging to a 16×16 layout, prohibiting page crossings, requiring four nonzero-leading decimal digits, searching longer paths, or requiring both bases to be prime changes the test. Keep such experiments in this family with their changed rules and results visible.\n\nA statistical extension must define what is randomized and what statistic is assessed. Shuffling entire tokens preserves different relationships from shuffling only their first characters. Testing these three specific omissions after noticing them also differs from a test specified in advance. The present result supplies no p-value and does not claim that other representations were exhaustively excluded.\n\nRead [search space and bounds](#/wiki/search-space) and [null models and selection](#/wiki/null-models) before turning this reproduced pattern into a claim about intention.\n",
+  "article_path": "experiments/records/grid-prime-paths/article.md",
+  "script_sha256": "eecd104e27f08f7a110538b77a9f475179a6e2801806ced3ada77d911b851942"
+}

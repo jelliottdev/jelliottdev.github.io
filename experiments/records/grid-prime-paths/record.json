@@ -1,0 +1,99 @@
+{
+  "id": "grid-prime-paths",
+  "title": "LP2-49–51: directional prime-path reconstruction",
+  "status": "published",
+  "question": "Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?",
+  "summary": "Reproduces 191 occurrences of 46 distinct decimal primes across 1,364 directed paths. All source CSV coordinates agree; no significance or plaintext claim.",
+  "tags": [
+    "find a word",
+    "191 primes",
+    "missing primes",
+    "1033",
+    "2213",
+    "3301",
+    "alphanumeric grid",
+    "L256",
+    "directional search",
+    "base4"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "First characters of case-preserved two-character tokens, stacked as 32 rows by 8 columns in manuscript order.",
+    "procedure": "Enumerate four-cell straight paths in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+    "parameters": "1,364 directed paths; no wrapping; leading zeroes allowed; page boundaries crossed; no turns or cell deletion.",
+    "exclusions": "Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent."
+  },
+  "outcome": "supported",
+  "finding": "The narrowly specified count claim is reproduced: 191 occurrences, 46 distinct primes, 49-value universe, and missing 1033/2213/3301. Supported describes this recount, not an intentional hidden message.",
+  "limitations": "Chosen exploratory representation. Overlapping paths are dependent. No chance probability, selection correction, key search or plaintext recovery. Human review pending.",
+  "next_steps": "Keep changes to layout, path length, boundary rules or primality base as explicit variants. A statistical follow-up needs a fixed null model and selection accounting.",
+  "family": {
+    "id": "grid-directional-searches",
+    "title": "Directional searches in the alphanumeric grid",
+    "question": "Which values occur or are missing under specified grid layouts and path rules?",
+    "baseline": "grid-prime-paths"
+  },
+  "variant": {
+    "label": "32x8; four cells; decimal-prime filter",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent endpoint enumeration and sieve over archived page records; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-prime-paths/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/grid-prime-paths/check.py",
+    "script": "experiments/records/grid-prime-paths/run.py",
+    "inputs": [
+      {
+        "path": "scripts/grid_prime_paths.py",
+        "sha256": "51c89160f9434dce7aa8d1b5643bd7a2cc9a549be88420b015c4129a2be6a7e3"
+      },
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      },
+      {
+        "path": "experiments/records/grid-prime-paths/check.py",
+        "sha256": "8e24bb8532bf2d9257197639ce66a23e466c7289aef7030cc0c27f576db80c2e"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-prime-paths/results.json",
+        "sha256": "72680f450ebb614628ebf88f6512eb1b2d79ab17d54bfd38f33ba52b257557a5"
+      }
+    ],
+    "script_sha256": "eecd104e27f08f7a110538b77a9f475179a6e2801806ced3ada77d911b851942"
+  },
+  "sources": [
+    {
+      "label": "Detailed reconstruction and exact search rules",
+      "url": "https://jelliottdev.github.io/#/wiki/grid-prime-paths"
+    },
+    {
+      "label": "Pinned published occurrence CSV",
+      "url": "https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/resources/find_a_word_primes.csv"
+    }
+  ],
+  "related": []
+}
