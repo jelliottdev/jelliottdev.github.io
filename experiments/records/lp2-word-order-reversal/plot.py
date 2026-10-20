@@ -32,7 +32,7 @@ parts.extend([
 ])
 (HERE / 'source-trace.svg').write_text(''.join(parts), encoding='utf-8', newline='\n')
 with (HERE / 'page-summary.csv').open('w', encoding='utf-8', newline='') as stream:
-    writer = csv.DictWriter(stream, fieldnames=[
+    writer = csv.DictWriter(stream, lineterminator='\n', fieldnames=[
         'page', 'runes', 'cases', 'distinct_outputs', 'opening_comparisons', 'matching_cases'])
     writer.writeheader()
     for page in result['pages']:
