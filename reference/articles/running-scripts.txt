@@ -32,6 +32,18 @@ The wiki’s other recipes use python as shorthand. Substitute the command that 
 
 3. Decode the warning and check the result
 
+Check the extracted files first
+
+Before decoding, check that the extracted files match the bundle’s recorded sizes and hashes. Run this from the folder containing scripts, text and data, using the Python command that worked above:
+
+python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
+
+A successful check reports a file count followed by 0 problems. The count can change as the wiki grows. Missing or changed files are listed with FAIL:, and the command exits unsuccessfully. The checker reads files without modifying them; files you add yourself are outside its manifest and are not checked.
+
+This is a check against the included manifest, not independent proof of who created it. You can also compare the ZIP itself with the download catalogue. See bundle verification for the distinction between checking the archive and checking its contents.
+
+Run the known control
+
 Run the warning command from the table above. In the examples that follow, python means whichever Python 3 command worked on your machine.
 
 python scripts/reproduce_reading.py warning
@@ -100,6 +112,8 @@ When you are ready to try another method
 The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.
 
 For image-based work, extract the original-images ZIP into the same folder as the reference data. See the bundle instructions for the complete command list.
+
+Check those image files with python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json. Each download has a separately named manifest. Prefer these names to the generic CONTENTS.json, which another bundle may replace when extracted into the same folder. Passing the reference-data check does not check images from the image bundle.
 
 	Task	Requirements	Instructions
 
@@ -197,6 +211,10 @@ Sources, related references, and files
   https://github.com/jelliottdev/jelliottdev.github.io
 - the official Python downloads
   https://www.python.org/downloads/
+- download catalogue
+  https://jelliottdev.github.io/#/downloads
+- bundle verification
+  https://jelliottdev.github.io/reference/articles/checksums.html#bundle
 - the complete warning reading; Warning control
   https://jelliottdev.github.io/reference/articles/reading-warning.html
 - zero-based alphabet indices

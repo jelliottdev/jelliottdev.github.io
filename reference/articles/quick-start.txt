@@ -18,9 +18,12 @@ LP2-31: a later investigation. Its recorded measurements describe the text; they
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
 
+python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
-Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. The first command prints the warning’s literal reading; the second checks all 17 known runic-page outputs. Both run locally with the Python standard library and make no AI requests. A full repository checkout also works.
+Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. After the file check, the warning command prints its literal reading; --check-all checks all 17 known runic-page outputs. All three commands run locally with the Python standard library and make no AI requests. A full repository checkout also works.
+
+The first command checks the extracted files against the bundle’s own manifest and should report 0 problems. It does not authenticate the manifest. If it reports missing or changed files, follow the setup check before interpreting a decoding result.
 
 What success looks like
 
@@ -97,6 +100,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/alphabet
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- the setup check
+  https://jelliottdev.github.io/reference/articles/running-scripts.html#verify-files
 - download catalogue
   https://jelliottdev.github.io/#/downloads
 - transliteration guide

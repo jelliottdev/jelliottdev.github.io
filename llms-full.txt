@@ -5359,9 +5359,12 @@ LP2-31: a later investigation. Its recorded measurements describe the text; they
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
 
+python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
-Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. The first command prints the warning’s literal reading; the second checks all 17 known runic-page outputs. Both run locally with the Python standard library and make no AI requests. A full repository checkout also works.
+Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. After the file check, the warning command prints its literal reading; --check-all checks all 17 known runic-page outputs. All three commands run locally with the Python standard library and make no AI requests. A full repository checkout also works.
+
+The first command checks the extracted files against the bundle’s own manifest and should report 0 problems. It does not authenticate the manifest. If it reports missing or changed files, follow the setup check before interpreting a decoding result.
 
 What success looks like
 
@@ -5438,6 +5441,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/alphabet
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- the setup check
+  https://jelliottdev.github.io/reference/articles/running-scripts.html#verify-files
 - download catalogue
   https://jelliottdev.github.io/#/downloads
 - transliteration guide
@@ -5514,6 +5519,18 @@ The wiki’s other recipes use python as shorthand. Substitute the command that 
 
 3. Decode the warning and check the result
 
+Check the extracted files first
+
+Before decoding, check that the extracted files match the bundle’s recorded sizes and hashes. Run this from the folder containing scripts, text and data, using the Python command that worked above:
+
+python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
+
+A successful check reports a file count followed by 0 problems. The count can change as the wiki grows. Missing or changed files are listed with FAIL:, and the command exits unsuccessfully. The checker reads files without modifying them; files you add yourself are outside its manifest and are not checked.
+
+This is a check against the included manifest, not independent proof of who created it. You can also compare the ZIP itself with the download catalogue. See bundle verification for the distinction between checking the archive and checking its contents.
+
+Run the known control
+
 Run the warning command from the table above. In the examples that follow, python means whichever Python 3 command worked on your machine.
 
 python scripts/reproduce_reading.py warning
@@ -5582,6 +5599,8 @@ When you are ready to try another method
 The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.
 
 For image-based work, extract the original-images ZIP into the same folder as the reference data. See the bundle instructions for the complete command list.
+
+Check those image files with python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json. Each download has a separately named manifest. Prefer these names to the generic CONTENTS.json, which another bundle may replace when extracted into the same folder. Passing the reference-data check does not check images from the image bundle.
 
 	Task	Requirements	Instructions
 
@@ -5679,6 +5698,10 @@ Sources, related references, and files
   https://github.com/jelliottdev/jelliottdev.github.io
 - the official Python downloads
   https://www.python.org/downloads/
+- download catalogue
+  https://jelliottdev.github.io/#/downloads
+- bundle verification
+  https://jelliottdev.github.io/reference/articles/checksums.html#bundle
 - the complete warning reading; Warning control
   https://jelliottdev.github.io/reference/articles/reading-warning.html
 - zero-based alphabet indices

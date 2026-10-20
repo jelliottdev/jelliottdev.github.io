@@ -12,6 +12,12 @@ cd jelliottdev.github.io</code></pre>
 <div class="table-wrap"><table><thead><tr><th>Terminal</th><th>Run the warning example</th></tr></thead><tbody><tr><td>Windows PowerShell</td><td><code>py scripts/reproduce_reading.py warning</code></td></tr><tr><td>macOS / Linux</td><td><code>python3 scripts/reproduce_reading.py warning</code></td></tr><tr><td>If <code>python</code> already selects Python 3</td><td><code>python scripts/reproduce_reading.py warning</code></td></tr></tbody></table></div>
 <p>The wiki’s other recipes use <code>python</code> as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. The calculation runs on your computer; it does not use the site's AI assistant.</p>
 <h2 id="check">3. Decode the warning and check the result</h2>
+<h3 id="verify-files">Check the extracted files first</h3>
+<p>Before decoding, check that the extracted files match the bundle’s recorded sizes and hashes. Run this from the folder containing <code>scripts</code>, <code>text</code> and <code>data</code>, using the Python command that worked above:</p>
+<pre><code>python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json</code></pre>
+<p>A successful check reports a file count followed by <code>0 problems.</code> The count can change as the wiki grows. Missing or changed files are listed with <code>FAIL:</code>, and the command exits unsuccessfully. The checker reads files without modifying them; files you add yourself are outside its manifest and are not checked.</p>
+<p>This is a check against the included manifest, not independent proof of who created it. You can also compare the ZIP itself with the <a href="../../index.html#/downloads">download catalogue</a>. See <a href="checksums.html#bundle">bundle verification</a> for the distinction between checking the archive and checking its contents.</p>
+<h3 id="decode-warning">Run the known control</h3>
 <p>Run the warning command from the table above. In the examples that follow, <code>python</code> means whichever Python 3 command worked on your machine.</p>
 <pre><code>python scripts/reproduce_reading.py warning</code></pre>
 <p>The script reads LP1-01, applies Atbash, and compares its output with the stored reading. It then prints <code>=== LP1-01 ===</code> followed by the decoded text. Open <a href="reading-warning.html">the complete warning reading</a> beside it to compare the output with the explanation.</p>
@@ -49,6 +55,7 @@ python scripts/reproduce_reading.py warning --trace --output warning-trace.csv</
 <h2 id="requirements">When you are ready to try another method</h2>
 <p>The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.</p>
 <p>For image-based work, extract <a href="../../downloads/original-images.zip">the original-images ZIP</a> into the same folder as the reference data. See the <a href="../../downloads/REFERENCE-DATA-README.txt">bundle instructions</a> for the complete command list.</p>
+<p>Check those image files with <code>python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json</code>. Each download has a separately named manifest. Prefer these names to the generic <code>CONTENTS.json</code>, which another bundle may replace when extracted into the same folder. Passing the reference-data check does not check images from the image bundle.</p>
 <div class="table-wrap"><table><thead><tr><th>Task</th><th>Requirements</th><th>Instructions</th></tr></thead><tbody>
 <tr><td>Known rune readings</td><td>Python 3, standard library only</td><td><a href="reading-warning.html">Warning control</a></td></tr>
 <tr><td>Locate words in known readings</td><td>Python 3, standard library only; searches contextual English</td><td><a href="reading-concordance.html">Known-reading concordance</a></td></tr>
