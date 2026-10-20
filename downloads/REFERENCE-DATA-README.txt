@@ -48,6 +48,11 @@ Measure single-rune frequency entropy:
 
 Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
+
+Find fixed-substitution-compatible positions (rune labels, not English words):
+  python scripts/rune_crib.py lp2-42 --crib "F U F U TH" --output crib-matches.json
+  This checks equality patterns, ignores separators, and includes headings.
+  It does not recover a key or assign significance to a match.
   Guide: reference/articles/rune-ngrams.txt
   Reports overlapping repeats and source positions under its stated boundaries.
 

@@ -131,6 +131,23 @@ print("PASS: fixed one-to-one substitution pattern checks")
 A pass is a compatibility result, not a decryption. For how to state the acceptance rule of a larger search, see candidate readings and acceptance tests. This example does not run a dictionary search or assign a probability to a match.
 
 
+Search a page for compatible positions
+
+The rune crib search applies the same rule to every overlapping window on one archived page. Extract the reference-data ZIP, then run:
+
+python scripts/rune_crib.py lp2-42 --crib "F U F U TH" --output lp2-42-pattern.json
+
+This example tests 268 five-rune windows in a 272-rune stream and returns one match: rune offset 176, covering source character offsets 229–233. Both offsets start at zero. The page and pattern were chosen to illustrate the earlier token; the single match is not a chance probability or evidence for a reading.
+
+Supply each proposed rune as a separate space-delimited label or glyph. TH is one rune; T H is two. IA and IO are aliases of the same rune, so --crib "IA IO" means a repeated symbol. The tool rejects unrecognized labels such as THE; it does not decide how to encode English into runes. It accepts 1–64 rune tokens and one release-specific page ID at a time.
+
+The search includes headings and ignores separators while forming the rune stream. Windows may cross word or line boundaries, but never page boundaries. The saved JSON retains the original source span, its line and column in the archived text, each compatible substitution mapping, and input checksums. Source offsets refer to decoded Unicode characters, not UTF-8 bytes or image coordinates. Each match is considered separately and can require a different alphabet mapping.
+
+Omit --output to print JSON in the terminal. Saving refuses to replace an existing file; use a new name to retain different trials. A zero-match result excludes this pattern only under the fixed one-to-one substitution model and these boundaries. It does not exclude a position-dependent cipher or a different rune encoding of the proposed plaintext.
+
+The implementation is checked against all 6,561 pairs of four-symbol sequences over a three-symbol alphabet using explicit permutation enumeration. The tests also check overlapping windows, the LP2-42 source spans, rune aliases and overwrite refusal. Reproduce those checks with python scripts/test_rune_crib.py. This is a search utility, not a new completed dictionary or language experiment.
+
+
 Choose a test that can change
 
 For a transposition search, length and rune counts are integrity checks. To compare candidate orders, examine something sensitive to order, such as repeated neighboring pairs, the distribution within specified columns, or a fully stated language score. A promising score still needs controls for how many arrangements were tried.
@@ -196,6 +213,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/unsolved-word-tokens.json
 - candidate readings and acceptance tests
   https://jelliottdev.github.io/reference/articles/candidate-readings.html
+- rune crib search
+  https://jelliottdev.github.io/scripts/rune_crib.py
 - transposition search
   https://jelliottdev.github.io/reference/articles/transposition.html
 - the reproduction guide

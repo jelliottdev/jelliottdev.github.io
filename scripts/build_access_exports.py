@@ -278,6 +278,7 @@ script_details = {
  'plot_atbash_pairs.py': ('Draw the complete Atbash mapping', 'atbash', ['alphabet reversal', 'Atbash chart', 'rune pairs']),
  'verify_bundle.py': ('Verify extracted bundle files', 'checksums', ['file integrity', 'manifest', 'SHA256', 'checksums']),
  'rune_entropy.py': ('Measure rune frequency entropy', 'rune-entropy', ['Shannon entropy', 'bits per rune']),
+ 'rune_crib.py': ('Find substitution-compatible rune windows', 'cipher-invariants', ['crib search','word pattern search','rune pattern']),
  'rune_ngrams.py': ('Locate repeated rune sequences', 'rune-ngrams', ['repeated runes', 'bigrams', 'trigrams', 'ngrams']),
  'plot_rune_frequencies.py': ('Draw the rune frequency chart', 'index-of-coincidence', ['histogram', 'frequency chart']),
  'reading_concordance.py': ('Find words in known readings', 'reading-concordance', ['phrase search', 'concordance', 'English readings', 'literal word search', 'exact page', 'line breaks']),
@@ -293,7 +294,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['audit_runeberg_prefixes.py','reproduce_britannica.py','word_reset_bound.py','position_divisor_bound.py','polynomial_stream_bound.py','compare_five_dots.py','audit_grid_radix.py','image_resolution_inventory.py','parable_mp3_link.py','side_dot_reuse.py','fibonacci_prime_panel.py','repeated_marker_audit.py','transcription_coverage.py','wing_tree_windows.py','later_message_sums.py','compass_mapping_audit.py','reproduce_second_chance.py','grid_prime_paths.py','fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['rune_crib.py','test_rune_crib.py','audit_runeberg_prefixes.py','reproduce_britannica.py','word_reset_bound.py','position_divisor_bound.py','polynomial_stream_bound.py','compare_five_dots.py','audit_grid_radix.py','image_resolution_inventory.py','parable_mp3_link.py','side_dot_reuse.py','fibonacci_prime_panel.py','repeated_marker_audit.py','transcription_coverage.py','wing_tree_windows.py','later_message_sums.py','compass_mapping_audit.py','reproduce_second_chance.py','grid_prime_paths.py','fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:
@@ -490,6 +491,11 @@ Measure single-rune frequency entropy:
 
 Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
+
+Find fixed-substitution-compatible positions (rune labels, not English words):
+  python scripts/rune_crib.py lp2-42 --crib "F U F U TH" --output crib-matches.json
+  This checks equality patterns, ignores separators, and includes headings.
+  It does not recover a key or assign significance to a match.
   Guide: reference/articles/rune-ngrams.txt
   Reports overlapping repeats and source positions under its stated boundaries.
 
