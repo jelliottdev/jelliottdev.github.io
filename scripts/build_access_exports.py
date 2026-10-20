@@ -124,6 +124,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'column-readout.svg': {'title':'Column rearrangement and reading direction (SVG)', 'guide':'transposition', 'aliases':['transposition diagram','column order','reading direction','row readout']},
  'circumference-passages.svg': {'title':'Circumference across three passages (SVG)', 'guide':'circumference', 'aliases':['circumference map','identity diagram','inner voice','emergence'], 'pages':['lp1-10','lp1-14','lp2-57'], 'releases':['LP1','LP2']},
  'welcome-key-alignment.svg': {'title':'Welcome interruption: rune and key counters (SVG)', 'guide':'vigenere', 'aliases':['Vigenere alignment diagram','Welcome key counter','copied F','interruption diagram'], 'pages':['lp1-03'], 'release':'LP1'},
  'collision-pairs.svg': {'title':'Matching pairs with and without replacement (SVG)', 'guide':'rune-entropy', 'aliases':['collision probability diagram','sampling with replacement','IoC pairs','AAABBB']},
