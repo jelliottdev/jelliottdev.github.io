@@ -6,6 +6,15 @@ from build_articles import (Text, reference_url, linked_articles, article_conten
                             linked_reference_text, manuscript_reference_html, standalone_url, standalone_body)
 
 class ArticleExports(unittest.TestCase):
+    def test_math_scripts_retain_grouping_and_link_labels(self):
+        parser = Text()
+        parser.feed('<p>p<sub>i+1</sub>; (−1)<sup>k</sup>; '
+                    '<a href="#formula">x<sup><em>n+1</em></sup></a></p>'
+                    '<pre><code>literal &lt;sup&gt;k&lt;/sup&gt;</code></pre>')
+        self.assertEqual("".join(parser.parts).strip(),
+                         "p_(i+1); (−1)^(k); x^(n+1)\nliteral <sup>k</sup>")
+        self.assertEqual(parser.link_labels["#formula"], ["x^(n+1)"])
+
     def test_compact_discovery_preserves_aliases_without_article_bodies(self):
         source = [{"id": "example", "title": "Example", "summary": "Explanation",
                    "aliases": ["φ(n)"], "alias_sections": {"φ(n)": "part two"},

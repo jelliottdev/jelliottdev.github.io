@@ -5,8 +5,8 @@ Distinguish a prime from its ordinal, and reproduce the 3299 and 9467 calculatio
 A prime’s value and its position in the ordered list of primes are different numbers. Specify which operation you mean before combining a prime with a page number or rune value.
 
 Value versus ordinal
-Write pn for the nth prime, using one-based indexing: p1 = 2, p2 = 3, p3 = 5. Looking up p3299 gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
-The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value pi+1. Confusing these conventions introduces an off-by-one error.
+Write p_(n) for the nth prime, using one-based indexing: p_(1) = 2, p_(2) = 3, p_(3) = 5. Looking up p_(3299) gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
+The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value p_(i+1). Confusing these conventions introduces an off-by-one error.
 
 Which way does the lookup go?
 
@@ -14,23 +14,23 @@ There are two different questions: “Which prime is in position 3299?” and �
 
 	Prime value	Its one-based position	Equivalent statement
 
-	3299	463	p463 = 3299
+	3299	463	p_(463) = 3299
 
-	7649	971	p971 = 7649
+	7649	971	p_(971) = 7649
 
-	9467	1173	p1173 = 9467
+	9467	1173	p_(1173) = 9467
 
-	30557	3299	p3299 = 30557
+	30557	3299	p_(3299) = 30557
 
-	98597	9467	p9467 = 98597
+	98597	9467	p_(9467) = 98597
 
 
-For example, replacing the prime value 3299 with its position gives 463. Treating 3299 as a position and looking up the prime there gives 30557. “Take the prime ordinal” is ambiguous unless the direction is stated. The input to an nth-prime lookup need not itself be prime: p4 = 7 is perfectly well-defined, although 4 is composite.
+For example, replacing the prime value 3299 with its position gives 463. Treating 3299 as a position and looking up the prime there gives 30557. “Take the prime ordinal” is ambiguous unless the direction is stated. The input to an nth-prime lookup need not itself be prime: p_(4) = 7 is perfectly well-defined, although 4 is composite.
 
 The prime-counting function π(x) counts primes less than or equal to x. For a prime q, π(q) is its one-based position. For a composite x, π(x) still exists, but it is not the ordinal of x as a prime. Here π is a function name, not the circle constant.
 
 The 3299 and 9467 examples
-The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 = 30,557 and p9467 = 98,597 are exact. Their product is:
+The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p_(3299) = 30,557 and p_(9467) = 98,597 are exact. Their product is:
 98597 × 30557 = 3012828529
  9857 × 30557 =  301200349
 The second expression omits a 9 and gives a different answer. Preserve the operands as well as the final sequence when describing a hypothesis. These calculations establish arithmetic, not a relationship between manuscript pages.

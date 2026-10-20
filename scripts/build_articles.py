@@ -58,6 +58,8 @@ class Text(HTMLParser):
         if self.parts and not self.parts[-1].endswith("\n"):
             self.parts.append("\n")
     def handle_starttag(self, tag, attrs):
+        if tag in {"sup", "sub"}:
+            self.handle_data("^(" if tag == "sup" else "_(")
         if tag in self.blocks or tag == "br":
             self.boundary()
         if tag in {"td", "th"}:
@@ -77,6 +79,8 @@ class Text(HTMLParser):
             if self.anchor is not None:
                 self.anchor[1].append(label)
     def handle_endtag(self, tag):
+        if tag in {"sup", "sub"}:
+            self.handle_data(")")
         if tag == "a" and self.anchor is not None:
             self.add_label(self.anchor[0], "".join(self.anchor[1]))
             self.anchor = None
