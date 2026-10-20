@@ -1501,6 +1501,7 @@ LP2-00–02: text and image measurements: https://jelliottdev.github.io/referenc
 Image regions and connected components: https://jelliottdev.github.io/reference/articles/image-regions.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Dots and punctuation: https://jelliottdev.github.io/reference/articles/dots.html
+Night Thoughts: Young, Blake and a proposed book lookup: https://jelliottdev.github.io/reference/articles/night-thoughts.html
 
 ## Sources
 
@@ -1559,6 +1560,7 @@ LP2-00–02: text and image measurements: https://jelliottdev.github.io/referenc
 Image regions and connected components: https://jelliottdev.github.io/reference/articles/image-regions.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Dots and punctuation: https://jelliottdev.github.io/reference/articles/dots.html
+Night Thoughts: Young, Blake and a proposed book lookup: https://jelliottdev.github.io/reference/articles/night-thoughts.html
 
 ## Sources
 
@@ -1615,6 +1617,7 @@ Image regions and connected components: https://jelliottdev.github.io/reference/
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Dots and punctuation: https://jelliottdev.github.io/reference/articles/dots.html
 Insects and wing imagery: https://jelliottdev.github.io/reference/articles/insects.html
+Night Thoughts: Young, Blake and a proposed book lookup: https://jelliottdev.github.io/reference/articles/night-thoughts.html
 
 ## Sources
 
@@ -10495,6 +10498,9 @@ Connection: a published proposal comparing the reclining manuscript figures with
 
 Inspect: the four manuscript locations and their orientations, the reported source-page locators, and the edition and ISBN information. The guide separates the observed drawings from the proposed source.
 
+Young’s Night Thoughts
+Connection: a proposed book lookup motivated by Blake’s illustrations and the 729-rune total of LP2-00–02. The count reproduces; a cipher result and the supplied scan’s edition remain unverified. The guide separates Young’s text, Edwards’s publishing role and Blake’s artwork, and defines what a repeatable lookup would require.
+
 Terms and traditions are another kind of reference
 
 The manuscript explicitly labels two dialogues as koans. That establishes the label in the known reading; it does not supply a traditional case number, teacher, lineage, or source collection. The koan guide explains the genre and follows the dialogues before considering outside attribution.
@@ -10567,6 +10573,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reclining-figure.html#pages
 - edition and ISBN information
   https://jelliottdev.github.io/reference/articles/reclining-figure.html#editions
+- Night Thoughts
+  https://jelliottdev.github.io/reference/articles/night-thoughts.html
 - koans
   https://jelliottdev.github.io/reference/articles/koans.html
 - instar
@@ -17209,6 +17217,118 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 
 Article: https://jelliottdev.github.io/reference/articles/doublets.html
+
+
+---
+
+Night Thoughts: Young, Blake and a proposed book lookup
+
+Distinguish author, publisher, illustrations and editions; reproduce the 729-rune scope without treating a proposed book key as established.
+
+Night Thoughts is a proposed book source for further investigation, not an identified source of a Liber Primus passage or a demonstrated key. Its connection with William Blake makes it a reasonable work to inspect, but Blake’s involvement does not establish that the puzzle used this book.
+
+Young, Edwards and Blake are different people
+
+	Person	Role in the illustrated book
+	Edward Young	Author of the poem
+	Richard Edwards	Bookseller and publisher who commissioned the illustrations
+	William Blake	Artist and engraver
+	R. Noble	Printer of the 1797 edition
+
+The Metropolitan Museum’s 1797 volume records these roles. Its catalogue describes a poem in nine sections, 537 watercolor designs, and 43 engravings published in the first installment. The planned continuation was not issued. A watercolor design, an engraved page and a later text edition are therefore different objects; “Blake’s version” is not an adequate identifier for a cipher input.
+
+Inspect the illustrated volume and its images at the Met. For the terminology, see plates, impressions and copies. The separate Liber Primus cover guide identifies the Blake compositions proposed for that collage; those identifications do not identify Night Thoughts as its source.
+
+What kind of text is it?
+
+The 1853 edition transcribed by Project Gutenberg presents Young’s poem with a life, critical dissertation and explanatory notes by George Gilfillan. Its title page names James Nichol in Edinburgh, James Nisbet and Co. in London, and W. Robertson in Dublin. This is a later edited text, not the 1797 illustrated volume.
+
+The passage around Night IV, line 729 considers reason and Christian faith in an argument about death and immortality. The line includes “Hold her sacred still,” referring to reason. The surrounding lines matter: selecting the phrase alone removes the argument it belongs to. A resemblance to Liber Primus themes such as knowledge or inner discovery is a comparison to examine, not a verified quotation. See testing knowledge and authority for the manuscript’s own statements.
+
+The 729-rune proposal: what can be checked
+
+One proposed lookup takes the rune count of LP2-00–02 and uses it as a line number in Night Thoughts. The manuscript-side count reproduces from the archived transcriptions when headings are included and every non-rune is removed:
+
+	Page	Alphabet runes
+	LP2-00	262
+	LP2-01	266
+	LP2-02	201
+	Total	729
+
+[Image: LP2-00, first page in the proposed 729-rune scope]
+LP2-00 · 262 runes
+[Image: LP2-01, second page in the proposed scope]
+LP2-01 · 266 runes
+[Image: LP2-02, third page in the proposed scope]
+LP2-02 · 201 runes
+
+To reproduce those counts using the repository or reference-data bundle, run:
+
+python scripts/rune_ioc.py lp2-00
+python scripts/rune_ioc.py lp2-01
+python scripts/rune_ioc.py lp2-02
+
+The reports include input hashes and counting conventions; the IoC guide explains their other fields. The sum 729 is both 27² and 9³, equivalently 3⁶. Those are properties of the same integer, not independent confirmations of a proposed source.
+
+The Google Books volume supplied with the proposal remains an unresolved edition reference in this audit: its title page and pagination have not been verified here. Do not silently substitute the Gutenberg edition and claim to have reproduced its page numbers. A chapter or “Night” number, a printed page, a verse-line number and a scan-image number are different coordinates.
+
+What a reproducible test still needs
+
+Fix the source. Record the edition, exact copy or scan, and file hash. If using a modern transcription, identify it separately from the historical book.
+Define the lookup. Specify which Nights are eligible, whether numbering restarts, and how headings, dedications, footnotes and wrapped lines are handled. “Line 729” can point to several passages when numbering restarts.
+Freeze the extracted text. Preserve the full line and its neighbors, spelling and punctuation, before choosing a normalization or rune conversion. Distinguish extracting every eligible line from choosing the ones that sound relevant.
+Name the cipher operation. A selected passage is not yet a key. Specify the algorithm, alphabet, direction, key phase, interruptions, target pages and success criterion.
+Report all candidates. Include all tested Nights, editions and transformations, not only the most suggestive phrase. Separate a literal textual match from a statistical or cryptographic result.
+
+A reported search of many books without the source files, extraction rules, candidate list and outputs cannot establish that this particular lookup has been tried. No such cipher-search result is reproduced on this page. Related starting points are search space and bounds, documenting an attempt, and the Emerson book-cipher control, where a specific source and explicit coordinates can be checked.
+
+Sources and status
+
+Met object 2021.164.2: the illustrated 1797 volume supports the production history. Project Gutenberg ebook 33156 supplies the later edition’s title page and poem text. These establish bibliographic facts and readable context; neither establishes use by the puzzle authors. The three manuscript counts were recomputed from Liberpedia’s archived text on 20 October 2026.
+
+Sources, related references, and files
+- Metropolitan Museum’s 1797 volume; Inspect the illustrated volume and its images at the Met; Met object 2021.164.2: the illustrated 1797 volume
+  https://www.metmuseum.org/art/collection/search/343210
+- plates, impressions and copies
+  https://jelliottdev.github.io/reference/articles/blake-printmaking.html
+- Liber Primus cover guide
+  https://jelliottdev.github.io/reference/articles/illustrated-cover.html
+- 1853 edition transcribed by Project Gutenberg; Project Gutenberg ebook 33156
+  https://www.gutenberg.org/cache/epub/33156/pg33156-images.html
+- testing knowledge and authority
+  https://jelliottdev.github.io/reference/articles/testing-knowledge.html
+- LP2-00
+  https://jelliottdev.github.io/reference/lp2-00.html
+- LP2-01
+  https://jelliottdev.github.io/reference/lp2-01.html
+- LP2-02
+  https://jelliottdev.github.io/reference/lp2-02.html
+- LP2-00, first page in the proposed 729-rune scope
+  https://jelliottdev.github.io/#/reader/lp2-00
+- LP2-00, first page in the proposed 729-rune scope
+  https://jelliottdev.github.io/thumbs/lp2-00.jpg
+- LP2-01, second page in the proposed scope
+  https://jelliottdev.github.io/#/reader/lp2-01
+- LP2-01, second page in the proposed scope
+  https://jelliottdev.github.io/thumbs/lp2-01.jpg
+- LP2-02, third page in the proposed scope
+  https://jelliottdev.github.io/#/reader/lp2-02
+- LP2-02, third page in the proposed scope
+  https://jelliottdev.github.io/thumbs/lp2-02.jpg
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- IoC guide
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- Google Books volume supplied with the proposal
+  https://books.google.com/books?id=GsVHv1gACYAC
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- documenting an attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Emerson book-cipher control
+  https://jelliottdev.github.io/reference/articles/emerson-self-reliance.html
+
+Article: https://jelliottdev.github.io/reference/articles/night-thoughts.html
 
 
 ---
