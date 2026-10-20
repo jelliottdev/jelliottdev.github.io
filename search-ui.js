@@ -8,8 +8,8 @@ function bindWikiSearch(){
  const panel=document.createElement('div');panel.id='search-suggestions';panel.hidden=true;panel.setAttribute('role','region');panel.setAttribute('aria-label','Search suggestions');form.append(panel);
  input.setAttribute('aria-controls',panel.id);input.setAttribute('aria-expanded','false');
  const size=()=>{panel.style.maxHeight=Math.max(100,Math.min(420,(window.visualViewport?.height||innerHeight)-form.getBoundingClientRect().bottom-12))+'px';};
- let observedValue=input.value,watchTimer=null;
- const draw=()=>{observedValue=input.value;const q=input.value.trim();if(q.length<2){closeSearchSuggestions();return}const hits=WikiSearch.search(db,q).slice(0,5);panel.innerHTML=hits.length?hits.map(h=>searchResultHTML(h,q,true)).join(''):`<p class="suggestions-empty">No matches for “${esc(q)}”.</p>`;panel.innerHTML+=`<a class="search-all" href="#/search/${encodeURIComponent(q)}">See all results for “${esc(q)}” →</a>`;panel.hidden=false;input.setAttribute('aria-expanded','true');size();};
+ let observedValue=input.value,watchTimer=null,resultPointer=false,pointerRelease=null;
+ const draw=()=>{if(resultPointer)return;observedValue=input.value;const q=input.value.trim();if(q.length<2){closeSearchSuggestions();return}const hits=WikiSearch.search(db,q).slice(0,5);panel.innerHTML=hits.length?hits.map(h=>searchResultHTML(h,q,true)).join(''):`<p class="suggestions-empty">No matches for “${esc(q)}”.</p>`;panel.innerHTML+=`<a class="search-all" href="#/search/${encodeURIComponent(q)}">See all results for “${esc(q)}” →</a>`;panel.hidden=false;input.setAttribute('aria-expanded','true');size();};
  // Android keyboards can keep a whole word in composition. Rendering suggestions
  // is read-only with respect to the input, so do not wait for compositionend.
  input.addEventListener('input',draw);input.addEventListener('compositionend',draw);
@@ -21,9 +21,15 @@ function bindWikiSearch(){
  if(document.activeElement===input)startWatching();
  input.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearchSuggestions();e.stopPropagation()}else if(e.key==='ArrowDown'&&!panel.hidden){e.preventDefault();panel.querySelector('a')?.focus()}});
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){input.focus();closeSearchSuggestions();e.preventDefault()}else if(['ArrowDown','ArrowUp'].includes(e.key)){const links=[...panel.querySelectorAll('a')],i=links.indexOf(document.activeElement);e.preventDefault();if(e.key==='ArrowUp'&&i===0)input.focus();else links[(i+(e.key==='ArrowDown'?1:-1)+links.length)%links.length].focus();}});
- panel.addEventListener('click',e=>{if(e.target.closest('.search-all')){e.preventDefault();submitWikiSearch(input.value)}else if(e.target.closest('a')){input.blur();closeSearchSuggestions()}});
+ // Keep the touched link alive through blur and IME composition events. A touch
+ // may become a scroll, so navigation still belongs to click, never pointerdown.
+ panel.addEventListener('pointerdown',()=>{clearTimeout(pointerRelease);resultPointer=true;});
+ const releasePointer=()=>{if(!resultPointer)return;clearTimeout(pointerRelease);pointerRelease=setTimeout(()=>{resultPointer=false;if(!form.contains(document.activeElement))closeSearchSuggestions();else if(document.activeElement===input&&input.value!==observedValue)draw();},250);};
+ document.addEventListener('pointerup',releasePointer);
+ document.addEventListener('pointercancel',releasePointer);
+ panel.addEventListener('click',e=>{const link=e.target.closest('a');if(!link)return;if(e.button>0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const href=link.getAttribute('href');e.preventDefault();clearTimeout(pointerRelease);resultPointer=false;input.blur();closeSearchSuggestions();setNavigation(false);if(location.hash===href)route();else location.hash=href;});
  document.addEventListener('pointerdown',e=>{if(!form.contains(e.target))closeSearchSuggestions()});
- form.addEventListener('focusout',()=>{queueMicrotask(()=>{if(!form.contains(document.activeElement))closeSearchSuggestions()})});
+ form.addEventListener('focusout',()=>{queueMicrotask(()=>{if(!resultPointer&&!form.contains(document.activeElement))closeSearchSuggestions()})});
  window.visualViewport?.addEventListener('resize',size);
 }
 function wikiSearchPage(query,release='',coverage=''){

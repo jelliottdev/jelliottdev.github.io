@@ -25,10 +25,10 @@ const vm=require('node:vm');
 function target(){return {style:{},listeners:{},attrs:{},addEventListener(name,fn){this.listeners[name]=fn},setAttribute(name,value){this.attrs[name]=value},getBoundingClientRect(){return {bottom:100}},contains(){return false}}}
 const input=target(),form=target(),panel=target();input.value='Atba';
 form.append=()=>{};panel.hidden=true;
-let poll=null;
-const sandbox={setInterval:fn=>{poll=fn;return 1},clearInterval:()=>{poll=null},queueMicrotask:fn=>fn(),db,WikiSearch:search,esc:String,marked:String,excerpt:String,
+let poll=null,release=null;const docListeners={};
+const sandbox={setTimeout:fn=>{release=fn;return 2},clearTimeout:()=>{release=null},location:{hash:"#/experiments"},setNavigation(){},route(){},setInterval:fn=>{poll=fn;return 1},clearInterval:()=>{poll=null},queueMicrotask:fn=>fn(),db,WikiSearch:search,esc:String,marked:String,excerpt:String,
  $:s=>({'#search':input,'#search-form':form,'#search-suggestions':panel}[s]),
- document:{createElement:()=>panel,addEventListener(){}},
+ document:{createElement:()=>panel,addEventListener(name,fn){docListeners[name]=fn}},
  window:{visualViewport:{height:430,addEventListener(){}}},innerHeight:430};
 vm.createContext(sandbox);
 vm.runInContext(fs.readFileSync(path.join(root,'search-ui.js'),'utf8'),sandbox);
@@ -51,3 +51,28 @@ const rendered=panel.innerHTML;panel.innerHTML='unchanged';poll();
 assert.equal(panel.innerHTML,'unchanged','Unchanged input must not repeat the search');
 input.listeners.blur();assert.equal(poll,null,'Stop the fallback when focus leaves');
 console.log('PASS: eventless value changes update while focused; unchanged text does no work');
+
+// A mobile tap can blur the field and commit composition before click arrives.
+input.blur=()=>{sandbox.document.activeElement=null;input.listeners.blur();form.listeners.focusout()};
+input.value='Koa';sandbox.document.activeElement=input;input.listeners.focus();
+const beforeTap=panel.innerHTML;
+panel.listeners.pointerdown();input.blur();
+assert.equal(panel.hidden,false,'Blur during a result gesture must not hide its target');
+input.value='Koan';input.listeners.compositionend();
+assert.equal(panel.innerHTML,beforeTap,'Composition completion must not replace the touched link');
+docListeners.pointerup();
+let prevented=false;
+const anchor={getAttribute:()=> '#/wiki/reading-first-koan'};
+panel.listeners.click({target:{closest:()=>anchor},preventDefault(){prevented=true}});
+assert.equal(sandbox.location.hash,'#/wiki/reading-first-koan');
+assert(prevented);assert.equal(panel.hidden,true);assert.equal(release,null);
+// Scrolling/cancelling a gesture must never activate a result.
+sandbox.document.activeElement=input;input.listeners.focus();panel.listeners.pointerdown();
+input.blur();docListeners.pointercancel();release();
+assert.equal(sandbox.location.hash,'#/wiki/reading-first-koan');
+assert.equal(panel.hidden,true);
+// Enter produces click without a preceding pointer gesture.
+sandbox.document.activeElement=input;input.listeners.focus();
+panel.listeners.click({target:{closest:()=>({getAttribute:()=> '#/wiki/reading-second-koan'})},preventDefault(){}});
+assert.equal(sandbox.location.hash,'#/wiki/reading-second-koan');
+console.log('PASS: blur/composition before tap, cancelled gestures, and keyboard activation');
