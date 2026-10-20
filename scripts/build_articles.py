@@ -25,6 +25,38 @@ class Text(HTMLParser):
         if target and target not in self.links:
             self.links.append(target)
 
+class Headings(HTMLParser):
+    def __init__(self, body):
+        super().__init__()
+        self.items = []
+        self.current = None
+        self.feed(body)
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "h2":
+            identifier = dict(attrs).get("id")
+            self.current = [identifier, []] if identifier else None
+
+    def handle_data(self, data):
+        if self.current is not None:
+            self.current[1].append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "h2" and self.current is not None:
+            identifier, parts = self.current
+            self.items.append((identifier, "".join(parts).strip()))
+            self.current = None
+
+
+def article_contents(body):
+    headings = Headings(body).items
+    if not headings:
+        return ""
+    links = "".join(f'<a href="#{quote(identifier, safe="-_")}">{html.escape(label)}</a>'
+                    for identifier, label in headings)
+    return ('<details class="standalone-contents"><summary>On this page</summary>'
+            '<nav aria-label="Article sections">' + links + '</nav></details>')
+
 def reference_url(target, article_id=None):
     """Prefer standalone guide/page references over JavaScript routes."""
     if target.startswith("#") and not target.startswith("#/") and article_id:
@@ -85,7 +117,7 @@ def build():
             f'<title>{title} — Liberpedia</title><link rel="stylesheet" href="../../style.css">'
             '<body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · '
             f'<a href="../../index.html#/wiki/{a["id"]}">Open in wiki</a> · <a href="{a["id"]}.txt">Plain text</a></nav>'
-            f'<h1>{title}</h1><p>{html.escape(a["summary"])}</p>{standalone}</main></body></html>', encoding="utf-8", newline="\n")
+            f'<h1>{title}</h1><p>{html.escape(a["summary"])}</p>{article_contents(body)}{standalone}</main></body></html>', encoding="utf-8", newline="\n")
         links = "\n".join(a["references"])
         (out / f'{a["id"]}.txt').write_text(a["title"] + "\n\n" + a["summary"] + "\n\n" + a["text"] + "\n\nSources, related references, and files\n" + links + "\n\nArticle: https://jelliottdev.github.io/reference/articles/" + a["id"] + ".html\n", encoding="utf-8", newline="\n")
     (ROOT / "data/articles.json").write_text(json.dumps(articles, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")

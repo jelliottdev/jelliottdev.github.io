@@ -74,4 +74,8 @@ this content batch.
 
 ## Complete-section guides
 
+Standalone HTML articles include a native expandable contents menu derived from
+their `h2` elements with IDs. These links work without JavaScript and preserve
+section fragments for sharing. Keep heading IDs stable when editing a guide.
+
 `build_reading_guides.py` generates `articles/readings/` from the nine published controls and page records. Never hand-edit these generated bodies. The builder asserts that all pages agree on section membership, order, and contextual text. Literal outputs retain their page boundaries; contextual English stays a separate whole-section rendering. The ordinary guide builder then includes these records in navigation, backlinks, search, and standalone exports.

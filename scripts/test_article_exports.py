@@ -1,8 +1,17 @@
 """Checks that non-JavaScript references remain usable as instructions."""
 import unittest
-from build_articles import Text, reference_url, linked_articles
+from build_articles import Text, reference_url, linked_articles, article_contents
 
 class ArticleExports(unittest.TestCase):
+    def test_native_contents_preserves_heading_text_and_escapes_links(self):
+        result = article_contents('<h2 id="part two">Read <em>A &amp; B</em></h2>'
+                                  '<h3 id="minor">Minor</h3><h2>No ID</h2>')
+        self.assertIn('href="#part%20two">Read A &amp; B</a>', result)
+        self.assertIn('<summary>On this page</summary>', result)
+        self.assertNotIn('Minor', result)
+        self.assertNotIn('No ID', result)
+        self.assertEqual(article_contents('<p>No sections</p>'), '')
+
     def test_backlinks_include_sections_without_prefix_collisions(self):
         body = """<a href="#/wiki/atbash?section=example">Example</a>
         <a href='#/wiki/atbash'>Guide</a>
