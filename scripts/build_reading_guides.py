@@ -19,6 +19,18 @@ NAMES = {
     "lp2-56": "An End: the hash reference",
     "lp2-57": "Parable",
 }
+# Editorial routes from a verified reading to its explanatory guides.
+CONTEXT = {
+    "warning": ["testing-knowledge"],
+    "welcome": ["pilgrimage", "instar", "william-blake"],
+    "some-wisdom": ["testing-knowledge", "prime-sums"],
+    "first-koan": ["koans", "lewis-carroll"],
+    "loss-of-divinity": ["consumption-preservation-adherence", "primality-and-divinity"],
+    "second-koan": ["koans", "circumference"],
+    "instruction": ["testing-knowledge", "magic-squares"],
+    "lp2-56": ["lp2-56-target", "dots"],
+    "lp2-57": ["instar", "circumference", "prime-sums"],
+}
 METHODS = {
     "direct": ("direct-reading", "Direct reading", "p = c"),
     "atbash": ("atbash", "Atbash", "p = 28 − c"),
@@ -32,6 +44,7 @@ def build():
     output = ROOT / "articles/readings"
     output.mkdir(exist_ok=True)
     metadata = []
+    guides = {a["id"]: a for a in json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))}
     for control in controls:
         section = control["id"]
         pages = [json.loads((ROOT / f'data/pages/{pid}.json').read_text(encoding="utf-8")) for pid in control["pages"]]
@@ -61,6 +74,11 @@ def build():
             body += '<pre><code>' + escape(p["reading"]["literal"]) + '</code></pre>'
         body += '<h2 id="conventions">Reading the notation</h2><p>Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See <a href="#/conventions">transcription conventions</a> and <a href="#/wiki/transliteration">literal versus contextual text</a>. Do not silently normalize a spelling before calculating a prime sum.</p>'
         body += '<h2 id="contextual">Contextual whole-section reading</h2><p>This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.</p><details><summary>Show contextual English</summary><p>' + escape(pages[0]["reading"]["reading"]) + '</p></details>'
+        body += '<h2 id="explore">Explore this passage</h2><p>These guides explain terms, imagery and calculations associated with the reading. Their interpretation is separate from the reproduced text above.</p><dl class="article-directory">'
+        for target in CONTEXT[section]:
+            article = guides[target]
+            body += f'<div><dt><a href="#/wiki/{target}">{escape(article["title"])}</a></dt><dd>{escape(article["summary"])}</dd></div>'
+        body += '</dl>'
         body += '<h2 id="sources">Sources and status</h2><p>These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. <a href="data/evidence/known-readings.json">Compiled readings and provenance</a> · <a href="#/readings">All known sections</a>. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.</p>'
         id = "reading-" + section
         source = f"readings/{id}.html"
