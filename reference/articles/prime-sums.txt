@@ -15,7 +15,7 @@ Run the read-only check
 python scripts/reproduce_prime_sums.py
 python scripts/reproduce_prime_sums.py --json
 
-Run from the complete repository using Python 3. See script setup if this is your first command. The first prints a concise report. The second prints the full rune sequences, prime values, totals and counterfactual results as JSON. Neither command changes files, accesses the network, or calls an AI.
+Run from the repository or the extracted reference-data ZIP using Python 3. See script setup if this is your first command. The first prints a concise report. The second prints the full rune sequences, prime values, totals and counterfactual results as JSON. Neither command changes files, accesses the network, or calls an AI.
 
 The script re-decodes the nine documented controls, verifies all 17 literal page readings, reconstructs the rune stream from the per-rune trace, and compares the ten selected word occurrences and four LP2-57 segments with the published arithmetic evidence. The ten occurrences are the examples selected for the spelling article, not an exhaustive sample of all manuscript words. This shares the known-reading implementation; it is not an independent photographic transcription.
 
@@ -53,6 +53,8 @@ Adding I flips parity because 31 is odd. Reordering a word cannot change parity 
 
 What this says about purpose
 
+For the manuscript’s philosophical use of the term, see primality and divinity. A prime-valued alphabet provides numerical context, but does not by itself specify which sums the prose asks a reader to calculate.
+
 The reproducible observation is that the three body sums are emirps under the declared convention. The counterfactuals show that some alternate encodings lose a property, while reorderings and aliases do not affect it. Neither statement alone identifies the author’s reason for choosing a spelling.
 
 A proposed purpose such as marking sentence boundaries or providing a consistency check needs a separately stated rule and a complete set of cases. It should explain which units are meant to satisfy the rule and which choices were allowed. Selecting only successful words, or adding a delimiter value after seeing a composite total, changes the test. See selection effects and reproducible scope. This guide does not assign a probability that the observed totals were intentional.
@@ -64,11 +66,13 @@ Read-only reproduction script · Known-reading implementation · Method paramete
 Sources, related references, and files
 https://jelliottdev.github.io/#/spelling
 https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/data/evidence/spelling-sums.json
 https://jelliottdev.github.io/reference/lp2-57.html
 https://jelliottdev.github.io/reference/articles/emirps.html
 https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/articles/primality-and-divinity.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
 https://jelliottdev.github.io/scripts/reproduce_prime_sums.py
 https://jelliottdev.github.io/scripts/reproduce_reading.py
