@@ -1,0 +1,109 @@
+Alphanumeric grids on LP2-49–51
+
+Three plant-bordered sheets, 256 two-character entries, and a reproducible count that preserves case and leading zeroes.
+
+LP2-49–51 contain rectangular arrays of two-character entries made from decimal digits and Latin letters. They are easy to recognize by the tall, curling plant borders on both sides. These arrays are different from the numerical magic squares: an arrangement in rows and columns does not by itself establish an arithmetic rule.
+
+Where the grids appear
+
+
+[Image: LP2-49: three runic rows above an alphanumeric grid, between plant borders.]
+LP2-49: runes above the grid.
+
+[Image: LP2-50: thirteen grid rows between plant borders.]
+LP2-50: grid only.
+
+[Image: LP2-51: nine grid rows followed by four runic rows.]
+LP2-51: runes below the grid.
+
+
+The first sheet has three runic rows above its grid, ending in a small red dotted cluster. The middle sheet has no runic rows. The third has four runic rows below the grid. The borders share curling stems, drooping leaves, root-like branches, and groups of filled dots. Compare the originals before treating the ornaments as identical copies.
+
+What can be counted directly
+
+	Page	Grid rows	Entries per row	Entries	Runes outside the grid
+	LP2-49	10	8	80	66
+	LP2-50	13	8	104	0
+	LP2-51	9	8	72	92
+
+Together, the archived grids contain (10 + 13 + 9) × 8 = 256 entries. Each entry contains two characters. The count 256 is therefore a count of entries, not runes, bytes, or distinct values. Calling these bytes would require an explicit decoding rule and a check of its outputs.
+
+Preserve the spelling of each entry
+
+The first grid row on LP2-49 is 3N 3p 2l 36 1b 3v 26 33. Uppercase and lowercase letters both matter to the record: 0X and 0x, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.
+
+Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the original image. A proposed correction should identify its page, row, column, and image evidence. See the transcription guide for the distinction between an image and its text representation.
+
+What an encoding proposal needs to specify
+
+Reading these entries as positional numbers is a testable proposal. It needs an ordered alphabet, a base, an explanation of letter case, and a reading order across rows and pages. Names such as “base 60” or “base 62” alone do not provide that specification. Different symbol orders assign different values to the same entry.
+
+For an alphabet of length b, a two-character entry xy would have value b × index(x) + index(y), using zero-based indices. That equation describes the proposed conversion; it does not show that the manuscript intended it. Keep the surrounding runes and artwork available as context, and distinguish a valid conversion from a demonstrated decipherment.
+
+Reproduce the grid dimensions
+
+Run this Python snippet from the repository root. It reads the archived page records, selects rows consisting entirely of hyphen-separated two-character alphanumeric entries, and checks that every selected row has eight entries. It does not choose a numeral base or change character case.
+
+import json
+import re
+from pathlib import Path
+
+total = 0
+for number in (49, 50, 51):
+    page_id = f"lp2-{number}"
+    page = json.loads(
+        Path(f"data/pages/{page_id}.json").read_text(encoding="utf-8")
+    )
+    rows = [
+        line.removesuffix("/").split("-")
+        for line in page["raw"].splitlines()
+        if re.fullmatch(r"[0-9A-Za-z]{2}(?:-[0-9A-Za-z]{2})+/?", line)
+    ]
+    assert rows and all(len(row) == 8 for row in rows)
+    count = sum(map(len, rows))
+    total += count
+    print(page_id, len(rows), 8, count)
+print("total", total)
+
+Expected output:
+
+lp2-49 10 8 80
+lp2-50 13 8 104
+lp2-51 9 8 72
+total 256
+
+This check reproduces the dimensions of the stored transcription. It does not independently verify every glyph or prove that a particular traversal is intended. If you alter the transcription format, revisit the row-selection expression rather than assuming an unchanged count means an unchanged grid.
+
+Originals and data
+
+The page records for LP2-49, LP2-50, and LP2-51 link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are 49 JSON, 50 JSON, and 51 JSON. Return to the illustrated index to compare other manuscript details.
+
+Sources, related references, and files
+- numerical magic squares
+  https://jelliottdev.github.io/reference/articles/magic-squares.html
+- LP2-49: three runic rows above an alphanumeric grid, between plant borders.; LP2-49
+  https://jelliottdev.github.io/reference/lp2-49.html
+- LP2-49: three runic rows above an alphanumeric grid, between plant borders.
+  https://jelliottdev.github.io/images/lp2-49.jpg
+- LP2-50: thirteen grid rows between plant borders.; LP2-50
+  https://jelliottdev.github.io/reference/lp2-50.html
+- LP2-50: thirteen grid rows between plant borders.
+  https://jelliottdev.github.io/images/lp2-50.jpg
+- LP2-51: nine grid rows followed by four runic rows.; LP2-51
+  https://jelliottdev.github.io/reference/lp2-51.html
+- LP2-51: nine grid rows followed by four runic rows.
+  https://jelliottdev.github.io/images/lp2-51.jpg
+- original image
+  https://jelliottdev.github.io/#/reader/lp2-49
+- transcription guide
+  https://jelliottdev.github.io/reference/articles/transliteration.html
+- 49 JSON
+  https://jelliottdev.github.io/data/pages/lp2-49.json
+- 50 JSON
+  https://jelliottdev.github.io/data/pages/lp2-50.json
+- 51 JSON
+  https://jelliottdev.github.io/data/pages/lp2-51.json
+- illustrated index
+  https://jelliottdev.github.io/reference/articles/visual-index.html
+
+Article: https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html

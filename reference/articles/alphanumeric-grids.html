@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alphanumeric grids on LP2-49–51 — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/alphanumeric-grids">Open in wiki</a> · <a href="alphanumeric-grids.txt">Plain text</a></nav><h1>Alphanumeric grids on LP2-49–51</h1><p>Three plant-bordered sheets, 256 two-character entries, and a reproducible count that preserves case and leading zeroes.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#layout">Where the grids appear</a></li><li><a href="#counts">What can be counted directly</a></li><li><a href="#transcription">Preserve the spelling of each entry</a></li><li><a href="#encoding">What an encoding proposal needs to specify</a></li><li><a href="#reproduce">Reproduce the grid dimensions</a></li><li><a href="#sources">Originals and data</a></li></ul></nav></details><p>LP2-49–51 contain rectangular arrays of two-character entries made from decimal digits and Latin letters. They are easy to recognize by the tall, curling plant borders on both sides. These arrays are different from the <a href="magic-squares.html">numerical magic squares</a>: an arrangement in rows and columns does not by itself establish an arithmetic rule.</p>
+<h2 id="layout">Where the grids appear</h2>
+<div class="manuscript-gallery">
+<figure><a href="../lp2-49.html"><img src="../../images/lp2-49.jpg" width="2400" height="3600" alt="LP2-49: three runic rows above an alphanumeric grid, between plant borders." loading="lazy"></a><figcaption><a href="../lp2-49.html">LP2-49</a>: runes above the grid.</figcaption></figure>
+<figure><a href="../lp2-50.html"><img src="../../images/lp2-50.jpg" width="2400" height="3600" alt="LP2-50: thirteen grid rows between plant borders." loading="lazy"></a><figcaption><a href="../lp2-50.html">LP2-50</a>: grid only.</figcaption></figure>
+<figure><a href="../lp2-51.html"><img src="../../images/lp2-51.jpg" width="2400" height="3600" alt="LP2-51: nine grid rows followed by four runic rows." loading="lazy"></a><figcaption><a href="../lp2-51.html">LP2-51</a>: runes below the grid.</figcaption></figure>
+</div>
+<p>The first sheet has three runic rows above its grid, ending in a small red dotted cluster. The middle sheet has no runic rows. The third has four runic rows below the grid. The borders share curling stems, drooping leaves, root-like branches, and groups of filled dots. Compare the originals before treating the ornaments as identical copies.</p>
+<h2 id="counts">What can be counted directly</h2>
+<table><thead><tr><th>Page</th><th>Grid rows</th><th>Entries per row</th><th>Entries</th><th>Runes outside the grid</th></tr></thead><tbody><tr><td>LP2-49</td><td>10</td><td>8</td><td>80</td><td>66</td></tr><tr><td>LP2-50</td><td>13</td><td>8</td><td>104</td><td>0</td></tr><tr><td>LP2-51</td><td>9</td><td>8</td><td>72</td><td>92</td></tr></tbody></table>
+<p>Together, the archived grids contain <code>(10 + 13 + 9) × 8 = 256</code> entries. Each entry contains two characters. The count 256 is therefore a count of entries, not runes, bytes, or distinct values. Calling these bytes would require an explicit decoding rule and a check of its outputs.</p>
+<h2 id="transcription">Preserve the spelling of each entry</h2>
+<p>The first grid row on LP2-49 is <code>3N 3p 2l 36 1b 3v 26 33</code>. Uppercase and lowercase letters both matter to the record: <code>0X</code> and <code>0x</code>, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.</p>
+<p>Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the <a href="../../index.html#/reader/lp2-49">original image</a>. A proposed correction should identify its page, row, column, and image evidence. See the <a href="transliteration.html">transcription guide</a> for the distinction between an image and its text representation.</p>
+<h2 id="encoding">What an encoding proposal needs to specify</h2>
+<p>Reading these entries as positional numbers is a testable proposal. It needs an ordered alphabet, a base, an explanation of letter case, and a reading order across rows and pages. Names such as “base 60” or “base 62” alone do not provide that specification. Different symbol orders assign different values to the same entry.</p>
+<p>For an alphabet of length <code>b</code>, a two-character entry <code>xy</code> would have value <code>b × index(x) + index(y)</code>, using zero-based indices. That equation describes the proposed conversion; it does not show that the manuscript intended it. Keep the surrounding runes and artwork available as context, and distinguish a valid conversion from a demonstrated decipherment.</p>
+<h2 id="reproduce">Reproduce the grid dimensions</h2>
+<p>Run this Python snippet from the repository root. It reads the archived page records, selects rows consisting entirely of hyphen-separated two-character alphanumeric entries, and checks that every selected row has eight entries. It does not choose a numeral base or change character case.</p>
+<pre><code>import json
+import re
+from pathlib import Path
+
+total = 0
+for number in (49, 50, 51):
+    page_id = f"lp2-{number}"
+    page = json.loads(
+        Path(f"data/pages/{page_id}.json").read_text(encoding="utf-8")
+    )
+    rows = [
+        line.removesuffix("/").split("-")
+        for line in page["raw"].splitlines()
+        if re.fullmatch(r"[0-9A-Za-z]{2}(?:-[0-9A-Za-z]{2})+/?", line)
+    ]
+    assert rows and all(len(row) == 8 for row in rows)
+    count = sum(map(len, rows))
+    total += count
+    print(page_id, len(rows), 8, count)
+print("total", total)</code></pre>
+<p>Expected output:</p>
+<pre><code>lp2-49 10 8 80
+lp2-50 13 8 104
+lp2-51 9 8 72
+total 256</code></pre>
+<p>This check reproduces the dimensions of the stored transcription. It does not independently verify every glyph or prove that a particular traversal is intended. If you alter the transcription format, revisit the row-selection expression rather than assuming an unchanged count means an unchanged grid.</p>
+<h2 id="sources">Originals and data</h2>
+<p>The page records for <a href="../lp2-49.html">LP2-49</a>, <a href="../lp2-50.html">LP2-50</a>, and <a href="../lp2-51.html">LP2-51</a> link the original JPEGs, pinned archive sources, and checksums. Their machine-readable records are <a href="../../data/pages/lp2-49.json" download>49 JSON</a>, <a href="../../data/pages/lp2-50.json" download>50 JSON</a>, and <a href="../../data/pages/lp2-51.json" download>51 JSON</a>. Return to the <a href="visual-index.html">illustrated index</a> to compare other manuscript details.</p>
+<h2>Manuscript pages discussed</h2><p><a href="../lp2-49.html">LP2-49</a> · <a href="../lp2-50.html">LP2-50</a> · <a href="../lp2-51.html">LP2-51</a></p><h2>Guides linking here</h2><ul><li><a href="magic-squares.html">Magic squares in the 2014 puzzle</a></li><li><a href="visual-index.html">Illustrated index: artwork and page features</a></li></ul></main></body></html>
