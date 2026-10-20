@@ -152,7 +152,7 @@ script_details = {
  'rune_entropy.py': ('Measure rune frequency entropy', 'rune-entropy', ['Shannon entropy', 'bits per rune']),
  'rune_ngrams.py': ('Locate repeated rune sequences', 'rune-ngrams', ['repeated runes', 'bigrams', 'trigrams', 'ngrams']),
  'plot_rune_frequencies.py': ('Draw the rune frequency chart', 'index-of-coincidence', ['histogram', 'frequency chart']),
- 'reading_concordance.py': ('Find words in known readings', 'reading-concordance', ['phrase search', 'concordance', 'English readings']),
+ 'reading_concordance.py': ('Find words in known readings', 'reading-concordance', ['phrase search', 'concordance', 'English readings', 'literal word search', 'exact page', 'line breaks']),
  'reproduce_reading.py': ('Decode and check known rune readings', 'running-scripts', ['warning', 'welcome', 'Atbash', 'Vigenere', 'koan', 'trace']),
  'reproduce_prime_sums.py': ('Reproduce known-reading prime sums', 'prime-sums', ['Gematria Primus', 'spelling sums', 'emirps']),
  'check_number_examples.py': ('Check prime values and ordinal examples', 'prime-indices', ['3012828529', 'nth prime', 'prime ordinal']),
@@ -298,6 +298,13 @@ Find a word or phrase in the contextual English readings:
   Guide: reference/articles/reading-concordance.txt
   This searches known readings, not unsolved ciphertext or hidden messages.
 
+Locate the exact page of a literal decoded word:
+  python scripts/reading_concordance.py circumference --literal --prefix
+  Guide: reference/articles/reading-concordance.txt (Locate a word on an exact page)
+  Joins archived line wraps and reports page and literal-line locations.
+  Preserve label spelling: DIUINITY and UOICE, rather than DIVINITY and VOICE.
+  JSON output retains the original excerpt and per-page source hashes.
+
 Measure rune frequencies and matching pairs:
   python scripts/rune_ioc.py lp2-31
   python scripts/rune_ioc.py --check
@@ -315,6 +322,14 @@ Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
   Guide: reference/articles/rune-ngrams.txt
   Reports overlapping repeats and source positions under its stated boundaries.
+
+Count equal runes at fixed distances:
+  python scripts/rune_lag_matches.py lp2-31 --max-lag 20
+  Guide: reference/articles/rune-lag-matches.txt
+  Reports a numerator and denominator for every lag, without circular wraparound.
+  A peak does not establish a period or key length. The saved example is in
+  exports/lp2-31-lag-matches.json and exports/lp2-31-lag-matches.csv.
+  The SVG chart is at exports/figures/lp2-31-lag-matches.svg.
 
 Generate a bounded set of shift candidates:
   python scripts/enumerate_shifts.py lp2-31 --output my-shifts.json
@@ -349,6 +364,7 @@ SAVE A RESULT
   python scripts/reading_concordance.py circumference --prefix --json --output circumference.json
   python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
   python scripts/rune_entropy.py lp2-31 --output lp2-31-entropy.json
+  python scripts/rune_lag_matches.py lp2-31 --max-lag 20 --output my-lag-counts.json
 These create UTF-8 files in your current folder and refuse to overwrite existing
 files. For the concordance, --json selects JSON; the filename alone does not.
 Preserve the input hashes and counting rules alongside any interpretation.
