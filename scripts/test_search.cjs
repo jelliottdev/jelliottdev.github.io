@@ -67,7 +67,7 @@ console.log('PASS: visual names, spelling variants, partial aliases, direct page
 // Adding the red clusters previously displaced black-dot pages for "dots".
 for(const [queries,id,section,pages] of [
  [['red dots','red closing mark'],'dots','red-clusters',['lp2-22','lp2-32','lp2-55']],
- [['reclining figure'],'mobius','closing-page',['lp2-22']],
+ [['reclining figure','reclining figures','lying human figure','lying man','laying man'],'reclining-figure','pages',['lp1-14','lp1-15','lp1-16','lp2-22']],
  [['blurry tree'],'branches','tree-comparison',['lp2-32']],
  [['faint tree'],'branches','tree-comparison',['lp2-55']],
  [['dots below hash','hash page dots'],'dots','hash-page-dots',['lp2-56']],
