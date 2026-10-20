@@ -8,7 +8,7 @@ from pathlib import Path
 def prime(n):
     return n >= 2 and all(n % d for d in range(2, isqrt(n) + 1))
 
-def main():
+def report(root=Path(__file__).resolve().parents[1]):
     primes = [n for n in range(2, 100000) if prime(n)]
     square = [[272,138,341,131,151], [366,199,130,320,18],
               [226,245,91,245,226], [18,320,130,199,366],
@@ -19,7 +19,6 @@ def main():
               sum(square[i][4-i] for i in range(5))]
     assert set(lines) == {1033}
     # Read the printed decimal rows from the shipped transcription, not rune values.
-    root = Path(__file__).resolve().parents[1]
     mixed_bytes = (root / "data/pages/lp1-05.json").read_bytes()
     mixed_record = json.loads(mixed_bytes)
     alphabet_bytes = (root / "data/index.json").read_bytes()
@@ -94,7 +93,7 @@ def main():
     digit_primes = primes[:len(product_digits)]
     digit_sums = [digit + value for digit, value in zip(product_digits, digit_primes)]
     assert digit_sums == [5, 3, 6, 9, 19, 15, 25, 24, 25, 38]
-    print(json.dumps({
+    return {
         "prime_index_convention": "one-based: p_1 = 2",
         "p_3299": primes[3298], "p_9467": primes[9466],
         "prime_value_to_one_based_position": positions,
@@ -145,7 +144,10 @@ def main():
             "normal": sorted(value for row in printed for value in row) == list(range(1, 26)),
         },
         "scope": "Prime lookups and product-digit arithmetic, LP1-05 rune-value conversion, printed LP1-16 panel, and LP2-15 differences from 3301; no new decryption claim."
-    }, indent=2))
+    }
+
+def main():
+    print(json.dumps(report(), indent=2))
 
 if __name__ == "__main__":
     main()

@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from build_articles import manuscript_reference_html, guide_discovery_index
 from rune_ioc import csv_report
 from export_alphanumeric_grids import report as grid_report, csv_report as grid_csv
+from check_number_examples import report as number_report
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -175,6 +176,22 @@ sum_writer.writeheader();sum_writer.writerows(sum_records)
 save('exports/known-reading-page-sums.csv',sum_csv.getvalue())
 register('exports/known-reading-page-sums.csv','Known-reading page-sum comparison')
 files[-1].update(title='Archived and decoded page sums (CSV)',guide='prime-sums',aliases=['prime sums','prime sum comparison','ciphertext sums','plaintext sums','known reading totals','spreadsheet'])
+panel_data = number_report(root)['lp2_15']
+panel_csv = io.StringIO(newline='')
+panel_fields = ['page','row','column','printed_value','difference_from_3301','difference_is_prime','source_path','source_sha256','image_sha256','rule']
+panel_writer = csv.DictWriter(panel_csv,fieldnames=panel_fields,lineterminator='\n')
+panel_writer.writeheader()
+for row_number,row_values in enumerate(panel_data['matrix'],1):
+ for column_number,value in enumerate(row_values,1):
+  panel_writer.writerow(dict(page='lp2-15',row=row_number,column=column_number,printed_value=value,
+   difference_from_3301=panel_data['differences_from_3301'][row_number-1][column_number-1],
+   difference_is_prime=str(panel_data['difference_is_prime'][row_number-1][column_number-1]).lower(),
+   source_path=panel_data['source'],source_sha256=panel_data['source_sha256'],image_sha256=panel_data['image_sha256'],rule=panel_data['difference_rule']))
+for extension,content in [('json',json.dumps(panel_data,indent=2)+'\n'),('csv',panel_csv.getvalue())]:
+ path='exports/lp2-15-differences.'+extension
+ save(path,content)
+ register(path,'Number panel arithmetic')
+ files[-1].update(title='LP2-15 printed values and differences ('+extension.upper()+')',guide='lp2-15-panel',aliases=['3301 minus panel','LP2-15 differences','fourteen prime differences'])
 grid_data = grid_report(root)
 for extension, content in [('json', json.dumps(grid_data,ensure_ascii=False,indent=2)+'\n'), ('csv', grid_csv(grid_data))]:
  path = 'exports/alphanumeric-grids.'+extension
@@ -355,7 +372,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.add('Topic discovery index')
- if name=='reference-data':roles.update({'Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')

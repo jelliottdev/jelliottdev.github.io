@@ -132,6 +132,23 @@ def main():
             assert result["source_sha256"] == hashlib.sha256(
                 (target / f"data/pages/{page}.json").read_bytes()).hexdigest()
         print("PASS: both manuscript squares and all five unequal-token pairs reproduce from current bundled inputs")
+        panel = numbers["lp2_15"]
+        assert json.loads((target / "exports/lp2-15-differences.json").read_text(encoding="utf-8")) == panel
+        import csv
+        with (target / "exports/lp2-15-differences.csv").open(encoding="utf-8", newline="") as handle:
+            panel_rows = list(csv.DictReader(handle))
+        assert len(panel_rows) == 16
+        assert sum(row["difference_is_prime"] == "true" for row in panel_rows) == 14
+        for position, row in enumerate(panel_rows):
+            r, c = divmod(position, 4)
+            assert (int(row["row"]), int(row["column"])) == (r + 1, c + 1)
+            assert int(row["printed_value"]) == panel["matrix"][r][c]
+            assert int(row["difference_from_3301"]) == 3301 - int(row["printed_value"])
+            assert row["difference_is_prime"] == str(panel["difference_is_prime"][r][c]).lower()
+            assert row["source_sha256"] == hashlib.sha256((target / row["source_path"]).read_bytes()).hexdigest()
+        assert panel_rows[12]["difference_from_3301"] == "-1215"
+        assert panel_rows[13]["difference_from_3301"] == "2095"
+        print("PASS: all sixteen LP2-15 export rows preserve printed values, derived values, prime checks and provenance")
         csv_result = subprocess.check_output(
             [sys.executable, "scripts/rune_ioc.py", "--format", "csv"], cwd=target)
         assert csv_result.decode("utf-8").replace("\r\n", "\n") == (target / "exports/rune-ioc.csv").read_text(encoding="utf-8")
