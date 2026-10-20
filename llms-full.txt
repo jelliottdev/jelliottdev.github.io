@@ -5903,6 +5903,20 @@ Keep a proposed explanation separate. This difference does not yet tell you whet
 
 You have now made a small claim another reader can check. The grid transcription guide explains ambiguous characters and leading zeroes; its coordinate exports let you check the same positions in structured data. If you disagree with a glyph, preserve the original transcription and document the proposed correction with the image location.
 
+Find the page behind a quotation
+
+Suppose you remember the phrase “circumference practices” and want to cite it. A complete reading can cover several sheets, so finding the section is only the first step.
+
+
+Search for "circumference practices", including the quotation marks. LP1-10 is the literal-reading match. Other sheets can appear because their records include the same complete section text.
+
+Open LP1-10’s known reading. The word crosses its first two literal lines: CIRCU/ then MFERENCE. Compare the page’s original image when checking the underlying runes.
+
+Keep the location with your note: “LP1-10, literal reading, lines 1–2; word joined across the line break.” A statement about what the circumference means is your interpretation and needs its own explanation.
+
+
+With Python, repeat the lookup using python scripts/reading_concordance.py "circumference practices" --literal. Add --json to retain the exact excerpt, character offsets, and page-record checksum. The concordance guide explains those fields and why character positions are not rune indices. This exercise works with a known reading; it does not search for English words inside unsolved ciphertext.
+
 Ready to contribute
 You should be able to identify an exact image, distinguish raw from corrected transcription, reproduce a known reading, and explain what would count against your hypothesis. You do not need to understand every cipher before inspecting a well-defined detail.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
@@ -5984,6 +5998,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#transcription
 - coordinate exports
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#downloads
+- "circumference practices"
+  https://jelliottdev.github.io/#/search/%22circumference%20practices%22
+- LP1-10’s known reading
+  https://jelliottdev.github.io/reference/lp1-10.html
+- concordance guide
+  https://jelliottdev.github.io/reference/articles/reading-concordance.html#literal
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
@@ -14459,7 +14479,7 @@ Article: https://jelliottdev.github.io/reference/articles/consumption-preservati
 
 Search the known readings: a concordance
 
-Find words and phrases across nine contextual readings, with reproducible counts, surrounding text, and source hashes.
+Find words and phrases in contextual sections or on exact decoded pages, with original excerpts, line locations, and source hashes.
 
 A concordance locates a word or phrase and shows its surrounding text. By default, this tool searches the nine contextual known-reading sections in Liberpedia. Use --literal to locate decoded labels on individual manuscript pages. Both modes help compare recurring terms without relying on memory or repeatedly opening every section.
 
