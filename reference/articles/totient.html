@@ -1,6 +1,18 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Euler’s totient and prime-minus-one — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/totient">Open in wiki</a> · <a href="totient.txt">Plain text</a></nav><h1>Euler’s totient and prime-minus-one</h1><p>Why φ(p) equals p − 1 for primes, and what that means for LP2-56.</p><p>Euler’s totient function, written φ(n), counts the integers from 1 through n that are relatively prime to n. Two integers are relatively prime when their greatest common divisor is 1. “Relatively prime” does not mean that both integers are themselves prime.</p>
 <h2 id="examples">Small examples</h2><p>For n = 8, the qualifying integers are 1, 3, 5, and 7, so φ(8) = 4. For a prime p, every integer from 1 through p − 1 is relatively prime to p. Therefore φ(p) = p − 1. In particular, φ(2), φ(3), φ(5), φ(7) are 1, 2, 4, 6.</p>
+<div class="table-wrap"><table><thead><tr><th>n</th><th>Integers counted</th><th>φ(n)</th><th>n − 1</th></tr></thead><tbody>
+<tr><td>8</td><td>1, 3, 5, 7</td><td>4</td><td>7</td></tr>
+<tr><td>9</td><td>1, 2, 4, 5, 7, 8</td><td>6</td><td>8</td></tr>
+<tr><td>11</td><td>1 through 10</td><td>10</td><td>10</td></tr>
+</tbody></table></div>
+<p>The 9 row demonstrates the meaning of “relatively prime”: 4 and 8 are composite, but both are counted because neither shares a divisor greater than one with 9. The numbers 3, 6, and 9 are excluded because they share the factor 3. The function counts a relationship to n, not how many primes occur below n.</p>
+<p>For prime p, the only positive divisors are 1 and p. An integer k between 1 and p − 1 cannot share the divisor p, so its greatest common divisor with p must be 1. There are exactly p − 1 such integers. This proves the identity used by the LP2-56 method without needing a table of precomputed totients.</p>
 <h2 id="lp2">Why the LP2-56 method has two names</h2><p>The archived walkthrough describes <a href="../lp2-56.html">LP2-56</a> using “phi(prime).” The <a href="prime-minus-one.html">prime-minus-one guide</a> uses the equivalent expression p − 1. These are the same shifts when the input sequence consists of primes. Substituting φ(n) for consecutive integers n would produce a different sequence.</p>
+<div class="table-wrap"><table><thead><tr><th>Sequence used as input</th><th>Inputs</th><th>Totients</th></tr></thead><tbody>
+<tr><td>Consecutive primes</td><td>2, 3, 5, 7, 11</td><td>1, 2, 4, 6, 10</td></tr>
+<tr><td>Consecutive integers starting at 2</td><td>2, 3, 4, 5, 6</td><td>1, 2, 2, 4, 2</td></tr>
+</tbody></table></div>
+<p>The first two shifts agree, but the third already differs. “Use totients” therefore leaves an essential question unanswered: totients of which input sequence? It also differs from the <a href="prime-indices.html">prime-counting function</a>, which counts how many primes are at most a given number.</p>
 <h2 id="replicate">How to reproduce the identity</h2><pre><code>from math import gcd
 def phi(n):
     return sum(gcd(k, n) == 1 for k in range(1, n + 1))

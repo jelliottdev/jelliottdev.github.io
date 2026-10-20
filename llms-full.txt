@@ -5824,12 +5824,52 @@ Prime-minus-one decoding
 
 Reproduce LP2-56 with a prime sequence and one recorded interruption.
 
+The known LP2-56 reading uses a changing shift based on consecutive primes. The shift comes from a separate sequence, not from the identity of the rune being decoded. Following the first few positions makes that distinction concrete.
+
 The transformation
 Take prime[j] from 2, 3, 5, 7, 11, … and compute p = (c − (prime[j] − 1)) mod 29. The first shifts are 1, 2, 4, 6, 10, …. This is not the prime value assigned to the ciphertext rune.
 At j = 0, index 0 becomes 28; at j = 1, index 0 would become 27. These are arithmetic examples, not assertions about the page’s first two runes.
 
 The historical name φ(prime), or Euler’s totient of a prime, gives exactly these shifts.
+
+The first four runes of LP2-56
+
+	Rune position	Input index	Prime	Subtract	Output
+
+	0	25	2	1	24 → A
+
+	1	11	3	2	9 → N
+
+	2	22	5	4	18 → E
+
+	3	15	7	6	9 → N
+
+
+Positions start at zero. The first calculation is (25 − (2 − 1)) mod 29 = 24. These four labels begin the literal reading; they are not a four-letter word chosen in isolation. The complete reading supplies the surrounding text and exact output.
+
+Later shifts exceed 28. For example, at rune position 54, the script subtracts 256 from index 21. The result −235 has residue 26 modulo 29, giving Y. Equivalently, reduce 256 to 24 first and calculate (21 − 24) mod 29 = 26. The modular-arithmetic guide explains this wraparound.
+
+What happens at the copied F?
+
+The recorded control copies zero-based rune position 56, an F with index 0, and does not advance the prime sequence there. The surrounding trace is:
+
+	Rune position	Input index	Applied shift	Output index / label
+
+	55	4	262	3 / O
+
+	56	0	None: copied	0 / F
+
+	57	25	268	18 / E
+
+	58	10	270	1 / U
+
+
+The shift after 262 is 268, from the next prime 269. Copying the F leaves that next shift available for rune position 57. Applying a zero shift to F while still consuming the next prime would produce the same F at position 56 but change every later alignment. The output at the interruption alone cannot distinguish the two rules.
+
+This interruption position is a parameter of the published reproduction control, recorded through alignment with the archived known reading. It is not inferred automatically by this script and is not a rule to copy every F on an unsolved page. See keystream positions and interruptions.
+
 How to replicate LP2-56
+Use Python 3 from the repository or extracted reference-data ZIP. No additional package or AI service is needed.
 python scripts/reproduce_reading.py lp2-56
 python scripts/reproduce_reading.py lp2-56 --trace
 Start at prime 2. Copy zero-based rune ordinal 56 without advancing the prime sequence. Preserve punctuation. Compare with the literal reading.
@@ -5837,12 +5877,18 @@ Start at prime 2. Copy zero-based rune ordinal 56 without advancing the prime se
 The hash reference
 The decoded text refers to a page identified by a long hash. Reproducing that text is not the same as locating the referenced page. See the exact hash target and its unresolved input conventions.
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+Exact control parameters and interruption provenance · Reproduction script · Pinned historical walkthrough. The trace rows above were checked on 20 October 2026. Recipes reproduce published controls; they are not new solutions.
 
 Sources, related references, and files
 https://jelliottdev.github.io/reference/articles/totient.html
+https://jelliottdev.github.io/reference/articles/reading-lp2-56.html
+https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/lp2-56.html
 https://jelliottdev.github.io/reference/articles/lp2-56-target.html
+https://jelliottdev.github.io/data/evidence/reading-methods.json
+https://jelliottdev.github.io/scripts/reproduce_reading.py
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
 Article: https://jelliottdev.github.io/reference/articles/prime-minus-one.html
@@ -5859,8 +5905,30 @@ Euler’s totient function, written φ(n), counts the integers from 1 through n 
 Small examples
 For n = 8, the qualifying integers are 1, 3, 5, and 7, so φ(8) = 4. For a prime p, every integer from 1 through p − 1 is relatively prime to p. Therefore φ(p) = p − 1. In particular, φ(2), φ(3), φ(5), φ(7) are 1, 2, 4, 6.
 
+	n	Integers counted	φ(n)	n − 1
+
+	8	1, 3, 5, 7	4	7
+
+	9	1, 2, 4, 5, 7, 8	6	8
+
+	11	1 through 10	10	10
+
+
+The 9 row demonstrates the meaning of “relatively prime”: 4 and 8 are composite, but both are counted because neither shares a divisor greater than one with 9. The numbers 3, 6, and 9 are excluded because they share the factor 3. The function counts a relationship to n, not how many primes occur below n.
+
+For prime p, the only positive divisors are 1 and p. An integer k between 1 and p − 1 cannot share the divisor p, so its greatest common divisor with p must be 1. There are exactly p − 1 such integers. This proves the identity used by the LP2-56 method without needing a table of precomputed totients.
+
 Why the LP2-56 method has two names
 The archived walkthrough describes LP2-56 using “phi(prime).” The prime-minus-one guide uses the equivalent expression p − 1. These are the same shifts when the input sequence consists of primes. Substituting φ(n) for consecutive integers n would produce a different sequence.
+
+	Sequence used as input	Inputs	Totients
+
+	Consecutive primes	2, 3, 5, 7, 11	1, 2, 4, 6, 10
+
+	Consecutive integers starting at 2	2, 3, 4, 5, 6	1, 2, 2, 4, 2
+
+
+The first two shifts agree, but the third already differs. “Use totients” therefore leaves an essential question unanswered: totients of which input sequence? It also differs from the prime-counting function, which counts how many primes are at most a given number.
 
 How to reproduce the identity
 from math import gcd
@@ -5879,6 +5947,7 @@ Pinned LP2-56 walkthrough · Exact reproduction parameters.
 Sources, related references, and files
 https://jelliottdev.github.io/reference/lp2-56.html
 https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/reference/articles/prime-indices.html
 https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 https://jelliottdev.github.io/reference/articles/interruptions.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#73jpg---56jpg
