@@ -10390,6 +10390,11 @@ The LP1-05 opposite-cell comparison gives concrete equal-sum examples: SHADOWS a
 Testing row sums against a comparison
 The archived-row prime-sum experiment tests one global count across LP2-00–55. It finds 76 prime sums among 594 eligible rows; 843 of 999 shuffled datasets have at least as many (corrected one-sided p = 0.844). It does not support an excess under that model. Individual rows, emirps, other boundaries and decoded text are outside the test.
 
+
+The 2016–2017 message calculation
+
+The later-message worked example reproduces the original 59-rune group sums, then separately applies the proposed terminal-F move. It includes the exact word encodings and Fibonacci subtraction from prime indices, so the adjustment and its limits remain visible.
+
 Sources, related references, and files
 - spelling reference
   https://jelliottdev.github.io/#/spelling
@@ -10449,6 +10454,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/magic-squares.html#sum-collisions
 - archived-row prime-sum experiment
   https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums
+- later-message worked example
+  https://jelliottdev.github.io/reference/articles/later-messages.html#prime-sums
 
 Article: https://jelliottdev.github.io/reference/articles/prime-sums.html
 
@@ -19240,7 +19247,67 @@ The Welcome’s pilgrimage concerns inward change, loss of certainty and emergen
 
 For example, a map could motivate a route transposition, a coordinate lookup, a graph walk or a relation between passages. Those are different procedures. A useful proposal names its input arrangement, starting point, movement rule, stopping condition and output rule before checking the resulting text. The compass-proposal guide shows why a suggestive alignment alone does not determine a substitution.
 
-Numerical structure and thematic meaning are not mutually exclusive. Even if a sentence meets a chosen prime-sum constraint, that arithmetic alone does not prove the author could not also choose its theme. Conversely, thematic coherence does not demonstrate a numerical pattern. To assess a proposed 2016–2017 sum sequence, retain the exact message text and specify rune segmentation, punctuation handling, sentence boundaries and the recurrence. This page has not reproduced that sum claim. See spelling and prime sums for the distinction between a reproducible calculation and an account of how wording was composed.
+Numerical structure and thematic meaning are not mutually exclusive. Even if a sentence meets a chosen prime-sum constraint, that arithmetic alone does not prove the author could not also choose its theme. Conversely, thematic coherence does not demonstrate a numerical pattern. To assess a proposed 2016–2017 sum sequence, retain the exact message text and specify rune segmentation, punctuation handling, sentence boundaries and the recurrence. The conditional arithmetic is reproduced below; its normalization and terminal-F adjustment are part of the result. See spelling and prime sums for the distinction between a reproducible calculation and an account of how wording was composed.
+
+Reproducing the proposed prime-sum sequence
+
+The February 2024 presentation of the finding explicitly moves the last F of the 2016 message to its beginning. That adjustment matters. The following recount starts with the signed source bodies, preserves the unadjusted results, and then shows exactly what the move changes.
+
+Which text and encoding are counted?
+
+Extract runs of ASCII letters from the signed body, uppercase them and replace V with U. Use the stored alphabet aliases, including K/C, Z/S, ING/NG and IO/IA. Within each letter run, enumerate legal rune encodings and choose the one using the fewest runes. Every actual word in these messages has a unique shortest encoding under this rule. This is a declared transliteration convention, not a recovered instruction in the signature.
+
+Digits and punctuation do not contribute. The letters A and F in the key identifier 7A35090F do contribute, with prime values 97 and 2. Thus “count the message” means neither count every printed character nor discard the entire key identifier. Removing the identifier entirely would reduce each message total by 99.
+
+For 2016, split at periods: group the first three sentences, then the fourth sentence, then everything remaining in the body. The middle group is the sentence relating words, meaning and numbers to navigation. The final group includes the closing instructions, sign-off and verification line. The groups are not simply the file’s three physical paragraphs.
+
+	Group	Original runes	Original sum	After moving F
+	2016: first three sentences	59	2999	60 runes; 3001
+	2016: fourth sentence	59	2819	59 runes; 2819
+	2016: remaining body	59	2581	58 runes; 2579
+	2017: full body	45	2131	Unchanged
+
+The F is the terminal letter of the key identifier, not an arbitrary F chosen from the prose. Its prime value is 2: moving it adds 2 to the first group and subtracts 2 from the last. The total remains 8399. The three equal rune counts describe the unadjusted grouping; they do not remain equal after the move.
+
+How the recurrence reaches those sums
+
+Start at prime ordinal 464, whose prime is 3301. Subtract Fibonacci values 0, 1, 1, 2, 3, … cumulatively from the ordinal, and look up the prime at each resulting ordinal. This is subtraction from the prime index, not subtraction from the prime value.
+
+	Subtract	Prime index	Prime	Message comparison
+
+	0	464	3301	—
+
+	1	463	3299	—
+
+	1	462	3271	—
+
+	2	460	3257	—
+
+	3	457	3229	—
+
+	5	452	3191	—
+
+	8	444	3119	—
+
+	13	431	3001	2016 first group, plus F
+
+	21	410	2819	2016 middle group
+
+	34	376	2579	2016 last group, minus F
+
+	55	321	2131	2017 body
+
+
+This reproduces the four numerical equalities under the stated rules. The unedited first and third 2016 sums are not those recurrence terms. The 2017 total matches the next listed term, but a later match is not automatically a prediction: establishing a prospective prediction would require a dated record fixing the rule before that message appeared. The linked 2024 presentation does not establish that chronology.
+
+The calculation also leaves interpretation open. It does not identify a keystream, reset schedule, page order or decoding operator for unsolved Liber Primus. A fixed numerical relation can be reproduced without proving its chance probability, authorial intent or usefulness as a cipher key.
+
+Inspect every encoding and recompute
+
+python scripts/later_message_sums.py --check
+
+The reference-data ZIP includes the reproduction script and complete word-by-word ledger. Python’s standard library is sufficient. The ledger retains source text, all legal encodings, the selected shortest encoding, per-word sums, group totals and every recurrence step. The script checks source message hashes; a separate greedy token walk checks the selected encodings on these actual words, and an independent sieve checks the prime list. These cross-checks concern the implementation, not an independent reading of the intended normalization.
+
 
 Files and reproduction
 
@@ -19276,6 +19343,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
 - spelling and prime sums
   https://jelliottdev.github.io/reference/articles/prime-sums.html
+- February 2024 presentation of the finding
+  https://www.reddit.com/r/cicada/comments/1ayybpp/
+- reproduction script
+  https://jelliottdev.github.io/scripts/later_message_sums.py
+- complete word-by-word ledger
+  https://jelliottdev.github.io/exports/later-message-sums.json
 - 2016 extracted message
   https://jelliottdev.github.io/exports/steganography/message-2016.outguess.bin
 - 2017 armored message
