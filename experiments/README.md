@@ -77,3 +77,9 @@ Standalone Markdown images may reference declared local SVG, PNG, JPG, or WebP o
 ## Source-file scopes
 
 Experiments on historical clues or editions need not invent a manuscript page association. Set `scope.pages` to an empty list and list exact source paths in `scope.artifacts`; every artifact must also be a declared hashed input. At least one page or artifact is required. State explicitly whether the record is a known-result control or an unsolved-page test. Source-file matches do not establish that the method was tried on any manuscript page.
+
+## Updating metadata-bound inputs
+
+A checksum can be repeated in a record, a plan's input list, and a saved report's `plan_sha256`. Updating the record alone leaves a bundle that verifies its files but cannot reproduce its calculation. After an input changes, inspect the actual difference, update dependent plans, and rerun the affected producer and checker. If the change is provenance-only, compare every result field and confirm that only the plan digest changed; do not infer that from the input's filename or from a passing file manifest.
+
+Run `python scripts/test_experiment_bundles.py` after rebuilding downloads. It checks declared bundle files, plan input hashes and saved plan digests, then runs selected producers and checkers from isolated extractions. It does not rerun every experiment or establish the correctness of every hypothesis. Image prerequisites remain separate from the small experiment ZIPs.

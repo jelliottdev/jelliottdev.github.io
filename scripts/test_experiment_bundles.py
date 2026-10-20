@@ -1,4 +1,5 @@
 """Check every experiment archive and rerun representative scripts in isolation."""
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -23,7 +24,13 @@ def main():
                 for name in archive.namelist():
                     assert (target / name).resolve().is_relative_to(target.resolve()), name
                 archive.extractall(target)
+            instructions = (target / f"START-HERE-{experiment_id}.txt").read_text(encoding="utf-8")
+            for field in ("question", "finding", "limitations", "outcome"):
+                assert record[field] in instructions, (experiment_id, field)
+            assert record["reproduction"]["command"] in instructions
+            assert "Python 3.9 or later" in instructions
             manifest = target / f"EXPERIMENT-{experiment_id}-CONTENTS.json"
+            assert f"python scripts/verify_bundle.py {manifest.name}" in instructions
             checked, problems = verify(manifest)
             assert checked and not problems, (experiment_id, problems)
             members = {item["path"]: item for item in json.loads(manifest.read_text())}
@@ -37,14 +44,25 @@ def main():
             assert all(name.startswith("images/") for name in images)
             assert not set(members) & set(images)
             assert (target / f"experiments/records/{experiment_id}/record.json").is_file()
-            if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-trigram-repeats"):
+            plan_file = target / f"experiments/records/{experiment_id}/plan.json"
+            if plan_file.exists():
+                plan = json.loads(plan_file.read_text(encoding="utf-8"))
+                results_file = plan_file.with_name("results.json")
+                if results_file.exists():
+                    result_record = json.loads(results_file.read_text(encoding="utf-8"))
+                    if "plan_sha256" in result_record:
+                        assert result_record["plan_sha256"] == hashlib.sha256(plan_file.read_bytes()).hexdigest(), experiment_id
+                for dependency in plan.get("inputs", []):
+                    data = (target / dependency["path"]).read_bytes()
+                    assert hashlib.sha256(data).hexdigest() == dependency["sha256"], (experiment_id, dependency["path"])
+            if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-fibonacci-openings", "lp2-totient-openings", "lp2-trigram-repeats"):
                 for script, args in (("run.py", ["--check"]), ("check.py", [])):
                     result = subprocess.run(
                         [sys.executable, str(target / f"experiments/records/{experiment_id}/{script}"), *args],
                         cwd=target, capture_output=True, text=True, encoding="utf-8", timeout=60)
-                    assert result.returncode == 0, result.stdout + result.stderr
+                    assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
         print(f"PASS: all {len(records)} experiment bundles preserve declared files and hashes; "
-              "segment-order, ordinary-prime and trigram runners/checkers pass in isolated extractions.")
+              "segment-order, ordinary-prime, Fibonacci, totient and trigram runners/checkers pass in isolated extractions.")
 
 
 if __name__ == "__main__":

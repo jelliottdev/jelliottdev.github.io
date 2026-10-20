@@ -32,9 +32,19 @@ def build(root, record):
     manifest = f"EXPERIMENT-{experiment_id}-CONTENTS.json"
     instructions = (
         f"{record['title']}\n\n"
+        f"Experiment: {experiment_id}\n"
+        f"Published account: https://jelliottdev.github.io/#/experiments/{experiment_id}\n\n"
+        f"Question:\n{record['question']}\n\n"
+        f"Reported outcome: {record['outcome']}\n"
+        f"Finding:\n{record['finding']}\n\n"
+        f"Limits:\n{record['limitations']}\n\n"
+        f"Review:\n{record['review']['reviewer']}\n"
+        f"Recorded retest date: {record['review']['retested_on']}\n\n"
         "Extract this ZIP with its folders intact. Run commands from the extracted folder.\n"
         "This archive contains the published record, account, scripts, declared non-image\n"
         "inputs, and recorded results. It is not an executable installer or a whole website.\n\n"
+        "The bundled file verifier requires Python 3.9 or later. Individual experiments\n"
+        "may have further requirements listed below.\n\n"
         f"Verify the files:\n  python scripts/verify_bundle.py {manifest}\n\n"
         f"Environment and external prerequisites:\n{record['reproduction']['environment']}\n\n"
     )
@@ -53,7 +63,11 @@ def build(root, record):
         f"Read the complete account in {record['article_path']} before running.\n"
         "A successful reproduction checks the published calculation; it does not\n"
         "automatically support the hypothesis. Keep findings and limitations together.\n"
-        "External tools and Python packages are not installed or bundled.\n"
+        "External tools and Python packages are not installed or bundled.\n\n"
+        "If verification fails, retain the error and compare against a fresh extraction.\n"
+        "Do not overwrite the expected results to turn a mismatch into a pass.\n"
+        "Record your Python version, full command, terminal output and any changed inputs.\n"
+        "A missing dependency or abnormal exit is not a negative result for the hypothesis.\n"
     )
     members[f"START-HERE-{experiment_id}.txt"] = instructions.encode("utf-8")
     contents = [{"path": name, "bytes": len(data),
