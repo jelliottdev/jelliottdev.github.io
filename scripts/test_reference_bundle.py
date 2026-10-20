@@ -61,6 +61,37 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        # A self-consistent ZIP can still contain an older script or page record.
+        # The square guide now promises both manuscript calculations and token pairs.
+        for path in ["scripts/check_number_examples.py", "data/pages/lp1-05.json",
+                     "data/pages/lp1-16.json", "data/index.json"]:
+            # Git may check text out with LF or CRLF; compare decoded text here.
+            # The bundle manifest and reported source hashes still check exact bytes.
+            assert (target / path).read_text(encoding="utf-8") == (ROOT / path).read_text(encoding="utf-8"), path
+        numbers = json.loads(subprocess.check_output(
+            [sys.executable, "scripts/check_number_examples.py"], cwd=target))
+        mixed = numbers["lp1_05"]
+        assert mixed["line_sums"] == [1033] * 12
+        assert mixed["printed_tokens_half_turn_symmetric"] is False
+        assert mixed["converted_values_half_turn_symmetric"] is True
+        differing = [pair for pair in mixed["half_turn_pairs"]
+                     if not pair["same_printed_token"]]
+        assert len(mixed["half_turn_pairs"]) == 12 and len(differing) == 5
+        assert [(pair["labels"], pair["values"]) for pair in differing] == [
+            (["SHADOWS", "CABAL"], [341, 341]),
+            (["BUFFERS", "MOURNFUL"], [199, 199]),
+            (["CARNAL", "ANALOG"], [320, 320]),
+            (["226", "MOBIUS"], [226, 226]),
+            (["OBSCURA", "245"], [245, 245]),
+        ]
+        printed = numbers["lp1_16"]
+        assert printed["row_sums"] + printed["column_sums"] + printed["diagonal_sums"] == [3301] * 12
+        assert printed["total"] == 16505
+        assert printed["half_turn_symmetric"] is True and printed["normal"] is False
+        for page, result in [("lp1-05", mixed), ("lp1-16", printed)]:
+            assert result["source_sha256"] == hashlib.sha256(
+                (target / f"data/pages/{page}.json").read_bytes()).hexdigest()
+        print("PASS: both manuscript squares and all five unequal-token pairs reproduce from current bundled inputs")
         csv_result = subprocess.check_output(
             [sys.executable, "scripts/rune_ioc.py", "--format", "csv"], cwd=target)
         assert csv_result.decode("utf-8").replace("\r\n", "\n") == (target / "exports/rune-ioc.csv").read_text(encoding="utf-8")
