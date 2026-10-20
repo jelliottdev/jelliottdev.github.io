@@ -1,6 +1,6 @@
 # Editorial scope
 
-The manuscript reference remains evidence-based. A separate experiment registry accepts newly written, retested and human-reviewed records; it starts empty. Never import earlier runs as completed records without that process.
+The manuscript reference remains evidence-based. The separate experiment registry accepts newly written, retested records whose claims have been reviewed within their stated scope. Follow `experiments/README.md`: computational review must identify the agent and mark human review as pending. Never describe it as independent human review. Publication makes a bounded result available; it does not endorse a proposed decipherment. Never import earlier runs as completed records without a fresh reproduction and claim review.
 
 - Preserve original images and their SHA-256 checksums.
 - Distinguish archived transcriptions, documented corrections, known readings, and visual measurements.
@@ -62,6 +62,8 @@ Primary journey: page index or search → page record → source image and trans
 
 # Validation
 
-Check 75 image hashes, record cardinality, page links, desktop/mobile overflow, search, filters, transcription modes, image controls, invalid routes, and absence of experimental records before publication.
+For changes to original assets, importers or page-record generation, check the relevant image hashes, record cardinality and page links. For interface changes, check the affected desktop/mobile routes, search, filters, transcription modes, image controls and invalid-route behavior. Scale checks to the change; a prose update does not require rerunning unrelated experiments or hosted inference.
+
+Published experiments must pass the record builder's field and hash checks and the documented reproduction checks. Draft records must stay out of the public experiment search index. Keep experiment findings distinct from established manuscript readings. Review the declared dependencies and verify the downloadable bundle in isolation when a script or its dependencies change. See `experiments/README.md` for the full publication workflow and `docs/KNOWLEDGE-GAPS.md` for the evidence coverage review.
 
 For guide or topic-index links, run `python scripts/check_article_links.py`. It checks guide destinations and section anchors, manuscript IDs, local files, and duplicate topic IDs across the authored and generated reading guides. The check does not fetch external URLs or validate other application routes. Use `python scripts/test_article_links.py` when changing the checker itself. Both commands also run in the repository validation workflow.

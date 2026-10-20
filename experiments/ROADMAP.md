@@ -2,6 +2,8 @@
 
 Internal work queue. This is not a published result or a combined reader-facing article. Each approach needs its own bounded experiment page; group variations within the relevant family. Do not make ten empty placeholders or present plans as tests.
 
+For the current cross-topic coverage review and unresolved evidence gaps, see [Knowledge gaps](../docs/KNOWLEDGE-GAPS.md). The entries below retain the exact scope of earlier results; a completed narrow baseline does not close its entire research topic.
+
 Emirp row-sum variant: same 594 rows, 999 shuffles and seed as the prime baseline. Require a distinct prime decimal reversal. Observed 41; 539 exceedances; upper-tail p=0.540. All baseline prime-count vectors reproduce. Separate result page, shared family; no independent-evidence or individual-intent claim.
 
 Exact-repeat baseline: length-three overlapping windows on LP2-00–55; sum within-page matching-start pairs. Observed 55, with 798/999 whole-page fixed-count shuffle totals at least that large; upper-tail p=0.799. Standalone record includes positions, page CSV and histogram. No alternative lengths, between-page comparisons or per-page significance tested. Prior descriptive LP2-31 result disclosed.

@@ -27,7 +27,7 @@ Page details also expose related topics, neighboring pages at the top and bottom
 
 `data/topics.json` is an editorial index of supported facts and the questions they answer. Update it deliberately when adding researched evidence. The archive importer regenerates records and search metadata but does not overwrite this editorial index. Every new topic needs source links and a statement of its evidence scope.
 
-Never promote a provisional geometry proposal, decoded guess, or literature resemblance into an established observation. Current detailed visual coverage remains LP2-00 through LP2-02 and selected LP2-15 regions. This navigation work does not make those inventories exhaustive.
+Never promote a provisional geometry proposal, decoded guess, or literature resemblance into an established observation. The initial visual inventory covered LP2-00 through LP2-02 and selected LP2-15 regions; later coverage is recorded in `data/evidence/editorial-page-notes.json` and linked guides. Inspect those current records rather than treating this initial inventory as a coverage limit. The presence of a page record or an observation does not make its inventory exhaustive.
 
 ## Validation
 
@@ -38,4 +38,4 @@ Never promote a provisional geometry proposal, decoded guess, or literature rese
 - All 17 literal known readings independently reproduced using the exposed parameter records and the separately documented LP1-10 correction.
 - Original 75 image checksums verified in the initial build; image assets unchanged by this update.
 
-Publication remains dependent on the GitHub sign-in required by Git Credential Manager. A local preview and repository ZIP can be used without publication.
+The site is published through the repository's GitHub Pages workflow. Verify the current push and deployment state when reporting publication; the initial sign-in dependency is historical. A local preview and repository ZIP remain available for offline use.
