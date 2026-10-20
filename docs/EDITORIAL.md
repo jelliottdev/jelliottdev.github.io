@@ -10,6 +10,35 @@ The manuscript reference remains evidence-based. A separate experiment registry 
 - Every page must link to pinned public source images. Pixel coordinates use original-image coordinates.
 - Keep original transcriptions available when displaying a corrected derivative.
 
+## Adding or correcting visual observations
+
+Edit `data/evidence/editorial-page-notes.json` for selected observations of the preserved page images. Do not hand-edit generated `data/pages/*.json` files. The separate record keeps these observations distinct from imported archive measurements.
+
+Each entry contains:
+
+- `page`: the exact release ID, such as `lp2-33`.
+- `image_sha256`: the hash of the original JPEG that was inspected. Compare it with the page record and file; do not use a thumbnail hash.
+- `notes`: objects with a short `title` and explanatory `text`.
+- Optional `rect` within a note: `[x, y, width, height]` in original-image pixels. A display window can include whitespace; do not describe it as an exact ink boundary unless measured as such.
+
+Describe placement, shape, color, and other visible features before interpretation. A statement about an exact count needs a clear inclusion rule. A claim about pixel identity, reflection, or a source artwork needs the corresponding comparison; similar subjects alone are insufficient. Use a guide for the longer explanation and connect it to the page through `articles/index.json`.
+
+The record's `reviewed` date identifies the current observation record. Preserve history in Git and explain changed observations in the commit. This editorial record is not a human-reviewed experiment result.
+
+After editing, run from the repository root:
+
+```text
+python scripts/build_page_notes.py
+python scripts/build_assistant.py
+python scripts/build_access_exports.py
+```
+
+The first command checks original-image hashes and rectangle bounds before writing page notes and search summaries. It replaces only notes carrying this record's source path. Removing an entry withdraws its notes on the next build; imported measurements remain. Invalid or duplicate page IDs stop the build. Validation occurs before any page-record writes.
+
+If the edit also changes a guide or its search metadata, run `python scripts/build_articles.py` before the final access-export command. That updates both browser indexes and the standalone articles. Do not edit `articles/readings/` directly: those guides are generated from the known-reading controls.
+
+Inspect the affected page and any region buttons in the local site, check the resulting diff, and confirm that the prose and image agree. Relevant automated checks are `python scripts/test_page_notes.py` for builder changes and `node scripts/test_search.cjs` for search changes. The build checks file identity and data structure; it cannot certify the visual interpretation.
+
 # Interface
 
 ## Explanatory writing
