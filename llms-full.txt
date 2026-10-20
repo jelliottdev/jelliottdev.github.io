@@ -10118,9 +10118,34 @@ Inspect original-image rectangles, pixel thresholds and connected-component rule
 Do rows, columns and diagonals have equal totals?
 Reproduce the documented square and compare it with other numerical arrangements. A symmetric grid need not be a magic square.
 
+Which letter-and-number entries repeat?
+Count exact, case-sensitive tokens on LP2-49–51. Download all 256 entries with grid coordinates and a frequency inventory; no numeral base is assumed.
 Where does a word or phrase occur in the known readings?
 Search contextual English with section-level word positions. These results do not identify exact rune positions or search unknown plaintext on unsolved pages.
 
+
+Download reusable data
+
+These files let you inspect a published calculation or start a comparison without copying values from a table. Keep the source layer and counting unit attached to the data.
+
+	Dataset and input	Files and method
+
+	Whole-page rune statistics
+Archived rune frequencies and IoC. Punctuation and decimal digits are excluded from the rune sequence.	CSV · JSON · Method
+
+	Archived and decoded sums
+Prime-value totals for 17 known-reading pages, before and after the recorded decoding.	CSV · JSON · Comparison
+
+	Alphanumeric grid entries
+Two-character tokens on LP2-49–51, preserving case and leading zeroes. Coordinates count grid rows, excluding surrounding runic text.	CSV · JSON · Import instructions
+
+	LP2-56 dot measurements
+Connected pixel components under a stated crop, brightness threshold, and area rule. Coordinates refer to the original JPEG.	JSON · Reproduce
+
+
+For spreadsheets, import the grid’s token column as text so 04 remains two characters. The JSON preserves strings directly. For any downloaded file, the download catalogue supplies its exact byte count and SHA-256 hash.
+
+A rune frequency and a grid-token frequency count different units. Likewise, an archived prime sum and a decoded prime sum come from different symbol sequences. Choose a common definition before putting results into one comparison.
 
 Choose the input before comparing results
 
@@ -10158,7 +10183,7 @@ If your measurement suggests a hypothesis, preserve its scope and write a new re
 Sources, related references, and files
 - How evenly are symbol frequencies distributed?
   https://jelliottdev.github.io/reference/articles/rune-entropy.html
-- How unevenly are runes distributed?
+- How unevenly are runes distributed?; Method
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Which rune sequences repeat, and where?
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
@@ -10168,8 +10193,32 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - Do rows, columns and diagonals have equal totals?
   https://jelliottdev.github.io/reference/articles/magic-squares.html
+- Which letter-and-number entries repeat?
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#repetition
 - Where does a word or phrase occur in the known readings?
   https://jelliottdev.github.io/reference/articles/reading-concordance.html
+- CSV
+  https://jelliottdev.github.io/exports/rune-ioc.csv
+- JSON
+  https://jelliottdev.github.io/data/evidence/rune-ioc.json
+- CSV
+  https://jelliottdev.github.io/exports/known-reading-page-sums.csv
+- JSON
+  https://jelliottdev.github.io/data/evidence/known-reading-page-sums.json
+- Comparison
+  https://jelliottdev.github.io/reference/articles/prime-sums.html#before-after
+- CSV
+  https://jelliottdev.github.io/exports/alphanumeric-grids.csv
+- JSON
+  https://jelliottdev.github.io/exports/alphanumeric-grids.json
+- Import instructions
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#downloads
+- JSON
+  https://jelliottdev.github.io/data/evidence/lp2-56-dot-measurement.json
+- Reproduce
+  https://jelliottdev.github.io/reference/articles/image-regions.html#measure-dots
+- download catalogue
+  https://jelliottdev.github.io/#/downloads
 - Archived runes, corrected runes, decoded rune labels and contextual English
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - what cipher operations preserve
