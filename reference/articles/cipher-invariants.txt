@@ -31,6 +31,9 @@ A five-rune example
 
 Start with F F U F U, or indices 0 0 1 0 1. It has three F runes and two U runes. Its matching-pair numerator is 3 × 2 + 2 × 1 = 8; dividing by 5 × 4 = 20 gives IoC 2/5.
 
+[Image: Original indices 0 0 1 0 1, their reversal, and a uniform shift all retain counts three and two and IoC two fifths. Subtracting a repeating zero-one key gives counts two, two and one, with IoC one fifth.]
+Follow the repeated numbers: a uniform shift renames each symbol consistently; a repeating key can treat occurrences of the same symbol differently. Colors identify indices, while the numbers keep the comparison readable without color. Download diagram (SVG).
+
 	Operation	Output indices	IoC	What happened
 
 	Reverse the sequence	1 0 1 0 0	2/5	The same runes occupy different positions.
@@ -87,6 +90,8 @@ For a transposition search, length and rune counts are integrity checks. To comp
 
 For fixed alphabet substitutions, global IoC cannot select the correct mapping. Rune identities and repeated-word patterns can carry information that this single number discards. For position-dependent ciphers, a change in IoC is possible but is not a proof that a key is correct. The IoC guide explains whole-stream versus column measurements; the reproduction guide explains how to record the search scope.
 
+This matters when counting a search space: enumerating 58 shifts and orders does not give 58 different whole-stream IoC scores. Before running a large search, use a small example to check whether your chosen measurement can respond to the parameter you are changing.
+
 What these checks establish
 
 These are mathematical properties of the operations as defined here, illustrated with an artificial sequence. They are not newly completed experiments on an unsolved page. A proposed transposition that changes the rune counts has done something besides rearranging the fixed input; a proposal that preserves them has passed an integrity check, not proved a solution.
@@ -103,12 +108,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/atbash.html
 - Vigenère
   https://jelliottdev.github.io/reference/articles/vigenere.html
+- Original indices 0 0 1 0 1, their reversal, and a uniform shift all retain counts three and two and IoC two fifths. Subtracting a repeating zero-one key gives counts two, two and one, with IoC one fifth.; Download diagram (SVG)
+  https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
 - IoC formula; IoC guide
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - transposition search
   https://jelliottdev.github.io/reference/articles/transposition.html
 - the reproduction guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- search space
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - the Warning’s archived and Atbash-decoded sums
   https://jelliottdev.github.io/reference/articles/prime-sums.html#before-after
 
