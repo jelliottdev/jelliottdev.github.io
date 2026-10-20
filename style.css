@@ -210,3 +210,8 @@ main h2[id],main h3[id]{scroll-margin-top:calc(var(--header) + 18px)}
 .standalone-article section[id]{scroll-margin-top:16px}
 
 .reader-reading-links{display:flex;flex-wrap:wrap;gap:0 16px;font-size:14px}.reader-reading-links a{display:inline-flex;align-items:center;min-height:44px}
+
+/* Keep the inspected feature visible without fixing the toolbar to one text line. */
+#image-dialog[open]{display:flex;flex-direction:column}
+#image-dialog .viewer-toolbar{height:auto;flex:none}
+#image-dialog #viewer-scroll{height:auto;min-height:0;flex:1}
