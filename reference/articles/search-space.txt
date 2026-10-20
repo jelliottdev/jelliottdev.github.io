@@ -1,0 +1,131 @@
+Search space and bounds
+
+Count the possibilities, define what was tested, and make claims that match the evidence.
+
+“We tried this cipher” can mean one key, a million chosen keys, or every key in a precisely defined range. Those are different amounts of evidence. A useful experiment tells the reader which possibilities it covered and what would have counted as success.
+
+A large or speculative idea is not automatically a bad idea. The problem comes when the conclusion reaches beyond the work: a failed search becomes “impossible,” or the best-looking fragment becomes “solved.” Search space and bounds help keep the question, the calculation and the claim aligned.
+
+
+What is a search space?
+
+A candidate is one proposed answer or output. A configuration is the set of choices that produces it: a page, reading direction, key and so on. The search space is the collection of configurations under consideration. Bounds specify where that collection starts and stops.
+
+For example, “subtract a fixed shift from LP2-31” still leaves questions. Which symbols are included? Which alphabet order? Can the page be reversed first? Are all 29 shifts allowed? Does the shift continue through the whole page? Each answer either fixes a choice or adds alternatives to search.
+
+
+Count the choices before running
+
+Take all recognized runes in the archived LP2-31 transcription. Allow two whole-page orders: original and reversed. For each order, subtract every fixed shift from 0 through 28, using arithmetic modulo 29. There are 2 × 29 = 58 configurations.
+
+[Image: One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.]
+Multiply the number of choices when every combination is allowed. The branches count configurations, not successful decryptions. Download diagram.
+
+If you also allow three distinct starting offsets, the count becomes 2 × 29 × 3 = 174 configurations. That is a different search, and you must specify what an offset does: discard leading runes, move a keystream’s starting point, or something else. If some choices are only allowed on particular branches, count each branch separately and add the totals.
+
+	Declared choices	Configurations	What the number assumes
+
+	Two orders and 29 fixed shifts	58	Both orders use every shift.
+
+	A key of exactly four rune indices	29^(4) = 707,281	Every index is allowed at each position, including repeats.
+
+	A key of one through four rune indices	29 + 29^(2) + 29^(3) + 29^(4) = 732,540	All four key lengths are included; equivalent repeating keys may duplicate outputs.
+
+	Every order of 14 labeled columns	14! = 87,178,291,200	Each column appears exactly once; reading direction is fixed.
+
+
+The last count is about 87 billion, even before adding alternative grids or reading directions. A bound makes a proposal concrete enough to estimate its cost. It does not by itself make that proposal feasible or well motivated.
+
+To generate the 58-case example yourself, follow the shift enumeration walkthrough. Its output records the input hash, all configurations and the number of distinct outputs. It generates candidates; it does not judge whether they are meaningful.
+
+
+Configurations are not independent chances
+
+Different choices can produce exactly the same output. In the Fibonacci opening experiment, 55 nonempty pages × 29 offsets × two signs produced 3,190 configurations but only 1,540 distinct page outputs. The Fibonacci residues repeat every 14 terms modulo 29, so several tested offsets repeat the same operation.
+
+Even different outputs need not be statistically independent. Two candidates may differ at only one position, or share the same text and most of the same key. Count configurations to describe the work; count distinct outputs to expose duplication. Neither count alone gives the probability that a pattern appeared by chance.
+
+
+Bounds include more than the key
+
+Someone should be able to reconstruct your search without guessing what you meant by “all combinations.” Write down:
+
+
+Input: exact files and hashes, pages and regions, transcription corrections, and whether headings are included.
+
+Operations: transformations and their order. Reversing symbols inside words differs from reversing the order of whole words.
+
+Parameters: key lengths, allowed symbols, offset ranges with inclusive endpoints, shifts and directions.
+
+Boundaries: whether a sequence resets at a line or word, skips punctuation, or crosses page boundaries.
+
+Acceptance rule: the exact expected prefix, or the score, reference data and threshold used to judge candidates.
+
+Completion rule: enumerate every case, take a specified sample, or stop after a declared budget. Record what actually completed.
+
+
+Keep a short list of exclusions beside the result. “No alternate transcriptions, heading omissions, or word-boundary resets” tells another researcher whether their variation has already been covered. Related variations belong in the same experiment family, with separate records for changed questions.
+
+
+Exhaustive, sampled and interrupted searches
+
+Exhaustive means every configuration inside the stated domain completed the stated test. It does not mean every possible cipher was tried. A search of all four-rune keys can be exhaustive while saying nothing about five-rune keys.
+
+Sampled means selected configurations were tested. Record how they were selected, whether repeats were allowed, the seed when applicable, and how many distinct configurations completed. A million sampled keys is not interchangeable with the first million keys in a fixed enumeration. Neither establishes full coverage of a larger domain.
+
+Interrupted means the planned search did not finish. Preserve the completed range and failures so it can resume. A timeout, missing input or crashed decoder is not a tested negative. The default-key OutGuess record separates successful extraction outcomes from abnormal exits for this reason.
+
+A coverage fraction can describe enumeration: 10,000 distinct completed configurations out of a declared 1,000,000 is 1%. It is not a 1% probability that the correct solution was tested unless you justify a probability model over that space. Plausible keys need not be uniformly distributed.
+
+
+“No match” needs a named target
+
+The numerical-keystream experiments compare outputs with nine specified 12-rune openings from known readings. Their negative finding means those openings did not occur at the tested position under those parameters. An unknown page might begin with entirely different text. The tests therefore do not rule out every readable output or every use of those sequences.
+
+Likewise, ranking first under an English-language score does not establish a decryption. Some candidate must rank first, even when every candidate is wrong. Inspect full readings, justify the criterion, and compare against an appropriate baseline. See evaluating candidate readings.
+
+Changing the success rule after seeing an output enlarges the opportunity to find something interesting, even if you generate no new strings. Trying reversed spellings, alternate boundaries and several scoring rules, then reporting only the strongest result, hides part of the search. Exploration is useful; record it as exploration and test the resulting proposal against evidence that did not guide those choices.
+
+The six-arrangement null-model example shows this numerically. For statistical comparisons, apply the same selection procedure to the reference trials. In the periodic IoC experiment, each shuffle searches all periods 2–20 and keeps its maximum, just as the observed page does. Comparing an observed maximum with a single arbitrarily chosen null period would answer a different question.
+
+
+Write the claim at the same scale as the evidence
+
+	Too broad	A checkable claim
+
+	“We ruled out shifts.”	“All 58 specified order-and-shift cases completed. None matched the declared prefix at the declared position.” Only use this after performing that comparison.
+
+	“This looks too unlikely to be chance.”	“This pattern was selected during exploration. Its chance comparison has not yet accounted for the other choices we tried.”
+
+	“The program found nothing.”	“These configurations completed without meeting the criterion; these others failed or remain untested.”
+
+
+Before starting, finish this sentence: “On these exact inputs, I will test these choices, accept a candidate by this rule, and stop under these conditions.” Afterward, report completed and distinct counts, the result under that rule, and what remains outside the search. This makes even a negative result useful: the next person can reuse the work and identify a genuinely different test.
+
+Continue with documenting a reproducible attempt, or reproduce a published experiment before planning your own. The arithmetic above is explanatory; the linked experiment records contain the measured results, scripts and exact bounds.
+
+Sources, related references, and files
+- arithmetic modulo 29
+  https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+- One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.; Download diagram
+  https://jelliottdev.github.io/exports/figures/search-space.svg
+- the shift enumeration walkthrough
+  https://jelliottdev.github.io/reference/articles/reproducibility#generate-candidates.html
+- Fibonacci opening experiment
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
+- separate records for changed questions
+  https://jelliottdev.github.io/reference/articles/reproducibility#follow-up.html
+- default-key OutGuess record
+  https://jelliottdev.github.io/#/experiments/outguess-default-key
+- evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+- six-arrangement null-model example
+  https://jelliottdev.github.io/reference/articles/null-models#selection.html
+- periodic IoC experiment
+  https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
+- documenting a reproducible attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- reproduce a published experiment
+  https://jelliottdev.github.io/reference/articles/first-experiment.html
+
+Article: https://jelliottdev.github.io/reference/articles/search-space.html
