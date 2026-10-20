@@ -70,3 +70,11 @@ for (const id of categoryIDs(standalone))
 context.db.articles = [...articles, {id:'future-guide',title:'Future guide',category:'New subject',summary:'Example'}];
 assert(context.wikiPage().includes('href="#/wiki/future-guide"'));
 console.log(`PASS: ${articles.length} guides, category destinations, legacy bookmarks, and unconfigured-category fallback.`);
+
+for(const [id,href] of [['rune-entropy','#/wiki/analysis-and-measurement'],['reclining-figure','#/wiki/visual-index'],['analysis-and-measurement','#/wiki?section=guides-analysis']]){
+ const article=articles.find(a=>a.id===id);
+ assert.equal(context.wikiBreadcrumb(article).href,href);
+ assert.equal(context.wikiBreadcrumb(article).label,article.category);
+}
+assert.equal(context.wikiBreadcrumb({id:'unknown',category:'Unconfigured'}).href,'#/wiki');
+console.log('PASS: subject breadcrumbs return to hubs, avoid self-links, and retain a fallback');

@@ -6,7 +6,7 @@ const label=p=>`${p.release} · Page ${String(p.release_index).padStart(2,'0')}`
 const kind=p=>p.kind==='cover/title'?'Title page':p.kind==='runic-text'?'Runic text':p.kind.replaceAll('-',' ');
 const link=p=>`#/page/${p.id}`;
 const footer=()=>`<p class="footer-note"><a href="#/overview">Liberpedia</a> · <a href="#/sources">Sources & provenance</a> · Source snapshot: 5 October 2026</p>`;
-const head=(title,sub,crumb='Reference')=>`<nav class="breadcrumb" aria-label="Breadcrumb"><a href="#/overview">Liberpedia</a><span aria-hidden="true"> / </span>${esc(crumb)}</nav><header class="article-top"><h1>${esc(title)}</h1>${sub?`<p class="subline">${sub}</p>`:''}</header>`;
+const head=(title,sub,crumb='Reference',crumbHref='')=>`<nav class="breadcrumb" aria-label="Breadcrumb"><a href="#/overview">Liberpedia</a><span aria-hidden="true"> / </span>${crumbHref?`<a href="${esc(crumbHref)}">${esc(crumb)}</a>`:esc(crumb)}</nav><header class="article-top"><h1>${esc(title)}</h1>${sub?`<p class="subline">${sub}</p>`:''}</header>`;
 function overview(){
  const features=[
   ['illustrated-cover','images/1033.jpg','Compasses cover','Blake’s artwork and the hidden message'],

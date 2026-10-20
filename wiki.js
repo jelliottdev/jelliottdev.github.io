@@ -10,6 +10,12 @@ function wikiSidebarHref(id){
  };
  return destinations[article?.category]||null;
 }
+function wikiBreadcrumb(article){
+ const category=db.guideCategories.find(group=>group.title===article.category);
+ if(!category)return {label:'Guides and methods',href:'#/wiki'};
+ const hub=wikiSidebarHref(article.id);
+ return {label:category.title,href:hub&&hub!=='#/wiki/'+article.id?hub:'#/wiki?section=guides-'+category.id};
+}
 /* Authored reference articles. Never treated as completed experiment records. */
 const wikiArticleLoads=new Map();
 async function ensureWikiArticle(id){
@@ -61,7 +67,8 @@ function wikiPage(id='') {
   tools.append(status,wrap,button);pre.replaceWith(wrapper);wrapper.append(tools,pre);
  });
  const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
- return head(a.title,esc(a.summary),'Guides and methods')+`<div class="article-grid"><article class="wiki-article">
+ const breadcrumb=wikiBreadcrumb(a);
+ return head(a.title,esc(a.summary),breadcrumb.label,breadcrumb.href)+`<div class="article-grid"><article class="wiki-article">
  <p class="small"><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p>
  <details class="mobile-article-contents"><summary>On this page</summary>${contentsHTML}</details>
  ${doc.body.innerHTML}${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}${footer()}</article>
