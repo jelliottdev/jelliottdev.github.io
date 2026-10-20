@@ -1,0 +1,68 @@
+{
+  "id": "lp2-31-periodic-ioc",
+  "title": "LP2-31: periodic IoC for periods 2-20",
+  "status": "draft",
+  "question": "Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?",
+  "summary": "Period 13 is the observed peak, but 213 of 999 shuffled maxima are at least as large; corrected Monte Carlo p=0.214.",
+  "tags": [
+    "periodic IoC",
+    "index of coincidence",
+    "key length",
+    "Vigenere",
+    "shuffle",
+    "permutation test"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-31"
+    ],
+    "representation": "269 archived runes; headings included; non-alphabet characters removed; no corrections.",
+    "procedure": "Pool within-residue-column pair counts, maximize over periods, compare against identically scanned uniform multiset shuffles.",
+    "parameters": "Periods 2-20 inclusive; offset zero; 999 trials; seed 330131; >= ties; plus-one Monte Carlo correction; alpha 0.05.",
+    "exclusions": "Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches."
+  },
+  "outcome": "inconclusive",
+  "finding": "269 archived runes; unique maximum at period 13, 216/5300. Across 999 shuffles, 213 maxima meet or exceed it; p=0.214, not below the declared 0.05 threshold.",
+  "limitations": "Only LP2-31, complete archived stream, periods 2-20. Null preserves counts but not local structure. No adjustment for page selection or prior work. No cipher classification or key recovered.",
+  "next_steps": "Human review of the plan, pair-count oracle, null model, full output and bounded wording before publication. Any changed scope needs a new declared experiment.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-31-periodic-ioc/run.py --check",
+    "environment": "Python 3.12.10, standard library, Windows; independent check: python experiments/records/lp2-31-periodic-ioc/check.py",
+    "script": "experiments/records/lp2-31-periodic-ioc/run.py",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/plan.json",
+        "sha256": "02fd809ec925bc9ca7fcedb6f67bf36504d9730cf06c9a2df964c866860ba72d"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "418a9356dc0658ce036b032a7666162d2c7e1f13a9d7eff08c909ba1f3dd0513"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/results.json",
+        "sha256": "097abd65834c3962946b308affdfa468f253802dc90a5503f8632bfdef0b3e0b"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "",
+    "retested_on": ""
+  },
+  "sources": [
+    {
+      "label": "LP2-31 source record",
+      "url": "https://jelliottdev.github.io/#/page/lp2-31"
+    },
+    {
+      "label": "IoC baseline and definition",
+      "url": "https://jelliottdev.github.io/#/wiki/index-of-coincidence"
+    }
+  ],
+  "related": []
+}
