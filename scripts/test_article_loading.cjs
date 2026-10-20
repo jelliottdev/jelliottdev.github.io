@@ -46,6 +46,14 @@ async function checkNavigationRace(oldRequestFails){
  await older;
  assert.equal(main.innerHTML,'Newer guide','Late success or error must not replace the current page');
  assert.equal(sandbox.document.title,'Newer guide — Liberpedia');
+ let downloadQuery;
+ sandbox.downloadsPage=async query=>{downloadQuery=query;main.innerHTML='Downloads'};
+ for(const query of ['shift candidates','dots/punctuation','100%']){
+  sandbox.location.hash='#/downloads/'+encodeURIComponent(query);
+  await vm.runInContext('route()',sandbox);
+  assert.equal(downloadQuery,query,'Download route must decode the URL search phrase');
+ }
+
 }
 async function main(){
  let finish,calls=0;

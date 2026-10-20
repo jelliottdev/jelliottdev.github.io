@@ -94,8 +94,33 @@ for record in read('data/evidence/artwork-sources.json')['records']:
                   aliases=[record['accession'],'William Blake','Tate','museum catalogue','compasses'],
                   guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
+# Human task names make tools discoverable without knowing their filenames.
+script_details = {
+ 'enumerate_shifts.py': ('Generate fixed-shift candidates', 'reproducibility', ['shift candidates', '58 cases', 'reverse rune order']),
+ 'plot_atbash_pairs.py': ('Draw the complete Atbash mapping', 'atbash', ['alphabet reversal', 'Atbash chart', 'rune pairs']),
+ 'verify_bundle.py': ('Verify extracted bundle files', 'checksums', ['file integrity', 'manifest', 'SHA256', 'checksums']),
+ 'rune_entropy.py': ('Measure rune frequency entropy', 'rune-entropy', ['Shannon entropy', 'bits per rune']),
+ 'rune_ngrams.py': ('Locate repeated rune sequences', 'rune-ngrams', ['repeated runes', 'bigrams', 'trigrams', 'ngrams']),
+ 'plot_rune_frequencies.py': ('Draw the rune frequency chart', 'index-of-coincidence', ['histogram', 'frequency chart']),
+ 'reading_concordance.py': ('Find words in known readings', 'reading-concordance', ['phrase search', 'concordance', 'English readings']),
+ 'reproduce_reading.py': ('Decode and check known rune readings', 'running-scripts', ['warning', 'welcome', 'Atbash', 'Vigenere', 'koan', 'trace']),
+ 'reproduce_prime_sums.py': ('Reproduce known-reading prime sums', 'prime-sums', ['Gematria Primus', 'spelling sums', 'emirps']),
+ 'check_number_examples.py': ('Check prime values and ordinal examples', 'prime-indices', ['3012828529', 'nth prime', 'prime ordinal']),
+ 'rune_ioc.py': ('Measure the index of coincidence', 'index-of-coincidence', ['IoC', 'matching pairs', 'rune frequencies']),
+ 'inspect_visual_records.py': ('Inspect visual records and recount pixels', 'image-regions', ['dots', 'connected components', 'image measurements', 'punctuation']),
+ 'extract_payload.py': ('Extract an OutGuess payload', 'outguess', ['steganography', 'hidden JPEG message']),
+ 'reproduce_cover_chain.py': ('Reproduce the three-image cover chain', 'cover-chain', ['XOR', 'transposition', 'cover payload']),
+ 'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
+ 'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
+}
 for script in ['enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
+ detail = script_details.get(script)
+ if detail:
+  title, guide, aliases = detail
+  files[-1].update(title=title, guide=guide, aliases=aliases)
+ elif script.startswith('test_'):
+  files[-1].update(title='Regression checks: '+script[5:-3].replace('_',' '))
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')
 register('experiments/README.md','Experiment contribution guide')
