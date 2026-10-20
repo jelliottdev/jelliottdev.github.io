@@ -1,29 +1,34 @@
-<p>For the standard reading, prime-sum, IoC, cover-chain and stored visual-record checks, you can now download <a href="downloads/reference-data.zip">the reference-data bundle</a>. Extract it into an empty folder, preserve the directories, and open your terminal there. It includes the scripts and their text/data inputs. <a href="downloads/REFERENCE-DATA-README.txt">Bundle instructions</a> explain which image checks additionally need <a href="downloads/original-images.zip">the original-images bundle</a> and external software. This is a reproduction package; use the complete repository for development or draft experiments.</p>
-<p>The reproduction scripts let you check a published reading against exact stored outputs. Start with the warning on <a href="#/page/lp1-01">LP1-01</a>: it uses a short <a href="#/wiki/atbash">Atbash</a> transformation and needs no external Python packages. These scripts reproduce documented controls; they do not search for new solutions.</p>
-<h2 id="get-files">1. Get the whole repository</h2>
-<p>Open <a href="https://github.com/jelliottdev/jelliottdev.github.io">the Liberpedia repository</a>, choose <strong>Code → Download ZIP</strong>, and extract it. Open the extracted folder containing <code>scripts</code>, <code>text</code>, and <code>data</code>. An image bundle or an individually downloaded script is not enough: the reading script also needs the archived transcriptions, method parameters, and expected readings.</p>
-<p>Alternatively, clone the repository if you already use Git:</p>
+<p>Reproducing a reading means starting with the manuscript's rune text, applying the documented cipher, and checking that you get the same result. It is a useful first step into solving: you can see how a method works before changing it or trying it on an unsolved page.</p>
+<p>This walkthrough uses <a href="#/page/lp1-01">LP1-01, the warning</a>. Its <a href="#/wiki/atbash">Atbash cipher</a> reverses the rune alphabet, so you can follow the calculation by hand as well as run it in Python. By the end, you will have decoded the page, checked your result, and inspected the first two runes step by step.</p>
+<h2 id="get-files">1. Download and open the files</h2>
+<p>Download <a href="downloads/reference-data.zip">the reference-data ZIP</a> and extract it into an empty folder. Open that folder: you should see directories named <code>scripts</code>, <code>text</code> and <code>data</code>. Keep them together. The script supplies the instructions; the other folders supply the manuscript text, cipher settings and known readings it needs.</p>
+<p>Open a terminal in this folder. A terminal is the window where you type the commands below. On Windows, you can use File Explorer's <strong>Open in Terminal</strong> command. If you navigate there with <code>cd</code>, put quotation marks around a folder path that contains spaces.</p>
+<p>The reference-data ZIP is enough for this walkthrough. If you want to edit the site or work with draft experiments, get the <a href="https://github.com/jelliottdev/jelliottdev.github.io">complete repository</a> instead using <strong>Code → Download ZIP</strong>. Readers who already use Git can clone it:</p>
 <pre><code>git clone https://github.com/jelliottdev/jelliottdev.github.io.git
 cd jelliottdev.github.io</code></pre>
-<p>Open a terminal in that folder. On Windows, File Explorer’s “Open in Terminal” command can open the selected folder. The commands below assume this working directory. If your path contains spaces, put quotation marks around it when using <code>cd</code>.</p>
 <h2 id="python">2. Check Python</h2>
 <p>You need Python 3. On Windows, try <code>py --version</code>; on macOS or Linux, try <code>python3 --version</code>. If neither command is available, install Python from <a href="https://www.python.org/downloads/">the official Python downloads</a> or your operating system’s package manager, then reopen your terminal. A command that prints a Python 2 version is not suitable.</p>
-<div class="table-wrap"><table><thead><tr><th>Terminal</th><th>First control</th></tr></thead><tbody><tr><td>Windows PowerShell</td><td><code>py scripts/reproduce_reading.py warning</code></td></tr><tr><td>macOS / Linux</td><td><code>python3 scripts/reproduce_reading.py warning</code></td></tr><tr><td>If <code>python</code> already selects Python 3</td><td><code>python scripts/reproduce_reading.py warning</code></td></tr></tbody></table></div>
-<p>The wiki’s other recipes use <code>python</code> as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. No API key, model download, or hosted AI request is involved.</p>
-<h2 id="check">3. Check the expected result</h2>
+<div class="table-wrap"><table><thead><tr><th>Terminal</th><th>Run the warning example</th></tr></thead><tbody><tr><td>Windows PowerShell</td><td><code>py scripts/reproduce_reading.py warning</code></td></tr><tr><td>macOS / Linux</td><td><code>python3 scripts/reproduce_reading.py warning</code></td></tr><tr><td>If <code>python</code> already selects Python 3</td><td><code>python scripts/reproduce_reading.py warning</code></td></tr></tbody></table></div>
+<p>The wiki’s other recipes use <code>python</code> as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. The calculation runs on your computer; it does not use the site's AI assistant.</p>
+<h2 id="check">3. Decode the warning and check the result</h2>
+<p>Run the warning command from the table above. In the examples that follow, <code>python</code> means whichever Python 3 command worked on your machine.</p>
+<pre><code>python scripts/reproduce_reading.py warning</code></pre>
+<p>The script reads LP1-01, applies Atbash, and compares its output with the stored reading. It then prints <code>=== LP1-01 ===</code> followed by the decoded text. Open <a href="#/wiki/reading-warning">the complete warning reading</a> beside it to compare the output with the explanation.</p>
+<p>The spelling may look unusual. The output uses literal rune labels, which preserve distinctions that ordinary English can hide. Keep those spellings when checking the result; the guide also provides contextual English to help you read the message.</p>
+<p>Once this example works, check the other known readings:</p>
 <pre><code>python scripts/reproduce_reading.py --list
-python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all</code></pre>
-<p><code>--list</code> prints nine named section controls. <code>warning</code> prints <code>=== LP1-01 ===</code> followed by its literal reading, after checking it against the stored page output. <code>--check-all</code> should finish with:</p>
+<p><code>--list</code> shows the nine named sections available to the script. <code>--check-all</code> decodes them and should finish with:</p>
 <pre><code>PASS: 17 literal page readings match the published controls exactly.</code></pre>
-<p>Nine sections and 17 pages are different counts: several sections span multiple images. This check covers the known runic-page outputs in the repository, not all 75 images, their hidden payloads, or unsolved ciphertext. The <a href="#/wiki/reading-warning">complete warning guide</a> shows both the literal output and contextual English. Do not normalize spellings before comparing literal outputs.</p>
+<p>A <strong>control</strong> is an example whose expected result is already known. Matching it helps check that the implementation and inputs work together. There are nine sections but 17 pages because some sections span several images. This command checks those known readings; it does not attempt the unsolved pages or extract hidden image content.</p>
 <h2 id="trace">4. Read a rune-by-rune trace</h2>
 <pre><code>python scripts/reproduce_reading.py warning --trace</code></pre>
-<p>The output is CSV: one row per recognized rune, with a header naming each field. The first two rows are:</p>
+<p>A <strong>trace</strong> shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two rows are:</p>
 <pre><code>page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied
 lp1-01,0,0,ᚱ,4,,24,A,False
 lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 <p>Atbash maps index <code>x</code> to <code>28 − x</code>. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are <a href="#/wiki/rune-values">zero-based alphabet indices</a>, not prime values. A two-letter Latin label such as NG still represents one rune.</p>
+<p>You only need the input index, output index and Latin label to follow this Atbash example. The remaining fields help when a method crosses page boundaries or skips particular runes:</p>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
 <tr><td><code>page_rune_ordinal</code></td><td>Zero-based rune position within the page; resets at each new page.</td></tr>
 <tr><td><code>section_rune_ordinal</code></td><td>Position under the control’s section/boundary rule. It can continue across pages.</td></tr>
@@ -33,7 +38,9 @@ lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 <tr><td><code>copied</code></td><td>Whether this position is listed as an interruption in the control. <code>False</code> does not mean the index changed: direct readings also have false entries.</td></tr>
 </tbody></table></div>
 <p>Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run <code>python scripts/reproduce_reading.py welcome --trace</code> and follow <a href="#/wiki/interruptions">keystream positions and interruptions</a>. The specific LP1-10 correction is applied before transformation and trace output; see <a href="#/wiki/transliteration">transcription layers</a>.</p>
-<h2 id="requirements">Which tools need extra software?</h2>
+<h2 id="requirements">When you are ready to try another method</h2>
+<p>The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.</p>
+<p>For image-based work, extract <a href="downloads/original-images.zip">the original-images ZIP</a> into the same folder as the reference data. See the <a href="downloads/REFERENCE-DATA-README.txt">bundle instructions</a> for the complete command list.</p>
 <div class="table-wrap"><table><thead><tr><th>Task</th><th>Requirements</th><th>Instructions</th></tr></thead><tbody>
 <tr><td>Known rune readings</td><td>Python 3, standard library only</td><td><a href="#/wiki/reading-warning">Warning control</a></td></tr>
 <tr><td>Reconstruct the exported cover chain</td><td>Python 3, standard library only; uses stored extractions</td><td><a href="#/wiki/cover-chain">Cover chain</a></td></tr>
@@ -44,8 +51,8 @@ lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 </tbody></table></div>
 <h2 id="troubleshooting">When a command fails</h2>
 <ul><li><strong>“Command not found” or “not recognized”:</strong> check the Python command first. If it names <code>outguess</code> or <code>gpg</code>, that is a separate executable, not a missing rune dataset.</li>
-<li><strong>“Can’t open file” for the script:</strong> check the terminal’s current folder. You need the extracted repository root, not its parent or the still-compressed ZIP.</li>
-<li><strong>A missing <code>text/</code> or <code>data/</code> file:</strong> obtain the complete repository. The script locates these directories relative to its own file.</li>
+<li><strong>“Can’t open file” for the script:</strong> check the terminal’s current folder. Open the extracted folder that contains <code>scripts</code>, rather than its parent folder or the ZIP itself.</li>
+<li><strong>A missing <code>text/</code> or <code>data/</code> file:</strong> extract a fresh reference-data bundle and keep its directories together. Moving just the script breaks the relative paths it uses to find its inputs.</li>
 <li><strong>Boxes instead of runes:</strong> the terminal font may lack runic characters. Check the numeric indices and Latin labels, and compare with the browser reader. Missing glyphs alone do not establish bad input bytes.</li>
 <li><strong>“Output differs” or a hash mismatch:</strong> preserve the full error and identify the affected file. Compare with an unchanged copy and the <a href="#/wiki/checksums">checksums</a>. Do not change the expected output merely to make the check pass.</li></ul>
 <h2 id="record">Keep the result reproducible</h2>

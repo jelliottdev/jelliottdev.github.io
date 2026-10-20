@@ -5088,55 +5088,66 @@ Running the reproduction scripts
 
 Set up the repository, verify a known reading, understand a rune-by-rune trace, and diagnose common errors.
 
-For the standard reading, prime-sum, IoC, cover-chain and stored visual-record checks, you can now download the reference-data bundle. Extract it into an empty folder, preserve the directories, and open your terminal there. It includes the scripts and their text/data inputs. Bundle instructions explain which image checks additionally need the original-images bundle and external software. This is a reproduction package; use the complete repository for development or draft experiments.
+Reproducing a reading means starting with the manuscript's rune text, applying the documented cipher, and checking that you get the same result. It is a useful first step into solving: you can see how a method works before changing it or trying it on an unsolved page.
 
-The reproduction scripts let you check a published reading against exact stored outputs. Start with the warning on LP1-01: it uses a short Atbash transformation and needs no external Python packages. These scripts reproduce documented controls; they do not search for new solutions.
+This walkthrough uses LP1-01, the warning. Its Atbash cipher reverses the rune alphabet, so you can follow the calculation by hand as well as run it in Python. By the end, you will have decoded the page, checked your result, and inspected the first two runes step by step.
 
-1. Get the whole repository
+1. Download and open the files
 
-Open the Liberpedia repository, choose Code → Download ZIP, and extract it. Open the extracted folder containing scripts, text, and data. An image bundle or an individually downloaded script is not enough: the reading script also needs the archived transcriptions, method parameters, and expected readings.
+Download the reference-data ZIP and extract it into an empty folder. Open that folder: you should see directories named scripts, text and data. Keep them together. The script supplies the instructions; the other folders supply the manuscript text, cipher settings and known readings it needs.
 
-Alternatively, clone the repository if you already use Git:
+Open a terminal in this folder. A terminal is the window where you type the commands below. On Windows, you can use File Explorer's Open in Terminal command. If you navigate there with cd, put quotation marks around a folder path that contains spaces.
+
+The reference-data ZIP is enough for this walkthrough. If you want to edit the site or work with draft experiments, get the complete repository instead using Code → Download ZIP. Readers who already use Git can clone it:
 
 git clone https://github.com/jelliottdev/jelliottdev.github.io.git
 cd jelliottdev.github.io
-
-Open a terminal in that folder. On Windows, File Explorer’s “Open in Terminal” command can open the selected folder. The commands below assume this working directory. If your path contains spaces, put quotation marks around it when using cd.
 
 2. Check Python
 
 You need Python 3. On Windows, try py --version; on macOS or Linux, try python3 --version. If neither command is available, install Python from the official Python downloads or your operating system’s package manager, then reopen your terminal. A command that prints a Python 2 version is not suitable.
 
-	Terminal	First control
+	Terminal	Run the warning example
 	Windows PowerShell	py scripts/reproduce_reading.py warning
 	macOS / Linux	python3 scripts/reproduce_reading.py warning
 	If python already selects Python 3	python scripts/reproduce_reading.py warning
 
-The wiki’s other recipes use python as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. No API key, model download, or hosted AI request is involved.
+The wiki’s other recipes use python as shorthand. Substitute the command that worked on your machine; the script path and arguments stay the same. The calculation runs on your computer; it does not use the site's AI assistant.
 
-3. Check the expected result
+3. Decode the warning and check the result
+
+Run the warning command from the table above. In the examples that follow, python means whichever Python 3 command worked on your machine.
+
+python scripts/reproduce_reading.py warning
+
+The script reads LP1-01, applies Atbash, and compares its output with the stored reading. It then prints === LP1-01 === followed by the decoded text. Open the complete warning reading beside it to compare the output with the explanation.
+
+The spelling may look unusual. The output uses literal rune labels, which preserve distinctions that ordinary English can hide. Keep those spellings when checking the result; the guide also provides contextual English to help you read the message.
+
+Once this example works, check the other known readings:
 
 python scripts/reproduce_reading.py --list
-python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
 
---list prints nine named section controls. warning prints === LP1-01 === followed by its literal reading, after checking it against the stored page output. --check-all should finish with:
+--list shows the nine named sections available to the script. --check-all decodes them and should finish with:
 
 PASS: 17 literal page readings match the published controls exactly.
 
-Nine sections and 17 pages are different counts: several sections span multiple images. This check covers the known runic-page outputs in the repository, not all 75 images, their hidden payloads, or unsolved ciphertext. The complete warning guide shows both the literal output and contextual English. Do not normalize spellings before comparing literal outputs.
+A control is an example whose expected result is already known. Matching it helps check that the implementation and inputs work together. There are nine sections but 17 pages because some sections span several images. This command checks those known readings; it does not attempt the unsolved pages or extract hidden image content.
 
 4. Read a rune-by-rune trace
 
 python scripts/reproduce_reading.py warning --trace
 
-The output is CSV: one row per recognized rune, with a header naming each field. The first two rows are:
+A trace shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two rows are:
 
 page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied
 lp1-01,0,0,ᚱ,4,,24,A,False
 lp1-01,1,1,ᛝ,21,,7,W,False
 
 Atbash maps index x to 28 − x. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are zero-based alphabet indices, not prime values. A two-letter Latin label such as NG still represents one rune.
+
+You only need the input index, output index and Latin label to follow this Atbash example. The remaining fields help when a method crosses page boundaries or skips particular runes:
 
 	Field	Meaning
 
@@ -5155,7 +5166,11 @@ Atbash maps index x to 28 − x. The first rune has index 4, so its output index
 
 Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run python scripts/reproduce_reading.py welcome --trace and follow keystream positions and interruptions. The specific LP1-10 correction is applied before transformation and trace output; see transcription layers.
 
-Which tools need extra software?
+When you are ready to try another method
+
+The warning example needs only Python and the reference-data bundle. Other tasks work on different layers of the manuscript. Reconstructing already-extracted text is different from extracting it from a JPEG yourself, which is why their software requirements differ.
+
+For image-based work, extract the original-images ZIP into the same folder as the reference data. See the bundle instructions for the complete command list.
 
 	Task	Requirements	Instructions
 
@@ -5176,9 +5191,9 @@ When a command fails
 
 “Command not found” or “not recognized”: check the Python command first. If it names outguess or gpg, that is a separate executable, not a missing rune dataset.
 
-“Can’t open file” for the script: check the terminal’s current folder. You need the extracted repository root, not its parent or the still-compressed ZIP.
+“Can’t open file” for the script: check the terminal’s current folder. Open the extracted folder that contains scripts, rather than its parent folder or the ZIP itself.
 
-A missing text/ or data/ file: obtain the complete repository. The script locates these directories relative to its own file.
+A missing text/ or data/ file: extract a fresh reference-data bundle and keep its directories together. Moving just the script breaks the relative paths it uses to find its inputs.
 
 Boxes instead of runes: the terminal font may lack runic characters. Check the numeric indices and Latin labels, and compare with the browser reader. Missing glyphs alone do not establish bad input bytes.
 
@@ -5194,17 +5209,17 @@ Implementation and verification
 The commands and trace fields above are documented from the reproduction script and its control parameters. The first trace rows and all 17 literal page outputs were checked locally on 19 October 2026. Operating-system launch commands are alternatives; this verification used Python 3.12 on Windows.
 
 Sources, related references, and files
-https://jelliottdev.github.io/downloads/reference-data.zip
-https://jelliottdev.github.io/downloads/REFERENCE-DATA-README.txt
-https://jelliottdev.github.io/downloads/original-images.zip
 https://jelliottdev.github.io/reference/lp1-01.html
 https://jelliottdev.github.io/reference/articles/atbash.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://github.com/jelliottdev/jelliottdev.github.io
 https://www.python.org/downloads/
 https://jelliottdev.github.io/reference/articles/reading-warning.html
 https://jelliottdev.github.io/reference/articles/rune-values.html
 https://jelliottdev.github.io/reference/articles/interruptions.html
 https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/downloads/original-images.zip
+https://jelliottdev.github.io/downloads/REFERENCE-DATA-README.txt
 https://jelliottdev.github.io/reference/articles/cover-chain.html
 https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
 https://jelliottdev.github.io/reference/articles/image-regions.html
