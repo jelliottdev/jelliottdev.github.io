@@ -2,6 +2,8 @@
 
 Internal work queue. This is not a published result or a combined reader-facing article. Each approach needs its own bounded experiment page; group variations within the relevant family. Do not make ten empty placeholders or present plans as tests.
 
+Exact-repeat baseline: length-three overlapping windows on LP2-00–55; sum within-page matching-start pairs. Observed 55, with 798/999 whole-page fixed-count shuffle totals at least that large; upper-tail p=0.799. Standalone record includes positions, page CSV and histogram. No alternative lengths, between-page comparisons or per-page significance tested. Prior descriptive LP2-31 result disclosed.
+
 Within-segment reversal now has its own record in the reading-route family. Two predeclared line-boundary conventions give 110 distinct page outputs and zero matches to nine fixed beginnings. Full traces audited with regex spans and reflected positions; complete rerun agrees. Word-order reversal and broader language ranking remain untested.
 
 1. Direct reading and Atbash reuse.
