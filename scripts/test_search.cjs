@@ -133,6 +133,26 @@ for(const [query,id,section] of [
 ])assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
 console.log('PASS: measurement and grid terminology opens worked examples directly');
 
+// Concept locations follow the actual passage, including literal rune-label spellings.
+for(const [query,section,pages] of [
+ ['consumption','consumption',['lp1-10','lp1-11']],
+ ['consumptian','consumption',['lp1-10','lp1-11']],
+ ['preservation','preservation',['lp1-11','lp1-12']],
+ ['preseruatian','preservation',['lp1-11','lp1-12']],
+ ['adherence','adherence',['lp1-12']],
+ ['dogma or reason','adherence',['lp1-12']],
+ ['to belong is death','adherence',['lp1-12']],
+ ['attachment','wealth',['lp1-13']],
+ ['possessions','wealth',['lp1-13']],
+ ['amass great wealth','wealth',['lp1-13']],
+ ['never become attached','wealth',['lp1-13']],
+]){
+ const hits=search.search(db,query);
+ assert.equal(hits[0].href,`#/wiki/consumption-preservation-adherence?section=${section}`,query);
+ assert.deepEqual(hits.filter(hit=>hit.page).slice(0,pages.length).map(hit=>hit.page.id),pages,query);
+}
+console.log('PASS: philosophical concepts and literal spellings prioritize their actual passage pages');
+
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
 const vm=require('node:vm');
