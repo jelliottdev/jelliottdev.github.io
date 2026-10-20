@@ -33,7 +33,10 @@ function experimentArticle(r){
 // Deliberately small Markdown subset: text, headings, lists and fenced code; no embedded HTML.
 function renderExperimentMarkdown(markdown){
   let inCode=false,code=[],paragraph=[],html=[],listType='';
-  const inline=text=>esc(text).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  const inline=text=>String(text).split(/(`[^`]+`)/g).map(part=>{
+    if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
+    return esc(part).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+  }).join('');
   const closeList=()=>{if(listType){html.push(`</${listType}>`);listType='';}};
   const flush=()=>{if(paragraph.length){html.push('<p>'+inline(paragraph.join(' '))+'</p>');paragraph=[];}};
   for(const line of markdown.split('\n')){

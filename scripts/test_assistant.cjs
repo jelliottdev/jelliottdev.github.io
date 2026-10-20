@@ -27,3 +27,16 @@ assert(html.includes('<strong>One row</strong>'));assert(html.includes('<table>'
 assert(!html.includes('<img'));assert(!html.includes('<script>'));assert(!html.includes('href="javascript:'));assert(html.includes('href="#/experiments/test"'));
 assert(!Markdown.render('`[1]`',sources).includes('<a '));
 console.log('PASS: no page-only experiment matches, scope separation, page ID parsing, Markdown tables/lists/code, citation links and HTML/URL escaping.');
+
+// Published experiment prose must preserve literal reproduction syntax.
+const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const experimentContext={esc:text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))};
+vm.createContext(experimentContext);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../experiments.js'),'utf8'),experimentContext);
+const literal=experimentContext.renderExperimentMarkdown('Use `**pattern**` beside **emphasis** and `<script>`.');
+assert(literal.includes('<code>**pattern**</code>'));
+assert(literal.includes('<strong>emphasis</strong>'));
+assert(literal.includes('<code>&lt;script&gt;</code>'));
+assert(!literal.includes('<script>'));
+assert(!experimentContext.renderExperimentMarkdown('```\n**literal** <script>\n```').includes('<strong>'));
+console.log('PASS: experiment inline and fenced code preserve literal syntax and escape HTML.');
