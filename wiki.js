@@ -1,3 +1,15 @@
+// Sidebar context follows the authored category; exact navigation links win in route().
+function wikiSidebarHref(id){
+ const article=db.articles.find(a=>a.id===id);
+ const destinations={
+  'Getting started':'#/wiki/quick-start',
+  'Complete known readings':'#/readings',
+  'Analysis and reproduction':'#/wiki/analysis-and-measurement',
+  'Philosophy and literary references':'#/wiki/philosophical-themes',
+  'Artwork and visual features':'#/wiki/visual-index'
+ };
+ return destinations[article?.category]||null;
+}
 /* Authored reference articles. Never treated as completed experiment records. */
 const wikiArticleLoads=new Map();
 async function ensureWikiArticle(id){

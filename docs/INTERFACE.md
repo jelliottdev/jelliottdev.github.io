@@ -57,3 +57,5 @@ Category destinations use stable names rather than their display position. Prese
 
 `data/guide-categories.json` owns the category order, descriptions, stable IDs, and legacy aliases. Both the wiki and the generated standalone reference index use this file. The standalone index uses native fragment links and must remain navigable without JavaScript.
 
+
+Guide navigation highlights the exact sidebar link when present. Otherwise, authored categories retain the corresponding subject context (getting started, known readings, analysis, philosophy, or artwork); other guides use All guides & methods. Category context uses aria-current="location", while an exact destination uses aria-current="page".

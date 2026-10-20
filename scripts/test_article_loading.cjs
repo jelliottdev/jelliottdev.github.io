@@ -80,6 +80,24 @@ async function main(){
  await assert.rejects(vm.runInContext("ensureWikiArticle('missing')",sandbox),/does not exist/);
  await vm.runInContext("ensureWikiArticle('')",sandbox);
  assert.equal(calls,2);
+ sandbox.db.articles=light;
+ const navigationCases={
+  'koans':'#/wiki/philosophical-themes',
+  'urizen':'#/wiki/philosophical-themes',
+  'reading-warning':'#/readings',
+  'blake-newton':'#/wiki/visual-index',
+  'insects':'#/wiki/visual-index',
+  'rune-entropy':'#/wiki/analysis-and-measurement',
+  'running-scripts':'#/wiki/quick-start',
+  'atbash':null,
+  'missing-guide':null
+ };
+ const markup=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ for(const [id,expected] of Object.entries(navigationCases)){
+  assert.equal(vm.runInContext(`wikiSidebarHref(${JSON.stringify(id)})`,sandbox),expected,id);
+  if(expected)assert(markup.includes(`href="${expected}"`),'Category destination must be in navigation');
+ }
+ console.log('PASS: guide categories retain subject navigation context.');
  await checkNavigationRace(false);
  await checkNavigationRace(true);
  console.log('PASS: search parity, all source bodies, shared requests, retry, caching, and unknown guides.');
