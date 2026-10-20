@@ -10789,6 +10789,49 @@ Keep a comparison another reader can check
 
 For each connection, save the passage and page or section, the exact wording you are comparing, and a separate sentence explaining your interpretation. If you propose an outside source, add its specific passage or image and explain both the matches and differences. The concordance helps find repeated wording; the works index distinguishes documented puzzle sources from possible influences.
 
+Where the wording recurs
+
+This map locates four selected words in the nine stored contextual readings. It counts each section once, even when the reading spans several manuscript pages. It includes headings present in that stored text and uses exact whole-word matches, ignoring case. These are raw counts, not frequencies adjusted for section length.
+
+[Image: Exact-word counts for truth, self, divinity and instar across nine contextual readings. Truth occurs in the Warning and Instruction; self in Welcome; divinity in Loss of Divinity and the Parable; instar in Welcome and the Parable.]
+A map of wording, not a score for philosophical importance. Download diagram · Counts, exact excerpts and source checksum.
+
+The Warning and final LP1 Instruction share truth; Welcome and the final parable share instar. These give concrete starting points for the reading route above. But the first and second koans have zero exact matches for self even though identity is central to their dialogues. They discuss the subject through questions, descriptions and the pronoun I. A word search can locate a connection without measuring the whole idea.
+
+The three divinity matches in The Loss of Divinity include one in its heading. The other two occur in the opening account of the three behaviors and the concluding loss of primality. Counting headings is a declared convention; excluding that heading would give two. Yourself is not counted as self, and related forms are not silently added. This is a selected vocabulary comparison, not a scan for the most statistically unusual terms.
+
+Counts with links to the complete readings
+	Reading	Truth	Self	Divinity	Instar
+
+	Warning	1	0	0	0
+
+	Welcome	0	2	0	1
+
+	Some Wisdom	0	0	0	0
+
+	First koan	0	0	0	0
+
+	Loss of Divinity	0	0	3	0
+
+	Second koan	0	0	0	0
+
+	Instruction	2	0	0	0
+
+	LP2-56	0	0	0	0
+
+	Parable · LP2-57	0	0	1	1
+
+
+Reproduce the map or inspect a passage
+
+Extract the reference-data ZIP and run these commands with Python 3. The first checks the saved report and figure, including a separate exact-match check of every source offset. The second prints the surrounding divinity passages.
+
+python scripts/theme_vocabulary.py
+python scripts/reading_concordance.py divinity --context 8
+
+The map script uses the stored contextual English, not raw runes. Use --write only to regenerate its report and SVG. For literal spellings or exact page placement, follow the literal concordance instructions. These counts neither attribute the ideas to an outside author nor supply a cipher rule.
+
+
 Text, interpretation and attribution
 
 The page records preserve literal rune-label readings. Contextual English expands conventions such as U/V and NG/ING; it helps explain sentences but is not the exact sequence to use in a cipher or prime-sum calculation. Compare the transcription layers before drawing conclusions from spelling.
@@ -10878,25 +10921,25 @@ This is a close reading of the compiled known readings, supported by the linked 
 Follow the recurring term in circumference, identity, and emergence, or use the known-reading concordance to locate a word or phrase yourself.
 
 Sources, related references, and files
-- A Warning
+- A Warning; Warning
   https://jelliottdev.github.io/reference/articles/reading-warning.html
-- the final LP1 instruction; The final LP1 instruction
+- the final LP1 instruction; Instruction; The final LP1 instruction
   https://jelliottdev.github.io/reference/articles/reading-instruction.html
 - knowledge and authority; Testing knowledge, certainty, and authority
   https://jelliottdev.github.io/reference/articles/testing-knowledge.html
-- first koan; first koan, LP1-06–09
+- first koan; First koan; first koan, LP1-06–09
   https://jelliottdev.github.io/reference/articles/reading-first-koan.html
-- second; second koan, LP1-14–15
+- second; Second koan; second koan, LP1-14–15
   https://jelliottdev.github.io/reference/articles/reading-second-koan.html
 - koan guide; dedicated koan guide
   https://jelliottdev.github.io/reference/articles/koans.html
-- The Loss of Divinity; The Loss of Divinity, LP1-10–13
+- The Loss of Divinity; Loss of Divinity; The Loss of Divinity, LP1-10–13
   https://jelliottdev.github.io/reference/articles/reading-loss-of-divinity.html
 - page map and close reading
   https://jelliottdev.github.io/reference/articles/consumption-preservation-adherence.html#page-map
 - Welcome
   https://jelliottdev.github.io/reference/articles/reading-welcome.html
-- final parable; LP2-57's parable
+- final parable; Parable · LP2-57; LP2-57's parable
   https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 - circumference; circumference, identity, and emergence
   https://jelliottdev.github.io/reference/articles/circumference.html
@@ -10916,6 +10959,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reading-concordance.html
 - works index; referenced works and possible influences index
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
+- Exact-word counts for truth, self, divinity and instar across nine contextual readings. Truth occurs in the Warning and Instruction; self in Welcome; divinity in Loss of Divinity and the Parable; instar in Welcome and the Parable.; Download diagram
+  https://jelliottdev.github.io/exports/figures/theme-vocabulary.svg
+- Counts, exact excerpts and source checksum
+  https://jelliottdev.github.io/exports/theme-vocabulary.json
+- LP2-56
+  https://jelliottdev.github.io/reference/articles/reading-lp2-56.html
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- map script
+  https://jelliottdev.github.io/scripts/theme_vocabulary.py
+- literal concordance instructions
+  https://jelliottdev.github.io/reference/articles/reading-concordance.html#literal
 - transcription layers; the rune-label conventions
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - Emerson’s Self-Reliance
