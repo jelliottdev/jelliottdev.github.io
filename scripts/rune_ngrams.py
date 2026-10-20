@@ -11,6 +11,33 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+def indexed_runes(text, lookup):
+    """Keep original Unicode character positions while filtering the rune stream."""
+    symbols, positions = [], []
+    line, column = 1, 1
+    for offset, character in enumerate(text):
+        if character in lookup:
+            symbols.append(lookup[character])
+            positions.append({"offset": offset, "line": line, "column": column})
+        if character == "\n":
+            line, column = line + 1, 1
+        else:
+            column += 1
+    return symbols, positions
+
+
+def occurrence(text, positions, start, length):
+    first = positions[start]
+    end = positions[start + length - 1]["offset"] + 1
+    return {
+        "start_rune": start,
+        "source_start": first["offset"],
+        "source_end": end,
+        "source_line": first["line"],
+        "source_column": first["column"],
+        "source_text": text[first["offset"]:end],
+    }
+
 
 def repeated_windows(symbols, length):
     if isinstance(length, bool) or not isinstance(length, int) or not 1 <= length <= 12:
@@ -40,7 +67,7 @@ def report(page_id, length):
     if unknown:
         raise ValueError("Unknown runes in transcription: " + ascii(unknown))
     lookup = {rune: i for i, rune in enumerate(runes)}
-    symbols = [lookup[c] for c in text if c in lookup]
+    symbols, positions = indexed_runes(text, lookup)
     if len(symbols) != page["rune_count"]:
         raise ValueError("Rune count disagrees with the page index")
     patterns = repeated_windows(symbols, length)
@@ -53,6 +80,10 @@ def report(page_id, length):
         "scope": "Archived runes in source order, including headings; all non-runes removed. "
                  "Windows may cross word, line, and paragraph boundaries, but not pages.",
         "positions": "Zero-based rune ordinals in the filtered stream; not character offsets.",
+        "source_positions": "Source start/end are zero-based Unicode character offsets with "
+                            "an exclusive end. Source line/column are one-based; LF starts a new "
+                            "line and each Unicode character counts as one column. These are "
+                            "archive text positions, not image coordinates or reader text-row IDs.",
         "counting": "All overlapping windows; repeated means at least two occurrences. "
                     "Sorted by count descending, then alphabet-index tuple.",
         "rune_count": len(symbols),
@@ -63,7 +94,8 @@ def report(page_id, length):
             {"indices": list(pattern),
              "labels": [alphabet[i]["latin"] for i in pattern],
              "runes": "".join(runes[i] for i in pattern),
-             "count": len(starts), "starts": starts}
+             "count": len(starts), "starts": starts,
+             "occurrences": [occurrence(text, positions, start, length) for start in starts]}
             for pattern, starts in patterns
         ],
         "interpretation": "Descriptive counts, not a chance probability, key length, or decryption.",

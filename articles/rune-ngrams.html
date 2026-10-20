@@ -30,6 +30,21 @@ python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json</co
 <tr><td>D–S</td><td>23, 15</td><td>7, 14, 41</td></tr>
 </tbody></table></div>
 <p>These are selected rows from the full report, not an exhaustive list of repeated pairs. The empty trigram list means every three-rune window is distinct under this rule. A longer exact repeat would contain a repeated trigram, so the same stream also has no exact repeat of length greater than three. This says nothing about approximate matches, other representations, or patterns spanning multiple pages.</p>
+<h2 id="source-positions">Find an occurrence in the original text file</h2>
+<p>Each pattern’s <code>occurrences</code> list maps the filtered rune positions back to the unchanged transcription. For the R–E pattern in the example above:</p>
+<div class="table-wrap"><table><thead><tr><th>Start rune</th><th>Source line / column</th><th>Source characters</th><th>Exact source slice</th></tr></thead><tbody>
+<tr><td>84</td><td>4 / 20</td><td>[109, 111)</td><td><code>ᚱᛖ</code></td></tr>
+<tr><td>162</td><td>8 / 6</td><td>[214, 217)</td><td><code>ᚱ-ᛖ</code></td></tr>
+<tr><td>233</td><td>11 / 11</td><td>[310, 312)</td><td><code>ᚱᛖ</code></td></tr>
+</tbody></table></div>
+<p>The second occurrence crosses a hyphen, the archive’s <a href="#/wiki/transliteration">word-separator notation</a>. Filtering makes these runes adjacent, but the preserved source slice keeps the separator visible. All three match the declared rune-stream rule; they would not all qualify under a rule that forbids crossing word boundaries.</p>
+<p><code>source_start</code> and <code>source_end</code> count Unicode characters from zero. The end is excluded: <code>[214, 217)</code> means characters 214, 215 and 216. <code>source_line</code> and <code>source_column</code> count from one. An LF newline starts a new source line; each Unicode character counts as one column, even if a tab or symbol takes a different visual width in an editor. These are neither UTF-8 byte offsets nor pixel positions.</p>
+<p>To check the second occurrence directly, run this from the extracted bundle or repository:</p>
+<pre><code>from pathlib import Path
+source = Path("text/lp2-31.txt").read_bytes().decode("utf-8")
+assert source[214:217] == "ᚱ-ᛖ"
+print(source.splitlines()[7])  # Source line 8; Python lists start at zero.</code></pre>
+<p>The JSON’s <code>source_text</code> field preserves the complete slice, including any intervening separators or newlines. Source-file line numbers can differ from the wiki’s displayed text-row numbers because the reader omits standalone editorial separators. Use the downloaded source file for these coordinates.</p>
 <h2 id="interpret">What a repeat does and does not establish</h2>
 <p>Repeated windows are observations about the selected text. Their counts alone do not give a chance probability, a cipher family or a key length. Window overlap also means that the observed windows are not independent samples. A repeated run of identical symbols illustrates the problem: several windows can be produced by one local run.</p>
 <p>A fixed reversible alphabet substitution preserves the occurrence positions and counts of corresponding patterns, though it renames their symbols. Arbitrary transposition can change adjacency and therefore these counts. See <a href="#/wiki/cipher-invariants">cipher invariants</a> before using n-grams to rank transformations.</p>
