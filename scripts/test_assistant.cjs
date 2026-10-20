@@ -9,6 +9,12 @@ assert.equal(Search.select([page,experiment],'has anyone tested page 31').length
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[0].id,'test');
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[1].id,'lp2-31-0');
 assert.deepEqual(Search.pageIds('LP2-31 and lp1 4'),['lp2-31','lp1-04']);
+for(const notation of ['LP2:31','LP2 : 31','LP2 page 31','LP2-page-31']){
+ assert.deepEqual(Search.pageIds(notation),['lp2-31']);
+ assert.equal(Search.select([page,experiment],`has anyone tried ${notation}`).length,0,
+   'A page notation must not become a technique match');
+ assert.equal(Search.select([page,experiment],`reverse prime sequence on ${notation}`)[1].id,page.id);
+}
 const sources=[{title:'Scope',href:'#/experiments/test'}];
 const html=Markdown.render('# Scope\n\n**One row** [1].\n\n- First\n- Second\n\n| Test | Scope |\n| --- | --- |\n| Reverse | One row |\n\n```py\nprint("<script>")\n```\n\n<img src=x onerror=alert(1)>\n\n[bad](javascript:alert(1))',sources);
 assert(html.includes('<strong>One row</strong>'));assert(html.includes('<table>'));assert(html.includes('<li>Second</li>'));
