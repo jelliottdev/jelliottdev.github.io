@@ -10723,6 +10723,9 @@ Similarly, instar is a biological term used in the Welcome and final parable. It
 
 The self and identity comparison shows how to read two works together while retaining their differences: Emerson’s affirmative account of self-trust is compared with the first koan’s unfinished answer.
 
+English Qaballa: order and value
+Connection: a proposed comparison with an outside alphabet-assignment system. The guide identifies the Crowley passage, reproduces the step-eleven table, and explains why a 26-letter construction cannot simply be treated as a 29-rune cipher. No manuscript quotation match or decoding result is established.
+
 How to add a useful comparison
 
 Locate both objects. Give the manuscript ID and the outside work’s edition, chapter, plate, or collection record.
@@ -10829,6 +10832,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 - self and identity comparison
   https://jelliottdev.github.io/reference/articles/self-and-identity.html
+- English Qaballa: order and value
+  https://jelliottdev.github.io/reference/articles/english-qaballa.html
 - the reproduction guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - documented experiment records
@@ -17898,6 +17903,114 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/outguess.html
 
 Article: https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
+
+
+---
+
+English Qaballa: order, value and alphabet permutations
+
+Reproduce the step-eleven alphabet and distinguish a proposed comparison from a bounded rune-cipher test.
+
+English Qaballa assigns numbers to the 26 English letters in a particular order. It offers a concrete comparison for proposals about changing an alphabet's order or numerical values. No Liber Primus decryption or source attribution is established by that comparison.
+
+Where “order and value” comes from
+
+Chapter II, verse 55 of Aleister Crowley's The Book of the Law contains the phrase “the order & value of the English Alphabet”. Read it in the source text. This identifies an outside reference; it does not locate an equivalent phrase in Liber Primus. A claim of quotation or influence still needs a specific manuscript image, a reproducible reading and a comparison of the surrounding passage.
+
+Jake Stratton-Kent's 1998 English Qaballa FAQ supplies the letter table and describes its use within a Thelemic practice. It is a practitioner account: useful evidence for what this system is, but its claims about the significance of numerical correspondences are not statistical tests.
+
+The step-eleven rule
+
+Write the ordinary English alphabet with positions A = 0 through Z = 25. Start at A, advance eleven positions, and wrap around after Z. Assign values 1 through 26 in the order visited. This reproduces the FAQ's table:
+
+	Step	Position calculation	Letter	Assigned value
+
+	0	0	A	1
+
+	1	11	L	2
+
+	2	22	W	3
+
+	3	33 mod 26 = 7	H	4
+
+	4	44 mod 26 = 18	S	5
+
+
+Order: A L W H S D O Z K V G R C
+Value: 1 2 3 4 5 6 7 8 9 10 11 12 13
+
+Order: N  Y  J  U  F  Q  B  M  X  I  T  E  P
+Value: 14 15 16 17 18 19 20 21 22 23 24 25 26
+
+The formula is position(k) = 11k mod 26 for k = 0, …, 25. Because 11 and 26 have no common factor greater than one, all 26 letters are visited before the sequence repeats. A step of two would visit only thirteen positions. The distinction matters when generalizing a circular alphabet rule.
+
+Reproduce the table
+
+This Python example checks the construction against the published order. It does not process manuscript text or test a cipher.
+
+from math import gcd
+from string import ascii_uppercase
+
+step = 11
+assert gcd(step, 26) == 1
+order = ''.join(ascii_uppercase[(step * k) % 26]
+                for k in range(26))
+assert order == 'ALWHSDOZKV GRCNYJUFQBMXITEP'.replace(' ', '')
+values = {letter: k + 1 for k, letter in enumerate(order)}
+assert len(values) == 26
+print(order)
+print(values['A'], values['L'], values['W'])  # 1 2 3
+
+What changes when applying it to runes?
+
+Gematria Primus has 29 rune symbols and prime values. Some rune labels contain multiple Latin letters. Reordering the 29 runes, reordering 26 English letters after transliteration, and assigning new numerical values are therefore different operations.
+
+	Choice	English table above	A rune experiment must specify
+
+	Objects being ordered	26 Latin letters	29 rune symbols, or a defined transliteration
+
+	Modulus	26	29 for rune positions; another modulus needs a reason
+
+	Values	Integers 1–26	Positions, prime values, or an explicit replacement table
+
+	Operation	Table construction	Substitution, key generation, summation, or another stated transform
+
+
+For example, stepping by eleven through 29 positions visits every rune, but it produces a different table from English Qaballa. The same is true of every step from 1 through 28 because 29 is prime. A complete traversal is consequently an expected property of all those steps, not evidence that eleven was intended. Keep prime indices and prime values separate as well: an index difference of eleven need not be a numerical difference of eleven.
+
+Turn the proposal into a bounded test
+
+Start with one question: does a specified alphabet permutation, used in a specified way, improve the chosen decoding measure on specified pages? Record the alphabet, starting point, direction, numerical assignment, transform, page boundaries and scoring rule before looking at candidate outputs. Preserve all outputs, including those without recognizable words.
+
+A family containing every start and every nonzero constant step has 29 × 28 = 812 distinct ordered rune tables. Reverse directions are already included as negative steps modulo 29; counting both again would duplicate tables. These 812 tables are only a restricted family of permutations, not all possible rune orders. Adding key choices, reset rules or alternative transforms expands the search further. See search space and bounds.
+
+Summing assigned values asks a different question from decoding. A sum loses letter order, so every anagram has the same total under a fixed per-letter assignment. If testing whether totals match selected words or numbers unusually often, define the comparison vocabulary and a suitable null model, and account for all tried tables and targets. A memorable match selected afterward cannot supply its own chance probability. The spelling and prime-sum guide gives manuscript examples of why order and sum must be distinguished.
+
+Current status
+
+The alphabet construction above is reproducible. This guide records a proposed comparison and a possible experiment family; it reports no manuscript decoding test. A future experiment record should group related starts, steps and value assignments as named variants, with scripts, inputs and limits, rather than creating a separate theory page for every numerical match.
+
+Return to works and possible influences for comparisons with established manuscript locations.
+
+Sources, related references, and files
+- source text
+  https://sacred-texts.com/oto/engccxx.htm
+- 1998 English Qaballa FAQ
+  https://www.arcane-archive.org/faqs/faq.englqbl.9801.php
+- Gematria Primus
+  https://jelliottdev.github.io/#/gematria
+- prime indices and prime values
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- spelling and prime-sum guide
+  https://jelliottdev.github.io/reference/articles/prime-sums.html
+- experiment record
+  https://jelliottdev.github.io/#/experiments
+- works and possible influences
+  https://jelliottdev.github.io/reference/articles/works-and-influences.html
+
+Article: https://jelliottdev.github.io/reference/articles/english-qaballa.html
 
 
 ---

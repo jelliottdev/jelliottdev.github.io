@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>English Qaballa: order, value and alphabet permutations — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/english-qaballa">Open in wiki</a> · <a href="english-qaballa.txt">Plain text</a></nav><h1>English Qaballa: order, value and alphabet permutations</h1><p>Reproduce the step-eleven alphabet and distinguish a proposed comparison from a bounded rune-cipher test.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#wording">Where “order and value” comes from</a></li><li><a href="#rule">The step-eleven rule</a></li><li><a href="#reproduce">Reproduce the table</a></li><li><a href="#runes">What changes when applying it to runes?</a></li><li><a href="#bounds">Turn the proposal into a bounded test</a></li><li><a href="#status">Current status</a></li></ul></nav></details><p>English Qaballa assigns numbers to the 26 English letters in a particular order. It offers a concrete comparison for proposals about changing an alphabet's order or numerical values. No Liber Primus decryption or source attribution is established by that comparison.</p>
+<h2 id="wording">Where “order and value” comes from</h2>
+<p>Chapter II, verse 55 of Aleister Crowley's <cite>The Book of the Law</cite> contains the phrase “the order &amp; value of the English Alphabet”. Read it in the <a href="https://sacred-texts.com/oto/engccxx.htm">source text</a>. This identifies an outside reference; it does not locate an equivalent phrase in Liber Primus. A claim of quotation or influence still needs a specific manuscript image, a reproducible reading and a comparison of the surrounding passage.</p>
+<p>Jake Stratton-Kent's <a href="https://www.arcane-archive.org/faqs/faq.englqbl.9801.php">1998 English Qaballa FAQ</a> supplies the letter table and describes its use within a Thelemic practice. It is a practitioner account: useful evidence for what this system is, but its claims about the significance of numerical correspondences are not statistical tests.</p>
+<h2 id="rule">The step-eleven rule</h2>
+<p>Write the ordinary English alphabet with positions A = 0 through Z = 25. Start at A, advance eleven positions, and wrap around after Z. Assign values 1 through 26 in the order visited. This reproduces the FAQ's table:</p>
+<div class="table-wrap"><table><thead><tr><th>Step</th><th>Position calculation</th><th>Letter</th><th>Assigned value</th></tr></thead><tbody>
+<tr><td>0</td><td>0</td><td>A</td><td>1</td></tr>
+<tr><td>1</td><td>11</td><td>L</td><td>2</td></tr>
+<tr><td>2</td><td>22</td><td>W</td><td>3</td></tr>
+<tr><td>3</td><td>33 mod 26 = 7</td><td>H</td><td>4</td></tr>
+<tr><td>4</td><td>44 mod 26 = 18</td><td>S</td><td>5</td></tr>
+</tbody></table></div>
+<pre><code>Order: A L W H S D O Z K V G R C
+Value: 1 2 3 4 5 6 7 8 9 10 11 12 13
+
+Order: N  Y  J  U  F  Q  B  M  X  I  T  E  P
+Value: 14 15 16 17 18 19 20 21 22 23 24 25 26</code></pre>
+<p>The formula is <code>position(k) = 11k mod 26</code> for k = 0, …, 25. Because 11 and 26 have no common factor greater than one, all 26 letters are visited before the sequence repeats. A step of two would visit only thirteen positions. The distinction matters when generalizing a circular alphabet rule.</p>
+<h2 id="reproduce">Reproduce the table</h2>
+<p>This Python example checks the construction against the published order. It does not process manuscript text or test a cipher.</p>
+<pre><code>from math import gcd
+from string import ascii_uppercase
+
+step = 11
+assert gcd(step, 26) == 1
+order = ''.join(ascii_uppercase[(step * k) % 26]
+                for k in range(26))
+assert order == 'ALWHSDOZKV GRCNYJUFQBMXITEP'.replace(' ', '')
+values = {letter: k + 1 for k, letter in enumerate(order)}
+assert len(values) == 26
+print(order)
+print(values['A'], values['L'], values['W'])  # 1 2 3</code></pre>
+<h2 id="runes">What changes when applying it to runes?</h2>
+<p><a href="../../index.html#/gematria">Gematria Primus</a> has 29 rune symbols and prime values. Some rune labels contain multiple Latin letters. Reordering the 29 runes, reordering 26 English letters after transliteration, and assigning new numerical values are therefore different operations.</p>
+<div class="table-wrap"><table><thead><tr><th>Choice</th><th>English table above</th><th>A rune experiment must specify</th></tr></thead><tbody>
+<tr><td>Objects being ordered</td><td>26 Latin letters</td><td>29 rune symbols, or a defined transliteration</td></tr>
+<tr><td>Modulus</td><td>26</td><td>29 for rune positions; another modulus needs a reason</td></tr>
+<tr><td>Values</td><td>Integers 1–26</td><td>Positions, prime values, or an explicit replacement table</td></tr>
+<tr><td>Operation</td><td>Table construction</td><td>Substitution, key generation, summation, or another stated transform</td></tr>
+</tbody></table></div>
+<p>For example, stepping by eleven through 29 positions visits every rune, but it produces a different table from English Qaballa. The same is true of every step from 1 through 28 because 29 is prime. A complete traversal is consequently an expected property of all those steps, not evidence that eleven was intended. Keep <a href="prime-indices.html">prime indices and prime values</a> separate as well: an index difference of eleven need not be a numerical difference of eleven.</p>
+<h2 id="bounds">Turn the proposal into a bounded test</h2>
+<p>Start with one question: does a specified alphabet permutation, used in a specified way, improve the chosen decoding measure on specified pages? Record the alphabet, starting point, direction, numerical assignment, transform, page boundaries and scoring rule before looking at candidate outputs. Preserve all outputs, including those without recognizable words.</p>
+<p>A family containing every start and every nonzero constant step has <code>29 × 28 = 812</code> distinct ordered rune tables. Reverse directions are already included as negative steps modulo 29; counting both again would duplicate tables. These 812 tables are only a restricted family of permutations, not all possible rune orders. Adding key choices, reset rules or alternative transforms expands the search further. See <a href="search-space.html">search space and bounds</a>.</p>
+<p>Summing assigned values asks a different question from decoding. A sum loses letter order, so every anagram has the same total under a fixed per-letter assignment. If testing whether totals match selected words or numbers unusually often, define the comparison vocabulary and a suitable null model, and account for all tried tables and targets. A memorable match selected afterward cannot supply its own chance probability. The <a href="prime-sums.html">spelling and prime-sum guide</a> gives manuscript examples of why order and sum must be distinguished.</p>
+<h2 id="status">Current status</h2>
+<p>The alphabet construction above is reproducible. This guide records a proposed comparison and a possible experiment family; it reports no manuscript decoding test. A future <a href="../../index.html#/experiments">experiment record</a> should group related starts, steps and value assignments as named variants, with scripts, inputs and limits, rather than creating a separate theory page for every numerical match.</p>
+<p>Return to <a href="works-and-influences.html">works and possible influences</a> for comparisons with established manuscript locations.</p>
+<h2>Guides linking here</h2><ul><li><a href="works-and-influences.html">Referenced works and possible influences</a></li></ul></main></body></html>
