@@ -5477,7 +5477,21 @@ For image-based work, extract the original-images ZIP into the same folder as th
 
 	Known rune readings	Python 3, standard library only	Warning control
 
+	Locate words in known readings	Python 3, standard library only; searches contextual English	Known-reading concordance
+
+	Reproduce rune prime sums	Python 3, standard library only; uses decoded rune sequences	Prime-sum checks
+
+	Check prime positions and numerical examples	Python 3, standard library only	Prime values and positions
+
+	Recompute whole-page IoC	Python 3, standard library only; uses archived rune streams	IoC baseline
+
+	Redraw the frequency chart	Python 3 and Matplotlib; reads the saved IoC counts	Frequency chart and command
+
 	Reconstruct the exported cover chain	Python 3, standard library only; uses stored extractions	Cover chain
+
+	Reproduce the illustrated-cover RSA message	Python 3, standard library only; uses the recorded factors and stored payload	RSA reproduction
+
+	Reproduce the Emerson book cipher	Python 3, standard library only for the stored paragraph source	Book-cipher reproduction
 
 	Check visual-record structure	Python 3, standard library only	Opening-page inventory
 
@@ -5488,6 +5502,31 @@ For image-based work, extract the original-images ZIP into the same folder as th
 	Verify signed messages	GnuPG and the documented public key	PGP signatures
 
 
+Install an optional package only when you need it
+
+You can complete the warning walkthrough, prime-sum checks, concordance, and IoC calculation without installing any Python packages. To redraw the chart, install Matplotlib into the same Python environment that will run the plotting script. To recount image pixels, install Pillow. The package names and Python import names differ for Pillow: its code is imported as PIL.
+
+python -m pip install matplotlib
+python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg
+
+The installation command may download packages; the plotting command reads local files. If you use py or python3 for the scripts, use that same command before -m pip. This avoids installing a package for one Python interpreter and running the script with another.
+
+For a separate project environment, create a local .venv folder and invoke its Python directly. Activation is optional:
+
+Windows PowerShell
+
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install matplotlib
+.\.venv\Scripts\python.exe scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg
+
+macOS / Linux
+
+python3 -m venv .venv
+.venv/bin/python -m pip install matplotlib
+.venv/bin/python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg
+
+Keep the environment separate from the preserved evidence files. Record package versions when sharing a generated figure: python -m pip show matplotlib reports the installed version. Visual output can vary across package or font versions even when the underlying numerical counts agree.
+
 When a command fails
 
 “Command not found” or “not recognized”: check the Python command first. If it names outguess or gpg, that is a separate executable, not a missing rune dataset.
@@ -5495,6 +5534,10 @@ When a command fails
 “Can’t open file” for the script: check the terminal’s current folder. Open the extracted folder that contains scripts, rather than its parent folder or the ZIP itself.
 
 A missing text/ or data/ file: extract a fresh reference-data bundle and keep its directories together. Moving just the script breaks the relative paths it uses to find its inputs.
+
+No module named matplotlib or No module named PIL: install the optional package for the Python interpreter running that particular task. Neither error means the basic reading checks need those packages.
+
+“Output already exists”: choose a new output filename or inspect the existing result. Scripts that refuse overwrites do so to preserve earlier output, not because the calculation failed.
 
 Boxes instead of runes: the terminal font may lack runic characters. Check the numeric indices and Latin labels, and compare with the browser reader. Missing glyphs alone do not establish bad input bytes.
 
@@ -5521,14 +5564,20 @@ https://jelliottdev.github.io/reference/articles/interruptions.html
 https://jelliottdev.github.io/reference/articles/transliteration.html
 https://jelliottdev.github.io/downloads/original-images.zip
 https://jelliottdev.github.io/downloads/REFERENCE-DATA-README.txt
+https://jelliottdev.github.io/reference/articles/reading-concordance.html
+https://jelliottdev.github.io/reference/articles/prime-sums.html
+https://jelliottdev.github.io/reference/articles/prime-indices.html
+https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+https://jelliottdev.github.io/reference/articles/index-of-coincidence.html#frequencies
 https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/reference/articles/cover-rsa.html
+https://jelliottdev.github.io/reference/articles/emerson-self-reliance.html
 https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
 https://jelliottdev.github.io/reference/articles/image-regions.html
 https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/checksums.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
-https://jelliottdev.github.io/reference/articles/prime-sums.html
 https://jelliottdev.github.io/scripts/reproduce_reading.py
 https://jelliottdev.github.io/data/evidence/reading-methods.json
 

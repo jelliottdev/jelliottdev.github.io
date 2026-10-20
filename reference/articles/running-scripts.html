@@ -43,16 +43,40 @@ lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 <p>For image-based work, extract <a href="../../downloads/original-images.zip">the original-images ZIP</a> into the same folder as the reference data. See the <a href="../../downloads/REFERENCE-DATA-README.txt">bundle instructions</a> for the complete command list.</p>
 <div class="table-wrap"><table><thead><tr><th>Task</th><th>Requirements</th><th>Instructions</th></tr></thead><tbody>
 <tr><td>Known rune readings</td><td>Python 3, standard library only</td><td><a href="reading-warning.html">Warning control</a></td></tr>
+<tr><td>Locate words in known readings</td><td>Python 3, standard library only; searches contextual English</td><td><a href="reading-concordance.html">Known-reading concordance</a></td></tr>
+<tr><td>Reproduce rune prime sums</td><td>Python 3, standard library only; uses decoded rune sequences</td><td><a href="prime-sums.html">Prime-sum checks</a></td></tr>
+<tr><td>Check prime positions and numerical examples</td><td>Python 3, standard library only</td><td><a href="prime-indices.html">Prime values and positions</a></td></tr>
+<tr><td>Recompute whole-page IoC</td><td>Python 3, standard library only; uses archived rune streams</td><td><a href="index-of-coincidence.html">IoC baseline</a></td></tr>
+<tr><td>Redraw the frequency chart</td><td>Python 3 and Matplotlib; reads the saved IoC counts</td><td><a href="index-of-coincidence.html#frequencies">Frequency chart and command</a></td></tr>
 <tr><td>Reconstruct the exported cover chain</td><td>Python 3, standard library only; uses stored extractions</td><td><a href="cover-chain.html">Cover chain</a></td></tr>
+<tr><td>Reproduce the illustrated-cover RSA message</td><td>Python 3, standard library only; uses the recorded factors and stored payload</td><td><a href="cover-rsa.html">RSA reproduction</a></td></tr>
+<tr><td>Reproduce the Emerson book cipher</td><td>Python 3, standard library only for the stored paragraph source</td><td><a href="emerson-self-reliance.html">Book-cipher reproduction</a></td></tr>
 <tr><td>Check visual-record structure</td><td>Python 3, standard library only</td><td><a href="lp2-opening-pages.html">Opening-page inventory</a></td></tr>
 <tr><td>Recount image pixels with <code>--pixels</code></td><td>Python 3 and Pillow</td><td><a href="image-regions.html">Image regions and measurement rules</a></td></tr>
 <tr><td>Extract hidden JPEG payloads again</td><td>Python wrapper plus an OutGuess executable</td><td><a href="outguess.html">OutGuess extraction</a></td></tr>
 <tr><td>Verify signed messages</td><td>GnuPG and the documented public key</td><td><a href="pgp-signatures.html">PGP signatures</a></td></tr>
 </tbody></table></div>
+<h2 id="optional-packages">Install an optional package only when you need it</h2>
+<p>You can complete the warning walkthrough, prime-sum checks, concordance, and IoC calculation without installing any Python packages. To redraw the chart, install Matplotlib into the same Python environment that will run the plotting script. To recount image pixels, install Pillow. The package names and Python import names differ for Pillow: its code is imported as <code>PIL</code>.</p>
+<pre><code>python -m pip install matplotlib
+python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg</code></pre>
+<p>The installation command may download packages; the plotting command reads local files. If you use <code>py</code> or <code>python3</code> for the scripts, use that same command before <code>-m pip</code>. This avoids installing a package for one Python interpreter and running the script with another.</p>
+<p>For a separate project environment, create a local <code>.venv</code> folder and invoke its Python directly. Activation is optional:</p>
+<h3>Windows PowerShell</h3>
+<pre><code>py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install matplotlib
+.\.venv\Scripts\python.exe scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg</code></pre>
+<h3>macOS / Linux</h3>
+<pre><code>python3 -m venv .venv
+.venv/bin/python -m pip install matplotlib
+.venv/bin/python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg</code></pre>
+<p>Keep the environment separate from the preserved evidence files. Record package versions when sharing a generated figure: <code>python -m pip show matplotlib</code> reports the installed version. Visual output can vary across package or font versions even when the underlying numerical counts agree.</p>
 <h2 id="troubleshooting">When a command fails</h2>
 <ul><li><strong>“Command not found” or “not recognized”:</strong> check the Python command first. If it names <code>outguess</code> or <code>gpg</code>, that is a separate executable, not a missing rune dataset.</li>
 <li><strong>“Can’t open file” for the script:</strong> check the terminal’s current folder. Open the extracted folder that contains <code>scripts</code>, rather than its parent folder or the ZIP itself.</li>
 <li><strong>A missing <code>text/</code> or <code>data/</code> file:</strong> extract a fresh reference-data bundle and keep its directories together. Moving just the script breaks the relative paths it uses to find its inputs.</li>
+<li><strong><code>No module named matplotlib</code> or <code>No module named PIL</code>:</strong> install the optional package for the Python interpreter running that particular task. Neither error means the basic reading checks need those packages.</li>
+<li><strong>“Output already exists”:</strong> choose a new output filename or inspect the existing result. Scripts that refuse overwrites do so to preserve earlier output, not because the calculation failed.</li>
 <li><strong>Boxes instead of runes:</strong> the terminal font may lack runic characters. Check the numeric indices and Latin labels, and compare with the browser reader. Missing glyphs alone do not establish bad input bytes.</li>
 <li><strong>“Output differs” or a hash mismatch:</strong> preserve the full error and identify the affected file. Compare with an unchanged copy and the <a href="checksums.html">checksums</a>. Do not change the expected output merely to make the check pass.</li></ul>
 <h2 id="record">Keep the result reproducible</h2>
