@@ -1,7 +1,7 @@
 """Check local article destinations without network requests.
 
 Checks guide IDs/section anchors, manuscript IDs, local files/images, duplicate
-HTML IDs, metadata destinations, and topic-index links. Other application routes and external URLs
+HTML IDs, metadata destinations, published experiment routes, and topic-index links. Other application routes and external URLs
 are outside this check; it does not certify their availability.
 """
 from collections import Counter
@@ -11,6 +11,12 @@ from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Stable bookmark IDs rendered by experimentArticle in experiments.js.
+EXPERIMENT_SECTIONS = {
+    "experiment-finding", "experiment-scope", "experiment-reproduce",
+    "experiment-remaining", "experiment-sources",
+}
 
 
 class Links(HTMLParser):
@@ -29,9 +35,10 @@ class Links(HTMLParser):
             self.targets.append(target)
 
 
-def validate(root, articles, topics=()):
+def validate(root, articles, topics=(), experiments=()):
     errors = []
     parsed = {}
+    published = {r["id"]: r for r in experiments if r.get("status") == "published"}
     counts = Counter(a["id"] for a in articles)
     errors.extend(f"Duplicate article ID: {aid}" for aid, count in counts.items() if count > 1)
     for article in articles:
@@ -64,6 +71,19 @@ def validate(root, articles, topics=()):
                         errors.append(f"{aid}: missing guide section {target}")
             elif target.startswith(("#/page/", "#/reader/")):
                 manuscript(aid, unquote(target.split("/")[2].split("?")[0]))
+            elif target.startswith("#/experiments/"):
+                route = urlsplit(target[1:])
+                if "#" in target[1:]:
+                    errors.append(f"{aid}: unsupported experiment fragment {target}; use ?section= instead")
+                    continue
+                record = published.get(route.path[len("/experiments/"):])
+                if record is None:
+                    errors.append(f"{aid}: missing published experiment {target}")
+                    continue
+                sections = EXPERIMENT_SECTIONS | ({"experiment-family"} if record.get("family") else set())
+                for section in parse_qs(route.query).get("section", []):
+                    if section not in sections:
+                        errors.append(f"{aid}: missing experiment section {target}")
             elif target.startswith("#/"):
                 continue  # Other application routes need browser/router checks.
             elif target.startswith("#"):
@@ -102,11 +122,12 @@ def main():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
     articles += json.loads((ROOT / "articles/readings/index.json").read_text(encoding="utf-8"))
     topics = json.loads((ROOT / "data/topics.json").read_text(encoding="utf-8"))
-    errors, total = validate(ROOT, articles, topics)
+    experiments = json.loads((ROOT / "data/experiments.json").read_text(encoding="utf-8"))["records"]
+    errors, total = validate(ROOT, articles, topics, experiments)
     if errors:
         raise SystemExit("\n".join(errors))
     print(f"PASS: {len(articles)} articles, {len(topics)} topics, {total} link/image references; "
-          "guide sections, manuscript IDs, local files, and metadata destinations checked.")
+          "guide sections, published experiment sections, manuscript IDs, local files, and metadata destinations checked.")
     print("External URLs and other application routes were not checked.")
 
 

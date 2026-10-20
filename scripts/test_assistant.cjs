@@ -115,9 +115,16 @@ experimentContext.published=published;
 experimentContext.head=()=>'';
 experimentContext.footer=()=>'';
 vm.runInContext('experimentRecords=published',experimentContext);
+const auditSource=fs.readFileSync(path.join(__dirname,'check_article_links.py'),'utf8');
+const auditSectionBlock=auditSource.match(/EXPERIMENT_SECTIONS = \{([\s\S]*?)\}/);
+assert(auditSectionBlock,'Link audit must declare its checked experiment section IDs');
+const auditedSections=[...auditSectionBlock[1].matchAll(/"(experiment-[a-z-]+)"/g)].map(m=>m[1]);
+assert(auditedSections.length>0);
 for(const record of published){
  const rendered=experimentContext.experimentArticle(record);
  const sectionIDs=[...rendered.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ for(const id of auditedSections)assert(sectionIDs.includes(id),`Link audit accepts missing rendered section ${id}`);
+ assert.equal(sectionIDs.includes('experiment-family'),!!record.family,'Family bookmark must match record metadata');
  for(const match of rendered.matchAll(/href="(#\/experiments\/[^"]+\?section=([^"]+))" data-anchor="([^"]+)"/g)){
   assert.equal(match[2],match[3]);
   assert(sectionIDs.includes(match[2]),'Experiment section links must have a rendered destination');

@@ -64,6 +64,37 @@ class ArticleLinks(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(count, 3)
 
+    def test_published_experiment_routes_and_sections(self):
+        self.write("one", """<a href="#/experiments">Browse</a>
+        <a href="#/experiments/complete">Record</a>
+        <a href="#/experiments/complete?section=experiment-scope">Scope</a>
+        <a href="#/experiments/complete?section=experiment-family">Family</a>""")
+        records = [{"id": "complete", "status": "published", "family": {"id": "group"}}]
+        errors, count = validate(self.root, [{"id": "one"}], experiments=records)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 4)
+
+    def test_draft_missing_and_invalid_experiment_destinations(self):
+        self.write("one", """<a href="#/experiments/absent">Missing</a>
+        <a href="#/experiments/draft">Unpublished</a>
+        <a href="#/experiments/complete?section=missing">Bad section</a>
+        <a href="#/experiments/complete?section=experiment-family">No family</a>
+        <a href="#/experiments/complete#experiment-scope">Wrong fragment</a>
+        <a href="#/experiments/complete/extra">Extra path</a>""")
+        records = [{"id": "complete", "status": "published"}, {"id": "draft", "status": "draft"}]
+        errors, _ = validate(self.root, [{"id": "one"}], experiments=records)
+        self.assertEqual(len(errors), 6)
+        self.assertEqual(sum("missing published experiment" in e for e in errors), 3)
+        self.assertEqual(sum("missing experiment section" in e for e in errors), 2)
+        self.assertEqual(sum("unsupported experiment fragment" in e for e in errors), 1)
+
+    def test_topic_experiment_links_are_checked(self):
+        self.write("one", "<p>Example</p>")
+        errors, _ = validate(self.root, [{"id": "one"}],
+                             [{"id": "example", "links": [{"href": "#/experiments/absent"}]}])
+        self.assertEqual(len(errors), 1)
+        self.assertIn("topic example: missing published experiment", errors[0])
+
     def test_broken_topic_destinations_and_duplicate_ids_fail(self):
         self.write("one", '<h2 id="exists">Existing</h2>')
         topics = [{"id": "detail", "links": [{"href": href} for href in [
