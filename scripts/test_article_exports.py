@@ -2,10 +2,27 @@
 import unittest
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
-from build_articles import (Text, reference_url, linked_articles, article_contents,
+from build_articles import (Text, reference_url, linked_articles, article_contents, guide_discovery_index,
                             linked_reference_text, manuscript_reference_html, standalone_url, standalone_body)
 
 class ArticleExports(unittest.TestCase):
+    def test_compact_discovery_preserves_aliases_without_article_bodies(self):
+        source = [{"id": "example", "title": "Example", "summary": "Explanation",
+                   "aliases": ["φ(n)"], "alias_sections": {"φ(n)": "part two"},
+                   "pages": ["lp1-05"], "html": "<p>Do not duplicate</p>",
+                   "text": "Do not duplicate"}]
+        result = guide_discovery_index(source)
+        row = result["guides"][0]
+        self.assertEqual(row["aliases"], ["φ(n)"])
+        self.assertEqual(row["alias_urls"]["φ(n)"],
+                         "https://jelliottdev.github.io/reference/articles/example.html#part%20two")
+        self.assertEqual(row["text_url"],
+                         "https://jelliottdev.github.io/reference/articles/example.txt")
+        self.assertEqual(row["pages"], ["lp1-05"])
+        self.assertNotIn("html", row)
+        self.assertNotIn("text", row)
+        self.assertIn("not evidence", result["scope"])
+
     def test_generated_articles_have_existing_local_link_and_image_targets(self):
         root = Path(__file__).resolve().parents[1]
         articles = list((root / "reference/articles").glob("*.html"))

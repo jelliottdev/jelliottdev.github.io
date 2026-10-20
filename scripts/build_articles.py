@@ -162,6 +162,25 @@ def linked_articles(body):
                    for link in parser.links if link.startswith("#/wiki/")
                    and link[len("#/wiki/"):].split("?")[0].split("#")[0]})
 
+def guide_discovery_index(articles):
+    """Small discovery metadata; article bodies and experiment evidence stay separate."""
+    return {
+        "schema": "liberpedia-guide-index-v1",
+        "scope": "Guide discovery only. Inclusion is not evidence that an experiment was performed.",
+        "guides": [{
+            "id": a["id"], "title": a["title"], "summary": a["summary"],
+            "category": a.get("category", "Reference"),
+            "url": reference_url("#/wiki/" + a["id"]),
+            "text_url": reference_url("#/wiki/" + a["id"]).removesuffix(".html") + ".txt",
+            "aliases": a.get("aliases", []),
+            "alias_urls": {
+                alias: reference_url("#/wiki/" + a["id"] + "?section=" + quote(section, safe=""))
+                for alias, section in a.get("alias_sections", {}).items()
+            },
+            "pages": a.get("pages", []),
+        } for a in articles],
+    }
+
 def build():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
     reading_index = ROOT / "articles/readings/index.json"
