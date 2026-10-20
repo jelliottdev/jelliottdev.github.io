@@ -51,8 +51,11 @@ for summary in index['pages']:
  text+='## Archived transcription\n\n'+(p['raw'] or 'No archived rune transcription.')+'\n\n'
  embedded=next((r for r in payloads['records'] if r['page']==pid),None)
  if embedded:
-  p['embedded_payload']=embedded
-  save(f'data/pages/{pid}.json',json.dumps(p,ensure_ascii=False,indent=2)+'\n')
+  # Preserve source bytes when the hidden-layer data is already current.
+  # Reformatting here fought build_page_notes and broke clean CI rebuilds.
+  if p.get('embedded_payload') != embedded:
+   p['embedded_payload']=embedded
+   save(f'data/pages/{pid}.json',json.dumps(p,ensure_ascii=False,separators=(',', ':')))
   # Refresh the record hash after adding the separately labeled hidden layer.
   record=next(f for f in files if f['path']==f'data/pages/{pid}.json')
   content=(root/record['path']).read_bytes();record.update(bytes=len(content),sha256=hashlib.sha256(content).hexdigest())
