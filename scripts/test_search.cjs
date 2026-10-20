@@ -72,6 +72,21 @@ for(const [queries,id,section] of [
  assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
 }
 console.log('PASS: arithmetic names, symbol variants, and notation open the relevant definitions');
+for(const [query,id,section] of [
+ ['ragged grid','transposition','partial-row'],
+ ['transposition padding','transposition','partial-row'],
+ ['odd parity','xor','parity'],
+ ['three input xor','xor','parity'],
+ ['sampling without replacement','index-of-coincidence','replacement'],
+ ['sampling with replacement','index-of-coincidence','replacement'],
+ ['self pairs','index-of-coincidence','replacement'],
+ ['connected components','image-regions','components'],
+ ['diagonal pixels','image-regions','diagonal-example'],
+ ['flood fill','image-regions','component-code'],
+ ['crop rectangle','image-regions','coordinates'],
+ ['maximum empirical entropy','rune-entropy','finite-length'],
+])assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
+console.log('PASS: measurement and grid terminology opens worked examples directly');
 
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
