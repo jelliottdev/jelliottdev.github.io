@@ -7064,6 +7064,20 @@ Examples from the archived streams
 
 These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
 
+See the distributions behind the numbers
+Archived-stream frequencies for LP2-31 and LP2-57. Bars show the proportion of each rune, not raw counts. Open or save the full-size SVG; use the alphabet reference to look up an index.
+
+LP2-31’s counts range from 5 to 13 per rune. LP2-57 has seven runes with no occurrences and one rune, index 18, with 15 occurrences. Concentration matters because a count contributes nᵢ(nᵢ − 1) matching pairs: a count of 15 supplies 210, while a count of 5 supplies only 20. Large counts therefore contribute disproportionately to IoC.
+
+The dashed line is the equal-probability reference, 1/29 per rune. It is not a confidence bound or a minimum. A bar above it simply means that this rune occurs more often than the uniform proportion in this sample. The two pages have different lengths, and the chart does not estimate how surprising either distribution is.
+
+To redraw the figure, extract the reference-data ZIP, install Matplotlib with python -m pip install matplotlib, then run:
+
+python scripts/rune_ioc.py --check
+python scripts/plot_rune_frequencies.py --output my-rune-frequencies.svg
+
+The first command checks the saved counts against the archived inputs. The second reads those saved counts and renders the chart, refusing to overwrite an existing output. Matplotlib is needed only to redraw the figure; the numerical IoC checks use Python’s standard library. The plotting script fixes the axes and page selection so the two panels remain comparable.
+
 What is the reference level?
 
 For independent, uniformly distributed symbols from a 29-symbol alphabet, the expected match probability is 1/29 ≈ 0.03448276. This follows by adding the 29 possible matching outcomes, each with probability (1/29)². A finite sample need not equal this expectation. An observed value below it is possible; LP2-31 is one example.
@@ -7163,6 +7177,8 @@ https://jelliottdev.github.io/reference/lp1-00.html
 https://jelliottdev.github.io/reference/lp1-01.html
 https://jelliottdev.github.io/reference/lp2-31.html
 https://jelliottdev.github.io/reference/lp2-57.html
+https://jelliottdev.github.io/exports/figures/rune-frequencies.svg
+https://jelliottdev.github.io/scripts/plot_rune_frequencies.py
 https://jelliottdev.github.io/reference/articles/atbash.html
 https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 https://jelliottdev.github.io/reference/articles/vigenere.html
