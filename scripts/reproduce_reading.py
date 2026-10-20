@@ -64,6 +64,8 @@ def reproduce(control):
             skipped = global_ordinal in control["skip"]
             amount = None
             method = control["method"]
+            key_before = key_position if method in ("vigenere", "prime-minus-one") else ""
+            key_slot = key_position % len(control["key"]) if method == "vigenere" else ""
             if skipped or method == "direct":
                 decoded = value
             elif method == "atbash":
@@ -79,7 +81,8 @@ def reproduce(control):
                 raise ValueError(f"Unsupported documented method: {method}")
             out.append(LATIN[decoded])
             trace.append([page_id, local_ordinal, global_ordinal, char, value,
-                          "" if amount is None else amount, decoded, LATIN[decoded], skipped])
+                          "" if amount is None else amount, decoded, LATIN[decoded], skipped, key_before,
+                          key_position if key_before != "" else "", key_slot])
             local_ordinal += 1
             global_ordinal += 1
         results[page_id] = "".join(out)
@@ -127,7 +130,8 @@ def main():
     if args.trace:
         writer = csv.writer(rendered, lineterminator="\n")
         writer.writerow(["page", "page_rune_ordinal", "section_rune_ordinal", "input_rune",
-                         "input_index", "subtracted_value", "output_index", "latin", "copied"])
+                         "input_index", "subtracted_value", "output_index", "latin", "copied",
+                         "key_position_before", "key_position_after", "key_slot_before"])
         writer.writerows(trace)
     else:
         for page_id, text in output.items():

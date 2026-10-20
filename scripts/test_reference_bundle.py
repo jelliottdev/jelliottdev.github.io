@@ -1,4 +1,6 @@
 """Run advertised examples from an isolated extraction, never the checkout."""
+import csv
+import io
 import hashlib
 import json
 from pathlib import Path
@@ -178,6 +180,15 @@ def main():
         assert tails["equal"] == dict(observed_score=2, at_least_observed=2, total=6, probability="1/3")
         assert tails["selected"] == dict(observed_score=2, at_least_observed=6, total=6, probability="1")
         print("PASS: exact six-arrangement teaching example and JSON tails")
+        welcome_trace = list(csv.DictReader(io.StringIO(subprocess.check_output(
+            [sys.executable, "scripts/reproduce_reading.py", "welcome", "--trace"], cwd=target).decode("utf-8"))))
+        assert [(r["key_position_before"], r["key_position_after"], r["key_slot_before"])
+                for r in welcome_trace[47:50]] == [("47", "48", "7"), ("48", "48", "0"), ("48", "49", "0")]
+        for row in welcome_trace:
+            before, after = int(row["key_position_before"]), int(row["key_position_after"])
+            assert after - before == (0 if row["copied"] == "True" else 1)
+            assert int(row["key_slot_before"]) == before % 8
+        print("PASS: Welcome trace records paused and advanced key counters across both pages")
         for flags, name in [([], "warning.txt"), (["--trace"], "warning.csv")]:
             command = [sys.executable, "scripts/reproduce_reading.py", "warning", *flags]
             expected = subprocess.run(command, cwd=target, capture_output=True, check=True).stdout

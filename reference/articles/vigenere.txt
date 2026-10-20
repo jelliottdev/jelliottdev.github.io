@@ -72,6 +72,8 @@ Watch the key counter pause
 [Image: Welcome positions 47 to 49: the consumed-key counter advances from 47 to 48, stays at 48 for the copied F, then advances to 49.]
 The first recorded interruption in the Welcome. A key slot is the consumed-key counter modulo eight; it is not the input rune's ordinal after an interruption. Arithmetic wraps modulo 29. Open full size · Download SVG.
 
+The CSV trace exposes key_position_before, key_position_after, and key_slot_before. For positions 47–49, the counter pairs are 47→48, 48→48, and 48→49; the slots are 7, 0, and 0. A slot shown on a copied row is pending, not consumed.
+
 For ordinary runes, j advances once per rune; punctuation consumes no key position, and the recorded copied runes do not advance j either. After the first interruption, the physical rune position and consumed-key count differ. A multi-letter output label is still one rune and consumes at most one key position.
 
 If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune. The column-IoC explanation describes why repeating keys motivate a periodic analysis, but such an analysis must use the same advancement convention.

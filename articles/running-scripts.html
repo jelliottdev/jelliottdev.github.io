@@ -31,9 +31,9 @@ python scripts/reproduce_reading.py --check-all</code></pre>
 <h2 id="trace">4. Read a rune-by-rune trace</h2>
 <pre><code>python scripts/reproduce_reading.py warning --trace</code></pre>
 <p>A <strong>trace</strong> shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two rows are:</p>
-<pre><code>page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied
-lp1-01,0,0,ᚱ,4,,24,A,False
-lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
+<pre><code>page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied,key_position_before,key_position_after,key_slot_before
+lp1-01,0,0,ᚱ,4,,24,A,False,,,
+lp1-01,1,1,ᛝ,21,,7,W,False,,,</code></pre>
 <p>Atbash maps index <code>x</code> to <code>28 − x</code>. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are <a href="#/wiki/rune-values">zero-based alphabet indices</a>, not prime values. A two-letter Latin label such as NG still represents one rune.</p>
 <p>You only need the input index, output index and Latin label to follow this Atbash example. The remaining fields help when a method crosses page boundaries or skips particular runes:</p>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
@@ -41,6 +41,8 @@ lp1-01,1,1,ᛝ,21,,7,W,False</code></pre>
 <tr><td><code>section_rune_ordinal</code></td><td>Position under the control’s section/boundary rule. It can continue across pages.</td></tr>
 <tr><td><code>input_index</code>, <code>output_index</code></td><td>Positions in the 29-rune alphabet before and after the transformation.</td></tr>
 <tr><td><code>subtracted_value</code></td><td>The applied Vigenère or prime-minus-one amount. Blank for Atbash, direct reading, or a copied interruption; blank is not a recorded zero.</td></tr>
+<tr><td><code>key_position_before</code>, <code>key_position_after</code></td><td>The consumed-keystream counter before and after the rune, including the control's starting offset. Equal at a copied interruption. Blank for methods without a keystream.</td></tr>
+<tr><td><code>key_slot_before</code></td><td>For Vigenère, the counter before the rune modulo key length. A copied rune leaves this slot unused. Blank for other methods, including the nonrepeating prime stream.</td></tr>
 <tr><td><code>latin</code></td><td>The output rune’s Latin label, before contextual English editing.</td></tr>
 <tr><td><code>copied</code></td><td>Whether this position is listed as an interruption in the control. <code>False</code> does not mean the index changed: direct readings also have false entries.</td></tr>
 </tbody></table></div>
