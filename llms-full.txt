@@ -12968,6 +12968,8 @@ What each operation preserves
 
 “Not guaranteed” does not mean “must change.” A particular input can happen to give the same result. A fixed one-to-one substitution uses the same reversible alphabet mapping at every position; ordinary Atbash and a uniform shift are examples. A repeating Vigenère key can instead apply different shifts to different positions.
 
+A necessary condition can constrain a model without rejecting it. For the specific nonzero-key rule Cᵢ − Cᵢ₋₁ = Kᵢ(Pᵢ − 28) mod 29, a doublet is equivalent to plaintext EA. The EA running-sum explanation proves the condition, checks all finite transitions and shows where it fails if assumptions change. The observed 86 doublets require 86 EA events at the measured within-page transitions; no plaintext distribution is inferred.
+
 A five-rune example
 
 Start with F F U F U, or indices 0 0 1 0 1. It has three F runes and two U runes. Its matching-pair numerator is 3 × 2 + 2 × 1 = 8; dividing by 5 × 4 = 20 gives IoC 2/5.
@@ -13067,6 +13069,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/atbash.html
 - Vigenère
   https://jelliottdev.github.io/reference/articles/vigenere.html
+- EA running-sum explanation
+  https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
 - Original indices 0 0 1 0 1, their reversal, and a uniform shift all retain counts three and two and IoC two fifths. Subtracting a repeating zero-one key gives counts two, two and one, with IoC one fifth.; Download diagram (SVG)
   https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
 - IoC formula; IoC guide
@@ -18647,6 +18651,27 @@ The rule Cᵢ = Cᵢ₋₁ − Pᵢ has the same zero condition. The different r
 
 The existing F-reset and F-skip experiments test specified feedback and periodic-IoC rules on LP2-54–55. They do not test all mechanisms that could reduce doublets across LP2-00–55. Deletion, inserted separators, reordering and adaptive keys are different hypotheses requiring their own invertibility rules and bounds.
 
+When a doublet would mean EA
+
+Consider the specific running-sum rule Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29, where plaintext EA has index 28 and each key value is in 1–28. This is a proposed equation, not an established Liber Primus cipher. It has an exact property: the ciphertext repeats its previous rune if and only if the current plaintext rune is EA.
+
+A repeat makes the difference Cᵢ − Cᵢ₋₁ zero. Every nonzero value has an inverse modulo the prime 29, so Kᵢ(Pᵢ − 28) = 0 forces Pᵢ = 28. Conversely, Pᵢ=28 makes the product zero for every allowed key. This reasoning needs no assumption about whether keys are constant, periodic or random.
+
+	Previous ciphertext	Key	Plaintext	Next ciphertext	Repeat?
+
+	7	5	EA = 28	7 + 5(28 − 28) = 7	Yes
+
+	7	5	E = 18	7 + 5(18 − 28) ≡ 15	No
+
+	7	0, outside the model	F = 0	7 + 0(0 − 28) = 7	Yes, without EA
+
+
+Applied to the archived within-page count, this model requires 86 EA events at the 12,901 measured transitions. Page-initial plaintext runes are not constrained by that count because the preceding state lies outside the measured page edges. This is a necessary condition, not a recovered plaintext and not a rejection of the model. In particular, uniformly selecting nonzero keys does not imply a repeat probability of 1/29: for this equation, repeating is determined by whether the plaintext is EA.
+
+The assumptions matter. Allowing a zero key permits a repeat with any plaintext. Changing to a composite modulus also requires care: modulo 28, a nonzero key can lack an inverse. For the analogous offset-27 rule, key 2 and plaintext 13 give 2(13 − 27) ≡ 0 mod 28, despite 13 not being 27. An extra position-dependent output mapping, skipped positions or internal resets needs a separate analysis.
+
+The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun. No English EA-frequency comparison is included.
+
 Reproduce the counts
 
 Download the reference-data bundle or use the repository. Python 3.12 and its standard library are sufficient. Run from the extracted root:
@@ -22059,7 +22084,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "inputs": [
       {
         "path": "scripts/rune_doublets.py",
-        "sha256": "8ea22cf349ad64f00bedff297d39e1e819f6fce4087a45592dfeddb94ef950aa"
+        "sha256": "8fd493fd43e61f72346b1a312a8b98d03dc6efdd5a6efea940d05f5d213745f4"
       },
       {
         "path": "experiments/records/doublet-event-lags/check.py",

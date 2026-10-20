@@ -55,3 +55,21 @@ for text in ("", "A", "AAAA", "AABC", "AABB"):
     assert Fraction(measured["shuffle_expected_doublets"]) == average
     assert measured["doublets"] == sum(a == b for a, b in zip(text, text[1:]))
 print("PASS all 86 source locations, both count vectors, overlap handling and exact toy shuffle expectations")
+
+# Check the transition identity independently through modular inverses.
+constraint = r['multiplicative_ea_constraint']
+for key in range(1, 29):
+    inverse = pow(key, -1, 29)
+    decoded = [(difference * inverse + 28) % 29 for difference in range(29)]
+    assert decoded[0] == 28 and 28 not in decoded[1:]
+    assert len(set(decoded)) == 29
+for row in constraint['rows']:
+    assert row['keys_producing_repeat'] == (list(range(1, 29)) if row['plaintext_index'] == 28 else [])
+assert constraint['transitions_checked'] == 23548
+zero = constraint['zero_key_counterexample']
+assert (zero['previous'] + zero['key'] * (zero['plaintext'] - 28)) % 29 == zero['current'] == zero['previous']
+assert zero['plaintext'] != 28
+composite = constraint['composite_modulus_counterexample']
+assert (composite['previous'] + composite['key'] * (composite['plaintext'] - composite['offset'])) % composite['modulus'] == composite['current'] == composite['previous']
+assert composite['plaintext'] != composite['offset']
+print('PASS: nonzero-key inverse constraint and zero-key/composite-modulus counterexamples')

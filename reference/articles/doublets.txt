@@ -66,6 +66,27 @@ The rule Cᵢ = Cᵢ₋₁ − Pᵢ has the same zero condition. The different r
 
 The existing F-reset and F-skip experiments test specified feedback and periodic-IoC rules on LP2-54–55. They do not test all mechanisms that could reduce doublets across LP2-00–55. Deletion, inserted separators, reordering and adaptive keys are different hypotheses requiring their own invertibility rules and bounds.
 
+When a doublet would mean EA
+
+Consider the specific running-sum rule Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29, where plaintext EA has index 28 and each key value is in 1–28. This is a proposed equation, not an established Liber Primus cipher. It has an exact property: the ciphertext repeats its previous rune if and only if the current plaintext rune is EA.
+
+A repeat makes the difference Cᵢ − Cᵢ₋₁ zero. Every nonzero value has an inverse modulo the prime 29, so Kᵢ(Pᵢ − 28) = 0 forces Pᵢ = 28. Conversely, Pᵢ=28 makes the product zero for every allowed key. This reasoning needs no assumption about whether keys are constant, periodic or random.
+
+	Previous ciphertext	Key	Plaintext	Next ciphertext	Repeat?
+
+	7	5	EA = 28	7 + 5(28 − 28) = 7	Yes
+
+	7	5	E = 18	7 + 5(18 − 28) ≡ 15	No
+
+	7	0, outside the model	F = 0	7 + 0(0 − 28) = 7	Yes, without EA
+
+
+Applied to the archived within-page count, this model requires 86 EA events at the 12,901 measured transitions. Page-initial plaintext runes are not constrained by that count because the preceding state lies outside the measured page edges. This is a necessary condition, not a recovered plaintext and not a rejection of the model. In particular, uniformly selecting nonzero keys does not imply a repeat probability of 1/29: for this equation, repeating is determined by whether the plaintext is EA.
+
+The assumptions matter. Allowing a zero key permits a repeat with any plaintext. Changing to a composite modulus also requires care: modulo 28, a nonzero key can lack an inverse. For the analogous offset-27 rule, key 2 and plaintext 13 give 2(13 − 27) ≡ 0 mod 28, despite 13 not being 27. An extra position-dependent output mapping, skipped positions or internal resets needs a separate analysis.
+
+The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun. No English EA-frequency comparison is included.
+
 Reproduce the counts
 
 Download the reference-data bundle or use the repository. Python 3.12 and its standard library are sufficient. Run from the extracted root:

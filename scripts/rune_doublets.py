@@ -39,6 +39,32 @@ def summary(streams, alphabet):
     }
 
 
+def multiplicative_ea_constraint():
+    """Exhaust the finite transition domain; this does not choose a plaintext."""
+    rows = []
+    for plaintext in range(29):
+        repeat_keys = []
+        for key in range(1, 29):
+            difference = key * (plaintext - 28) % 29
+            assert (difference == 0) == (plaintext == 28)
+            repeat_keys.extend([key] if difference == 0 else [])
+            for previous in range(29):
+                current = (previous + difference) % 29
+                assert (current == previous) == (plaintext == 28)
+        rows.append({'plaintext_index': plaintext, 'keys_producing_repeat': repeat_keys})
+    return {
+        'equation': 'c_i = c_(i-1) + k_i * (p_i - 28) mod 29',
+        'key_domain': [1, 28],
+        'plaintext_domain': [0, 28],
+        'previous_state_domain': [0, 28],
+        'transitions_checked': 29 * 28 * 29,
+        'rows': rows,
+        'zero_key_counterexample': {'previous': 7, 'key': 0, 'plaintext': 0, 'current': 7},
+        'composite_modulus_counterexample': {'modulus': 28, 'offset': 27, 'previous': 7, 'key': 2, 'plaintext': 13, 'current': 7},
+        'scope': 'A doublet is equivalent to plaintext EA=28 only for this equation with nonzero keys modulo prime 29. No language frequency or key generator is assumed.',
+    }
+
+
 def report():
     index_bytes = (ROOT/"data/index.json").read_bytes()
     alphabet = json.loads(index_bytes)["alphabet"]
@@ -75,6 +101,7 @@ def report():
         "expectation": "Uniform random permutations preserving each stream's rune counts. Sum f*(f-1)/N per nonempty stream. This is an expectation, not a p-value.",
         "input_sha256": inputs,
         "alphabet": [{"rune": a["rune"], "latin": a["latin"]} for a in alphabet],
+        "multiplicative_ea_constraint": multiplicative_ea_constraint(),
         "page": summary(streams, alphabet),
         "joined": summary([sum(streams, [])], alphabet),
     }
