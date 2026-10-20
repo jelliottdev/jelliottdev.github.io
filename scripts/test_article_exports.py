@@ -1,8 +1,22 @@
 """Checks that non-JavaScript references remain usable as instructions."""
 import unittest
-from build_articles import Text, reference_url, linked_articles, article_contents
+from build_articles import Text, reference_url, linked_articles, article_contents, linked_reference_text
 
 class ArticleExports(unittest.TestCase):
+    def test_reference_urls_are_clickable_without_changing_preserved_text(self):
+        original = ('Runes: ᚠᚢᚦ\nGuide: https://example.org/guide?a=1&b=2#part\n'
+                    '<script>unsafe()</script>\nImage: https://example.org/image.jpg\n'
+                    'Not a link: javascript:alert(1)')
+        rendered = linked_reference_text(original)
+        self.assertIn('href="https://example.org/guide?a=1&amp;b=2#part"', rendered)
+        self.assertNotIn('<script>', rendered)
+        self.assertNotIn('href="javascript:', rendered)
+        parser = Text()
+        parser.feed(rendered)
+        self.assertEqual("".join(parser.parts), original)
+        self.assertEqual(parser.links, ['https://example.org/guide?a=1&b=2#part',
+                                        'https://example.org/image.jpg'])
+
     def test_compact_blocks_and_line_breaks_do_not_merge_words(self):
         parser = Text()
         parser.feed('<dl><dt>Newton</dt><dd>Upper panel</dd>'

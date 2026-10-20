@@ -8,6 +8,18 @@ from urllib.parse import urljoin, parse_qs, quote
 
 ROOT = Path(__file__).resolve().parents[1]
 
+def linked_reference_text(text):
+    """Keep reference text intact while making its explicit HTTP(S) URLs usable."""
+    parts = []
+    position = 0
+    for match in re.finditer(r"""https?://[^\s<>"']+""", text):
+        parts.append(html.escape(text[position:match.start()]))
+        url = html.escape(match.group(), quote=True)
+        parts.append(f'<a href="{url}">{url}</a>')
+        position = match.end()
+    parts.append(html.escape(text[position:]))
+    return "".join(parts)
+
 class Text(HTMLParser):
     blocks = {"p", "h1", "h2", "h3", "h4", "li", "pre", "tr",
               "dt", "dd", "figure", "figcaption", "blockquote"}
