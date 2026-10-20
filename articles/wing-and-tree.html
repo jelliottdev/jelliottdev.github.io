@@ -5,3 +5,26 @@
 <p>The <a href="#/experiments/lp2-32-message-grid">11×11 grid experiment</a> reproduces a first-row sum of 563, first-column sum of 569 and central 5×5 perimeter sum of 1136. These equal the 2016 carrier’s width, height and extracted payload length. The record specifies every cell and the rearrangement; it does not establish intent or statistical significance.</p>
 
 <figure class="evidence-figure" style="max-width:480px"><a href="experiments/records/lp2-32-message-grid/grid.svg"><img src="experiments/records/lp2-32-message-grid/grid.svg" width="480" height="960" loading="lazy" alt="LP2-32 rearranged into 11 rows of 11. The first row sums to 563 and first column to 569. The enlarged central 5 by 5 block highlights its 16 perimeter cells; their sum is 1136."></a><figcaption>The tested rearrangement and selected perimeter. Read the <a href="#/experiments/lp2-32-message-grid">complete experiment</a> for cell coordinates, exclusions and downloads. The diagram is not a facsimile of the manuscript’s printed lines.</figcaption></figure>
+
+<h2 id="eleven-rune-windows">How often do eleven-rune sums reach 563 or 569?</h2>
+<p>The grid correspondence raises a useful follow-up: do these totals occur elsewhere in the section? A <strong>window</strong> is a fixed-length piece of the rune stream. Here, take the first eleven runes, add their Gematria Primus prime values, move forward by one rune, and repeat. This counts every possible starting position rather than reporting only the positions that match.</p>
+<p>The census retains every alphabet rune, including headings, and removes punctuation and spaces. Each page starts a fresh stream. Windows may cross printed lines and word boundaries, but never page boundaries. There is no reversal, padding or wrap from the end back to the start. A page with <var>N</var> runes therefore contributes <var>N</var> − 10 windows.</p>
+<div class="table-wrap"><table><thead><tr><th>Page</th><th>Runes</th><th>Windows</th><th>Sum 563</th><th>Sum 569</th></tr></thead><tbody>
+<tr><td><a href="#/page/lp2-27">LP2-27</a></td><td>234</td><td>224</td><td>0</td><td>2</td></tr>
+<tr><td><a href="#/page/lp2-28">LP2-28</a></td><td>269</td><td>259</td><td>2</td><td>2</td></tr>
+<tr><td><a href="#/page/lp2-29">LP2-29</a></td><td>277</td><td>267</td><td>1</td><td>2</td></tr>
+<tr><td><a href="#/page/lp2-30">LP2-30</a></td><td>263</td><td>253</td><td>0</td><td>1</td></tr>
+<tr><td><a href="#/page/lp2-31">LP2-31</a></td><td>269</td><td>259</td><td>3</td><td>3</td></tr>
+<tr><td><a href="#/page/lp2-32">LP2-32</a></td><td>121</td><td>111</td><td>1</td><td>0</td></tr>
+<tr><th>Total</th><td>1,433</td><td>1,373</td><td>7</td><td>10</td></tr>
+</tbody></table></div>
+<p>The mean sum across these 1,373 windows is 784,505 ÷ 1,373 ≈ <strong>571.38</strong>. This is the mean for these six pages and these rules, not an estimate for all Liber Primus pages. The complete ledger records every sum, rune sequence, one-based rune interval and zero-based character offsets in the archived text.</p>
+<h3 id="window-versus-column">Why LP2-32 has no 569 window</h3>
+<p>The grid experiment’s first column takes rune positions 1, 12, 23, …, 111. Those eleven positions sum to 569, but they are not consecutive. The first row takes positions 1–11, so its 563 sum is included in the window census. Both results can be correct because the selection rules differ. A claim about a printed row, a rearranged column or a page-spanning interval needs its own coordinates.</p>
+<h3 id="window-limits">What this comparison can establish</h3>
+<p>The totals recur under the declared rule; their presence alone does not isolate one location. These frequencies are not chance probabilities. Adjacent windows share ten of their eleven runes, and both the target numbers and the section were selected after the original observation. A significance test would need a stated <a href="#/wiki/null-models">null model</a> and would have to account for the other lengths, targets, layouts and sections searched. This census does not test the additional image-only proposals whose exact coordinates were not supplied.</p>
+<h3 id="window-reproduce">Reproduce the census</h3>
+<p>Download and extract the <a href="downloads/reference-data.zip" download>reference-data bundle</a>, or use the repository. Python’s standard library is sufficient; no image files or model service are needed.</p>
+<pre><code>python scripts/wing_tree_windows.py --check
+python scripts/wing_tree_windows.py</code></pre>
+<p>The first command compares the regenerated report with the stored ledger, including source hashes and every interval. The second prints the complete JSON. The calculation checks prefix-sum differences against direct addition for each window. <a href="scripts/wing_tree_windows.py" download>Download the script</a> · <a href="exports/wing-tree-windows.json" download>Download all results</a>. See the <a href="#/experiments/lp2-32-message-grid">grid experiment</a> for the separate row, column and perimeter calculation.</p>

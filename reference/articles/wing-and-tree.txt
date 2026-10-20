@@ -48,6 +48,49 @@ The 11×11 grid experiment reproduces a first-row sum of 563, first-column sum o
 [Image: LP2-32 rearranged into 11 rows of 11. The first row sums to 563 and first column to 569. The enlarged central 5 by 5 block highlights its 16 perimeter cells; their sum is 1136.]
 The tested rearrangement and selected perimeter. Read the complete experiment for cell coordinates, exclusions and downloads. The diagram is not a facsimile of the manuscript’s printed lines.
 
+
+How often do eleven-rune sums reach 563 or 569?
+
+The grid correspondence raises a useful follow-up: do these totals occur elsewhere in the section? A window is a fixed-length piece of the rune stream. Here, take the first eleven runes, add their Gematria Primus prime values, move forward by one rune, and repeat. This counts every possible starting position rather than reporting only the positions that match.
+
+The census retains every alphabet rune, including headings, and removes punctuation and spaces. Each page starts a fresh stream. Windows may cross printed lines and word boundaries, but never page boundaries. There is no reversal, padding or wrap from the end back to the start. A page with N runes therefore contributes N − 10 windows.
+
+	Page	Runes	Windows	Sum 563	Sum 569
+
+	LP2-27	234	224	0	2
+
+	LP2-28	269	259	2	2
+
+	LP2-29	277	267	1	2
+
+	LP2-30	263	253	0	1
+
+	LP2-31	269	259	3	3
+
+	LP2-32	121	111	1	0
+
+	Total	1,433	1,373	7	10
+
+
+The mean sum across these 1,373 windows is 784,505 ÷ 1,373 ≈ 571.38. This is the mean for these six pages and these rules, not an estimate for all Liber Primus pages. The complete ledger records every sum, rune sequence, one-based rune interval and zero-based character offsets in the archived text.
+
+Why LP2-32 has no 569 window
+
+The grid experiment’s first column takes rune positions 1, 12, 23, …, 111. Those eleven positions sum to 569, but they are not consecutive. The first row takes positions 1–11, so its 563 sum is included in the window census. Both results can be correct because the selection rules differ. A claim about a printed row, a rearranged column or a page-spanning interval needs its own coordinates.
+
+What this comparison can establish
+
+The totals recur under the declared rule; their presence alone does not isolate one location. These frequencies are not chance probabilities. Adjacent windows share ten of their eleven runes, and both the target numbers and the section were selected after the original observation. A significance test would need a stated null model and would have to account for the other lengths, targets, layouts and sections searched. This census does not test the additional image-only proposals whose exact coordinates were not supplied.
+
+Reproduce the census
+
+Download and extract the reference-data bundle, or use the repository. Python’s standard library is sufficient; no image files or model service are needed.
+
+python scripts/wing_tree_windows.py --check
+python scripts/wing_tree_windows.py
+
+The first command compares the regenerated report with the stored ledger, including source hashes and every interval. The second prints the complete JSON. The calculation checks prefix-sum differences against direct addition for each window. Download the script · Download all results. See the grid experiment for the separate row, column and perimeter calculation.
+
 Sources, related references, and files
 - LP2-27: a detached wing above the runes; LP2-27
   https://jelliottdev.github.io/reference/lp2-27.html
@@ -117,9 +160,17 @@ Sources, related references, and files
   https://www.cicadasolvers.com/wiki/liber-primus/lp2/
 - artwork-source directory
   https://jelliottdev.github.io/reference/articles/works-and-influences.html#image-origins
-- 11×11 grid experiment; complete experiment
+- 11×11 grid experiment; complete experiment; grid experiment
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
 - LP2-32 rearranged into 11 rows of 11. The first row sums to 563 and first column to 569. The enlarged central 5 by 5 block highlights its 16 perimeter cells; their sum is 1136.
   https://jelliottdev.github.io/experiments/records/lp2-32-message-grid/grid.svg
+- null model
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Download the script
+  https://jelliottdev.github.io/scripts/wing_tree_windows.py
+- Download all results
+  https://jelliottdev.github.io/exports/wing-tree-windows.json
 
 Article: https://jelliottdev.github.io/reference/articles/wing-and-tree.html
