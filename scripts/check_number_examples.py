@@ -1,5 +1,7 @@
 """Exact arithmetic examples for reference articles; not a cipher search."""
-from math import isqrt
+from math import isqrt, gcd
+from itertools import permutations
+from bisect import bisect_right
 import json
 import re
 import hashlib
@@ -89,6 +91,32 @@ def report(root=Path(__file__).resolve().parents[1]):
                            [13, 7, 5, 829], [-1215, 2095, 2593, 1481]]
     assert sum(sum(row) for row in difference_primes) == 14
     assert 2095 == 5 * 419 and prime(419)
+    # Audit a fixed supplied numerical chain; Q is constructed, not printed.
+    q = [primes[i:i+4] for i in range(0, 16, 4)]
+    determinant = 0
+    for order in permutations(range(4)):
+        inversions = sum(order[i] > order[j] for i in range(4) for j in range(i+1, 4))
+        term = (-1) ** inversions
+        for row, col in enumerate(order):
+            term *= q[row][col]
+        determinant += term
+    trace = sum(q[i][i] for i in range(4))
+    s16 = sum(map(sum, differences))
+    s14 = sum(value for row in differences for value in row if prime(value))
+    pi14, pi16 = bisect_right(primes, s14), bisect_right(primes, s16)
+    totients = {str(n): sum(gcd(k, n) == 1 for k in range(1, n+1))
+                for n in [880, s14, s16]}
+    assert (s14, s16, s16-s14) == (5953, 6833, 880)
+    assert prime(s14) and prime(s16)
+    assert (pi14, pi16, pi16-pi14, determinant, trace) == (781, 880, 99, 880, 99)
+    assert totients == {'880': 320, '5953': 5952, '6833': 6832}
+    chain = {'constructed_first_16_primes_row_major': q,
+             'determinant': determinant, 'trace': trace,
+             'sum_14_prime_differences': s14, 'sum_all_16_differences': s16,
+             'difference_between_sums': s16-s14,
+             'prime_counting': {str(s14): pi14, str(s16): pi16},
+             'prime_count_difference': pi16-pi14, 'totients': totients,
+             'selection': 'Fixed supplied chain; no search of alternative constants, layouts or functions; no probability claim.'}
     product_digits = [int(digit) for digit in str(98597 * 30557)]
     digit_primes = primes[:len(product_digits)]
     digit_sums = [digit + value for digit, value in zip(product_digits, digit_primes)]
@@ -128,6 +156,7 @@ def report(root=Path(__file__).resolve().parents[1]):
             "differences_from_3301": differences,
             "difference_is_prime": difference_primes,
             "prime_difference_count": sum(sum(row) for row in difference_primes),
+            "constructed_matrix_chain": chain,
             "positive_composite_factorization": {"2095": [5, 419]},
             "interpretation": "Derived arithmetic for all sixteen entries; no claim about statistical surprise or intended cipher.",
         },

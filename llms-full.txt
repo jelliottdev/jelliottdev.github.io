@@ -9513,6 +9513,47 @@ python scripts/check_number_examples.py
 
 The output’s lp2_15 object includes the source-record hash, original-image hash, printed matrix, transformed matrix and a Boolean prime flag for each position. Primality is checked by exact trial division through the integer square root. Run from the repository or extracted reference-data bundle with Python 3. The script reads the stored panel and does not modify it or execute a cipher search.
 
+The 880 and 99 numerical chain
+
+A further proposal compares totals from the transformed panel with a new matrix built from the first sixteen primes. The following equalities reproduce. They describe a selected arithmetic relationship; they do not supply a decryption rule.
+
+Of the sixteen differences 3301 − entry, fourteen are prime. Their total is 5953. Including the remaining values, 2095 and −1215, gives 6833. Thus 6833 − 5953 = 2095 − 1215 = 880. These are sums, so no spiral order is needed to reproduce them. A proposed spiral matters only for an operation that uses sequence order.
+
+A separate matrix made from consecutive primes
+
+Construct Q by placing the first sixteen primes in ordinary row order:
+
+ 2   3   5   7
+11  13  17  19
+23  29  31  37
+41  43  47  53
+
+Q is not the matrix printed on LP2-15. Its trace is the main-diagonal sum, 2 + 13 + 31 + 53 = 99. Its determinant is 880. The determinant combines signed products of entries selected from distinct rows and columns; it is not a sum of all entries or a magic constant. Changing how the primes are arranged can change it.
+
+	Panel-derived calculation	Value	Constructed-Q calculation
+	6833 − 5953	880	det(Q)
+	π(6833) − π(5953)	99	trace(Q)
+
+Prime counting is not the totient function
+
+π(n) counts primes less than or equal to n. φ(n) counts integers from 1 through n that are coprime to n. These functions answer different questions. Both 5953 and 6833 are prime, so their totients are one less than the number itself.
+
+	n	Prime count π(n)	Totient φ(n)
+	5953	781	5952
+	6833	880	6832
+
+The difference 99 uses the prime-counting column. Using totients instead gives 6832 − 5952 = 880, not 99. Since both inputs are prime, the totient difference merely reproduces their numerical difference; it is not an additional independent coincidence. See prime values and positions for one-based indexing conventions.
+
+A separate totient calculation also holds: 880 = 2⁴ × 5 × 11, hence φ(880) = 880 × (1 − 1/2) × (1 − 1/5) × (1 − 1/11) = 320. CARNAL and ANALOG have that prime-value sum in the LP1-05 mixed square. Their shared total does not select one as a key. The word-sum experiment distinguishes matching totals from unique word recovery.
+
+Reproduce the fixed chain
+
+python scripts/check_number_examples.py
+
+The output at lp2_15.constructed_matrix_chain records Q, the two panel-derived sums, prime counts, totients, determinant and trace. The script reads the archived page matrix, constructs Q from primes checked by exact trial division, evaluates all 24 signed determinant terms, and counts coprime integers directly for the totients. It uses integer arithmetic throughout and needs only the reference-data bundle.
+
+This check does not search other constants, matrix layouts, functions, words or keys. It also does not assign a probability to finding such a relationship after exploring those choices. A follow-up cipher test needs to specify how Q, 880, 99 or a candidate word acts on rune positions, which pages it covers, and what would count as success. Keep those variants separate from this arithmetic baseline; see search space and bounds.
+
 The heading is not a known plaintext
 [Image: Red LP2-15 heading with dot clusters at either end and a separator between its two rune groups]
 Heading detail from the original image. The terminal dot clusters and the separator between groups are visible alongside the runes. Complete original JPEG · Download
@@ -9564,12 +9605,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/lp2-15-differences.json
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
+- prime values and positions; prime-index guide
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- LP1-05 mixed square
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#sum-collisions
+- word-sum experiment
+  https://jelliottdev.github.io/#/experiments/mixed-square-word-sums
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - transliteration labels
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - original in the reader
   https://jelliottdev.github.io/#/reader/lp2-15
-- prime-index guide
-  https://jelliottdev.github.io/reference/articles/prime-indices.html
 - emirp guide
   https://jelliottdev.github.io/reference/articles/emirps.html
 - Pinned number and rune transcription
