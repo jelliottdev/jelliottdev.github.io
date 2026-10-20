@@ -243,3 +243,10 @@ for (const query of ['hex image','hex JPEG','hidden rune image']) {
 }
 assert.equal(search.search(db,'0x')[0].page?.id,'lp2-49','Literal grid tokens retain their manuscript match');
 console.log('PASS: hex encoding terms and hidden-image searches keep distinct destinations');
+
+for(const [query,section] of [['pilgrimage',''],['end to self','self']]){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/pilgrimage'+(section?'?section='+section:''),query);
+}
+assert(search.search(db,'command your own self').slice(0,3).some(hit=>hit.href==='#/wiki/pilgrimage?section=self'),
+ 'Keep the close reading beside the existing visual study of the instruction');
+console.log('PASS: pilgrimage and selfhood queries open the close reading.');
