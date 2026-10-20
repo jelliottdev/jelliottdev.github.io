@@ -65,6 +65,19 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        lag_data = json.loads(subprocess.check_output(
+            [sys.executable, "scripts/rune_lag_matches.py", "lp2-31", "--max-lag", "20"], cwd=target))
+        assert lag_data == json.loads((target / "exports/lp2-31-lag-matches.json").read_text(encoding="utf-8"))
+        import csv
+        with (target / "exports/lp2-31-lag-matches.csv").open(encoding="utf-8", newline="") as stream:
+            lag_rows = list(csv.DictReader(stream))
+        assert len(lag_rows) == 20
+        for saved, calculated in zip(lag_rows, lag_data["rows"]):
+            for key, value in calculated.items():
+                assert saved[key] == str(value), (key, saved, calculated)
+            assert saved["source_sha256"] == lag_data["source_sha256"]
+            assert saved["page"] == "lp2-31" and saved["rune_count"] == "269"
+        print("PASS: all twenty lag-count export rows reproduce from bundled inputs")
         grid = json.loads(subprocess.check_output(
             [sys.executable, "scripts/export_alphanumeric_grids.py"], cwd=target))
         assert grid == json.loads((target / "exports/alphanumeric-grids.json").read_text(encoding="utf-8"))

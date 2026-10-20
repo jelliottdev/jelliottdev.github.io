@@ -23,12 +23,12 @@ def lag_counts(symbols, max_lag):
              'compared_pairs': n - lag} for lag in range(1, max_lag + 1)]
 
 
-def report(page_id, max_lag):
-    index = json.loads((ROOT / 'data/index.json').read_text(encoding='utf-8'))
+def report(page_id, max_lag, root=ROOT):
+    index = json.loads((root / 'data/index.json').read_text(encoding='utf-8'))
     page = next((p for p in index['pages'] if p['id'] == page_id), None)
     if page is None:
         raise ValueError('Unknown page ID; include the release, for example lp2-31')
-    source = ROOT / 'text' / (page_id + '.txt')
+    source = root / 'text' / (page_id + '.txt')
     raw = source.read_bytes()
     text = raw.decode('utf-8')
     alphabet = [entry['rune'] for entry in index['alphabet']]
@@ -49,7 +49,7 @@ def report(page_id, max_lag):
         row['rate'] = row['matching_pairs'] / row['compared_pairs']
     return {
         'schema': 'liberpedia-rune-lag-matches-v1', 'page': page_id,
-        'source': source.relative_to(ROOT).as_posix(), 'source_sha256': hashlib.sha256(raw).hexdigest(),
+        'source': source.relative_to(root).as_posix(), 'source_sha256': hashlib.sha256(raw).hexdigest(),
         'alphabet': alphabet,
         'alphabet_sha256': hashlib.sha256(''.join(alphabet).encode('utf-8')).hexdigest(),
         'alphabet_hash_encoding': 'UTF-8 concatenation of the ordered runes, without separators',

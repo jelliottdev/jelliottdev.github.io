@@ -6,6 +6,7 @@ from build_articles import manuscript_reference_html, guide_discovery_index
 from rune_ioc import csv_report
 from export_alphanumeric_grids import report as grid_report, csv_report as grid_csv
 from check_number_examples import report as number_report
+from rune_lag_matches import report as lag_report
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -109,7 +110,20 @@ register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
+lag_example = lag_report('lp2-31', 20, root)
+save('exports/lp2-31-lag-matches.json',json.dumps(lag_example,ensure_ascii=False,indent=2)+'\n')
+lag_csv = io.StringIO(newline='')
+lag_writer = csv.DictWriter(lag_csv,fieldnames=['page','lag','matching_pairs','compared_pairs','rate_fraction','rate','rune_count','source','source_sha256'],lineterminator='\n')
+lag_writer.writeheader()
+for row in lag_example['rows']:
+ lag_writer.writerow(dict(row,page=lag_example['page'],rune_count=lag_example['rune_count'],source=lag_example['source'],source_sha256=lag_example['source_sha256']))
+save('exports/lp2-31-lag-matches.csv',lag_csv.getvalue())
+for suffix in ('json','csv'):
+ register('exports/lp2-31-lag-matches.'+suffix,'Rune lag measurements',read('data/pages/lp2-31.json'))
+ files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
+
 figure_details = {
+ 'lp2-31-lag-matches.svg': {'title':'LP2-31 rune matches by distance (SVG)', 'guide':'rune-lag-matches', 'aliases':['lag coincidence chart','lag matches','shift coincidences'], 'pages':['lp2-31'], 'release':'LP2'},
  'rune-frequencies.svg': {'title':'Rune frequency comparison: LP2-31 and LP2-57 (SVG)', 'guide':'index-of-coincidence', 'aliases':['rune frequency chart','letter frequencies','histogram','IoC diagram'], 'pages':['lp2-31','lp2-57'], 'release':'LP2'},
  'atbash-pairs.svg': {'title':'Atbash: all 29 rune-index mappings (SVG)', 'guide':'atbash', 'aliases':['Atbash diagram','alphabet reversal','index pairs','28 minus']},
  'second-koan-argument.svg': {'title':'Second koan: how the argument works (SVG)', 'guide':'koans', 'aliases':['koan diagram','inner voice','self reference'], 'pages':['lp1-14','lp1-15'], 'release':'LP1'},
@@ -129,6 +143,7 @@ for record in read('data/evidence/artwork-sources.json')['records']:
 
 # Human task names make tools discoverable without knowing their filenames.
 script_details = {
+ 'plot_rune_lags.py': ('Draw the lag coincidence chart', 'rune-lag-matches', ['lag chart','lag matches','shift coincidences']),
  'rune_lag_matches.py': ('Count equal runes at fixed distances', 'rune-lag-matches', ['lag coincidences','lag matches','shift coincidences']),
  'reproduce_null_example.py': ('Reproduce the exact chance-comparison example', 'null-models', ['null model', 'permutation example', 'selection effect', 'AABB']),
  'enumerate_shifts.py': ('Generate fixed-shift candidates', 'reproducibility', ['shift candidates', '58 cases', 'reverse rune order']),
@@ -149,7 +164,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:
@@ -389,7 +404,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.add('Topic discovery index')
- if name=='reference-data':roles.update({'Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
