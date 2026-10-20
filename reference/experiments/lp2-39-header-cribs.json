@@ -1,0 +1,96 @@
+{
+  "id": "lp2-39-header-cribs",
+  "title": "LP2-39: twenty proposed red-header cribs",
+  "status": "published",
+  "question": "Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?",
+  "summary": "Seventeen exact-label segmentations have three runes. WHY is the sole affine fit in this list, with a = 7 and b = 7; this does not establish the plaintext.",
+  "tags": [
+    "LP2-39",
+    "red header",
+    "crib",
+    "cribbing",
+    "WHY",
+    "BEING",
+    "THUS",
+    "affine",
+    "three runes",
+    "guessing words"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-39"
+    ],
+    "representation": "Archived lower-block prefix IA C S, indices 27 5 15; twenty uppercase candidates segmented with exact stored GP labels only.",
+    "procedure": "Enumerate every exact-label segmentation, retain length three for all 812 affine encryption keys, and record every matching key.",
+    "parameters": "20 fixed candidates; 22 segmentations; 17 three-rune segmentations; a = 1..28, b = 0..28; C = aP + b modulo 29; 13,804 candidate/key trials.",
+    "exclusions": "Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim."
+  },
+  "outcome": "inconclusive",
+  "finding": "WHY fits at a = 7, b = 7. The other sixteen length-compatible candidates do not fit any affine key. BEING has four or five runes under the stated labels.",
+  "limitations": "Selected words and a three-rune target provide no independent confirmation. EI is not a stored GP label. Computational review; human review pending.",
+  "next_steps": "Test any surviving fixed key against held-out text under a declared criterion. Add alternative spelling conventions or candidate lists as explicit variants.",
+  "family": {
+    "id": "red-header-cribs",
+    "title": "Red-header crib tests",
+    "question": "Which proposed header readings satisfy stated representation and cipher constraints?",
+    "baseline": "lp2-39-header-cribs"
+  },
+  "variant": {
+    "label": "LP2-39, fixed twenty-word list and affine substitutions",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent cut-mask and two-point algebra check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-39-header-cribs/run.py --check",
+    "environment": "Python 3.12.10 standard library; independent check: python experiments/records/lp2-39-header-cribs/check.py",
+    "script": "experiments/records/lp2-39-header-cribs/run.py",
+    "script_sha256": "5d6b4605b53fa19275baecbe1c4f03db7312fa732c8f669af9bf169d1a4c52d5",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "experiments/records/lp2-39-header-cribs/plan.json",
+        "sha256": "4a3007543eae8a003eb7e95eaf091447edc79775fd9d48ce9b669f5ccff89dbf"
+      },
+      {
+        "path": "experiments/records/lp2-39-header-cribs/check.py",
+        "sha256": "d1b3a8d4bb31f5db7ac7b9cd65c11b48d2a7f60474ed5cb373e7d0f0c1223bf4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-39-header-cribs/results.json",
+        "sha256": "27a9d2e30a661063d8ccb6a35d214c103e349ad33b1e9b176cfdeb1af72db8e5"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "LP2-39 original image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-39"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
+  ],
+  "related": [],
+  "article": "## What was tested?\n\nThe lower text block on [LP2-39](#/page/lp2-39) starts with three red runes, followed by punctuation. The first rune is enlarged across several rows. Read in manuscript order, the archived prefix is IA + C + S, with zero-based indices 27, 5 and 15. The Latin labels describe the ciphertext symbols; they are not an English reading.\n\nA **crib** is a proposed plaintext fragment. This experiment takes twenty suggested words and asks whether any single affine substitution maps the word to those three runes. It checks the entire declared key space, rather than adjusting a separate shift for each position.\n\nThe candidate list is fixed in plan.json. It is a selected list, not a dictionary or an unbiased sample of possible headings. WHY was already in the list before this calculation; no new words were added after inspecting the result.\n\n## Representation comes before the key search\n\nWords are uppercased and split in every possible way using the 29 Latin labels stored in the [GP alphabet and rune values](#/wiki/rune-values). There are no pronunciation rules or spelling substitutions. TH may be one label or T + H; NG may be one label or N + G.\n\nBEING does **not** have a three-rune representation under these rules. Its two segmentations are B + E + I + NG (four) and B + E + I + N + G (five). The suggested B + EI + NG would need an EI label that is absent from this alphabet. A proposed alias can be tested separately, but it must be declared rather than silently substituted.\n\nTHUS has three runes as TH + U + S, or four as T + H + U + S. Their prime sums are 61 and 138 respectively. These sums are recorded for transparency; primality is not used to select a candidate or key. See [word lengths](#/wiki/word-lengths) and [spelling and prime sums](#/wiki/prime-sums).\n\n## Search bounds and complete result\n\nThe encryption rule is C = (aP + b) mod 29, using rune indices rather than prime values. Test every a from 1 through 28 and every b from 0 through 28: **812 keys**. Multiplication by any allowed a is invertible modulo 29. This space includes ordinary shifts and shifted alphabet reversals.\n\nThe twenty words give 22 segmentations. Seventeen have the required three runes, so the complete search contains **17 × 812 = 13,804 candidate/key trials**. Wrong-length candidates are retained below instead of disappearing from the report.\n\n| Candidate | Rune lengths | Result |\n| --- | --- | --- |\n| AND | 3 | No affine fit |\n| BUT | 3 | No affine fit |\n| WHY | 3 | a = 7, b = 7 |\n| HOW | 3 | No affine fit |\n| WHO | 3 | No affine fit |\n| YOU | 3 | No affine fit |\n| HER | 3 | No affine fit |\n| HIM | 3 | No affine fit |\n| HIS | 3 | No affine fit |\n| ONE | 3 | No affine fit |\n| TWO | 3 | No affine fit |\n| WAY | 3 | No affine fit |\n| MAP | 3 | No affine fit |\n| LAW | 3 | No affine fit |\n| GOD | 3 | No affine fit |\n| BEING | 5, 4 | Wrong length |\n| OLD | 3 | No affine fit |\n| THUS | 3, 4 | No affine fit |\n| FOLLY | 5 | Wrong length |\n| WISDOM | 6 | Wrong length |\n\nOnly WHY matches. Its rune indices are W = 7, H = 8 and Y = 26. The single key a = 7, b = 7 produces:\n\n| Position | Proposed index P | 7P + 7 | Reduced modulo 29 | Cipher label |\n| --- | --- | --- | --- | --- |\n| 1 | 7 | 56 | 27 | IA |\n| 2 | 8 | 63 | 5 | C |\n| 3 | 26 | 189 | 15 | S |\n\n## Why this is not a solution\n\nThree symbols provide very little independent constraint. Because the first two proposed indices differ, they determine an affine key; the third position tests that key. Here the check was repeated across seventeen eligible candidates. Finding one fit does not establish that the authors intended WHY, or that this key applies to the following text.\n\nFor this three-symbol ciphertext, the 812 invertible affine keys produce 812 distinct three-symbol candidate plaintexts. A short word among those outputs needs further evidence. This is a search-space count, not a probability estimate for English words or for the authors' choices.\n\nThis experiment does not score the remaining text, use a language model, or select a key by how promising the continuation sounds. The recorded outcome is **inconclusive** about the reading. The exact header fit is reproducible; a decipherment is not established.\n\nA follow-up should freeze the surviving key and test text outside the three-rune crib against an explicit criterion. If it fails, inventing fresh per-position shifts would define a different method, not rescue this affine result. Keep such changes in separate variants within this family. See [search space and bounds](#/wiki/search-space) and [cipher invariants](#/wiki/cipher-invariants).\n\n## Reproduce and inspect\n\nDownload this experiment's ZIP and extract it with its folders intact. Both commands use Python's standard library and run offline:\n\n```text\npython experiments/records/lp2-39-header-cribs/run.py --check\npython experiments/records/lp2-39-header-cribs/check.py\n```\n\nThe first script enumerates label prefixes and all affine keys. The independent checker enumerates every possible cut in each spelling, locates the header from the archived paragraph boundary, and derives a key algebraically from the first two positions before checking the third. It does not import the search implementation.\n\nresults.json retains every segmentation, its indices, rune count, prime sum and matching keys. plan.json fixes the candidate list, normalization, source position and key bounds. Changing any of these should produce a named variant, with the old result retained for comparison.\n",
+  "article_path": "experiments/records/lp2-39-header-cribs/article.md",
+  "script_sha256": "5d6b4605b53fa19275baecbe1c4f03db7312fa732c8f669af9bf169d1a4c52d5"
+}

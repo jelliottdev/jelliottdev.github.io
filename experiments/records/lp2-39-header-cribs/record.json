@@ -1,0 +1,93 @@
+{
+  "id": "lp2-39-header-cribs",
+  "title": "LP2-39: twenty proposed red-header cribs",
+  "status": "published",
+  "question": "Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?",
+  "summary": "Seventeen exact-label segmentations have three runes. WHY is the sole affine fit in this list, with a = 7 and b = 7; this does not establish the plaintext.",
+  "tags": [
+    "LP2-39",
+    "red header",
+    "crib",
+    "cribbing",
+    "WHY",
+    "BEING",
+    "THUS",
+    "affine",
+    "three runes",
+    "guessing words"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-39"
+    ],
+    "representation": "Archived lower-block prefix IA C S, indices 27 5 15; twenty uppercase candidates segmented with exact stored GP labels only.",
+    "procedure": "Enumerate every exact-label segmentation, retain length three for all 812 affine encryption keys, and record every matching key.",
+    "parameters": "20 fixed candidates; 22 segmentations; 17 three-rune segmentations; a = 1..28, b = 0..28; C = aP + b modulo 29; 13,804 candidate/key trials.",
+    "exclusions": "Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim."
+  },
+  "outcome": "inconclusive",
+  "finding": "WHY fits at a = 7, b = 7. The other sixteen length-compatible candidates do not fit any affine key. BEING has four or five runes under the stated labels.",
+  "limitations": "Selected words and a three-rune target provide no independent confirmation. EI is not a stored GP label. Computational review; human review pending.",
+  "next_steps": "Test any surviving fixed key against held-out text under a declared criterion. Add alternative spelling conventions or candidate lists as explicit variants.",
+  "family": {
+    "id": "red-header-cribs",
+    "title": "Red-header crib tests",
+    "question": "Which proposed header readings satisfy stated representation and cipher constraints?",
+    "baseline": "lp2-39-header-cribs"
+  },
+  "variant": {
+    "label": "LP2-39, fixed twenty-word list and affine substitutions",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent cut-mask and two-point algebra check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-39-header-cribs/run.py --check",
+    "environment": "Python 3.12.10 standard library; independent check: python experiments/records/lp2-39-header-cribs/check.py",
+    "script": "experiments/records/lp2-39-header-cribs/run.py",
+    "script_sha256": "5d6b4605b53fa19275baecbe1c4f03db7312fa732c8f669af9bf169d1a4c52d5",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "experiments/records/lp2-39-header-cribs/plan.json",
+        "sha256": "4a3007543eae8a003eb7e95eaf091447edc79775fd9d48ce9b669f5ccff89dbf"
+      },
+      {
+        "path": "experiments/records/lp2-39-header-cribs/check.py",
+        "sha256": "d1b3a8d4bb31f5db7ac7b9cd65c11b48d2a7f60474ed5cb373e7d0f0c1223bf4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-39-header-cribs/results.json",
+        "sha256": "27a9d2e30a661063d8ccb6a35d214c103e349ad33b1e9b176cfdeb1af72db8e5"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "LP2-39 original image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-39"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
+  ],
+  "related": []
+}

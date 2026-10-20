@@ -709,6 +709,101 @@
   &quot;article&quot;: &quot;# LP2-31 periodic IoC: preserving row composition\n\n## Why change the null model?\n\nThe baseline shuffles all 269 runes together. That preserves the page&#x27;s total counts but can move any rune to any row. If rows differ in composition, that comparison removes those differences as well as the ordering under investigation.\n\nThis variant instead preserves each archived row&#x27;s length and exact rune counts, shuffling only within that row. It asks a conditional question about order after holding row composition fixed. This is not automatically a better model; it makes a different assumption visible.\n\nLP2-31 has twelve ordinary text rows and no separately identified heading. No row was removed or renamed as a heading for this test. Archived transcription lines provide the boundaries.\n\n## Plan and relation to the baseline\n\nThe plan and runner were committed as `8dfc7c0` before executing the variant. The variant was motivated after the whole-page result was known; it is not independent confirmation and does not account for selecting among null models.\n\nOnly the shuffle procedure changes. The input remains the same 269 runes, periods remain 2–20 inclusive, the statistic remains pooled within-column matching pairs, and each trial&#x27;s maximum is compared with the observed maximum. There are still 999 trials, seed 330131, greater-than-or-equal ties, plus-one Monte Carlo correction, and a 0.05 threshold.\n\nThe twelve row lengths are:\n\n```\n23, 22, 24, 24, 22, 22, 21, 22, 21, 24, 22, 22\n```\n\nRemove non-alphabet characters inside each row, shuffle that row&#x27;s runes, then concatenate rows in their original order. Column positions run across the concatenated page; they do not restart at row boundaries. The same seed does not make the two models&#x27; individual shuffled pages equivalent or create a paired statistical test.\n\n## Results\n\n| Quantity | Whole-page baseline | Within-row variant |\n| --- | --- | --- |\n| Input runes | 269 | 269 |\n| Observed peak period | 13 | 13 |\n| Observed peak fraction | 216/5300 | 216/5300 |\n| Null maxima at least observed | 213/999 | 245/999 |\n| Plus-one Monte Carlo p | 0.214 | 0.246 |\n| Below declared 0.05 threshold | No | No |\n\nThe observed scores agree exactly for every period, as they should: the observed input and scoring procedure did not change. The within-row comparison is 246/1000 = 0.246. Its approximate Monte Carlo standard error is 0.014, using sqrt(q*(1-q)/999) with q=245/999. This describes simulation uncertainty, not confidence in a cipher.\n\nThe two runs give the same threshold decision under their different assumptions. The difference between 0.214 and 0.246 is not evaluated as a separate statistical effect, and neither p-value is the probability that period 13 is the true key length.\n\n## Reproduce\n\nFrom a repository checkout with Python 3.12.10:\n\n```\npython experiments/records/lp2-31-row-shuffle-ioc/run.py --check\npython experiments/records/lp2-31-row-shuffle-ioc/check.py\n```\n\nThe runner compares every observed field and all 999 stored trial records. The separate checker verifies the twelve row lengths, exact agreement with the baseline&#x27;s observed scores, and a position-pair oracle for all observed periods and the first three seeded null trials. That oracle directly enumerates position pairs rather than using column-frequency counts. The runner also asserts preservation of each row&#x27;s multiset in every trial.\n\n[Download the complete variant output](experiments/records/lp2-31-row-shuffle-ioc/results.json). All 19 period numerators are stored for every shuffle; the denominators are in the observed rows. The comparison diagram is generated from the two saved reports. Neither the checker nor the plot interprets candidate plaintext or calls an AI service.\n\n## Retest and changes after inspection\n\nCodex reran the complete variant and performed the separate checks on 20 October 2026. Every stored field reproduced. No null rule, period range, input boundary, seed, threshold or statistic changed after the variant&#x27;s first result. The checker and comparison graphic were added afterward for verification and presentation. Human review remains pending.\n\n## Interpretation and remaining limits\n\nThis row-conditioned null preserves more local composition than the whole-page null, but still discards within-row word boundaries and local patterns. It treats all rune permutations within a row as exchangeable. Neither model is a full model of a particular cipher or language.\n\nThis variant does not show that the page is random, that period 13 is impossible, or that Vigenère is absent. It also does not test different pages, period ranges, row selections, alternative statistics or key searches. Those changes must be documented separately rather than silently folded into this result.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-31-row-shuffle-ioc/article.md&quot;,
   &quot;script_sha256&quot;: &quot;0298ea05a55bdc35570e5718cc238456c2679ae86e8a26698f45f18e4ac86fbe&quot;
+}</pre></article><article id="lp2-39-header-cribs"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-39-header-cribs&quot;,
+  &quot;title&quot;: &quot;LP2-39: twenty proposed red-header cribs&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?&quot;,
+  &quot;summary&quot;: &quot;Seventeen exact-label segmentations have three runes. WHY is the sole affine fit in this list, with a = 7 and b = 7; this does not establish the plaintext.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-39&quot;,
+    &quot;red header&quot;,
+    &quot;crib&quot;,
+    &quot;cribbing&quot;,
+    &quot;WHY&quot;,
+    &quot;BEING&quot;,
+    &quot;THUS&quot;,
+    &quot;affine&quot;,
+    &quot;three runes&quot;,
+    &quot;guessing words&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-39&quot;
+    ],
+    &quot;representation&quot;: &quot;Archived lower-block prefix IA C S, indices 27 5 15; twenty uppercase candidates segmented with exact stored GP labels only.&quot;,
+    &quot;procedure&quot;: &quot;Enumerate every exact-label segmentation, retain length three for all 812 affine encryption keys, and record every matching key.&quot;,
+    &quot;parameters&quot;: &quot;20 fixed candidates; 22 segmentations; 17 three-rune segmentations; a = 1..28, b = 0..28; C = aP + b modulo 29; 13,804 candidate/key trials.&quot;,
+    &quot;exclusions&quot;: &quot;Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;WHY fits at a = 7, b = 7. The other sixteen length-compatible candidates do not fit any affine key. BEING has four or five runes under the stated labels.&quot;,
+  &quot;limitations&quot;: &quot;Selected words and a three-rune target provide no independent confirmation. EI is not a stored GP label. Computational review; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Test any surviving fixed key against held-out text under a declared criterion. Add alternative spelling conventions or candidate lists as explicit variants.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;red-header-cribs&quot;,
+    &quot;title&quot;: &quot;Red-header crib tests&quot;,
+    &quot;question&quot;: &quot;Which proposed header readings satisfy stated representation and cipher constraints?&quot;,
+    &quot;baseline&quot;: &quot;lp2-39-header-cribs&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;LP2-39, fixed twenty-word list and affine substitutions&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent cut-mask and two-point algebra check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-39-header-cribs/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12.10 standard library; independent check: python experiments/records/lp2-39-header-cribs/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-39-header-cribs/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;5d6b4605b53fa19275baecbe1c4f03db7312fa732c8f669af9bf169d1a4c52d5&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-39-header-cribs/plan.json&quot;,
+        &quot;sha256&quot;: &quot;4a3007543eae8a003eb7e95eaf091447edc79775fd9d48ce9b669f5ccff89dbf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-39-header-cribs/check.py&quot;,
+        &quot;sha256&quot;: &quot;d1b3a8d4bb31f5db7ac7b9cd65c11b48d2a7f60474ed5cb373e7d0f0c1223bf4&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-39-header-cribs/results.json&quot;,
+        &quot;sha256&quot;: &quot;27a9d2e30a661063d8ccb6a35d214c103e349ad33b1e9b176cfdeb1af72db8e5&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;LP2-39 original image and archived transcription&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-39&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Gematria Primus alphabet&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/alphabet&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;article&quot;: &quot;## What was tested?\n\nThe lower text block on [LP2-39](#/page/lp2-39) starts with three red runes, followed by punctuation. The first rune is enlarged across several rows. Read in manuscript order, the archived prefix is IA + C + S, with zero-based indices 27, 5 and 15. The Latin labels describe the ciphertext symbols; they are not an English reading.\n\nA **crib** is a proposed plaintext fragment. This experiment takes twenty suggested words and asks whether any single affine substitution maps the word to those three runes. It checks the entire declared key space, rather than adjusting a separate shift for each position.\n\nThe candidate list is fixed in plan.json. It is a selected list, not a dictionary or an unbiased sample of possible headings. WHY was already in the list before this calculation; no new words were added after inspecting the result.\n\n## Representation comes before the key search\n\nWords are uppercased and split in every possible way using the 29 Latin labels stored in the [GP alphabet and rune values](#/wiki/rune-values). There are no pronunciation rules or spelling substitutions. TH may be one label or T + H; NG may be one label or N + G.\n\nBEING does **not** have a three-rune representation under these rules. Its two segmentations are B + E + I + NG (four) and B + E + I + N + G (five). The suggested B + EI + NG would need an EI label that is absent from this alphabet. A proposed alias can be tested separately, but it must be declared rather than silently substituted.\n\nTHUS has three runes as TH + U + S, or four as T + H + U + S. Their prime sums are 61 and 138 respectively. These sums are recorded for transparency; primality is not used to select a candidate or key. See [word lengths](#/wiki/word-lengths) and [spelling and prime sums](#/wiki/prime-sums).\n\n## Search bounds and complete result\n\nThe encryption rule is C = (aP + b) mod 29, using rune indices rather than prime values. Test every a from 1 through 28 and every b from 0 through 28: **812 keys**. Multiplication by any allowed a is invertible modulo 29. This space includes ordinary shifts and shifted alphabet reversals.\n\nThe twenty words give 22 segmentations. Seventeen have the required three runes, so the complete search contains **17 × 812 = 13,804 candidate/key trials**. Wrong-length candidates are retained below instead of disappearing from the report.\n\n| Candidate | Rune lengths | Result |\n| --- | --- | --- |\n| AND | 3 | No affine fit |\n| BUT | 3 | No affine fit |\n| WHY | 3 | a = 7, b = 7 |\n| HOW | 3 | No affine fit |\n| WHO | 3 | No affine fit |\n| YOU | 3 | No affine fit |\n| HER | 3 | No affine fit |\n| HIM | 3 | No affine fit |\n| HIS | 3 | No affine fit |\n| ONE | 3 | No affine fit |\n| TWO | 3 | No affine fit |\n| WAY | 3 | No affine fit |\n| MAP | 3 | No affine fit |\n| LAW | 3 | No affine fit |\n| GOD | 3 | No affine fit |\n| BEING | 5, 4 | Wrong length |\n| OLD | 3 | No affine fit |\n| THUS | 3, 4 | No affine fit |\n| FOLLY | 5 | Wrong length |\n| WISDOM | 6 | Wrong length |\n\nOnly WHY matches. Its rune indices are W = 7, H = 8 and Y = 26. The single key a = 7, b = 7 produces:\n\n| Position | Proposed index P | 7P + 7 | Reduced modulo 29 | Cipher label |\n| --- | --- | --- | --- | --- |\n| 1 | 7 | 56 | 27 | IA |\n| 2 | 8 | 63 | 5 | C |\n| 3 | 26 | 189 | 15 | S |\n\n## Why this is not a solution\n\nThree symbols provide very little independent constraint. Because the first two proposed indices differ, they determine an affine key; the third position tests that key. Here the check was repeated across seventeen eligible candidates. Finding one fit does not establish that the authors intended WHY, or that this key applies to the following text.\n\nFor this three-symbol ciphertext, the 812 invertible affine keys produce 812 distinct three-symbol candidate plaintexts. A short word among those outputs needs further evidence. This is a search-space count, not a probability estimate for English words or for the authors&#x27; choices.\n\nThis experiment does not score the remaining text, use a language model, or select a key by how promising the continuation sounds. The recorded outcome is **inconclusive** about the reading. The exact header fit is reproducible; a decipherment is not established.\n\nA follow-up should freeze the surviving key and test text outside the three-rune crib against an explicit criterion. If it fails, inventing fresh per-position shifts would define a different method, not rescue this affine result. Keep such changes in separate variants within this family. See [search space and bounds](#/wiki/search-space) and [cipher invariants](#/wiki/cipher-invariants).\n\n## Reproduce and inspect\n\nDownload this experiment&#x27;s ZIP and extract it with its folders intact. Both commands use Python&#x27;s standard library and run offline:\n\n```text\npython experiments/records/lp2-39-header-cribs/run.py --check\npython experiments/records/lp2-39-header-cribs/check.py\n```\n\nThe first script enumerates label prefixes and all affine keys. The independent checker enumerates every possible cut in each spelling, locates the header from the archived paragraph boundary, and derives a key algebraically from the first two positions before checking the third. It does not import the search implementation.\n\nresults.json retains every segmentation, its indices, rune count, prime sum and matching keys. plan.json fixes the candidate list, normalization, source position and key bounds. Changing any of these should produce a named variant, with the old result retained for comparison.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-39-header-cribs/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5d6b4605b53fa19275baecbe1c4f03db7312fa732c8f669af9bf169d1a4c52d5&quot;
 }</pre></article><article id="lp2-54-55-autokey-reset"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp2-54-55-autokey-reset&quot;,
   &quot;title&quot;: &quot;LP2-54–55: reset ciphertext state at selected F runes&quot;,
