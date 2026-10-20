@@ -8897,6 +8897,18 @@ The decoded JPEG, its archived rune transcription, and exact reproduction steps.
 
 LP1-03 has two different images to examine: the visible runic manuscript page and a smaller JPEG encoded inside its signed OutGuess message. The known Vigenère reading of the manuscript does not automatically decode the second image.
 
+Four layers to keep separate
+
+	Layer	What you examine
+	Original LP1-03 JPEG	The visible Welcome page, with its runes and leafy border. It also carries hidden data.
+	OutGuess payload	31,809 extracted bytes containing the signed message.
+	Signed message body	A short instruction followed by hexadecimal text representing another JPEG.
+	Decoded JPEG	The small rune-and-digit image shown below, 15,188 bytes long.
+
+The body opens with “Let the text guide you.”, then “Good luck.” and “3301”, before the hexadecimal sequence. These words are in the extracted message, not the visible runic paragraph on the manuscript sheet. Read the complete body or inspect the signed block.
+
+OutGuess extraction, signature verification, and hexadecimal decoding answer different questions. Extraction retrieves the stored bytes. Signature verification checks the signed content against a particular public key. Hexadecimal decoding converts character pairs into bytes. None of those operations alone supplies a reading of the runes in the resulting image.
+
 The decoded derivative
 [Image: A narrow black rune sequence containing the decimal digits 5 and 3 on a white background]
 The JPEG decoded from the hexadecimal portion of LP1-03’s signed message.
@@ -8911,20 +8923,40 @@ Those labels are a transliteration, not established plaintext. The added spaces 
 
 How to reproduce the image
 First follow OutGuess extraction for LP1-03 and verify its signed message. Decode the hexadecimal suffix of the exported body:
+import hashlib
+import json
 from pathlib import Path
-body = Path("exports/steganography/lp1-03.body.txt").read_text()
+
+manifest = json.loads(
+    Path("data/evidence/embedded-payloads.json").read_text(encoding="utf-8")
+)
+record = next(row for row in manifest["records"] if row["page"] == "lp1-03")
+body_bytes = Path(record["body_path"]).read_bytes()
+if hashlib.sha256(body_bytes).hexdigest() != record["body_sha256"]:
+    raise ValueError("Message body differs from the recorded source")
+body = body_bytes.decode("utf-8")
 image = bytes.fromhex(body[body.index("ffd8ffe"):])
-assert len(image) == 15188
+if len(image) != record["embedded_image_bytes"]:
+    raise ValueError("Decoded JPEG length differs from the record")
+if hashlib.sha256(image).hexdigest() != record["embedded_image_sha256"]:
+    raise ValueError("Decoded JPEG differs from the recorded derivative")
 with open("lp1-03-decoded.jpg", "xb") as output:
     output.write(image)
+print("Verified and wrote", len(image), "bytes")
 The exclusive-create mode refuses to overwrite an existing file. This reproduces a format conversion, not a proposed solution to the image’s text. Keep the original signed body and the derivative as separate files.
 
+Run the example from an extracted reference-data bundle or the repository root. It uses only Python’s standard library. A successful run prints Verified and wrote 15188 bytes. The hashes check consistency with the supplied manifest; authenticate the signed message separately using the linked verification instructions.
+If a hash check fails, stop before interpreting the derivative. Confirm that the message body and manifest come from the same download, and avoid opening and resaving the body in an editor that changes line endings. Use the file-verification guide to compare bytes. The checks deliberately read the body as bytes before decoding its text.
 Sources
 Pinned transcription of the embedded image · Signed block · Message body · Payload inventory.
 
 Sources, related references, and files
 - LP1-03
   https://jelliottdev.github.io/reference/lp1-03.html
+- Read the complete body; Message body
+  https://jelliottdev.github.io/exports/steganography/lp1-03.body.txt
+- inspect the signed block; Signed block
+  https://jelliottdev.github.io/exports/steganography/lp1-03.signed.asc
 - A narrow black rune sequence containing the decimal digits 5 and 3 on a white background; Download the JPEG
   https://jelliottdev.github.io/exports/steganography/lp1-03.embedded.jpg
 - payload manifest
@@ -8935,12 +8967,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/outguess.html
 - verify its signed message
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- the file-verification guide
+  https://jelliottdev.github.io/reference/articles/checksums.html
 - Pinned transcription of the embedded image
   https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/liber_primus/markdown/03.md
-- Signed block
-  https://jelliottdev.github.io/exports/steganography/lp1-03.signed.asc
-- Message body
-  https://jelliottdev.github.io/exports/steganography/lp1-03.body.txt
 - Payload inventory
   https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 
