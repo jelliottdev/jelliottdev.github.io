@@ -206,6 +206,7 @@ def guide_discovery_index(articles):
     }
 
 def build():
+    categories = {g["title"]: g["id"] for g in json.loads((ROOT / "data/guide-categories.json").read_text(encoding="utf-8"))}
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
     reading_index = ROOT / "articles/readings/index.json"
     if reading_index.exists():
@@ -227,6 +228,9 @@ def build():
                                   for link in parser.links]
         a["linked_articles"] = outgoing[a["id"]]
         title = html.escape(a["title"])
+        category = a.get("category", "Reference")
+        category_link = (f'<a href="../index.html#guides-{html.escape(categories[category], quote=True)}">{html.escape(category)}</a> · '
+                         if category in categories else "")
         standalone = standalone_body(body)
         related = [b for b in articles if b["id"] != a["id"] and
                    a["id"] in outgoing[b["id"]]]
@@ -239,7 +243,8 @@ def build():
         (out / f'{a["id"]}.html').write_text(
             '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{title} — Liberpedia</title><link rel="stylesheet" href="../../style.css">'
-            '<body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · '
+            '<body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · '
+            + category_link +
             f'<a href="../../index.html#/wiki/{a["id"]}">Open in wiki</a> · <a href="{a["id"]}.txt">Plain text</a></nav>'
             f'<h1>{title}</h1><p>{html.escape(a["summary"])}</p>{article_contents(body)}{standalone}</main></body></html>', encoding="utf-8", newline="\n")
         links = "\n".join(("- " + "; ".join(ref["labels"]) + "\n  " + ref["url"])
