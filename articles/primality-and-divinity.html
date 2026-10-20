@@ -7,6 +7,19 @@
 <tr><td>Parable<br>LP2-57</td><td>17</td><td>DIVINITY is described as within, between shedding circumferences and emerging.</td></tr>
 </tbody></table></div>
 <p>The current compilation therefore contains one exact occurrence of <code>PRIMALITY</code> and four of <code>DIVINITY</code>, including the heading. These are positions in contextual English, counted from one at the start of each section. They are not rune positions, and a section spanning LP1-10–13 does not place each occurrence on all four pages.</p>
+<h3 id="literal-locations">Find the words on the original sheets</h3>
+<p>The literal labels spell the contextual word “divinity” as <code>DIUINITY</code>. Searching for <code>DIVINITY</code> in literal mode therefore returns no exact matches. The following locations use the exported literal text, whose numbered lines include its recorded line breaks; these are not rune ordinals.</p>
+<div class="table-wrap"><table><thead><tr><th>Literal word</th><th>Page</th><th>Literal text lines</th></tr></thead><tbody>
+<tr><td>DIUINITY, in the heading</td><td style="white-space:nowrap"><a href="#/wiki/reading-loss-of-divinity?section=lp1-10">LP1-10</a></td><td>1</td></tr>
+<tr><td>DIUINITY, in the opening statement</td><td style="white-space:nowrap"><a href="#/wiki/reading-loss-of-divinity?section=lp1-10">LP1-10</a></td><td>4</td></tr>
+<tr><td>PRIMALITY</td><td style="white-space:nowrap"><a href="#/wiki/reading-loss-of-divinity?section=lp1-13">LP1-13</a></td><td>1–2: PRIMAL / ITY</td></tr>
+<tr><td>DIUINITY, following “and thus”</td><td style="white-space:nowrap"><a href="#/wiki/reading-loss-of-divinity?section=lp1-13">LP1-13</a></td><td>2</td></tr>
+<tr><td>DIUINITY, within</td><td style="white-space:nowrap"><a href="#/wiki/reading-lp2-57?section=lp2-57">LP2-57</a></td><td>5</td></tr>
+</tbody></table></div>
+<figure class="evidence-figure"><a href="images/lp1-13.jpg" style="display:block;position:relative;overflow:hidden;aspect-ratio:1240/360"><img src="images/lp1-13.jpg" width="2400" height="3600" loading="lazy" style="position:absolute;width:193.5484%;max-width:none;max-height:none;height:auto;left:-46.7742%;top:-180.5556%" alt="The first two black runic lines on LP1-13, above the insect, with a red separator at the end of the second line."></a><figcaption>The claim on <a href="#/reader/lp1-13">LP1-13</a>, original-image rectangle <code>[580, 650, 1240, 360]</code>. This view enlarges the original bytes; it does not redraw the runes. <a href="images/lp1-13.jpg" download>Download the original JPEG</a>.</figcaption></figure>
+<pre><code>CE-THAT-HAUE-US-LOSE-OUR-PRIMAL/
+ITY;AND-THUS-OUR-DIUINITY./</code></pre>
+<p>The opening <code>CE</code> is the continuation of <code>ADHEREN</code> at the bottom of <a href="#/wiki/reading-loss-of-divinity?section=lp1-12">LP1-12</a>. The argument crosses a page boundary before “primality” crosses a line boundary. Read both pages together: LP1-12 names consumption, preservation and adherence; LP1-13 completes the statement about their consequences. The insect below these two lines separates them visually from the following red-headed wisdom passage.</p>
 <h2 id="argument">What the passage actually argues</h2>
 <p>The sequence matters. Consumption is linked to perceived scarcity and fear of future inability to obtain what is needed. Preservation is linked to fear of being unable to regain what is lost. Adherence is linked to wanting to belong and be right. The text treats both dogma and reason as things that can be followed for that last motive. Its argument concerns dependence on possession and approval, rather than simply listing disfavored objects or beliefs.</p>
 <div class="table-wrap"><table><thead><tr><th>Step in the text</th><th>Connection</th></tr></thead><tbody>
@@ -32,7 +45,9 @@
 <p>Extract the <a href="downloads/reference-data.zip">reference-data ZIP</a> and run these commands from its folder with Python 3. The <a href="#/wiki/reading-concordance">concordance guide</a> explains the matching and word-position rules.</p>
 <pre><code>python scripts/reading_concordance.py primality --context 18
 python scripts/reading_concordance.py divinity --context 8
+python scripts/reading_concordance.py primality --literal --context 15
+python scripts/reading_concordance.py DIUINITY --literal --context 8
 python scripts/reproduce_prime_sums.py</code></pre>
-<p>The first two commands locate vocabulary in the nine contextual sections. The third reproduces the separately documented sums using decoded rune sequences. A contextual word count is not an input to that sum calculation. Keeping the checks separate prevents expanded English spellings from silently changing the arithmetic.</p>
+<p>The first two commands locate vocabulary in the nine contextual sections. The next two locate literal spellings on individual pages, joining line wraps before matching. The final command reproduces the separately documented sums using decoded rune sequences. A contextual word count is not an input to that sum calculation. Keeping the checks separate prevents expanded English spellings from silently changing the arithmetic.</p>
 <h2 id="sources">Sources and further reading</h2>
 <p>The occurrence table and close reading use <a href="data/evidence/known-readings.json">the known-reading compilation</a>, especially <a href="#/wiki/reading-loss-of-divinity">The Loss of Divinity</a> and <a href="#/wiki/reading-lp2-57">LP2-57</a>. The mathematical examples use the published <a href="#/alphabet">rune values</a>. Interpretations above are editorial comparisons, not additional decoded content. For actual numerical results, continue with <a href="#/wiki/prime-sums">prime sums</a>, <a href="#/wiki/emirps">emirps</a>, and <a href="#/spelling">spelling and prime sums</a>.</p>
