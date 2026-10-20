@@ -65,6 +65,45 @@ Zero-based rune indices introduce another issue: the F index is 0, outside the p
 
 The function name alone supplies no direction, grouping, starting position, output alphabet or success criterion. A proposed use therefore belongs in a bounded reproducible experiment. This guide explains the mathematics and verifies the examples; it does not claim that μ is an established Liber Primus cipher or that applying it has been exhaustively tested.
 
+LP2-40: the proposed “FOR EVERY” crib
+
+A crib is a guessed plaintext passage, not a recovered reading. One proposal begins by assuming that the first eight runes of LP2-40 mean FOR EVERY, then works backward to a possible running key. The following audit reconstructs its numerical intermediate steps; it does not establish that the guess is correct.
+
+The proposed rune labels are F O R E U E R Y, using U for the English V. Their zero-based indices are [0, 3, 4, 18, 1, 18, 4, 26], and their Gematria Primus sum is 271, a prime. The manuscript’s first eight stored indices are [0, 9, 19, 26, 6, 23, 25, 8]. A prime sum is a property of the proposed spelling; it does not independently identify the plaintext.
+
+Reconstruct the arithmetic
+
+Leave the initial F unchanged. For each remaining proposed plaintext index P, apply (28 − (P + 18)) mod 29: shift by +18, then Atbash. Add the consecutive prime-minus-one schedule starting at 2−1 after the exempt F. These choices reproduce the stated intermediate:
+
+Shift, then Atbash:
+0  7  6 21  9 21  6 13
+
+Add prime minus one:
+0  1  2  4  6 10 12 16
+
+Intermediate, modulo 29:
+0  8  8 25 15  2 18  0
+
+Stored ciphertext:
+0  9 19 26  6 23 25  8
+
+Required added key, modulo 29:
+0  1 11  1 20 21  7  8
+
+The final row is obtained by subtracting the intermediate from the ciphertext modulo 29. A signed representation may use −8 instead of 21; these are the same residue. This audit exempts only the initial F. It does not infer a rule for later F runes, other interruptions or other pages.
+
+From the repository or reference-data bundle, run python scripts/audit_lp2_40_crib.py. The audit script reads the archived ciphertext and alphabet, prints every stage with input hashes, verifies the prime-minus-one values by coprime counting, and reverses the reconstructed arithmetic back to the proposed crib. It makes no network request and performs no Möbius-driven decryption.
+
+A fitted key is not yet a prediction
+
+For any proposed intermediate X and observed ciphertext C, defining K = C − X (mod 29) guarantees X + K = C. Reconstructing the eight symbols with that fitted key is therefore not an independent test of the guessed words. The evidence would come from a separately specified key-generation rule predicting symbols that were not used to choose it.
+
+The proposed next step assigns different combinations of plaintext, ciphertext and signs to states derived from nearby Möbius values. That needs a complete specification. Each μ value has three possible outputs, so a three-position tuple has up to 27 formal labels before any restrictions from the sequence. Eight binary states do not follow automatically: the conversion to bits, including treatment of zero and sign, must be stated.
+
+A runnable experiment needs the input sequence and starting index, seeds, exact references to previous or current symbols, state-update order, a fixed table mapping every reachable state to an operation, and an interruption rule. It must also state whether it can encrypt and decrypt without consulting the desired answer. Once those choices are frozen, test held-out text or another declared target instead of revising the table whenever a letter misses.
+
+The arithmetic above is reproducible; the supplied description does not yet define that full selector. Its later matrix and Slidefair suggestions are separate proposals, not additional evidence for this unfinished Möbius rule. Compare search space and bounds, autokey and doublets, and the consecutive-integer totient experiment. That last experiment uses a different schedule and does not test this layered, crib-driven construction.
+
 Sources and related references
 
 NIST DLMF definition, checked 20 October 2026. Manuscript context: LP1-05 and the Möbius visual-feature guide. For other frequently confused arithmetic operations, compare prime indices and totients.
@@ -82,6 +121,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - reproducible experiment
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- LP2-40
+  https://jelliottdev.github.io/reference/lp2-40.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- audit script
+  https://jelliottdev.github.io/scripts/audit_lp2_40_crib.py
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- autokey and doublets
+  https://jelliottdev.github.io/reference/articles/doublets.html#autokey
+- consecutive-integer totient experiment
+  https://jelliottdev.github.io/#/experiments/lp2-totient-openings
 - LP1-05
   https://jelliottdev.github.io/reference/lp1-05.html
 - prime indices

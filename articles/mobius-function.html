@@ -39,5 +39,31 @@ print("Examples match")
 <p>First identify the inputs. <a href="#/wiki/rune-values">Every Gematria Primus rune value is prime</a>, so applying μ separately to those values produces −1 for every rune. That operation loses all distinctions between rune identities. It is not equivalent to applying μ to word sums, printed decimal numbers, or a sequence of positive ordinal positions.</p>
 <p>Zero-based rune indices introduce another issue: the F index is 0, outside the positive-integer domain of this definition. Adding one, replacing zero, or choosing prime values instead would each be an additional rule. State it explicitly rather than letting a software convention choose the input.</p>
 <p>The function name alone supplies no direction, grouping, starting position, output alphabet or success criterion. A proposed use therefore belongs in a bounded <a href="#/wiki/reproducibility">reproducible experiment</a>. This guide explains the mathematics and verifies the examples; it does not claim that μ is an established Liber Primus cipher or that applying it has been exhaustively tested.</p>
+<h2 id="for-every">LP2-40: the proposed “FOR EVERY” crib</h2>
+<p>A <strong>crib</strong> is a guessed plaintext passage, not a recovered reading. One proposal begins by assuming that the first eight runes of <a href="#/page/lp2-40">LP2-40</a> mean FOR EVERY, then works backward to a possible running key. The following audit reconstructs its numerical intermediate steps; it does not establish that the guess is correct.</p>
+<p>The proposed rune labels are F O R E U E R Y, using U for the English V. Their zero-based indices are <code>[0, 3, 4, 18, 1, 18, 4, 26]</code>, and their Gematria Primus sum is 271, a prime. The manuscript’s first eight stored indices are <code>[0, 9, 19, 26, 6, 23, 25, 8]</code>. A prime sum is a property of the proposed spelling; it does not independently identify the plaintext.</p>
+<h3 id="crib-trace">Reconstruct the arithmetic</h3>
+<p>Leave the initial F unchanged. For each remaining proposed plaintext index P, apply <code>(28 − (P + 18)) mod 29</code>: shift by +18, then Atbash. Add the consecutive prime-minus-one schedule starting at 2−1 after the exempt F. These choices reproduce the stated intermediate:</p>
+<pre><code>Shift, then Atbash:
+0  7  6 21  9 21  6 13
+
+Add prime minus one:
+0  1  2  4  6 10 12 16
+
+Intermediate, modulo 29:
+0  8  8 25 15  2 18  0
+
+Stored ciphertext:
+0  9 19 26  6 23 25  8
+
+Required added key, modulo 29:
+0  1 11  1 20 21  7  8</code></pre>
+<p>The final row is obtained by subtracting the intermediate from the ciphertext modulo 29. A signed representation may use −8 instead of 21; these are the same residue. This audit exempts only the initial F. It does not infer a rule for later F runes, other interruptions or other pages.</p>
+<p>From the repository or <a href="downloads/reference-data.zip">reference-data bundle</a>, run <code>python scripts/audit_lp2_40_crib.py</code>. The <a href="scripts/audit_lp2_40_crib.py" download>audit script</a> reads the archived ciphertext and alphabet, prints every stage with input hashes, verifies the prime-minus-one values by coprime counting, and reverses the reconstructed arithmetic back to the proposed crib. It makes no network request and performs no Möbius-driven decryption.</p>
+<h3 id="crib-limits">A fitted key is not yet a prediction</h3>
+<p>For any proposed intermediate X and observed ciphertext C, defining <code>K = C − X (mod 29)</code> guarantees <code>X + K = C</code>. Reconstructing the eight symbols with that fitted key is therefore not an independent test of the guessed words. The evidence would come from a separately specified key-generation rule predicting symbols that were not used to choose it.</p>
+<p>The proposed next step assigns different combinations of plaintext, ciphertext and signs to states derived from nearby Möbius values. That needs a complete specification. Each μ value has three possible outputs, so a three-position tuple has up to 27 formal labels before any restrictions from the sequence. Eight binary states do not follow automatically: the conversion to bits, including treatment of zero and sign, must be stated.</p>
+<p>A runnable experiment needs the input sequence and starting index, seeds, exact references to previous or current symbols, state-update order, a fixed table mapping every reachable state to an operation, and an interruption rule. It must also state whether it can encrypt and decrypt without consulting the desired answer. Once those choices are frozen, test held-out text or another declared target instead of revising the table whenever a letter misses.</p>
+<p>The arithmetic above is reproducible; the supplied description does not yet define that full selector. Its later matrix and Slidefair suggestions are separate proposals, not additional evidence for this unfinished Möbius rule. Compare <a href="#/wiki/search-space">search space and bounds</a>, <a href="#/wiki/doublets?section=autokey">autokey and doublets</a>, and the <a href="#/experiments/lp2-totient-openings">consecutive-integer totient experiment</a>. That last experiment uses a different schedule and does not test this layered, crib-driven construction.</p>
 <h2 id="sources">Sources and related references</h2>
 <p><a href="https://dlmf.nist.gov/27.2.E12">NIST DLMF definition</a>, checked 20 October 2026. Manuscript context: <a href="#/page/lp1-05">LP1-05</a> and the <a href="#/wiki/mobius">Möbius visual-feature guide</a>. For other frequently confused arithmetic operations, compare <a href="#/wiki/prime-indices">prime indices</a> and <a href="#/wiki/totient">totients</a>.</p>
