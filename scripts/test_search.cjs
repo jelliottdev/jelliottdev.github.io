@@ -62,6 +62,18 @@ assert.equal(search.search(db,'infinity').filter(hit=>hit.page)[0].page.id,'lp2-
  'The reclining figure must not replace the crossed-loop page for infinity');
 console.log('PASS: specific red-dot, figure and tree queries retain their own page destinations');
 
+// Different squares need different destinations, even though they share a guide.
+for(const [query,section,page] of [
+ ['1033 square','historical','lp1-05'],
+ ['mixed grid','historical','lp1-05'],
+ ['3301 square','lp1-16','lp1-16']
+]){
+ const hits=search.search(db,query);
+ assert.equal(hits[0].href,`#/wiki/magic-squares?section=${section}`,query);
+ assert(hits.slice(1,5).some(hit=>hit.page?.id===page),query+' must offer the original page');
+}
+console.log('PASS: mixed and decimal squares open their own explanations and pages');
+
 // Distinctive literary phrases and catalogue identifiers should open their explanation.
 for(const [query,id,section] of [
  ['all that lives is holy','william-blake','parallel'],

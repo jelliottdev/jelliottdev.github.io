@@ -461,6 +461,7 @@ SOME WISDOM THE PRIMES ARE SACRED THE TOTIENT FUNCTION IS SACRED ALL THINGS SHOU
 
 The Möbius function: squarefree numbers and signs: https://jelliottdev.github.io/reference/articles/mobius-function.html
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
+Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
 Philosophical themes in Liber Primus: https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Some Wisdom: complete reading: https://jelliottdev.github.io/reference/articles/reading-some-wisdom.html
@@ -5130,7 +5131,7 @@ Sources & reproduction: https://jelliottdev.github.io/#/spelling?section=sum-sou
 
 Artwork, ideas, decoding methods, and source records.
 
-33 topics. Generated from data/topics.json.
+34 topics. Generated from data/topics.json.
 
 ## Which “page 15” is this?
 
@@ -5651,6 +5652,22 @@ Search terms: caesar shift reverse reversal enumerate candidates 58 brute force 
 - Download the script: https://jelliottdev.github.io/scripts/enumerate_shifts.py
 
 Evidence basis: A reproducible candidate-generation exercise, not a completed experiment or a finding about an unsolved page.
+
+## Which number grid is this?
+
+Subject: Decoding and analysis
+
+Topic: https://jelliottdev.github.io/#/topics?topic=number-grids
+
+Compare LP1-05’s mixture of rune words and numbers, LP1-16’s decimal square, the embedded ASCII grids, and the red-3299 panel on LP2-15.
+
+Search terms: magic square 1033 3301 mixed grid rune words number panel
+
+- Compare the four arrangements: https://jelliottdev.github.io/#/wiki/magic-squares?section=compare
+- Work through the rune-value substitution: https://jelliottdev.github.io/#/wiki/magic-squares?section=rune-cells
+- LP2-15 printed panel: https://jelliottdev.github.io/#/wiki/lp2-15-panel
+
+Evidence basis: Original page records, preserved embedded messages, and reproducible arithmetic; a matching sum does not establish a cipher key.
 
 
 ---
@@ -8197,15 +8214,25 @@ Article: https://jelliottdev.github.io/reference/articles/emirps.html
 
 Magic squares in the 2014 puzzle
 
-Compare the historical 1033 square, the printed LP1-16 square summing to 3301, and signed payload instructions; reproduce the arithmetic.
+Convert LP1-05 rune words into the 1033 square, check LP1-16’s 3301 square, and distinguish both from the embedded grids and LP2-15 panel.
 
 A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.
 
+Which number grid are you looking for?
+	Location	What is present	What is checked
+	LP1-05	Five-by-five grid of numbers and rune words	After rune-value substitution, all twelve lines sum to 1033
+	LP1-16	Five-by-five grid of printed numbers	All twelve lines sum to 3301 directly
+	LP1-10–13 embedded messages	ASCII grids with differing borders	The displayed three-by-three interior alone is not magic
+	LP2-15	Four-by-four decimal panel, with red 3299	Printed rows and columns have unequal sums
+These are different objects. Specify the page, whether the grid is visible or extracted, and any substitution before comparing totals.
 Magic does not always mean normal
 A normal order-n magic square uses each integer from 1 to n² exactly once. A general magic square need not use that range or distinct entries. Keep the definition separate from any additional rules in a historical challenge.
 
-A documented 1033 square
-The archived 2014 walkthrough records this order-5 square during an earlier puzzle stage:
+LP1-05: turning rune words into a 1033 square
+The Some Wisdom page, LP1-05, prints a five-by-five grid containing both decimal numbers and rune words below CNOW THIS. The all-number version recorded in the historical walkthrough is a conversion of that mixed grid. Keep each printed number unchanged; replace each rune word with the sum of its Gematria Primus prime values.
+[Image: LP1-05: red heading above a grid containing decimal numbers and rune words.]
+Original-image detail, rectangle [500, 1900, 1400, 900]. Complete page · Original JPEG.
+The resulting matrix is:
 272 138 341 131 151
 366 199 130 320  18
 226 245  91 245 226
@@ -8213,6 +8240,24 @@ The archived 2014 walkthrough records this order-5 square during an earlier puzz
 151 131 341 138 272
 All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.
 
+Every rune cell, worked through
+Row and column positions below start at 1. Latin labels identify the original runes; a multi-letter label can still represent one rune. Sum the listed prime values once each. Do not replace the unusual spellings with ordinary English or sum Unicode character numbers.
+	Row, column	Rune labels	Prime values	Total
+	1, 3	SHADOWS	53 + 23 + 97 + 89 + 7 + 19 + 53	341
+	2, 1	AETHEREAL	101 + 5 + 67 + 11 + 109 + 73	366
+	2, 2	BUFFERS	61 + 3 + 2 + 2 + 67 + 11 + 53	199
+	2, 3	UOID	3 + 7 + 31 + 89	130
+	2, 4	CARNAL	13 + 97 + 11 + 29 + 97 + 73	320
+	3, 2	OBSCURA	7 + 61 + 53 + 13 + 3 + 11 + 97	245
+	3, 3	FORM	2 + 7 + 11 + 71	91
+	3, 5	MOBIUS	71 + 7 + 61 + 31 + 3 + 53	226
+	4, 2	ANALOG	97 + 29 + 97 + 73 + 7 + 17	320
+	4, 3	UOID	3 + 7 + 31 + 89	130
+	4, 4	MOURNFUL	71 + 7 + 3 + 11 + 29 + 2 + 3 + 73	199
+	4, 5	AETHEREAL	101 + 5 + 67 + 11 + 109 + 73	366
+	5, 3	CABAL	13 + 97 + 61 + 97 + 73	341
+For example, the top-row rune word gives 341. The first row then becomes 272 + 138 + 341 + 131 + 151 = 1033. The complete reading places the grid beside the statements about primes and the totient function; those statements and this additive conversion are related context, not interchangeable arithmetic operations.
+Run python scripts/check_number_examples.py from the repository folder. Its lp1_05 result includes every rune cell, the converted matrix, all twelve line sums, and input hashes. The script reads the page and alphabet records and checks that the conversion equals the historical numeric example. Unknown symbols cause an error rather than being silently discarded.
 The printed 3301 square on LP1-16
 
 The final LP1 sheet contains a five-by-five decimal square below the heading read as CNOW THIS. These are printed numbers, not prime values calculated from runes. The complete instruction reading preserves their position after the text and insect illustration.
@@ -8316,6 +8361,24 @@ Sources
 Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
 
 Sources, related references, and files
+- LP1-05
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#historical
+- LP1-16
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#lp1-16
+- LP1-10–13 embedded messages
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#payloads
+- LP2-15; LP2-15 decimal panel; LP2-15 panel guide
+  https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+- Some Wisdom page, LP1-05
+  https://jelliottdev.github.io/reference/lp1-05.html
+- Gematria Primus prime values
+  https://jelliottdev.github.io/reference/articles/rune-values.html
+- LP1-05: red heading above a grid containing decimal numbers and rune words.; Original JPEG
+  https://jelliottdev.github.io/images/lp1-05.jpg
+- Complete page
+  https://jelliottdev.github.io/#/reader/lp1-05
+- complete reading
+  https://jelliottdev.github.io/reference/articles/reading-some-wisdom.html
 - complete instruction reading
   https://jelliottdev.github.io/reference/articles/reading-instruction.html
 - LP1-16 detail: the red heading above five rows of decimal numbers.; Original JPEG
@@ -8330,8 +8393,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp1-10.html
 - LP1-13
   https://jelliottdev.github.io/reference/lp1-13.html
-- LP2-15 decimal panel; LP2-15 panel guide
-  https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
 - Pinned 2014 walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 - LP1-10 body
