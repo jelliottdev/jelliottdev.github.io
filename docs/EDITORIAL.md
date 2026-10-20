@@ -1,6 +1,6 @@
 # Editorial scope
 
-This release is a source reference, not an experiment log or theory catalogue.
+The manuscript reference remains evidence-based. A separate experiment registry accepts newly written, retested and human-reviewed records; it starts empty. Never import earlier runs as completed records without that process.
 
 - Preserve original images and their SHA-256 checksums.
 - Distinguish archived transcriptions, documented corrections, known readings, and visual measurements.

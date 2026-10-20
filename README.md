@@ -1,10 +1,10 @@
-# Liber Primus research wiki
+# Liberpedia
 
 A static reference wiki for the 75 archived Liber Primus page images. Includes transcriptions, documented corrections, known readings, original-image inspection, the Gematria Primus alphabet, and source references.
 
 ## Editorial scope
 
-This edition prioritizes source material and factual organization. It does not publish experimental cipher runs or speculative theories. See [editorial conventions](docs/EDITORIAL.md). Coverage is explicitly stated on each page; having a page record does not mean every visual detail has been reviewed.
+This edition prioritizes source material and factual organization. The experiment system is ready for newly written, retested, reviewed records; its registry starts empty. See [the experiment guide](experiments/README.md). See [editorial conventions](docs/EDITORIAL.md). Coverage is explicitly stated on each page; having a page record does not mean every visual detail has been reviewed.
 
 ## Run locally
 
