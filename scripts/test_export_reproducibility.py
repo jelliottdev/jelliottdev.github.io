@@ -36,6 +36,11 @@ def compare(first, second):
     assert not changed, 'Identical inputs changed export bytes: ' + ', '.join(changed)
 
 
+def remove_copied_archives(root):
+    for name in ['reference-data', 'original-images', 'transcriptions-and-readings']:
+        (root / 'downloads' / (name + '.zip')).unlink(missing_ok=True)
+
+
 def main():
     with tempfile.TemporaryDirectory(prefix='liberpedia-export-test-', dir=ROOT.parent) as folder:
         target = Path(folder).resolve()
@@ -43,11 +48,13 @@ def main():
         # No hard links: rebuilding this copy must not overwrite checkout files.
         shutil.copytree(ROOT, target, dirs_exist_ok=True,
                         ignore=shutil.ignore_patterns('.git', 'node_modules', '__pycache__'))
+        # Repository archives may have been produced on another OS/zlib version.
+        # Establish a fresh baseline in this runtime before testing repeatability.
+        remove_copied_archives(target)
         first = build(target, 1)
         compare(first, build(target, 2))
         # Also verify a clean archive rebuild, not only the archive reuse path.
-        for name in ['reference-data', 'original-images', 'transcriptions-and-readings']:
-            (target / 'downloads' / (name + '.zip')).unlink()
+        remove_copied_archives(target)
         compare(first, build(target, 3))
     print('PASS: all cataloged bytes and discovery exports match across three hash seeds, '
           'including a clean rebuild of all three archives.')
