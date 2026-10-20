@@ -1,0 +1,113 @@
+{
+  "id": "lp2-31-row-shuffle-ioc",
+  "title": "LP2-31: periodic IoC with within-row shuffles",
+  "status": "published",
+  "question": "Does the largest pooled column IoC over periods 2–20 exceed shuffles that preserve every archived row’s rune multiset?",
+  "summary": "The observed period-13 peak is unchanged. With within-row shuffling, 245 of 999 null maxima meet or exceed it; corrected Monte Carlo p = 0.246.",
+  "tags": [
+    "periodic IoC",
+    "index of coincidence",
+    "key length",
+    "Vigenere",
+    "shuffle",
+    "permutation test"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-31"
+    ],
+    "representation": "269 archived runes; headings included; non-alphabet characters removed; no corrections.",
+    "procedure": "Keep the twelve archived transcription row boundaries fixed; shuffle each row independently while preserving its rune counts; concatenate in original row order. Pool residue-column pairs over the whole stream, maximize over periods, and compare against identically scanned within-row shuffles.",
+    "parameters": "Periods 2-20 inclusive; offset zero; 999 trials; seed 330131; >= ties; plus-one Monte Carlo correction; alpha 0.05.",
+    "exclusions": "Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches."
+  },
+  "outcome": "inconclusive",
+  "finding": "Same observed maximum: period 13, 216/5300. Within-row null: 245 of 999 maxima at least as large; corrected p=0.246, above 0.05. Whole-page baseline p=0.214.",
+  "limitations": "A follow-up chosen after seeing the baseline, not independent confirmation. Row-conditioned exchangeability still does not preserve words or local order. Neither result proves randomness or rules out a cipher. No adjustment for comparing null models. Human review pending.",
+  "next_steps": "Human review of the row-conditioned null and boundaries. Any changed page, regions, statistic or period range needs a declared variant.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-31-row-shuffle-ioc/run.py --check",
+    "environment": "Python 3.12.10 standard library. Separate check: python experiments/records/lp2-31-row-shuffle-ioc/check.py",
+    "script": "experiments/records/lp2-31-row-shuffle-ioc/run.py",
+    "script_sha256": "0298ea05a55bdc35570e5718cc238456c2679ae86e8a26698f45f18e4ac86fbe",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-31-row-shuffle-ioc/plan.json",
+        "sha256": "22dba22e3cc0c7dfe01ee1a5925c37d9ca83c9a9e2d8a0a863e971c2f6204e76"
+      },
+      {
+        "path": "experiments/records/lp2-31-row-shuffle-ioc/check.py",
+        "sha256": "b5c781eb594240ff093590e3f57cd3f1fb702040d271466a5b695103b18a717d"
+      },
+      {
+        "path": "experiments/records/lp2-31-row-shuffle-ioc/plot.py",
+        "sha256": "88462df48cfd37356c63e1dd3bee08e8e9325d92d881f1996cd14e7ddf0e4318"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "experiments/records/lp2-31-periodic-ioc/results.json",
+        "sha256": "9a35c8217dd4d731ebbef61ebdbe15081d1b39de9e6a7538bf95ec102662c4b5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-31-row-shuffle-ioc/results.json",
+        "sha256": "3a741617a1addac77d8cffc38bca5bec5013f41e0fb1e9c850f47bb987f0cd82"
+      },
+      {
+        "path": "experiments/records/lp2-31-row-shuffle-ioc/comparison.svg",
+        "sha256": "6e19a199cc99b9a0a1a6bc223cf8732554ba87413512e773c23b5ed5355d391f"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — full rerun and pair-count checks; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "LP2-31 source record",
+      "url": "https://jelliottdev.github.io/#/page/lp2-31"
+    },
+    {
+      "label": "IoC baseline and definition",
+      "url": "https://jelliottdev.github.io/#/wiki/index-of-coincidence"
+    }
+  ],
+  "related": [],
+  "family": {
+    "id": "periodic-ioc-shuffle",
+    "title": "Periodic IoC with a shuffle comparison",
+    "question": "Does the largest column-coincidence score exceed random reorderings of the same rune counts?",
+    "baseline": "lp2-31-periodic-ioc"
+  },
+  "variant": {
+    "label": "Variant: preserve row lengths and rune counts",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Pool within-residue-column pair counts, maximize over periods, compare against identically scanned uniform multiset shuffles.",
+        "after": "Keep the twelve archived transcription row boundaries fixed; shuffle each row independently while preserving its rune counts; concatenate in original row order. Pool residue-column pairs over the whole stream, maximize over periods, and compare against identically scanned within-row shuffles.",
+        "reason": "Check sensitivity to the null model by preserving per-row composition; the input and observed statistic are unchanged."
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-31-row-shuffle-ioc/comparison.svg",
+      "caption": "Only the null model changes: whole-page shuffles versus shuffles within archived rows. The observed scores are identical. Both corrected Monte Carlo values remain above 0.05."
+    }
+  ],
+  "article": "# LP2-31 periodic IoC: preserving row composition\n\n## Why change the null model?\n\nThe baseline shuffles all 269 runes together. That preserves the page's total counts but can move any rune to any row. If rows differ in composition, that comparison removes those differences as well as the ordering under investigation.\n\nThis variant instead preserves each archived row's length and exact rune counts, shuffling only within that row. It asks a conditional question about order after holding row composition fixed. This is not automatically a better model; it makes a different assumption visible.\n\nLP2-31 has twelve ordinary text rows and no separately identified heading. No row was removed or renamed as a heading for this test. Archived transcription lines provide the boundaries.\n\n## Plan and relation to the baseline\n\nThe plan and runner were committed as `8dfc7c0` before executing the variant. The variant was motivated after the whole-page result was known; it is not independent confirmation and does not account for selecting among null models.\n\nOnly the shuffle procedure changes. The input remains the same 269 runes, periods remain 2–20 inclusive, the statistic remains pooled within-column matching pairs, and each trial's maximum is compared with the observed maximum. There are still 999 trials, seed 330131, greater-than-or-equal ties, plus-one Monte Carlo correction, and a 0.05 threshold.\n\nThe twelve row lengths are:\n\n```\n23, 22, 24, 24, 22, 22, 21, 22, 21, 24, 22, 22\n```\n\nRemove non-alphabet characters inside each row, shuffle that row's runes, then concatenate rows in their original order. Column positions run across the concatenated page; they do not restart at row boundaries. The same seed does not make the two models' individual shuffled pages equivalent or create a paired statistical test.\n\n## Results\n\n| Quantity | Whole-page baseline | Within-row variant |\n| --- | --- | --- |\n| Input runes | 269 | 269 |\n| Observed peak period | 13 | 13 |\n| Observed peak fraction | 216/5300 | 216/5300 |\n| Null maxima at least observed | 213/999 | 245/999 |\n| Plus-one Monte Carlo p | 0.214 | 0.246 |\n| Below declared 0.05 threshold | No | No |\n\nThe observed scores agree exactly for every period, as they should: the observed input and scoring procedure did not change. The within-row comparison is 246/1000 = 0.246. Its approximate Monte Carlo standard error is 0.014, using sqrt(q*(1-q)/999) with q=245/999. This describes simulation uncertainty, not confidence in a cipher.\n\nThe two runs give the same threshold decision under their different assumptions. The difference between 0.214 and 0.246 is not evaluated as a separate statistical effect, and neither p-value is the probability that period 13 is the true key length.\n\n## Reproduce\n\nFrom a repository checkout with Python 3.12.10:\n\n```\npython experiments/records/lp2-31-row-shuffle-ioc/run.py --check\npython experiments/records/lp2-31-row-shuffle-ioc/check.py\n```\n\nThe runner compares every observed field and all 999 stored trial records. The separate checker verifies the twelve row lengths, exact agreement with the baseline's observed scores, and a position-pair oracle for all observed periods and the first three seeded null trials. That oracle directly enumerates position pairs rather than using column-frequency counts. The runner also asserts preservation of each row's multiset in every trial.\n\n[Download the complete variant output](experiments/records/lp2-31-row-shuffle-ioc/results.json). All 19 period numerators are stored for every shuffle; the denominators are in the observed rows. The comparison diagram is generated from the two saved reports. Neither the checker nor the plot interprets candidate plaintext or calls an AI service.\n\n## Retest and changes after inspection\n\nCodex reran the complete variant and performed the separate checks on 20 October 2026. Every stored field reproduced. No null rule, period range, input boundary, seed, threshold or statistic changed after the variant's first result. The checker and comparison graphic were added afterward for verification and presentation. Human review remains pending.\n\n## Interpretation and remaining limits\n\nThis row-conditioned null preserves more local composition than the whole-page null, but still discards within-row word boundaries and local patterns. It treats all rune permutations within a row as exchangeable. Neither model is a full model of a particular cipher or language.\n\nThis variant does not show that the page is random, that period 13 is impossible, or that Vigenère is absent. It also does not test different pages, period ranges, row selections, alternative statistics or key searches. Those changes must be documented separately rather than silently folded into this result.\n",
+  "article_path": "experiments/records/lp2-31-row-shuffle-ioc/article.md",
+  "script_sha256": "0298ea05a55bdc35570e5718cc238456c2679ae86e8a26698f45f18e4ac86fbe"
+}

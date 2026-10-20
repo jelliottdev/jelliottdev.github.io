@@ -51,4 +51,4 @@ jobs:
       - run: python scripts/test_visual_report.py
       - run: python scripts/test_measure_region.py
       - name: Check that published exports match reviewed records
-        run: git diff --exit-code -- data/index.json data/pages data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings
+        run: git diff --exit-code -- data/index.json data/pages data/experiments.json data/experiment-index.json reference/experiments reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings

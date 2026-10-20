@@ -20,6 +20,8 @@ Drafts never enter the public search index. Files committed to a public reposito
 
 ## Search and optional AI
 
+External tools can start with `data/experiment-index.json`, a compact discovery list of published questions, summaries, tags, families and targets. Follow `record_url` to `reference/experiments/<id>.json` for the complete record, including scope, findings, limitations, review, article and hashed file lists. This object is identical to that record in `data/experiments.json`; relative paths resolve against the site root. Follow `bundle_url` for its reproduction archive. Discovery summaries and family membership are not sufficient evidence that a specific proposal was tested. These static resources require no API key and do not call hosted inference. The builder removes withdrawn records from its generated individual-export directory.
+
 The site ranks published techniques locally with BM25 term matching, including scope and limitations. Page references are removed from the technique query; a page number alone is never a matching experiment. Selected pages provide scope context, not substitute results. This is lexical retrieval, not exhaustive detection of equivalent ideas. No hit means no matching **documented** experiment. Compare pages, input representation, and parameter bounds yourself.
 
 Hosted AI is deployed through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).

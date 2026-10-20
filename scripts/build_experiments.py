@@ -136,6 +136,39 @@ def build(root=ROOT):
     (root / 'data/experiments.json').write_text(json.dumps({
         'schema': 'liberpedia-experiments-v1', 'records': records
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+    # Discovery stays small; a selected record retains its complete scope and evidence.
+    base = 'https://jelliottdev.github.io/'
+    export_dir = root / 'reference/experiments'
+    export_dir.mkdir(parents=True, exist_ok=True)
+    require(export_dir.resolve().is_relative_to(root.resolve()), 'Export directory escapes repository')
+    published_ids = {record['id'] for record in records}
+    for previous in export_dir.glob('*.json'):
+        require(previous.resolve().is_relative_to(export_dir.resolve()), 'Export path escapes directory')
+        if previous.stem not in published_ids:
+            previous.unlink()
+    discovery = []
+    for record in records:
+        identifier = record['id']
+        path = f'reference/experiments/{identifier}.json'
+        (root / path).write_text(json.dumps(record, ensure_ascii=False, indent=2) + '\n',
+                                encoding='utf-8', newline='\n')
+        discovery.append({
+            'id': identifier, 'title': record['title'], 'question': record['question'],
+            'summary': record['summary'], 'tags': record['tags'],
+            'family': record.get('family'), 'variant_label': record.get('variant', {}).get('label'),
+            'pages': record['scope']['pages'], 'artifacts': record['scope'].get('artifacts', []),
+            'outcome': record['outcome'], 'retested_on': record['review']['retested_on'],
+            'url': base + '#/experiments/' + identifier, 'record_url': base + path,
+            'article_url': base + record['article_path'],
+            'bundle_url': base + 'downloads/experiments/' + identifier + '.zip',
+        })
+    (root / 'data/experiment-index.json').write_text(json.dumps({
+        'schema': 'liberpedia-experiment-discovery-v1',
+        'usage': 'Discovery only. Fetch record_url and compare the complete scope, findings, '
+                 'limitations and review before claiming an idea was tested. No match means '
+                 'no matching documented record here, not proof that an idea is new.',
+        'records': discovery,
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     body = '<h1>Experiment records</h1>'
     if not records:
         body += '<p>No experiment records have been published yet.</p>'

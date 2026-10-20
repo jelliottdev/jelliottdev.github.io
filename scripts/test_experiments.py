@@ -42,9 +42,19 @@ class RegistryTests(unittest.TestCase):
         return build(self.root)
 
     def test_published_record_and_draft_exclusion(self):
-        self.assertEqual(len(self.run_build()), 1)
+        records = self.run_build()
+        self.assertEqual(len(records), 1)
+        exported = self.root / 'reference/experiments/test-record.json'
+        self.assertEqual(json.loads(exported.read_text(encoding='utf-8')), records[0])
+        discovery = json.loads((self.root / 'data/experiment-index.json').read_text(encoding='utf-8'))
+        self.assertEqual([item['id'] for item in discovery['records']], ['test-record'])
+        self.assertTrue(discovery['records'][0]['record_url'].endswith('/reference/experiments/test-record.json'))
+        self.assertNotIn('article', discovery['records'][0])
+        self.assertNotIn('reproduction', discovery['records'][0])
         self.record['status'] = 'draft'
         self.assertEqual(self.run_build(), [])
+        self.assertFalse(exported.exists(), 'A withdrawn record must not survive in generated individual exports')
+        self.assertEqual(json.loads((self.root / 'data/experiment-index.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
 
     def test_changed_script_or_missing_reviewed_hash_rejected(self):
