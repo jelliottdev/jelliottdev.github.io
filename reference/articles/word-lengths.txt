@@ -1,0 +1,123 @@
+Word lengths and corpus comparisons
+
+Count rune tokens, reconcile the 2896 and 2902 conventions, and separate manuscript measurements from English-corpus claims.
+
+Word lengths can reveal structure that a one-rune-for-one-rune cipher preserves. Before comparing them with English, define the units and boundaries. A count of Latin letters, a count of runes, and a count that includes decimal labels can describe different datasets.
+
+Count runes, not the letters in their labels
+
+The rune labeled TH is one symbol. An illustrative encoding of THE as TH + E has length two; T + H + E has length three. Those are different spelling or conversion choices. An English reference corpus must use a documented conversion rule, not merely have its spaces and punctuation removed. See rune indices and labels and transcription layers.
+
+Here, a token means a unit selected by a stated parsing rule. Calling it a token avoids assuming that every visible separator corresponds to an English word. A decimal label is visibly present, but it is not a rune.
+
+A reproducible count for LP2-00–55
+
+Our descriptive audit concatenates these archived pages in order, removes slash and newline wrapping, and preserves other delimiters. It includes headings and joins tokens across page boundaries where the transcription has no intervening delimiter. An internal apostrophe stays in its token and counts zero runes. Decimal numbers and the alphanumeric table do not contribute to the rune-only count.
+
+Under those rules there are 2,896 rune tokens containing 12,956 runes. There are 448 tokens of length two (15.47%) and 720 of length three (24.86%). These are measured counts, not evidence by themselves of a particular cipher or a departure from English.
+
+[Image: Histogram of 2896 rune-only tokens in LP2-00 through LP2-55; three-rune tokens are most frequent at 720, followed by four-rune tokens at 513 and two-rune tokens at 448]
+Runes per token under the stated boundary rules. This chart contains no English reference distribution. Download the counts and conventions.
+
+Joining pages matters. Parsing every page separately with the same within-page rules produces 2,928 pieces: some words are split by the sheet boundary. That is a different object, not an alternative spelling of the same count. The complete token ledger records the original start and end page and character offsets, including tokens that span pages.
+
+Why an earlier summary has 2,902 tokens
+
+The pinned historical summary is consistent with six additional length-one tokens. The archive contains exactly six isolated single decimal digits:
+
+	Page	Digit or labels	Added tokens
+
+	LP2-10	7	1
+
+	LP2-36	1	1
+
+	LP2-37	2, 3, 4	3
+
+	LP2-38	5	1
+
+
+Including these as length-one tokens reproduces all fourteen length proportions and the summary’s mean, median, minimum, maximum, quartiles, sample standard deviation and variance to numerical precision. The count becomes 2,902 tokens and 12,962 counted units; the extra six units are decimal digits, not missing runes.
+
+	Convention	Length-one tokens	Total tokens	Total counted units
+
+	Runes only	83	2,896	12,956 runes
+
+	Runes plus six single digits	89	2,902	12,956 runes + 6 digits
+
+
+This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The comparison with a reference corpus still needs its own reproduction.
+
+What is needed for an English comparison?
+
+The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
+
+Liberpedia has reproduced the manuscript-summary match above, not the corpus samples or their reported probabilities. A further test must freeze the corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
+
+A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
+
+What does a length difference imply?
+
+If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
+
+The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Related methods should be linked without treating their results as interchangeable.
+
+Reproduce the count and inspect every token
+
+Extract the reference-data ZIP with its folders intact. Python 3 is sufficient; no corpus download, network access or third-party package is required for this audit.
+
+python scripts/rune_word_lengths.py --check
+python scripts/test_rune_word_lengths.py
+
+The first command reconstructs the reports and chart. The second uses an independent character scanner and checks every token against its original source span. Both checks passed. The measurement script, summary and source hashes, token ledger, and pinned historical CSV can also be downloaded individually.
+
+To rebuild the local generated files after a deliberate change, run python scripts/rune_word_lengths.py --write. A changed input or counting convention defines a changed measurement; retain its provenance and compare it separately.
+
+Sources and status
+
+Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; this audit does not claim to have processed it. Counts and the summary reconciliation were checked on 20 October 2026.
+
+Sources, related references, and files
+- rune indices and labels
+  https://jelliottdev.github.io/reference/articles/rune-values.html
+- transcription layers
+  https://jelliottdev.github.io/reference/articles/transliteration.html
+- Histogram of 2896 rune-only tokens in LP2-00 through LP2-55; three-rune tokens are most frequent at 720, followed by four-rune tokens at 513 and two-rune tokens at 448
+  https://jelliottdev.github.io/exports/figures/word-lengths.svg
+- Download the counts and conventions; summary and source hashes
+  https://jelliottdev.github.io/exports/unsolved-word-lengths.json
+- complete token ledger; token ledger
+  https://jelliottdev.github.io/exports/unsolved-word-tokens.json
+- pinned historical summary
+  https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/data/unsolved_summary.csv
+- LP2-10
+  https://jelliottdev.github.io/reference/lp2-10.html
+- LP2-36
+  https://jelliottdev.github.io/reference/lp2-36.html
+- LP2-37
+  https://jelliottdev.github.io/reference/lp2-37.html
+- LP2-38
+  https://jelliottdev.github.io/reference/lp2-38.html
+- checked-in corpus script
+  https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/code/project_runeberg.py
+- statistics script
+  https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/code/project_runeberg_statistics.py
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- cipher invariants
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- 464-word column-balance experiment
+  https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- measurement script
+  https://jelliottdev.github.io/scripts/rune_word_lengths.py
+- pinned historical CSV
+  https://jelliottdev.github.io/exports/sources/unsolved-word-length-summary.csv
+- mae3301/lp_experiments, revision cb5cdb9
+  https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2
+- Project Runeberg, revision a39e87e
+  https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
+
+Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
