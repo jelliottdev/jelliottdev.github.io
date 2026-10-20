@@ -1,0 +1,35 @@
+{
+  "question": "Does a fixed line sum, half-turn symmetry and one fixed entry uniquely determine a five-by-five magic square?",
+  "prior_information": "Supplied discussion proposed uniqueness, then retracted it after noticing dependent constraints; later suggested dimensions five and fifteen for orders five and seven. These are prior claims, not predictions made blind.",
+  "model": "All n*n cells are rational variables. Every row, column and both main diagonals have the same prescribed constant. Half-turn means x[r,c]=x[n-1-r,n-1-c]; transpose is a separate comparison model.",
+  "cases": {
+    "orders": [
+      3,
+      5,
+      7
+    ],
+    "symmetries": [
+      "none",
+      "half-turn",
+      "transpose",
+      "half-turn+transpose"
+    ]
+  },
+  "procedure": [
+    "Build homogeneous difference constraints (all line sums zero) in row-major cell order.",
+    "Compute exact rational RREF, rank, free columns and a nullspace basis.",
+    "For half-turn models, add a zero change constraint at each individual cell in turn and recompute dimension.",
+    "Read LP1-05 converted values and LP1-16 decimal values from stored transcriptions. Verify their line sums and half-turn symmetry.",
+    "For each cell in each actual 5x5 grid, construct the first nonzero integral null vector keeping that cell fixed. Try plus then minus one primitive step; record whether the entire changed grid is positive. No random search."
+  ],
+  "criterion": "Any two distinct positive integer grids with the same fixed line sum, half-turn symmetry and identical chosen cell disprove uniqueness under those constraints. Dimensions concern the rational affine solution space, not a count of positive integer grids.",
+  "exclusions": [
+    "No primality restrictions on other cells",
+    "No requirement that entries be distinct or use 1..n*n",
+    "No claim of reproducing the historical submission validator",
+    "No inference about the author choosing particular primes",
+    "No claim that arbitrary rational free parameters always yield positive integers",
+    "Order seven is a mathematical comparison, not an audited historical 7x7 transcription"
+  ],
+  "validation": "Independently compare rank modulo two large primes; directly check each basis vector against row/column/diagonal and symmetry rules; verify every counterexample with direct arithmetic. Check known 3x3 cases."
+}

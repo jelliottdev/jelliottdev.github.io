@@ -5748,6 +5748,116 @@
   &quot;article&quot;: &quot;# Reversing runes within word-like segments\n\nA natural first idea is to read each word backwards while keeping the words in their original order. On an unsolved page, however, the archive gives us separators and line markers—not independently established plaintext words. This experiment makes that distinction explicit.\n\nIt tests two precise interpretations of the archived boundaries on LP2-00–55. All 110 cases completed and produced 110 distinct full page outputs. None matched any of the nine declared 12-rune openings. LP2-50 contains no recognized runes and contributes no candidates.\n\n## What counts as a segment?\n\nBoth conventions include headings, preserve segment order, and reverse rune positions inside each segment. Neither changes the rune alphabet.\n\n| Convention | Rule | Consequence |\n| --- | --- | --- |\n| Split lines | Every non-rune ends the current segment. | A slash or newline ends a segment even without a word separator. |\n| Join lines | Remove slash, carriage return and newline before finding maximal rune segments. Every other non-rune still ends a segment. | Runes across a line boundary join unless another delimiter intervenes. |\n\nHyphens and periods remain boundaries under both conventions. Spaces and other non-rune characters also remain boundaries. No inference about the author&#x27;s intended word division is made.\n\nIn this invented example, letters stand for single rune symbols:\n\n```text\nInput: AB/C-D\n       EF.\n\nSplit lines: BA | C | D | FE  -&gt; BACDFE\nJoin lines:  CBA | FED       -&gt; CBAFED\n```\n\nThe slash and newline are archive boundaries. The vertical bars in the output explanation show the segments; they are not additional input characters. A hyphen before a line break would still prevent joining.\n\n## Difference from the row and column experiment\n\nThe [row and column baseline](#/experiments/lp2-row-column-routes) traverses rows or ordinal columns as whole groups. Here the groups are maximal rune segments under one of the two boundary rules. This is a separate experiment in the same reading-route family.\n\nMore than one scope field changes: the grouping representation, traversal procedure, number of configurations and exclusions. The comparison is not an attempt to isolate one numerical parameter. The family comparison lists these differences explicitly.\n\nWhole-page reversal, reversing the order of words, alphabet substitution after reversal, and arbitrarily regrouping runes are not tested here.\n\n## Inspect a real source trace\n\n![The first six LP2-31 output positions where splitting and joining lines produce different source-position traces.](experiments/records/lp2-word-reversal/boundary-trace.svg)\n\nThe diagram reads positions from the saved result. Each number identifies a rune in the original page stream, counted from zero. The full report also retains zero-based Unicode character offsets into the exact UTF-8-decoded source file. Character offsets are not byte offsets: a rune occupies more than one UTF-8 byte.\n\nBoth permutations use every source rune exactly once. Consequently, they preserve rune counts, whole-stream IoC and single-rune entropy. Those measurements cannot choose between these two outputs; see [cipher invariants](#/wiki/cipher-invariants).\n\n## What the result establishes\n\n| Quantity | Recorded result |\n| --- | --- |\n| Declared pages | 56, including the zero-rune LP2-50 |\n| Nonempty pages | 55 |\n| Boundary conventions per nonempty page | 2 |\n| Candidate configurations | 110 |\n| Distinct full page outputs, counted within page | 110 |\n| Exact opening comparisons | 990 |\n| Matching cases | 0 |\n\nThe nine reference beginnings are Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. The plan stores the exact first twelve decoded rune indices and the hashes of their source traces.\n\nThis result excludes only those beginnings under the stated rules. A genuine reading beginning differently would fail this test. No general English score, later-position search or statistical significance calculation was used. The [candidate-reading guide](#/wiki/candidate-readings) explains why a failed opening test is not a general rejection of a cipher idea.\n\n## Controls and retest\n\nThe plan and runner were committed as `9b081f6` before the full page search. Neither the boundary conventions nor the acceptance rule changed after inspecting outputs.\n\nThe runner groups positions with a character-by-character scan. The checker independently locates segments with regular expressions after the declared normalization, then calculates reflected source positions for every segment. It compares every saved permutation, output and match decision, checks source hashes and opening vectors, and verifies the complete case set. The small example above also checks the production segmenter directly.\n\nA complete second execution reproduces the saved result. This is computational review by Codex; human review remains pending.\n\n## Reproduce and inspect\n\nFrom the repository root with Python 3:\n\n```sh\npython experiments/records/lp2-word-reversal/run.py --check\npython experiments/records/lp2-word-reversal/check.py\n```\n\nSave a fresh full result without overwriting the reviewed file:\n\n```sh\npython experiments/records/lp2-word-reversal/run.py --output word-reversal-rerun.json\n```\n\nThe destination must not already exist. All commands use the standard library and local files. Each page has a `cases` array containing the boundary convention, segment lengths, source ordinals, character offsets, complete output indices and any matching opening IDs.\n\nTo regenerate the diagram:\n\n```sh\npython experiments/records/lp2-word-reversal/plot.py\n```\n\n## Useful follow-ups\n\nA proposal to reverse word order, omit headings or add a substitution is a new scope. Specify its boundaries and acceptance rule before inspecting results, and retain the full traces. A broader language-ranking test needs a declared corpus, scoring rule and evaluation procedure; it should not silently replace this record&#x27;s fixed-opening criterion.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-word-reversal/article.md&quot;,
   &quot;script_sha256&quot;: &quot;a59a085cfd1216aca8816d596244cc7622d947841fa4f1a08abb1d34572b7f6d&quot;
+}</pre></article><article id="magic-square-freedom"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;magic-square-freedom&quot;,
+  &quot;title&quot;: &quot;Magic squares: does one fixed entry determine the rest?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?&quot;,
+  &quot;summary&quot;: &quot;No: five rational degrees of freedom remain after fixing any one entry. Fifty positive-integer counterexamples preserve the chosen cell and all required sums and symmetry.&quot;,
+  &quot;tags&quot;: [
+    &quot;magic square&quot;,
+    &quot;degrees of freedom&quot;,
+    &quot;linear constraints&quot;,
+    &quot;rank&quot;,
+    &quot;centrosymmetric&quot;,
+    &quot;half-turn&quot;,
+    &quot;prime selection&quot;,
+    &quot;1033&quot;,
+    &quot;3301&quot;,
+    &quot;809&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;magic-square-freedom&quot;,
+    &quot;title&quot;: &quot;Magic-square constraints and freedom&quot;,
+    &quot;question&quot;: &quot;Which explicit numerical constraints determine or restrict a magic square?&quot;,
+    &quot;baseline&quot;: &quot;magic-square-freedom&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Baseline&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-05&quot;,
+      &quot;lp1-16&quot;
+    ],
+    &quot;representation&quot;: &quot;LP1-05 rune words converted by additive Gematria Primus prime values; LP1-16 decimal grid. Row-major rational variables for comparison models.&quot;,
+    &quot;procedure&quot;: &quot;Exact rational RREF of fixed-line-sum difference constraints; separate none, half-turn, transpose and combined models. Add a fixed-cell constraint at every position for half-turn models. Construct and check positive-integer changes to the two archived 5x5 grids.&quot;,
+    &quot;parameters&quot;: &quot;Orders 3, 5, 7; four symmetry models each (12 cases). All cells fixed individually for half-turn dimensions. 25 positions per actual page (50 witness cases); first primitive null direction, plus then minus one step only.&quot;,
+    &quot;exclusions&quot;: &quot;No other primality, distinctness, normal-square or server-validation requirements; no enumeration of all positive grids; no historical 7x7 transcription or cipher search.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;Uniqueness is not supported under the stated rules: half-turn dimensions are 6 for order 5 and 16 for order 7 before fixing an entry, then 5 and 15 respectively. All 50 actual-grid fixed-cell cases have a verified positive-integer alternative.&quot;,
+  &quot;limitations&quot;: &quot;Not an enumeration of integer solutions, primality constraints, normal squares, historical server criteria, author intentions or an unsolved-page cipher. Order seven is a mathematical comparison, not a checked historical grid.&quot;,
+  &quot;next_steps&quot;: &quot;Treat additional fixed entries, allowed-value lists or prime-pattern requirements as explicit variants; integer enumeration requires separate bounds and lattice treatment.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/magic-square-freedom/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library. Independent checks: python experiments/records/magic-square-freedom/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/magic-square-freedom/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/magic-square-freedom/plan.json&quot;,
+        &quot;sha256&quot;: &quot;008633d70f241c0869155855f7f543c458533c8172d11ef69beeaba763b01b94&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/magic-square-freedom/check.py&quot;,
+        &quot;sha256&quot;: &quot;0b83bfda968314b8439af94107f05625c97aacb36566856f5098f647f10d80ca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/magic-square-freedom/plot.py&quot;,
+        &quot;sha256&quot;: &quot;82e6e6a6b806c1cc1b2f53d7d295fbc6956d6377f2a10dbb54471b0eebead931&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-05.json&quot;,
+        &quot;sha256&quot;: &quot;eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-16.json&quot;,
+        &quot;sha256&quot;: &quot;e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/magic-square-freedom/results.json&quot;,
+        &quot;sha256&quot;: &quot;e39c5391e04eae26369f85811dd8aac8c7a6ea5974bfc4b79eef62962140d538&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/magic-square-freedom/fixed-center.svg&quot;,
+        &quot;sha256&quot;: &quot;2e6627ff0c1ebcd765a02ffcaae1d849537821280a1f18ffcc6b04cfb1c14e6b&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; exact rerun and separately implemented modular-rank and direct-witness checks; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Original grids and rune conversion&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/magic-squares&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Search space and bounds&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/search-space&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/magic-square-freedom/fixed-center.svg&quot;,
+      &quot;caption&quot;: &quot;A constructed change to LP1-16: two +1 and two âˆ’1 adjustments preserve every line sum, half-turn symmetry and the center 809. Zero marks unchanged cells; this is not an original image.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# How much freedom remains in a magic square?\n\n## Question\nDoes a fixed line sum, half-turn symmetry and one fixed entry determine the rest of a five-by-five magic square?\n\nNo. Under precisely these conditions, five rational degrees of freedom remain. We also construct positive-integer alternatives to both LP1 examples, keeping any one chosen cell unchanged. This tests uniqueness of numerical grids, not a cipher or the authors’ intentions.\n\n## Why this matters\nIt is tempting to count twelve line-sum equations, subtract twelve from the number of cells, and conclude that almost everything is forced. That subtraction only works for independent equations. For example, the sum of all row totals already equals the sum of all column totals. Symmetry creates further dependencies.\n\nA **degree of freedom** is an independent parameter that can vary while all the equations remain satisfied. It is not a count of solutions and does not mean that every integer assigned to those parameters produces an allowed square.\n\n## Scope and plan\nThe [recorded plan](experiments/records/magic-square-freedom/plan.json) specifies orders 3, 5 and 7, with four symmetry conditions each. Every row, column and both main diagonals have the same fixed sum. We distinguish:\n\n- No additional symmetry.\n- Half-turn symmetry: the cell at row r, column c equals its opposite after a 180-degree rotation.\n- Transpose symmetry: swapping row and column leaves the entry unchanged.\n- Both symmetries together.\n\nThe actual LP1-05 converted square and LP1-16 printed square have half-turn symmetry. Neither is transpose-symmetric: compare their cells at row 1, column 2 and row 2, column 1. Imposing transpose symmetry would therefore change the model and exclude both observed grids.\n\nThe supplied discussion had already proposed uniqueness, retracted that claim, and suggested possible dimensions. Those claims were known before calculation. This is a deterministic audit, not a blind prediction or significance test. The plan was written before running but was not externally timestamped or preregistered.\n\n## Method\nLet A be an existing square and D a change to it. The square A+D retains the same line sums exactly when every row, column and diagonal of D sums to zero. The same symmetry equations apply to D. Keeping one cell unchanged adds the equation that its change is zero.\n\nThe script forms these linear equations and reduces them with exact rational arithmetic. Rank counts the independent equations; dimension equals the number of cells minus rank. The saved nullspace basis describes all rational changes satisfying the equations. A uniform rational grid with entry equal to the line sum divided by the order supplies a solution for every prescribed rational sum, so the reported affine dimensions are not dimensions of an empty set.\n\nFor each of the 25 cell positions in each actual five-by-five square, the script selects the first basis vector that preserves that cell, clears denominators, and divides out the common integer factor. It tries adding that primitive change, then subtracting it. It stops after those two possibilities; this is not an exhaustive positive-integer enumeration.\n\n## Results\nAll twelve comparison models completed. These dimensions assume a fixed common line sum:\n\n| Order | No symmetry | Half-turn | Transpose | Both |\n| --- | --- | --- | --- | --- |\n| 3 | 2 | 0 | 1 | 0 |\n| 5 | 14 | 6 | 8 | 4 |\n| 7 | 34 | 16 | 19 | 10 |\n\nFor order five, fixing any one cell reduces the half-turn dimension from six to five. For order seven it reduces sixteen to fifteen. This is not a statement about an audited historical seven-by-seven square; order seven here is a mathematical comparison. For order three, the half-turn model already has dimension zero: with a fixed sum, it forces the uniform rational square.\n\nEvery one of the **50 fixed-cell tests** produced a different positive-integer square. Each preserves its original line sum and half-turn symmetry, and keeps the chosen entry unchanged. The complete [results and witnesses](experiments/records/magic-square-freedom/results.json) include all cases, bases, positions and input hashes.\n\n### An example you can check by hand\nKeep the center 809 in LP1-16. Add 1 to row 2, column 1 and row 4, column 5; subtract 1 from row 2, column 5 and row 4, column 1. Leave every other cell alone.\n\n```text\n 434 1311 312  278  966\n 205  812 934  280 1070\n 626  620 809  620  626\n1070  280 934  812  205\n 966  278 312 1311  434\n```\n\nEach affected row and column gains one and loses one. Neither diagonal changes. Opposite entries still agree, all entries remain positive, and every line still sums to 3301. Thus the center value 809 cannot uniquely determine the original grid under these rules. These numbers are a constructed counterexample, not a transcription correction.\n\n## Reproduce\nPython 3.12 standard library; no network, packages or AI calls. From the repository root, run:\n\n```sh\npython experiments/records/magic-square-freedom/run.py --check\npython experiments/records/magic-square-freedom/check.py\n```\n\nThe first command recomputes every case and compares the complete report. The second independently constructs the equations and checks rank modulo two large primes. It directly verifies every rational null vector and its independence. A matching modular rank gives a lower bound; the independent null vectors give the matching upper bound, certifying the rational rank. It also checks every positive-integer counterexample by summing its actual rows, columns and diagonals and comparing opposite cells.\n\nUse `--write` instead of `--check` to regenerate results. Preserve the old output if changing the plan or input transcriptions.\n\n## Retest and changes\nOn 20 October 2026, Codex recomputed the saved result and ran the separate checker. All twelve ranks, fixed-cell dimensions and fifty witnesses passed. This is computational review by the same agent; independent human review is pending. No model, bounds or criterion changed after inspecting the results.\n\n## What remains open\nThis disproves uniqueness under the stated constraints. It does not count all positive-integer solutions, impose prime patterns or distinct entries, reconstruct a historical server validator, or show which values the authors deliberately selected. A rational basis is not automatically a basis for all integer solutions: clearing each vector’s denominators is enough to construct these witnesses, but is not an integer-lattice enumeration method.\n\nAn extra requirement can shrink the space. To test one, state it as a separate variant and show exactly which constraints changed. A theory that fixes many cells, restricts values to a list, or imposes a primality pattern is not ruled out by this result.\n\nSee [the magic-square guide](#/wiki/magic-squares) for the original images and rune-value conversion, and [search space and bounds](#/wiki/search-space) for why a claim must name the space it covers.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/magic-square-freedom/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce&quot;
 }</pre></article><article id="outguess-default-key"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;outguess-default-key&quot;,
   &quot;title&quot;: &quot;Original JPEGs: default-key OutGuess sweep&quot;,

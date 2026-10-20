@@ -1,0 +1,108 @@
+{
+  "id": "magic-square-freedom",
+  "title": "Magic squares: does one fixed entry determine the rest?",
+  "status": "published",
+  "question": "Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?",
+  "summary": "No: five rational degrees of freedom remain after fixing any one entry. Fifty positive-integer counterexamples preserve the chosen cell and all required sums and symmetry.",
+  "tags": [
+    "magic square",
+    "degrees of freedom",
+    "linear constraints",
+    "rank",
+    "centrosymmetric",
+    "half-turn",
+    "prime selection",
+    "1033",
+    "3301",
+    "809"
+  ],
+  "family": {
+    "id": "magic-square-freedom",
+    "title": "Magic-square constraints and freedom",
+    "question": "Which explicit numerical constraints determine or restrict a magic square?",
+    "baseline": "magic-square-freedom"
+  },
+  "variant": {
+    "label": "Baseline",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp1-05",
+      "lp1-16"
+    ],
+    "representation": "LP1-05 rune words converted by additive Gematria Primus prime values; LP1-16 decimal grid. Row-major rational variables for comparison models.",
+    "procedure": "Exact rational RREF of fixed-line-sum difference constraints; separate none, half-turn, transpose and combined models. Add a fixed-cell constraint at every position for half-turn models. Construct and check positive-integer changes to the two archived 5x5 grids.",
+    "parameters": "Orders 3, 5, 7; four symmetry models each (12 cases). All cells fixed individually for half-turn dimensions. 25 positions per actual page (50 witness cases); first primitive null direction, plus then minus one step only.",
+    "exclusions": "No other primality, distinctness, normal-square or server-validation requirements; no enumeration of all positive grids; no historical 7x7 transcription or cipher search."
+  },
+  "outcome": "not-supported",
+  "finding": "Uniqueness is not supported under the stated rules: half-turn dimensions are 6 for order 5 and 16 for order 7 before fixing an entry, then 5 and 15 respectively. All 50 actual-grid fixed-cell cases have a verified positive-integer alternative.",
+  "limitations": "Not an enumeration of integer solutions, primality constraints, normal squares, historical server criteria, author intentions or an unsolved-page cipher. Order seven is a mathematical comparison, not a checked historical grid.",
+  "next_steps": "Treat additional fixed entries, allowed-value lists or prime-pattern requirements as explicit variants; integer enumeration requires separate bounds and lattice treatment.",
+  "reproduction": {
+    "command": "python experiments/records/magic-square-freedom/run.py --check",
+    "environment": "Python 3.12 standard library. Independent checks: python experiments/records/magic-square-freedom/check.py",
+    "script": "experiments/records/magic-square-freedom/run.py",
+    "script_sha256": "83d3474caaf0cc50019244bd8010088b04c93201c1e4bbd705a5126f78aa93ce",
+    "inputs": [
+      {
+        "path": "experiments/records/magic-square-freedom/plan.json",
+        "sha256": "008633d70f241c0869155855f7f543c458533c8172d11ef69beeaba763b01b94"
+      },
+      {
+        "path": "experiments/records/magic-square-freedom/check.py",
+        "sha256": "0b83bfda968314b8439af94107f05625c97aacb36566856f5098f647f10d80ca"
+      },
+      {
+        "path": "experiments/records/magic-square-freedom/plot.py",
+        "sha256": "82e6e6a6b806c1cc1b2f53d7d295fbc6956d6377f2a10dbb54471b0eebead931"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "data/pages/lp1-05.json",
+        "sha256": "eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826"
+      },
+      {
+        "path": "data/pages/lp1-16.json",
+        "sha256": "e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/magic-square-freedom/results.json",
+        "sha256": "e39c5391e04eae26369f85811dd8aac8c7a6ea5974bfc4b79eef62962140d538"
+      },
+      {
+        "path": "experiments/records/magic-square-freedom/fixed-center.svg",
+        "sha256": "2e6627ff0c1ebcd765a02ffcaae1d849537821280a1f18ffcc6b04cfb1c14e6b"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; exact rerun and separately implemented modular-rank and direct-witness checks; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Original grids and rune conversion",
+      "url": "https://jelliottdev.github.io/#/wiki/magic-squares"
+    },
+    {
+      "label": "Search space and bounds",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/magic-square-freedom/fixed-center.svg",
+      "caption": "A constructed change to LP1-16: two +1 and two âˆ’1 adjustments preserve every line sum, half-turn symmetry and the center 809. Zero marks unchanged cells; this is not an original image."
+    }
+  ]
+}
