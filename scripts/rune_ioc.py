@@ -3,10 +3,13 @@
 Print all records as JSON, or select a page: python scripts/rune_ioc.py lp2-31
 Compare all current inputs with the published baseline: --check
 Write a new report without overwriting an existing file: --output PATH
+Export spreadsheet rows with hashes and scope: --format csv
 """
 import argparse
+import csv
 from collections import Counter
 import hashlib
+import io
 import json
 from pathlib import Path
 
@@ -70,15 +73,39 @@ def report():
     }
 
 
+def csv_report(result):
+    """Flatten records while preserving input identity and counting scope.
+
+    Empty IoC cells mean undefined, not zero. Count columns follow the alphabet
+    indices in the full JSON report; its hash is repeated in each CSV row.
+    """
+    output = io.StringIO(newline="")
+    fields = ["page", "input_path", "input_sha256", "alphabet_sha256", "n",
+              "numerator", "denominator", "ioc", "scaled_ioc_29", "scope"]
+    count_fields = [f"count_{i}" for i in range(len(result["alphabet"]))]
+    writer = csv.DictWriter(output, fieldnames=fields + count_fields, lineterminator="\n")
+    writer.writeheader()
+    for record in result["records"]:
+        row = {key: record.get(key) for key in fields}
+        row.update(alphabet_sha256=result["alphabet_sha256"], scope=result["scope"])
+        row.update(zip(count_fields, record["counts"]))
+        writer.writerow(row)
+    return output.getvalue()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("page", nargs="?", help="Exact page ID, e.g. lp2-31")
+    parser.add_argument("--format", choices=("json", "csv"), default="json",
+                        help="Report format (default: json). CSV retains hashes and scope.")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--check", action="store_true")
     group.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.page and args.check:
         parser.error("--check compares the full baseline; omit the page")
+    if args.check and args.format != "json":
+        parser.error("--check verifies the JSON baseline; omit --format")
     result = report()
     if args.check:
         saved = json.loads(BASELINE.read_text(encoding="utf-8"))
@@ -90,7 +117,7 @@ def main():
         result["records"] = [r for r in result["records"] if r["page"] == args.page]
         if not result["records"]:
             parser.error("Unknown page ID")
-    output = json.dumps(result, ensure_ascii=True, indent=2) + "\n"
+    output = csv_report(result) if args.format == "csv" else json.dumps(result, ensure_ascii=True, indent=2) + "\n"
     if args.output:
         with args.output.open("x", encoding="utf-8", newline="\n") as handle:
             handle.write(output)

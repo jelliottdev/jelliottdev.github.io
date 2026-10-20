@@ -71,6 +71,16 @@ Run from the repository or the extracted reference-data ZIP with Python 3; no ex
 
 Download the calculation script · Download all page results and input hashes. The reference-data ZIP includes the script and its inputs; downloading the script alone does not include the manuscript transcriptions.
 
+Compare pages in a spreadsheet
+
+Download the whole-page CSV for one row per manuscript page. It includes the input filename and SHA-256, alphabet hash, rune count, exact matching-pair numerator and denominator, ordinary and scaled IoC, and all 29 rune frequencies. The counting scope is repeated in each row so a filtered extract retains that context.
+
+Columns count_0 through count_28 follow the rune alphabet’s zero-based indices. Blank IoC cells mean undefined, not zero: the title pages do not have enough archived runes for a pair calculation. Import the comma-delimited file with its header row, keep the hash columns as text, and sort entire rows rather than one column alone.
+
+python scripts/rune_ioc.py --format csv --output my-ioc.csv
+
+This recomputes the CSV from the archived transcriptions and refuses to overwrite an existing output. Add an exact page ID to export just that page. The downloadable CSV is a rendering of the published JSON baseline; the command above recalculates it from inputs. Sorting by IoC can help inspect the data, but a high or low rank is not a cipher classification or a probability that a page is unusual.
+
 Examples from the archived streams
 
 	Page	Runes	Unscaled IoC
@@ -247,7 +257,7 @@ For another summary of the same frequency counts, see single-rune entropy. Like 
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
-- rune alphabet; alphabet reference
+- rune alphabet; rune alphabet’s zero-based indices; alphabet reference
   https://jelliottdev.github.io/#/alphabet
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
@@ -257,6 +267,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/rune_ioc.py
 - Download all page results and input hashes; the baseline manifest
   https://jelliottdev.github.io/data/evidence/rune-ioc.json
+- Download the whole-page CSV
+  https://jelliottdev.github.io/exports/rune-ioc.csv
 - LP1-00
   https://jelliottdev.github.io/reference/lp1-00.html
 - LP1-01

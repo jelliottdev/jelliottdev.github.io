@@ -48,6 +48,10 @@ def main():
             if result.returncode:
                 raise AssertionError(f"{command} failed:\n{result.stdout}\n{result.stderr}")
             print("PASS from extracted bundle:", " ".join(command))
+        csv_result = subprocess.check_output(
+            [sys.executable, "scripts/rune_ioc.py", "--format", "csv"], cwd=target)
+        assert csv_result.decode("utf-8").replace("\r\n", "\n") == (target / "exports/rune-ioc.csv").read_text(encoding="utf-8")
+        print("PASS: recomputed CSV matches the bundled whole-page baseline")
         example = json.loads(subprocess.check_output(
             [sys.executable, "scripts/reproduce_null_example.py", "--json"], cwd=target))
         assert [row["arrangement"] for row in example["arrangements"]] == [

@@ -2,6 +2,7 @@
 from pathlib import Path
 import json,hashlib,zipfile,html
 from build_articles import manuscript_reference_html, guide_discovery_index
+from rune_ioc import csv_report
 root=Path(globals().get('OUTPUT_ROOT',Path(__file__).resolve().parents[1])); base='https://jelliottdev.github.io/'
 def read(p):return json.loads((root/p).read_text(encoding='utf-8'))
 def save(p,s):
@@ -137,6 +138,10 @@ register('data/evidence/reading-methods.json','Known method parameters')
 register('data/evidence/visual-measurements.json','Visual measurement conventions')
 register('data/evidence/editorial-page-notes.json','Editorial visual observations')
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
+save('exports/rune-ioc.csv', csv_report(read('data/evidence/rune-ioc.json')))
+register('exports/rune-ioc.csv','Archived rune IoC baseline')
+files[-1].update(title='Whole-page rune statistics (CSV)',guide='index-of-coincidence',
+                aliases=['IoC spreadsheet','page comparison','rune frequencies','CSV'])
 register('data/evidence/signature-checks.json','Isolated signature verification results')
 register('data/evidence/known-readings.json','Known-reading provenance')
 # The standalone index must expose the same authored knowledge as the wiki.
