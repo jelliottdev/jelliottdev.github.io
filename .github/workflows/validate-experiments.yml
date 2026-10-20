@@ -17,6 +17,7 @@ jobs:
           node-version: '22'
       - run: node services/idea-assistant/test-worker.mjs
       - run: node scripts/test_assistant.cjs
+      - run: node scripts/test_search.cjs
       - run: python scripts/test_experiments.py
       - run: python scripts/build_experiments.py
       - run: python scripts/build_assistant.py

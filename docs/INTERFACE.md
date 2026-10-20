@@ -29,3 +29,7 @@ The first choice is the manuscript page, then image, text, or desktop comparison
 Keep original JPEG and checksummed file links together after the reading surface. Page records contain the deeper annotations and sources. Image enlargement supports fit-page, fit-width, zoom and native overflow panning; the dialog fills a phone viewport and closes with Escape or its Close control. Never disable browser zoom.
 
 Reader verification: narrow 320 and 390 CSS-pixel screens, 1440 desktop comparison, release boundaries, first/last pages, title-page mode fallback, persisted text mode, original-image enlargement and panning. This is browser viewport verification, not a physical-device certification.
+
+## Wiki search
+
+Header suggestions and submitted results share local ranking. Exact identifiers lead to manuscript records; guide titles and title prefixes outrank incidental body mentions. A query such as Atbash must put its method article ahead of general introduction pages. The results page has one query field (the header), a ranked list with explicit content types, optional type tabs, and collapsed manuscript filters. Page filters do not suppress unrelated guide results. Search suggestions link directly to destinations and offer all results; Escape, Tab, arrow keys and pointer dismissal remain usable. Suggestion height follows the visible viewport when the phone keyboard appears. The ordinary wiki search remains separate from evidence of completed experiments.

@@ -17,5 +17,22 @@
  }
  function distance(a,b){let row=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let next=[i];for(let j=1;j<=b.length;j++)next[j]=Math.min(next[j-1]+1,row[j]+1,row[j-1]+(a[i-1]!==b[j-1]));row=next;}return row[b.length];}
  function suggest(q,topics){const n=norm(q);if(!/^[a-z]{5,24}$/.test(n))return [];const words=[...new Set(topics.flatMap(t=>(norm(t.title+' '+t.terms).match(/[a-z]{5,24}/g)||[])))];return words.filter(w=>w!==n&&Math.abs(w.length-n.length)<=2).map(w=>({w,d:distance(n,w)})).filter(x=>x.d<=(n.length>7?2:1)).sort((a,b)=>a.d-b.d||a.w.localeCompare(b.w)).slice(0,3).map(x=>x.w);}
- const api={norm,terms,has,page,suggest};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WikiSearch=api;
+ function relevance(title,summary,body,q){
+  const n=norm(q);if(!n)return 0;
+  if(norm(title)===n)return 1200;
+  if(norm(title).startsWith(n))return 800;
+  if(has(title,q))return 650;
+  if(has(summary,q))return 300;
+  return has(title+' '+summary+' '+body,q)?60:0;
+ }
+ function search(db,q){
+  if(!norm(q))return [];
+  const hits=[];
+  for(const a of db.articles||[]){const score=relevance(a.title,a.summary,a.text,q);if(score)hits.push({type:'guide',title:a.title,text:a.summary,href:'#/wiki/'+a.id,score});}
+  for(const p of db.pages||[]){const hit=page(p,q);if(hit)hits.push({type:'page',title:p.id.toUpperCase()+(p.title?' · '+p.title:''),text:hit.text,href:'#/page/'+p.id+'?'+(hit.row?'line='+hit.row+'&mode='+hit.mode:'section='+hit.section),score:hit.score,page:p});}
+  for(const t of db.topics||[]){const score=relevance(t.title,t.summary,t.terms,q);if(score)hits.push({type:'topic',title:t.title,text:t.summary,href:'#/topics?topic='+t.id,score:score===1200?1100:score-40});}
+  for(const r of db.sources||[]){if(has(decodeURI(r.url).replaceAll('-',' '),q))hits.push({type:'source',title:decodeURI(new URL(r.url).pathname),text:new URL(r.url).hostname,href:r.url,score:10});}
+  return hits.sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title));
+ }
+ const api={norm,terms,has,page,suggest,relevance,search};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.WikiSearch=api;
 })(globalThis);
