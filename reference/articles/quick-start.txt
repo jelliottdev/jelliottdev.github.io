@@ -9,6 +9,7 @@ The first release contains 17 images, including two title pages. The second rele
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
 
 The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
+LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
 
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
@@ -16,6 +17,16 @@ Open the warning in the reader. Compare the original image with its runes, then 
 python scripts/reproduce_reading.py warning
 python scripts/reproduce_reading.py --check-all
 Download and extract the reference-data ZIP, then run these commands from the extracted folder with Python 3. Keep the folders together: the script reads the included text and parameter files. The first command prints the warning’s literal reading; the second checks all 17 known runic-page outputs. Both run locally with the Python standard library and make no AI requests. A full repository checkout also works.
+
+What success looks like
+
+The warning output begins A-WARNNG.BELIEUE-NOTHNG-FROM-. Those spellings are expected literal rune labels, not evidence that the script failed. The complete control check prints:
+
+PASS: 17 literal page readings match the published controls exactly.
+
+This confirms that the supplied recipes reproduce the stored known outputs. It does not independently authenticate the source files or validate a proposed solution to an unsolved page. Use the download catalogue for file hashes and the transliteration guide for the difference between literal labels and contextual English.
+
+Working from a phone? You can do the first arithmetic check without installing anything. In the worked warning example, the first rune has index 4. Subtracting it from 28 gives 24, the label A. The next input index is 21, giving 7, or W. Follow the table against the original image, then read the complete passage. Save the script run for when you have a Python environment.
 
 New to the terminal? Running the reproduction scripts walks through setup, expected results, trace columns, and common errors.
 3. Learn the other layers
@@ -30,6 +41,25 @@ For the ideas behind the decoded passages, start with philosophical themes, then
 Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, carrying through punctuation, with no skipped runes” specifies one test. It does not establish that this is the correct method.
 Check Have we tried it? for the technique and scope. The registry is awaiting reviewed records; an empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
 
+Choose one first investigation
+
+You do not need to learn every technique at once. Choose a route that produces a small result someone else can inspect.
+
+	If you want to…	Start with	Keep as your result
+
+	Read and interpret	Compare the warning and later instructions	Exact passages, their locations, and your interpretation stated separately
+
+	Inspect artwork	Compare the insect drawings	Page IDs, visible similarities and differences, and any named comparison source
+
+	Check arithmetic	Reproduce one recorded prime sum	The original rune sequence, chosen boundaries, values, and total
+
+	Measure a text	Reproduce LP2-31’s IoC	The input hash, rune counts, exact fraction, and a statement of what it cannot establish
+
+	Study a decoding	Trace the Welcome’s repeating key	A few input/output steps, the key position, and the treatment of recorded exceptions
+
+
+Before expanding a numerical search, check what your operation preserves. For example, whole-stream IoC cannot choose between rearrangements of the same symbols. For literary or visual work, a well-supported comparison is useful even when it supplies no cipher key.
+
 Ready to contribute
 You should be able to identify an exact image, distinguish raw from corrected transcription, reproduce a known reading, and explain what would count against your hypothesis. You do not need to understand every cipher before inspecting a well-defined detail.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
@@ -43,10 +73,16 @@ https://jelliottdev.github.io/reference/lp2-31.html
 https://jelliottdev.github.io/#/numbering
 https://jelliottdev.github.io/reference/articles/illustrated-cover.html
 https://jelliottdev.github.io/#/reader/lp1-01
+https://jelliottdev.github.io/thumbs/lp1-01.jpg
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/thumbs/lp2-31.jpg
 https://jelliottdev.github.io/reference/articles/reading-warning.html
 https://jelliottdev.github.io/reference/articles/atbash.html
 https://jelliottdev.github.io/#/alphabet
 https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/#/downloads
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/articles/atbash.html#worked
 https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/reference/articles/rune-values.html
 https://jelliottdev.github.io/reference/articles/vigenere.html
@@ -56,7 +92,11 @@ https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 https://jelliottdev.github.io/reference/articles/william-blake.html
 https://jelliottdev.github.io/#/experiments
 https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/reference/articles/testing-knowledge.html
+https://jelliottdev.github.io/reference/articles/insects.html
+https://jelliottdev.github.io/reference/articles/prime-sums.html
 https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
 Article: https://jelliottdev.github.io/reference/articles/quick-start.html
