@@ -5,6 +5,36 @@ const path = require('node:path');
 const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const articles = JSON.parse(fs.readFileSync(path.join(root, 'data/articles.json'), 'utf8'));
+const {norm} = require('../search-engine.js');
+function aliasConflicts(records) {
+  const conflicts = [];
+  for (const article of records) {
+    for (const field of ['alias_sections', 'alias_pages']) {
+      const seen = new Map();
+      for (const [phrase, destination] of Object.entries(article[field] || {})) {
+        const key = norm(phrase);
+        const value = JSON.stringify(field === 'alias_pages' ? [...new Set(destination)].sort() : destination);
+        const previous = seen.get(key);
+        if (previous && previous.value !== value)
+          conflicts.push(`${article.id}: ${field} has conflicting destinations for "${previous.phrase}" and "${phrase}"`);
+        seen.set(key, {phrase, value});
+      }
+    }
+  }
+  return conflicts;
+}
+// Search ignores case, accents, repeated whitespace, and several dash variants.
+// Metadata must not depend on which equivalent key happens to be listed first.
+assert.equal(aliasConflicts([{id:'case',alias_sections:{'Daniel 4':'old','DANIEL 4':'new'}}]).length,1);
+assert.equal(aliasConflicts([{id:'accent',alias_sections:{'Möbius':'old','mobius':'new'}}]).length,1);
+assert.equal(aliasConflicts([{id:'spacing',alias_pages:{'page–detail':['lp2-01'],'PAGE_detail':['lp2-02']}}]).length,1);
+assert.deepEqual(aliasConflicts([{id:'same',alias_pages:{'Two  pages':['lp2-01','lp2-02'],'two pages':['lp2-02','lp2-01']}}]),[]);
+assert.deepEqual(aliasConflicts([{id:'one',alias_sections:{term:'first'}},{id:'two',alias_sections:{term:'second'}}]),[],
+  'Different guides can legitimately discuss the same term');
+const authored = JSON.parse(fs.readFileSync(path.join(root, 'articles/index.json'), 'utf8'));
+for (const [name, records] of [['authored', authored], ['generated', articles]])
+  assert.deepEqual(aliasConflicts(records), [], `${name} guide aliases must resolve unambiguously`);
+console.log('PASS: normalized aliases have consistent section and page destinations');
 const esc = value => String(value).replace(/[&<>"']/g, ch =>
   ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 const context = {db:{articles,guideCategories:JSON.parse(fs.readFileSync(path.join(root, 'data/guide-categories.json'), 'utf8'))}, esc, head:()=>'', footer:()=>'',

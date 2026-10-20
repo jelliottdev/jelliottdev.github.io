@@ -77,3 +77,5 @@ Article and standalone-reference code uses an explicit monospace font stack. Inl
 Transcription row links scroll the selected row into view, highlight it, and move programmatic focus to that row. The row uses tabindex="-1" so it does not add a stop to ordinary Tab navigation; Tab continues from the linked row. A nonexistent row must leave the page usable.
 
 Literal reading search joins archived slash/newline wraps and treats hyphens as word separators for typed phrases. Original notation remains searchable as a separate field. Preserve literal spelling (including U/V conventions); a page-specific literal match outranks the shared contextual reading of its section. Search excerpts may show joined text, while page records retain the source line breaks.
+
+Within one guide, alias-section and alias-page keys that normalize to the same search phrase must name the same destination. Case, accents, repeated whitespace, and supported dash variants cannot distinguish two destinations. The guide-index check validates authored and generated metadata; equivalent page lists may differ in order. Different guides may legitimately share a subject alias.
