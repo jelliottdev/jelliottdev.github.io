@@ -7100,6 +7100,22 @@ Run from a folder containing images/lp1-00.jpg, or replace the path with your ac
 
 Hexadecimal letter case does not change the digest value; PowerShell may display uppercase. Compare all 64 digits. A leading or trailing excerpt of the digest is not the full check.
 
+Check the files inside an extracted bundle
+
+The reference-data bundle includes a Python 3 checker. From the folder where you extracted it, run:
+
+python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
+
+It checks the recorded size and SHA-256 of each listed file, reports missing or changed members, and leaves your files untouched. A mismatch produces a nonzero exit status. Extra files, such as your own experiment outputs, are not part of this check.
+
+If you extract the original-image bundle into the same folder, its separately named manifest remains available too:
+
+python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json
+
+Each bundle has its own named manifest; the transcription bundle uses TRANSCRIPTIONS-AND-READINGS-CONTENTS.json. The older name CONTENTS.json is also included for compatibility, but extracting another bundle into the folder can replace that generic copy. Use the separately named files when combining bundles.
+
+The checker confirms agreement with the manifest you supplied. It does not authenticate that manifest, validate the transcription, or check files omitted from the list. Verify the downloaded ZIP against the published catalog separately when you need to establish which bundle you received.
+
 Why invisible text changes matter
 
 The byte sequence 41 0a is A followed by LF. 41 0d 0a is A followed by CRLF. An editor may display them as the same line, but their hashes differ. This small Python 3 example makes the distinction visible:
@@ -7132,6 +7148,8 @@ Sources, related references, and files
 https://jelliottdev.github.io/#/downloads
 https://jelliottdev.github.io/data/catalog.json
 https://jelliottdev.github.io/#/downloads/lp1-00
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/downloads/original-images.zip
 https://jelliottdev.github.io/reference/articles/reproducibility.html
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/lp2-56-target.html

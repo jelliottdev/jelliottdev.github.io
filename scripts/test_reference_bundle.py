@@ -22,6 +22,8 @@ def main():
                 assert hashlib.sha256(bundle.read(item["path"])).hexdigest() == item["sha256"]
             bundle.extractall(target)
         for command in [
+            ["scripts/test_verify_bundle.py"],
+            ["scripts/verify_bundle.py", "REFERENCE-DATA-CONTENTS.json"],
             ["scripts/test_reading_concordance.py"],
             ["scripts/reading_concordance.py", "circumference", "--prefix", "--json"],
             ["scripts/reproduce_reading.py", "--check-all"],
@@ -62,6 +64,16 @@ def main():
         assert (target / "downloads/REFERENCE-DATA-README.txt").is_file()
         assert (target / "START-HERE.txt").read_bytes() == (
             target / "downloads/REFERENCE-DATA-README.txt").read_bytes()
+        reference_manifest = (target / "REFERENCE-DATA-CONTENTS.json").read_bytes()
+        with zipfile.ZipFile(ROOT / "downloads/original-images.zip") as images:
+            # Check the manifest collision without extracting all images.
+            (target / "CONTENTS.json").write_bytes(images.read("CONTENTS.json"))
+            (target / "ORIGINAL-IMAGES-CONTENTS.json").write_bytes(
+                images.read("ORIGINAL-IMAGES-CONTENTS.json"))
+        assert (target / "REFERENCE-DATA-CONTENTS.json").read_bytes() == reference_manifest
+        subprocess.run([sys.executable, "scripts/verify_bundle.py",
+                        "REFERENCE-DATA-CONTENTS.json"], cwd=target,
+                       capture_output=True, check=True)
 
 
 if __name__ == "__main__":

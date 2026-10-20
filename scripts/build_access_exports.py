@@ -89,7 +89,7 @@ for record in read('data/evidence/artwork-sources.json')['records']:
                   aliases=[record['accession'],'William Blake','Tate','museum catalogue','compasses'],
                   guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
-for script in ['rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')
@@ -199,6 +199,15 @@ These create UTF-8 files in your current folder and refuse to overwrite existing
 files. For the concordance, --json selects JSON; the filename alone does not.
 Preserve the input hashes and counting rules alongside any interpretation.
 
+VERIFY THE EXTRACTED FILES
+  python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
+After extracting original-images.zip into the same folder, also run:
+  python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json
+The checker reads files without changing them and reports missing or changed
+members. Extra files are not checked. Matching a manifest does not authenticate
+its source. The separately named manifests survive combining the bundles;
+CONTENTS.json is a compatibility copy belonging to the last bundle extracted.
+
 WHAT IS INCLUDED
 The commands above use the included archived texts, records, parameters and
 evidence. No network or AI service is needed. CONTENTS.json lists member hashes
@@ -233,16 +242,19 @@ for name,roles in [('original-images',{'Original JPEG','Historical illustrated c
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
   selected.append({**instructions,'path':'START-HERE.txt','source_path':instructions['path']})
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
+ named_manifest=name.upper()+'-CONTENTS.json'
  reusable=False
  if (root/path).exists():
   with zipfile.ZipFile(root/path) as z:
-   reusable=(z.read('CONTENTS.json').decode()==contents and all(hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256'] for f in selected))
+   reusable=(named_manifest in z.namelist() and z.read(named_manifest).decode()==contents and z.read('CONTENTS.json').decode()==contents and all(hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256'] for f in selected))
  if not reusable:
   with zipfile.ZipFile(root/path,'w',zipfile.ZIP_DEFLATED) as z:
    for f in selected:
     info=zipfile.ZipInfo(f['path'],(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
     z.writestr(info,(root/f.get('source_path',f['path'])).read_bytes())
    info=zipfile.ZipInfo('CONTENTS.json',(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
+   z.writestr(info,contents)
+   info=zipfile.ZipInfo(named_manifest,(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
    z.writestr(info,contents)
  with zipfile.ZipFile(root/path) as z:
   for f in selected:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']

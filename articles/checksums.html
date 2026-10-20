@@ -21,6 +21,14 @@ shasum -a 256 images/lp1-00.jpg</code></pre><p>Compare with <a href="data/catalo
 <p>Run from a folder containing <code>images/lp1-00.jpg</code>, or replace the path with your actual download location. The preserved LP1-00 original is <strong>168,876 bytes</strong> and its expected SHA-256 is:</p>
 <pre><code>184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7</code></pre>
 <p>Hexadecimal letter case does not change the digest value; PowerShell may display uppercase. Compare all 64 digits. A leading or trailing excerpt of the digest is not the full check.</p>
+<h2 id="bundle">Check the files inside an extracted bundle</h2>
+<p>The <a href="downloads/reference-data.zip">reference-data bundle</a> includes a Python 3 checker. From the folder where you extracted it, run:</p>
+<pre><code>python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json</code></pre>
+<p>It checks the recorded size and SHA-256 of each listed file, reports missing or changed members, and leaves your files untouched. A mismatch produces a nonzero exit status. Extra files, such as your own experiment outputs, are not part of this check.</p>
+<p>If you extract the <a href="downloads/original-images.zip">original-image bundle</a> into the same folder, its separately named manifest remains available too:</p>
+<pre><code>python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json</code></pre>
+<p>Each bundle has its own named manifest; the transcription bundle uses <code>TRANSCRIPTIONS-AND-READINGS-CONTENTS.json</code>. The older name <code>CONTENTS.json</code> is also included for compatibility, but extracting another bundle into the folder can replace that generic copy. Use the separately named files when combining bundles.</p>
+<p>The checker confirms agreement with the manifest you supplied. It does not authenticate that manifest, validate the transcription, or check files omitted from the list. Verify the downloaded ZIP against the <a href="data/catalog.json">published catalog</a> separately when you need to establish which bundle you received.</p>
 <h2 id="bytes">Why invisible text changes matter</h2>
 <p>The byte sequence <code>41 0a</code> is A followed by LF. <code>41 0d 0a</code> is A followed by CRLF. An editor may display them as the same line, but their hashes differ. This small Python 3 example makes the distinction visible:</p>
 <pre><code>from hashlib import sha256

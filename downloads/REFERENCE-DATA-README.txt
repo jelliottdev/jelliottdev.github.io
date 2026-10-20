@@ -61,6 +61,15 @@ These create UTF-8 files in your current folder and refuse to overwrite existing
 files. For the concordance, --json selects JSON; the filename alone does not.
 Preserve the input hashes and counting rules alongside any interpretation.
 
+VERIFY THE EXTRACTED FILES
+  python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
+After extracting original-images.zip into the same folder, also run:
+  python scripts/verify_bundle.py ORIGINAL-IMAGES-CONTENTS.json
+The checker reads files without changing them and reports missing or changed
+members. Extra files are not checked. Matching a manifest does not authenticate
+its source. The separately named manifests survive combining the bundles;
+CONTENTS.json is a compatibility copy belonging to the last bundle extracted.
+
 WHAT IS INCLUDED
 The commands above use the included archived texts, records, parameters and
 evidence. No network or AI service is needed. CONTENTS.json lists member hashes
