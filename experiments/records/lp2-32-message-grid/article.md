@@ -16,6 +16,8 @@ The first row is grid row 1, columns 1–11. The first column is column 1, rows 
 
 The central 5×5 block occupies rows 4–8 and columns 4–8, using one-based coordinates. Sum its outer border, counting each corner once. That is 16 cells: five across the top, five across the bottom, and three additional cells down each side. Do not include the central nine cells or count corners twice.
 
+In the enlarged figure, the top border sums to 275 and the bottom border to 373. The three remaining left-edge cells sum to 231; the three remaining right-edge cells sum to 257. Thus `275 + 373 + 231 + 257 = 1136`. This decomposition counts each corner exactly once.
+
 | Quantity | Value |
 | --- | --- |
 | Rune count | 121 |
@@ -48,3 +50,13 @@ The producer reads the rune text and parses JPEG segment headers. The checker re
 ## Limits and follow-up
 
 The original lead selected this page, arrangement and central border for inspection. No null model or accounting for other explored arrangements is supplied here. A follow-up can test a stated family of layouts or a fixed shuffle model, but should not describe this one successful comparison as an exhaustive search. See [search space and bounds](#/wiki/search-space) and [null models](#/wiki/null-models).
+
+## Recreate the diagram
+
+The SVG is included in the experiment ZIP. The drawing reads the stored cell ledger directly; its numbers are not manually retyped. Install Matplotlib if you want to recreate it, then choose a new output filename:
+
+```text
+python experiments/records/lp2-32-message-grid/plot.py --output my-grid.svg
+```
+
+The drawing script refuses to overwrite an existing file. Plotting is optional; the producer and independent checker still use only Python’s standard library.
