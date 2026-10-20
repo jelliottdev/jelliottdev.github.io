@@ -1,7 +1,40 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arithmetic modulo 29 — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/modular-arithmetic">Open in wiki</a> · <a href="modular-arithmetic.txt">Plain text</a></nav><h1>Arithmetic modulo 29</h1><p>How shifts wrap around the rune alphabet, including negative results.</p>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arithmetic modulo 29 — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/modular-arithmetic">Open in wiki</a> · <a href="modular-arithmetic.txt">Plain text</a></nav><h1>Arithmetic modulo 29</h1><p>How shifts wrap around the rune alphabet, including negative results.</p><p>The rune alphabet has 29 positions, numbered 0 through 28. <strong>Arithmetic modulo 29</strong> keeps a calculation within those positions by wrapping around whenever it passes either end. It supplies the arithmetic used by several documented readings, including <a href="vigenere.html">Vigenère</a> and <a href="prime-minus-one.html">prime-minus-one</a>.</p>
 <h2 id="definition">What “mod 29” means</h2><p>Two integers are equal modulo 29 when their difference is a multiple of 29. For rune indices, choose the representative from 0 through 28. Moving forward from 28 by one returns to 0; moving backward from 0 by one returns to 28.</p>
-<h2 id="examples">Worked steps</h2><p>If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. Adding 29 to −7 gives the same index. A shift by 31 is equivalent to a shift by 2.</p><pre><code># Python:
-assert (3 - 10) % 29 == 22
-# JavaScript needs normalization of its signed remainder:
-# ((3 - 10) % 29 + 29) % 29</code></pre>
-<h2 id="limits">What this does not decide</h2><p>Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See <a href="vigenere.html">Vigenère</a>, <a href="prime-minus-one.html">prime-minus-one</a>, and <a href="interruptions.html">keystream positions</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p><h2>Guides linking here</h2><ul><li><a href="rune-values.html">Rune indices and prime values</a></li><li><a href="prime-minus-one.html">Prime-minus-one decoding</a></li><li><a href="totient.html">Euler’s totient and prime-minus-one</a></li><li><a href="xor.html">Exclusive OR (XOR)</a></li><li><a href="index-of-coincidence.html">Index of coincidence: a reproducible rune baseline</a></li></ul></main></body></html>
+<h2 id="examples">Worked steps</h2><p>If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. First subtract normally to get −7. Then add 29 to choose the equivalent value in the allowed range. The negative intermediate result is not an error.</p>
+<div class="table-wrap"><table><thead><tr><th>Calculation</th><th>Ordinary result</th><th>Adjustment</th><th>Rune index</th></tr></thead><tbody>
+<tr><td>28 + 1</td><td>29</td><td>Subtract 29</td><td>0</td></tr>
+<tr><td>0 − 1</td><td>−1</td><td>Add 29</td><td>28</td></tr>
+<tr><td>3 − 10</td><td>−7</td><td>Add 29</td><td>22</td></tr>
+<tr><td>21 − 256</td><td>−235</td><td>Add 8 × 29</td><td>26</td></tr>
+</tbody></table></div>
+<p>The final row is a calculation from the <a href="prime-minus-one.html#first-runes">LP2-56 trace</a>. Adding 29 only once would leave a negative number there. A modulo operation handles however many complete turns are needed.</p>
+<h2 id="equivalent">Different numbers can describe the same shift</h2>
+<p>A shift by 31 is equivalent to a shift by 2 because <code>31 = 29 + 2</code>. Subtracting 23 is equivalent to adding 6 because <code>−23 + 29 = 6</code>. This explains how two walkthroughs can describe the same operation using different signed amounts.</p>
+<p>Equivalence depends on the entire formula. Adding 23 and subtracting 23 are generally different. For input index 0, they produce 23 and 6 respectively. Do not change the direction while keeping the same key values and expect the same reading.</p>
+<p>Modulo 29 is also different from writing a number in base 29. Modulo retains one residue; a base-29 representation expresses the whole number using place values. Likewise, reducing a <a href="rune-values.html">Gematria Primus prime value</a> modulo 29 does not generally recover the rune’s alphabet index. The value and index are separate assignments.</p>
+<h2 id="code">Python and JavaScript examples</h2>
+<p>For integer inputs and a positive divisor of 29, Python’s <code>%</code> gives the representative from 0 through 28:</p>
+<pre><code>def mod29(n):
+    return n % 29
+
+assert mod29(-7) == 22
+assert mod29(-235) == 26
+assert mod29(29) == 0
+assert mod29(31) == 2
+assert all(mod29(n) == mod29(n + 29) for n in range(-100, 101))</code></pre>
+<p>JavaScript’s <code>%</code> is a signed remainder operation: <code>-7 % 29</code> gives −7. Normalize the result before using it as an alphabet index. The <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder">JavaScript remainder reference</a> documents this distinction.</p>
+<pre><code>const mod29 = n =&gt; ((n % 29) + 29) % 29;
+
+for (const [input, expected] of [[-7, 22], [-235, 26], [29, 0], [31, 2]]) {
+    if (mod29(input) !== expected) throw new Error("Incorrect residue");
+}</code></pre>
+<p>These examples are self-contained checks for small integers, not whole-page decoders. For an actual control, run <code>python scripts/reproduce_reading.py lp2-56 --trace</code> from the <a href="running-scripts.html">reference-data setup</a> and inspect the input, subtracted value, and output columns.</p>
+<h2 id="round-trip">Check a shift by undoing it</h2>
+<p>If decoding subtracts k, adding k back should recover the input modulo 29. For the example above, <code>(22 + 10) mod 29 = 3</code>. A round-trip check is useful for catching a sign or normalization mistake:</p>
+<pre><code>for c in range(29):
+    for k in range(29):
+        p = (c - k) % 29
+        assert (p + k) % 29 == c</code></pre>
+<p>This verifies the arithmetic for every single-rune input and shift. It does not verify a keyword, a page transcription, or the handling of an interruption. Those choices belong to the complete decoding method.</p>
+<h2 id="limits">What this does not decide</h2><p>Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See <a href="vigenere.html">Vigenère</a>, <a href="prime-minus-one.html">prime-minus-one</a>, and <a href="interruptions.html">keystream positions</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. The Python and JavaScript examples and all 841 single-rune shift round trips were checked on 20 October 2026.</p>
+<h2>Guides linking here</h2><ul><li><a href="rune-values.html">Rune indices and prime values</a></li><li><a href="prime-minus-one.html">Prime-minus-one decoding</a></li><li><a href="totient.html">Euler’s totient and prime-minus-one</a></li><li><a href="xor.html">Exclusive OR (XOR)</a></li><li><a href="index-of-coincidence.html">Index of coincidence: a reproducible rune baseline</a></li></ul></main></body></html>

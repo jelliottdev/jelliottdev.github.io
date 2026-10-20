@@ -5698,24 +5698,81 @@ Arithmetic modulo 29
 
 How shifts wrap around the rune alphabet, including negative results.
 
+The rune alphabet has 29 positions, numbered 0 through 28. Arithmetic modulo 29 keeps a calculation within those positions by wrapping around whenever it passes either end. It supplies the arithmetic used by several documented readings, including Vigenère and prime-minus-one.
+
 What “mod 29” means
 Two integers are equal modulo 29 when their difference is a multiple of 29. For rune indices, choose the representative from 0 through 28. Moving forward from 28 by one returns to 0; moving backward from 0 by one returns to 28.
 
 Worked steps
-If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. Adding 29 to −7 gives the same index. A shift by 31 is equivalent to a shift by 2.
-# Python:
-assert (3 - 10) % 29 == 22
-# JavaScript needs normalization of its signed remainder:
-# ((3 - 10) % 29 + 29) % 29
+If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. First subtract normally to get −7. Then add 29 to choose the equivalent value in the allowed range. The negative intermediate result is not an error.
+
+	Calculation	Ordinary result	Adjustment	Rune index
+
+	28 + 1	29	Subtract 29	0
+
+	0 − 1	−1	Add 29	28
+
+	3 − 10	−7	Add 29	22
+
+	21 − 256	−235	Add 8 × 29	26
+
+
+The final row is a calculation from the LP2-56 trace. Adding 29 only once would leave a negative number there. A modulo operation handles however many complete turns are needed.
+
+Different numbers can describe the same shift
+
+A shift by 31 is equivalent to a shift by 2 because 31 = 29 + 2. Subtracting 23 is equivalent to adding 6 because −23 + 29 = 6. This explains how two walkthroughs can describe the same operation using different signed amounts.
+
+Equivalence depends on the entire formula. Adding 23 and subtracting 23 are generally different. For input index 0, they produce 23 and 6 respectively. Do not change the direction while keeping the same key values and expect the same reading.
+
+Modulo 29 is also different from writing a number in base 29. Modulo retains one residue; a base-29 representation expresses the whole number using place values. Likewise, reducing a Gematria Primus prime value modulo 29 does not generally recover the rune’s alphabet index. The value and index are separate assignments.
+
+Python and JavaScript examples
+
+For integer inputs and a positive divisor of 29, Python’s % gives the representative from 0 through 28:
+
+def mod29(n):
+    return n % 29
+
+assert mod29(-7) == 22
+assert mod29(-235) == 26
+assert mod29(29) == 0
+assert mod29(31) == 2
+assert all(mod29(n) == mod29(n + 29) for n in range(-100, 101))
+
+JavaScript’s % is a signed remainder operation: -7 % 29 gives −7. Normalize the result before using it as an alphabet index. The JavaScript remainder reference documents this distinction.
+
+const mod29 = n => ((n % 29) + 29) % 29;
+
+for (const [input, expected] of [[-7, 22], [-235, 26], [29, 0], [31, 2]]) {
+    if (mod29(input) !== expected) throw new Error("Incorrect residue");
+}
+
+These examples are self-contained checks for small integers, not whole-page decoders. For an actual control, run python scripts/reproduce_reading.py lp2-56 --trace from the reference-data setup and inspect the input, subtracted value, and output columns.
+
+Check a shift by undoing it
+
+If decoding subtracts k, adding k back should recover the input modulo 29. For the example above, (22 + 10) mod 29 = 3. A round-trip check is useful for catching a sign or normalization mistake:
+
+for c in range(29):
+    for k in range(29):
+        p = (c - k) % 29
+        assert (p + k) % 29 == c
+
+This verifies the arithmetic for every single-rune input and shift. It does not verify a keyword, a page transcription, or the handling of an interruption. Those choices belong to the complete decoding method.
 
 What this does not decide
 Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See Vigenère, prime-minus-one, and keystream positions.
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The Python and JavaScript examples and all 841 single-rune shift round trips were checked on 20 October 2026.
 
 Sources, related references, and files
 https://jelliottdev.github.io/reference/articles/vigenere.html
 https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+https://jelliottdev.github.io/reference/articles/prime-minus-one.html#first-runes
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
+https://jelliottdev.github.io/reference/articles/running-scripts.html
 https://jelliottdev.github.io/reference/articles/interruptions.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
