@@ -1,0 +1,122 @@
+{
+  "id": "totient-map-route",
+  "title": "LP2-00–02: 27 × 27 totient-map route replay",
+  "status": "published",
+  "question": "Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?",
+  "summary": "Reproduces the selected words and 16 transition fits; measures coverage, compares three SOON nodes, and checks mirror abundance against shuffled maps.",
+  "tags": [
+    "27x27",
+    "27 × 27",
+    "totient",
+    "Euler phi",
+    "Mobius",
+    "Möbius",
+    "three rune nodes",
+    "geometric cipher",
+    "AS I GO",
+    "WEATHER",
+    "2retooz270703",
+    "map"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "artifacts": [
+      "experiments/records/totient-map-route/route.json"
+    ],
+    "representation": "729 archived runes including headings, page-order row-major 27x27, punctuation removed; one-based cells; indices 0–28.",
+    "procedure": "Replay supplied nodes and ciphertext; independently check arithmetic; recompute three transition rules; compare three documented SOON centers; census mirrors and 99 frequency-preserving shuffled controls.",
+    "parameters": "Pinned commit d5eed3f10428372c7202ceebc65cc3bdead0819d; 17 primary blocks plus alternative SOON; 16 primary transitions; phase thresholds 7,14; four mirror axes/radii 1..13; seed3301; ordered signature keys indices1..28.",
+    "exclusions": "Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods."
+  },
+  "outcome": "inconclusive",
+  "finding": "The selected words reproduce, including the alternative SOON reading: 65 rune calculations across 18 blocks. All 16 primary transitions match the stated signature, axis and boundary rules. However, three nodes giving the same SOON key predict different next axes; the route still needs selection rules.",
+  "limitations": "The rules were checked on the route used to develop them, not an unseen continuation. The replay supplies the selected blocks, nodes and thresholds. It does not establish an intended plaintext or show that arbitrary sentences can be made. Human review is pending.",
+  "next_steps": "Freeze complete node/traversal/block-length and tie-breaking rules, then test an unseen continuation and matched controls without retuning.",
+  "family": {
+    "id": "totient-map",
+    "title": "27 × 27 totient-map methods",
+    "question": "Can fixed geometric rules recover and predict a reading of LP2-00–02?",
+    "baseline": "totient-map-route"
+  },
+  "variant": {
+    "label": "Pinned selected-route replay, transition checks and bounded ambiguity controls",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent factorization arithmetic check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/totient-map-route/run.py --check",
+    "environment": "Python 3 standard library; no network or AI. Independent check: python experiments/records/totient-map-route/check.py.",
+    "script": "experiments/records/totient-map-route/run.py",
+    "script_sha256": "218eca36c309bfbc138b1d87ebb47d424df172bf5fa53261efd9f09395fa964a",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "experiments/records/totient-map-route/route.json",
+        "sha256": "b7c06c4b8264eb449d269174e37761cb9a85b2ce7c65ab9148f2f2734e3bfd67"
+      },
+      {
+        "path": "experiments/records/totient-map-route/check.py",
+        "sha256": "22c06811881fe23a67e8e4089403749bcd04124adf6a2da0d11697aee1f561fe"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/totient-map-route.json",
+        "sha256": "fec6c854fdebb8dc6d0bb4f95c7754b43044854bdf8e6f329dc0232999e74e12"
+      },
+      {
+        "path": "exports/figures/totient-map-coverage.svg",
+        "sha256": "9589cde62d4ae186a9af06cbe4656cd951df3d43e066e3d6966953e198629b5f"
+      },
+      {
+        "path": "exports/figures/totient-map-node-choice.svg",
+        "sha256": "c1ff129e18b0e2717d6ddd4406ee9f2049ba25125c735e8f1482720149622dfb"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned method, transition rules and selected readings",
+      "url": "https://github.com/2retooz270703/Liber-Primus-27x27-Map-3-Rune-Nodes-Totient-Decryption/tree/d5eed3f10428372c7202ceebc65cc3bdead0819d"
+    },
+    {
+      "label": "Archived LP2 text and provenance",
+      "url": "https://jelliottdev.github.io/data/index.json"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/totient-map-coverage.svg",
+      "caption": "Primary-route ciphertext coverage: 54 distinct cells out of 729. Key nodes and navigation landmarks are not highlighted. The full-size SVG is included in the download and linked in the full account."
+    },
+    {
+      "path": "exports/figures/totient-map-node-choice.svg",
+      "caption": "The same derived SOON key comes from three documented centers. The next-axis prediction changes with the selected original center."
+    }
+  ]
+}
