@@ -45,12 +45,47 @@ The registry groups related methods into families, but its records do not all an
 
 	Statistical comparison	Repeated trigrams	Compares one specified count with a declared shuffle model. A result that is ordinary under that model does not prove the text random.
 
+	Exact mathematical exclusion	Direct polynomial streams	A finite-difference obstruction excludes every modulus greater than one for the defined direct-output rule through degree eight. It does not cover polynomial keys mixed with unknown plaintext.
+
+	Necessary model constraint	Word-local repetition	Distinct ciphertext units require distinct corresponding plaintext units under one shared deterministic word function and context. This does not establish that the unknown plaintext repeats, so it does not by itself reject the model.
+
 	Bounded cipher search	Fibonacci shifts	No tested configuration matched any of nine fixed 12-rune openings. This excludes those exact matches within the stated bounds, not every Fibonacci-based cipher.
 
 	Tool and payload check	Default-key OutGuess sweep	Distinguishes reproduced payloads, unverified output bytes, rejected retrievals and abnormal exits. An abnormal exit is not evidence that an image has no payload.
 
 	Historical control	Emerson book cipher	Reproduces the documented historical string with fixed source and counting conventions. It does not establish that the same book or method decrypts another page.
 
+
+What has actually been ruled out?
+
+The following published results show why “we tried it” needs more than an outcome label. They all use exact calculations, but their conclusions have different logical strength.
+
+A proof can cover parameters that were never enumerated
+
+The polynomial experiment does not loop through a large list of coefficients, origins or moduli. Its argument says that every allowed modulus must divide a particular greatest common divisor. When that gcd is 1, no integer modulus greater than one can work. The program supplies the manuscript-specific integer differences needed by the argument. All 55 nonempty rune pages in LP2-00–55 have this obstruction in both tested representations for every degree bound 1–8.
+
+That is stronger than finding no candidate in a finite coefficient range, but only for the stated rule: the polynomial directly generates the observed rune indices or prime values at a fixed stride. A polynomial generating a key that is then added to unknown plaintext is a different construction. The word “polynomial” alone is not enough to transfer the result.
+
+Compare the fixed alphabet transform search: all 6,496 declared cases completed without matching the specified warning opening. That search has complete coverage of its listed cases, but its success criterion is one particular opening. A different plaintext opening is not contradicted by the result.
+
+A necessary constraint may leave a model possible
+
+The word-reset experiment finds no exact repeats among the selected interior ciphertext tokens. Under one shared deterministic word function with identical key and reset context, equal plaintext units would give equal ciphertext units. Consequently, the corresponding plaintext units must all differ. To turn that constraint into a rejection, you would need an additional justified premise that some of those plaintext units repeat. The experiment does not supply that premise.
+
+[Image: A shared deterministic reset preserves exact repetitions; a shared symbol map plus independent within-word shuffling preserves symbol counts instead.]
+Changing word order inside a token and changing the symbol map are different operations. The full account lists all four observed anagram pairs and explains the assumptions for each model.
+
+A counterexample shows where a conclusion stops
+
+The position-divisor experiment rules out assigning a fixed divisor greater than one to each rune when numbered positions advance by one. Repeated-rune gaps remove the unknown starting position, so trying more starting integers cannot repair the contradiction.
+
+Allow positions to advance by two instead, assign divisor 2 to every rune, and start at 2: every numbered position is even. That satisfies the bare divisibility requirement. It does not tell you which rune to emit and is not a solution. It is a counterexample to the broader claim that the same argument excludes every stride. Extra requirements, such as distinct divisor labels or a deterministic factor-selection rule, must be checked separately.
+
+What the checks have verified
+
+These three newer records include an elementary argument, a calculation on hashed archived inputs, and a second implementation that uses a different computational approach. Their downloadable bundles reproduce those checks without network or AI calls. The two text formats share an archival source, so agreement is not an independent visual review of every manuscript rune.
+
+The supplied research archive also describes formal Lean proofs. These records do not claim to have rerun that formal development. A checked numerical witness, a mathematical argument and a proof-assistant build are different pieces of evidence; only claim the ones actually supplied. Human review remains pending as stated in each record.
 
 Read the outcome with the finding
 
@@ -90,12 +125,22 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/mixed-square-word-sums
 - N-rune distances
   https://jelliottdev.github.io/#/experiments/n-rune-gaps
+- Direct polynomial streams; polynomial experiment
+  https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
+- Word-local repetition; word-reset experiment; full account
+  https://jelliottdev.github.io/#/experiments/word-reset-repetition
 - Fibonacci shifts; existing record
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - Default-key OutGuess sweep
   https://jelliottdev.github.io/#/experiments/outguess-default-key
 - Emerson book cipher
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
+- fixed alphabet transform search
+  https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
+- A shared deterministic reset preserves exact repetitions; a shared symbol map plus independent within-word shuffling preserves symbol counts instead.
+  https://jelliottdev.github.io/exports/figures/word-reset-bound.svg
+- position-divisor experiment
+  https://jelliottdev.github.io/#/experiments/position-divisor-labels
 - Have we tried it?
   https://jelliottdev.github.io/#/experiments
 - search space and bounds
