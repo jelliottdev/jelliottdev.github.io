@@ -81,3 +81,5 @@ Literal reading search joins archived slash/newline wraps and treats hyphens as 
 Within one guide, alias-section and alias-page keys that normalize to the same search phrase must name the same destination. Case, accents, repeated whitespace, and supported dash variants cannot distinguish two destinations. The guide-index check validates authored and generated metadata; equivalent page lists may differ in order. Different guides may legitimately share a subject alias.
 
 Article breadcrumbs name the authored subject category and link to its subject index when available. A subject index itself links to its category in All guides rather than back to itself. Unconfigured categories fall back to All guides. Keep the standalone-page and text-download actions separate from this navigation.
+
+Scoped download URLs (`#/downloads/<query>`) open at Individual files with the query already applied. General Downloads opens at the bundle introduction. Explicit section parameters take precedence. Preserve the focused heading below the sticky header so keyboard and phone users can reach filtered files without crossing the bundle instructions.
