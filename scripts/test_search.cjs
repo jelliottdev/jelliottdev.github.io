@@ -42,6 +42,23 @@ assert.equal(search.search(db,'spirals')[0].href,'#/wiki/spirals');
 assert.equal(search.search(db,'branches')[0].href,'#/wiki/branches');
 console.log('PASS: visual names, spelling variants, partial aliases, direct page results, and subject anchors');
 
+// Distinctive literary phrases and catalogue identifiers should open their explanation.
+for(const [query,id,section] of [
+ ['all that lives is holy','william-blake','parallel'],
+ ['outward circumference','william-blake','circumference'],
+ ['N05058','blake-newton','collection'],
+ ['N05059','blake-nebuchadnezzar','collection'],
+ ['nebuchadnezar','blake-nebuchadnezzar','subject'],
+ ['Book of Daniel','blake-nebuchadnezzar','daniel'],
+ ['Urizen','blake-ancient-of-days','frontispiece'],
+ ['Europe a Prophecy','blake-ancient-of-days','frontispiece'],
+ ['foolish consistency','emerson-self-reliance','passages'],
+ ['koan meaning','koans','term'],
+ ['White Queen','lewis-carroll','queen-scene'],
+ ['six impossible things','lewis-carroll','wording']
+])assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
+console.log('PASS: literary phrases, artwork identifiers, and named concepts open their sections');
+
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
 const vm=require('node:vm');
