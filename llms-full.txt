@@ -9066,6 +9066,34 @@ The chapter title displays “Chapter 1” above “Intus,” in black Latin let
 Both carry hidden messages
 Each original JPEG yields a signed hexadecimal OutGuess body. Together with the warning image, LP1-01, they form the three-image XOR and transposition chain. Their visible headings and embedded bodies must remain separate in transcriptions and citations.
 
+Choose the right hidden-content file
+
+These downloads preserve different stages of the extraction. A file ending in .bin contains bytes; it is not necessarily readable text. The recorded extraction from each title image is 2,899 bytes, while its hex-decoded body is 991 bytes. That difference is expected: the extraction also includes the signed-message structure.
+
+
+Raw extraction
+The complete stored OutGuess output. Compare this with a fresh extraction from the original JPEG.
+
+Signed message
+The extracted armored PGP block. Use this for signature verification; the separate body file has no signature attached.
+
+Hex body
+The message content, represented as 1,982 hexadecimal digits. Two digits encode one byte. Line wrapping is not another ciphertext layer.
+
+Decoded bytes
+The 991 bytes obtained from those hex pairs. These are the inputs to the three-image XOR step, not a decoded English paragraph.
+
+
+LP1-00 files
+Raw extraction · Signed message · Hex body · Decoded bytes
+Check sizes and SHA-256 hashes · View the payload record.
+
+LP1-02 files
+Raw extraction · Signed message · Hex body · Decoded bytes
+Check sizes and SHA-256 hashes · View the payload record.
+
+The two streams have the same length but different contents and hashes. Neither title stream alone completes the reconstruction: obtain the warning page’s third stream, then follow the worked first-byte XOR example. The combined output is another signed message with its own verification step.
+
 How to inspect the layers
 Open the original image in the reader and compare its visible lettering with the labeled visible-text transcription.
 Download the original JPEG, not the cropped thumbnail.
@@ -9087,9 +9115,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp1-02
 - Cropped preview showing Chapter 1 above Intus on LP1-02
   https://jelliottdev.github.io/thumbs/lp1-02.jpg
-- LP1-00 original download
+- LP1-00 original download; Check sizes and SHA-256 hashes
   https://jelliottdev.github.io/#/downloads/lp1-00
-- LP1-02 original download
+- LP1-02 original download; Check sizes and SHA-256 hashes
   https://jelliottdev.github.io/#/downloads/lp1-02
 - Lewis and Short dictionary entry
   https://atlas.perseus.tufts.edu/dictionaries/entry/urn%3Acite2%3Ascaife-viewer%3Adictionary-entries.atlas_v1%3Alat.ls.perseus-eng2-n24654/
@@ -9097,6 +9125,30 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp1-01.html
 - three-image XOR and transposition chain
   https://jelliottdev.github.io/reference/articles/cover-chain.html
+- Raw extraction
+  https://jelliottdev.github.io/exports/steganography/lp1-00.outguess.bin
+- Signed message
+  https://jelliottdev.github.io/exports/steganography/lp1-00.signed.asc
+- Hex body
+  https://jelliottdev.github.io/exports/steganography/lp1-00.body.txt
+- Decoded bytes
+  https://jelliottdev.github.io/exports/steganography/lp1-00.hex-decoded.bin
+- View the payload record
+  https://jelliottdev.github.io/reference/lp1-00.html
+- Raw extraction
+  https://jelliottdev.github.io/exports/steganography/lp1-02.outguess.bin
+- Signed message
+  https://jelliottdev.github.io/exports/steganography/lp1-02.signed.asc
+- Hex body
+  https://jelliottdev.github.io/exports/steganography/lp1-02.body.txt
+- Decoded bytes
+  https://jelliottdev.github.io/exports/steganography/lp1-02.hex-decoded.bin
+- View the payload record
+  https://jelliottdev.github.io/reference/lp1-02.html
+- the warning page’s third stream
+  https://jelliottdev.github.io/reference/lp1-01.html
+- worked first-byte XOR example
+  https://jelliottdev.github.io/reference/articles/cover-chain.html#first-byte
 - OutGuess extraction
   https://jelliottdev.github.io/reference/articles/outguess.html
 - signed block
