@@ -3132,6 +3132,7 @@ Reproduce your first experiment: https://jelliottdev.github.io/reference/article
 Transliteration and literal readings: https://jelliottdev.github.io/reference/articles/transliteration.html
 Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+Periodic IoC: columns, weighting, and trial periods: https://jelliottdev.github.io/reference/articles/periodic-ioc.html
 Rune-frequency entropy: balance without order: https://jelliottdev.github.io/reference/articles/rune-entropy.html
 Repeated rune sequences: bigrams and trigrams: https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 Wing and Tree: LP2-27–32: https://jelliottdev.github.io/reference/articles/wing-and-tree.html
@@ -6920,6 +6921,15 @@ The trace exposes each rune’s operation and result. Punctuation remains in pla
 
 What passing a control means
 A matching output confirms that your convention reproduces that passage. It does not establish that an unsolved page uses Atbash. Keep ordinary and shifted variants distinct in a test record.
+
+Has alphabet reversal been tried on LP2?
+
+The fixed-alphabet experiment tries every constant shift and every shifted alphabet reversal on LP2-00–55, in both original and whole-stream reversed order. Ordinary Atbash is one included case: (−c + 28) mod 29. Each complete output is retained for inspection.
+
+Its test is deliberately narrower than “find readable text”: the output must start with the first twelve decoded rune indices of the warning. None of the 6496 parameter cases matches that opening. The count includes the zero-rune LP2-50 cases; it is not a count of distinct nonempty readings. Other beginnings, treating headings separately and general substitutions remain outside this result.
+
+For the distinction between a failed opening comparison and rejection of a cipher, see what an opening test answers. Reversing the rune alphabet is also different from reversing rune positions within words; the word-like segment reversal experiment documents the latter separately.
+
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
@@ -6948,6 +6958,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - known readings
   https://jelliottdev.github.io/#/readings
+- fixed-alphabet experiment
+  https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
+- what an opening test answers
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html#opening
+- word-like segment reversal experiment
+  https://jelliottdev.github.io/#/experiments/lp2-word-reversal
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
@@ -11098,6 +11114,10 @@ Compare two arrangements of the same symbols to see why shuffling can change col
 Reproduce the column example
 Run the exact-fraction Python example. It uses invented inputs and does not publish an experiment result.
 
+Compare the published LP2-31 tests
+
+The worked manuscript comparison connects the column formula to two completed experiments. The whole-page shuffle baseline and within-row variant both scan periods 2–20 and compare maxima with maxima. Their p-values are 0.214 and 0.246 under different shuffle constraints. These are separate experiment results, not additional outputs of the descriptive whole-page IoC script.
+
 Sources and verification
 
 Historical background: William F. Friedman, The Index of Coincidence and Its Applications in Cryptanalysis, preserved by the NSA. The counting convention and derivation used by this script are stated explicitly above; do not assume every historical or modern use of “IoC” has identical scaling.
@@ -11159,6 +11179,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html#shuffle
 - Run the exact-fraction Python example
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html#toy-code
+- worked manuscript comparison
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#manuscript-tests
+- whole-page shuffle baseline
+  https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
+- within-row variant
+  https://jelliottdev.github.io/#/experiments/lp2-31-row-shuffle-ioc
 - The Index of Coincidence and Its Applications in Cryptanalysis
   https://www.nsa.gov/portals/75/documents/news-features/declassified-documents/friedman-documents/publications/folder_233/41761039080018.pdf
 - single-rune entropy
@@ -11179,7 +11205,7 @@ Article: https://jelliottdev.github.io/reference/articles/index-of-coincidence.h
 
 Periodic IoC: columns, weighting, and trial periods
 
-A hand-checkable column example, exact-fraction Python reproduction, and the distinction between an ordinary mean and a pooled pair rate.
+Calculate pooled column IoC, distinguish offset rules, and compare the published LP2-31 period scan under two shuffle models.
 
 Periodic IoC groups rune positions by a proposed repeating period and measures coincidence within those groups. It answers a different question from whole-page IoC, which ignores where matching symbols occur. This guide uses an invented seven-symbol example so every count can be checked by hand.
 
@@ -11331,7 +11357,24 @@ print("Relabeling preserves 4/9; removing the prefix gives 1/3.")
 
 Apply the distinction carefully
 
-For actual archived inputs and the matching-pair definition, use the whole-page baseline. For comparison design, see null models and selection. For a complete record of a proposed test, follow documenting a reproducible attempt. This teaching example is not a published experiment record.
+What happens on LP2-31?
+
+The whole-page shuffle experiment applies this pooled score to LP2-31’s 269 archived runes at periods 2–20. Period 13 has the largest observed score, 216 / 5300 ≈ 0.04075. Finding the largest score is only the first step: every shuffled input is also scanned across all nineteen periods, and its largest score is retained.
+
+Of 999 whole-page shuffles, 213 have a maximum at least as large as the observed peak. The corrected upper-tail p-value is 0.214. That comparison does not support an unusually large peak at the declared 0.05 threshold. It does not identify a key length, establish randomness or rule out a repeating-key cipher.
+
+[Image: The same LP2-31 observed peak compared with whole-page and within-row shuffles: p-values 0.214 and 0.246.]
+The observed input and period scan stay fixed. Changing which rune movements the null model permits changes the comparison distribution. Open the separately documented row-preserving variant.
+
+The within-row shuffle variant holds each archived row’s rune counts fixed and rearranges only the runes inside that row. It then concatenates the rows before assigning columns; the period counter does not restart at each line. LP2-31 has twelve text rows and no separately identified heading in this test.
+
+Under that model, 245 of 999 simulated maxima meet or exceed the same observed peak, giving p = 0.246. Both records remain available with their plans, scripts and complete period scores. The variant was chosen after the baseline was known, so their agreement is not independent confirmation. Neither p-value is the probability that 13 is the true key length.
+
+Before changing the period range
+
+A search over periods 2–40 would ask a different question from this 2–20 scan. It must recompute the maximum over 2–40 for every shuffled input as well. Comparing a newly selected peak against the old 2–20 reference distribution would omit part of the selection process. Likewise, dropping a heading, restarting the counter on each line or testing another page changes the inputs or procedure and belongs in a separate declared record.
+
+For actual archived inputs and the matching-pair definition, use the whole-page baseline. For comparison design, see null models and selection. For a complete record of a proposed test, follow documenting a reproducible attempt. The seven-symbol examples above are instructional; the linked manuscript tests have their own published records.
 
 Sources, related references, and files
 - whole-page IoC; whole-page baseline
@@ -11344,6 +11387,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - key advancement and boundaries
   https://jelliottdev.github.io/reference/articles/interruptions.html
+- whole-page shuffle experiment
+  https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
+- The same LP2-31 observed peak compared with whole-page and within-row shuffles: p-values 0.214 and 0.246.
+  https://jelliottdev.github.io/experiments/records/lp2-31-row-shuffle-ioc/comparison.svg
+- Open the separately documented row-preserving variant; within-row shuffle variant
+  https://jelliottdev.github.io/#/experiments/lp2-31-row-shuffle-ioc
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 
