@@ -192,6 +192,11 @@ files[-1].update(title='Wing and Tree: every eleven-rune prime sum',guide='wing-
 register('exports/transcription-coverage.json','Transcription layer inventory')
 files[-1].update(title='Transcription layers: all 75 page records',guide='transcription-checking',aliases=['review coverage','reviewed transcription'])
 
+register('exports/grid-radix-bound.json','Alphanumeric grid transcription')
+files[-1].update(title='Conditional base-60 uniqueness: witnesses and bounds',guide='alphanumeric-grids')
+register('exports/image-resolution-inventory.json','Image window comparison')
+files[-1].update(title='All 75 manuscript JPEG dimensions and JFIF metadata',guide='image-regions')
+
 register('exports/parable-mp3-link.json','Parable audio evidence')
 files[-1].update(title='LP2-57 and 761.MP3 numeric connection',guide='prime-sums')
 register('exports/761-id3.bin','Parable audio evidence')
@@ -208,6 +213,8 @@ register('exports/repeated-marker-audit.json','Repeated marker audit')
 files[-1].update(title='Repeated markers: positions, distances and subtraction',guide='rune-ngrams',aliases=['DJUBEI','EARTH alignment','6388','6395'])
 
 script_details = {
+ 'audit_grid_radix.py': ('Verify the conditional base-60 bound','alphanumeric-grids',['base 60 uniqueness']),
+ 'image_resolution_inventory.py': ('Inventory original JPEG dimensions and density','image-regions',['400 dpi','JFIF']),
  'parable_mp3_link.py': ('Verify the parable and MP3 metadata link','prime-sums',['761.MP3','1595277641']),
  'side_dot_reuse.py': ('Compare side-dot regions on LP2-40–55','spirals',['side dots','pixel equality']),
  'fibonacci_prime_panel.py': ('Reproduce the complete LP2-15 panel', 'lp2-15-panel', ['Fibonacci','spiral']),
@@ -251,7 +258,7 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
-for script in ['parable_mp3_link.py','side_dot_reuse.py','fibonacci_prime_panel.py','repeated_marker_audit.py','transcription_coverage.py','wing_tree_windows.py','later_message_sums.py','compass_mapping_audit.py','reproduce_second_chance.py','grid_prime_paths.py','fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['audit_grid_radix.py','image_resolution_inventory.py','parable_mp3_link.py','side_dot_reuse.py','fibonacci_prime_panel.py','repeated_marker_audit.py','transcription_coverage.py','wing_tree_windows.py','later_message_sums.py','compass_mapping_audit.py','reproduce_second_chance.py','grid_prime_paths.py','fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)
  if detail:

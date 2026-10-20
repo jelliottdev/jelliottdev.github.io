@@ -1,0 +1,85 @@
+{
+  "assumptions": [
+    "One common integer base, positional two-digit numerals.",
+    "Digit values follow 0–9, A–Z, a–z, starting at zero.",
+    "Every entry represents one unsigned byte, 0–255."
+  ],
+  "source_sha256": {
+    "data/pages/lp2-49.json": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c",
+    "data/pages/lp2-50.json": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161",
+    "data/pages/lp2-51.json": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+  },
+  "entries": 256,
+  "digit_alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  "lower_bound": 60,
+  "upper_bound": 60,
+  "witnesses": [
+    {
+      "page": "lp2-49",
+      "grid_row": 3,
+      "column": 7,
+      "token": "0x"
+    },
+    {
+      "page": "lp2-49",
+      "grid_row": 7,
+      "column": 4,
+      "token": "0x"
+    },
+    {
+      "page": "lp2-49",
+      "grid_row": 9,
+      "column": 2,
+      "token": "4F"
+    },
+    {
+      "page": "lp2-50",
+      "grid_row": 7,
+      "column": 2,
+      "token": "2x"
+    },
+    {
+      "page": "lp2-51",
+      "grid_row": 5,
+      "column": 4,
+      "token": "0x"
+    }
+  ],
+  "alternatives": [
+    {
+      "base": 59,
+      "valid_digits": false,
+      "minimum": 0,
+      "maximum": 251,
+      "over_byte": 0
+    },
+    {
+      "base": 60,
+      "valid_digits": true,
+      "minimum": 0,
+      "maximum": 255,
+      "over_byte": 0
+    },
+    {
+      "base": 61,
+      "valid_digits": true,
+      "minimum": 0,
+      "maximum": 259,
+      "over_byte": 4
+    },
+    {
+      "base": 62,
+      "valid_digits": true,
+      "minimum": 0,
+      "maximum": 263,
+      "over_byte": 12
+    }
+  ],
+  "reversed_order_maximum_at_minimum_base": 3542,
+  "reversed_order_over_byte": 239,
+  "limits": [
+    "Conditional uniqueness does not prove the byte assumption.",
+    "Different digit values, nonpositional codes and larger values are outside the proof.",
+    "No row traversal, multi-byte endianness, cipher or payload interpretation follows."
+  ]
+}

@@ -10140,6 +10140,32 @@ Reading a rectangle
 The wiki uses [x, y, width, height] in original-image pixels. The origin is the top-left; x increases rightward and y downward. For [599, 664, 153, 501], the region starts at x = 599, y = 664 and covers 153 columns and 501 rows. In a half-open crop convention, the right and bottom bounds are 752 and 1165.
 A thumbnail or resized preview uses different display coordinates. Use the original JPEG or the wiki’s region inspector rather than copying screen coordinates into a dataset.
 
+Pixel dimensions and density metadata
+
+All 75 manuscript originals are 2400 × 3600 pixels. This inventory covers LP1-00–16 and LP2-00–57, including their title and chapter pages. It does not include thumbnails, illustration crops, the separate illustrated cover, or later-message images.
+
+	Files	Pixel dimensions	JFIF density
+	All 58 LP2 pages	2400 × 3600	400 × 400 pixels per inch
+	8 LP1 pages	2400 × 3600	400 × 400 pixels per inch
+	9 LP1 pages	2400 × 3600	1 × 1, with no physical units
+
+The nine unitless files are LP1-00, 01, 02, 03, 08, 10, 11, 12 and 13. Their 1 × 1 density metadata describes an aspect ratio; it does not mean one pixel per inch. The other 66 files declare 400 pixels per inch in both directions. The Pillow JPEG documentation explains the jfif_unit and jfif_density fields used in the check.
+
+Pixels are not a physical production history
+
+At a declared 400 pixels per inch, 2400 × 3600 pixels would map to 6 × 9 inches. That is a conversion from metadata, not evidence that the manuscript was printed or scanned at that size. Software can set or change density metadata without changing the pixel grid. These fields also do not identify which software created the images.
+
+For geometric comparisons, use original pixel coordinates first. The same dimensions provide a common canvas, but do not guarantee that two drawings share an origin, scale or alignment. For example, the side-dot comparison on LP2-40–55 separately establishes equality within two fixed rectangles; the dimensions alone would not establish that result.
+
+Reproduce the complete inventory
+
+python -m pip install Pillow
+python scripts/image_resolution_inventory.py --check
+
+Extract the reference-data bundle and original-image bundle into the same directory, preserving their folders. The script verifies every JPEG’s SHA-256 against its page record, then reads the dimensions and JFIF metadata. It does not resave, resize or alter the files.
+
+Download the complete 75-file inventory. Each row includes the page ID, file hash, byte size, width, height, JFIF version, density units and density values. This is an inventory of those fields, not an exhaustive examination of all JPEG metadata.
+
 Connected components
 A connected component is a group of selected pixels joined by the chosen neighborhood rule. Eight-connectivity includes horizontal, vertical, and diagonal neighbors. Four-connectivity excludes diagonal neighbors; the same image can produce different counts under those definitions.
 The published opening-page measurement uses foreground grayscale below 140 and retains eight-connected groups containing at least 20 pixels. Tiny isolated specks are excluded by that area threshold. A count of 13 means thirteen qualifying groups under this rule, not necessarily thirteen intentional dots.
@@ -10237,12 +10263,20 @@ Line spacing and file sizes
 The line-gap audit corrects a reported file-size comparison and explains why baseline spacing, blank ink-to-ink gaps and JPEG byte counts must be measured separately.
 
 Sources, related references, and files
+- Pillow JPEG documentation
+  https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#jpeg
+- side-dot comparison on LP2-40–55
+  https://jelliottdev.github.io/reference/articles/spirals.html#side-dot-reuse
+- reference-data bundle; reference data
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-image bundle; original images
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/image_resolution_inventory.py
+- Download the complete 75-file inventory
+  https://jelliottdev.github.io/exports/image-resolution-inventory.json
 - five isolated dots below the hash-target text
   https://jelliottdev.github.io/reference/articles/dots.html#hash-page-dots
-- reference data
-  https://jelliottdev.github.io/downloads/reference-data.zip
-- original images
-  https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/measure_region.py
 - complete JSON result
@@ -17430,6 +17464,38 @@ Each two-character token is interpreted separately as 60 × first_digit + second
 
 Eight unsigned bits represent values 0–255. The value 256 already needs nine bits. This matters when comparing these tokens with unrelated decimal numbers elsewhere in the manuscript: sharing a rendering method does not mean those numbers fit the same width.
 
+Why base 60 is unique under the byte assumption
+
+Base 60 is more than one base that happens to work here. It is the only possible integer base under three explicit assumptions: each pair is a positional numeral, digit values follow 0–9, A–Z, a–z in that order, and every pair represents one unsigned byte (0–255). The last assumption matters: this argument does not independently prove that the grid contains bytes.
+
+The largest observed digit sets a lower bound. Lowercase x has value 59. A base-b digit must be smaller than b, so b ≥ 60. For example, 0x appears on LP2-49 at grid row 3, column 7.
+A large pair sets an upper bound. The entry 4F, at LP2-49 grid row 9, column 2, has value 4b + 15. Requiring it to fit in one byte gives 4b + 15 ≤ 255, hence b ≤ 60.
+The bounds meet. Together, 60 ≤ b ≤ 60 leaves exactly base 60. Checking all 256 entries confirms that every digit and resulting value is valid at that base.
+
+Grid rows here exclude the runic text above the array. The coordinate-bearing report lists every x-containing pair and the 4F witness, so the proof can be checked against the original images.
+
+Nearby bases under the same digit-value assignment
+	Base	All digits valid?	Largest computed value	Entries above 255
+	59	No: x = 59 is not a base-59 digit	251*	0*
+	60	Yes	255	0
+	61	Yes	259	4
+	62	Yes	263	12
+
+*The base-59 figures are formal substitutions into the equation; invalid digits prevent them from being valid base-59 numerals. A small numerical result alone does not make a representation valid.
+
+Can the right digit be the more significant one?
+
+Not under these same assumptions. Reversing significance makes 0x worth 59b. Since b must be at least 60, that is at least 3540, already too large for a byte. The observed 2x would be 3542 at base 60. This concerns the two digits inside each pair; it does not decide the order of rows, pages, or bytes in a larger integer.
+
+Reproduce the bound
+
+python scripts/audit_grid_radix.py --check
+python scripts/audit_grid_radix.py
+
+The standard-library Python script reads the three page records directly, calculates the strongest digit and byte bounds, checks all entries, and prints the witnesses and nearby-base comparisons. It works in the reference-data bundle. Download its report and input hashes.
+
+If the byte bound is removed, bases 61 and 62 become valid representations with larger values. Changing the digit assignment or using a non-positional code also leaves this proof’s scope. Conditional uniqueness is useful because it makes those choices visible; it is not a decipherment or a claim that every other encoding has been eliminated. See search space and bounds.
+
 Preserve every bit and every row
 
 Encode each value in exactly eight bits, with the most significant bit first. Keep the original eight tokens per row, placing each token’s eight bits horizontally. The 32 manuscript rows then produce a 64-column by 32-row bit array. Pages LP2-49, 50 and 51 occupy rows 1–10, 11–23 and 24–32 respectively. A one is black and a zero is white; no row is omitted, no bits are truncated, and no rotations or reflections are applied.
@@ -17532,16 +17598,20 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/alphanumeric-grids.csv
 - export script
   https://jelliottdev.github.io/scripts/export_alphanumeric_grids.py
-- 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order; Download the SVG
-  https://jelliottdev.github.io/exports/figures/grid-binary.svg
+- coordinate-bearing report; Download its report and input hashes
+  https://jelliottdev.github.io/exports/grid-radix-bound.json
+- standard-library Python script
+  https://jelliottdev.github.io/scripts/audit_grid_radix.py
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order; Download the SVG
+  https://jelliottdev.github.io/exports/figures/grid-binary.svg
 - standard-library script
   https://jelliottdev.github.io/scripts/audit_grid_binary.py
 - JSON report
   https://jelliottdev.github.io/exports/grid-binary-audit.json
-- search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - published alternative-grid proposal
