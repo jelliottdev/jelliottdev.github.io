@@ -68,6 +68,35 @@ Both are prime, and they are different: 347 is an emirp.</code></pre>
 <p>Passing would be much weaker evidence. “The sum is an emirp” accepts many different totals. Even an exact expected total accepts any rearrangement of the same runes. WIDSOM and WISDOM both total 270: a sum cannot tell which order the manuscript uses. It also loses information beyond order. For example, the synthetic two-rune sequences U–O and TH–TH both total 10: <code>3 + 7 = 5 + 5</code>. These are different rune collections with the same length and total, not manuscript words or a proposed reading.</p>
 <p>A useful check therefore needs an independently justified expectation, not just a property discovered after trying different boundaries. It can help reject some candidate transcriptions; it cannot recover the wording by itself. Compare <a href="#/wiki/cipher-invariants">what cipher operations preserve</a> and <a href="#/wiki/checksums">file checksums</a>, which address a different question: whether the file bytes match a specified reference.</p>
 <p>A proposed purpose such as marking sentence boundaries or providing a consistency check needs a separately stated rule and a complete set of cases. It should explain which units are meant to satisfy the rule and which choices were allowed. Selecting only successful words, or adding a delimiter value after seeing a composite total, changes the test. See <a href="#/wiki/reproducibility">selection effects and reproducible scope</a>. This guide does not assign a probability that the observed totals were intentional.</p>
+<h2 id="length-bounds">How many runes can sum to a target?</h2>
+<p>Before looking up words for a number, check whether the requested rune length is even possible. Gematria Primus assigns values from 2 through 109. For a sequence of n runes with positive total S, <code>2n ≤ S ≤ 109n</code>. Therefore <code>ceil(S / 109) ≤ n ≤ floor(S / 2)</code>. These are necessary bounds; they do not guarantee that the available values can make the target at every length inside the interval.</p>
+<div class="table-wrap"><table><thead><tr><th>Target sum</th><th>Simple lower bound</th><th>Exact minimum rune count</th><th>One arithmetic witness</th></tr></thead><tbody><tr><td>131</td><td>2</td><td>3</td><td>109 + 19 + 3</td></tr><tr><td>151</td><td>2</td><td>3</td><td>107 + 41 + 3</td></tr><tr><td>809</td><td>8</td><td>9</td><td>7 × 109 + 43 + 3</td></tr><tr><td>3299</td><td>31</td><td>31</td><td>30 × 109 + 29</td></tr></tbody></table></div>
+<p>The witnesses are synthetic rune-value combinations, not English words or proposed plaintexts. Repeated rune values are allowed. The problem being solved is numerical reachability under the fixed alphabet, without vocabulary or grammatical constraints.</p>
+<h3 id="809-bound">Why eight runes cannot total 809</h3>
+<p>Seven runes are too few because <code>7 × 109 = 763</code>. Eight odd prime values have an even sum, whereas 809 is odd. An eight-rune sequence totaling 809 must therefore contain an odd number of 2-valued F runes, since 2 is the alphabet’s only even value. Even with just one F and seven largest values, the sum is at most <code>2 + 7 × 109 = 765</code>. Eight runes cannot reach 809. Nine can: <code>7 × 109 + 43 + 3 = 809</code>.</p>
+<h3 id="3299-bound">Why 3299 needs at least 31 runes</h3>
+<p>Thirty runes can total at most <code>30 × 109 = 3270</code>. Adding a 29-valued N rune gives 3299 in 31 runes, so the lower bound is attainable. This concerns <strong>runes</strong>, not ordinary English letters: some rune labels contain two Latin letters, and transliteration conventions can change the rune sequence.</p>
+<p>A dictionary limited to fourteen runes per entry cannot contain any 3299-sum entry under these values. A no-hit result from that dictionary would follow from the bound alone. Expanding the vocabulary cannot overcome an incompatible length limit; changing the alphabet values or allowing sums of several words would define a different search.</p>
+<h3 id="bound-reproduce">Reproduce the exact minima</h3>
+<p>This Python example uses dynamic programming. For each smaller total, it retains a shortest available value sequence. Extending those solutions by each allowed value finds a shortest sequence for the next total. It reads the alphabet from the reference-data bundle and makes no network requests.</p>
+<pre><code>import json
+from pathlib import Path
+
+alphabet = json.loads(Path('data/index.json').read_text(encoding='utf-8'))['alphabet']
+values = [entry['prime'] for entry in alphabet]
+assert len(values) == 29 and min(values) == 2 and max(values) == 109
+for target in (131, 151, 809, 3299):
+    best = [None] * (target + 1)
+    best[0] = []
+    for total in range(1, target + 1):
+        choices = [best[total - p] + [p] for p in values
+                   if p &lt;= total and best[total - p] is not None]
+        if choices:
+            best[total] = min(choices, key=len)
+    witness = best[target]
+    assert witness is not None and sum(witness) == target
+    print(target, len(witness), witness)</code></pre>
+<p>The minimum counts are 3, 3, 9 and 31. A shortest witness need not be unique; the program’s ordering merely selects one. It neither enumerates all words nor estimates how likely a matching word is. For a fixed list of actual word candidates, see the <a href="#/experiments/mixed-square-word-sums">complete segmentation audit</a>. For defining a wider vocabulary search, see <a href="#/wiki/search-space">search space and bounds</a>.</p>
 <h2 id="sources">Sources and verification</h2>
 <p><a href="scripts/reproduce_prime_sums.py">Read-only reproduction script</a> · <a href="scripts/reproduce_reading.py">Known-reading implementation</a> · <a href="data/evidence/reading-methods.json">Method parameters</a> · <a href="data/evidence/spelling-sums.json">Exact sum evidence</a> · <a href="#/wiki/reading-lp2-57">Complete LP2-57 reading</a>. The calculations and trace reconstruction were checked on 19 October 2026. Successful verification supports the declared arithmetic and recorded inputs; it does not validate every glyph against the original image or establish a new decryption.</p>
 <p>The <a href="#/wiki/magic-squares?section=sum-collisions">LP1-05 opposite-cell comparison</a> gives concrete equal-sum examples: SHADOWS and CABAL both give 341, while the printed tokens differ. It separates symmetry of the converted number grid from symmetry of the original writing.</p>

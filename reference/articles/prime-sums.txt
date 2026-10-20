@@ -130,6 +130,52 @@ A useful check therefore needs an independently justified expectation, not just 
 
 A proposed purpose such as marking sentence boundaries or providing a consistency check needs a separately stated rule and a complete set of cases. It should explain which units are meant to satisfy the rule and which choices were allowed. Selecting only successful words, or adding a delimiter value after seeing a composite total, changes the test. See selection effects and reproducible scope. This guide does not assign a probability that the observed totals were intentional.
 
+How many runes can sum to a target?
+
+Before looking up words for a number, check whether the requested rune length is even possible. Gematria Primus assigns values from 2 through 109. For a sequence of n runes with positive total S, 2n ≤ S ≤ 109n. Therefore ceil(S / 109) ≤ n ≤ floor(S / 2). These are necessary bounds; they do not guarantee that the available values can make the target at every length inside the interval.
+
+	Target sum	Simple lower bound	Exact minimum rune count	One arithmetic witness
+	131	2	3	109 + 19 + 3
+	151	2	3	107 + 41 + 3
+	809	8	9	7 × 109 + 43 + 3
+	3299	31	31	30 × 109 + 29
+
+The witnesses are synthetic rune-value combinations, not English words or proposed plaintexts. Repeated rune values are allowed. The problem being solved is numerical reachability under the fixed alphabet, without vocabulary or grammatical constraints.
+
+Why eight runes cannot total 809
+
+Seven runes are too few because 7 × 109 = 763. Eight odd prime values have an even sum, whereas 809 is odd. An eight-rune sequence totaling 809 must therefore contain an odd number of 2-valued F runes, since 2 is the alphabet’s only even value. Even with just one F and seven largest values, the sum is at most 2 + 7 × 109 = 765. Eight runes cannot reach 809. Nine can: 7 × 109 + 43 + 3 = 809.
+
+Why 3299 needs at least 31 runes
+
+Thirty runes can total at most 30 × 109 = 3270. Adding a 29-valued N rune gives 3299 in 31 runes, so the lower bound is attainable. This concerns runes, not ordinary English letters: some rune labels contain two Latin letters, and transliteration conventions can change the rune sequence.
+
+A dictionary limited to fourteen runes per entry cannot contain any 3299-sum entry under these values. A no-hit result from that dictionary would follow from the bound alone. Expanding the vocabulary cannot overcome an incompatible length limit; changing the alphabet values or allowing sums of several words would define a different search.
+
+Reproduce the exact minima
+
+This Python example uses dynamic programming. For each smaller total, it retains a shortest available value sequence. Extending those solutions by each allowed value finds a shortest sequence for the next total. It reads the alphabet from the reference-data bundle and makes no network requests.
+
+import json
+from pathlib import Path
+
+alphabet = json.loads(Path('data/index.json').read_text(encoding='utf-8'))['alphabet']
+values = [entry['prime'] for entry in alphabet]
+assert len(values) == 29 and min(values) == 2 and max(values) == 109
+for target in (131, 151, 809, 3299):
+    best = [None] * (target + 1)
+    best[0] = []
+    for total in range(1, target + 1):
+        choices = [best[total - p] + [p] for p in values
+                   if p <= total and best[total - p] is not None]
+        if choices:
+            best[total] = min(choices, key=len)
+    witness = best[target]
+    assert witness is not None and sum(witness) == target
+    print(target, len(witness), witness)
+
+The minimum counts are 3, 3, 9 and 31. A shortest witness need not be unique; the program’s ordering merely selects one. It neither enumerates all words nor estimates how likely a matching word is. For a fixed list of actual word candidates, see the complete segmentation audit. For defining a wider vocabulary search, see search space and bounds.
+
 Sources and verification
 
 Read-only reproduction script · Known-reading implementation · Method parameters · Exact sum evidence · Complete LP2-57 reading. The calculations and trace reconstruction were checked on 19 October 2026. Successful verification supports the declared arithmetic and recorded inputs; it does not validate every glyph against the original image or establish a new decryption.
@@ -185,6 +231,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/primality-and-divinity.html
 - selection effects and reproducible scope
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- complete segmentation audit
+  https://jelliottdev.github.io/#/experiments/mixed-square-word-sums
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - Read-only reproduction script
   https://jelliottdev.github.io/scripts/reproduce_prime_sums.py
 - Known-reading implementation
