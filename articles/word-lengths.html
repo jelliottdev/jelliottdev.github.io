@@ -34,5 +34,32 @@
 python scripts/test_rune_word_lengths.py</code></pre>
 <p>The first command reconstructs the reports and chart. The second uses an independent character scanner and checks every token against its original source span. Both checks passed. The <a href="scripts/rune_word_lengths.py" download>measurement script</a>, <a href="exports/unsolved-word-lengths.json" download>summary and source hashes</a>, <a href="exports/unsolved-word-tokens.json" download>token ledger</a>, and <a href="exports/sources/unsolved-word-length-summary.csv" download>pinned historical CSV</a> can also be downloaded individually.</p>
 <p>To rebuild the local generated files after a deliberate change, run <code>python scripts/rune_word_lengths.py --write</code>. A changed input or counting convention defines a changed measurement; retain its provenance and compare it separately.</p>
+<h2 id="joined-987">LP2-18: how two tokens become a 17-rune candidate</h2>
+<p>A proposed Fibonacci connection used a 17-rune sequence with prime-value sum 987. The sum reproduces, but the archived transcription places a clause separator inside that sequence. Under this guide’s token rules it is two tokens, not one long word.</p>
+<div class="table-wrap"><table><thead><tr><th>Archived token</th><th>Runes</th><th>Prime-value sum</th></tr></thead><tbody><tr><td><code>ᛠᛞᛇᛉᚳᛠᚩᛟᛖ</code></td><td>9</td><td>565</td></tr><tr><td><code>ᛗᛈᛒᚦᛝᛋᚢᛡ</code></td><td>8</td><td>422</td></tr><tr><td>Artificial concatenation</td><td>17</td><td>987</td></tr></tbody></table></div>
+<p>The relevant archived span is below. The first token crosses a <code>/</code> line-boundary marker, which is removed when reconstructing a word across manuscript rows. The dot before the second token is a clause separator and must remain a token boundary:</p>
+<pre><code>ᛠᛞᛇᛉᚳ/
+ᛠᚩᛟᛖ.ᛗᛈᛒᚦᛝᛋᚢᛡ</code></pre>
+<p>In the archived UTF-8 text decoded to Unicode, the first token starts at character offset 84, the dot is at 95, and the second token starts at 96. These offsets are zero-based; they refer to the exact archived text, before removing line markers. <a href="text/lp2-18.txt">Inspect the transcription</a> and <a href="#/reader/lp2-18">the original page</a>. This is a check of the archived notation, not a new manual verification of every mark in the image.</p>
+<h3 id="joined-987-reproduce">Reproduce the boundary and sums</h3>
+<p>Run this Python from the extracted reference-data bundle or repository. It checks the separator as well as the arithmetic, so a matching total cannot hide a changed input:</p>
+<pre><code>import json
+from pathlib import Path
+
+raw = Path('text/lp2-18.txt').read_bytes().decode('utf-8')
+alphabet = json.loads(Path('data/index.json').read_text(encoding='utf-8'))['alphabet']
+prime = {entry['rune']: entry['prime'] for entry in alphabet}
+left = 'ᛠᛞᛇᛉᚳᛠᚩᛟᛖ'
+right = 'ᛗᛈᛒᚦᛝᛋᚢᛡ'
+joined_rows = raw.replace('/', '').replace('\n', '')
+assert left + '.' + right in joined_rows
+assert raw[95] == '.' and raw[96:104] == right
+for token in (left, right, left + right):
+    print(len(token), sum(prime[rune] for rune in token))
+# 9 565
+# 8 422
+# 17 987</code></pre>
+<p>987 is a Fibonacci number, but here it is the sum of a deliberately joined pair. That fact does not make the pair a single word, prove its ordinal in a section, or establish a cipher key. A study of adjacent-token sums could include it legitimately if that population and boundary rule were declared in advance. It would need to include all eligible pairs, not only the pair with an appealing total.</p>
+<p>The <a href="#/wiki/transcription-checking">transcription-checking guide</a> explains how formatting-only differences can change a word-based experiment while leaving the whole-page rune stream unchanged. For a different question, the <a href="#/experiments/lp2-fibonacci-openings">Fibonacci opening experiment</a> tests a specified sequence as shifts against fixed opening texts. Neither result settles every Fibonacci-based proposal.</p>
 <h2 id="sources">Sources and status</h2>
 <p>Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to <a href="https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2">mae3301/lp_experiments, revision cb5cdb9</a>. The referenced corpus is <a href="https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87">Project Runeberg, revision a39e87e</a>; this audit does not claim to have processed it. Counts and the summary reconciliation were checked on 20 October 2026.</p>

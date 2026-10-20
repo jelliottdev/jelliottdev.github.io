@@ -45,6 +45,8 @@ The tool selects the 29 symbols in the bundled alphabet. It rejects unfamiliar c
 
 No Unicode normalization, spelling repair, punctuation substitution or newline conversion is applied. A byte-order mark and CRLF versus LF line endings consequently remain visible in the exact comparison. That is deliberate: readers can decide which differences matter to a particular experiment, instead of having the script erase the decision.
 
+For a concrete case, see LP2-18’s reported 17-rune word: removing a clause boundary joins two tokens into a candidate with sum 987. The rune-only stream stays the same, but the claimed word changes.
+
 Review the image and record a correction
 
 Identify the release and page, archived text hash and original JPEG hash. Use the page record's downloads rather than a thumbnail or compressed screenshot.
@@ -66,6 +68,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/compare_transcriptions.py
 - the transcription conventions
   https://jelliottdev.github.io/#/conventions
+- LP2-18’s reported 17-rune word
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#joined-987
 - IoC
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - word lengths

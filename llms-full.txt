@@ -2496,6 +2496,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Möbius and the crossed-loop drawing: https://jelliottdev.github.io/reference/articles/mobius.html
+Word lengths and corpus comparisons: https://jelliottdev.github.io/reference/articles/word-lengths.html
 
 ## Sources
 
@@ -17419,6 +17420,47 @@ The first command reconstructs the reports and chart. The second uses an indepen
 
 To rebuild the local generated files after a deliberate change, run python scripts/rune_word_lengths.py --write. A changed input or counting convention defines a changed measurement; retain its provenance and compare it separately.
 
+LP2-18: how two tokens become a 17-rune candidate
+
+A proposed Fibonacci connection used a 17-rune sequence with prime-value sum 987. The sum reproduces, but the archived transcription places a clause separator inside that sequence. Under this guide’s token rules it is two tokens, not one long word.
+
+	Archived token	Runes	Prime-value sum
+	ᛠᛞᛇᛉᚳᛠᚩᛟᛖ	9	565
+	ᛗᛈᛒᚦᛝᛋᚢᛡ	8	422
+	Artificial concatenation	17	987
+
+The relevant archived span is below. The first token crosses a / line-boundary marker, which is removed when reconstructing a word across manuscript rows. The dot before the second token is a clause separator and must remain a token boundary:
+
+ᛠᛞᛇᛉᚳ/
+ᛠᚩᛟᛖ.ᛗᛈᛒᚦᛝᛋᚢᛡ
+
+In the archived UTF-8 text decoded to Unicode, the first token starts at character offset 84, the dot is at 95, and the second token starts at 96. These offsets are zero-based; they refer to the exact archived text, before removing line markers. Inspect the transcription and the original page. This is a check of the archived notation, not a new manual verification of every mark in the image.
+
+Reproduce the boundary and sums
+
+Run this Python from the extracted reference-data bundle or repository. It checks the separator as well as the arithmetic, so a matching total cannot hide a changed input:
+
+import json
+from pathlib import Path
+
+raw = Path('text/lp2-18.txt').read_bytes().decode('utf-8')
+alphabet = json.loads(Path('data/index.json').read_text(encoding='utf-8'))['alphabet']
+prime = {entry['rune']: entry['prime'] for entry in alphabet}
+left = 'ᛠᛞᛇᛉᚳᛠᚩᛟᛖ'
+right = 'ᛗᛈᛒᚦᛝᛋᚢᛡ'
+joined_rows = raw.replace('/', '').replace('\n', '')
+assert left + '.' + right in joined_rows
+assert raw[95] == '.' and raw[96:104] == right
+for token in (left, right, left + right):
+    print(len(token), sum(prime[rune] for rune in token))
+# 9 565
+# 8 422
+# 17 987
+
+987 is a Fibonacci number, but here it is the sum of a deliberately joined pair. That fact does not make the pair a single word, prove its ordinal in a section, or establish a cipher key. A study of adjacent-token sums could include it legitimately if that population and boundary rule were declared in advance. It would need to include all eligible pairs, not only the pair with an appealing total.
+
+The transcription-checking guide explains how formatting-only differences can change a word-based experiment while leaving the whole-page rune stream unchanged. For a different question, the Fibonacci opening experiment tests a specified sequence as shifts against fixed opening texts. Neither result settles every Fibonacci-based proposal.
+
 Sources and status
 
 Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; this audit does not claim to have processed it. Counts and the summary reconciliation were checked on 20 October 2026.
@@ -17462,6 +17504,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/rune_word_lengths.py
 - pinned historical CSV
   https://jelliottdev.github.io/exports/sources/unsolved-word-length-summary.csv
+- Inspect the transcription
+  https://jelliottdev.github.io/text/lp2-18.txt
+- the original page
+  https://jelliottdev.github.io/#/reader/lp2-18
+- transcription-checking guide
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- Fibonacci opening experiment
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - mae3301/lp_experiments, revision cb5cdb9
   https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2
 - Project Runeberg, revision a39e87e
@@ -18109,6 +18159,8 @@ The tool selects the 29 symbols in the bundled alphabet. It rejects unfamiliar c
 
 No Unicode normalization, spelling repair, punctuation substitution or newline conversion is applied. A byte-order mark and CRLF versus LF line endings consequently remain visible in the exact comparison. That is deliberate: readers can decide which differences matter to a particular experiment, instead of having the script erase the decision.
 
+For a concrete case, see LP2-18’s reported 17-rune word: removing a clause boundary joins two tokens into a candidate with sum 987. The rune-only stream stays the same, but the claimed word changes.
+
 Review the image and record a correction
 
 Identify the release and page, archived text hash and original JPEG hash. Use the page record's downloads rather than a thumbnail or compressed screenshot.
@@ -18130,6 +18182,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/compare_transcriptions.py
 - the transcription conventions
   https://jelliottdev.github.io/#/conventions
+- LP2-18’s reported 17-rune word
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#joined-987
 - IoC
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - word lengths
