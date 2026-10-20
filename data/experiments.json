@@ -6853,6 +6853,120 @@
       "article": "# Original JPEGs: default-key OutGuess retrieval\n\n## Why run this?\n\nSome known Liber Primus images contain messages recovered with OutGuess. A newcomer may reasonably try the same operation on the other images. This experiment records what that particular retrieval does, including failures and unverified output, instead of assuming that every byte stream is a message or every failure means an empty image.\n\n## Plan fixed before execution\n\nThe runner and plan were committed as `8bca8ba` before the first run. The scope is all 75 archived manuscript JPEGs, plus the 2014 opening image and the compasses cover. Every original-image SHA-256 is fixed in the plan. Thumbnails, screenshots and recompressed images are excluded.\n\nEach image receives exactly one invocation of OutGuess with retrieval mode and the literal key `Default key`. The timeout is 20 seconds per invocation. Ten expected payload hashes serve as positive controls. All output files, exit codes and stderr diagnostics are retained, including empty output files and abnormal exits. A second complete run checks reproducibility; it is not counted as 77 additional independent discoveries.\n\n## Result\n\n| Observed category | Images | What it establishes |\n| --- | --- | --- |\n| Known payload hash reproduced | 10 | Exact agreement with the archived extraction control |\n| Nonempty output, exit code 0, no control | 21 | Unverified candidate bytes only |\n| Retrieval rejected, exit code 1 | 5 | This retrieval did not succeed |\n| Abnormal exit code 3221225620 | 41 | An unresolved failure of this tool/build on these inputs |\n| Timeout | 0 | No invocation exceeded the declared time limit |\n\nAll 77 invocations were attempted. Ten controls matched. **The other 67 images are not established as free of hidden data.** The 21 candidate outputs are not authenticated messages, and the 41 abnormal exits prevent treating this as a clean image-wide negative result.\n\nThe repeated output length 58,152 occurs in 19 candidate records. It is a reported extraction length, not a discovered structure in the manuscript. The 21 candidate byte streams have distinct hashes. None contains the ASCII marker `-----BEGIN PGP SIGNED MESSAGE-----`; that limited observation neither validates nor rules out a different encoding or payload type. No signature verification or interpretation of candidate contents was performed in this experiment.\n\n## How to reproduce\n\nUse Python 3.12.10 and a locally available OutGuess executable. See the [OutGuess guide](#/wiki/outguess) for original-file selection and the known-payload controls.\n\n```\npython experiments/records/outguess-default-key/run.py --outguess outguess --output my-outguess-run\npython experiments/records/outguess-default-key/check.py\n```\n\nThe first command creates a new directory, refuses to reuse an existing one, and records your executable's SHA-256. Replace `outguess` with its full executable path if necessary. The second command audits the saved experiment: every image hash, output hash, expected control and record count. It does not run OutGuess.\n\nTo repeat the exact saved run with the same executable:\n\n```\npython experiments/records/outguess-default-key/run.py --outguess outguess --check\n```\n\nThis checks the tool hash, all statuses, diagnostics and every saved payload byte. Paths to temporary files are normalized in diagnostics; diagnostic content is otherwise retained. A different binary or platform may legitimately produce different diagnostics or error behavior. Run it into a new directory and compare it as a build variant rather than replacing this baseline.\n\n## Tool and build limitation\n\nThe recorded binary was a local Windows port of upstream commit `24810e14327c2bbeedeaadd3e24491f2a4425c02`, built using MinGW-W64 GCC 16.1.0. Its SHA-256 is `b342b8b85d678d3b2ed26efab70fba2b3956725670be7149b89646868f0ebade`.\n\nThe existing build record describes use of the upstream allocation/read fallback instead of mmap, a compatibility byte-order helper, and binary-mode input on Windows. Matching the ten controls checks those particular extraction paths; it does not establish correct behavior on all other images. The 41 abnormal exits remain a substantial limitation. The executable is not included in the wiki downloads. A reader with a different build should preserve their new report as a comparison, not expect its executable hash to match.\n\n## Retest and review\n\nCodex ran the entire 77-image sweep twice on 20 October 2026. All return codes, normalized diagnostics and output bytes matched exactly. A separate saved-file audit checked all image and output hashes and the ten control comparisons. The original plan, key, timeout and image list did not change after the first run. The visual map was generated from the saved report; it does not run another extraction. Human review remains pending.\n\n## What to test next\n\nThe most informative next variant is another documented OutGuess build on exactly the same files and key, focusing on whether the 41 abnormal exits persist. A new key is a different variable and should not be changed simultaneously if the purpose is to isolate build behavior. Other steganographic methods require their own clearly scoped experiment.\n\n## Per-image results\n\nThe table below lists every invocation. Full diagnostics and exact hashes are in [the machine-readable report](experiments/records/outguess-default-key/results/report.json). Raw output downloads are listed under the record's output checksums; unverified bytes must not be described as decoded messages.\n\n| Image | Category | Exit code | Output bytes |\n| --- | --- | --- | --- |\n| lp1-00 | Known control matched | 0 | 2899 |\n| lp1-01 | Known control matched | 0 | 2899 |\n| lp1-02 | Known control matched | 0 | 2899 |\n| lp1-03 | Known control matched | 0 | 31809 |\n| lp1-04 | Unverified output | 0 | 7524 |\n| lp1-05 | Rejected | 1 | 0 |\n| lp1-06 | Unverified output | 0 | 58152 |\n| lp1-07 | Unverified output | 0 | 58152 |\n| lp1-08 | Unverified output | 0 | 140 |\n| lp1-09 | Unverified output | 0 | 58152 |\n| lp1-10 | Known control matched | 0 | 1234 |\n| lp1-11 | Known control matched | 0 | 1234 |\n| lp1-12 | Known control matched | 0 | 1234 |\n| lp1-13 | Known control matched | 0 | 1234 |\n| lp1-14 | Abnormal tool exit | 3221225620 | 0 |\n| lp1-15 | Rejected | 1 | 0 |\n| lp1-16 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-00 | Unverified output | 0 | 58152 |\n| lp2-01 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-02 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-03 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-04 | Unverified output | 0 | 58152 |\n| lp2-05 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-06 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-07 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-08 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-09 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-10 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-11 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-12 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-13 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-14 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-15 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-16 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-17 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-18 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-19 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-20 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-21 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-22 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-23 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-24 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-25 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-26 | Unverified output | 0 | 58152 |\n| lp2-27 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-28 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-29 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-30 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-31 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-32 | Rejected | 1 | 0 |\n| lp2-33 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-34 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-35 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-36 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-37 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-38 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-39 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-40 | Unverified output | 0 | 58152 |\n| lp2-41 | Unverified output | 0 | 58152 |\n| lp2-42 | Unverified output | 0 | 58152 |\n| lp2-43 | Unverified output | 0 | 58152 |\n| lp2-44 | Unverified output | 0 | 58152 |\n| lp2-45 | Unverified output | 0 | 58152 |\n| lp2-46 | Unverified output | 0 | 58152 |\n| lp2-47 | Unverified output | 0 | 58152 |\n| lp2-48 | Unverified output | 0 | 58152 |\n| lp2-49 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-50 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-51 | Unverified output | 0 | 58152 |\n| lp2-52 | Unverified output | 0 | 58152 |\n| lp2-53 | Unverified output | 0 | 58152 |\n| lp2-54 | Unverified output | 0 | 58152 |\n| lp2-55 | Abnormal tool exit | 3221225620 | 0 |\n| lp2-56 | Rejected | 1 | 0 |\n| lp2-57 | Rejected | 1 | 0 |\n| opening-2014 | Known control matched | 0 | 1150 |\n| 1033 | Known control matched | 0 | 1498 |\n",
       "article_path": "experiments/records/outguess-default-key/article.md",
       "script_sha256": "bdec2f5edb86362520ee579a3cea2b0da7769b6e5c79e920dc25933627614816"
+    },
+    {
+      "id": "selected-phrase-word-sums",
+      "title": "Selected phrase and MYRMELEONTIDAE: five word-sum candidates",
+      "status": "published",
+      "question": "Do the selected PROVE WORTHIER FIND TRUTHS and MYRMELEONTIDAE candidates admit their proposed sums under the baseline rules?",
+      "summary": "All five selected targets are achievable across ten segmentations. MYRMELEONTIDAE totals 809 with EO combined and A/E separate; combining both pairs gives 746.",
+      "tags": [
+        "PROVE WORTHIER FIND TRUTHS",
+        "MYRMELEONTIDAE",
+        "809",
+        "131",
+        "151",
+        "word sums",
+        "dictionary",
+        "segmentation",
+        "longest match"
+      ],
+      "scope": {
+        "pages": [
+          "lp1-05",
+          "lp1-16"
+        ],
+        "representation": "Five supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+        "procedure": "Enumerate all segmentations, sum prime values, and compare each with its supplied target.",
+        "parameters": "Fixed five candidates; ten complete segmentations; no dictionary expansion.",
+        "exclusions": "Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance."
+      },
+      "outcome": "inconclusive",
+      "finding": "Five selected targets match; ten complete segmentations retained. The 809 candidate requires mixed treatment of EO and AE, so its sum is not fixed by the Latin spelling.",
+      "limitations": "Selected candidate list; no unbiased match-rate estimate, dictionary search or manuscript decryption. Computational review; human review pending.",
+      "next_steps": "Group alternate vocabulary or transliteration rules as explicit variants. Define a separate bounded transform before using candidates as cipher keys.",
+      "family": {
+        "id": "word-sum-substitutions",
+        "title": "Word-sum substitutions",
+        "question": "Which candidate words fit specified rune-value totals, under which representations?",
+        "baseline": "mixed-square-word-sums"
+      },
+      "variant": {
+        "label": "Selected phrase plus MYRMELEONTIDAE",
+        "changes": [
+          {
+            "field": "pages",
+            "before": [
+              "lp1-05"
+            ],
+            "after": [
+              "lp1-05",
+              "lp1-16"
+            ],
+            "reason": "Add LP1-16 as the context of the proposed 809 candidate."
+          },
+          {
+            "field": "representation",
+            "before": "Sixteen supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+            "after": "Five supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+            "reason": "Use the five selected candidates while keeping normalization and alphabet fixed."
+          },
+          {
+            "field": "parameters",
+            "before": "Fixed 16 candidates; 24 complete segmentations; no dictionary expansion.",
+            "after": "Fixed five candidates; ten complete segmentations; no dictionary expansion.",
+            "reason": "Enumerate the complete segmentation set for the changed candidate list."
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Codex; independent exhaustive cut-mask check; human review pending",
+        "retested_on": "2026-10-20",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/selected-phrase-word-sums/run.py --check",
+        "environment": "Python 3.12.10 standard library; independent check: python experiments/records/selected-phrase-word-sums/check.py",
+        "script": "experiments/records/selected-phrase-word-sums/run.py",
+        "script_sha256": "fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc",
+        "inputs": [
+          {
+            "path": "data/index.json",
+            "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+          },
+          {
+            "path": "experiments/records/selected-phrase-word-sums/plan.json",
+            "sha256": "883f4effebb7d2c42052dfce72468b8ef0b4c5f91f54875fa99760022000876c"
+          },
+          {
+            "path": "experiments/records/selected-phrase-word-sums/check.py",
+            "sha256": "0a3736b4b269b5c793e871d9d362d49abfb028db2ff9ea94d2d370884f2c8687"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/selected-phrase-word-sums/results.json",
+            "sha256": "0b5e9cd7ed18011df9a42de44e6e7300e8c82d6221db311e4bbe5eaefaaa0bc9"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Mixed-square context",
+          "url": "https://jelliottdev.github.io/#/wiki/magic-squares"
+        },
+        {
+          "label": "Gematria Primus alphabet",
+          "url": "https://jelliottdev.github.io/#/alphabet"
+        }
+      ],
+      "related": [
+        "mixed-square-word-sums"
+      ],
+      "article": "# Selected phrase and MYRMELEONTIDAE word sums\n\nThis variant changes the baseline's candidate list to five supplied words: PROVE, WORTHIER, FIND, TRUTHS and MYRMELEONTIDAE. The first four were proposed against totals 131, 151, 151 and 131; the last against 809. It checks those selected matches without claiming that the resulting phrase or name is recovered plaintext.\n\n## What changes from the baseline?\n\nThe [baseline word-sum audit](#/experiments/mixed-square-word-sums) tests sixteen other supplied word-and-total pairs, including FIND. This variant retains the same 29-label alphabet, V-to-U normalization, exhaustive segmentation procedure and prime-value summation. Only the candidate list and proposed targets change. FIND is intentionally retained as a shared check.\n\nThe candidate list was fixed before enumeration, but the supplied words were already selected for their claimed numerical matches. This is an exploratory audit, not an unbiased measure of how frequently words match these targets.\n\n## All ten segmentations\n\nEvery segmentation is retained below. A slash separates rune labels; adjacent Latin letters inside one label belong to a single rune.\n\n| Candidate | Rune labels | Sum | Proposed target matched? |\n| --- | --- | --- | --- |\n| PROVE | P / R / O / U / E | 131 | Yes |\n| WORTHIER | W / O / R / TH / I / E / R | 151 | Yes |\n| WORTHIER | W / O / R / T / H / I / E / R | 228 | No |\n| FIND | F / I / N / D | 151 | Yes |\n| TRUTHS | T / R / U / TH / S | 131 | Yes |\n| TRUTHS | T / R / U / T / H / S | 208 | No |\n| MYRMELEONTIDAE | M / Y / R / M / E / L / EO / N / T / I / D / A / E | 809 | Yes |\n| MYRMELEONTIDAE | M / Y / R / M / E / L / EO / N / T / I / D / AE | 746 | No |\n| MYRMELEONTIDAE | M / Y / R / M / E / L / E / O / N / T / I / D / A / E | 842 | No |\n| MYRMELEONTIDAE | M / Y / R / M / E / L / E / O / N / T / I / D / AE | 779 | No |\n\nAll five targets are achievable, each by one segmentation. PROVE and FIND each have only one segmentation under the declared rules. WORTHIER and TRUTHS each have two; MYRMELEONTIDAE has four.\n\n## The 809 match requires a particular segmentation\n\nMYRMELEONTIDAE gives 809 when EO is combined but the final A and E are separate. Combining both EO and AE gives 746. Separating both pairs gives 842; combining only the final AE gives 779. These alternatives differ because a two-letter rune's prime value is not the sum of its two separate letters' values.\n\nA converter that always consumes the longest available label would choose EO and AE and return 746. A converter that always treats each Latin letter separately would return 842. The proposed 809 result is therefore possible within the exhaustive search, but it is not determined by the spelling alone. No evidence here selects that segmentation as the manuscript's intended representation.\n\n## What the phrase match establishes\n\nThe matching totals for PROVE WORTHIER FIND TRUTHS are 131, 151, 151 and 131. That verifies four arithmetic assignments. It does not recover their order, grammar or intended meaning from the square. Choosing words for their fitting totals and then observing that those totals are prime is not a second independent test: the target numbers already supplied that property.\n\nThe [mixed-square guide](#/wiki/magic-squares) distinguishes LP1-05's 1033 square, LP1-16's 3301 square and the separate LP2-15 panel. This variant associates the first four targets with LP1-05 and 809 with LP1-16; it does not move the red 3299 from LP2-15 into either square. A claimed thematic relation of a word to insect imagery would require separate evidence and is not tested here.\n\n## Reproduce and inspect\n\n```text\npython experiments/records/selected-phrase-word-sums/run.py --check\npython experiments/records/selected-phrase-word-sums/check.py\n```\n\nThe runner is byte-identical to the baseline runner and reads this variant's plan. Without `--check`, it prints the complete JSON report. The independent checker enumerates every cut/no-cut choice between Latin letters, rejects pieces absent from the alphabet, and verifies all retained segmentations and totals. Both commands passed in the extracted reproduction bundle. Python's standard library is sufficient; no dictionary download or hosted AI is involved.\n\n## Limits and next variants\n\nNo alternative words, synonyms or dictionary entries were searched. No cipher was applied to the manuscript, and no null model estimates the surprise of the selected words. The finding neither proves an intended phrase nor shows that these are the only fitting words.\n\nA broader word search must pin its vocabulary, normalization and segmentation policy, then retain all matches. A fixed longest-label policy would be a different variant. A cipher test using these candidates must specify the target pages, transform, key advancement and success criterion. The [rune-length bounds](#/wiki/prime-sums?section=length-bounds) can rule out impossible lengths before a dictionary search starts.\n",
+      "article_path": "experiments/records/selected-phrase-word-sums/article.md",
+      "script_sha256": "fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc"
     }
   ]
 }

@@ -1,0 +1,111 @@
+{
+  "id": "selected-phrase-word-sums",
+  "title": "Selected phrase and MYRMELEONTIDAE: five word-sum candidates",
+  "status": "published",
+  "question": "Do the selected PROVE WORTHIER FIND TRUTHS and MYRMELEONTIDAE candidates admit their proposed sums under the baseline rules?",
+  "summary": "All five selected targets are achievable across ten segmentations. MYRMELEONTIDAE totals 809 with EO combined and A/E separate; combining both pairs gives 746.",
+  "tags": [
+    "PROVE WORTHIER FIND TRUTHS",
+    "MYRMELEONTIDAE",
+    "809",
+    "131",
+    "151",
+    "word sums",
+    "dictionary",
+    "segmentation",
+    "longest match"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-05",
+      "lp1-16"
+    ],
+    "representation": "Five supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+    "procedure": "Enumerate all segmentations, sum prime values, and compare each with its supplied target.",
+    "parameters": "Fixed five candidates; ten complete segmentations; no dictionary expansion.",
+    "exclusions": "Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance."
+  },
+  "outcome": "inconclusive",
+  "finding": "Five selected targets match; ten complete segmentations retained. The 809 candidate requires mixed treatment of EO and AE, so its sum is not fixed by the Latin spelling.",
+  "limitations": "Selected candidate list; no unbiased match-rate estimate, dictionary search or manuscript decryption. Computational review; human review pending.",
+  "next_steps": "Group alternate vocabulary or transliteration rules as explicit variants. Define a separate bounded transform before using candidates as cipher keys.",
+  "family": {
+    "id": "word-sum-substitutions",
+    "title": "Word-sum substitutions",
+    "question": "Which candidate words fit specified rune-value totals, under which representations?",
+    "baseline": "mixed-square-word-sums"
+  },
+  "variant": {
+    "label": "Selected phrase plus MYRMELEONTIDAE",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-05"
+        ],
+        "after": [
+          "lp1-05",
+          "lp1-16"
+        ],
+        "reason": "Add LP1-16 as the context of the proposed 809 candidate."
+      },
+      {
+        "field": "representation",
+        "before": "Sixteen supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+        "after": "Five supplied Latin words, uppercase with V replaced by U; exact GP Latin-label segmentations.",
+        "reason": "Use the five selected candidates while keeping normalization and alphabet fixed."
+      },
+      {
+        "field": "parameters",
+        "before": "Fixed 16 candidates; 24 complete segmentations; no dictionary expansion.",
+        "after": "Fixed five candidates; ten complete segmentations; no dictionary expansion.",
+        "reason": "Enumerate the complete segmentation set for the changed candidate list."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent exhaustive cut-mask check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/selected-phrase-word-sums/run.py --check",
+    "environment": "Python 3.12.10 standard library; independent check: python experiments/records/selected-phrase-word-sums/check.py",
+    "script": "experiments/records/selected-phrase-word-sums/run.py",
+    "script_sha256": "fa37d2e9e709b8f1e1685666ad2a2d067aaeacd6de523abd176c745921a833cc",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "experiments/records/selected-phrase-word-sums/plan.json",
+        "sha256": "883f4effebb7d2c42052dfce72468b8ef0b4c5f91f54875fa99760022000876c"
+      },
+      {
+        "path": "experiments/records/selected-phrase-word-sums/check.py",
+        "sha256": "0a3736b4b269b5c793e871d9d362d49abfb028db2ff9ea94d2d370884f2c8687"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/selected-phrase-word-sums/results.json",
+        "sha256": "0b5e9cd7ed18011df9a42de44e6e7300e8c82d6221db311e4bbe5eaefaaa0bc9"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Mixed-square context",
+      "url": "https://jelliottdev.github.io/#/wiki/magic-squares"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
+  ],
+  "related": [
+    "mixed-square-word-sums"
+  ]
+}
