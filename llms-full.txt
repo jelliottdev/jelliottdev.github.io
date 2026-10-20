@@ -3128,6 +3128,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 ## Related guides
 
+Reproduce your first experiment: https://jelliottdev.github.io/reference/articles/first-experiment.html
 Transliteration and literal readings: https://jelliottdev.github.io/reference/articles/transliteration.html
 Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
@@ -4147,6 +4148,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 ## Related guides
 
+Reproduce your first experiment: https://jelliottdev.github.io/reference/articles/first-experiment.html
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Alphanumeric grids on LP2-49–51: https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 
@@ -5904,7 +5906,11 @@ For the ideas behind the decoded passages, follow the philosophy reading route, 
 
 4. Make an idea testable
 Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, advancing the prime sequence only for runes, continuing across punctuation without resetting, and skipping no runes” specifies one test. It does not establish that this is the correct method.
-Check Have we tried it? for the technique and scope. The registry is awaiting reviewed records; an empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
+Check Have we tried it? for the technique and scope. Browse the published experiment families or describe a technique to find related records. Open the individual record and compare its inputs, boundary rules, parameters and exclusions with your proposal. An empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
+
+Follow one completed experiment
+
+The first-experiment walkthrough takes you through the published trigram-repeat test: read its chart, compare its scope with a proposed idea, inspect the downloaded counts, and reproduce the calculation. It also explains an important distinction: a script can pass its reproduction check even when the experiment does not support the tested hypothesis.
 
 Choose one first investigation
 
@@ -6023,6 +6029,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments
 - reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- first-experiment walkthrough
+  https://jelliottdev.github.io/reference/articles/first-experiment.html
 - Compare the warning and later instructions
   https://jelliottdev.github.io/reference/articles/testing-knowledge.html
 - Compare the insect drawings
@@ -6251,6 +6259,8 @@ Boxes instead of runes: the terminal font may lack runic characters. Check the n
 
 Keep the result reproducible
 
+Once you can reproduce a known reading, try the guided first experiment. It shows how to replay a published shuffle comparison, inspect its files, and explain why a passing reproduction check is different from a positive experimental finding.
+
 Record the repository commit, Python version, command, and output. In a Git checkout, git rev-parse HEAD prints the commit ID. For a ZIP download, retain the archive and its checksum; do not claim a commit ID you have not verified. When you move from a control to a new hypothesis, follow documenting a reproducible attempt. A passing control is a starting point, not evidence that the same method solves another page.
 
 Reproducing rune prime sums provides a read-only command and explicit spelling comparisons.
@@ -6315,6 +6325,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 - checksums
   https://jelliottdev.github.io/reference/articles/checksums.html
+- guided first experiment
+  https://jelliottdev.github.io/reference/articles/first-experiment.html
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - the reproduction script
@@ -6323,6 +6335,65 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 
 Article: https://jelliottdev.github.io/reference/articles/running-scripts.html
+
+
+---
+
+Reproduce your first experiment
+
+Read a completed test, inspect its chart and files, and distinguish a passing rerun from a positive finding.
+
+Start with repeated trigrams against page shuffles. A trigram is a window of three consecutive runes. The experiment asks whether the archived LP2 pages have more matching pairs of these windows than shuffled versions with the same rune counts. It measures a property of the text; it does not attempt to decode it.
+
+[Image: The trigram experiment’s histogram: 55 observed matching pairs, with 798 of 999 shuffled totals at least as large.]
+The orange line marks the observed total. The bars count simulated datasets in intervals of five pair counts. Open the full experiment and its files.
+
+Read the record before running it
+
+
+Read the question and scope. This test uses LP2-00–55, includes headings, removes separators, and permits overlapping windows. It compares windows within each page, never between pages. Those choices define what was tested.
+
+Read the finding beside its limit. The observation is 55 matching pairs. In 999 simulated datasets, 798 totals are at least that large. The corrected upper-tail p-value is 0.799, so the test does not show an excess under this model. That is not proof that the pages are random.
+
+Open the full account. Its small examples explain why three occurrences of one pattern give three matching pairs. Its shuffle description states exactly what the comparison preserves and destroys.
+
+Inspect a file. Download the per-page CSV. LP2-31 has 269 runes, 267 windows and zero matching trigram pairs. LP2-50 remains present with zero runes. These are descriptive page counts, not separate significance tests.
+
+
+Reproduce the result
+
+If you have Python, extract the reference-data bundle with its folders intact, verify its manifest using the setup guide, and run:
+
+python experiments/records/lp2-trigram-repeats/run.py --check
+python experiments/records/lp2-trigram-repeats/check.py
+
+The recorded simulation used Python 3.12.10. The first command should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by "observed_total": 55, "exceedances": 798, "monte_carlo_p": 0.799 and "below_threshold": false. The second checks the observations with a different counting approach and audits the saved comparison. See setup instructions if your terminal uses py or python3 instead.
+
+Report what passed
+
+A passing rerun means the published calculation was reproduced. It does not mean the hypothesis was supported: in this case, the result is a lack of evidence for the specified excess. Keep that distinction when reporting your own work. Changing the window length, removing headings or comparing across pages creates a different test and needs a declared plan.
+
+Plan a follow-up
+
+Begin with documenting a reproducible attempt. If your proposed change only affects a few variables, use the existing experiment as a baseline and record exactly what changes. Keep the previous finding available. For how to interpret a candidate decryption rather than a descriptive measurement, see evaluating candidate readings.
+
+Sources, related references, and files
+- repeated trigrams against page shuffles; Open the full experiment and its files
+  https://jelliottdev.github.io/#/experiments/lp2-trigram-repeats
+- The trigram experiment’s histogram: 55 observed matching pairs, with 798 of 999 shuffled totals at least as large.
+  https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/null-distribution.svg
+- the per-page CSV
+  https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/observed-pages.csv
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- setup instructions
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- documenting a reproducible attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+
+Article: https://jelliottdev.github.io/reference/articles/first-experiment.html
 
 
 ---

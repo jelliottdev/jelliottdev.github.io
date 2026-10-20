@@ -1,0 +1,55 @@
+Reproduce your first experiment
+
+Read a completed test, inspect its chart and files, and distinguish a passing rerun from a positive finding.
+
+Start with repeated trigrams against page shuffles. A trigram is a window of three consecutive runes. The experiment asks whether the archived LP2 pages have more matching pairs of these windows than shuffled versions with the same rune counts. It measures a property of the text; it does not attempt to decode it.
+
+[Image: The trigram experiment’s histogram: 55 observed matching pairs, with 798 of 999 shuffled totals at least as large.]
+The orange line marks the observed total. The bars count simulated datasets in intervals of five pair counts. Open the full experiment and its files.
+
+Read the record before running it
+
+
+Read the question and scope. This test uses LP2-00–55, includes headings, removes separators, and permits overlapping windows. It compares windows within each page, never between pages. Those choices define what was tested.
+
+Read the finding beside its limit. The observation is 55 matching pairs. In 999 simulated datasets, 798 totals are at least that large. The corrected upper-tail p-value is 0.799, so the test does not show an excess under this model. That is not proof that the pages are random.
+
+Open the full account. Its small examples explain why three occurrences of one pattern give three matching pairs. Its shuffle description states exactly what the comparison preserves and destroys.
+
+Inspect a file. Download the per-page CSV. LP2-31 has 269 runes, 267 windows and zero matching trigram pairs. LP2-50 remains present with zero runes. These are descriptive page counts, not separate significance tests.
+
+
+Reproduce the result
+
+If you have Python, extract the reference-data bundle with its folders intact, verify its manifest using the setup guide, and run:
+
+python experiments/records/lp2-trigram-repeats/run.py --check
+python experiments/records/lp2-trigram-repeats/check.py
+
+The recorded simulation used Python 3.12.10. The first command should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by "observed_total": 55, "exceedances": 798, "monte_carlo_p": 0.799 and "below_threshold": false. The second checks the observations with a different counting approach and audits the saved comparison. See setup instructions if your terminal uses py or python3 instead.
+
+Report what passed
+
+A passing rerun means the published calculation was reproduced. It does not mean the hypothesis was supported: in this case, the result is a lack of evidence for the specified excess. Keep that distinction when reporting your own work. Changing the window length, removing headings or comparing across pages creates a different test and needs a declared plan.
+
+Plan a follow-up
+
+Begin with documenting a reproducible attempt. If your proposed change only affects a few variables, use the existing experiment as a baseline and record exactly what changes. Keep the previous finding available. For how to interpret a candidate decryption rather than a descriptive measurement, see evaluating candidate readings.
+
+Sources, related references, and files
+- repeated trigrams against page shuffles; Open the full experiment and its files
+  https://jelliottdev.github.io/#/experiments/lp2-trigram-repeats
+- The trigram experiment’s histogram: 55 observed matching pairs, with 798 of 999 shuffled totals at least as large.
+  https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/null-distribution.svg
+- the per-page CSV
+  https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/observed-pages.csv
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- setup instructions
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- documenting a reproducible attempt
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- evaluating candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+
+Article: https://jelliottdev.github.io/reference/articles/first-experiment.html
