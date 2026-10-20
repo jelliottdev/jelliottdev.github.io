@@ -14,6 +14,39 @@ const search=require('../search-engine.js');
 for(const query of ['Atbash','φ(n)','circumference','dots','padding','impose nothing']){
  assert.deepEqual(search.search({articles:light},query),search.search({articles:full},query));
 }
+async function checkNavigationRace(oldRequestFails){
+ const pending=new Map();
+ const main={innerHTML:'',focus(){},querySelector(){return {textContent:this.innerHTML}}};
+ const sandbox={
+  db:{articles:[{id:'older'},{id:'newer'}]},main,renderId:0,URLSearchParams,
+  location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
+  stopExperimentAI(){},esc:String,
+  window:{scrollTo(){}},
+  document:{body:{classList:{toggle(){}}},addEventListener(){},
+   querySelectorAll(){return []},getElementById(){return null}},
+  fetch:url=>new Promise((resolve,reject)=>pending.set(url,{resolve,reject})),
+ };
+ vm.createContext(sandbox);
+ vm.runInContext(fs.readFileSync(path.join(root,'wiki.js'),'utf8'),sandbox);
+ // Exercise the production route with only DOM rendering replaced.
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ const start=app.indexOf('async function route()');
+ const end=app.indexOf("\nPromise.all([",start);
+ assert(start>=0&&end>start,'Locate the complete production router');
+ vm.runInContext(app.slice(start,end),sandbox);
+ vm.runInContext('wikiPage=id=>db.articles.find(a=>a.id===id).html',sandbox);
+ const older=vm.runInContext('route()',sandbox);
+ sandbox.location.hash='#/wiki/newer';
+ const newer=vm.runInContext('route()',sandbox);
+ pending.get('articles/newer.html').resolve({ok:true,text:async()=> 'Newer guide'});
+ await newer;
+ assert.equal(main.innerHTML,'Newer guide');
+ if(oldRequestFails)pending.get('articles/older.html').reject(new Error('Old request failed'));
+ else pending.get('articles/older.html').resolve({ok:true,text:async()=> 'Older guide'});
+ await older;
+ assert.equal(main.innerHTML,'Newer guide','Late success or error must not replace the current page');
+ assert.equal(sandbox.document.title,'Newer guide — Liberpedia');
+}
 async function main(){
  let finish,calls=0;
  const sandbox={db:{articles:[{id:'example',source:'readings/example.html'}]},
@@ -39,6 +72,9 @@ async function main(){
  await assert.rejects(vm.runInContext("ensureWikiArticle('missing')",sandbox),/does not exist/);
  await vm.runInContext("ensureWikiArticle('')",sandbox);
  assert.equal(calls,2);
+ await checkNavigationRace(false);
+ await checkNavigationRace(true);
  console.log('PASS: search parity, all source bodies, shared requests, retry, caching, and unknown guides.');
+ console.log('PASS: production router ignores older guide responses and failures after navigation.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1});
