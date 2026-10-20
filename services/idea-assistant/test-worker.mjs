@@ -9,6 +9,10 @@ const request=(query='reverse',pages=[],headers={})=>new Request('https://fixtur
 const handle=createHandler(async()=>docs);
 assert.equal((await (await createHandler(async()=>[])(request(),env)).json()).reason,'no-matching-records');
 assert.equal((await (await handle(request('Vigenere on page 31'),env)).json()).reason,'no-matching-records');assert.equal(calls,0);
+for(const query of ['has anyone tried LP2–15','has anyone tested page #15','has anyone tested pages #15–#16']){
+ assert.equal((await (await handle(request(query),env)).json()).reason,'no-matching-records');
+ assert.equal(calls,0,'Page punctuation must not trigger inference');
+}
 let r=await handle(request(),env);assert.equal(r.status,200);assert.equal((await r.json()).sources[0].id,'fixture');assert.equal(calls,1);
 r=await handle(request('  reverse  '),env);assert.equal((await r.json()).cached,true);assert.equal(calls,1);
 // Exact content changes invalidate answers, including changed limits.

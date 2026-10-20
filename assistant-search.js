@@ -2,7 +2,7 @@
 (function(root) {
   const stop = new Set('a an the is it this that to of for on in with and or we i have has had tried try could would can does do what if using use how why are was were about explain compare please page pages test tests tested testing technique method any anyone already every all been done applying apply row rows line lines input inputs data manuscript rune runes result results one each'.split(' '));
   const aliases={primes:'prime',emirps:'emirp',reversal:'reverse',reversing:'reverse',reversed:'reverse',shifts:'shift',shifted:'shift',shifting:'shift'};
-  const pageReference=/\blp\s*([12])(?:[\s:-]*page\s*)?[\s:-]*(\d{1,2})\b/gi;
+  const pageReference=/\blp\s*([12])(?:[\s:\-‐‑–—−]*page\s*)?[\s:#\-‐‑–—−]*(\d{1,2})\b/gi;
   const tokens = text => (String(text).normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[]).filter(t=>!stop.has(t)).map(t=>aliases[t]||t);
   function pageIds(text) {
     return [...new Set([...text.matchAll(pageReference)]
@@ -17,7 +17,7 @@
     }));
   }
   function techniqueQuery(query) {
-    return query.replace(pageReference,' ').replace(/\bpages?\s*\d+(?:\s*[-–]\s*\d+)?/gi,' ');
+    return query.replace(pageReference,' ').replace(/\bpages?\s*#?\s*\d+(?:\s*[-‐‑–—−]\s*#?\s*\d+)?/gi,' ');
   }
   function search(documents, query, pages=[]) {
     const terms=[...new Set(tokens(query))], explicit=[...new Set([...pages,...pageIds(query)])];
