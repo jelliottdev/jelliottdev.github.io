@@ -7,7 +7,7 @@ Downloads use a generated file catalog with exact paths, roles, byte lengths, an
 Machine-readable access does not alter the human interface:
 
 - `/llms.txt`: discovery and evidence conventions.
-- `/llms-full.txt`: the complete set of published page references.
+- `/llms-full.txt`: the published page references and authored guide text.
 - `/data/catalog.json`: exact file URLs, roles, sizes, hashes.
 - `/data/pages/{id}.json`: existing structured records.
 - `/reference/{id}.md`: plain-text page documents.
@@ -16,13 +16,15 @@ Machine-readable access does not alter the human interface:
 
 These are ordinary public static resources, not an authenticated API or a promise that every AI provider will ingest them automatically. Snapshot dates, numbering conventions, source links, and evidence limitations are included in the machine-facing text. No private conversations or unpublished experiment logs are exported.
 
-Regenerate after data changes, in this order:
+Regenerate affected sources before the access exports:
 
-1. `python scripts/build_numeric_notes.py`
-2. `python scripts/build_access_exports.py`
+1. `python scripts/build_numeric_notes.py` when numeric source data changes.
+2. `python scripts/build_reading_guides.py` when known-reading controls or their guide template change.
+3. `python scripts/build_articles.py` when authored guides or generated reading guides change.
+4. `python scripts/build_access_exports.py` after any of the above.
 
-The archive importer invokes both steps automatically. Text file line endings must remain LF so served bytes agree with checksums. Verify catalog hashes against the Git blobs before pushing, not just against the working directory. If an exported record changes, rebuild all affected manifests and bundles.
+The archive importer invokes the numeric-note and access-export steps automatically. Text file line endings must remain LF so served bytes agree with checksums. Verify catalog hashes against the Git blobs before pushing, not just against the working directory. If an exported record changes, rebuild all affected manifests and bundles.
 
 Validation includes a real browser download compared with its original-image hash, local verification of both correct and modified files with zero upload requests, no-JavaScript reading, desktop/mobile reader and downloads, and verification of every bundled member.
 
-When reference article copy or method details change, run `node scripts/export_articles.cjs` against the local preview before rebuilding access exports. It requires Playwright (or an absolute `PLAYWRIGHT_MODULE` path) and installed Edge; `WIKI_BASE_URL` defaults to `http://127.0.0.1:8765/`. It expands details sections before extracting text, so machine readers receive the same full content available to human readers. Page-record exports themselves need only Python.
+Authored wiki guides use the Python article builder above. When the six rendered reference routes (spelling, conventions, alphabet, readings, topics, or sources) change, run `node scripts/export_articles.cjs` against the local preview before rebuilding access exports. It requires Playwright (or an absolute `PLAYWRIGHT_MODULE` path) and installed Edge; `WIKI_BASE_URL` defaults to `http://127.0.0.1:8765/`. It expands details sections before extracting text, so machine readers receive the same full content available to human readers. Page-record exports themselves need only Python.

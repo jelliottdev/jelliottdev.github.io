@@ -5660,35 +5660,112 @@ Article: https://jelliottdev.github.io/reference/articles/transposition.html
 
 OutGuess extraction
 
-Recover hidden bytes from the original JPEG before interpreting them.
+Choose the correct original image, extract its hidden payload, check the expected bytes, and follow the signed message to its next step.
 
-Steganography, not a rune cipher
-OutGuess retrieves data hidden in an image carrier. Resizing, resaving, screenshotting or recompressing a JPEG can change its bytes. Use the original JPEG, not a thumbnail.
+OutGuess retrieves a hidden payload from an image file. A visible title, artwork, or runic passage can coexist with a separate signed message inside the JPEG. Extracting that message is a different operation from decoding the visible runes.
 
-How to replicate
-Install or build OutGuess for your operating system. No executable is bundled here. From the repository root, use an executable on PATH or supply its path:
-python scripts/extract_payload.py lp1-00 --outguess outguess --output cover.bin
-The wrapper checks the image hash, retrieves the default-key payload, and checks its expected hash before writing a new file. It refuses to overwrite a destination. The underlying operation is:
-outguess -r -k "Default key" images/lp1-00.jpg cover.bin
-The cover’s full extraction is 2,899 bytes. Checksums and the exact verified build are in the manifest. Compare output bytes, not merely a success message.
+Choose the image first
 
-Keep the layers separate
-Preserve the full extraction. The exported signed block supports PGP verification; the body is a separate derivative. On the cover, that body is hexadecimal. Follow the three-image chain to interpret it.
+Two different images are often called “the cover.” The illustrated compasses collage is 1033.jpg; the plain Liber Primus title page is LP1-00. They have different hidden messages and different extraction sizes.
 
-Coverage and tool source
-Eight documented extractions were reproduced on 19 October 2026. This does not rule out other keys or hiding methods. The upstream repository is archived, not actively maintained. Pinned source · Payload inventory.
-Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+Opening imageScript ID: opening-2014
+Compasses coverScript ID: 1033
+LP1 title pageScript ID: lp1-00
+
+Expected size of the full extraction, not the JPEG or separated message body
+	Image / script ID	Extracted bytes	What to follow next
+
+	opening-2014	1,150	Emerson book-cipher coordinates
+
+	1033	1,498	RSA parameters and encrypted message
+
+	lp1-00, lp1-01, lp1-02	2,899 each	Three hexadecimal bodies combined with XOR
+
+	lp1-03	31,809	A hex-encoded JPEG inside the signed body
+
+	lp1-10 through lp1-13	1,234 each	Historical instructions and magic-square material
+
+
+Equal byte counts do not mean equal messages. Use the expected SHA-256 for the specific image’s extraction, as recorded in its manifest.
+
+Prepare the files and tool
+
+Use a repository checkout, or extract both the reference-data ZIP and original-images ZIP into the same directory. Keep their scripts/, data/, and images/ folders intact.
+Install or build OutGuess for your operating system. The downloads contain reproduction scripts, not an OutGuess executable. The recorded extraction used the pinned upstream source.
+Open a terminal in the directory containing those folders. Use Python 3 to run the wrapper below. If OutGuess is not on PATH, replace outguess after --outguess with its full executable path, quoted if it contains spaces.
+
+Use the original JPEG, not a screenshot, thumbnail, or image saved through an editor. Resizing or recompressing the image can change the carrier bytes even when it looks the same.
+
+Run one extraction
+
+Choose one command for the file you want to inspect:
+
+python scripts/extract_payload.py opening-2014 --outguess outguess --output opening-payload.bin
+python scripts/extract_payload.py 1033 --outguess outguess --output compasses-payload.bin
+python scripts/extract_payload.py lp1-00 --outguess outguess --output title-payload.bin
+
+The wrapper first checks the original image’s hash. It then extracts into a temporary file using the literal key string Default key, compares the resulting payload hash with the recorded control, and saves your output only if they match. It refuses to overwrite an existing destination. The script makes no network or AI request.
+
+For LP1-00, the underlying retrieval command is:
+
+outguess -r -k "Default key" images/lp1-00.jpg title-payload.bin
+
+Running OutGuess directly does not perform the wrapper’s input or output checksum checks. A successful retrieval message is therefore not equivalent to a match with the published control.
+
+What success looks like
+
+The wrapper prints Verified 2899 bytes. SHA-256: … for LP1-00, with the full checksum rather than the ellipsis. For 1033, expect 1,498 bytes; for opening-2014, expect 1,150. This establishes that the extracted bytes match the archived control. It does not verify a PGP signature or explain the message body.
+
+Keep the output layers separate
+
+	File layer	Purpose	Next operation
+
+	Original JPEG	Preserves the visible image and hidden-data carrier	Check its hash, then extract
+
+	.outguess.bin	Preserves the full extracted bytes	Compare the payload hash
+
+	.signed.asc	Preserves the separated signed message	Verify the signature
+
+	.body.txt	Contains the message body as a derivative	Interpret or decode the body’s specific format
+
+
+The wiki supplies these layers separately in the payload inventory. Preserve the extraction unchanged. For LP1-00–02, the bodies are hexadecimal inputs to the three-image chain. For the compasses cover, the body supplies RSA parameters; for the opening image, it supplies book-cipher coordinates.
+
+If the command fails
+
+Python cannot find the script: check your working directory and extracted folder structure.
+The OutGuess executable cannot be found: supply its full path. Having Python installed does not install OutGuess.
+Input JPEG differs from the pinned original: obtain the original from Downloads and check that you selected the correct image.
+Output already exists: choose a new output filename. The wrapper preserves existing results.
+Extraction returns different bytes: retain the diagnostic, executable version, and input hash. The wrapper does not save unverified output under your requested destination.
+
+Verified coverage
+
+The collection records ten default-key extractions: eight LP1 images checked on 19 October 2026 and the opening image and compasses collage checked on 20 October. This is a positive inventory of reproduced payloads, not an exhaustive search of every image, key, or steganographic method.
+
+Eight-image LP1 manifest · Opening-image record · Compasses-cover record · Extraction wrapper. These records retain original-image and payload hashes. Signature evidence is separate from extraction evidence.
 
 Sources, related references, and files
-https://jelliottdev.github.io/#/downloads
-https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/reference/articles/opening-2014.html
+https://jelliottdev.github.io/images/opening-2014.jpg
+https://jelliottdev.github.io/reference/articles/illustrated-cover.html
+https://jelliottdev.github.io/images/1033.jpg
+https://jelliottdev.github.io/reference/lp1-00.html
+https://jelliottdev.github.io/thumbs/lp1-00.jpg
+https://jelliottdev.github.io/reference/articles/emerson-self-reliance.html
+https://jelliottdev.github.io/reference/articles/cover-rsa.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
+https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/downloads/original-images.zip
+https://github.com/resurrecting-open-source-projects/outguess/tree/24810e14327c2bbeedeaadd3e24491f2a4425c02
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 https://jelliottdev.github.io/reference/articles/hexadecimal.html
-https://jelliottdev.github.io/reference/articles/cover-chain.html
-https://github.com/resurrecting-open-source-projects/outguess/tree/24810e14327c2bbeedeaadd3e24491f2a4425c02
-https://jelliottdev.github.io/reference/articles/embedded-payloads.html
-https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/data/evidence/opening-2014.json
+https://jelliottdev.github.io/data/evidence/illustrated-cover.json
+https://jelliottdev.github.io/scripts/extract_payload.py
 
 Article: https://jelliottdev.github.io/reference/articles/outguess.html
 
@@ -5699,13 +5776,13 @@ Embedded OutGuess payloads
 
 Eight LP1 images with reproduced extractions and verified signatures.
 
-The visible manuscript and JPEG carrier have distinct layers. The cover and chapter-title images participate in a hidden-message chain.
+The visible manuscript and JPEG carrier have distinct layers. The LP1 title page (LP1-00), warning (LP1-01), and chapter-title image (LP1-02) participate in a hidden-message chain.
 
 The earlier 1033.jpg compasses collage has a separately verified 1,498-byte extraction containing RSA parameters and an encrypted message. Its article provides the files, signature evidence and reproduction steps. It is outside the LP1 inventory below.
 
 The 2014 opening image has a separately verified 1,150-byte message supplying the Emerson book-cipher coordinates.
 
-Verified inventory
+Eight LP1 extractions
 	Image	Bytes	Files	Provenance
 	LP1-00	2,899	Extraction · Signed block · Body	Source
 	LP1-01	2,899	Extraction · Signed block · Body	Source
@@ -5717,7 +5794,7 @@ Verified inventory
 	LP1-13	1,234	Extraction · Signed block · Body	Source
 Default-key extraction and signature checks were repeated on 19 October 2026. The manifest records hashes and verification modes. This positive inventory does not rule out other hidden data.
 
-Cover, warning, and chapter title
+LP1 title page, warning, and chapter title
 LP1-00, LP1-01 and LP1-02 contain signed hex bodies. Decode and XOR them to recover another signed message. Follow the complete chain; examining one body alone misses that relationship.
 
 Welcome: LP1-03

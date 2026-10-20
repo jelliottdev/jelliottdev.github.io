@@ -21,8 +21,12 @@ and internally scrolling wide tables.
 `data/evidence/embedded-payloads.json` records eight fresh default-key OutGuess
 extractions checked on 2026-10-19 against pinned archive controls. The exported
 public key and signed messages were verified in an isolated GnuPG keyring.
-The reconstructed cover-chain signature required the recorded legacy SHA-1
-compatibility flag. These checks are positive controls, not an exhaustive search
+An earlier run used a legacy SHA-1 compatibility flag for the reconstructed
+cover-chain signature. The later isolated GnuPG 2.5.21 check in
+`data/evidence/signature-checks.json` verified all nine signed messages without
+that override. Do not describe the flag as required by that evidence.
+The opening image and compasses collage have two additional extraction and
+signature records in `opening-2014.json` and `illustrated-cover.json`. These checks are positive controls, not an exhaustive search
 for steganography.
 
 Preserve full extracted bytes, separated signed blocks, message bodies, and
@@ -52,9 +56,10 @@ scripts use Python's standard library and make no network or inference calls.
 After committing, `python scripts/verify_downloads.py --git` checks the actual
 published Git bytes rather than the working tree's newline conventions.
 
-For this expansion, 17 literal page controls, the 991-byte reconstructed signed
-message, eight payload manifests, 135 authored links, and all 425 catalog entries
-were checked. Brave checks covered guide navigation, the chapter-title payload,
+The initial guide expansion checked 17 literal page controls, the 991-byte
+reconstructed signed message, and eight LP1 payload manifests. Catalog and
+article counts change as the reference grows; use the current generated catalog
+and verifier output rather than treating those initial counts as current coverage. Brave checks covered guide navigation, the chapter-title payload,
 search discovery, and a 390-pixel phone viewport. No live inference was used for
 this content batch.
 
