@@ -67,3 +67,5 @@ Direct section and topic URLs scroll to the destination and move keyboard focus 
 Authored manuscript images and thumbnails must include their native width and height attributes. CSS controls their displayed size and cropping; the attributes preserve the aspect ratio before lazy images load, preventing section destinations from shifting on phones. Do not resize or recompress original image files for this purpose.
 
 Region inspection fits the recorded rectangle within both viewport dimensions and outlines its original-image bounds. The surrounding original remains visible with a light shade; the outline scales with zoom and clears when opening an image without a selected region.
+
+Guide contents include authored H2 sections and H3 subsections in a nested list. The desktop list scrolls within the viewport; the mobile list remains a collapsed disclosure and closes after selecting a destination.

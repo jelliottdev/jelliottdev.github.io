@@ -39,7 +39,15 @@ function wikiPage(id='') {
  const a=articles.find(a=>a.id===id);
  if(!a)throw Error('This guide does not exist. Open Guides and methods to find an article.');
  const doc=new DOMParser().parseFromString(a.html,'text/html');
- const headings=[...doc.querySelectorAll('h2[id]')];
+ const headings=[...doc.querySelectorAll('h2[id],h3[id]')];
+ const contentsGroups=[];
+ headings.forEach(h=>{
+  const entry={heading:h,children:[]};
+  if(h.tagName==='H3'&&contentsGroups.length)contentsGroups.at(-1).children.push(entry);
+  else contentsGroups.push(entry);
+ });
+ const contentsList=groups=>`<ul class="guide-contents-list">${groups.map(({heading:h,children})=>`<li><a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>${children.length?contentsList(children):''}</li>`).join('')}</ul>`;
+ const contentsHTML=contentsList(contentsGroups);
  doc.querySelectorAll('pre').forEach((pre,i)=>{
   const wrapper=doc.createElement('div');wrapper.className='copyable-block';
   const tools=doc.createElement('div');tools.className='block-tools';
@@ -55,9 +63,9 @@ function wikiPage(id='') {
  const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  return head(a.title,esc(a.summary),'Guides and methods')+`<div class="article-grid"><article class="wiki-article">
  <p class="small"><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p>
- <details class="mobile-article-contents"><summary>On this page</summary>${headings.map(h=>`<a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</details>
+ <details class="mobile-article-contents"><summary>On this page</summary>${contentsHTML}</details>
  ${doc.body.innerHTML}${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}${footer()}</article>
- <aside class="contents"><strong>On this page</strong>${headings.map(h=>`<a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>`).join('')}</aside></div>`;
+ <aside class="contents"><strong>On this page</strong>${contentsHTML}</aside></div>`;
 }
 document.addEventListener('click',async event=>{
  const wrap=event.target.closest('[data-wrap-block]');

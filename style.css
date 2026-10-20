@@ -228,3 +228,8 @@ main h2[id],main h3[id]{scroll-margin-top:calc(var(--header) + 18px)}
 /* Transcribed runes are reading material, not small programming-code glyphs. */
 .wiki-article pre.rune-line,.standalone-article pre.rune-line{font:24px/1.8 "Segoe UI Historic","Noto Sans Runic",serif;letter-spacing:1px}
 .wiki-article pre.rune-line code,.standalone-article pre.rune-line code{font:inherit;letter-spacing:inherit}
+
+.guide-contents-list{list-style:none;padding:0;margin:0}
+.guide-contents-list .guide-contents-list{padding-left:14px;font-size:12px}
+.contents:has(.guide-contents-list){max-height:calc(100dvh - 110px);overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:760px){.mobile-article-contents .guide-contents-list a{padding:8px 0;min-height:40px}.mobile-article-contents .guide-contents-list .guide-contents-list{font-size:13px}}
