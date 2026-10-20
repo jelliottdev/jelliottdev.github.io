@@ -44,3 +44,17 @@ python experiments/records/doublet-event-lags/check.py
 The producer uses the included doublet extractor and prints fresh JSON without `--check`. The independent checker uses overlapping regular-expression matches on the archived rune text, then checks every event, lag pair, histogram, distance and boundary flag. It also computes shuffle expectations from symbol frequencies instead of enumerating pairs of event positions.
 
 These checks establish agreement about the archived transcription. They do not independently settle ambiguous handwriting. The [doublet guide](#/wiki/doublets) explains the source rules and supplies the original pair coordinates.
+
+## Read and reproduce the figure
+
+The figure shows every possible forward difference, including bins with zero occurrences. Dark bars count within-page comparisons; pale bars count cross-page comparisons. The ten +4 matches split into **three within-page and seven cross-page** comparisons. These counts have different opportunities: only eight lag-three comparisons stay within a page, while 75 cross pages. Comparing raw bar lengths alone would overlook that imbalance.
+
+Brown marks show the expected total count per bin after shuffling the fixed multiset of 86 events. They are not confidence limits or a cutoff for significance. The chart does not assign separate null expectations to the two boundary groups.
+
+The SVG is included in the download. To regenerate a figure, install Matplotlib in your Python environment, then run:
+
+```text
+python experiments/records/doublet-event-lags/plot.py --output my-distribution.svg
+```
+
+The script refuses to overwrite an existing file. The numerical producer and independent checker still require only the standard library; plotting is optional.
