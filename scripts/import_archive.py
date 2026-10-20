@@ -51,7 +51,11 @@ for p in pages:
     record.update({'title':p.get('title',''),'lines':lines,'raw':text,'frequencies':dict(freqs),'prime_sum':sum(t['prime'] for t in tokens),
         'sources':[{'name':m['source'],'url':m['source_url'],'commit':m['commit']} for m in p['mirrors']],
         'visual':visual,'corrections':corrections,'reviewed_text':review['effective_text'] if review else None,'reading':solved.get(pid),
-        'notes':[],'transcription_sha256':p.get('transcription_sha256')})
+        'notes':[],'transcription_sha256':hashlib.sha256((source/p['transcription_path']).read_bytes()).hexdigest() if p.get('transcription_path') else None})
+    if pid=='lp1-10':
+        chars=list(text); positions=[i for i,c in enumerate(chars) if c in am]
+        a,b=positions[116:118]; chars[a],chars[b]=chars[b],chars[a]
+        record['reviewed_text']=''.join(chars)
     if pid=='lp2-15':
         panel=read('corpus/decimal-panels/lp2-15-v1.json')
         record['numbers']=panel['values']
@@ -81,6 +85,7 @@ originals={p['id']:p for p in pages}
 for item in index['pages']:
     p=json.loads((dest/f"data/pages/{item['id']}.json").read_text(encoding='utf-8'))
     item.update({'combined_index':originals[item['id']]['combined_index'],'source_names':[{'name':m['source'],'filename':m['source_url'].rsplit('/',1)[1],'url':m['source_url']} for m in originals[item['id']]['mirrors']],'correction_count':len(p['corrections']),'section':p['reading']['section'] if p['reading'] else None,'method':p['reading']['method'] if p['reading'] else None,'notes_text':' '.join(n['title']+' '+n['text'] for n in p['notes']),'correction_text':' '.join(c['note'] for c in p['corrections']),'literal':p['reading']['literal'] if p['reading'] else ''})
+    item['text_rows']=[{'row':i+1,'raw':l['raw'],'latin':l['latin']} for i,l in enumerate(p['lines'])]
     item['contextual']=p['reading']['reading'] if p['reading'] else ''
     item['transcription_search']=p['raw']+' '+' '.join(l['latin'] for l in p['lines'])
     item['search']+=' '+item['notes_text']+' '+item['correction_text']+' '+(item['section'] or '')+' '+(item['method'] or '')
@@ -89,3 +94,9 @@ write('data/index.json',index)
 method_source=source/'solutions/known-controls.json'
 method_record=read('solutions/known-controls.json')
 write('data/evidence/reading-methods.json',{'source_sha256':hashlib.sha256(method_source.read_bytes()).hexdigest(),'scope':method_record['scope'],'interruption_provenance':method_record['interruption_provenance'],'walkthrough_url':'https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md','controls':[{k:c[k] for k in ['id','pages','method','key','skip','start','shift','boundary']} for c in method_record['controls']]})
+
+# Recompute the shipped mathematical article evidence after rebuilding page data.
+import runpy
+runpy.run_path(str(Path(__file__).with_name("build_numeric_notes.py")),run_name="__main__",init_globals={"OUTPUT_ROOT":dest})
+
+runpy.run_path(str(Path(__file__).with_name("build_access_exports.py")),run_name="__main__",init_globals={"OUTPUT_ROOT":dest})
