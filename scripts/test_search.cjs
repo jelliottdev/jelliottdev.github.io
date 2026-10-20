@@ -59,6 +59,20 @@ for(const [query,id,section] of [
 ])assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
 console.log('PASS: literary phrases, artwork identifiers, and named concepts open their sections');
 
+for(const [queries,id,section] of [
+ [['phi','φ','ϕ','φ(n)','ϕ(n)','coprime','relatively prime'],'totient','examples'],
+ [['phi(prime)'],'totient','lp2'],
+ [['μ','µ','μ(n)','mu(n)','square free'],'mobius-function','definition'],
+ [['mod 29','modulo 29','modulo'],'modular-arithmetic','definition'],
+ [['negative modulo'],'modular-arithmetic','examples'],
+ [['exclusive or','exclusive-or','⊕'],'xor','operation'],
+ [['π(n)','pi(n)','prime counting'],'prime-indices','directions'],
+ [['nth prime','p_n'],'prime-indices','definition'],
+])for(const query of queries){
+ assert.equal(search.search(db,query)[0].href,`#/wiki/${id}?section=${section}`,query);
+}
+console.log('PASS: arithmetic names, symbol variants, and notation open the relevant definitions');
+
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
 const vm=require('node:vm');
