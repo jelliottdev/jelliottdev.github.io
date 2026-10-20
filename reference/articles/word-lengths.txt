@@ -64,11 +64,52 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 
 This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The comparison with a reference corpus still needs its own reproduction.
 
+A bounded check of the comparison corpus
+
+The pinned Project Runeberg repository contains 25,906 files under files. We checked the first twelve filenames in Unicode lexicographic order, taking each file’s first 2,902 nonempty space-separated tokens. This is a deterministic convenience sample, not a random sample or a check of all books. Every selected file has enough tokens.
+
+All twelve prefixes contain ᛂ (U+16C2), which is absent from our stored 29-rune alphabet. The historical script measures each token with Python’s len, so that symbol contributes to its length. This does not establish that the conversion is wrong: it establishes that its symbol inventory differs from the manuscript alphabet used in our audit. Dropping or substituting the symbol would change the experiment and needs a documented conversion rule.
+
+	Corpus file	U+16C2 occurrences in first 2,902 tokens
+
+	10002-8.txt	15
+
+	10003-8.txt	17
+
+	10004-8.txt	17
+
+	10005-8.txt	19
+
+	10006-8.txt	10
+
+	10007-8.txt	16
+
+	10008-8.txt	14
+
+	10011-8.txt	15
+
+	10012-8.txt	12
+
+	10013-8.txt	18
+
+	10014-8.txt	51
+
+	10016-8.txt	34
+
+
+Within these prefixes, U+16C2 is the only character outside the stored alphabet; each occurrence is in a different token. This is an input-compatibility result, not a measurement of how much any reported probability changes.
+
+To reproduce, obtain a local clone of the pinned corpus repository, then run the command below from a Liberpedia checkout. The script reads committed Git bytes, avoiding checkout newline conversion. It does not execute the corpus’s code. A partial clone may need network access to fetch missing source blobs.
+
+python scripts/audit_runeberg_prefixes.py /path/to/project-runeberg
+
+Download the audit script · Download the file hashes, counts and exact alphabet. The full historical corpus comparison remains unreproduced.
+
 What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
 
-Liberpedia has reproduced the manuscript-summary match above, not the corpus samples or their reported probabilities. A further test must freeze the corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
+Liberpedia has reproduced the manuscript-summary match above, not the full corpus comparison or its reported probabilities. A further test must freeze the corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
@@ -132,7 +173,7 @@ The transcription-checking guide explains how formatting-only differences can ch
 
 Sources and status
 
-Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; this audit does not claim to have processed it. Counts and the summary reconciliation were checked on 20 October 2026.
+Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; only the twelve prefixes specified above were processed for the input audit. Counts and the summary reconciliation were checked on 20 October 2026.
 
 
 A short-header example: BEING and THUS
@@ -167,6 +208,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - LP2-38
   https://jelliottdev.github.io/reference/lp2-38.html
+- the pinned corpus repository; Project Runeberg, revision a39e87e
+  https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
+- Download the audit script
+  https://jelliottdev.github.io/scripts/audit_runeberg_prefixes.py
+- Download the file hashes, counts and exact alphabet
+  https://jelliottdev.github.io/exports/runeberg-prefix-audit.json
 - checked-in corpus script
   https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/code/project_runeberg.py
 - statistics script
@@ -195,8 +242,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - mae3301/lp_experiments, revision cb5cdb9
   https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2
-- Project Runeberg, revision a39e87e
-  https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
 - LP2-39 header-crib experiment
   https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
 - word-reset repetition experiment
