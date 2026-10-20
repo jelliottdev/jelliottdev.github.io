@@ -18,3 +18,5 @@ The fixed-alphabet warning-prefix baseline covers a single narrowly defined crit
 OutGuess default-key baseline: all 77 declared images attempted twice; ten controls reproduce, 21 outputs remain unverified, five retrievals are rejected and 41 abnormal exits remain unresolved. Next useful variant: same key and images with another documented build. Do not classify failed extractions as clean negative results.
 
 Known Vigenère key baseline: two recorded vectors, all 21 phases, both directions, LP2-00–55; 2352 candidates, nine fixed 12-rune openings, no exact matches. No interruption search or general language score. Treat new alignment hypotheses and key lists as declared variants.
+
+Periodic-IoC family now has a within-row-shuffle variant: same LP2-31 input, score and periods; p=0.246 versus whole-page p=0.214. Both above 0.05. This is a declared sensitivity comparison, not independent confirmation.
