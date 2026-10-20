@@ -190,16 +190,16 @@ for row_number,row_values in enumerate(panel_data['matrix'],1):
 for extension,content in [('json',json.dumps(panel_data,indent=2)+'\n'),('csv',panel_csv.getvalue())]:
  path='exports/lp2-15-differences.'+extension
  save(path,content)
- register(path,'Number panel arithmetic')
+ register(path,'Number panel arithmetic',read('data/pages/lp2-15.json'))
  files[-1].update(title='LP2-15 printed values and differences ('+extension.upper()+')',guide='lp2-15-panel',aliases=['3301 minus panel','LP2-15 differences','fourteen prime differences'])
 grid_data = grid_report(root)
 for extension, content in [('json', json.dumps(grid_data,ensure_ascii=False,indent=2)+'\n'), ('csv', grid_csv(grid_data))]:
  path = 'exports/alphanumeric-grids.'+extension
  save(path,content)
  register(path,'Alphanumeric grid transcription')
- files[-1].update(title='LP2-49–51 grid entries ('+extension.upper()+')',guide='alphanumeric-grids',aliases=['alphanumeric grids','256 entries','grid coordinates','letter number grids'])
+ files[-1].update(title='LP2-49–51 grid entries ('+extension.upper()+')',guide='alphanumeric-grids',release='LP2',pages=['lp2-49','lp2-50','lp2-51'],aliases=['alphanumeric grids','256 entries','grid coordinates','letter number grids'])
 register('scripts/export_alphanumeric_grids.py','Reproduction script')
-files[-1].update(title='Export alphanumeric grid coordinates',guide='alphanumeric-grids',aliases=['alphanumeric grids','256 entries','grid coordinates'])
+files[-1].update(title='Export alphanumeric grid coordinates',guide='alphanumeric-grids',release='LP2',pages=['lp2-49','lp2-50','lp2-51'],aliases=['alphanumeric grids','256 entries','grid coordinates'])
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 save('exports/rune-ioc.csv', csv_report(read('data/evidence/rune-ioc.json')))
 register('exports/rune-ioc.csv','Archived rune IoC baseline')
