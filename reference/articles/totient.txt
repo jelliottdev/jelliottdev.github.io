@@ -1,0 +1,22 @@
+Euler’s totient and prime-minus-one
+
+Why φ(p) equals p − 1 for primes, and what that means for LP2-56.
+
+Euler’s totient function, written φ(n), counts the integers from 1 through n that are relatively prime to n. Two integers are relatively prime when their greatest common divisor is 1. “Relatively prime” does not mean that both integers are themselves prime.
+Small examples
+For n = 8, the qualifying integers are 1, 3, 5, and 7, so φ(8) = 4. For a prime p, every integer from 1 through p − 1 is relatively prime to p. Therefore φ(p) = p − 1. In particular, φ(2), φ(3), φ(5), φ(7) are 1, 2, 4, 6.
+Why the LP2-56 method has two names
+The archived walkthrough describes LP2-56 using “phi(prime).” The prime-minus-one guide uses the equivalent expression p − 1. These are the same shifts when the input sequence consists of primes. Substituting φ(n) for consecutive integers n would produce a different sequence.
+How to reproduce the identity
+from math import gcd
+def phi(n):
+return sum(gcd(k, n) == 1 for k in range(1, n + 1))
+assert phi(8) == 4
+assert [phi(p) for p in [2, 3, 5, 7]] == [1, 2, 4, 6]
+This deliberately simple implementation is useful for small examples. Reproduce the actual page with python scripts/reproduce_reading.py lp2-56, including its recorded interruption and modulo-29 arithmetic.
+What the identity does not determine
+It does not specify the starting prime, direction, reset behavior, or copied rune positions. Those parameters remain part of the keystream convention.
+Sources
+Pinned LP2-56 walkthrough · Exact reproduction parameters.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/totient.html

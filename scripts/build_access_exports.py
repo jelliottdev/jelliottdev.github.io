@@ -39,6 +39,8 @@ for summary in index['pages']:
  if p['corrections']:text+='## Documented corrections\n\n'+'\n'.join(json.dumps(c,ensure_ascii=False) for c in p['corrections'])+'\n\n'
  if p['reviewed_text']:text+='## Reviewed rune derivative\n\n'+p['reviewed_text']+'\n\n'
  if p['reading']:text+='## Literal known reading\n\nMethod: '+p['reading']['method']+'\n\n'+p['reading']['literal']+'\n\n## Contextual whole-section reading\n\nSection spans: '+', '.join(p['reading']['section_pages'])+'\n\n'+p['reading']['reading']+'\n\n'
+ guides=[a for a in articles if pid in a.get('pages',[])]
+ if guides:text+='## Related guides\n\n'+'\n'.join(a['title']+': '+base+'reference/articles/'+a['id']+'.html' for a in guides)+'\n\n'
  text+='## Sources\n\n'+'\n'.join(s['url'] for s in p['sources'])+'\n\nMirror agreement identifies preserved bytes, not creator authentication. Latin rune labels are not automatically plaintext.\n'
  save(f'reference/{pid}.md',text);register(f'reference/{pid}.md','Plain-text page reference',p);documents.append(text)
  # Standalone HTML contains the full reference text, usable without the app runtime.

@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The LP2-56 hash target — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/lp2-56-target">Open in wiki</a> · <a href="lp2-56-target.txt">Plain text</a></nav><h1>The LP2-56 hash target</h1><p>The exact printed value, its representation, and the assumptions a candidate check must state.</p><p><a href="../../index.html#/page/lp2-56">LP2-56</a> has a known reading titled “An End.” Its text refers to a page in the deep web that hashes to the hexadecimal value printed between the runic passages. Decoding the surrounding runes and finding the referenced page are separate tasks.</p>
+<h2 id="literal">The literal target</h2><p>The archived transcription preserves five printed rows:</p><pre><code>36367763ab73783c7af284446c
+59466b4cd653239a311cb7116
+d4618dee09a8425893dc7500b
+464fdaf1672d7bef5e891c6e227
+4568926a49fb4f45132c2a8b4</code></pre><p>Concatenating the rows yields 128 hexadecimal characters, representing 64 bytes, or 512 bits. The rows are presentation breaks; preserving them in a text file is different from the single digest string used for comparison.</p>
+<h2 id="algorithm">Length is evidence of format, not proof of an algorithm</h2><p>A SHA-512 digest has this length. The quoted decoded instruction does not name SHA-512 or define which bytes of a “page” should be hashed. Length alone cannot distinguish all algorithms that produce 512-bit outputs. State SHA-512 explicitly as an assumption when testing a candidate.</p><p>A URL string, an HTTP response body, an HTML source file, rendered text, and a screenshot are different inputs. Their hashes need not agree. Encoding, line endings, compression handling, and trailing newlines also matter. Do not silently normalize a candidate after a mismatch.</p>
+<h2 id="replicate">Extract the target from the shipped reading</h2><pre><code>import json, re
+from pathlib import Path
+page = json.loads(Path("data/pages/lp2-56.json").read_text(encoding="utf-8"))
+lines = [line.rstrip("/") for line in page["reading"]["literal"].splitlines()]
+rows = [line for line in lines if re.fullmatch(r"[0-9a-f]+", line)]
+target = "".join(rows)
+assert len(rows) == 5 and len(target) == 128
+assert len(bytes.fromhex(target)) == 64
+print(target)</code></pre><p>This extracts a preserved target. It does not discover a destination, query a network, or test candidate pages. Use <a href="../../index.html#/wiki/prime-minus-one">the reading recipe</a> to reproduce the surrounding text independently.</p>
+<h2 id="scope">Record exactly what a candidate check establishes</h2><p>A mismatch excludes the tested bytes under the chosen algorithm. It does not exclude every version of a site, every serialization, or every algorithm. A reported match should include the exact candidate bytes, their provenance, the hashing operation, and an independently repeatable comparison. See <a href="../../index.html#/wiki/checksums">checksums</a> and <a href="../../index.html#/wiki/reproducibility">reproducibility</a>.</p>
+<h2 id="sources">Sources and status</h2><p><a href="../../index.html#/reader/lp2-56">Original image and reading</a> · <a href="../../data/pages/lp2-56.json">Structured record</a> · <a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#73jpg---56jpg">Pinned walkthrough</a>. The source snapshot establishes the known reading; this article does not assert that the referenced page has been located.</p>
+</main></body></html>
