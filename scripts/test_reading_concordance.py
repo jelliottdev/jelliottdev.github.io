@@ -1,9 +1,35 @@
 import json
 import unittest
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
 from reading_concordance import SOURCE, concordance
 
 
 class ReadingConcordance(unittest.TestCase):
+    def test_saved_reports_match_stdout_and_preserve_existing_files(self):
+        script = Path(__file__).with_name("reading_concordance.py")
+        with tempfile.TemporaryDirectory() as folder:
+            for flags, extension in [([], "txt"), (["--json"], "json")]:
+                output = Path(folder) / ("result." + extension)
+                command = [sys.executable, str(script), "circumference", "--prefix", *flags]
+                expected = subprocess.run(command, capture_output=True, check=True).stdout
+                subprocess.run([*command, "--output", str(output)],
+                               capture_output=True, check=True)
+                self.assertEqual(output.read_bytes(), expected)
+                refused = subprocess.run([*command, "--output", str(output)],
+                                         capture_output=True)
+                self.assertNotEqual(refused.returncode, 0)
+                self.assertEqual(output.read_bytes(), expected)
+                if extension == "json":
+                    self.assertEqual(json.loads(expected)["occurrences"], 3)
+            invalid = Path(folder) / "invalid.json"
+            failed = subprocess.run([sys.executable, str(script), "two words",
+                                     "--prefix", "--output", str(invalid)], capture_output=True)
+            self.assertNotEqual(failed.returncode, 0)
+            self.assertFalse(invalid.exists())
+
     def test_published_circumference_passages(self):
         controls = json.loads(SOURCE.read_bytes())["controls"]
         self.assertEqual(len(controls), 9)

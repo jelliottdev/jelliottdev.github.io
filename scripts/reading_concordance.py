@@ -8,6 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "data/evidence/known-readings.json"
@@ -58,12 +59,31 @@ def concordance(controls, query, prefix=False, context=10):
     return hits
 
 
+def render_result(result, structured=False):
+    if structured:
+        return json.dumps(result, ensure_ascii=True, indent=2) + "\n"
+    lines = [
+        f"{result['occurrences']} occurrences across {result['sections_searched']} known-reading sections.",
+        result["representation"],
+        result["position_convention"],
+    ]
+    for h in result["hits"]:
+        lines.extend([
+            f"\n{h['section']} ({', '.join(h['section_pages'])}), word {h['word_start']}",
+            f"{h['before']} [{h['matched']}] {h['after']}".strip(),
+            h["reading_url"],
+        ])
+    lines.append("\nSource SHA-256: " + result["source_sha256"])
+    return "\n".join(lines) + "\n"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("query", help="Word or quoted phrase; case-insensitive")
     parser.add_argument("--prefix", action="store_true", help="Match words beginning with the query")
     parser.add_argument("--context", type=int, default=10, help="Surrounding words per side (0–50)")
     parser.add_argument("--json", action="store_true", help="Print a structured result")
+    parser.add_argument("--output", type=Path, help="Save UTF-8 text or JSON without overwriting")
     args = parser.parse_args()
     raw = SOURCE.read_bytes()
     data = json.loads(raw)
@@ -86,17 +106,17 @@ def main():
         "occurrences": len(hits),
         "hits": hits,
     }
-    if args.json:
-        print(json.dumps(result, ensure_ascii=True, indent=2))
+    rendered = render_result(result, args.json)
+    if args.output:
+        try:
+            with args.output.open("x", encoding="utf-8", newline="") as destination:
+                destination.write(rendered)
+        except OSError as error:
+            parser.error(str(error))
+        print("Saved report:", args.output)
     else:
-        print(f"{len(hits)} occurrences across {len(data['controls'])} known-reading sections.")
-        print(result["representation"])
-        print(result["position_convention"])
-        for h in hits:
-            print(f"\n{h['section']} ({', '.join(h['section_pages'])}), word {h['word_start']}")
-            print(f"{h['before']} [{h['matched']}] {h['after']}".strip())
-            print(h["reading_url"])
-        print("\nSource SHA-256: " + result["source_sha256"])
+        sys.stdout.reconfigure(encoding="utf-8", newline="")
+        print(rendered, end="")
 
 
 if __name__ == "__main__":

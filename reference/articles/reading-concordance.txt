@@ -38,8 +38,12 @@ Contextual English expands or interprets some literal rune labels. A count in th
 Save a machine-readable result
 
 python scripts/reading_concordance.py circumference --prefix --json
+python scripts/reading_concordance.py circumference --prefix --json --output circumference-concordance.json
+python scripts/reading_concordance.py circumference --prefix --output circumference-concordance.txt
 
-The JSON output includes the query, matching mode, tokenization rule, source-file SHA-256, and every hit. To save it, redirect the output to a new filename, for example by appending > circumference-concordance.json. Shell redirection may overwrite an existing file, so choose a new name for each result you intend to preserve.
+The JSON output includes the query, matching mode, tokenization rule, source-file SHA-256, and every hit. Add --output to save the result as a UTF-8 file. The command refuses to overwrite an existing file; choose a new name for a later run. A relative filename is saved in your current working directory, so run these commands from the extracted bundle or repository directory.
+
+Use --json for structured results, including exact source excerpts and character positions. Omit it for the readable text report. The filename extension does not select the format: --json does. Without --output, the result is printed in the terminal. A lookup with no matches still produces a valid report with zero occurrences.
 
 The hash identifies the exact contextual compilation searched. It is not a signature or evidence that the contextual rendering is an original manuscript file. Read the checksum guide for that distinction.
 
