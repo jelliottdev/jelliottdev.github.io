@@ -8,15 +8,27 @@ The full primary fingerprint of the exported key is 6D854CD7933322A601C3286D181F
 
 Verify in a separate keyring
 Install GnuPG, create an empty directory named verify-keyring, and run from the repository root:
-gpg --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
-gpg --homedir verify-keyring --fingerprint
-gpg --homedir verify-keyring --verify exports/steganography/lp1-00.signed.asc
-gpg --homedir verify-keyring --verify exports/steganography/cover-chain.signed.asc
+gpg --no-options --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
+gpg --no-options --homedir verify-keyring --fingerprint
+gpg --no-options --homedir verify-keyring --verify exports/steganography/lp1-00.signed.asc
+gpg --no-options --homedir verify-keyring --verify exports/steganography/cover-chain.signed.asc
 Compare the full fingerprint. A good signature and unknown trust can coexist: validity differs from identity-trust assignments. No private key is required.
 
+Read the verification output
+For an inspectable status stream, add --status-fd 1:
+gpg --no-options --homedir verify-keyring --status-fd 1 --verify exports/steganography/lp1-00.signed.asc
+The fresh isolated check produced these status types: GOODSIG, VALIDSIG and TRUST_UNDEFINED. The VALIDSIG line identified the full fingerprint above. The trust warning did not mean the signature failed: this new keyring contained no identity-trust assignments. Do not assign trust merely to silence that warning. GnuPG documents these machine-readable records in its status-format specification.
+The displayed user ID, Cicada 3301 (845145127), is a label associated with the key; matching that text is not the same as matching the fingerprint. Keep the verification result, key provenance, and real-world identity claim separate.
+If verification fails
+No public key: confirm that you imported the shipped key into the same directory supplied to --homedir.
+No signed data: check that you selected the preserved .signed.asc block, not the extracted body or decoded binary stream.
+Bad signature: compare the file checksum with the manifest and obtain an unchanged copy before drawing conclusions.
+Rejected digest: inspect the exact diagnostic and the compatibility note below; a policy rejection differs from a verified signature.
 Legacy digest compatibility
 Some versions reject historical SHA-1 signatures by policy. If that is the reported cause, repeat this isolated check with --allow-weak-digest-algos on that command only. Record the flag; do not change global settings or treat SHA-1 as suitable for new signatures.
 
+The earlier extraction manifest records the compatibility mode used in that run. A fresh isolated check with GnuPG 2.5.21 on Windows, --no-options, and no compatibility override verified all eight extracted signed blocks plus the reconstructed cover-chain message. The nine-file verification record stores input hashes, status lines, options and version. Do not assume a flag is necessary simply because another verification run used it.
+--homedir selects the separate keyring directory; --no-options avoids reading the default options file. See GnuPG configuration options and digest compatibility options.
 Different files, different purposes
 The manifest separately hashes full extractions, signed blocks, and bodies. Verifying an edited body is not equivalent to verifying the preserved signed block. See extraction and checksums.
 Sources and verification
@@ -24,6 +36,10 @@ Pinned historical walkthrough. Recipes reproduce published controls; they are no
 
 Sources, related references, and files
 https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+https://github.com/gpg/gnupg/blob/master/doc/DETAILS
+https://jelliottdev.github.io/data/evidence/signature-checks.json
+https://www.gnupg.org/documentation/manuals/gnupg/GPG-Configuration-Options.html
+https://www.gnupg.org/documentation/manuals/gnupg/GPG-Esoteric-Options.html
 https://jelliottdev.github.io/data/evidence/embedded-payloads.json
 https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/checksums.html
