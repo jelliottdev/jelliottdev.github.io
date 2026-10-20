@@ -61,3 +61,5 @@ Category destinations use stable names rather than their display position. Prese
 Guide navigation highlights the exact sidebar link when present. Otherwise, authored categories retain the corresponding subject context (getting started, known readings, analysis, philosophy, or artwork); other guides use All guides & methods. Category context uses aria-current="location", while an exact destination uses aria-current="page".
 
 Region inspection keeps the page name and selected feature in the viewer heading. Inspection controls have descriptive accessible names; opening the whole image clears the feature context. The toolbar must grow for wrapped headings without hiding controls or removing the image viewport.
+
+Direct section and topic URLs scroll to the destination and move keyboard focus to its heading (or the destination itself when it has no heading). A missing destination leaves the normal page available. Focusing must not trigger a second scroll or move the content behind the sticky header.

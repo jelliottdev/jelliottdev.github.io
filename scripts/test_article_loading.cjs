@@ -53,6 +53,30 @@ async function checkNavigationRace(oldRequestFails){
   await vm.runInContext('route()',sandbox);
   assert.equal(downloadQuery,query,'Download route must decode the URL search phrase');
  }
+ const events=[];
+ const heading={
+  querySelector(){return null},
+  hasAttribute(){return false},
+  setAttribute(name,value){events.push([name,value])},
+  focus(options){events.push(['focus',options.preventScroll])},
+  scrollIntoView(options){events.push(['scroll',options.block])},
+ };
+ const topic={...heading,querySelector(){return heading}};
+ sandbox.topicsPage=()=> 'Topics';
+ sandbox.bindTopics=()=>{};
+ sandbox.document.getElementById=id=>({'topic-example':topic,'passage':heading}[id]||null);
+ for(const hash of ['#/topics?topic=example','#/wiki/newer?section=passage']){
+  events.length=0;
+  sandbox.location.hash=hash;
+  await vm.runInContext('route()',sandbox);
+  assert.deepEqual(events,[['scroll','start'],['tabindex','-1'],['focus',true]],
+   'Deep links must focus their destination after scrolling without a second scroll');
+ }
+ events.length=0;
+ sandbox.location.hash='#/topics?topic=missing';
+ await vm.runInContext('route()',sandbox);
+ assert.equal(main.innerHTML,'Topics','A missing target must not break the page');
+ assert.deepEqual(events,[]);
 
 }
 async function main(){
