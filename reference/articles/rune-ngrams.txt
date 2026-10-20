@@ -107,6 +107,92 @@ The separate LP2 trigram-repeat experiment tests an aggregate excess of matching
 
 Counting script · small-example tests · archived LP2-31 input · alphabet and page index. The worked counts were reproduced on 20 October 2026. They validate the declared calculation, not an independent transcription of the original JPEG. Follow documenting a reproducible attempt when turning a measurement into a hypothesis test.
 
+
+Two repeated-marker claims: locations before interpretation
+
+Two proposed alignments illustrate why a repeated sequence needs exact coordinates and counting rules. This audit searches the archived rune streams of LP2-00–55, retaining headings and removing non-runes. It locates markers only within pages; global positions concatenate the pages in order. All positions below begin at zero.
+
+DJUBEI: 6395, 6389 or 6388?
+
+The six rune labels D J U B E I occur twice under these rules:
+
+	Page	Page rune interval	Global start
+	LP2-27	[28, 34)	6555
+	LP2-55	[70, 76)	12950
+
+The second occurrence ends the rune stream of LP2-55. The first is followed by AE. An interval written [28, 34) includes positions 28 through 33: its end is excluded.
+
+	Measurement	Calculation	Result
+	Start to start	12950 − 6555	6395
+	Strictly between the identical six-rune markers	6395 − 6	6389
+	Also exclude the AE after the first marker	6395 − 7	6388
+
+6388 = 4 × 1597, but that value uses the additional AE exclusion. AE is not part of the repeated six-rune marker. The identity is reproducible with that boundary; it should not be presented as the unqualified distance between the two copies. Changing the corpus, heading treatment or transcription can change global positions.
+
+O F L OE NG: what the subtraction produces
+
+The five-rune marker O F L OE NG occurs at LP2-30 rune 86 and LP2-52 rune 179. Align those starts and subtract the earlier page from the later page modulo 29. The following sixteen-position span is the one specified in the proposal; the audit does not search lengths or offsets for a better word.
+
+Using zero-based rune indices gives:
+
+F F F F F E A R TH S I G W O TH Y
+
+The matching marker necessarily gives five zeros, represented by F. The next four output runes are E A R TH, which transliterate to EARTH. This is an arithmetic match, not an established word boundary or a validated reading of the surrounding output.
+
+Using prime values, reducing their differences modulo 29 and interpreting each residue as a rune index instead gives:
+
+F F F F F L J X G TH S OE A EO G B
+
+These are different operations. Prime values are not interchangeable with alphabet indices. The comparison below keeps both representations visible; “offset” counts forward from the aligned marker start.
+
+	Offset	LP2-30	LP2-52	Index difference	Prime difference → index label
+
+	0	O	O	F	F
+
+	1	F	F	F	F
+
+	2	L	L	F	F
+
+	3	OE	OE	F	F
+
+	4	NG	NG	F	F
+
+	5	P	TH	E	L
+
+	6	R	EA	A	J
+
+	7	IA	TH	R	X
+
+	8	A	Y	TH	G
+
+	9	O	E	S	TH
+
+	10	T	Y	I	S
+
+	11	O	N	G	OE
+
+	12	EA	G	W	A
+
+	13	G	N	O	EO
+
+	14	AE	IA	TH	G
+
+	15	M	T	Y	B
+
+
+For example, the first position after the marker compares P (index 13, prime 43) with TH (index 2, prime 5). Index subtraction gives (2 − 13) mod 29 = 18, the index of E. Prime subtraction gives (5 − 43) mod 29 = 20, the index of L. Reversing the subtraction would be another operation again.
+
+Reproduce the locations and arithmetic
+
+Extract the reference-data bundle or use the repository, then run:
+
+python scripts/repeated_marker_audit.py --check
+python scripts/repeated_marker_audit.py
+
+The script and full JSON ledger include input hashes, all marker occurrences, source character offsets, both representations and every output in the specified span. This does not reproduce the separate image-only claim that a DJUBEI alignment yields TRUTH: its exact paired intervals and operation have not been established here.
+
+A next test should fix the alignment rule and output range before judging additional text, retain unsuccessful output, and account for the markers and operations already considered. See candidate readings and search space and bounds. Reproducing a short word does not identify a cipher or establish its chance probability.
+
 Sources, related references, and files
 - index of coincidence
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
@@ -146,5 +232,17 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/index.json
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- LP2-27
+  https://jelliottdev.github.io/reference/lp2-27.html
+- LP2-55
+  https://jelliottdev.github.io/reference/lp2-55.html
+- script
+  https://jelliottdev.github.io/scripts/repeated_marker_audit.py
+- full JSON ledger
+  https://jelliottdev.github.io/exports/repeated-marker-audit.json
+- candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 
 Article: https://jelliottdev.github.io/reference/articles/rune-ngrams.html

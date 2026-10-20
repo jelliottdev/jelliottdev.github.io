@@ -1,6 +1,6 @@
 Spirals and branching borders
 
-Compare the curled borders on LP2-03–07 with the branching designs on LP2-40–55, and plan a measurable geometric comparison.
+Compare curled and branching borders, inspect repeated side-dot regions on all sixteen LP2-40–55 pages, and reproduce the pixel comparison.
 
 Several groups of Liber Primus pages have curled drawings beside the text. The community calls LP2-03–07 “Spirals,” LP2-40–53 “Spiral Branches,” and LP2-54–55 “Spiral & Dead Tree.” These names make the images easier to find. Comparing their actual linework is more useful than treating every curl as the same symbol.
 The curled borders on LP2-03–07
@@ -26,9 +26,36 @@ Compare the group openings: LP2-40 and LP2-54
 
 Both pages begin with an enlarged red rune beside three rows and smaller red text at the start of the first row. On LP2-54, the red opening ends with a compact punctuation cluster before the black runes continue. The shared border style does not erase these differences in text and punctuation.
 
-Each page also has a small cluster beside the inner edge of each border. On the left, three marks are solid black and two are pale ring outlines; on the right, all five are solid. The same fill pattern is recorded on LP2-53, with enlarged views. This comparison covers these inspected pages, not every intervening page.
+Each page also has a small cluster beside the inner edge of each border. On the left, three marks are solid black and two are pale ring outlines; on the right, all five are solid. The same fill pattern is recorded on LP2-53, with enlarged views. The opening-text comparison concerns these inspected pages. The separate side-dot audit below covers all sixteen pages from LP2-40 through LP2-55.
 
 Open the LP2-40 observations or LP2-54 observations beside the original images. The pale tree and winged figure that explain the community name “Spiral & Dead Tree” are on LP2-55; the name does not mean both pages contain a tree.
+
+The same side-dot regions on all sixteen pages
+
+Both small side-dot regions are repeated without pixel changes across every page from LP2-40 through LP2-55. We compared each left region with the left region on LP2-40, and each right region with the right region on LP2-40. All 16 images match in both decoded RGB pixels and grayscale pixels, without alignment, resizing or a tolerance.
+
+
+[Image: Original left side-dot region on LP2-40, with three dark circles and two very pale outlines]
+Left region: three solid marks and two very pale outlines. Original contrast; faint outlines can be difficult to see.
+
+[Image: Original right side-dot region on LP2-40 with five dark circles]
+Right region: five solid marks. This is compared with the same right region on subsequent pages.
+
+Rectangles in the original 2400 × 3600 images. Right and bottom edges are exclusive.
+	Region	Left, top, right, bottom	Pixels per page	Unequal pixels versus LP2-40
+	Left	340, 1450, 450, 1570	13,200	0 on every page
+	Right	1950, 1450, 2060, 1570	13,200	0 on every page
+
+This is stronger than a visual resemblance, but narrower than a claim that all borders or whole pages are identical. It supports reuse of these fixed image regions. A reused motif could still carry constant information; equality alone does not prove that the marks are merely decoration. This comparison also does not measure reflection between the left and right motifs, or compare the separate five-dot groups on LP2-07, LP2-23 and LP2-56.
+
+Reproduce the crop comparison
+
+python -m pip install Pillow
+python scripts/side_dot_reuse.py --check
+
+Use the repository with original images in images/. If starting from the reference-data bundle, separately download LP2-40 through LP2-55 from their page records and put them in that directory; the bundle does not include the JPEGs. The script verifies each image hash before comparing pixels. It creates no edited images.
+
+Download all sixteen comparisons and source hashes · Download the script. The JSON records each region’s decoded RGB hash as well as its unequal-pixel counts.
 
 A useful comparison starts with a question
 	Question	What to record	What the result would establish
@@ -43,7 +70,7 @@ Download the original files and verify their SHA-256 hashes.
 Record rectangles using original-image coordinates. Keep the original pixels and any transformed comparison image separately.
 Document scaling, rotation, reflection, thresholding, and the score used to compare the shapes.
 Publish the script and output together, including mismatches. A visually plausible overlay alone is not enough to reproduce the comparison.
-This article provides an inspection route and a comparison method. It does not report a completed geometric fit or establish a cipher role for the borders.
+The completed side-dot comparison above establishes pixel equality within its two rectangles. The broader border-fitting questions remain open, and no cipher role is established.
 Sources
 Page observations refer to the original JPEGs linked through the page records, which retain checksums and pinned archive sources. The section names and ranges follow Cicada Solvers’ LP2 index. Previews are cropped browsing aids; open a page record or reader for the complete image.
 
@@ -60,7 +87,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/thumbs/lp2-07.jpg
 - Read
   https://jelliottdev.github.io/#/reader/lp2-07
-- dots and punctuation
+- dots and punctuation; LP2-07, LP2-23 and LP2-56
   https://jelliottdev.github.io/reference/articles/dots.html
 - LP2-04
   https://jelliottdev.github.io/reference/lp2-04.html
@@ -102,6 +129,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-40.html
 - LP2-54 observations
   https://jelliottdev.github.io/reference/lp2-54.html
+- Original left side-dot region on LP2-40, with three dark circles and two very pale outlines; Original right side-dot region on LP2-40 with five dark circles
+  https://jelliottdev.github.io/images/lp2-40.jpg
+- Download all sixteen comparisons and source hashes
+  https://jelliottdev.github.io/exports/side-dot-reuse.json
+- Download the script
+  https://jelliottdev.github.io/scripts/side_dot_reuse.py
 - logarithmic spiral
   https://mathworld.wolfram.com/LogarithmicSpiral.html
 - Archimedean spiral
