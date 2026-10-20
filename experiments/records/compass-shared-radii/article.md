@@ -19,6 +19,8 @@ For each threshold 100, 140 and 180, a pixel is dark if its grayscale value is s
 
 Each center is the arithmetic mean of its component’s pixel coordinates. The report stores integer coordinate sums and areas, so the subsequent calculation uses exact fractions rather than rounded coordinates. This measures a particular thresholded shape; it is not an assertion that the author placed the dot at that exact rational point.
 
+The source-region figure shows decoded original JPEG crops with red center marks. It does not threshold or increase contrast in the displayed image; thresholding is used only to calculate the marked centers. Each crop is fitted to the same display width, so the previews have different scales. The separate spacing diagram uses a common horizontal scale.
+
 At threshold 140, the adjacent center separations on LP2-33 are approximately 417.47 and 478.23 pixels. On LP2-39 they are 196 and 224.5 pixels. The diagram uses one horizontal scale for both pages and separates the rows vertically for readability. It does not show the original vertical positions.
 
 ## Why three distances impose a constraint
@@ -67,7 +69,7 @@ python experiments/records/compass-shared-radii/check.py
 
 The producer uses Pillow 11.3.0 and Python’s standard library. Its version is recorded so a different image-decoding environment does not silently claim an exact replay. The checker needs only the standard library. Neither command calls AI or accesses the network.
 
-The producer reruns component measurement and the rational certificate. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.
+The producer reruns component measurement, the rational certificate and the annotated source-region SVG. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.
 
 Both checks passed on 20 October 2026. The procedure and controls were recorded in `plan.txt`; the declared thresholds, crops and target rectangle were unchanged after the run. This freshly reconstructs a constrained claim in the supplied research archive; it is not a new discovery. Human review remains pending.
 

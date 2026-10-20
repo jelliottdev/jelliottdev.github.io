@@ -1,14 +1,17 @@
 """Fresh dot centroids and exact shared-radius certificate. Requires Pillow."""
 import argparse
+import base64
 from collections import deque
 from fractions import Fraction as F
 import hashlib
+import io
 import json
 from pathlib import Path
 from PIL import Image, __version__ as PILLOW_VERSION
 
 ROOT=Path(__file__).resolve().parents[3]
 REPORT=ROOT/'exports/compass-shared-radii.json'
+FIGURE=ROOT/'exports/figures/compass-dot-regions.svg'
 BOXES={'lp2-33':(576,1656,1824,1836),'lp2-39':(1200,1638,1800,1746)}
 CORNERS=[(0,0),(2399,0),(0,3599),(2399,3599)]
 DIAGONAL_SQUARED=2399**2+3599**2
@@ -46,6 +49,31 @@ def geometry(dots):
 
 def ratio(x):return {'numerator':x.numerator,'denominator':x.denominator,'decimal':float(x)}
 
+def render_regions(report):
+    parts=['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="280" viewBox="0 0 360 280" role="img" aria-labelledby="title desc">',
+           '<title id="title">Original dot crops with measured centers</title>',
+           '<desc id="desc">Original JPEG regions on LP2-33 and LP2-39 with the threshold-140 centers labeled A, B and C. Each crop is fitted to the available width, so the two crops have different display scales.</desc>',
+           '<rect width="360" height="280" fill="#faf9f6"/>']
+    for page,top in zip(report['pages'],(0,112)):
+        box=page['crop'];w,h=box[2]-box[0],box[3]-box[1];scale=336/w
+        path=ROOT/f"images/{page['page']}.jpg"
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==page['source_sha256']
+        with Image.open(path) as original:
+            crop=original.convert('RGB').crop(box)
+        buffer=io.BytesIO();crop.save(buffer,format='PNG')
+        image=base64.b64encode(buffer.getvalue()).decode('ascii')
+        parts.append(f'<text x="12" y="{top+24}" font-family="sans-serif" font-size="16" fill="#243c48">{page["page"].upper()} · original dot region</text>')
+        parts.append(f'<image x="12" y="{top+40}" width="336" height="{h*scale:.4f}" href="data:image/png;base64,{image}"/>')
+        dots=next(v['dots'] for v in page['thresholds'] if v['threshold']==140)
+        for label,dot in zip('ABC',dots):
+            x=12+(dot['sum_x']/dot['area']-box[0])*scale
+            y=top+40+(dot['sum_y']/dot['area']-box[1])*scale
+            parts.append(f'<path d="M{x-4:.3f} {y:.3f}h8M{x:.3f} {y-4:.3f}v8" stroke="#a12727" stroke-width="1"/>')
+            parts.append(f'<text x="{x:.3f}" y="{y-10:.3f}" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#a12727">{label}</text>')
+    parts.append('<text x="12" y="253" font-family="sans-serif" font-size="12" fill="#243c48">Red crosses: measured centers at threshold 140.</text>')
+    parts.append('<text x="12" y="272" font-family="sans-serif" font-size="12" fill="#243c48">Crops fitted to width: different display scales.</text></svg>')
+    return '\n'.join(parts)+'\n'
+
 def measure():
     pages=[];cases={t:[] for t in (100,140,180)}
     for page,box in BOXES.items():
@@ -71,6 +99,11 @@ def measure():
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args()
     d=measure()
-    if args.check:assert d==json.loads(REPORT.read_bytes())
-    else:REPORT.write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8',newline='\n')
+    figure=render_regions(d)
+    if args.check:
+        assert d==json.loads(REPORT.read_bytes())
+        assert figure==FIGURE.read_text(encoding='utf-8')
+    else:
+        REPORT.write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8',newline='\n')
+        FIGURE.write_text(figure,encoding='utf-8',newline='\n')
     for c in d['certificates']:print(c['threshold'],c['lower_bound']['decimal'],c['upper_bound']['decimal'],c['incompatible'])
