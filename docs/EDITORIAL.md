@@ -63,3 +63,5 @@ Primary journey: page index or search → page record → source image and trans
 # Validation
 
 Check 75 image hashes, record cardinality, page links, desktop/mobile overflow, search, filters, transcription modes, image controls, invalid routes, and absence of experimental records before publication.
+
+For guide or topic-index links, run `python scripts/check_article_links.py`. It checks guide destinations and section anchors, manuscript IDs, local files, and duplicate topic IDs across the authored and generated reading guides. The check does not fetch external URLs or validate other application routes. Use `python scripts/test_article_links.py` when changing the checker itself. Both commands also run in the repository validation workflow.

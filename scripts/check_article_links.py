@@ -1,7 +1,7 @@
 """Check local article destinations without network requests.
 
 Checks guide IDs/section anchors, manuscript IDs, local files/images, duplicate
-HTML IDs, and metadata destinations. Other application routes and external URLs
+HTML IDs, metadata destinations, and topic-index links. Other application routes and external URLs
 are outside this check; it does not certify their availability.
 """
 from collections import Counter
@@ -29,7 +29,7 @@ class Links(HTMLParser):
             self.targets.append(target)
 
 
-def validate(root, articles):
+def validate(root, articles, topics=()):
     errors = []
     parsed = {}
     counts = Counter(a["id"] for a in articles)
@@ -48,19 +48,8 @@ def validate(root, articles):
         if not (root / "data/pages" / (page + ".json")).is_file():
             errors.append(f"{aid}: unknown manuscript {page}")
 
-    for article in articles:
-        aid = article["id"]
-        if aid not in parsed:
-            continue
-        for section in article.get("alias_sections", {}).values():
-            if section not in parsed[aid].ids:
-                errors.append(f"{aid}: search alias points to missing section {section}")
-        pages = list(article.get("pages", [])) + list(article.get("feature_pages", []))
-        for values in article.get("alias_pages", {}).values():
-            pages.extend(values)
-        for page in set(pages):
-            manuscript(aid, page)
-        for target in parsed[aid].targets:
+    def destinations(aid, targets, local_ids=()):
+        for target in targets:
             if target.startswith("#/wiki/"):
                 route = urlsplit(target[1:])
                 other = unquote(route.path[len("/wiki/"):])
@@ -75,7 +64,7 @@ def validate(root, articles):
             elif target.startswith("#/"):
                 continue  # Other application routes need browser/router checks.
             elif target.startswith("#"):
-                if unquote(target[1:]) not in parsed[aid].ids:
+                if unquote(target[1:]) not in local_ids:
                     errors.append(f"{aid}: missing local anchor {target}")
             else:
                 url = urlsplit(target)
@@ -84,16 +73,36 @@ def validate(root, articles):
                 path = (root / unquote(url.path).lstrip("/")).resolve()
                 if not path.is_relative_to(root.resolve()) or not path.is_file():
                     errors.append(f"{aid}: missing local file {target}")
-    return errors, sum(len(p.targets) for p in parsed.values())
+
+    for article in articles:
+        aid = article["id"]
+        if aid not in parsed:
+            continue
+        for section in article.get("alias_sections", {}).values():
+            if section not in parsed[aid].ids:
+                errors.append(f"{aid}: search alias points to missing section {section}")
+        pages = list(article.get("pages", [])) + list(article.get("feature_pages", []))
+        for values in article.get("alias_pages", {}).values():
+            pages.extend(values)
+        for page in set(pages):
+            manuscript(aid, page)
+        destinations(aid, parsed[aid].targets, parsed[aid].ids)
+
+    topic_counts = Counter(t["id"] for t in topics)
+    errors.extend(f"Duplicate topic ID: {tid}" for tid, count in topic_counts.items() if count > 1)
+    for topic in topics:
+        destinations("topic " + topic["id"], [link["href"] for link in topic["links"]])
+    return errors, sum(len(p.targets) for p in parsed.values()) + sum(len(t["links"]) for t in topics)
 
 
 def main():
     articles = json.loads((ROOT / "articles/index.json").read_text(encoding="utf-8"))
     articles += json.loads((ROOT / "articles/readings/index.json").read_text(encoding="utf-8"))
-    errors, total = validate(ROOT, articles)
+    topics = json.loads((ROOT / "data/topics.json").read_text(encoding="utf-8"))
+    errors, total = validate(ROOT, articles, topics)
     if errors:
         raise SystemExit("\n".join(errors))
-    print(f"PASS: {len(articles)} articles, {total} link/image references; "
+    print(f"PASS: {len(articles)} articles, {len(topics)} topics, {total} link/image references; "
           "guide sections, manuscript IDs, local files, and metadata destinations checked.")
     print("External URLs and other application routes were not checked.")
 

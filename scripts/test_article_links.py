@@ -45,6 +45,27 @@ class ArticleLinks(unittest.TestCase):
                        "search alias points"]:
             self.assertTrue(any(phrase in e for e in errors), phrase)
 
+    def test_topic_destinations_include_generated_readings(self):
+        (self.root / "articles/readings").mkdir()
+        (self.root / "articles/readings/reading.html").write_text(
+            '<h2 id="argument">Argument</h2>', encoding="utf-8")
+        topics = [{"id": "koan", "links": [
+            {"href": "#/wiki/reading?section=argument"},
+            {"href": "#/page/lp1-01"}, {"href": "sample.txt"}]}]
+        errors, count = validate(self.root, [{"id": "reading", "source": "readings/reading.html"}], topics)
+        self.assertEqual(errors, [])
+        self.assertEqual(count, 3)
+
+    def test_broken_topic_destinations_and_duplicate_ids_fail(self):
+        self.write("one", '<h2 id="exists">Existing</h2>')
+        topics = [{"id": "detail", "links": [{"href": href} for href in [
+            "#/wiki/gone", "#/wiki/one?section=gone", "#/reader/lp2-99",
+            "missing.json", "../outside.txt"]]}, {"id": "detail", "links": []}]
+        errors, _ = validate(self.root, [{"id": "one"}], topics)
+        self.assertEqual(len(errors), 6)
+        self.assertTrue(any("Duplicate topic ID" in e for e in errors))
+        self.assertEqual(sum(e.startswith("topic detail:") for e in errors), 5)
+
     def test_duplicate_article_ids_and_missing_sources_fail(self):
         errors, _ = validate(self.root, [{"id": "absent"}, {"id": "absent"}])
         self.assertTrue(any("Duplicate article ID" in e for e in errors))
