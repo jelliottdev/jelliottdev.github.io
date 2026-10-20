@@ -22,3 +22,5 @@ Known Vigenère key baseline: two recorded vectors, all 21 phases, both directio
 Periodic-IoC family now has a within-row-shuffle variant: same LP2-31 input, score and periods; p=0.246 versus whole-page p=0.214. Both above 0.05. This is a declared sensitivity comparison, not independent confirmation.
 
 Book-cipher control: frozen Emerson PDF re-extracted with pypdf 6.19.0; all 50 paragraphs and 15 lookups plus seven literals reproduce. Known-result historical control only; unsolved-page applications remain untested.
+
+Prime-row baseline: 594 eligible archived rows, 76 prime sums; within-page shuffles preserving row lengths give upper-tail p=0.844. Global excess only; LP2-50 contributes no runic rows. No per-page significance or emirp test.
