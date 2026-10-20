@@ -53,3 +53,6 @@ gpg --no-options --homedir verify-keyring --fingerprint
 gpg --no-options --homedir verify-keyring --batch --no-auto-key-retrieve --status-fd 1 --verify exports/steganography/message-2016.outguess.bin
 gpg --no-options --homedir verify-keyring --batch --no-auto-key-retrieve --status-fd 1 --verify exports/steganography/message-2017.asc</code></pre>
 <p>Compare the complete fingerprint <code>6D854CD7933322A601C3286D181F01E57A35090F</code>, not only the short ID printed in the message. The recorded GnuPG 2.5.21 checks return <code>VALIDSIG</code> for both messages and undefined identity trust. No digest compatibility override was used. Signature verification and checksum matching do not test a proposed cipher or prove an interpretation of the message.</p>
+
+<h2 id="grid-correspondence">LP2-32 grid correspondence</h2>
+<p>The <a href="#/experiments/lp2-32-message-grid">11×11 grid experiment</a> reproduces a first-row sum of 563, first-column sum of 569 and central 5×5 perimeter sum of 1136. These equal the 2016 carrier’s width, height and extracted payload length. The record specifies every cell and the rearrangement; it does not establish intent or statistical significance.</p>

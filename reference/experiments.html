@@ -1082,6 +1082,108 @@
   &quot;article&quot;: &quot;# LP2-31 periodic IoC: preserving row composition\n\n## Why change the null model?\n\nThe baseline shuffles all 269 runes together. That preserves the page&#x27;s total counts but can move any rune to any row. If rows differ in composition, that comparison removes those differences as well as the ordering under investigation.\n\nThis variant instead preserves each archived row&#x27;s length and exact rune counts, shuffling only within that row. It asks a conditional question about order after holding row composition fixed. This is not automatically a better model; it makes a different assumption visible.\n\nLP2-31 has twelve ordinary text rows and no separately identified heading. No row was removed or renamed as a heading for this test. Archived transcription lines provide the boundaries.\n\n## Plan and relation to the baseline\n\nThe plan and runner were committed as `8dfc7c0` before executing the variant. The variant was motivated after the whole-page result was known; it is not independent confirmation and does not account for selecting among null models.\n\nOnly the shuffle procedure changes. The input remains the same 269 runes, periods remain 2–20 inclusive, the statistic remains pooled within-column matching pairs, and each trial&#x27;s maximum is compared with the observed maximum. There are still 999 trials, seed 330131, greater-than-or-equal ties, plus-one Monte Carlo correction, and a 0.05 threshold.\n\nThe twelve row lengths are:\n\n```\n23, 22, 24, 24, 22, 22, 21, 22, 21, 24, 22, 22\n```\n\nRemove non-alphabet characters inside each row, shuffle that row&#x27;s runes, then concatenate rows in their original order. Column positions run across the concatenated page; they do not restart at row boundaries. The same seed does not make the two models&#x27; individual shuffled pages equivalent or create a paired statistical test.\n\n## Results\n\n| Quantity | Whole-page baseline | Within-row variant |\n| --- | --- | --- |\n| Input runes | 269 | 269 |\n| Observed peak period | 13 | 13 |\n| Observed peak fraction | 216/5300 | 216/5300 |\n| Null maxima at least observed | 213/999 | 245/999 |\n| Plus-one Monte Carlo p | 0.214 | 0.246 |\n| Below declared 0.05 threshold | No | No |\n\nThe observed scores agree exactly for every period, as they should: the observed input and scoring procedure did not change. The within-row comparison is 246/1000 = 0.246. Its approximate Monte Carlo standard error is 0.014, using sqrt(q*(1-q)/999) with q=245/999. This describes simulation uncertainty, not confidence in a cipher.\n\nThe two runs give the same threshold decision under their different assumptions. The difference between 0.214 and 0.246 is not evaluated as a separate statistical effect, and neither p-value is the probability that period 13 is the true key length.\n\n## Reproduce\n\nFrom a repository checkout with Python 3.12.10:\n\n```\npython experiments/records/lp2-31-row-shuffle-ioc/run.py --check\npython experiments/records/lp2-31-row-shuffle-ioc/check.py\n```\n\nThe runner compares every observed field and all 999 stored trial records. The separate checker verifies the twelve row lengths, exact agreement with the baseline&#x27;s observed scores, and a position-pair oracle for all observed periods and the first three seeded null trials. That oracle directly enumerates position pairs rather than using column-frequency counts. The runner also asserts preservation of each row&#x27;s multiset in every trial.\n\n[Download the complete variant output](experiments/records/lp2-31-row-shuffle-ioc/results.json). All 19 period numerators are stored for every shuffle; the denominators are in the observed rows. The comparison diagram is generated from the two saved reports. Neither the checker nor the plot interprets candidate plaintext or calls an AI service.\n\n## Retest and changes after inspection\n\nCodex reran the complete variant and performed the separate checks on 20 October 2026. Every stored field reproduced. No null rule, period range, input boundary, seed, threshold or statistic changed after the variant&#x27;s first result. The checker and comparison graphic were added afterward for verification and presentation. Human review remains pending.\n\n## Interpretation and remaining limits\n\nThis row-conditioned null preserves more local composition than the whole-page null, but still discards within-row word boundaries and local patterns. It treats all rune permutations within a row as exchangeable. Neither model is a full model of a particular cipher or language.\n\nThis variant does not show that the page is random, that period 13 is impossible, or that Vigenère is absent. It also does not test different pages, period ranges, row selections, alternative statistics or key searches. Those changes must be documented separately rather than silently folded into this result.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-31-row-shuffle-ioc/article.md&quot;,
   &quot;script_sha256&quot;: &quot;0298ea05a55bdc35570e5718cc238456c2679ae86e8a26698f45f18e4ac86fbe&quot;
+}</pre></article><article id="lp2-32-message-grid"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-32-message-grid&quot;,
+  &quot;title&quot;: &quot;LP2-32: grid sums and the 2016 message file&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?&quot;,
+  &quot;summary&quot;: &quot;Reproduces sums 563, 569 and 1136 under a specified grid layout. These equal the preserved image dimensions and payload bytes; significance and intent remain untested.&quot;,
+  &quot;tags&quot;: [
+    &quot;tree&quot;,
+    &quot;2016 message&quot;,
+    &quot;563&quot;,
+    &quot;569&quot;,
+    &quot;1136&quot;,
+    &quot;11x11&quot;,
+    &quot;5x5&quot;,
+    &quot;grid sums&quot;,
+    &quot;circumference&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-32&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;images/message-2016.jpg&quot;,
+      &quot;exports/steganography/message-2016.outguess.bin&quot;
+    ],
+    &quot;representation&quot;: &quot;All 121 alphabet runes in archived LP2-32 order, stripped of separators and filled left-to-right into 11 rows of 11; Gematria Primus prime values.&quot;,
+    &quot;procedure&quot;: &quot;Sum first row, first column, and the 16 distinct cells on the central 5x5 perimeter; compare with JPEG header dimensions and payload bytes. Report all 49 contiguous 5x5 perimeter sums.&quot;,
+    &quot;parameters&quot;: &quot;One row-major 11x11 layout; central rows and columns 4–8 one-based; corners counted once; 49 possible 5x5 positions; no rotations or reversals.&quot;,
+    &quot;exclusions&quot;: &quot;Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;First row=563, first column=569, central perimeter=1136. Image header=563x569; preserved extraction=1136 bytes. The central position is the only 1136 perimeter among the 49 tested positions.&quot;,
+  &quot;limitations&quot;: &quot;Chosen exploratory layout and measurements. Numerical equality does not establish rarity or an intended connection. The 11x11 grid differs from printed lines. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Specify any comparison corpus or randomized model before assessing rarity; record layout changes as separate family variants.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;message-grid-correspondences&quot;,
+    &quot;title&quot;: &quot;Grid sums and message-file measurements&quot;,
+    &quot;question&quot;: &quot;Which specified grid sums match preserved message-file measurements?&quot;,
+    &quot;baseline&quot;: &quot;lp2-32-message-grid&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;LP2-32; row-major 11x11; central 5x5&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent flat-index sums from page JSON and JPEG header check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-32-message-grid/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library. Original images/message-2016.jpg must be downloaded separately (26,342 bytes; checksum in image-input manifest). Independent check: python experiments/records/lp2-32-message-grid/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-32-message-grid/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;c684966ef09db99abb5e450ec91b88ac0012c72e3e5ddac705d9ff67183505bd&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/message-2016.jpg&quot;,
+        &quot;sha256&quot;: &quot;a8340ad04b83fb3130e7ed9172867a440812e87089d6aa2b932d97c6ae38aebe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/steganography/message-2016.outguess.bin&quot;,
+        &quot;sha256&quot;: &quot;fe89e77519dfaca998a257ed39c2861303029de2a49183db00eea0fda3a28010&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;504d8f49de1cfc2e95738c783e6b93dd7118d0b1f4f03e1c97c62a310531ea53&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-32-message-grid/check.py&quot;,
+        &quot;sha256&quot;: &quot;dac3ab63cc2d8ca4ecb478165152c05759850ddf313d32c97ec38bca384425f5&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-32-message-grid/results.json&quot;,
+        &quot;sha256&quot;: &quot;395f29b13c4d96a29d8996b28a6a0415a43afc3911c1b5915499bf7c288a0d5c&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;2016 carrier and verified extraction&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/later-messages&quot;
+    },
+    {
+      &quot;label&quot;: &quot;LP2-32 source record&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-32&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;article&quot;: &quot;# LP2-32 grid sums and the 2016 message\n\nThis recount reproduces three numerical equalities: **563, 569 and 1136**. They are the first-row sum, first-column sum and central 5×5 perimeter sum of a specified arrangement of LP2-32. The preserved 2016 image measures 563×569 pixels, and its extracted payload contains 1,136 bytes.\n\n“Supported” refers to these exact calculations. It does not establish that the correspondence was intended, statistically unusual or useful for decryption.\n\n## Construct the grid\n\nUse the archived LP2-32 text. Keep all 121 alphabet runes, remove separators, and place the stream left-to-right into eleven rows of eleven. Do not reverse, rotate, pad or omit runes. Replace each rune with its stored Gematria Primus prime value.\n\nThis is an analytical rearrangement. It is not a claim that the original manuscript has eleven printed lines. The JSON records every grid cell, its original rune ordinal and its source-text character offset so the rearrangement can be followed back to the page.\n\n## Exactly which cells are summed?\n\nThe first row is grid row 1, columns 1–11. The first column is column 1, rows 1–11. They share the top-left cell, so these measurements are not disjoint.\n\nThe central 5×5 block occupies rows 4–8 and columns 4–8, using one-based coordinates. Sum its outer border, counting each corner once. That is 16 cells: five across the top, five across the bottom, and three additional cells down each side. Do not include the central nine cells or count corners twice.\n\n| Quantity | Value |\n| --- | --- |\n| Rune count | 121 |\n| Sum of all 121 prime values | 6045 |\n| First row | 563 |\n| First column | 569 |\n| Central 5×5 perimeter | 1136 |\n| Original 2016 JPEG width × height | 563 × 569 |\n| Preserved OutGuess payload bytes | 1136 |\n\nThe output also lists all eleven row sums, all eleven column sums and all 49 placements of a contiguous 5×5 block within this grid. Only the central block has perimeter sum 1136 under these rules. That statement concerns those 49 placements; it is not a chance probability over other layouts, page choices or target numbers.\n\n## What was compared with the grid?\n\nThe image measurement comes from the original JPEG frame header, not a displayed preview. Payload length means raw bytes in the preserved extracted signed message, including its armor and formatting. It does not mean visible characters, plaintext letters, pixels or the JPEG file size.\n\nThe [later-message guide](#/wiki/later-messages) separately documents an exact OutGuess extraction and signature verification. This recount uses those preserved bytes and hashes them; it does not need to run OutGuess again. The [Wing and Tree guide](#/wiki/wing-and-tree) locates the manuscript drawing. A numerical match does not prove that the two tree images have the same source.\n\n## Reproduce\n\nExtract this experiment’s ZIP with its directory structure intact. It includes the payload, scripts and text inputs. Download the [original 2016 JPEG](images/message-2016.jpg) separately and save it as `images/message-2016.jpg` inside the extracted folder. The ZIP’s image-input manifest gives its checksum. Python’s standard library is sufficient.\n\n```text\npython experiments/records/lp2-32-message-grid/run.py --check\npython experiments/records/lp2-32-message-grid/check.py\n```\n\nThe producer reads the rune text and parses JPEG segment headers. The checker reads the separate archived page record, uses flat-index cell sets to recount the perimeters, and checks the image’s baseline frame header independently. Both use the same stored alphabet, so their agreement does not independently resolve transcription ambiguities.\n\n## Limits and follow-up\n\nThe original lead selected this page, arrangement and central border for inspection. No null model or accounting for other explored arrangements is supplied here. A follow-up can test a stated family of layouts or a fixed shuffle model, but should not describe this one successful comparison as an exhaustive search. See [search space and bounds](#/wiki/search-space) and [null models](#/wiki/null-models).\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-32-message-grid/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;c684966ef09db99abb5e450ec91b88ac0012c72e3e5ddac705d9ff67183505bd&quot;
 }</pre></article><article id="lp2-39-header-cribs"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp2-39-header-cribs&quot;,
   &quot;title&quot;: &quot;LP2-39: twenty proposed red-header cribs&quot;,

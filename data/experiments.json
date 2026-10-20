@@ -1093,6 +1093,109 @@
       "script_sha256": "0298ea05a55bdc35570e5718cc238456c2679ae86e8a26698f45f18e4ac86fbe"
     },
     {
+      "id": "lp2-32-message-grid",
+      "title": "LP2-32: grid sums and the 2016 message file",
+      "status": "published",
+      "question": "Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?",
+      "summary": "Reproduces sums 563, 569 and 1136 under a specified grid layout. These equal the preserved image dimensions and payload bytes; significance and intent remain untested.",
+      "tags": [
+        "tree",
+        "2016 message",
+        "563",
+        "569",
+        "1136",
+        "11x11",
+        "5x5",
+        "grid sums",
+        "circumference"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-32"
+        ],
+        "artifacts": [
+          "images/message-2016.jpg",
+          "exports/steganography/message-2016.outguess.bin"
+        ],
+        "representation": "All 121 alphabet runes in archived LP2-32 order, stripped of separators and filled left-to-right into 11 rows of 11; Gematria Primus prime values.",
+        "procedure": "Sum first row, first column, and the 16 distinct cells on the central 5x5 perimeter; compare with JPEG header dimensions and payload bytes. Report all 49 contiguous 5x5 perimeter sums.",
+        "parameters": "One row-major 11x11 layout; central rows and columns 4–8 one-based; corners counted once; 49 possible 5x5 positions; no rotations or reversals.",
+        "exclusions": "Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption."
+      },
+      "outcome": "supported",
+      "finding": "First row=563, first column=569, central perimeter=1136. Image header=563x569; preserved extraction=1136 bytes. The central position is the only 1136 perimeter among the 49 tested positions.",
+      "limitations": "Chosen exploratory layout and measurements. Numerical equality does not establish rarity or an intended connection. The 11x11 grid differs from printed lines. Human review pending.",
+      "next_steps": "Specify any comparison corpus or randomized model before assessing rarity; record layout changes as separate family variants.",
+      "family": {
+        "id": "message-grid-correspondences",
+        "title": "Grid sums and message-file measurements",
+        "question": "Which specified grid sums match preserved message-file measurements?",
+        "baseline": "lp2-32-message-grid"
+      },
+      "variant": {
+        "label": "LP2-32; row-major 11x11; central 5x5",
+        "changes": []
+      },
+      "review": {
+        "reviewer": "Codex; independent flat-index sums from page JSON and JPEG header check; human review pending",
+        "retested_on": "2026-10-20",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/lp2-32-message-grid/run.py --check",
+        "environment": "Python 3.12 standard library. Original images/message-2016.jpg must be downloaded separately (26,342 bytes; checksum in image-input manifest). Independent check: python experiments/records/lp2-32-message-grid/check.py",
+        "script": "experiments/records/lp2-32-message-grid/run.py",
+        "script_sha256": "c684966ef09db99abb5e450ec91b88ac0012c72e3e5ddac705d9ff67183505bd",
+        "inputs": [
+          {
+            "path": "data/index.json",
+            "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+          },
+          {
+            "path": "text/lp2-32.txt",
+            "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "path": "images/message-2016.jpg",
+            "sha256": "a8340ad04b83fb3130e7ed9172867a440812e87089d6aa2b932d97c6ae38aebe"
+          },
+          {
+            "path": "exports/steganography/message-2016.outguess.bin",
+            "sha256": "fe89e77519dfaca998a257ed39c2861303029de2a49183db00eea0fda3a28010"
+          },
+          {
+            "path": "data/pages/lp2-32.json",
+            "sha256": "504d8f49de1cfc2e95738c783e6b93dd7118d0b1f4f03e1c97c62a310531ea53"
+          },
+          {
+            "path": "experiments/records/lp2-32-message-grid/check.py",
+            "sha256": "dac3ab63cc2d8ca4ecb478165152c05759850ddf313d32c97ec38bca384425f5"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/lp2-32-message-grid/results.json",
+            "sha256": "395f29b13c4d96a29d8996b28a6a0415a43afc3911c1b5915499bf7c288a0d5c"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "2016 carrier and verified extraction",
+          "url": "https://jelliottdev.github.io/#/wiki/later-messages"
+        },
+        {
+          "label": "LP2-32 source record",
+          "url": "https://jelliottdev.github.io/#/page/lp2-32"
+        }
+      ],
+      "related": [],
+      "article": "# LP2-32 grid sums and the 2016 message\n\nThis recount reproduces three numerical equalities: **563, 569 and 1136**. They are the first-row sum, first-column sum and central 5×5 perimeter sum of a specified arrangement of LP2-32. The preserved 2016 image measures 563×569 pixels, and its extracted payload contains 1,136 bytes.\n\n“Supported” refers to these exact calculations. It does not establish that the correspondence was intended, statistically unusual or useful for decryption.\n\n## Construct the grid\n\nUse the archived LP2-32 text. Keep all 121 alphabet runes, remove separators, and place the stream left-to-right into eleven rows of eleven. Do not reverse, rotate, pad or omit runes. Replace each rune with its stored Gematria Primus prime value.\n\nThis is an analytical rearrangement. It is not a claim that the original manuscript has eleven printed lines. The JSON records every grid cell, its original rune ordinal and its source-text character offset so the rearrangement can be followed back to the page.\n\n## Exactly which cells are summed?\n\nThe first row is grid row 1, columns 1–11. The first column is column 1, rows 1–11. They share the top-left cell, so these measurements are not disjoint.\n\nThe central 5×5 block occupies rows 4–8 and columns 4–8, using one-based coordinates. Sum its outer border, counting each corner once. That is 16 cells: five across the top, five across the bottom, and three additional cells down each side. Do not include the central nine cells or count corners twice.\n\n| Quantity | Value |\n| --- | --- |\n| Rune count | 121 |\n| Sum of all 121 prime values | 6045 |\n| First row | 563 |\n| First column | 569 |\n| Central 5×5 perimeter | 1136 |\n| Original 2016 JPEG width × height | 563 × 569 |\n| Preserved OutGuess payload bytes | 1136 |\n\nThe output also lists all eleven row sums, all eleven column sums and all 49 placements of a contiguous 5×5 block within this grid. Only the central block has perimeter sum 1136 under these rules. That statement concerns those 49 placements; it is not a chance probability over other layouts, page choices or target numbers.\n\n## What was compared with the grid?\n\nThe image measurement comes from the original JPEG frame header, not a displayed preview. Payload length means raw bytes in the preserved extracted signed message, including its armor and formatting. It does not mean visible characters, plaintext letters, pixels or the JPEG file size.\n\nThe [later-message guide](#/wiki/later-messages) separately documents an exact OutGuess extraction and signature verification. This recount uses those preserved bytes and hashes them; it does not need to run OutGuess again. The [Wing and Tree guide](#/wiki/wing-and-tree) locates the manuscript drawing. A numerical match does not prove that the two tree images have the same source.\n\n## Reproduce\n\nExtract this experiment’s ZIP with its directory structure intact. It includes the payload, scripts and text inputs. Download the [original 2016 JPEG](images/message-2016.jpg) separately and save it as `images/message-2016.jpg` inside the extracted folder. The ZIP’s image-input manifest gives its checksum. Python’s standard library is sufficient.\n\n```text\npython experiments/records/lp2-32-message-grid/run.py --check\npython experiments/records/lp2-32-message-grid/check.py\n```\n\nThe producer reads the rune text and parses JPEG segment headers. The checker reads the separate archived page record, uses flat-index cell sets to recount the perimeters, and checks the image’s baseline frame header independently. Both use the same stored alphabet, so their agreement does not independently resolve transcription ambiguities.\n\n## Limits and follow-up\n\nThe original lead selected this page, arrangement and central border for inspection. No null model or accounting for other explored arrangements is supplied here. A follow-up can test a stated family of layouts or a fixed shuffle model, but should not describe this one successful comparison as an exhaustive search. See [search space and bounds](#/wiki/search-space) and [null models](#/wiki/null-models).\n",
+      "article_path": "experiments/records/lp2-32-message-grid/article.md",
+      "script_sha256": "c684966ef09db99abb5e450ec91b88ac0012c72e3e5ddac705d9ff67183505bd"
+    },
+    {
       "id": "lp2-39-header-cribs",
       "title": "LP2-39: twenty proposed red-header cribs",
       "status": "published",

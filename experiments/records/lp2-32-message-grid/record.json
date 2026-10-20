@@ -1,0 +1,100 @@
+{
+  "id": "lp2-32-message-grid",
+  "title": "LP2-32: grid sums and the 2016 message file",
+  "status": "published",
+  "question": "Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?",
+  "summary": "Reproduces sums 563, 569 and 1136 under a specified grid layout. These equal the preserved image dimensions and payload bytes; significance and intent remain untested.",
+  "tags": [
+    "tree",
+    "2016 message",
+    "563",
+    "569",
+    "1136",
+    "11x11",
+    "5x5",
+    "grid sums",
+    "circumference"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-32"
+    ],
+    "artifacts": [
+      "images/message-2016.jpg",
+      "exports/steganography/message-2016.outguess.bin"
+    ],
+    "representation": "All 121 alphabet runes in archived LP2-32 order, stripped of separators and filled left-to-right into 11 rows of 11; Gematria Primus prime values.",
+    "procedure": "Sum first row, first column, and the 16 distinct cells on the central 5x5 perimeter; compare with JPEG header dimensions and payload bytes. Report all 49 contiguous 5x5 perimeter sums.",
+    "parameters": "One row-major 11x11 layout; central rows and columns 4–8 one-based; corners counted once; 49 possible 5x5 positions; no rotations or reversals.",
+    "exclusions": "Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption."
+  },
+  "outcome": "supported",
+  "finding": "First row=563, first column=569, central perimeter=1136. Image header=563x569; preserved extraction=1136 bytes. The central position is the only 1136 perimeter among the 49 tested positions.",
+  "limitations": "Chosen exploratory layout and measurements. Numerical equality does not establish rarity or an intended connection. The 11x11 grid differs from printed lines. Human review pending.",
+  "next_steps": "Specify any comparison corpus or randomized model before assessing rarity; record layout changes as separate family variants.",
+  "family": {
+    "id": "message-grid-correspondences",
+    "title": "Grid sums and message-file measurements",
+    "question": "Which specified grid sums match preserved message-file measurements?",
+    "baseline": "lp2-32-message-grid"
+  },
+  "variant": {
+    "label": "LP2-32; row-major 11x11; central 5x5",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent flat-index sums from page JSON and JPEG header check; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-32-message-grid/run.py --check",
+    "environment": "Python 3.12 standard library. Original images/message-2016.jpg must be downloaded separately (26,342 bytes; checksum in image-input manifest). Independent check: python experiments/records/lp2-32-message-grid/check.py",
+    "script": "experiments/records/lp2-32-message-grid/run.py",
+    "script_sha256": "c684966ef09db99abb5e450ec91b88ac0012c72e3e5ddac705d9ff67183505bd",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "images/message-2016.jpg",
+        "sha256": "a8340ad04b83fb3130e7ed9172867a440812e87089d6aa2b932d97c6ae38aebe"
+      },
+      {
+        "path": "exports/steganography/message-2016.outguess.bin",
+        "sha256": "fe89e77519dfaca998a257ed39c2861303029de2a49183db00eea0fda3a28010"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "504d8f49de1cfc2e95738c783e6b93dd7118d0b1f4f03e1c97c62a310531ea53"
+      },
+      {
+        "path": "experiments/records/lp2-32-message-grid/check.py",
+        "sha256": "dac3ab63cc2d8ca4ecb478165152c05759850ddf313d32c97ec38bca384425f5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-32-message-grid/results.json",
+        "sha256": "395f29b13c4d96a29d8996b28a6a0415a43afc3911c1b5915499bf7c288a0d5c"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "2016 carrier and verified extraction",
+      "url": "https://jelliottdev.github.io/#/wiki/later-messages"
+    },
+    {
+      "label": "LP2-32 source record",
+      "url": "https://jelliottdev.github.io/#/page/lp2-32"
+    }
+  ],
+  "related": []
+}
