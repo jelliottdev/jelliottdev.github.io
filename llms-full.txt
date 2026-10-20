@@ -2651,6 +2651,7 @@ Visual observation record (selected observations, original-image hashes and revi
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 Möbius and the crossed-loop drawing: https://jelliottdev.github.io/reference/articles/mobius.html
+Word lengths and corpus comparisons: https://jelliottdev.github.io/reference/articles/word-lengths.html
 Line gaps: spacing, punctuation and file sizes: https://jelliottdev.github.io/reference/articles/line-gaps.html
 
 ## Sources
@@ -18392,6 +18393,23 @@ Runes per token under the stated boundary rules. This chart contains no English 
 
 Joining pages matters. Parsing every page separately with the same within-page rules produces 2,928 pieces: some words are split by the sheet boundary. That is a different object, not an alternative spelling of the same count. The complete token ledger records the original start and end page and character offsets, including tokens that span pages.
 
+LP2-21: three consecutive lengths of 11, 11 and 10
+
+On LP2-21, three consecutive rune tokens have lengths 11–11–10. They are tokens 1,167–1,169 in the joined LP2-00–55 ledger, not word numbers printed on the page. The exact pattern occurs once among the ledger’s 2,894 overlapping three-token windows. This is a descriptive count under the conventions above, not an English-language probability.
+
+	Ledger token	Rune sequence	Length
+
+	1,167	ᚦᛖᚩᛄᚷᛋᛝᚣᛗᛟᚻ	11
+
+	1,168	ᛗᚠᚦᛉᚦᚫᛋᛈᚣᚩᚠ	11: ten before the line wrap, one after
+
+	1,169	ᛈᛟᛋᛖᚫᛇᛗᛚᛈᚾ	10
+
+
+The middle token crosses a line wrap. Treating that wrap as a separator would split it into lengths 10 and 1 and erase the reported chain. Under the archived conventions, slash and line breaks are transparent while the surrounding hyphens delimit tokens. None of these three tokens crosses a page boundary or contains an apostrophe. The summary report now includes the matching tokens and their source offsets; the independent scanner checks the middle token’s 10+1 split.
+
+A one-rune-for-one-rune cipher that preserves boundaries must preserve this length sequence. It does not follow that the three plaintext words have 11, 11 and 10 Latin letters: TH, NG and other multi-letter labels can represent single runes. Nor does this observation by itself reject English or establish a boundary-changing cipher. A comparison needs a frozen rune-conversion rule, a stated corpus and a rule for selecting unusual patterns. Choosing this chain after inspecting the page and then treating it as a preselected test would overstate its significance. No solved-text baseline or statistical significance result is claimed for this chain here.
+
 Why an earlier summary has 2,902 tokens
 
 The pinned historical summary is consistent with six additional length-one tokens. The archive contains exactly six isolated single decimal digits:
@@ -18505,10 +18523,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - Histogram of 2896 rune-only tokens in LP2-00 through LP2-55; three-rune tokens are most frequent at 720, followed by four-rune tokens at 513 and two-rune tokens at 448
   https://jelliottdev.github.io/exports/figures/word-lengths.svg
-- Download the counts and conventions; summary and source hashes
+- Download the counts and conventions; summary report; summary and source hashes
   https://jelliottdev.github.io/exports/unsolved-word-lengths.json
 - complete token ledger; token ledger
   https://jelliottdev.github.io/exports/unsolved-word-tokens.json
+- LP2-21
+  https://jelliottdev.github.io/reference/lp2-21.html
 - pinned historical summary
   https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/data/unsolved_summary.csv
 - LP2-10

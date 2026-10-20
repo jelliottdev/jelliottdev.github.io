@@ -27,3 +27,16 @@ for item in report['standalone_single_digits']:
 assert [x['token'] for x in report['standalone_single_digits']]==['7','1','2','3','4','5']
 assert report['all_historical_fields_match'] and all(report['historical_comparisons'].values())
 print('PASS: independent 2896-token scan, all original source spans, 12956 rune count and six digit locations')
+
+# Locate the chain from the independent character scanner, not the report.
+lengths = [sum(c in runes for c in word) for word in words]
+starts = [i for i in range(len(words) - 2) if lengths[i:i+3] == [11, 11, 10]]
+chain = report['eleven_eleven_ten']
+assert chain['windows_examined'] == len(words) - 2
+assert [i + 1 for i in starts] == [m['first_ordinal'] for m in chain['matches']] == [1167]
+assert chain['matches'][0]['tokens'] == ledger[1166:1169]
+assert all(t['start']['page'] == t['end']['page'] == 'lp2-21' for t in ledger[1166:1169])
+row = ledger[1167]
+fragment = pages[21][row['start']['offset']:row['end']['offset_exclusive']]
+assert [sum(c in runes for c in part) for part in fragment.splitlines()] == [10, 1]
+print('PASS: one 11-11-10 chain in 2894 windows; middle token wraps 10+1 runes')

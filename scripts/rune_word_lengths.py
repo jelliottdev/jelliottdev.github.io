@@ -56,6 +56,17 @@ def measure():
     def summary(values):
         return {'tokens':len(values),'total_counted_units':sum(values),'histogram':{str(k):v for k,v in sorted(Counter(values).items())},'two_rune_fraction':values.count(2)/len(values),'three_rune_fraction':values.count(3)/len(values)}
     result={'schema':'liberpedia-word-length-audit-v1','pages':'LP2-00–55','method':'Concatenate archived pages in order; remove slash and CR/LF wraps; preserve other delimiters. Rune runs with internal apostrophes are tokens; apostrophes count zero. Do not reset at page boundaries. Include headings. Decimal and alphanumeric content is excluded from rune tokens.','inputs':source_files,'page_local_token_pieces':page_local_tokens,'rune_only':summary(lengths),'standalone_single_digits':digits,'runes_plus_single_digits':summary(augmented),'augmented_metrics':metrics,'historical_summary_url':SOURCE,'historical_comparisons':matched,'all_historical_fields_match':all(matched.values()),'interpretation':'Including six isolated decimal digits as length-one tokens reconstructs the pinned summary. This is consistent with a counting convention; without its token ledger it does not prove the historical pipeline used that exact rule. No corpus comparison or p-value is reproduced here.'}
+    matches = []
+    for start in range(len(tokens) - 2):
+        window = tokens[start:start + 3]
+        if [token['rune_length'] for token in window] == [11, 11, 10]:
+            matches.append({'first_ordinal': start + 1, 'tokens': window})
+    result['eleven_eleven_ten'] = {
+        'pattern': [11, 11, 10],
+        'windows_examined': len(tokens) - 2,
+        'matches': matches,
+        'interpretation': 'Descriptive exact-pattern count under the existing joined-page tokenization. No English baseline or significance test.',
+    }
     return result,tokens
 
 
