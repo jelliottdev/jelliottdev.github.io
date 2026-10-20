@@ -61,7 +61,7 @@ register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
-for script in ['reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py']:
+for script in ['reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')
@@ -73,6 +73,7 @@ for experiment in read('data/experiments.json')['records']:
 register('data/evidence/spelling-sums.json','Spelling and prime-sum calculations')
 register('data/evidence/reading-methods.json','Known method parameters')
 register('data/evidence/visual-measurements.json','Visual measurement conventions')
+register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 register('data/evidence/signature-checks.json','Isolated signature verification results')
 register('data/evidence/known-readings.json','Known-reading provenance')
 save('reference/index.html','<!doctype html><html lang="en"><meta charset="utf-8"><title>Liberpedia reference index</title><h1>Liberpedia reference index</h1><p>Standalone reference pages; no JavaScript required.</p><ul>'+''.join(f'<li><a href="{p["id"]}.html">{p["id"].upper()}</a> · <a href="{p["id"]}.md">Plain text</a></li>' for p in index['pages'])+'</ul></html>')

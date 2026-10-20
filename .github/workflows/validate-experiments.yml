@@ -28,6 +28,8 @@ jobs:
       - run: python scripts/reproduce_cover_chain.py
       - run: python scripts/check_number_examples.py
       - run: python scripts/reproduce_prime_sums.py
+      - run: python scripts/test_rune_ioc.py
+      - run: python scripts/rune_ioc.py --check
       - run: python scripts/inspect_visual_records.py
       - name: Check that published exports match reviewed records
         run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json reference/articles articles/readings
