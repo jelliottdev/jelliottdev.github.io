@@ -1,0 +1,188 @@
+{
+  "id": "wing-tree-eleven-rune-windows",
+  "title": "LP2-27–32: eleven-rune sums of 563 and 569",
+  "status": "published",
+  "question": "Do sums 563 and 569 recur in eleven consecutive runes elsewhere in the Wing and Tree section?",
+  "summary": "A complete within-page census finds seven windows summing to 563 and ten to 569 among 1373 starts. This measures recurrence, not chance probability.",
+  "tags": [
+    "563",
+    "569",
+    "2016 message",
+    "tree",
+    "Wing and Tree",
+    "eleven rune windows",
+    "sliding windows",
+    "prime sums"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32"
+    ],
+    "artifacts": [],
+    "representation": "All alphabet runes in archived LP2-27–32 order, including headings; separators removed; each page remains a separate stream; Gematria Primus prime values.",
+    "procedure": "Enumerate every eleven-consecutive-rune window within each page and count sums equal to fixed targets 563 and 569; retain every window and its coordinates.",
+    "parameters": "Length 11; targets 563 and 569; one-rune steps; all 1373 eligible starts in six pages; no page crossing, wrapping, reversal or padding.",
+    "exclusions": "Grid columns and perimeters, manuscript-row selection, other lengths or targets, cross-page windows, file-dimension retesting, null-model simulations, image provenance and decryption."
+  },
+  "outcome": "supported",
+  "finding": "563 occurs seven times across LP2-28, LP2-29, LP2-31 and LP2-32; 569 occurs ten times across LP2-27–31. Mean window sum: 784505/1373, approximately 571.38.",
+  "limitations": "Targets and section were selected after the original observation. Overlapping windows share ten runes; hit counts are not independent trials or p-values. No unspecified image-only row claim is evaluated. Human review pending.",
+  "next_steps": "Freeze any further lengths, boundary rules or null model as separate variants before assessing significance.",
+  "family": {
+    "id": "message-grid-correspondences",
+    "title": "Rune sums and message-file measurements",
+    "question": "Which specified rune selections reproduce the numerical targets associated with the 2016 message?",
+    "baseline": "lp2-32-message-grid"
+  },
+  "variant": {
+    "label": "Six pages; all consecutive eleven-rune windows",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-32"
+        ],
+        "after": [
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32"
+        ],
+        "reason": "Expand from LP2-32 to the six-page Wing and Tree group."
+      },
+      {
+        "field": "artifacts",
+        "before": [
+          "images/message-2016.jpg",
+          "exports/steganography/message-2016.outguess.bin"
+        ],
+        "after": [],
+        "reason": "Reuse the fixed targets without remeasuring the message files."
+      },
+      {
+        "field": "representation",
+        "before": "All 121 alphabet runes in archived LP2-32 order, stripped of separators and filled left-to-right into 11 rows of 11; Gematria Primus prime values.",
+        "after": "All alphabet runes in archived LP2-27–32 order, including headings; separators removed; each page remains a separate stream; Gematria Primus prime values.",
+        "reason": "Use a linear stream per page instead of a square grid."
+      },
+      {
+        "field": "procedure",
+        "before": "Sum first row, first column, and the 16 distinct cells on the central 5x5 perimeter; compare with JPEG header dimensions and payload bytes. Report all 49 contiguous 5x5 perimeter sums.",
+        "after": "Enumerate every eleven-consecutive-rune window within each page and count sums equal to fixed targets 563 and 569; retain every window and its coordinates.",
+        "reason": "Enumerate every eligible consecutive window."
+      },
+      {
+        "field": "parameters",
+        "before": "One row-major 11x11 layout; central rows and columns 4–8 one-based; corners counted once; 49 possible 5x5 positions; no rotations or reversals.",
+        "after": "Length 11; targets 563 and 569; one-rune steps; all 1373 eligible starts in six pages; no page crossing, wrapping, reversal or padding.",
+        "reason": "Fix length eleven and count all 1373 starts."
+      },
+      {
+        "field": "exclusions",
+        "before": "Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.",
+        "after": "Grid columns and perimeters, manuscript-row selection, other lengths or targets, cross-page windows, file-dimension retesting, null-model simulations, image provenance and decryption.",
+        "reason": "Exclude geometric selections and significance testing."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent direct summation from page JSON; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wing-tree-eleven-rune-windows/run.py --check",
+    "environment": "Python 3 standard library. Independent check: python experiments/records/wing-tree-eleven-rune-windows/check.py. Experiment ZIP includes all inputs; no images or network needed.",
+    "script": "experiments/records/wing-tree-eleven-rune-windows/run.py",
+    "script_sha256": "7463edbab7e919dca1c11666b3233982620fd5b5aeb1832080b7bc41a7630f72",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775"
+      },
+      {
+        "path": "scripts/wing_tree_windows.py",
+        "sha256": "963bfce2fe74c9370974928384ce6e7b4f49adc78506b4947864187e6d888d3c"
+      },
+      {
+        "path": "experiments/records/wing-tree-eleven-rune-windows/check.py",
+        "sha256": "2cd4dd61a799f931c4c36d90e31ed1af0e85651f8ff6d0dd7ff3a73c12b31825"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "504d8f49de1cfc2e95738c783e6b93dd7118d0b1f4f03e1c97c62a310531ea53"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/wing-tree-windows.json",
+        "sha256": "6b72931dada990ca2b862d094068dcde1277c7f35cfba555a4ea90c7fd34ef6e"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid correspondence baseline",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-32-message-grid"
+    },
+    {
+      "label": "Window census explanation",
+      "url": "https://jelliottdev.github.io/#/wiki/wing-and-tree?section=eleven-rune-windows"
+    }
+  ],
+  "related": [
+    "lp2-32-message-grid"
+  ]
+}
