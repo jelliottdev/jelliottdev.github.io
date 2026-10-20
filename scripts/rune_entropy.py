@@ -31,8 +31,20 @@ def report(page):
         "observed_symbols": sum(c > 0 for c in row["counts"]),
         "empirical_entropy_bits": entropy(row["counts"]),
         "uniform_29_entropy_bits": math.log2(29),
+        "finite_sample_maximum_entropy_bits": maximum_entropy(row["n"], 29),
         "interpretation": "Single-symbol frequency summary, not entropy rate, a randomness test, or evidence of a cipher family. Empty input has null entropy.",
     }
+
+
+def maximum_entropy(n, alphabet_size):
+    """Maximum empirical entropy: integer counts differ by at most one."""
+    if type(n) is not int or n < 0:
+        raise ValueError("Sample size must be a nonnegative integer")
+    if type(alphabet_size) is not int or alphabet_size < 1:
+        raise ValueError("Alphabet size must be a positive integer")
+    quotient, remainder = divmod(n, alphabet_size)
+    return entropy([quotient + 1] * remainder
+                   + [quotient] * (alphabet_size - remainder))
 
 
 def main():

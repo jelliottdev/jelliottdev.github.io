@@ -49,6 +49,25 @@ The measurement uses the archived LP2-31 transcription, SHA-256 493cb51478b106dd
 
 The uniform value is a distributional upper bound, not the expected measured value of a finite random page. Here 269 is not divisible by 29, so exact equality of all integer counts is impossible. Sample length and the number of observed symbols matter when comparing pages. An empty rune stream receives null, because there are no empirical probabilities to calculate; it should not be mistaken for a nonempty one-symbol stream with entropy zero.
 
+The most even counts this length permits
+
+For 269 runes in a 29-rune alphabet, divide 269 = 29 × 9 + 8. The most even possible counts are eight symbols appearing ten times and twenty-one appearing nine times. Their entropy is 4.856331980164111 bits per rune. The report includes this as finite_sample_maximum_entropy_bits.
+
+In general, write N = Kq + r, where K is the alphabet size and r is the remainder. Assign count q + 1 to r symbols and q to the other K − r symbols, then apply the entropy formula. Moving one observation from a count that exceeds another by at least two makes the counts more balanced and increases entropy; repeating this gives the maximum. This is a bound across all possible count vectors of that length, not a rearrangement of the page’s actual counts.
+
+	Sample length, alphabet of 29	Maximizing counts	Maximum empirical entropy
+
+	1	One count of 1; 28 zeros	0 bits
+
+	4	Four counts of 1; 25 zeros	2 bits
+
+	58	29 counts of 2	log2(29) bits
+
+	269	Eight counts of 10; 21 counts of 9	About 4.856332 bits
+
+
+The alphabet remains all 29 runes, even if a short sample contains fewer distinct runes. Neither this maximum nor the gap below it is an expected random value or a significance test. Random sampling can produce uneven counts; a probability claim needs a specified null model. Empty input has no empirical distribution, so its maximum is also reported as null.
+
 What it cannot distinguish
 
 A pure transposition preserves every count, so it preserves this entropy. A fixed one-to-one substitution relabels the same counts and also preserves it. Therefore this score cannot choose among those transformations of the same input. See cipher invariants.
@@ -68,12 +87,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the archived LP2-31 transcription
   https://jelliottdev.github.io/text/lp2-31.txt
+- null model; comparison model
+  https://jelliottdev.github.io/reference/articles/null-models.html
 - cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - repeated sequences
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
-- comparison model
-  https://jelliottdev.github.io/reference/articles/null-models.html
 - Entropy script
   https://jelliottdev.github.io/scripts/rune_entropy.py
 - small-example tests

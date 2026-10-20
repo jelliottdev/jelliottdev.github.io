@@ -6,10 +6,27 @@ import tempfile
 from pathlib import Path
 import unittest
 from collections import Counter
-from rune_entropy import entropy, report
+from rune_entropy import entropy, report, maximum_entropy
 
 
 class RuneEntropy(unittest.TestCase):
+    def test_finite_maximum_against_exhaustive_small_distributions(self):
+        import itertools
+        for n in range(1, 8):
+            for size in range(1, 5):
+                possible = (counts for counts in itertools.product(range(n + 1), repeat=size)
+                            if sum(counts) == n)
+                self.assertAlmostEqual(maximum_entropy(n, size),
+                                       max(entropy(counts) for counts in possible))
+        self.assertIsNone(maximum_entropy(0, 29))
+        self.assertEqual(maximum_entropy(1, 29), 0)
+        self.assertAlmostEqual(maximum_entropy(4, 29), 2)
+        self.assertAlmostEqual(maximum_entropy(58, 29), math.log2(29))
+        self.assertAlmostEqual(maximum_entropy(269, 29), entropy([10] * 8 + [9] * 21))
+        for n, size in [(-1, 29), (True, 29), (1, 0), (1, 1.5)]:
+            with self.assertRaises(ValueError):
+                maximum_entropy(n, size)
+
     def test_cli_saved_bytes_and_overwrite(self):
         command = [sys.executable, str(Path(__file__).with_name("rune_entropy.py")), "lp2-31"]
         printed = subprocess.run(command, capture_output=True, check=True).stdout
