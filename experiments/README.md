@@ -54,6 +54,14 @@ If header, separator, or data rows have different cell counts, the full table is
 
 Group tests by a shared scientific question and method, not merely a keyword or page. Every new record has `family` (`id`, `title`, `question`, `baseline`) and `variant` (`label`, `changes`). All members repeat identical family metadata; the baseline names a published record. Older independent records remain readable.
 
+To start a separate follow-up page in an existing family:
+
+```sh
+python scripts/new_experiment.py my-row-sum-variant --baseline lp2-row-prime-sums
+```
+
+This creates a new draft folder with the baseline's family and scope, plus a link back to it. It does not inherit results, input hashes, output files, review, or published status. Replace the variant label, change the intended scope fields, and record their exact differences before running. The command accepts a published family baseline; if you are following up on a sibling variant, use its family's baseline here and explain the sibling connection in the article. Add that sibling to `related` as appropriate.
+
 The baseline has an empty `changes` list. For a variant, list every changed scope field once: `pages`, `representation`, `procedure`, `parameters`, or `exclusions`. Each entry has `field`, the exact `before` and `after` values from the two records, and a `reason`. The builder rejects missing, invented, or inaccurate differences. Changing several variables is permitted but must be visible; it cannot isolate the effect of one variable.
 
 An identical rerun belongs in the original record's retest history. A new parameter sweep belongs in one planned record with its full result table, not dozens of records selected after seeing favorable values. Preserve the original plan and outputs when recording exploratory follow-ups. A fundamentally different question or method needs a new family; use `related` for connections across families.
