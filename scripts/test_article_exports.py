@@ -24,6 +24,12 @@ class ArticleExports(unittest.TestCase):
         self.assertEqual("".join(parser.parts).strip(), "3258\t3222")
 
     def test_links_resolve_to_standalone_references(self):
+        self.assertEqual(reference_url("#cover", "visual-index"),
+                         "https://jelliottdev.github.io/reference/articles/visual-index.html#cover")
+        self.assertEqual(reference_url("#part%20two", "example"),
+                         "https://jelliottdev.github.io/reference/articles/example.html#part%20two")
+        self.assertEqual(reference_url("#/wiki/outguess", "visual-index"),
+                         "https://jelliottdev.github.io/reference/articles/outguess.html")
         self.assertEqual(reference_url("#/wiki/outguess"),
                          "https://jelliottdev.github.io/reference/articles/outguess.html")
         self.assertEqual(reference_url("#/wiki/visual-index?section=spiral-branches"),

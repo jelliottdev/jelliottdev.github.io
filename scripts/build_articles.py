@@ -25,8 +25,11 @@ class Text(HTMLParser):
         if target and target not in self.links:
             self.links.append(target)
 
-def reference_url(target):
+def reference_url(target, article_id=None):
     """Prefer standalone guide/page references over JavaScript routes."""
+    if target.startswith("#") and not target.startswith("#/") and article_id:
+        return urljoin("https://jelliottdev.github.io/reference/articles/"
+                       + article_id + ".html", target)
     if target.startswith("#/wiki/"):
         article, _, query = target.split("/")[2].partition("?")
         section = parse_qs(query).get("section", [""])[0]
@@ -60,7 +63,7 @@ def build():
         a["html"] = body
         # Preserve Python indentation and tabular boundaries in downloadable text.
         a["text"] = "".join(parser.parts).strip()
-        a["references"] = [reference_url(link) for link in parser.links]
+        a["references"] = [reference_url(link, a["id"]) for link in parser.links]
         a["linked_articles"] = outgoing[a["id"]]
         title = html.escape(a["title"])
         standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
