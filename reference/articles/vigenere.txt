@@ -78,6 +78,8 @@ For ordinary runes, j advances once per rune; punctuation consumes no key positi
 
 If output matches until one point, inspect the trace around that point. Check transcription, multi-letter rune counting, boundary resets, and whether a copied rune consumed a key value. One alignment error can affect every later rune. The column-IoC explanation describes why repeating keys motivate a periodic analysis, but such an analysis must use the same advancement convention.
 
+Testing the known keys on other pages
+The known-key reuse experiment tests both recorded vectors at every phase, with addition and subtraction, on LP2-00–55. None of its 2352 candidates matched the nine fixed known-reading openings. It uses no interruptions and does not evaluate general readability, so it does not rule out Vigenère or other keys.
 Sources and verification
 Control parameters and interruption provenance · Reproduction script · Pinned historical walkthrough. The eight-rune example and positions 47–49 were checked against the Welcome trace on 20 October 2026. Recipes reproduce published controls; they are not new solutions.
 
@@ -100,6 +102,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/figures/welcome-key-alignment.svg
 - column-IoC explanation
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html#columns
+- known-key reuse experiment
+  https://jelliottdev.github.io/#/experiments/lp2-known-vigenere-keys
 - Reproduction script
   https://jelliottdev.github.io/scripts/reproduce_reading.py
 - Pinned historical walkthrough
