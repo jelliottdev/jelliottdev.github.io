@@ -118,7 +118,9 @@ for(const [query,id,section] of [
  ['Book of Daniel','blake-nebuchadnezzar','daniel'],
  ['Urizen','urizen','character'],
  ['Europe a Prophecy','blake-ancient-of-days','frontispiece'],
- ['foolish consistency','emerson-self-reliance','passages'],
+ ['foolish consistency','emerson-self-reliance','consistency'],
+ ['Emerson conformity','emerson-self-reliance','conformity'],
+ ['Emerson principles','emerson-self-reliance','fortune'],
  ['koan meaning','koans','term'],
  ['White Queen','lewis-carroll','queen-scene'],
  ['six impossible things','lewis-carroll','wording']
