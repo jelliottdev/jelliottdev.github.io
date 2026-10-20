@@ -73,3 +73,5 @@ Guide contents include authored H2 sections and H3 subsections in a nested list.
 ## Literal tokens and code sizing
 
 Article and standalone-reference code uses an explicit monospace font stack. Inline tokens inherit the surrounding text size; script blocks stay at 14px on phones as well as desktop. Wrapped blocks must fit a 320px viewport, and unwrapped blocks scroll horizontally within their container. Runic transcription blocks retain their larger historic-script typography.
+
+Transcription row links scroll the selected row into view, highlight it, and move programmatic focus to that row. The row uses tabindex="-1" so it does not add a stop to ordinary Tab navigation; Tab continues from the linked row. A nonexistent row must leave the page usable.
