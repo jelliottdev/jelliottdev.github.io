@@ -1337,7 +1337,7 @@
   &quot;outcome&quot;: &quot;not-supported&quot;,
   &quot;finding&quot;: &quot;No nonidentity permutation exists within scope: 812 anchor pairs reduce to the identity branch and 13,212 candidate maps with no survivors.&quot;,
   &quot;limitations&quot;: &quot;Full literal-prime alphabet only; not rune indices, partial page support, noninjective maps or position-dependent rules. Human review pending. No proof-assistant rerun.&quot;,
-  &quot;next_steps&quot;: &quot;Test actual partial-page supports separately before extending this statement to every page.&quot;,
+  &quot;next_steps&quot;: &quot;The page-support variant now checks the archived LP2 supports and documents two LP2-55 exceptions. Nonlinear and position-dependent maps require separate tests.&quot;,
   &quot;reproduction&quot;: {
     &quot;command&quot;: &quot;python experiments/records/literal-prime-affine/run.py --check&quot;,
     &quot;environment&quot;: &quot;Python 3 standard library; no network or AI. Independent checker: python experiments/records/literal-prime-affine/check.py&quot;,
@@ -1380,16 +1380,486 @@
       &quot;url&quot;: &quot;https://jelliottdev.github.io/data/index.json&quot;
     }
   ],
-  &quot;related&quot;: [],
+  &quot;related&quot;: [
+    &quot;literal-prime-affine-pages&quot;
+  ],
   &quot;visuals&quot;: [
     {
       &quot;path&quot;: &quot;exports/figures/literal-prime-affine.svg&quot;,
       &quot;caption&quot;: &quot;Two anchor outputs reduce the infinite modulus range to one identity branch and finitely many divisibility candidates.&quot;
     }
   ],
-  &quot;article&quot;: &quot;## What was tested\n\nCan one fixed rule `(a × p + b) mod m` rearrange all 29 Gematria Primus prime values into a different ordering of the same values? Here p is the literal prime, not a rune index. Every output must belong to the same prime alphabet, and distinct inputs must give distinct outputs.\n\nFor **every integer modulus m greater than 109**, the only resulting permutation is the identity: each prime stays itself. This is a fresh reconstruction of the supplied research archive’s C07 claim, not a new discovery or a rerun of its original certificate. No manuscript page or proposed plaintext is used.\n\n## Results\n\n| Check | Result |\n| --- | --- |\n| Distinct images of inputs 2 and 3 | 29 × 28 = 812 choices |\n| Exact integer permutations without modular wrapping | One: a=1, b=0 |\n| Remaining anchor choices | 811 |\n| Candidate maps requiring modular checks | 13,212 |\n| Nonidentity full-alphabet permutations | None |\n\nThis does not exclude shifts modulo 29 on **rune indices**, prime-derived running keys, or position-dependent transformations. It is specifically about a single affine map of the full literal-prime alphabet.\n\n## Why the infinite range is finite to check\n\nLet u be the output of 2 and v the output of 3. Subtract their congruences:\n\n```text\n2a + b ≡ u (mod m)\n3a + b ≡ v (mod m)\na ≡ v − u (mod m)\nb ≡ 3u − 2v (mod m)\n```\n\nNo modular division is needed. Composite moduli and coefficients that are not invertible modulo m are included. For each u,v define the unreduced integer expression `L(p)=u+(p−2)(v−u)`.\n\nIf L sends every prime into the palette as ordinary integers, its nonzero slope makes it injective. Exhaustive anchor checking finds only L(p)=p in this branch. Otherwise choose a palette input p whose integer image L(p) is outside the palette. To obtain an allowed modular output y, **m must divide the nonzero integer L(p)−y**. Enumerating those divisors for all 29 possible targets gives every candidate modulus for that anchor pair.\n\nThe identity works for every m&gt;109 because all primes are canonical residues. Every other branch has a nonzero divisibility witness, so it is finite. There is no unsearched large-modulus tail. The report lists every anchor, witness and candidate modulus.\n\n## A worked branch\n\nSuppose 2 maps to 3 and 3 maps to 5. Then L(p)=2p−1, so L(5)=9 is outside the palette. For any allowed output y from 2 through 109, the nonzero difference 9−y has absolute value at most 100. No modulus above 109 can divide it. This anchor pair therefore has no candidates.\n\nOther pairs have larger differences and require checks. The program applies the reduction to every pair; this example alone is not the proof of the complete result.\n\n## Where the conclusion stops\n\n| Relaxed assumption | Counterexample | Consequence |\n| --- | --- | --- |\n| Drop injectivity | a=0, b=2, m=110 maps every prime to 2 | Output membership alone does not force identity |\n| Use a partial palette | a=109, b=5, m=110 swaps 2 and 3 | The subset {2,3} has a nonidentity permutation |\n\nThe subset example is not a result about any actual manuscript page. A page using fewer than all 29 symbols requires its own support-specific test. Neither counterexample recovers plaintext.\n\n## Reproduce\n\nExtract the experiment bundle with its folders intact:\n\n```text\npython experiments/records/literal-prime-affine/run.py --check\npython experiments/records/literal-prime-affine/check.py\n```\n\nBoth commands use Python’s standard library and make no network or AI requests. The first reconstructs the full report. The second does not import the producer: it checks candidate completeness by scanning each witness’s bounded modulus range directly, then enumerates all coefficient pairs for moduli 110 through 125. Those sixteen controls check the implementation; coverage above them comes from the divisibility argument, not extrapolation. The checker also verifies the two counterexamples.\n\nBoth checks passed on 20 October 2026. The question, planned procedure and controls are in `plan.txt`. No search bounds, scoring rules or exceptions were changed after seeing the result. Source alphabet, scripts and output hashes are included in the record. Computational review is complete within this scope; human review is pending. No Lean or other proof-assistant build is claimed.\n\nSee [rune indices and prime values](#/wiki/rune-values), [prime indices](#/wiki/prime-indices), [cipher invariants](#/wiki/cipher-invariants), and [search space and bounds](#/wiki/search-space) before applying this result to another proposal.\n&quot;,
+  &quot;article&quot;: &quot;## What was tested\n\nCan one fixed rule `(a × p + b) mod m` rearrange all 29 Gematria Primus prime values into a different ordering of the same values? Here p is the literal prime, not a rune index. Every output must belong to the same prime alphabet, and distinct inputs must give distinct outputs.\n\nFor **every integer modulus m greater than 109**, the only resulting permutation is the identity: each prime stays itself. This is a fresh reconstruction of the supplied research archive’s C07 claim, not a new discovery or a rerun of its original certificate. No manuscript page or proposed plaintext is used.\n\n## Results\n\n| Check | Result |\n| --- | --- |\n| Distinct images of inputs 2 and 3 | 29 × 28 = 812 choices |\n| Exact integer permutations without modular wrapping | One: a=1, b=0 |\n| Remaining anchor choices | 811 |\n| Candidate maps requiring modular checks | 13,212 |\n| Nonidentity full-alphabet permutations | None |\n\nThis does not exclude shifts modulo 29 on **rune indices**, prime-derived running keys, or position-dependent transformations. It is specifically about a single affine map of the full literal-prime alphabet.\n\n## Why the infinite range is finite to check\n\nLet u be the output of 2 and v the output of 3. Subtract their congruences:\n\n```text\n2a + b ≡ u (mod m)\n3a + b ≡ v (mod m)\na ≡ v − u (mod m)\nb ≡ 3u − 2v (mod m)\n```\n\nNo modular division is needed. Composite moduli and coefficients that are not invertible modulo m are included. For each u,v define the unreduced integer expression `L(p)=u+(p−2)(v−u)`.\n\nIf L sends every prime into the palette as ordinary integers, its nonzero slope makes it injective. Exhaustive anchor checking finds only L(p)=p in this branch. Otherwise choose a palette input p whose integer image L(p) is outside the palette. To obtain an allowed modular output y, **m must divide the nonzero integer L(p)−y**. Enumerating those divisors for all 29 possible targets gives every candidate modulus for that anchor pair.\n\nThe identity works for every m&gt;109 because all primes are canonical residues. Every other branch has a nonzero divisibility witness, so it is finite. There is no unsearched large-modulus tail. The report lists every anchor, witness and candidate modulus.\n\n## A worked branch\n\nSuppose 2 maps to 3 and 3 maps to 5. Then L(p)=2p−1, so L(5)=9 is outside the palette. For any allowed output y from 2 through 109, the nonzero difference 9−y has absolute value at most 100. No modulus above 109 can divide it. This anchor pair therefore has no candidates.\n\nOther pairs have larger differences and require checks. The program applies the reduction to every pair; this example alone is not the proof of the complete result.\n\n## Where the conclusion stops\n\n| Relaxed assumption | Counterexample | Consequence |\n| --- | --- | --- |\n| Drop injectivity | a=0, b=2, m=110 maps every prime to 2 | Output membership alone does not force identity |\n| Use a partial palette | a=109, b=5, m=110 swaps 2 and 3 | The subset {2,3} has a nonidentity permutation |\n\nThe subset example is not a result about any actual manuscript page. A page using fewer than all 29 symbols requires its own support-specific test. Neither counterexample recovers plaintext.\n\n## Reproduce\n\nExtract the experiment bundle with its folders intact:\n\n```text\npython experiments/records/literal-prime-affine/run.py --check\npython experiments/records/literal-prime-affine/check.py\n```\n\nBoth commands use Python’s standard library and make no network or AI requests. The first reconstructs the full report. The second does not import the producer: it checks candidate completeness by scanning each witness’s bounded modulus range directly, then enumerates all coefficient pairs for moduli 110 through 125. Those sixteen controls check the implementation; coverage above them comes from the divisibility argument, not extrapolation. The checker also verifies the two counterexamples.\n\nBoth checks passed on 20 October 2026. The question, planned procedure and controls are in `plan.txt`. No search bounds, scoring rules or exceptions were changed after seeing the result. Source alphabet, scripts and output hashes are included in the record. Computational review is complete within this scope; human review is pending. No Lean or other proof-assistant build is claimed.\n\nSee [rune indices and prime values](#/wiki/rune-values), [prime indices](#/wiki/prime-indices), [cipher invariants](#/wiki/cipher-invariants), and [search space and bounds](#/wiki/search-space) before applying this result to another proposal.\n\nThe [completed page-support variant](#/experiments/literal-prime-affine-pages) checks the actual archived LP2 supports. It retains two additional LP2-55 maps, illustrating this distinction with manuscript data.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/literal-prime-affine/article.md&quot;,
   &quot;script_sha256&quot;: &quot;fba95b035e557f3bba7df7d2a8e7195415caa145da5dd06e01c63ee251c7f94d&quot;
+}</pre></article><article id="literal-prime-affine-pages"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;literal-prime-affine-pages&quot;,
+  &quot;title&quot;: &quot;LP2 page supports: literal-prime affine maps and the two page-55 exceptions&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Which fixed affine maps into the prime palette remain injective on each archived LP2-00–55 page support?&quot;,
+  &quot;summary&quot;: &quot;All-modulus enumeration leaves only identity on 54 nonempty pages. LP2-55 additionally allows F to T or F to Y while fixing every observed odd prime.&quot;,
+  &quot;tags&quot;: [
+    &quot;literal primes&quot;,
+    &quot;affine&quot;,
+    &quot;page support&quot;,
+    &quot;LP2-55&quot;,
+    &quot;prime palette&quot;,
+    &quot;injective&quot;,
+    &quot;C08&quot;,
+    &quot;F to T&quot;,
+    &quot;F to Y&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;literal-prime-maps&quot;,
+    &quot;title&quot;: &quot;Literal-prime alphabet transformations&quot;,
+    &quot;question&quot;: &quot;Which fixed maps preserve the literal Gematria Primus prime palette?&quot;,
+    &quot;baseline&quot;: &quot;literal-prime-affine&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Observed support per page, with outputs in the full palette&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;pages&quot;,
+        &quot;before&quot;: [],
+        &quot;after&quot;: [
+          &quot;lp2-00&quot;,
+          &quot;lp2-01&quot;,
+          &quot;lp2-02&quot;,
+          &quot;lp2-03&quot;,
+          &quot;lp2-04&quot;,
+          &quot;lp2-05&quot;,
+          &quot;lp2-06&quot;,
+          &quot;lp2-07&quot;,
+          &quot;lp2-08&quot;,
+          &quot;lp2-09&quot;,
+          &quot;lp2-10&quot;,
+          &quot;lp2-11&quot;,
+          &quot;lp2-12&quot;,
+          &quot;lp2-13&quot;,
+          &quot;lp2-14&quot;,
+          &quot;lp2-15&quot;,
+          &quot;lp2-16&quot;,
+          &quot;lp2-17&quot;,
+          &quot;lp2-18&quot;,
+          &quot;lp2-19&quot;,
+          &quot;lp2-20&quot;,
+          &quot;lp2-21&quot;,
+          &quot;lp2-22&quot;,
+          &quot;lp2-23&quot;,
+          &quot;lp2-24&quot;,
+          &quot;lp2-25&quot;,
+          &quot;lp2-26&quot;,
+          &quot;lp2-27&quot;,
+          &quot;lp2-28&quot;,
+          &quot;lp2-29&quot;,
+          &quot;lp2-30&quot;,
+          &quot;lp2-31&quot;,
+          &quot;lp2-32&quot;,
+          &quot;lp2-33&quot;,
+          &quot;lp2-34&quot;,
+          &quot;lp2-35&quot;,
+          &quot;lp2-36&quot;,
+          &quot;lp2-37&quot;,
+          &quot;lp2-38&quot;,
+          &quot;lp2-39&quot;,
+          &quot;lp2-40&quot;,
+          &quot;lp2-41&quot;,
+          &quot;lp2-42&quot;,
+          &quot;lp2-43&quot;,
+          &quot;lp2-44&quot;,
+          &quot;lp2-45&quot;,
+          &quot;lp2-46&quot;,
+          &quot;lp2-47&quot;,
+          &quot;lp2-48&quot;,
+          &quot;lp2-49&quot;,
+          &quot;lp2-50&quot;,
+          &quot;lp2-51&quot;,
+          &quot;lp2-52&quot;,
+          &quot;lp2-53&quot;,
+          &quot;lp2-54&quot;,
+          &quot;lp2-55&quot;
+        ],
+        &quot;reason&quot;: &quot;Replace full-alphabet permutation with injectivity on each page’s observed support.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;The 29 stored Gematria Primus prime values, from 2 through 109; literal values, not rune indices.&quot;,
+        &quot;after&quot;: &quot;Literal prime values of the rune types present on each archived LP2-00–55 page; LP2-50 has no rune support. Outputs may be any GP prime.&quot;,
+        &quot;reason&quot;: &quot;Replace full-alphabet permutation with injectivity on each page’s observed support.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Enumerate distinct anchor outputs of 2 and 3; reduce each nonidentity branch to divisors of nonzero witness differences; verify full palette equality.&quot;,
+        &quot;after&quot;: &quot;Group identical supports, enumerate all anchor pairs and divisibility candidates, and retain every allowed-output map injective on the observed support.&quot;,
+        &quot;reason&quot;: &quot;Replace full-alphabet permutation with injectivity on each page’s observed support.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;All integer m&gt;109; all coefficient residues a,b modulo m; 812 distinct anchor pairs; no language score.&quot;,
+        &quot;after&quot;: &quot;All integer m&gt;109 and coefficient residues a,b; 812 anchors per nonempty support; three distinct supports; empty support untested.&quot;,
+        &quot;reason&quot;: &quot;Replace full-alphabet permutation with injectivity on each page’s observed support.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.&quot;,
+        &quot;after&quot;: &quot;Noninjective, nonlinear and position-dependent rules; rune-index transforms; altered transcriptions; plaintext scoring or recovery.&quot;,
+        &quot;reason&quot;: &quot;Replace full-alphabet permutation with injectivity on each page’s observed support.&quot;
+      }
+    ]
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;data/index.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Literal prime values of the rune types present on each archived LP2-00–55 page; LP2-50 has no rune support. Outputs may be any GP prime.&quot;,
+    &quot;procedure&quot;: &quot;Group identical supports, enumerate all anchor pairs and divisibility candidates, and retain every allowed-output map injective on the observed support.&quot;,
+    &quot;parameters&quot;: &quot;All integer m&gt;109 and coefficient residues a,b; 812 anchors per nonempty support; three distinct supports; empty support untested.&quot;,
+    &quot;exclusions&quot;: &quot;Noninjective, nonlinear and position-dependent rules; rune-index transforms; altered transcriptions; plaintext scoring or recovery.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;54 of 55 nonempty rune pages admit only identity. LP2-55 additionally permits (58p+57) mod 114 and (102p+101) mod 202. LP2-50 has no rune support and is not tested.&quot;,
+  &quot;limitations&quot;: &quot;Archived rune support only; not a plaintext recovery. Nonlinear, noninjective, position-dependent and rune-index maps are excluded. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Keep nonlinear or transcription-changing proposals as separate variants; do not interpret the two exceptions as recovered English.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/literal-prime-affine-pages/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; no network or AI. Independent check: python experiments/records/literal-prime-affine-pages/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/literal-prime-affine-pages/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;2eebb404162dbcf25288e036dca2cd0cdfa3393d7a7eb9982437fd63d73f890f&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/literal-prime-affine/run.py&quot;,
+        &quot;sha256&quot;: &quot;fba95b035e557f3bba7df7d2a8e7195415caa145da5dd06e01c63ee251c7f94d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/literal-prime-affine-pages/check.py&quot;,
+        &quot;sha256&quot;: &quot;6a1882b1c079bbbf7e44301edf64f9c7386b5369ef33fed1f37eccefb252608f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/literal-prime-affine-pages/plan.txt&quot;,
+        &quot;sha256&quot;: &quot;3ac8890705ca02258f71497a0db2bf7513675bd10ffc34c3cdebc6abe758e20e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/literal-prime-affine-pages.json&quot;,
+        &quot;sha256&quot;: &quot;c4916d4834a2a264dbd082de854bbd3dd897f2662b78a998afe039f0c8f88064&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/figures/literal-prime-affine-pages.svg&quot;,
+        &quot;sha256&quot;: &quot;aa4fe80d4a64f3e70c39dd00a6ec28c306a1c7aa56632cd78bd61106228e58da&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent support counts, direct modulus-range checks and survivor verification; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Archived pages and Gematria Primus alphabet&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/data/index.json&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;literal-prime-affine&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;exports/figures/literal-prime-affine-pages.svg&quot;,
+      &quot;caption&quot;: &quot;The two page-55 maps change only prime 2. Their target values are absent from the page’s input support, so they create no collision there.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## What changes from the baseline?\n\nThe [baseline](#/experiments/literal-prime-affine) requires one affine map to permute the entire 29-prime alphabet. This variant uses the prime values actually present on each archived LP2-00–55 page. Outputs may be any of the 29 allowed primes, but distinct observed inputs must still have distinct outputs. A page may use its own fixed coefficients and modulus.\n\nThe modulus range remains **every integer m greater than 109**. We do not score English or select a proposed reading. The supplied archive’s C08 claim predicted two LP2-55 exceptions; the fresh calculation retained all survivors rather than filtering for that prediction.\n\n## Results\n\n| Archived page support | Pages | Candidate maps checked per distinct support | Nonidentity maps |\n| --- | --- | --- | --- |\n| All 29 prime values | 53 pages | 13,212 | None |\n| 28 values, missing 7 | LP2-49 | 14,901 | None |\n| 25 values, missing 7, 29, 59, 103 | LP2-55 | 14,901 | Two |\n| No rune values | LP2-50 | Not tested | No conclusion |\n\nThus **54 of the 55 nonempty rune pages allow only identity** under this exact model. LP2-55 has two additional maps. LP2-50 contains the alphanumeric panel rather than a rune stream; this procedure does not interpret its characters as GP runes.\n\nThe counts refer to distinct input supports, not a separate rerun for each of the 53 identical full-support cases. There are 43,014 candidate-map checks across the three supports. The all-modulus identity branch is handled separately.\n\n## The two LP2-55 exceptions\n\n| Coefficients (a, b, m) | Image of prime 2 | Images of observed odd primes |\n| --- | --- | --- |\n| (58, 57, 114) | 59: rune label T | Unchanged |\n| (102, 101, 202) | 103: rune label Y | Unchanged |\n\nBoth have the form `a=m/2+1`, `b=m/2`. For an odd prime p,\n\n```text\nap+b = p + (m/2)(p+1) ≡ p (mod m)\n```\n\nbecause p+1 is even. At p=2, the result is `2+m/2`: 59 for m=114 and 103 for m=202. Each map therefore changes only F to T or Y on this page. It does not decode the remaining runes or recover word boundaries.\n\nNeither 59 nor 103 occurs in LP2-55’s observed input support. Sending 2 to either value therefore does not collide with another observed input. On the full alphabet, the odd input 59 or 103 is fixed too, so two inputs would have the same output. That is why these exceptions do not contradict the baseline.\n\nThe coefficients 58 and 102 are not units modulo 114 and 202 respectively: each gcd is 2. Requiring the affine map to be invertible on the entire residue ring would discard them. Our stated model requires injectivity only on the observed prime support, so they must be retained.\n\n## Complete enumeration without a modulus cutoff\n\nEvery nonempty page support contains primes 2 and 3. Assign distinct allowed images u and v to them, giving 812 anchor choices per support. These determine `a=v−u` and `b=3u−2v` modulo m.\n\nFor each pair, examine the unreduced expression `L(p)=u+(p−2)(v−u)` on the page’s support. If every integer output is already allowed, record that branch separately. In this dataset the only such branch is identity. Otherwise choose the first supported prime whose L(p) is outside the full palette. Every valid modulus must divide one of the nonzero differences `L(p)−y`, where y is an allowed target prime.\n\nThe script tests every resulting divisor above 109, requiring both allowed outputs and no collisions on the observed support. The complete report retains each anchor’s witness and candidate list, the two surviving maps and their full outputs, and every page’s source hash. There is no arbitrary upper modulus bound.\n\n## Reproduce\n\nExtract this variant’s bundle with its folders intact:\n\n```text\npython experiments/records/literal-prime-affine-pages/run.py --check\npython experiments/records/literal-prime-affine-pages/check.py\n```\n\nPython’s standard library is sufficient. The bundle includes the baseline’s divisor helper and all 56 archived page texts. No network or AI requests are made.\n\nThe independent checker does not import the producer or divisor helper. It reconstructs page support by counting each alphabet symbol, verifies page hashes, enumerates the possible moduli directly within each witness’s mathematical bound, and checks every survivor. It also verifies that both LP2-55 exceptions fix all its odd input primes and move 2 to a previously absent value.\n\nBoth commands passed on 20 October 2026. The method and controls were recorded in `plan.txt`; no input boundaries, candidate criteria or modulus bounds were changed after inspecting the result. Human review is pending. This is an elementary calculation with a checked certificate, not a proof-assistant build or a new decipherment.\n\n## Limits\n\nThe result concerns the archived rune transcription and one fixed literal-prime affine map per page. It does not cover corrected symbol streams that change a page’s support, position-dependent transformations, noninjective maps, nonlinear rules, rune indices modulo 29, or prime-derived keystreams. A change in any of those assumptions requires a separate variant.\n\nSee [rune values](#/wiki/rune-values), [the full-alphabet baseline](#/experiments/literal-prime-affine), and [search space and bounds](#/wiki/search-space) for the distinction between checking a model completely and claiming a general decryption.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/literal-prime-affine-pages/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;2eebb404162dbcf25288e036dca2cd0cdfa3393d7a7eb9982437fd63d73f890f&quot;
 }</pre></article><article id="lp1-word-length-balance"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp1-word-length-balance&quot;,
   &quot;title&quot;: &quot;LP1: the 464-word table and column balance&quot;,

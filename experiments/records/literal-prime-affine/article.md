@@ -62,3 +62,5 @@ Both commands use Python’s standard library and make no network or AI requests
 Both checks passed on 20 October 2026. The question, planned procedure and controls are in `plan.txt`. No search bounds, scoring rules or exceptions were changed after seeing the result. Source alphabet, scripts and output hashes are included in the record. Computational review is complete within this scope; human review is pending. No Lean or other proof-assistant build is claimed.
 
 See [rune indices and prime values](#/wiki/rune-values), [prime indices](#/wiki/prime-indices), [cipher invariants](#/wiki/cipher-invariants), and [search space and bounds](#/wiki/search-space) before applying this result to another proposal.
+
+The [completed page-support variant](#/experiments/literal-prime-affine-pages) checks the actual archived LP2 supports. It retains two additional LP2-55 maps, illustrating this distinction with manuscript data.
