@@ -270,3 +270,13 @@ for(const [query,section] of [['pilgrimage',''],['end to self','self']]){
 assert(search.search(db,'command your own self').slice(0,3).some(hit=>hit.href==='#/wiki/pilgrimage?section=self'),
  'Keep the close reading beside the existing visual study of the instruction');
 console.log('PASS: pilgrimage and selfhood queries open the close reading.');
+
+for(const q of ['signpost','signposts','cross','crosses','cross-like drawings']){
+ const hits=search.search(db,q);
+ assert.equal(hits[0].href,'#/wiki/visual-index?section=signposts',q);
+ for(const id of ['lp2-00','lp2-01','lp2-02']){
+  const hit=hits.find(h=>h.page?.id===id);
+  assert(hit && hits.indexOf(hit)<5 && hit.href==='#/page/'+id+'?section=details', q+' should surface the illustrated page '+id);
+ }
+}
+console.log('PASS: signpost and cross aliases lead to their guide section and manuscript pages');
