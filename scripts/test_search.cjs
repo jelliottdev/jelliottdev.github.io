@@ -22,7 +22,7 @@ console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phra
 // Exercise the actual header input handler with an Android-style composing event.
 // This is an isolated event test, not a physical-device keyboard simulation.
 const vm=require('node:vm');
-function target(){return {listeners:{},attrs:{},addEventListener(name,fn){this.listeners[name]=fn},setAttribute(name,value){this.attrs[name]=value},getBoundingClientRect(){return {bottom:100}},contains(){return false}}}
+function target(){return {style:{},listeners:{},attrs:{},addEventListener(name,fn){this.listeners[name]=fn},setAttribute(name,value){this.attrs[name]=value},getBoundingClientRect(){return {bottom:100}},contains(){return false}}}
 const input=target(),form=target(),panel=target();input.value='Atba';
 form.append=()=>{};panel.hidden=true;
 const sandbox={db,WikiSearch:search,esc:String,marked:String,excerpt:String,
