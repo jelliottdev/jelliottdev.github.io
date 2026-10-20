@@ -46,6 +46,8 @@ python scripts/build_reading_guides.py
 python scripts/build_articles.py
 python scripts/build_assistant.py
 python scripts/build_access_exports.py
+python scripts/check_article_links.py
+python scripts/test_article_links.py
 python scripts/reproduce_reading.py --check-all
 python scripts/reproduce_cover_chain.py
 python scripts/verify_downloads.py
@@ -55,6 +57,13 @@ The extraction wrapper additionally requires OutGuess. The reading and chain
 scripts use Python's standard library and make no network or inference calls.
 After committing, `python scripts/verify_downloads.py --git` checks the actual
 published Git bytes rather than the working tree's newline conventions.
+
+`check_article_links.py` checks authored and generated guides for missing guide
+IDs, section anchors, manuscript IDs, local files/images, duplicate HTML IDs,
+and metadata destinations used by search aliases and page associations.
+It uses no network. External URLs, other application routes, image decoding,
+and browser interactions remain outside its scope. Run it after rebuilding
+generated guides; GitHub validation also runs it on every push.
 
 The initial guide expansion checked 17 literal page controls, the 991-byte
 reconstructed signed message, and eight LP1 payload manifests. Catalog and
