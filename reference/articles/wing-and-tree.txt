@@ -1,8 +1,29 @@
 Wing and Tree: LP2-27–32
 
-Follow the detached wing and tree-shaped drawing at the endpoints of the LP2-27–32 group, with all intervening pages.
+Research dossier for LP2-27–32: illustrated pages, source comparisons, grid sums, period-13 tests, experiment bounds and open questions.
 
 “Wing & Tree” is the community name for LP2-27–32. The group begins with a detached, veined wing above the text on LP2-27 and ends with a soft-edged tree-shaped drawing below the text on LP2-32. Looking at the two endpoints makes the browsing name much easier to understand.
+Section at a glance
+
+LP2-27–32 comprises six unsolved pages in the current archive. “Wing and Tree” names its illustrated endpoints; it is not a recovered chapter title or proof that all six pages use one key. Start with the page records below, then compare the documented tests with the exact operation you want to try.
+
+	Page	Archived runes	Prime sum	Locate
+
+	LP2-27	234	12093	Wing above the text
+
+	LP2-28	269	14161	First intervening page
+
+	LP2-29	277	14009	Intervening text
+
+	LP2-30	263	14443	Intervening text
+
+	LP2-31	269	13680	Page used in the period-13 IoC studies
+
+	LP2-32	121	6045	Tree below the text
+
+
+Counts include every recognized alphabet rune in the archived text, including headings, and exclude punctuation and other characters. Prime sums use the stored Gematria Primus values. None of these six page records currently has a separate reviewed-text layer; that is a statement about published review coverage, not a claim that their transcriptions are wrong.
+
 The illustrated endpoints
 [Image: LP2-27: a detached wing above the runes]
 LP2-27 — a detached wing above the runes. Open reader
@@ -86,6 +107,39 @@ python scripts/wing_tree_windows.py
 
 The first command compares the regenerated report with the stored ledger, including source hashes and every interval. The second prints the complete JSON. The calculation checks prefix-sum differences against direct addition for each window. Download the script · Download all results. See the grid experiment for the separate row, column and perimeter calculation.
 
+What has been tested in this section?
+
+Read the target and acceptance rule together. A section can appear in an experiment without receiving a separate statistical test, and a rejected opening does not reject every possible plaintext.
+
+LP2-31: the period-13 peak
+
+Two experiments scan periods 2–20 on the same 269-rune stream. Both find the largest pooled column IoC at period 13, with value 216/5300. They differ in what their shuffled comparison inputs preserve:
+
+Whole-page shuffles preserve the page’s rune counts. Of 999 simulated maxima, 213 reach or exceed the observed maximum; the plus-one Monte Carlo value is p = 0.214.
+Within-row shuffles also preserve each of the twelve archived rows’ rune counts. Here 245 of 999 simulated maxima reach or exceed the observation, giving p = 0.246.
+
+Neither crosses the declared 0.05 threshold. These values compare the maximum across the scanned periods, rather than treating period 13 as the only period tried. They do not adjust for selecting this page from the manuscript or establish that its text is random. The second model is a follow-up comparison, not independent confirmation. No key or plaintext is recovered by either test.
+
+LP2-32 and the six-page census
+
+The grid experiment reproduces 563, 569 and 1136 for specified grid features. The window census tests recurrence of 563 and 569 in consecutive eleven-rune intervals across all six pages. Their counts and diagrams appear above. Neither provides a chance probability or tests a branch-derived key.
+
+Broader tests that include these pages
+
+The known Vigenère-key experiment includes every page in this section, but tests only two known key vectors, every phase, both signs and nine specified initial twelve-rune readings. It finds no matches in its complete LP2-00–55 search. It does not test arbitrary English openings, unknown keys, interruptions or a key carried across pages. The candidate-reading guide explains the similar limits of the arithmetic and reading-route opening searches.
+
+The trigram experiment includes the section in an aggregate LP2-00–55 statistic. Its p = 0.799 is for that full dataset under its declared upper-tail shuffle test. It is not a Wing and Tree result or a separate significance value for any page. Windows from different pages are not compared in that experiment.
+
+What remains open here?
+
+Section boundaries and key continuity. The shared visual grouping does not determine whether to reset at a page, printed row, punctuation mark or heading. A comparison needs explicit competing rules and the same acceptance criterion.
+Repeated-text alignments. A proposal to align repeated sequences and subtract nearby values needs both source intervals, direction, representation and the full resulting span. An attractive word at one selected offset is not enough to assess the surrounding text.
+The wing’s source and geometric use. The page locates the illustration, but does not supply an independently verified source image or a reproducible map from its veins to a key.
+Image processing. The shared-tree source comparison does not reconstruct the exact transformations used for each appearance.
+Unfamiliar plaintext. The opening searches cannot recognize a correct reading that starts with different words. A broader language test requires a published score, corpus and controls.
+
+For a new attempt, begin with one of these questions, list the choices being varied, and reserve additional text or features for checking the result. Consult search space and bounds before expanding the search. A missing experiment here means the site has not documented that exact test; it does not mean nobody has tried it.
+
 Related images and readings
 Insects and wing imagery · Branches and trees · Spiral borders · Instar and emergence in the known readings.
 Sources
@@ -94,38 +148,42 @@ Observations refer to the preserved JPEGs linked through the page records. Those
 For source attributions and open image-origin questions across the manuscript, use the artwork-source directory. It distinguishes published comparisons from verified source identifications.
 
 Sources, related references, and files
-- LP2-27: a detached wing above the runes; LP2-27
+- documented tests
+  https://jelliottdev.github.io/reference/articles/wing-and-tree.html#tested
+- LP2-27; LP2-27: a detached wing above the runes
   https://jelliottdev.github.io/reference/lp2-27.html
+- LP2-28; LP2-28: intervening text
+  https://jelliottdev.github.io/reference/lp2-28.html
+- LP2-29; LP2-29: intervening text
+  https://jelliottdev.github.io/reference/lp2-29.html
+- LP2-30; LP2-30: intervening text
+  https://jelliottdev.github.io/reference/lp2-30.html
+- LP2-31; LP2-31: intervening text
+  https://jelliottdev.github.io/reference/lp2-31.html
+- LP2-32; LP2-32: a tree-shaped drawing below the runes
+  https://jelliottdev.github.io/reference/lp2-32.html
+- published review coverage
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#coverage
 - LP2-27: a detached wing above the runes
   https://jelliottdev.github.io/thumbs/lp2-27.jpg
 - Open reader
   https://jelliottdev.github.io/#/reader/lp2-27
-- LP2-32: a tree-shaped drawing below the runes; LP2-32
-  https://jelliottdev.github.io/reference/lp2-32.html
 - LP2-32: a tree-shaped drawing below the runes
   https://jelliottdev.github.io/thumbs/lp2-32.jpg
 - Open reader
   https://jelliottdev.github.io/#/reader/lp2-32
-- LP2-28: intervening text; LP2-28
-  https://jelliottdev.github.io/reference/lp2-28.html
 - LP2-28: intervening text
   https://jelliottdev.github.io/thumbs/lp2-28.jpg
 - Open reader
   https://jelliottdev.github.io/#/reader/lp2-28
-- LP2-29: intervening text; LP2-29
-  https://jelliottdev.github.io/reference/lp2-29.html
 - LP2-29: intervening text
   https://jelliottdev.github.io/thumbs/lp2-29.jpg
 - Open reader
   https://jelliottdev.github.io/#/reader/lp2-29
-- LP2-30: intervening text; LP2-30
-  https://jelliottdev.github.io/reference/lp2-30.html
 - LP2-30: intervening text
   https://jelliottdev.github.io/thumbs/lp2-30.jpg
 - Open reader
   https://jelliottdev.github.io/#/reader/lp2-30
-- LP2-31: intervening text; LP2-31
-  https://jelliottdev.github.io/reference/lp2-31.html
 - LP2-31: intervening text
   https://jelliottdev.github.io/thumbs/lp2-31.jpg
 - Open reader
@@ -162,7 +220,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
 - LP2-32 rearranged into 11 rows of 11. The first row sums to 563 and first column to 569. The enlarged central 5 by 5 block highlights its 16 perimeter cells; their sum is 1136.
   https://jelliottdev.github.io/experiments/records/lp2-32-message-grid/grid.svg
-- registered window-census experiment
+- registered window-census experiment; window census
   https://jelliottdev.github.io/#/experiments/wing-tree-eleven-rune-windows
 - null model
   https://jelliottdev.github.io/reference/articles/null-models.html
@@ -172,6 +230,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/wing_tree_windows.py
 - Download all results
   https://jelliottdev.github.io/exports/wing-tree-windows.json
+- Whole-page shuffles
+  https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
+- Within-row shuffles
+  https://jelliottdev.github.io/#/experiments/lp2-31-row-shuffle-ioc
+- known Vigenère-key experiment
+  https://jelliottdev.github.io/#/experiments/lp2-known-vigenere-keys
+- candidate-reading guide
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+- trigram experiment
+  https://jelliottdev.github.io/#/experiments/lp2-trigram-repeats
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - Insects and wing imagery
   https://jelliottdev.github.io/reference/articles/insects.html
 - Spiral borders
