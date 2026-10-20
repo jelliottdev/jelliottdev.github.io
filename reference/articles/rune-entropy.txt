@@ -1,0 +1,84 @@
+Rune-frequency entropy: balance without order
+
+Calculate empirical Shannon entropy from archived rune counts, reproduce LP2-31, and understand what this measurement cannot distinguish.
+
+Single-rune entropy summarizes a frequency distribution. It is low when most observations belong to a few symbols and higher when observations are spread more evenly. It does not inspect the order of the runes. Use it beside IoC as a descriptive measurement, not as a test that a page is encrypted or random.
+
+From counts to bits
+
+Let N be the number of retained runes and c be one rune’s count. Its empirical probability is p = c/N. Compute H = −sum(p × log2(p)) over nonzero counts. A zero count contributes zero; do not attempt to evaluate log2(0). Base-two logarithms give bits per symbol. This is the Shannon-entropy formula applied to observed frequencies; SciPy’s entropy reference documents the formula and logarithm-base convention. The script here uses Python’s standard library.
+
+	Invented input	Counts	Entropy
+
+	AAAAAAAA	8	0 bits
+
+	AAAABBBB	4, 4	1 bit
+
+	ABABABAB	4, 4	1 bit
+
+	AABBCCDD	2, 2, 2, 2	2 bits
+
+	AAAB	3, 1	About 0.811278 bits
+
+
+For two equally frequent symbols, each contributes −0.5 × log2(0.5) = 0.5; their total is 1. Notice that grouping and alternating the same four A and four B symbols changes nothing. Neither does consistently renaming A and B. The statistic summarizes the counts, not the arrangement.
+
+Reproduce a manuscript measurement
+
+Extract the reference-data bundle, keeping its folders together, and run:
+
+python scripts/rune_entropy.py lp2-31
+python scripts/rune_entropy.py lp2-31 --output lp2-31-entropy.json
+
+The script uses the same counting implementation as the IoC report: archived runes, including rune headings; no corrections or decryption. Punctuation, spaces, Latin text and printed decimal numbers are excluded. The saved UTF-8 JSON contains the source hash, alphabet hash, ordered counts, sample size and result. Existing output files are not replaced. No network or AI request is made.
+
+LP2-31: what the result says
+
+	Field	Result
+
+	Retained runes	269
+
+	Distinct observed runes	29
+
+	Empirical entropy	4.814030217724328 bits per rune
+
+	Exactly uniform 29-symbol distribution	log2(29) ≈ 4.857980995127572 bits per rune
+
+
+The measurement uses the archived LP2-31 transcription, SHA-256 493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68. Its frequency distribution is fairly even under this counting rule. Closeness to the uniform value is not a probability, confidence score or identification of the cipher.
+
+The uniform value is a distributional upper bound, not the expected measured value of a finite random page. Here 269 is not divisible by 29, so exact equality of all integer counts is impossible. Sample length and the number of observed symbols matter when comparing pages. An empty rune stream receives null, because there are no empirical probabilities to calculate; it should not be mistaken for a nonempty one-symbol stream with entropy zero.
+
+What it cannot distinguish
+
+A pure transposition preserves every count, so it preserves this entropy. A fixed one-to-one substitution relabels the same counts and also preserves it. Therefore this score cannot choose among those transformations of the same input. See cipher invariants.
+
+This is not an entropy-rate estimate: it does not model how a symbol depends on preceding symbols. The alternating example above has a predictable pattern despite its balanced counts. Use repeated sequences to inspect adjacency, and specify a comparison model before claiming statistical surprise. A frequency summary alone does not measure meaning, compressibility under a particular compressor, or resistance to cryptanalysis.
+
+Files and verification
+
+Entropy script · small-example tests · shared counting implementation. The worked result was calculated from the archived source on 20 October 2026. The examples check known distributions, order invariance, input validation and the empty-page case. This is a descriptive method guide, not a published experiment on a candidate solution.
+
+Sources, related references, and files
+- IoC
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- SciPy’s entropy reference
+  https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.entropy.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- the archived LP2-31 transcription
+  https://jelliottdev.github.io/text/lp2-31.txt
+- cipher invariants
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- repeated sequences
+  https://jelliottdev.github.io/reference/articles/rune-ngrams.html
+- comparison model
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- Entropy script
+  https://jelliottdev.github.io/scripts/rune_entropy.py
+- small-example tests
+  https://jelliottdev.github.io/scripts/test_rune_entropy.py
+- shared counting implementation
+  https://jelliottdev.github.io/scripts/rune_ioc.py
+
+Article: https://jelliottdev.github.io/reference/articles/rune-entropy.html
