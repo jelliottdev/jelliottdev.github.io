@@ -6,6 +6,15 @@ async function loadSupportingIndex(){
   if(!supportingIndex)supportingIndex=fetch('data/assistant-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).catch(()=>{supportingIndex=null;return {documents:[]};});
   return supportingIndex;
 }
+function experimentSearchResult(r, requestedPages=[]){
+  const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
+  return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
+    <p>${esc(r.summary)}</p>
+    <dl class="idea-result-scope"><dt>Method tested</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Excluded</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
+    ${missing.length?`<p class="scope-mismatch">Not in this record’s page scope: ${missing.map(id=>esc(id.toUpperCase())).join(', ')}.</p>`:''}
+    <details class="idea-match-details"><summary>Pages, inputs and limitations</summary><dl class="idea-result-scope"><dt>Targets</dt><dd>${experimentScopeLinks(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl></details>
+    <p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}</p></article>`;
+}
 function renderIdeaChecker(endpoint,query){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
@@ -89,10 +98,7 @@ function renderIdeaChecker(endpoint,query){
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=`<h2>Published experiments</h2>${experimentGroups(experimentRecords,r=>`<p><a href="#/experiments/${r.id}">${esc(r.title)}</a><br><span class="small muted">${esc(r.summary)}</span><br><span class="small muted">${esc(r.review.reviewer)}</span></p>`)}`;
     else if(!matches.length)results.innerHTML='<h2>No matching documented technique</h2><p>Try the operation, cipher, key, or transformation rather than only a page number. This index does not cover all previous research.</p>';
-    else results.innerHTML=`<h2>${matches.length} related ${matches.length===1?'record':'records'}</h2><p class="small muted">These are technique matches, not a verdict that your idea is a duplicate.</p>${experimentGroups(matches.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>{
-      const pageOverlap=matches.find(m=>m.document.id===r.id).pageOverlap;
-      return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><dl class="idea-result-scope"><dt>Tested</dt><dd>${experimentScopeLinks(r)} · ${esc(r.scope.representation)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl><p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}${(pages().length||AssistantSearch.pageIds(idea).length)&&!pageOverlap?' · Different page scope':''}</p></article>`;
-    })}`;
+    else results.innerHTML=`<h2>${matches.length} related ${matches.length===1?'record':'records'}</h2><p class="small muted">Compare the method and exclusions before treating a record as the same test.</p>${experimentGroups(matches.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]))}`;
     if(matches.length&&endpoint){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});

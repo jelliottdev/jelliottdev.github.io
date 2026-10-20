@@ -111,3 +111,17 @@ for(const record of published){
  if(family>=0)assert(family>rendered.indexOf('id="experiment-reproduce"'));
 }
 console.log('PASS: published records lead with findings; result downloads and required bundles remain accessible.');
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../assistant-ui.js'),'utf8'),experimentContext);
+const totient=published.find(r=>r.id==='lp2-totient-openings');
+const scopedResult=experimentContext.experimentSearchResult(totient,['lp2-31','lp2-56']);
+assert(scopedResult.indexOf(experimentContext.esc(totient.scope.procedure))<scopedResult.indexOf('<details'));
+assert(scopedResult.indexOf(experimentContext.esc(totient.scope.exclusions))<scopedResult.indexOf('<details'));
+assert(scopedResult.includes('Not in this record’s page scope: LP2-56.'));
+assert(!scopedResult.includes('Not in this record’s page scope: LP2-31'));
+assert(!experimentContext.experimentSearchResult(totient,['lp2-31']).includes('scope-mismatch'));
+const liveDocs=Search.experimentDocs(published);
+assert.equal(Search.experiments(liveDocs,'totient of rune values on LP2-31')[0].document.id,totient.id);
+assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'lp2-fibonacci-openings');
+assert.equal(Search.experiments(liveDocs,'OutGuess on LP2-31')[0].document.id,'outguess-default-key');
+assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
+console.log('PASS: method and exclusions remain visible; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
