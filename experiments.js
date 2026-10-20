@@ -78,7 +78,7 @@ function experimentArticle(r){
   const pageLinks=experimentScopeLinks(r);
   const fields=[['Targets',r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)],['Parameter bounds',esc(r.scope.parameters)],['Excluded',esc(r.scope.exclusions)]];
   const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
-  const needsImages=r.reproduction.inputs.some(f=>/\.(jpe?g|png)$/i.test(f.path));
+  const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
   return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Experiments')+`<article class="reading-width experiment-article">
@@ -91,7 +91,8 @@ function experimentArticle(r){
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
-      <p>Starting from scratch? Download <a href="downloads/reference-data.zip" download>reference-data.zip</a> and extract it with its folders intact.${needsImages?' Also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder for the original image inputs.':''} Follow the <a href="#/wiki/running-scripts">script setup guide</a>, then run this command from the extracted repository root.</p>
+      <p>Download <a href="downloads/experiments/${esc(r.id)}.zip" download>this experiment’s files (ZIP)</a> and extract them with their folders intact. The archive includes scripts, input data, recorded results, and a <code>START-HERE</code> file with verification instructions.${needsImages?' Original image inputs are separate: also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''}</p>
+      <p>Install the prerequisites listed below, then run the command from the extracted folder. See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> remains available for working across experiments.</p>
       <p>${esc(r.reproduction.environment)}</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>
       <h3>Individual files</h3><p class="small muted">Use these to inspect the method or results. The run script also needs the inputs listed below.</p>
       ${experimentDownloads(r)}

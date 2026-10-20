@@ -6070,6 +6070,8 @@ Reproducing a reading means starting with the manuscript's rune text, applying t
 
 This walkthrough uses LP1-01, the warning. Its Atbash cipher reverses the rune alphabet, so you can follow the calculation by hand as well as run it in Python. By the end, you will have decoded the page, checked your result, and inspected the first two runes step by step.
 
+For a published experiment, use the smaller ZIP linked in that experiment's Reproduce & download section. Its own START-HERE file names the verification command and prerequisites. Original image inputs, when needed, are downloaded separately. The first-experiment walkthrough demonstrates this route.
+
 1. Download and open the files
 
 Download the reference-data ZIP and extract it into an empty folder. Open that folder: you should see directories named scripts, text and data. Keep them together. The script supplies the instructions; the other folders supply the manuscript text, cipher settings and known readings it needs.
@@ -6274,6 +6276,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp1-01.html
 - Atbash cipher
   https://jelliottdev.github.io/reference/articles/atbash.html
+- first-experiment walkthrough
+  https://jelliottdev.github.io/reference/articles/first-experiment.html#run
 - the reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - read those instructions before downloading; bundle instructions
@@ -6363,12 +6367,13 @@ Inspect a file. Download the per-page CSV. LP2-31 has 269 runes, 267 windows and
 
 Reproduce the result
 
-If you have Python, extract the reference-data bundle with its folders intact, verify its manifest using the setup guide, and run:
+If you have Python, download this experiment's reproduction files and extract them into an empty folder, preserving the directories. Open a terminal in that folder. Verify the included files, then run the experiment and its independent checker:
 
+python scripts/verify_bundle.py EXPERIMENT-lp2-trigram-repeats-CONTENTS.json
 python experiments/records/lp2-trigram-repeats/run.py --check
 python experiments/records/lp2-trigram-repeats/check.py
 
-The recorded simulation used Python 3.12.10. The first command should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by "observed_total": 55, "exceedances": 798, "monte_carlo_p": 0.799 and "below_threshold": false. The second checks the observations with a different counting approach and audits the saved comparison. See setup instructions if your terminal uses py or python3 instead.
+The verification command should report 0 problems. The recorded simulation used Python 3.12.10. The runner should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by "observed_total": 55, "exceedances": 798, "monte_carlo_p": 0.799 and "below_threshold": false. The final command checks the observations with a different counting approach and audits the saved comparison. See setup instructions if your terminal uses py or python3 instead. This experiment needs no original JPEGs or external Python packages.
 
 Report what passed
 
@@ -6385,8 +6390,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/null-distribution.svg
 - the per-page CSV
   https://jelliottdev.github.io/experiments/records/lp2-trigram-repeats/observed-pages.csv
-- reference-data bundle
-  https://jelliottdev.github.io/downloads/reference-data.zip
+- this experiment's reproduction files
+  https://jelliottdev.github.io/downloads/experiments/lp2-trigram-repeats.zip
 - setup instructions
   https://jelliottdev.github.io/reference/articles/running-scripts.html
 - documenting a reproducible attempt

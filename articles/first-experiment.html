@@ -8,10 +8,11 @@
 <li><strong>Inspect a file.</strong> Download <a href="experiments/records/lp2-trigram-repeats/observed-pages.csv" download>the per-page CSV</a>. LP2-31 has 269 runes, 267 windows and zero matching trigram pairs. LP2-50 remains present with zero runes. These are descriptive page counts, not separate significance tests.</li>
 </ol>
 <h2 id="run">Reproduce the result</h2>
-<p>If you have Python, extract the <a href="downloads/reference-data.zip">reference-data bundle</a> with its folders intact, verify its manifest using the setup guide, and run:</p>
-<pre><code>python experiments/records/lp2-trigram-repeats/run.py --check
+<p>If you have Python, download <a href="downloads/experiments/lp2-trigram-repeats.zip">this experiment's reproduction files</a> and extract them into an empty folder, preserving the directories. Open a terminal in that folder. Verify the included files, then run the experiment and its independent checker:</p>
+<pre><code>python scripts/verify_bundle.py EXPERIMENT-lp2-trigram-repeats-CONTENTS.json
+python experiments/records/lp2-trigram-repeats/run.py --check
 python experiments/records/lp2-trigram-repeats/check.py</code></pre>
-<p>The recorded simulation used Python 3.12.10. The first command should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by <code>"observed_total": 55</code>, <code>"exceedances": 798</code>, <code>"monte_carlo_p": 0.799</code> and <code>"below_threshold": false</code>. The second checks the observations with a different counting approach and audits the saved comparison. See <a href="#/wiki/running-scripts">setup instructions</a> if your terminal uses <code>py</code> or <code>python3</code> instead.</p>
+<p>The verification command should report <code>0 problems</code>. The recorded simulation used Python 3.12.10. The runner should report that all observed repeats and 999 complete-dataset shuffles reproduce, followed by <code>"observed_total": 55</code>, <code>"exceedances": 798</code>, <code>"monte_carlo_p": 0.799</code> and <code>"below_threshold": false</code>. The final command checks the observations with a different counting approach and audits the saved comparison. See <a href="#/wiki/running-scripts">setup instructions</a> if your terminal uses <code>py</code> or <code>python3</code> instead. This experiment needs no original JPEGs or external Python packages.</p>
 <h2 id="interpret">Report what passed</h2>
 <p>A passing rerun means the published calculation was reproduced. It does not mean the hypothesis was supported: in this case, the result is a lack of evidence for the specified excess. Keep that distinction when reporting your own work. Changing the window length, removing headings or comparing across pages creates a different test and needs a declared plan.</p>
 <h2 id="next">Plan a follow-up</h2>

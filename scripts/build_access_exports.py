@@ -4,6 +4,7 @@ from pathlib import Path
 import json,hashlib,zipfile,html,csv,io
 from urllib.parse import urljoin
 from build_articles import manuscript_reference_html, guide_discovery_index
+from build_experiment_bundles import build as build_experiment_bundle
 from rune_ioc import csv_report
 from export_alphanumeric_grids import report as grid_report, csv_report as grid_csv
 from check_number_examples import report as number_report
@@ -484,9 +485,18 @@ for name,roles in [('original-images',{'Original JPEG','Historical illustrated c
  with zipfile.ZipFile(root/path) as z:
   for f in selected:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']
  register(path,'ZIP bundle');files[-1]['members']=len(selected)
+experiment_bundle_count=0
+for experiment in read('data/experiments.json')['records']:
+ path,members,omitted_images=build_experiment_bundle(root,experiment)
+ register(path,'Experiment ZIP')
+ files[-1].update(title=experiment['title']+' — reproduction files',experiment=experiment['id'],
+                  pages=experiment['scope']['pages'],aliases=experiment.get('tags',[]),
+                  releases=sorted({p['release'] for p in index['pages'] if p['id'] in experiment['scope']['pages']}),
+                  members=members,original_images_required=omitted_images)
+ experiment_bundle_count+=1
 save('data/catalog.json',json.dumps({'schema':'liber-primus-file-catalog-v1','base_url':base,'snapshot':index['snapshot'],'checksum_algorithm':'SHA-256','files':files},ensure_ascii=False,indent=2))
 save('downloads/SHA256SUMS.txt',''.join(f'{f["sha256"]}  {f["path"]}\n' for f in files))
 save('robots.txt','User-agent: *\nAllow: /\nSitemap: '+base+'sitemap.xml\n')
 save('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+base+'reference/'+p['id']+'.html</loc></url>' for p in index['pages'])+'</urlset>')
 save('sitemap.xml',(root/'sitemap.xml').read_text().replace('</urlset>',''.join('<url><loc>'+base+'reference/articles/'+a['id']+'.html</loc></url>' for a in articles)+'</urlset>'))
-print('Published',len(files),'catalog entries; verified every member of 3 ZIP bundles')
+print('Published',len(files),'catalog entries; verified every member of',3+experiment_bundle_count,'ZIP bundles')

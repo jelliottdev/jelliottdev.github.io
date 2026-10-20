@@ -32,6 +32,8 @@ Run `python scripts/test_experiments.py` for publishing validation. For browser 
 
 ## Preserve the reviewed script
 
+Each published record receives a reproduction ZIP under `downloads/experiments/`, built from its declared inputs and outputs, script, account, record JSON, and the manifest verifier. Declare every local helper and data dependency; an undeclared dependency will not be supplied by a larger checkout when someone uses this archive. Original image inputs remain in `original-images.zip`; the per-experiment instructions and image-input manifest identify that requirement. External executables and packages are not bundled. Run `python scripts/test_experiment_bundles.py` to check all archive manifests and representative isolated reruns.
+
 Set `reproduction.script_sha256` to the SHA-256 of the exact script used in the retest. The builder compares this declared digest with the current file; changing the script or leaving the digest empty prevents publication. The generated draft leaves it empty deliberately.
 
 For example, from the repository root:

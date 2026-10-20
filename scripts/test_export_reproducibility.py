@@ -39,6 +39,9 @@ def compare(first, second):
 def remove_copied_archives(root):
     for name in ['reference-data', 'original-images', 'transcriptions-and-readings']:
         (root / 'downloads' / (name + '.zip')).unlink(missing_ok=True)
+    for archive in (root / 'downloads/experiments').glob('*.zip'):
+        assert archive.resolve().is_relative_to(root.resolve())
+        archive.unlink()
 
 
 def main():
@@ -57,7 +60,7 @@ def main():
         remove_copied_archives(target)
         compare(first, build(target, 3))
     print('PASS: all cataloged bytes and discovery exports match across three hash seeds, '
-          'including a clean rebuild of all three archives.')
+          'including a clean rebuild of the collection and experiment archives.')
 
 
 if __name__ == '__main__':
