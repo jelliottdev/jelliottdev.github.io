@@ -31,7 +31,7 @@ def prime_stream():
         candidate += 1
 
 
-def reproduce(control):
+def reproduce(control, root=ROOT):
     results, trace = {}, []
     global_ordinal = 0
     key_position = control["start"]
@@ -39,7 +39,7 @@ def reproduce(control):
     for _ in range(control["start"]):
         next(primes)
     for page_id in control["pages"]:
-        text = (ROOT / f"text/{page_id}.txt").read_text(encoding="utf-8")
+        text = (root / f"text/{page_id}.txt").read_text(encoding="utf-8")
         # This specific documented source correction is required for the control.
         # It is not a general operation on unsolved ciphertext.
         if page_id == "lp1-10":
@@ -89,11 +89,21 @@ def reproduce(control):
     return results, trace
 
 
-def check(results):
+def check(results, root=ROOT):
     for page_id, actual in results.items():
-        expected = json.loads((ROOT / f"data/pages/{page_id}.json").read_text(encoding="utf-8"))
+        expected = json.loads((root / f"data/pages/{page_id}.json").read_text(encoding="utf-8"))
         if actual != expected["reading"]["literal"]:
             raise ValueError(f"{page_id}: output differs from the published literal reading")
+
+
+def trace_csv(trace):
+    rendered = io.StringIO(newline="")
+    writer = csv.writer(rendered, lineterminator="\n")
+    writer.writerow(["page", "page_rune_ordinal", "section_rune_ordinal", "input_rune",
+                     "input_index", "subtracted_value", "output_index", "latin", "copied",
+                     "key_position_before", "key_position_after", "key_slot_before"])
+    writer.writerows(trace)
+    return rendered.getvalue()
 
 
 def main():
@@ -128,11 +138,7 @@ def main():
     check(output)
     rendered = io.StringIO(newline="")
     if args.trace:
-        writer = csv.writer(rendered, lineterminator="\n")
-        writer.writerow(["page", "page_rune_ordinal", "section_rune_ordinal", "input_rune",
-                         "input_index", "subtracted_value", "output_index", "latin", "copied",
-                         "key_position_before", "key_position_after", "key_slot_before"])
-        writer.writerows(trace)
+        rendered.write(trace_csv(trace))
     else:
         for page_id, text in output.items():
             print(f"=== {page_id.upper()} ===\n{text}", file=rendered)

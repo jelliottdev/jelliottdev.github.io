@@ -180,6 +180,17 @@ def main():
         assert tails["equal"] == dict(observed_score=2, at_least_observed=2, total=6, probability="1/3")
         assert tails["selected"] == dict(observed_score=2, at_least_observed=6, total=6, probability="1")
         print("PASS: exact six-arrangement teaching example and JSON tails")
+        trace_manifest = json.loads((target / 'exports/readings/manifest.json').read_text(encoding='utf-8'))
+        assert len(trace_manifest['records']) == 9
+        for record in trace_manifest['records']:
+            actual = subprocess.check_output([sys.executable, 'scripts/reproduce_reading.py',
+                                              record['control']['id'], '--trace'], cwd=target)
+            assert actual == (target / record['path']).read_bytes()
+            assert hashlib.sha256(actual).hexdigest() == record['sha256']
+            assert len(list(csv.DictReader(io.StringIO(actual.decode('utf-8'))))) == record['rows']
+            for source in record['sources']:
+                assert hashlib.sha256((target / source['path']).read_bytes()).hexdigest() == source['sha256']
+        print('PASS: all nine downloadable traces reproduce byte-for-byte with verified source hashes')
         welcome_trace = list(csv.DictReader(io.StringIO(subprocess.check_output(
             [sys.executable, "scripts/reproduce_reading.py", "welcome", "--trace"], cwd=target).decode("utf-8"))))
         assert [(r["key_position_before"], r["key_position_after"], r["key_slot_before"])

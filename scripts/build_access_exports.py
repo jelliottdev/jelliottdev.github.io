@@ -1,4 +1,5 @@
 """Publish stable reader exports, a file catalog, and non-JavaScript AI references."""
+from reproduce_reading import reproduce, check as check_reading, trace_csv
 from pathlib import Path
 import json,hashlib,zipfile,html,csv,io
 from urllib.parse import urljoin
@@ -186,6 +187,26 @@ register('scripts/test_check_lp2_target.py','Reproduction script')
 register('scripts/check_lp2_target.py','Reproduction script')
 files[-1].update(title='Compare local bytes with the LP2-56 target',guide='lp2-56-target',aliases=['SHA-512','hash candidate','deep web hash'])
 register('data/evidence/reading-methods.json','Known method parameters')
+trace_manifest = {'description': 'Per-rune traces of known controls; not results for unsolved pages.', 'records': []}
+for control in read('data/evidence/reading-methods.json')['controls']:
+ output, trace = reproduce(control, root)
+ check_reading(output, root)
+ path = f"exports/readings/{control['id']}.csv"
+ save(path, trace_csv(trace))
+ register(path, 'Known-reading trace')
+ files[-1].update(title=control['id'].replace('-', ' ').title()+' per-rune trace (CSV)',
+                  guide='reading-'+control['id'], pages=control['pages'],
+                  releases=sorted({pid.split('-')[0].upper() for pid in control['pages']}),
+                  aliases=['reading trace', 'CSV', 'spreadsheet', 'decoded runes'])
+ sources = ['scripts/reproduce_reading.py', 'data/evidence/reading-methods.json']
+ sources += [f'text/{pid}.txt' for pid in control['pages']]
+ sources += [f'data/pages/{pid}.json' for pid in control['pages']]
+ trace_manifest['records'].append(dict(path=path, sha256=files[-1]['sha256'], rows=len(trace),
+   control=control, sources=[dict(path=p, sha256=hashlib.sha256((root/p).read_bytes()).hexdigest()) for p in sources]))
+save('exports/readings/manifest.json', json.dumps(trace_manifest, ensure_ascii=False, indent=2)+'\n')
+register('exports/readings/manifest.json', 'Known-reading trace')
+files[-1].update(title='Known-reading trace sources and parameters (JSON)', guide='running-scripts', aliases=['trace provenance', 'reading trace'])
+
 register('data/evidence/visual-measurements.json','Visual measurement conventions')
 register('data/evidence/lp2-56-dot-measurement.json','LP2-56 dot pixel measurements')
 register('data/evidence/editorial-page-notes.json','Editorial visual observations')
@@ -421,7 +442,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.add('Topic discovery index')
+ if name=='reference-data':roles.update({'Topic discovery index', 'Known-reading trace'})
  if name=='reference-data':roles.update({'Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':

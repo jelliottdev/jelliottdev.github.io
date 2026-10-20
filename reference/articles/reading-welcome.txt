@@ -11,6 +11,11 @@ Copy these zero-based rune ordinals without advancing the sequence: 48, 74, 84, 
 python scripts/reproduce_reading.py welcome
 python scripts/reproduce_reading.py welcome --trace
 Run with Python 3 from the extracted reference-data bundle or a full repository checkout. The script checks its result against the shipped literal controls before printing. It uses no network or AI requests. Read the script · Exact parameters and provenance.
+Inspect the arithmetic
+Download the per-rune trace (CSV). Open it in a spreadsheet to follow each input rune through to its output. Each row identifies its manuscript page and zero-based rune position; key counters show when the sequence advances or pauses. Blank key fields mean that the method does not use that counter.
+How to read the CSV columns · Source hashes and exact parameters (JSON). These files reproduce the known reading above; they do not test a new solution.
+To regenerate the same CSV as a new file:
+python scripts/reproduce_reading.py welcome --trace --output welcome-trace.csv
 LP1-03: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 WELCOME.WELCOME,-PIL/
@@ -75,6 +80,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/reproduce_reading.py
 - Exact parameters and provenance
   https://jelliottdev.github.io/data/evidence/reading-methods.json
+- Download the per-rune trace (CSV)
+  https://jelliottdev.github.io/exports/readings/welcome.csv
+- How to read the CSV columns
+  https://jelliottdev.github.io/reference/articles/running-scripts.html#trace
+- Source hashes and exact parameters (JSON)
+  https://jelliottdev.github.io/exports/readings/manifest.json
 - Compare with the image
   https://jelliottdev.github.io/#/reader/lp1-03
 - Transcription and corrections
