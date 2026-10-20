@@ -14,6 +14,7 @@ async function readerPage(id,version){
  </nav>
  <div class="reader-views" role="group" aria-label="Reader view"><button data-reader-view="image">Image</button><button data-reader-view="text">Text</button><button data-reader-view="compare" class="reader-compare">Compare</button></div>
  </div>
+ ${id==='lp1-00'?'<p class="reader-cover-link">For the compasses collage, open the <a href="#/wiki/illustrated-cover">illustrated cover</a>.</p>':''}
  <div class="reader-workspace">
  <section class="manuscript-image" aria-label="Original manuscript image">
  <div class="reader-pane-bar"><span>Original JPEG</span><button id="reader-zoom">Enlarge ↗</button></div>

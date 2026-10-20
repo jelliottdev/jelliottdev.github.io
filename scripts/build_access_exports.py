@@ -12,6 +12,8 @@ def register(path,role,page=None):
  f=root/path;data=f.read_bytes();row={'path':path,'url':base+path,'role':role,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
  if page:row.update(page=page['id'],release=page['release'])
  files.append(row)
+register('images/1033.jpg','Historical illustrated cover')
+register('data/evidence/illustrated-cover.json','Illustrated cover provenance')
 for summary in index['pages']:
  p=read(f'data/pages/{summary["id"]}.json');pid=p['id']
  register(f'images/{pid}.jpg','Original JPEG',p);assert files[-1]['sha256']==p['image_sha256']
@@ -110,9 +112,9 @@ The complete repository is available from the GitHub Code download menu.
 ''')
 register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
-for name,roles in [('original-images',{'Original JPEG'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
+for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
  reusable=False

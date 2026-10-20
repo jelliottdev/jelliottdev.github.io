@@ -50,6 +50,7 @@ def build():
         a["references"] = [reference_url(link) for link in parser.links]
         title = html.escape(a["title"])
         standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
+        standalone = standalone.replace('src="images/', 'src="../../images/').replace('href="images/', 'href="../../images/').replace('href="downloads/', 'href="../../downloads/')
         standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
         standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
         related = [b for b in articles if b["id"] != a["id"] and
