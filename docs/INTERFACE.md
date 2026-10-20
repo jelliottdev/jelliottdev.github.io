@@ -14,8 +14,8 @@ Primary paths:
 
 Phone priorities are selecting a page, reading, inspecting an image, downloading the correct file, and searching an idea. Controls must fit at 320 CSS pixels; tables may scroll inside a labeled section without making the whole page scroll sideways. Use legible input fonts and sufficiently large tap targets.
 
-Experiment search is not a novelty oracle. Empty registry, no lexical match, index-load failure, unsupported WebGPU, model loading, cancellation and generation failure need distinct messages. Optional AI must never silently download a model or replace source records. Generated comparisons remain drafts with links to retrieved records.
+Experiment search is not a novelty oracle. Empty registry, no lexical match, index-load failure, hosted-service loading, cancellation and generation failure need distinct messages. Hosted AI must not download a model onto the visitor’s device or replace source records. Generated comparisons remain drafts with links to retrieved records.
 
-The system currently has no published experiment records. Real-device AI quality and performance evaluation remains required once records are available. Browser tests use isolated synthetic records; these must never be published as research.
+The system currently has no published experiment records. Hosted AI quality and performance evaluation remains required once records are available. Browser tests use isolated synthetic records; these must never be published as research.
 
 Checked during the October 2026 update: home, catalogue, search, reader, downloads, prime-sum article, topics, experiments and manuscript pages at 320, 390, 768 and 1440 CSS pixels; drawer keyboard behavior; original download hash; offline file verification; search deep links; and empty/populated experiment UI using test fixtures.

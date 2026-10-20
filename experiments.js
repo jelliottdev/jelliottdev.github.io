@@ -1,7 +1,7 @@
-'use strict';
-let experimentRecords, experimentWorker;
+ 'use strict';
+let experimentRecords, assistantConfig, experimentRequest;
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
-function stopExperimentAI(){if(experimentWorker){experimentWorker.terminate();experimentWorker=null;}}
+function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 async function experimentsPage(id, version, query='') {
   stopExperimentAI();
   if (!experimentRecords) {
@@ -11,68 +11,59 @@ async function experimentsPage(id, version, query='') {
     if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
     experimentRecords = data.records;
   }
+  if (!assistantConfig) {
+    try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}
+  }
   if (version !== renderId) return;
   if (id) {
     const record = experimentRecords.find(r => r.id === id);
     if (!record) throw Error('That experiment has no published record.');
-    main.innerHTML = experimentArticle(record);
-    return;
+    main.innerHTML = experimentArticle(record); return;
   }
+  const endpoint=typeof assistantConfig.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
   main.innerHTML = head('Have we tried it?', 'Search documented experiments') + `<article class="reading-width">
     <p>Describe an idea to find related tests, their scope, and their results.</p>
     <form id="experiment-form"><label for="experiment-query">Your idea</label>
     <textarea id="experiment-query" rows="3" maxlength="1500" placeholder="For example: reverse prime values on LP2-15">${esc(query)}</textarea>
-    <button type="submit">Find related work</button></form>
-    <div id="experiment-results" aria-live="polite"></div>
+    <button type="submit">Find related work</button>
+    ${endpoint?'<p class="small muted">Your idea and matching public records are sent to Cloudflare for an AI comparison. Check its claims against the sources.</p>':''}</form>
+    <div id="experiment-answer" aria-live="polite"></div><div id="experiment-results" aria-live="polite"></div>
     <details class="experiment-guide"><summary>How this lookup works</summary>
     <p>Search matches words in published experiment records, including their scope and limitations. Related results are not necessarily the same test. No match does not establish that an idea is new.</p>
     <p>Records will be added after their scripts are written, retested, and reviewed. <a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download the index</a></p></details>
-    <section id="experiment-ai"><h2>Optional AI comparison</h2><p class="small">Compare your idea with the retrieved records using a model on your device. Search works without it.</p>
-    <details><summary>Download and device requirements</summary><p class="small">Requires WebGPU and roughly 1 GB of available graphics memory. The first use downloads hundreds of megabytes from external model hosts. Your query is processed locally, with no API key or account. The model may make mistakes; check the linked records.</p></details>
-    <button id="experiment-ai-start" disabled>Load model and compare</button> <button id="experiment-ai-stop" hidden>Stop</button>
-    <p id="experiment-ai-status" class="small muted" role="status"></p><div id="experiment-ai-answer"></div></section>
     ${footer()}</article>`;
-  const form = $('#experiment-form'), input = $('#experiment-query');
-  let results = [], submittedQuery = '';
-  const resetAI = () => {stopExperimentAI();$('#experiment-ai-stop').hidden=true;$('#experiment-ai-answer').replaceChildren();};
-  const draw = (searchNow) => {
-    resetAI(); submittedQuery = input.value.trim();
-    results = searchNow ? ExperimentSearch.search(experimentRecords, submittedQuery) : [];
-    const container = $('#experiment-results');
-    if (!experimentRecords.length) container.innerHTML = '<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported.</p>';
-    else if (!searchNow || !submittedQuery) container.innerHTML = `<h2>Published experiments</h2>${experimentRecords.map(r=>`<p><a href="#/experiments/${r.id}">${esc(r.title)}</a><br><span class="small muted">${esc(r.summary)}</span></p>`).join('')}`;
-    else if (!results.length) container.innerHTML = '<h2>No matching documented experiment</h2><p>Try the page ID, method name, or a distinctive number. This index does not cover all previous research.</p>';
-    else container.innerHTML = `<h2>${results.length} related ${results.length===1?'record':'records'}</h2><p class="small muted">Compare the scope before treating a result as a duplicate.</p>${results.map(({record:r,matched},i)=>`<article class="experiment-result" id="experiment-result-${i+1}"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><p class="small"><b>Scope:</b> ${esc(r.scope.pages.join(', ').toUpperCase())} · ${esc(r.scope.representation)}</p><p class="small"><b>Finding:</b> ${esc(r.finding)}</p><p class="small muted">Matched: ${esc(matched.join(', '))} · Retested ${esc(r.review.retested_on)}</p></article>`).join('')}`;
-    if (submittedQuery) container.innerHTML += `<p><a href="#/search/${encodeURIComponent(submittedQuery)}">Search manuscript facts for this idea</a></p>`;
-    const supported = !!navigator.gpu;
-    $('#experiment-ai-start').disabled = !results.length || !supported;
-    $('#experiment-ai-status').textContent = !results.length ? 'Available after a search finds published experiment records.' : !supported ? 'WebGPU is unavailable in this browser. The records above are still available.' : 'Ready. Loading the model starts a large download if it is not cached.';
-  };
-  input.addEventListener('input',()=>{resetAI();$('#experiment-ai-start').disabled=true;$('#experiment-ai-status').textContent='Search again to compare the edited idea.';});
-  form.onsubmit = e => {e.preventDefault();history.replaceState(null,'',`#/experiments?q=${encodeURIComponent(input.value.trim())}`);draw(true);};
-  $('#experiment-ai-stop').onclick = () => {resetAI();$('#experiment-ai-start').disabled=!results.length;$('#experiment-ai-status').textContent='Stopped. The retrieved records remain available.';};
-  $('#experiment-ai-start').onclick = () => {
-    if (!results.length || input.value.trim()!==submittedQuery) return;
-    resetAI();
-    const selected=results.slice(0,3).map(({record},i)=>({citation:i+1,id:record.id,title:record.title,question:record.question,scope:record.scope,outcome:record.outcome,finding:record.finding,limitations:record.limitations}));
-    const button=$('#experiment-ai-start'), status=$('#experiment-ai-status');
-    button.disabled=true;$('#experiment-ai-stop').hidden=false;status.textContent='Checking device and loading model…';
-    const worker = new Worker('experiment-ai-worker.js',{type:'module'});experimentWorker=worker;
-    const fail = message => {if(experimentWorker!==worker)return;stopExperimentAI();status.textContent=message;button.disabled=false;$('#experiment-ai-stop').hidden=true;};
-    worker.onerror = () => fail('The model could not start. Try again on a device with WebGPU and more memory, or read the records above.');
-    worker.onmessage = ({data}) => {
-      if (experimentWorker!==worker) return;
-      if(data.type==='progress')status.textContent=data.text;
-      if(data.type==='error')fail('The model could not complete the comparison. '+data.text+' The records above are still available.');
-      if(data.type==='answer') {
-        const cited=[...data.text.matchAll(/\[(\d+)\]/g)].map(m=>Number(m[1]));
-        if(!cited.length || cited.some(n=>!selected.some(s=>s.citation===n))) {fail('The generated answer did not provide valid record citations. Read the retrieved records above or retry.');return;}
-        $('#experiment-ai-answer').innerHTML='<h3>AI draft comparison</h3><p class="small muted">Check every claim against its source. This does not establish that an idea has been exhausted.</p><p class="ai-text">'+esc(data.text).replace(/\[(\d+)\]/g,(_,n)=>`<a href="#/experiments/${selected[Number(n)-1].id}">[${n}]</a>`)+'</p>';
-        status.textContent='Comparison complete.';button.disabled=false;$('#experiment-ai-stop').hidden=true;stopExperimentAI();
+  const input=$('#experiment-query');
+  const reset=()=>{stopExperimentAI();$('#experiment-answer').replaceChildren();};
+  const compare=async idea=>{
+    const controller=new AbortController();experimentRequest=controller;
+    const answer=$('#experiment-answer');answer.innerHTML='<p class="small muted" role="status">Comparing the matching records…</p>';
+    const timeout=setTimeout(()=>controller.abort(),25000);
+    try {
+      const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:idea}),signal:controller.signal});
+      const data=await response.json();
+      if(experimentRequest!==controller)return;
+      if(!response.ok)throw Error('Comparison unavailable');
+      const sources=data.sources||[],cited=[...(data.answer||'').matchAll(/\[(\d+)\]/g)].map(m=>Number(m[1]));
+      if(!data.answer||!cited.length||sources.some(source=>!experimentRecords.some(r=>r.id===source.id))||cited.some(n=>n<1||n>sources.length)){
+        answer.innerHTML='<p class="small muted">Read the matching records below; an AI comparison is unavailable for this search.</p>';return;
       }
-    };
-    worker.postMessage({query:submittedQuery,records:selected});
+      answer.innerHTML='<h2>Comparison</h2><p class="ai-text">'+esc(data.answer).replace(/\[(\d+)\]/g,(_,n)=>`<a href="#/experiments/${sources[Number(n)-1].id}">[${n}]</a>`)+ '</p><p class="small muted">AI-generated. Check the cited scope and findings.</p>';
+    }catch{if(experimentRequest===controller)answer.innerHTML='<p class="small muted">AI comparison is unavailable right now. The matching records are below.</p>';}
+    finally{clearTimeout(timeout);if(experimentRequest===controller)experimentRequest=null;}
   };
+  const draw=searchNow=>{
+    reset();const idea=input.value.trim();
+    const results=searchNow?ExperimentSearch.search(experimentRecords,idea):[];
+    const container=$('#experiment-results');
+    if(!experimentRecords.length)container.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported.</p>';
+    else if(!searchNow||!idea)container.innerHTML=`<h2>Published experiments</h2>${experimentRecords.map(r=>`<p><a href="#/experiments/${r.id}">${esc(r.title)}</a><br><span class="small muted">${esc(r.summary)}</span></p>`).join('')}`;
+    else if(!results.length)container.innerHTML='<h2>No matching documented experiment</h2><p>Try the page ID, method name, or a distinctive number. This index does not cover all previous research.</p>';
+    else container.innerHTML=`<h2>${results.length} related ${results.length===1?'record':'records'}</h2><p class="small muted">Compare the scope before treating a result as a duplicate.</p>${results.map(({record:r,matched})=>`<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3><p>${esc(r.summary)}</p><p class="small"><b>Scope:</b> ${esc(r.scope.pages.join(', ').toUpperCase())} · ${esc(r.scope.representation)}</p><p class="small"><b>Finding:</b> ${esc(r.finding)}</p><p class="small muted">Matched: ${esc(matched.join(', '))} · Retested ${esc(r.review.retested_on)}</p></article>`).join('')}`;
+    if(idea)container.innerHTML+=`<p><a href="#/search/${encodeURIComponent(idea)}">Search manuscript facts for this idea</a></p>`;
+    if(results.length&&endpoint)compare(idea);
+  };
+  input.addEventListener('input',reset);
+  $('#experiment-form').onsubmit=e=>{e.preventDefault();history.replaceState(null,'',`#/experiments?q=${encodeURIComponent(input.value.trim())}`);draw(true);};
   draw(Boolean(query));
 }
 

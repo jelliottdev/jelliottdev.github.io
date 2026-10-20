@@ -22,14 +22,10 @@ Drafts never enter the public search index. Files committed to a public reposito
 
 The site ranks published records locally with BM25 term matching, including scope and limitations. This is lexical retrieval, not exhaustive detection of equivalent ideas. No hit means no matching **documented** experiment. Compare pages, input representation, and parameter bounds yourself.
 
-Optional AI uses WebLLM 0.2.86 and Qwen2.5-0.5B-Instruct in a browser worker. It receives the query and up to three retrieved records with citation labels. It cannot browse, run scripts, or submit ideas. It is disabled when no matching published records exist.
+Hosted AI is prepared through Cloudflare Workers AI, using its built-in binding rather than provider or visitor keys. It uses the same form and adds a cited comparison above the records; there is no browser model download or separate AI section. See [deployment and limits](../services/idea-assistant/README.md).
 
-Inference runs on the visitor's device. Initial runtime/model downloads use jsDelivr, Hugging Face, and the model-library host. No API key or paid inference endpoint is used. The visitor chooses whether to start the large download. WebGPU and sufficient memory are required; search remains usable without them. Generated text is labeled a draft and never changes the recorded result. Citation labels identify provided records, not verified entailment.
-
-The AI needs real-device answer-quality evaluation once records exist. Do not present it as an authority on all prior Cicada research.
-
-References: https://webllm.mlc.ai/docs/user/get_started.html and https://github.com/mlc-ai/web-llm/tree/v0.2.86
+The service is not active until its verified URL is set in `data/assistant.json`. Empty registries and unmatched queries do not call inference. The free plan has a daily allowance; when unavailable, ordinary search still works. Generated comparisons are not authoritative findings, and valid citation labels do not prove that a claim follows from the source.
 
 ## Check the implementation
 
-Run `python scripts/test_experiments.py` for publishing validation. For browser regression tests, install Playwright, serve the repository on port 8765, and run `node scripts/test_interface.cjs`. It uses the Edge browser channel; `PLAYWRIGHT_MODULE` can point to an existing Playwright installation and `WIKI_BASE_URL` can select a different preview server. Synthetic experiment records are intercepted in the test browser only. AI output is mocked in those UI tests; this does not test model answer quality.
+Run `python scripts/test_experiments.py` for publishing validation. For browser regression tests, install Playwright, serve the repository on port 8765, and run `node scripts/test_interface.cjs`. It uses the Edge browser channel; `PLAYWRIGHT_MODULE` can point to an existing Playwright installation and `WIKI_BASE_URL` can select a different preview server. Synthetic experiment records are intercepted in the test browser only. Hosted responses are mocked in UI tests; this does not test model answer quality.
