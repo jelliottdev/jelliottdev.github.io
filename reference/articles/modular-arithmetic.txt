@@ -65,10 +65,58 @@ for c in range(29):
 
 This verifies the arithmetic for every single-rune input and shift. It does not verify a keyword, a page transcription, or the handling of an interruption. Those choices belong to the complete decoding method.
 
+Multiplication needs an inverse, not ordinary division
+
+An affine map has the form y = (ax + b) mod m: multiply by a, add b, then reduce modulo m. To undo it on all residues, first subtract b, then multiply by the modular inverse of a. An inverse is an integer u satisfying au ≡ 1 (mod m). It is not the fraction 1/a.
+
+For example, 2 has inverse 15 modulo 29 because 2 × 15 = 30 ≡ 1. If y = (2x + 3) mod 29 and x=20, the output is 14. Recover x with 15 × (14 − 3) mod 29 = 20. Dividing the displayed output difference 11 by 2 would give 5.5 and miss the wraparound.
+
+An inverse exists exactly when gcd(a,m)=1, where the greatest common divisor is the largest positive integer dividing both numbers. Such a residue a is called a unit modulo m. If the gcd is one, integers u and v exist with au + mv = 1, making u an inverse. Conversely, any inverse equation gives that same integer identity, so a common divisor must divide 1.
+
+Because 29 is prime, every multiplier from 1 through 28 has an inverse modulo 29. Zero does not. Composite moduli require the gcd check; a nonzero multiplier is not automatically invertible.
+
+Invertible on all residues versus distinct on one page
+
+Two inputs x and z collide under an affine map when a(x−z) ≡ 0 (mod m); adding b does not affect collisions. Let d=gcd(a,m). Dividing both a and m by d leaves coprime integers, so the condition is exactly that x−z is a multiple of m/d. If d is greater than one, the full residue set therefore has collisions.
+
+A smaller input set can still avoid those colliding pairs. The LP2-55 experiment supplies two concrete examples:
+
+	Map	gcd(a,m)	Colliding input pair	On the page
+
+	(58x + 57) mod 114	2	2 and 59 both give 59	59 is absent; the 25 observed prime inputs give 25 distinct outputs
+
+	(102x + 101) mod 202	2	2 and 103 both give 103	103 is absent; the 25 observed prime inputs give 25 distinct outputs
+
+
+Neither multiplier has an inverse on its full residue set. Nevertheless, each map is injective on the page’s observed support. A lookup table could reverse it within that restricted input set. This is why requiring a whole-ring inverse would reject these two maps even though the experiment’s weaker, explicitly stated condition allows them. Their existence is not evidence of recovered plaintext.
+
+Check both meanings in Python
+
+Run this from the extracted reference-data bundle or repository with Python 3.8 or later. The negative exponent in three-argument pow requests a modular inverse.
+
+import json
+from math import gcd
+from pathlib import Path
+
+assert pow(2, -1, 29) == 15
+assert (15 * (((2 * 20 + 3) % 29) - 3)) % 29 == 20
+alphabet = json.loads(Path("data/index.json").read_text(encoding="utf-8"))["alphabet"]
+prime = {entry["rune"]: entry["prime"] for entry in alphabet}
+text = Path("text/lp2-55.txt").read_text(encoding="utf-8")
+support = {prime[c] for c in text if c in prime}
+assert len(support) == 25
+for a, b, m in [(58, 57, 114), (102, 101, 202)]:
+    assert gcd(a, m) == 2
+    assert len({(a*x+b) % m for x in range(m)}) == m // 2
+    assert len({(a*x+b) % m for x in support}) == len(support)
+print("PASS: no full-residue inverse, but distinct outputs on LP2-55 support")
+
+This snippet checks the two named maps. The experiment’s separate certificate is what establishes that they are the only nonidentity affine maps in its all-modulus search; the snippet alone does not prove completeness.
+
 What this does not decide
 Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See Vigenère, prime-minus-one, and keystream positions.
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The Python and JavaScript examples and all 841 single-rune shift round trips were checked on 20 October 2026.
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The Python and JavaScript examples and all 841 single-rune shift round trips were checked on 20 October 2026. The modular-inverse example uses the alphabet and LP2-55 support preserved in the linked experiment.
 
 Sources, related references, and files
 - Vigenère
@@ -83,6 +131,10 @@ Sources, related references, and files
   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder
 - reference-data setup
   https://jelliottdev.github.io/reference/articles/running-scripts.html
+- LP2-55 experiment
+  https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
+- injective on the page’s observed support
+  https://jelliottdev.github.io/reference/articles/rune-values.html#injectivity
 - keystream positions
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Pinned historical walkthrough
