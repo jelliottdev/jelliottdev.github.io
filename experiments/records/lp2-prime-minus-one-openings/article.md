@@ -68,3 +68,7 @@ The output path must not already exist. The saved result identifies every candid
 Different plaintext beginnings, later starting offsets, interruptions, heading removal, reversed input, cross-page continuation and composition with another cipher are outside this test. Replacing prime-minus-one with primes, Fibonacci numbers or totients also changes the procedure and requires a declared variant with its own result page.
 
 Before expanding a range, state why the new range is useful. Before adding exceptions, specify how many and where they may occur. Otherwise the search can keep adapting to accidental fragments without a clear stopping rule.
+
+## Related schedule: ordinary primes
+
+The [ordinary-prime variant](#/experiments/lp2-prime-openings) keeps every other setting fixed and has its own result page. It also found no exact opening matches. Every subtraction output is one index lower than the corresponding result here, modulo 29; every addition output is one higher. If a future search already includes all 29 constant output shifts, these two schedules cover the same candidates under identical advancement rules. Do not count them as independent evidence.

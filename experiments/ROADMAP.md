@@ -28,3 +28,5 @@ Prime-row baseline: 594 eligible archived rows, 76 prime sums; within-page shuff
 Reading-route baseline: sixteen row/ordinal-column route configurations on 55 nonempty pages (LP2-50 zero runes); 880 cases, nine fixed openings, zero matches. Full coordinate permutations saved. Does not test physical alignment, arbitrary permutations or combined substitution.
 
 Prime-minus-one baseline: 29 offsets, both directions, 55 nonempty LP2 pages; 3190 candidates and 28710 fixed-opening comparisons, zero matches. All candidates audited; first 56 LP2-56 control runes reproduce. Other schedules belong in separate declared variants, not a combined ten-approach article.
+
+Ordinary-prime variant: only the schedule changes from the prime-minus-one baseline; all 3190 cases retested and compared. Zero fixed-opening matches. Every candidate differs by its sign modulo 29, so an all-constant-shifts search would duplicate coverage. Separate result page, same family.

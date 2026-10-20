@@ -61,6 +61,9 @@ Start at prime 2. Copy zero-based rune ordinal 56 without advancing the prime se
 Has this been tried on other pages?
 The prime-minus-one reuse experiment tests LP2-00–55 with starting offsets 0–28 and both arithmetic directions, without interruptions. None of its 3190 candidates starts with any of nine declared 12-rune openings. Read the scope before treating this as a negative result: different beginnings and interruption rules were not tested. Complete candidate sequences and reproduction scripts are available with the record.
 
+What if I subtract the primes themselves?
+With the same input and key advancement, replacing each prime minus one with the prime lowers every subtraction output by one alphabet position modulo 29. With addition, it raises every output by one. The ordinary-prime variant records that comparison separately and verifies the relation for every candidate. If a search already tries all 29 constant output shifts, these two schedules cover the same outputs; counting both as independent coverage would be misleading.
+
 The hash reference
 The decoded text refers to a page identified by a long hash. Reproducing that text is not the same as locating the referenced page. See the exact hash target and its unresolved input conventions.
 Sources and verification
@@ -81,6 +84,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-56.html
 - prime-minus-one reuse experiment
   https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
+- ordinary-prime variant
+  https://jelliottdev.github.io/#/experiments/lp2-prime-openings
 - the exact hash target and its unresolved input conventions
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - Exact control parameters and interruption provenance
