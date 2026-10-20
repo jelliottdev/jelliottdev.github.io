@@ -15,6 +15,7 @@ def register(path,role,page=None):
 register('images/1033.jpg','Historical illustrated cover')
 register('data/evidence/illustrated-cover.json','Illustrated cover provenance')
 register('data/evidence/cover-rsa.json','Historical RSA reproduction')
+for path in ['data/evidence/emerson-book-cipher.json','exports/sources/emerson-paragraphs.json','exports/sources/emerson-self-reliance.pdf']:register(path,'Historical book-cipher reproduction')
 for summary in index['pages']:
  p=read(f'data/pages/{summary["id"]}.json');pid=p['id']
  register(f'images/{pid}.jpg','Original JPEG',p);assert files[-1]['sha256']==p['image_sha256']
@@ -65,7 +66,7 @@ register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
-for script in ['reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')
@@ -113,6 +114,7 @@ From that folder, with Python 3, run:
   python scripts/rune_ioc.py --check
   python scripts/reproduce_cover_chain.py
   python scripts/reproduce_cover_rsa.py
+  python scripts/reproduce_emerson.py
   python scripts/inspect_visual_records.py
 
 These checks use the included archived texts, records, parameters and evidence.
@@ -132,7 +134,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
  reusable=False

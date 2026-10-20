@@ -14,7 +14,47 @@ Follow the first coordinate
 
 The walkthrough points to this Dartmouth-hosted PDF of Self-Reliance. The first coordinate is 1:2:3:1. Count from the first prose paragraph, after the title and opening verse. Its second sentence begins The soul always. The third word is always, whose first letter is a. This agrees with the first character of the reported address.
 
-That one lookup checks the meaning of the coordinate and the initial counting convention. It is not a full replay of the address. The complete route still needs every coordinate traced against a fixed source, including the literal characters printed among the coordinates. Do not silently change punctuation or paragraph boundaries to make later letters fit.
+Reproduce all the lookups
+
+The complete replay was checked on 20 October 2026. Extract the reference-data ZIP and run:
+
+python scripts/reproduce_emerson.py
+
+This uses Python’s standard library and the included paragraph derivative. It prints the complete result and every selected sentence, word and character. The output is auqgnxjtvdbll3pv.onion; no network request is made.
+
+For a second level of reproduction, install pypdf==6.19.0 in your Python environment and run python scripts/reproduce_emerson.py --check-pdf. This re-extracts the included source PDF and compares all 50 derived paragraphs before doing the lookups. The default command does not require that package.
+
+	Coordinate or literal	Selected word	Character
+	1:2:3:1	always	a
+	3:3:13:5	genius	u
+	45:5:2:3	acquires	q
+	20:3:20:5	among	g
+	8:3:8:6	action	n
+	48:5:14:2	experience	x
+	21:13:4:1	justice	j
+	25:1:7:4	truth	t
+	15:9:3:4	above	v
+	1:1:16:3	and	d
+	4:3:3:1	being	b
+	8:3:26:4	daily	l
+	47:3:3:5	equality	l
+	3	Printed literally	3
+	13:2:5:4	corpse	p
+	1:4:16:4	private	v
+	.	Printed literally	.
+	o	Printed literally	o
+	n	Printed literally	n
+	i	Printed literally	i
+	o	Printed literally	o
+	n	Printed literally	n
+
+The counting rules used here
+
+Counting starts at the first prose paragraph and excludes the title, opening verse and page-number footers. Sentences end at periods, question marks or exclamation marks. Words are separated by whitespace, with punctuation removed from their edges; only alphabetic characters count within the selected word. All coordinates start at 1. Typographical ligatures are expanded, and words split with a line-ending hyphen are joined while retaining the hyphen.
+
+One detail changes the later paragraph numbers: the two inset verse lines on printed page 16 stay within paragraph 36. They are not two additional prose paragraphs. An initial automatic extraction counted them separately; inspecting the PDF explained the resulting mismatches. This is a documented correction during replay of a known result, not an independently predicted decoding rule.
+
+The full evidence record contains source and derivative checksums, every coordinate and selected sentence, and the conventions. The paragraph derivative records the printed starting page for each paragraph. Coordinates come from the pinned walkthrough; this replay has not freshly extracted or authenticated the opening carrier image. It also does not establish that the PDF snapshot is byte-for-byte the edition originally used by the puzzle authors.
 
 What “self-reliance” means in the essay
 
@@ -36,6 +76,10 @@ https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897a
 https://jelliottdev.github.io/reference/articles/illustrated-cover.html
 https://jelliottdev.github.io/reference/articles/cover-rsa.html
 https://math.dartmouth.edu/~doyle/docs/self/self.pdf
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/exports/sources/emerson-self-reliance.pdf
+https://jelliottdev.github.io/data/evidence/emerson-book-cipher.json
+https://jelliottdev.github.io/exports/sources/emerson-paragraphs.json
 https://www.gutenberg.org/files/2944/2944-h/2944-h.htm
 https://jelliottdev.github.io/reference/articles/reading-instruction.html
 https://jelliottdev.github.io/reference/articles/reading-loss-of-divinity.html

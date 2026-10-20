@@ -8,6 +8,7 @@ From that folder, with Python 3, run:
   python scripts/rune_ioc.py --check
   python scripts/reproduce_cover_chain.py
   python scripts/reproduce_cover_rsa.py
+  python scripts/reproduce_emerson.py
   python scripts/inspect_visual_records.py
 
 These checks use the included archived texts, records, parameters and evidence.

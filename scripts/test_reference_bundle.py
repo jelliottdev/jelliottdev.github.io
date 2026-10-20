@@ -27,6 +27,7 @@ def main():
             ["scripts/rune_ioc.py", "--check"],
             ["scripts/reproduce_cover_chain.py"],
             ["scripts/reproduce_cover_rsa.py"],
+            ["scripts/reproduce_emerson.py"],
             ["scripts/inspect_visual_records.py"],
         ]:
             result = subprocess.run([sys.executable, *command], cwd=target,
