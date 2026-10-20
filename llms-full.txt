@@ -8949,7 +8949,45 @@ Fix one rule: read the product’s decimal digits from left to right and add con
 
 If a separate rule reduces those sums modulo 29, the sequence becomes 5, 3, 6, 9, 19, 15, 25, 24, 25, 9. Only the final sum changes: 38 mod 29 = 9. These residues could be interpreted as direct rune indices or as shifts applied to a specified ciphertext stream, but those are different operations. No ciphertext has been used in this table.
 
-The reproduction script includes the digits, primes, sums and residues in product_digit_prime_addition. This provides a fixed arithmetic reference against which to describe another variant, including an F-triggered exception. It does not fill in the unspecified route from the drawing to 7649 or demonstrate a connection between pages.
+The reproduction script includes the digits, primes, sums and residues in product_digit_prime_addition. This provides a fixed arithmetic reference against which to describe another variant, including an F-triggered exception. The Unicode route discussed below is a separate proposed derivation; neither calculation demonstrates a connection between pages.
+
+From the infinity code point to 7649
+
+The proposed chain starts by identifying a drawn shape with the Unicode infinity character, U+221E, whose code-point value is decimal 8734. That identification and the use of Unicode are hypotheses about how to represent the drawing; the arithmetic that follows does not establish them.
+
+Using the shortest binary spelling gives 14 bits. Flip each bit within that width:
+
+8734: 10001000011110
+flip: 01110111100001 = 7649
+
+Equivalently, (2^14 − 1) − 8734 = 7649. This is a fixed-width bit complement, not decimal digit reversal and not reversal of the order of the binary digits. Width is part of the rule: flipping a 16-bit representation instead gives 65535 − 8734 = 56801. A programming-language operator with no declared width can behave differently again.
+
+Next reverse the decimal digits of 7649 to get 9467. Both are primes and differ from one another, so they are emirps. Treating 9467 as a one-based prime index then gives 98597. The separate lookup for 3299 gives 30557, and their product is 3012828529 as shown above. These are individually checkable steps, each with its own representation choice.
+
+What the Unicode names actually say
+
+	Decimal value	Code point	Unicode name
+	8734	U+221E	INFINITY
+	7649	U+1DE1	COMBINING LATIN LETTER SMALL CAPITAL N
+	9467	U+24FB	DOUBLE CIRCLED DIGIT SEVEN
+
+7649 therefore has an N-related character name, but it is not ordinary capital N, whose code point is U+004E, decimal 78. Likewise, a character representing a double-circled seven is not automatically the number seven in a cipher. Turning these names into “N = 7”, then into an instruction to skip a symbol or substitute zero, introduces additional rules that the code-point lookup does not supply. The names can be checked in the official combining-mark chart and enclosed-alphanumeric chart.
+
+How common is the emirp-to-emirp lookup?
+
+Define a finite reference set: all integers from 1000 through 9999 that are prime and whose reversed decimal digits form a different prime. Count individual values, not reversal pairs; exclude palindromic primes. There are 204 such four-digit emirps.
+
+For each value n in that set, calculate the nth prime p_(n), then test whether p_(n) is itself an emirp. Exactly 67 of 204 pass, approximately 32.84%. This independently reproduces the supplied count. The complete audit lists every input, its nth prime, and its pass/fail result.
+
+This is a descriptive proportion for a declared population. It is not a p-value for the manuscript theory. The proposed numbers were not established as uniform random draws from that population, and the chain includes choices of symbol, code point, bit width, digit reversal, lookup direction and output interpretation. Squaring 67/204 would additionally assume two independent draws; that does not follow from selecting two numbers in a theory.
+
+A claim about the prefix 301 would need to define what products were eligible, what counted as a match, and how many alternative transformations and prefixes were inspected. A short fragment that becomes readable only after replacing an inconvenient prime is a fitted result. Preserve that exception and test a fixed rule on new text rather than treating the fitted fragment as an independent confirmation.
+
+Reproduce the chain and reference population
+
+Run python scripts/audit_emirp_chain.py --check from the repository or extracted reference-data bundle. The standard-library script checks the binary widths, Unicode names, nth-prime lookups and all 204 reference cases. It uses exact trial division and makes no network requests. Use --output my-emirp-audit.json to save a new report without replacing an existing file.
+
+This is an arithmetic audit, not a ciphertext experiment. The LP2-15 panel guide preserves the printed numbers; search space and bounds explains how to turn a chain of choices into a testable claim. The suggested subtraction and mirroring routes through pages 0–2 still need exact coordinates and traversal rules before their claimed 301 sequences can be reproduced.
 
 How to replicate
 python scripts/check_number_examples.py
@@ -8963,14 +9001,24 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/alphabet
 - LP2-15; Original page and provenance
   https://jelliottdev.github.io/reference/lp2-15.html
-- LP2-15: the complete number panel, heading, and drawing
+- LP2-15: the complete number panel, heading, and drawing; LP2-15 panel guide
   https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
 - zero-based rune index
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - interruptions guide
   https://jelliottdev.github.io/reference/articles/interruptions.html
-- reference-data ZIP
+- combining-mark chart
+  https://unicode.org/charts/PDF/U1DC0.pdf
+- enclosed-alphanumeric chart
+  https://www.unicode.org/charts/PDF/U2460.pdf
+- complete audit
+  https://jelliottdev.github.io/exports/emirp-chain-audit.json
+- reference-data bundle; reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- standard-library script
+  https://jelliottdev.github.io/scripts/audit_emirp_chain.py
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - emirps and reversal
   https://jelliottdev.github.io/reference/articles/emirps.html
 - documenting scope
