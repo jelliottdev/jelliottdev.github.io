@@ -101,6 +101,17 @@ record.json: structured scope, inputs, outputs, hashes, and review fields used b
 run.py: a stub that deliberately stops until you implement the test.
 Complete the plan first. After the run, distinguish what completed from what was skipped or interrupted. Record any new exceptions or parameter choices prompted by the output, so another reader can see how the test developed. Leave the retest fields unfinished until someone has actually performed that check.
 The scaffold starts as a draft and refuses to reuse an existing ID. Creating the files does not publish a result or add it to the idea checker. Follow the repository contribution instructions for validation and accurately labeled review. The downloadable reference-data bundle is sufficient for the published examples; this contribution workflow uses the full repository checkout.
+Give a follow-up its own record
+
+When you change a few variables in an existing experiment, keep the new test in the same family with its own question, script and findings. Start a draft from the family's baseline:
+
+python scripts/new_experiment.py my-row-sum-variant --baseline lp2-row-prime-sums
+
+Replace my-row-sum-variant with your new record ID. The command copies the family and starting scope, but leaves the findings, file hashes and review empty. Set a descriptive variant label, edit the scope, and fill variant.changes with the exact previous value, new value and reason for each changed field. For example, the emirp row-sum test changes which sums qualify while retaining the prime baseline's rows and shuffle settings. Both results remain separate and accessible within the family.
+
+If you change several variables, say so; the comparison cannot tell you which change caused a difference. If nothing changes and you only rerun the calculation, document the retest with the existing record. Neither a draft nor an unperformed follow-up counts as a completed experiment in the idea checker.
+
+
 The research registry
 Have we tried it? compares techniques and scope in published records. Background pages do not count as experiments. The registry distinguishes published bounded results from plans. A method guide alone does not establish that a new experiment was performed. Open an individual record to inspect its exact scope and results. The contribution format describes publication requirements.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
@@ -132,6 +143,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - repository contribution instructions; contribution format
   https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md
+- the emirp row-sum test
+  https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
 - Have we tried it?
   https://jelliottdev.github.io/#/experiments
 - the index-of-coincidence baseline
