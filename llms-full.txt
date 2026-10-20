@@ -10652,6 +10652,9 @@ For another summary of the same frequency counts, see single-rune entropy. Like 
 
 For an order-dependent pair count, see rune matches at fixed distances. It compares positions separated by a declared lag, with no circular wraparound.
 
+
+The all-distance identity shows how the lag counts partition the same matching pairs used by IoC, and why the rates must be weighted by their denominators.
+
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
@@ -10699,6 +10702,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/rune-entropy.html#ioc-comparison
 - rune matches at fixed distances
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
+- all-distance identity
+  https://jelliottdev.github.io/reference/articles/rune-lag-matches.html#ioc-connection
 
 Article: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 
@@ -15429,6 +15434,25 @@ Under a uniform random rearrangement preserving the symbol counts, any two disti
 
 The report includes this fraction as shuffle_expected_rate_fraction. It is not a p-value, a confidence interval, or a threshold for a meaningful result. Pairs can overlap, and results at different lags share the same input. If you select the largest result after scanning many lags, a chance comparison must repeat that selection procedure. See null models and selection.
 
+How all distances add up to IoC
+
+Every pair of distinct positions has exactly one positive distance. If you calculate all lags from 1 through n − 1, you count every forward pair once. Consequently:
+
+Matching forward pairs
+Σ c(c−1) / 2
+All forward pairs
+n(n−1) / 2
+Ratio of these totals
+Whole-page IoC
+
+Here c is each symbol’s frequency. Both totals are half the ordered-pair totals used in the IoC formula, so their ratio is unchanged. This is an identity for the observed stream, not just an average expected from shuffling.
+
+In the ABABA example, combine the counts: (0 + 3 + 0 + 1) / (4 + 3 + 2 + 1) = 4/10. The same stream has three As and two Bs, giving IoC (3×2 + 2×1) / (5×4) = 8/20. Both equal 2/5.
+
+Do not average the four rates equally. That would give (0 + 1 + 0 + 1) / 4 = 1/2, because it assigns a one-pair lag the same weight as a four-pair lag. Weight each rate by its number of comparisons, or simply divide the summed numerators by the summed denominators.
+
+The LP2-31 chart above includes only lags 1–20, so its pooled rate need not equal whole-page IoC. For the identity, all 268 distances are required. Lag counts reveal how matching pairs are distributed over distances; their full total supplies no independent evidence beyond the same frequency counts.
+
 What the result cannot decide
 
 An elevated lag can motivate a more specific test; it does not identify a cipher or key length by itself. Changing the heading policy, page boundaries, or skipped positions changes the sequence being measured. Record those choices before comparing reports.
@@ -15437,10 +15461,10 @@ Renaming symbols consistently leaves equality unchanged. Reversing the whole str
 
 Files and checks
 
-Calculation script · Checks. Tests cover the hand example, valid lag bounds, symbol renaming, reversal, and the expected rate averaged over all six distinct arrangements of AABB. The archived-page check verifies the 269-rune scope and its comparison denominators. These validate the stated calculation, not the original photographic transcription.
+Calculation script · Checks. Tests also check the all-lag identity on every three-symbol sequence of lengths 2–6. They cover the hand example, valid lag bounds, symbol renaming, reversal, and the expected rate averaged over all six distinct arrangements of AABB. The archived-page check verifies the 269-rune scope and its comparison denominators. These validate the stated calculation, not the original photographic transcription.
 
 Sources, related references, and files
-- whole-page IoC
+- whole-page IoC; IoC formula
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip

@@ -1,4 +1,5 @@
 import itertools
+from collections import Counter
 from fractions import Fraction
 import unittest
 import json
@@ -10,6 +11,16 @@ from rune_lag_matches import lag_counts, report
 
 
 class LagMatches(unittest.TestCase):
+    def test_all_lags_partition_the_ioc_pairs(self):
+        for length in range(2, 7):
+            for symbols in itertools.product('ABC', repeat=length):
+                rows = lag_counts(symbols, length - 1)
+                matches = sum(row['matching_pairs'] for row in rows)
+                pairs = sum(row['compared_pairs'] for row in rows)
+                frequencies = Counter(symbols)
+                self.assertEqual(pairs, length * (length - 1) // 2)
+                self.assertEqual(2 * matches, sum(c * (c - 1) for c in frequencies.values()))
+
     def test_saved_json_and_no_overwrite(self):
         script = Path(__file__).with_name('rune_lag_matches.py')
         command = [sys.executable, str(script), 'lp2-31', '--max-lag', '4']
