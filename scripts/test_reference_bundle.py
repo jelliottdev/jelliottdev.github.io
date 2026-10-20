@@ -6,6 +6,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+from urllib.parse import urljoin
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,6 +22,18 @@ def main():
             for item in manifest:
                 assert hashlib.sha256(bundle.read(item["path"])).hexdigest() == item["sha256"]
             bundle.extractall(target)
+        # Catch omission or staleness of discovery data independently of the
+        # bundle manifest (which can consistently describe an outdated file).
+        topics = json.loads((target / "data/topics.json").read_text(encoding="utf-8"))
+        assert topics == json.loads((ROOT / "data/topics.json").read_text(encoding="utf-8"))
+        topic_text = (target / "reference/topics.txt").read_text(encoding="utf-8")
+        for topic in topics:
+            assert topic["title"] in topic_text
+            assert topic["summary"] in topic_text
+            assert topic["basis"] in topic_text
+            for link in topic["links"]:
+                assert urljoin("https://jelliottdev.github.io/", link["href"]) in topic_text
+        print("PASS: bundled topic records match current sources and retain evidence and links")
         for command in [
             ["scripts/test_verify_bundle.py"],
             ["scripts/reproduce_null_example.py"],

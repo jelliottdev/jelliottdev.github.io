@@ -89,6 +89,11 @@ its source. The separately named manifests survive combining the bundles;
 CONTENTS.json is a compatibility copy belonging to the last bundle extracted.
 
 WHAT IS INCLUDED
+For subject discovery, data/topics.json contains topic titles, categories,
+summaries, search terms, links, and evidence notes. reference/topics.txt is its
+readable counterpart. These are navigation records, not completed experiments;
+use data/experiments.json for the reviewed experiment registry.
+
 The commands above use the included archived texts, records, parameters and
 evidence. No network or AI service is needed. CONTENTS.json lists member hashes
 and roles. START-HERE.txt duplicates downloads/REFERENCE-DATA-README.txt for
