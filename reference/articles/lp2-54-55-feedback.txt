@@ -1,0 +1,110 @@
+LP2-54–55: interruption and ciphertext-feedback tests
+
+The two-page input, six F positions, reset and skip rules, period-13 results, reproduction and remaining questions.
+
+LP2-54 and LP2-55 form a useful two-page study of interruption rules. Both have curled side borders; LP2-54 opens with red runes, and LP2-55 places a pale tree above a winged figure. The current records contain 232 and 76 alphabet runes respectively. Both pages remain unsolved.
+
+Locate the evidence
+
+[Image: LP2-54: red opening, black rune text and curled side borders.]
+LP2-54 page record · Original JPEG
+[Image: LP2-55: short text above a pale tree and dark winged figure, framed by curled borders.]
+LP2-55 page record · Original JPEG
+
+Use the page records’ detail controls to inspect the border marks and red closing cluster. The tree-source comparison and border guide address the artwork. The feedback experiments below operate on rune indices; they do not derive a key from these drawings.
+
+The tested input and six possible interruptions
+
+The tests concatenate LP2-54 followed by LP2-55, retain headings and remove all non-rune characters. The resulting stream has 308 runes. The ciphertext state carries across the page boundary. Neither record uses a separate reviewed-text layer or removes the red opening.
+
+	Page	F positions within page	F positions in joined stream
+	LP2-54	41, 65, 195	41, 65, 195
+	LP2-55	15, 25, 41	247, 257, 273
+
+All positions here are zero-based rune ordinals. The second page starts at ordinal 232, so its first candidate F is at 232 + 15 = 247. Each of the six positions can be selected or left ordinary, giving 2⁶ = 64 subsets. The empty subset is included. This is not a search over all possible interruption symbols or positions.
+
+What “reset” and “skip” mean here
+
+For an ordinary rune, subtract the previous ciphertext index from the current ciphertext index modulo 29, then store the current ciphertext index for the next step. Initially the stored value is zero. This is ciphertext feedback, not plaintext autokey: the stored value comes from the input, not the decoded output.
+
+output = (current_ciphertext - previous_ciphertext) mod 29
+previous_ciphertext = current_ciphertext
+
+At a selected F rune, both variants copy the F unchanged and omit that copied rune from the sequence used for scoring. Their difference is what happens to the stored value:
+
+Reset: set it to zero.
+Skip: keep the value from the preceding non-interruption rune.
+
+An unselected F follows the ordinary equation, including the state update. Consequently, even though F has index zero, selecting it is not equivalent to treating it normally.
+
+A three-rune example
+
+Take artificial ciphertext indices [10, 0, 7], selecting the middle rune as the interruption. This illustrates the rules; it is not a reading of either manuscript page.
+
+	Rule	Full output	Scored output
+	Reset	10, 0, 7	10, 7
+	Skip	10, 0, 26	10, 26
+	No interruption selected	10, 19, 7	10, 19, 7
+
+In skip mode, the final step is (7 − 10) mod 29 = 26. In reset mode it is (7 − 0) mod 29 = 7. If the zero is ordinary, its output is (0 − 10) mod 29 = 19; it then sets the stored ciphertext value to zero. The score uses the compact output after selected interruptions are removed, so selecting an interruption also changes later residue-column positions.
+
+What the two experiments found
+
+Each variant scans all 64 subsets and periods 2–30: 64 × 29 = 1,856 configurations for the observed input. It measures pooled column index of coincidence and selects the maximum. The winning observed configuration in both variants uses period 13 and no interruptions, with pooled IoC approximately 0.04748.
+
+Each shuffled comparison keeps the six F positions fixed and permutes the remaining non-F rune multiset. It repeats the complete subset-and-period search rather than comparing a selected winner with an unsearched random input.
+
+	Variant	Shuffled maxima at least as large	Plus-one Monte Carlo p
+	Reset	543 of 999	0.544
+	Skip	557 of 999	0.558
+
+Neither result is below 0.05 even before the records’ additional correction for comparing two variants. The shared observed winner follows from selecting no interruptions, where the two rules coincide; it is not two independent confirmations of a key length. These tests do not establish randomness or exclude other interruption models.
+
+Reproduce the results
+
+Each linked experiment provides its own ZIP with scripts, recorded results, checksums and instructions. Extract it with the directory structure intact. The records also explain their independent checks and Python requirements.
+
+python experiments/records/lp2-54-55-autokey-reset/run.py --check
+python experiments/records/lp2-54-55-autokey-skip/run.py --check
+
+These are new, explicitly specified implementations of the two recurrence rules. They are not claimed to be exact reruns of the unavailable original discussion scripts. Human review is still pending.
+
+What remains untested?
+
+Resetting state at the boundary between LP2-54 and LP2-55.
+Removing the heading or using other candidate interruption symbols.
+Plaintext autokey, different primers, or additional substitution stages.
+A language score that can recognize unfamiliar plaintext rather than a periodic-IoC peak.
+A cipher rule derived reproducibly from the border marks, tree or winged figure.
+
+Each changes the hypothesis or its acceptance rule. Record such changes as related variants with fixed search bounds. The interruption guide explains why copying a rune, advancing a key and changing feedback state must be specified separately.
+
+Sources, related references, and files
+- LP2-54: red opening, black rune text and curled side borders.
+  https://jelliottdev.github.io/#/reader/lp2-54
+- LP2-54: red opening, black rune text and curled side borders.; Original JPEG
+  https://jelliottdev.github.io/images/lp2-54.jpg
+- LP2-54 page record
+  https://jelliottdev.github.io/reference/lp2-54.html
+- LP2-55: short text above a pale tree and dark winged figure, framed by curled borders.
+  https://jelliottdev.github.io/#/reader/lp2-55
+- LP2-55: short text above a pale tree and dark winged figure, framed by curled borders.; Original JPEG
+  https://jelliottdev.github.io/images/lp2-55.jpg
+- LP2-55 page record
+  https://jelliottdev.github.io/reference/lp2-55.html
+- tree-source comparison
+  https://jelliottdev.github.io/reference/articles/branches.html#shared-tree
+- border guide
+  https://jelliottdev.github.io/reference/articles/spirals.html
+- index of coincidence
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html
+- Reset
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
+- Skip
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- search bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- interruption guide
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+
+Article: https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
