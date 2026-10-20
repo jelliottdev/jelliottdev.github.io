@@ -1,0 +1,87 @@
+Testing compass and geometric cipher proposals
+
+Distinguish a suggestive alignment from a complete substitution, and specify an overlay someone else can reproduce.
+
+A compass, folded sheet or rotated pointer can suggest a cipher operation. To test that suggestion, separate two questions: what mapping does the construction produce? and does that mapping decrypt the selected text? A resemblance to a known operation is a starting point, not a complete decoding rule.
+
+Which objects are being compared?
+
+[Image: The archived 1033.jpg collage, with drawing compasses in the upper and lower central panels]
+The 1033.jpg collage contains drawing compasses. Interpreting its geometry as a navigational compass or cipher pointer is a proposed use of the image.
+
+The collage, the Gematria Primus alphabet and a manuscript page are different objects. Their pixel dimensions, crops and coordinate systems need not coincide. The Newton, Ancient of Days and Nebuchadnezzar guides identify the artworks before discussing possible interpretations. The printmaking guide explains why differences between impressions need their own source comparison.
+
+One matching pair does not identify Atbash
+
+Suppose a proposed construction maps alphabet index 24 to index 4. Ordinary Atbash does this: 28 − 24 = 4. But a constant shift of +9 does it too: (24 + 9) mod 29 = 4. They disagree on most other inputs.
+
+	Input index	Atbash: 28 − x	Shift: x + 9 mod 29
+	0	28	9
+	4	24	13
+	14	14	23
+	24	4	4
+	28	0	8
+
+Within the affine family y = ax + b mod 29, choose any nonzero slope a from 1 through 28 and any offset b from 0 through 28. These give 812 distinct reversible maps. The single pair 24 → 4 leaves 28 of them: for each slope, set b = 4 − 24a mod 29. This is an exact enumeration, not a probability estimate.
+
+Adding the reverse pair 4 → 24 leaves only a = 28, b = 28 within that family, which is ordinary Atbash. The two constraints give 20a = −20 mod 29; because 20 is invertible modulo 29, a = −1. But uniqueness depends on the family: an unrestricted substitution permutation still has 27! possibilities after those two assignments. One assigned pair leaves 28! possibilities. A complete 29-entry table removes that ambiguity about the map itself.
+
+A half-turn is not automatically alphabet reversal
+
+A geometric transformation acts on positions; a substitution acts on symbol labels. A rule connecting those positions to the labels is necessary. For 29 equally spaced labels around a circle, a 180° turn advances 14½ label spacings and lands between labels. It is not an exact permutation of that ring. Choosing a nearest label introduces a rounding rule; it does not by itself establish Atbash.
+
+Ordinary Atbash pairs indices whose sum is 28 and leaves index 14 fixed. It can be represented by a reflection with the appropriate arrangement and axis. It can also be drawn in other layouts. Thus a fold or rotation should be evaluated against its actual layout, rather than treated as a universal synonym for reversal.
+
+Similarly, names such as Albam or Achbi do not specify a 29-rune implementation here. A proposal must supply its complete table, including how it handles an odd number of symbols. If a map is meant to be reversible, every output must occur exactly once. A missing or duplicated output changes the proposed cipher.
+
+What makes an overlay reproducible?
+
+Record the original file hashes and dimensions, then give the crop rectangle, scale factors, rotation angle, reflection and translation for each image. State whether scaling preserves aspect ratio and where the rotation centre lies. Coordinates measured on a screenshot are not interchangeable with coordinates in the original JPEG.
+
+Define the pointer as exact endpoints or a line equation, and define how it selects a symbol: intersect a region, choose a nearest centre, or use another stated rule. Record tolerance and ties. “It points near this rune” cannot be rerun without those choices. An alignment fitted to one attractive correspondence should be checked against unused correspondences.
+
+Separate the geometry from the cipher test. First export the full mapping produced by the fixed overlay. Then apply it to a declared page range with stated treatment of headings, spaces and interruptions. For a compound operation, state the order: reversing then shifting is not generally the same as shifting then reversing. The first koan and shifted Atbash explanation provide a known control.
+
+Reproduce the mapping example
+
+python scripts/compass_mapping_audit.py --check
+
+The reference-data ZIP includes the standard-library script and complete enumeration. It checks all 812 affine maps, lists the 28 maps fitting 24 → 4, and checks the two-pair result independently using modular algebra. It also lists the five example comparisons above and Atbash’s fixed index.
+
+This is a mathematical audit of mapping ambiguity. It does not reproduce a cover-pointer overlay, an Albam/Achbi implementation, or a new decryption. Those require additional specified inputs and belong in a bounded experiment record. See search space and bounds and candidate readings for deciding what a result supports.
+
+Sources, related references, and files
+- The archived 1033.jpg collage, with drawing compasses in the upper and lower central panels
+  https://jelliottdev.github.io/images/1033.jpg
+- 1033.jpg collage
+  https://jelliottdev.github.io/reference/articles/illustrated-cover.html
+- Gematria Primus alphabet
+  https://jelliottdev.github.io/#/alphabet
+- Newton
+  https://jelliottdev.github.io/reference/articles/blake-newton.html
+- Ancient of Days
+  https://jelliottdev.github.io/reference/articles/blake-ancient-of-days.html
+- Nebuchadnezzar
+  https://jelliottdev.github.io/reference/articles/blake-nebuchadnezzar.html
+- printmaking guide
+  https://jelliottdev.github.io/reference/articles/blake-printmaking.html
+- Atbash
+  https://jelliottdev.github.io/reference/articles/atbash.html
+- first koan
+  https://jelliottdev.github.io/reference/articles/reading-first-koan.html
+- shifted Atbash explanation
+  https://jelliottdev.github.io/reference/articles/atbash.html#shift-order
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- standard-library script
+  https://jelliottdev.github.io/scripts/compass_mapping_audit.py
+- complete enumeration
+  https://jelliottdev.github.io/exports/compass-mapping-audit.json
+- experiment record
+  https://jelliottdev.github.io/#/experiments
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+
+Article: https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
