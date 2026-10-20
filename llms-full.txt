@@ -14153,6 +14153,9 @@ The experiment-writing guide explains how to preserve that scope. Use Have we tr
 A complete historical control
 The Emerson control experiment records a fresh PDF reconstruction, all 15 coordinate lookups and seven literal characters, exact inputs and two matching reruns. It reproduces the historical opening puzzle, not an unsolved LP2 page. Earlier adjustments to paragraph extraction remain disclosed.
 
+
+The 2012 Britannica example reproduces nineteen character selections and three literal prime instructions. Its raw uppercase H and physical line wrapping show why preserving the exact text representation matters.
+
 Sources, related references, and files
 - Emerson’s Self-Reliance; Emerson replay
   https://jelliottdev.github.io/reference/articles/emerson-self-reliance.html
@@ -14162,6 +14165,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments
 - Emerson control experiment
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
+- 2012 Britannica example
+  https://jelliottdev.github.io/reference/articles/britannica-book-code.html
 
 Article: https://jelliottdev.github.io/reference/articles/book-ciphers.html
 
@@ -20225,6 +20230,9 @@ Sources
 
 Internet Archive collection records: volume 7 · volume 27 · volume 28. The spelling and page numbers were checked visually against the preserved page images. This article documents a source lead, not a confirmed literary influence.
 
+
+The historical precedent can now be inspected separately in the 2012 Britannica book-code replay, with all coordinates, exact text conventions and a fresh signature check. That reconstruction does not establish a source for the LP spelling.
+
 Sources, related references, and files
 - LP1-04 reading
   https://jelliottdev.github.io/reference/lp1-04.html
@@ -20254,8 +20262,115 @@ Sources, related references, and files
   https://archive.org/details/encyclopaediabri27chisrich
 - volume 28
   https://archive.org/details/encyclopaediabri28chisrich
+- the 2012 Britannica book-code replay
+  https://jelliottdev.github.io/reference/articles/britannica-book-code.html
 
 Article: https://jelliottdev.github.io/reference/articles/britannica-widsom.html
+
+
+---
+
+The 2012 Britannica book code
+
+Replay the Cicada article coordinates, preserve the line and character conventions, and verify the signed clue separately.
+
+The archived 2012 Britannica clue can be replayed against a preserved Project Gutenberg text of the Cicada article. Nineteen line-and-character coordinates and three literal prime instructions produce eq6emgv2eHsrix6t.onion. This is a reproduction of a historical book-code interpretation, not a new Liber Primus reading.
+
+The two inputs
+
+The preserved signed clue begins “In twenty-nine volumes, knowledge was once contained.” The public ClevCode account records that clue and discusses Britannica as a candidate, but its account of this branch stops before the extraction reproduced here. It is evidence for the historical clue, not a source for claiming that this particular replay was completed there.
+
+The text input is Gutenberg ebook 31447, Encyclopaedia Britannica, 11th Edition, “Chitral” to “Cincinnati”, volume 6, slice 3. The catalogue credits Marius Masi, Don Kretz, Juliet Sutherland and the Online Distributed Proofreading Team. Use the preserved Latin-1 text file, whose SHA-256 is recorded in the replay ledger. An HTML rendering, reflowed ebook or different text revision need not preserve the required positions.
+
+Count physical lines and characters
+
+Find the unique heading beginning CICADA (_Cicadidae_). Treat that physical line as line zero.
+The following line, beginning Hemiptera, generally, is line one. Keep the file's physical line wrapping; do not rewrap the paragraph to fit the screen.
+For row:column, select the numbered line, then count characters from one. Spaces, punctuation and underscore markup count. Preserve case.
+Replace each instruction for the product of the first two primes with 6, and the instruction for the first prime with 2. Read all outputs in their given order.
+
+For example, 1:29 selects e from the first numbered line. The later 1:1 selects its capital H. That explains why the raw extraction contains an uppercase character; silently lowercasing it would conceal part of the actual procedure.
+
+All 22 output positions
+
+	Step	Instruction	Output
+	1	1:29	e
+	2	6:46	q
+	3	the product of the first two primes	6
+	4	2:37	e
+	5	14:41	m
+	6	17:3	g
+	7	27:40	v
+	8	the first prime	2
+	9	2:33	e
+	10	1:1	H
+	11	7:45	s
+	12	17:29	r
+	13	21:31	i
+	14	12:17	x
+	15	the product of the first two primes	6
+	16	22:42	t
+	17	15:18	.
+	18	24:33	o
+	19	27:46	n
+	20	12:29	i
+	21	25:66	o
+	22	7:47	n
+
+Raw result: eq6emgv2eHsrix6t.onion. Its lowercase rendering is eq6emgv2ehsrix6t.onion. These strings are displayed as historical outputs, not as links. This reproduction does not access the service or verify its historical operation.
+
+The ledger includes the source line and zero-based character index for every coordinate, so the extraction can be inspected character by character. It also records four numbering combinations: counting or skipping the heading, and zero- or one-based character positions. Only the stated combination gives the recorded output. Two alternatives encounter an out-of-range column, explicitly marked ?; that marker is not a source character. These four comparisons do not exhaust all conceivable text-processing conventions.
+
+The clue's signature
+
+A fresh offline GnuPG check in an isolated temporary keyring verifies the preserved clue under fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. The verification record contains the input hashes and machine-readable status. The historical message uses SHA-1, so the verification command explicitly enables compatibility for that digest; it does not change the user's normal GnuPG configuration.
+
+A valid signature binds these message bytes to the corresponding key. It does not independently establish a civil identity, signing time, Gutenberg file version or correctness of a proposed solution. The signature guide explains that distinction.
+
+Reproduce the extraction
+
+Extract the reference-data bundle with folders intact, or use the repository. The extraction requires only Python 3. Signature verification additionally requires GnuPG on your command path.
+
+python scripts/reproduce_britannica.py --check
+python scripts/reproduce_britannica.py --verify-signature
+
+The first command recomputes all outputs and numbering comparisons. The second imports only the bundled public key into a temporary keyring and checks the preserved signature without fetching keys. It prints the verified fingerprint and hashes. Download the script; a script downloaded alone still needs the files named above.
+
+What this adds to Liberpedia
+
+This provides a concrete historical example of a book code whose reproducibility depends on an exact text representation. The three printed “widsom” occurrences are a separate source lead in different articles. The historical extraction does not show that LP copied that spelling, used Britannica as a key, or refers to those articles.
+
+This replay starts from the Cicada article. It does not reconstruct the Mabinogion line-count clue that could lead a solver to that choice. It also does not establish byte identity between the preserved Gutenberg text and a file downloaded in 2012. The source-file hashes make the present reproduction exact without filling those historical gaps by assumption.
+
+For comparison with another fully specified extraction, see the book-cipher guide and Emerson historical control.
+
+Sources, related references, and files
+- preserved signed clue
+  https://jelliottdev.github.io/exports/sources/britannica-2012-clue.asc
+- ClevCode account
+  https://clevcode.org/cicada-3301/
+- Gutenberg ebook 31447
+  https://www.gutenberg.org/ebooks/31447
+- preserved Latin-1 text file
+  https://jelliottdev.github.io/exports/sources/gutenberg-31447-8.txt
+- replay ledger
+  https://jelliottdev.github.io/exports/britannica-book-code.json
+- verification record
+  https://jelliottdev.github.io/exports/britannica-clue-signature.json
+- signature guide
+  https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Download the script
+  https://jelliottdev.github.io/scripts/reproduce_britannica.py
+- printed “widsom” occurrences
+  https://jelliottdev.github.io/reference/articles/britannica-widsom.html
+- book-cipher guide
+  https://jelliottdev.github.io/reference/articles/book-ciphers.html
+- Emerson historical control
+  https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
+
+Article: https://jelliottdev.github.io/reference/articles/britannica-book-code.html
 
 
 ---
