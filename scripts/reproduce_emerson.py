@@ -84,13 +84,27 @@ def main():
     args = parser.parse_args()
     evidence = json.loads((ROOT / "data/evidence/emerson-book-cipher.json")
                           .read_text(encoding="utf-8"))
+    body = (ROOT / evidence["coordinate_payload_path"]).read_bytes()
+    if hashlib.sha256(body).hexdigest() != evidence["coordinate_payload_sha256"]:
+        raise ValueError("Coordinate message checksum mismatch")
+    lines = body.decode("ascii").splitlines()
+    start = next(i for i, line in enumerate(lines)
+                 if re.fullmatch(r"\d+:\d+:\d+:\d+", line))
+    entries = []
+    for line in lines[start:]:
+        if line == "Good luck.":
+            break
+        if line.strip():
+            entries.append(line)
+    if entries != evidence["entries"]:
+        raise ValueError("Coordinates differ from the extracted message")
     source = ROOT / evidence["paragraphs_path"]
     if hashlib.sha256(source.read_bytes()).hexdigest() != evidence["paragraphs_sha256"]:
         raise ValueError("Paragraph derivative checksum mismatch")
     paragraphs = json.loads(source.read_text(encoding="utf-8"))
     if args.check_pdf and extract_pdf() != paragraphs:
         raise ValueError("PDF extraction differs from the published paragraphs")
-    result = replay(paragraphs, evidence["entries"])
+    result = replay(paragraphs, entries)
     if result != evidence["result"]:
         raise ValueError("Lookup trace differs from the recorded control")
     print(json.dumps(result, ensure_ascii=True, indent=2))

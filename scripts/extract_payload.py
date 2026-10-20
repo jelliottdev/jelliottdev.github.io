@@ -16,13 +16,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("page", choices=["1033", "lp1-00", "lp1-01", "lp1-02", "lp1-03",
+    parser.add_argument("page", choices=["opening-2014", "1033", "lp1-00", "lp1-01", "lp1-02", "lp1-03",
                                         "lp1-10", "lp1-11", "lp1-12", "lp1-13"])
     parser.add_argument("--outguess", default="outguess", help="Executable name or full path")
     parser.add_argument("--output", type=Path, required=True, help="New output file; never overwritten")
     args = parser.parse_args()
     manifest = json.loads((ROOT / "data/evidence/embedded-payloads.json").read_text())
-    if args.page == "1033":
+    if args.page == "opening-2014":
+        record = json.loads((ROOT / "data/evidence/opening-2014.json").read_text())
+    elif args.page == "1033":
         record = json.loads((ROOT / "data/evidence/illustrated-cover.json").read_text())["embedded_payload"]
     else:
         record = next(r for r in manifest["records"] if r["page"] == args.page)

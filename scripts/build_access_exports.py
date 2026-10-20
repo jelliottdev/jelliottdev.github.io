@@ -13,6 +13,8 @@ def register(path,role,page=None):
  if page:row.update(page=page['id'],release=page['release'])
  files.append(row)
 register('images/1033.jpg','Historical illustrated cover')
+register('images/opening-2014.jpg','Historical opening image')
+register('data/evidence/opening-2014.json','Historical opening provenance')
 register('data/evidence/illustrated-cover.json','Illustrated cover provenance')
 register('data/evidence/cover-rsa.json','Historical RSA reproduction')
 for path in ['data/evidence/emerson-book-cipher.json','exports/sources/emerson-paragraphs.json','exports/sources/emerson-self-reliance.pdf']:register(path,'Historical book-cipher reproduction')
@@ -132,9 +134,9 @@ The complete repository is available from the GitHub Code download menu.
 ''')
 register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
-for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
+for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
  reusable=False
