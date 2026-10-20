@@ -1,14 +1,49 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book ciphers: coordinates, editions and counting rules — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/book-ciphers">Open in wiki</a> · <a href="book-ciphers.txt">Plain text</a></nav><h1>Book ciphers: coordinates, editions and counting rules</h1><p>How text lookups work and what to preserve so another reader can reproduce them.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><a href="#lookup">How a four-part lookup works</a><a href="#conventions">Decide what counts before extracting</a><a href="#trace">What a reproducible trace should show</a><a href="#testing">Using a possible literary reference</a></nav></details><p>A book cipher turns coordinates into text by looking them up in a shared source. The source can be an essay, poem or other document; it need not be a whole book. To reproduce a result, knowing the title is not enough. You also need the edition and the rules used to count its parts.</p>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book ciphers: coordinates, editions and counting rules — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/book-ciphers">Open in wiki</a> · <a href="book-ciphers.txt">Plain text</a></nav><h1>Book ciphers: coordinates, editions and counting rules</h1><p>How text lookups work and what to preserve so another reader can reproduce them.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><a href="#lookup">How a four-part lookup works</a><a href="#worked">Reproduce the small example</a><a href="#conventions">Decide what counts before extracting</a><a href="#editions">Why a different edition can change the result</a><a href="#trace">What a reproducible trace should show</a><a href="#testing">Using a possible literary reference</a></nav></details><p>A book cipher turns coordinates into text by looking them up in a shared source. The source can be an essay, poem or other document; it need not be a whole book. To reproduce a result, knowing the title is not enough. You also need the edition and the rules used to count its parts.</p>
 <h2 id="lookup">How a four-part lookup works</h2>
 <p>In a paragraph:sentence:word:letter scheme, <code>2:1:3:2</code> means: select paragraph 2, then its first sentence, then its third word, then the second letter of that word. This assumes one-based counting, where the first item is numbered 1.</p>
 <p>For a small invented example, let paragraph 2 begin <q>We study runes.</q> The third word is <em>runes</em>, so the second letter is <strong>u</strong>. The coordinates identify nested locations; they are not numbers to add together.</p>
 <p>The archived 2014 opening puzzle uses this kind of rule with <a href="emerson-self-reliance.html">Emerson’s Self-Reliance</a>. That guide traces all 15 coordinates and the literal characters against a derivative of the referenced PDF, with downloadable source files and a reproduction script.</p>
+<h2 id="worked">Reproduce the small example</h2>
+<p>The nested lists below explicitly define paragraphs, sentences, and words. That makes the counting visible; this example does not pretend to automatically recognize those boundaries in an arbitrary PDF. The words contain only letters, so character positions and letter positions agree here.</p>
+<pre><code># document[paragraph][sentence][word]
+document = [
+    [["First", "paragraph"]],
+    [["We", "study", "runes"]],
+]
+
+def lookup(document, coordinate):
+    if len(coordinate) != 4 or any(type(n) is not int or n &lt; 1 for n in coordinate):
+        raise ValueError("Use four positive one-based integer coordinates")
+    p, s, w, letter = coordinate
+    try:
+        word = document[p - 1][s - 1][w - 1]
+        character = word[letter - 1]
+    except IndexError as error:
+        raise ValueError(f"Coordinate out of range: {coordinate}") from error
+    return word, character
+
+coordinate = (2, 1, 3, 2)
+word, character = lookup(document, coordinate)
+print(coordinate, word, character)
+assert (word, character) == ("runes", "u")
+# (2, 1, 3, 2) runes u</code></pre>
+<p>The subtraction of 1 converts each published coordinate to Python’s zero-based indexing. Validate positivity before subtracting: an input coordinate of zero would otherwise become index −1, which Python interprets as the last item. An invalid coordinate could silently produce a plausible letter instead of failing.</p>
+<div class="table-wrap"><table><thead><tr><th>Step</th><th>Published coordinate</th><th>Python index</th><th>Selected item</th></tr></thead><tbody>
+<tr><td>Paragraph</td><td>2</td><td>1</td><td>Second paragraph</td></tr>
+<tr><td>Sentence</td><td>1</td><td>0</td><td>We study runes</td></tr>
+<tr><td>Word</td><td>3</td><td>2</td><td>runes</td></tr>
+<tr><td>Letter</td><td>2</td><td>1</td><td>u</td></tr>
+</tbody></table></div>
 <h2 id="conventions">Decide what counts before extracting</h2>
 <dl><dt>Starting point</dt><dd>State whether titles, opening quotations and notes are included. Starting at the first prose paragraph can differ from starting at the first text on the page.</dd>
 <dt>Paragraph boundaries</dt><dd>Preserve actual paragraph divisions. A page or display line ending may interrupt a paragraph without creating a new one.</dd>
 <dt>Sentence boundaries</dt><dd>Specify how punctuation and abbreviations are handled. Splitting blindly at every period can create false sentences.</dd>
 <dt>Word and letter boundaries</dt><dd>Record how hyphens, apostrophes, punctuation and accented letters are treated. Counting characters in a raw file is not necessarily counting letters in the printed word.</dd>
 <dt>Literal characters</dt><dd>A clue may print some digits or punctuation directly. Identify those separately instead of forcing every item through the coordinate rule.</dd></dl>
+<p>For example, the raw characters in <code>don't</code> put the apostrophe in position 4 and t in position 5. Counting letters only instead puts t in position 4. Neither convention should be introduced only after seeing which one gives a desired output. Define it for the whole extraction and retain the original spelling.</p>
+<h2 id="editions">Why a different edition can change the result</h2>
+<p>A text with the same title can differ in paragraph divisions, punctuation, added notes, or corrected spelling. In a nested coordinate system, these differences act at different levels: a new paragraph can shift paragraph coordinates, an altered sentence boundary can shift sentence coordinates within that paragraph, and a changed word can affect its letter positions.</p>
+<p>A matching PDF checksum establishes that two researchers started from the same file. It does not establish that their PDF-to-text tools produced the same paragraphs. Preserve the extracted derivative and its rules as well as the source file. The <a href="emerson-self-reliance.html">Emerson replay</a> provides a concrete example of keeping the source PDF, paragraph data, lookup rule, and output trace together.</p>
 <h2 id="trace">What a reproducible trace should show</h2>
 <p>For each coordinate, record the selected paragraph, sentence, word and letter, plus the resulting output character. Include the source URL, a file checksum, and any transcription changes. A reader should be able to inspect one disagreeing character without rerunning an opaque decoder.</p>
 <p>If a coordinate points beyond a sentence or word, report it as out of range. Wrapping around, skipping a heading or switching editions introduces another rule. Such a rule may be worth testing, but it must be stated rather than hidden inside a correction.</p>
