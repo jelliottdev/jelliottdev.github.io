@@ -216,3 +216,18 @@ console.log('PASS: blur/composition before tap, cancelled gestures, and keyboard
 
 assert(!search.search(db,'five dots').some(h=>h.page?.id==='lp2-33'));
 assert(!search.search(db,'three dots').some(h=>h.page?.id==='lp2-07'));
+
+// Grid arrays, arithmetic squares, and botanical borders are different subjects.
+for (const [query, section] of [
+ ['letter number grid','layout'], ['letters and numbers','layout'],
+ ['256','counts'], ['grid repeats','repetition'], ['grid frequencies','repetition'],
+ ['grid csv','downloads'], ['grid coordinates','downloads']
+]) {
+ const hits=search.search(db,query);
+ assert.equal(hits[0].href,`#/wiki/alphanumeric-grids?section=${section}`,query);
+ for (const page of ['lp2-49','lp2-50','lp2-51'])
+  assert(hits.slice(1,5).some(hit=>hit.page?.id===page),query+' must expose '+page);
+}
+for (const query of ['plant border','plant borders','paired plants'])
+ assert.equal(search.search(db,query)[0].href,'#/wiki/branches?section=paired-plants',query);
+console.log('PASS: alphanumeric arrays, repeats, downloads and plant borders have distinct destinations');
