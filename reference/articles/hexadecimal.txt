@@ -5,12 +5,26 @@ An encoding of bytes, not by itself an encryption method.
 Two digits per byte
 Hexadecimal uses 0–9 and a–f for values 0–15. Each digit encodes four bits; two encode one byte. Hex 41 is decimal 65, the ASCII byte for A. Leading zeros matter.
 
+A byte written 04 is one byte whose value is four. It is not the two text characters “0” and “4.” In the LP1-00 body, the first six hexadecimal characters are 775d04; decoding them gives three bytes, 77 5d 04. Encoding the literal characters as ASCII instead would give six bytes, 37 37 35 64 30 34.
+
+hex_text = "775d04"
+decoded = bytes.fromhex(hex_text)
+characters = hex_text.encode("ascii")
+print(decoded.hex(" "))    # 77 5d 04
+print(characters.hex(" ")) # 37 37 35 64 30 34
+assert len(decoded) == 3
+assert len(characters) == 6
+
+This is why the XOR trace operates after hex decoding. The characters used to write a byte and the byte they represent are different inputs.
+
 Decode a cover body
 from pathlib import Path
 body = Path("exports/steganography/lp1-00.body.txt").read_text()
 data = bytes.fromhex(body)
 assert len(data) == 991
-Whitespace may separate digits. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is bytewise XOR.
+Whitespace may separate complete byte pairs. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is bytewise XOR.
+
+Run from the extracted reference-data bundle or the repository root. Python’s bytes.fromhex accepts whitespace between complete byte pairs and either letter case. An unmatched final digit or a non-hex character raises ValueError. Do not repair such an error by silently dropping characters: check that you selected the message body, kept its bytes intact, and excluded prose or signature delimiters.
 
 Do not decode prose as hex
 LP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.
@@ -18,7 +32,9 @@ Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
 Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/xor.html#trace
 https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 
 Article: https://jelliottdev.github.io/reference/articles/hexadecimal.html

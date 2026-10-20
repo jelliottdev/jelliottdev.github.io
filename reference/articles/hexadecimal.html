@@ -1,7 +1,18 @@
 <!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hexadecimal and byte streams — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/hexadecimal">Open in wiki</a> · <a href="hexadecimal.txt">Plain text</a></nav><h1>Hexadecimal and byte streams</h1><p>An encoding of bytes, not by itself an encryption method.</p>
 <h2 id="encoding">Two digits per byte</h2><p>Hexadecimal uses 0–9 and a–f for values 0–15. Each digit encodes four bits; two encode one byte. Hex 41 is decimal 65, the ASCII byte for A. Leading zeros matter.</p>
+<p>A byte written <code>04</code> is one byte whose value is four. It is not the two text characters “0” and “4.” In the LP1-00 body, the first six hexadecimal characters are <code>775d04</code>; decoding them gives three bytes, <code>77 5d 04</code>. Encoding the literal characters as ASCII instead would give six bytes, <code>37 37 35 64 30 34</code>.</p>
+<pre><code>hex_text = "775d04"
+decoded = bytes.fromhex(hex_text)
+characters = hex_text.encode("ascii")
+print(decoded.hex(" "))    # 77 5d 04
+print(characters.hex(" ")) # 37 37 35 64 30 34
+assert len(decoded) == 3
+assert len(characters) == 6</code></pre>
+<p>This is why the <a href="xor.html#trace">XOR trace</a> operates after hex decoding. The characters used to write a byte and the byte they represent are different inputs.</p>
 <h2 id="replicate">Decode a cover body</h2><pre><code>from pathlib import Path
 body = Path("exports/steganography/lp1-00.body.txt").read_text()
 data = bytes.fromhex(body)
-assert len(data) == 991</code></pre><p>Whitespace may separate digits. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is <a href="cover-chain.html">bytewise XOR</a>.</p>
-<h2 id="other">Do not decode prose as hex</h2><p>LP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p><h2>Guides linking here</h2><ul><li><a href="outguess.html">OutGuess extraction</a></li><li><a href="xor.html">Exclusive OR (XOR)</a></li></ul></main></body></html>
+assert len(data) == 991</code></pre><p>Whitespace may separate complete byte pairs. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is <a href="cover-chain.html">bytewise XOR</a>.</p>
+<p>Run from the extracted <a href="../../downloads/reference-data.zip">reference-data bundle</a> or the repository root. Python’s <code>bytes.fromhex</code> accepts whitespace between complete byte pairs and either letter case. An unmatched final digit or a non-hex character raises <code>ValueError</code>. Do not repair such an error by silently dropping characters: check that you selected the message body, kept its bytes intact, and excluded prose or signature delimiters.</p>
+<h2 id="other">Do not decode prose as hex</h2><p>LP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
+<h2>Guides linking here</h2><ul><li><a href="outguess.html">OutGuess extraction</a></li><li><a href="xor.html">Exclusive OR (XOR)</a></li></ul></main></body></html>

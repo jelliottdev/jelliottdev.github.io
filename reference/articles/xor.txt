@@ -14,12 +14,44 @@ XOR is not addition with carries and is not alphabet arithmetic modulo 29. It wo
 The three-image chain
 The signed bodies from LP1-00, LP1-01, and LP1-02 are first decoded from hexadecimal. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.
 
+Follow the first five bytes
+
+Each row below combines the bytes at one offset in the three decoded streams. Offsets start at zero; all byte values in the table are hexadecimal.
+
+	Offset	LP1-00	LP1-01	LP1-02	XOR output
+
+	0	77	17	4d	2d
+
+	1	5d	a1	d1	2d
+
+	2	04	e1	c8	2d
+
+	3	81	03	af	2d
+
+	4	11	93	af	2d
+
+
+For offset 0, 0x77 ^ 0x17 = 0x60, then 0x60 ^ 0x4d = 0x2d. The output byte 2d is the ASCII hyphen. The first five output bytes therefore form the five hyphens beginning the signed-message header. That recognizable prefix is a useful checkpoint, but it does not verify the remaining bytes or the signature.
+
 How to replicate
-assert len(a) == len(b) == len(c)
+
+Extract the reference-data bundle and run this Python 3 example from its top-level folder. It reads the three preserved message bodies, decodes them, and prints the reconstructed first line. It does not modify the inputs or write an output file.
+
+from pathlib import Path
+
+pages = ("lp1-00", "lp1-01", "lp1-02")
+streams = [
+    bytes.fromhex(Path(f"exports/steganography/{page}.body.txt").read_text(encoding="ascii"))
+    for page in pages
+]
+a, b, c = streams
+assert len(a) == len(b) == len(c) == 991
 combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
-# Full checked reproduction:
-# python scripts/reproduce_cover_chain.py
-The length check prevents silent truncation by zip. Do not pad, cycle, or trim these documented inputs. Follow the complete recipe for the resulting signature and transposition.
+print(combined.splitlines()[0].decode("ascii"))
+assert combined.startswith(b"-----BEGIN PGP SIGNED MESSAGE-----")
+# -----BEGIN PGP SIGNED MESSAGE-----
+
+The length check prevents silent truncation by zip. Do not pad, cycle, or trim these documented inputs. This short example checks length and prefix only. For the full recorded input and output hash checks, run python scripts/reproduce_cover_chain.py. Follow the complete recipe for the separate signature verification and transposition.
 
 Useful identities and their limits
 A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.
@@ -33,6 +65,7 @@ https://jelliottdev.github.io/reference/lp1-00.html
 https://jelliottdev.github.io/reference/lp1-01.html
 https://jelliottdev.github.io/reference/lp1-02.html
 https://jelliottdev.github.io/reference/articles/hexadecimal.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/articles/cover-chain.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 https://jelliottdev.github.io/data/evidence/embedded-payloads.json

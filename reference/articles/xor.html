@@ -4,10 +4,32 @@
 --------
 00111100   (hex 3c)</code></pre><p>XOR is not addition with carries and is not alphabet arithmetic <a href="modular-arithmetic.html">modulo 29</a>. It works independently at each bit position.</p>
 <h2 id="chain">The three-image chain</h2><p>The signed bodies from <a href="../lp1-00.html">LP1-00</a>, <a href="../lp1-01.html">LP1-01</a>, and <a href="../lp1-02.html">LP1-02</a> are first decoded from <a href="hexadecimal.html">hexadecimal</a>. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.</p>
-<h2 id="replicate">How to replicate</h2><pre><code>assert len(a) == len(b) == len(c)
+<h2 id="trace">Follow the first five bytes</h2>
+<p>Each row below combines the bytes at one offset in the three decoded streams. Offsets start at zero; all byte values in the table are hexadecimal.</p>
+<div class="table-wrap"><table><thead><tr><th>Offset</th><th>LP1-00</th><th>LP1-01</th><th>LP1-02</th><th>XOR output</th></tr></thead><tbody>
+<tr><td>0</td><td>77</td><td>17</td><td>4d</td><td>2d</td></tr>
+<tr><td>1</td><td>5d</td><td>a1</td><td>d1</td><td>2d</td></tr>
+<tr><td>2</td><td>04</td><td>e1</td><td>c8</td><td>2d</td></tr>
+<tr><td>3</td><td>81</td><td>03</td><td>af</td><td>2d</td></tr>
+<tr><td>4</td><td>11</td><td>93</td><td>af</td><td>2d</td></tr>
+</tbody></table></div>
+<p>For offset 0, <code>0x77 ^ 0x17 = 0x60</code>, then <code>0x60 ^ 0x4d = 0x2d</code>. The output byte 2d is the ASCII hyphen. The first five output bytes therefore form the five hyphens beginning the signed-message header. That recognizable prefix is a useful checkpoint, but it does not verify the remaining bytes or the signature.</p>
+<h2 id="replicate">How to replicate</h2>
+<p>Extract the <a href="../../downloads/reference-data.zip">reference-data bundle</a> and run this Python 3 example from its top-level folder. It reads the three preserved message bodies, decodes them, and prints the reconstructed first line. It does not modify the inputs or write an output file.</p>
+<pre><code>from pathlib import Path
+
+pages = ("lp1-00", "lp1-01", "lp1-02")
+streams = [
+    bytes.fromhex(Path(f"exports/steganography/{page}.body.txt").read_text(encoding="ascii"))
+    for page in pages
+]
+a, b, c = streams
+assert len(a) == len(b) == len(c) == 991
 combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
-# Full checked reproduction:
-# python scripts/reproduce_cover_chain.py</code></pre><p>The length check prevents silent truncation by <code>zip</code>. Do not pad, cycle, or trim these documented inputs. Follow the <a href="cover-chain.html">complete recipe</a> for the resulting signature and transposition.</p>
+print(combined.splitlines()[0].decode("ascii"))
+assert combined.startswith(b"-----BEGIN PGP SIGNED MESSAGE-----")
+# -----BEGIN PGP SIGNED MESSAGE-----</code></pre>
+<p>The length check prevents silent truncation by <code>zip</code>. Do not pad, cycle, or trim these documented inputs. This short example checks length and prefix only. For the full recorded input and output hash checks, run <code>python scripts/reproduce_cover_chain.py</code>. Follow the <a href="cover-chain.html">complete recipe</a> for the separate signature verification and transposition.</p>
 <h2 id="properties">Useful identities and their limits</h2><p>A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.</p>
 <h2 id="sources">Sources</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned 2014 walkthrough</a> · <a href="../../data/evidence/embedded-payloads.json">Input and output hashes</a>.</p>
-<h2>Manuscript pages discussed</h2><p><a href="../lp1-00.html">LP1-00</a> · <a href="../lp1-01.html">LP1-01</a> · <a href="../lp1-02.html">LP1-02</a></p><h2>Guides linking here</h2><ul><li><a href="cover-chain.html">The cover payload chain</a></li></ul></main></body></html>
+<h2>Manuscript pages discussed</h2><p><a href="../lp1-00.html">LP1-00</a> · <a href="../lp1-01.html">LP1-01</a> · <a href="../lp1-02.html">LP1-02</a></p><h2>Guides linking here</h2><ul><li><a href="hexadecimal.html">Hexadecimal and byte streams</a></li><li><a href="cover-chain.html">The cover payload chain</a></li></ul></main></body></html>
