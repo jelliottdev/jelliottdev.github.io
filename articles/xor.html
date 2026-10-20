@@ -1,0 +1,12 @@
+<p>Exclusive OR, usually written XOR or ⊕, compares bits. Two equal bits give 0; two different bits give 1. Programming languages commonly use <code>^</code> for this operation on integers.</p>
+<h2 id="operation">A byte example</h2><pre><code>00001111   (hex 0f)
+00110011   (hex 33)
+--------
+00111100   (hex 3c)</code></pre><p>XOR is not addition with carries and is not alphabet arithmetic <a href="#/wiki/modular-arithmetic">modulo 29</a>. It works independently at each bit position.</p>
+<h2 id="chain">The three-image chain</h2><p>The signed bodies from <a href="#/page/lp1-00">LP1-00</a>, <a href="#/page/lp1-01">LP1-01</a>, and <a href="#/page/lp1-02">LP1-02</a> are first decoded from <a href="#/wiki/hexadecimal">hexadecimal</a>. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.</p>
+<h2 id="replicate">How to replicate</h2><pre><code>assert len(a) == len(b) == len(c)
+combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
+# Full checked reproduction:
+# python scripts/reproduce_cover_chain.py</code></pre><p>The length check prevents silent truncation by <code>zip</code>. Do not pad, cycle, or trim these documented inputs. Follow the <a href="#/wiki/cover-chain">complete recipe</a> for the resulting signature and transposition.</p>
+<h2 id="properties">Useful identities and their limits</h2><p>A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.</p>
+<h2 id="sources">Sources</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned 2014 walkthrough</a> · <a href="data/evidence/embedded-payloads.json">Input and output hashes</a>.</p>

@@ -23,5 +23,6 @@ jobs:
       - run: python scripts/build_articles.py
       - run: python scripts/reproduce_reading.py --check-all
       - run: python scripts/reproduce_cover_chain.py
+      - run: python scripts/check_number_examples.py
       - name: Check that published exports match reviewed records
         run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json reference/articles

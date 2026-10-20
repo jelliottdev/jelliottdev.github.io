@@ -1,0 +1,24 @@
+Emirps and decimal reversal
+
+Check reversed primes without conflating reversal, mirroring, and prime lookup.
+
+An emirp is a prime whose decimal digits, reversed, form a different prime. Both primality and the difference condition matter. This is a property of a number’s decimal representation, not a cipher by itself.
+Examples and non-examples
+13 and 31 form an emirp pair. 11 is prime but palindromic, so it is not an emirp under this definition. 23 is prime, but its reverse 32 is composite. The pair 7649 and 9467 passes both prime checks.
+Keep decimal reversal distinct from mirroring an image, reversing rune order, complementing digits, and taking a prime ordinal. Decimal reversal of 8734 is 4378. A transformation from 8734 to 7649 therefore needs a separately specified rule; “invert” alone does not define it.
+Where this matters in the manuscript
+The spelling and prime-sum article computes the three LP2-57 body sentence totals under a declared rune-only convention and checks their reversals. The boundaries and counting convention belong to the claim. Finding an emirp after changing a boundary is a different test.
+How to replicate the predicate
+from math import isqrt
+def prime(n):
+return n >= 2 and all(n % d for d in range(2, isqrt(n) + 1))
+def emirp(n):
+reverse = int(str(n)[::-1]) if n >= 0 else -1
+return n != reverse and prime(n) and prime(reverse)
+assert emirp(7649)
+assert not emirp(11)
+Converting the reversed digits to an integer removes leading zeros. This convention must be stated if applying reversal to strings that are not already prime numbers. See prime indices and selection effects.
+Sources and evidence
+Exact sentence sums and conventions · Checked numerical examples. No authorial purpose follows from the emirp property alone.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/emirps.html

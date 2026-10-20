@@ -55,7 +55,7 @@ register('data/evidence/embedded-payloads.json','Embedded payload evidence')
 for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
-for script in ['reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py']:
+for script in ['reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py']:
  register('scripts/'+script,'Reproduction script')
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')

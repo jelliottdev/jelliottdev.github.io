@@ -4637,6 +4637,7 @@ The same rune has an alphabet position and a separate Gematria Primus prime valu
 Two mappings, two jobs
 The alphabet has 29 symbols. Its zero-based indices run from 0 to 28. Its prime values are the first 29 primes, from 2 to 109. F has index 0 and prime value 2; U has index 1 and prime value 3; TH has index 2 and prime value 5.
 Known substitution ciphers use indices modulo 29. A Gematria Primus sum adds the prime values. Replacing one operation with the other changes the hypothesis.
+See prime values and prime indices for the indexing convention and larger-number examples.
 Count symbols, not Latin characters
 TH, EO, NG and other multi-letter labels each denote a single rune. U/V and C/K renderings also require the stated convention. Work from runes when computing sums and offsets.
 Reproduce a small example
@@ -4854,6 +4855,7 @@ The cover, warning, and chapter title combine into a signed message and a transp
 Three inputs
 LP1-00, Liber Primus, LP1-01, the warning, and LP1-02, Chapter 1 — Intus carry OutGuess payloads. Extract and verify them. Their 1,982-digit bodies decode to three 991-byte streams.
 XOR corresponding bytes
+What XOR means, with a worked byte example.
 XOR produces a 0 bit when input bits agree and 1 when they differ. Compute result[i] = A[i] XOR B[i] XOR C[i] on decoded bytes, not on hexadecimal text characters. For example, 0x0f XOR 0x33 = 0x3c.
 python scripts/reproduce_cover_chain.py
 python scripts/reproduce_cover_chain.py --output combined.asc
@@ -4969,6 +4971,7 @@ What was not tested and what would change the conclusion.
 Selection changes the evidence
 Trying many spellings, boundaries, reversals and offsets creates opportunities for chance patterns. A probability claim must account for the selection process. A null model is the comparison process expected without the proposed mechanism; preserve relevant properties such as symbol counts or region lengths. There is no universal coincidence probability for an unspecified search.
 Report “no match under these parameters,” not “the technique cannot work.” Label patterns selected after inspection as candidates for independent testing. See spelling and sums.
+Worked distinctions: emirps and prime-index calculations.
 The research registry
 Have we tried it? compares techniques and scope in published records. Background pages do not count as experiments. The registry remains empty while records are prepared and retested. The contribution format describes publication requirements.
 Sources and verification
@@ -5008,9 +5011,130 @@ with open("embedded.jpg", "xb") as f:
 f.write(image)
 LP1-10 through LP1-13
 These historical instructions discuss a Tor hidden service, CGI uploads, three magic squares, and working alone. They are source documents, not current wiki setup instructions. Decorative borders use 3s on LP1-10 and LP1-11, 0s on LP1-12, and 1s on LP1-13. Similar prose does not make signed files byte-identical.
+Magic squares: definitions, historical examples, and the payload number arrangement.
 Reproduce, then interpret
 Follow extraction, checksum verification, and signature verification as separate steps. This makes disagreements traceable to an operation and a file.
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
 Source links and downloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+
+
+---
+
+Prime values and prime indices
+
+Distinguish a prime from its ordinal, and reproduce the 3299 and 9467 calculations.
+
+A prime’s value and its position in the ordered list of primes are different numbers. Specify which operation you mean before combining a prime with a page number or rune value.
+Value versus ordinal
+Write pn for the nth prime, using one-based indexing: p1 = 2, p2 = 3, p3 = 5. Looking up p3299 gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
+The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value pi+1. Confusing these conventions introduces an off-by-one error.
+The 3299 and 9467 examples
+The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 = 30,557 and p9467 = 98,597 are exact. Their product is:
+98597 × 30557 = 3012828529
+9857 × 30557 =  301200349
+The second expression omits a 9 and gives a different answer. Preserve the operands as well as the final sequence when describing a hypothesis. These calculations establish arithmetic, not a relationship between manuscript pages.
+How to replicate
+python scripts/check_number_examples.py
+The script enumerates primes by exact trial division and checks the examples. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.
+Sources
+Original page and provenance · Arithmetic source code. Prime notation is a mathematical definition; the page’s printed number does not itself specify this lookup operation.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/prime-indices.html
+
+
+---
+
+Emirps and decimal reversal
+
+Check reversed primes without conflating reversal, mirroring, and prime lookup.
+
+An emirp is a prime whose decimal digits, reversed, form a different prime. Both primality and the difference condition matter. This is a property of a number’s decimal representation, not a cipher by itself.
+Examples and non-examples
+13 and 31 form an emirp pair. 11 is prime but palindromic, so it is not an emirp under this definition. 23 is prime, but its reverse 32 is composite. The pair 7649 and 9467 passes both prime checks.
+Keep decimal reversal distinct from mirroring an image, reversing rune order, complementing digits, and taking a prime ordinal. Decimal reversal of 8734 is 4378. A transformation from 8734 to 7649 therefore needs a separately specified rule; “invert” alone does not define it.
+Where this matters in the manuscript
+The spelling and prime-sum article computes the three LP2-57 body sentence totals under a declared rune-only convention and checks their reversals. The boundaries and counting convention belong to the claim. Finding an emirp after changing a boundary is a different test.
+How to replicate the predicate
+from math import isqrt
+def prime(n):
+return n >= 2 and all(n % d for d in range(2, isqrt(n) + 1))
+def emirp(n):
+reverse = int(str(n)[::-1]) if n >= 0 else -1
+return n != reverse and prime(n) and prime(reverse)
+assert emirp(7649)
+assert not emirp(11)
+Converting the reversed digits to an integer removes leading zeros. This convention must be stated if applying reversal to strings that are not already prime numbers. See prime indices and selection effects.
+Sources and evidence
+Exact sentence sums and conventions · Checked numerical examples. No authorial purpose follows from the emirp property alone.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/emirps.html
+
+
+---
+
+Exclusive OR (XOR)
+
+The bitwise operation used to combine the three cover-chain payloads.
+
+Exclusive OR, usually written XOR or ⊕, compares bits. Two equal bits give 0; two different bits give 1. Programming languages commonly use ^ for this operation on integers.
+A byte example
+00001111   (hex 0f)
+00110011   (hex 33)
+--------
+00111100   (hex 3c)
+XOR is not addition with carries and is not alphabet arithmetic modulo 29. It works independently at each bit position.
+The three-image chain
+The signed bodies from LP1-00, LP1-01, and LP1-02 are first decoded from hexadecimal. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.
+How to replicate
+assert len(a) == len(b) == len(c)
+combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
+# Full checked reproduction:
+# python scripts/reproduce_cover_chain.py
+The length check prevents silent truncation by zip. Do not pad, cycle, or trim these documented inputs. Follow the complete recipe for the resulting signature and transposition.
+Useful identities and their limits
+A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.
+Sources
+Pinned 2014 walkthrough · Input and output hashes.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/xor.html
+
+
+---
+
+Magic squares in the 2014 puzzle
+
+Definitions, the historical 1033 square, and the later signed instructions.
+
+A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.
+Magic does not always mean normal
+A normal order-n magic square uses each integer from 1 to n² exactly once. A general magic square need not use that range or distinct entries. Keep the definition separate from any additional rules in a historical challenge.
+A documented 1033 square
+The archived 2014 walkthrough records this order-5 square during an earlier puzzle stage:
+272 138 341 131 151
+366 199 130 320  18
+226 245  91 245 226
+18 320 130 199 366
+151 131 341 138 272
+All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.
+The later LP1 payloads
+LP1-10 through LP1-13 contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:
+10 12 10
+12 14 12
+10 12 10
+Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.
+The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.
+How to check a square
+n = len(square)
+assert n and all(len(row) == n for row in square)
+sums = [sum(row) for row in square]
+sums += [sum(row[c] for row in square) for c in range(n)]
+sums += [sum(square[i][i] for i in range(n)),
+sum(square[i][n-1-i] for i in range(n))]
+is_magic = len(set(sums)) == 1
+Run python scripts/check_number_examples.py to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.
+Sources
+Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/magic-squares.html

@@ -1,0 +1,25 @@
+Exclusive OR (XOR)
+
+The bitwise operation used to combine the three cover-chain payloads.
+
+Exclusive OR, usually written XOR or ⊕, compares bits. Two equal bits give 0; two different bits give 1. Programming languages commonly use ^ for this operation on integers.
+A byte example
+00001111   (hex 0f)
+00110011   (hex 33)
+--------
+00111100   (hex 3c)
+XOR is not addition with carries and is not alphabet arithmetic modulo 29. It works independently at each bit position.
+The three-image chain
+The signed bodies from LP1-00, LP1-01, and LP1-02 are first decoded from hexadecimal. XOR their corresponding bytes to reconstruct a signed message. XORing their ASCII hex characters would be a different operation.
+How to replicate
+assert len(a) == len(b) == len(c)
+combined = bytes(x ^ y ^ z for x, y, z in zip(a, b, c))
+# Full checked reproduction:
+# python scripts/reproduce_cover_chain.py
+The length check prevents silent truncation by zip. Do not pad, cycle, or trim these documented inputs. Follow the complete recipe for the resulting signature and transposition.
+Useful identities and their limits
+A ⊕ A = 0 and A ⊕ 0 = A. Applying the same XOR mask twice recovers the input. The three inputs can be combined in any order because XOR is associative and commutative. Those identities explain the computation; they do not establish why a particular set of manuscript files should be combined.
+Sources
+Pinned 2014 walkthrough · Input and output hashes.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/xor.html

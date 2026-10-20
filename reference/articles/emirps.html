@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Emirps and decimal reversal — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/emirps">Open in wiki</a> · <a href="emirps.txt">Plain text</a></nav><h1>Emirps and decimal reversal</h1><p>Check reversed primes without conflating reversal, mirroring, and prime lookup.</p><p>An emirp is a prime whose decimal digits, reversed, form a different prime. Both primality and the difference condition matter. This is a property of a number’s decimal representation, not a cipher by itself.</p>
+<h2 id="examples">Examples and non-examples</h2><p>13 and 31 form an emirp pair. 11 is prime but palindromic, so it is not an emirp under this definition. 23 is prime, but its reverse 32 is composite. The pair 7649 and 9467 passes both prime checks.</p><p>Keep decimal reversal distinct from mirroring an image, reversing rune order, complementing digits, and taking a prime ordinal. Decimal reversal of 8734 is 4378. A transformation from 8734 to 7649 therefore needs a separately specified rule; “invert” alone does not define it.</p>
+<h2 id="manuscript">Where this matters in the manuscript</h2><p>The <a href="../../index.html#/spelling">spelling and prime-sum article</a> computes the three LP2-57 body sentence totals under a declared rune-only convention and checks their reversals. The boundaries and counting convention belong to the claim. Finding an emirp after changing a boundary is a different test.</p>
+<h2 id="replicate">How to replicate the predicate</h2><pre><code>from math import isqrt
+def prime(n):
+    return n &gt;= 2 and all(n % d for d in range(2, isqrt(n) + 1))
+def emirp(n):
+    reverse = int(str(n)[::-1]) if n &gt;= 0 else -1
+    return n != reverse and prime(n) and prime(reverse)
+assert emirp(7649)
+assert not emirp(11)</code></pre><p>Converting the reversed digits to an integer removes leading zeros. This convention must be stated if applying reversal to strings that are not already prime numbers. See <a href="../../index.html#/wiki/prime-indices">prime indices</a> and <a href="../../index.html#/wiki/reproducibility">selection effects</a>.</p>
+<h2 id="sources">Sources and evidence</h2><p><a href="../../data/evidence/spelling-sums.json">Exact sentence sums and conventions</a> · <a href="../../scripts/check_number_examples.py">Checked numerical examples</a>. No authorial purpose follows from the emirp property alone.</p>
+</main></body></html>

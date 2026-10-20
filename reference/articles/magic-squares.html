@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Magic squares in the 2014 puzzle — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/magic-squares">Open in wiki</a> · <a href="magic-squares.txt">Plain text</a></nav><h1>Magic squares in the 2014 puzzle</h1><p>Definitions, the historical 1033 square, and the later signed instructions.</p><p>A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.</p>
+<h2 id="normal">Magic does not always mean normal</h2><p>A normal order-n magic square uses each integer from 1 to n² exactly once. A general magic square need not use that range or distinct entries. Keep the definition separate from any additional rules in a historical challenge.</p>
+<h2 id="historical">A documented 1033 square</h2><p>The archived 2014 walkthrough records this order-5 square during an earlier puzzle stage:</p><pre><code>272 138 341 131 151
+366 199 130 320  18
+226 245  91 245 226
+ 18 320 130 199 366
+151 131 341 138 272</code></pre><p>All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.</p>
+<h2 id="payloads">The later LP1 payloads</h2><p><a href="../../index.html#/page/lp1-10?section=embedded">LP1-10</a> through <a href="../../index.html#/page/lp1-13?section=embedded">LP1-13</a> contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:</p><pre><code>10 12 10
+12 14 12
+10 12 10</code></pre><p>Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.</p><p>The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.</p>
+<h2 id="replicate">How to check a square</h2><pre><code>n = len(square)
+assert n and all(len(row) == n for row in square)
+sums = [sum(row) for row in square]
+sums += [sum(row[c] for row in square) for c in range(n)]
+sums += [sum(square[i][i] for i in range(n)),
+         sum(square[i][n-1-i] for i in range(n))]
+is_magic = len(set(sums)) == 1</code></pre><p>Run <code>python scripts/check_number_examples.py</code> to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.</p>
+<h2 id="sources">Sources</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned 2014 walkthrough</a> · <a href="../../exports/steganography/lp1-10.body.txt">LP1-10 body</a> · <a href="../../index.html#/wiki/embedded-payloads">All signed payloads and hashes</a>.</p>
+</main></body></html>

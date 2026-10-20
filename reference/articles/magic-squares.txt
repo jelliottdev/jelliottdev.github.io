@@ -1,0 +1,35 @@
+Magic squares in the 2014 puzzle
+
+Definitions, the historical 1033 square, and the later signed instructions.
+
+A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.
+Magic does not always mean normal
+A normal order-n magic square uses each integer from 1 to n² exactly once. A general magic square need not use that range or distinct entries. Keep the definition separate from any additional rules in a historical challenge.
+A documented 1033 square
+The archived 2014 walkthrough records this order-5 square during an earlier puzzle stage:
+272 138 341 131 151
+366 199 130 320  18
+226 245  91 245 226
+18 320 130 199 366
+151 131 341 138 272
+All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.
+The later LP1 payloads
+LP1-10 through LP1-13 contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:
+10 12 10
+12 14 12
+10 12 10
+Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.
+The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.
+How to check a square
+n = len(square)
+assert n and all(len(row) == n for row in square)
+sums = [sum(row) for row in square]
+sums += [sum(row[c] for row in square) for c in range(n)]
+sums += [sum(square[i][i] for i in range(n)),
+sum(square[i][n-1-i] for i in range(n))]
+is_magic = len(set(sums)) == 1
+Run python scripts/check_number_examples.py to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.
+Sources
+Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/magic-squares.html
