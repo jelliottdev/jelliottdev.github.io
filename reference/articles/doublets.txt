@@ -77,6 +77,40 @@ Counting and chart script · Independent checks · Counts and complete position 
 
 The checker recounts pairs through overlapping regular-expression matches, verifies every recorded source coordinate, and compares the shuffle expectation against exhaustive permutations of small synthetic examples. These checks reproduce the archived transcription; they do not independently resolve ambiguous handwriting.
 
+Distances between successive doublet symbols
+
+A different analysis extracts one symbol from each doublet occurrence and asks how far apart successive extracted symbols are in the 29-rune alphabet. For example, aabcdeefgghijkll gives the event sequence a e g l. These distances concern alphabet positions, not the number of intervening runes on the page.
+
+Using the archived LP2-00–55 inputs above, retain overlapping equal-rune pairs within each page, including headings and ignoring non-runes. Concatenate the resulting events in page order, then compare successive events. A triple occurrence such as AAA contributes two overlapping doublets and therefore two A events; it is not collapsed into one run.
+
+	Quantity	Reconstructed value
+	Doublet events	86
+	Successive event pairs	85
+	Pairs crossing a page boundary	41
+	Sum of circular distances	734
+	Mean circular distance	734 / 85 ≈ 8.635294
+	Expected mean after uniformly shuffling these events	≈ 7.288098
+
+For indices a and b, use d = min((b − a) mod 29, (a − b) mod 29). Its possible values are 0 through 14. A directed difference uses (b − a) mod 29 instead and can distinguish, for example, +5 from −5. Those are different statistics and should not be substituted for each other.
+
+The reconstruction does not reproduce the proposed mean of 8.81. Its shuffled-order expectation does agree with the approximate 7.29 baseline. The proposal does not provide enough input and implementation detail here to identify the source of the mean difference. Consequently its quoted p-value is not adopted as a verified result.
+
+What is being shuffled?
+
+The expectation above holds the multiset of 86 extracted event symbols fixed and randomizes their order. It does not shuffle all manuscript runes and extract a fresh set of doublets. Those operations preserve different information and answer different questions.
+
+If symbol a appears c(a) times among N events, the probability that two consecutive shuffled positions contain a then b is c(a) × (c(b) − [a = b]) / (N(N − 1)). Multiply each such probability by the circular distance and sum over all a,b. Every adjacent position pair has this expectation, so it is also the expected mean. The script checks the result independently by enumerating all ordered pairs of distinct event positions.
+
+An observed mean above this expectation is a descriptive comparison, not a significance test. A permutation p-value needs the full distribution and a stated tail. If several lags, distance groups or boundary rules were tried before selecting the reported pattern, a confirmatory test must account for those choices. In particular, resetting event comparisons at page boundaries would remove 41 of the 85 comparisons and define a different measurement.
+
+Inspect every comparison
+
+python scripts/doublet_distances.py --check
+
+Use the reference-data bundle with its folders intact. The script recomputes doublets from the archived text through rune_doublets.py. The complete JSON ledger preserves all 85 pairs, source positions, page-boundary flags, directed differences, circular distances, the histogram and input hashes. Run without options to print the report, or with --write to regenerate the stored JSON.
+
+The proposed lag-three +4 concentration and the reported significance of distances 5, 12 and 14 have not been retested by this audit. They should be explicit follow-up statistics, not folded into the reconstructed lag-one mean. See null models and selection and search bounds.
+
 Continue from the observation
 
 Read n-grams for other repeated windows, lag matches for equal runes farther apart, and word lengths for the effect of token boundaries. A fixed reversible substitution renames symbols but preserves equality at each position; it cannot change the total number of doublets.
@@ -102,6 +136,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/rune_doublets.py
 - Independent checks
   https://jelliottdev.github.io/scripts/test_rune_doublets.py
+- script
+  https://jelliottdev.github.io/scripts/doublet_distances.py
+- complete JSON ledger
+  https://jelliottdev.github.io/exports/doublet-distances.json
+- search bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - n-grams
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 - lag matches
