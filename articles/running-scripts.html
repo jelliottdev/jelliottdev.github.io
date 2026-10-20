@@ -30,10 +30,7 @@ python scripts/reproduce_reading.py --check-all</code></pre>
 <p>A <strong>control</strong> is an example whose expected result is already known. Matching it helps check that the implementation and inputs work together. There are nine sections but 17 pages because some sections span several images. This command checks those known readings; it does not attempt the unsolved pages or extract hidden image content.</p>
 <h2 id="trace">4. Read a rune-by-rune trace</h2>
 <pre><code>python scripts/reproduce_reading.py warning --trace</code></pre>
-<p>A <strong>trace</strong> shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two rows are:</p>
-<pre><code>page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied,key_position_before,key_position_after,key_slot_before
-lp1-01,0,0,ᚱ,4,,24,A,False,,,
-lp1-01,1,1,ᛝ,21,,7,W,False,,,</code></pre>
+<p>A <strong>trace</strong> shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two steps are explained below; expand the CSV sample to inspect the exact exported columns and rows.</p>
 <p>Atbash maps index <code>x</code> to <code>28 − x</code>. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are <a href="#/wiki/rune-values">zero-based alphabet indices</a>, not prime values. A two-letter Latin label such as NG still represents one rune.</p>
 <p>You only need the input index, output index and Latin label to follow this Atbash example. The remaining fields help when a method crosses page boundaries or skips particular runes:</p>
 <div class="table-wrap"><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody>
@@ -46,6 +43,9 @@ lp1-01,1,1,ᛝ,21,,7,W,False,,,</code></pre>
 <tr><td><code>latin</code></td><td>The output rune’s Latin label, before contextual English editing.</td></tr>
 <tr><td><code>copied</code></td><td>Whether this position is listed as an interruption in the control. <code>False</code> does not mean the index changed: direct readings also have false entries.</td></tr>
 </tbody></table></div>
+<details><summary>Exact CSV header and first two rows</summary><pre><code>page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied,key_position_before,key_position_after,key_slot_before
+lp1-01,0,0,ᚱ,4,,24,A,False,,,
+lp1-01,1,1,ᛝ,21,,7,W,False,,,</code></pre></details>
 <p>Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run <code>python scripts/reproduce_reading.py welcome --trace</code> and follow <a href="#/wiki/interruptions">keystream positions and interruptions</a>. The specific LP1-10 correction is applied before transformation and trace output; see <a href="#/wiki/transliteration">transcription layers</a>.</p>
 <h2 id="save-output">Save a reading or trace</h2>
 <p>Use <code>--output</code> to keep the result as a file. The script checks the reading against its stored control before writing anything, saves UTF-8 text, and refuses to replace an existing file.</p>

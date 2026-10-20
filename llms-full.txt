@@ -6086,11 +6086,7 @@ A control is an example whose expected result is already known. Matching it help
 
 python scripts/reproduce_reading.py warning --trace
 
-A trace shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two rows are:
-
-page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied,key_position_before,key_position_after,key_slot_before
-lp1-01,0,0,ᚱ,4,,24,A,False,,,
-lp1-01,1,1,ᛝ,21,,7,W,False,,,
+A trace shows the intermediate steps rather than only the finished text. Here, each row follows one rune from its input alphabet position to its output. The format is CSV (comma-separated values), so you can also open it in a spreadsheet. The first two steps are explained below; expand the CSV sample to inspect the exact exported columns and rows.
 
 Atbash maps index x to 28 − x. The first rune has index 4, so its output index is 24, labeled A. The second has index 21, so its output is 7, labeled W. These are zero-based alphabet indices, not prime values. A two-letter Latin label such as NG still represents one rune.
 
@@ -6114,6 +6110,11 @@ You only need the input index, output index and Latin label to follow this Atbas
 
 	copied	Whether this position is listed as an interruption in the control. False does not mean the index changed: direct readings also have false entries.
 
+
+Exact CSV header and first two rows
+page,page_rune_ordinal,section_rune_ordinal,input_rune,input_index,subtracted_value,output_index,latin,copied,key_position_before,key_position_after,key_slot_before
+lp1-01,0,0,ᚱ,4,,24,A,False,,,
+lp1-01,1,1,ᛝ,21,,7,W,False,,,
 
 Non-rune characters are preserved in the literal output but do not get trace rows. For a key-dependent example, run python scripts/reproduce_reading.py welcome --trace and follow keystream positions and interruptions. The specific LP1-10 correction is applied before transformation and trace output; see transcription layers.
 
