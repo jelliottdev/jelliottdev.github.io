@@ -452,7 +452,8 @@ The complete repository is available from the GitHub Code download menu.
 register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Register experiment dependencies after normal exports, preserving their canonical roles.
 for experiment in read('data/experiments.json')['records']:
- for path in {experiment['article_path'],experiment['reproduction']['script'],*[f['path'] for f in experiment['reproduction']['inputs']],*[f['path'] for f in experiment['reproduction']['outputs']]}:
+ # A set removes repeated dependencies, but hash order must not reach catalogs or ZIPs.
+ for path in sorted({experiment['article_path'],experiment['reproduction']['script'],*[f['path'] for f in experiment['reproduction']['inputs']],*[f['path'] for f in experiment['reproduction']['outputs']]}):
   if not any(f['path']==path for f in files):register(path,'Experiment file')
 
 # Bundles preserve each member's exact bytes and repository-relative path.

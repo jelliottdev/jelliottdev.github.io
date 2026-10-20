@@ -4,7 +4,7 @@ A static reference wiki for the 75 archived Liber Primus page images. Includes t
 
 ## Editorial scope
 
-This edition prioritizes source material and factual organization. The experiment system is ready for newly written, retested, reviewed records; its registry starts empty. See [the experiment guide](experiments/README.md). See [editorial conventions](docs/EDITORIAL.md), including how to add or correct page observations. Coverage is explicitly stated on each page; having a page record does not mean every visual detail has been reviewed.
+This edition prioritizes source material and factual organization. Published experiments have separate records with declared scope, reproducible scripts, saved results, and explicit review status. Related variants are grouped without merging their findings. See [the experiment guide](experiments/README.md). See [editorial conventions](docs/EDITORIAL.md), including how to add or correct page observations. Coverage is explicitly stated on each page; having a page record does not mean every visual detail has been reviewed.
 
 ## Run locally
 
