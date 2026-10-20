@@ -24,6 +24,34 @@ Straightforward arithmetic
 The row sums are 12670, 12713, 12350, and 8250. The column sums are 14340, 11021, 10454, and 10168. The two main diagonals sum to 11673 and 14146. All sixteen entries sum to 45983.
 These unequal totals mean that the printed panel is not a magic square under the ordinary equal-line-sums definition. This says nothing about a proposed transformation of the entries; a transformed panel would be a different object and require its own stated rule.
 
+Subtracting the entries from 3301
+
+Choose the explicit operation d = 3301 − printed entry, keeping all sixteen positions. The resulting panel is:
+
+Derived differences, not numbers printed on the page
+	Row	Column 1	Column 2	Column 3	Column 4
+
+	1	43	79	149	263
+
+	2	23	2	3	463
+
+	3	13	7	5	829
+
+	4	−1215	2095	2593	1481
+
+
+Fourteen differences are prime. All twelve entries in the first three rows are prime, as are the final two entries of the fourth row. The exceptions are 3301 − 4516 = −1215, which is negative and therefore not prime, and 3301 − 1206 = 2095 = 5 × 419, which is composite.
+
+The red 3299 gives a difference of 2, the first prime. The entry 2838 gives 463; separately, 3299 is the 463rd prime. These are checkable numerical relationships. They do not establish that the page instructs either subtraction or an ordinal lookup. See the two directions of a prime lookup.
+
+Using an absolute value, changing a printed entry, or dropping the last row would define a different procedure. Keep the full panel when describing this one. Counting fourteen primes is a descriptive result; judging how surprising it is requires a stated comparison model and an account of how the constant and operation were selected.
+
+Reproduce the difference panel
+
+python scripts/check_number_examples.py
+
+The output’s lp2_15 object includes the source-record hash, original-image hash, printed matrix, transformed matrix and a Boolean prime flag for each position. Primality is checked by exact trial division through the integer square root. Run from the repository or extracted reference-data bundle with Python 3. The script reads the stored panel and does not modify it or execute a cipher search.
+
 The heading is not a known plaintext
 [Image: Red LP2-15 heading with dot clusters at either end and a separator between its two rune groups]
 Heading detail from the original image. The terminal dot clusters and the separator between groups are visible alongside the runes. Complete original JPEG · Download
@@ -65,6 +93,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/pages/lp2-15.json
 - magic square
   https://jelliottdev.github.io/reference/articles/magic-squares.html
+- the two directions of a prime lookup
+  https://jelliottdev.github.io/reference/articles/prime-indices.html#directions
+- comparison model
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
 - transliteration labels
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - original in the reader

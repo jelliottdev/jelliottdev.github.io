@@ -80,6 +80,16 @@ def main():
     assert prime(7649) and prime(9467)
     assert 98597*30557 == 3012828529
     assert 9857*30557 == 301200349
+    panel_bytes = (root / "data/pages/lp2-15.json").read_bytes()
+    panel_record = json.loads(panel_bytes)
+    panel = panel_record["numbers"]
+    assert len(panel) == 4 and all(len(row) == 4 for row in panel)
+    differences = [[3301 - value for value in row] for row in panel]
+    difference_primes = [[prime(value) for value in row] for row in differences]
+    assert differences == [[43, 79, 149, 263], [23, 2, 3, 463],
+                           [13, 7, 5, 829], [-1215, 2095, 2593, 1481]]
+    assert sum(sum(row) for row in difference_primes) == 14
+    assert 2095 == 5 * 419 and prime(419)
     product_digits = [int(digit) for digit in str(98597 * 30557)]
     digit_primes = primes[:len(product_digits)]
     digit_sums = [digit + value for digit, value in zip(product_digits, digit_primes)]
@@ -110,6 +120,18 @@ def main():
             "converted_values_half_turn_symmetric": True,
             "line_sums": lines,
         },
+        "lp2_15": {
+            "source": "data/pages/lp2-15.json",
+            "source_sha256": hashlib.sha256(panel_bytes).hexdigest(),
+            "image_sha256": panel_record["image_sha256"],
+            "matrix": panel,
+            "difference_rule": "3301 minus each printed entry, retaining row and column order; no absolute value or modular reduction.",
+            "differences_from_3301": differences,
+            "difference_is_prime": difference_primes,
+            "prime_difference_count": sum(sum(row) for row in difference_primes),
+            "positive_composite_factorization": {"2095": [5, 419]},
+            "interpretation": "Derived arithmetic for all sixteen entries; no claim about statistical surprise or intended cipher.",
+        },
         "lp1_16": {
             "source": "data/pages/lp1-16.json",
             "source_sha256": hashlib.sha256(record_bytes).hexdigest(),
@@ -122,7 +144,7 @@ def main():
             "half_turn_symmetric": printed == rotated,
             "normal": sorted(value for row in printed for value in row) == list(range(1, 26)),
         },
-        "scope": "Prime lookups and product-digit arithmetic, LP1-05 rune-value conversion, and the printed LP1-16 panel; no new decryption claim."
+        "scope": "Prime lookups and product-digit arithmetic, LP1-05 rune-value conversion, printed LP1-16 panel, and LP2-15 differences from 3301; no new decryption claim."
     }, indent=2))
 
 if __name__ == "__main__":
