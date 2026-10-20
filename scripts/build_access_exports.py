@@ -11,6 +11,15 @@ articles=read('data/articles.json')
 def register(path,role,page=None):
  f=root/path;data=f.read_bytes();row={'path':path,'url':base+path,'role':role,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
  if page:row.update(page=page['id'],release=page['release'])
+ # Human labels and archive aliases remain separate from the preserved path.
+ if 'opening-2014' in path:
+  row.update(title='2014 opening image and message',aliases=['zN4h51m.jpg','opening clue','pilgrimage'],guide='opening-2014')
+ elif '1033.' in path or 'illustrated-cover' in path:
+  row.update(title='Illustrated cover with compasses',aliases=['1033.jpg','Blake collage','compass'],guide='illustrated-cover')
+ elif 'cover-rsa' in path or 'cover_rsa' in path:
+  row.update(title='Illustrated cover RSA reproduction',aliases=['1033','compasses','OAEP'],guide='cover-rsa')
+ elif 'emerson' in path:
+  row.update(title='Emerson Self-Reliance book cipher',aliases=['Self Reliance','Dartmouth','book cipher'],guide='emerson-self-reliance')
  files.append(row)
 register('images/1033.jpg','Historical illustrated cover')
 register('images/opening-2014.jpg','Historical opening image')
