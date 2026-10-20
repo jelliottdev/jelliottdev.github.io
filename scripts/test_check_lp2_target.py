@@ -1,6 +1,10 @@
 """Known digest and exact-byte checks; no search for a target preimage."""
 import tempfile
 import unittest
+import json
+import shutil
+import subprocess
+import sys
 from pathlib import Path
 from check_lp2_target import compare_file, target_record
 
@@ -34,6 +38,40 @@ class CandidateChecks(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaises(FileNotFoundError):
                 compare_file(Path(folder) / "missing", ABC_SHA512, "fixture")
+
+    def test_invalid_target_structure(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / "data/pages/lp2-56.json"
+            path.parent.mkdir(parents=True)
+            for value in [
+                None, [], {"id": "lp2-55"},
+                {"id": "lp2-56", "reading": None},
+                {"id": "lp2-56", "reading": {"literal": 123}},
+                {"id": "lp2-56", "reading": {"literal": "not a digest"}},
+            ]:
+                with self.subTest(value=value):
+                    path.write_text(json.dumps(value), encoding="utf-8")
+                    with self.assertRaises(ValueError):
+                        target_record(root)
+
+    def test_invalid_target_cli_status(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "scripts").mkdir()
+            script = root / "scripts/check_lp2_target.py"
+            shutil.copyfile(Path(__file__).with_name("check_lp2_target.py"), script)
+            target = root / "data/pages/lp2-56.json"
+            target.parent.mkdir(parents=True)
+            target.write_text("null", encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(script), "unused-candidate"],
+                capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertEqual(result.stdout, "")
+            self.assertIn("Target record must identify page lp2-56", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
 
 
 if __name__ == "__main__":

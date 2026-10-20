@@ -17,9 +17,14 @@ def target_record(root=ROOT):
     path = root / "data/pages/lp2-56.json"
     raw = path.read_bytes()
     page = json.loads(raw)
+    if not isinstance(page, dict) or page.get("id") != "lp2-56":
+        raise ValueError("Target record must identify page lp2-56")
+    reading = page.get("reading")
+    if not isinstance(reading, dict) or not isinstance(reading.get("literal"), str):
+        raise ValueError("Target record must contain a literal reading as text")
     rows = [
         line.rstrip("/")
-        for line in page["reading"]["literal"].splitlines()
+        for line in reading["literal"].splitlines()
         if re.fullmatch(r"[0-9a-f]+/?", line)
     ]
     target = "".join(rows)
