@@ -43,6 +43,8 @@ for summary in index['pages']:
   save(f'exports/{pid}.contextual-section.txt','Section: '+p['reading']['section']+'\nPages: '+', '.join(p['reading']['section_pages'])+'\n\n'+p['reading']['reading']+'\n');register(f'exports/{pid}.contextual-section.txt','Contextual whole-section reading',p)
  text=f'# {pid.upper()}\n\nRelease: {p["release"]}; zero-based release index: {p["release_index"]}; combined archive index: {summary["combined_index"]}.\nStatus in source snapshot dated {index["snapshot"]}: {p["status"]}.\n\nOriginal image: {base}images/{pid}.jpg\nImage SHA-256: {p["image_sha256"]}\nStructured record: {base}data/pages/{pid}.json\nHuman reader: {base}#/reader/{pid}\n\n'
  text+='## Visual observations\n\n'+('\n\n'.join(n['title']+': '+n['text'] for n in p['notes']) or 'No detailed visual inventory published for this page. An indexed image is not an exhaustive review.')+'\n\n'
+ if any(n.get('source')=='data/evidence/editorial-page-notes.json' for n in p['notes']):
+  text+='Visual observation record (selected observations, original-image hashes and review date): '+base+'data/evidence/editorial-page-notes.json\n\n'
  if p.get('numbers'):text+='Printed decimal rows:\n'+ '\n'.join(' '.join(map(str,row)) for row in p['numbers'])+'\n\n'
  text+='## Archived transcription\n\n'+(p['raw'] or 'No archived rune transcription.')+'\n\n'
  embedded=next((r for r in payloads['records'] if r['page']==pid),None)
