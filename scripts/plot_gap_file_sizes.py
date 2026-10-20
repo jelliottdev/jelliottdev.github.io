@@ -32,3 +32,6 @@ ax.set_axisbelow(True)
 ax.legend(loc="upper left", frameon=False, fontsize=11)
 fig.tight_layout()
 fig.savefig(args.output, metadata={"Date": None})
+
+# Keep downloadable bytes stable across platform newline conventions.
+args.output.write_bytes(args.output.read_bytes().replace(b"\r\n", b"\n"))

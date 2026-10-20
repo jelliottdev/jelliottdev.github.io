@@ -125,6 +125,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'gap-file-sizes.svg': {'title':'LP2 file sizes by reported gap group (SVG)', 'guide':'line-gaps','aliases':['big gaps','line spacing','file sizes']},
  'doublets.svg': {'title':'Doublet counts by rune (SVG)', 'guide':'doublets','aliases':['doublets','421','equal adjacent runes']},
  'word-lengths.svg': {'title':'Rune-token lengths in LP2-00 to LP2-55 (SVG)', 'guide':'word-lengths','aliases':['word length histogram','runeglish','2896 tokens']},
  'cipher-invariants.svg': {'title':'Cipher operations and unchanged IoC (SVG)', 'guide':'cipher-invariants', 'aliases':['cipher invariant diagram','same IoC','uniform shift counts']},
