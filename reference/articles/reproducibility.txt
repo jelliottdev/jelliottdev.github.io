@@ -7,7 +7,7 @@ Name page IDs, regions, input hashes, transcription versions, transformation ord
 
 Turn “try shifts” into a bounded question
 
-The following is a planning example, not a completed experiment. It shows how to specify a small search on LP2-31 without implying that the page is expected to use this method.
+The following is a candidate-generation example, not a completed hypothesis test. It shows how to specify a small search on LP2-31 without implying that the page is expected to use this method.
 
 	Decision	Example specification
 
@@ -29,6 +29,31 @@ The following is a planning example, not a completed experiment. It shows how to
 There are 2 × 29 = 58 parameter cases. This is not a claim that all 58 output strings must be distinct. If you later try both including and excluding a heading, you have added another input choice. Record the new scope and count; do not describe the enlarged search as the original test.
 
 “Looks like English” is not a sufficiently reproducible criterion on its own. An exact comparison needs the expected symbols and positions. A language score needs its formula, reference data, normalization, and selection rule. Whole-stream IoC is unsuitable for ranking this example’s cases because a fixed shift and a reversal preserve it; see what cipher operations preserve.
+
+Generate the 58 cases yourself
+
+Download and extract the reference-data bundle, then open a terminal in its extracted folder. With Python 3 installed, run:
+
+python scripts/enumerate_shifts.py lp2-31 --output my-shifts.json
+
+The script uses only Python’s standard library. It reads the archived transcription and writes all 58 cases to a new JSON file. It refuses to replace an existing file. No network connection or AI service is involved. For help with opening a terminal and checking downloaded files, see running the reproduction scripts.
+
+Each case records its order, shift, and complete output as rune indices. For example, the invented input [0, 1, 28] with shift 1 becomes [28, 0, 27]. Reversing that input first gives [28, 1, 0], then subtracting 1 gives [27, 0, 28]. These small examples make the direction and order of operations visible.
+
+	Report field	What it lets you check
+
+	source_sha256	The exact archived input bytes used by this run.
+
+	alphabet_runes_in_index_order	Which rune each index 0–28 denotes.
+
+	rune_count	The length of the selected stream; LP2-31 currently contains 269 archived runes.
+
+	case_count and distinct_output_count	How many parameter cases were generated, and how many different output sequences they produced. Those counts need not be equal.
+
+	cases	Every original-order case followed by every reversed-order case, with shifts 0–28 in each group.
+
+
+This command does not decide whether any candidate is meaningful. There is no language score, expected prefix, or success threshold in the script. Choose and document a comparison before examining the candidates if you intend to make a confirmatory claim. Generating this file does not publish an experiment or tell the idea checker that the technique has been ruled out.
 
 Use known controls
 A control has an expected result. Reproducing the warning checks an Atbash implementation; reproducing LP2-56 checks a particular prime schedule. One control does not validate every method or transcription.
@@ -71,17 +96,21 @@ The research registry
 Have we tried it? compares techniques and scope in published records. Background pages do not count as experiments. The registry remains empty while records are prepared and retested. The contribution format describes publication requirements.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The linked known-reading recipes provide controls. The 58-case scope above is an instructional specification; this article reports no execution or finding for that hypothetical search.
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The linked known-reading recipes provide controls. The 58-case example demonstrates candidate generation. It does not test a plaintext hypothesis or report a decipherment.
 
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- script
+  https://jelliottdev.github.io/scripts/enumerate_shifts.py
+- running the reproduction scripts
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
 - the warning
   https://jelliottdev.github.io/reference/articles/atbash.html
 - LP2-56
   https://jelliottdev.github.io/reference/articles/prime-minus-one.html
-- running the reproduction scripts
-  https://jelliottdev.github.io/reference/articles/running-scripts.html
 - spelling and sums
   https://jelliottdev.github.io/#/spelling
 - emirps
