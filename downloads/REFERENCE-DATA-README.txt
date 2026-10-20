@@ -28,6 +28,12 @@ Measure rune frequencies and matching pairs:
   The first measures one archived page; the second verifies the saved baseline.
   A descriptive statistic is not a cipher identification or a significance test.
 
+Measure single-rune frequency entropy:
+  python scripts/rune_entropy.py lp2-31
+  Guide: reference/articles/rune-entropy.txt
+  Reports bits per rune from the observed counts. This does not measure sequence
+  order, identify a cipher, or test whether a page is random.
+
 Locate repeated rune sequences:
   python scripts/rune_ngrams.py lp2-31 --length 2
   Guide: reference/articles/rune-ngrams.txt
@@ -57,6 +63,7 @@ SAVE A RESULT
   python scripts/reproduce_reading.py warning --trace --output warning-trace.csv
   python scripts/reading_concordance.py circumference --prefix --json --output circumference.json
   python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
+  python scripts/rune_entropy.py lp2-31 --output lp2-31-entropy.json
 These create UTF-8 files in your current folder and refuse to overwrite existing
 files. For the concordance, --json selects JSON; the filename alone does not.
 Preserve the input hashes and counting rules alongside any interpretation.
