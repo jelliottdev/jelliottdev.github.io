@@ -44,8 +44,16 @@ class Text(HTMLParser):
         super().__init__()
         self.parts = []
         self.links = []
+        self.link_labels = {}
+        self.anchor = None
+    def add_label(self, target, label):
+        label = " ".join(label.split())
+        if label and label not in self.link_labels.setdefault(target, []):
+            self.link_labels[target].append(label)
     def handle_data(self, data):
         self.parts.append(data)
+        if self.anchor is not None:
+            self.anchor[1].append(data)
     def boundary(self):
         if self.parts and not self.parts[-1].endswith("\n"):
             self.parts.append("\n")
@@ -61,7 +69,17 @@ class Text(HTMLParser):
         target = values.get("href") if tag == "a" else values.get("src") if tag == "img" else None
         if target and target not in self.links:
             self.links.append(target)
+        if tag == "a" and target:
+            self.anchor = [target, []]
+        if tag == "img" and target:
+            label = values.get("alt", "")
+            self.add_label(target, label)
+            if self.anchor is not None:
+                self.anchor[1].append(label)
     def handle_endtag(self, tag):
+        if tag == "a" and self.anchor is not None:
+            self.add_label(self.anchor[0], "".join(self.anchor[1]))
+            self.anchor = None
         if tag in self.blocks:
             self.boundary()
 
@@ -161,6 +179,9 @@ def build():
         # Preserve Python indentation and tabular boundaries in downloadable text.
         a["text"] = "".join(parser.parts).strip()
         a["references"] = [reference_url(link, a["id"]) for link in parser.links]
+        reference_details = [{"url": reference_url(link, a["id"]),
+                                   "labels": parser.link_labels.get(link, [])}
+                                  for link in parser.links]
         a["linked_articles"] = outgoing[a["id"]]
         title = html.escape(a["title"])
         standalone = standalone_body(body)
@@ -178,7 +199,9 @@ def build():
             '<body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · '
             f'<a href="../../index.html#/wiki/{a["id"]}">Open in wiki</a> · <a href="{a["id"]}.txt">Plain text</a></nav>'
             f'<h1>{title}</h1><p>{html.escape(a["summary"])}</p>{article_contents(body)}{standalone}</main></body></html>', encoding="utf-8", newline="\n")
-        links = "\n".join(a["references"])
+        links = "\n".join(("- " + "; ".join(ref["labels"]) + "\n  " + ref["url"])
+                          if ref["labels"] else "- " + ref["url"]
+                          for ref in reference_details)
         (out / f'{a["id"]}.txt').write_text(a["title"] + "\n\n" + a["summary"] + "\n\n" + a["text"] + "\n\nSources, related references, and files\n" + links + "\n\nArticle: https://jelliottdev.github.io/reference/articles/" + a["id"] + ".html\n", encoding="utf-8", newline="\n")
     (ROOT / "data/articles.json").write_text(json.dumps(articles, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Built {len(articles)} searchable articles and standalone HTML/text copies.")

@@ -24,6 +24,22 @@ class ArticleExports(unittest.TestCase):
                     self.assertTrue(resolved.is_relative_to(root), "Link escapes repository")
                     self.assertTrue(resolved.is_file(), "Missing local destination")
 
+    def test_reference_labels_preserve_context_without_modifying_prose(self):
+        parser = Text()
+        parser.feed('<p>Read <a href="source.html">the <em>primary</em> text</a>.</p>'
+                    '<a href="source.html">Another passage</a>'
+                    '<a href="source.html">the primary text</a>'
+                    '<a href="original.jpg"><img src="thumb.jpg" alt="Hand &amp; compasses"></a>'
+                    '<a href="unlabeled.txt"></a>')
+        self.assertEqual(parser.link_labels["source.html"],
+                         ["the primary text", "Another passage"])
+        self.assertEqual(parser.link_labels["original.jpg"], ["Hand & compasses"])
+        self.assertEqual(parser.link_labels["thumb.jpg"], ["Hand & compasses"])
+        self.assertEqual(parser.links,
+                         ["source.html", "original.jpg", "thumb.jpg", "unlabeled.txt"])
+        self.assertNotIn("unlabeled.txt", parser.link_labels)
+        self.assertTrue("".join(parser.parts).startswith("Read the primary text.\n"))
+
     def test_standalone_resources_preserve_paths_queries_and_fragments(self):
         for path in ("text/lp2-31.txt", "data/catalog.json", "images/1033.jpg",
                      "downloads/reference-data.zip", "exports/example.svg",
