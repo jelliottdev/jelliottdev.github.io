@@ -9,7 +9,9 @@ function bindWikiSearch(){
  input.setAttribute('aria-controls',panel.id);input.setAttribute('aria-expanded','false');
  const size=()=>{panel.style.maxHeight=Math.max(100,Math.min(420,(window.visualViewport?.height||innerHeight)-form.getBoundingClientRect().bottom-12))+'px';};
  const draw=()=>{const q=input.value.trim();if(q.length<2){closeSearchSuggestions();return}const hits=WikiSearch.search(db,q).slice(0,5);panel.innerHTML=hits.length?hits.map(h=>searchResultHTML(h,q,true)).join(''):`<p class="suggestions-empty">No matches for “${esc(q)}”.</p>`;panel.innerHTML+=`<a class="search-all" href="#/search/${encodeURIComponent(q)}">See all results for “${esc(q)}” →</a>`;panel.hidden=false;input.setAttribute('aria-expanded','true');size();};
- input.addEventListener('input',e=>{if(!e.isComposing)draw()});input.addEventListener('compositionend',draw);input.addEventListener('focus',draw);
+ // Android keyboards can keep a whole word in composition. Rendering suggestions
+ // is read-only with respect to the input, so do not wait for compositionend.
+ input.addEventListener('input',draw);input.addEventListener('compositionend',draw);input.addEventListener('focus',draw);
  input.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSearchSuggestions();e.stopPropagation()}else if(e.key==='ArrowDown'&&!panel.hidden){e.preventDefault();panel.querySelector('a')?.focus()}});
  panel.addEventListener('keydown',e=>{if(e.key==='Escape'){input.focus();closeSearchSuggestions();e.preventDefault()}else if(['ArrowDown','ArrowUp'].includes(e.key)){const links=[...panel.querySelectorAll('a')],i=links.indexOf(document.activeElement);e.preventDefault();if(e.key==='ArrowUp'&&i===0)input.focus();else links[(i+(e.key==='ArrowDown'?1:-1)+links.length)%links.length].focus();}});
  panel.addEventListener('click',e=>{if(e.target.closest('.search-all')){e.preventDefault();submitWikiSearch(input.value)}else if(e.target.closest('a')){input.blur();closeSearchSuggestions()}});

@@ -18,3 +18,25 @@ assert.equal(search.relevance('Atbash','', '','"atbash"'),650);
 assert.equal(search.relevance('Some Wisdom','','a warning','wisdom warning'),60);
 assert.equal(search.relevance('Some Wisdom','','a warning','"wisdom warning"'),0);
 console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phrases and empty results');
+
+// Exercise the actual header input handler with an Android-style composing event.
+// This is an isolated event test, not a physical-device keyboard simulation.
+const vm=require('node:vm');
+function target(){return {listeners:{},attrs:{},addEventListener(name,fn){this.listeners[name]=fn},setAttribute(name,value){this.attrs[name]=value},getBoundingClientRect(){return {bottom:100}},contains(){return false}}}
+const input=target(),form=target(),panel=target();input.value='Atba';
+form.append=()=>{};panel.hidden=true;
+const sandbox={db,WikiSearch:search,esc:String,marked:String,excerpt:String,
+ $:s=>({'#search':input,'#search-form':form,'#search-suggestions':panel}[s]),
+ document:{createElement:()=>panel,addEventListener(){}},
+ window:{visualViewport:{height:430,addEventListener(){}}},innerHeight:430};
+vm.createContext(sandbox);
+vm.runInContext(fs.readFileSync(path.join(root,'search-ui.js'),'utf8'),sandbox);
+vm.runInContext('bindWikiSearch()',sandbox);
+input.listeners.input({isComposing:true});
+assert.equal(panel.hidden,false,'Composing input must immediately show suggestions');
+assert.match(panel.innerHTML,/#\/wiki\/atbash/);
+assert.equal(input.value,'Atba','Rendering must not change keyboard composition text');
+assert.equal(input.attrs['aria-expanded'],'true');
+input.value='';input.listeners.input({isComposing:true});
+assert.equal(panel.hidden,true,'Clearing composing text must hide suggestions');
+console.log('PASS: composing input shows suggestions without blur or text mutation');
