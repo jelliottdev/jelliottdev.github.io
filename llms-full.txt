@@ -10690,6 +10690,9 @@ For an order-dependent pair count, see rune matches at fixed distances. It compa
 
 The all-distance identity shows how the lag counts partition the same matching pairs used by IoC, and why the rates must be weighted by their denominators.
 
+
+The with-replacement comparison explains why summing squared rune proportions differs from IoC, derives the conversion, and shows a resulting lower bound on Shannon entropy.
+
 Sources, related references, and files
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
@@ -10739,6 +10742,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
 - all-distance identity
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html#ioc-connection
+- with-replacement comparison
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html#collision-probability
 
 Article: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 
@@ -10886,6 +10891,47 @@ AAAABC IoC: 2/5 entropy: 1.251629
 
 Adding the 26 or 27 unused runes to the count array changes neither result: zero counts contribute nothing. Both examples therefore fit within the same 29-symbol alphabet. Their order can be rearranged without changing either score. For selecting candidate transformations, consult which properties each operation preserves; for interpreting an unusual value, specify a comparison model.
 
+Matching symbols: with or without replacement?
+
+Choose one position uniformly from a text of N symbols, then choose a second position. If the second choice can select the first position again, the probability of a matching symbol is C = sum((c/N)²). This is sampling with replacement. If the positions must be different, the matching probability is the IoC used in this wiki: I = sum(c(c−1)) / (N(N−1)).
+
+The difference is the possibility of selecting the same position twice, which always produces a match. For N greater than one:
+
+Separate the squared counts
+sum(c²) = sum(c(c−1)) + N
+Divide by N²
+C = 1/N + ((N−1)/N) × I
+Recover IoC
+I = (N × C − 1) / (N−1)
+
+For AAABBB, C is 1/2 but IoC is 2/5. If all N symbols are different, IoC is zero while C is 1/N: the only matching draws with replacement are those that revisit the same position. A one-symbol text has C = 1, but its IoC is undefined because there is no pair of distinct positions.
+
+A lower bound on Shannon entropy
+
+The same empirical probabilities give a useful mathematical check: H ≥ −log2(C). To see why, select a symbol using its observed probability p. Shannon entropy is the average of −log2(p); the average of p under that selection is sum(p²) = C. The function −log2 is convex, so its average cannot be below its value at the average. Equality holds when all observed symbols have equal probabilities.
+
+This is a bound, not a conversion formula for entropy. The two six-symbol examples above have the same C = 1/2 and therefore the same bound of 1 bit, but their entropies differ. Do not insert IoC directly into the logarithm: it uses a different sampling rule and can be zero even for a nonempty text.
+
+Check LP2-31 using exact fractions
+
+For the 269-rune stream above, the matching ordered-pair count is 2,376. This short calculation reproduces the conversion:
+
+from fractions import Fraction
+from math import log2
+
+n = 269
+ioc = Fraction(2376, n * (n - 1))
+collision = Fraction(1, n) + Fraction(n - 1, n) * ioc
+print("With replacement:", collision)
+print("Entropy lower bound:", f"{-log2(float(collision)):.6f}")
+
+Expected output:
+
+With replacement: 2645/72361
+Entropy lower bound: 4.773873
+
+The measured Shannon entropy, about 4.814030 bits, is above this bound. Both values describe this count distribution. Neither is a probability that the page is random or evidence for a particular cipher. Use the null-model guide for that separate question.
+
 What it cannot distinguish
 
 A pure transposition preserves every count, so it preserves this entropy. A fixed one-to-one substitution relabels the same counts and also preserves it. Therefore this score cannot choose among those transformations of the same input. See cipher invariants.
@@ -10905,7 +10951,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the archived LP2-31 transcription
   https://jelliottdev.github.io/text/lp2-31.txt
-- null model; null models and selection; comparison model
+- null model; null models and selection; comparison model; null-model guide
   https://jelliottdev.github.io/reference/articles/null-models.html
 - which properties each operation preserves; cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html

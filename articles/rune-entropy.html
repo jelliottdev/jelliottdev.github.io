@@ -77,6 +77,28 @@ for text in ("AAABBB", "AAAABC"):
 <pre><code>AAABBB IoC: 2/5 entropy: 1.000000
 AAAABC IoC: 2/5 entropy: 1.251629</code></pre>
 <p>Adding the 26 or 27 unused runes to the count array changes neither result: zero counts contribute nothing. Both examples therefore fit within the same 29-symbol alphabet. Their order can be rearranged without changing either score. For selecting candidate transformations, consult <a href="#/wiki/cipher-invariants">which properties each operation preserves</a>; for interpreting an unusual value, specify a <a href="#/wiki/null-models">comparison model</a>.</p>
+<h2 id="collision-probability">Matching symbols: with or without replacement?</h2>
+<p>Choose one position uniformly from a text of N symbols, then choose a second position. If the second choice can select the first position again, the probability of a matching symbol is <code>C = sum((c/N)²)</code>. This is sampling <strong>with replacement</strong>. If the positions must be different, the matching probability is the IoC used in this wiki: <code>I = sum(c(c−1)) / (N(N−1))</code>.</p>
+<p>The difference is the possibility of selecting the same position twice, which always produces a match. For N greater than one:</p>
+<dl><dt>Separate the squared counts</dt><dd><code>sum(c²) = sum(c(c−1)) + N</code></dd><dt>Divide by N²</dt><dd><code>C = 1/N + ((N−1)/N) × I</code></dd><dt>Recover IoC</dt><dd><code>I = (N × C − 1) / (N−1)</code></dd></dl>
+<p>For <code>AAABBB</code>, C is 1/2 but IoC is 2/5. If all N symbols are different, IoC is zero while C is 1/N: the only matching draws with replacement are those that revisit the same position. A one-symbol text has C = 1, but its IoC is undefined because there is no pair of distinct positions.</p>
+<h3 id="collision-bound">A lower bound on Shannon entropy</h3>
+<p>The same empirical probabilities give a useful mathematical check: <code>H ≥ −log2(C)</code>. To see why, select a symbol using its observed probability p. Shannon entropy is the average of <code>−log2(p)</code>; the average of p under that selection is <code>sum(p²) = C</code>. The function −log2 is convex, so its average cannot be below its value at the average. Equality holds when all observed symbols have equal probabilities.</p>
+<p>This is a bound, not a conversion formula for entropy. The two six-symbol examples above have the same C = 1/2 and therefore the same bound of 1 bit, but their entropies differ. Do not insert IoC directly into the logarithm: it uses a different sampling rule and can be zero even for a nonempty text.</p>
+<h3 id="collision-example">Check LP2-31 using exact fractions</h3>
+<p>For the 269-rune stream above, the matching ordered-pair count is 2,376. This short calculation reproduces the conversion:</p>
+<pre><code>from fractions import Fraction
+from math import log2
+
+n = 269
+ioc = Fraction(2376, n * (n - 1))
+collision = Fraction(1, n) + Fraction(n - 1, n) * ioc
+print("With replacement:", collision)
+print("Entropy lower bound:", f"{-log2(float(collision)):.6f}")</code></pre>
+<p>Expected output:</p>
+<pre><code>With replacement: 2645/72361
+Entropy lower bound: 4.773873</code></pre>
+<p>The measured Shannon entropy, about 4.814030 bits, is above this bound. Both values describe this count distribution. Neither is a probability that the page is random or evidence for a particular cipher. Use the <a href="#/wiki/null-models">null-model guide</a> for that separate question.</p>
 <h2 id="limits">What it cannot distinguish</h2>
 <p>A pure transposition preserves every count, so it preserves this entropy. A fixed one-to-one substitution relabels the same counts and also preserves it. Therefore this score cannot choose among those transformations of the same input. See <a href="#/wiki/cipher-invariants">cipher invariants</a>.</p>
 <p>This is not an entropy-rate estimate: it does not model how a symbol depends on preceding symbols. The alternating example above has a predictable pattern despite its balanced counts. Use <a href="#/wiki/rune-ngrams">repeated sequences</a> to inspect adjacency, and specify a <a href="#/wiki/null-models">comparison model</a> before claiming statistical surprise. A frequency summary alone does not measure meaning, compressibility under a particular compressor, or resistance to cryptanalysis.</p>
