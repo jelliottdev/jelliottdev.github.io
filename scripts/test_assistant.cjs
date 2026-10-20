@@ -49,3 +49,14 @@ assert(account.includes('<code>[Literal](#/wiki/atbash)</code>'));
 assert(!experimentContext.renderExperimentMarkdown('[escape](../file.txt)',['../file.txt']).includes('<a '));
 assert(!experimentContext.renderExperimentMarkdown('[markup](https://example.com/"onclick="bad)').includes('<a '));
 console.log('PASS: authored experiment links support methods, HTTPS sources and declared files without linking unsafe destinations.');
+
+const tableAccount=experimentContext.renderExperimentMarkdown('Before.\n\n| Test | Result |\n| --- | --- |\n| **Control** | `**literal**` |\n| <img src=x> | [Method](#/wiki/atbash) |\n\nAfter.');
+assert(tableAccount.includes('<th scope="col">Test</th>'));
+assert(tableAccount.includes('<td><strong>Control</strong></td>'));
+assert(tableAccount.includes('<td><code>**literal**</code></td>'));
+assert(tableAccount.includes('&lt;img src=x&gt;'));
+assert(!tableAccount.includes('<img'));
+assert(tableAccount.includes('href="#/wiki/atbash"'));
+assert(tableAccount.endsWith('<p>After.</p>'));
+assert(!experimentContext.renderExperimentMarkdown('```\n| A | B |\n| --- | --- |\n```').includes('<table>'));
+console.log('PASS: experiment tables preserve inline syntax, escape HTML, and leave fenced examples literal.');
