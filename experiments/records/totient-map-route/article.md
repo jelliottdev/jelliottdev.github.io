@@ -50,7 +50,13 @@ The source provides more than word examples. It predicts a next-key signature us
 
 We recomputed all 16 primary transitions, treating OF and THE separately and using the primary SOON route. All three checks match. The starting state, block boundaries, node centers and phase thresholds are inputs. The source states that the thresholds were identified from this route. Consequently, **16 matches are an in-sample fit, not 16 held-out predictions**. The signature, axis and boundary checks also share inputs and must not be multiplied as independent probabilities.
 
+### How many keys share a signature?
+
 A signature constrains a key without identifying its runes. For example, (0,0,0) is shared by 4,096 ordered triples of positive rune indices; (1,0,1) by 1,296. These counts enumerate indices 1–28 only. They exclude F=0, for which the standard positive-integer totient is not defined here. They are not counts of reachable nodes: geometric restrictions can reduce the candidates considerably.
+
+For each derived key index k, compute μ(φ(k)). Among indices 1–28, 16 give zero, 3 give −1, and 9 give +1. An ordered key with signature (0,0,0) can independently select any of the 16 zero-class indices in each slot: 16 × 16 × 16 = 4,096. Repeated indices are allowed in this algebraic count. The signature (1,0,1) similarly gives 9 × 16 × 9 = 1,296.
+
+[Inspect the signature-class diagram](exports/figures/totient-signature-classes.svg). These are derived key triples before phase rotation; equal outer signature values do not require equal outer rune indices. They do not enumerate manuscript locations, enforce mirror-node geometry, or measure how many alternatives survive the complete proposed traversal. Therefore they cannot be used as the denominator of a chance probability for the reading.
 
 ### Check one transition by hand: WEATHER → TURNS
 
@@ -91,11 +97,14 @@ Download this experiment's bundle and extract it without changing its folder str
 ```text
 python experiments/records/totient-map-route/run.py --check
 python experiments/records/totient-map-route/check.py
+python experiments/records/totient-map-route/signature_figure.py
 ```
 
 The first command rebuilds the report and coverage image in memory and compares them with the saved versions. It checks all selected key nodes and subtractions, recomputes transition matches, enumerates signature classes, and repeats the mirror controls. Running without `--check` writes the report and coverage image. The explanatory node-choice diagram is an authored illustration of the reported three-node comparison.
 
 The second command independently derives totients through prime factorization, checks all 65 recorded rune subtractions and node-derived keys, and compares totients with coprime counting for 1–729. It also independently verifies all 16 transition calculation records, all 18 key-node midpoints, and rotation identities for all 729 cells. It does not independently rediscover the route or certify the author's navigation choices. The JSON report includes all rune traces, transition inputs/results, the 99 control counts, reused cells, and phase-rotation ablations. Those ablations deliberately change the phase rule; they are sensitivity checks, not alternatives permitted by the fixed phase formula.
+
+The third command independently calculates totients by counting coprimes and Möbius values by factorization, checks all six reported signature-class counts, and verifies the saved diagram. Add `--write` only to regenerate that diagram. It does not search for map nodes or produce plaintext.
 
 ## What would strengthen the claim
 
