@@ -79,7 +79,7 @@ for artifact in sorted((root/'exports/steganography').iterdir()):
  page=next((p for p in index['pages'] if artifact.name.startswith(p['id']+'.')),None)
  register('exports/steganography/'+artifact.name,'Embedded payload file',page)
 register('exports/figures/rune-frequencies.svg','Analysis figure')
-for script in ['plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
+for script in ['rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
 register('data/experiments.json','Experiment registry')
 register('data/assistant-index.json','Assistant source excerpts')
@@ -125,6 +125,7 @@ From that folder, with Python 3, run:
   python scripts/reproduce_reading.py --check-all
   python scripts/reproduce_prime_sums.py
   python scripts/rune_ioc.py --check
+  python scripts/rune_ngrams.py lp2-31 --length 2
   python scripts/reproduce_cover_chain.py
   python scripts/reproduce_cover_rsa.py
   python scripts/reproduce_emerson.py

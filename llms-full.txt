@@ -2901,6 +2901,7 @@ No detailed visual inventory published for this page. An indexed image is not an
 ## Related guides
 
 Index of coincidence: a reproducible rune baseline: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+Repeated rune sequences: bigrams and trigrams: https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 Wing and Tree: LP2-27–32: https://jelliottdev.github.io/reference/articles/wing-and-tree.html
 
 ## Sources
@@ -8306,6 +8307,8 @@ FFUUFFU whole: 3/7 period 2: 1/3
 
 This example explains an operation, not a tested claim about the manuscript. To apply it, declare the actual rune stream, headings, interruptions, page boundaries, periods and scoring rule first. If you choose the maximum over several periods, each randomized comparison must repeat that same search to evaluate the selected maximum. Comparing the winning period only with a single-period reference would omit the advantage gained by trying many candidates.
 
+To inspect order-dependent local patterns, use repeated rune sequences. Its script lists overlapping bigrams and trigrams with exact positions and input hashes.
+
 Sources and verification
 
 Historical background: William F. Friedman, The Index of Coincidence and Its Applications in Cryptanalysis, preserved by the NSA. The counting convention and derivation used by this script are stated explicitly above; do not assume every historical or modern use of “IoC” has identical scaling.
@@ -8330,9 +8333,103 @@ https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 https://jelliottdev.github.io/reference/articles/vigenere.html
 https://jelliottdev.github.io/#/experiments
 https://jelliottdev.github.io/reference/articles/reproducibility.html
+https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 https://www.nsa.gov/portals/75/documents/news-features/declassified-documents/friedman-documents/publications/folder_233/41761039080018.pdf
 
 Article: https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+
+
+---
+
+Repeated rune sequences: bigrams and trigrams
+
+Locate overlapping repeats, reproduce exact counts and rune positions, and distinguish repetition from a cipher claim.
+
+An n-gram is a sequence of n consecutive symbols. A bigram contains two; a trigram contains three. Counting repeated rune n-grams lets you ask which exact sequences recur and where. Unlike a whole-page index of coincidence, this measurement depends on neighboring symbols and their order.
+
+Slide a window, one rune at a time
+
+For the synthetic stream F–U–F–U–F, a three-rune window has three possible starting positions:
+
+	Start, from zero	Window	Included positions
+
+	0	F–U–F	0, 1, 2
+
+	1	U–F–U	1, 2, 3
+
+	2	F–U–F	2, 3, 4
+
+
+F–U–F is one repeated pattern with two occurrences, starting at 0 and 2. The occurrences share position 2: this procedure counts overlapping windows. Similarly, F–F–F–F contains three overlapping F–F windows, not two. For N runes and a positive window length n, the number of windows is max(0, N − n + 1).
+
+Exactly which stream is counted
+
+The supplied script reads one archived transcription and retains the 29 alphabet runes in source order, including headings. It removes every non-rune: punctuation, spaces, line markers and printed decimal numbers. Windows can therefore cross word, line and paragraph boundaries. They never cross into another page.
+
+This is a rune-stream measurement, not a count of repeated words or preserved visual rows. Removing a separator makes the runes on its two sides adjacent. A study limited to words, rows or body text would need different segmentation and should not be reported as the same test. Unknown characters in the Runic Unicode block cause an error rather than disappearing silently.
+
+Reproduce the report
+
+Use the repository or reference-data bundle; see setup instructions. Python 3 and its standard library are sufficient. The commands read local files and do not use AI or network services.
+
+python scripts/rune_ngrams.py lp2-31 --length 2
+python scripts/rune_ngrams.py lp2-31 --length 3
+python scripts/rune_ngrams.py lp2-31 --length 2 --output lp2-31-bigrams.json
+
+The output is JSON. Length defaults to 3 and accepts integers from 1 through 12. An existing output file is never replaced. A page with no archived rune transcription produces an explanatory error.
+
+Each report records the source file’s SHA-256, the ordered alphabet’s SHA-256, the filtering rule, rune count, total windows and every pattern occurring at least twice. Each pattern includes its rune indices, Latin labels, count and starting positions. Starts are zero-based rune ordinals after filtering, not Unicode character offsets or image coordinates. Latin labels identify the runes; they are not decoded words.
+
+Worked manuscript example: LP2-31
+
+For LP2-31, the archived stream contains 269 runes. Its source SHA-256 is 493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68.
+
+	Window length	Total windows	Distinct patterns occurring at least twice
+
+	2	268	33
+
+	3	267	0
+
+
+The first three entries in the bigram report each occur three times. The script sorts by descending count, then by alphabet-index tuple, so ties have a reproducible order:
+
+	Rune labels	Indices	Starts
+
+	R–E	4, 18	84, 162, 233
+
+	H–O	8, 3	62, 131, 224
+
+	D–S	23, 15	7, 14, 41
+
+
+These are selected rows from the full report, not an exhaustive list of repeated pairs. The empty trigram list means every three-rune window is distinct under this rule. A longer exact repeat would contain a repeated trigram, so the same stream also has no exact repeat of length greater than three. This says nothing about approximate matches, other representations, or patterns spanning multiple pages.
+
+What a repeat does and does not establish
+
+Repeated windows are observations about the selected text. Their counts alone do not give a chance probability, a cipher family or a key length. Window overlap also means that the observed windows are not independent samples. A repeated run of identical symbols illustrates the problem: several windows can be produced by one local run.
+
+A fixed reversible alphabet substitution preserves the occurrence positions and counts of corresponding patterns, though it renames their symbols. Arbitrary transposition can change adjacency and therefore these counts. See cipher invariants before using n-grams to rank transformations.
+
+If you compare many window lengths, page subsets or candidate transformations, record the complete search scope and any selection rule. A significance test would need a stated comparison model and must repeat the selection procedure. This guide supplies a descriptive measurement only; it does not publish a new cipher experiment or claim that a technique has solved LP2-31.
+
+Sources and verification
+
+Counting script · small-example tests · archived LP2-31 input · alphabet and page index. The worked counts were reproduced on 20 October 2026. They validate the declared calculation, not an independent transcription of the original JPEG. Follow documenting a reproducible attempt when turning a measurement into a hypothesis test.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/downloads/reference-data.zip
+https://jelliottdev.github.io/reference/articles/running-scripts.html
+https://jelliottdev.github.io/reference/lp2-31.html
+https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+https://jelliottdev.github.io/scripts/rune_ngrams.py
+https://jelliottdev.github.io/scripts/test_rune_ngrams.py
+https://jelliottdev.github.io/text/lp2-31.txt
+https://jelliottdev.github.io/data/index.json
+https://jelliottdev.github.io/reference/articles/reproducibility.html
+
+Article: https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 
 
 ---

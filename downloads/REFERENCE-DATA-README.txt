@@ -6,6 +6,7 @@ From that folder, with Python 3, run:
   python scripts/reproduce_reading.py --check-all
   python scripts/reproduce_prime_sums.py
   python scripts/rune_ioc.py --check
+  python scripts/rune_ngrams.py lp2-31 --length 2
   python scripts/reproduce_cover_chain.py
   python scripts/reproduce_cover_rsa.py
   python scripts/reproduce_emerson.py

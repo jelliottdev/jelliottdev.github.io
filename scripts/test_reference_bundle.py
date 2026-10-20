@@ -27,6 +27,8 @@ def main():
             ["scripts/reproduce_reading.py", "--check-all"],
             ["scripts/reproduce_prime_sums.py"],
             ["scripts/rune_ioc.py", "--check"],
+            ["scripts/test_rune_ngrams.py"],
+            ["scripts/rune_ngrams.py", "lp2-31", "--length", "2"],
             ["scripts/reproduce_cover_chain.py"],
             ["scripts/reproduce_cover_rsa.py"],
             ["scripts/reproduce_emerson.py"],
