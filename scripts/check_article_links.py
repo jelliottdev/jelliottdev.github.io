@@ -52,6 +52,9 @@ def validate(root, articles, topics=()):
         for target in targets:
             if target.startswith("#/wiki/"):
                 route = urlsplit(target[1:])
+                if "#" in target[1:]:
+                    errors.append(f"{aid}: unsupported guide fragment {target}; use ?section= instead")
+                    continue
                 other = unquote(route.path[len("/wiki/"):])
                 if other not in parsed:
                     errors.append(f"{aid}: missing guide {target}")

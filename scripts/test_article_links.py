@@ -45,6 +45,14 @@ class ArticleLinks(unittest.TestCase):
                        "search alias points"]:
             self.assertTrue(any(phrase in e for e in errors), phrase)
 
+    def test_second_hash_is_not_a_router_section(self):
+        self.write("one", """<h2 id="exists">Existing</h2>
+        <a href="#/wiki/one#exists">Broken despite existing section</a>
+        <a href="#/wiki/one?section=exists">Working route</a>""")
+        errors, _ = validate(self.root, [{"id": "one"}])
+        self.assertEqual(len(errors), 1)
+        self.assertIn("unsupported guide fragment", errors[0])
+
     def test_topic_destinations_include_generated_readings(self):
         (self.root / "articles/readings").mkdir()
         (self.root / "articles/readings/reading.html").write_text(
