@@ -40,6 +40,25 @@ class EditorialNotes(unittest.TestCase):
         page = json.loads(self.outputs()[1])
         self.assertEqual(page["notes"], [self.archive])
         self.assertNotIn("Editorial note", json.loads(self.outputs()[0])["pages"][0]["notes_text"])
+        self.assertTrue(json.loads(self.outputs()[0])["pages"][0]["has_notes"])
+
+    def test_filter_tracks_added_and_withdrawn_editorial_notes(self):
+        page = json.loads(self.outputs()[1])
+        page["notes"] = []
+        self.save("data/pages/lp2-33.json", page)
+        apply_notes(self.root)
+        self.assertTrue(json.loads(self.outputs()[0])["pages"][0]["has_notes"])
+        self.save(SOURCE, {"records": []})
+        apply_notes(self.root)
+        summary = json.loads(self.outputs()[0])["pages"][0]
+        self.assertFalse(summary["has_notes"])
+        self.assertEqual(summary["notes_text"], "")
+
+    def test_stale_flag_on_non_editorial_page_is_reconciled(self):
+        self.save(SOURCE, {"records": []})
+        self.save("data/index.json", {"pages": [{"id": "lp2-33", "has_notes": False}]})
+        apply_notes(self.root)
+        self.assertTrue(json.loads(self.outputs()[0])["pages"][0]["has_notes"])
 
     def test_invalid_evidence_never_changes_published_records(self):
         baseline = self.outputs()

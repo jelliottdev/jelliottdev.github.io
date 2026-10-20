@@ -30,6 +30,7 @@ def apply_notes(root=ROOT):
                 page["notes"] = [n for n in page["notes"] if n.get("source") != SOURCE]
                 summary["notes_text"] = " ".join(n["title"] + " " + n["text"] for n in page["notes"])
                 updates.append((path, page))
+            summary["has_notes"] = bool(page["notes"])
             continue
         digest = hashlib.sha256((root / "images" / (pid + ".jpg")).read_bytes()).hexdigest()
         if digest != entry["image_sha256"] or digest != page["image_sha256"]:
@@ -47,6 +48,7 @@ def apply_notes(root=ROOT):
         page["notes"] = [n for n in page["notes"] if n.get("source") != SOURCE]
         page["notes"].extend(dict(n, source=SOURCE) for n in entry["notes"])
         summary["notes_text"] = " ".join(n["title"] + " " + n["text"] for n in page["notes"])
+        summary["has_notes"] = bool(page["notes"])
         updates.append((path, page))
     for path, value in [*updates, (root / "data/index.json", index)]:
         path.write_text(json.dumps(value, ensure_ascii=False, separators=(",", ":")), encoding="utf-8", newline="\n")
