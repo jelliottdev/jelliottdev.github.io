@@ -1,0 +1,124 @@
+{
+  "id": "grid-prime-paths-page-boundaries",
+  "title": "LP2-49–51: prime paths confined to each page",
+  "status": "published",
+  "question": "Does forbidding page crossings preserve the same three missing prime values?",
+  "summary": "The page-confined variant retains 151 occurrences of 44 distinct primes. It adds 1103 and 3011 to the missing set; the original three remain absent.",
+  "tags": [
+    "find a word",
+    "191 primes",
+    "missing primes",
+    "1033",
+    "2213",
+    "3301",
+    "alphanumeric grid",
+    "L256",
+    "directional search",
+    "base4",
+    "page boundaries",
+    "within page",
+    "1103",
+    "3011"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "First characters of case-preserved two-character tokens, stacked as 32 rows by 8 columns in manuscript order.",
+    "procedure": "Enumerate four-cell straight paths within each page in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+    "parameters": "1,148 directed within-page paths; no wrapping; leading zeroes allowed; page crossings forbidden; no turns or cell deletion.",
+    "exclusions": "Other layouts, path lengths, cross-page paths, removal of 4 cells, null-model simulation, decipherment and authorial intent."
+  },
+  "outcome": "not-supported",
+  "finding": "The exact three-value missing set is not preserved: 1033, 1103, 2213, 3011 and 3301 are absent. This boundary change removes 40 prime occurrences and two distinct values.",
+  "limitations": "One boundary-rule variant of an exploratory search. No probability, authorial-intent or plaintext claim; human review pending.",
+  "next_steps": "Compare future layout or path-rule variants within this family; a probability calculation requires a separately specified null model.",
+  "family": {
+    "id": "grid-directional-searches",
+    "title": "Directional searches in the alphanumeric grid",
+    "question": "Which values occur or are missing under specified grid layouts and path rules?",
+    "baseline": "grid-prime-paths"
+  },
+  "variant": {
+    "label": "Same grid and primality rule; page crossings forbidden",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Enumerate four-cell straight paths in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+        "after": "Enumerate four-cell straight paths within each page in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+        "reason": "Treat original manuscript page boundaries as barriers; retain all other counting rules."
+      },
+      {
+        "field": "parameters",
+        "before": "1,364 directed paths; no wrapping; leading zeroes allowed; page boundaries crossed; no turns or cell deletion.",
+        "after": "1,148 directed within-page paths; no wrapping; leading zeroes allowed; page crossings forbidden; no turns or cell deletion.",
+        "reason": "Treat original manuscript page boundaries as barriers; retain all other counting rules."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.",
+        "after": "Other layouts, path lengths, cross-page paths, removal of 4 cells, null-model simulation, decipherment and authorial intent.",
+        "reason": "Treat original manuscript page boundaries as barriers; retain all other counting rules."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent endpoint enumeration and sieve over archived page records; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-prime-paths-page-boundaries/run.py --check",
+    "environment": "Python 3.12.10 standard library. Independent check: python experiments/records/grid-prime-paths-page-boundaries/check.py",
+    "script": "experiments/records/grid-prime-paths-page-boundaries/run.py",
+    "inputs": [
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      },
+      {
+        "path": "experiments/records/grid-prime-paths-page-boundaries/check.py",
+        "sha256": "132439279ca1d73fc448c5be237be6ecfa1695645db2540315eda1d27924514e"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-prime-paths-page-boundaries/results.json",
+        "sha256": "8fdb01ab377fd2164415850c839bec132edc135dee90c8f059dab7fe074de6fb"
+      }
+    ],
+    "script_sha256": "6563dbbb499abaa1a5b7cb09de56335424d1a8d92ac853cdd597098bd7369e1d"
+  },
+  "sources": [
+    {
+      "label": "Joined-page baseline",
+      "url": "https://jelliottdev.github.io/#/experiments/grid-prime-paths"
+    },
+    {
+      "label": "Detailed reconstruction and exact search rules",
+      "url": "https://jelliottdev.github.io/#/wiki/grid-prime-paths"
+    },
+    {
+      "label": "Pinned published occurrence CSV",
+      "url": "https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/resources/find_a_word_primes.csv"
+    }
+  ],
+  "related": [
+    "grid-prime-paths"
+  ]
+}
