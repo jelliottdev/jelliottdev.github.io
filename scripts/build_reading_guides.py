@@ -41,6 +41,8 @@ def build():
         guide, method, formula = METHODS[control["method"]]
         page_links = " · ".join(f'<a href="#/page/{p["id"]}">{p["id"].upper()}</a>' for p in pages)
         body = f'<p>This known section covers {page_links}, in that order. The literal readings below preserve individual page boundaries. The contextual English at the end describes the whole section.</p>'
+        if section in {'first-koan', 'second-koan'}:
+            body += '<p>For the meaning and relationship of the dialogues, read <a href="#/wiki/koans">The two koans: identity and the inner voice</a>.</p>'
         body += f'<h2 id="method">Method and reproduction</h2><p><a href="#/wiki/{guide}">{method}: worked explanation</a>. The recorded transformation is <code>{escape(formula)}</code>, using zero-based positions in the 29-rune alphabet.</p>'
         if control["key"]:
             body += '<p>Key indices: <code>' + ", ".join(map(str, control["key"])) + '</code>.</p>'
@@ -50,7 +52,7 @@ def build():
         if control["skip"]:
             body += '<p>Copy these zero-based rune ordinals without advancing the sequence: <code>' + ", ".join(map(str, control["skip"])) + '</code>. See <a href="#/wiki/interruptions">interruptions and counting conventions</a>; these recorded positions are not a universal rule for other pages.</p>'
         body += f'<pre><code>python scripts/reproduce_reading.py {section}\npython scripts/reproduce_reading.py {section} --trace</code></pre>'
-        body += '<p>Run from the full repository with Python 3. The script checks its result against the shipped literal controls before printing. It uses no network or AI requests. <a href="scripts/reproduce_reading.py">Read the script</a> · <a href="data/evidence/reading-methods.json">Exact parameters and provenance</a>.</p>'
+        body += '<p>Run with Python 3 from the extracted <a href="downloads/reference-data.zip">reference-data bundle</a> or a full repository checkout. The script checks its result against the shipped literal controls before printing. It uses no network or AI requests. <a href="scripts/reproduce_reading.py">Read the script</a> · <a href="data/evidence/reading-methods.json">Exact parameters and provenance</a>.</p>'
         for p in pages:
             pid = p["id"]
             body += f'<h2 id="{pid}">{pid.upper()}: literal reading</h2><p><a href="#/reader/{pid}">Compare with the image</a> · <a href="#/page/{pid}?section=transcription">Transcription and corrections</a> · <a href="exports/{pid}.known-literal.txt" download>Download literal text</a></p>'
