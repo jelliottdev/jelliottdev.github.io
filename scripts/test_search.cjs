@@ -42,6 +42,26 @@ assert.equal(search.search(db,'spirals')[0].href,'#/wiki/spirals');
 assert.equal(search.search(db,'branches')[0].href,'#/wiki/branches');
 console.log('PASS: visual names, spelling variants, partial aliases, direct page results, and subject anchors');
 
+// These features share broad guide categories but belong to different sheets.
+// Adding the red clusters previously displaced black-dot pages for "dots".
+for(const [queries,id,section,pages] of [
+ [['red dots','red closing mark'],'dots','red-clusters',['lp2-22','lp2-32','lp2-55']],
+ [['reclining figure'],'mobius','closing-page',['lp2-22']],
+ [['blurry tree'],'branches','tree-comparison',['lp2-32']],
+ [['faint tree'],'branches','tree-comparison',['lp2-55']],
+]){
+ for(const query of queries){
+  const hits=search.search(db,query);
+  assert.equal(hits[0].href,`#/wiki/${id}?section=${section}`,query);
+  for(const page of pages)
+   assert(hits.slice(1,5).some(hit=>hit.page?.id===page),
+    `${query}: make the actual feature page ${page} directly available`);
+ }
+}
+assert.equal(search.search(db,'infinity').filter(hit=>hit.page)[0].page.id,'lp2-15',
+ 'The reclining figure must not replace the crossed-loop page for infinity');
+console.log('PASS: specific red-dot, figure and tree queries retain their own page destinations');
+
 // Distinctive literary phrases and catalogue identifiers should open their explanation.
 for(const [query,id,section] of [
  ['all that lives is holy','william-blake','parallel'],
