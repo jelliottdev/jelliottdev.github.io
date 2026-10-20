@@ -7712,6 +7712,39 @@ A runnable experiment needs the input sequence and starting index, seeds, exact 
 
 The arithmetic above is reproducible; the supplied description does not yet define that full selector. Its later matrix and Slidefair suggestions are separate proposals, not additional evidence for this unfinished Möbius rule. Compare search space and bounds, autokey and doublets, and the consecutive-integer totient experiment. That last experiment uses a different schedule and does not test this layered, crib-driven construction.
 
+QuagMirrors: distinguish the implementations
+
+QuagMirrors combines keyed alphabet substitutions with changing arithmetic and feedback from preceding symbols. It is a useful example of why an experiment needs a versioned algorithm: the published source contains four implementations with different rules. Their shared name does not make a result from one a test of the others.
+
+This is a source audit, not a decryption result. The files were inspected at revision 88ef1e60b0738b8b28db96bc9dc44dc4da8dd307. Each contains a 729-value ciphertext array and nine hardcoded 29-entry substitution tables. A static check confirms that every table is a permutation of indices 0–28. That establishes that the tables individually map symbols one-to-one; it does not establish that the complete feedback algorithm is invertible or that its output is plaintext.
+
+	Source file	What a reproduction must preserve
+
+	OG_quag_mirror.py	Branches on current and previous Möbius states; a conditional mirror bypass at index 30; stops after 153 loop iterations.
+
+	Mobius_AT_QuagMirror.py	Overrides the first intermediate value and first two mirror selections; stops after six iterations.
+
+	quag_mirror_WIP.py	Uses its own feedback branches and sign convention; contains a cutoff at 500 iterations.
+
+	quag_mirror_v4.py	Explicitly skips index 17 without updating the index or feedback state, then continues with the next ciphertext symbol; stops when its processing index reaches 48.
+
+
+These are limits and branches visible in the source, not assertions that every program reaches its cutoff successfully. In particular, a skipped ciphertext symbol and an incremented key position are different operations. In v4 the skip is removed from the list before continuing, so the following symbol uses the same processing index. A rewrite that advances the key at that point would test a different algorithm.
+
+How to turn this into a bounded experiment
+
+Choose one file at the pinned revision. Record its exact bytes and dependency versions, and compare its ciphertext array with the archived manuscript transcription before running it.
+Record all seeds, substitution tables, exceptional positions, feedback equations and stopping conditions. State which symbols advance each counter.
+First reproduce the original output without repairing or extending its rules. If a correction is necessary, save that as a separate variant with an explanation.
+Choose the scoring window and success criterion before evaluating new text. Keep the opening used to develop the rules separate from held-out evaluation.
+If searching variants, declare the complete set of allowed choices. Repeat that same search on control inputs; comparing the best tuned output with one untuned random output gives an unfair comparison.
+
+For example, allowing three arithmetic operations and twelve substitution choices independently at each of 17 positions creates up to 36^17 operation paths before accounting for duplicate outputs and state constraints. This is an illustrative search bound, not a measured coverage result for these nine-table scripts. The number of distinct outputs may be much smaller, and feedback can make choices dependent. A meaningful experiment must enumerate its actual rules rather than borrowing a probability from a different variant.
+
+Group future results under one QuagMirrors family, with separate records for each frozen implementation and changed variable. No completed QuagMirrors experiment is claimed here. Compare search space and bounds, feedback equations and doublets, and the difference between fitting a crib and predicting new text.
+
+Primary source: the four pinned QuagMirrors implementations. Inspection does not establish the derivation of the hardcoded mirror tables, a full-page reading, or an exhaustive negative result.
+
 Sources and related references
 
 NIST DLMF definition, checked 20 October 2026. Manuscript context: LP1-05 and the Möbius visual-feature guide. For other frequently confused arithmetic operations, compare prime indices and totients.
@@ -7737,10 +7770,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_lp2_40_crib.py
 - search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
-- autokey and doublets
+- autokey and doublets; feedback equations and doublets
   https://jelliottdev.github.io/reference/articles/doublets.html#autokey
 - consecutive-integer totient experiment
   https://jelliottdev.github.io/#/experiments/lp2-totient-openings
+- difference between fitting a crib and predicting new text
+  https://jelliottdev.github.io/reference/articles/mobius-function.html#crib-limits
+- the four pinned QuagMirrors implementations
+  https://github.com/sgroveman/cicada3301_lp/tree/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts
 - LP1-05
   https://jelliottdev.github.io/reference/lp1-05.html
 - prime indices
