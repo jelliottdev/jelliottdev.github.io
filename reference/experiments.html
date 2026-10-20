@@ -2834,6 +2834,410 @@
   &quot;article&quot;: &quot;# Simple row and column transposition routes\n\n## Why this test?\n\nReading a page backwards or down its columns is a natural first attempt. But “try transposition” leaves many decisions unstated: the alignment of uneven rows, which corner to start from, whether direction alternates, and whether symbols are also substituted.\n\nThis record tests a small, explicit set of pure rearrangements. Its success criterion is exact agreement with one of nine known 12-rune openings at the start of the output. It does not score English or assume every valid plaintext must reuse an existing opening.\n\n## Plan and input layout\n\nThe plan and runner were committed as `26802b6` before execution. Use all archived LP2-00–55 text, retaining recognized runes and grouping them by source line. Headings remain included. Non-rune characters and lines without runes are ignored. LP2-50 remains an explicit zero-rune page and produces no routes.\n\nRows are left-aligned by rune ordinal, not by measured image coordinates. The first rune of every nonempty line is in ordinal column zero. Short rows remain short; missing cells are skipped, not padded. This convention can differ from the manuscript&#x27;s physical column alignment.\n\n## The sixteen route choices\n\n| Choice | Options | Meaning |\n| --- | --- | --- |\n| Main axis | Rows / columns | Visit a complete row or ordinal column at a time |\n| Outer direction | Forward / reversed | Top-to-bottom versus bottom-to-top rows; left-to-right versus right-to-left columns |\n| Initial inner direction | Forward / reversed | Left-to-right versus right-to-left within a row; top-to-bottom versus bottom-to-top within a column |\n| Alternate inner direction | No / yes | Keep the same direction, or reverse it on every other visited row/column |\n\nThe product is 2 × 2 × 2 × 2 = 16 parameter routes per nonempty page. Alternation begins with the selected initial direction and changes by visited-group ordinal, not by the original printed row number. Some routes or output strings can coincide; 16 is a parameter count, not a claim of 16 distinct texts on every page.\n\nNo substitution, fixed shift or repeating key is applied. A pure transposition uses every source position once and keeps its rune value.\n\n## Hand-checkable ragged-row controls\n\nFor the invented rows `ABC`, `DE`, `F`, ordinary column-first reading gives `ADFBEC`. Row-first reading with alternating directions gives `ABCEDF`. These are implementation controls only, not manuscript inputs or results.\n\nThe independent checker verifies those controls and constructs every real route by sorting source coordinates with a separate ordering-key implementation. It checks that each saved route is a complete permutation and every output index comes from its declared source position.\n\n## Results and limits\n\nAll 880 parameter routes completed across the 55 pages with eligible runes. No output&#x27;s first 12 indices matched any of the nine fixed known-reading openings. There are 7920 exact opening comparisons in total.\n\nThe nine opening vectors come from Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. Their exact values and source-trace hashes are recorded in the plan. They were fixed before this search.\n\nThis negative result is limited to those openings, these routes and the archived layout convention. It does not rule out other beginnings, arbitrary column permutations, spirals, rectangular reflow, physical coordinate alignment, a different region, or transposition combined with substitution. There is no probability claim or general readability score.\n\n## Follow an output back to its source\n\nEach page has a `source_positions` array. Every entry gives its zero-based source ordinal, one-based archived line, one-based rune position within that line, and alphabet index. Each candidate&#x27;s `source_ordinals` array is the output-to-input mapping: its first number tells you which original position supplied output position zero.\n\nThe accompanying `output_indices` array contains the corresponding rune indices. The `alphabet` list maps indices back to rune symbols. Original whitespace and punctuation are not part of the permutation.\n\nThe diagram shows the first six positions of the ordinary column-first route on LP2-31. It is extracted from the saved result, not an invented grid. All 269 positions are retained in that route&#x27;s complete trace.\n\n## Reproduce\n\nUse Python 3.12.10 and the repository checkout. No third-party package or network service is required.\n\n```\npython experiments/records/lp2-row-column-routes/run.py --check\npython experiments/records/lp2-row-column-routes/check.py\n```\n\nThe first command regenerates and compares every source position, route, output index and match decision. The second uses the independent ordering-key checker. Both reject discrepancies rather than silently replacing the saved result.\n\n[Download all routes and source traces](experiments/records/lp2-row-column-routes/results.json). To save another report, run the main script with `--output my-routes.json`; it refuses an existing filename. The plot script reads the saved result and draws one trace without searching again.\n\n## Retest and review\n\nCodex reran the complete enumeration and verified all 880 candidates with the independent ordering implementation on 20 October 2026. No route rule, layout choice, opening vector or matching criterion changed after the first run. The checker and diagram were added afterward for verification and explanation. Human review remains pending.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) includes whole-stream reversal with shifts and a different opening criterion. The [transposition guide](#/wiki/transposition) explains the documented historical 14-column permutation. Neither record establishes that every transposition on an unsolved page has been searched.\n\nA physically aligned column model, a justified spiral, a new region or an added substitution needs a separately planned variant. Preserve its source-coordinate trace so another reader can tell exactly which operation was performed.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-row-column-routes/article.md&quot;,
   &quot;script_sha256&quot;: &quot;7db305eae184041f3bd4732625f7f240aa1da82170a722e94b6d72dae87c421c&quot;
+}</pre></article><article id="lp2-row-emirp-sums"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-row-emirp-sums&quot;,
+  &quot;title&quot;: &quot;LP2-00–55: emirp row sums with the same page shuffles&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do archived LP2-00–55 row sums contain more emirps than the same page shuffles used in the prime-sum baseline?&quot;,
+  &quot;summary&quot;: &quot;41 of 594 archived row sums are emirps. The baseline’s same 999 shuffled datasets give 539 totals at least as large; corrected upper-tail p=0.540.&quot;,
+  &quot;tags&quot;: [
+    &quot;emirp&quot;,
+    &quot;emirps&quot;,
+    &quot;prime sums&quot;,
+    &quot;row sums&quot;,
+    &quot;decimal reversal&quot;,
+    &quot;reverse digits&quot;,
+    &quot;Gematria Primus&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;representation&quot;: &quot;Each nonempty archived text line with at least one recognized rune defines one row. Include headings. Remove non-alphabet characters; ignore rows with no recognized runes. No corrections or decryption. LP2-50 contributes zero eligible rows.&quot;,
+    &quot;procedure&quot;: &quot;Total number of rows whose prime-value sum is prime, has a prime base-ten decimal reversal, and differs from its reversal. One global statistic; per-page counts are descriptive only. Independently permute the full rune multiset within each page, then partition it using that page’s original row lengths. Preserve page counts and every row length, not words or per-row counts.&quot;,
+    &quot;parameters&quot;: &quot;594 eligible rows; 56 declared pages, 55 with runic rows; 999 full-dataset trials; seed 330133; greater-than-or-equal upper tail; plus-one Monte Carlo correction; alpha 0.05.&quot;,
+    &quot;exclusions&quot;: &quot;Prime palindromes, prime ordinals, decoded text, arbitrary regions, changed spellings, other bases or boundaries and page-specific significance claims.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;41 emirp-valued rows; 539/999 shuffled totals meet or exceed 41, giving corrected upper-tail p=0.540. All baseline prime-count vectors reproduce.&quot;,
+  &quot;limitations&quot;: &quot;Global row-boundary count only. No evidence of excess under this model does not exclude deliberate individual sums or establish randomness. Uses the same shuffles as the prime baseline, not independent evidence. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Declare other boundaries, numeral bases or selected-region rules separately. Account for selection when choosing among alternative properties.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;archived-row-prime-sums&quot;,
+    &quot;title&quot;: &quot;Prime sums at archived row boundaries&quot;,
+    &quot;question&quot;: &quot;Do predefined row boundaries yield an excess of prime or emirp sums under fixed shuffle rules?&quot;,
+    &quot;baseline&quot;: &quot;lp2-row-prime-sums&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Emirp criterion; same inputs, boundaries and shuffles&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Total number of rows with a prime sum across all selected pages. One global statistic; per-page counts are descriptive only. Independently permute the full rune multiset within each page, then partition it using that page’s original row lengths. Preserve page counts and every row length, not words or per-row counts.&quot;,
+        &quot;after&quot;: &quot;Total number of rows whose prime-value sum is prime, has a prime base-ten decimal reversal, and differs from its reversal. One global statistic; per-page counts are descriptive only. Independently permute the full rune multiset within each page, then partition it using that page’s original row lengths. Preserve page counts and every row length, not words or per-row counts.&quot;,
+        &quot;reason&quot;: &quot;Require a different prime decimal reversal in addition to a prime sum.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Emirps, prime ordinals, decoded text, arbitrary regions, changed spellings, other boundaries and page-specific significance claims.&quot;,
+        &quot;after&quot;: &quot;Prime palindromes, prime ordinals, decoded text, arbitrary regions, changed spellings, other bases or boundaries and page-specific significance claims.&quot;,
+        &quot;reason&quot;: &quot;Test emirps while explicitly excluding prime palindromes and other numeral bases.&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex — full rerun, independent observed classifications and first three null trials, all baseline prime-count vectors checked; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-row-emirp-sums/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12.10 standard library. Independent check: python experiments/records/lp2-row-emirp-sums/check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-row-emirp-sums/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;06199c50fe1cdfa1f87b75cae2185858a500ee0e861cff465a0142625f315db0&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/plan.json&quot;,
+        &quot;sha256&quot;: &quot;7b45bb8ec624472990ca867854804be6d0329f9a617c643d755f42f208dfded9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/check.py&quot;,
+        &quot;sha256&quot;: &quot;23f56a2c2fbdc4ba68790fec27d422c1ab5229dca39fbde80d53887231e56c16&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/plot.py&quot;,
+        &quot;sha256&quot;: &quot;0513099e1610ff183c1e8429c6954f1e31427168b6c85dad9b28a09b07ece73d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;3a0a170bc72e32b4d989319ba2db93562c03a9cc3724f7912453c54a7ec16775&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-prime-sums/plan.json&quot;,
+        &quot;sha256&quot;: &quot;518747c953941c766909a5a0d5f9d7296366708a73b4ccd1ec06498260209ec6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-prime-sums/results.json&quot;,
+        &quot;sha256&quot;: &quot;66bdd16bcc0a3aa94e85cb872c1a9aa7509cbf8d963f199fdfb1daa0c078432b&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/results.json&quot;,
+        &quot;sha256&quot;: &quot;fda8f625486bf7bbc0929db3e699284aa4018160e5848e8e66e2d550c89b873e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/null-distribution.svg&quot;,
+        &quot;sha256&quot;: &quot;e57002478b2532d271252e1bf732e17720f26b9e6142e29bec2be0678a1e5ede&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/observed-rows.csv&quot;,
+        &quot;sha256&quot;: &quot;2aa088b3467fa980c2530cc7948a36fde693173980a8516fd08a2ebb0bdef46a&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Emirps and decimal reversal&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/emirps&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Prime-row baseline&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-row-prime-sums&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-row-emirp-sums/null-distribution.svg&quot;,
+      &quot;caption&quot;: &quot;41 observed emirp-valued row sums against the same 999 page shuffles as the prime-sum baseline. The upper-tail p-value is 0.540; shared inputs do not provide independent evidence.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Emirp sums at archived row boundaries\n\nThis variant asks whether the archived rows of LP2-00–55 produce an excess of **emirp-valued sums**. It follows the [prime-row baseline](#/experiments/lp2-row-prime-sums), keeping its pages, row lengths, input values, shuffle sequence, trial count and upper-tail rule.\n\nThere are 41 qualifying rows among 594 eligible rows. Of 999 simulated datasets, 539 have at least 41. The corrected upper-tail p-value is **0.540**. This does not provide evidence of excess emirp row sums under the declared shuffle model.\n\n## What changes from the baseline?\n\nThe baseline counts a row when its Gematria Primus sum is prime. This variant adds two requirements: reversing its base-ten decimal digits must produce a prime, and the reversed value must differ from the original.\n\n| Sum | Decimal reversal | Qualifies? |\n| --- | --- | --- |\n| 13 | 31 | Yes: distinct primes |\n| 23 | 32 | No: the reversal is composite |\n| 101 | 101 | No: a prime palindrome is excluded |\n| 107 | 701 | Yes: distinct primes |\n\nThese are arithmetic controls, not selected manuscript observations. Reversal acts on the decimal digits of the completed sum. It does not reverse rune order, complement digits, reverse a prime ordinal or use another numeral base. See [emirps and decimal reversal](#/wiki/emirps).\n\nEach eligible row counts once when it qualifies. Two different rows with the same qualifying sum still count as two rows; the statistic is not a count of distinct numerical values.\n\n## What stays fixed?\n\nEvery nonempty archived line containing recognized runes is an eligible row, including headings. Non-rune characters are removed before summing Gematria Primus prime values. LP2-50 contributes no runic rows. No correction, decryption or respelling is applied.\n\nFor each simulated dataset, the full rune multiset of each page is shuffled and then divided using that page&#x27;s original row lengths. This preserves page frequencies and row lengths, but not each row&#x27;s original frequencies or word structure.\n\nThe seed remains 330133, with the same page order, trial order and Python shuffle calls as the baseline. There are 999 complete-dataset trials. The decision compares the global observed count with simulated global counts, includes ties, uses the plus-one Monte Carlo correction, and retains the 0.05 threshold.\n\nThe baseline excludes emirps from its scope; this variant explicitly tests them. Its other exclusions remain visible in the scope comparison. The baseline finding has not been replaced or reinterpreted.\n\n## Recorded result\n\n![Emirp row-sum counts across the baseline’s 999 shuffled datasets, with the observed count of 41 marked.](experiments/records/lp2-row-emirp-sums/null-distribution.svg)\n\n| Quantity | Result |\n| --- | --- |\n| Eligible rows | 594 |\n| Observed prime-valued rows, as in the baseline | 76 |\n| Observed emirp-valued rows | 41 |\n| Simulated emirp-count range | 20–60 |\n| Mean simulated emirp count | Approximately 41.40 |\n| Simulated totals at least 41 | 539 of 999 |\n| Corrected upper-tail p-value | (539 + 1) / (999 + 1) = 0.540 |\n\nThe 41 emirp rows are a subset of the 76 prime rows. The two experiments are related measurements on the same observed and simulated inputs, not independent evidence. Comparing their p-values does not establish that one property is more intentional or more useful for decryption.\n\nThis is a sampled comparison. Its approximate Monte Carlo standard error is 0.016, calculated as `sqrt(q × (1 − q) / 999)` with `q = 539 / 999`. That estimate describes simulation uncertainty, not uncertainty about the transcription or the choice of model.\n\n## Inspect and reproduce\n\nFrom the repository root with Python 3.12.10:\n\n```sh\npython experiments/records/lp2-row-emirp-sums/run.py --check\npython experiments/records/lp2-row-emirp-sums/check.py\n```\n\nThe first command repeats every observed row and all 999 trials. The second verifies observed primality by trial division and reverses digits arithmetically with division and remainders. This differs from the runner&#x27;s sieve and string reversal. It also independently checks the first three shuffled datasets and audits all stored totals, tail decisions and baseline prime-count vectors.\n\n[Download the row CSV](experiments/records/lp2-row-emirp-sums/observed-rows.csv) for all 594 eligible rows, including those that do not qualify. Each row includes the page, one-based archived line number, rune count, sum, decimal reversal and both classifications. LP2-50 has no eligible CSV rows; it remains explicit in the full report.\n\n[Download the JSON report](experiments/records/lp2-row-emirp-sums/results.json) for the observed rows and all trial counts. Each trial retains `page_counts` for emirps and `prime_page_counts` for comparison with the baseline. Both vectors follow `null_page_order`.\n\nSave a new result without replacing the reviewed file:\n\n```sh\npython experiments/records/lp2-row-emirp-sums/run.py --output emirp-rerun.json\n```\n\nThe output file must not already exist. The standard-library scripts read local files; no AI service is involved. Regenerate the chart and CSV with:\n\n```sh\npython experiments/records/lp2-row-emirp-sums/plot.py\n```\n\n## Plan and verification\n\nThe plan and runner were committed as `1d901b4` before the full calculation. The prime baseline was already known, and emirps were an existing topic of interest. The plan discloses that this is a follow-up rather than a blind discovery. No property, input rule, seed, threshold or tail changed after inspection.\n\nThe checker verifies that the baseline&#x27;s unchanged plan fields still agree. Every observed sum and prime classification matches the earlier record; all 999 per-page prime-count vectors also match. Emirp counts never exceed their corresponding prime counts. A complete second execution reproduces the full result.\n\nCodex performed these computational checks on 20 October 2026. Human review remains pending.\n\n## Limits\n\nThe test concerns a global excess at archived row boundaries. It does not test selected words, decoded sentences, other numeral bases, alternative boundaries, prime-index transformations or the meaning of a particular number. It does not assign page-specific significance.\n\nA result above the threshold does not prove that no row was deliberately constructed, nor that the manuscript is random. It says that this aggregate emirp count is not unusually high under this specific comparison. Alternative statistics selected after seeing results need a new declared procedure and an appropriate treatment of selection; see [null models](#/wiki/null-models).\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-row-emirp-sums/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;06199c50fe1cdfa1f87b75cae2185858a500ee0e861cff465a0142625f315db0&quot;
 }</pre></article><article id="lp2-row-prime-sums"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp2-row-prime-sums&quot;,
   &quot;title&quot;: &quot;LP2-00–55: prime row sums against shuffled pages&quot;,
@@ -2919,7 +3323,7 @@
   &quot;family&quot;: {
     &quot;id&quot;: &quot;archived-row-prime-sums&quot;,
     &quot;title&quot;: &quot;Prime sums at archived row boundaries&quot;,
-    &quot;question&quot;: &quot;Do predefined row boundaries yield more prime-valued sums than a specified shuffle comparison?&quot;,
+    &quot;question&quot;: &quot;Do predefined row boundaries yield an excess of prime or emirp sums under fixed shuffle rules?&quot;,
     &quot;baseline&quot;: &quot;lp2-row-prime-sums&quot;
   },
   &quot;variant&quot;: {
