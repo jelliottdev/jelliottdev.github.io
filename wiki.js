@@ -104,7 +104,14 @@ function payloadSection(p){
  p.id==='lp1-03'?'The signed body contains “Let the text guide you,” a good-luck message, and hexadecimal JPEG data. The embedded image is separate from this visible manuscript page.':
  'The signed body contains historical instructions about a Tor hidden service, uploads, and magic squares. Read it as an archived puzzle document, not a current instruction for this site.';
  return `<section id="embedded"><h2>Embedded OutGuess content</h2><p>${explanation}</p><p>Default-key extraction reproduced ${db.payloads.verified_on}: <b>${r.payload_bytes.toLocaleString()} bytes</b>. The separated signed message verified against the <a href="#/wiki/pgp-signatures">recorded public key</a>. This verifies the message, not the entire JPEG.</p>
- <p><a href="${r.payload_path}" download>Download full extraction</a> · <a href="${r.signed_path}" download>Signed message</a> · <a href="${r.body_path}">Message body</a></p>
+ <dl class="article-directory">
+ <div><dt><a href="${esc(r.payload_path)}" download>Full extraction</a></dt><dd>Unchanged OutGuess output (${r.payload_bytes.toLocaleString()} bytes). Compare this file with a fresh extraction from the original JPEG.</dd></div>
+ <div><dt><a href="${esc(r.signed_path)}" download>Signed message</a></dt><dd>The armored PGP block, used to verify the signature against the recorded key.</dd></div>
+ <div><dt><a href="${esc(r.body_path)}">Read the message body</a> · <a href="${esc(r.body_path)}" download>Download</a></dt><dd>${early?'The hexadecimal content inside the signed message. This body file is not itself a signed block.':'The message content separated from its signature. Keep the signed message when checking authenticity.'}</dd></div>
+ ${r.decoded_path?`<div><dt><a href="${esc(r.decoded_path)}" download>Decoded bytes for XOR</a></dt><dd>${r.hex_decoded_bytes.toLocaleString()} bytes decoded from the hex body. Combine these with the other two pages’ decoded streams; do not XOR the text of the hex digits.</dd></div>`:''}
+ </dl>
+ ${r.embedded_image_path?`<figure><a href="#/wiki/lp1-03-embedded-image"><img class="embedded-facsimile" src="${esc(r.embedded_image_path)}" loading="lazy" alt="Small JPEG decoded from LP1-03’s signed body: a row of runes and decimal digits."></a><figcaption>This image was decoded from the hidden message; it is not a crop of the manuscript. <a href="${esc(r.embedded_image_path)}" download>Download the decoded JPEG</a> · <a href="#/wiki/lp1-03-embedded-image">Read its transcription and reproduction steps</a>.</figcaption></figure>`:''}
+ <p><a href="#/downloads/${p.id}">All page files, sizes and checksums</a></p>
  <p><a href="#/wiki/${early?'cover-chain':'embedded-payloads'}">${early?'Follow the three-image chain':'Read the payload inventory'}</a> · <a href="#/wiki/outguess">How to extract it</a> · <a href="${r.source_url}">Archived source</a></p>
  <details><summary>Exact payload checksum</summary><p class="checksum">${esc(r.payload_sha256)}</p><p class="small">SHA-256 of the full extraction. <a href="data/evidence/embedded-payloads.json">Manifest with separate signed-block and body hashes</a>.</p></details></section>`;
 }
