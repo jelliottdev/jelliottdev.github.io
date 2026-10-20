@@ -5,8 +5,35 @@ Make the question, inputs, transformations, and limits checkable.
 Define the claim
 Name page IDs, regions, input hashes, transcription versions, transformation order, key space, offsets, and boundary rules. State which parameters were fixed in advance and which were selected after viewing outputs.
 
+Turn “try shifts” into a bounded question
+
+The following is a planning example, not a completed experiment. It shows how to specify a small search on LP2-31 without implying that the page is expected to use this method.
+
+	Decision	Example specification
+
+	Input	The archived text/lp2-31.txt, with its SHA-256 recorded at run time
+
+	Symbols	Only the 29 recognized runes, including rune headings; punctuation and decimal digits excluded
+
+	Order	The complete rune stream in its original order, or the complete stream reversed
+
+	Transformation	For each order, subtract one fixed shift k modulo 29 from every rune index
+
+	Bounds	Every integer k from 0 through 28; no skipped runes, alternate spellings, or extra transformations
+
+	Outputs	All 58 labeled parameter cases, not only the most readable fragment
+
+	Criterion	Before running, specify an independently motivated exact rune-index prefix or a fully defined scoring rule
+
+
+There are 2 × 29 = 58 parameter cases. This is not a claim that all 58 output strings must be distinct. If you later try both including and excluding a heading, you have added another input choice. Record the new scope and count; do not describe the enlarged search as the original test.
+
+“Looks like English” is not a sufficiently reproducible criterion on its own. An exact comparison needs the expected symbols and positions. A language score needs its formula, reference data, normalization, and selection rule. Whole-stream IoC is unsuitable for ranking this example’s cases because a fixed shift and a reversal preserve it; see what cipher operations preserve.
+
 Use known controls
 A control has an expected result. Reproducing the warning checks an Atbash implementation; reproducing LP2-56 checks a particular prime schedule. One control does not validate every method or transcription.
+
+Check the parts used by your own test. For the shift example, a short sequence with a hand-calculated result can detect an addition/subtraction error. A round trip checks that the inverse restores the input; an unchanged rune count checks that nothing was silently dropped. These checks serve different purposes. A round trip alone can pass even when encryption and decryption share the same mistaken convention.
 
 For setup and a worked trace before writing your own attempt, see running the reproduction scripts.
 What to record
@@ -22,13 +49,30 @@ Trying many spellings, boundaries, reversals and offsets creates opportunities f
 Report “no match under these parameters,” not “the technique cannot work.” Label patterns selected after inspection as candidates for independent testing. See spelling and sums.
 
 Worked distinctions: emirps and prime-index calculations.
+Write a conclusion that matches the run
+
+Use these as wording patterns, not as results already obtained:
+
+No exact match: “None of the 58 declared cases matched the specified prefix at the declared position.” This does not rule out different keys, transcriptions, regions, or a different expected prefix.
+A high-scoring candidate: “This case ranked first under the stated score.” First place alone does not show that its score is unusual, that its text is meaningful, or that the method is correct.
+Incomplete run: “The run stopped after these cases; the remaining cases were not checked.” An interrupted search is not a negative result for the full parameter range.
+
+If a candidate prompted you to change a boundary or add an exception, keep the earlier outputs and label the revised test separately. The history explains which observations motivated which decisions. A new test can be useful without pretending its choices were made independently of the first result.
+
+Make it easy for someone else to retest
+
+Provide one command, the exact inputs, dependency versions, expected output location, and the comparison to perform. Keep the script readable and make failure visible: a missing file, unknown rune, or incomplete output should not quietly become an empty result. Store machine-readable results alongside an explanation of their fields.
+
+A retest should compare the stated outputs, not merely confirm that the script exits successfully. Record who reviewed the result and what they checked. The registry’s published status requires that review; an example in this guide or a draft in the repository is not a published experiment record.
+
 The research registry
 Have we tried it? compares techniques and scope in published records. Background pages do not count as experiments. The registry remains empty while records are prepared and retested. The contribution format describes publication requirements.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. The linked known-reading recipes provide controls. The 58-case scope above is an instructional specification; this article reports no execution or finding for that hypothetical search.
 
 Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 https://jelliottdev.github.io/reference/articles/atbash.html
 https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 https://jelliottdev.github.io/reference/articles/running-scripts.html
