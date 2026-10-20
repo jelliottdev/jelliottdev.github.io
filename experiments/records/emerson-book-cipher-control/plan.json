@@ -1,0 +1,32 @@
+{
+  "question": "Do the archived opening-image coordinates reproduce the documented historical string with the frozen Emerson PDF derivative and its declared conventions?",
+  "purpose": "Known-result replication, not blind discovery or a test of an unsolved LP2 page.",
+  "inputs": [
+    {
+      "path": "scripts/reproduce_emerson.py",
+      "sha256": "5074ccdfceb377e31bcbd1421fa4fdf42e06f66bbdda6ddc113455633c8beb2e"
+    },
+    {
+      "path": "data/evidence/emerson-book-cipher.json",
+      "sha256": "c4388c38cf6cdc9885b127b4cc228115b46d968779f700c6ff811c60ab87f2b8"
+    },
+    {
+      "path": "exports/sources/emerson-self-reliance.pdf",
+      "sha256": "fee032e9ff4f2429fccc120831f9ad7a6d27d36f70828f037c191d5f34900abd"
+    },
+    {
+      "path": "exports/sources/emerson-paragraphs.json",
+      "sha256": "f7cbcaac8a9e75e58122b6b526e4da740bf4f94a746ceb3315c6c1b07305eba6"
+    },
+    {
+      "path": "exports/steganography/opening-2014.body.txt",
+      "sha256": "eae028cde5bb5f28459c5b88e201c05ad27c8dba3d81a2d0c3e1e4c99286f733"
+    }
+  ],
+  "procedure": "Re-extract the pinned PDF with pypdf 6.19.0, compare all 50 paragraphs, then apply the published one-based paragraph:sentence:word:letter rules and literal characters. Compare the full trace with the archived control.",
+  "expected": "auqgnxjtvdbll3pv.onion",
+  "prior_adjustment": "Earlier reconstruction changed the treatment of embedded verse after observing mismatches; that corrected rule is frozen here. This rerun is not an independent discovery.",
+  "stopping_rule": "One full reconstruction and trace comparison; repeat to verify identical output. No website or hidden-service requests.",
+  "exclusions": "Other editions, other texts, arbitrary coordinate searches, unsolved-page transfer and validation of any current network destination.",
+  "declared_before_rerun": "2026-10-20"
+}
