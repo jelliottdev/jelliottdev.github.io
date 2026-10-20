@@ -20,6 +20,8 @@ def register(path,role,page=None):
  f=root/path;data=f.read_bytes();row={'path':path,'url':base+path,'role':role,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()}
  if page:row.update(page=page['id'],release=page['release'])
  # Human labels and archive aliases remain separate from the preserved path.
+ if 'message-2016' in path or 'message-2017' in path or 'later-messages' in path:
+  row.update(title='2016–2017 signed messages and verification',aliases=['2016 message','2017 message','4gq25.jpg','way map road direction'],guide='later-messages')
  if 'second-chance-2012' in path:
   row.update(title='2012 second-chance painting and message',aliases=['NHYLD.jpg','Lady of Shalott','Waterhouse'],guide='lady-of-shalott')
  elif 'opening-2014' in path:
@@ -31,6 +33,8 @@ def register(path,role,page=None):
  elif 'emerson' in path:
   row.update(title='Emerson Self-Reliance book cipher',aliases=['Self Reliance','Dartmouth','book cipher'],guide='emerson-self-reliance')
  files.append(row)
+register('images/message-2016.jpg','Historical later-message image')
+register('data/evidence/later-messages.json','Historical later-message provenance')
 register('images/second-chance-2012.jpg','Historical second-chance image')
 register('data/evidence/second-chance-2012.json','Historical second-chance provenance')
 register('images/1033.jpg','Historical illustrated cover')
@@ -531,10 +535,10 @@ for experiment in read('data/experiments.json')['records']:
   if not any(f['path']==path for f in files):register(path,'Experiment file')
 
 # Bundles preserve each member's exact bytes and repository-relative path.
-for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
+for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Structured experiment record'})
- if name=='reference-data':roles.update({'Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Historical later-message provenance','Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
