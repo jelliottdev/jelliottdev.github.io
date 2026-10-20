@@ -44,6 +44,27 @@ Row and column positions below start at 1. Latin labels identify the original ru
 	5, 3	CABAL	13 + 97 + 61 + 97 + 73	341
 For example, the top-row rune word gives 341. The first row then becomes 272 + 138 + 341 + 131 + 151 = 1033. The complete reading places the grid beside the statements about primes and the totient function; those statements and this additive conversion are related context, not interchangeable arithmetic operations.
 Run python scripts/check_number_examples.py from the repository folder. Its lp1_05 result includes every rune cell, the converted matrix, all twelve line sums, and input hashes. The script reads the page and alphabet records and checks that the conversion equals the historical numeric example. Unknown symbols cause an error rather than being silently discarded.
+Equal sums do not mean matching words
+Turn the converted LP1-05 number grid through 180 degrees and every value matches its opposite. Do the same with the printed tokens and five of the twelve opposite pairs differ. The remaining seven pairs match exactly; the center cell stays in place. Here are the five differences, using one-based row and column positions:
+	Printed token	Opposite token	Value
+	SHADOWS
+Row 1, col 3	CABAL
+Row 5, col 3	341
+	BUFFERS
+Row 2, col 2	MOURNFUL
+Row 4, col 4	199
+	CARNAL
+Row 2, col 4	ANALOG
+Row 4, col 2	320
+	226
+Row 3, col 1	MOBIUS
+Row 3, col 5	226
+	OBSCURA
+Row 3, col 2	245
+Row 3, col 4	245
+The word pairs SHADOWS/CABAL, BUFFERS/MOURNFUL and CARNAL/ANALOG have equal additive rune values despite having different rune sequences. The other two pairs put a decimal number opposite a rune word. Thus the symmetry belongs to the converted values, not to identical writing in every opposite cell.
+This is an example of a sum collision: different inputs produce the same total. Addition also loses order, so rearranging the same runes leaves their sum unchanged. A total therefore cannot uniquely recover a word, establish that two words mean the same thing, or specify a decoding rule. The spelling and prime-sum guide explains why word order and rune choice must be kept separate when evaluating unusual spellings.
+To reproduce this distinction, run python scripts/check_number_examples.py and inspect lp1_05.half_turn_pairs. Each pair records its positions, Latin labels, whether its original tokens match, and its converted values. The output reports printed_tokens_half_turn_symmetric: false and converted_values_half_turn_symmetric: true. The first comparison is between stored tokens, not a pixel-by-pixel test of the handwriting.
 The printed 3301 square on LP1-16
 
 The final LP1 sheet contains a five-by-five decimal square below the heading read as CNOW THIS. These are printed numbers, not prime values calculated from runes. The complete instruction reading preserves their position after the text and insect illustration.
@@ -165,6 +186,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp1-05
 - complete reading
   https://jelliottdev.github.io/reference/articles/reading-some-wisdom.html
+- spelling and prime-sum guide
+  https://jelliottdev.github.io/#/spelling
 - complete instruction reading
   https://jelliottdev.github.io/reference/articles/reading-instruction.html
 - LP1-16 detail: the red heading above five rows of decimal numbers.; Original JPEG

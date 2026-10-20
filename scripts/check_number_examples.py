@@ -42,6 +42,23 @@ def main():
                               "sum": value})
         converted.append(values)
     assert converted == square
+    opposite_pairs = []
+    for r in range(5):
+        for c in range(5):
+            if r * 5 + c >= 12:
+                continue  # Count each opposite pair once; omit the fixed center.
+            other_r, other_c = 4 - r, 4 - c
+            left, right = mixed_rows[r][c], mixed_rows[other_r][other_c]
+            def label(token):
+                return token if token.isdecimal() else "".join(alphabet[ch]["latin"] for ch in token)
+            opposite_pairs.append({
+                "positions": [[r + 1, c + 1], [other_r + 1, other_c + 1]],
+                "labels": [label(left), label(right)],
+                "same_printed_token": left == right,
+                "values": [converted[r][c], converted[other_r][other_c]],
+            })
+    assert all(pair["values"][0] == pair["values"][1] for pair in opposite_pairs)
+    assert sum(not pair["same_printed_token"] for pair in opposite_pairs) == 5
     record_bytes = (root / "data/pages/lp1-16.json").read_bytes()
     record = json.loads(record_bytes)
     printed = [[int(value) for value in line.rstrip("/").split("-")]
@@ -78,6 +95,9 @@ def main():
             "image_sha256": mixed_record["image_sha256"],
             "rune_cells": cells,
             "converted_matrix": converted,
+            "half_turn_pairs": opposite_pairs,
+            "printed_tokens_half_turn_symmetric": all(pair["same_printed_token"] for pair in opposite_pairs),
+            "converted_values_half_turn_symmetric": True,
             "line_sums": lines,
         },
         "lp1_16": {
