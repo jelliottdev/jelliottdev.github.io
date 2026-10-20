@@ -1,6 +1,6 @@
 Magic squares in the 2014 puzzle
 
-Definitions, the historical 1033 square, and the later signed instructions.
+Compare the historical 1033 square, the printed LP1-16 square summing to 3301, and signed payload instructions; reproduce the arithmetic.
 
 A magic square has equal sums in every row, every column, and both main diagonals. Its order is its width and height; its magic constant is that common sum. Equal row sums alone are not enough.
 
@@ -15,6 +15,36 @@ The archived 2014 walkthrough records this order-5 square during an earlier puzz
  18 320 130 199 366
 151 131 341 138 272
 All five rows, all five columns, and both diagonals sum to 1033. Entries repeat, so it is not a normal square. This is historical context, not a newly discovered Liber Primus solution.
+
+The printed 3301 square on LP1-16
+
+The final LP1 sheet contains a five-by-five decimal square below the heading read as CNOW THIS. These are printed numbers, not prime values calculated from runes. The complete instruction reading preserves their position after the text and insect illustration.
+
+[Image: LP1-16 detail: the red heading above five rows of decimal numbers.]
+Original-image detail, rectangle [500, 1800, 1400, 900]. Complete page · Original JPEG.
+
+ 434 1311 312  278  966
+ 204  812 934  280 1071
+ 626  620 809  620  626
+1071  280 934  812  204
+ 966  278 312 1311  434
+
+Every row, every column and both main diagonals sum to 3301. For example, the first row gives 434 + 1311 + 312 + 278 + 966 = 3301; the descending diagonal gives 434 + 812 + 809 + 812 + 434 = 3301. The total of all 25 entries is 16505, which is five times the common line sum. The square is magic under the definition above, but not normal: it repeats values and does not use 1 through 25.
+
+It also has half-turn symmetry: rotate the grid through 180 degrees and every entry returns to an equal entry. In zero-based coordinates, A[r][c] = A[4-r][4-c]. The center, 809, stays in place. This is different from reflecting only left-to-right: the first row reversed is the last row, not the first row. Symmetry and equal sums are separate properties, so both should be checked.
+
+Reproduce the calculation
+
+From the repository folder, run python scripts/check_number_examples.py. No extra packages, network access or AI service are needed. The script reads the five decimal rows directly from the page transcription, checks all twelve line sums and the half-turn, and prints a JSON result under lp1_16. It also records the transcription file hash and the original image hash so another researcher can identify the inputs.
+
+row_sums:      [3301, 3301, 3301, 3301, 3301]
+column_sums:   [3301, 3301, 3301, 3301, 3301]
+diagonal_sums: [3301, 3301]
+total: 16505
+half_turn_symmetric: true
+normal: false
+
+Download the calculation script. Run it inside the repository so its page-record path resolves. The script verifies arithmetic from the stored transcription; checking those digits against the original JPEG is the independent visual step. These results do not establish that the square supplies a key for an unsolved page or reproduces a historical server submission.
 
 The later LP1 payloads
 LP1-10 through LP1-13 contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:
@@ -89,6 +119,16 @@ Sources
 Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
 
 Sources, related references, and files
+- complete instruction reading
+  https://jelliottdev.github.io/reference/articles/reading-instruction.html
+- LP1-16 detail: the red heading above five rows of decimal numbers.; Original JPEG
+  https://jelliottdev.github.io/images/lp1-16.jpg
+- Complete page
+  https://jelliottdev.github.io/#/reader/lp1-16
+- the page transcription
+  https://jelliottdev.github.io/data/pages/lp1-16.json
+- Download the calculation script
+  https://jelliottdev.github.io/scripts/check_number_examples.py
 - LP1-10
   https://jelliottdev.github.io/reference/lp1-10.html
 - LP1-13
