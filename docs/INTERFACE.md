@@ -63,3 +63,5 @@ Guide navigation highlights the exact sidebar link when present. Otherwise, auth
 Region inspection keeps the page name and selected feature in the viewer heading. Inspection controls have descriptive accessible names; opening the whole image clears the feature context. The toolbar must grow for wrapped headings without hiding controls or removing the image viewport.
 
 Direct section and topic URLs scroll to the destination and move keyboard focus to its heading (or the destination itself when it has no heading). A missing destination leaves the normal page available. Focusing must not trigger a second scroll or move the content behind the sticky header.
+
+Authored manuscript images and thumbnails must include their native width and height attributes. CSS controls their displayed size and cropping; the attributes preserve the aspect ratio before lazy images load, preventing section destinations from shifting on phones. Do not resize or recompress original image files for this purpose.
