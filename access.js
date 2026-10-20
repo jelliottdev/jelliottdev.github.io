@@ -26,7 +26,7 @@ async function readerPage(id,version){
  <div class="reader-version"><label for="reader-mode">Text version</label><select id="reader-mode">${p.visible_text?'<option value="visible">Visible Latin text</option>':'<option value="raw">Archived runes</option><option value="latin">Latin rune labels</option>'}${p.reviewed_text?'<option value="reviewed">Reviewed runes</option>':''}${p.reading?'<option value="literal">Literal known reading</option><option value="context">Contextual whole-section reading</option>':''}</select></div>
  <div class="reader-type-size"><label for="reader-size">Text size</label><input id="reader-size" type="range" min="16" max="32" value="${readerSize}"><output id="reader-size-value">${readerSize}px</output></div>
  <p id="reader-text-note" class="small muted"></p>
- ${readingGuide?`<p class="reader-text-links reader-reading-links"><a href="#/wiki/${esc(readingGuide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(readingGuide.id)}">Read the complete section</a></p>`:''}
+ ${readingGuide?`<p class="reader-text-links reader-reading-links"><a href="#/wiki/${esc(readingGuide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(readingGuide.id)}">Read the complete section</a><a href="#/wiki/${esc(readingGuide.id)}?section=trace">Inspect the decoding trace</a></p>`:''}
  <pre id="reader-text"></pre>
  <p class="reader-text-links"><a href="${link(p)}?section=transcription">Transcription notes</a> · <a href="${link(p)}?section=page-sources">Sources</a></p>
  </section></div>
