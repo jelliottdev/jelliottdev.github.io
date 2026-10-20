@@ -99,4 +99,6 @@ write('data/evidence/reading-methods.json',{'source_sha256':hashlib.sha256(metho
 import runpy
 runpy.run_path(str(Path(__file__).with_name("build_numeric_notes.py")),run_name="__main__",init_globals={"OUTPUT_ROOT":dest})
 
+runpy.run_path(str(Path(__file__).with_name("build_page_notes.py")),run_name="__main__",init_globals={"OUTPUT_ROOT":dest})
+
 runpy.run_path(str(Path(__file__).with_name("build_access_exports.py")),run_name="__main__",init_globals={"OUTPUT_ROOT":dest})

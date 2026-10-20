@@ -131,6 +131,7 @@ for experiment in read('data/experiments.json')['records']:
 register('data/evidence/spelling-sums.json','Spelling and prime-sum calculations')
 register('data/evidence/reading-methods.json','Known method parameters')
 register('data/evidence/visual-measurements.json','Visual measurement conventions')
+register('data/evidence/editorial-page-notes.json','Editorial visual observations')
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
 register('data/evidence/signature-checks.json','Isolated signature verification results')
 register('data/evidence/known-readings.json','Known-reading provenance')
@@ -292,7 +293,7 @@ register('downloads/REFERENCE-DATA-README.txt','Bundle instructions')
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Original JPEG','Historical illustrated cover','Historical opening image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
- if name=='reference-data':roles.update({'Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
