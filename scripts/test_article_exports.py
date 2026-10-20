@@ -3,6 +3,27 @@ import unittest
 from build_articles import Text, reference_url, linked_articles, article_contents
 
 class ArticleExports(unittest.TestCase):
+    def test_compact_blocks_and_line_breaks_do_not_merge_words(self):
+        parser = Text()
+        parser.feed('<dl><dt>Newton</dt><dd>Upper panel</dd>'
+                    '<dt>Ancient of Days</dt><dd>Lower panel</dd></dl>'
+                    '<p>LP1-10<br>LP1-13</p><blockquote>Quoted text</blockquote>After')
+        result = "".join(parser.parts).strip()
+        self.assertEqual(result.splitlines(),
+                         ["Newton", "Upper panel", "Ancient of Days",
+                          "Lower panel", "LP1-10", "LP1-13", "Quoted text", "After"])
+
+    def test_images_keep_descriptions_and_source_links(self):
+        parser = Text()
+        parser.feed('<figure><img src="images/1033.jpg" alt="Hand &amp; compasses">'
+                    '<figcaption>Cover detail</figcaption></figure>'
+                    '<img src="decoration.svg" alt="">')
+        result = "".join(parser.parts)
+        self.assertIn("[Image: Hand & compasses]\n", result)
+        self.assertIn("\nCover detail\n", result)
+        self.assertEqual(result.count("[Image:"), 1)
+        self.assertEqual(parser.links, ["images/1033.jpg", "decoration.svg"])
+
     def test_native_contents_preserves_heading_text_and_escapes_links(self):
         result = article_contents('<h2 id="part two">Read <em>A &amp; B</em></h2>'
                                   '<h3 id="minor">Minor</h3><h2>No ID</h2>')

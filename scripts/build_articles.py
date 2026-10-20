@@ -9,21 +9,32 @@ from urllib.parse import urljoin, parse_qs, quote
 ROOT = Path(__file__).resolve().parents[1]
 
 class Text(HTMLParser):
+    blocks = {"p", "h1", "h2", "h3", "h4", "li", "pre", "tr",
+              "dt", "dd", "figure", "figcaption", "blockquote"}
     def __init__(self):
         super().__init__()
         self.parts = []
         self.links = []
     def handle_data(self, data):
         self.parts.append(data)
-    def handle_starttag(self, tag, attrs):
-        if tag in {"p", "h2", "h3", "li", "pre", "tr"}:
+    def boundary(self):
+        if self.parts and not self.parts[-1].endswith("\n"):
             self.parts.append("\n")
+    def handle_starttag(self, tag, attrs):
+        if tag in self.blocks or tag == "br":
+            self.boundary()
         if tag in {"td", "th"}:
             self.parts.append("\t")
         values = dict(attrs)
+        if tag == "img" and values.get("alt", "").strip():
+            self.boundary()
+            self.parts.append("[Image: " + values["alt"].strip() + "]\n")
         target = values.get("href") if tag == "a" else values.get("src") if tag == "img" else None
         if target and target not in self.links:
             self.links.append(target)
+    def handle_endtag(self, tag):
+        if tag in self.blocks:
+            self.boundary()
 
 class Headings(HTMLParser):
     def __init__(self, body):

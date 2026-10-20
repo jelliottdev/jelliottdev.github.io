@@ -5,7 +5,9 @@ Reverse the rune alphabet, with an extra shift where the control specifies one.
 The mapping
 Ordinary Atbash gives p = 28 − c. Index 0 maps to 28, 1 to 27, and 14 to itself. Applying it twice returns the original index. It reverses the alphabet mapping, not rune order within a line.
 The warning uses ordinary Atbash. The first koan, LP1-06–09, uses p = (28 − c + 3) mod 29. For c = 0 this produces index 2, because 31 mod 29 = 2.
-Ordinary Atbash: pairs at opposite ends of the alphabetᚠ F · 0↔ᛠ EA · 28ᚢ U · 1↔ᛡ IA · 27ᛉ X · 14↔ᛉ X · 14
+
+Ordinary Atbash: pairs at opposite ends of the alphabet
+ᚠ F · 0↔ᛠ EA · 28ᚢ U · 1↔ᛡ IA · 27ᛉ X · 14↔ᛉ X · 14
 Each pair’s indices add to 28. The middle rune maps to itself. These examples show symbol substitutions, not a reversal of the order of text.
 
 Follow the first runes
@@ -32,6 +34,7 @@ With the source separator retained, these produce A-WARNNG. The final NG is one 
 Reverse, then add the shift
 
 The first koan adds 3 after reversing the alphabet. Its first five indices are 7, 26, 28, 7, 22. The ordinary reversal gives 21, 2, 0, 21, 6; adding 3 gives 24, 5, 3, 24, 9. Those labels read A-COAN with the original separator. See the complete first koan.
+
 One rune through the shifted mapping
 Read W: input index 7.
 Reverse: 28 − 7 = 21.

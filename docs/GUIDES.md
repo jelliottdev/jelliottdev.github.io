@@ -6,6 +6,13 @@ HTML. `scripts/build_articles.py` builds the searchable index and standalone
 HTML/text. Keep explanations, links, and reproduction commands in the authored
 files; do not edit generated copies.
 
+Plain-text exports preserve code indentation, table cell boundaries, definition
+labels and descriptions, captions, and explicit line breaks. Image alt text is
+included as `[Image: ...]`; use it to describe the visible source, and keep
+attribution or interpretation in the caption and article. Empty alt text is
+omitted. Image source URLs remain in the exported reference list. These same
+exports feed the searchable article text and the AI-readable reference bundle.
+
 The ordinary wiki search searches guides. The idea checker does not treat them
 as experiment records. No record was added to the experiment registry by this
 content expansion.

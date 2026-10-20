@@ -5342,7 +5342,11 @@ The first release contains 17 images, including two title pages. The second rele
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
 
 The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
-LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
+
+[Image: The warning page used for the first reading exercise]
+LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.
+[Image: LP2-31, an unsolved page used in the statistics guide]
+LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
 
 2. Reproduce one short reading
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
@@ -5897,7 +5901,9 @@ Reverse the rune alphabet, with an extra shift where the control specifies one.
 The mapping
 Ordinary Atbash gives p = 28 − c. Index 0 maps to 28, 1 to 27, and 14 to itself. Applying it twice returns the original index. It reverses the alphabet mapping, not rune order within a line.
 The warning uses ordinary Atbash. The first koan, LP1-06–09, uses p = (28 − c + 3) mod 29. For c = 0 this produces index 2, because 31 mod 29 = 2.
-Ordinary Atbash: pairs at opposite ends of the alphabetᚠ F · 0↔ᛠ EA · 28ᚢ U · 1↔ᛡ IA · 27ᛉ X · 14↔ᛉ X · 14
+
+Ordinary Atbash: pairs at opposite ends of the alphabet
+ᚠ F · 0↔ᛠ EA · 28ᚢ U · 1↔ᛡ IA · 27ᛉ X · 14↔ᛉ X · 14
 Each pair’s indices add to 28. The middle rune maps to itself. These examples show symbol substitutions, not a reversal of the order of text.
 
 Follow the first runes
@@ -5924,6 +5930,7 @@ With the source separator retained, these produce A-WARNNG. The final NG is one 
 Reverse, then add the shift
 
 The first koan adds 3 after reversing the alphabet. Its first five indices are 7, 26, 28, 7, 22. The ordinary reversal gives 21, 2, 0, 21, 6; adding 3 gives 24, 5, 3, 24, 9. Those labels read A-COAN with the original separator. See the complete first koan.
+
 One rune through the shifted mapping
 Read W: input index 7.
 Reverse: 28 − 7 = 21.
@@ -6349,6 +6356,8 @@ The first seven runes in the archived LP2-57 sequence produce the heading PARABL
 
 
 Notice what the table does not use: the runes’ prime values. These numbers are zero-based alphabet indices. Prime values are relevant to a separate calculation such as a rune sum, not needed to read this heading.
+
+[Image: LP2-57 with the red PARABLE heading above the body text and insect-like image]
 Complete parable reading. Open the reader to compare the heading with the full original image.
 
 Why the literal output can still look unfamiliar
@@ -6504,9 +6513,19 @@ Choose the image first
 
 Two different images are often called “the cover.” The illustrated compasses collage is 1033.jpg; the plain Liber Primus title page is LP1-00. They have different hidden messages and different extraction sizes.
 
-Opening imageScript ID: opening-2014
-Compasses coverScript ID: 1033
-LP1 title pageScript ID: lp1-00
+
+[Image: The dark 2014 opening image with white text]
+Opening image
+Script ID: opening-2014
+
+[Image: The illustrated compasses collage]
+Compasses cover
+Script ID: 1033
+
+[Image: The plain Liber Primus title]
+LP1 title page
+Script ID: lp1-00
+
 
 Expected size of the full extraction, not the JPEG or separated message body
 	Image / script ID	Extracted bytes	What to follow next
@@ -6635,6 +6654,8 @@ LP1-00, LP1-01 and LP1-02 contain signed hex bodies. Decode and XOR them to reco
 
 Welcome: LP1-03
 The body begins “Let the text guide you,” followed by a good-luck message and a hex-encoded JPEG. The embedded image is distinct from the visible manuscript image. Preserve the signed body separately from the decoded derivative. Full body.
+
+[Image: Decoded LP1-03 embedded image: a narrow row of black runes and decimal digits on white]
 JPEG decoded from the signed body; a derivative, not the carrier page.
 Download the decoded JPEG (15,188 bytes). To reproduce it:
 from pathlib import Path
@@ -7346,8 +7367,11 @@ The LP2-15 number panel and heading
 The exact 4 × 4 matrix, checked totals, red entry, heading, and open-loop drawing.
 
 LP2-15 contains a red runic heading, a 4 × 4 decimal panel, and an open-loop drawing below it. Its combined archive index is 32. Use the release ID when citing it: LP1-15 is a different image with a known keyed reading.
+
+[Image: LP2-15: compare the printed matrix and loop with the transcription below.]
 LP2-15: compare the printed matrix and loop with the transcription below. Page record · Original JPEG
-The exact number panelValues in image order; row and column positions are one-based here.
+The exact number panel
+Values in image order; row and column positions are one-based here.
 	Row	Column 1	Column 2	Column 3	Column 4
 
 	1	3258	3222	3152	3038
@@ -7462,7 +7486,9 @@ The decoded JPEG, its archived rune transcription, and exact reproduction steps.
 
 LP1-03 has two different images to examine: the visible runic manuscript page and a smaller JPEG encoded inside its signed OutGuess message. The known Vigenère reading of the manuscript does not automatically decode the second image.
 
-The decoded derivativeThe JPEG decoded from the hexadecimal portion of LP1-03’s signed message.
+The decoded derivative
+[Image: A narrow black rune sequence containing the decimal digits 5 and 3 on a white background]
+The JPEG decoded from the hexadecimal portion of LP1-03’s signed message.
 The derivative is 587 × 109 pixels and 15,188 bytes. Download the JPEG. Its checksum is recorded in the payload manifest.
 
 Archived transcription
@@ -7507,7 +7533,13 @@ LP2-00–02: text and image measurements
 Rune regions, ink classes, punctuation shapes, and the limits of the stored visual survey.
 
 LP2-00, LP2-01, and LP2-02 are the first three images of the second release. Their combined archive indices are 17–19. The source snapshot does not give them a known plaintext. Studying them together does not establish a shared key or a reset rule.
-LP2-00 · ReadLP2-01 · ReadLP2-02 · Read
+
+[Image: LP2-00 manuscript preview]
+LP2-00 · Read
+[Image: LP2-01 manuscript preview]
+LP2-01 · Read
+[Image: LP2-02 manuscript preview]
+LP2-02 · Read
 What has been measured
 	Page	Rune regions	Red runes	Dark runes	Punctuation regions
 
@@ -7844,13 +7876,21 @@ Inspect: chapter V’s White Queen dialogue. Compare doing with believing, four 
 Emerson’s role in the earlier route does not prove that every later statement about selfhood comes from Emerson. Likewise, the Carroll comparison is not a quotation match. The linked articles preserve these limits alongside the evidence.
 
 Artwork in the illustrated cover
+
+[Image: The preserved 1033.jpg cover collage with central compasses fragments and narrow side panels]
 The 1033.jpg cover belongs to the earlier puzzle route. It is separate from the plain LP1-00 title image.
 
 The cover studies discussed in the linked guides identify fragments of three Blake compositions. Identifying a composition does not necessarily identify the particular impression, photograph, or digital reproduction used in the collage.
 
-NewtonThe upper central compasses panel. Compare the hand, instrument, and drawing, retaining the reported reflection.
-The Ancient of DaysThe lower central panel. Compare the fragment with the frontispiece to Europe: a Prophecy; the guide discusses rotation and the museum record’s qualified identification of the figure.
-NebuchadnezzarThe narrow side strips. Follow the divided figure and the artwork’s biblical subject without treating the title as cover plaintext.
+
+Newton
+The upper central compasses panel. Compare the hand, instrument, and drawing, retaining the reported reflection.
+
+The Ancient of Days
+The lower central panel. Compare the fragment with the frontispiece to Europe: a Prophecy; the guide discusses rotation and the museum record’s qualified identification of the figure.
+
+Nebuchadnezzar
+The narrow side strips. Follow the divided figure and the artwork’s biblical subject without treating the title as cover plaintext.
 
 
 These guides cite the published cover identification and museum descriptions separately. They also explain what to compare in the preserved image. For the visible motifs on the later manuscript pages, use the illustrated page index.
@@ -7902,7 +7942,11 @@ Read the warning alongside inward discovery, adherence, and the instruction to i
 The warning asks readers to test what the book says. Later passages direct them inward, criticize adherence, and tell them to impose nothing on others. These are related instructions, but they do not all answer the same question: how to check a claim, how to understand oneself, and how to treat another person are different problems.
 
 Read the instructions together
-The warning places testing beside a demand to preserve the book.The final LP1 instruction combines inward discovery with a limit on imposing it on others.
+
+[Image: Original LP1-01 warning page]
+The warning places testing beside a demand to preserve the book.
+[Image: Original LP1-16 instruction page with a number panel below the text]
+The final LP1 instruction combines inward discovery with a limit on imposing it on others.
 
 	Passage	Instruction or claim	Question it raises
 
@@ -8029,7 +8073,11 @@ Divinity within: another comparison to inspect
 After the Proverbs of Hell, Blake’s prose account of poetic deities and priesthood ends with deities residing in the human breast. This passage is on printed pages 20–21 of the 1906 transcription. Its immediate concern is how poetic personifications become objects of religious authority.
 
 Liber Primus’s final parable instead places inward divinity within a sequence of shedding and emergence. Both direct the reader inward, but the parable does not repeat Blake’s account of the origin of priesthood. This is a thematic comparison, rather than the close sentence-level match in the holy-life statement.
-Welcome, LP1-04: the close verbal parallel.Parable, LP2-57: a broader comparison concerning divinity within.
+
+[Image: LP1-04, the Welcome page containing the holy-life statement]
+Welcome, LP1-04: the close verbal parallel.
+[Image: LP2-57, the final parable with an insect-like figure]
+Parable, LP2-57: a broader comparison concerning divinity within.
 
 The illustrated cover, the holy-life sentence, and these vocabulary comparisons are distinct pieces of evidence. Taken together they make Blake a concrete source to investigate. They still do not establish that every manuscript idea came from Blake, or that a particular edition was used as a cipher key.
 
@@ -8134,6 +8182,8 @@ Examples from the archived streams
 These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
 
 See the distributions behind the numbers
+
+[Image: Two frequency bar charts on identical axes. LP2-31 has 5 to 13 occurrences per rune across 269 symbols. LP2-57 has zero to 15 across 95 symbols, with a larger concentration at rune index 18.]
 Archived-stream frequencies for LP2-31 and LP2-57. Bars show the proportion of each rune, not raw counts. Open or save the full-size SVG; use the alphabet reference to look up an index.
 
 LP2-31’s counts range from 5 to 13 per rune. LP2-57 has seven runes with no occurrences and one rune, index 18, with 15 occurrences. Concentration matters because a count contributes nᵢ(nᵢ − 1) matching pairs: a count of 15 supplies 210, while a count of 5 supplies only 20. Large counts therefore contribute disproportionately to IoC.
@@ -8221,7 +8271,6 @@ def pooled(symbols, period):
 
 for text in ("FUFUFFU", "FFUUFFU"):
     print(text, "whole:", rate(pairs(text)), "period 2:", pooled(text, 2))
-
 
 Expected output:
 
@@ -8394,6 +8443,7 @@ Keep three things separate while reading: a stage of development, the act of she
 These are contextual English renderings. LP1-04's literal labels include LICE-THE-INSTAR and GONG-WITHIN; LP2-57 has LICE-THE-INSTAR-TUNNELNG-TO-THE-SURFACE after joining its line wrap. Keep these literal forms when checking runes or numbers. The contextual wording is not a replacement transcription. See the full Welcome, the full parable and reading conventions.
 
 How the biological terms fit together
+
 Instars are stages; molts separate them
 Hatching: the first instar begins.
 First instar: a stage of development before the next molt.
@@ -8425,6 +8475,8 @@ The image beneath the parable
 The original LP2-57 image places a black, stippled, winged insect-like figure below the text. Its body runs vertically, with lateral wing shapes and scattered marks around it. Above it are the red heading and enlarged red initial among otherwise black runes. These are observations of the page, not an identification of a species or source illustration.
 
 The adjacent emergence text makes an insect comparison relevant, but it cannot by itself establish what species the drawing represents. A visual attribution would need a matching source image or diagnostic features, with differences recorded. Do not use the surrounding prose as proof that every feature of the drawing is anatomically cicadan. Use the reader's enlarged original to inspect the marks rather than treating a small thumbnail as sufficient evidence.
+
+[Image: LP2-57: stippled figure below the parable]
 LP2-57 — stippled figure below the parable. Open reader
 Compare other insect drawings in LP2 and the detached wing on LP2-27.
 Why the exact spelling still matters
@@ -8552,6 +8604,8 @@ The illustrated cover: compasses and Blake artwork
 The 1033.jpg collage, its source artworks, original download, and place in the 2014 puzzle.
 
 This is the compasses collage often reproduced as the illustrated cover of Liber Primus. Its archived filename is 1033.jpg. It appeared at an earlier stage of the 2014 puzzle, before the manuscript images catalogued here as LP1 and LP2.
+
+[Image: Four-panel collage: a hand holds drawing compasses over geometrical figures in the upper centre; golden compasses extend from a hand below; narrow figures frame both sides.]
 The archived 1033.jpg. Select the image to inspect it at full size.
 
 Download the original JPEG · File provenance and checksum
@@ -8651,6 +8705,8 @@ Newton: the upper compasses panel
 The drawing instrument, Blake’s portrayal of Newton, and how to compare the cover fragment.
 
 The upper central panel of the illustrated cover concentrates on a hand, compasses and a geometrical drawing. Frank G. Bosman’s published identification traces this fragment to William Blake’s Newton. Understanding the whole composition helps explain what the crop leaves out.
+
+[Image: Upper central panel of the preserved cover, showing a hand holding compasses over a geometrical drawing]
 Upper central panel, shown as a cropped view of the preserved cover. The hand, open compasses and drawing are the features to compare with Newton. The view retains the collage’s orientation; no reflection has been applied. Open the complete original JPEG.
 
 What the original depicts
@@ -8691,6 +8747,8 @@ Nebuchadnezzar: the cover’s side panels
 The biblical figure in Blake’s artwork and the distinction between identification and a proposed book source.
 
 The narrow strips beside the central compasses panels are identified as fragments of William Blake’s Nebuchadnezzar in Frank G. Bosman’s study of the cover. They are easy to overlook because the collage splits the composition into its margins.
+
+[Image: The complete cover collage, with narrow fragments of limbs and hair along its left and right edges]
 Follow the two outer strips, rather than the central compasses panels. The left strip contains a pale bent limb and long hair near its lower end; the right strip continues the fragmented figure against a dark background. This full-cover view preserves their separation. Open the original JPEG to inspect the edges.
 
 Who is Nebuchadnezzar?
@@ -8733,6 +8791,8 @@ The Ancient of Days: the lower compasses panel
 The frontispiece, the figure with compasses, and why the exact Blake copy matters.
 
 The lower central panel of the compasses cover is identified as a detail of William Blake’s The Ancient of Days by Frank G. Bosman’s cover study. The complete composition supplies context that is lost when the hand and instrument are isolated.
+
+[Image: Lower central panel of the preserved cover, with two golden compass legs extending upward from a hand]
 Lower central panel, shown as a cropped view of the preserved cover. The compass legs extend upward in the collage. Compare the hand and rays around it with the complete frontispiece before interpreting this orientation. Open the complete original JPEG.
 
 What is a frontispiece?
@@ -9025,11 +9085,21 @@ The subtraction of 1 converts each published coordinate to Python’s zero-based
 
 
 Decide what counts before extracting
-Starting pointState whether titles, opening quotations and notes are included. Starting at the first prose paragraph can differ from starting at the first text on the page.
-Paragraph boundariesPreserve actual paragraph divisions. A page or display line ending may interrupt a paragraph without creating a new one.
-Sentence boundariesSpecify how punctuation and abbreviations are handled. Splitting blindly at every period can create false sentences.
-Word and letter boundariesRecord how hyphens, apostrophes, punctuation and accented letters are treated. Counting characters in a raw file is not necessarily counting letters in the printed word.
-Literal charactersA clue may print some digits or punctuation directly. Identify those separately instead of forcing every item through the coordinate rule.
+
+Starting point
+State whether titles, opening quotations and notes are included. Starting at the first prose paragraph can differ from starting at the first text on the page.
+
+Paragraph boundaries
+Preserve actual paragraph divisions. A page or display line ending may interrupt a paragraph without creating a new one.
+
+Sentence boundaries
+Specify how punctuation and abbreviations are handled. Splitting blindly at every period can create false sentences.
+
+Word and letter boundaries
+Record how hyphens, apostrophes, punctuation and accented letters are treated. Counting characters in a raw file is not necessarily counting letters in the printed word.
+
+Literal characters
+A clue may print some digits or punctuation directly. Identify those separately instead of forcing every item through the coordinate rule.
 
 For example, the raw characters in don't put the apostrophe in position 4 and t in position 5. Counting letters only instead puts t in position 4. Neither convention should be introduced only after seeing which one gives a desired output. Define it for the whole extraction and retain the original spelling.
 
@@ -9066,6 +9136,8 @@ The 2014 opening image and its hidden message
 The original zN4h51m.jpg, verified OutGuess content, and the route through Emerson to the compasses cover.
 
 The opening image of the archived 2014 route is a dark JPEG with a greeting, a pilgrimage announcement, a faint insect-like figure and the number 3301. Its archive filename is zN4h51m.jpg. Unlike a numbered Liber Primus page, its role here is to introduce the route that leads to the manuscript.
+
+[Image: Black opening image with white greeting and pilgrimage text, a faint winged figure, a good-luck wish and 3301.]
 The unchanged opening JPEG. The faint central image is part of the source, not a loading error.
 
 Download the original JPEG · Provenance and verification evidence
@@ -9203,31 +9275,150 @@ Illustrated index: artwork and page features
 
 Find the compasses cover, spirals, branches, insects, dots, and recurring marks by sight.
 
-Find a page by what you remember seeing. The LP2 group names below follow the community index; they are browsing labels, not translated chapter titles or proof that each group uses one cipher. Image previews are cropped browsing aids. Select a page to inspect its complete original.Compasses coverDotsSignposts and crossesSpiralsBranchesMöbiusMayflyWing and treeCuneiform-like markSpiral branchesSpiral and dead tree
+Find a page by what you remember seeing. The LP2 group names below follow the community index; they are browsing labels, not translated chapter titles or proof that each group uses one cipher. Image previews are cropped browsing aids. Select a page to inspect its complete original.
+Compasses coverDotsSignposts and crossesSpiralsBranchesMöbiusMayflyWing and treeCuneiform-like markSpiral branchesSpiral and dead tree
 Compasses and William Blake
-The illustrated 1033.jpg cover predates the numbered manuscript releases. Its collage includes details identified with Newton, The Ancient of Days, and Nebuchadnezzar. It has its own original file and hidden-message record.Explore the cover, artwork, and embedded message
+The illustrated 1033.jpg cover predates the numbered manuscript releases. Its collage includes details identified with Newton, The Ancient of Days, and Nebuchadnezzar. It has its own original file and hidden-message record.
+[Image: The illustrated cover with drawing compasses and Blake artwork]
+Explore the cover, artwork, and embedded message
 Dots and punctuation
 Compare large separated dots and small punctuation clusters, with original page images and measured examples.
 Signposts and crosses · LP2-00–02
-Cross-shaped drawings frame the opening pages. Read the detailed article.LP2-00 · ReadLP2-01 · ReadLP2-02 · Read
+Cross-shaped drawings frame the opening pages. Read the detailed article.
+[Image: LP2-00 manuscript preview]
+LP2-00 · Read
+[Image: LP2-01 manuscript preview]
+LP2-01 · Read
+[Image: LP2-02 manuscript preview]
+LP2-02 · Read
 Spirals · LP2-03–07
-Curled line drawings give this group its browsing name. Compare the borders and their geometry.LP2-03 · ReadLP2-04 · ReadLP2-05 · ReadLP2-06 · ReadLP2-07 · Read
+Curled line drawings give this group its browsing name. Compare the borders and their geometry.
+[Image: LP2-03 manuscript preview]
+LP2-03 · Read
+[Image: LP2-04 manuscript preview]
+LP2-04 · Read
+[Image: LP2-05 manuscript preview]
+LP2-05 · Read
+[Image: LP2-06 manuscript preview]
+LP2-06 · Read
+[Image: LP2-07 manuscript preview]
+LP2-07 · Read
 Branches · LP2-08–14
-Compare the branching forms in their surrounding page layouts. Read about branches, trees, and counting conventions.LP2-08 · ReadLP2-09 · ReadLP2-10 · ReadLP2-11 · ReadLP2-12 · ReadLP2-13 · ReadLP2-14 · Read
+Compare the branching forms in their surrounding page layouts. Read about branches, trees, and counting conventions.
+[Image: LP2-08 manuscript preview]
+LP2-08 · Read
+[Image: LP2-09 manuscript preview]
+LP2-09 · Read
+[Image: LP2-10 manuscript preview]
+LP2-10 · Read
+[Image: LP2-11 manuscript preview]
+LP2-11 · Read
+[Image: LP2-12 manuscript preview]
+LP2-12 · Read
+[Image: LP2-13 manuscript preview]
+LP2-13 · Read
+[Image: LP2-14 manuscript preview]
+LP2-14 · Read
 Möbius · LP2-15–22
-Begin with the crossed loop and number panel on LP2-15. Read the detailed article.LP2-15 · ReadLP2-16 · ReadLP2-17 · ReadLP2-18 · ReadLP2-19 · ReadLP2-20 · ReadLP2-21 · ReadLP2-22 · Read
+Begin with the crossed loop and number panel on LP2-15. Read the detailed article.
+[Image: LP2-15 manuscript preview]
+LP2-15 · Read
+[Image: LP2-16 manuscript preview]
+LP2-16 · Read
+[Image: LP2-17 manuscript preview]
+LP2-17 · Read
+[Image: LP2-18 manuscript preview]
+LP2-18 · Read
+[Image: LP2-19 manuscript preview]
+LP2-19 · Read
+[Image: LP2-20 manuscript preview]
+LP2-20 · Read
+[Image: LP2-21 manuscript preview]
+LP2-21 · Read
+[Image: LP2-22 manuscript preview]
+LP2-22 · Read
 Mayfly · LP2-23–26
-The insect name is a community label for this grouping. Compare the insect imagery.LP2-23 · ReadLP2-24 · ReadLP2-25 · ReadLP2-26 · Read
+The insect name is a community label for this grouping. Compare the insect imagery.
+[Image: LP2-23 manuscript preview]
+LP2-23 · Read
+[Image: LP2-24 manuscript preview]
+LP2-24 · Read
+[Image: LP2-25 manuscript preview]
+LP2-25 · Read
+[Image: LP2-26 manuscript preview]
+LP2-26 · Read
 Wing and tree · LP2-27–32
-Inspect the illustrated pages alongside the intervening text. Follow the wing and tree endpoints.LP2-27 · ReadLP2-28 · ReadLP2-29 · ReadLP2-30 · ReadLP2-31 · ReadLP2-32 · Read
+Inspect the illustrated pages alongside the intervening text. Follow the wing and tree endpoints.
+[Image: LP2-27 manuscript preview]
+LP2-27 · Read
+[Image: LP2-28 manuscript preview]
+LP2-28 · Read
+[Image: LP2-29 manuscript preview]
+LP2-29 · Read
+[Image: LP2-30 manuscript preview]
+LP2-30 · Read
+[Image: LP2-31 manuscript preview]
+LP2-31 · Read
+[Image: LP2-32 manuscript preview]
+LP2-32 · Read
 Cuneiform-like mark · LP2-33–39
-The repeated mark is below the text on page 33 and above it on pages 34–39. Read the detailed article.LP2-33 · ReadLP2-34 · ReadLP2-35 · ReadLP2-36 · ReadLP2-37 · ReadLP2-38 · ReadLP2-39 · Read
+The repeated mark is below the text on page 33 and above it on pages 34–39. Read the detailed article.
+[Image: LP2-33 manuscript preview]
+LP2-33 · Read
+[Image: LP2-34 manuscript preview]
+LP2-34 · Read
+[Image: LP2-35 manuscript preview]
+LP2-35 · Read
+[Image: LP2-36 manuscript preview]
+LP2-36 · Read
+[Image: LP2-37 manuscript preview]
+LP2-37 · Read
+[Image: LP2-38 manuscript preview]
+LP2-38 · Read
+[Image: LP2-39 manuscript preview]
+LP2-39 · Read
 Spiral branches · LP2-40–53
-The community groups these fourteen pages under a shared visual name. Compare the branching borders.LP2-40 · ReadLP2-41 · ReadLP2-42 · ReadLP2-43 · ReadLP2-44 · ReadLP2-45 · ReadLP2-46 · ReadLP2-47 · ReadLP2-48 · ReadLP2-49 · ReadLP2-50 · ReadLP2-51 · ReadLP2-52 · ReadLP2-53 · Read
+The community groups these fourteen pages under a shared visual name. Compare the branching borders.
+[Image: LP2-40 manuscript preview]
+LP2-40 · Read
+[Image: LP2-41 manuscript preview]
+LP2-41 · Read
+[Image: LP2-42 manuscript preview]
+LP2-42 · Read
+[Image: LP2-43 manuscript preview]
+LP2-43 · Read
+[Image: LP2-44 manuscript preview]
+LP2-44 · Read
+[Image: LP2-45 manuscript preview]
+LP2-45 · Read
+[Image: LP2-46 manuscript preview]
+LP2-46 · Read
+[Image: LP2-47 manuscript preview]
+LP2-47 · Read
+[Image: LP2-48 manuscript preview]
+LP2-48 · Read
+[Image: LP2-49 manuscript preview]
+LP2-49 · Read
+[Image: LP2-50 manuscript preview]
+LP2-50 · Read
+[Image: LP2-51 manuscript preview]
+LP2-51 · Read
+[Image: LP2-52 manuscript preview]
+LP2-52 · Read
+[Image: LP2-53 manuscript preview]
+LP2-53 · Read
 Spiral and dead tree · LP2-54–55
-The final illustrated pair before the two known LP2 readings. Inspect the pale tree on LP2-55.LP2-54 · ReadLP2-55 · Read
+The final illustrated pair before the two known LP2 readings. Inspect the pale tree on LP2-55.
+[Image: LP2-54 manuscript preview]
+LP2-54 · Read
+[Image: LP2-55 manuscript preview]
+LP2-55 · Read
 The final two LP2 pages
-LP2-56’s deep-web hash and LP2-57’s parable have known readings in the source compilation.LP2-56 · ReadLP2-57 · Read
+LP2-56’s deep-web hash and LP2-57’s parable have known readings in the source compilation.
+[Image: LP2-56 manuscript preview]
+LP2-56 · Read
+[Image: LP2-57 manuscript preview]
+LP2-57 · Read
 Names, coverage, and sources
 Cicada Solvers’ LP2 index supplies the community section names and ranges. The page links above provide original images, checksums, and pinned archive sources. Section names are descriptive navigation labels, not decrypted headings.
 For the first release, browse known readings by section or all LP1 pages. Detailed visual measurements currently cover a smaller subset than this browsing index.
@@ -9451,14 +9642,23 @@ Find five-dot arrangements on LP2-07 and LP2-23, three-dot rows on LP2-33 and LP
 
 “Dots” can mean several visibly different things in Liber Primus. Large dots separated by wide spaces, small marks between runes, and compact multi-dot clusters should not be treated as one symbol just because a transcription uses similar punctuation for them.
 Five large dots on LP2-07 and LP2-23
-LP2-07 has five large black dots beneath its red closing line. They form a loose arrangement rather than one straight row. Smaller specks also appear beside the upper spiral drawings, so “the dots on page 7” should specify which group is meant.LP2-07 · Read
+LP2-07 has five large black dots beneath its red closing line. They form a loose arrangement rather than one straight row. Smaller specks also appear beside the upper spiral drawings, so “the dots on page 7” should specify which group is meant.
+[Image: LP2-07 cropped page preview]
+LP2-07 · Read
 See spirals and branching borders for the surrounding LP2-03–07 group.
-LP2-23 also has five large dots, this time above the text. Their placement differs from the group below the text on LP2-07. A relationship between these arrangements would need a specified comparison; the shared count alone does not establish a code.LP2-23 — five large dots above the text. Open reader
+LP2-23 also has five large dots, this time above the text. Their placement differs from the group below the text on LP2-07. A relationship between these arrangements would need a specified comparison; the shared count alone does not establish a code.
+[Image: LP2-23: five large dots above the text]
+LP2-23 — five large dots above the text. Open reader
 Continue with the Mayfly group and insect imagery.
 Large separated dots
-LP2-33 has three conspicuous black dots between two blocks of text. LP2-39 also has a separated row of three dots. These are useful starting points when someone remembers “the page with dots.” This pair is a set of illustrated examples, not an exhaustive dot inventory of all 75 pages.Three large separated dots between the text blocks on LP2-33. Page record · Original JPEGThree separated dots within the layout of LP2-39. Page record · Original JPEG
+LP2-33 has three conspicuous black dots between two blocks of text. LP2-39 also has a separated row of three dots. These are useful starting points when someone remembers “the page with dots.” This pair is a set of illustrated examples, not an exhaustive dot inventory of all 75 pages.
+[Image: Three large separated dots between the text blocks on LP2-33.]
+Three large separated dots between the text blocks on LP2-33. Page record · Original JPEG
+[Image: Three separated dots within the layout of LP2-39.]
+Three separated dots within the layout of LP2-39. Page record · Original JPEG
 Small marks and compact clusters
-The LP2-00–02 inventory records punctuation separately from rune shapes. Its measured regions include one-, four-, and thirteen-component groups. A “component” is a connected set of dark pixels under a specified threshold. It is not automatically one intentional dot: touching marks can merge, and tiny specks can be excluded.Published measurements for the opening pages
+The LP2-00–02 inventory records punctuation separately from rune shapes. Its measured regions include one-, four-, and thirteen-component groups. A “component” is a connected set of dark pixels under a specified threshold. It is not automatically one intentional dot: touching marks can merge, and tiny specks can be excluded.
+Published measurements for the opening pages
 	Page	Punctuation regions	Recorded groups	Red punctuation
 	LP2-00	58	56 × one; 1 × four; 1 × thirteen	One one-component region and the thirteen-component region
 	LP2-01	62	57 × one; 5 × four	None under the recorded rule
@@ -9509,12 +9709,30 @@ Möbius and the crossed-loop drawing
 
 Find the LP2-15–22 grouping, inspect the loop beneath the number panel, and distinguish the visual name from a geometric claim.
 
-The name Möbius (also written Mobius or Moebius) is used for the LP2-15–22 section. The most recognizable detail is the crossed, two-lobed drawing beneath the numbers on LP2-15. Start there if you remember an infinity-shaped symbol or a number square.LP2-15: the number panel, crossed loop, and runic text on the complete original sheet. Page record · Original JPEG
+The name Möbius (also written Mobius or Moebius) is used for the LP2-15–22 section. The most recognizable detail is the crossed, two-lobed drawing beneath the numbers on LP2-15. Start there if you remember an infinity-shaped symbol or a number square.
+[Image: LP2-15: the number panel, crossed loop, and runic text on the complete original sheet.]
+LP2-15: the number panel, crossed loop, and runic text on the complete original sheet. Page record · Original JPEG
 What the drawing shows
 The two lobes cross, but their outlines have visible openings. The recorded inspection describes an open-loop drawing. “Infinity sign” is a useful way to find it; it does not establish an exact Unicode symbol or a number encoded by that symbol.
 A Möbius strip is a surface made by joining the ends of a strip with a half-twist. An infinity sign is a two-dimensional figure-eight shape. Those are different objects: a crossed outline alone cannot demonstrate that a surface has a half-twist. A proposed Möbius interpretation needs to specify how the page’s lines, crossings, and gaps encode that surface.
 Pages in the community grouping
-The grouping runs from LP2-15 through LP2-22. It does not mean that every sheet contains the same motif, or that all eight use the same cipher. Select any preview to inspect that page’s record.LP2-15 · ReadLP2-16 · ReadLP2-17 · ReadLP2-18 · ReadLP2-19 · ReadLP2-20 · ReadLP2-21 · ReadLP2-22 · Read
+The grouping runs from LP2-15 through LP2-22. It does not mean that every sheet contains the same motif, or that all eight use the same cipher. Select any preview to inspect that page’s record.
+[Image: LP2-15 manuscript preview]
+LP2-15 · Read
+[Image: LP2-16 manuscript preview]
+LP2-16 · Read
+[Image: LP2-17 manuscript preview]
+LP2-17 · Read
+[Image: LP2-18 manuscript preview]
+LP2-18 · Read
+[Image: LP2-19 manuscript preview]
+LP2-19 · Read
+[Image: LP2-20 manuscript preview]
+LP2-20 · Read
+[Image: LP2-21 manuscript preview]
+LP2-21 · Read
+[Image: LP2-22 manuscript preview]
+LP2-22 · Read
 Following the numerical details
 The panel contains sixteen numbers; 3299 is red. The panel article gives every value, row and column totals, and a reproducible calculation. For an idea involving prime positions or reversed digits, use prime indices and emirps before assigning those operations to the drawing.
 There is also a literal MOBIUS in the known Some Wisdom reading. That textual occurrence is a separate piece of evidence. A shared name is a reason to compare the pages, not proof that one supplies a key for the other.
@@ -9565,9 +9783,27 @@ Cuneiform-like mark
 
 Compare the repeated mark on LP2-33–39, including its different placement on the first page.
 
-A compact, two-row mark repeats on LP2-33–39. It is commonly called the cuneiform mark. The visible mark belongs in an illustrated index even though its intended meaning is not established.LP2-33: the mark appears below the runic text, near the foot of the page. Page record · Original JPEGLP2-34: the repeated mark appears above the runic text. Page record · Original JPEG
+A compact, two-row mark repeats on LP2-33–39. It is commonly called the cuneiform mark. The visible mark belongs in an illustrated index even though its intended meaning is not established.
+[Image: LP2-33: the mark appears below the runic text, near the foot of the page.]
+LP2-33: the mark appears below the runic text, near the foot of the page. Page record · Original JPEG
+[Image: LP2-34: the repeated mark appears above the runic text.]
+LP2-34: the repeated mark appears above the runic text. Page record · Original JPEG
 Where to find it
-Placement matters. On LP2-33 the mark is at the bottom; on LP2-34–39 it is above the main text. Calling it a “header” without that exception would hide a potentially relevant layout difference. The previews below let you compare all seven sheets.LP2-33 · ReadLP2-34 · ReadLP2-35 · ReadLP2-36 · ReadLP2-37 · ReadLP2-38 · ReadLP2-39 · Read
+Placement matters. On LP2-33 the mark is at the bottom; on LP2-34–39 it is above the main text. Calling it a “header” without that exception would hide a potentially relevant layout difference. The previews below let you compare all seven sheets.
+[Image: LP2-33 manuscript preview]
+LP2-33 · Read
+[Image: LP2-34 manuscript preview]
+LP2-34 · Read
+[Image: LP2-35 manuscript preview]
+LP2-35 · Read
+[Image: LP2-36 manuscript preview]
+LP2-36 · Read
+[Image: LP2-37 manuscript preview]
+LP2-37 · Read
+[Image: LP2-38 manuscript preview]
+LP2-38 · Read
+[Image: LP2-39 manuscript preview]
+LP2-39 · Read
 What the name tells us
 The British Museum’s Mesopotamia guide explains how early pictograms developed into wedge-shaped writing called cuneiform. Here it is the community’s name for a visual resemblance. Identifying the manuscript mark as a particular historical sign would require a sign-by-sign comparison with a specified script, period, orientation, and reading. The label alone is not a translation.
 The repeated motif is also not part of the ordinary 29-rune Gematria Primus alphabet. Do not assign it a rune index or prime value merely because it occurs beside runic text.
@@ -9626,11 +9862,23 @@ Compare the curled borders on LP2-03–07 with the branching designs on LP2-40�
 
 Several groups of Liber Primus pages have curled drawings beside the text. The community calls LP2-03–07 “Spirals,” LP2-40–53 “Spiral Branches,” and LP2-54–55 “Spiral & Dead Tree.” These names make the images easier to find. Comparing their actual linework is more useful than treating every curl as the same symbol.
 The curled borders on LP2-03–07
-On LP2-03, paired curves frame the left and right margins of the runic text. Each side has a tighter upper curl and a longer lower curve. LP2-07 retains this border arrangement, while its lower text ends above a red line and five large black dots.LP2-03 · ReadLP2-07 · Read
+On LP2-03, paired curves frame the left and right margins of the runic text. Each side has a tighter upper curl and a longer lower curve. LP2-07 retains this border arrangement, while its lower text ends above a red line and five large black dots.
+[Image: LP2-03 cropped page preview]
+LP2-03 · Read
+[Image: LP2-07 cropped page preview]
+LP2-07 · Read
 The dots are a separate feature from the small groups of specks beside the upper curls. See dots and punctuation for examples of why position, size, and arrangement should be recorded separately.
 Open the intervening pages: LP2-04 · LP2-05 · LP2-06.
 The branching borders on LP2-40–55
-LP2-40 has curls joined to branching, root-like forms on both sides of the text. LP2-53 shows a winged insect below its red closing passage. The next pair, LP2-54–55, continues the branching border style; LP2-55 also contains a pale tree-shaped drawing above a winged insect.LP2-40 · ReadLP2-53 · ReadLP2-54 · ReadLP2-55 · Read
+LP2-40 has curls joined to branching, root-like forms on both sides of the text. LP2-53 shows a winged insect below its red closing passage. The next pair, LP2-54–55, continues the branching border style; LP2-55 also contains a pale tree-shaped drawing above a winged insect.
+[Image: LP2-40 cropped page preview]
+LP2-40 · Read
+[Image: LP2-53 cropped page preview]
+LP2-53 · Read
+[Image: LP2-54 cropped page preview]
+LP2-54 · Read
+[Image: LP2-55 cropped page preview]
+LP2-55 · Read
 Use the illustrated index to inspect the intervening LP2-40–53 pages. The branches and trees article compares these forms with the narrow branching drawing on LP2-08–14.
 A useful comparison starts with a question
 	Question	What to record	What the result would establish
@@ -9691,12 +9939,22 @@ Locate the narrow branching drawings on LP2-08–14 and the pale tree on LP2-55;
 
 Branching forms occur in several parts of LP2. They differ in placement and appearance: a narrow drawing beside the text on LP2-08–14, curled borders later in the manuscript, and a pale tree-shaped drawing inside LP2-55. Keeping these examples separate makes it possible to compare them without losing their page context.
 The narrow branching drawing on LP2-08–14
-LP2-08 shows a long, slender form along the left margin. Smaller lines branch off toward its upper and lower ends, while the main text sits to its right. LP2-14 shows the same broad arrangement and includes an insect drawing below the text at the right.LP2-08 · ReadLP2-14 · Read
+LP2-08 shows a long, slender form along the left margin. Smaller lines branch off toward its upper and lower ends, while the main text sits to its right. LP2-14 shows the same broad arrangement and includes an insect drawing below the text at the right.
+[Image: LP2-08 cropped page preview]
+LP2-08 · Read
+[Image: LP2-14 cropped page preview]
+LP2-14 · Read
 The community groups LP2-08–14 under “Branches.” Open the middle pages to compare placement and linework: 09 · 10 · 11 · 12 · 13. The group name does not establish that the form represents a particular plant species, diagram, or cipher key.
 Curled borders and the pale tree
-On LP2-40, branching forms are part of the curled drawings on both sides of the text. LP2-55 has that border style as well as a much lighter tree-shaped drawing in the central space above the insect. Its low contrast is itself a reason to consult the original image rather than relying on a transcription.LP2-40 · ReadLP2-55 · Read
+On LP2-40, branching forms are part of the curled drawings on both sides of the text. LP2-55 has that border style as well as a much lighter tree-shaped drawing in the central space above the insect. Its low contrast is itself a reason to consult the original image rather than relying on a transcription.
+[Image: LP2-40 cropped page preview]
+LP2-40 · Read
+[Image: LP2-55 cropped page preview]
+LP2-55 · Read
 Compare the spiral and branching borders, or use the illustrated index to browse the other artwork groups, including the separately named LP2-27–32 “Wing & Tree” group.
-The Wing and Tree group adds another distinct example: the soft-edged tree-shaped figure on LP2-32. It should not be conflated with the pale, more finely outlined drawing on LP2-55.LP2-32 — soft-edged tree-shaped drawing. Open reader
+The Wing and Tree group adds another distinct example: the soft-edged tree-shaped figure on LP2-32. It should not be conflated with the pale, more finely outlined drawing on LP2-55.
+[Image: LP2-32: soft-edged tree-shaped drawing]
+LP2-32 — soft-edged tree-shaped drawing. Open reader
 What does “count the branches” mean?
 A branch count sounds straightforward until two people trace the same drawing differently. One may count every visible line leaving a trunk; another may count terminal tips; a third may count each segment between junctions. Those are different measurements.
 	Quantity	A possible explicit definition
@@ -9753,12 +10011,28 @@ Compare the profile insect, the Mayfly group, later winged figures, and the stip
 
 Insect imagery appears in several different forms across LP2. A profile drawing, opposed figures, a detached wing, and the stippled figure beneath the final parable offer different visual evidence. This guide brings selected examples together so they can be compared without assuming that they depict the same animal.
 The profile drawing on LP2-14
-Below the text at the right of LP2-14 is a sideways insect drawing. The body is segmented, a veined wing rises above it, and long curved appendages extend from its rear. The narrow branching drawing continues down the opposite margin. This combination makes the page recognizable even without reading its runes.LP2-14 — profile insect beside the branching margin. Open reader
+Below the text at the right of LP2-14 is a sideways insect drawing. The body is segmented, a veined wing rises above it, and long curved appendages extend from its rear. The narrow branching drawing continues down the opposite margin. This combination makes the page recognizable even without reading its runes.
+[Image: LP2-14: profile insect beside the branching margin]
+LP2-14 — profile insect beside the branching margin. Open reader
 The “Mayfly” group: LP2-23–26
-The community groups LP2-23–26 under “Mayfly.” LP2-23 opens with five large dots above the text. On LP2-24–26, elongated insect-like figures flank the text on both sides. Their upper and lower parts oppose one another, which makes orientation a useful feature to record before comparing the drawings.LP2-23 — five dots above the opening text. Open readerLP2-24 — opposed figures beside the text. Open readerLP2-25 — the figures beside another text layout. Open readerLP2-26 — the final page of the community group. Open reader
+The community groups LP2-23–26 under “Mayfly.” LP2-23 opens with five large dots above the text. On LP2-24–26, elongated insect-like figures flank the text on both sides. Their upper and lower parts oppose one another, which makes orientation a useful feature to record before comparing the drawings.
+[Image: LP2-23: five dots above the opening text]
+LP2-23 — five dots above the opening text. Open reader
+[Image: LP2-24: opposed figures beside the text]
+LP2-24 — opposed figures beside the text. Open reader
+[Image: LP2-25: the figures beside another text layout]
+LP2-25 — the figures beside another text layout. Open reader
+[Image: LP2-26: the final page of the community group]
+LP2-26 — the final page of the community group. Open reader
 The browsing name does not prove a species identification. Nor does it mean that a complete insect drawing appears on every page in the named group. The dot inventory separately records the LP2-23 arrangement.
 Winged figures on later pages
-LP2-53 and LP2-55 show dark winged figures beneath their text, within the surrounding curled borders. LP2-55 also has a pale tree-shaped drawing above its insect. On LP2-57, the figure is built from a dense vertical body and scattered marks extending into wing-like areas. Its rendering differs visibly from the outlined and shaded figures on pages 53 and 55.LP2-53 — winged figure beneath the red passage. Open readerLP2-55 — pale tree above a winged figure. Open readerLP2-57 — stippled figure beneath the parable. Open reader
+LP2-53 and LP2-55 show dark winged figures beneath their text, within the surrounding curled borders. LP2-55 also has a pale tree-shaped drawing above its insect. On LP2-57, the figure is built from a dense vertical body and scattered marks extending into wing-like areas. Its rendering differs visibly from the outlined and shaded figures on pages 53 and 55.
+[Image: LP2-53: winged figure beneath the red passage]
+LP2-53 — winged figure beneath the red passage. Open reader
+[Image: LP2-55: pale tree above a winged figure]
+LP2-55 — pale tree above a winged figure. Open reader
+[Image: LP2-57: stippled figure beneath the parable]
+LP2-57 — stippled figure beneath the parable. Open reader
 A resemblance between two figures is a starting point for comparison. To claim that they reuse one source, compare corresponding contours, internal details, and proportions after stating any scaling or reflection. Repeated subject matter alone is insufficient.
 The detached wing
 LP2-27 places a long, veined wing above the red opening text. It is useful to inspect that wing separately from the whole-insect drawings. The Wing and Tree guide follows the LP2-27–32 group from this image to the tree-shaped drawing on its last page.
@@ -9819,10 +10093,22 @@ Wing and Tree: LP2-27–32
 Follow the detached wing and tree-shaped drawing at the endpoints of the LP2-27–32 group, with all intervening pages.
 
 “Wing & Tree” is the community name for LP2-27–32. The group begins with a detached, veined wing above the text on LP2-27 and ends with a soft-edged tree-shaped drawing below the text on LP2-32. Looking at the two endpoints makes the browsing name much easier to understand.
-The illustrated endpointsLP2-27 — a detached wing above the runes. Open readerLP2-32 — a tree-shaped drawing below the runes. Open reader
+The illustrated endpoints
+[Image: LP2-27: a detached wing above the runes]
+LP2-27 — a detached wing above the runes. Open reader
+[Image: LP2-32: a tree-shaped drawing below the runes]
+LP2-32 — a tree-shaped drawing below the runes. Open reader
 The wing has a dark outer boundary and a network of internal lines. The tree-shaped drawing has a dark central trunk-like form and branching extensions, with much softer edges. These descriptions concern appearance; they do not establish a species, a source illustration, or an intended mathematical structure.
 The pages between them
-LP2-28–31 carry the intervening runic text. Keep these pages in view when proposing a section-wide operation: a rule that uses only the illustrated endpoints still needs to explain how it applies to the middle.LP2-28 — intervening text. Open readerLP2-29 — intervening text. Open readerLP2-30 — intervening text. Open readerLP2-31 — intervening text. Open reader
+LP2-28–31 carry the intervening runic text. Keep these pages in view when proposing a section-wide operation: a rule that uses only the illustrated endpoints still needs to explain how it applies to the middle.
+[Image: LP2-28: intervening text]
+LP2-28 — intervening text. Open reader
+[Image: LP2-29: intervening text]
+LP2-29 — intervening text. Open reader
+[Image: LP2-30: intervening text]
+LP2-30 — intervening text. Open reader
+[Image: LP2-31: intervening text]
+LP2-31 — intervening text. Open reader
 Two different kinds of branching
 The wing’s internal lines form enclosed areas; the tree-shaped drawing suggests a central form with extensions. A graph can represent either tracing, but the decision about vertices and edges must be explicit. A junction, a crossing, and a closed cell are different features.
 The branches and trees article defines tips, junctions, and segments as separate possible measurements. For the wing, a cell count would be another measurement: state whether the outer boundary closes a region and how faint or interrupted lines are handled. Counting a picture without those rules is difficult to reproduce.
@@ -9881,11 +10167,14 @@ The three passages
 
 	Section	Use of the term	Context
 
-	The Loss of DivinityLP1-10–13	The circumference practices three behaviors	Consumption, preservation, and adherence lead to a loss of primality and divinity.
+	The Loss of Divinity
+LP1-10–13	The circumference practices three behaviors	Consumption, preservation, and adherence lead to a loss of primality and divinity.
 
-	Second koanLP1-14–15	The I is associated with its voice	A student’s thought denying an inner voice becomes the master’s example of it.
+	Second koan
+LP1-14–15	The I is associated with its voice	A student’s thought denying an inner voice becomes the master’s example of it.
 
-	ParableLP2-57	Circumferences are to be shed	The surrounding language concerns an instar, inward divinity, and emergence.
+	Parable
+LP2-57	Circumferences are to be shed	The surrounding language concerns an instar, inward divinity, and emergence.
 
 
 These are section-level references. A multi-page section is not a claim that the word appears on every listed page. The table paraphrases contextual English; use the linked complete readings and original images when checking the exact wording or rune sequence.
@@ -9905,6 +10194,8 @@ This makes the circumference more than a literal physical perimeter in that dial
 What changes in the parable
 
 The parable uses the plural, circumferences, beside an image of emergence. Its instar comparison gives shedding a biological counterpart: moving beyond a limiting outer form. The repeated vocabulary makes it reasonable to read this alongside the earlier behavioral and identity passages.
+
+[Image: LP2-57 parable above a stippled insect-like figure]
 Read the parable beside its original image. The preview is cropped; the reader shows the complete page.
 
 The plural does not itself tell us how many layers there are, what order to remove them in, or which cipher transformation to apply. Those would be additional hypotheses. The text provides a recurring metaphor; a computational proposal still needs an explicit operation.
@@ -10032,13 +10323,15 @@ Where the words occur
 
 	Known-reading section	Contextual word position	What occurs there
 
-	The Loss of DivinityLP1-10–13	4	DIVINITY in the section heading.
+	The Loss of Divinity
+LP1-10–13	4	DIVINITY in the section heading.
 
 	The Loss of Divinity	15	The opening statement introduces behaviors that cause its loss.
 
 	The Loss of Divinity	152 and 156	PRIMALITY followed by DIVINITY in the concluding explanation of those behaviors.
 
-	ParableLP2-57	17	DIVINITY is described as within, between shedding circumferences and emerging.
+	Parable
+LP2-57	17	DIVINITY is described as within, between shedding circumferences and emerging.
 
 
 The current compilation therefore contains one exact occurrence of PRIMALITY and four of DIVINITY, including the heading. These are positions in contextual English, counted from one at the start of each section. They are not rune positions, and a section spanning LP1-10–13 does not place each occurrence on all four pages.
@@ -10077,6 +10370,8 @@ Likewise, “divinity within” permits an interpretation involving inward disco
 The Blake comparison examines a specific passage about inward deities and explains how its account differs from the manuscript’s parable.
 
 How the parable changes the emphasis
+
+[Image: LP2-57, containing the parable and its insect-like illustration]
 LP2-57: the parable places inward divinity beside shedding and emergence. Open the reader for the complete image.
 
 The earlier section describes a loss. The parable describes a movement: shed circumferences, find divinity within, and emerge. This gives the shared vocabulary a different role. Divinity is not only something the text says can be lost; it is also something its concluding parable asks the reader to discover.
@@ -10135,8 +10430,14 @@ A heading is identified by its position and function, while red lettering descri
 
 Three different uses of red
 
+
+[Image: LP2-15 preview showing a red rune heading and the red decimal entry 3299 among black numbers]
 LP2-15: red runes above the panel; 3299 is the panel’s only red entry.
+
+[Image: LP2-36 preview with a small red decimal 1 beside the start of a text block]
 LP2-36: a red decimal 1 at the left of a text block.
+
+[Image: LP2-57 preview with a red opening heading, a large angular red mark, and red dotted marks]
 LP2-57: red opening text, an enlarged angular mark, and red dot clusters.
 
 
@@ -10226,11 +10527,11 @@ RDS-OR-THEIR-NUMBERS.FOR-ALL-I/
 S-SACRED./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 A WARNING BELIEVE NOTHING FROM THIS BOOK EXCEPT WHAT YOU KNOW TO BE TRUE TEST THE KNOWLEDGE FIND YOUR TRUTH EXPERIENCE YOUR DEATH DO NOT EDIT OR CHANGE THIS BOOK OR THE MESSAGE CONTAINED WITHIN EITHER THE WORDS OR THEIR NUMBERS FOR ALL IS SACRED
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10281,7 +10582,6 @@ RNG,-YOUR-INNOCENCE,-YOUR-ILLU/
 SIANS-YOUR-CERTAINTY,-AND-YOU/
 R-REALITY.ULTIMATELY,-YOU-W/
 ILL-DISCOUER-AN-END-TO-SELF/
-
 LP1-04: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 .IT-IS-THROUGH-THIS-PILGRIM/
@@ -10300,11 +10600,11 @@ R-ALL-THAT-LIUES-IS-HOLY./
 AN-INSTRUCTIAN.COMMAND-YOUR-OWN-SELF./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 WELCOME WELCOME,  PILGRIM,  TO  THE  GREAT  JOURNEY  TOWARD  THE  END  OF  ALL  THINGS IT  IS  NOT  AN  EASY  TRIP,  BUT  FOR  THOSE  WHO  FIND  THEIR  WAY  HERE  IT  IS  A  NECESSARY  ONE ALONG  THE  WAY  YOU  WILL  FIND  AN  END  TO  ALL  STRUGGLE  AND  SUFFERING,  YOUR  INNOCENCE,  YOUR  ILLUSIONS,  YOUR  CERTAINTY,  AND  YOUR  REALITY ULTIMATELY,  YOU  WILL  DISCOVER  AN  END  TO  SELF IT  IS  THROUGH  THIS  PILGRIMAGE  THAT  WE  SHAPE  OURSELVES  AND  OUR  REALITIES JOURNEY  DEEP  WITHIN  AND  YOU  WILL  ARRIVE  OUTSIDE LIKE  THE  INSTAR,  IT  IS  ONLY  THROUGH  GOING  WITHIN  THAT  WE  MAY  EMERGE WIDSOM YOU  ARE  A  BEING  UNTO  YOURSELF YOU  ARE  A  LAW  UNTO  YOURSELF EACH  INTELLIGENCE  IS  HOLY FOR  ALL  THAT  LIVES  IS  HOLY AN  INSTRUCTION  COMMAND  YOUR  OWN  SELF
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10358,11 +10658,11 @@ AETHEREAL-BUFFERS-UOID-CARNAL-18/
 151-131-CABAL-138-272/
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 SOME WISDOM THE PRIMES ARE SACRED THE TOTIENT FUNCTION IS SACRED ALL THINGS SHOULD BE ENCRYPTED KNOW THIS 272 138 SHADOWS 131 151 AETHEREAL BUFFERS VOID CARNAL 18 226 OBSCURA FORM 245 MOBIUS 18 ANALOG VOID MOURNFUL AETHEREAL 151 131 CABAL 138 272
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10410,7 +10710,6 @@ NT-TOLD-THE-MASTER-HIS-NAME./
 T-IS-ONLY-WHAT-YOU-ARE-CAL/
 LED.WHO-ARE-YOU-WHO-WISH/
 ES-TO-STUDY-HERE"HE-ASCE/
-
 LP1-07: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 D-AGAIN.THE-MAN-THOUGHT-FOR-A-/
@@ -10424,7 +10723,6 @@ OUGHT-SOME-MORE.FINALLY,/
 HE-ANSWERED,"I-AM-A-HUMAN-B/
 ENG"."THAT-IS-ONLY-YOUR-SPE/
 CIES,NOT-WHO-YOU-ARE.WH/
-
 LP1-08: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 O-ARE-YOU-WHO-WISHES-TO-/
@@ -10438,7 +10736,6 @@ RE,NOT-WHO-YOU-ARE.WHO-A/
 RE-YOU-WHO-WISHES-TO-STU/
 DY-HERE".THE-MAN-WAS-GETTNG-IR/
 RITATED."I-AM,HE-STARTED,/
-
 LP1-09: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 BUT-HE-COULD-NOT-THINC-OF-/
@@ -10453,11 +10750,11 @@ UNREASONABLE-THNGS-EACH-DA/
 Y./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 A  KOAN A  MAN  DECIDED  TO  GO  AND  STUDY  WITH  A  MASTER HE  WENT  TO  THE  DOOR  OF  THE  MASTER "WHO  ARE  YOU  WHO  WISHES  TO  STUDY  HERE"  ASKED  THE  MASTER THE  STUDENT  TOLD  THE  MASTER  HIS  NAME "THAT  IS  NOT  WHO  YOU  ARE,  THAT  IS  ONLY  WHAT  YOU  ARE  CALLED WHO  ARE  YOU  WHO  WISHES  TO  STUDY  HERE"  HE  ASKED  AGAIN THE  MAN  THOUGHT  FOR  A  MOMENT,  AND  REPLIED  "I  AM  A  PROFESSOR" "THAT  IS  WHAT  YOU  DO,  NOT  WHO  YOU  ARE,"  REPLIED  THE  MASTER "WHO  ARE  YOU  WHO  WISHES  TO  STUDY  HERE" CONFUSED,  THE  MAN  THOUGHT  SOME  MORE FINALLY,  HE  ANSWERED,  "I  AM  A  HUMAN  BEING" "THAT  IS  ONLY  YOUR  SPECIES,  NOT  WHO  YOU  ARE WHO  ARE  YOU  WHO  WISHES  TO  STUDY  HERE",  ASKED  THE  MASTER  AGAIN AFTER  A  MOMENT  OF  THOUGHT,  THE  PROFESSOR  REPLIED  "I  AM  A  CONSCIOUSNESS  INHABITING  AN  ARBITRARY  BODY" "THAT  IS  MERELY  WHAT  YOU  ARE,  NOT  WHO  YOU  ARE WHO  ARE  YOU  WHO  WISHES  TO  STUDY  HERE" THE  MAN  WAS  GETTING  IRRITATED "I  AM,"  HE  STARTED,  BUT  HE  COULD  NOT  THINK  OF  ANYTHING  ELSE  TO  SAY,  SO  HE  TRAILED  OFF AFTER  A  LONG  PAUSE  THE  MASTER  REPLIED,  "THEN  YOU  ARE  WELCOME  TO  COME  STUDY" AN  INSTRUCTION DO  FOUR  UNREASONABLE  THINGS  EACH  DAY
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10517,7 +10814,6 @@ FOLLOWNG-TWO-ERRORS-WITHIN-THE-DEC/
 EPTIAN./
 1-WE-DO-NOT-HAUE-ENOUGH-/
 OR-THERE-IS-NOT-ENOUGH./
-
 LP1-11: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 2-WE-HAUE-WHAT-WE-HAUE-N/
@@ -10531,7 +10827,6 @@ THNGS-BECAUSE-WE-BELIEUE-WE-AR/
 E-WEAC.IF-WE-LOSE-THEM-WE-WILL-NO/
 T-BE-STRONG-ENOUGH-TO-GAIN-THEM-/
 AGAIN.THIS-IS-THE-DECEPTIAN./
-
 LP1-12: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 MOST-THNGS-ARE-NOT-WORTH-PRESERU/
@@ -10544,7 +10839,6 @@ THERE-IS-NOTHNG-TO-BE-RIGHT-ABOUT-/
 TO-BELONG-IS-DEATH./
 IT-IS-THE-BEHAUIARS-OF-CONSUMPT/
 IAN;PRESERUATIAN;AND-ADHEREN/
-
 LP1-13: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 CE-THAT-HAUE-US-LOSE-OUR-PRIMAL/
@@ -10560,11 +10854,11 @@ AN-INSTRUCTIAN.PROGRAM-YOU/
 R-MIND.PROGRAM-REALITY./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE LOSS OF DIVINITY CONSUMPTION WE CONSUME TOO MUCH BECAUSE WE BELIEVE THE FOLLOWING TWO ERRORS WITHIN THE DECEPTION 1 WE DO NOT HAVE ENOUGH, OR THERE IS NOT ENOUGH 2 WE HAVE WHAT WE HAVE NOW BY LUCK; AND WE WILL NOT BE STRONG ENOUGH LATER TO OBTAIN WHAT WE NEED MOST THINGS ARE NOT WORTH CONSUMING PRESERVATION WE PRESERVE THINGS BECAUSE WE BELIEVE WE ARE WEAK IF WE LOSE THEM WE WILL NOT BE STRONG ENOUGH TO GAIN THEM AGAIN THIS IS THE DECEPTION MOST THINGS ARE NOT WORTH PRESERVING ADHERENCE WE FOLLOW DOGMA SO THAT WE CAN BELONG AND BE RIGHT; OR WE FOLLOW REASON SO WE CAN BELONG AND BE RIGHT THERE IS NOTHING TO BE RIGHT ABOUT; TO BELONG IS DEATH IT IS THE BEHAVIORS OF CONSUMPTION, PRESERVATION AND ADHERENCE THAT HAVE US LOSE OUR PRIMALITY, AND THUS OUR DIVINITY SOME WISDOM AMASS GREAT WEALTH NEVER BECOME ATTACHED TO WHAT YOU OWN BE PREPARED TO DESTROY ALL THAT YOU OWN AN INSTRUCTION PROGRAM YOUR MIND PROGRAM REALITY
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10628,7 +10922,6 @@ EAD"."I-DON'T-HAUE-A-UOICE-I/
 N-MY-HEAD,"-THOUGHT-THE-STUDENT-/
 AND-HE-RAISED-HIS-HAND-TO-TE/
 LL-THE-MASTER.THE-MASTER-STOP/
-
 LP1-15: literal reading
 Compare with the image · Transcription and corrections · Download literal text
 PED-THE-STUDENT,AND-SAID"THE-/
@@ -10638,11 +10931,11 @@ I."AND-THE-STUDENTS-WERE-ENL/
 IGHTENED./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 A  KOAN DURING  A  LESSON,  THE  MASTER  EXPLAINED  THE  I "THE  I  IS  THE  VOICE  OF  THE  CIRCUMFERENCE,"  HE  SAID WHEN  ASKED  BY  A  STUDENT  TO  EXPLAIN  WHAT  THAT  MEANT;  THE  MASTER  SAID  "IT  IS  A  VOICE  INSIDE  YOUR  HEAD" "I  DON'T  HAVE  A  VOICE  IN  MY  HEAD,"  THOUGHT  THE  STUDENT,  AND  HE  RAISED  HIS  HAND  TO  TELL  THE  MASTER THE  MASTER  STOPPED  THE  STUDENT,  AND  SAID  "THE  VOICE  THAT  JUST  SAID  YOU  HAVE  NO  VOICE  IN  YOUR  HEAD;  IS  THE  I" AND  THE  STUDENTS  WERE  ENLIGHTENED
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10697,11 +10990,11 @@ CNOW-THIS./
 966-278-312-1311-434/
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 AN  INSTRUCTION KWESTION  ALL  THINGS DISCOVER  TRUTH  INSIDE  YOURSELF FOLLOW  YOUR  TRUTH IMPOSE  NOTHING  ON  OTHERS KNOW  THIS 434 1311 312 278 966 204 812 934 280 1071 626 620 809 620 626 1071 280 934 812 204 966 278 312 1311 434
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10753,11 +11046,11 @@ IT-IS-THE-DUTY-OF-EUERY-PILGR/
 IM-TO-SEEC-OUT-THIS-PAGE./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 AN END WITHIN THE DEEP WEB THERE EXISTS A PAGE THAT HASHES TO 36367763ab73783c7af284446c59466b4cd653239a311cb7116d4618dee09a8425893dc7500b464fdaf1672d7bef5e891c6e2274568926a49fb4f45132c2a8b4 IT IS THE DUTY OF EVERY PILGRIM TO SEEK OUT THIS PAGE
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.
@@ -10801,11 +11094,11 @@ IRCUMFERENCES.FIND-TH/
 E-DIUINITY-WITHIN-AND-EMERGE./
 &
 $
-
 Reading the notation
 Latin labels can represent multi-letter runes. Slashes, line markers, and separators retain the exported literal notation; they are not additional decoded letters. See transcription conventions and literal versus contextual text. Do not silently normalize a spelling before calculating a prime sum.
 Contextual whole-section reading
-This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.Show contextual English
+This is the archived contextual rendering for all pages listed above. It may normalize or interpret rune labels; use the individual literal texts for sequence and spelling comparisons.
+Show contextual English
 PARABLE LIKE THE INSTAR TUNNELING TO THE SURFACE WE MUST SHED OUR OWN CIRCUMFERENCES FIND THE DIVINITY WITHIN AND EMERGE
 Sources and status
 These are known readings in the 5 October 2026 source snapshot, reproduced using the published controls. Compiled readings and provenance · All known sections. Page-specific source images and archive references are linked above. Reproducing a known section does not establish a solution to another page.

@@ -53,6 +53,8 @@ Examples from the archived streams
 These are rounded display values. Use the integer numerator and denominator in the report for exact comparisons. The examples illustrate different input lengths and values; they are not a selection of statistically significant pages.
 
 See the distributions behind the numbers
+
+[Image: Two frequency bar charts on identical axes. LP2-31 has 5 to 13 occurrences per rune across 269 symbols. LP2-57 has zero to 15 across 95 symbols, with a larger concentration at rune index 18.]
 Archived-stream frequencies for LP2-31 and LP2-57. Bars show the proportion of each rune, not raw counts. Open or save the full-size SVG; use the alphabet reference to look up an index.
 
 LP2-31’s counts range from 5 to 13 per rune. LP2-57 has seven runes with no occurrences and one rune, index 18, with 15 occurrences. Concentration matters because a count contributes nᵢ(nᵢ − 1) matching pairs: a count of 15 supplies 210, while a count of 5 supplies only 20. Large counts therefore contribute disproportionately to IoC.
@@ -140,7 +142,6 @@ def pooled(symbols, period):
 
 for text in ("FUFUFFU", "FFUUFFU"):
     print(text, "whole:", rate(pairs(text)), "period 2:", pooled(text, 2))
-
 
 Expected output:
 
