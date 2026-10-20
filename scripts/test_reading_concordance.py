@@ -4,14 +4,15 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from reading_concordance import SOURCE, concordance
+from reading_concordance import ROOT, SOURCE, concordance, literal_concordance
 
 
 class ReadingConcordance(unittest.TestCase):
     def test_saved_reports_match_stdout_and_preserve_existing_files(self):
         script = Path(__file__).with_name("reading_concordance.py")
         with tempfile.TemporaryDirectory() as folder:
-            for flags, extension in [([], "txt"), (["--json"], "json")]:
+            for flags, extension in [([], "txt"), (["--json"], "json"),
+                                     (["--literal", "--json"], "literal.json")]:
                 output = Path(folder) / ("result." + extension)
                 command = [sys.executable, str(script), "circumference", "--prefix", *flags]
                 expected = subprocess.run(command, capture_output=True, check=True).stdout
@@ -42,6 +43,35 @@ class ReadingConcordance(unittest.TestCase):
                           ("second-koan", "CIRCUMFERENCE"),
                           ("lp2-57", "CIRCUMFERENCES")])
         self.assertEqual(expanded[0]["section_pages"], ["lp1-10", "lp1-11", "lp1-12", "lp1-13"])
+
+    def test_literal_pages_and_original_wraps(self):
+        hits, sources = literal_concordance(ROOT, "circumference", prefix=True)
+        self.assertEqual(len(sources), 17)
+        self.assertEqual([(h["page"], h["line_start"], h["line_end"]) for h in hits],
+                         [("lp1-10", 1, 2), ("lp1-14", 3, 4), ("lp2-57", 3, 4)])
+        self.assertEqual(hits[0]["matched_source"], "CIRCU/\nMFERENCE")
+        for hit in hits:
+            literal = json.loads((ROOT / hit["source"]).read_bytes())["reading"]["literal"]
+            self.assertEqual(literal[hit["source_start"]:hit["source_end"]],
+                             hit["matched_source"])
+            self.assertIn(hit["matched_source"], hit["source_excerpt"])
+
+    def test_literal_search_preserves_spelling_and_page_boundaries(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            folder = root / "data/pages"
+            folder.mkdir(parents=True)
+            for page, literal in [("a", "☀ DIUINITY.SELF"),
+                                  ("b", "KNOWLEDGE.CIRCU/\r\nMFERENCE")]:
+                (folder / (page + ".json")).write_text(
+                    json.dumps({"id": page, "reading": {"literal": literal}}), encoding="utf-8")
+            self.assertEqual(literal_concordance(root, "divinity")[0], [])
+            self.assertEqual(len(literal_concordance(root, "diuinity")[0]), 1)
+            self.assertEqual(literal_concordance(root, "self knowledge")[0], [])
+            hit = literal_concordance(root, "circumference", context=0)[0][0]
+            self.assertEqual(hit["matched_source"], "CIRCU/\r\nMFERENCE")
+            self.assertEqual(hit["source_excerpt"], hit["matched_source"])
+            self.assertEqual((hit["line_start"], hit["line_end"]), (1, 2))
 
     def test_phrase_boundaries_and_apostrophes(self):
         controls = [{"id": "a", "pages": ["a"], "reading": "Don't stop. SELF"},

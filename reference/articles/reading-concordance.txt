@@ -2,7 +2,7 @@ Search the known readings: a concordance
 
 Find words and phrases across nine contextual readings, with reproducible counts, surrounding text, and source hashes.
 
-A concordance locates a word or phrase and shows its surrounding text. This tool searches the nine contextual known-reading sections in Liberpedia. It is useful for comparing terms such as circumference, divinity, self, and instar without relying on memory or repeatedly opening every section.
+A concordance locates a word or phrase and shows its surrounding text. By default, this tool searches the nine contextual known-reading sections in Liberpedia. Use --literal to locate decoded labels on individual manuscript pages. Both modes help compare recurring terms without relying on memory or repeatedly opening every section.
 
 Run a lookup
 
@@ -24,7 +24,22 @@ THE LOSS OF DIVINITY THE [CIRCUMFERENCE] PRACTICES THREE BEHAVIORS ...
 
 This shortened example illustrates the output; the command prints its actual context rather than an ellipsis. A section range does not identify the exact page holding the word. Open the complete reading to compare its literal page outputs and original images.
 
-What is being searched?
+Locate a word on an exact page
+
+A section can span several sheets. To find the page that actually contains a word, search the 17 available literal page readings:
+
+python scripts/reading_concordance.py circumference --literal --prefix
+python scripts/reading_concordance.py circumference --literal --prefix --json
+
+The result places the two singular occurrences on LP1-10 and LP1-14, and the plural on LP2-57. Each hit links to its page record and reports its line range in the stored literal reading.
+
+Words can wrap between lines. On LP1-10, the stored text is CIRCU/ followed on the next line by MFERENCE. This mode removes slash markers and carriage-return/newline characters before matching, so the whole word can be found. Hyphens and other punctuation still separate tokens. It does not join different pages, so a phrase split across two sheets requires the contextual section search.
+
+Literal labels retain their spelling: search DIUINITY, not DIVINITY, and UOICE, not VOICE. No U/V expansion, synonym matching, or spelling correction is applied. A label such as TH can represent one rune, so the reported word and character positions must not be treated as rune indices.
+
+In literal JSON output, matched_source retains the original wraps. The offsets index the page record’s reading.literal string, and line_start and line_end count its lines from one. The report includes the path and SHA-256 of every page record searched. These are hashes of the JSON records, not of the manuscript images. This makes the lookup checkable without implying that decoded Latin labels were printed on the original page.
+
+Scope of the default contextual search
 
 	Included	Outside this search
 	One contextual English reading for each of nine sections	Unsolved ciphertext, artwork, and OutGuess messages
@@ -68,6 +83,12 @@ Lookup script · Checks · Contextual source compilation. The source record reta
 Sources, related references, and files
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- LP1-10
+  https://jelliottdev.github.io/reference/lp1-10.html
+- LP1-14
+  https://jelliottdev.github.io/reference/lp1-14.html
+- LP2-57
+  https://jelliottdev.github.io/reference/lp2-57.html
 - literal rune labels
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - rune indices and prime values
