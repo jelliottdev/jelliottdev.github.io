@@ -8362,6 +8362,37 @@ Using 0 instead of 7 at the fourth position changes that last sum from 9 to 2. Z
 
 Similarly, applying these sums modulo 29 is an additional operation, and applying them as shifts to ciphertext is different from interpreting them directly as rune indices. Write each step explicitly before judging whether the output looks meaningful. A change introduced to improve one fragment must be recorded and checked across the declared scope.
 
+The complete ten-position calculation
+
+Fix one rule: read the product’s decimal digits from left to right and add consecutive primes beginning at 2, without skipping, resetting or replacing any prime. This produces:
+
+	Position	Digit	Prime	Sum
+
+	1	3	2	5
+
+	2	0	3	3
+
+	3	1	5	6
+
+	4	2	7	9
+
+	5	8	11	19
+
+	6	2	13	15
+
+	7	8	17	25
+
+	8	5	19	24
+
+	9	2	23	25
+
+	10	9	29	38
+
+
+If a separate rule reduces those sums modulo 29, the sequence becomes 5, 3, 6, 9, 19, 15, 25, 24, 25, 9. Only the final sum changes: 38 mod 29 = 9. These residues could be interpreted as direct rune indices or as shifts applied to a specified ciphertext stream, but those are different operations. No ciphertext has been used in this table.
+
+The reproduction script includes the digits, primes, sums and residues in product_digit_prime_addition. This provides a fixed arithmetic reference against which to describe another variant, including an F-triggered exception. It does not fill in the unspecified route from the drawing to 7649 or demonstrate a connection between pages.
+
 How to replicate
 python scripts/check_number_examples.py
 Run with Python 3 from the repository or extracted reference-data ZIP. The script enumerates primes by exact trial division and checks both lookup directions and the products. Its JSON field prime_value_to_one_based_position reproduces the table above. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.

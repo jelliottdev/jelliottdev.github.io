@@ -80,6 +80,10 @@ def main():
     assert prime(7649) and prime(9467)
     assert 98597*30557 == 3012828529
     assert 9857*30557 == 301200349
+    product_digits = [int(digit) for digit in str(98597 * 30557)]
+    digit_primes = primes[:len(product_digits)]
+    digit_sums = [digit + value for digit, value in zip(product_digits, digit_primes)]
+    assert digit_sums == [5, 3, 6, 9, 19, 15, 25, 24, 25, 38]
     print(json.dumps({
         "prime_index_convention": "one-based: p_1 = 2",
         "p_3299": primes[3298], "p_9467": primes[9466],
@@ -87,6 +91,12 @@ def main():
         "7649_and_decimal_reverse_are_prime": True,
         "98597_times_30557": 98597*30557,
         "9857_times_30557": 9857*30557,
+        "product_digit_prime_addition": {
+            "rule": "Read product digits left to right; add consecutive primes starting at 2; no skips, resets or substitutions.",
+            "digits": product_digits, "primes": digit_primes, "sums": digit_sums,
+            "residues_mod_29": [value % 29 for value in digit_sums],
+            "scope": "A defined arithmetic sequence, not a ciphertext decoding or validation of its proposed origin.",
+        },
         "historical_square_line_sums": lines,
         "lp1_05": {
             "source": "data/pages/lp1-05.json",
@@ -112,7 +122,7 @@ def main():
             "half_turn_symmetric": printed == rotated,
             "normal": sorted(value for row in printed for value in row) == list(range(1, 26)),
         },
-        "scope": "Arithmetic of the LP1-05 rune-value conversion and printed LP1-16 panel; no new decryption claim."
+        "scope": "Prime lookups and product-digit arithmetic, LP1-05 rune-value conversion, and the printed LP1-16 panel; no new decryption claim."
     }, indent=2))
 
 if __name__ == "__main__":
