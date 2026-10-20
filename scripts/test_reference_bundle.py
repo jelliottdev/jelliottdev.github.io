@@ -56,6 +56,7 @@ def main():
             ["scripts/inspect_visual_records.py"],
             ["scripts/test_visual_report.py"],
             ["scripts/test_measure_region.py"],
+            ["scripts/test_check_lp2_target.py"],
         ]:
             result = subprocess.run([sys.executable, *command], cwd=target,
                                     capture_output=True, text=True, encoding="utf-8")
