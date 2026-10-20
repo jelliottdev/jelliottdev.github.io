@@ -8,12 +8,48 @@
 <h2 id="payloads">The later LP1 payloads</h2><p><a href="../lp1-10.html">LP1-10</a> through <a href="../lp1-13.html">LP1-13</a> contain signed instructions referring to three magic squares. Their ASCII borders differ. If one removes the surrounding border digits, the displayed interior is:</p><pre><code>10 12 10
 12 14 12
 10 12 10</code></pre><p>Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.</p><p>The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.</p>
-<p>The <a href="lp2-15-panel.html">LP2-15 decimal panel</a> is another distinct arrangement; its printed row and column sums are unequal.</p><h2 id="replicate">How to check a square</h2><pre><code>n = len(square)
+<p>The <a href="lp2-15-panel.html">LP2-15 decimal panel</a> is another distinct arrangement; its printed row and column sums are unequal.</p><h2 id="replicate">How to check a square</h2>
+<p>This complete Python 3 example uses the historical arrangement above. It prints row, column, and diagonal totals separately, so a failed check can be located rather than hidden behind a single yes/no result. It needs no files or extra packages.</p>
+<pre><code>square = [
+    [272, 138, 341, 131, 151],
+    [366, 199, 130, 320, 18],
+    [226, 245, 91, 245, 226],
+    [18, 320, 130, 199, 366],
+    [151, 131, 341, 138, 272],
+]
+n = len(square)
 assert n and all(len(row) == n for row in square)
-sums = [sum(row) for row in square]
-sums += [sum(row[c] for row in square) for c in range(n)]
-sums += [sum(square[i][i] for i in range(n)),
-         sum(square[i][n-1-i] for i in range(n))]
-is_magic = len(set(sums)) == 1</code></pre><p>Run <code>python scripts/check_number_examples.py</code> to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.</p>
+rows = [sum(row) for row in square]
+columns = [sum(row[c] for row in square) for c in range(n)]
+diagonals = [sum(square[i][i] for i in range(n)),
+             sum(square[i][n - 1 - i] for i in range(n))]
+lines = rows + columns + diagonals
+is_magic = len(set(lines)) == 1
+entries = [value for row in square for value in row]
+is_normal = is_magic and sorted(entries) == list(range(1, n * n + 1))
+print("Rows:", rows)
+print("Columns:", columns)
+print("Diagonals:", diagonals)
+print("Magic:", is_magic, "Normal:", is_normal)
+assert lines == [1033] * 12
+assert is_magic and not is_normal</code></pre>
+<p>Expected output:</p>
+<pre><code>Rows: [1033, 1033, 1033, 1033, 1033]
+Columns: [1033, 1033, 1033, 1033, 1033]
+Diagonals: [1033, 1033]
+Magic: True Normal: False</code></pre>
+<p>The repository command <code>python scripts/check_number_examples.py</code> checks the same twelve lines alongside the recorded prime-number examples. Either calculation checks arithmetic, not provenance or historical server acceptance.</p>
+<h2 id="constant">Where the magic constant comes from</h2>
+<p>If an order-n square has row sum M, adding all rows gives a total of nM. Thus the total of all entries divided by n is the only possible common row sum. For this example, the total is 5165, so the candidate is <code>5165 / 5 = 1033</code>. That is a necessary condition, not a substitute for checking the individual lines.</p>
+<p>For a <em>normal</em> square, the sum of the integers 1 through n² is <code>n²(n² + 1) / 2</code>. Dividing by n gives the familiar constant <code>n(n² + 1) / 2</code>. A normal order-5 square therefore has constant 65. Applying that formula to this non-normal historical arrangement would be a category error: it does not contain the integers 1 through 25.</p>
+<h2 id="symmetry">Symmetry is a different property</h2>
+<p>The three-by-three interior in the signed payload looks balanced because it repeats under horizontal and vertical reflection. But its outer rows total 32 while its middle row totals 38. Its columns likewise total 32, 38, and 32; both main diagonals total 34. The total of all entries is 102, giving a candidate constant of 34, yet not one row reaches that value.</p>
+<div class="table-wrap"><table><thead><tr><th>Check</th><th>Historical 5 × 5</th><th>Payload interior 3 × 3</th></tr></thead><tbody>
+<tr><td>All row sums equal?</td><td>Yes: 1033</td><td>No: 32, 38, 32</td></tr>
+<tr><td>All column sums equal?</td><td>Yes: 1033</td><td>No: 32, 38, 32</td></tr>
+<tr><td>Both main diagonals match that sum?</td><td>Yes: 1033</td><td>Both are 34, but the rows and columns fail</td></tr>
+<tr><td>Magic under the stated definition?</td><td>Yes</td><td>No</td></tr>
+</tbody></table></div>
+<p>A centered layout, repeated numbers, or matching diagonals can be worth describing without calling the arrangement magic. The <a href="lp2-15-panel.html">LP2-15 panel guide</a> applies this same separation between visible pattern and checked sums to its sixteen printed values.</p>
 <h2 id="sources">Sources</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned 2014 walkthrough</a> · <a href="../../exports/steganography/lp1-10.body.txt">LP1-10 body</a> · <a href="embedded-payloads.html">All signed payloads and hashes</a>.</p>
 <h2>Manuscript pages discussed</h2><p><a href="../lp1-10.html">LP1-10</a> · <a href="../lp1-11.html">LP1-11</a> · <a href="../lp1-12.html">LP1-12</a> · <a href="../lp1-13.html">LP1-13</a></p><h2>Guides linking here</h2><ul><li><a href="embedded-payloads.html">Embedded OutGuess payloads</a></li><li><a href="lp2-15-panel.html">The LP2-15 number panel and heading</a></li></ul></main></body></html>

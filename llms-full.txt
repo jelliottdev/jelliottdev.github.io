@@ -6943,14 +6943,64 @@ The historical walkthrough later describes an input form accepting squares subje
 
 The LP2-15 decimal panel is another distinct arrangement; its printed row and column sums are unequal.
 How to check a square
+
+This complete Python 3 example uses the historical arrangement above. It prints row, column, and diagonal totals separately, so a failed check can be located rather than hidden behind a single yes/no result. It needs no files or extra packages.
+
+square = [
+    [272, 138, 341, 131, 151],
+    [366, 199, 130, 320, 18],
+    [226, 245, 91, 245, 226],
+    [18, 320, 130, 199, 366],
+    [151, 131, 341, 138, 272],
+]
 n = len(square)
 assert n and all(len(row) == n for row in square)
-sums = [sum(row) for row in square]
-sums += [sum(row[c] for row in square) for c in range(n)]
-sums += [sum(square[i][i] for i in range(n)),
-         sum(square[i][n-1-i] for i in range(n))]
-is_magic = len(set(sums)) == 1
-Run python scripts/check_number_examples.py to check all twelve lines of the historical 5 × 5 example. This checks arithmetic, not provenance or historical server acceptance.
+rows = [sum(row) for row in square]
+columns = [sum(row[c] for row in square) for c in range(n)]
+diagonals = [sum(square[i][i] for i in range(n)),
+             sum(square[i][n - 1 - i] for i in range(n))]
+lines = rows + columns + diagonals
+is_magic = len(set(lines)) == 1
+entries = [value for row in square for value in row]
+is_normal = is_magic and sorted(entries) == list(range(1, n * n + 1))
+print("Rows:", rows)
+print("Columns:", columns)
+print("Diagonals:", diagonals)
+print("Magic:", is_magic, "Normal:", is_normal)
+assert lines == [1033] * 12
+assert is_magic and not is_normal
+
+Expected output:
+
+Rows: [1033, 1033, 1033, 1033, 1033]
+Columns: [1033, 1033, 1033, 1033, 1033]
+Diagonals: [1033, 1033]
+Magic: True Normal: False
+
+The repository command python scripts/check_number_examples.py checks the same twelve lines alongside the recorded prime-number examples. Either calculation checks arithmetic, not provenance or historical server acceptance.
+
+Where the magic constant comes from
+
+If an order-n square has row sum M, adding all rows gives a total of nM. Thus the total of all entries divided by n is the only possible common row sum. For this example, the total is 5165, so the candidate is 5165 / 5 = 1033. That is a necessary condition, not a substitute for checking the individual lines.
+
+For a normal square, the sum of the integers 1 through n² is n²(n² + 1) / 2. Dividing by n gives the familiar constant n(n² + 1) / 2. A normal order-5 square therefore has constant 65. Applying that formula to this non-normal historical arrangement would be a category error: it does not contain the integers 1 through 25.
+
+Symmetry is a different property
+
+The three-by-three interior in the signed payload looks balanced because it repeats under horizontal and vertical reflection. But its outer rows total 32 while its middle row totals 38. Its columns likewise total 32, 38, and 32; both main diagonals total 34. The total of all entries is 102, giving a candidate constant of 34, yet not one row reaches that value.
+
+	Check	Historical 5 × 5	Payload interior 3 × 3
+
+	All row sums equal?	Yes: 1033	No: 32, 38, 32
+
+	All column sums equal?	Yes: 1033	No: 32, 38, 32
+
+	Both main diagonals match that sum?	Yes: 1033	Both are 34, but the rows and columns fail
+
+	Magic under the stated definition?	Yes	No
+
+
+A centered layout, repeated numbers, or matching diagonals can be worth describing without calling the arrangement magic. The LP2-15 panel guide applies this same separation between visible pattern and checked sums to its sixteen printed values.
 
 Sources
 Pinned 2014 walkthrough · LP1-10 body · All signed payloads and hashes.
