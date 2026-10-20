@@ -28,7 +28,7 @@ The pinned 2012 walkthrough’s “A Second Chance” section associates NHYLD.j
 
 The walkthrough identifies that next image with Blake’s The Marriage of Heaven and Hell and reports using Blake’s text for the book code. It does not report using Tennyson’s poem at that step. This is a useful distinction: a painting can carry a message that points to a different author’s book.
 
-Liberpedia has now reproduced the default-key extraction: all 1,079 bytes match the pinned archive’s stored output. GnuPG validates the extracted message against the stored Cicada key in a fresh isolated keyring. The book-code lookup has not been reproduced here. See files and reproduction below for the exact scope.
+Liberpedia has now reproduced the default-key extraction: all 1,079 bytes match the pinned archive’s stored output. GnuPG validates the extracted message against the stored Cicada key in a fresh isolated keyring. The subsequent book-code lookup also reproduces the historical output; its exact counting rules and trace appear below. See files and reproduction below for the exact scope.
 
 Use the pinned repository files for historical inspection. The account warns that the old image-host address could later show unrelated content. A historical URL is therefore not sufficient to identify the bytes used in a reproduction.
 
@@ -71,6 +71,75 @@ Compare the full fingerprint: 6D854CD7933322A601C3286D181F01E57A35090F. The reco
 
 The JPEG checksum answers whether you have these exact image bytes. The signature checks the signed message extracted from them. Neither operation reproduces the subsequent book cipher. See signature validity, identity and whole-file checksums.
 
+
+Reproduce the Blake book code
+
+The next image is identified in the historical account as a detail of plate 4 of Blake’s The Marriage of Heaven and Hell, headed “The voice of the Devil”. The 2021 reproduction by Connor Tumbleson supplies a line-preserving transcription. This reproduction uses those exact downloaded bytes, with a recorded checksum; it does not silently substitute a reflowed modern edition.
+
+Inspect the plate image, download the attributed transcription, or download the full lookup trace. Blake’s underlying text is public domain. The transcription retains its source comment.
+
+Remove the two heading lines, blank lines and the final source comment. Eighteen body lines remain.
+Trim indentation at the ends of each line. Keep spaces inside a line, punctuation, numbered paragraphs and the line-ending hyphen in princi-.
+Read each signed-message pair as line:character, counting both from 1. A character is not a word or a letter-only position.
+Concatenate the selected characters in message order. No anagramming, skipped coordinates or spelling repairs are needed.
+
+For example, line 4 is ples Viz: a Body & a Soul.. Positions 7 and 8 give i and z; position 26 gives the period. Removing spaces would change the coordinate system and fail to reproduce this result.
+
+	Step	Line:character	Output
+
+	1	1:22	c
+
+	2	3:33	g
+
+	3	3:40	i
+
+	4	6:19	n
+
+	5	4:7	i
+
+	6	4:8	z
+
+	7	4:7	i
+
+	8	9:23	g
+
+	9	12:12	l
+
+	10	4:16	y
+
+	11	16:7	a
+
+	12	11:16	o
+
+	13	1:7	b
+
+	14	5:14	y
+
+	15	3:35	p
+
+	16	2:2	h
+
+	17	4:26	.
+
+	18	1:12	o
+
+	19	3:11	n
+
+	20	3:28	i
+
+	21	4:23	o
+
+	22	18:18	n
+
+
+The result is cginiziglyaobyph.onion, shown as historical text rather than a navigation link. This establishes that the stated transcription and counting convention reproduce the archived answer. It does not establish that every edition has identical line breaks, nor does it solve a numbered Liber Primus page.
+
+From the reference-data ZIP, run the following command. It checks the input hashes and prints the 18 source lines, all 22 lookups and the assembled result as JSON. It makes no network requests.
+
+python scripts/reproduce_second_chance.py
+
+This is a worked example of why a book-code proposal needs an exact edition, passage and counting rule. See search space and bounds before extending the method to other texts.
+
 Sources, related references, and files
 - Rochester’s comparison of the 1833 and 1842 versions; Read both versions
   https://d.lib.rochester.edu/camelot/text/tennyson-shalott-comparison.html
@@ -110,5 +179,15 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/outguess.html
 - signature validity, identity and whole-file checksums
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- 2021 reproduction by Connor Tumbleson
+  https://connortumbleson.com/2021/04/12/the-cicada-3301-mystery-puzzle-1-extra/
+- Inspect the plate image
+  https://connortumbleson.com/content/images/2021/01/mhh4.jpg
+- download the attributed transcription
+  https://jelliottdev.github.io/exports/sources/second-chance-voice-of-devil.txt
+- download the full lookup trace
+  https://jelliottdev.github.io/exports/second-chance-book-code.json
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 
 Article: https://jelliottdev.github.io/reference/articles/lady-of-shalott.html
