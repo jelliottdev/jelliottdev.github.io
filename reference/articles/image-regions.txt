@@ -64,6 +64,32 @@ Each selected pixel is removed from the remaining set when it is assigned to a c
 
 The real opening-page rule additionally discards components smaller than 20 pixels. Applied to this tiny teaching mask, that filter would retain zero components under either connectivity rule. Always report the neighborhood, brightness threshold and minimum area together; “three dots” is not a complete measurement specification.
 
+Measure the five dots on LP2-56
+
+The five isolated dots below the hash-target text provide a manageable first measurement. The rectangle [800, 2350, 900, 500] contains the dots without the writing above them. Its coordinates refer to the original 2400 by 3600 pixel image.
+
+Download and extract both the reference data and original images into the same directory. Run these commands there, with Python 3 installed:
+
+python -m pip install Pillow
+python scripts/measure_region.py lp2-56 --rect 800 2350 900 500 --threshold 140 --minimum-area 20 --connectivity 8
+
+The script checks the original JPEG against the page record’s SHA-256 before decoding it. It converts the pixels to grayscale with Pillow, selects values strictly below 140, groups eight-connected neighbors, and discards groups smaller than 20 pixels. It prints JSON and leaves the image unchanged.
+
+Expected result
+
+With Pillow 11.3.0, the region contains 17,888 selected pixels in five retained components; no small components are discarded. The table lists them from top to bottom by centroid. These row numbers are measurement labels, not a proposed reading order.
+
+	Component	Area in pixels	Centroid (x, y)
+	1	3559	1103.934, 2447.301
+	2	3560	873.346, 2517.000
+	3	3604	1603.870, 2686.500
+	4	3542	921.227, 2708.059
+	5	3623	1408.122, 2747.286
+
+A centroid is the arithmetic mean of the selected pixels’ x and y indices. It estimates the center of this dark pixel group, not an intended geometric point. The table rounds to three decimal places for readability; the complete JSON result retains six decimals, bounding rectangles, input hash, Pillow version and all measurement settings.
+
+To measure another region, change the page ID and rectangle. Keep the output with your notes, including any settings you change. A rectangle that cuts through a dot measures only the retained part; a threshold that admits a connecting stroke can merge groups. Comparing two patterns also requires a stated rule for matching points and allowing translation, rotation or scaling. Five components alone establish none of those relationships.
+
 Color classification
 Within a stored rectangle, foreground pixels use the weighted brightness test 0.299R + 0.587G + 0.114B < 140. A foreground pixel is red-dominant when R − max(G,B) > 70. A red-dominant fraction above 90% gives “red”; below 10% gives “dark”; intermediate cases are “mixed/uncertain.” These labels summarize pixels under a rule, not a chemical analysis of ink.
 
@@ -74,6 +100,16 @@ Reproduce the published examples
 Follow the LP2-00–02 inventory and run python scripts/inspect_visual_records.py --pixels. The measurement manifest records the scope and input hashes; the script shows the exact implementation. Keep file integrity separate from a claim about meaning.
 
 Sources, related references, and files
+- five isolated dots below the hash-target text
+  https://jelliottdev.github.io/reference/articles/dots.html#hash-page-dots
+- reference data
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original images
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/measure_region.py
+- complete JSON result
+  https://jelliottdev.github.io/data/evidence/lp2-56-dot-measurement.json
 - the LP2-00–02 inventory
   https://jelliottdev.github.io/reference/articles/lp2-opening-pages.html
 - measurement manifest

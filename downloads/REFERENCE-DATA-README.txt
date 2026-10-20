@@ -66,6 +66,7 @@ Reproduce the earlier puzzle chains:
 
 Inspect recorded visual measurements:
   python scripts/inspect_visual_records.py
+  python scripts/measure_region.py lp2-56 --rect 800 2350 900 500
   Guide: reference/articles/image-regions.txt
   The ordinary command checks saved records, not newly measured image pixels.
 
@@ -101,7 +102,7 @@ convenient access after extraction.
 
 Original JPEGs are provided separately in original-images.zip. Extract that ZIP
 into the SAME folder if you want image-based checks. The --pixels option of
-inspect_visual_records.py also requires Pillow. extract_payload.py requires
+inspect_visual_records.py and measure_region.py also require Pillow. extract_payload.py requires
 OutGuess, and signature verification requires GnuPG. See the included guides.
 
 DRAW THE ATBASH MAPPING

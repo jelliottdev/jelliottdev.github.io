@@ -43,5 +43,6 @@ jobs:
       - run: python scripts/rune_ioc.py --check
       - run: python scripts/inspect_visual_records.py
       - run: python scripts/test_visual_report.py
+      - run: python scripts/test_measure_region.py
       - name: Check that published exports match reviewed records
         run: git diff --exit-code -- data/index.json data/pages data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json data/article-search.json reference/articles articles/readings
