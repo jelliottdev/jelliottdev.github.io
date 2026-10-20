@@ -6337,6 +6337,27 @@ Value versus ordinal
 Write pn for the nth prime, using one-based indexing: p1 = 2, p2 = 3, p3 = 5. Looking up p3299 gives 30,557. This means that 30,557 is the 3,299th prime; it does not mean that 3,299 has ordinal 30,557.
 The rune alphabet instead uses zero-based positions 0–28. Rune index i has Gematria Primus value pi+1. Confusing these conventions introduces an off-by-one error.
 
+Which way does the lookup go?
+
+There are two different questions: “Which prime is in position 3299?” and “What position does the prime 3299 occupy?” Both use the number 3299, but they return different answers. In the first question, 3299 is an index; in the second, it is a value.
+
+	Prime value	Its one-based position	Equivalent statement
+
+	3299	463	p463 = 3299
+
+	7649	971	p971 = 7649
+
+	9467	1173	p1173 = 9467
+
+	30557	3299	p3299 = 30557
+
+	98597	9467	p9467 = 98597
+
+
+For example, replacing the prime value 3299 with its position gives 463. Treating 3299 as a position and looking up the prime there gives 30557. “Take the prime ordinal” is ambiguous unless the direction is stated. The input to an nth-prime lookup need not itself be prime: p4 = 7 is perfectly well-defined, although 4 is composite.
+
+The prime-counting function π(x) counts primes less than or equal to x. For a prime q, π(q) is its one-based position. For a composite x, π(x) still exists, but it is not the ordinal of x as a prime. Here π is a function name, not the circle constant.
+
 The 3299 and 9467 examples
 The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 = 30,557 and p9467 = 98,597 are exact. Their product is:
 98597 × 30557 = 3012828529
@@ -6344,9 +6365,22 @@ The decimal number 3299 appears in red on LP2-15. The arithmetic lookups p3299 =
 The second expression omits a 9 and gives a different answer. Preserve the operands as well as the final sequence when describing a hypothesis. These calculations establish arithmetic, not a relationship between manuscript pages.
 
 LP2-15: the complete number panel, heading, and drawing.
+
+Turning the product into a sequence is another decision
+
+The product is an integer. Reading it as ten separate decimal digits, as five two-digit groups, or as a source of rune shifts gives different inputs. If you choose single digits and add consecutive primes, the first four sums are:
+
+Product digits:     3  0  1  2
+Consecutive primes: 2  3  5  7
+Sums:               5  3  6  9
+
+Using 0 instead of 7 at the fourth position changes that last sum from 9 to 2. Zero is a valid zero-based rune index for F, but it is not a prime. Such a replacement needs a separate, consistently applied rule: which F positions trigger it, whether they consume a prime, and whether the output is copied or transformed. The interruptions guide explains these alternatives.
+
+Similarly, applying these sums modulo 29 is an additional operation, and applying them as shifts to ciphertext is different from interpreting them directly as rune indices. Write each step explicitly before judging whether the output looks meaningful. A change introduced to improve one fragment must be recorded and checked across the declared scope.
+
 How to replicate
 python scripts/check_number_examples.py
-The script enumerates primes by exact trial division and checks the examples. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.
+Run with Python 3 from the repository or extracted reference-data ZIP. The script enumerates primes by exact trial division and checks both lookup directions and the products. Its JSON field prime_value_to_one_based_position reproduces the table above. It makes no network calls or model requests. See emirps and reversal for a distinct operation, and documenting scope before proposing a decoding chain.
 
 Sources
 Original page and provenance · Arithmetic source code. Prime notation is a mathematical definition; the page’s printed number does not itself specify this lookup operation.
@@ -6355,6 +6389,9 @@ Sources, related references, and files
 https://jelliottdev.github.io/#/alphabet
 https://jelliottdev.github.io/reference/lp2-15.html
 https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/reference/articles/interruptions.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/articles/emirps.html
 https://jelliottdev.github.io/reference/articles/reproducibility.html
 https://jelliottdev.github.io/scripts/check_number_examples.py

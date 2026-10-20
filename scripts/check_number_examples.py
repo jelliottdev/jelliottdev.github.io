@@ -17,12 +17,16 @@ def main():
     assert set(lines) == {1033}
     assert primes[3299-1] == 30557
     assert primes[9467-1] == 98597
+    positions = {str(n): primes.index(n) + 1 for n in (3299, 7649, 9467, 30557, 98597)}
+    assert positions == {"3299": 463, "7649": 971, "9467": 1173,
+                         "30557": 3299, "98597": 9467}
     assert prime(7649) and prime(9467)
     assert 98597*30557 == 3012828529
     assert 9857*30557 == 301200349
     print(json.dumps({
         "prime_index_convention": "one-based: p_1 = 2",
         "p_3299": primes[3298], "p_9467": primes[9466],
+        "prime_value_to_one_based_position": positions,
         "7649_and_decimal_reverse_are_prime": True,
         "98597_times_30557": 98597*30557,
         "9857_times_30557": 9857*30557,
