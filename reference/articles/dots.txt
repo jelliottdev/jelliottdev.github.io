@@ -14,7 +14,7 @@ LP2-07 has five large black dots beneath its red closing line. They form a loose
 [Image: LP2-07 cropped page preview]
 LP2-07 · Read
 See spirals and branching borders for the surrounding LP2-03–07 group.
-LP2-23 also has five large dots, this time above the text. Their placement differs from the group below the text on LP2-07. A relationship between these arrangements would need a specified comparison; the shared count alone does not establish a code.
+LP2-23 also has five large dots, this time above the text. Their placement differs from the group below the text on LP2-07. The measured comparison below shows a top-bottom reflection relationship with LP2-07; this geometry does not itself establish a code.
 [Image: LP2-23: five large dots above the text]
 LP2-23 — five large dots above the text. Open reader
 Continue with the Mayfly group and insect imagery.
@@ -22,9 +22,52 @@ Five dots below the hash-target page · LP2-56
 LP2-56 has five large filled black dots below its final two runic rows. Their loose arrangement differs from the compact small punctuation clusters within the writing. The five-row hexadecimal block sits higher on the page, between the runic passages.
 [Image: LP2-56 detail: five large black dots in a loose arrangement below the text.]
 Original-image detail, rectangle [800, 2350, 900, 500]. Complete page · Original JPEG.
-Compare this with the five-dot arrangements on LP2-07 and LP2-23. A shared count is a starting observation; it does not establish the same spacing, orientation or role. A geometric comparison should state the dot centers and transformations used, rather than matching only the number five.
+Compare this with the five-dot arrangements on LP2-07 and LP2-23. The geometric comparison below measures their centres and tests explicit transformations. It finds shared point geometry in different orientations, without assigning the marks a cipher role.
 Measure these five dots with the original-image rectangle, a reproducible Python command and a table of pixel areas and centroids.
 The hash-target guide explains the printed hexadecimal string and its limits. The known reading is a separate result from an interpretation of the dots: decoding the words does not by itself give the marks a meaning.
+The three five-dot groups share a geometric pattern
+
+The groups on LP2-07, LP2-23 and LP2-56 agree much more closely than the phrase “five dots” suggests. Comparing their measured centres gives a near-exact match after reflection or a half-turn, with a fitted scale very close to one. This supports a shared artwork point pattern in different orientations.
+
+[Image: Measured dot centres on LP2-07, LP2-23 and LP2-56, plotted at the same scale in their original page orientations, labeled one to five from left to right.]
+Centroid plots, not original artwork. Each group is translated into its own panel; none is rotated or reflected for this illustration. Dot sizes are symbolic. Select the diagram to enlarge it.
+
+Best fit at grayscale threshold 140. Errors are measured in original target-image pixels.
+	Source → target	Operation	Scale	RMS error	Largest point error
+	LP2-07 → LP2-23	top-bottom reflection	1.000038	0.066	0.130
+	LP2-07 → LP2-56	left-right reflection	1.000116	0.140	0.204
+	LP2-23 → LP2-56	half-turn	1.000078	0.177	0.255
+
+“Top-bottom reflection” reverses the y direction; “left-right reflection” reverses x. A half-turn reverses both. Each fit also allows translation, because the groups occupy different places on their pages. A scale of 1 would retain the original distances exactly. These fitted scales differ from 1 by less than 0.012%.
+
+What was measured and searched
+
+In each original JPEG, select grayscale pixels strictly below 140, group eight-connected pixels, and keep components containing at least 1,000 pixels. This leaves five components in each region. A component’s centroid is the mean coordinate of its selected pixels; it is not an inferred original vector-circle centre.
+
+	Page	Rectangle [x, y, width, height]
+	LP2-07	550, 2700, 1200, 600
+	LP2-23	500, 300, 1300, 650
+	LP2-56	500, 2320, 1250, 500
+
+Label the centres from left to right on each page. Try all 5! = 120 assignments of source points to target points for each of four operations: unchanged orientation, top-bottom reflection, left-right reflection and half-turn. That is 480 assignments per page pair per threshold. For each assignment, fit a positive uniform scale and a translation by least squares; discard nonpositive scales. Arbitrary rotation angles, unequal x/y stretching and shear are not searched.
+
+The winning correspondence for 07 → 23 is 1→1, 2→2, 3→3, 4→4, 5→5. For both comparisons with 56, it is reversed: 1→5, 2→4, 3→3, 4→2, 5→1. The next-best axis operation, after optimizing its own correspondence, has an RMS error above 145 pixels in each pair. That separation is a comparison among the declared models, not a chance probability.
+
+How sensitive is this to the measurement rule?
+
+Repeat the complete comparison at thresholds 120, 160 and 180. All three orientation results remain the same; every winning RMS error remains below 0.203 pixels. The script also checks all ten pairwise distances under each fitted correspondence. Synthetic controls recover all four axis operations, while a deliberately stretched shape fails an exact uniform-scale fit.
+
+Subpixel residuals are possible because a centroid averages many integer pixel coordinates. They do not mean that the image has subpixel resolution, or that the original shapes are known with unlimited precision. JPEG decoding, thresholding and the selected component boundaries remain part of the measurement.
+
+Reproduce the comparison
+
+python -m pip install Pillow
+python scripts/compare_five_dots.py --check
+
+Extract the reference data and original images together, preserving their folders. The comparison script uses the bundled component measurement script and verifies each source-image hash. Download every centroid, fitted transform, threshold result and input hash · Download the diagram.
+
+This is a reproduction of an existing geometric observation, not a new cipher discovery. It supports shared point geometry, rather than pixel-identical JPEG crops. It does not identify a constellation, tell us to reverse runes, choose a key, or establish plaintext. Any proposed use as a reading instruction needs a separate bounded experiment with explicit input and traversal rules.
+
 Large separated dots
 LP2-33 has three conspicuous black dots between two blocks of text. LP2-39 also has a separated row of three dots. These are useful starting points when someone remembers “the page with dots.” This pair is a set of illustrated examples, not an exhaustive dot inventory of all 75 pages.
 [Image: Three large separated dots between the text blocks on LP2-33.]
@@ -133,7 +176,7 @@ Left cluster. Display window: 300, 1400, 200, 200 pixels (x, y, width, height).
 [Image: Right border cluster on LP2-53, with original color and orientation preserved]
 Right cluster. Display window: 1900, 1400, 200, 200 pixels (x, y, width, height).
 These enlarged views use the preserved JPEG; they are not thresholded or recolored. Open the image to inspect the marks in context. The fill difference is an observation, not evidence by itself for a binary code. A proposed extraction needs an explicit ordering, a rule for pale outlines, and a stated set of pages to compare. See image regions and measurement rules.
-The same left/right fill pattern is also visible on LP2-40 and LP2-54: three solid marks plus two pale outlines on the left, five solid marks on the right. These are separately inspected examples, not a verified count across the entire border group. Compare their layouts in the group-opening comparison.
+The same left/right fill pattern is also visible on LP2-40 and LP2-54: three solid marks plus two pale outlines on the left, five solid marks on the right. These examples can now be compared with the verified side-dot regions on all sixteen pages from LP2-40 through LP2-55. Compare their layouts in the group-opening comparison.
 Red closing clusters on LP2-22, LP2-32, and LP2-55
 These three pages end their black rune text with a narrow red cluster of small square marks. The clusters occupy a similar place in the text layout even though the drawings below them differ: a reclining figure on LP2-22, a soft-edged tree on LP2-32, and a pale tree above a winged figure on LP2-55.
 [Image: Red closing cluster from LP2-22, shown with original color and orientation.]
@@ -200,12 +243,30 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp2-56.jpg
 - Complete page
   https://jelliottdev.github.io/#/reader/lp2-56
+- geometric comparison below
+  https://jelliottdev.github.io/reference/articles/dots.html#five-dot-geometry
 - Measure these five dots; LP2-56 five-dot measurement
   https://jelliottdev.github.io/reference/articles/image-regions.html#measure-dots
 - hash-target guide
   https://jelliottdev.github.io/reference/articles/lp2-56-target.html
 - known reading
   https://jelliottdev.github.io/reference/articles/reading-lp2-56.html
+- LP2-56
+  https://jelliottdev.github.io/reference/lp2-56.html
+- Measured dot centres on LP2-07, LP2-23 and LP2-56, plotted at the same scale in their original page orientations, labeled one to five from left to right.; Download the diagram
+  https://jelliottdev.github.io/exports/five-dot-orientations.svg
+- reference data
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original images
+  https://jelliottdev.github.io/downloads/original-images.zip
+- comparison script
+  https://jelliottdev.github.io/scripts/compare_five_dots.py
+- component measurement script
+  https://jelliottdev.github.io/scripts/measure_region.py
+- Download every centroid, fitted transform, threshold result and input hash
+  https://jelliottdev.github.io/exports/five-dot-geometry.json
+- bounded experiment; search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
 - LP2-33; Page record
   https://jelliottdev.github.io/reference/lp2-33.html
 - LP2-39; Page record
@@ -218,18 +279,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp2-33
 - LP2-39
   https://jelliottdev.github.io/#/reader/lp2-39
-- reference data
-  https://jelliottdev.github.io/downloads/reference-data.zip
-- original images
-  https://jelliottdev.github.io/downloads/original-images.zip
 - LP2-33 measurement
   https://jelliottdev.github.io/data/evidence/lp2-33-dot-measurement.json
 - LP2-39 measurement
   https://jelliottdev.github.io/data/evidence/lp2-39-dot-measurement.json
 - image measurement rules; image regions and measurement rules; image regions and connected components
   https://jelliottdev.github.io/reference/articles/image-regions.html
-- search space and bounds
-  https://jelliottdev.github.io/reference/articles/search-space.html
 - LP2-53’s curled borders
   https://jelliottdev.github.io/reference/lp2-53.html
 - Left border cluster on LP2-53, with original color and orientation preserved; Right border cluster on LP2-53, with original color and orientation preserved
@@ -238,6 +293,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-40.html
 - LP2-54
   https://jelliottdev.github.io/reference/lp2-54.html
+- verified side-dot regions on all sixteen pages from LP2-40 through LP2-55; the complete LP2-40–55 pixel comparison
+  https://jelliottdev.github.io/reference/articles/spirals.html#side-dot-reuse
 - the group-opening comparison
   https://jelliottdev.github.io/reference/articles/spirals.html#group-openings
 - Red closing cluster from LP2-22, shown with original color and orientation.; LP2-22
@@ -276,7 +333,5 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/visual-index.html
 - rubrication and color boundaries
   https://jelliottdev.github.io/reference/articles/rubrication.html
-- the complete LP2-40–55 pixel comparison
-  https://jelliottdev.github.io/reference/articles/spirals.html#side-dot-reuse
 
 Article: https://jelliottdev.github.io/reference/articles/dots.html
