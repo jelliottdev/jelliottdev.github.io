@@ -43,15 +43,17 @@
   if(n.length>=3&&(aliases||[]).some(a=>norm(a).startsWith(n)))return 780;
   return 0;
  }
+ // Destination keys follow the same case/accent rules as alias matching.
+ const aliasDestination=(mapping,q)=>Object.entries(mapping||{}).find(([key])=>norm(key)===norm(q))?.[1];
  function search(db,q){
   if(!norm(q))return [];
   const hits=[];
   const features=new Map();
   for(const a of db.articles||[]){
    const alias=aliasScore(a.aliases,q),score=Math.max(alias,relevance(a.title,a.summary,a.text,q));
-   const section=alias?(a.alias_sections||{})[norm(q)]:null;
+   const section=alias?aliasDestination(a.alias_sections,q):null;
    if(score)hits.push({type:'guide',title:a.title,text:a.summary,href:'#/wiki/'+a.id+(section?'?section='+encodeURIComponent(section):''),score});
-   if(alias)for(const id of (a.alias_pages||{})[norm(q)]||a.feature_pages||[])if(!features.has(id))features.set(id,a);
+   if(alias)for(const id of aliasDestination(a.alias_pages,q)||a.feature_pages||[])if(!features.has(id))features.set(id,a);
   }
   for(const p of db.pages||[]){const hit=page(p,q);if(hit)hits.push({type:'page',title:p.id.toUpperCase()+(p.title?' · '+p.title:''),text:hit.text,href:'#/page/'+p.id+'?'+(hit.row?'line='+hit.row+'&mode='+hit.mode:'section='+hit.section),score:hit.score,page:p});}
   for(const [id,a] of features){

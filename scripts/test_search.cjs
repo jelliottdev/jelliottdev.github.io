@@ -76,6 +76,17 @@ for(const [query,section,page] of [
 }
 console.log('PASS: mixed and decimal squares open their own explanations and pages');
 
+// Visible title text should not send readers to unrelated numbered chapters.
+for(const [query,section,page] of [
+ ['Intus','intus','lp1-02'], ['Chapter 1','intus','lp1-02'],
+ ['chapter one','intus','lp1-02'], ['plain title page','cover','lp1-00']
+]){
+ const hits=search.search(db,query);
+ assert.equal(hits[0].href,`#/wiki/title-pages?section=${section}`,query);
+ assert(hits.slice(1,5).some(hit=>hit.page?.id===page),query+' must expose the original image record');
+}
+console.log('PASS: visible title wording opens its own explanation and page');
+
 // Distinctive literary phrases and catalogue identifiers should open their explanation.
 for(const [query,id,section] of [
  ['all that lives is holy','william-blake','parallel'],
