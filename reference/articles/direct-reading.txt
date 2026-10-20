@@ -2,24 +2,77 @@ Direct reading
 
 When rune labels already form a readable sequence.
 
+Direct reading means that the recorded rune sequence produces readable text without shifting or rearranging its alphabet indices. The runes still need to be identified and labeled correctly. Turning those labels into ordinary English is a separate editorial step.
+
 Identity transformation
-Direct reading uses p = c: label each rune without changing its index. Distinguish the literal labels from contextual English.
+Direct reading uses p = c: label each rune without changing its index. Here c is the input rune index and p is the output index in the same 29-symbol alphabet. There is no key to subtract and no permutation to undo. Distinguish the literal labels from contextual English.
+
+Read PARABLE one rune at a time
+
+The first seven runes in the archived LP2-57 sequence produce the heading PARABLE. The reproduction trace gives:
+
+	Rune	Input index	Output index	Latin label
+
+	ᛈ	13	13	P
+
+	ᚪ	24	24	A
+
+	ᚱ	4	4	R
+
+	ᚪ	24	24	A
+
+	ᛒ	17	17	B
+
+	ᛚ	20	20	L
+
+	ᛖ	18	18	E
+
+
+Notice what the table does not use: the runes’ prime values. These numbers are zero-based alphabet indices. Prime values are relevant to a separate calculation such as a rune sum, not needed to read this heading.
+Complete parable reading. Open the reader to compare the heading with the full original image.
+
+Why the literal output can still look unfamiliar
+
+Later on LP2-57, the literal labels give LICE, TUNNELNG, and DIUINITY. Contextual English renders these as LIKE, TUNNELING, and DIVINITY. C/K and U/V are label conventions, while the NG rune can stand for the ending represented as ING in ordinary spelling. These readings do not require a new shift of the rune indices.
+
+Keep both forms available. Contextual English makes the passage easier to understand; the rune sequence is the appropriate input for rune counts and prime-sum calculations. Inserting an extra I rune into TUNNELNG would change the numerical input, whereas displaying the same NG rune with a different Latin label would not.
+
 How to replicate
+Extract the reference-data ZIP and run these commands with Python 3 from its folder. No extra packages or AI service are needed.
 python scripts/reproduce_reading.py some-wisdom
 python scripts/reproduce_reading.py loss-of-divinity
 python scripts/reproduce_reading.py instruction
 python scripts/reproduce_reading.py lp2-57
-These cover LP1-05, LP1-10–13, LP1-16 and LP2-57. The loss-of-divinity control includes the documented correction.
+These cover LP1-05, LP1-10–13, LP1-16 and LP2-57. The loss-of-divinity control includes the documented correction before the identity transformation. That source correction and the cipher operation are separate steps.
+
+To reproduce the heading table and inspect every rune:
+
+python scripts/reproduce_reading.py lp2-57 --trace
+
+The trace’s subtracted_value column is blank because no subtraction is applied. Its copied flag is False: that flag identifies specifically recorded interruption positions, not every rune whose index happens to stay the same. See how to read a trace for all fields.
 
 Readable does not mean exhausted
-Several direct-reading pages also have OutGuess payloads. Visual details and numerical patterns need their own evidence.
+Several direct-reading pages also have OutGuess payloads. Visual details and numerical patterns need their own evidence. Being able to read the visible words does not establish that every layer of a file has been explained.
+
+Conversely, obtaining familiar letters from a short runic fragment does not establish a direct reading for a whole unsolved page. Compare the complete sequence, word boundaries, and recorded controls before extending a local observation into a broader claim. The identity operation itself is easy to apply to any page; interpreting its output is a different question.
+
 Sources and verification
-Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+Known-reading compilation · Reproduction script · Pinned historical walkthrough. The LP2-57 trace above was checked on 20 October 2026. Recipes reproduce published controls; they are not new solutions.
 
 Sources, related references, and files
 https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/lp2-57.html
+https://jelliottdev.github.io/reference/articles/rune-values.html
+https://jelliottdev.github.io/#/reader/lp2-57
+https://jelliottdev.github.io/thumbs/lp2-57.jpg
+https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
+https://jelliottdev.github.io/reference/articles/prime-sums.html
+https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/lp1-10.html
+https://jelliottdev.github.io/reference/articles/running-scripts.html#trace
 https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+https://jelliottdev.github.io/data/evidence/known-readings.json
+https://jelliottdev.github.io/scripts/reproduce_reading.py
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 
 Article: https://jelliottdev.github.io/reference/articles/direct-reading.html

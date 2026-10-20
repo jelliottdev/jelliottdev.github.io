@@ -1,6 +1,28 @@
-
-<h2 id="method">Identity transformation</h2><p>Direct reading uses p = c: label each rune without changing its index. Distinguish the <a href="#/wiki/transliteration">literal labels from contextual English</a>.</p><h2 id="replicate">How to replicate</h2><pre><code>python scripts/reproduce_reading.py some-wisdom
+<p><strong>Direct reading</strong> means that the recorded rune sequence produces readable text without shifting or rearranging its alphabet indices. The runes still need to be identified and labeled correctly. Turning those labels into ordinary English is a separate editorial step.</p>
+<h2 id="method">Identity transformation</h2><p>Direct reading uses <code>p = c</code>: label each rune without changing its index. Here c is the input rune index and p is the output index in the same 29-symbol alphabet. There is no key to subtract and no permutation to undo. Distinguish the <a href="#/wiki/transliteration">literal labels from contextual English</a>.</p>
+<h2 id="example">Read PARABLE one rune at a time</h2>
+<p>The first seven runes in the archived <a href="#/page/lp2-57">LP2-57</a> sequence produce the heading PARABLE. The reproduction trace gives:</p>
+<div class="table-wrap"><table class="alphabet-table"><thead><tr><th>Rune</th><th>Input index</th><th>Output index</th><th>Latin label</th></tr></thead><tbody>
+<tr><td><span class="rune">ᛈ</span></td><td>13</td><td>13</td><td>P</td></tr>
+<tr><td><span class="rune">ᚪ</span></td><td>24</td><td>24</td><td>A</td></tr>
+<tr><td><span class="rune">ᚱ</span></td><td>4</td><td>4</td><td>R</td></tr>
+<tr><td><span class="rune">ᚪ</span></td><td>24</td><td>24</td><td>A</td></tr>
+<tr><td><span class="rune">ᛒ</span></td><td>17</td><td>17</td><td>B</td></tr>
+<tr><td><span class="rune">ᛚ</span></td><td>20</td><td>20</td><td>L</td></tr>
+<tr><td><span class="rune">ᛖ</span></td><td>18</td><td>18</td><td>E</td></tr>
+</tbody></table></div>
+<p>Notice what the table does not use: the runes’ prime values. These numbers are <a href="#/wiki/rune-values">zero-based alphabet indices</a>. Prime values are relevant to a separate calculation such as a rune sum, not needed to read this heading.</p>
+<div class="manuscript-gallery"><figure><a href="#/reader/lp2-57"><img src="thumbs/lp2-57.jpg" loading="lazy" alt="LP2-57 with the red PARABLE heading above the body text and insect-like image"></a><figcaption><a href="#/wiki/reading-lp2-57">Complete parable reading</a>. Open the reader to compare the heading with the full original image.</figcaption></figure></div>
+<h2 id="english">Why the literal output can still look unfamiliar</h2>
+<p>Later on LP2-57, the literal labels give <code>LICE</code>, <code>TUNNELNG</code>, and <code>DIUINITY</code>. Contextual English renders these as LIKE, TUNNELING, and DIVINITY. C/K and U/V are label conventions, while the NG rune can stand for the ending represented as ING in ordinary spelling. These readings do not require a new shift of the rune indices.</p>
+<p>Keep both forms available. Contextual English makes the passage easier to understand; the rune sequence is the appropriate input for rune counts and <a href="#/wiki/prime-sums">prime-sum calculations</a>. Inserting an extra I rune into TUNNELNG would change the numerical input, whereas displaying the same NG rune with a different Latin label would not.</p>
+<h2 id="replicate">How to replicate</h2><p>Extract the <a href="downloads/reference-data.zip">reference-data ZIP</a> and run these commands with Python 3 from its folder. No extra packages or AI service are needed.</p><pre><code>python scripts/reproduce_reading.py some-wisdom
 python scripts/reproduce_reading.py loss-of-divinity
 python scripts/reproduce_reading.py instruction
-python scripts/reproduce_reading.py lp2-57</code></pre><p>These cover LP1-05, LP1-10–13, LP1-16 and LP2-57. The loss-of-divinity control includes the <a href="#/page/lp1-10?section=corrections">documented correction</a>.</p>
-<h2 id="layers">Readable does not mean exhausted</h2><p>Several direct-reading pages also have <a href="#/wiki/embedded-payloads">OutGuess payloads</a>. Visual details and numerical patterns need their own evidence.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
+python scripts/reproduce_reading.py lp2-57</code></pre><p>These cover LP1-05, LP1-10–13, LP1-16 and LP2-57. The loss-of-divinity control includes the <a href="#/page/lp1-10?section=corrections">documented correction</a> before the identity transformation. That source correction and the cipher operation are separate steps.</p>
+<p>To reproduce the heading table and inspect every rune:</p>
+<pre><code>python scripts/reproduce_reading.py lp2-57 --trace</code></pre>
+<p>The trace’s <code>subtracted_value</code> column is blank because no subtraction is applied. Its <code>copied</code> flag is False: that flag identifies specifically recorded interruption positions, not every rune whose index happens to stay the same. See <a href="#/wiki/running-scripts?section=trace">how to read a trace</a> for all fields.</p>
+<h2 id="layers">Readable does not mean exhausted</h2><p>Several direct-reading pages also have <a href="#/wiki/embedded-payloads">OutGuess payloads</a>. Visual details and numerical patterns need their own evidence. Being able to read the visible words does not establish that every layer of a file has been explained.</p>
+<p>Conversely, obtaining familiar letters from a short runic fragment does not establish a direct reading for a whole unsolved page. Compare the complete sequence, word boundaries, and recorded controls before extending a local observation into a broader claim. The identity operation itself is easy to apply to any page; interpreting its output is a different question.</p>
+<h2 id="sources">Sources and verification</h2><p><a href="data/evidence/known-readings.json">Known-reading compilation</a> · <a href="scripts/reproduce_reading.py">Reproduction script</a> · <a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. The LP2-57 trace above was checked on 20 October 2026. Recipes reproduce published controls; they are not new solutions.</p>
