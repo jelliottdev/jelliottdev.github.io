@@ -77,7 +77,9 @@ def report(page_id, length):
         "page": page_id,
         "source": source.relative_to(ROOT).as_posix(),
         "source_sha256": hashlib.sha256(raw).hexdigest(),
+        "alphabet": runes,
         "alphabet_sha256": hashlib.sha256("".join(runes).encode("utf-8")).hexdigest(),
+        "alphabet_encoding": "Ordered rune list; indices are zero-based. SHA-256 covers their UTF-8 concatenation without separators.",
         "scope": "Archived runes in source order, including headings; all non-runes removed. "
                  "Windows may cross word, line, and paragraph boundaries, but not pages.",
         "positions": "Zero-based rune ordinals in the filtered stream; not character offsets.",

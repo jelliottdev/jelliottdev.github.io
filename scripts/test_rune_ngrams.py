@@ -1,5 +1,6 @@
 import unittest
 import json
+import hashlib
 import os
 from pathlib import Path
 import subprocess
@@ -50,6 +51,19 @@ class RuneNgrams(unittest.TestCase):
                                  pattern["runes"])
                 self.assertEqual(source.count("\n", 0, item["source_start"]) + 1,
                                  item["source_line"])
+
+    def test_report_carries_its_own_index_mapping(self):
+        result = report("lp2-31", 2)
+        alphabet = result["alphabet"]
+        self.assertEqual(len(alphabet), 29)
+        self.assertEqual(len(set(alphabet)), 29)
+        self.assertEqual(hashlib.sha256("".join(alphabet).encode("utf-8")).hexdigest(),
+                         result["alphabet_sha256"])
+        for pattern in result["patterns"]:
+            self.assertEqual("".join(alphabet[i] for i in pattern["indices"]),
+                             pattern["runes"])
+        # The mapping must still be present when no repeated patterns are found.
+        self.assertEqual(report("lp2-31", 3)["alphabet"], alphabet)
 
     def test_overlapping_windows(self):
         self.assertEqual(repeated_windows([0, 0, 0, 0], 2), [((0, 0), [0, 1, 2])])
