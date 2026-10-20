@@ -111,6 +111,31 @@ def reference_url(target, article_id=None):
         return "https://jelliottdev.github.io/reference/" + target.split("/")[2].split("?")[0] + ".html"
     return urljoin("https://jelliottdev.github.io/", target)
 
+def standalone_url(target):
+    """Resolve authored site-root-relative resources from reference/articles/."""
+    if target.startswith("#/wiki/"):
+        article, _, query = target[len("#/wiki/"):].partition("?")
+        section = parse_qs(query).get("section", [""])[0]
+        return article + ".html" + ("#" + quote(section, safe="-_") if section else "")
+    if target.startswith("#/page/"):
+        return "../" + target[len("#/page/"):].split("?")[0] + ".html"
+    if target.startswith("#/"):
+        return "../../index.html" + target
+    if not target or target.startswith(("#", "/")) or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+        return target
+    return "../../" + target
+
+
+def standalone_body(body):
+    # Rewrite real link/image attributes, not examples inside code blocks.
+    def tag(match):
+        return re.sub(r"\b(href|src)=(['\"])(.*?)\2",
+                      lambda attr: attr[1] + '=' + attr[2]
+                      + html.escape(standalone_url(html.unescape(attr[3])), quote=True)
+                      + attr[2], match[0])
+    return re.sub(r"<(?:a|img)\b[^>]*>", tag, body)
+
+
 def linked_articles(body):
     """Collect exact guide destinations, including links to guide sections."""
     parser = Text()
@@ -138,12 +163,7 @@ def build():
         a["references"] = [reference_url(link, a["id"]) for link in parser.links]
         a["linked_articles"] = outgoing[a["id"]]
         title = html.escape(a["title"])
-        standalone = body.replace('href="#/', 'href="../../index.html#/').replace('href="exports/', 'href="../../exports/').replace('href="scripts/', 'href="../../scripts/').replace('href="data/', 'href="../../data/').replace('src="exports/', 'src="../../exports/')
-        standalone = standalone.replace('src="images/', 'src="../../images/').replace('href="images/', 'href="../../images/').replace('href="downloads/', 'href="../../downloads/')
-        standalone = standalone.replace('src="thumbs/', 'src="../../thumbs/')
-        standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)\?section=([^"]+)"', r'href="\1.html#\2"', standalone)
-        standalone = re.sub(r'href="../../index.html#/wiki/([^"?]+)"', r'href="\1.html"', standalone)
-        standalone = re.sub(r'href="../../index.html#/page/([^"?]+)(?:\?[^"]*)?"', r'href="../\1.html"', standalone)
+        standalone = standalone_body(body)
         related = [b for b in articles if b["id"] != a["id"] and
                    a["id"] in outgoing[b["id"]]]
         if a.get("pages"):

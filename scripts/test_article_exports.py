@@ -1,9 +1,51 @@
 """Checks that non-JavaScript references remain usable as instructions."""
 import unittest
+from pathlib import Path
+from urllib.parse import urlsplit, unquote
 from build_articles import (Text, reference_url, linked_articles, article_contents,
-                            linked_reference_text, manuscript_reference_html)
+                            linked_reference_text, manuscript_reference_html, standalone_url, standalone_body)
 
 class ArticleExports(unittest.TestCase):
+    def test_generated_articles_have_existing_local_link_and_image_targets(self):
+        root = Path(__file__).resolve().parents[1]
+        articles = list((root / "reference/articles").glob("*.html"))
+        self.assertTrue(articles, "Generate the article exports before this check")
+        for article in articles:
+            parser = Text()
+            parser.feed(article.read_text(encoding="utf-8"))
+            for target in parser.links:
+                parsed = urlsplit(target)
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    continue
+                path = unquote(parsed.path)
+                resolved = (root / path.lstrip("/") if path.startswith("/")
+                            else article.parent / path).resolve()
+                with self.subTest(article=article.name, target=target):
+                    self.assertTrue(resolved.is_relative_to(root), "Link escapes repository")
+                    self.assertTrue(resolved.is_file(), "Missing local destination")
+
+    def test_standalone_resources_preserve_paths_queries_and_fragments(self):
+        for path in ("text/lp2-31.txt", "data/catalog.json", "images/1033.jpg",
+                     "downloads/reference-data.zip", "exports/example.svg",
+                     "reference/index.html", "scripts/rune_ngrams.py"):
+            self.assertEqual(standalone_url(path), "../../" + path)
+        self.assertEqual(standalone_url("text/example.txt?raw=1#part"),
+                         "../../text/example.txt?raw=1#part")
+        for path in ("#local", "https://example.org/file", "//example.org/file", "/images/a.jpg", ""):
+            self.assertEqual(standalone_url(path), path)
+        self.assertEqual(standalone_url("#/wiki/outguess?section=run"), "outguess.html#run")
+        self.assertEqual(standalone_url("#/page/lp2-31?section=reading"), "../lp2-31.html")
+        self.assertEqual(standalone_url("#/downloads"), "../../index.html#/downloads")
+
+    def test_standalone_rewrites_attributes_not_literal_examples(self):
+        body = ('<a href="text/a.txt?x=1&amp;y=2">Source</a>'
+                "<img src='images/a.jpg' alt='Example'>"
+                '<code>href="text/a.txt"</code>')
+        result = standalone_body(body)
+        self.assertIn('href="../../text/a.txt?x=1&amp;y=2"', result)
+        self.assertIn("src='../../images/a.jpg'", result)
+        self.assertIn('<code>href="text/a.txt"</code>', result)
+
     def test_manuscript_sections_are_native_and_keep_literal_text(self):
         original = ('# LP2-57\n\nIntro\n\n## Archived transcription\n\n'
                     'ᚠᚢᚦ-ᚩ/\n  ᚱᚳ.\n\n## Sources & scope\n\n'
