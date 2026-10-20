@@ -1,7 +1,45 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Transposition ciphers — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/transposition">Open in wiki</a> · <a href="transposition.txt">Plain text</a></nav><h1>Transposition ciphers</h1><p>Reorder symbols without substituting their values.</p>
-<h2 id="definition">Preserve symbols, change positions</h2><p>A permutation uses every position once, preserving length and symbol counts. Atbash and Vigenère change values; a pure transposition does not.</p>
-<h2 id="replicate">The historical column operation</h2><p>Set <code>rows</code> to the five strings in the <a href="cover-chain.html">cover-chain grid</a>:</p><pre><code>order = [2, 8, 9, 1, 12, 13, 11, 4, 5, 7, 3, 0, 6, 10]
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Transposition ciphers — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav><a href="../../reference/index.html">Reference index</a> · <a href="../../index.html#/wiki/transposition">Open in wiki</a> · <a href="transposition.txt">Plain text</a></nav><h1>Transposition ciphers</h1><p>Reorder symbols without substituting their values.</p><p>A <strong>transposition</strong> rearranges the positions of symbols while keeping the symbols themselves. It is the difference between moving letter tiles and replacing the letters printed on them. Liber Primus research includes a documented column rearrangement in the <a href="cover-chain.html">LP1 title-page payload chain</a>; this guide explains that operation and how to check it.</p>
+<h2 id="definition">Preserve symbols, change positions</h2><p>A permutation uses every position once, preserving length and symbol counts. Atbash and Vigenère change values; a pure transposition does not. Reversal is one simple permutation. Swapping columns of a fixed-width grid is another.</p>
+<h2 id="small-example">A four-column example</h2>
+<p>Start with two rows, <code>ABCD</code> and <code>EFGH</code>. Number the columns from zero and read each row in the order <code>[2, 0, 3, 1]</code>. The order means “take the old column 2 first, then 0, then 3, then 1.”</p>
+<div class="table-wrap"><table><thead><tr><th>Output position</th><th>Read input column</th><th>First row</th><th>Second row</th></tr></thead><tbody>
+<tr><td>0</td><td>2</td><td>C</td><td>G</td></tr>
+<tr><td>1</td><td>0</td><td>A</td><td>E</td></tr>
+<tr><td>2</td><td>3</td><td>D</td><td>H</td></tr>
+<tr><td>3</td><td>1</td><td>B</td><td>F</td></tr>
+</tbody></table></div>
+<p>The reordered rows are <code>CADB</code> and <code>GEHF</code>. Reading them from top to bottom gives <code>CADBGEHF</code>. Reading down columns instead would produce <code>CGAEDHBF</code>, a different result. The permutation alone therefore does not specify the complete readout: you must also state the row and column traversal.</p>
+<h2 id="inverse">Reverse the operation</h2>
+<p>To undo the rearrangement, put each output character back into the input column from which it came. The inverse order for this example is <code>[1, 3, 0, 2]</code>. It differs from the original order, so applying the original permutation a second time does not generally restore the text.</p>
+<pre><code>rows = ["ABCD", "EFGH"]
+order = [2, 0, 3, 1]
+assert sorted(order) == list(range(4))
+encoded = ["".join(row[c] for c in order) for row in rows]
+inverse = [order.index(c) for c in range(4)]
+decoded = ["".join(row[c] for c in inverse) for row in encoded]
+print(encoded, inverse, decoded)
+assert encoded == ["CADB", "GEHF"]
+assert decoded == rows</code></pre>
+<p>This self-contained Python example prints the rearranged rows, inverse order, and recovered rows. Checking the round trip catches mistakes about which way the permutation maps positions. It does not establish that a chosen permutation solves a manuscript page.</p>
+<h2 id="replicate">The historical column operation</h2><p>The <a href="cover-chain.html">cover-chain guide</a> explains how the stored OutGuess payloads combine into a signed message. Its 70-character grid supplies the following five rows. This example needs only Python 3:</p><pre><code>rows = [
+    "IDGTKUMLOOARWO",
+    "ERTHISUTETLHUT",
+    "IATSLLOUIMNITE",
+    "LNJ7TFYVOIUAUS",
+    "NOCO5JI4MEODZZ",
+]
+order = [2, 8, 9, 1, 12, 13, 11, 4, 5, 7, 3, 0, 6, 10]
 assert sorted(order) == list(range(14))
 assert len(rows) == 5 and all(len(row) == 14 for row in rows)
-result = "".join(rows[r][c] for r in range(5) for c in order)</code></pre>
-<h2 id="search">Define the search space</h2><p>Record grid dimensions, fill and read directions, padding, and permutation. Fourteen columns admit 14! = 87,178,291,200 orders. A fragment selected after many choices needs stronger support than a prediction from an independently specified order. See <a href="reproducibility.html">controls and scope</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p><h2>Manuscript pages discussed</h2><p><a href="../lp1-00.html">LP1-00</a> · <a href="../lp1-01.html">LP1-01</a> · <a href="../lp1-02.html">LP1-02</a></p><h2>Guides linking here</h2><ul><li><a href="cover-chain.html">The cover payload chain</a></li></ul></main></body></html>
+result = "".join(rows[r][c] for r in range(5) for c in order)
+assert len(result) == 70
+print(result)</code></pre>
+<p>The first input row becomes <code>GOODWORKULTIMA</code>. The complete output is:</p>
+<pre><code>GOODWORKULTIMATETRUTHISTHEULTIMATEILLUSIONJOINUSATFV7LYUCMEOZZD5J4ONIO</code></pre>
+<p>Keep the final <code>ONIO</code> as produced. The historical interpretation supplies another N to form an onion-address ending, but adding a character is not a transposition. The <a href="cover-chain.html#literal">cover-chain explanation</a> preserves this distinction and the historical address.</p>
+<h2 id="invariants">What cannot change under a pure transposition?</h2>
+<p>The total length and each symbol’s count must remain the same. Consequently, a <a href="prime-sums.html">sum of fixed rune values</a> and whole-stream <a href="index-of-coincidence.html">IoC</a> remain unchanged too. These are useful checks: if a purported rearrangement changes one of them, it also changed, added, or removed symbols.</p>
+<p>What can change is adjacency and location. Word-like sequences, repeated neighboring pairs, column statistics, and which symbols fall on a particular row can all change. An improvement in one of those measurements must be evaluated against the choices tried; preserving the global counts does not guarantee meaningful output.</p>
+<p>These statements assume a fixed symbol sequence. Adding padding to fill a grid, dropping a final partial row, or splitting a multi-letter rune label into separate Latin characters changes the input. For rune work, choose the actual rune as the unit; see <a href="transliteration.html">transcription layers</a>. The historical example above instead rearranges the Latin characters of an extracted message.</p>
+<h2 id="search">Define the search space</h2><p>Record grid dimensions, fill and read directions, padding, and permutation. Fourteen columns admit 14! = 87,178,291,200 orders. A fragment selected after many choices needs stronger support than a prediction from an independently specified order. See <a href="reproducibility.html">controls and scope</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>
+<h2>Manuscript pages discussed</h2><p><a href="../lp1-00.html">LP1-00</a> · <a href="../lp1-01.html">LP1-01</a> · <a href="../lp1-02.html">LP1-02</a></p><h2>Guides linking here</h2><ul><li><a href="cover-chain.html">The cover payload chain</a></li></ul></main></body></html>
