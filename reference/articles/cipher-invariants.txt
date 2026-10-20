@@ -109,6 +109,11 @@ A direct polynomial stream is a narrower proposal than a polynomial key combined
 
 The direct polynomial stream experiment checks degree bounds 1–8 in both index and prime coordinates on all 55 nonempty rune pages in LP2-00–55. All 880 checks have gcd 1. Its worked example, full difference ledger and two independent implementations explain the result. Origins and fixed signed strides are covered algebraically; unknown plaintext, irregular clocks, resets and extra output maps are outside this conclusion.
 
+
+Repeated positions can eliminate an unknown origin
+
+If a rune always labels a divisor q of N+s*i, then q divides the differences between its numbered positions. The position-divisor experiment finds a gcd-one gap witness on each of the 55 nonempty LP2-00–55 rune streams. That excludes unit strides for every origin. For general stride s, it only forces the witnessed divisor to divide s. A worked diagram and stride-two counterexample show why the distinction matters.
+
 Sources, related references, and files
 - rune indices and prime values
   https://jelliottdev.github.io/reference/articles/rune-values.html
@@ -134,5 +139,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/word-lengths.html
 - direct polynomial stream experiment
   https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
+- position-divisor experiment
+  https://jelliottdev.github.io/#/experiments/position-divisor-labels
 
 Article: https://jelliottdev.github.io/reference/articles/cipher-invariants.html
