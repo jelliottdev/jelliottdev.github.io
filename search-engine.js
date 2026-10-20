@@ -2,7 +2,15 @@
 (function(root){
  const norm=s=>String(s||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[–—_]/g,'-').replace(/\s+/g,' ').trim();
  const terms=q=>[...String(q).matchAll(/"([^"]+)"|(\S+)/g)].map(m=>norm(m[1]||m[2])).filter(Boolean);
- const has=(text,q)=>terms(q).every(t=>norm(text).includes(t));
+ // One parsed query can be reused across every field. Keep only the current
+ // query, and leave the public terms() result independent and mutable.
+ let lastQuery,lastTerms;
+ const has=(text,q)=>{
+  if(q!==lastQuery||!lastTerms){lastQuery=q;lastTerms=terms(q);}
+  if(!lastTerms.length)return true;
+  const normalized=norm(text);
+  return lastTerms.every(t=>normalized.includes(t));
+ };
  function page(p,q){
   if(!q.trim())return {score:0,type:'Page record',text:p.title,section:'details'};
   const n=norm(q),id=n.match(/^lp([12])\s*[-:·]?\s*(?:page\s*)?0*(\d{1,2})$/),generic=n.match(/^page\s*0*(\d{1,2})$/),file=n.match(/^(\d{1,2})\.jpg$/);
@@ -19,8 +27,9 @@
  function suggest(q,topics){const n=norm(q);if(!/^[a-z]{5,24}$/.test(n))return [];const words=[...new Set(topics.flatMap(t=>(norm(t.title+' '+t.terms).match(/[a-z]{5,24}/g)||[])))];return words.filter(w=>w!==n&&Math.abs(w.length-n.length)<=2).map(w=>({w,d:distance(n,w)})).filter(x=>x.d<=(n.length>7?2:1)).sort((a,b)=>a.d-b.d||a.w.localeCompare(b.w)).slice(0,3).map(x=>x.w);}
  function relevance(title,summary,body,q){
   const n=norm(q);if(!n)return 0;
-  if(norm(title)===n)return 1200;
-  if(norm(title).startsWith(n))return 800;
+  const normalizedTitle=norm(title);
+  if(normalizedTitle===n)return 1200;
+  if(normalizedTitle.startsWith(n))return 800;
   if(has(title,q))return 650;
   if(has(summary,q))return 300;
   return has(title+' '+summary+' '+body,q)?60:0;
