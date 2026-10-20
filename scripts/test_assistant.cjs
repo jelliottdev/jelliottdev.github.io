@@ -40,3 +40,12 @@ assert(literal.includes('<code>&lt;script&gt;</code>'));
 assert(!literal.includes('<script>'));
 assert(!experimentContext.renderExperimentMarkdown('```\n**literal** <script>\n```').includes('<strong>'));
 console.log('PASS: experiment inline and fenced code preserve literal syntax and escape HTML.');
+
+const account=experimentContext.renderExperimentMarkdown('[Method](#/wiki/atbash?section=formula) [Source](https://example.com/evidence) [Input](text/lp2-31.txt) [Missing](private.txt) [Unsafe](javascript:alert) `[Literal](#/wiki/atbash)`',['text/lp2-31.txt']);
+for(const href of ['#/wiki/atbash?section=formula','https://example.com/evidence','text/lp2-31.txt'])assert(account.includes('href="'+href+'"'));
+assert(!account.includes('href="private.txt"'));
+assert(!account.includes('href="javascript:'));
+assert(account.includes('<code>[Literal](#/wiki/atbash)</code>'));
+assert(!experimentContext.renderExperimentMarkdown('[escape](../file.txt)',['../file.txt']).includes('<a '));
+assert(!experimentContext.renderExperimentMarkdown('[markup](https://example.com/"onclick="bad)').includes('<a '));
+console.log('PASS: authored experiment links support methods, HTTPS sources and declared files without linking unsafe destinations.');

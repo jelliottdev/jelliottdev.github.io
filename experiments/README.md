@@ -41,3 +41,7 @@ python -c "import hashlib; from pathlib import Path; print(hashlib.sha256(Path('
 ```
 
 Replace `your-short-id` with the record ID. Copy the digest only after the retest, along with the corresponding input/output hashes and review details. If the script changes, retest it before updating the recorded hash. Hash verification establishes byte identity, not that a retest occurred or that the findings are correct. List local helper modules and configuration files used by the script among the hashed inputs as well.
+
+## Links in the full account
+
+Use ordinary Markdown links for HTTPS sources and wiki routes, for example `[Atbash](#/wiki/atbash)`. Links to local files must name the exact script, article, input, or output path declared in the record; `[Input](text/lp2-31.txt)` works when that path is in `reproduction.inputs`. Unsafe or undeclared file destinations remain visible as text. Inline and fenced code stay literal. This renderer is for reviewed experiment articles; the AI answer renderer has separate evidence-link restrictions.
