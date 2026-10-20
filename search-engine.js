@@ -49,6 +49,18 @@
  }
  // Destination keys follow the same case/accent rules as alias matching.
  const aliasDestination=(mapping,q)=>Object.entries(mapping||{}).find(([key])=>norm(key)===norm(q))?.[1];
+ function featureDescription(p,a,q){
+  // Use page evidence, including another curated name for the same subject.
+  // A missing note is not permission to describe the page from guide prose.
+  const sentences=String(p.notes_text||'').match(/[^.!?]+[.!?]*(?:\s|$)/g)||[];
+  const section=aliasDestination(a.alias_sections,q);
+  const aliases=(a.aliases||[]).filter(term=>!section||aliasDestination(a.alias_sections,term)===section);
+  for(const term of [q,...aliases]){
+   const match=sentences.find(text=>has(text,term));
+   if(match)return match.trim();
+  }
+  return 'Listed in '+a.title+'. Open the page details to inspect the original and its recorded evidence.';
+ }
  function search(db,q){
   if(!norm(q))return [];
   const hits=[];
@@ -65,7 +77,7 @@
    const existing=hits.find(h=>h.page?.id===id);
    const score=aliasScore(a.aliases,q)>=1100?900:700;
    if(existing&&existing.score>=score)continue;
-   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score,page:p,matchLabel:null};
+   const feature={type:'page',title:id.toUpperCase()+(p.title?' · '+p.title:''),text:featureDescription(p,a,q),href:'#/page/'+id+'?section=details',score,page:p,matchLabel:null};
    if(existing)Object.assign(existing,feature);else hits.push(feature);
   }
   for(const t of db.topics||[]){const score=relevance(t.title,t.summary,t.terms,q);if(score)hits.push({type:'topic',title:t.title,text:t.summary,href:'#/topics?topic='+t.id,score:score===1200?1100:score-40});}

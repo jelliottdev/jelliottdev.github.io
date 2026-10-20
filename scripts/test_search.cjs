@@ -280,3 +280,13 @@ for(const q of ['signpost','signposts','cross','crosses','cross-like drawings'])
  }
 }
 console.log('PASS: signpost and cross aliases lead to their guide section and manuscript pages');
+
+const crossPage=search.search(db,'signposts').find(h=>h.page?.id==='lp2-00');
+assert.equal(crossPage.title,'LP2-00');
+assert(crossPage.text.includes('Cross-like drawings'));
+assert(db.pages.find(p=>p.id==='lp2-00').notes_text.includes(crossPage.text));
+const noNotes=search.search({articles:[{id:'example',title:'Example guide',summary:'Not page evidence',aliases:['shape'],feature_pages:['lp2-00']}],pages:[{id:'lp2-00',title:'Page title'}]},'shape').find(h=>h.page);
+assert.equal(noNotes.title,'LP2-00 · Page title');
+assert(noNotes.text.startsWith('Listed in Example guide.'));
+assert(!noNotes.text.includes('Not page evidence'));
+console.log('PASS: feature results use page titles and recorded visual evidence, with an explicit fallback');
