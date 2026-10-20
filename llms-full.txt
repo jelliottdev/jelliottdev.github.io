@@ -44,7 +44,7 @@ Human reader: https://jelliottdev.github.io/#/reader/lp1-00
 
 ## Visual observations
 
-No detailed visual inventory published for this page. An indexed image is not an exhaustive review.
+Visible title: Large black Latin lettering reads “Liber Primus” on a white field, above the vertical midpoint with broad surrounding margins. Visual check: 19 October 2026.
 
 ## Archived transcription
 
@@ -60,12 +60,19 @@ Source: https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd
 Guide: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 This signed hex body participates in the three-image XOR and transposition chain: https://jelliottdev.github.io/reference/articles/cover-chain.html
 
+## Visible Latin text
+
+Liber Primus
+
+Editorial transcription of visible Latin lettering, checked against the original JPEG on 2026-10-19. Separate from archived rune transcription.
+
 ## Related guides
 
 Transposition ciphers: https://jelliottdev.github.io/reference/articles/transposition.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 Exclusive OR (XOR): https://jelliottdev.github.io/reference/articles/xor.html
 The cover payload chain: https://jelliottdev.github.io/reference/articles/cover-chain.html
+The two LP1 title pages: https://jelliottdev.github.io/reference/articles/title-pages.html
 
 ## Sources
 
@@ -171,7 +178,7 @@ Human reader: https://jelliottdev.github.io/#/reader/lp1-02
 
 ## Visual observations
 
-No detailed visual inventory published for this page. An indexed image is not an exhaustive review.
+Visible chapter heading: Black Latin lettering reads “Chapter 1” above “Intus” on a white field. The two text groups are vertically separated. Visual check: 19 October 2026.
 
 ## Archived transcription
 
@@ -187,12 +194,20 @@ Source: https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd
 Guide: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 This signed hex body participates in the three-image XOR and transposition chain: https://jelliottdev.github.io/reference/articles/cover-chain.html
 
+## Visible Latin text
+
+Chapter 1
+Intus
+
+Editorial transcription of visible Latin lettering, checked against the original JPEG on 2026-10-19. Separate from archived rune transcription.
+
 ## Related guides
 
 Transposition ciphers: https://jelliottdev.github.io/reference/articles/transposition.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
 Exclusive OR (XOR): https://jelliottdev.github.io/reference/articles/xor.html
 The cover payload chain: https://jelliottdev.github.io/reference/articles/cover-chain.html
+The two LP1 title pages: https://jelliottdev.github.io/reference/articles/title-pages.html
 
 ## Sources
 
@@ -273,6 +288,7 @@ WELCOME WELCOME,  PILGRIM,  TO  THE  GREAT  JOURNEY  TOWARD  THE  END  OF  ALL  
 Vigenère on the rune alphabet: https://jelliottdev.github.io/reference/articles/vigenere.html
 Keystream positions and interruptions: https://jelliottdev.github.io/reference/articles/interruptions.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+The image hidden in LP1-03: https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
 
 ## Sources
 
@@ -5178,6 +5194,7 @@ body = Path("exports/steganography/lp1-03.body.txt").read_text()
 image = bytes.fromhex(body[body.index("ffd8ffe"):])
 with open("embedded.jpg", "xb") as f:
     f.write(image)
+Read the embedded image’s transcription and reproduction guide.
 LP1-10 through LP1-13
 These historical instructions discuss a Tor hidden service, CGI uploads, three magic squares, and working alone. They are source documents, not current wiki setup instructions. Decorative borders use 3s on LP1-10 and LP1-11, 0s on LP1-12, and 1s on LP1-13. Similar prose does not make signed files byte-identical.
 
@@ -5231,6 +5248,7 @@ https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e86699
 https://jelliottdev.github.io/data/evidence/embedded-payloads.json
 https://jelliottdev.github.io/reference/articles/cover-chain.html
 https://jelliottdev.github.io/exports/steganography/lp1-03.embedded.jpg
+https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
 https://jelliottdev.github.io/reference/articles/magic-squares.html
 https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/checksums.html
@@ -5321,6 +5339,7 @@ The cover, warning, and chapter title combine into a signed message and a transp
 Three inputs
 LP1-00, Liber Primus, LP1-01, the warning, and LP1-02, Chapter 1 — Intus carry OutGuess payloads. Extract and verify them. Their 1,982-digit bodies decode to three 991-byte streams.
 
+Visible headings and the two title pages.
 XOR corresponding bytes
 What XOR means, with a worked byte example.
 XOR produces a 0 bit when input bits agree and 1 when they differ. Compute result[i] = A[i] XOR B[i] XOR C[i] on decoded bytes, not on hexadecimal text characters. For example, 0x0f XOR 0x33 = 0x3c.
@@ -5350,6 +5369,7 @@ https://jelliottdev.github.io/reference/lp1-01.html
 https://jelliottdev.github.io/reference/lp1-02.html
 https://jelliottdev.github.io/reference/articles/outguess.html
 https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/articles/title-pages.html
 https://jelliottdev.github.io/reference/articles/xor.html
 https://jelliottdev.github.io/exports/steganography/cover-chain.signed.asc
 https://jelliottdev.github.io/reference/articles/transposition.html
@@ -5672,3 +5692,91 @@ https://jelliottdev.github.io/reference/articles/emirps.html
 https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md#32jpg---15jpg
 
 Article: https://jelliottdev.github.io/reference/articles/lp2-15-panel.html
+
+
+---
+
+The two LP1 title pages
+
+Visible Latin headings, the meaning of Intus, and the hidden-message chain.
+
+The first release includes two title images among its seventeen pages. They are part of the file sequence and the hidden-message chain, even though neither has a runic paragraph.
+
+LP1-00: Liber Primus
+The cover displays “Liber Primus” in large black Latin lettering on a white field. The text sits above the vertical midpoint with broad margins. The literal visible text is recorded separately from the archived rune transcriptions; a rune count of zero does not mean the image contains no text or no information.
+
+LP1-02: Chapter 1 — Intus
+The chapter title displays “Chapter 1” above “Intus,” in black Latin lettering on white. The two text groups are vertically separated. In Latin, intus can mean “within” or “on the inside”; see the Lewis and Short dictionary entry. That lexical meaning does not by itself specify a cipher operation.
+
+Both carry hidden messages
+Each original JPEG yields a signed hexadecimal OutGuess body. Together with the warning image, LP1-01, they form the three-image XOR and transposition chain. Their visible headings and embedded bodies must remain separate in transcriptions and citations.
+
+How to inspect the layers
+Open the original image in the reader and compare its visible lettering with the labeled visible-text transcription.
+Download the original JPEG, not the cropped thumbnail.
+Follow OutGuess extraction and compare the expected checksum.
+Verify the signed block, then follow the documented three-image chain.
+The site’s title-page text is a labeled editorial transcription checked against the image on 19 October 2026. It is not a new cipher reading or a replacement for the image.
+
+Sources
+LP1-00 original and file provenance · LP1-02 original and file provenance · Hidden-payload evidence. Visual descriptions concern the displayed originals; no font identification or numerical interpretation of the layout is asserted.
+
+Sources, related references, and files
+https://jelliottdev.github.io/#/reader/lp1-00
+https://jelliottdev.github.io/#/reader/lp1-02
+https://atlas.perseus.tufts.edu/dictionaries/entry/urn%3Acite2%3Ascaife-viewer%3Adictionary-entries.atlas_v1%3Alat.ls.perseus-eng2-n24654/
+https://jelliottdev.github.io/reference/lp1-01.html
+https://jelliottdev.github.io/reference/articles/cover-chain.html
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://jelliottdev.github.io/reference/lp1-00.html
+https://jelliottdev.github.io/reference/lp1-02.html
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+
+Article: https://jelliottdev.github.io/reference/articles/title-pages.html
+
+
+---
+
+The image hidden in LP1-03
+
+The decoded JPEG, its archived rune transcription, and exact reproduction steps.
+
+LP1-03 has two different images to examine: the visible runic manuscript page and a smaller JPEG encoded inside its signed OutGuess message. The known Vigenère reading of the manuscript does not automatically decode the second image.
+
+The decoded derivativeThe JPEG decoded from the hexadecimal portion of LP1-03’s signed message.
+The derivative is 587 × 109 pixels and 15,188 bytes. Download the JPEG. Its checksum is recorded in the payload manifest.
+
+Archived transcription
+The pinned iBotPeaches archive supplies this transcription:
+ᚦᛗᛞᛇᚠᛗᚪᚱ5ᚢᚫᛝᚱᛝ3 ᛠᛗᛇᚠᛡ
+It contains 18 runes and the decimal digits 5 and 3. In the wiki’s alphabet labels, with spaces inserted between individual symbols for clarity:
+TH M D EO F M A R 5 U AE NG R NG 3 EA M EO F IA
+Those labels are a transliteration, not established plaintext. The added spaces above identify symbol boundaries; they are not a new claim about word boundaries in the image. Decimal digits remain digits rather than becoming rune indices.
+
+How to reproduce the image
+First follow OutGuess extraction for LP1-03 and verify its signed message. Decode the hexadecimal suffix of the exported body:
+from pathlib import Path
+body = Path("exports/steganography/lp1-03.body.txt").read_text()
+image = bytes.fromhex(body[body.index("ffd8ffe"):])
+assert len(image) == 15188
+with open("lp1-03-decoded.jpg", "xb") as output:
+    output.write(image)
+The exclusive-create mode refuses to overwrite an existing file. This reproduces a format conversion, not a proposed solution to the image’s text. Keep the original signed body and the derivative as separate files.
+
+Sources
+Pinned transcription of the embedded image · Signed block · Message body · Payload inventory.
+
+Sources, related references, and files
+https://jelliottdev.github.io/reference/lp1-03.html
+https://jelliottdev.github.io/exports/steganography/lp1-03.embedded.jpg
+https://jelliottdev.github.io/data/evidence/embedded-payloads.json
+https://jelliottdev.github.io/reference/articles/transliteration.html
+https://jelliottdev.github.io/reference/articles/outguess.html
+https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+https://github.com/iBotPeaches/cicada_3301/blob/fdda9cf7bc9e2151ca5272cd51e866991a4ea079/liber_primus/markdown/03.md
+https://jelliottdev.github.io/exports/steganography/lp1-03.signed.asc
+https://jelliottdev.github.io/exports/steganography/lp1-03.body.txt
+https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+
+Article: https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html

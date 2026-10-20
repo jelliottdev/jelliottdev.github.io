@@ -17,6 +17,9 @@ for summary in index['pages']:
  register(f'images/{pid}.jpg','Original JPEG',p);assert files[-1]['sha256']==p['image_sha256']
  register(f'data/pages/{pid}.json','Structured page record',p)
  if p['raw']:register(f'text/{pid}.txt','Archived rune transcription',p)
+ if p.get('visible_text'):
+  save(f'exports/{pid}.visible-latin.txt',p['visible_text']['text']+'\n')
+  register(f'exports/{pid}.visible-latin.txt','Visible Latin text derivative',p)
  if p['reviewed_text']:
   save(f'exports/{pid}.reviewed-runes.txt',p['reviewed_text']);register(f'exports/{pid}.reviewed-runes.txt','Reviewed rune derivative',p)
  if p['reading']:
@@ -36,6 +39,7 @@ for summary in index['pages']:
   text+='## Embedded OutGuess content\n\nVerified default-key extraction: '+str(embedded['payload_bytes'])+' bytes. Full payload: '+base+embedded['payload_path']+'\nSigned block: '+base+embedded['signed_path']+'\nMessage body: '+base+embedded['body_path']+'\nPayload SHA-256: '+embedded['payload_sha256']+'\nSource: '+embedded['source_url']+'\nGuide: '+base+'reference/articles/embedded-payloads.html\n'
   if pid in ['lp1-00','lp1-01','lp1-02']:text+='This signed hex body participates in the three-image XOR and transposition chain: '+base+'reference/articles/cover-chain.html\n'
   text+='\n'
+ if p.get('visible_text'):text+='## Visible Latin text\n\n'+p['visible_text']['text']+'\n\n'+p['visible_text']['basis']+'\n\n'
  if p['corrections']:text+='## Documented corrections\n\n'+'\n'.join(json.dumps(c,ensure_ascii=False) for c in p['corrections'])+'\n\n'
  if p['reviewed_text']:text+='## Reviewed rune derivative\n\n'+p['reviewed_text']+'\n\n'
  if p['reading']:text+='## Literal known reading\n\nMethod: '+p['reading']['method']+'\n\n'+p['reading']['literal']+'\n\n## Contextual whole-section reading\n\nSection spans: '+', '.join(p['reading']['section_pages'])+'\n\n'+p['reading']['reading']+'\n\n'
@@ -78,6 +82,7 @@ save('reference/index.html',(root/'reference/index.html').read_text(encoding='ut
 register('llms-full.txt','Complete plain-text page references')
 # Bundles preserve each member's exact bytes and repository-relative path.
 for name,roles in [('original-images',{'Original JPEG'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
+ if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  contents=json.dumps(selected,ensure_ascii=False,indent=2)
