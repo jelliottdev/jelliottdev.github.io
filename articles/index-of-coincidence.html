@@ -1,5 +1,6 @@
 <p>The index of coincidence (IoC) measures how often two different positions in a text contain the same symbol. It summarizes the symbol distribution; it does not read the text or identify a cipher by itself. This guide provides a reproducible whole-page baseline for the archived Liber Primus runes.</p>
 <h2 id="formula">Count matching pairs</h2>
+<p>Before using this number to compare candidate decodings, read <a href="#/wiki/cipher-invariants">what cipher operations preserve</a>. A rearrangement or fixed reversible alphabet substitution cannot change whole-stream IoC.</p>
 <p>Let <code>N</code> be the number of runes and <code>nᵢ</code> the count of rune <code>i</code>. The unscaled convention used here is:</p>
 <pre><code>IoC = sum(nᵢ × (nᵢ − 1)) / (N × (N − 1))</code></pre>
 <p>There are <code>N × (N − 1)</code> ordered choices of two distinct positions. A rune occurring <code>nᵢ</code> times contributes <code>nᵢ × (nᵢ − 1)</code> matching choices. Dividing gives the probability of a match when sampling positions without replacement. Counting unordered pairs instead divides both quantities by two and produces the same result.</p>

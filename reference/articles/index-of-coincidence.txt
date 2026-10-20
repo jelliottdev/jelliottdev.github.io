@@ -6,6 +6,8 @@ The index of coincidence (IoC) measures how often two different positions in a t
 
 Count matching pairs
 
+Before using this number to compare candidate decodings, read what cipher operations preserve. A rearrangement or fixed reversible alphabet substitution cannot change whole-stream IoC.
+
 Let N be the number of runes and nᵢ the count of rune i. The unscaled convention used here is:
 
 IoC = sum(nᵢ × (nᵢ − 1)) / (N × (N − 1))
@@ -154,6 +156,7 @@ Historical background: William F. Friedman, The Index of Coincidence and Its App
 Inputs: the archived rune files linked by the baseline manifest and their page records. Checks: short examples, exhaustive pair enumeration for three-symbol-alphabet strings of lengths 2–6, reversal and symbol-renaming invariance, and all 75 recorded page counts. These validate the calculation under its declared inputs; they do not independently validate the photographic transcription.
 
 Sources, related references, and files
+https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 https://jelliottdev.github.io/#/alphabet
 https://jelliottdev.github.io/downloads/reference-data.zip
 https://jelliottdev.github.io/reference/articles/running-scripts.html
