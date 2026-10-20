@@ -8,6 +8,16 @@ assert.equal(Search.select([page,experiment],'Vigenere on every row of LP2 page 
 assert.equal(Search.select([page,experiment],'has anyone tested page 31').length,0);
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[0].id,'test');
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[1].id,'lp2-31-0');
+const largeFirst={...experiment,id:'a',text:experiment.text.padEnd(6000,' ')};
+const largeSecond={...experiment,id:'b',text:experiment.text.padEnd(5000,' ')};
+const bounded=Search.select([largeFirst,largeSecond],'reverse prime sequence');
+assert.deepEqual(bounded.map(d=>d.id),['a'],'Keep a complete best match when two cannot fit');
+assert.equal(bounded[0].text,largeFirst.text,'Never truncate the chosen scope');
+assert.equal(Search.select([{...largeFirst,text:largeFirst.text.padEnd(9001,' ')},largeSecond],
+ 'reverse prime sequence').length,0,'Do not replace an oversized best match with a weaker record');
+const support=[0,1,2].map(n=>({...page,id:`support-${n}`}));
+assert.equal(Search.select([largeFirst,largeSecond,...support],'reverse prime sequence on LP2-31')
+ .filter(d=>d.kind==='page').length,2,'Keep the two-page supporting-context limit with one experiment');
 assert.deepEqual(Search.pageIds('LP2-31 and lp1 4'),['lp2-31','lp1-04']);
 for(const notation of ['LP2:31','LP2 : 31','LP2 page 31','LP2-page-31','LP2–31','LP2—31','LP2‑31','LP2−31','LP2 page #31']){
  assert.deepEqual(Search.pageIds(notation),['lp2-31']);

@@ -123,6 +123,8 @@ The archived-layout route experiment tests sixteen row/column traversal configur
 
 A separate within-word reversal experiment reverses runes inside transcription-defined segments while preserving segment order. It tests both splitting at line breaks and joining across them: 110 distinct page outputs, with no matches to the same nine beginnings. Its source-position diagram shows where those boundary conventions produce different routes. These segments are not independently established plaintext words.
 
+The segment-order reversal experiment tests the other meaning of “read the words backwards”: read the last segment first but keep its runes in forward order. Its 110 distinct outputs also match none of the nine beginnings. For an invented input AB | C | DEF, within-segment reversal gives BA | C | FED, while segment-order reversal gives DEF | C | AB. Applying both gives whole-stream reversal, so those combined operations do not create an additional reading rule.
+
 Sources, related references, and files
 - LP1 title-page payload chain; cover-chain guide
   https://jelliottdev.github.io/reference/articles/cover-chain.html
@@ -146,5 +148,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
 - within-word reversal experiment
   https://jelliottdev.github.io/#/experiments/lp2-word-reversal
+- segment-order reversal experiment
+  https://jelliottdev.github.io/#/experiments/lp2-word-order-reversal
 
 Article: https://jelliottdev.github.io/reference/articles/transposition.html

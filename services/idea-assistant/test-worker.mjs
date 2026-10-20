@@ -91,6 +91,7 @@ const realEnv={...env,AI:{run:async(model,options)=>{
 for(const [query,expected] of [
  ['Fibonacci on LP2-31','lp2-fibonacci-openings'],
  ['reverse words on LP2-31','lp2-word-reversal'],
+ ['reverse word order on LP2-31','lp2-word-order-reversal'],
  ['trigrams on LP2-31','lp2-trigram-repeats'],
  ['OutGuess on LP2-31','outguess-default-key'],
 ]){
@@ -98,7 +99,7 @@ for(const [query,expected] of [
  assert.equal(response.status,200);
  assert.equal((await response.json()).sources[0].id,expected);
 }
-assert.equal(realCalls,4);
+assert.equal(realCalls,5);
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
-assert.equal(realCalls,4);
+assert.equal(realCalls,5);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');

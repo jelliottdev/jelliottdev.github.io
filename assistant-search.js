@@ -38,14 +38,18 @@
     const ranked=experiments(documents,query,pages);
     // A manuscript page match is never evidence that a technique was tested.
     if(!ranked.length)return [];
-    const selected=ranked.slice(0,2).map(r=>r.document);
-    let size=selected.reduce((sum,d)=>sum+d.text.length,0);
-    if(size>9000)return []; // Do not truncate experiment scope to fit a prompt.
+    const selected=[ranked[0].document];
+    let size=selected[0].text.length;
+    if(size>9000)return []; // Never replace an oversized best match with a weaker one.
+    const second=ranked[1]?.document;
+    if(second&&size+second.text.length<=9000){selected.push(second);size+=second.text.length;}
+    // Keep the best complete scope when its sibling cannot fit; never truncate either.
     const explicit=[...new Set([...pages,...pageIds(query)])];
+    let pageCount=0;
     for(const {document} of search(documents.filter(d=>d.kind!=='experiment'),query,explicit)){
-      if(selected.length===4)break;
+      if(pageCount===2)break;
       if(!explicit.includes(document.page)||size+document.text.length>11000)continue;
-      selected.push(document);size+=document.text.length;
+      selected.push(document);size+=document.text.length;pageCount++;
     }
     return selected;
   }

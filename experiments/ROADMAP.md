@@ -6,7 +6,9 @@ Emirp row-sum variant: same 594 rows, 999 shuffles and seed as the prime baselin
 
 Exact-repeat baseline: length-three overlapping windows on LP2-00–55; sum within-page matching-start pairs. Observed 55, with 798/999 whole-page fixed-count shuffle totals at least that large; upper-tail p=0.799. Standalone record includes positions, page CSV and histogram. No alternative lengths, between-page comparisons or per-page significance tested. Prior descriptive LP2-31 result disclosed.
 
-Within-segment reversal now has its own record in the reading-route family. Two predeclared line-boundary conventions give 110 distinct page outputs and zero matches to nine fixed beginnings. Full traces audited with regex spans and reflected positions; complete rerun agrees. Word-order reversal and broader language ranking remain untested.
+Within-segment reversal now has its own record in the reading-route family. Two predeclared line-boundary conventions give 110 distinct page outputs and zero matches to nine fixed beginnings. Full traces audited with regex spans and reflected positions; complete rerun agrees.
+
+Segment-order reversal is a separate sibling: preserve runes inside segments, reverse segment order across the complete page. The same two boundary rules give 110 distinct outputs, 990 opening comparisons and zero matches. Regex/sorted-position audit and full rerun agree. All outputs equal whole-stream reversals of their within-segment siblings, as the algebra predicts. Row-local word-order reversal and broader language ranking remain untested.
 
 1. Direct reading and Atbash reuse.
 2. Constant shifts of the 29-rune alphabet.
