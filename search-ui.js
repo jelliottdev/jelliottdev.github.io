@@ -1,6 +1,6 @@
 /* Shared local ranking for the header suggestions and full search results. */
 const searchTypeNames={guide:'Guide',page:'Manuscript page',topic:'Topic',source:'Source'};
-function searchResultHTML(hit,q,compact=false){return `<a class="wiki-search-hit" href="${esc(hit.href)}"><span class="search-hit-type">${searchTypeNames[hit.type]}</span><strong>${marked(hit.title,q)}</strong>${compact?'':`<span class="search-hit-excerpt">${marked(excerpt(hit.text,q),q)}</span>`}</a>`;}
+function searchResultHTML(hit,q,compact=false){return `<a class="wiki-search-hit" href="${esc(hit.href)}"><span class="search-hit-type">${searchTypeNames[hit.type]}${hit.matchLabel?' · '+esc(hit.matchLabel):''}</span><strong>${marked(hit.title,q)}</strong>${compact?'':`<span class="search-hit-excerpt">${marked(excerpt(hit.text,q),q)}</span>`}</a>`;}
 function closeSearchSuggestions(){const panel=$('#search-suggestions');if(panel)panel.hidden=true;$('#search')?.setAttribute('aria-expanded','false');}
 function submitWikiSearch(value){const q=value.trim();closeSearchSuggestions();$('#search').blur();setNavigation(false);const target='#/search/'+encodeURIComponent(q);if(location.hash===target)route();else location.hash=target;}
 function bindWikiSearch(){

@@ -19,6 +19,10 @@
   if(file)return (p.source_names||[]).some(s=>s.filename.toLowerCase()===n)?{score:950,type:'Archive filename',text:`${q} in the pinned combined archive corresponds to ${p.id.toUpperCase()}.`,section:'details'}:null;
   const fields=[['Embedded payload',p.embedded_text,155,'embedded'],['Page title',p.title,180,'details'],['Visual note',p.notes_text,150,'details'],['Correction',p.correction_text,145,'corrections'],['Known reading',p.literal,130,'reading'],['Contextual reading of section',p.contextual,75,'reading'],['Method',`${p.section||''} ${p.method||''}`,110,'reading']];
   let hits=fields.filter(([,s])=>s&&has(s,q)).map(([type,text,score,section])=>({type,text,score,section}));
+  // Literal labels retain their spelling. Join only recorded line wraps and
+  // render word separators as spaces so ordinary typed phrases can find them.
+  const joined=String(p.literal||'').replace(/[\/\r\n]/g,'').replace(/-/g,' ');
+  if(joined&&has(joined,q))hits.push({type:'Known reading · line wraps joined',text:joined,score:130,section:'reading'});
   for(const row of p.text_rows||[]){if(has(row.raw,q))hits.push({type:`Archived text · row ${row.row}`,text:row.raw,score:170,section:'transcription',row:row.row,mode:'runes'});else if(has(row.latin,q))hits.push({type:`Latin labels · row ${row.row}`,text:row.latin,score:165,section:'transcription',row:row.row,mode:'latin'});}
   if(!hits.length&&has(`${p.id} ${p.release} page ${p.release_index} ${p.title} ${p.search}`,q))hits.push({type:'Page record',text:'Search terms occur across this page record. Open the transcription or related evidence below.',score:20,section:'details'});
   return hits.sort((a,b)=>b.score-a.score)[0]||null;
@@ -55,13 +59,13 @@
    if(score)hits.push({type:'guide',title:a.title,text:a.summary,href:'#/wiki/'+a.id+(section?'?section='+encodeURIComponent(section):''),score});
    if(alias)for(const id of aliasDestination(a.alias_pages,q)||a.feature_pages||[])if(!features.has(id))features.set(id,a);
   }
-  for(const p of db.pages||[]){const hit=page(p,q);if(hit)hits.push({type:'page',title:p.id.toUpperCase()+(p.title?' · '+p.title:''),text:hit.text,href:'#/page/'+p.id+'?'+(hit.row?'line='+hit.row+'&mode='+hit.mode:'section='+hit.section),score:hit.score,page:p});}
+  for(const p of db.pages||[]){const hit=page(p,q);if(hit)hits.push({type:'page',title:p.id.toUpperCase()+(p.title?' · '+p.title:''),text:hit.text,href:'#/page/'+p.id+'?'+(hit.row?'line='+hit.row+'&mode='+hit.mode:'section='+hit.section),score:hit.score,page:p,matchLabel:hit.type==='Contextual reading of section'?'section text':hit.type.startsWith('Known reading')?'literal reading':null});}
   for(const [id,a] of features){
    const p=(db.pages||[]).find(p=>p.id===id);if(!p)continue;
    const existing=hits.find(h=>h.page?.id===id);
    const score=aliasScore(a.aliases,q)>=1100?900:700;
    if(existing&&existing.score>=score)continue;
-   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score,page:p};
+   const feature={type:'page',title:id.toUpperCase()+' · '+a.title,text:a.summary,href:'#/page/'+id+'?section=details',score,page:p,matchLabel:null};
    if(existing)Object.assign(existing,feature);else hits.push(feature);
   }
   for(const t of db.topics||[]){const score=relevance(t.title,t.summary,t.terms,q);if(score)hits.push({type:'topic',title:t.title,text:t.summary,href:'#/topics?topic='+t.id,score:score===1200?1100:score-40});}

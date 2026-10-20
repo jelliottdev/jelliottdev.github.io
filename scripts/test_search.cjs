@@ -20,6 +20,26 @@ assert.equal(search.relevance('Some Wisdom','','a warning','wisdom warning'),60)
 assert.equal(search.relevance('Some Wisdom','','a warning','"wisdom warning"'),0);
 console.log('PASS: title/prefix ranking, page aliases, ambiguous numbering, phrases and empty results');
 
+// Find a page's own literal wording even when the word wraps between lines.
+const lp10=db.pages.find(p=>p.id==='lp1-10'),lp11=db.pages.find(p=>p.id==='lp1-11');
+for(const q of ['"circumference practices"','"three behauiars"','"within the deceptian"']){
+ const hit=search.page(lp10,q);
+ assert.equal(hit.type,'Known reading · line wraps joined',q);
+ assert.equal(hit.section,'reading');
+ assert(!hit.text.includes('/\n'));
+}
+assert(search.page(lp10,'"circumference practices"').score>search.page(lp11,'"circumference practices"').score,
+ 'The page containing the words must outrank another page sharing its contextual section');
+const phrasePages=search.search(db,'"circumference practices"').filter(hit=>hit.page);
+assert.equal(phrasePages[0].page.id,'lp1-10');
+assert.equal(phrasePages[0].matchLabel,'literal reading');
+assert.equal(phrasePages.find(hit=>hit.page.id==='lp1-11').matchLabel,'section text');
+const literalOnly={id:'lp1-10',literal:lp10.literal};
+assert.equal(search.page(literalOnly,'"three behaviors"'),null,'Do not expand literal spelling silently');
+assert.equal(search.page(literalOnly,'"enough preservation"'),null,'Do not join text from different pages');
+assert.equal(search.page(literalOnly,'CIRCU/').type,'Known reading','Keep exact archived notation searchable');
+console.log('PASS: literal words and phrases span line wraps without spelling expansion or cross-page joins');
+
 for(const [queries,id,pageIds] of [
  [['dots','black dots'],'dots',['lp2-07','lp2-33','lp2-39']],
  [['five dots'],'dots',['lp2-07','lp2-23','lp2-56']],
