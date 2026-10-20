@@ -38,6 +38,7 @@ def main():
             ["scripts/reproduce_cover_rsa.py"],
             ["scripts/reproduce_emerson.py"],
             ["scripts/inspect_visual_records.py"],
+            ["scripts/test_visual_report.py"],
         ]:
             result = subprocess.run([sys.executable, *command], cwd=target,
                                     capture_output=True, text=True, encoding="utf-8")

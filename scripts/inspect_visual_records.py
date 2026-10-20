@@ -12,6 +12,9 @@ import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parents[1]
+BRIGHTNESS_LIMIT = 140
+MINIMUM_AREA = 20
+RED_MARGIN = 70
 
 def components(points):
     remaining = set(points)
@@ -28,15 +31,15 @@ def components(points):
                     if neighbor in remaining:
                         remaining.remove(neighbor)
                         pending.append(neighbor)
-        count += area >= 20
+        count += area >= MINIMUM_AREA
     return count
 
 def color(crop):
     foreground = red = 0
     for r, g, b in crop.getdata():
-        if .299*r + .587*g + .114*b < 140:
+        if .299*r + .587*g + .114*b < BRIGHTNESS_LIMIT:
             foreground += 1
-            red += r - max(g, b) > 70
+            red += r - max(g, b) > RED_MARGIN
     ratio = red / foreground if foreground else None
     return "red" if ratio is not None and ratio > .9 else "dark" if ratio is not None and ratio < .1 else "mixed/uncertain"
 
@@ -44,11 +47,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pixels", action="store_true")
     args = parser.parse_args()
+    pillow_version = None
     if args.pixels:
         from PIL import Image
+        from PIL import __version__ as pillow_version
     results = []
     for pid in ["lp2-00", "lp2-01", "lp2-02"]:
-        page = json.loads((ROOT / f"data/pages/{pid}.json").read_text(encoding="utf-8"))
+        record_path = f"data/pages/{pid}.json"
+        record_bytes = (ROOT / record_path).read_bytes()
+        page = json.loads(record_bytes)
         glyphs, marks = page["visual"]["glyphs"], page["visual"]["punctuation"]
         assert [g["ordinal"] for g in glyphs] == list(range(page["rune_count"]))
         width, height = page["image_dimensions"]
@@ -67,13 +74,35 @@ def main():
                 assert color(crop) == region["ink_class"], (pid, "color", region)
                 if "component_count" in region:
                     pixels = crop.convert("L")
-                    points = {(xx, yy) for yy in range(h) for xx in range(w) if pixels.getpixel((xx, yy)) < 140}
+                    points = {(xx, yy) for yy in range(h) for xx in range(w) if pixels.getpixel((xx, yy)) < BRIGHTNESS_LIMIT}
                     assert components(points) == region["component_count"], (pid, "components", region)
-        results.append(dict(page=pid, glyph_regions=len(glyphs),
+        results.append(dict(page=pid,
+                            record_path=record_path,
+                            record_sha256=hashlib.sha256(record_bytes).hexdigest(),
+                            image_path=f"images/{pid}.jpg",
+                            expected_image_sha256=page["image_sha256"],
+                            image_hash_verified=args.pixels,
+                            image_dimensions=[width, height],
+                            glyph_regions=len(glyphs),
                             glyph_colors=dict(Counter(g["ink_class"] for g in glyphs)),
                             punctuation_regions=len(marks),
                             punctuation_component_counts=dict(Counter(g["component_count"] for g in marks))))
-    print(json.dumps({"scope": "Stored rectangles; not automatic segmentation or a cipher test.",
+    print(json.dumps({"schema_version": 1,
+                      "scope": "Stored rectangles; not automatic segmentation or a cipher test.",
+                      "pillow_version": pillow_version,
+                      "rules": {
+                          "rectangles": "[x, y, width, height], original pixels, top-left origin; right/bottom excluded",
+                          "component_grayscale": "Pillow RGB.convert('L')",
+                          "foreground_strictly_below": BRIGHTNESS_LIMIT,
+                          "connectivity": 8,
+                          "minimum_component_area_pixels": MINIMUM_AREA,
+                          "color_foreground": f"0.299R + 0.587G + 0.114B < {BRIGHTNESS_LIMIT} (unrounded)",
+                          "red_dominance_strictly_above": RED_MARGIN,
+                          "red_dominance_expression": "R - max(G, B)",
+                          "red_fraction_strictly_above": .9,
+                          "dark_fraction_strictly_below": .1,
+                          "otherwise": "mixed/uncertain, including no foreground",
+                      },
                       "pixel_recount": args.pixels, "pages": results}, indent=2))
 
 if __name__ == "__main__":
