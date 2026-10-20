@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: '22'
       - run: python scripts/check_download_catalog.py
+      - run: python scripts/test_download_catalog.py
       - run: node services/idea-assistant/test-worker.mjs
       - run: node scripts/test_assistant.cjs
       - run: node scripts/test_search.cjs
