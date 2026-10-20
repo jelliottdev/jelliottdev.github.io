@@ -20,5 +20,8 @@ jobs:
       - run: python scripts/test_experiments.py
       - run: python scripts/build_experiments.py
       - run: python scripts/build_assistant.py
+      - run: python scripts/build_articles.py
+      - run: python scripts/reproduce_reading.py --check-all
+      - run: python scripts/reproduce_cover_chain.py
       - name: Check that published exports match reviewed records
-        run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json
+        run: git diff --exit-code -- data/experiments.json reference/experiments.html data/assistant-index.json data/articles.json reference/articles

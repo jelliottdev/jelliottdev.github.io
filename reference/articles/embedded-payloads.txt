@@ -1,0 +1,35 @@
+Embedded OutGuess payloads
+
+Eight LP1 images with reproduced extractions and verified signatures.
+
+The visible manuscript and JPEG carrier have distinct layers. The cover and chapter-title images participate in a hidden-message chain.
+Verified inventory
+ImageBytesFilesProvenance
+LP1-002,899Extraction · Signed block · BodySource
+LP1-012,899Extraction · Signed block · BodySource
+LP1-022,899Extraction · Signed block · BodySource
+LP1-0331,809Extraction · Signed block · BodySource
+LP1-101,234Extraction · Signed block · BodySource
+LP1-111,234Extraction · Signed block · BodySource
+LP1-121,234Extraction · Signed block · BodySource
+LP1-131,234Extraction · Signed block · BodySource
+Default-key extraction and signature checks were repeated on 19 October 2026. The manifest records hashes and verification modes. This positive inventory does not rule out other hidden data.
+Cover, warning, and chapter title
+LP1-00, LP1-01 and LP1-02 contain signed hex bodies. Decode and XOR them to recover another signed message. Follow the complete chain; examining one body alone misses that relationship.
+Welcome: LP1-03
+The body begins “Let the text guide you,” followed by a good-luck message and a hex-encoded JPEG. The embedded image is distinct from the visible manuscript image. Preserve the signed body separately from the decoded derivative. Full body.
+JPEG decoded from the signed body; a derivative, not the carrier page.
+Download the decoded JPEG (15,188 bytes). To reproduce it:
+from pathlib import Path
+body = Path("exports/steganography/lp1-03.body.txt").read_text()
+image = bytes.fromhex(body[body.index("ffd8ffe"):])
+with open("embedded.jpg", "xb") as f:
+f.write(image)
+LP1-10 through LP1-13
+These historical instructions discuss a Tor hidden service, CGI uploads, three magic squares, and working alone. They are source documents, not current wiki setup instructions. Decorative borders use 3s on LP1-10 and LP1-11, 0s on LP1-12, and 1s on LP1-13. Similar prose does not make signed files byte-identical.
+Reproduce, then interpret
+Follow extraction, checksum verification, and signature verification as separate steps. This makes disagreements traceable to an operation and a file.
+Sources and verification
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html

@@ -1,0 +1,7 @@
+
+<h2 id="definition">What “mod 29” means</h2><p>Two integers are equal modulo 29 when their difference is a multiple of 29. For rune indices, choose the representative from 0 through 28. Moving forward from 28 by one returns to 0; moving backward from 0 by one returns to 28.</p>
+<h2 id="examples">Worked steps</h2><p>If ciphertext index c is 3 and the key value is 10, then p = (3 − 10) mod 29 = 22. Adding 29 to −7 gives the same index. A shift by 31 is equivalent to a shift by 2.</p><pre><code># Python:
+assert (3 - 10) % 29 == 22
+# JavaScript needs normalization of its signed remainder:
+# ((3 - 10) % 29 + 29) % 29</code></pre>
+<h2 id="limits">What this does not decide</h2><p>Modulo arithmetic supplies wraparound, not the key, direction, offset, or interruptions. See <a href="#/wiki/vigenere">Vigenère</a>, <a href="#/wiki/prime-minus-one">prime-minus-one</a>, and <a href="#/wiki/interruptions">keystream positions</a>.</p><h2 id="sources">Sources and verification</h2><p><a href="https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md">Pinned historical walkthrough</a>. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.</p>

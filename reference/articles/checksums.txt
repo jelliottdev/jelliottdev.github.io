@@ -1,0 +1,21 @@
+File hashes and checksums
+
+Identify exact bytes without confusing integrity, signatures, and decryption.
+
+What a checksum establishes
+SHA-256 maps bytes to a 256-bit digest, displayed as 64 hex digits. A matching digest identifies expected bytes under the hash’s security assumptions, not their creator. Changed line endings can change a text file’s hash.
+Check a download
+# PowerShell
+Get-FileHash images/lp1-00.jpg -Algorithm SHA256
+# Linux
+sha256sum images/lp1-00.jpg
+# macOS
+shasum -a 256 images/lp1-00.jpg
+Compare with the catalog or download entry. Hash the actual file, not its displayed preview.
+The puzzle’s hash target
+LP2-56 refers to a page identified by a hash. SHA-512 has 128 hexadecimal digits; it differs from this wiki’s SHA-256 distribution checksums. A hash is not normally reversible into its input. Candidate checks need the correct bytes and serialization.
+See signatures for signed evidence and prime-minus-one for reproducing the text containing the target.
+Sources and verification
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/checksums.html

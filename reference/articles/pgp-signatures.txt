@@ -1,0 +1,22 @@
+PGP signatures and the Cicada key
+
+Verify archived messages and state what verification establishes.
+
+Signature validity and identity
+A valid signature ties a signed message to a key. It does not decrypt its body, sign every byte of the enclosing JPEG, or by itself identify a real-world author. Historical association with Cicada is a separate provenance claim.
+The full primary fingerprint of the exported key is 6D854CD7933322A601C3286D181F01E57A35090F. Check the key itself, not its filename or short ID.
+Verify in a separate keyring
+Install GnuPG, create an empty directory named verify-keyring, and run from the repository root:
+gpg --homedir verify-keyring --import exports/steganography/cicada-public-key.asc
+gpg --homedir verify-keyring --fingerprint
+gpg --homedir verify-keyring --verify exports/steganography/lp1-00.signed.asc
+gpg --homedir verify-keyring --verify exports/steganography/cover-chain.signed.asc
+Compare the full fingerprint. A good signature and unknown trust can coexist: validity differs from identity-trust assignments. No private key is required.
+Legacy digest compatibility
+Some versions reject historical SHA-1 signatures by policy. If that is the reported cause, repeat this isolated check with --allow-weak-digest-algos on that command only. Record the flag; do not change global settings or treat SHA-1 as suitable for new signatures.
+Different files, different purposes
+The manifest separately hashes full extractions, signed blocks, and bodies. Verifying an edited body is not equivalent to verifying the preserved signed block. See extraction and checksums.
+Sources and verification
+Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
+
+Source links and downloads: https://jelliottdev.github.io/reference/articles/pgp-signatures.html
