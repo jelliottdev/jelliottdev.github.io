@@ -10608,6 +10608,24 @@ The wording is close but not identical: “all” replaces “everything.” The
 
 Check the external sentence in Project Gutenberg's transcription of the 1906 edition, under Chorus near the end. This edition's printed page numbers are not identifiers for the original illuminated plates.
 
+Find the sentence on the manuscript
+
+[Image: The last two black-text lines in LP1-04's lower block. The encrypted runes corresponding to FOR cross the line break.]
+A close-up of the original LP1-04 JPEG: the lower block's final two black-text lines, above the small red instruction. The image remains encrypted; the reading below comes from the Welcome decoding. Open the full page or download the unchanged original.
+
+INTELLIGENCE-IS-HOLY.FO/
+R-ALL-THAT-LIUES-IS-HOLY.
+
+The slash marks the archived line break. Join FO/ R to recover FOR; the space shown here only separates the two pieces for explanation. The first sentence concerns each intelligence, while the next broadens the claim to all that lives. The small red line immediately below gives the instruction to command one's own self.
+
+In the Welcome decoding trace (CSV), filter page to lp1-04 and inspect page_rune_ordinal 214 through 233 inclusive. These twenty runes produce FORALLTHATLIUESISHOLY. The label TH represents one rune, so counting Latin letters would give a different total. The CSV preserves each encrypted input rune, subtracted value and decoded index; see how to read the trace.
+
+To locate the phrase in the stored literal reading without manually joining the wrap, run:
+
+python scripts/reading_concordance.py "for all that liues is holy" --literal
+
+The match is on literal text lines 12–13. These line numbers include the archive's intervening marker line and are not rune ordinals. The literal concordance guide explains the positions and retained source excerpts.
+
 What the comparison supports
 
 The shared wording supports describing this as a close verbal parallel and a plausible Blake allusion. The manuscript passage does not name Blake. A parallel cannot establish whether the authors consulted his work directly, encountered a quotation elsewhere, or intended the surrounding book to function as a key. Those are separate hypotheses.
@@ -10686,6 +10704,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - Project Gutenberg's transcription of the 1906 edition; 1906 edition, printed page 7
   https://www.gutenberg.org/cache/epub/45315/pg45315-images.html
+- The last two black-text lines in LP1-04's lower block. The encrypted runes corresponding to FOR cross the line break.; Open the full page; LP1-04, the Welcome page containing the holy-life statement; LP1-04 in the reader
+  https://jelliottdev.github.io/#/reader/lp1-04
+- The last two black-text lines in LP1-04's lower block. The encrypted runes corresponding to FOR cross the line break.; download the unchanged original
+  https://jelliottdev.github.io/images/lp1-04.jpg
+- Welcome decoding trace (CSV)
+  https://jelliottdev.github.io/exports/readings/welcome.csv
+- how to read the trace
+  https://jelliottdev.github.io/reference/articles/reading-welcome.html#trace
+- literal concordance guide
+  https://jelliottdev.github.io/reference/articles/reading-concordance.html#literal
 - the reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Have we tried it?
@@ -10702,8 +10730,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/circumference.html
 - final parable
   https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
-- LP1-04, the Welcome page containing the holy-life statement; LP1-04 in the reader
-  https://jelliottdev.github.io/#/reader/lp1-04
 - LP1-04, the Welcome page containing the holy-life statement
   https://jelliottdev.github.io/thumbs/lp1-04.jpg
 - LP2-57, the final parable with an insect-like figure
