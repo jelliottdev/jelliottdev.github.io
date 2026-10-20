@@ -123,6 +123,7 @@ for suffix in ('json','csv'):
  files[-1].update(title='LP2-31 lag coincidences ('+suffix.upper()+')',guide='rune-lag-matches',aliases=['lag matches','shift coincidences','distance matches'])
 
 figure_details = {
+ 'collision-pairs.svg': {'title':'Matching pairs with and without replacement (SVG)', 'guide':'rune-entropy', 'aliases':['collision probability diagram','sampling with replacement','IoC pairs','AAABBB']},
  'lp2-31-lag-matches.svg': {'title':'LP2-31 rune matches by distance (SVG)', 'guide':'rune-lag-matches', 'aliases':['lag coincidence chart','lag matches','shift coincidences'], 'pages':['lp2-31'], 'release':'LP2'},
  'rune-frequencies.svg': {'title':'Rune frequency comparison: LP2-31 and LP2-57 (SVG)', 'guide':'index-of-coincidence', 'aliases':['rune frequency chart','letter frequencies','histogram','IoC diagram'], 'pages':['lp2-31','lp2-57'], 'release':'LP2'},
  'atbash-pairs.svg': {'title':'Atbash: all 29 rune-index mappings (SVG)', 'guide':'atbash', 'aliases':['Atbash diagram','alphabet reversal','index pairs','28 minus']},
