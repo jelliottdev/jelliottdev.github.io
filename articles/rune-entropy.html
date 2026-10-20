@@ -33,6 +33,25 @@ python scripts/rune_entropy.py lp2-31 --output lp2-31-entropy.json</code></pre>
 <tr><td>269</td><td>Eight counts of 10; 21 counts of 9</td><td>About 4.856332 bits</td></tr>
 </tbody></table></div>
 <p>The alphabet remains all 29 runes, even if a short sample contains fewer distinct runes. Neither this maximum nor the gap below it is an expected random value or a significance test. Random sampling can produce uneven counts; a probability claim needs a specified <a href="#/wiki/null-models">null model</a>. Empty input has no empirical distribution, so its maximum is also reported as <code>null</code>.</p>
+<h2 id="random-samples">Why random samples need not reach the maximum</h2>
+<p>Imagine a source that independently emits A or B with equal probability. Its underlying distribution has entropy 1 bit. Now take just two symbols. There are four equally likely ordered samples:</p>
+<table><thead><tr><th>Sample</th><th>Observed counts</th><th>Empirical entropy</th></tr></thead><tbody><tr><td>AA</td><td>2, 0</td><td>0 bits</td></tr><tr><td>AB</td><td>1, 1</td><td>1 bit</td></tr><tr><td>BA</td><td>1, 1</td><td>1 bit</td></tr><tr><td>BB</td><td>0, 2</td><td>0 bits</td></tr></tbody></table>
+<p>The average measured entropy is <code>(0 + 1 + 1 + 0) / 4 = 0.5</code> bits. That is below both the source’s entropy and the maximum empirical entropy attainable with two symbols. Yet every sample was produced by the same independent, balanced source. No measurement error or hidden pattern was needed to create the gap.</p>
+<p>The distinction is between a <strong>source distribution</strong> and the <strong>frequencies in one finite sample</strong>. With only two draws, a symbol can be missing simply because it did not occur. The empirical formula assigns that unobserved symbol probability zero even though its probability under the stipulated source remains one half.</p>
+<h3 id="random-samples-code">Enumerate the example</h3>
+<pre><code>from itertools import product
+from collections import Counter
+from math import log2
+
+values = []
+for sample in product("AB", repeat=2):
+    counts = Counter(sample).values()
+    h = sum(-(c / 2) * log2(c / 2) for c in counts)
+    values.append(h)
+    print("".join(sample), f"{h:.1f}")
+print("Mean:", sum(values) / len(values))</code></pre>
+<p>The final line is <code>Mean: 0.5</code>. This exact enumeration assumes equal probabilities for all four samples. A model that fixes the counts at one A and one B permits only AB and BA, both with entropy 1. Those are different models: random sampling allows the counts to change, while shuffling a fixed page does not.</p>
+<p>For manuscript comparisons, preserve the sample length, alphabet, and proposed sampling rule. The toy example explains the distinction; it does not assign a probability to LP2-31’s entropy or establish that its runes were generated independently. See <a href="#/wiki/null-models">null models and selection</a> before treating a shortfall from the maximum as evidence about a cipher.</p>
 <h2 id="ioc-comparison">Can two texts have the same IoC but different entropy?</h2>
 <p>Yes. Both measurements use symbol frequencies, but they compress those frequencies in different ways. IoC counts matching pairs; entropy uses logarithms of the observed proportions. One score does not generally determine the other.</p>
 <p>Compare these two invented six-symbol strings. They are teaching examples, not manuscript readings. Their lengths and matching-pair totals are identical:</p>

@@ -68,6 +68,38 @@ In general, write N = Kq + r, where K is the alphabet size and r is the remainde
 
 The alphabet remains all 29 runes, even if a short sample contains fewer distinct runes. Neither this maximum nor the gap below it is an expected random value or a significance test. Random sampling can produce uneven counts; a probability claim needs a specified null model. Empty input has no empirical distribution, so its maximum is also reported as null.
 
+Why random samples need not reach the maximum
+
+Imagine a source that independently emits A or B with equal probability. Its underlying distribution has entropy 1 bit. Now take just two symbols. There are four equally likely ordered samples:
+
+	Sample	Observed counts	Empirical entropy
+	AA	2, 0	0 bits
+	AB	1, 1	1 bit
+	BA	1, 1	1 bit
+	BB	0, 2	0 bits
+
+The average measured entropy is (0 + 1 + 1 + 0) / 4 = 0.5 bits. That is below both the source’s entropy and the maximum empirical entropy attainable with two symbols. Yet every sample was produced by the same independent, balanced source. No measurement error or hidden pattern was needed to create the gap.
+
+The distinction is between a source distribution and the frequencies in one finite sample. With only two draws, a symbol can be missing simply because it did not occur. The empirical formula assigns that unobserved symbol probability zero even though its probability under the stipulated source remains one half.
+
+Enumerate the example
+
+from itertools import product
+from collections import Counter
+from math import log2
+
+values = []
+for sample in product("AB", repeat=2):
+    counts = Counter(sample).values()
+    h = sum(-(c / 2) * log2(c / 2) for c in counts)
+    values.append(h)
+    print("".join(sample), f"{h:.1f}")
+print("Mean:", sum(values) / len(values))
+
+The final line is Mean: 0.5. This exact enumeration assumes equal probabilities for all four samples. A model that fixes the counts at one A and one B permits only AB and BA, both with entropy 1. Those are different models: random sampling allows the counts to change, while shuffling a fixed page does not.
+
+For manuscript comparisons, preserve the sample length, alphabet, and proposed sampling rule. The toy example explains the distinction; it does not assign a probability to LP2-31’s entropy or establish that its runes were generated independently. See null models and selection before treating a shortfall from the maximum as evidence about a cipher.
+
 Can two texts have the same IoC but different entropy?
 
 Yes. Both measurements use symbol frequencies, but they compress those frequencies in different ways. IoC counts matching pairs; entropy uses logarithms of the observed proportions. One score does not generally determine the other.
@@ -126,7 +158,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the archived LP2-31 transcription
   https://jelliottdev.github.io/text/lp2-31.txt
-- null model; comparison model
+- null model; null models and selection; comparison model
   https://jelliottdev.github.io/reference/articles/null-models.html
 - which properties each operation preserves; cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
