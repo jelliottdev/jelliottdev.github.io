@@ -198,6 +198,9 @@ for path in ['exports/cicada-2012-opening.json','scripts/replay_2012_opening.py'
 for path in ['exports/cicada-2013-liber-al.json','scripts/replay_2013_liber_al.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical book-cipher reproduction')
  files[-1].update(guide='historical-book-codes',aliases=['Liber AL','Book of the Law','2013 book code','chapter verse character'])
+for path in ['exports/cicada-2012-blake.json','scripts/replay_2012_blake.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/blake-2012').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical book-cipher reproduction')
+ files[-1].update(guide='historical-book-codes',aliases=['Blake','Voice of the Devil','second chance','line character'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
  register(artifact.relative_to(root).as_posix(),'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])
