@@ -1,0 +1,1 @@
+Diagnostic pilot, not a published experiment. Plan committed before rerun. Ten positive controls precede three preselected diagnostic cases. Source patches are verified after newline normalization. Complete build reproducibility and independent review remain required before publication. No full-sweep or payload-validity claim.

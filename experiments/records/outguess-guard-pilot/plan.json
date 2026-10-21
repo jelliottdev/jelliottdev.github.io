@@ -1,0 +1,92 @@
+{
+  "question": "What does one default-key OutGuess retrieval return from each archived manuscript JPEG, with ten known payload controls?",
+  "key": "Default key",
+  "tool_commit": "24810e14327c2bbeedeaadd3e24491f2a4425c02",
+  "timeout_seconds": 20,
+  "images": [
+    {
+      "id": "lp1-00",
+      "path": "images/lp1-00.jpg",
+      "sha256": "184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7"
+    },
+    {
+      "id": "lp1-01",
+      "path": "images/lp1-01.jpg",
+      "sha256": "71f4bd03c692ede630091272597d2b18702184ed32fdd1977ef0ba7306632b46"
+    },
+    {
+      "id": "lp1-02",
+      "path": "images/lp1-02.jpg",
+      "sha256": "0297572bbc2d234f84df634c6f0474011ff5df66c2ce987c3bb7aa0c635799b4"
+    },
+    {
+      "id": "lp1-03",
+      "path": "images/lp1-03.jpg",
+      "sha256": "b8b142f9b7854ec4f240e076cad03a98a2e3e9cf7c20f1da4fcde1ed25e3be3f"
+    },
+    {
+      "id": "lp1-10",
+      "path": "images/lp1-10.jpg",
+      "sha256": "12ebfe421c129f2ef78d527c1630e358963da8d8dfdf9620eb977980d7967376"
+    },
+    {
+      "id": "lp1-11",
+      "path": "images/lp1-11.jpg",
+      "sha256": "7bd11a2c9f5b512e33c9db170756e3b34cc1e29eb405373eb94957383a61be7d"
+    },
+    {
+      "id": "lp1-12",
+      "path": "images/lp1-12.jpg",
+      "sha256": "a5b58076e169f3f59c8a394dbef37da18226c9c4fff703df3be8dc95cf16291c"
+    },
+    {
+      "id": "lp1-13",
+      "path": "images/lp1-13.jpg",
+      "sha256": "bef0fc4867c2363c835eb4f08029a1eba35c925e2f72659d7353cf8a91089e56"
+    },
+    {
+      "id": "opening-2014",
+      "path": "images/opening-2014.jpg",
+      "sha256": "07ea379f22c899944df7d009dbeb61e5583a55afccf97e12d14ac0e097f75867"
+    },
+    {
+      "id": "1033",
+      "path": "images/1033.jpg",
+      "sha256": "15b2b99fe15ff34ef3eab574bb84bfaad0a119674be2ca5baf65951e6a9bd865"
+    },
+    {
+      "id": "lp1-06",
+      "path": "images/lp1-06.jpg",
+      "sha256": "913e26462e51942f49ca3ce2e94ef56c5fb65110814442dccc02b0d88af2c5ca"
+    },
+    {
+      "id": "lp1-05",
+      "path": "images/lp1-05.jpg",
+      "sha256": "2db94921ae5216d8a589890495fa5432446cd3227c45fbeb4934cbb0525112f7"
+    },
+    {
+      "id": "lp1-14",
+      "path": "images/lp1-14.jpg",
+      "sha256": "de2bebe1d06421d94f3dd2b2b5f838ee4cdb5f51b07b14e880e0108f7b79c14e"
+    }
+  ],
+  "controls": {
+    "lp1-00": "2efba5e2283fa16592bedb7c339223bf2db94f07cf2d42188684aa393c12d180",
+    "lp1-01": "da4ad19d7e46a9df54fe800bb2477914fbb7b83d34e4ea748760ce2e0902e656",
+    "lp1-02": "b1d1d69e32e6c5725dffbcd871c2acb482371889d48ce6734c17741816ad23a3",
+    "lp1-03": "a14c1e144760c361a39da41e4784a9a22a3ce490baf42d9eb99b37feab8a47c1",
+    "lp1-10": "56467e78411358a236479a867a073de1a6fe9be2572e19759be1128968b3feeb",
+    "lp1-11": "6f2db751c9d6acd7f17c59679e4313632402a66e7295447781d0de5701894027",
+    "lp1-12": "78581663e7a5ba77494d1840820098b122217edd13009661f1be2e497db88179",
+    "lp1-13": "83835b0e148c1061d42693ea14a5035f54ad41fa45496b00b37311b8e96a2095",
+    "opening-2014": "cba64781bd461b17039316ef97426f912aae987fde131f62e883f7f9e9f0118e",
+    "1033": "65ff60bfa019e424ce2ae23994f19af5692f7e12e6bc177830b42a154985defd"
+  },
+  "stopping_rule": "One retrieval per declared image. Retain return code, diagnostic and all produced bytes, including unsuccessful outputs. Complete every image; a timeout is incomplete, not a negative finding.",
+  "criterion": "Exact control payload hashes must match. New output bytes are extraction candidates only, not authenticated messages.",
+  "exclusions": "Other keys, other steganographic tools, signature verification, recompressed derivatives and image transformations.",
+  "declared_before_run": "2026-10-20",
+  "tool_sha256": "8d1282ecb242b80ebb20ca4bd1d2f9900d4d89680bd9b626598701dc08aeecd2",
+  "purpose": "Diagnostic pilot: ten positive controls, then lp1-06 candidate-output, lp1-05 rejected, lp1-14 abnormal in baseline. Same key/timeout; stop on control failure; no hidden-data absence inference.",
+  "selection": "Three diagnostic cases chosen from baseline outcomes, not random or held out."
+}

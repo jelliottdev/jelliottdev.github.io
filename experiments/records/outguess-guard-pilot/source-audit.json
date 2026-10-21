@@ -1,0 +1,33 @@
+{
+  "baseline_executable_sha256": "b342b8b85d678d3b2ed26efab70fba2b3956725670be7149b89646868f0ebade",
+  "guarded_executable_sha256": "8d1282ecb242b80ebb20ca4bd1d2f9900d4d89680bd9b626598701dc08aeecd2",
+  "exact_patches": [
+    {
+      "source": "outguess.c",
+      "before_sha256": "f254b7fe617dec5c1cc1c9046b4b0894dbe95a1119449a169e518dab8083237e",
+      "after_sha256": "2bcc81537ef5b8ea707b81c3c88443e77a91948aa5930279f7e09abdf630856a",
+      "exact_edits": [
+        {
+          "before": "\tfor (where = 0; where < bits; where++) {\n\t\ttmp |= (TEST_BIT(bitmap->bitmap, i) ? 1 : 0) << where;",
+          "after": "\tfor (where = 0; where < bits; where++) {\n\t\tif (i >= (u_int32_t)bitmap->bits)\n\t\t\terrx(1, \"Guard: retrieval bit out of bounds: %u >= %d\", i, bitmap->bits);\n\t\ttmp |= (TEST_BIT(bitmap->bitmap, i) ? 1 : 0) << where;"
+        }
+      ]
+    },
+    {
+      "source": "iterator.c",
+      "before_sha256": "3d99b4e03d94551625f230e7e6de590cfcaeca601e45e62d900ac78bf8d7b652",
+      "after_sha256": "e1088a3ec830fce892ccb3f28bee3cb6d72ef86760619dd5ca1b3274ac217818",
+      "exact_edits": [
+        {
+          "before": "\titer->off += (arc4_getword(&iter->as) % iter->skipmod) + 1;",
+          "after": "\tif (iter->skipmod == 0)\n\t\terrx(1, \"Guard: iterator skipmod zero at off=%d bits=%d\", iter->off, bitmap->bits);\n\titer->off += (arc4_getword(&iter->as) % iter->skipmod) + 1;"
+        },
+        {
+          "before": "\titer->skipmod = SKIPADJ(bitmap->bits, bitmap->bits - iter->off) *",
+          "after": "\tif (datalen <= 0 || iter->off < 0 || iter->off >= bitmap->bits)\n\t\terrx(1, \"Guard: iterator capacity exhausted: off=%d bits=%d remainingbytes=%d\", iter->off, bitmap->bits, datalen);\n\titer->skipmod = SKIPADJ(bitmap->bits, bitmap->bits - iter->off) *"
+        }
+      ]
+    }
+  ],
+  "scope": "Binary and source-file hashes verified; edits reconstructed after normalizing CRLF to LF. Not a clean rebuild or proof that this binary came from these sources."
+}
