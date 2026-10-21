@@ -1,0 +1,46 @@
+{
+  "source_revision": "cb5cdb908bb34b68d8a05353eaace56e83d0bbf2",
+  "sources": [
+    {
+      "file": "project_runeberg.py",
+      "git_blob": "8f9b13baf941f2d34579d725a3d05bb08673a547",
+      "sha256": "90aa5fb7986741a6f9d2d8d29be3fb2c50d331db5809422c3e5633447a5a877f"
+    },
+    {
+      "file": "project_runeberg_statistics.py",
+      "git_blob": "1e8b9088f8888b10cdfe828331c9a5953fa362f7",
+      "sha256": "e1870e13f843b855c79f21454e9391f058428909d341fa5acb0f376923388849"
+    }
+  ],
+  "missing_argument": {
+    "call_line": 89,
+    "error": "missing a required argument: 'word_count'",
+    "three_argument_binding_passes": true
+  },
+  "global_variable": {
+    "missing_global": "pg_df",
+    "supplied_distribution": [
+      1,
+      2,
+      3
+    ],
+    "conflicting_global_distribution": [
+      9,
+      9,
+      9
+    ],
+    "threshold": 2,
+    "original_tail_threshold_mean": [
+      0.0,
+      2,
+      9.0
+    ],
+    "repaired_tail_threshold_mean": [
+      0.6666666666666666,
+      2,
+      2.0
+    ]
+  },
+  "scope": "Two source-level defects and synthetic regression checks only. No corpus statistics, plots, or historical probability claims reproduced. Synthetic values are arbitrary units, not manuscript proportions.",
+  "repair": "Pass word_count at the process_word_counts call; use pr_df inside check_empirical_p. The latter repair changes the extracted test function only, not the archived source."
+}

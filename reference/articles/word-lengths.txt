@@ -155,6 +155,29 @@ Liberpedia has reproduced the manuscript-summary match above, not the full corpu
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
+Two code repairs to declare before a replay
+
+Our pinned-source code audit checks two specific defects. It uses small synthetic inputs and does not run the corpus or reproduce historical probability claims.
+
+Supply the requested prefix length. In create_results(word_count), the call supplies only filepath and instance_name, although process_word_counts requires word_count too. Python argument binding rejects that call. The repair is process_word_counts(filepath, instance_name, word_count).
+
+Use the dataframe passed to the helper. check_empirical_p(pr_df, lp_df, statistic) reads pg_df from global scope when calculating the corpus mean and tail fraction. Its supplied pr_df is unused. Without that global it raises NameError; with a different global it silently uses the wrong distribution. Replace those two pg_df references inside the helper with pr_df.
+
+The default plotting entry point sets a global pg_df before calling the helper, so the second defect need not change that execution. It matters when the helper is reused or called with another distribution. This is a reproducibility hazard, not proof that the published numerical results are incorrect.
+
+	Synthetic check	Inclusive left-tail fraction at 2	Mean used
+
+	Supply [1, 2, 3], but global is [9, 9, 9]; original helper	0/3 = 0	9
+
+	Same inputs; parameter repair	2/3	2
+
+
+These are arbitrary test values, not observed word-length proportions. The inclusive comparison counts the tie at 2. The audit verifies the original source bytes against their Git blob identifiers, checks the missing argument, and extracts only the two arithmetic functions for the synthetic check. It does not import pandas, execute plots, or alter the archived source.
+
+python scripts/audit_corpus_pipeline.py /path/to/lp_experiments/code
+
+Use the pinned source directory. The audit script and saved report are included in the reference-data bundle. A changed source file is rejected rather than silently treated as the audited revision. A full replay still needs pinned package versions and explicit aggregation, quantile, missing-value and sampling conventions.
+
 What does a length difference imply?
 
 If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
@@ -270,6 +293,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
+- pinned-source code audit
+  https://jelliottdev.github.io/exports/corpus-pipeline-audit.json
+- pinned source directory
+  https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/code
+- audit script
+  https://jelliottdev.github.io/scripts/audit_corpus_pipeline.py
 - cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - 464-word column-balance experiment
