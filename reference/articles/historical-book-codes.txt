@@ -14,7 +14,7 @@ The coordinates do not all mean the same thing
 
 	2012 Blake second chance	Plate-layout line : character	The Voice of the Devil layout	Source comparison; complete replay pending
 
-	2013 Liber AL	Chapter : numbered verse : character	Remove spaces/newlines; preserve punctuation	Source comparison; complete replay pending
+	2013 Liber AL	Chapter : numbered verse : character	Remove spaces/newlines; preserve punctuation	44 lookups and two literals replayed on the pinned working copy
 
 	2014 Emerson	Paragraph : sentence : word : letter	Referenced PDF and disclosed extraction rules	Complete historical control
 
@@ -58,7 +58,39 @@ A modern paragraph transcription can preserve every word yet fail the coordinate
 
 The community walkthrough identifies Crowley’s Liber AL vel Legis and explains that spaces are omitted while punctuation matters. The archived reconstruction specifies chapter and numbered-verse parsing, removing the verse labels, spaces and newlines before character selection. Browser wrapping is not the verse boundary.
 
-Retain two outputs: the raw extraction, containing dashes in URL separator positions, and the interpreted URL with those dashes replaced by slashes. They are different stages. A missing first character should trigger comparison of the verse label, leading text and indexing origin; it is not a reason to move every coordinate until a plausible URL appears. This guide has inspected the published instructions but has not yet independently replayed every coordinate.
+Retain two outputs: the raw extraction, containing dashes in URL separator positions, and the interpreted URL with those dashes replaced by slashes. They are different stages. A missing first character should trigger comparison of the verse label, leading text and indexing origin; it is not a reason to move every coordinate until a plausible URL appears. The independent replay below now checks every coordinate against a pinned archived working copy.
+
+Reproduce all 46 output characters
+
+The preserved chapter files contain 66, 79 and 75 numbered verses. Our script checks that verse numbers are consecutive, removes the numbering, then removes ASCII spaces and LF newlines. It preserves punctuation, capitalization and all other characters. Both verse and character positions begin at one. It also compares two parsing methods to ensure that a number inside a verse has not silently split the text.
+
+For example, verse I:1 is Had! The manifestation of Nuit.. Its working text begins Had!The: positions 1 through 7 are H, a, d, !, T, h, e. Therefore I:1:6 selects h. Removing the exclamation mark would change that lookup. Keeping the verse label would also change the positions. This is why a similar-looking copy can lose the first letter of the address.
+
+	Output position	Instruction	Selected character
+
+	1	I:1:6	h
+
+	2	I:2:15	t
+
+	3	I:3:26	t
+
+	4	I:5:4	p
+
+	5	I:6:15	s
+
+	6	I:10:26	:
+
+	7	I:14:136	-
+
+	8	I:15:68	-
+
+
+The complete extraction is https:--www.dropbox.com-s-r7sgeb5dtmzj14s-3301. There are 44 chapter/verse/character lookups and two literal digits. Replacing the extracted dashes with slashes is a separate interpretation, recorded alongside the raw result. No historical service was contacted.
+
+Download the full character-by-character trace, source manifest or replay script. The trace includes the original and processed verse for each lookup. Extract the reference-data bundle and run python scripts/replay_2013_liber_al.py --check; omit --check to print the report. Python 3 is sufficient.
+
+This confirms the counting rule for these archived bytes. It does not identify the original solver’s exact edition, freshly extract the opening JPEG, or verify the archived message’s PGP signature. Those are separate provenance checks, not consequences of obtaining a readable address.
+
 
 What every downloadable replay should contain
 
@@ -84,7 +116,7 @@ Sources, related references, and files
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/anomalies.txt
 - fresh replay ledger
   https://jelliottdev.github.io/exports/cicada-2012-subreddit.json
-- reference-data ZIP
+- reference-data ZIP; reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Replay script
   https://jelliottdev.github.io/scripts/replay_2012_subreddit.py
@@ -102,6 +134,12 @@ Sources, related references, and files
   https://uncovering-cicada.fandom.com/wiki/What_Happened_Part_1_%282013%29
 - archived reconstruction
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/001-232.jpg/README.md#solving-the-book-code
+- full character-by-character trace
+  https://jelliottdev.github.io/exports/cicada-2013-liber-al.json
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2013/manifest.json
+- replay script
+  https://jelliottdev.github.io/scripts/replay_2013_liber_al.py
 - book-cipher basics
   https://jelliottdev.github.io/reference/articles/book-ciphers.html
 - reproduction records
