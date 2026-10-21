@@ -1187,6 +1187,172 @@
       "script_sha256": "7de9e9ddc294d4a29b7df1a017dd0c4b77a5a3eae8a10b88d1b851343cded07c"
     },
     {
+      "id": "english-scorer-controls",
+      "title": "Would an English scorer accept other languages?",
+      "status": "published",
+      "question": "Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?",
+      "summary": "Known-text controls isolate language sensitivity in candidate scoring, with all eight languages, two normalization rules and three lengths retained.",
+      "tags": [
+        "scorer calibration",
+        "quadgrams",
+        "English scorer",
+        "false rejection",
+        "candidate scoring",
+        "shuffled controls",
+        "FLORES"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+          "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+          "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+          "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+          "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+          "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+          "experiments/records/parallel-languages/por_Latn.devtest.txt",
+          "experiments/records/parallel-languages/fin_Latn.devtest.txt"
+        ],
+        "representation": "Eight aligned FLORES devtest translations; uppercase A–Z and accent-folded uppercase A–Z.",
+        "procedure": "Score fixed prefixes from eight aligned blocks and twenty deterministic letter shuffles per cell with the pinned English quadgram model.",
+        "parameters": "Eight languages; 120, 240, 400 letters; two normalizations; threshold -5.5; 384 original cells and 7680 shuffles.",
+        "exclusions": "No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability."
+      },
+      "outcome": "supported",
+      "finding": "Acceptance depends on language: all English and French originals pass, some German, Italian, Portuguese and Spanish pass, and no Finnish or Welsh originals pass. No shuffled control passes.",
+      "limitations": "Nested lengths and shared translated sources are not independent trials. Training overlap is not excluded. Shuffles are not complete wrong-key searches. Human review pending.",
+      "next_steps": "Separate planted-decoder recovery from scorer acceptance; calibrate maxima from complete bounded null searches.",
+      "family": {
+        "id": "candidate-scorer-controls",
+        "title": "Candidate scorer controls",
+        "question": "Would a candidate-selection rule recognize known text and reject its declared controls?",
+        "baseline": "english-scorer-controls"
+      },
+      "variant": {
+        "label": "Fixed English quadgram threshold",
+        "changes": []
+      },
+      "review": {
+        "reviewer": "Codex; independently reconstructed source and counted-quadgram scores; human review pending",
+        "retested_on": "2026-10-20",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/english-scorer-controls/run.py --check",
+        "environment": "Python 3 standard library; offline. Independent checker command is in the article.",
+        "script": "experiments/records/english-scorer-controls/run.py",
+        "script_sha256": "bd7e40313e33f9098629450c74044c159dc1ea6a43dde32750e8285b52c97c9d",
+        "inputs": [
+          {
+            "path": "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+            "sha256": "612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88"
+          },
+          {
+            "path": "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+            "sha256": "94bdd16fe4141e5bef227bcd49dd283e1397e993ef0ab3e8db281175e536551f"
+          },
+          {
+            "path": "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+            "sha256": "9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2"
+          },
+          {
+            "path": "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+            "sha256": "82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42"
+          },
+          {
+            "path": "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+            "sha256": "40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9"
+          },
+          {
+            "path": "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+            "sha256": "4166da51aba285736535916870142d7e9491494cee52b1db0808533399796a94"
+          },
+          {
+            "path": "experiments/records/parallel-languages/por_Latn.devtest.txt",
+            "sha256": "1a04351c9b8c99a1808bb5da9051c06ffd1d65a5fe7236e40a80568abdbc67e7"
+          },
+          {
+            "path": "experiments/records/parallel-languages/fin_Latn.devtest.txt",
+            "sha256": "26b0906ca080c5602eec4a769b0ac24169ca8fa484f95fc8f41ca5212fa2632c"
+          },
+          {
+            "path": "experiments/records/parallel-languages/plan.json",
+            "sha256": "9b5236fcafbd2931ab1d4b36438a50b89b4b090243ada5e03501704041d378f4"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/SOURCE-LICENSE.txt",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/plans/english-scorer-language-controls.md",
+            "sha256": "6f53929bf30493e067c944fe19143f05fed52942786b84c4518b3da4c551278d"
+          },
+          {
+            "path": "experiments/plans/english-scorer-language-controls.json",
+            "sha256": "88caa361a29fa7f06505bb2aed7c3b2400d89bd09943a8ebd8b791512ae26575"
+          },
+          {
+            "path": "experiments/records/parallel-languages/SOURCE.txt",
+            "sha256": "0ac2331dc1c4b5045c672a9a16e3044c34481ebfe6320eb0f08a620fca6f5056"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/SOURCE.txt",
+            "sha256": "26d04bae102a217bf60d0fcdecc0d8a98f9cbde50dd79d2e69b12ce0e2081b61"
+          },
+          {
+            "path": "scripts/check_english_scorer_controls.py",
+            "sha256": "b9fe34498c602f785cb2373f88b91eb09c526ea5f13077342219c2b00d2f3db5"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/plot.py",
+            "sha256": "e4ffc851d61e0ca1144778f551ff5e0fcd725835028aea8ce75a60e14d42d7ad"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/english-scorer-controls/results.json",
+            "sha256": "bb3db114c10c0f9a5c86520023aef5b200d710b3db1ff5d83e6b07f82b780962"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/audit.json",
+            "sha256": "c6706d99a37ba4c00cfce3f328c02ee91b8d477bed5a646f377e0effb05d0aed"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/comparison.svg",
+            "sha256": "da661a77339d57e4ad57a97247c8053abc9432572ffd7423abeb529c541fc1f1"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned source scorer-language investigation",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md"
+        },
+        {
+          "label": "FLORES dataset and license",
+          "url": "https://huggingface.co/datasets/facebook/flores"
+        }
+      ],
+      "related": [
+        "parallel-languages",
+        "target-sized-languages"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/english-scorer-controls/comparison.svg",
+          "caption": "Every language uses the same marks and axes. Original scores are blue; gray ranges contain all shuffles. The dashed threshold is fixed at -5.5."
+        }
+      ],
+      "article": "## Would our scorer recognize a real answer?\n\nA search can recover meaningful text and still discard it if its scoring rule expects the wrong language. This experiment isolates that last step: give a fixed English four-letter scoring model known text in eight languages, then shuffle the same letters as a control. No cipher or decoder is involved.\n\nThe model accepts all English and French samples in this run, some German, Italian, Portuguese and Spanish samples, and none of the Finnish or Welsh samples. It accepts none of the 7,680 shuffled controls. That is useful separation from these shuffles, but **acceptance is neither English identification nor proof of a decryption**. Rejection also cannot rule out meaningful plaintext in another language.\n\n## Source and scope\n\nThe idea follows the scorer-language investigation in [Dukotah's repository](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md). We pin that revision and reuse its English quadgram count file and −5.5 threshold. We run a new, narrower control on our existing aligned FLORES translations; we do not reproduce the repository's full decoder benchmark or import its conclusions about the unsolved cipher.\n\nThe [language comparison experiments](#/experiments/parallel-languages) ask which reference profiles resemble manuscript statistics. This experiment instead asks what a candidate-selection tool accepts when the input is already known text. There are no unsolved-page inputs here.\n\n## Fixed procedure\n\nDivide each of the eight 1,012-sentence translations into the same eight consecutive sentence blocks: four of 127 sentences and four of 126. Join sentences with spaces. Apply each of two rules: uppercase and retain A–Z only; or uppercase, canonically decompose Unicode, remove combining marks, and then retain A–Z. The second rule folds many accented letters but is not a general transliteration system. Uppercasing can expand characters, such as ß to SS. The report records retained lengths and discarded alphabetic characters for each block.\n\nTake the first 120, 240 and 400 retained letters from every block. These are nested samples, not three independent passages. Aligned sentence blocks preserve source content boundaries, but equal character prefixes do not necessarily end at the same translated idea. Generate 20 deterministic shuffles of each excerpt, preserving its exact letter counts. Keep all 384 original cells and all 7,680 controls; there is no selection by score.\n\nFor each overlapping group of four letters, use log₁₀(count / total model count). An unseen group receives log₁₀(0.01 / total). Average over the length minus three groups. Accept a sample when this average is at least −5.5. This threshold belongs to this model and preprocessing; it is not portable to an arbitrary language scorer.\n\n## All conditions\n\nEach cell below is accepted originals out of eight blocks. Every condition also has 160 shuffles per language; all have zero accepted shuffles. The figure shows individual original scores and the full observed shuffled range, not a confidence interval.\n\n| Language | A–Z 120 | A–Z 240 | A–Z 400 | Folded 120 | Folded 240 | Folded 400 |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |\n| English | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| Finnish | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n| French | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| German | 6/8 | 6/8 | 6/8 | 6/8 | 6/8 | 8/8 |\n| Italian | 7/8 | 8/8 | 8/8 | 7/8 | 8/8 | 8/8 |\n| Portuguese | 5/8 | 7/8 | 7/8 | 6/8 | 7/8 | 7/8 |\n| Spanish | 6/8 | 7/8 | 7/8 | 8/8 | 7/8 | 7/8 |\n| Welsh | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n\n## What this does and does not establish\n\nThis scorer can reject intact language while accepting a different non-English language. A successful candidate therefore needs more than crossing a threshold: a reproducible decoding rule, declared choices, coherent extended output and checks against controls appropriate to the whole search.\n\nThe shuffles preserve single-letter frequencies but destroy order. They are not wrong-key outputs from a specified cipher. Zero acceptances in this finite collection does not imply zero false positives, especially after searching millions of candidates and keeping the maximum. The overlapping sample lengths, reused translations and shared model also prevent treating these cells as independent trials or a general accuracy estimate. Model-training overlap with the benchmark has not been independently excluded.\n\nThis is not decoder recovery power: it bypasses decoding entirely. A later planted-cipher variant should separately measure exact recovery and score acceptance under fixed encoder, key, skip rules and search budget. A search-size control should score the maximum from each complete null search rather than individual null strings alone.\n\n## Reproduce and inspect\n\nDownload the experiment bundle and extract it with its directory structure. No network access, API key or third-party Python package is required.\n\n```text\npython experiments/records/english-scorer-controls/run.py --check\npython scripts/check_english_scorer_controls.py experiments/records/english-scorer-controls/results.json --receipt my-scorer-audit.json\npython experiments/records/english-scorer-controls/plot.py\n```\n\nThe producer checks every pinned input hash. The independent checker reconstructs the source excerpts and shuffles, calculates scores by counting four-letter groups rather than importing the producer, and checks every decision within an absolute numerical tolerance of 10⁻¹². Both computations passed; human review remains pending. The saved JSON includes excerpts, hashes, seeds, individual scores and normalization diagnostics, so every plotted mark can be traced back to its input.\n",
+      "article_path": "experiments/records/english-scorer-controls/article.md",
+      "script_sha256": "bd7e40313e33f9098629450c74044c159dc1ea6a43dde32750e8285b52c97c9d"
+    },
+    {
       "id": "grid-prime-paths",
       "title": "LP2-49–51: directional prime-path reconstruction",
       "status": "published",

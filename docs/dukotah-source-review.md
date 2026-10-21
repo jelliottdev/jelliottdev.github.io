@@ -12,7 +12,7 @@ Source reviewed at commit `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`, not a movi
 | Short-seed versus external-pad controls | Plant a reproducible short-seed stream and test a fixed seed dictionary that includes its source seed; include omitted-seed and wrong-key controls. | Keystream experiments, but a separate derivation family and bounded seed coverage are needed. | Pin generator, seed encoding, counter endianness, output reduction and skip rule. A random-looking ciphertext does not prove a one-time pad. |
 | Image-based transcription checks | Reproduce template/segmentation comparisons and test deliberately inserted missing, extra and swapped glyphs, including ornate initials and full-line omissions. | Transcription-checking guide and image audits. | Separate image-independent segmentation from alignment supplied by the existing transcription. A method using canon's line inventory cannot independently discover a line absent from that inventory. |
 
-The first priority is scorer calibration: it directly complements the current eight-language work and tests a different failure mode. The second is a small, controlled encoder/decoder benchmark before any manuscript sweep. These are proposed experiments, not completed registry entries.
+The first priority is scorer calibration: it directly complements the current eight-language work and tests a different failure mode. The second is a small, controlled encoder/decoder benchmark before any manuscript sweep. The scorer-only subset is now reproduced in [English scorer controls](../experiments/records/english-scorer-controls/article.md), with independently checked results. The planted-decoder, search-size, seed and transcription proposals remain unexecuted leads.
 
 ## Sources inspected
 

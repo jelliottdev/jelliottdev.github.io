@@ -244,6 +244,45 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/emerson-book-cipher-control.zip"
     },
     {
+      "id": "english-scorer-controls",
+      "title": "Would an English scorer accept other languages?",
+      "question": "Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?",
+      "summary": "Known-text controls isolate language sensitivity in candidate scoring, with all eight languages, two normalization rules and three lengths retained.",
+      "tags": [
+        "scorer calibration",
+        "quadgrams",
+        "English scorer",
+        "false rejection",
+        "candidate scoring",
+        "shuffled controls",
+        "FLORES"
+      ],
+      "family": {
+        "id": "candidate-scorer-controls",
+        "title": "Candidate scorer controls",
+        "question": "Would a candidate-selection rule recognize known text and reject its declared controls?",
+        "baseline": "english-scorer-controls"
+      },
+      "variant_label": "Fixed English quadgram threshold",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+        "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+        "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+        "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+        "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+        "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+        "experiments/records/parallel-languages/por_Latn.devtest.txt",
+        "experiments/records/parallel-languages/fin_Latn.devtest.txt"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-20",
+      "url": "https://jelliottdev.github.io/#/experiments/english-scorer-controls",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/english-scorer-controls.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/english-scorer-controls/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/english-scorer-controls.zip"
+    },
+    {
       "id": "grid-prime-paths",
       "title": "LP2-49–51: directional prime-path reconstruction",
       "question": "Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?",

@@ -35,7 +35,7 @@
       const queryPhrase=' '+tokens(query).join(' ')+' ';
       const phraseBoost=Math.max(0,...(document.phrases||[]).map(phrase=>{
         const parts=tokens(phrase);
-        return parts.length>=2&&queryPhrase.includes(' '+parts.join(' ')+' ')?Math.min(6,parts.length*2):0;
+        return parts.length>=1&&queryPhrase.includes(' '+parts.join(' ')+' ')?Math.min(6,parts.length*2):0;
       }));
       score+=phraseBoost;
       const pinned=explicit.includes(document.page);

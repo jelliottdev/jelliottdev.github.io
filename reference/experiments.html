@@ -1179,6 +1179,171 @@
   &quot;article&quot;: &quot;# Historical Emerson book-cipher control\n\n## Purpose and what this does not test\n\nA book cipher needs a source edition and counting conventions, not just a book title. This record reproduces the documented 2014 opening-image coordinates against the frozen Emerson Self-Reliance PDF derivative. It gives newcomers a working control and a trace they can inspect before proposing new book-cipher experiments.\n\n**The answer was known before this rerun.** This is a historical replication, not blind discovery, an independent confirmation of source selection, or a decipherment of an unsolved manuscript page. No hidden-service address was visited.\n\n## Frozen plan and prior reconstruction history\n\nThe rerun plan and wrapper were committed as `1f67f70` before this execution. Source files, the existing lookup script and the known result were hashed in the plan. An earlier reconstruction had corrected the treatment of embedded verse after inspecting mismatches: the verse remains inside prose paragraph 36 rather than creating extra paragraphs. That earlier adjustment is disclosed in the existing evidence manifest and is not presented here as a rule discovered independently.\n\nThe PDF is the contemporary snapshot linked in the historical walkthrough. Its hash is fixed, but the original creator&#x27;s exact edition is not authenticated by this reproduction.\n\n## Counting conventions\n\nRe-extract the pinned PDF with pypdf 6.19.0 in layout mode. Begin at the first prose paragraph, exclude numeric page footers, and use four-space prose indentation to begin paragraphs. Seven-space verse remains in its surrounding paragraph. Apply Unicode NFKC normalization and join wrapped lines according to the stored extraction rule. All 50 extracted paragraphs must match the frozen derivative.\n\nCoordinates are one-based paragraph:sentence:word:letter positions. Sentences split at `.`, `!` and `?`; words split on whitespace with edge punctuation removed; only ASCII letters count inside the selected word. Single-character entries are copied literally. These are the documented reconstruction conventions, not a universal natural-language sentence parser.\n\n## Result\n\nThe complete trace matches the archived control. Fifteen coordinate lookups and seven literal characters reconstruct:\n\n```\nauqgnxjtvdbll3pv.onion\n```\n\nThis is a historical output string. Reproducing it says nothing about any current service at that name. The supported claim is only that these exact inputs and rules reproduce the recorded trace.\n\n## Complete coordinate trace\n\n| Entry | Printed PDF page | Selected word | Output |\n| --- | --- | --- | --- |\n| 1:2:3:1 | 1 | always | a |\n| 3:3:13:5 | 2 | genius | u |\n| 45:5:2:3 | 19 | acquires | q |\n| 20:3:20:5 | 9 | among | g |\n| 8:3:8:6 | 5 | action | n |\n| 48:5:14:2 | 20 | experience | x |\n| 21:13:4:1 | 9 | justice | j |\n| 25:1:7:4 | 12 | truth | t |\n| 15:9:3:4 | 7 | above | v |\n| 1:1:16:3 | 1 | and | d |\n| 4:3:3:1 | 2 | being | b |\n| 8:3:26:4 | 5 | daily | l |\n| 47:3:3:5 | 19 | equality | l |\n| 3 | Literal | Copied directly | 3 |\n| 13:2:5:4 | 6 | corpse | p |\n| 1:4:16:4 | 1 | private | v |\n| . | Literal | Copied directly | . |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n| i | Literal | Copied directly | i |\n| o | Literal | Copied directly | o |\n| n | Literal | Copied directly | n |\n\nThe first coordinate, 1:2:3:1, selects the third word of the second sentence in paragraph 1: `always`. Its first letter is `a`. The JSON output includes each full selected sentence, so a reader can check the counting rather than trusting the final string alone.\n\n## Reproduce from files\n\nUse Python 3.12.10 and pypdf 6.19.0. Install the exact dependency in your preferred environment:\n\n```\npython -m pip install pypdf==6.19.0\npython experiments/records/emerson-book-cipher-control/run.py --check\n```\n\nDependency installation needs package access; the actual experiment makes no network request. The wrapper checks every frozen input hash, invokes the existing reproduction script with `--check-pdf`, compares all 50 paragraphs, and checks the complete output trace. It then compares the new report with the saved one. Missing dependencies or changed inputs fail visibly.\n\nTo save a separate report:\n\n```\npython experiments/records/emerson-book-cipher-control/run.py --output my-emerson-control.json\n```\n\nExisting output files are never overwritten. [Download the complete trace](experiments/records/emerson-book-cipher-control/results.json). [Download the pinned PDF](exports/sources/emerson-self-reliance.pdf) and [paragraph derivative](exports/sources/emerson-paragraphs.json). The [coordinate payload](exports/steganography/opening-2014.body.txt) is the extracted message body; extraction and signature verification are separate steps described in the opening-image guide.\n\nFor a standard-library-only replay of the frozen paragraphs, run `python scripts/reproduce_emerson.py` without `--check-pdf`. That shorter check does not re-extract the PDF and must not be reported as having done so.\n\n## Retest and review\n\nCodex ran the PDF reconstruction and lookup twice on 20 October 2026. Both produced the same 50 paragraphs and identical complete trace. No counting rule or source changed during this rerun. The diagram was generated afterward from the saved first lookup. Human review remains pending, and the lookup implementation is the existing historical reproduction code rather than a newly independent decoder.\n\n## Family and future variants\n\nA different edition, paragraph convention or source text needs a separate variant with the exact change recorded. An attempt to apply a book cipher to an unsolved LP2 page also needs an independently defined source of coordinates and a success criterion. This historical control is useful for checking an implementation; it does not establish that such a transfer has already been tested.\n\nSee [book-cipher conventions](#/wiki/book-ciphers), [Emerson and the historical source](#/wiki/emerson-self-reliance), and [the opening image](#/wiki/opening-2014).\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/emerson-book-cipher-control/article.md&quot;,
   &quot;script_sha256&quot;: &quot;7de9e9ddc294d4a29b7df1a017dd0c4b77a5a3eae8a10b88d1b851343cded07c&quot;
+}</pre></article><article id="english-scorer-controls"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;english-scorer-controls&quot;,
+  &quot;title&quot;: &quot;Would an English scorer accept other languages?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?&quot;,
+  &quot;summary&quot;: &quot;Known-text controls isolate language sensitivity in candidate scoring, with all eight languages, two normalization rules and three lengths retained.&quot;,
+  &quot;tags&quot;: [
+    &quot;scorer calibration&quot;,
+    &quot;quadgrams&quot;,
+    &quot;English scorer&quot;,
+    &quot;false rejection&quot;,
+    &quot;candidate scoring&quot;,
+    &quot;shuffled controls&quot;,
+    &quot;FLORES&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/parallel-languages/eng_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/cym_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/deu_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/fra_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/spa_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/ita_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/por_Latn.devtest.txt&quot;,
+      &quot;experiments/records/parallel-languages/fin_Latn.devtest.txt&quot;
+    ],
+    &quot;representation&quot;: &quot;Eight aligned FLORES devtest translations; uppercase A–Z and accent-folded uppercase A–Z.&quot;,
+    &quot;procedure&quot;: &quot;Score fixed prefixes from eight aligned blocks and twenty deterministic letter shuffles per cell with the pinned English quadgram model.&quot;,
+    &quot;parameters&quot;: &quot;Eight languages; 120, 240, 400 letters; two normalizations; threshold -5.5; 384 original cells and 7680 shuffles.&quot;,
+    &quot;exclusions&quot;: &quot;No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;Acceptance depends on language: all English and French originals pass, some German, Italian, Portuguese and Spanish pass, and no Finnish or Welsh originals pass. No shuffled control passes.&quot;,
+  &quot;limitations&quot;: &quot;Nested lengths and shared translated sources are not independent trials. Training overlap is not excluded. Shuffles are not complete wrong-key searches. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Separate planted-decoder recovery from scorer acceptance; calibrate maxima from complete bounded null searches.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;candidate-scorer-controls&quot;,
+    &quot;title&quot;: &quot;Candidate scorer controls&quot;,
+    &quot;question&quot;: &quot;Would a candidate-selection rule recognize known text and reject its declared controls?&quot;,
+    &quot;baseline&quot;: &quot;english-scorer-controls&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Fixed English quadgram threshold&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independently reconstructed source and counted-quadgram scores; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/english-scorer-controls/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; offline. Independent checker command is in the article.&quot;,
+    &quot;script&quot;: &quot;experiments/records/english-scorer-controls/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;bd7e40313e33f9098629450c74044c159dc1ea6a43dde32750e8285b52c97c9d&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/eng_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/cym_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;94bdd16fe4141e5bef227bcd49dd283e1397e993ef0ab3e8db281175e536551f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/deu_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/fra_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/spa_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/ita_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;4166da51aba285736535916870142d7e9491494cee52b1db0808533399796a94&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/por_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;1a04351c9b8c99a1808bb5da9051c06ffd1d65a5fe7236e40a80568abdbc67e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/fin_Latn.devtest.txt&quot;,
+        &quot;sha256&quot;: &quot;26b0906ca080c5602eec4a769b0ac24169ca8fa484f95fc8f41ca5212fa2632c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/plan.json&quot;,
+        &quot;sha256&quot;: &quot;9b5236fcafbd2931ab1d4b36438a50b89b4b090243ada5e03501704041d378f4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/SOURCE-LICENSE.txt&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/english-scorer-language-controls.md&quot;,
+        &quot;sha256&quot;: &quot;6f53929bf30493e067c944fe19143f05fed52942786b84c4518b3da4c551278d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/english-scorer-language-controls.json&quot;,
+        &quot;sha256&quot;: &quot;88caa361a29fa7f06505bb2aed7c3b2400d89bd09943a8ebd8b791512ae26575&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/parallel-languages/SOURCE.txt&quot;,
+        &quot;sha256&quot;: &quot;0ac2331dc1c4b5045c672a9a16e3044c34481ebfe6320eb0f08a620fca6f5056&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/SOURCE.txt&quot;,
+        &quot;sha256&quot;: &quot;26d04bae102a217bf60d0fcdecc0d8a98f9cbde50dd79d2e69b12ce0e2081b61&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/check_english_scorer_controls.py&quot;,
+        &quot;sha256&quot;: &quot;b9fe34498c602f785cb2373f88b91eb09c526ea5f13077342219c2b00d2f3db5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/plot.py&quot;,
+        &quot;sha256&quot;: &quot;e4ffc851d61e0ca1144778f551ff5e0fcd725835028aea8ce75a60e14d42d7ad&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/results.json&quot;,
+        &quot;sha256&quot;: &quot;bb3db114c10c0f9a5c86520023aef5b200d710b3db1ff5d83e6b07f82b780962&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/audit.json&quot;,
+        &quot;sha256&quot;: &quot;c6706d99a37ba4c00cfce3f328c02ee91b8d477bed5a646f377e0effb05d0aed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;da661a77339d57e4ad57a97247c8053abc9432572ffd7423abeb529c541fc1f1&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned source scorer-language investigation&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md&quot;
+    },
+    {
+      &quot;label&quot;: &quot;FLORES dataset and license&quot;,
+      &quot;url&quot;: &quot;https://huggingface.co/datasets/facebook/flores&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;parallel-languages&quot;,
+    &quot;target-sized-languages&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/english-scorer-controls/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Every language uses the same marks and axes. Original scores are blue; gray ranges contain all shuffles. The dashed threshold is fixed at -5.5.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## Would our scorer recognize a real answer?\n\nA search can recover meaningful text and still discard it if its scoring rule expects the wrong language. This experiment isolates that last step: give a fixed English four-letter scoring model known text in eight languages, then shuffle the same letters as a control. No cipher or decoder is involved.\n\nThe model accepts all English and French samples in this run, some German, Italian, Portuguese and Spanish samples, and none of the Finnish or Welsh samples. It accepts none of the 7,680 shuffled controls. That is useful separation from these shuffles, but **acceptance is neither English identification nor proof of a decryption**. Rejection also cannot rule out meaningful plaintext in another language.\n\n## Source and scope\n\nThe idea follows the scorer-language investigation in [Dukotah&#x27;s repository](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md). We pin that revision and reuse its English quadgram count file and −5.5 threshold. We run a new, narrower control on our existing aligned FLORES translations; we do not reproduce the repository&#x27;s full decoder benchmark or import its conclusions about the unsolved cipher.\n\nThe [language comparison experiments](#/experiments/parallel-languages) ask which reference profiles resemble manuscript statistics. This experiment instead asks what a candidate-selection tool accepts when the input is already known text. There are no unsolved-page inputs here.\n\n## Fixed procedure\n\nDivide each of the eight 1,012-sentence translations into the same eight consecutive sentence blocks: four of 127 sentences and four of 126. Join sentences with spaces. Apply each of two rules: uppercase and retain A–Z only; or uppercase, canonically decompose Unicode, remove combining marks, and then retain A–Z. The second rule folds many accented letters but is not a general transliteration system. Uppercasing can expand characters, such as ß to SS. The report records retained lengths and discarded alphabetic characters for each block.\n\nTake the first 120, 240 and 400 retained letters from every block. These are nested samples, not three independent passages. Aligned sentence blocks preserve source content boundaries, but equal character prefixes do not necessarily end at the same translated idea. Generate 20 deterministic shuffles of each excerpt, preserving its exact letter counts. Keep all 384 original cells and all 7,680 controls; there is no selection by score.\n\nFor each overlapping group of four letters, use log₁₀(count / total model count). An unseen group receives log₁₀(0.01 / total). Average over the length minus three groups. Accept a sample when this average is at least −5.5. This threshold belongs to this model and preprocessing; it is not portable to an arbitrary language scorer.\n\n## All conditions\n\nEach cell below is accepted originals out of eight blocks. Every condition also has 160 shuffles per language; all have zero accepted shuffles. The figure shows individual original scores and the full observed shuffled range, not a confidence interval.\n\n| Language | A–Z 120 | A–Z 240 | A–Z 400 | Folded 120 | Folded 240 | Folded 400 |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |\n| English | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| Finnish | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n| French | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| German | 6/8 | 6/8 | 6/8 | 6/8 | 6/8 | 8/8 |\n| Italian | 7/8 | 8/8 | 8/8 | 7/8 | 8/8 | 8/8 |\n| Portuguese | 5/8 | 7/8 | 7/8 | 6/8 | 7/8 | 7/8 |\n| Spanish | 6/8 | 7/8 | 7/8 | 8/8 | 7/8 | 7/8 |\n| Welsh | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n\n## What this does and does not establish\n\nThis scorer can reject intact language while accepting a different non-English language. A successful candidate therefore needs more than crossing a threshold: a reproducible decoding rule, declared choices, coherent extended output and checks against controls appropriate to the whole search.\n\nThe shuffles preserve single-letter frequencies but destroy order. They are not wrong-key outputs from a specified cipher. Zero acceptances in this finite collection does not imply zero false positives, especially after searching millions of candidates and keeping the maximum. The overlapping sample lengths, reused translations and shared model also prevent treating these cells as independent trials or a general accuracy estimate. Model-training overlap with the benchmark has not been independently excluded.\n\nThis is not decoder recovery power: it bypasses decoding entirely. A later planted-cipher variant should separately measure exact recovery and score acceptance under fixed encoder, key, skip rules and search budget. A search-size control should score the maximum from each complete null search rather than individual null strings alone.\n\n## Reproduce and inspect\n\nDownload the experiment bundle and extract it with its directory structure. No network access, API key or third-party Python package is required.\n\n```text\npython experiments/records/english-scorer-controls/run.py --check\npython scripts/check_english_scorer_controls.py experiments/records/english-scorer-controls/results.json --receipt my-scorer-audit.json\npython experiments/records/english-scorer-controls/plot.py\n```\n\nThe producer checks every pinned input hash. The independent checker reconstructs the source excerpts and shuffles, calculates scores by counting four-letter groups rather than importing the producer, and checks every decision within an absolute numerical tolerance of 10⁻¹². Both computations passed; human review remains pending. The saved JSON includes excerpts, hashes, seeds, individual scores and normalization diagnostics, so every plotted mark can be traced back to its input.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/english-scorer-controls/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;bd7e40313e33f9098629450c74044c159dc1ea6a43dde32750e8285b52c97c9d&quot;
 }</pre></article><article id="grid-prime-paths"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;grid-prime-paths&quot;,
   &quot;title&quot;: &quot;LP2-49–51: directional prime-path reconstruction&quot;,
