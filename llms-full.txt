@@ -19358,6 +19358,8 @@ This is sensitivity to a null-model assumption, not independent confirmation. Bo
 
 The unchanged-rune audit separates ordinary fixed points from recorded interruptions across the four LP1 sections. An equal input and output index does not by itself show that the key counter paused.
 
+The six-width comparison tests a separate choice in the solved 464-word arrangement. It selects the smallest normalized imbalance across widths 2, 4, 8, 16, 32 and 64 and repeats that selection in every shuffled control. Its 0.12072 tail applies to that rule; it is not an adjustment of the smallest fixed-width p-value.
+
 The proposed 928-word carrier
 
 The carrier and word-matching guide contains the complete LP2-23–39 inventory, group-boundary diagram, halfway split and downloadable audit. The total is 928 rune-words; five decimal labels are counted separately. A matching total does not specify a grille operation.
@@ -19471,6 +19473,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - unchanged-rune audit
   https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
+- six-width comparison
+  https://jelliottdev.github.io/#/experiments/lp1-width-selection
 - carrier and word-matching guide
   https://jelliottdev.github.io/reference/articles/grille-carrier.html#carrier-928
 - word-lookup audit
@@ -26470,6 +26474,215 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "# LP1 column balance after searching section orders\n\nThis variant belongs to the LP1 word-length and column-balance family. Human review remains pending.\n\n## What was tested\n\nThe original 464-word sequence fills a table of 29 rows and 16 columns. Its column totals are unusually similar under the previously declared shuffle controls. This variant asks whether that comparison changes when a solver may rearrange the four intact sections and keep whichever arrangement has the most similar column totals.\n\nThe sections are Warning (45 words), Welcome (124), first koan (208), and second koan (87). Word order within each observed section remains unchanged. Every arrangement fills the table continuously, without resetting at section boundaries. The score is `Q = sum((16 * column_total - 1796)^2)`; lower scores mean more balanced columns.\n\nThe [protocol](experiments/plans/lp1-section-order.md) was committed before calculating the order search. It disclosed the already-known fixed-order results. Each of 49,999 controls shuffles lengths within the original sections, searches the same 24 orders, and retains its minimum. It would be unfair to search the observed data but compare that selected result with controls given only one arrangement.\n\n## Results\n\nNo alternative order improves the original score, **128256**. Four orders tie for that minimum because they are cyclic rotations of the original arrangement.\n\n| Representative order | Score Q |\n| --- | ---: |\n| Warning → Welcome → first koan → second koan | 128256 |\n| Warning → Welcome → second koan → first koan | 295680 |\n| Warning → first koan → Welcome → second koan | 257280 |\n| Warning → first koan → second koan → Welcome | 407296 |\n| Warning → second koan → Welcome → first koan | 215808 |\n| Warning → second koan → first koan → Welcome | 337664 |\n\nEach row represents four cyclic rotations with exactly the same score. Rotating the 464-word sequence shifts its sixteen column totals without changing their balance, since 464 is divisible by 16. Thus the 24 arrangements form six classes; this does **not** make the six scores independent.\n\n**440 of 49,999 controls** have a selected minimum no greater than the observed minimum, ties included. The plus-one estimate is `(440 + 1) / 50000 = 0.00882`. The fixed-order within-section comparison was `0.00178`. The larger estimate reflects the extra opportunities given to every control, even though the observed minimum did not improve.\n\nThe result remains below the protocol's 0.05 threshold. It describes this precise word sequence, table width, score, shuffle model and section-order search. It does not estimate the probability of intentional design, provide a decryption, or correct for the wider exploration that originally selected the 464-word object and sixteen-column layout. The two estimates use the same shuffled sections and are not independent evidence.\n\n## Verification and reproduction\n\nThe independent checker reconstructs the source tokens, generates permutations through explicit index swaps, and computes all 24 scores in every control using section-column accumulation. It does not import the producer. It checks **1,199,976 null order scores**, all observed orders, every minimum and tie list, and the full tail count. Every baseline-order control score also matches the earlier section-preserving report. Both implementations share Python's pseudorandom primitive.\n\nThe toy tests exhaust small section permutations with unequal section sizes and repeated values. A non-divisible example demonstrates why the cyclic reduction requires complete rows.\n\nFrom the repository root, choose new output paths:\n\n```sh\npython scripts/test_lp1_section_order.py\npython scripts/lp1_section_order.py --output order-replay.json\npython scripts/check_lp1_section_order.py order-replay.json --receipt order-replay-audit.json\n```\n\nThe producer checks the frozen input hashes. Compare the replay report's SHA-256 with `report_sha256` in the independent audit receipt. The downloadable result retains the full order mapping, observed scores, all six class scores for every trial, and all minimizing orders; none of the searched arrangements is omitted from that representation.\n\n## Read the figures\n\nThe order diagram lists all 24 arrangements in six groups. Every arrangement in one group has the same Q; the bar represents that shared score. Letters label sections, not rune values. The histogram shows the minimum score retained from every complete 24-order search. Its vertical scale counts trials, and its dashed line is the observed minimum. All 49,999 trials are included; the bin counts are downloadable as CSV.\n\n## Run the complete reproduction\n\nExtract the experiment ZIP with folders intact. Run `python experiments/records/lp1-section-order/run.py --check` from its root. Python 3 standard library is sufficient; the run is offline. Use `--output order-replay` to retain results in a new directory. The wrapper repeats the simulation, independently checks every order score, and reproduces the figures and histogram.\n\nSee the [fixed-order section-preserving comparison](#/experiments/lp1-section-balance), [original baseline](#/experiments/lp1-word-length-balance), and [search-space explanation](#/wiki/search-space).\n",
   "article_path": "experiments/records/lp1-section-order/article.md",
   "script_sha256": "4da7f606df7311f59474572b272e67e01fe579cacc1b00312885904b67a5e1ef"
+}
+
+---
+
+{
+  "id": "lp1-width-selection",
+  "title": "LP1 column balance after searching six widths",
+  "status": "published",
+  "question": "Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?",
+  "summary": "Width 2 minimizes normalized imbalance. Matching that six-width search in every unrestricted shuffle gives p=0.12072; this is not an adjustment of the smallest fixed-width p-value.",
+  "tags": [
+    "464 words",
+    "column width",
+    "width selection",
+    "column balance",
+    "multiple comparisons",
+    "power of two",
+    "word lengths"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "representation": "Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.",
+    "procedure": "Keep the original four-section word order. For each width 2,4,8,16,32,64, assign word i to column i modulo width without padding. Calculate weighted column imbalance divided by its exact unrestricted-permutation expectation; select the minimum R. Repeat all six widths in every shuffled control.",
+    "parameters": "49,999 unrestricted fresh-copy shuffles; Python Random seed 330146; exact rational comparisons; lower tail with ties; plus-one correction; threshold 0.05. Partial final rows retained. Original width-16 result and qualitative width observations known before this protocol.",
+    "exclusions": "Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption."
+  },
+  "outcome": "not-supported",
+  "finding": "The observed minimum R is 4167/245948 at width 2. Of 49,999 controls, 6,035 have a minimum no greater; plus-one estimate 0.12072.",
+  "limitations": "Calibrates minimum R over six declared widths, not selection of the smallest fixed-width p-value or all historical exploration. Unrestricted shuffles do not preserve sentences or section distributions. No intent or decryption claim; human review pending.",
+  "next_steps": "Other width sets or selecting a calibrated tail require separate frozen procedures and matched controls.",
+  "family": {
+    "id": "lp1-word-length-balance",
+    "title": "LP1 word lengths and column balance",
+    "question": "How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?",
+    "baseline": "lp1-word-length-balance"
+  },
+  "variant": {
+    "label": "Search six power-of-two widths",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.",
+        "after": "Keep the original four-section word order. For each width 2,4,8,16,32,64, assign word i to column i modulo width without padding. Calculate weighted column imbalance divided by its exact unrestricted-permutation expectation; select the minimum R. Repeat all six widths in every shuffled control.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      },
+      {
+        "field": "parameters",
+        "before": "16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.",
+        "after": "49,999 unrestricted fresh-copy shuffles; Python Random seed 330146; exact rational comparisons; lower tail with ties; plus-one correction; threshold 0.05. Partial final rows retained. Original width-16 result and qualitative width observations known before this protocol.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.",
+        "after": "Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent source scan, explicit Fisher–Yates and all 299,994 direct rational null scores; human review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp1-width-selection/run.py --check",
+    "environment": "Python 3 standard library; offline. All original transcriptions and baseline dependencies included. Full simulation, independent replay and figure comparison.",
+    "script": "experiments/records/lp1-width-selection/run.py",
+    "script_sha256": "acf614ac7cdca56907862fb68b0a2c146fc7b54759c42f4967467e4eaf36c877",
+    "inputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/plan.json",
+        "sha256": "a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/words.json",
+        "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/submitted-lengths.json",
+        "sha256": "5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/run.py",
+        "sha256": "5e09fe97ea9b825c2ea4c844a8579df1c05fa9f9544b0db949647083578d367a"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/results.json",
+        "sha256": "caa45886bb5a1b225c98948893c78b28addaa1f09eab1eacd97bbf056a4ba8b0"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "experiments/plans/lp1-width-selection.md",
+        "sha256": "84fc0d04c9814b99c25d4631accc9364b58a7756a5472d1c684ea5a4e81be73d"
+      },
+      {
+        "path": "experiments/plans/lp1-width-selection.json",
+        "sha256": "280eabedd930ace2632c14f1014f3b11552acfca78e4fd6135a712391cd485fc"
+      },
+      {
+        "path": "scripts/lp1_width_selection.py",
+        "sha256": "2aa679de020a29ca0fd9388330d3a54400cecf8cacec62c3e55777eff44be6fa"
+      },
+      {
+        "path": "scripts/check_lp1_width_selection.py",
+        "sha256": "d19d242e42e4c83461bfae12d434670d1931e136cb81c3504a830ab2e5bfdada"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/plot.py",
+        "sha256": "0cbb598beefca1e2a7df5eadb4eb76bf5a5b471f2bcbdc75b8fdf589a4c7e374"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp1-width-selection/results.json",
+        "sha256": "84620c178eadad82867fc9b74955201f66303c5335ea45f40203145d454a60cb"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/audit.json",
+        "sha256": "a5e72c3afe6b6b85107d7ab95af06f2591d5605160838ed8e47e8b394a4c3725"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/width-comparison.svg",
+        "sha256": "4430e820f3eb2e2ae346a7c8ec11899098b7c3fd537ae4e7c5c8e3313a797766"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/selected-null.svg",
+        "sha256": "6c1356fab52a9e9f5e25703d9416d36b3efb0c4bbf85e672603209b61274248a"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/histogram.csv",
+        "sha256": "213e0aa6ac3dcdbce42a08278bba8100f75f5e656639dfb18732efb2c81e0d4b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived transcription and source provenance",
+      "url": "https://jelliottdev.github.io/#/conventions"
+    },
+    {
+      "label": "Search space, bounds and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [
+    "lp1-word-length-balance",
+    "lp1-section-balance",
+    "lp1-section-order"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-width-selection/width-comparison.svg",
+      "caption": "Every observed width: bars compare normalized imbalance R; fixed-width tails are diagnostic and unadjusted. The smallest R and smallest tail occur at different widths."
+    },
+    {
+      "path": "experiments/records/lp1-width-selection/selected-null.svg",
+      "caption": "All 49,999 controls search the same six widths. The dashed line is the observed minimum; exact tail counts do not depend on the display bins."
+    }
+  ],
+  "article": "## Does searching other widths change the balance result?\n\nThe original comparison arranged 464 word lengths in sixteen columns. This variant asks a different question: if we may choose among six widths, how unusual is the smallest normalized column imbalance we can obtain? Every shuffled control receives exactly the same choice.\n\nThe fixed rule selects **width 2**, with normalized imbalance R about **0.01694**. Of 49,999 shuffled controls, 6,035 obtain a minimum no greater. The plus-one lower-tail estimate is **0.12072**, above the declared 0.05 threshold. This test does not support an unusually small minimum-R under its unrestricted-shuffle model.\n\nThat conclusion needs a precise qualification: **this is not an adjustment of the smallest fixed-width p-value**. Width 32 has the smallest unadjusted tail in the table below; width 2 has the smallest R. Choosing between those criteria after seeing the results would change the experiment.\n\n## What is fixed, and what changes?\n\nUse the same Warning, Welcome, first koan and second koan as the [464-word baseline](#/experiments/lp1-word-length-balance). Keep their order, headings, interruption runes, word boundaries and internal apostrophes. Count native runes per word. The source population contains 464 words and 1,796 runes.\n\nTry only widths **2, 4, 8, 16, 32 and 64**. Word i, counted from zero, goes in column i modulo the width. Do not rotate the start, reorder sections or pad the final row. Widths 32 and 64 leave unequal column sizes, so the statistic explicitly weights by the number of words in each column.\n\nThe width set follows the earlier power-of-two discussion, including 64. The original width-16 result and qualitative observations about other widths were known before this protocol. The protocol was committed before these new measurements; that does not erase the earlier exploration.\n\n## Why divide by an expectation?\n\nLet n be the number of words, T their total length, n_j the size of column j and S_j its length sum. Define weighted imbalance as Q = sum(S_j² / n_j) − T² / n. Lower Q means more similar column means. Let D = sum(x_i²) − T² / n, where x_i is each word length.\n\nUnder an unrestricted permutation of those fixed lengths, the expected Q for k columns is (k−1)D/(n−1). We use **R = Q / expected Q**. At width 16, this equals the baseline's normalized variance of column means. The derivation and exact arithmetic are preserved in the research README.\n\nDividing by the expectation makes the mean equal to one under each width's null distribution. It does **not** make those distributions have the same shape. An R of 0.02 at one width can be less unusual than an R of 0.3 at another. The declared selection rule nevertheless chooses the minimum R, and its control distribution must repeat precisely that rule.\n\n## Every tested width\n\nThe fixed-width tails below include ties and use the plus-one correction. They are diagnostic, unadjusted comparisons—not independent evidence or six corrected tests.\n\n| Width | Words per column | Observed R | Fixed-width tail / 49,999 | Unadjusted estimate |\n| --- | --- | ---: | ---: | ---: |\n| 2 | 232 | 0.01694 | 6,006 | 0.12014 |\n| 4 | 116 | 0.14684 | 3,429 | 0.06860 |\n| 8 | 58 | 0.34531 | 3,317 | 0.06636 |\n| 16 | 29 | 0.25150 | 54 | 0.00110 |\n| 32 | 14 or 15 | 0.31188 | 5 | 0.00012 |\n| 64 | 7 or 8 | 0.73060 | 2,044 | 0.04090 |\n\nThe width-16 exact R and 54-control tail reproduce the original baseline. The same random seed and fresh-copy shuffle sequence are used, so this agreement is a reproduction check, not an independent replication.\n\n## Matching the selection in every control\n\nGenerate 49,999 unrestricted permutations using Python's Random with seed 330146. For each one, calculate all six R values and retain the minimum, including every tying width. Compare those minima with the observed minimum using exact rational arithmetic. The result is (6,035 + 1)/(49,999 + 1) = **0.12072**.\n\nThe null figure includes all controls. Its bins are for display only; the tail count uses the exact values, not histogram bins. The saved report retains all 299,994 null width scores, their minima and ties.\n\nThis does not account for every width, every possible grouping of text, the original selection of the 464-word object, or choosing the statistic itself. It also does not preserve coherent sentences or each section's length distribution in the controls. The [within-section variant](#/experiments/lp1-section-balance) and [section-order variant](#/experiments/lp1-section-order) address different choices. No result here identifies a grille or the unsolved cipher.\n\n## Reproduce and inspect\n\nDownload this experiment's ZIP and extract its folders. Python 3's standard library is sufficient; the bundle includes the source transcriptions and baseline dependencies. No network access, API or model is used.\n\n```text\npython experiments/records/lp1-width-selection/run.py --check\n```\n\nTo retain a fresh replay instead of using a temporary directory:\n\n```text\npython experiments/records/lp1-width-selection/run.py --output my-width-replay\n```\n\nThe producer reconstructs the baseline words and scores nested power-of-two columns with exact integer ratios. The independent checker imports neither the producer nor its word tokenizer: it scans the source characters, explicitly replays Fisher–Yates and calculates each Q from direct column slices with rational arithmetic. It checks all observed scores, all 299,994 null scores, minima, ties and tail counts. Both computations agree; human review remains pending.\n",
+  "article_path": "experiments/records/lp1-width-selection/article.md",
+  "script_sha256": "acf614ac7cdca56907862fb68b0a2c146fc7b54759c42f4967467e4eaf36c877"
 }
 
 ---

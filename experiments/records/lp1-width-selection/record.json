@@ -1,0 +1,203 @@
+{
+  "id": "lp1-width-selection",
+  "title": "LP1 column balance after searching six widths",
+  "status": "published",
+  "question": "Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?",
+  "summary": "Width 2 minimizes normalized imbalance. Matching that six-width search in every unrestricted shuffle gives p=0.12072; this is not an adjustment of the smallest fixed-width p-value.",
+  "tags": [
+    "464 words",
+    "column width",
+    "width selection",
+    "column balance",
+    "multiple comparisons",
+    "power of two",
+    "word lengths"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "representation": "Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.",
+    "procedure": "Keep the original four-section word order. For each width 2,4,8,16,32,64, assign word i to column i modulo width without padding. Calculate weighted column imbalance divided by its exact unrestricted-permutation expectation; select the minimum R. Repeat all six widths in every shuffled control.",
+    "parameters": "49,999 unrestricted fresh-copy shuffles; Python Random seed 330146; exact rational comparisons; lower tail with ties; plus-one correction; threshold 0.05. Partial final rows retained. Original width-16 result and qualitative width observations known before this protocol.",
+    "exclusions": "Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption."
+  },
+  "outcome": "not-supported",
+  "finding": "The observed minimum R is 4167/245948 at width 2. Of 49,999 controls, 6,035 have a minimum no greater; plus-one estimate 0.12072.",
+  "limitations": "Calibrates minimum R over six declared widths, not selection of the smallest fixed-width p-value or all historical exploration. Unrestricted shuffles do not preserve sentences or section distributions. No intent or decryption claim; human review pending.",
+  "next_steps": "Other width sets or selecting a calibrated tail require separate frozen procedures and matched controls.",
+  "family": {
+    "id": "lp1-word-length-balance",
+    "title": "LP1 word lengths and column balance",
+    "question": "How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?",
+    "baseline": "lp1-word-length-balance"
+  },
+  "variant": {
+    "label": "Search six power-of-two widths",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.",
+        "after": "Keep the original four-section word order. For each width 2,4,8,16,32,64, assign word i to column i modulo width without padding. Calculate weighted column imbalance divided by its exact unrestricted-permutation expectation; select the minimum R. Repeat all six widths in every shuffled control.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      },
+      {
+        "field": "parameters",
+        "before": "16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.",
+        "after": "49,999 unrestricted fresh-copy shuffles; Python Random seed 330146; exact rational comparisons; lower tail with ties; plus-one correction; threshold 0.05. Partial final rows retained. Original width-16 result and qualitative width observations known before this protocol.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.",
+        "after": "Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.",
+        "reason": "Match the declared width selection in every unrestricted control, with explicit treatment of unequal column sizes."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent source scan, explicit Fisher–Yates and all 299,994 direct rational null scores; human review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp1-width-selection/run.py --check",
+    "environment": "Python 3 standard library; offline. All original transcriptions and baseline dependencies included. Full simulation, independent replay and figure comparison.",
+    "script": "experiments/records/lp1-width-selection/run.py",
+    "script_sha256": "acf614ac7cdca56907862fb68b0a2c146fc7b54759c42f4967467e4eaf36c877",
+    "inputs": [
+      {
+        "path": "experiments/records/lp1-word-length-balance/plan.json",
+        "sha256": "a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/words.json",
+        "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/submitted-lengths.json",
+        "sha256": "5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/run.py",
+        "sha256": "5e09fe97ea9b825c2ea4c844a8579df1c05fa9f9544b0db949647083578d367a"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/results.json",
+        "sha256": "caa45886bb5a1b225c98948893c78b28addaa1f09eab1eacd97bbf056a4ba8b0"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "experiments/plans/lp1-width-selection.md",
+        "sha256": "84fc0d04c9814b99c25d4631accc9364b58a7756a5472d1c684ea5a4e81be73d"
+      },
+      {
+        "path": "experiments/plans/lp1-width-selection.json",
+        "sha256": "280eabedd930ace2632c14f1014f3b11552acfca78e4fd6135a712391cd485fc"
+      },
+      {
+        "path": "scripts/lp1_width_selection.py",
+        "sha256": "2aa679de020a29ca0fd9388330d3a54400cecf8cacec62c3e55777eff44be6fa"
+      },
+      {
+        "path": "scripts/check_lp1_width_selection.py",
+        "sha256": "d19d242e42e4c83461bfae12d434670d1931e136cb81c3504a830ab2e5bfdada"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/plot.py",
+        "sha256": "0cbb598beefca1e2a7df5eadb4eb76bf5a5b471f2bcbdc75b8fdf589a4c7e374"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp1-width-selection/results.json",
+        "sha256": "84620c178eadad82867fc9b74955201f66303c5335ea45f40203145d454a60cb"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/audit.json",
+        "sha256": "a5e72c3afe6b6b85107d7ab95af06f2591d5605160838ed8e47e8b394a4c3725"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/width-comparison.svg",
+        "sha256": "4430e820f3eb2e2ae346a7c8ec11899098b7c3fd537ae4e7c5c8e3313a797766"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/selected-null.svg",
+        "sha256": "6c1356fab52a9e9f5e25703d9416d36b3efb0c4bbf85e672603209b61274248a"
+      },
+      {
+        "path": "experiments/records/lp1-width-selection/histogram.csv",
+        "sha256": "213e0aa6ac3dcdbce42a08278bba8100f75f5e656639dfb18732efb2c81e0d4b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived transcription and source provenance",
+      "url": "https://jelliottdev.github.io/#/conventions"
+    },
+    {
+      "label": "Search space, bounds and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/search-space"
+    }
+  ],
+  "related": [
+    "lp1-word-length-balance",
+    "lp1-section-balance",
+    "lp1-section-order"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-width-selection/width-comparison.svg",
+      "caption": "Every observed width: bars compare normalized imbalance R; fixed-width tails are diagnostic and unadjusted. The smallest R and smallest tail occur at different widths."
+    },
+    {
+      "path": "experiments/records/lp1-width-selection/selected-null.svg",
+      "caption": "All 49,999 controls search the same six widths. The dashed line is the observed minimum; exact tail counts do not depend on the display bins."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Six-width selection: checked research record
 
-Computation and independent replay are complete. Public registry entry, figures and standalone reproduction bundle are still pending. The protocol was committed as `0aad11d` before new scores were calculated.
+Computation and independent replay are complete. The public registry entry, figures and standalone reproduction bundle accompany this record. The protocol was committed as `0aad11d` before new scores were calculated.
 
 ## Result
 
