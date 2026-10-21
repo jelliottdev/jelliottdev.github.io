@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Stable bookmark IDs rendered by experimentArticle in experiments.js.
 EXPERIMENT_SECTIONS = {
     "experiment-finding", "experiment-scope", "experiment-reproduce",
-    "experiment-remaining", "experiment-sources",
+    "experiment-remaining", "experiment-sources", "experiment-methods",
 }
 
 

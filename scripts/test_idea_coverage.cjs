@@ -68,3 +68,28 @@ assert(existingFamily.includes('family-running-key'));
 ui.methodFamilyUnavailable=true;
 assert(ui.ideaCoverageView('unmatched').includes('could not be loaded'));
 console.log('PASS: family-only matches expose guides, distinguish absent links from negative results, and survive index-load failures');
+
+const detail={esc:ui.esc, records:experiments, families, head:()=>'', footer:()=>''};
+vm.createContext(detail);
+vm.runInContext(fs.readFileSync(require('node:path').join(root,'experiments.js'),'utf8'),detail);
+vm.runInContext('experimentRecords=records; methodFamilyRecords=families;',detail);
+for(const record of experiments.filter(r=>r.status==='published')){
+ const html=detail.experimentMethodGuides(record);
+ const expected=families.filter(f=>f.related.includes(record.id));
+ assert(expected.length>0);
+ for(const f of expected){
+  assert(html.includes(`#/wiki/${f.guide}`),record.id);
+  assert(html.includes(`section=family-${f.id}`),record.id);
+ }
+ for(const f of families.filter(f=>!f.related.includes(record.id)))
+  assert(!html.includes(`section=family-${f.id}\"`),record.id);
+ const article=detail.experimentArticle(record);
+ assert(article.includes('data-anchor="experiment-methods"'));
+ assert(article.indexOf('id="experiment-scope"')<article.indexOf('id="experiment-methods"'));
+ assert(article.indexOf('id="experiment-methods"')<article.indexOf('id="experiment-reproduce"'));
+}
+assert.equal(detail.experimentMethodGuides({id:'unmapped-example'}),'');
+vm.runInContext('methodFamilyUnavailable=true;',detail);
+assert(detail.experimentMethodGuides(experiments[0]).includes('could not be loaded'));
+assert(!detail.experimentMethodGuides(experiments[0]).includes('No experiment'));
+console.log('PASS: every published experiment links only to assigned method families, after scope, with an index-failure fallback');

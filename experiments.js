@@ -75,6 +75,12 @@ function experimentFamily(r){
 function experimentScopeLinks(r){
   return [...r.scope.pages.map(id=>`<a href="#/page/${id}">${esc(id.toUpperCase())}</a>`),...(r.scope.artifacts||[]).map(path=>`<a href="${esc(path)}">${esc(path.split('/').pop())}</a>`)].join(', ');
 }
+function experimentMethodGuides(r){
+  if(methodFamilyUnavailable)return '<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>The method index could not be loaded. You can still read this experiment and browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></section>';
+  const families=(methodFamilyRecords||[]).filter(f=>f.related.includes(r.id));
+  if(!families.length)return '';
+  return `<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>This experiment relates to the approaches below. Its result covers only the scope stated above; the guides explain broader variants and assumptions.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> — ${esc(f.description)}</p><p class="small"><a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Compare this family’s documented tests</a></p></li>`).join('')}</ul></section>`;
+}
 function experimentDownloads(r){
   const root=`experiments/records/${r.id}/`;
   const links=[{path:r.reproduction.script,label:'Run script'},
@@ -91,7 +97,8 @@ function experimentArticle(r){
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
-  const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
+  const methodGuides=experimentMethodGuides(r);
+  const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],...(methodGuides?[['experiment-methods','Method guides']]:[]),['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Experiments')+`<article class="reading-width experiment-article">
     <p><a href="#/experiments">← Have we tried it?</a></p>
@@ -104,6 +111,7 @@ function experimentArticle(r){
       ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test. <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
+    ${methodGuides}
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
       <p>Download <a href="downloads/experiments/${esc(r.id)}.zip" download>this experiment’s files (ZIP)</a> and extract them with their folders intact. The archive includes scripts, input data, recorded results, and a <code>START-HERE</code> file with verification instructions.${needsImages?' Original image inputs are separate: also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''}</p>
       <p>Install the prerequisites listed below, then run the command from the extracted folder. See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> remains available for working across experiments.</p>
