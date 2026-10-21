@@ -18752,6 +18752,31 @@ python scripts/audit_runeberg_prefixes.py /path/to/project-runeberg
 
 Download the audit script · Download the file hashes, counts and exact alphabet. The full historical corpus comparison remains unreproduced.
 
+File entries are not independent texts
+
+A separate audit of the complete pinned Git tree finds 25,906 corpus paths but 25,844 distinct file-content objects. This inventory covers every path; it does not decode or compute statistics for every text. We read the three repeated objects and independently compared the bytes at all 65 paths in those groups.
+
+	Repeated content	File entries	Tokens per file	Eligible for a 2,902-token prefix?
+
+	Empty file	61	0	No
+
+	11052-8.txt and 11502-8.txt	2	144,714	Yes
+
+	13689-8.txt and 20041010-13689-8.txt	2	109,251	Yes
+
+
+The historical minimum-length rule would exclude the 61 empty files. It would retain both members of each nonempty pair, counting the same prefix twice. These two extra eligible entries are a known weighting issue, not a measured explanation of the reported manuscript differences. The number of eligible files across the entire corpus remains unchecked.
+
+Byte identity is narrower than literary identity: different editions or conversions of the same work can have different bytes. Conversely, a filename alone does not establish an edition, language, author or source. The pinned tree contains only its short README and the corpus files; it does not contain conversion code or an edition manifest. This records what is present at that revision, not what may exist elsewhere.
+
+A faithful historical replay should preserve its file-by-file weighting and report these duplicates. A deduplicated comparison should be a separate variant with an explicit rule. Neither version supplies independent random samples merely because many files are present.
+
+Reproduce the inventory
+
+python scripts/audit_runeberg_inventory.py /path/to/project-runeberg
+
+The script reads committed Git metadata and one blob for each duplicate group; it does not run third-party code. A partial clone may fetch those blobs. The inventory report includes every duplicate path, object identifiers, SHA-256 hashes, byte sizes and the exact token rule. The raw NUL-delimited Git tree listing preserves the full path inventory. The audit script is included in the reference-data bundle. These checks do not reproduce the full corpus statistics or their reported probabilities.
+
 What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
@@ -18820,7 +18845,7 @@ The transcription-checking guide explains how formatting-only differences can ch
 
 Sources and status
 
-Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; only the twelve prefixes specified above were processed for the input audit. Counts and the summary reconciliation were checked on 20 October 2026.
+Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; the prefix audit processes only the twelve specified prefixes, while the separate tree inventory covers every path and decodes only the three repeated content objects. Counts and the summary reconciliation were checked on 20 October 2026.
 
 
 A short-header example: BEING and THUS
@@ -18861,6 +18886,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_runeberg_prefixes.py
 - Download the file hashes, counts and exact alphabet
   https://jelliottdev.github.io/exports/runeberg-prefix-audit.json
+- inventory report
+  https://jelliottdev.github.io/exports/runeberg-inventory.json
+- raw NUL-delimited Git tree listing
+  https://jelliottdev.github.io/exports/sources/runeberg-tree.bin
+- audit script
+  https://jelliottdev.github.io/scripts/audit_runeberg_inventory.py
 - checked-in corpus script
   https://github.com/mae3301/lp_experiments/blob/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2/code/project_runeberg.py
 - statistics script
