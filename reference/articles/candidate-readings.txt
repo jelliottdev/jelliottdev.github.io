@@ -62,7 +62,7 @@ The controls. Show whether known readings score sensibly, and what happens to ap
 
 The highest-scoring candidate always exists when a finite nonempty set has numeric scores. Its rank alone does not tell us that the candidate is meaningful. Publish the competing outputs and score differences, rather than showing only the winner.
 
-The eight-language scorer controls now test a fixed English threshold on known text and letter shuffles. The planted decoder controls separately compare exact rune recovery with score acceptance: value rewriting often leaves a high-scoring but incorrect sequence. Neither experiment calibrates the best result from a large key search. The fixed-opening searches retain their original acceptance rule and results.
+The eight-language scorer controls now test a fixed English threshold on known text and letter shuffles. The planted decoder controls separately compare exact rune recovery with score acceptance: value rewriting often leaves a high-scoring but incorrect sequence. A separate search-maximum control now checks complete nested dictionaries through 256 keys; it does not calibrate larger or adaptive searches. The fixed-opening searches retain their original acceptance rule and results.
 
 If a candidate looks promising
 
@@ -92,6 +92,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
 - planted decoder controls
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- search-maximum control
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
 - reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Have we tried it?

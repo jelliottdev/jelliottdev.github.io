@@ -12169,6 +12169,243 @@
       "script_sha256": "2ca802f7f836a90709cb254ff52e5590a11c2b797b7ffe677920a38f2c9c6689"
     },
     {
+      "id": "search-maximum-controls",
+      "title": "How does trying more keys change the best score?",
+      "status": "published",
+      "question": "How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?",
+      "summary": "Nine source sections and all five budgets compare null search winners with positive controls. Exact recovery and score acceptance remain separate.",
+      "tags": [
+        "search size",
+        "search maxima",
+        "multiple comparisons",
+        "wrong key search",
+        "key budget",
+        "selection bias",
+        "scorer calibration"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "exports/readings/first-koan.csv",
+          "exports/readings/instruction.csv",
+          "exports/readings/loss-of-divinity.csv",
+          "exports/readings/lp2-56.csv",
+          "exports/readings/lp2-57.csv",
+          "exports/readings/second-koan.csv",
+          "exports/readings/some-wisdom.csv",
+          "exports/readings/warning.csv",
+          "exports/readings/welcome.csv"
+        ],
+        "representation": "First min(240, available) known-reading output rune indices from nine traces; null indices and additive positive ciphertexts; canonical labels for scoring.",
+        "procedure": "Run complete nested derived-key dictionaries on 32 null/positive pairs per section; retain every candidate score and maximum; separately append the known true key to positive searches.",
+        "parameters": "Seeds 0..255; budgets 1,4,16,64,256; nine sections and 32 replicates; 147456 wrong-key scores and 288 true-key controls; fixed normalized English quadgram threshold -5.5.",
+        "exclusions": "No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate."
+      },
+      "outcome": "supported",
+      "finding": "Null maxima increase with nested search budgets, but no null or key-absent positive search crosses -5.5 in this grid. Appending the true key yields exact recovery and acceptance in all positive controls.",
+      "limitations": "Fixed dependent controls and a chosen null generator; zero exceedances are not a universal false-positive guarantee. Included-key searches have one additional candidate. Human review pending.",
+      "next_steps": "Calibrate the complete selection procedure whenever the dictionary, decoder, score or adaptive choices change.",
+      "family": {
+        "id": "candidate-scorer-controls",
+        "title": "Candidate scorer controls",
+        "question": "Would a candidate-selection rule recognize known text and reject its declared controls?",
+        "baseline": "english-scorer-controls"
+      },
+      "variant": {
+        "label": "Best scores from complete bounded key searches",
+        "changes": [
+          {
+            "field": "artifacts",
+            "before": [
+              "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+              "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+              "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+              "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+              "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+              "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+              "experiments/records/parallel-languages/por_Latn.devtest.txt",
+              "experiments/records/parallel-languages/fin_Latn.devtest.txt"
+            ],
+            "after": [
+              "exports/readings/first-koan.csv",
+              "exports/readings/instruction.csv",
+              "exports/readings/loss-of-divinity.csv",
+              "exports/readings/lp2-56.csv",
+              "exports/readings/lp2-57.csv",
+              "exports/readings/second-koan.csv",
+              "exports/readings/some-wisdom.csv",
+              "exports/readings/warning.csv",
+              "exports/readings/welcome.csv"
+            ],
+            "reason": "Measure whole-search selection and explicit true-key inclusion rather than individual known-text scores."
+          },
+          {
+            "field": "representation",
+            "before": "Eight aligned FLORES devtest translations; uppercase A–Z and accent-folded uppercase A–Z.",
+            "after": "First min(240, available) known-reading output rune indices from nine traces; null indices and additive positive ciphertexts; canonical labels for scoring.",
+            "reason": "Measure whole-search selection and explicit true-key inclusion rather than individual known-text scores."
+          },
+          {
+            "field": "procedure",
+            "before": "Score fixed prefixes from eight aligned blocks and twenty deterministic letter shuffles per cell with the pinned English quadgram model.",
+            "after": "Run complete nested derived-key dictionaries on 32 null/positive pairs per section; retain every candidate score and maximum; separately append the known true key to positive searches.",
+            "reason": "Measure whole-search selection and explicit true-key inclusion rather than individual known-text scores."
+          },
+          {
+            "field": "parameters",
+            "before": "Eight languages; 120, 240, 400 letters; two normalizations; threshold -5.5; 384 original cells and 7680 shuffles.",
+            "after": "Seeds 0..255; budgets 1,4,16,64,256; nine sections and 32 replicates; 147456 wrong-key scores and 288 true-key controls; fixed normalized English quadgram threshold -5.5.",
+            "reason": "Measure whole-search selection and explicit true-key inclusion rather than individual known-text scores."
+          },
+          {
+            "field": "exclusions",
+            "before": "No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.",
+            "after": "No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.",
+            "reason": "Measure whole-search selection and explicit true-key inclusion rather than individual known-text scores."
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Codex; independent candidate, key and maximum reconstruction; human review pending",
+        "retested_on": "2026-10-20",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/search-maximum-controls/run.py --check",
+        "environment": "Python 3 standard library; offline. Separate independent replay command is in the article.",
+        "script": "experiments/records/search-maximum-controls/run.py",
+        "script_sha256": "4c51eedad0337fca6101d6050f852ad96e76a5dac749eab4a0ace799b438b824",
+        "inputs": [
+          {
+            "path": "exports/readings/first-koan.csv",
+            "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+          },
+          {
+            "path": "exports/readings/instruction.csv",
+            "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+          },
+          {
+            "path": "exports/readings/loss-of-divinity.csv",
+            "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+          },
+          {
+            "path": "exports/readings/lp2-56.csv",
+            "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+          },
+          {
+            "path": "exports/readings/lp2-57.csv",
+            "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+          },
+          {
+            "path": "exports/readings/second-koan.csv",
+            "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+          },
+          {
+            "path": "exports/readings/some-wisdom.csv",
+            "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+          },
+          {
+            "path": "exports/readings/warning.csv",
+            "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+          },
+          {
+            "path": "exports/readings/welcome.csv",
+            "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/plans/search-maximum-controls.md",
+            "sha256": "7034389428793d817b6b34847a600761944a7e1ba160ad62fe7dd2981fcb63bc"
+          },
+          {
+            "path": "experiments/plans/search-maximum-controls.json",
+            "sha256": "61dd72b6b28fad539bb877bb76adee2151198ef11bbbc9d0884c70a92b72f820"
+          },
+          {
+            "path": "scripts/run_search_maximum_controls.py",
+            "sha256": "d0492e5e3c8a1e6d838c27e20cb7ef85460b97529699624227ab4af3dcf2c6a4"
+          },
+          {
+            "path": "scripts/check_search_maximum_controls.py",
+            "sha256": "fa11180045e371f51ab048ae51c7e386d55c2020eca54a98d021eb3bf4ff8dcf"
+          },
+          {
+            "path": "scripts/test_search_maximum_controls.py",
+            "sha256": "7471d8a07bea9ffdbd4d43369eac94520bb45c6dca8ab6559600d2c34a265e85"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/plot.py",
+            "sha256": "384405d93023a2d165fd2e40ce6be504605eb693744e8dd914b89dd961de9b85"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/SOURCE.txt",
+            "sha256": "26d04bae102a217bf60d0fcdecc0d8a98f9cbde50dd79d2e69b12ce0e2081b61"
+          },
+          {
+            "path": "experiments/records/english-scorer-controls/SOURCE-LICENSE.txt",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/search-maximum-controls/results.json",
+            "sha256": "f49efdd1110eda34cdd7d9fe845e4d3c54b02af031971e42e36032b4549e0b52"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/audit.json",
+            "sha256": "8d66549d30230bca5da439d6935a15083ddfc61d05109ec8aa0cc8338d4d7c99"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/summary.csv",
+            "sha256": "9d66472ebe5981f797a66a77df682902473d592a7e8fa47b39e32a132a794b04"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/maxima-1.svg",
+            "sha256": "6be0b54006754e92db613fe3b449768533b56f14cbe223474cd1abca094896a1"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/maxima-2.svg",
+            "sha256": "ac43e9287aa4712a70cc391e2ecd816b21577776bb2027fe49f97fad3cad09e1"
+          },
+          {
+            "path": "experiments/records/search-maximum-controls/maxima-3.svg",
+            "sha256": "94124e989ed093bd1e54a57789f6a39156f737527cb336ec7c4f34606b950d16"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned source benchmark and control motivation",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md"
+        }
+      ],
+      "related": [
+        "english-scorer-controls",
+        "decoder-skip-controls"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/search-maximum-controls/maxima-1.svg",
+          "caption": "Source sections 1–3 of nine. Dots are medians and lines are observed ranges across 32 searches; all panels share axes. The included-key arm adds one candidate to each budget."
+        },
+        {
+          "path": "experiments/records/search-maximum-controls/maxima-2.svg",
+          "caption": "Source sections 4–6 of nine. Dots are medians and lines are observed ranges across 32 searches; all panels share axes. The included-key arm adds one candidate to each budget."
+        },
+        {
+          "path": "experiments/records/search-maximum-controls/maxima-3.svg",
+          "caption": "Source sections 7–9 of nine. Dots are medians and lines are observed ranges across 32 searches; all panels share axes. The included-key arm adds one candidate to each budget."
+        }
+      ],
+      "article": "## Why test a whole search?\n\nA candidate can look better simply because we tried more keys. Comparing that winner with one randomly chosen wrong key ignores the selection that produced it. This experiment repeats an entire declared search on null ciphertexts, retaining its best score each time.\n\nThe best null scores rise as the nested dictionary grows from one to 256 keys, but none crosses the fixed −5.5 acceptance threshold in this grid. Searches of positive ciphertext also fail that threshold when the true key is absent. Appending the true key makes every positive control recover exactly and pass. These outcomes describe this finite search; they are not a guarantee against false positives in larger or different searches.\n\n## Three conditions, kept separate\n\n| Condition | Ciphertext | Keys searched | What it checks |\n| --- | --- | --- | --- |\n| Null | Reproducible uniform pseudorandom rune indices | A declared wrong-key dictionary | The best score selected from the whole dictionary under this null generator. |\n| Positive, key absent | A known rune prefix encrypted by addition modulo 29 | The same dictionary, excluding its true seed | What a search reports when its intended answer is outside its bounds. |\n| Positive, key included | The same positive ciphertext | That dictionary plus its true key | Whether inclusion recovers the known answer and whether it wins the scoring comparison. |\n\nThe included condition has **one more candidate** than the stated wrong-key budget. At budget 256 it compares 257 candidates. Its known key is not secretly inserted into the other conditions, and its exact-recovery check is separate from score acceptance.\n\n## Inputs and bounds\n\nAll nine known-reading traces contribute their first 240 output rune indices, or their full length when shorter. Their lengths range from 85 to 240 runes. These are existing trace outputs, not edited English converted back into runes. No section is removed because of a poor score or unusual content.\n\nFor each section, 32 replicates generate a null ciphertext and a positive ciphertext of that section's length. Each null uses a fresh, recorded Python pseudorandom-generator seed and uniform draws from indices 0–28. Each positive uses the known prefix and a recorded derived key. The paired controls share length and search settings; they do not share ciphertext.\n\nThe candidate keys use SHA-256 over a fixed ASCII seed label and a four-byte big-endian counter, with digest bytes reduced modulo 29. Because 256 is not divisible by 29, this reduction is biased. It is an explicit fixture, not a uniform-pad claim. Candidate seeds are 0–255; positive seeds are 100000–100031 and therefore absent from that dictionary.\n\nFor every candidate, subtract its key from the ciphertext modulo 29, transliterate with the canonical rune labels, and average the English quadgram log scores. The unseen-quadgram count is 0.01 and the threshold is −5.5, inherited unchanged from the [scorer controls](#/experiments/english-scorer-controls). There are no offsets, alternate signs, skip rules or word-boundary adjustments.\n\n## Nested search budgets\n\nEvery search retains all 256 individual candidate scores and examines dictionary prefixes of 1, 4, 16, 64 and 256 keys. A larger budget contains every candidate in the smaller one. Its maximum therefore cannot decrease. Ties use the smallest seed ID, including when comparing an appended true key.\n\nThe figures preserve all nine source sections. At each budget, a dot is the median of the 32 best scores and the vertical line is their full observed range. Neither is a confidence interval. All panels share a score scale. The positive included condition has a constant score within a section because exact decryption returns the same known rune prefix despite different encryption keys.\n\n| Wrong-key budget | Null accepted | Positive accepted, true key absent | Positive exact and accepted, true key included |\n| --- | ---: | ---: | ---: |\n| 1 | 0/288 | 0/288 | 288/288 (2 candidates) |\n| 4 | 0/288 | 0/288 | 288/288 (5 candidates) |\n| 16 | 0/288 | 0/288 | 288/288 (17 candidates) |\n| 64 | 0/288 | 0/288 | 288/288 (65 candidates) |\n| 256 | 0/288 | 0/288 | 288/288 (257 candidates) |\n\nThese are counts over the fixed grid, not independent-trial accuracy estimates. The full CSV keeps each section separate across all 135 section/budget/condition combinations. The JSON retains all 147,456 wrong-key scores, 288 true-key controls, ciphertexts, seeds, candidate hashes and search winners.\n\n## What a zero count means\n\nWe observed no threshold exceedances among these null searches. That does not prove the threshold is safe for a million-key search, a beam decoder, several language models, or repeated human choices about which output to keep. Such procedures offer different opportunities to find a high-scoring candidate and need their own controls.\n\nThe sections share source material, the dictionary is reused, and budgets are nested. Repetition does not turn this into 288 independent texts drawn from all possible plaintext. The null generator is also a chosen model, not an established description of the manuscript. We do not estimate a probability that a manuscript candidate is correct, pool the scores into an anomaly verdict, or infer a cipher family.\n\nThe [decoder alignment controls](#/experiments/decoder-skip-controls) demonstrate a complementary limitation: even a correct key can fail under an unsuitable decoder, and an incorrect rune sequence can pass a language score. Here the positive controls validate only ordinary modular addition and this declared dictionary search.\n\n## Reproduce and inspect\n\nExtract the experiment ZIP with its folder structure intact. Python 3 and its standard library are sufficient; there are no network requests, API calls or paid services.\n\n```text\npython experiments/records/search-maximum-controls/run.py --check\npython scripts/check_search_maximum_controls.py experiments/records/search-maximum-controls/results.json --receipt my-search-audit.json\npython experiments/records/search-maximum-controls/plot.py\n```\n\nThe independent checker imports no producer functions. It rebuilds the source prefixes, null ciphertexts and derived keys, checks every candidate hash, recalculates scores using counted quadgrams, and reconstructs every winner and tie decision. It also checks monotonic maxima and the additional candidate count when the true key is appended. All 288 paired searches passed; human review remains pending.\n\nThe practical lesson is to compare a selected result with controls that undergo the same selection. See [search space and bounds](#/wiki/search-space) and [null models](#/wiki/null-models). A different dictionary, decoder, scoring rule or adaptive workflow should be a documented variant, with the complete search repeated in its controls.\n",
+      "article_path": "experiments/records/search-maximum-controls/article.md",
+      "script_sha256": "4c51eedad0337fca6101d6050f852ad96e76a5dac749eab4a0ace799b438b824"
+    },
+    {
       "id": "selected-phrase-word-sums",
       "title": "Selected phrase and MYRMELEONTIDAE: five word-sum candidates",
       "status": "published",
