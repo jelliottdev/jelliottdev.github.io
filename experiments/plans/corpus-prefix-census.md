@@ -2,7 +2,7 @@
 
 This prepares a descriptive census, not a reproduced historical probability result. The machine-readable plan fixes the source revision, every eligible path, counting conventions and calculator hashes.
 
-The calculator uses exact rational intermediate means and sample variances before serializing floats. Quantiles use linear interpolation. Four regression tests cover literal-space parsing and Unicode units, a hand-computed variance/quartile example, ties and duplicate weighting, and reconstruction of the pinned manuscript summary. Run:
+The calculator uses exact rational intermediate means and sample variances before serializing floats. Quantiles use linear interpolation. Five regression tests cover literal-space parsing and Unicode units, a hand-computed variance/quartile example, ties and duplicate weighting, the integer variance identity over 243 short sequences, and reconstruction of the pinned manuscript summary. Run:
 
 ```text
 python scripts/test_corpus_prefix_statistics.py
@@ -31,3 +31,5 @@ python scripts/check_corpus_prefixes.py /path/to/project-runeberg /path/to/censu
 ```
 
 The receipt path must be new. No successful full-corpus audit is claimed until this command completes. The checker is syntax-checked; its full source-byte validation is pending the finished census.
+
+The variance implementation uses the exact identity `(n * sum(x*x) - sum(x)**2) / (n * (n-1))` with integer sums and a rational final division. This replaces per-item rational subtraction without changing the statistical definition. The plan hashes were updated before the full census execution.

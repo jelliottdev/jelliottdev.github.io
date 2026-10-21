@@ -20,8 +20,11 @@ def summarize(lengths):
         raise ValueError('Need at least two positive integer lengths')
     n = len(lengths)
     ordered = sorted(lengths)
-    mean = Fraction(sum(lengths), n)
-    variance = sum((Fraction(x)-mean)**2 for x in lengths)/(n-1)
+    total = sum(lengths)
+    mean = Fraction(total, n)
+    # Exact integer sufficient statistics avoid thousands of Fraction objects
+    # per text while retaining the same sample-variance definition.
+    variance = Fraction(n*sum(x*x for x in lengths)-total*total, n*(n-1))
     def quantile(q):
         position = (n-1)*q
         low = position.numerator//position.denominator

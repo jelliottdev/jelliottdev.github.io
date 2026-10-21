@@ -2,7 +2,9 @@
 import csv
 from fractions import Fraction
 import json
+import itertools
 from pathlib import Path
+import statistics
 import unittest
 
 from corpus_prefix_statistics import prefix, summarize, tails
@@ -26,6 +28,12 @@ class Conventions(unittest.TestCase):
         self.assertEqual(tails([1,2,2,3],2),{'n':4,'less':1,'equal':2,'greater':1,'inclusive_left_numerator':3,'inclusive_right_numerator':3})
         self.assertEqual(tails([1,1,3],2)['inclusive_left_numerator'],2)
         with self.assertRaises(ValueError):tails([],2)
+
+    def test_integer_variance_identity(self):
+        for lengths in itertools.product((1,2,9),repeat=5):
+            r=summarize(lengths)
+            self.assertEqual(r['sample_variance'],statistics.variance(lengths))
+            self.assertEqual(r['mean'],statistics.mean(lengths))
 
     def test_pinned_manuscript_summary(self):
         report=json.loads((ROOT/'exports/unsolved-word-lengths.json').read_bytes())
