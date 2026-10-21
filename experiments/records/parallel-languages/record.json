@@ -3,7 +3,7 @@
   "title": "Could the unsolved text be another language? Eight aligned translations",
   "status": "published",
   "question": "Which of eight languages, including Welsh, best matches the unsolved text under word-length and fixed-substitution assumptions?",
-  "summary": "Aligned FLORES translations: English is closest by word lengths; Welsh is second with letters and third with GP grouping. No language identification is established.",
+  "summary": "Eight aligned FLORES translations compared under explicit symbol and boundary assumptions. English is closest by word lengths; repetition statistics do not fit a single fixed-substitution explanation.",
   "tags": [
     "language",
     "different language",
@@ -89,9 +89,9 @@
     "exclusions": "No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference."
   },
   "outcome": "inconclusive",
-  "finding": "English has the smallest word-length distance in all three representations and all 200 paired article resamples. Welsh ranks second with letter units, third with GP grouping. Welsh has the closest IoC but none of the eight letter profiles is close to the pooled rune IoC under a fixed substitution.",
+  "finding": "English has the smallest word-length distance in all three representations and all 200 paired article resamples. Other close candidates change order with representation. None of the eight letter profiles is close to the pooled rune IoC under a fixed substitution.",
   "limitations": "Similarity under assumed preserved boundaries and symbol units does not identify plaintext. Modern translated web prose differs in genre; GP grouping is only an orthographic sensitivity and can retain more than 29 symbols. Pages are pooled. Human review pending.",
-  "next_steps": "Independently review the corpus/tokenization; compare a fixed genre-matched parallel corpus, known decoded LP controls and matched target-sized samples before making language claims.",
+  "next_steps": "Independently review tokenization; compare a fixed genre-matched parallel corpus and known decoded LP controls. The shorter aligned-block control is now documented as a related variant; exact target-size calibration remains open.",
   "family": {
     "id": "plaintext-language",
     "title": "Plaintext language comparisons",
@@ -112,7 +112,7 @@
     "command": "python experiments/records/parallel-languages/run.py --check",
     "environment": "Python 3 standard library; offline. Independent count check: python experiments/records/parallel-languages/check.py.",
     "script": "experiments/records/parallel-languages/run.py",
-    "script_sha256": "0786c3427af1da5436f26ed20d0ca856b5090d41839b5b8b66369519cdcf1ebb",
+    "script_sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c",
     "inputs": [
       {
         "path": "experiments/records/parallel-languages/cym_Latn.dev.txt",
@@ -204,7 +204,7 @@
       },
       {
         "path": "experiments/records/parallel-languages/distribution_figure.py",
-        "sha256": "d7100086c9a988860dacb53563480a49abbacc33b7150ba50d4b158d060c08d5"
+        "sha256": "be4fc6823087d0eb41e3e5ce22687149ce02bca24c3f7f50ebf0e99ab7bbf51e"
       }
     ],
     "outputs": [
@@ -214,11 +214,11 @@
       },
       {
         "path": "experiments/records/parallel-languages/comparison.svg",
-        "sha256": "1c1e5a48bc31e8eb7fff986249b7ac160210ac4b84b64ca4818a48987f013687"
+        "sha256": "2cfb9d01ef5cd3ce226e17c1ad20c267eceed040723924f075aebc86727880dd"
       },
       {
         "path": "experiments/records/parallel-languages/distributions.svg",
-        "sha256": "19d0da498cd064b32f5562adf50b5823f0a27331b19d18175cbf6be5ac1c618e"
+        "sha256": "3011607135e5a1a13bc3fed509bb30e42cbd8d77d97ddc0e0ddc177109f54873"
       }
     ]
   },
@@ -232,7 +232,9 @@
       "url": "https://huggingface.co/datasets/facebook/flores"
     }
   ],
-  "related": [],
+  "related": [
+    "parallel-language-blocks"
+  ],
   "visuals": [
     {
       "path": "experiments/records/parallel-languages/comparison.svg",
@@ -240,7 +242,7 @@
     },
     {
       "path": "experiments/records/parallel-languages/distributions.svg",
-      "caption": "Same-scale word-length distributions for the manuscript, English and Welsh. The 9+ bin is for display only; scoring retains the original 16 bins. A close rank can still hide important differences."
+      "caption": "Shared-scale distributions for the manuscript target and all eight languages alphabetically. All languages use identical styling; 9+ is a display group, not the scoring bins."
     }
   ]
 }

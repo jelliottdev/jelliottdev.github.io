@@ -18957,7 +18957,7 @@ The word-reset repetition experiment uses a deliberately different selection: se
 
 
 Could the plaintext be another language?
-The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; Welsh ranks second using letters and third under a GP grouping sensitivity. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
+The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
 
 Sources, related references, and files
 - rune indices and labels
@@ -32045,11 +32045,274 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "parallel-language-blocks",
+  "title": "Language comparison: shorter aligned passage controls",
+  "status": "published",
+  "question": "Does the eight-language length comparison remain stable on shorter aligned passages?",
+  "summary": "Eight disjoint aligned blocks per language. English remains nearest to the manuscript in every block; all 64 known-language controls match their development profiles in each representation.",
+  "tags": [
+    "language",
+    "different language",
+    "not English",
+    "Welsh",
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
+    "Portuguese",
+    "Finnish",
+    "parallel corpus",
+    "word lengths",
+    "sample size",
+    "held out",
+    "FLORES"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [],
+    "representation": "Existing rune-only joined LP2-00–55 token ledger, 2896 tokens, headings included; no decimal tokens. Three shared representations plus a Welsh digraph sensitivity; details in plan.",
+    "procedure": "For each block and representation, compare each language length histogram to the fixed manuscript histogram with the baseline TV metric. Report all scores and ranks, not a posterior. Classify each of 64 language/block profiles by nearest full dev language histogram, separately per representation; publish confusion matrices and individual decisions. Dev is unchanged; no fitting or tuning.",
+    "parameters": "Partition all 1012 FLORES devtest sentences into eight consecutive disjoint blocks: first four 127 sentences, last four 126. Same sentence ranges for every language. Fixed before block scoring. Three unchanged representations; no bootstrap.",
+    "exclusions": "Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity. Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference."
+  },
+  "outcome": "inconclusive",
+  "finding": "English has the smallest manuscript length-distance in all eight blocks in each representation. Known-language reference matching succeeds in 64/64 decisions per representation. This is stability within FLORES, not proof of plaintext language.",
+  "limitations": "Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference. Genre, cipher and transcription uncertainty remain; human review pending.",
+  "next_steps": "Use separately fixed genre-matched parallel material and known decoded LP controls; do not treat correlated benchmark decisions as a calibrated language probability.",
+  "family": {
+    "id": "plaintext-language",
+    "title": "Plaintext language comparisons",
+    "question": "What can preserved statistics tell us about plaintext language?",
+    "baseline": "parallel-languages"
+  },
+  "variant": {
+    "label": "Eight shorter aligned blocks with known-language controls",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Total variation distance between word-length histograms, bins 1..15 and16+. Lower is closer. Rank eight languages separately for each of first three representations. Never combine metrics into a language probability. IoC and within-word adjacent-identical fraction; separate distances under fixed bijective substitution only. Distinct symbol inventory reported. Dev language profiles classify each whole devtest language by word-length distance (8 held-out documents per representation). No tuning after scoring.",
+        "after": "For each block and representation, compare each language length histogram to the fixed manuscript histogram with the baseline TV metric. Report all scores and ranks, not a posterior. Classify each of 64 language/block profiles by nearest full dev language histogram, separately per representation; publish confusion matrices and individual decisions. Dev is unchanged; no fitting or tuning.",
+        "reason": "Evaluate shorter aligned passages while retaining the baseline corpus, target and symbol conventions."
+      },
+      {
+        "field": "parameters",
+        "before": "Eight fixed languages; all 997 dev and 1012 devtest aligned sentences; 281 devtest article clusters; 200 paired bootstrap draws; seed 3301; 16 length bins.",
+        "after": "Partition all 1012 FLORES devtest sentences into eight consecutive disjoint blocks: first four 127 sentences, last four 126. Same sentence ranges for every language. Fixed before block scoring. Three unchanged representations; no bootstrap.",
+        "reason": "Evaluate shorter aligned passages while retaining the baseline corpus, target and symbol conventions."
+      },
+      {
+        "field": "exclusions",
+        "before": "No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference.",
+        "after": "Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity. Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference.",
+        "reason": "Evaluate shorter aligned passages while retaining the baseline corpus, target and symbol conventions."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent regex tokenization and exact rational distance checks for all 192 profiles; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/parallel-language-blocks/run.py --check",
+    "environment": "Python 3 standard library, offline. Independent check: python experiments/records/parallel-language-blocks/check.py.",
+    "script": "experiments/records/parallel-language-blocks/run.py",
+    "script_sha256": "db2005dd2fbebe5e0afe202cc5a7aecc4ca60f9ae8a3b059b6deb028220183d5",
+    "inputs": [
+      {
+        "path": "experiments/records/parallel-languages/cym_Latn.dev.txt",
+        "sha256": "384b2d60a58ffa69686fd0a786cab0797d5a10aa774223087661ce4ee34ea747"
+      },
+      {
+        "path": "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+        "sha256": "94bdd16fe4141e5bef227bcd49dd283e1397e993ef0ab3e8db281175e536551f"
+      },
+      {
+        "path": "experiments/records/parallel-languages/deu_Latn.dev.txt",
+        "sha256": "12fac774c6f79d966774a1829648a6e107700662e9e7b9e31ad08541382b97aa"
+      },
+      {
+        "path": "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+        "sha256": "9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2"
+      },
+      {
+        "path": "experiments/records/parallel-languages/eng_Latn.dev.txt",
+        "sha256": "51a25f527fd81f428b6933d85a2f5e5544af92aa82042c7fbf0c4120327fba0a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+        "sha256": "612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fin_Latn.dev.txt",
+        "sha256": "9769916f6411822e510b47b1aac01fb123061a0da9ef14a621540b81c490ef4a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fin_Latn.devtest.txt",
+        "sha256": "26b0906ca080c5602eec4a769b0ac24169ca8fa484f95fc8f41ca5212fa2632c"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fra_Latn.dev.txt",
+        "sha256": "7c1e1043b9d8cc6cb6fd4388ce068060f36518fd3597357a381cfdbe8ce5ab00"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+        "sha256": "82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42"
+      },
+      {
+        "path": "experiments/records/parallel-languages/ita_Latn.dev.txt",
+        "sha256": "192429adab7b6c43f75db8363151a91b7a21cdb83bafc2a1d5ee2f1dec7f81c6"
+      },
+      {
+        "path": "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+        "sha256": "4166da51aba285736535916870142d7e9491494cee52b1db0808533399796a94"
+      },
+      {
+        "path": "experiments/records/parallel-languages/por_Latn.dev.txt",
+        "sha256": "cf748f9311660dbfc4dbaad9301c98865c6b6f72fba86ee496e7b00e3472575e"
+      },
+      {
+        "path": "experiments/records/parallel-languages/por_Latn.devtest.txt",
+        "sha256": "1a04351c9b8c99a1808bb5da9051c06ffd1d65a5fe7236e40a80568abdbc67e7"
+      },
+      {
+        "path": "experiments/records/parallel-languages/spa_Latn.dev.txt",
+        "sha256": "9a99ddc459542da2d980b21cc049e799172545938cb02a5e7c92ebd8234b2121"
+      },
+      {
+        "path": "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+        "sha256": "40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9"
+      },
+      {
+        "path": "experiments/records/parallel-languages/metadata_dev.tsv",
+        "sha256": "26e7b00913809be16aa2590e5e252f0a54832eef2de96b3948876878995ec771"
+      },
+      {
+        "path": "experiments/records/parallel-languages/metadata_devtest.tsv",
+        "sha256": "8edac47f861fcf6b54dad2068c10ba8f741da8b8676861c6bc27fcd9f5483b36"
+      },
+      {
+        "path": "exports/unsolved-word-tokens.json",
+        "sha256": "fd6a8d02d472567a06fc85384d4961971cb67c93720b3d2b0ad7c53ec39cdb8a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/plan.json",
+        "sha256": "9b5236fcafbd2931ab1d4b36438a50b89b4b090243ada5e03501704041d378f4"
+      },
+      {
+        "path": "experiments/records/parallel-languages/SOURCE.txt",
+        "sha256": "0ac2331dc1c4b5045c672a9a16e3044c34481ebfe6320eb0f08a620fca6f5056"
+      },
+      {
+        "path": "experiments/records/parallel-languages/run.py",
+        "sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c"
+      },
+      {
+        "path": "experiments/records/parallel-language-blocks/plan.json",
+        "sha256": "3ac0b548787d75b320d07ff7225177b514db2502a81b43516c09e1ee5f67f216"
+      },
+      {
+        "path": "experiments/records/parallel-language-blocks/check.py",
+        "sha256": "842223726e807cf6c2be071c4f97d258913d41fe8498e1437eed8766d647e2e8"
+      },
+      {
+        "path": "experiments/records/parallel-languages/check.py",
+        "sha256": "4ad3269e4426d09298160426f47d85108d2a0edb0356b5945a20575c6d128320"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/parallel-language-blocks/results.json",
+        "sha256": "0c8e9c64ad21773739c085afbb6ecb8eb0608d25be28e5f25c64893a8f22d0e8"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "FLORES-200 official documentation",
+      "url": "https://github.com/facebookresearch/flores/blob/main/flores200/README.md"
+    },
+    {
+      "label": "Dataset card, attribution and CC BY-SA 4.0 license",
+      "url": "https://huggingface.co/datasets/facebook/flores"
+    }
+  ],
+  "related": [
+    "parallel-languages"
+  ],
+  "visuals": [],
+  "article": "## What changed from the baseline\n\nThe [full-corpus comparison](#/experiments/parallel-languages) used 1,012 evaluation sentences per language. Here we divide that evaluation split into **eight consecutive, disjoint blocks** and compare shorter passages. Each block contains the same sentence IDs in all eight languages. No sentences were chosen because their statistics looked promising.\n\nThe first four blocks contain 127 sentences each, and the last four contain 126. Exact one-based sentence ranges are recorded in the results. The plan was committed before block scoring; its dependency hash was then refreshed for a chart-only change in the baseline, before scoring began. The tokenization and distance definitions are unchanged.\n\n## Results\n\n**English is the closest of the eight language profiles to the pooled manuscript in all eight blocks, in each of the three representations.** This supports the stability of that relative ranking across these shorter passages. It does not identify the plaintext language.\n\nUsing letter units, the block sizes and manuscript distances are:\n\n| Language | Tokens per block, range | Word-length distance, range |\n| --- | ---: | ---: |\n| English | 2,613–3,002 | 0.0710–0.1035 |\n| Finnish | 1,927–2,105 | 0.3726–0.4316 |\n| French | 3,047–3,318 | 0.1731–0.2079 |\n| German | 2,623–2,927 | 0.1696–0.1961 |\n| Italian | 2,880–3,181 | 0.2274–0.2467 |\n| Portuguese | 2,818–3,147 | 0.2007–0.2300 |\n| Spanish | 3,106–3,467 | 0.2091–0.2402 |\n| Welsh | 2,884–3,206 | 0.1416–0.1940 |\n\nThe target has 2,896 rune tokens. These are smaller aligned passages, not exactly size-matched samples: their token counts range from **1,927 to 3,467**. Translating the same content changes word counts. Keeping the same sentence ranges preserves the content control; truncating every language at exactly 2,896 words would no longer compare exactly the same passages. This design documents that tradeoff rather than hiding it.\n\n## Does the statistic recognize known languages at this scale?\n\nFor each block, we compare its word-length histogram against all eight full development-language histograms. The closest development profile is the corresponding language in **64 of 64 decisions**, separately for letter units, accent-folded letters, and GP grouping. The raw report includes every distance and the full confusion matrices, including zeros.\n\nThat is a control on these eight translated languages within FLORES. It is not a success rate for cipher language identification. The corpus shares translation practices and source genre; the manuscript does not. The three representations also reuse the same text and are not independent replications.\n\n## Bounds and limitations\n\n- All 1,012 evaluation sentences are used once per language, with no overlap between blocks. Development text is used only for the reference profiles.\n- A source article can cross a block boundary. Blocks are therefore not independent draws, and the 64 decisions are not treated as independent trials. No binomial accuracy interval or language posterior is calculated.\n- The manuscript remains pooled LP2-00–55, with headings and the baseline boundary convention. This does not test each section separately.\n- Word-length comparison requires preserved boundaries and one ciphertext rune per counted plaintext unit. GP grouping remains an orthographic sensitivity, not a validated phonetic transcription.\n- No genre-matched corpus or known decoded LP control is included. Those remain separate follow-ups.\n\n## Reproduce\n\nThe experiment download includes the aligned corpus, token ledger, baseline helper, independent tokenizer, frozen plan and result ledger. Python 3 standard library only; no network, API or model is used.\n\n```sh\npython experiments/records/parallel-language-blocks/run.py --check\npython experiments/records/parallel-language-blocks/check.py\n```\n\nThe first command verifies input hashes and recomputes the full report. The second independently reconstructs all 192 block profiles with a regex tokenizer and exact rational total-variation distances, checks all nearest-reference decisions, and verifies that the block ranges cover the evaluation sentences exactly once. Human review is pending.\n\n[Results and confusion matrices](experiments/records/parallel-language-blocks/results.json) · [Frozen plan](experiments/records/parallel-language-blocks/plan.json) · [Baseline distributions and source attribution](#/experiments/parallel-languages)\n\nFLORES source text and this derived account are offered under CC BY-SA 4.0. See the source attribution included with the baseline files.\n",
+  "article_path": "experiments/records/parallel-language-blocks/article.md",
+  "script_sha256": "db2005dd2fbebe5e0afe202cc5a7aecc4ca60f9ae8a3b059b6deb028220183d5"
+}
+
+---
+
+{
   "id": "parallel-languages",
   "title": "Could the unsolved text be another language? Eight aligned translations",
   "status": "published",
   "question": "Which of eight languages, including Welsh, best matches the unsolved text under word-length and fixed-substitution assumptions?",
-  "summary": "Aligned FLORES translations: English is closest by word lengths; Welsh is second with letters and third with GP grouping. No language identification is established.",
+  "summary": "Eight aligned FLORES translations compared under explicit symbol and boundary assumptions. English is closest by word lengths; repetition statistics do not fit a single fixed-substitution explanation.",
   "tags": [
     "language",
     "different language",
@@ -32135,9 +32398,9 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "exclusions": "No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference."
   },
   "outcome": "inconclusive",
-  "finding": "English has the smallest word-length distance in all three representations and all 200 paired article resamples. Welsh ranks second with letter units, third with GP grouping. Welsh has the closest IoC but none of the eight letter profiles is close to the pooled rune IoC under a fixed substitution.",
+  "finding": "English has the smallest word-length distance in all three representations and all 200 paired article resamples. Other close candidates change order with representation. None of the eight letter profiles is close to the pooled rune IoC under a fixed substitution.",
   "limitations": "Similarity under assumed preserved boundaries and symbol units does not identify plaintext. Modern translated web prose differs in genre; GP grouping is only an orthographic sensitivity and can retain more than 29 symbols. Pages are pooled. Human review pending.",
-  "next_steps": "Independently review the corpus/tokenization; compare a fixed genre-matched parallel corpus, known decoded LP controls and matched target-sized samples before making language claims.",
+  "next_steps": "Independently review tokenization; compare a fixed genre-matched parallel corpus and known decoded LP controls. The shorter aligned-block control is now documented as a related variant; exact target-size calibration remains open.",
   "family": {
     "id": "plaintext-language",
     "title": "Plaintext language comparisons",
@@ -32158,7 +32421,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "command": "python experiments/records/parallel-languages/run.py --check",
     "environment": "Python 3 standard library; offline. Independent count check: python experiments/records/parallel-languages/check.py.",
     "script": "experiments/records/parallel-languages/run.py",
-    "script_sha256": "0786c3427af1da5436f26ed20d0ca856b5090d41839b5b8b66369519cdcf1ebb",
+    "script_sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c",
     "inputs": [
       {
         "path": "experiments/records/parallel-languages/cym_Latn.dev.txt",
@@ -32250,7 +32513,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       },
       {
         "path": "experiments/records/parallel-languages/distribution_figure.py",
-        "sha256": "d7100086c9a988860dacb53563480a49abbacc33b7150ba50d4b158d060c08d5"
+        "sha256": "be4fc6823087d0eb41e3e5ce22687149ce02bca24c3f7f50ebf0e99ab7bbf51e"
       }
     ],
     "outputs": [
@@ -32260,11 +32523,11 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       },
       {
         "path": "experiments/records/parallel-languages/comparison.svg",
-        "sha256": "1c1e5a48bc31e8eb7fff986249b7ac160210ac4b84b64ca4818a48987f013687"
+        "sha256": "2cfb9d01ef5cd3ce226e17c1ad20c267eceed040723924f075aebc86727880dd"
       },
       {
         "path": "experiments/records/parallel-languages/distributions.svg",
-        "sha256": "19d0da498cd064b32f5562adf50b5823f0a27331b19d18175cbf6be5ac1c618e"
+        "sha256": "3011607135e5a1a13bc3fed509bb30e42cbd8d77d97ddc0e0ddc177109f54873"
       }
     ]
   },
@@ -32278,7 +32541,9 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "url": "https://huggingface.co/datasets/facebook/flores"
     }
   ],
-  "related": [],
+  "related": [
+    "parallel-language-blocks"
+  ],
   "visuals": [
     {
       "path": "experiments/records/parallel-languages/comparison.svg",
@@ -32286,12 +32551,12 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     },
     {
       "path": "experiments/records/parallel-languages/distributions.svg",
-      "caption": "Same-scale word-length distributions for the manuscript, English and Welsh. The 9+ bin is for display only; scoring retains the original 16 bins. A close rank can still hide important differences."
+      "caption": "Shared-scale distributions for the manuscript target and all eight languages alphabetically. All languages use identical styling; 9+ is a display group, not the scoring bins."
     }
   ],
-  "article": "## What this comparison tells us\n\n**English is closest by word lengths among these eight languages; Welsh comes second.** When a fixed GP-style grouping is applied to all eight, English remains closest and Welsh moves to third, just behind German. This is a comparison of statistical shapes under stated assumptions. It does not identify the plaintext or decipher a word.\n\nThe experiment uses translations of the **same 997 development sentences and 1,012 evaluation sentences** from FLORES-200. The languages were fixed before scoring: English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. They give a manageable Latin-script comparison without adding a transliteration model for other scripts. They are not a shortlist inferred from the manuscript, and the ranking is not a search across all languages.\n\nThe plan and source files were committed in `738a812` before any scores were calculated. It is a predeclared comparison within this project, not an external preregistration. Human review is pending.\n\n## Word-length results\n\nThe distance is **total variation** between word-length distributions: half the sum of their absolute frequency differences. Zero means identical distributions; one means no overlap. We count lengths 1 through 15 separately and put longer words in a final 16+ bin. A value of 0.084 is a distance, not an 8.4% chance of anything.\n\n| Language | Letters | GP grouping sensitivity |\n| --- | ---: | ---: |\n| English | 0.0840 | 0.1148 |\n| Welsh | 0.1721 | 0.1731 |\n| German | 0.1757 | 0.1708 |\n| French | 0.1827 | 0.1759 |\n| Portuguese | 0.2131 | 0.2058 |\n| Spanish | 0.2240 | 0.2127 |\n| Italian | 0.2359 | 0.2311 |\n| Finnish | 0.4022 | 0.3927 |\n\n[Open the comparison chart](experiments/records/parallel-languages/comparison.svg). The chart shows the same results with article-resampling ranges. The JSON also contains the accent-folded letter comparison, which keeps the same language order.\n\nWelsh therefore does rank relatively high in this particular test. Its second-place result should not be exaggerated: it is farther from the manuscript than English, and the position changes with the representation. Giving Welsh its own mechanical digraph units—CH, DD, FF, NG, LL, PH, RH and TH—reduces its distance to **0.1466**. This is a separate sensitivity check, not permission to choose whichever conversion wins. Digraph parsing across morphemes and loanwords is not resolved here.\n\n## Why the rankings differ\n\nThe distributions show more than the rank alone. **Three-rune tokens make up 24.86% of the manuscript**, compared with 19.07% three-letter words in the English sample and 12.93% in Welsh. At length one, the manuscript has 2.87%, English 2.56%, and Welsh 10.40%.\n\nThus Welsh's relatively high position does not mean its most distinctive short-word frequencies match. Its one- and three-letter bins together contribute more than half of its total variation distance from the manuscript. English is closer overall, but still has substantially fewer three-letter words than the manuscript has three-rune tokens. That residual difference needs explanation; a first-place rank does not make it disappear.\n\n[Open the distribution chart](experiments/records/parallel-languages/distributions.svg). All three panels use the same vertical scale. Lengths 9 and above are combined only to make the phone-sized chart legible; the experiment still scores its original 16 bins. English and Welsh are shown to explain the leading result and the requested Welsh comparison, not as a new two-language candidate selection. All eight full distributions remain in the results JSON.\n\n## The assumptions that make lengths useful\n\nThis comparison requires manuscript word boundaries to preserve plaintext word boundaries, and one counted plaintext unit to correspond to one ciphertext rune. A position-dependent substitution can preserve lengths even when letter frequencies change. Inserted nulls, deleted symbols, word splitting, different spacing, or units representing syllables can break the comparison.\n\nThe manuscript target is the existing [rune-token ledger](exports/unsolved-word-tokens.json): **2,896 tokens and 12,956 runes from LP2-00–55**, including headings. Line wraps and slash wraps are removed; tokens can continue across page boundaries. Internal apostrophes count zero, and decimal labels are excluded. See [word lengths](#/wiki/word-lengths) for the exact boundary convention and its historical alternatives. Pooling the pages assumes their aggregate is meaningful; it does not establish that every section has one language or cipher.\n\nFor FLORES, letters are lowercased and normalized to NFC. Alphabetic runs are words; internal straight or curly apostrophes are removed without splitting the word. Hyphens and other nonletters separate words. Numbers contribute no letters. Each sentence is tokenized independently. This is an explicit mechanical convention, not a linguist's definition of a word. The comparison retains every aligned sentence; it does not truncate each language to a different passage to equalize word totals.\n\nThe GP sensitivity folds combining accents and greedily groups ING, TH, EO, NG, OE, AE, IA, IO and EA, longest first. ING/NG, IO/IA, K/C and Z/S share symbols. Other letters remain. **This is not a validated translation into Gematria Primus.** Pronunciation, ambiguous segmentation and unsupported letters remain unresolved. The raw-letter and GP profiles can contain more than 29 distinct symbols, so they cannot be literal bijective mappings into a 29-rune alphabet as written. This inventory mismatch is reported in the downloadable results rather than silently repaired by deleting rare letters.\n\n## Repetition gives a different test\n\nIoC is the probability that two different sampled positions contain the same symbol. Adjacent repetition here counts equal neighbors **within words only**. Both require stronger assumptions than lengths: equality must survive a fixed one-to-one substitution. They are not preserved by a general polyalphabetic cipher.\n\n| Text, using letter units | IoC | Equal adjacent pairs |\n| --- | ---: | ---: |\n| Unsolved rune target | 0.03448 | 0.63% |\n| English | 0.06597 | 2.42% |\n| Welsh | 0.06387 | 5.74% |\n| German | 0.07344 | 2.33% |\n| French | 0.06912 | 2.42% |\n| Portuguese | 0.07072 | 1.00% |\n| Spanish | 0.07111 | 0.77% |\n| Italian | 0.07305 | 4.57% |\n| Finnish | 0.07282 | 9.31% |\n\nWelsh has the closest letter IoC of the eight, but its **0.06387** is still far from the target's **0.03448**. Its repeated-letter rate is also much higher. None of these profiles supplies a close single-substitution explanation of the pooled manuscript. The GP sensitivity does not remove that discrepancy. Spanish is closest on the adjacent-repeat measure, yet has a much poorer word-length match. These conflicting rankings are why we do not blend the measures into an unexplained “language likelihood.”\n\nThis does not eliminate Welsh, English or any other language under a different cipher. It weakens the proposed fixed-substitution comparison under these text and unit conventions. See [cipher invariants](#/wiki/cipher-invariants) for what different transformations preserve.\n\n## Controls and sampling sensitivity\n\nEach development-language word-length profile was compared with each evaluation-language profile. The nearest development profile identified the corresponding evaluation language **8 out of 8 times in each of the three representations**. That is a useful check that this dataset and statistic can distinguish the chosen languages at this sample size. It is not 100% accuracy on unknown manuscripts: there are only eight whole-document controls, drawn from the same benchmark, and they are much longer than the target.\n\nFor the error bars we resample the **281 source-article URL groups** in the evaluation split, with replacement, 200 times using seed 3301. All sentences from a sampled article are kept. The same article draw is used for all eight languages, preserving the matched-content comparison and avoiding treating every sentence as independent. English has the smallest length distance in all 200 draws in all three representations. This is stability to this corpus resampling—not a 100% probability that the manuscript is English. The target transcription is held fixed; these intervals omit uncertainty about its boundaries, genre and cipher.\n\nFLORES contains translated web material. It controls subject matter across languages, but not the difference between that material and Liber Primus's philosophical style, historical spelling or possible nonstandard prose. Translation practices can also affect lengths. A next experiment should use a separately fixed, genre-matched parallel corpus and known decoded LP passages, with a defensible conversion rule and matched target-sized samples. Those are follow-ups, not controls already completed here.\n\n## Reproduce it\n\nDownload this experiment's bundle. It includes the source translations, source-article metadata, plan, token ledger, scripts, result JSON and chart. No API, account, model download or network request is needed to rerun the analysis; Python 3's standard library is enough.\n\n```sh\npython experiments/records/parallel-languages/run.py --check\npython experiments/records/parallel-languages/check.py\npython experiments/records/parallel-languages/distribution_figure.py --check\n```\n\nThe first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, Welsh digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).\n\n[Raw results](experiments/records/parallel-languages/results.json) · [Frozen plan](experiments/records/parallel-languages/plan.json) · [Source attribution](experiments/records/parallel-languages/SOURCE.txt)\n\n## Sources and reuse\n\n- [FLORES-200 documentation](https://github.com/facebookresearch/flores/blob/main/flores200/README.md): aligned translation benchmark and language list.\n- [Original archive](https://dl.fbaipublicfiles.com/nllb/flores200_dataset.tar.gz): exact extracted translation and metadata files; archive and extracted-file hashes are recorded in the plan.\n- [Dataset card and license](https://huggingface.co/datasets/facebook/flores): Creative Commons Attribution-ShareAlike 4.0 International. Source translations are redistributed unchanged. This derived analysis and its article are also offered under CC BY-SA 4.0.\n",
+  "article": "## What this comparison tells us\n\n**English is closest by word lengths among these eight languages.** The ordering of other close candidates changes when a fixed GP-style grouping is applied to all eight. This is a comparison of statistical shapes under stated assumptions. It does not identify the plaintext or decipher a word.\n\nThe experiment uses translations of the **same 997 development sentences and 1,012 evaluation sentences** from FLORES-200. The languages were fixed before scoring: English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. They give a manageable Latin-script comparison without adding a transliteration model for other scripts. They are not a shortlist inferred from the manuscript, and the ranking is not a search across all languages.\n\nThe plan and source files were committed in `738a812` before any scores were calculated. It is a predeclared comparison within this project, not an external preregistration. Human review is pending.\n\n## Word-length results\n\nThe distance is **total variation** between word-length distributions: half the sum of their absolute frequency differences. Zero means identical distributions; one means no overlap. We count lengths 1 through 15 separately and put longer words in a final 16+ bin. A value of 0.084 is a distance, not an 8.4% chance of anything.\n\n| Language | Letters | GP grouping sensitivity |\n| --- | ---: | ---: |\n| English | 0.0840 | 0.1148 |\n| Welsh | 0.1721 | 0.1731 |\n| German | 0.1757 | 0.1708 |\n| French | 0.1827 | 0.1759 |\n| Portuguese | 0.2131 | 0.2058 |\n| Spanish | 0.2240 | 0.2127 |\n| Italian | 0.2359 | 0.2311 |\n| Finnish | 0.4022 | 0.3927 |\n\n[Open the comparison chart](experiments/records/parallel-languages/comparison.svg). The chart shows the same results with article-resampling ranges. The JSON also contains the accent-folded letter comparison, which keeps the same language order.\n\nThe ordering depends on the counting convention. A language ranking is conditional on both the corpus and the assumed relationship between plaintext units and ciphertext runes. The full table keeps every tested candidate visible.\n\n## Why the rankings differ\n\nThe manuscript has a pronounced peak at length three: **24.86% of its tokens contain three runes**. The language profiles differ in how much mass they place at each length. The distribution chart shows the manuscript first, followed by all eight languages alphabetically, using identical scales and the same styling for every language.\n\nThe first-place result still has a visible mismatch: English has 19.07% three-letter words, below the manuscript's three-rune share. A ranking measures relative closeness among the tested profiles; it does not establish that the nearest profile is a good explanation of the ciphertext.\n\n[Open all nine distribution panels](experiments/records/parallel-languages/distributions.svg). Lengths 9 and above are combined only for display; scoring retains the original 16 bins. Every full distribution is also available in the results JSON.\n\n## The assumptions that make lengths useful\n\nThis comparison requires manuscript word boundaries to preserve plaintext word boundaries, and one counted plaintext unit to correspond to one ciphertext rune. A position-dependent substitution can preserve lengths even when letter frequencies change. Inserted nulls, deleted symbols, word splitting, different spacing, or units representing syllables can break the comparison.\n\nThe manuscript target is the existing [rune-token ledger](exports/unsolved-word-tokens.json): **2,896 tokens and 12,956 runes from LP2-00–55**, including headings. Line wraps and slash wraps are removed; tokens can continue across page boundaries. Internal apostrophes count zero, and decimal labels are excluded. See [word lengths](#/wiki/word-lengths) for the exact boundary convention and its historical alternatives. Pooling the pages assumes their aggregate is meaningful; it does not establish that every section has one language or cipher.\n\nFor FLORES, letters are lowercased and normalized to NFC. Alphabetic runs are words; internal straight or curly apostrophes are removed without splitting the word. Hyphens and other nonletters separate words. Numbers contribute no letters. Each sentence is tokenized independently. This is an explicit mechanical convention, not a linguist's definition of a word. The comparison retains every aligned sentence; it does not truncate each language to a different passage to equalize word totals.\n\nThe GP sensitivity folds combining accents and greedily groups ING, TH, EO, NG, OE, AE, IA, IO and EA, longest first. ING/NG, IO/IA, K/C and Z/S share symbols. Other letters remain. **This is not a validated translation into Gematria Primus.** Pronunciation, ambiguous segmentation and unsupported letters remain unresolved. A supplementary mechanical Welsh-digraph calculation is retained in the raw data as a representation check, not as a separate candidate category or a preferred model. It groups CH, DD, FF, NG, LL, PH, RH and TH and gives a length distance of 0.1466; it does not resolve morphological parsing. The raw-letter and GP profiles can contain more than 29 distinct symbols, so they cannot be literal bijective mappings into a 29-rune alphabet as written. This inventory mismatch is reported in the downloadable results rather than silently repaired by deleting rare letters.\n\n## Repetition gives a different test\n\nIoC is the probability that two different sampled positions contain the same symbol. Adjacent repetition here counts equal neighbors **within words only**. Both require stronger assumptions than lengths: equality must survive a fixed one-to-one substitution. They are not preserved by a general polyalphabetic cipher.\n\n| Text, using letter units | IoC | Equal adjacent pairs |\n| --- | ---: | ---: |\n| Unsolved rune target | 0.03448 | 0.63% |\n| English | 0.06597 | 2.42% |\n| Welsh | 0.06387 | 5.74% |\n| German | 0.07344 | 2.33% |\n| French | 0.06912 | 2.42% |\n| Portuguese | 0.07072 | 1.00% |\n| Spanish | 0.07111 | 0.77% |\n| Italian | 0.07305 | 4.57% |\n| Finnish | 0.07282 | 9.31% |\n\nThe language profiles have letter IoCs between **0.06387 and 0.07344**, far from the target's **0.03448**. None of these profiles supplies a close single-substitution explanation of the pooled manuscript. The GP sensitivity does not remove that discrepancy. Spanish is closest on the adjacent-repeat measure, yet has a much poorer word-length match. These conflicting rankings are why we do not blend the measures into an unexplained “language likelihood.”\n\nThis does not eliminate Welsh, English or any other language under a different cipher. It weakens the proposed fixed-substitution comparison under these text and unit conventions. See [cipher invariants](#/wiki/cipher-invariants) for what different transformations preserve.\n\n## Controls and sampling sensitivity\n\nEach development-language word-length profile was compared with each evaluation-language profile. The nearest development profile identified the corresponding evaluation language **8 out of 8 times in each of the three representations**. That is a useful check that this dataset and statistic can distinguish the chosen languages at this sample size. It is not 100% accuracy on unknown manuscripts: there are only eight whole-document controls, drawn from the same benchmark, and they are much longer than the target.\n\nFor the error bars we resample the **281 source-article URL groups** in the evaluation split, with replacement, 200 times using seed 3301. All sentences from a sampled article are kept. The same article draw is used for all eight languages, preserving the matched-content comparison and avoiding treating every sentence as independent. English has the smallest length distance in all 200 draws in all three representations. This is stability to this corpus resampling—not a 100% probability that the manuscript is English. The target transcription is held fixed; these intervals omit uncertainty about its boundaries, genre and cipher.\n\nFLORES contains translated web material. It controls subject matter across languages, but not the difference between that material and Liber Primus's philosophical style, historical spelling or possible nonstandard prose. Translation practices can also affect lengths. A next experiment should use a separately fixed, genre-matched parallel corpus and known decoded LP passages, with a defensible conversion rule and matched target-sized samples. Those remain follow-ups. A separate [shorter aligned-block variant](#/experiments/parallel-language-blocks) now checks eight disjoint evaluation blocks per language; it preserves matching sentences rather than enforcing exactly equal word counts.\n\n## Reproduce it\n\nDownload this experiment's bundle. It includes the source translations, source-article metadata, plan, token ledger, scripts, result JSON and chart. No API, account, model download or network request is needed to rerun the analysis; Python 3's standard library is enough.\n\n```sh\npython experiments/records/parallel-languages/run.py --check\npython experiments/records/parallel-languages/check.py\npython experiments/records/parallel-languages/distribution_figure.py --check\n```\n\nThe first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, additional digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).\n\n[Raw results](experiments/records/parallel-languages/results.json) · [Frozen plan](experiments/records/parallel-languages/plan.json) · [Source attribution](experiments/records/parallel-languages/SOURCE.txt)\n\n## Sources and reuse\n\n- [FLORES-200 documentation](https://github.com/facebookresearch/flores/blob/main/flores200/README.md): aligned translation benchmark and language list.\n- [Original archive](https://dl.fbaipublicfiles.com/nllb/flores200_dataset.tar.gz): exact extracted translation and metadata files; archive and extracted-file hashes are recorded in the plan.\n- [Dataset card and license](https://huggingface.co/datasets/facebook/flores): Creative Commons Attribution-ShareAlike 4.0 International. Source translations are redistributed unchanged. This derived analysis and its article are also offered under CC BY-SA 4.0.\n",
   "article_path": "experiments/records/parallel-languages/article.md",
-  "script_sha256": "0786c3427af1da5436f26ed20d0ca856b5090d41839b5b8b66369519cdcf1ebb"
+  "script_sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c"
 }
 
 ---

@@ -11,12 +11,13 @@ HERE=Path(__file__).resolve().parent
 
 def figure(report):
     selected=[('Manuscript: rune units',report['target'],'#263b45')]
-    for name,color in [('English','#315f73'),('Welsh','#99642d')]:
+    for name in sorted(x['language'] for x in report['modes']['letters']['ranking']):
+        color='#315f73'
         selected.append((name+': letter units',next(x for x in report['modes']['letters']['ranking'] if x['language']==name),color))
-    out=['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="700" viewBox="0 0 360 700" role="img" aria-labelledby="title desc">',
+    out=['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="1828" viewBox="0 0 360 1828" role="img" aria-labelledby="title desc">',
          '<title id="title">Where the length profiles differ</title>',
-         '<desc id="desc">Three panels share a zero to thirty percent scale. Three-unit tokens are most common in the manuscript. Welsh has more one-letter words and fewer three-letter words. Lengths nine and above are combined for display only.</desc>',
-         '<rect width="360" height="700" fill="#faf9f5"/><g font-family="Arial,sans-serif" fill="#263b45">',
+         '<desc id="desc">Nine panels share a zero to forty percent scale: the manuscript target and all eight languages in alphabetical order. All languages use the same blue bars. Lengths nine and above are combined for display only.</desc>',
+         '<rect width="360" height="1828" fill="#faf9f5"/><g font-family="Arial,sans-serif" fill="#263b45">',
          '<text x="14" y="27" font-size="19">Where the profiles differ</text>',
          '<text x="14" y="49" font-size="14">Percent of words; same scale in each panel</text>']
     for panel,(label,data,color) in enumerate(selected):
@@ -24,17 +25,17 @@ def figure(report):
         values=data['histogram'][:8]+[sum(data['histogram'][8:])]
         assert sum(values)==data['tokens']
         out.append(f'<text x="14" y="{top}" font-size="16">{label}</text>')
-        for tick in (0,10,20,30):
-            y=baseline-tick*3.4
+        for tick in (0,10,20,30,40):
+            y=baseline-tick*2.5
             out.append(f'<path d="M40 {y}H344" stroke="#d7dbda"/><text x="34" y="{y+4}" text-anchor="end" font-size="12">{tick}</text>')
         for i,count in enumerate(values):
-            percent=100*count/data['tokens'];x=44+i*33;height=percent*3.4
+            percent=100*count/data['tokens'];x=44+i*33;height=percent*2.5
             out.append(f'<rect x="{x}" y="{baseline-height:.3f}" width="23" height="{height:.3f}" fill="{color}"/>')
             out.append(f'<text x="{x+11.5}" y="{baseline-height-4:.3f}" text-anchor="middle" font-size="11">{percent:.1f}</text>')
             out.append(f'<text x="{x+11.5}" y="{baseline+18}" text-anchor="middle" font-size="13">{i+1 if i<8 else "9+"}</text>')
-    out += ['<text x="14" y="645" font-size="14">Horizontal axis: counted units per word.</text>',
-            '<text x="14" y="667" font-size="13">9+ is a display group, not the scoring bins.</text>',
-            '<text x="14" y="688" font-size="13">Different units require a cipher assumption.</text></g></svg>']
+    out += ['<text x="14" y="1773" font-size="14">Horizontal axis: counted units per word.</text>',
+            '<text x="14" y="1795" font-size="13">9+ is a display group, not the scoring bins.</text>',
+            '<text x="14" y="1816" font-size="13">Different units require a cipher assumption.</text></g></svg>']
     return '\n'.join(out)+'\n'
 
 

@@ -1,6 +1,6 @@
 ## What this comparison tells us
 
-**English is closest by word lengths among these eight languages; Welsh comes second.** When a fixed GP-style grouping is applied to all eight, English remains closest and Welsh moves to third, just behind German. This is a comparison of statistical shapes under stated assumptions. It does not identify the plaintext or decipher a word.
+**English is closest by word lengths among these eight languages.** The ordering of other close candidates changes when a fixed GP-style grouping is applied to all eight. This is a comparison of statistical shapes under stated assumptions. It does not identify the plaintext or decipher a word.
 
 The experiment uses translations of the **same 997 development sentences and 1,012 evaluation sentences** from FLORES-200. The languages were fixed before scoring: English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. They give a manageable Latin-script comparison without adding a transliteration model for other scripts. They are not a shortlist inferred from the manuscript, and the ranking is not a search across all languages.
 
@@ -23,15 +23,15 @@ The distance is **total variation** between word-length distributions: half the 
 
 [Open the comparison chart](experiments/records/parallel-languages/comparison.svg). The chart shows the same results with article-resampling ranges. The JSON also contains the accent-folded letter comparison, which keeps the same language order.
 
-Welsh therefore does rank relatively high in this particular test. Its second-place result should not be exaggerated: it is farther from the manuscript than English, and the position changes with the representation. Giving Welsh its own mechanical digraph units—CH, DD, FF, NG, LL, PH, RH and TH—reduces its distance to **0.1466**. This is a separate sensitivity check, not permission to choose whichever conversion wins. Digraph parsing across morphemes and loanwords is not resolved here.
+The ordering depends on the counting convention. A language ranking is conditional on both the corpus and the assumed relationship between plaintext units and ciphertext runes. The full table keeps every tested candidate visible.
 
 ## Why the rankings differ
 
-The distributions show more than the rank alone. **Three-rune tokens make up 24.86% of the manuscript**, compared with 19.07% three-letter words in the English sample and 12.93% in Welsh. At length one, the manuscript has 2.87%, English 2.56%, and Welsh 10.40%.
+The manuscript has a pronounced peak at length three: **24.86% of its tokens contain three runes**. The language profiles differ in how much mass they place at each length. The distribution chart shows the manuscript first, followed by all eight languages alphabetically, using identical scales and the same styling for every language.
 
-Thus Welsh's relatively high position does not mean its most distinctive short-word frequencies match. Its one- and three-letter bins together contribute more than half of its total variation distance from the manuscript. English is closer overall, but still has substantially fewer three-letter words than the manuscript has three-rune tokens. That residual difference needs explanation; a first-place rank does not make it disappear.
+The first-place result still has a visible mismatch: English has 19.07% three-letter words, below the manuscript's three-rune share. A ranking measures relative closeness among the tested profiles; it does not establish that the nearest profile is a good explanation of the ciphertext.
 
-[Open the distribution chart](experiments/records/parallel-languages/distributions.svg). All three panels use the same vertical scale. Lengths 9 and above are combined only to make the phone-sized chart legible; the experiment still scores its original 16 bins. English and Welsh are shown to explain the leading result and the requested Welsh comparison, not as a new two-language candidate selection. All eight full distributions remain in the results JSON.
+[Open all nine distribution panels](experiments/records/parallel-languages/distributions.svg). Lengths 9 and above are combined only for display; scoring retains the original 16 bins. Every full distribution is also available in the results JSON.
 
 ## The assumptions that make lengths useful
 
@@ -41,7 +41,7 @@ The manuscript target is the existing [rune-token ledger](exports/unsolved-word-
 
 For FLORES, letters are lowercased and normalized to NFC. Alphabetic runs are words; internal straight or curly apostrophes are removed without splitting the word. Hyphens and other nonletters separate words. Numbers contribute no letters. Each sentence is tokenized independently. This is an explicit mechanical convention, not a linguist's definition of a word. The comparison retains every aligned sentence; it does not truncate each language to a different passage to equalize word totals.
 
-The GP sensitivity folds combining accents and greedily groups ING, TH, EO, NG, OE, AE, IA, IO and EA, longest first. ING/NG, IO/IA, K/C and Z/S share symbols. Other letters remain. **This is not a validated translation into Gematria Primus.** Pronunciation, ambiguous segmentation and unsupported letters remain unresolved. The raw-letter and GP profiles can contain more than 29 distinct symbols, so they cannot be literal bijective mappings into a 29-rune alphabet as written. This inventory mismatch is reported in the downloadable results rather than silently repaired by deleting rare letters.
+The GP sensitivity folds combining accents and greedily groups ING, TH, EO, NG, OE, AE, IA, IO and EA, longest first. ING/NG, IO/IA, K/C and Z/S share symbols. Other letters remain. **This is not a validated translation into Gematria Primus.** Pronunciation, ambiguous segmentation and unsupported letters remain unresolved. A supplementary mechanical Welsh-digraph calculation is retained in the raw data as a representation check, not as a separate candidate category or a preferred model. It groups CH, DD, FF, NG, LL, PH, RH and TH and gives a length distance of 0.1466; it does not resolve morphological parsing. The raw-letter and GP profiles can contain more than 29 distinct symbols, so they cannot be literal bijective mappings into a 29-rune alphabet as written. This inventory mismatch is reported in the downloadable results rather than silently repaired by deleting rare letters.
 
 ## Repetition gives a different test
 
@@ -59,7 +59,7 @@ IoC is the probability that two different sampled positions contain the same sym
 | Italian | 0.07305 | 4.57% |
 | Finnish | 0.07282 | 9.31% |
 
-Welsh has the closest letter IoC of the eight, but its **0.06387** is still far from the target's **0.03448**. Its repeated-letter rate is also much higher. None of these profiles supplies a close single-substitution explanation of the pooled manuscript. The GP sensitivity does not remove that discrepancy. Spanish is closest on the adjacent-repeat measure, yet has a much poorer word-length match. These conflicting rankings are why we do not blend the measures into an unexplained “language likelihood.”
+The language profiles have letter IoCs between **0.06387 and 0.07344**, far from the target's **0.03448**. None of these profiles supplies a close single-substitution explanation of the pooled manuscript. The GP sensitivity does not remove that discrepancy. Spanish is closest on the adjacent-repeat measure, yet has a much poorer word-length match. These conflicting rankings are why we do not blend the measures into an unexplained “language likelihood.”
 
 This does not eliminate Welsh, English or any other language under a different cipher. It weakens the proposed fixed-substitution comparison under these text and unit conventions. See [cipher invariants](#/wiki/cipher-invariants) for what different transformations preserve.
 
@@ -69,7 +69,7 @@ Each development-language word-length profile was compared with each evaluation-
 
 For the error bars we resample the **281 source-article URL groups** in the evaluation split, with replacement, 200 times using seed 3301. All sentences from a sampled article are kept. The same article draw is used for all eight languages, preserving the matched-content comparison and avoiding treating every sentence as independent. English has the smallest length distance in all 200 draws in all three representations. This is stability to this corpus resampling—not a 100% probability that the manuscript is English. The target transcription is held fixed; these intervals omit uncertainty about its boundaries, genre and cipher.
 
-FLORES contains translated web material. It controls subject matter across languages, but not the difference between that material and Liber Primus's philosophical style, historical spelling or possible nonstandard prose. Translation practices can also affect lengths. A next experiment should use a separately fixed, genre-matched parallel corpus and known decoded LP passages, with a defensible conversion rule and matched target-sized samples. Those are follow-ups, not controls already completed here.
+FLORES contains translated web material. It controls subject matter across languages, but not the difference between that material and Liber Primus's philosophical style, historical spelling or possible nonstandard prose. Translation practices can also affect lengths. A next experiment should use a separately fixed, genre-matched parallel corpus and known decoded LP passages, with a defensible conversion rule and matched target-sized samples. Those remain follow-ups. A separate [shorter aligned-block variant](#/experiments/parallel-language-blocks) now checks eight disjoint evaluation blocks per language; it preserves matching sentences rather than enforcing exactly equal word counts.
 
 ## Reproduce it
 
@@ -81,7 +81,7 @@ python experiments/records/parallel-languages/check.py
 python experiments/records/parallel-languages/distribution_figure.py --check
 ```
 
-The first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, Welsh digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).
+The first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, additional digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).
 
 [Raw results](experiments/records/parallel-languages/results.json) · [Frozen plan](experiments/records/parallel-languages/plan.json) · [Source attribution](experiments/records/parallel-languages/SOURCE.txt)
 

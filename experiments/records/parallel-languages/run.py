@@ -137,7 +137,7 @@ def figure(report):
         for i,row in enumerate(report['modes'][mode]['ranking']):
             y=top+25+i*29; lo,hi=row['bootstrap_tv_95_percentile']; scale=450
             out += [f'<text x="16" y="{y+4}" font-size="14">{row["language"]}</text>',
-                    f'<rect x="95" y="{y-9}" width="{row["length_tv"]*scale:.2f}" height="16" fill="{("#99642d" if row["language"]=="Welsh" else "#315f73")}"/>',
+                    f'<rect x="95" y="{y-9}" width="{row["length_tv"]*scale:.2f}" height="16" fill="#315f73"/>',
                     f'<path d="M{95+lo*scale:.2f} {y-1}H{95+hi*scale:.2f}" stroke="#111" stroke-width="2"/>',
                     f'<text x="305" y="{y+4}" font-size="14">{row["length_tv"]:.3f}</text>']
     out += ['<text x="16" y="661" font-size="13">Lines: 200 paired article resamples.</text>',
