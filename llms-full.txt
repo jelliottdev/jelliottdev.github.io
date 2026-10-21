@@ -6875,7 +6875,7 @@ Sources, related references, and files
 - Codebooks and mixed letter-word systems
   https://jelliottdev.github.io/reference/articles/method-codebooks.html
 - Arithmetic keystreams
-  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+  https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
 - LP2-00–55: prime-minus-one shifts and known openings
   https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
 - LP2-00–55: ordinary primes instead of primes minus one
@@ -6995,7 +6995,7 @@ Sources, related references, and files
 - Compression and packed symbol streams
   https://jelliottdev.github.io/reference/articles/method-compression.html
 - Language and corpus identification
-  https://jelliottdev.github.io/reference/articles/word-lengths.html
+  https://jelliottdev.github.io/reference/articles/method-language-identification.html
 - Could the unsolved text be another language? Eight aligned translations
   https://jelliottdev.github.io/#/experiments/parallel-languages
 - Language controls with exactly 2,896 tokens per sample
@@ -9197,6 +9197,9 @@ The decoded text refers to a page identified by a long hash. Reproducing that te
 Sources and verification
 Exact control parameters and interruption provenance · Reproduction script · Pinned historical walkthrough. The trace rows above were checked on 20 October 2026. Recipes reproduce published controls; they are not new solutions.
 
+
+For the broader approach and its other variants, see the arithmetic-keystream family guide.
+
 Sources, related references, and files
 - φ(prime), or Euler’s totient of a prime
   https://jelliottdev.github.io/reference/articles/totient.html
@@ -9226,6 +9229,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/reproduce_reading.py
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+- arithmetic-keystream family guide
+  https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
 
 Article: https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 
@@ -20796,6 +20801,9 @@ Can a word identify a unique position?
 
 In the solved 464-word arrangement, 216 ciphertext positions have a word form that occurs elsewhere in the same object. The word-lookup audit explains the difference between distinct forms and ambiguous positions, with the full occurrence lists and a comparison to decoded rune text.
 
+
+For the broader approach and its other variants, see the language and corpus identification guide.
+
 Sources, related references, and files
 - rune indices and labels
   https://jelliottdev.github.io/reference/articles/rune-values.html
@@ -20915,6 +20923,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/grille-carrier.html#carrier-928
 - word-lookup audit
   https://jelliottdev.github.io/reference/articles/grille-carrier.html#word-identity
+- language and corpus identification guide
+  https://jelliottdev.github.io/reference/articles/method-language-identification.html
 
 Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
 
@@ -24025,6 +24035,158 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-page-order.html
+
+
+---
+
+Arithmetic keystreams
+
+Define numerical shift sequences, alignment rules and finite searches before comparing candidate readings.
+
+An arithmetic keystream generates a numerical shift for each position. The sequence can come from primes, Fibonacci numbers, a polynomial or another specified rule. A name such as “use primes” leaves several different ciphers possible: the sequence, its starting point and the way it advances all matter.
+
+Different sequences produce different shifts
+
+This table compares definitions, not candidate readings. Values have not yet been reduced modulo 29.
+
+	Rule	Starting convention	First five shifts
+
+	Consecutive primes	First prime is 2	2, 3, 5, 7, 11
+
+	Prime minus one	Subtract one from each prime	1, 2, 4, 6, 10
+
+	Totients of consecutive integers	φ(1), φ(2), …	1, 1, 2, 2, 4
+
+	Fibonacci numbers	F₀ = 0, F₁ = 1	0, 1, 1, 2, 3
+
+	Position squared	n = 0, 1, …	0, 1, 4, 9, 16
+
+
+For a prime p, φ(p) = p − 1. That identity explains the known LP2-56 method; it does not make the totients of consecutive integers the same stream. Likewise, a rune’s assigned prime value or a prime-index operation is a different input from the position counter used here.
+
+Turn the idea into a reproducible rule
+
+A simple subtraction decoder is plaintext[i] = (ciphertext[i] − sequence[i + offset]) mod 29, using rune indices 0–28. Fix the sequence definition, offset range, arithmetic direction and modulus before evaluating results. State whether punctuation consumes a shift, whether the counter resets at words or pages, and whether any rune interrupts it. A copied symbol that pauses the counter differs from a zero shift that advances it; see alignment and interruptions.
+
+If the sequence depends on previous plaintext or ciphertext, include that state explicitly and consult feedback methods. Changing the rule whenever the output stops forming words creates additional choices, not a continuation of the original fixed test.
+
+Count distinct outputs as well as settings
+
+Trying 29 offsets and two signs gives 58 configurations per input under those rules. Some may produce identical outputs. Only residues modulo 29 affect this decoder, so a repeating residue stream can make additional offsets redundant. Similarly, subtracting primes instead of primes minus one changes every output by a constant −1 when alignment is identical. If all constant output shifts are already searched, those variants cover the same set of outputs.
+
+Documented tests and what remains open
+
+The prime-minus-one, ordinary-prime, Fibonacci and consecutive-totient records test declared opening hypotheses with fixed alignment rules. The polynomial-stream record has its own degree and coefficient bounds. Their scope sections determine which proposals they actually cover; a failure to match the selected openings does not exclude a sequence against every possible plaintext.
+
+For an extension, freeze the full rule and success criterion, retain all candidates, and test an untouched continuation. Compare the best selected score with the same search on controls, rather than comparing one selected candidate with an ordinary random sample. See null models and all method families.
+
+Sources, related references, and files
+- known LP2-56 method
+  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+- assigned prime value or a prime-index operation
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- alignment
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- interruptions
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+- feedback methods
+  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+- prime-minus-one
+  https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
+- ordinary-prime
+  https://jelliottdev.github.io/#/experiments/lp2-prime-openings
+- Fibonacci
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
+- consecutive-totient
+  https://jelliottdev.github.io/#/experiments/lp2-totient-openings
+- polynomial-stream record
+  https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- all method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
+
+
+---
+
+Language and corpus identification
+
+Compare language evidence under explicit cipher, tokenization and corpus assumptions.
+
+“Could the unsolved text be another language?” is a useful question, but the answer depends on what the cipher preserves. Comparing ciphertext word lengths is different from identifying the language of a candidate plaintext. Neither task can rank languages reliably without stating how the text was represented and what transformations may have changed it.
+
+Choose evidence the proposed cipher preserves
+
+	Observable	Required assumption	Main limitation
+
+	Word lengths	Word boundaries and symbol counts survive encryption	Rune counts are not Latin-letter counts; uncertain separators change the sample.
+
+	Symbol-frequency shape and coincidence	A fixed one-to-one substitution preserves counts	Unknown symbol labels prevent direct letter-by-letter comparison; other cipher families change the distribution.
+
+	Repeated words and patterns	The same units receive consistent encodings	Changing keys or boundaries can destroy these relationships.
+
+	Readable words and grammar	A candidate decoding has already supplied an interpretable alphabet	Flexible decoding and scoring can select appealing fragments from many attempts.
+
+
+The word-length guide explains the stored corpus and tokenization rules. In particular, a rune that transliterates as TH is one symbol, not two. A comparison must apply a declared conversion to each reference language instead of silently mixing rune lengths with ordinary spelling lengths.
+
+Build comparable reference samples
+
+Use translations of the same source to reduce differences in subject and structure, with documented editions, passage alignment and normalization. Translation style still matters, so agreement across independent texts is stronger evidence than one favorable translation. Match sample sizes, record removed characters and unsupported spellings, and test sensitivity to alternative rune conversions and disputed boundaries.
+
+A language ranking answers “which of these reference samples fits this observable best under these assumptions?” It is not a probability that the plaintext is that language. The true language may be absent, the reference genre may be unsuitable, or the cipher may not preserve the observable. Welsh belongs in the comparison on the same terms as every other language.
+
+Read the existing comparisons together
+
+
+Parallel-language comparison: compare aligned translations under the declared representation.
+
+Aligned-block comparison: inspect whether the result depends on the selected portion of text.
+
+Target-sized comparison: compare samples at the unsolved corpus’s token count.
+
+Known-reading controls: check behavior on Liber Primus text whose reading is already known.
+
+Corpus-prefix census: examine the separate historical corpus and its stated sampling limits.
+
+
+The English-scorer controls address another question: whether a score intended to favor English also accepts other languages. A high score alone does not identify a language.
+
+What a stronger test would add
+
+Declare the languages, corpora, transformations, statistics and selection rule before comparing results. Retain all rankings and uncertainty estimates. When resampling, preserve relevant structure—for example, sample passages rather than treating adjacent words as independent if passage-level variation is the question. Report how ranks change across texts, encodings and boundary policies.
+
+For candidate plaintexts, keep a separate continuation that was not used to choose the key or scoring settings. If thousands of decodings compete, controls must repeat that entire selection process; see search-maximum controls. These are requirements for future extensions, not claims that every listed comparison has performed them.
+
+All method families · Null models · Transcription and boundary checking
+
+Sources, related references, and files
+- word-length guide
+  https://jelliottdev.github.io/reference/articles/word-lengths.html
+- Parallel-language comparison
+  https://jelliottdev.github.io/#/experiments/parallel-languages
+- Aligned-block comparison
+  https://jelliottdev.github.io/#/experiments/parallel-language-blocks
+- Target-sized comparison
+  https://jelliottdev.github.io/#/experiments/target-sized-languages
+- Known-reading controls
+  https://jelliottdev.github.io/#/experiments/known-reading-languages
+- Corpus-prefix census
+  https://jelliottdev.github.io/#/experiments/corpus-prefix-census
+- English-scorer controls
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- search-maximum controls
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- Transcription and boundary checking
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-language-identification.html
 
 
 ---

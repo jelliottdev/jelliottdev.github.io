@@ -1,0 +1,68 @@
+Arithmetic keystreams
+
+Define numerical shift sequences, alignment rules and finite searches before comparing candidate readings.
+
+An arithmetic keystream generates a numerical shift for each position. The sequence can come from primes, Fibonacci numbers, a polynomial or another specified rule. A name such as “use primes” leaves several different ciphers possible: the sequence, its starting point and the way it advances all matter.
+
+Different sequences produce different shifts
+
+This table compares definitions, not candidate readings. Values have not yet been reduced modulo 29.
+
+	Rule	Starting convention	First five shifts
+
+	Consecutive primes	First prime is 2	2, 3, 5, 7, 11
+
+	Prime minus one	Subtract one from each prime	1, 2, 4, 6, 10
+
+	Totients of consecutive integers	φ(1), φ(2), …	1, 1, 2, 2, 4
+
+	Fibonacci numbers	F₀ = 0, F₁ = 1	0, 1, 1, 2, 3
+
+	Position squared	n = 0, 1, …	0, 1, 4, 9, 16
+
+
+For a prime p, φ(p) = p − 1. That identity explains the known LP2-56 method; it does not make the totients of consecutive integers the same stream. Likewise, a rune’s assigned prime value or a prime-index operation is a different input from the position counter used here.
+
+Turn the idea into a reproducible rule
+
+A simple subtraction decoder is plaintext[i] = (ciphertext[i] − sequence[i + offset]) mod 29, using rune indices 0–28. Fix the sequence definition, offset range, arithmetic direction and modulus before evaluating results. State whether punctuation consumes a shift, whether the counter resets at words or pages, and whether any rune interrupts it. A copied symbol that pauses the counter differs from a zero shift that advances it; see alignment and interruptions.
+
+If the sequence depends on previous plaintext or ciphertext, include that state explicitly and consult feedback methods. Changing the rule whenever the output stops forming words creates additional choices, not a continuation of the original fixed test.
+
+Count distinct outputs as well as settings
+
+Trying 29 offsets and two signs gives 58 configurations per input under those rules. Some may produce identical outputs. Only residues modulo 29 affect this decoder, so a repeating residue stream can make additional offsets redundant. Similarly, subtracting primes instead of primes minus one changes every output by a constant −1 when alignment is identical. If all constant output shifts are already searched, those variants cover the same set of outputs.
+
+Documented tests and what remains open
+
+The prime-minus-one, ordinary-prime, Fibonacci and consecutive-totient records test declared opening hypotheses with fixed alignment rules. The polynomial-stream record has its own degree and coefficient bounds. Their scope sections determine which proposals they actually cover; a failure to match the selected openings does not exclude a sequence against every possible plaintext.
+
+For an extension, freeze the full rule and success criterion, retain all candidates, and test an untouched continuation. Compare the best selected score with the same search on controls, rather than comparing one selected candidate with an ordinary random sample. See null models and all method families.
+
+Sources, related references, and files
+- known LP2-56 method
+  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+- assigned prime value or a prime-index operation
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- alignment
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- interruptions
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+- feedback methods
+  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+- prime-minus-one
+  https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings
+- ordinary-prime
+  https://jelliottdev.github.io/#/experiments/lp2-prime-openings
+- Fibonacci
+  https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
+- consecutive-totient
+  https://jelliottdev.github.io/#/experiments/lp2-totient-openings
+- polynomial-stream record
+  https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- all method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html

@@ -1,0 +1,76 @@
+Language and corpus identification
+
+Compare language evidence under explicit cipher, tokenization and corpus assumptions.
+
+“Could the unsolved text be another language?” is a useful question, but the answer depends on what the cipher preserves. Comparing ciphertext word lengths is different from identifying the language of a candidate plaintext. Neither task can rank languages reliably without stating how the text was represented and what transformations may have changed it.
+
+Choose evidence the proposed cipher preserves
+
+	Observable	Required assumption	Main limitation
+
+	Word lengths	Word boundaries and symbol counts survive encryption	Rune counts are not Latin-letter counts; uncertain separators change the sample.
+
+	Symbol-frequency shape and coincidence	A fixed one-to-one substitution preserves counts	Unknown symbol labels prevent direct letter-by-letter comparison; other cipher families change the distribution.
+
+	Repeated words and patterns	The same units receive consistent encodings	Changing keys or boundaries can destroy these relationships.
+
+	Readable words and grammar	A candidate decoding has already supplied an interpretable alphabet	Flexible decoding and scoring can select appealing fragments from many attempts.
+
+
+The word-length guide explains the stored corpus and tokenization rules. In particular, a rune that transliterates as TH is one symbol, not two. A comparison must apply a declared conversion to each reference language instead of silently mixing rune lengths with ordinary spelling lengths.
+
+Build comparable reference samples
+
+Use translations of the same source to reduce differences in subject and structure, with documented editions, passage alignment and normalization. Translation style still matters, so agreement across independent texts is stronger evidence than one favorable translation. Match sample sizes, record removed characters and unsupported spellings, and test sensitivity to alternative rune conversions and disputed boundaries.
+
+A language ranking answers “which of these reference samples fits this observable best under these assumptions?” It is not a probability that the plaintext is that language. The true language may be absent, the reference genre may be unsuitable, or the cipher may not preserve the observable. Welsh belongs in the comparison on the same terms as every other language.
+
+Read the existing comparisons together
+
+
+Parallel-language comparison: compare aligned translations under the declared representation.
+
+Aligned-block comparison: inspect whether the result depends on the selected portion of text.
+
+Target-sized comparison: compare samples at the unsolved corpus’s token count.
+
+Known-reading controls: check behavior on Liber Primus text whose reading is already known.
+
+Corpus-prefix census: examine the separate historical corpus and its stated sampling limits.
+
+
+The English-scorer controls address another question: whether a score intended to favor English also accepts other languages. A high score alone does not identify a language.
+
+What a stronger test would add
+
+Declare the languages, corpora, transformations, statistics and selection rule before comparing results. Retain all rankings and uncertainty estimates. When resampling, preserve relevant structure—for example, sample passages rather than treating adjacent words as independent if passage-level variation is the question. Report how ranks change across texts, encodings and boundary policies.
+
+For candidate plaintexts, keep a separate continuation that was not used to choose the key or scoring settings. If thousands of decodings compete, controls must repeat that entire selection process; see search-maximum controls. These are requirements for future extensions, not claims that every listed comparison has performed them.
+
+All method families · Null models · Transcription and boundary checking
+
+Sources, related references, and files
+- word-length guide
+  https://jelliottdev.github.io/reference/articles/word-lengths.html
+- Parallel-language comparison
+  https://jelliottdev.github.io/#/experiments/parallel-languages
+- Aligned-block comparison
+  https://jelliottdev.github.io/#/experiments/parallel-language-blocks
+- Target-sized comparison
+  https://jelliottdev.github.io/#/experiments/target-sized-languages
+- Known-reading controls
+  https://jelliottdev.github.io/#/experiments/known-reading-languages
+- Corpus-prefix census
+  https://jelliottdev.github.io/#/experiments/corpus-prefix-census
+- English-scorer controls
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- search-maximum controls
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- Transcription and boundary checking
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-language-identification.html
