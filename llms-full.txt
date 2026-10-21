@@ -6353,8 +6353,8 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 
 
 
-Seeded generators and unrestricted additive keys
-Distinguish short reproducible generators from unrestricted per-position keys.
+Seeded generators and generated keystreams
+Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
 Documented tests (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
@@ -6414,6 +6414,18 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 LP2-54–55: skip selected F runes in ciphertext feedback
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+
+
+Unrestricted additive keys and one-time-pad hypotheses
+Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim.
+
+Documented tests (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+Does matching the opening text identify a seed?
+Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
+Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
 
 
 
@@ -6914,8 +6926,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - LP2-54–55: skip selected F runes in ciphertext feedback
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
-- Seeded generators and unrestricted additive keys
-  https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- Seeded generators and generated keystreams
+  https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - Running keys from external texts
@@ -6930,6 +6942,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- Unrestricted additive keys and one-time-pad hypotheses
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - Transposition and permutations
   https://jelliottdev.github.io/reference/articles/transposition.html
 - LP2-00–55: simple row and column reading routes
@@ -23235,6 +23249,9 @@ A guessed opening can match several seeds without identifying the intended one. 
 
 The experiment makes the bounds explicit: two specified hash generators, 4,096 seeds each and exact alignment. Its omitted-seed controls show why an empty dictionary search does not exclude the generator itself. It does not identify the generator used by Liber Primus.
 
+
+For a worked generator trace and output-conversion rules, see seeded generators and generated keystreams.
+
 Sources, related references, and files
 - Shannon’s Communication Theory of Secrecy Systems
   https://www.apprendre-en-ligne.net/crypto/bibliotheque/PDF/shannon1949.pdf
@@ -23260,6 +23277,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/pad-identification-example.json
 - known-crib seed experiment
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- seeded generators and generated keystreams
+  https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 
 Article: https://jelliottdev.github.io/reference/articles/one-time-pad.html
 
@@ -24477,6 +24496,83 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+
+
+---
+
+Seeded generators and generated keystreams
+
+Specify seeds, output conversion and alignment before searching a generated key stream.
+
+A seeded generator expands a starting value into a sequence. A cipher can use that sequence as shifts, bytes or route choices. To test this idea, specify both the generator and the conversion from its output to the decoding operation. A long generated stream is not the same hypothesis as an independently chosen key value at every position.
+
+A complete toy generator
+
+This deliberately small recurrence illustrates the required details; it is not a secure generator or a proposed Liber Primus solution. Start with state 4. Before each output, update state = (5 × state + 3) mod 29, then emit the new state as the shift. Subtract it from the ciphertext index modulo 29.
+
+	Position	State before update	Emitted shift	Invented ciphertext	Decoded index
+
+	0	4	23	23	0
+
+	1	23	2	3	1
+
+	2	2	13	15	2
+
+	3	13	10	13	3
+
+	4	10	24	28	4
+
+
+Emitting the initial state before updating would start with 4 instead of 23 and give a different decoding. An instruction to use the same formula and seed would therefore still be incomplete without the timing convention.
+
+Reproduce the example
+
+This Python example uses only the standard language. It checks the full decoded sequence; it performs no search on manuscript text.
+
+ciphertext = [23, 3, 15, 13, 28]
+state = 4
+decoded = []
+for position, value in enumerate(ciphertext):
+    before = state
+    state = (5 * state + 3) % 29
+    plain = (value - state) % 29
+    decoded.append(plain)
+    print(position, before, state, value, plain)
+assert decoded == [0, 1, 2, 3, 4]
+
+What a real proposal must fix
+
+Record the exact generator, seed encoding and allowed seed range. For a byte-oriented generator, specify character encoding, byte order, counter format and how outputs become rune indices. State whether an output is consumed before the first rune, how punctuation is treated, and where the stream restarts. A password, decimal number and its binary integer representation are different seed inputs unless the implementation explicitly equates them.
+
+Output conversion can change the distribution. For example, reducing a uniform byte modulo 29 gives residues 0–23 nine preimages each and residues 24–28 eight each, because 256 = 8 × 29 + 24. Rejecting byte values 232–255 before reduction gives each residue eight preimages, but consumes a variable number of bytes. Those are different algorithms and can lose alignment with each other.
+
+Seed bounds are not output-length bounds
+
+A fixed generator with b seed bits produces at most 2^(b) streams of a chosen length. Distinct seeds may collide. Trying multiple generators, seed encodings, offsets and output conversions expands the search beyond the seed count. Record every tried setting and deduplicate identical outputs.
+
+The toy example has only 29 allowed seeds if its starting state is restricted to 0–28. Allowing arbitrary integers does not add streams here: reducing the seed modulo 29 gives the same subsequent states. This is a property of this recurrence, not a general statement about generators.
+
+Existing test and its limits
+
+The known-crib seed experiment tests two specified hash generators and 4,096 seeds each on synthetic ciphertexts. It includes missing-seed, wrong-generator and incorrect-crib controls, and checks a continuation beyond the fitted opening. It does not search the toy recurrence above or identify an LP generator.
+
+A failed seed search excludes only its tested settings under its acceptance criterion. A short matching opening can leave several seeds; an untouched continuation is needed to distinguish them. Conversely, obtaining a desired reading by choosing an unrestricted key after the fact says nothing about whether a generator produced it. See unrestricted keys and one-time-pad claims.
+
+Arithmetic keystreams · Alignment · All method families
+
+Sources, related references, and files
+- known-crib seed experiment
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- unrestricted keys and one-time-pad claims
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- Arithmetic keystreams
+  https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
+- Alignment
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 
 
 ---

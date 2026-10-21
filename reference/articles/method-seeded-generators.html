@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Seeded generators and generated keystreams — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · <a href="../index.html#guides-cipher-methods">Runes and cipher methods</a> · <a href="../../index.html#/wiki/method-seeded-generators">Open in wiki</a> · <a href="method-seeded-generators.txt">Plain text</a></nav><h1>Seeded generators and generated keystreams</h1><p>Specify seeds, output conversion and alignment before searching a generated key stream.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#example">A complete toy generator</a></li><li><a href="#reproduce">Reproduce the example</a></li><li><a href="#specification">What a real proposal must fix</a></li><li><a href="#bounds">Seed bounds are not output-length bounds</a></li><li><a href="#coverage">Existing test and its limits</a></li></ul></nav></details><p>A seeded generator expands a starting value into a sequence. A cipher can use that sequence as shifts, bytes or route choices. To test this idea, specify both the generator and the conversion from its output to the decoding operation. A long generated stream is not the same hypothesis as an independently chosen key value at every position.</p>
+<h2 id="example">A complete toy generator</h2>
+<p>This deliberately small recurrence illustrates the required details; it is not a secure generator or a proposed Liber Primus solution. Start with state 4. Before each output, update <code>state = (5 × state + 3) mod 29</code>, then emit the new state as the shift. Subtract it from the ciphertext index modulo 29.</p>
+<div class="table-wrap"><table><thead><tr><th>Position</th><th>State before update</th><th>Emitted shift</th><th>Invented ciphertext</th><th>Decoded index</th></tr></thead><tbody>
+<tr><td>0</td><td>4</td><td>23</td><td>23</td><td>0</td></tr>
+<tr><td>1</td><td>23</td><td>2</td><td>3</td><td>1</td></tr>
+<tr><td>2</td><td>2</td><td>13</td><td>15</td><td>2</td></tr>
+<tr><td>3</td><td>13</td><td>10</td><td>13</td><td>3</td></tr>
+<tr><td>4</td><td>10</td><td>24</td><td>28</td><td>4</td></tr>
+</tbody></table></div>
+<p>Emitting the initial state before updating would start with 4 instead of 23 and give a different decoding. An instruction to use the same formula and seed would therefore still be incomplete without the timing convention.</p>
+<h2 id="reproduce">Reproduce the example</h2>
+<p>This Python example uses only the standard language. It checks the full decoded sequence; it performs no search on manuscript text.</p>
+<pre><code>ciphertext = [23, 3, 15, 13, 28]
+state = 4
+decoded = []
+for position, value in enumerate(ciphertext):
+    before = state
+    state = (5 * state + 3) % 29
+    plain = (value - state) % 29
+    decoded.append(plain)
+    print(position, before, state, value, plain)
+assert decoded == [0, 1, 2, 3, 4]</code></pre>
+<h2 id="specification">What a real proposal must fix</h2>
+<p>Record the exact generator, seed encoding and allowed seed range. For a byte-oriented generator, specify character encoding, byte order, counter format and how outputs become rune indices. State whether an output is consumed before the first rune, how punctuation is treated, and where the stream restarts. A password, decimal number and its binary integer representation are different seed inputs unless the implementation explicitly equates them.</p>
+<p>Output conversion can change the distribution. For example, reducing a uniform byte modulo 29 gives residues 0–23 nine preimages each and residues 24–28 eight each, because <code>256 = 8 × 29 + 24</code>. Rejecting byte values 232–255 before reduction gives each residue eight preimages, but consumes a variable number of bytes. Those are different algorithms and can lose alignment with each other.</p>
+<h2 id="bounds">Seed bounds are not output-length bounds</h2>
+<p>A fixed generator with b seed bits produces at most 2<sup>b</sup> streams of a chosen length. Distinct seeds may collide. Trying multiple generators, seed encodings, offsets and output conversions expands the search beyond the seed count. Record every tried setting and deduplicate identical outputs.</p>
+<p>The toy example has only 29 allowed seeds if its starting state is restricted to 0–28. Allowing arbitrary integers does not add streams here: reducing the seed modulo 29 gives the same subsequent states. This is a property of this recurrence, not a general statement about generators.</p>
+<h2 id="coverage">Existing test and its limits</h2>
+<p>The <a href="../../index.html#/experiments/seed-crib-controls">known-crib seed experiment</a> tests two specified hash generators and 4,096 seeds each on synthetic ciphertexts. It includes missing-seed, wrong-generator and incorrect-crib controls, and checks a continuation beyond the fitted opening. It does not search the toy recurrence above or identify an LP generator.</p>
+<p>A failed seed search excludes only its tested settings under its acceptance criterion. A short matching opening can leave several seeds; an untouched continuation is needed to distinguish them. Conversely, obtaining a desired reading by choosing an unrestricted key after the fact says nothing about whether a generator produced it. See <a href="one-time-pad.html">unrestricted keys and one-time-pad claims</a>.</p>
+<p><a href="method-arithmetic-streams.html">Arithmetic keystreams</a> · <a href="key-alignment.html">Alignment</a> · <a href="solving-methods.html">All method families</a></p>
+<h2>Guides linking here</h2><ul><li><a href="solving-methods.html">Solving methods: a map of families and variants</a></li><li><a href="one-time-pad.html">One-time pads, short seeds and what statistics can establish</a></li></ul></main></body></html>

@@ -103,8 +103,8 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 
 
 
-Seeded generators and unrestricted additive keys
-Distinguish short reproducible generators from unrestricted per-position keys.
+Seeded generators and generated keystreams
+Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
 Documented tests (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
@@ -164,6 +164,18 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 LP2-54–55: skip selected F runes in ciphertext feedback
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+
+
+Unrestricted additive keys and one-time-pad hypotheses
+Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim.
+
+Documented tests (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+Does matching the opening text identify a seed?
+Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
+Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
 
 
 
@@ -664,8 +676,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - LP2-54–55: skip selected F runes in ciphertext feedback
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
-- Seeded generators and unrestricted additive keys
-  https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- Seeded generators and generated keystreams
+  https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - Running keys from external texts
@@ -680,6 +692,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- Unrestricted additive keys and one-time-pad hypotheses
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - Transposition and permutations
   https://jelliottdev.github.io/reference/articles/transposition.html
 - LP2-00–55: simple row and column reading routes
