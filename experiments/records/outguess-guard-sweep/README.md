@@ -37,4 +37,4 @@ python experiments/records/outguess-guard-sweep/figure.py
 
 The checker verifies original image hashes, plan/report dependencies, saved payload sizes and hashes, then compares bytes and diagnostics directly against the saved baseline. It recomputes the comparison rather than accepting its boolean fields as evidence. It needs the repository's original images and baseline result files. The figure is derived from the saved comparison, so run the checker first.
 
-This directory is a completed computational comparison awaiting integration into the experiment index and downloadable family bundle.
+This comparison is indexed as a variant in the original-JPEG OutGuess family. See `article.md` for the published account and `record.json` for the exact bundle dependencies. Human review remains pending.

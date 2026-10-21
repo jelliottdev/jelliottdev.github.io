@@ -100,7 +100,7 @@
   "outcome": "inconclusive",
   "finding": "All ten known payload hashes match. Other outcomes: 21 unverified nonempty outputs with exit 0; five exit-1 rejections; 41 abnormal exits with code 3221225620. Every status, diagnostic and output byte reproduced on rerun.",
   "limitations": "A successful process exit does not authenticate bytes. Failed retrieval does not prove no hidden data. The 41 abnormal exits are unresolved build/tool failures. Only one key and build were tested. Computational review only; human review pending.",
-  "next_steps": "Compare another documented OutGuess build with the same images and key before varying keys. Validate candidate bytes independently; preserve the baseline failures.",
+  "next_steps": "See the guarded-build variant for a completed comparison on the same 77 images. Further work includes independent-platform checks and separate validation of candidate bytes; preserve the original baseline failures.",
   "family": {
     "id": "outguess-original-jpegs",
     "title": "OutGuess retrieval from original JPEGs",
@@ -785,7 +785,9 @@
       "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55"
     }
   ],
-  "related": [],
+  "related": [
+    "outguess-guard-sweep"
+  ],
   "visuals": [
     {
       "path": "experiments/records/outguess-default-key/coverage.svg",

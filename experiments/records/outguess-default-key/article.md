@@ -12,6 +12,8 @@ Each image receives exactly one invocation of OutGuess with retrieval mode and t
 
 ## Result
 
+A subsequent [guarded-build comparison](#/experiments/outguess-guard-sweep) retains these original inputs and key. It reproduces all output bytes while replacing the 41 abnormal exits with explicit iterator-guard diagnostics. The table below remains the result of the original baseline build.
+
 | Observed category | Images | What it establishes |
 | --- | --- | --- |
 | Known payload hash reproduced | 10 | Exact agreement with the archived extraction control |
