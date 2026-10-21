@@ -135,7 +135,7 @@ A separate audit of the complete pinned Git tree finds 25,906 corpus paths but 2
 	13689-8.txt and 20041010-13689-8.txt	2	109,251	Yes
 
 
-The historical minimum-length rule would exclude the 61 empty files. It would retain both members of each nonempty pair, counting the same prefix twice. These two extra eligible entries are a known weighting issue, not a measured explanation of the reported manuscript differences. The number of eligible files across the entire corpus remains unchecked.
+The historical minimum-length rule would exclude the 61 empty files. It would retain both members of each nonempty pair, counting the same prefix twice. These two extra eligible entries are a known weighting issue, not a measured explanation of the reported manuscript differences. The later complete prefix census checks all 25,906 paths and finds 25,565 eligible paths representing 25,563 distinct eligible blobs. The other 341 paths are too short under that token rule; the empty files are only part of that excluded group.
 
 Byte identity is narrower than literary identity: different editions or conversions of the same work can have different bytes. Conversely, a filename alone does not establish an edition, language, author or source. The pinned tree contains only its short README and the corpus files; it does not contain conversion code or an edition manifest. This records what is present at that revision, not what may exist elsewhere.
 
@@ -182,7 +182,7 @@ What does a length difference imply?
 
 If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
 
-The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Related methods should be linked without treating their results as interchangeable.
+The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Its within-section shuffle variant preserves each section’s length distribution; the section-order variant also searches every arrangement in both the observed data and the controls. They address different choices in the same LP1 comparison, rather than supplying three independent confirmations.
 
 Reproduce the count and inspect every token
 
@@ -287,7 +287,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - LP2-38
   https://jelliottdev.github.io/reference/lp2-38.html
-- complete pinned-corpus comparison; full prefix census and descriptive comparison; complete pinned prefix comparison
+- complete pinned-corpus comparison; full prefix census and descriptive comparison; complete prefix census; complete pinned prefix comparison
   https://jelliottdev.github.io/#/experiments/corpus-prefix-census
 - the pinned corpus repository; Project Runeberg, revision a39e87e
   https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
@@ -319,6 +319,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - 464-word column-balance experiment
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
+- within-section shuffle variant; section-preserving variant
+  https://jelliottdev.github.io/#/experiments/lp1-section-balance
+- section-order variant
+  https://jelliottdev.github.io/#/experiments/lp1-section-order
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - measurement script
@@ -347,7 +351,5 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/target-sized-languages
 - language-comparison overview
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
-- section-preserving variant
-  https://jelliottdev.github.io/#/experiments/lp1-section-balance
 
 Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
