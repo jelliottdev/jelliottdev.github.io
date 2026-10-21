@@ -19316,6 +19316,8 @@ The unchanged-rune audit separates ordinary fixed points from recorded interrupt
 
 The proposed 928-word carrier
 
+For a separate requirement of word-matching proposals, see whether a word identifies a unique position below.
+
 [Image: Word positions on a shared scale: Mayfly 1–224, Wing and Tree 225–550, Cuneiform 551–928. The halfway split after 464 falls within Wing and Tree.]
 The dashed line marks the split into two equal lists. Each row uses the same word-position scale; grey areas belong to the other groups. Download SVG · Reproduce figure.
 
@@ -19343,6 +19345,36 @@ Reproduce the inventory
 Download the reference-data ZIP and extract its folders. The audit script uses only Python’s standard library. A state-based scanner and a regular-expression scanner must agree on every word span. The complete inventory retains all 928 words, their source pages, line numbers, character offsets, decimal labels and source hashes. This checks the archived transcription; it is not a fresh certification of every manuscript glyph.
 
 python scripts/audit_928_carrier.py --output carrier-replay.json
+
+Can a word identify a unique position?
+
+A word-based lookup needs more than a matching spelling: it needs to tell the reader which occurrence to use. In the four solved LP1 sections underlying the 464-word arrangement, ciphertext has more distinct forms than decoded rune text. It still leaves many positions indistinguishable by word form alone.
+
+[Image: Ciphertext: 248 uniquely identifiable positions and 216 with a repeated word form. Decoded rune text: 116 unique and 348 nonunique positions, out of the same 464.]
+Both bars count word positions, not different forms. A repeated form contributes every occurrence to the pale segment. Download SVG · Figure script.
+
+	Measurement	Ciphertext	Decoded rune text
+	All word positions	464	464
+	Distinct forms	304	180
+	Forms appearing once	248	116
+	Forms appearing more than once	56	64
+	Positions belonging to repeated forms	216	348
+	Occurrences beyond the first of each form	160	284
+
+The distinction between the final two rows matters. If a form appears three times, it creates three positions that cannot be distinguished by spelling alone, but only two occurrences beyond its first appearance. Thus 464 − 304 = 160 does not count all ambiguous ciphertext positions; that count is 464 − 248 = 216.
+
+For example, ciphertext ᚪᛞᛠ appears at fourteen positions. Decoded ᚦᛖ appears at thirty-two. The complete report lists every occurrence by its one-based ordinal in the 464-word object. These repeats need not be adjacent. A proposal can resolve them with a specified positional rule, but choosing whichever occurrence yields a desired phrase adds an undeclared choice.
+
+Representation and reproduction
+
+The audit retains the established word boundaries, headings, interruptions and internal apostrophes. It reconstructs the original ciphertext words from archived pages and replaces each rune with its checked output index from the known-reading traces. The decoded representation is a rune sequence, not a normalized English spelling. No alternate spelling, word segmentation or punctuation repair is introduced.
+
+Extract the reference-data ZIP, then run:
+
+python scripts/audit_word_identity.py --output word-identity-replay.json
+python scripts/plot_word_identity.py
+
+The audit script rechecks all known cipher traces and the stored word inventory before counting. It also compares every pair of positions directly to check the grouped repetition calculation. The report preserves all words in both representations, each form’s positions and input hashes. This is a descriptive ambiguity check, not a carrier match, grille extraction or probability of intentional design.
 
 Sources, related references, and files
 - rune indices and labels
@@ -19415,7 +19447,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_corpus_pipeline.py
 - cipher invariants
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
-- 464-word column-balance experiment
+- 464-word column-balance experiment; 464-word arrangement
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - within-section shuffle variant; section-preserving variant
   https://jelliottdev.github.io/#/experiments/lp1-section-balance
@@ -19449,6 +19481,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - unchanged-rune audit
   https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
+- whether a word identifies a unique position
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#word-identity
 - Word positions on a shared scale: Mayfly 1–224, Wing and Tree 225–550, Cuneiform 551–928. The halfway split after 464 falls within Wing and Tree.; Download SVG
   https://jelliottdev.github.io/exports/figures/carrier-928.svg
 - Reproduce figure
@@ -19465,6 +19499,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/audit_928_carrier.py
 - complete inventory
   https://jelliottdev.github.io/exports/carrier-928.json
+- Ciphertext: 248 uniquely identifiable positions and 216 with a repeated word form. Decoded rune text: 116 unique and 348 nonunique positions, out of the same 464.; Download SVG
+  https://jelliottdev.github.io/exports/figures/word-identity.svg
+- Figure script
+  https://jelliottdev.github.io/scripts/plot_word_identity.py
+- audit script
+  https://jelliottdev.github.io/scripts/audit_word_identity.py
+- report
+  https://jelliottdev.github.io/exports/word-identity.json
 
 Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
 

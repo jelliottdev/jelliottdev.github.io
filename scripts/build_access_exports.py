@@ -180,7 +180,7 @@ files[-1].update(title='Cuneiform marks: exact pixel comparisons',guide='cuneifo
 for path in ['exports/corpus-pipeline-audit.json','exports/runeberg-inventory.json','exports/sources/runeberg-tree.bin','exports/runeberg-prefix-audit.json','exports/unsolved-word-lengths.json','exports/unsolved-word-tokens.json','exports/sources/unsolved-word-length-summary.csv']:
  register(path,'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['word lengths','2902 words','2896 words','token boundaries'])
-for path in ['exports/carrier-928.json','exports/figures/carrier-928.svg','scripts/audit_928_carrier.py','scripts/plot_928_carrier.py']:
+for path in ['exports/carrier-928.json','exports/figures/carrier-928.svg','scripts/audit_928_carrier.py','scripts/plot_928_carrier.py','exports/word-identity.json','exports/figures/word-identity.svg','scripts/audit_word_identity.py','scripts/plot_word_identity.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['928 words','carrier','grille'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):

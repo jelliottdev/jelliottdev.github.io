@@ -319,3 +319,7 @@ for(const query of ['928','928 words','928-word carrier','grille','carrier midpo
  assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=carrier-928',query);
 }
 console.log('PASS: carrier and grille queries open the bounded carrier inventory.');
+for(const query of ['word lookup','304 forms','216 repeated positions']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=word-identity',query);
+}
+console.log('PASS: word lookup and repeated-position counts reach the identity audit.');
