@@ -3371,6 +3371,211 @@
   &quot;article&quot;: &quot;## What was tested\n\nSuppose a rune is replaced by its Gematria Primus prime value: F becomes 2, U becomes 3, and so on through the 29-value alphabet ending at 109. Could one fixed quadratic formula rearrange that entire alphabet without producing any values outside it?\n\nWe tested `f(x) = ax² + bx + c (mod m)` for **every integer modulus m greater than 109**, requiring all 29 output values to be distinct members of the same prime alphabet. The result is identity only: under these assumptions, each prime must map back to itself.\n\nThis is a replication of the quadratic claim in the supplied research archive. The earlier scripts and reported result were inspected before the plan was written. It is not a new discovery or a blind test. A fresh enumerator and a separately implemented checker agree; human review remains pending.\n\nThis extends the [full-alphabet affine experiment](#/experiments/literal-prime-affine) by allowing a quadratic term. It does not extend the result to every arithmetic cipher. In particular, a changing key added to plaintext has a different equation and is outside this test.\n\n## Why an infinite range can be checked\n\nTrying moduli up to a convenient maximum would leave every larger modulus unresolved. Instead, three chosen inputs restrict which moduli can work.\n\nCall the prime alphabet S. The images of 2, 3 and 5 must be three different members of S; write them as u, v and w. There are `29 × 28 × 27 = 21,924` ordered choices. These three images determine the following integer expression:\n\n```text\nQ(x) = 2u(x−3)(x−5) − 3v(x−2)(x−5) + w(x−2)(x−3)\n```\n\nFor any polynomial fitting those three images, `6f(x) ≡ Q(x) (mod m)`. The factor 6 matters: it cannot simply be cancelled when the modulus is divisible by 2 or 3.\n\nFor each choice of u, v and w, find the first alphabet value x for which Q(x) is not six times an alphabet value. If the final output is some y in S, then m must divide the **nonzero integer** `Q(x) − 6y`. A nonzero integer has only finitely many positive divisors. Taking the divisors for all 29 possible y therefore gives a complete finite list for this branch, including moduli larger than a guessed search cutoff.\n\nThe downloaded certificate records each branch&#x27;s three images, the chosen witness x, its Q(x), and every candidate modulus. For each candidate the scripts recover all possible coefficients and check the entire output alphabet directly.\n\n## The branch without a finite witness\n\nExactly one choice escapes that divisor reduction: `(u,v,w) = (2,3,5)`. In this branch Q(x) is exactly 6x as an integer, so a different argument is needed. All its possible maps have the form\n\n```text\nf(x) = x + a(x−2)(x−3) (mod m), with 6a ≡ 0 (mod m).\n```\n\nFor every integer x, `(x−2)(x−3)` is either 0 or 2 modulo 6. The only possible changes from identity are therefore a shift by 2a; the input 7 already tests that shift. If it is nonzero, its circular distance from zero is m/3. But two members of this alphabet differ by at most `109−2 = 107`. A valid nonidentity map in this branch would consequently need `m ≤ 321`.\n\nThe checker directly scans the coefficient residues for all moduli 110 through 321. None gives a nonidentity permutation of the alphabet. The argument above handles every larger modulus; those larger moduli are not silently dropped.\n\n## Results\n\n| Finite branches | Candidate-modulus checks | Coefficient checks | Surviving maps |\n| --- | ---: | ---: | ---: |\n| Modulus coprime to 6 | 261,346 | 261,346 | 0 |\n| Modulus divisible by 2 or 3 | 2,420,451 | 7,993,284 | 0 |\n\nThese counts are branch checks: a modulus can occur under several different choices of anchor images. They are not counts of distinct modulus values across the whole experiment.\n\nThe separate identity-anchor branch contains 318 coefficient expressions representing identity within the checked interval. **Different coefficients need not mean a different function.** For example, modulo 110,\n\n```text\n55x² + 56x = x + 55x(x+1) ≡ x.\n```\n\nThe product x(x+1) is always even, so the extra term is divisible by 110. Reporting that quadratic coefficient as a nonidentity solution would be a mistake.\n\n## Where the conclusion stops\n\nThe requirement to preserve the **whole** alphabet is essential. On only the three inputs `{2,3,5}`, the quadratic `22x² + 16x + 10 (mod 127)` swaps 2 and 3 and fixes 5. However, it sends 7 to 57, outside the prime alphabet. A smaller observed alphabet can therefore permit maps excluded by the full-alphabet test. See the [affine page-support variant](#/experiments/literal-prime-affine-pages) for a separate example of why page-level scope matters.\n\nInjectivity is essential too: the constant function f(x)=2 always stays inside S, but destroys the distinctions between runes. Working with rune indices instead of their literal primes changes the domain. Higher-degree formulas, word-dependent operations, varying coefficients, and polynomial key sequences combined with unknown plaintext are also outside this experiment.\n\nNo candidate plaintext was scored. There was no selection of words that happened to look meaningful, and no claim about the language of the unsolved pages follows from this result.\n\n## How to reproduce it\n\nUse Python 3 with its standard library. No network service or model is needed. From the repository root, choose output filenames that do not already exist:\n\n```sh\npython -m unittest discover -s scripts -p test_quadratic_palette.py\npython scripts/run_quadratic_palette.py --output quadratic-certificate.json\npython scripts/check_quadratic_palette.py quadratic-certificate.json --receipt quadratic-audit.json\n```\n\nThe first command compares both coefficient solvers against every coefficient triple for moduli 2 through 18, including cases where division by 6 is invalid. It also checks divisor generation and the scope counterexamples above.\n\nThe producer scans divisor pairs up to the square root and solves congruences using modular inverses after accounting for the greatest common divisor. The checker imports none of that code: it reconstructs divisors by prime factorization and obtains coefficient solutions by lifting a congruence to integer equations. It then checks every finite branch and the bounded identity branch against the saved certificate. The receipt identifies the certificate and checker by SHA-256.\n\nAgreement between these implementations supports the computation. The all-modulus conclusion additionally depends on the reduction explained above. It has not been presented as a proof-assistant result or as completed human review.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/literal-prime-quadratic/article.md&quot;,
   &quot;script_sha256&quot;: &quot;5aca7221cf7857cdced38d4cd595bbce6725d00bfb416f77fb354957c1886186&quot;
+}</pre></article><article id="lp1-section-balance"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp1-section-balance&quot;,
+  &quot;title&quot;: &quot;LP1 column balance with section-preserving shuffles&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?&quot;,
+  &quot;summary&quot;: &quot;A section-preserving variant retains the low-variance result: 88 of 49,999 constrained shuffles are at least as flat, with plus-one estimate 0.00178. Shared-scale figures compare the two null models.&quot;,
+  &quot;tags&quot;: [
+    &quot;464 words&quot;,
+    &quot;word lengths&quot;,
+    &quot;column balance&quot;,
+    &quot;within section shuffle&quot;,
+    &quot;section preserving&quot;,
+    &quot;constrained permutation&quot;,
+    &quot;sixteen columns&quot;,
+    &quot;unreasonable things&quot;,
+    &quot;variance&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-01&quot;,
+      &quot;lp1-03&quot;,
+      &quot;lp1-04&quot;,
+      &quot;lp1-06&quot;,
+      &quot;lp1-07&quot;,
+      &quot;lp1-08&quot;,
+      &quot;lp1-09&quot;,
+      &quot;lp1-14&quot;,
+      &quot;lp1-15&quot;
+    ],
+    &quot;representation&quot;: &quot;Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.&quot;,
+    &quot;procedure&quot;: &quot;Retain the baseline word vector and continuous 29-by-16 layout. Independently shuffle fresh copies within each of the four sections, preserving section slots. Compare integer scores proportional to column-mean variance and derive the constrained expectation exactly.&quot;,
+    &quot;parameters&quot;: &quot;16 columns; 29 words per column; section sizes 45,124,208,87; 49,999 trials; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Baseline arrangement and result were known before this frozen variant.&quot;,
+    &quot;exclusions&quot;: &quot;Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;The observed score stays 128256. With section distributions and slots preserved, 88 of 49,999 shuffled scores are at or below it (plus-one lower-tail estimate 0.00178). The observed variance is 25.21% of this model’s exact expectation; the unrestricted baseline was 25.15%.&quot;,
+  &quot;limitations&quot;: &quot;Previously selected arrangement and known baseline. This is a model-sensitivity comparison, not independent or exploration-adjusted evidence. Both nulls destroy sentence syntax. No intent, grille or decryption claim; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Any sentence-preserving, alternative-width or section-order comparison needs its own frozen procedure and a selection-aware interpretation.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;lp1-word-length-balance&quot;,
+    &quot;title&quot;: &quot;LP1 word lengths and column balance&quot;,
+    &quot;question&quot;: &quot;How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?&quot;,
+    &quot;baseline&quot;: &quot;lp1-word-length-balance&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Preserve each section’s distribution and slots&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.&quot;,
+        &quot;after&quot;: &quot;Retain the baseline word vector and continuous 29-by-16 layout. Independently shuffle fresh copies within each of the four sections, preserving section slots. Compare integer scores proportional to column-mean variance and derive the constrained expectation exactly.&quot;,
+        &quot;reason&quot;: &quot;Change only the null permutation constraint and its exact normalization; disclose the remaining untested models.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.&quot;,
+        &quot;after&quot;: &quot;16 columns; 29 words per column; section sizes 45,124,208,87; 49,999 trials; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Baseline arrangement and result were known before this frozen variant.&quot;,
+        &quot;reason&quot;: &quot;Change only the null permutation constraint and its exact normalization; disclose the remaining untested models.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.&quot;,
+        &quot;after&quot;: &quot;Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.&quot;,
+        &quot;reason&quot;: &quot;Change only the null permutation constraint and its exact normalization; disclose the remaining untested models.&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent source token scan, all 49,999 permutation scores and position-pair expectation; exhaustive small controls; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-21&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp1-section-balance/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; offline. All inputs are included. Baseline plotting uses its preserved result; the complete constrained simulation is rerun.&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp1-section-balance/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;36c7f7101d0c5d169e5c56f0ab046fbc4aacab9f17b1009e1d0062e4c2056c89&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/plans/lp1-section-balance.md&quot;,
+        &quot;sha256&quot;: &quot;09044ab2a6a4a0b335f403ad10bb54d22eb00cf52e38a5bd41f31e6d61f6f646&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-word-length-balance/plan.json&quot;,
+        &quot;sha256&quot;: &quot;a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-word-length-balance/words.json&quot;,
+        &quot;sha256&quot;: &quot;67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-word-length-balance/submitted-lengths.json&quot;,
+        &quot;sha256&quot;: &quot;5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-01.txt&quot;,
+        &quot;sha256&quot;: &quot;24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-03.txt&quot;,
+        &quot;sha256&quot;: &quot;0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-04.txt&quot;,
+        &quot;sha256&quot;: &quot;588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-06.txt&quot;,
+        &quot;sha256&quot;: &quot;9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-07.txt&quot;,
+        &quot;sha256&quot;: &quot;df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-08.txt&quot;,
+        &quot;sha256&quot;: &quot;a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-09.txt&quot;,
+        &quot;sha256&quot;: &quot;2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-14.txt&quot;,
+        &quot;sha256&quot;: &quot;b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-15.txt&quot;,
+        &quot;sha256&quot;: &quot;aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/lp1-section-balance.json&quot;,
+        &quot;sha256&quot;: &quot;d9d2a54271d6e64767e2091e360fc252c73a703cd7a0b6672090e615708e83b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-word-length-balance/results.json&quot;,
+        &quot;sha256&quot;: &quot;caa45886bb5a1b225c98948893c78b28addaa1f09eab1eacd97bbf056a4ba8b0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/lp1_section_balance.py&quot;,
+        &quot;sha256&quot;: &quot;7d377e02faadf231fe2a59738cbcf88d4ab4415e8673e67bff89486f3733ff26&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/check_lp1_section_balance.py&quot;,
+        &quot;sha256&quot;: &quot;c9238525b4cce2a46bba641574cfdc3c0f1f7e83908c260c13042d031bed0e26&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/test_lp1_section_balance.py&quot;,
+        &quot;sha256&quot;: &quot;78102080c611e68ac35bdfeaefe0812d14f142face8e0b970c21ec1923024335&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/plot.py&quot;,
+        &quot;sha256&quot;: &quot;8bb486ba3bf4ae22f30b067b33155c723e83513883286834b33ff142081d7976&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/results.json&quot;,
+        &quot;sha256&quot;: &quot;ca10968e838db07716104b7c090e91f7132bbf88cf0f3bdb12da29016fc18b94&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/audit.json&quot;,
+        &quot;sha256&quot;: &quot;1a64498cd4194c4d701406f93182d328caed7b895d14c1233524a7d0f136e3f5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/null-comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;6d17f374d7d848d0ceca036d930fbc30034edd3bd9a323eb13e40a1b402bb923&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/section-slots.svg&quot;,
+        &quot;sha256&quot;: &quot;a4441f41e639e308b1e43d977e3a3ac164578140b35c7532a0de9c22b58a07fd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp1-section-balance/histogram.csv&quot;,
+        &quot;sha256&quot;: &quot;2c2841bfaea8b8e573db0ff409911a3c32f1bb60948961e8188131c135bd91f4&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Archived transcription and source provenance&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/conventions&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Search space, bounds and selection&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/search-space&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp1-word-length-balance&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp1-section-balance/null-comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Both null distributions use the same bins and axes. The dashed line marks the unchanged observed variance. Each panel includes all 49,999 trials; neither p-value adjusts for the original exploration.&quot;
+    },
+    {
+      &quot;path&quot;: &quot;experiments/records/lp1-section-balance/section-slots.svg&quot;,
+      &quot;caption&quot;: &quot;Fixed section membership of all 464 slots. Word lengths move only within their section’s colored slots. Columns continue across section boundaries.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Does preserving each section change the column-balance result?\n\nThe fixed 464-word arrangement remains unusually flat under a null that shuffles word lengths only within their original four sections. All original section slots and the continuous sixteen-column layout are preserved. This is a sensitivity variant of `lp1-word-length-balance`, not an independent discovery.\n\n| Quantity | Unrestricted baseline | Within-section variant |\n| --- | ---: | ---: |\n| Observed integer score | 128256 | 128256 |\n| Observed column-mean variance | 501/13456 | 501/13456 |\n| Observed variance / model expectation | 0.25150357 | 0.25209625 |\n| Null trials | 49,999 | 49,999 |\n| Trials at or below observed, including ties | 54 | 88 |\n| Plus-one lower-tail estimate | 0.0011 | 0.00178 |\n\nThe constrained expectation is calculated separately. Its exact expected integer score is `612019253902976/1202967183`, and expected column-mean variance is `4781400421117/32374252828896`. The unchanged observed variance divided by that expectation is `1205373117366/4781400421117`.\n\nThe four sections contain 45, 124, 208 and 87 words. Their boundaries do not reset the column position. The report preserves every section&#x27;s slot counts in all sixteen columns, exact expected column sums and variances, and all 49,999 null scores. A singleton-section boundary and unequal section sizes are covered by small exhaustive controls.\n\n## What changes between the two models?\n\nThe baseline permits any word length to move to any of the 464 slots. This variant permits a word length to move only to a slot in its original section. The lengths themselves, section order and observed arrangement remain unchanged. A section may occupy different numbers of slots in different columns, so keeping its slots matters as well as keeping its histogram.\n\nThe slot diagram shows those fixed memberships. Colors identify the four sections, not high or low word lengths. The same word may have several interchangeable positions within its color. A single section boundary can cut across a row; the next section continues at the next column.\n\nThe two histogram panels use identical integer-score bins, displayed on a common column-mean variance scale. The dashed line is the unchanged observed variance. Lower variance means more similar column means. Every one of the 49,999 null scores per model contributes to its panel; the complete bin counts are downloadable as CSV. The shared seed number does not pair individual trials because the procedures consume random choices differently.\n\n## Why the expectation changes\n\nUnder unrestricted shuffling, every slot samples the same pool of lengths. Under within-section shuffling, each slot samples only its section&#x27;s pool. The four pools have different means and variances. Columns also contain different section slot counts. Consequently, their expected sums need not be identical, even though every column still contains 29 words.\n\nFor section size N, population variance v and c slots in one column, its sum contributes variance `c*(N-c)*v/(N-1)`. Contributions from independently shuffled sections add. The expected squared distance from the fixed overall mean also includes the difference between each column&#x27;s expected sum and the overall mean. The script uses exact fractions; the checker obtains the same expectation through pairwise position moments. The ratio in the table therefore uses each model&#x27;s own expectation.\n\n## Reproduce\n\nExtract the experiment ZIP with folders intact, or use the repository. Python 3 standard library is sufficient. Run `python experiments/records/lp1-section-balance/run.py --check` to reproduce all constrained scores, run the independent checker and verify the figures. Use `--output section-replay` to retain new files in a new directory.\n\nThe individual stages can also be run from the root with new output paths:\n\n```sh\npython scripts/test_lp1_section_balance.py\npython scripts/lp1_section_balance.py --output section-results.json\npython scripts/check_lp1_section_balance.py section-results.json --receipt section-audit.json\n```\n\nThe [protocol](experiments/plans/lp1-section-balance.md) was committed before constrained shuffles were generated. The producer uses the hashed word ledger and source dependencies. The checker independently scans the original archived text, verifies all 464 words, reconstructs every permutation with explicit index swaps, and calculates the expectation through position-pair second moments. It imports no producer code. Both implementations share Python&#x27;s pseudorandom primitive.\n\n## Interpretation and publication status\n\nBoth estimates are below the predeclared 0.05 threshold. Preserving section-level length distributions does not remove the low-variance result in this fixed test. The two tests share the same selected arrangement; their p-values must not be combined as independent evidence. The original exploration is not included in either null. Neither model preserves sentence syntax, and neither tests a grille, carrier text, authorial intent or a decryption.\n\nHuman review remains pending. Saved results and the independent receipt are preserved here without overwriting the original baseline. The figures and histogram CSV are generated from those saved reports; the baseline distribution is reused from its published record, not simulated as part of this variant.\n\n## Related explanations\n\nSee [the unrestricted baseline](#/experiments/lp1-word-length-balance), [word-length conventions](#/wiki/word-lengths), and [null models and selection](#/wiki/null-models). Preserving section distributions is only one possible constraint; preserving sentences or testing alternative section orders would require a separately declared variant.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp1-section-balance/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;36c7f7101d0c5d169e5c56f0ab046fbc4aacab9f17b1009e1d0062e4c2056c89&quot;
 }</pre></article><article id="lp1-word-length-balance"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp1-word-length-balance&quot;,
   &quot;title&quot;: &quot;LP1: the 464-word table and column balance&quot;,

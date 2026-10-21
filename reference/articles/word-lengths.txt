@@ -257,6 +257,13 @@ The eight-language parallel-corpus experiment compares the same FLORES passages 
 
 For the limits of this language comparison on actual manuscript prose, see the known-LP reading control. Its pool and individual sections can rank differently. The equal-token control compares samples of exactly 2,896 tokens: English remains the manuscript’s nearest tested profile, but the manuscript is farther from each language profile than that language’s observed reference samples. The language-comparison overview explains how all four related records fit together.
 
+
+Does the 464-word balance depend on mixing sections?
+
+The section-preserving variant keeps the same observed arrangement but shuffles lengths only within each section’s original slots. It still finds low column-mean variance under that model: 88 of 49,999 trials are at least as flat, giving a plus-one lower-tail estimate of 0.00178. The shared-scale histograms and slot map show what changes from the unrestricted baseline.
+
+This is sensitivity to a null-model assumption, not independent confirmation. Both comparisons use the same previously selected arrangement and neither preserves coherent sentences or accounts for the original search over arrangements.
+
 Sources, related references, and files
 - rune indices and labels
   https://jelliottdev.github.io/reference/articles/rune-values.html
@@ -340,5 +347,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/target-sized-languages
 - language-comparison overview
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
+- section-preserving variant
+  https://jelliottdev.github.io/#/experiments/lp1-section-balance
 
 Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
