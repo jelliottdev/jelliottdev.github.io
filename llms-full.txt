@@ -6322,7 +6322,7 @@ The coordinates do not all mean the same thing
 
 	Puzzle	Lookup unit	Critical detail	Liberpedia status
 
-	2012 Mabinogion	Decoded post line : character	Post order, repeated titles and spacing	Source comparison; complete replay pending
+	2012 Mabinogion	Decoded post line : character	Post order, repeated titles and spacing	76 lookups replayed on the pinned archive; historical provenance limits below
 
 	2012 Britannica	Physical text line : character	CICADA heading is line zero; spaces count	All lookups replayed
 
@@ -6339,7 +6339,28 @@ The puzzle’s working text was decoded from post titles. Substituting a conveni
 
 The archived reconstruction script sorts records by creation time, handles image posts separately and suppresses repeated titles. Its anomaly log records repeated and later posts. That is evidence that copying the current visible listing is not a sufficient reconstruction procedure. It does not establish which “fourth post” a reader encountered or justify an arbitrary reorder.
 
-A complete replay should publish a numbered table containing the post ID, creation time, original title, inclusion decision, decoded line and every selected character. Keep duplicate rejection and whitespace edits visible. The archive’s script and the contemporary spacing account need reconciliation against preserved bytes before this page can claim a complete independent replay.
+Reproduced: why the third and fourth lines change places
+
+Our fresh replay ledger starts from 192 archived post records. It compares two declared selection rules: keep the earliest occurrence of each title across all authors, or first retain only posts whose author field is CageThrottleUs. Both sort by creation timestamp, with post ID as a tie-breaker, exclude JPEG/PNG image URLs, strip only outer title whitespace and suppress duplicate working titles. They retain 186 and 185 text lines respectively; the opening payload uses the first 76.
+
+	Rule	Line 3	Line 4	Opening extraction
+
+	Earliest copy, any author	o4e2a · anonymous copy	o4efi · named account	CAMT US…
+
+	Named account only	o4efi · named account	o4eu9 · later named copy	CALL US…
+
+
+The anonymous o4e2a and later named o4eu9 posts contain the same working title. Keeping the former inserts that text before o4efi. No manual line swap is needed for the named-account rule. Coordinates 3:5 and 4:20 select M and T in the first ordering, and L and L in the second. This explains this archive’s discrepancy without guessing which post a current reader called “number four.”
+
+Decode and inspect every lookup
+
+The title string a2e7j6ic78h0j7eiejd0120 gives the numeric key by interpreting digits normally and a–j as 10–19. Subtract successive key values modulo 26 from ASCII letters, repeat the key as needed, and restart it at each title. Punctuation does not advance the key. This replay uppercases letters but retains internal spacing and punctuation exactly as archived. Row and character coordinates both start at one.
+
+Under the named-account rule, all 76 coordinates extract CALL US AT US TELE PHONE NUMBER TWO ONE FOUR THREE NINE OH NINE SIX OH EIGHT. The ledger retains every input title, timestamp, selection decision, decoded line and lookup. The comparison was exploratory, prompted by the ordering complaint; the author filter is not cryptographic authentication. It reproduces the archived text, not a freshly retrieved 2012 Reddit page.
+
+No extra space was inserted after a period in this replay. The contemporary account’s spacing repair remains a separate historical observation: archive agreement does not prove its bytes are identical to that solver’s original copy. Preserve both facts rather than declaring either source universally correct.
+
+Extract the reference-data ZIP, then run python scripts/replay_2012_subreddit.py --output subreddit-replay.json with Python 3. The script checks source hashes, inverse letter shifts and coordinate selection, and preserves both outcomes. Replay script · Archived post records · Source manifest. The opening coordinates come from the freshly extracted JPEG payload.
 
 2012: Blake’s plate layout is part of the key
 
@@ -6375,6 +6396,18 @@ Sources, related references, and files
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/parse-decrypt-analyze.py
 - anomaly log
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/anomalies.txt
+- fresh replay ledger
+  https://jelliottdev.github.io/exports/cicada-2012-subreddit.json
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Replay script
+  https://jelliottdev.github.io/scripts/replay_2012_subreddit.py
+- Archived post records
+  https://jelliottdev.github.io/exports/sources/cicada-2012/subreddit-posts.json
+- Source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2012/manifest.json
+- freshly extracted JPEG payload
+  https://jelliottdev.github.io/reference/articles/2012-opening.html#outguess
 - community wiki account
   https://uncovering-cicada.fandom.com/wiki/The_second_chance_%282012%29
 - artifact archive

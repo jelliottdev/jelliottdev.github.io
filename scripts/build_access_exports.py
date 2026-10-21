@@ -21,7 +21,7 @@ def register(path,role,page=None):
  if page:row.update(page=page['id'],release=page['release'])
  # Human labels and archive aliases remain separate from the preserved path.
  if 'message-2016' in path or 'message-2017' in path or 'later-messages' in path:
-  row.update(title='2016–2017 signed messages and verification',aliases=['2016 message','2017 message','4gq25.jpg','way map road direction'],guide='later-messages')
+  row.update(title='2016â€“2017 signed messages and verification',aliases=['2016 message','2017 message','4gq25.jpg','way map road direction'],guide='later-messages')
  if 'second-chance-2012' in path:
   row.update(title='2012 second-chance painting and message',aliases=['NHYLD.jpg','Lady of Shalott','Waterhouse'],guide='lady-of-shalott')
  elif 'opening-2014' in path:
@@ -84,8 +84,8 @@ for summary in index['pages']:
  text+='## Sources\n\n'+'\n'.join(s['url'] for s in p['sources'])+'\n\nMirror agreement identifies preserved bytes, not creator authentication. Latin rune labels are not automatically plaintext.\n'
  save(f'reference/{pid}.md',text);register(f'reference/{pid}.md','Plain-text page reference',p);documents.append(text)
  # Standalone HTML contains the full reference text, usable without the app runtime.
- title=html.escape(pid.upper()+' — Liberpedia')
- save(f'reference/{pid}.html',f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav aria-label="Reference navigation"><a href="../index.html#/page/{pid}">Open wiki page</a> · <a href="{pid}.md">Plain text</a> · <a href="../data/pages/{pid}.json">JSON</a> · <a href="index.html">All page references</a></nav>{manuscript_reference_html(text)}</main></body></html>')
+ title=html.escape(pid.upper()+' â€” Liberpedia')
+ save(f'reference/{pid}.html',f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav aria-label="Reference navigation"><a href="../index.html#/page/{pid}">Open wiki page</a> Â· <a href="{pid}.md">Plain text</a> Â· <a href="../data/pages/{pid}.json">JSON</a> Â· <a href="index.html">All page references</a></nav>{manuscript_reference_html(text)}</main></body></html>')
 # Keep the non-JavaScript topic reference in sync with the same records as the UI.
 # A saved DOM snapshot can silently omit new topics or preserve a filtered view.
 topics=read('data/topics.json')
@@ -162,7 +162,7 @@ register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
  assert files[-1]['sha256']==record['sha256']
- files[-1].update(title=record['title']+' — Tate collection metadata',
+ files[-1].update(title=record['title']+' â€” Tate collection metadata',
                   aliases=[record['accession'],'William Blake','Tate','museum catalogue','compasses'],
                   guide={'N05058':'blake-newton','N05059':'blake-nebuchadnezzar'}[record['accession']])
 
@@ -189,7 +189,7 @@ for path in ['exports/section-contributions.json','exports/figures/section-contr
 for path in ['exports/phase-invariant.json','scripts/check_phase_invariant.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='cipher-invariants',aliases=['phase invariant','periodic affine','invertible multiplier'])
-for path in ['exports/cicada-2012-opening.json','scripts/replay_2012_opening.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2012').iterdir())]:
+for path in ['exports/cicada-2012-opening.json','scripts/replay_2012_opening.py','exports/cicada-2012-subreddit.json','scripts/replay_2012_subreddit.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2012').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='2012-opening',aliases=['2012 opening','first image','duck','OutGuess'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
@@ -210,7 +210,7 @@ register('exports/compass-mapping-audit.json','Geometric mapping audit')
 files[-1].update(title='Compass mapping ambiguity: complete affine enumeration',guide='compass-cipher-tests',aliases=['compass cipher','24 to 4','affine mapping'])
 
 register('exports/later-message-sums.json','Later-message arithmetic')
-files[-1].update(title='2016–2017 prime sums: full encoding ledger',guide='later-messages',aliases=['2016 prime sums','Fibonacci message','terminal F'])
+files[-1].update(title='2016â€“2017 prime sums: full encoding ledger',guide='later-messages',aliases=['2016 prime sums','Fibonacci message','terminal F'])
 
 register('exports/wing-tree-windows.json','Wing and Tree window audit')
 files[-1].update(title='Wing and Tree: every eleven-rune prime sum',guide='wing-and-tree',aliases=['563','569','eleven rune windows'])
@@ -239,7 +239,7 @@ files[-1].update(title='LP2-57 and 761.MP3 numeric connection',guide='prime-sums
 register('exports/761-id3.bin','Parable audio evidence')
 files[-1].update(title='761.MP3 original ID3 metadata excerpt (not audio)',guide='prime-sums')
 register('exports/side-dot-reuse.json','Image window comparison')
-files[-1].update(title='Side-dot regions across all sixteen LP2-40–55 pages',guide='spirals')
+files[-1].update(title='Side-dot regions across all sixteen LP2-40â€“55 pages',guide='spirals')
 
 register('exports/fibonacci-prime-panel.json','Number panel arithmetic')
 files[-1].update(title='LP2-15 complete Fibonacci-prime construction',guide='lp2-15-panel')
@@ -278,7 +278,7 @@ script_details = {
  'audit_grid_radix.py': ('Verify the conditional base-60 bound','alphanumeric-grids',['base 60 uniqueness']),
  'image_resolution_inventory.py': ('Inventory original JPEG dimensions and density','image-regions',['400 dpi','JFIF']),
  'parable_mp3_link.py': ('Verify the parable and MP3 metadata link','prime-sums',['761.MP3','1595277641']),
- 'side_dot_reuse.py': ('Compare side-dot regions on LP2-40–55','spirals',['side dots','pixel equality']),
+ 'side_dot_reuse.py': ('Compare side-dot regions on LP2-40â€“55','spirals',['side dots','pixel equality']),
  'fibonacci_prime_panel.py': ('Reproduce the complete LP2-15 panel', 'lp2-15-panel', ['Fibonacci','spiral']),
  'repeated_marker_audit.py': ('Audit repeated marker alignments', 'rune-ngrams', ['DJUBEI','EARTH alignment','6388']),
  'transcription_coverage.py': ('Inventory published transcription layers', 'transcription-checking', ['review coverage','reviewed transcription']),
@@ -409,7 +409,7 @@ for extension, content in [('json', json.dumps(grid_data,ensure_ascii=False,inde
  path = 'exports/alphanumeric-grids.'+extension
  save(path,content)
  register(path,'Alphanumeric grid transcription')
- files[-1].update(title='LP2-49–51 grid entries ('+extension.upper()+')',guide='alphanumeric-grids',release='LP2',pages=['lp2-49','lp2-50','lp2-51'],aliases=['alphanumeric grids','256 entries','grid coordinates','letter number grids'])
+ files[-1].update(title='LP2-49â€“51 grid entries ('+extension.upper()+')',guide='alphanumeric-grids',release='LP2',pages=['lp2-49','lp2-50','lp2-51'],aliases=['alphanumeric grids','256 entries','grid coordinates','letter number grids'])
 register('scripts/export_alphanumeric_grids.py','Reproduction script')
 files[-1].update(title='Export alphanumeric grid coordinates',guide='alphanumeric-grids',release='LP2',pages=['lp2-49','lp2-50','lp2-51'],aliases=['alphanumeric grids','256 entries','grid coordinates'])
 register('data/evidence/rune-ioc.json','Archived rune IoC baseline')
@@ -436,7 +436,7 @@ present=list(dict.fromkeys(a.get('category','Reference') for a in articles))
 groups=[g for g in categories if g['title'] in present]
 groups += [dict(title=title,id=f'other-{i}',description='') for i,title in
            enumerate(t for t in present if t not in {g['title'] for g in categories})]
-reference_index='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liberpedia reference index</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav><a href="../index.html#/overview">Open the wiki</a></nav><h1>Liberpedia reference index</h1><p>Read manuscript records and guides without JavaScript. Each article also has a plain-text version.</p><p>New here? Begin with <a href="articles/quick-start.html">Start solving</a>. Looking for the compasses image? Open the <a href="articles/illustrated-cover.html">illustrated cover</a>.</p><nav aria-label="Reference sections"><a href="#guides">Guides and methods</a> · <a href="#manuscript">Manuscript pages</a></nav><section id="guides"><h2>Guides and methods</h2>'
+reference_index='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liberpedia reference index</title><link rel="stylesheet" href="../style.css"><body><main class="standalone-article"><nav><a href="../index.html#/overview">Open the wiki</a></nav><h1>Liberpedia reference index</h1><p>Read manuscript records and guides without JavaScript. Each article also has a plain-text version.</p><p>New here? Begin with <a href="articles/quick-start.html">Start solving</a>. Looking for the compasses image? Open the <a href="articles/illustrated-cover.html">illustrated cover</a>.</p><nav aria-label="Reference sections"><a href="#guides">Guides and methods</a> Â· <a href="#manuscript">Manuscript pages</a></nav><section id="guides"><h2>Guides and methods</h2>'
 reference_index+='<nav class="section-nav" aria-label="Guide categories">'+''.join(
  '<a href="#guides-'+html.escape(g['id'],quote=True)+'">'+html.escape(g['title'])+'</a>' for g in groups)+'</nav>'
 for group in groups:
@@ -450,7 +450,7 @@ for group in groups:
 reference_index+='</section><section id="manuscript"><h2>Manuscript pages</h2><p>Both releases use zero-based numbering. The earlier illustrated cover is separate from these 75 records.</p>'
 for release in ['LP1','LP2']:
  reference_index+='<h3>'+release+'</h3><ul>'
- reference_index+=''.join(f'<li><a href="{p["id"]}.html">{p["id"].upper()}</a> · <a href="{p["id"]}.md">Plain text</a></li>' for p in index['pages'] if p['release']==release)
+ reference_index+=''.join(f'<li><a href="{p["id"]}.html">{p["id"].upper()}</a> Â· <a href="{p["id"]}.md">Plain text</a></li>' for p in index['pages'] if p['release']==release)
  reference_index+='</ul>'
 reference_index+='</section></main></body></html>'
 save('reference/index.html',reference_index)
@@ -676,7 +676,7 @@ experiment_bundle_count=0
 for experiment in read('data/experiments.json')['records']:
  path,members,omitted_images=build_experiment_bundle(root,experiment)
  register(path,'Experiment ZIP')
- files[-1].update(title=experiment['title']+' — reproduction files',experiment=experiment['id'],
+ files[-1].update(title=experiment['title']+' â€” reproduction files',experiment=experiment['id'],
                   pages=experiment['scope']['pages'],aliases=experiment.get('tags',[]),
                   releases=sorted({p['release'] for p in index['pages'] if p['id'] in experiment['scope']['pages']}),
                   members=members,original_images_required=omitted_images)
