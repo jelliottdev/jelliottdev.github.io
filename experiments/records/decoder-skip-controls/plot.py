@@ -20,7 +20,7 @@ for plant in report['plants']:
         row['truth_prefix_pruned']+=r['first_pruned_truth_step'] is not None
 assert len(groups)==80 and all(r['samples']==27 for r in groups.values())
 with (HERE/'summary.csv').open('w',encoding='utf-8',newline='') as f:
-    writer=csv.DictWriter(f,fieldnames=list(next(iter(groups.values()))));writer.writeheader();writer.writerows(groups.values())
+    writer=csv.DictWriter(f,fieldnames=list(next(iter(groups.values()))),lineterminator='\n');writer.writeheader();writer.writerows(groups.values())
 names={'rigid':'Ordinary addition','skip':'Key skipping','rewrite':'Value rewriting','drift-skip':'Unrelated advance + skipping'}
 configs=[('rigid',None,0)]+[('beam',w,s) for w in (16,64) for s in (1,3)]
 for repeat in (1,4):
