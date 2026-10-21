@@ -23975,6 +23975,42 @@ Major variants
 
 Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.
 
+Exhaustive over what?
+
+An exhaustive search visits every candidate in a declared finite set. Searching every seed from 0 to 255 is exhaustive over those 256 seeds for the chosen generator, alignment and decoding rule. It is not exhaustive over all seeds, generators or ciphers. A heuristic search can explore a much larger model without covering every candidate; report its stopping rule and what it actually evaluated.
+
+	Search choice	What to report	What failure does not establish
+
+	Finite enumeration	Complete candidate definition, bounds, duplicates and acceptance rule.	Exclusion of settings outside the enumeration.
+
+	Local improvement and restarts	Allowed moves, starting states, restart count and evaluation budget.	That no better candidate exists elsewhere.
+
+	Beam or other pruned search	Retained width, branching rules, score and pruning decisions.	That the correct path survived pruning.
+
+	Repeated manual tuning	Every changed parameter, score and selection criterion.	That the final result came from one fixed search.
+
+
+The best score changes with the search
+
+If one candidate set contains another and the score is unchanged, its maximum cannot be lower: the earlier winner is still available. This is true even when all candidates are wrong. A better maximum after trying more keys therefore needs interpretation, not automatic promotion to evidence of progress.
+
+The complete-search control experiment uses nested budgets of 1, 4, 16, 64 and 256 keys. Its null maxima increase across these budgets. In that particular grid, no null or key-absent positive search crosses the fixed threshold; adding the true key gives exact recovery and acceptance in all positive controls. The included-key arm has one extra candidate. These results establish behavior for the stored fixtures and search, not a universal false-positive rate.
+
+[Image: Recorded complete-search maxima for the first three of nine source sections, comparing null inputs, positive controls with the true key absent and positive controls with it included across five key budgets.]
+Existing control results, source sections 1–3 of nine. Dots are medians; lines show observed minimum-to-maximum ranges across 32 searches, not confidence intervals. All panels share axes. Full experiment, all nine sections and reproduction files · Download figure.
+
+A score is not a decoding certificate
+
+Check whether the score measures the property being claimed. The English-scorer controls find that both English and French originals pass the tested threshold, along with some samples from other languages. That scorer threshold is therefore not an English-language identifier. The fact that its shuffled controls fail is useful but does not calibrate an entire wrong-key search.
+
+The decoder controls make another distinction: some rewritten outputs pass the language threshold without exact rune recovery. Conversely, permitted skip limits can exclude a true alignment; making the beam wider cannot restore a path that the rules forbid. Search budget, candidate model and scoring objective are separate parts of the procedure.
+
+Make the strongest candidate inspectable
+
+Preserve the full output, key or parameter set, input version, score definition and candidate count. Keep several top candidates so readers can see whether the apparent winner is distinctive. Record all normalization, dictionary expansion and spelling changes used by the scorer. Evaluate an untouched continuation without retuning the rule or threshold.
+
+For controls, repeat the full search and selection process with comparable budgets. If the real search includes several ciphers, both directions, many offsets and several scoring models, controls that test only one key do not measure that procedure. See null models and adaptive choices.
+
 What a test must specify
 
 Declare the model, parameter bounds, compute budget, all selection rules and random seeds. Record how many candidates were evaluated and whether the search is exhaustive. Separate tuning examples from evaluation inputs.
@@ -23992,10 +24028,18 @@ Would an English scorer accept other languages?
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
-- How does trying more keys change the best score?
+- complete-search control experiment; Full experiment, all nine sections and reproduction files; How does trying more keys change the best score?
   https://jelliottdev.github.io/#/experiments/search-maximum-controls
-- Would an English scorer accept other languages?
+- Recorded complete-search maxima for the first three of nine source sections, comparing null inputs, positive controls with the true key absent and positive controls with it included across five key budgets.; Download figure
+  https://jelliottdev.github.io/experiments/records/search-maximum-controls/maxima-1.svg
+- English-scorer controls; Would an English scorer accept other languages?
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- decoder controls
+  https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- adaptive choices
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
