@@ -7099,7 +7099,7 @@ Sources, related references, and files
 - LP1: the 464-word table and column balance
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - Source verification and transcription audits
-  https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+  https://jelliottdev.github.io/reference/articles/method-source-audits.html
 - Have we tried it?
   https://jelliottdev.github.io/#/experiments
 - Download the family map
@@ -10521,6 +10521,9 @@ The later signed messages
 
 The 2016 and 2017 messages connect navigation language with an instruction to verify signatures. Inspect the original 2016 carrier image, preserved message files and reproduced checks before interpreting their wording as a cipher hint.
 
+
+For how this check fits the complete evidence trail, see source verification and transcription audits.
+
 Sources, related references, and files
 - exported key
   https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
@@ -10546,6 +10549,8 @@ Sources, related references, and files
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 - 2016 and 2017 messages
   https://jelliottdev.github.io/reference/articles/later-messages.html
+- source verification and transcription audits
+  https://jelliottdev.github.io/reference/articles/method-source-audits.html
 
 Article: https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 
@@ -21878,6 +21883,9 @@ A comparison that starts with a supplied list of text rows cannot independently 
 
 Equal counts can also mislead: LP2-00 had 12 proposals and 12 reference rune rows, yet only nine matched individually. The experiment provides original-image overlays and a reproduction bundle. It tests one segmentation rule; it does not show that a line is missing from the archived transcription.
 
+
+For how this check fits the complete evidence trail, see source verification and transcription audits.
+
 Sources, related references, and files
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
@@ -22037,6 +22045,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/page_boundary_inventory.py
 - eight-page row-coverage experiment
   https://jelliottdev.github.io/#/experiments/image-row-coverage
+- source verification and transcription audits
+  https://jelliottdev.github.io/reference/articles/method-source-audits.html
 
 Article: https://jelliottdev.github.io/reference/articles/transcription-checking.html
 
@@ -24749,6 +24759,82 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-positional-extraction.html
+
+
+---
+
+Source verification and transcription audits
+
+Trace artifacts, extracted content, transcriptions and analysis inputs, keeping each verification claim scoped.
+
+A source audit asks whether an analysis used the intended evidence and represented it faithfully. It can uncover a wrong file, a missing row, an altered separator or an undocumented preprocessing step. These checks support later experiments, but they do not identify a cipher by themselves.
+
+Follow the evidence through each stage
+
+	Stage	Question	Record to retain
+
+	Archived artifact	Which exact file was obtained, and from where?	Source URL or pinned revision, acquisition information, file size and checksum.
+
+	Extracted content	What operation produced the payload or image crop?	Tool version, command, input checksum and unmodified output.
+
+	Transcription	Which visible marks were copied or omitted?	Image locations, transcription conventions, corrections and unresolved ambiguities.
+
+	Analysis input	How did text become tokens, indices or measurements?	Normalization rules, headings, delimiters, boundary handling and source-position trace.
+
+	Result	Can the stated procedure regenerate this output?	Script, parameters, environment, output checksum and comparison report.
+
+
+A break in this chain limits the claim. Reproducing a result from a supplied transcription does not show that the transcription matches every mark in the original image. Likewise, identical copies in several repositories may share one source rather than represent independent checks.
+
+Choose the check that answers the question
+
+File identity: compare bytes or use the recorded checksums to detect a different input. This establishes agreement with the chosen reference file, not who created that reference or whether its interpretation is correct. The download catalog supplies checksums and bundles for reproductions.
+
+Signature verification: use the PGP guide to check the specified signed message against the specified key. Keep the signed object, key provenance and author-identity claim separate. A signed payload extracted from a JPEG is not a signature over every byte of that JPEG.
+
+Transcription comparison: the comparison guide distinguishes exact bytes, ordered rune streams and image review. Two files can have the same runes but different word boundaries, with different consequences for a word-length or word-reset experiment.
+
+Image coverage: check the regions actually inspected. The image-row coverage experiment records its specific audit scope. A sample of rows cannot certify uninspected rows or all page-boundary joins.
+
+Keep alternatives when the image is ambiguous
+
+Give each disputed mark a stable location and preserve its original crop. Record plausible readings without silently replacing the archived text. Run the downstream measurement under each declared alternative when feasible. If alternatives change the conclusion, report that dependence; if they do not, state the exact alternatives tested.
+
+With m independent disputed positions and two readings at each, there are 2^(m) combinations. Some disputes are linked rather than independent, and some alternatives produce identical analysis inputs. Describe those constraints and count the actual inputs instead of assuming every theoretical combination is meaningful.
+
+Start with a reproducible comparison
+
+From the extracted reference-data bundle, compare two UTF-8 transcriptions with:
+
+python scripts/compare_transcriptions.py old.txt new.txt
+
+The command reports byte and rune differences without editing the inputs. Follow the setup and output guide to interpret locations and dependencies. A file compared with itself is a useful installation check, but is not an independent transcription audit.
+
+State exactly what was checked
+
+A useful audit report names the files and versions, inspected regions, comparison rules, disagreements and unresolved items. Separate “the script reproduced the stored output,” “these rune rows match the image” and “this signed message verified.” None should be shortened to “the source is verified” without its scope.
+
+Documenting an experiment · Running reproduction scripts · All method families
+
+Sources, related references, and files
+- download catalog
+  https://jelliottdev.github.io/#/downloads
+- PGP guide
+  https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- comparison guide
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- image-row coverage experiment
+  https://jelliottdev.github.io/#/experiments/image-row-coverage
+- setup and output guide
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#compare
+- Documenting an experiment
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Running reproduction scripts
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-source-audits.html
 
 
 ---

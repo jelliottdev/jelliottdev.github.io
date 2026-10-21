@@ -1,0 +1,25 @@
+<p>A source audit asks whether an analysis used the intended evidence and represented it faithfully. It can uncover a wrong file, a missing row, an altered separator or an undocumented preprocessing step. These checks support later experiments, but they do not identify a cipher by themselves.</p>
+<h2 id="chain">Follow the evidence through each stage</h2>
+<div class="table-wrap"><table><thead><tr><th>Stage</th><th>Question</th><th>Record to retain</th></tr></thead><tbody>
+<tr><td>Archived artifact</td><td>Which exact file was obtained, and from where?</td><td>Source URL or pinned revision, acquisition information, file size and checksum.</td></tr>
+<tr><td>Extracted content</td><td>What operation produced the payload or image crop?</td><td>Tool version, command, input checksum and unmodified output.</td></tr>
+<tr><td>Transcription</td><td>Which visible marks were copied or omitted?</td><td>Image locations, transcription conventions, corrections and unresolved ambiguities.</td></tr>
+<tr><td>Analysis input</td><td>How did text become tokens, indices or measurements?</td><td>Normalization rules, headings, delimiters, boundary handling and source-position trace.</td></tr>
+<tr><td>Result</td><td>Can the stated procedure regenerate this output?</td><td>Script, parameters, environment, output checksum and comparison report.</td></tr>
+</tbody></table></div>
+<p>A break in this chain limits the claim. Reproducing a result from a supplied transcription does not show that the transcription matches every mark in the original image. Likewise, identical copies in several repositories may share one source rather than represent independent checks.</p>
+<h2 id="checks">Choose the check that answers the question</h2>
+<p><strong>File identity:</strong> compare bytes or use the recorded checksums to detect a different input. This establishes agreement with the chosen reference file, not who created that reference or whether its interpretation is correct. The <a href="#/downloads">download catalog</a> supplies checksums and bundles for reproductions.</p>
+<p><strong>Signature verification:</strong> use the <a href="#/wiki/pgp-signatures">PGP guide</a> to check the specified signed message against the specified key. Keep the signed object, key provenance and author-identity claim separate. A signed payload extracted from a JPEG is not a signature over every byte of that JPEG.</p>
+<p><strong>Transcription comparison:</strong> the <a href="#/wiki/transcription-checking">comparison guide</a> distinguishes exact bytes, ordered rune streams and image review. Two files can have the same runes but different word boundaries, with different consequences for a word-length or word-reset experiment.</p>
+<p><strong>Image coverage:</strong> check the regions actually inspected. The <a href="#/experiments/image-row-coverage">image-row coverage experiment</a> records its specific audit scope. A sample of rows cannot certify uninspected rows or all page-boundary joins.</p>
+<h2 id="ambiguity">Keep alternatives when the image is ambiguous</h2>
+<p>Give each disputed mark a stable location and preserve its original crop. Record plausible readings without silently replacing the archived text. Run the downstream measurement under each declared alternative when feasible. If alternatives change the conclusion, report that dependence; if they do not, state the exact alternatives tested.</p>
+<p>With m independent disputed positions and two readings at each, there are 2<sup>m</sup> combinations. Some disputes are linked rather than independent, and some alternatives produce identical analysis inputs. Describe those constraints and count the actual inputs instead of assuming every theoretical combination is meaningful.</p>
+<h2 id="replicate">Start with a reproducible comparison</h2>
+<p>From the extracted reference-data bundle, compare two UTF-8 transcriptions with:</p>
+<pre><code>python scripts/compare_transcriptions.py old.txt new.txt</code></pre>
+<p>The command reports byte and rune differences without editing the inputs. Follow the <a href="#/wiki/transcription-checking?section=compare">setup and output guide</a> to interpret locations and dependencies. A file compared with itself is a useful installation check, but is not an independent transcription audit.</p>
+<h2 id="report">State exactly what was checked</h2>
+<p>A useful audit report names the files and versions, inspected regions, comparison rules, disagreements and unresolved items. Separate “the script reproduced the stored output,” “these rune rows match the image” and “this signed message verified.” None should be shortened to “the source is verified” without its scope.</p>
+<p><a href="#/wiki/reproducibility">Documenting an experiment</a> · <a href="#/wiki/running-scripts">Running reproduction scripts</a> · <a href="#/wiki/solving-methods">All method families</a></p>
