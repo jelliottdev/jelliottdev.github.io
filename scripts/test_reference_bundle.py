@@ -177,8 +177,12 @@ def main():
         assert [row["equal"] for row in example["arrangements"]] == [2, 0, 1, 1, 0, 2]
         assert [row["selected"] for row in example["arrangements"]] == [2, 3, 2, 2, 3, 2]
         tails = example["upper_tails_including_ties"]
-        assert tails["equal"] == dict(observed_score=2, at_least_observed=2, total=6, probability="1/3")
-        assert tails["selected"] == dict(observed_score=2, at_least_observed=6, total=6, probability="1")
+        assert tails["equal"] == dict(observed_score=2, at_least_observed=2, total=6,
+                                     probability="1/3", below=4, tied=2, above=0,
+                                     inclusive_left="1", strict_right="0")
+        assert tails["selected"] == dict(observed_score=2, at_least_observed=6, total=6,
+                                        probability="1", below=0, tied=4, above=2,
+                                        inclusive_left="2/3", strict_right="1/3")
         print("PASS: exact six-arrangement teaching example and JSON tails")
         trace_manifest = json.loads((target / 'exports/readings/manifest.json').read_text(encoding='utf-8'))
         assert len(trace_manifest['records']) == 9
