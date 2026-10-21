@@ -66,6 +66,12 @@ The rule Cᵢ = Cᵢ₋₁ − Pᵢ has the same zero condition. The different r
 
 The existing F-reset and F-skip experiments test specified feedback and periodic-IoC rules on LP2-54–55. They do not test all mechanisms that could reduce doublets across LP2-00–55. Deletion, inserted separators, reordering and adaptive keys are different hypotheses requiring their own invertibility rules and bounds.
 
+What independent uniform keys would predict
+
+The uniform-additive-key experiment tests one precise model: each key is independently uniform on all 29 residues and independent of the plaintext. With the recorded page boundaries, it predicts about 444.86 adjacent matches; the observed count is 86. The exact inclusive lower tail is about 1.0708 × 10^(−98). The record supplies the binomial argument, an independent recurrence check, a distribution chart and a runnable bundle.
+
+This is a different null model from shuffling fixed rune counts. It was examined after the low count was already known, and its tail is not corrected for historical feature selection. It is not a rejection of every random-key construction. The following running-sum equation illustrates why the actual cipher equation matters.
+
 When a doublet would mean EA
 
 Consider the specific running-sum rule Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29, where plaintext EA has index 28 and each key value is in 1–28. This is a proposed equation, not an established Liber Primus cipher. It has an exact property: the ciphertext repeats its previous rune if and only if the current plaintext rune is EA.
@@ -154,6 +160,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - F-skip
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- uniform-additive-key experiment
+  https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Counting and chart script

@@ -1,0 +1,391 @@
+{
+  "id": "uniform-additive-doublets",
+  "title": "LP2-00–55: uniform additive keys and adjacent matches",
+  "status": "published",
+  "question": "Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?",
+  "summary": "86 adjacent matches versus 444.86 expected under one fixed model. Exact lower-tail calculation, page-boundary proof and independent finite controls.",
+  "tags": [
+    "doublets",
+    "adjacent matches",
+    "uniform keys",
+    "random keys",
+    "additive cipher",
+    "binomial distribution",
+    "repeat suppression",
+    "independent keys"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [],
+    "representation": "Archived rune-only page streams; headings included; remove non-runes; count overlapping equal neighbors; never join pages.",
+    "procedure": "Recount all pages and evaluate the inclusive lower binomial tail using exact integer arithmetic; independently check by integer-mass recurrence and regex recount.",
+    "parameters": "29-symbol alphabet; independent uniform additive keys, independent of fixed plaintext; fixed observed page lengths; lower tail includes ties; 80-digit Decimal rendering; 12 finite distribution controls.",
+    "exclusions": "Nonuniform or dependent keys, fixed-count shuffles, other cipher equations, altered boundaries, output filters, plaintext identification and correction for historical feature selection."
+  },
+  "outcome": "not-supported",
+  "finding": "The observed 86 matches among 12,901 edges strongly disagree with this uniform model: expected 12,901/29 ≈ 444.86; conditional P(D≤86) ≈ 1.0708e-98. This is not logical impossibility or a probability about language.",
+  "limitations": "Low count and prior claim known before replication. Conditional tail is not adjusted for prior feature selection. Archived transcription is assumed. Other key models and multiplicative running sums remain outside the result; human review pending.",
+  "next_steps": "Evaluate any alternative only under its own explicit key and boundary model; do not transfer this binomial tail to a fixed-count shuffle or nonuniform process.",
+  "family": {
+    "id": "doublet-count-models",
+    "title": "Models for the number of adjacent matches",
+    "question": "Which explicit symbol-generation models agree with the observed within-page repeat count?",
+    "baseline": "uniform-additive-doublets"
+  },
+  "variant": {
+    "label": "Independent uniform additive keys modulo 29",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent regex recount, exact integer recurrence and exhaustive finite controls; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/uniform-additive-doublets/run.py --check",
+    "environment": "Python 3 standard library. Independent check: python experiments/records/uniform-additive-doublets/check.py. Figure: python experiments/records/uniform-additive-doublets/plot.py --check.",
+    "script": "experiments/records/uniform-additive-doublets/run.py",
+    "script_sha256": "ce541bd6740626fb01f9360e0b6a78ba6fa2c1d47f89fe2a46f18e9d04625064",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/plans/uniform-additive-doublets.md",
+        "sha256": "31463abb017275ee340a7593c1100b900033d6ed80988ca67c2418150a831cd1"
+      },
+      {
+        "path": "exports/unsolved-doublets.json",
+        "sha256": "283af6bd2d7c5887fb34b0b84b3ac0b13a47ecd7d7042a89152a99a68ab17bcb"
+      },
+      {
+        "path": "experiments/plans/uniform-additive-doublets.json",
+        "sha256": "806a5e67073293939f3df266a71766e145d61424c71ac954263fce0fe1edaf2c"
+      },
+      {
+        "path": "experiments/records/uniform-additive-doublets/check.py",
+        "sha256": "fbabb0e71e987a63b5a062b9045ce3fff193ecbba0f664b3381e37b56fa3a6d8"
+      },
+      {
+        "path": "experiments/records/uniform-additive-doublets/plot.py",
+        "sha256": "635ed332e882a20371ea6944b767434e43c4660dfd9e5ec67fd4c0423b851a3f"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/uniform-additive-doublets/results.json",
+        "sha256": "5b449b1758ff7743f54eef6d40ba5c0506fffe507eec97ff7497433688068f4c"
+      },
+      {
+        "path": "experiments/records/uniform-additive-doublets/distribution.svg",
+        "sha256": "c35f0bebf3e7142a16945be6c1014e040b8f02393e1b7448c64e0cc4d128e0a0"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived doublet ledger and boundary conventions",
+      "url": "https://jelliottdev.github.io/#/wiki/doublets"
+    },
+    {
+      "label": "Conditional null models and selection",
+      "url": "https://jelliottdev.github.io/#/wiki/null-models"
+    }
+  ],
+  "related": [
+    "doublet-event-lags",
+    "parallel-languages"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/uniform-additive-doublets/distribution.svg",
+      "caption": "Binomial probabilities in ten-count bins under independent uniform additive keys. The observed count is 86; the expected count is about 445. Display ends at 649, with the remaining probability retained in JSON. This is a specific model comparison, not a plaintext-language probability."
+    }
+  ],
+  "article": "## What was tested\n\nThe archived LP2-00–55 text has **86 adjacent equal-rune pairs across 12,901 within-page edges**. Independent uniform additive keys modulo 29 would produce about **444.86 matches on average**. The exact probability of 86 or fewer under that model is approximately **1.0708 × 10⁻⁹⁸**.\n\nThis is a strong disagreement with one precisely defined model. It does not rule out encryption, random choices in other constructions, or any particular plaintext language. The low count and an earlier statement of this model were known before the replication. The probability is conditional on the model and is not adjusted for the historical search across manuscript features.\n\n## The model in ordinary terms\n\nFor every plaintext rune, independently choose a key uniformly from 0 through 28 and add it modulo 29. The plaintext may be any fixed sequence. Each resulting ciphertext rune is uniform, and different positions are independent. Keep the observed page lengths fixed.\n\nThe prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript's observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.\n\n## Why overlapping pairs still give a binomial law here\n\nAdjacent comparisons share positions: the first pair of ABC uses A and B, and the next uses B and C. Shared positions do not automatically make these match indicators dependent under this particular uniform model.\n\nWithin one page, replace the ciphertext sequence by its first rune and the successive differences modulo 29. This transformation is reversible: start at the first rune and add each difference to recover the page. A reversible transformation of the uniformly distributed full sequence remains uniform over all such coordinate tuples. The differences are therefore independent uniform residues. A pair matches exactly when its difference is zero, which has probability 1/29.\n\nApply this separately to each page. There are 12,956 runes on 55 nonempty pages, hence **12,956 − 55 = 12,901 differences**. LP2-50 has no alphabet runes and adds no edge. Their zero count has the binomial distribution with 12,901 trials and success probability 1/29.\n\nUniformity matters. For independent binary symbols with probabilities 3/4 and 1/4, one pair matches with probability 5/8. Both overlapping pairs match with probability 7/16, which is different from (5/8)² = 25/64. The corresponding independence argument fails for that nonuniform model.\n\n## Reading the figure and the probability\n\nThe bars show probabilities for ten-count intervals under the uniform model. The observed count is far to the left of the main mass; its tiny probability cannot be resolved at this linear plotting scale. Values 650 and above are retained in one overflow bin in the JSON but omitted from the displayed range. The exact lower tail includes every count from zero through 86, not just the probability of exactly 86.\n\nThe numerator is the integer sum `Σ comb(E,j) × 28^(E−j)` for j from 0 through D, and the denominator is `29^E`, with E = 12,901 and D = 86. The script uses exact integers for that sum and 80-digit decimal arithmetic to render the ratio. It records hashes of both exact integers and supplies their reconstruction formulas. No normal approximation is used.\n\nThe separate checker reconstructs the same integer masses using a recurrence. It verifies the entire set of plotting bins against exact integer totals, independently recounts all 56 source files with regular expressions, and exhausts twelve small uniform-alphabet/page-length cases. Those controls include overlapping edges, multiple pages, empty pages and single-rune pages. They check the calculation and boundary handling; they do not authenticate the underlying handwriting.\n\n## What remains possible\n\nThe model assigns this event a very small but nonzero probability. That is statistical evidence against the model, not a mathematical impossibility certificate. It neither selects an alternative model nor explains the suppression.\n\nIn particular, the [multiplicative running-sum model](#/wiki/doublets?section=ea-constraint) has a different equation. There, with nonzero keys modulo 29, a repeat can be determined by a particular plaintext rune. Uniform selection of its nonzero keys does not imply a repeat probability of 1/29. This experiment must not be used to reject that construction.\n\n## Reproduce the comparison\n\nDownload this experiment's bundle and preserve its folders. Python 3 standard library only; no network, API, or model is required.\n\n```text\npython experiments/records/uniform-additive-doublets/run.py --check\npython experiments/records/uniform-additive-doublets/check.py\npython experiments/records/uniform-additive-doublets/plot.py --check\n```\n\nThe first verifies the input hashes, per-page counts, exact tail and saved bins. The second uses the independent recurrence and controls. The third checks the chart against the saved probabilities. To regenerate, run the producer with `--write` and the plotter without `--check`.\n\nThe [committed plan](experiments/plans/uniform-additive-doublets.md) was fixed before these new calculations, after the prior count and claim were known. This is computationally checked replication; human review is pending. See [doublet definitions](#/wiki/doublets), [null-model selection](#/wiki/null-models), and [what a scoped exclusion means](#/wiki/first-experiment?section=exclusions).\n",
+  "article_path": "experiments/records/uniform-additive-doublets/article.md",
+  "script_sha256": "ce541bd6740626fb01f9360e0b6a78ba6fa2c1d47f89fe2a46f18e9d04625064"
+}

@@ -11895,6 +11895,396 @@
   &quot;article&quot;: &quot;## What was tested\n\nThe proposed 27 × 27 reading can be reproduced **when its selected cells and key nodes are supplied**. This experiment checks that arithmetic, the map itself, and the additional rules for predicting properties of the next block. It does not find the route from the manuscript without those selections.\n\nThe source is pinned to commit `d5eed3f10428372c7202ceebc65cc3bdead0819d`. Later edits to that repository are outside this result. The downloadable input records the coordinates, keys, source-file hashes and proposed output rune indices. No language model or language scorer chooses words in this replay.\n\n## Results at a glance\n\n| Check | Result | What it establishes |\n| --- | --- | --- |\n| Map compared with archived LP2-00–02 | 729 of 729 cells agree | The selected matrix uses our transcription in page order |\n| Main reading | 17 blocks, 61 rune subtractions reproduce | Correct arithmetic for supplied choices |\n| Alternative SOON block | 4 further subtractions reproduce | A second supplied route produces the same word |\n| Next-key signature | 16 of 16 transitions match | Fit to the recorded route |\n| Next axis and boundary role | Each matches 16 of 16 | Further fit to the same route, not independent discoveries |\n| Ciphertext coverage | 54 distinct cells of 729, about 7.4% | The proposed reading is a selection, with reused cells |\n| Same SOON key from three nodes | Horizontal / diagonal / diagonal | Key equality does not settle the node choice |\n\n**Outcome: inconclusive as a decryption claim.** Successful arithmetic is a real result. The supplied rules do not yet uniquely select and read the full matrix, and this experiment does not establish whether the proposed passage was intended.\n\n[Open the full-size coverage map](exports/figures/totient-map-coverage.svg) · [Open the node-choice diagram](exports/figures/totient-map-node-choice.svg)\n\n## How the map is made\n\nRead [LP2-00](#/page/lp2-00), [LP2-01](#/page/lp2-01) and [LP2-02](#/page/lp2-02) in that order. Keep every rune, including the heading, remove punctuation and spacing, and fill rows of 27 from left to right. Coordinates start at (1,1). This gives exactly 729 cells; the repository&#x27;s displayed map agrees cell by cell. It is a rearrangement of the text, not the original page layout.\n\nThe coverage figure highlights only ciphertext cells used in the primary route. Keys and navigation landmarks can use other cells. There are 61 output positions but only 54 distinct ciphertext cells because several are read more than once. Reuse is not automatically an error in a geometric cipher; it needs an explicit rule, just as skipping cells does.\n\nFor the functions themselves, see [Euler’s totient](#/wiki/totient) and [the Möbius function](#/wiki/mobius-function).\n\n## A complete arithmetic example: WEATHER\n\nThe node at row 14, columns 4–6 is X–OE–X, with indices 14,22,14. Replace the middle index by its totient: φ(22)=10, giving X–I–X. Apply μ(φ(k)) to each derived key index. The signature is (1,0,1), whose sum modulo 3 is 2. Rotate the key left twice to get X–X–I and repeat it.\n\n| Cipher cell | Cipher index | Key index | Difference modulo 29 | Output |\n| --- | --- | --- | --- | --- |\n| (14,14) | NG = 21 | X = 14 | 7 | W |\n| (14,15) | P = 13 | X = 14 | 28 | EA |\n| (14,16) | EO = 12 | I = 10 | 2 | TH |\n| (14,17) | O = 3 | X = 14 | 18 | E |\n| (14,18) | E = 18 | X = 14 | 4 | R |\n\nFive output runes spell WEATHER. This calculation does not itself explain why those five cells are chosen, why the block stops there, or which block follows. The opening block also crosses a row boundary, whereas later selections include vertical and diagonal segments. TURNS uses its three node indices directly rather than transforming the center. Those choices are preserved in the replay instead of silently replacing them with a uniform rule.\n\nThe output trace retains rune tokens such as TH and EA. Spaces and punctuation in the proposed English reading are editorial interpretations, not separate decoded symbols.\n\n## What the transition rules add\n\nThe source provides more than word examples. It predicts a next-key signature using Möbius values of current block coordinates. It switches between direct and half-turned positions at cumulative phase totals 7 and 14. A quarter-turn calculation updates the outer signature state. A separate formula involving the current beginning, end and original node center predicts horizontal, vertical or diagonal; another predicts whether the next block&#x27;s leftmost cell is its beginning or end.\n\nWe recomputed all 16 primary transitions, treating OF and THE separately and using the primary SOON route. All three checks match. The starting state, block boundaries, node centers and phase thresholds are inputs. The source states that the thresholds were identified from this route. Consequently, **16 matches are an in-sample fit, not 16 held-out predictions**. The signature, axis and boundary checks also share inputs and must not be multiplied as independent probabilities.\n\n### How many keys share a signature?\n\nA signature constrains a key without identifying its runes. For example, (0,0,0) is shared by 4,096 ordered triples of positive rune indices; (1,0,1) by 1,296. These counts enumerate indices 1–28 only. They exclude F=0, for which the standard positive-integer totient is not defined here. They are not counts of reachable nodes: geometric restrictions can reduce the candidates considerably.\n\nFor each derived key index k, compute μ(φ(k)). Among indices 1–28, 16 give zero, 3 give −1, and 9 give +1. An ordered key with signature (0,0,0) can independently select any of the 16 zero-class indices in each slot: 16 × 16 × 16 = 4,096. Repeated indices are allowed in this algebraic count. The signature (1,0,1) similarly gives 9 × 16 × 9 = 1,296.\n\n[Inspect the signature-class diagram](exports/figures/totient-signature-classes.svg). These are derived key triples before phase rotation; equal outer signature values do not require equal outer rune indices. They do not enumerate manuscript locations, enforce mirror-node geometry, or measure how many alternatives survive the complete proposed traversal. Therefore they cannot be used as the denominator of a chance probability for the reading.\n\n### Check one transition by hand: WEATHER → TURNS\n\nWEATHER occupies absolute positions 365–369, where position is `27 × (row − 1) + column`. Its original key-node center is (14,5), position 356, and contains OE with rune index 22. The cumulative phase total before this transition is 2, so the direct-position mode with offset 1 applies.\n\n| Quantity | Calculation | Result |\n| --- | --- | --- |\n| Next phase | `(1 + μ(365) + μ(366) + μ(367) + μ(368) + μ(369)) mod 3` = `(1 + 1 − 1 − 1 + 0 + 0) mod 3` | 0 |\n| Next outer state | Quarter-turned positions are 365, 392, 419, 446, 473; minimum 365 has μ = 1. Update `(1 + 1) mod 2`. | 0 |\n| Next signature | Phase 0 and outer state 0 force the middle component to 0. | (0,0,0) |\n| Next axis | `μ(365 + 356) + μ(gcd(473,361))` = `μ(721) + μ(1)` = 1 + 1 | Positive: vertical |\n| Next boundary role | Three-quarter-turned endpoint has position 257. `(μ(257) + φ(22)) mod 2` = `(−1 + 10) mod 2` | 1: beginning |\n\nFor a vertical block, the minimum quarter-turned position corresponds to its bottommost cell. Calling that cell the beginning therefore predicts upward reading. The supplied TURNS block does read upward, from (14,19) to (10,19), and its key has signature (0,0,0). These properties agree; the calculation still does not choose column 19, the block&#x27;s starting row, its length, or the exact key.\n\nEvery transition now has the same level of detail in the report&#x27;s `calculation` object: coordinates, transformed positions, individual Möbius values, cumulative state, gcd arguments and boundary selection. The independent checker reconstructs these entries by rotating coordinates directly instead of using the replay&#x27;s formulas for rotated absolute positions.\n\n## A controlled ambiguity: three SOON nodes\n\nThe source documents L–C–EA, L–I–EA and L–EO–EA. Their center indices 5, 10 and 12 all have totient 4. All therefore derive L–R–EA, align to EA–L–R, and turn the same X–D–W–H ciphertext into SOON.\n\nHowever, the next-axis formula also uses the original center&#x27;s **position**. With the documented centers (25,7), (20,15) and (25,14), the scores are respectively 0, −1 and −1: horizontal, diagonal, diagonal. The published transition fit chooses (25,7), which agrees with THEN&#x27;s horizontal block. The source explicitly identifies that choice.\n\nThis is a bounded example of a selection that affects the result. It does not prove that any desired sentence can be produced, or that all three choices satisfy every proposed navigation condition. It shows why a full decoder needs a rule selecting the original node before the next block is inspected.\n\n## Are three-rune mirrors unusual by themselves?\n\nWe counted equal outer runes around any center, along rows, columns and the two diagonals, at every in-bounds radius from 1 to 13. Each unoriented triple is counted once. The map has **507** such mirrors.\n\nAs a control, we shuffled the same 729 rune indices 99 times using seed 3301. This preserves rune frequencies but removes their original positions. Mirror counts ranged from **458 to 568**. The observed count is inside that range.\n\nThis control is deliberately narrow. It tests the abundance of this simple geometric pattern, not the quality of the proposed English, the complete traversal, or the combined transition rules. It supplies no chance probability for the selected reading. Testing that stronger claim would require a completely specified search procedure, the same search budget on controls, and a scoring rule chosen before inspecting the results.\n\n## How to reproduce\n\nDownload this experiment&#x27;s bundle and extract it without changing its folder structure. Python 3 and its standard library are sufficient; no network, API or model is required.\n\n```text\npython experiments/records/totient-map-route/run.py --check\npython experiments/records/totient-map-route/check.py\npython experiments/records/totient-map-route/signature_figure.py\n```\n\nThe first command rebuilds the report and coverage image in memory and compares them with the saved versions. It checks all selected key nodes and subtractions, recomputes transition matches, enumerates signature classes, and repeats the mirror controls. Running without `--check` writes the report and coverage image. The explanatory node-choice diagram is an authored illustration of the reported three-node comparison.\n\nThe second command independently derives totients through prime factorization, checks all 65 recorded rune subtractions and node-derived keys, and compares totients with coprime counting for 1–729. It also independently verifies all 16 transition calculation records, all 18 key-node midpoints, and rotation identities for all 729 cells. It does not independently rediscover the route or certify the author&#x27;s navigation choices. The JSON report includes all rune traces, transition inputs/results, the 99 control counts, reused cells, and phase-rotation ablations. Those ablations deliberately change the phase rule; they are sensitivity checks, not alternatives permitted by the fixed phase formula.\n\nThe third command independently calculates totients by counting coprimes and Möbius values by factorization, checks all six reported signature-class counts, and verifies the saved diagram. Add `--write` only to regenerate that diagram. It does not search for map nodes or produce plaintext.\n\n## What would strengthen the claim\n\nA useful next variant would freeze a deterministic procedure for choosing the initial node, subsequent anchors, node transformations, distance expressions, block lengths, directions, stopping condition and tie-breaking. It should specify how to handle zero-valued runes and every branch that remains possible.\n\nRun that fixed procedure on an unseen continuation before adjusting it. Report all outputs, not only readable ones. If alternatives remain, bound the enumeration and apply an explicit score to every candidate and to matched controls. This is the distinction between a reproducible selected reading and a decoder capable of making a new prediction. See [search space and bounds](#/wiki/search-space) and [planning a first experiment](#/wiki/first-experiment).\n\nThe numerical and thematic correspondences in the source&#x27;s “Strongest Plaintext Evidence” discussion are not assigned significance here. Nor does this test rule out other 27 × 27, totient or geometric methods. Revisions that change node selection or traversal belong as related variants in this experiment family, with their changed choices stated explicitly.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/totient-map-route/article.md&quot;,
   &quot;script_sha256&quot;: &quot;cb69a7bb519052a308fcd28ec8c09586f53e5d095193fe4ebd06cb15296177cd&quot;
+}</pre></article><article id="uniform-additive-doublets"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;uniform-additive-doublets&quot;,
+  &quot;title&quot;: &quot;LP2-00–55: uniform additive keys and adjacent matches&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?&quot;,
+  &quot;summary&quot;: &quot;86 adjacent matches versus 444.86 expected under one fixed model. Exact lower-tail calculation, page-boundary proof and independent finite controls.&quot;,
+  &quot;tags&quot;: [
+    &quot;doublets&quot;,
+    &quot;adjacent matches&quot;,
+    &quot;uniform keys&quot;,
+    &quot;random keys&quot;,
+    &quot;additive cipher&quot;,
+    &quot;binomial distribution&quot;,
+    &quot;repeat suppression&quot;,
+    &quot;independent keys&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [],
+    &quot;representation&quot;: &quot;Archived rune-only page streams; headings included; remove non-runes; count overlapping equal neighbors; never join pages.&quot;,
+    &quot;procedure&quot;: &quot;Recount all pages and evaluate the inclusive lower binomial tail using exact integer arithmetic; independently check by integer-mass recurrence and regex recount.&quot;,
+    &quot;parameters&quot;: &quot;29-symbol alphabet; independent uniform additive keys, independent of fixed plaintext; fixed observed page lengths; lower tail includes ties; 80-digit Decimal rendering; 12 finite distribution controls.&quot;,
+    &quot;exclusions&quot;: &quot;Nonuniform or dependent keys, fixed-count shuffles, other cipher equations, altered boundaries, output filters, plaintext identification and correction for historical feature selection.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The observed 86 matches among 12,901 edges strongly disagree with this uniform model: expected 12,901/29 ≈ 444.86; conditional P(D≤86) ≈ 1.0708e-98. This is not logical impossibility or a probability about language.&quot;,
+  &quot;limitations&quot;: &quot;Low count and prior claim known before replication. Conditional tail is not adjusted for prior feature selection. Archived transcription is assumed. Other key models and multiplicative running sums remain outside the result; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Evaluate any alternative only under its own explicit key and boundary model; do not transfer this binomial tail to a fixed-count shuffle or nonuniform process.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;doublet-count-models&quot;,
+    &quot;title&quot;: &quot;Models for the number of adjacent matches&quot;,
+    &quot;question&quot;: &quot;Which explicit symbol-generation models agree with the observed within-page repeat count?&quot;,
+    &quot;baseline&quot;: &quot;uniform-additive-doublets&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Independent uniform additive keys modulo 29&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent regex recount, exact integer recurrence and exhaustive finite controls; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/uniform-additive-doublets/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library. Independent check: python experiments/records/uniform-additive-doublets/check.py. Figure: python experiments/records/uniform-additive-doublets/plot.py --check.&quot;,
+    &quot;script&quot;: &quot;experiments/records/uniform-additive-doublets/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ce541bd6740626fb01f9360e0b6a78ba6fa2c1d47f89fe2a46f18e9d04625064&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/uniform-additive-doublets.md&quot;,
+        &quot;sha256&quot;: &quot;31463abb017275ee340a7593c1100b900033d6ed80988ca67c2418150a831cd1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/unsolved-doublets.json&quot;,
+        &quot;sha256&quot;: &quot;283af6bd2d7c5887fb34b0b84b3ac0b13a47ecd7d7042a89152a99a68ab17bcb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/uniform-additive-doublets.json&quot;,
+        &quot;sha256&quot;: &quot;806a5e67073293939f3df266a71766e145d61424c71ac954263fce0fe1edaf2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/uniform-additive-doublets/check.py&quot;,
+        &quot;sha256&quot;: &quot;fbabb0e71e987a63b5a062b9045ce3fff193ecbba0f664b3381e37b56fa3a6d8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/uniform-additive-doublets/plot.py&quot;,
+        &quot;sha256&quot;: &quot;635ed332e882a20371ea6944b767434e43c4660dfd9e5ec67fd4c0423b851a3f&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/uniform-additive-doublets/results.json&quot;,
+        &quot;sha256&quot;: &quot;5b449b1758ff7743f54eef6d40ba5c0506fffe507eec97ff7497433688068f4c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/uniform-additive-doublets/distribution.svg&quot;,
+        &quot;sha256&quot;: &quot;c35f0bebf3e7142a16945be6c1014e040b8f02393e1b7448c64e0cc4d128e0a0&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Archived doublet ledger and boundary conventions&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/doublets&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Conditional null models and selection&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/null-models&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;doublet-event-lags&quot;,
+    &quot;parallel-languages&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/uniform-additive-doublets/distribution.svg&quot;,
+      &quot;caption&quot;: &quot;Binomial probabilities in ten-count bins under independent uniform additive keys. The observed count is 86; the expected count is about 445. Display ends at 649, with the remaining probability retained in JSON. This is a specific model comparison, not a plaintext-language probability.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## What was tested\n\nThe archived LP2-00–55 text has **86 adjacent equal-rune pairs across 12,901 within-page edges**. Independent uniform additive keys modulo 29 would produce about **444.86 matches on average**. The exact probability of 86 or fewer under that model is approximately **1.0708 × 10⁻⁹⁸**.\n\nThis is a strong disagreement with one precisely defined model. It does not rule out encryption, random choices in other constructions, or any particular plaintext language. The low count and an earlier statement of this model were known before the replication. The probability is conditional on the model and is not adjusted for the historical search across manuscript features.\n\n## The model in ordinary terms\n\nFor every plaintext rune, independently choose a key uniformly from 0 through 28 and add it modulo 29. The plaintext may be any fixed sequence. Each resulting ciphertext rune is uniform, and different positions are independent. Keep the observed page lengths fixed.\n\nThe prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript&#x27;s observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.\n\n## Why overlapping pairs still give a binomial law here\n\nAdjacent comparisons share positions: the first pair of ABC uses A and B, and the next uses B and C. Shared positions do not automatically make these match indicators dependent under this particular uniform model.\n\nWithin one page, replace the ciphertext sequence by its first rune and the successive differences modulo 29. This transformation is reversible: start at the first rune and add each difference to recover the page. A reversible transformation of the uniformly distributed full sequence remains uniform over all such coordinate tuples. The differences are therefore independent uniform residues. A pair matches exactly when its difference is zero, which has probability 1/29.\n\nApply this separately to each page. There are 12,956 runes on 55 nonempty pages, hence **12,956 − 55 = 12,901 differences**. LP2-50 has no alphabet runes and adds no edge. Their zero count has the binomial distribution with 12,901 trials and success probability 1/29.\n\nUniformity matters. For independent binary symbols with probabilities 3/4 and 1/4, one pair matches with probability 5/8. Both overlapping pairs match with probability 7/16, which is different from (5/8)² = 25/64. The corresponding independence argument fails for that nonuniform model.\n\n## Reading the figure and the probability\n\nThe bars show probabilities for ten-count intervals under the uniform model. The observed count is far to the left of the main mass; its tiny probability cannot be resolved at this linear plotting scale. Values 650 and above are retained in one overflow bin in the JSON but omitted from the displayed range. The exact lower tail includes every count from zero through 86, not just the probability of exactly 86.\n\nThe numerator is the integer sum `Σ comb(E,j) × 28^(E−j)` for j from 0 through D, and the denominator is `29^E`, with E = 12,901 and D = 86. The script uses exact integers for that sum and 80-digit decimal arithmetic to render the ratio. It records hashes of both exact integers and supplies their reconstruction formulas. No normal approximation is used.\n\nThe separate checker reconstructs the same integer masses using a recurrence. It verifies the entire set of plotting bins against exact integer totals, independently recounts all 56 source files with regular expressions, and exhausts twelve small uniform-alphabet/page-length cases. Those controls include overlapping edges, multiple pages, empty pages and single-rune pages. They check the calculation and boundary handling; they do not authenticate the underlying handwriting.\n\n## What remains possible\n\nThe model assigns this event a very small but nonzero probability. That is statistical evidence against the model, not a mathematical impossibility certificate. It neither selects an alternative model nor explains the suppression.\n\nIn particular, the [multiplicative running-sum model](#/wiki/doublets?section=ea-constraint) has a different equation. There, with nonzero keys modulo 29, a repeat can be determined by a particular plaintext rune. Uniform selection of its nonzero keys does not imply a repeat probability of 1/29. This experiment must not be used to reject that construction.\n\n## Reproduce the comparison\n\nDownload this experiment&#x27;s bundle and preserve its folders. Python 3 standard library only; no network, API, or model is required.\n\n```text\npython experiments/records/uniform-additive-doublets/run.py --check\npython experiments/records/uniform-additive-doublets/check.py\npython experiments/records/uniform-additive-doublets/plot.py --check\n```\n\nThe first verifies the input hashes, per-page counts, exact tail and saved bins. The second uses the independent recurrence and controls. The third checks the chart against the saved probabilities. To regenerate, run the producer with `--write` and the plotter without `--check`.\n\nThe [committed plan](experiments/plans/uniform-additive-doublets.md) was fixed before these new calculations, after the prior count and claim were known. This is computationally checked replication; human review is pending. See [doublet definitions](#/wiki/doublets), [null-model selection](#/wiki/null-models), and [what a scoped exclusion means](#/wiki/first-experiment?section=exclusions).\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/uniform-additive-doublets/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ce541bd6740626fb01f9360e0b6a78ba6fa2c1d47f89fe2a46f18e9d04625064&quot;
 }</pre></article><article id="wing-tree-eleven-rune-windows"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wing-tree-eleven-rune-windows&quot;,
   &quot;title&quot;: &quot;LP2-27–32: eleven-rune sums of 563 and 569&quot;,
