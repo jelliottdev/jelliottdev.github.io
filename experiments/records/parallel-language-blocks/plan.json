@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "question": "Do language matches survive shorter aligned evaluation passages?",
+  "design": "Partition all 1012 FLORES devtest sentences into eight consecutive disjoint blocks: first four 127 sentences, last four126. Same sentence ranges for every language. Fixed before block scoring.",
+  "models": [
+    "letters",
+    "folded",
+    "gp-length"
+  ],
+  "primary": "For each block and representation, compare each language length histogram to the fixed manuscript histogram with the baseline TV metric. Report all scores and ranks, not a posterior.",
+  "control": "Classify each of 64 language/block profiles by nearest full dev language histogram, separately per representation; publish confusion matrices and individual decisions. Dev is unchanged; no fitting or tuning.",
+  "sampling_limit": "Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference.",
+  "exclusions": "Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity.",
+  "inputs": [
+    {
+      "path": "experiments/records/parallel-languages/cym_Latn.dev.txt",
+      "sha256": "384b2d60a58ffa69686fd0a786cab0797d5a10aa774223087661ce4ee34ea747"
+    },
+    {
+      "path": "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+      "sha256": "94bdd16fe4141e5bef227bcd49dd283e1397e993ef0ab3e8db281175e536551f"
+    },
+    {
+      "path": "experiments/records/parallel-languages/deu_Latn.dev.txt",
+      "sha256": "12fac774c6f79d966774a1829648a6e107700662e9e7b9e31ad08541382b97aa"
+    },
+    {
+      "path": "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+      "sha256": "9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2"
+    },
+    {
+      "path": "experiments/records/parallel-languages/eng_Latn.dev.txt",
+      "sha256": "51a25f527fd81f428b6933d85a2f5e5544af92aa82042c7fbf0c4120327fba0a"
+    },
+    {
+      "path": "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+      "sha256": "612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88"
+    },
+    {
+      "path": "experiments/records/parallel-languages/fin_Latn.dev.txt",
+      "sha256": "9769916f6411822e510b47b1aac01fb123061a0da9ef14a621540b81c490ef4a"
+    },
+    {
+      "path": "experiments/records/parallel-languages/fin_Latn.devtest.txt",
+      "sha256": "26b0906ca080c5602eec4a769b0ac24169ca8fa484f95fc8f41ca5212fa2632c"
+    },
+    {
+      "path": "experiments/records/parallel-languages/fra_Latn.dev.txt",
+      "sha256": "7c1e1043b9d8cc6cb6fd4388ce068060f36518fd3597357a381cfdbe8ce5ab00"
+    },
+    {
+      "path": "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+      "sha256": "82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42"
+    },
+    {
+      "path": "experiments/records/parallel-languages/ita_Latn.dev.txt",
+      "sha256": "192429adab7b6c43f75db8363151a91b7a21cdb83bafc2a1d5ee2f1dec7f81c6"
+    },
+    {
+      "path": "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+      "sha256": "4166da51aba285736535916870142d7e9491494cee52b1db0808533399796a94"
+    },
+    {
+      "path": "experiments/records/parallel-languages/por_Latn.dev.txt",
+      "sha256": "cf748f9311660dbfc4dbaad9301c98865c6b6f72fba86ee496e7b00e3472575e"
+    },
+    {
+      "path": "experiments/records/parallel-languages/por_Latn.devtest.txt",
+      "sha256": "1a04351c9b8c99a1808bb5da9051c06ffd1d65a5fe7236e40a80568abdbc67e7"
+    },
+    {
+      "path": "experiments/records/parallel-languages/spa_Latn.dev.txt",
+      "sha256": "9a99ddc459542da2d980b21cc049e799172545938cb02a5e7c92ebd8234b2121"
+    },
+    {
+      "path": "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+      "sha256": "40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9"
+    },
+    {
+      "path": "experiments/records/parallel-languages/metadata_dev.tsv",
+      "sha256": "26e7b00913809be16aa2590e5e252f0a54832eef2de96b3948876878995ec771"
+    },
+    {
+      "path": "experiments/records/parallel-languages/metadata_devtest.tsv",
+      "sha256": "8edac47f861fcf6b54dad2068c10ba8f741da8b8676861c6bc27fcd9f5483b36"
+    },
+    {
+      "path": "exports/unsolved-word-tokens.json",
+      "sha256": "fd6a8d02d472567a06fc85384d4961971cb67c93720b3d2b0ad7c53ec39cdb8a"
+    },
+    {
+      "path": "experiments/records/parallel-languages/plan.json",
+      "sha256": "9b5236fcafbd2931ab1d4b36438a50b89b4b090243ada5e03501704041d378f4"
+    },
+    {
+      "path": "experiments/records/parallel-languages/SOURCE.txt",
+      "sha256": "0ac2331dc1c4b5045c672a9a16e3044c34481ebfe6320eb0f08a620fca6f5056"
+    },
+    {
+      "path": "experiments/records/parallel-languages/run.py",
+      "sha256": "0786c3427af1da5436f26ed20d0ca856b5090d41839b5b8b66369519cdcf1ebb"
+    }
+  ]
+}
