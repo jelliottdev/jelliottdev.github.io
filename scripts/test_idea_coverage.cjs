@@ -59,7 +59,16 @@ for(const [query,id] of [
  ['Read backwards','transposition'],
  ['Read in a snake pattern','routes'],
  ['Combine ciphers','composition'],
- ['Remove some runes first','null-removal']
+ ['Remove some runes first','null-removal'],
+ ['book cipher','book-codes'],
+ ['fractionation','fractionation'],
+ ['transposition','transposition'],
+ ['substitution','fixed-substitution'],
+ ['frequency analysis','distributions'],
+ ['entropy','distributions'],
+ ['IoC','distributions'],
+ ['block cipher','blocks'],
+ ['beam search','automatic-search']
 ])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
 assert.equal(Coverage.families(families,'LP2-31').length,0);
 assert.equal(Search.experimentDocs(families).length,0);
