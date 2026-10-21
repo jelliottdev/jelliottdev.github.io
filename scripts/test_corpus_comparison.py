@@ -6,6 +6,7 @@ import statistics
 import unittest
 
 from compare_corpus_prefixes import exact_profile, rank_profiles
+from check_corpus_comparison import expanded_profile, check_rows
 
 
 class ComparisonControls(unittest.TestCase):
@@ -43,6 +44,24 @@ class ComparisonControls(unittest.TestCase):
         rows = rank_profiles([{'mean': Fraction(10**20 - 1, 10**20)}, target,
                               {'mean': Fraction(10**20 + 1, 10**20)}], target)
         self.assertEqual([rows[0][k] for k in ('below', 'equal', 'above')], [1, 1, 1])
+
+    def test_independent_checker_and_corruptions(self):
+        histograms = [{'1': 2, '3': 2}, {'2': 4}, {'1': 1, '2': 2, '16': 1}]
+        producer = [exact_profile(h) for h in histograms]
+        independent = [expanded_profile(h) for h in histograms]
+        self.assertEqual(producer, independent)
+        rows = rank_profiles(producer, producer[0])
+        check_rows(rows, independent, independent[0])
+        for key in ('below', 'equal', 'above', 'inclusive_left_numerator',
+                    'inclusive_right_numerator', 'reference_count'):
+            damaged = [dict(r) for r in rows]
+            damaged[0][key] += 1
+            with self.assertRaises(AssertionError):
+                check_rows(damaged, independent, independent[0])
+        with self.assertRaises(AssertionError):
+            check_rows(rows[:-1], independent, independent[0])
+        with self.assertRaises(AssertionError):
+            check_rows(list(reversed(rows)), independent, independent[0])
 
 
 if __name__ == '__main__':
