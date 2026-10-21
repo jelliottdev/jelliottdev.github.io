@@ -24463,6 +24463,11 @@ How local choices accumulate
 
 If every one of n positions independently allows addition or subtraction of a fixed shift, there are 2^(n) choice sequences. At 20 positions that is 1,048,576 configurations. Some may coincide—for example, adding and subtracting zero give the same result—so report distinct outputs as well as configurations.
 
+[Image: Eight add-or-subtract combinations for ciphertext 10, 10, 10 and shifts 1, 2, 3, with all output indices. A zero middle shift reduces distinct outputs to four.]
+Each row uses the same invented input and shifts. Only the signs change. No row is selected as a reading. Download figure.
+
+Reproduce both enumerations with python scripts/switching_choices_example.py. The standard-library script writes the figure and exact rows, checking configuration counts and distinct outputs. Download script · Download rows. This is a mathematical illustration, not an LP decoding test.
+
 More extreme freedom makes a proposed reading unavoidable: for any desired rune sequence p and ciphertext c, choosing a separate shift k[i] = (c[i] − p[i]) mod 29 makes c[i] − k[i] reproduce p. This proves only that an unrestricted per-position shift can fit that target. It does not disprove a separately specified switching algorithm or an independently obtained key.
 
 What turns a proposal into a test?
@@ -24482,6 +24487,12 @@ The LP2-54–55 reset and skip experiments enumerate subsets of six declared can
 Feedback and state · Interruptions · Automatic search · All method families
 
 Sources, related references, and files
+- Eight add-or-subtract combinations for ciphertext 10, 10, 10 and shifts 1, 2, 3, with all output indices. A zero middle shift reduces distinct outputs to four.; Download figure
+  https://jelliottdev.github.io/exports/figures/switching-choices-example.svg
+- Download script
+  https://jelliottdev.github.io/scripts/switching_choices_example.py
+- Download rows
+  https://jelliottdev.github.io/exports/switching-choices-example.json
 - LP2-54–55 reset
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - skip
