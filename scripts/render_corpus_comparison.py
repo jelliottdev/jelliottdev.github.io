@@ -35,6 +35,9 @@ def validate_rows(comparison, plan):
             assert r['inclusive_left_numerator'] == r['below'] + r['equal']
             assert r['inclusive_right_numerator'] == r['above'] + r['equal']
             assert r['comparison_scale'] == ('variance' if r['measure'] == 'sample_std' else r['measure'])
+            value = r['target_comparison_value']
+            assert type(value['numerator']) is int and value['numerator'] >= 0
+            assert type(value['denominator']) is int and value['denominator'] > 0
         assert len(totals) == 1
 
 
@@ -55,13 +58,13 @@ def render(comparison, plan):
                 f'<text x="{x+18}" y="70">{name}</text>']
     md = ['## Complete corpus comparison', '',
           'Every planned measure is shown under both weighting rules. Bars partition reference prefixes by whether their value is below, equal to, or above the manuscript value. They do not show probabilities of a language or cipher.', '',
-          'The two inclusive fractions both contain ties: they can sum to more than one. Distinct Git blobs remove byte-identical duplicates only; editions, translations and overlapping works may remain. Standard-deviation ranks use exact variance ordering, which preserves all ties.', '']
+          'The two inclusive fractions both contain ties: they can sum to more than one. Distinct Git blobs remove byte-identical duplicates only; editions, translations and overlapping works may remain. Manuscript values are exact fractions; length-bin values are proportions. Standard deviation is shown as a square root, while its ranks use exact variance ordering, which preserves all ties.', '']
     for panel,(weight,rows) in enumerate(comparison['comparisons'].items()):
         top = 100 + panel*panel_height
         heading = 'Every eligible path' if weight == 'eligible path' else 'Distinct eligible Git blobs'
         svg.append(f'<text x="12" y="{top}" style="font-weight:bold">{heading} · n = {rows[0]["reference_count"]:,}</text>')
-        md += ['### '+heading, '', '| Measure | Below | Equal | Above | At or below | At or above |',
-               '| --- | ---: | ---: | ---: | --- | --- |']
+        md += ['### '+heading, '', '| Measure | Manuscript value | Below | Equal | Above | At or below | At or above |',
+               '| --- | --- | ---: | ---: | ---: | --- | --- |']
         for i,r in enumerate(rows):
             y = top + 28 + i*27; n = r['reference_count']; x = 145
             svg.append(f'<text x="12" y="{y+11}">{html.escape(label(r["measure"]))}</text>')
@@ -69,7 +72,11 @@ def render(comparison, plan):
                 width = 220*r[key]/n
                 svg.append(f'<rect x="{x:.6f}" y="{y}" width="{width:.6f}" height="15" fill="{color}"><title>{key}: {r[key]} / {n}</title></rect>')
                 x += width
-            md.append(f'| {label(r["measure"])} | {r["below"]} | {r["equal"]} | {r["above"]} | {r["inclusive_left_numerator"]}/{n} | {r["inclusive_right_numerator"]}/{n} |')
+            target = r['target_comparison_value']
+            value = str(target['numerator']) if target['denominator'] == 1 else f'{target["numerator"]}/{target["denominator"]}'
+            if r['measure'] == 'sample_std':
+                value = f'√({value})'
+            md.append(f'| {label(r["measure"])} | {value} | {r["below"]} | {r["equal"]} | {r["above"]} | {r["inclusive_left_numerator"]}/{n} | {r["inclusive_right_numerator"]}/{n} |')
         axis = top + 28 + count*27
         for x,text in [(145,'0%'),(255,'50%'),(365,'100%')]:
             svg.append(f'<text x="{x}" y="{axis}" text-anchor="middle">{text}</text>')

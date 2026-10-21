@@ -13,6 +13,7 @@ class PresentationControls(unittest.TestCase):
         for i, measure in enumerate(self.plan['measures']):
             below, equal, above = [(10,0,0),(0,10,0),(0,0,10),(3,4,3)][i%4]
             rows.append(dict(measure=measure, comparison_scale='variance' if measure=='sample_std' else measure,
+                             target_comparison_value={'numerator':9,'denominator':4},
                              reference_count=10, below=below, equal=equal, above=above,
                              inclusive_left_numerator=below+equal, inclusive_right_numerator=above+equal))
         self.data = {'comparisons': {w:copy.deepcopy(rows) for w in self.plan['weighting']}}
@@ -26,8 +27,17 @@ class PresentationControls(unittest.TestCase):
         for i in range(0,len(bars),3):
             self.assertAlmostEqual(sum(float(r.attrib['width']) for r in bars[i:i+3]),220)
         self.assertEqual(len([line for line in md.splitlines() if line.startswith('| ')]),50)
-        self.assertIn('| Length 2 | 0 | 10 | 0 | 10/10 | 10/10 |',md)
+        self.assertIn('| Length 2 | 9/4 | 0 | 10 | 0 | 10/10 | 10/10 |',md)
         self.assertIn('not calibrated p-values',svg)
+
+    def test_std_display_is_not_its_ranking_variance(self):
+        _, md = render(self.data, self.plan)
+        self.assertIn('| Variance | 9/4 |', md)
+        self.assertIn('| Standard deviation | √(9/4) |', md)
+
+    def test_rejects_invalid_target_fraction(self):
+        self.data['comparisons'][self.plan['weighting'][0]][0]['target_comparison_value']['denominator'] = 0
+        with self.assertRaises(AssertionError):render(self.data,self.plan)
 
     def test_rejects_missing_measure(self):
         self.data['comparisons'][self.plan['weighting'][0]].pop()
