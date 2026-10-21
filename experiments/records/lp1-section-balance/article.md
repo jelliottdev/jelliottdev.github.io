@@ -51,4 +51,4 @@ Human review remains pending. Saved results and the independent receipt are pres
 
 ## Related explanations
 
-See [the unrestricted baseline](#/experiments/lp1-word-length-balance), [word-length conventions](#/wiki/word-lengths), and [null models and selection](#/wiki/null-models). Preserving section distributions is only one possible constraint; preserving sentences or testing alternative section orders would require a separately declared variant.
+See [the unrestricted baseline](#/experiments/lp1-word-length-balance), [word-length conventions](#/wiki/word-lengths), and [null models and selection](#/wiki/null-models). The [section-order variant](#/experiments/lp1-section-order) now searches all 24 orders with matching selection in every control. Preserving sentences remains a separate, untested constraint.

@@ -3590,9 +3590,218 @@
           "caption": "Fixed section membership of all 464 slots. Word lengths move only within their section’s colored slots. Columns continue across section boundaries."
         }
       ],
-      "article": "# Does preserving each section change the column-balance result?\n\nThe fixed 464-word arrangement remains unusually flat under a null that shuffles word lengths only within their original four sections. All original section slots and the continuous sixteen-column layout are preserved. This is a sensitivity variant of `lp1-word-length-balance`, not an independent discovery.\n\n| Quantity | Unrestricted baseline | Within-section variant |\n| --- | ---: | ---: |\n| Observed integer score | 128256 | 128256 |\n| Observed column-mean variance | 501/13456 | 501/13456 |\n| Observed variance / model expectation | 0.25150357 | 0.25209625 |\n| Null trials | 49,999 | 49,999 |\n| Trials at or below observed, including ties | 54 | 88 |\n| Plus-one lower-tail estimate | 0.0011 | 0.00178 |\n\nThe constrained expectation is calculated separately. Its exact expected integer score is `612019253902976/1202967183`, and expected column-mean variance is `4781400421117/32374252828896`. The unchanged observed variance divided by that expectation is `1205373117366/4781400421117`.\n\nThe four sections contain 45, 124, 208 and 87 words. Their boundaries do not reset the column position. The report preserves every section's slot counts in all sixteen columns, exact expected column sums and variances, and all 49,999 null scores. A singleton-section boundary and unequal section sizes are covered by small exhaustive controls.\n\n## What changes between the two models?\n\nThe baseline permits any word length to move to any of the 464 slots. This variant permits a word length to move only to a slot in its original section. The lengths themselves, section order and observed arrangement remain unchanged. A section may occupy different numbers of slots in different columns, so keeping its slots matters as well as keeping its histogram.\n\nThe slot diagram shows those fixed memberships. Colors identify the four sections, not high or low word lengths. The same word may have several interchangeable positions within its color. A single section boundary can cut across a row; the next section continues at the next column.\n\nThe two histogram panels use identical integer-score bins, displayed on a common column-mean variance scale. The dashed line is the unchanged observed variance. Lower variance means more similar column means. Every one of the 49,999 null scores per model contributes to its panel; the complete bin counts are downloadable as CSV. The shared seed number does not pair individual trials because the procedures consume random choices differently.\n\n## Why the expectation changes\n\nUnder unrestricted shuffling, every slot samples the same pool of lengths. Under within-section shuffling, each slot samples only its section's pool. The four pools have different means and variances. Columns also contain different section slot counts. Consequently, their expected sums need not be identical, even though every column still contains 29 words.\n\nFor section size N, population variance v and c slots in one column, its sum contributes variance `c*(N-c)*v/(N-1)`. Contributions from independently shuffled sections add. The expected squared distance from the fixed overall mean also includes the difference between each column's expected sum and the overall mean. The script uses exact fractions; the checker obtains the same expectation through pairwise position moments. The ratio in the table therefore uses each model's own expectation.\n\n## Reproduce\n\nExtract the experiment ZIP with folders intact, or use the repository. Python 3 standard library is sufficient. Run `python experiments/records/lp1-section-balance/run.py --check` to reproduce all constrained scores, run the independent checker and verify the figures. Use `--output section-replay` to retain new files in a new directory.\n\nThe individual stages can also be run from the root with new output paths:\n\n```sh\npython scripts/test_lp1_section_balance.py\npython scripts/lp1_section_balance.py --output section-results.json\npython scripts/check_lp1_section_balance.py section-results.json --receipt section-audit.json\n```\n\nThe [protocol](experiments/plans/lp1-section-balance.md) was committed before constrained shuffles were generated. The producer uses the hashed word ledger and source dependencies. The checker independently scans the original archived text, verifies all 464 words, reconstructs every permutation with explicit index swaps, and calculates the expectation through position-pair second moments. It imports no producer code. Both implementations share Python's pseudorandom primitive.\n\n## Interpretation and publication status\n\nBoth estimates are below the predeclared 0.05 threshold. Preserving section-level length distributions does not remove the low-variance result in this fixed test. The two tests share the same selected arrangement; their p-values must not be combined as independent evidence. The original exploration is not included in either null. Neither model preserves sentence syntax, and neither tests a grille, carrier text, authorial intent or a decryption.\n\nHuman review remains pending. Saved results and the independent receipt are preserved here without overwriting the original baseline. The figures and histogram CSV are generated from those saved reports; the baseline distribution is reused from its published record, not simulated as part of this variant.\n\n## Related explanations\n\nSee [the unrestricted baseline](#/experiments/lp1-word-length-balance), [word-length conventions](#/wiki/word-lengths), and [null models and selection](#/wiki/null-models). Preserving section distributions is only one possible constraint; preserving sentences or testing alternative section orders would require a separately declared variant.\n",
+      "article": "# Does preserving each section change the column-balance result?\n\nThe fixed 464-word arrangement remains unusually flat under a null that shuffles word lengths only within their original four sections. All original section slots and the continuous sixteen-column layout are preserved. This is a sensitivity variant of `lp1-word-length-balance`, not an independent discovery.\n\n| Quantity | Unrestricted baseline | Within-section variant |\n| --- | ---: | ---: |\n| Observed integer score | 128256 | 128256 |\n| Observed column-mean variance | 501/13456 | 501/13456 |\n| Observed variance / model expectation | 0.25150357 | 0.25209625 |\n| Null trials | 49,999 | 49,999 |\n| Trials at or below observed, including ties | 54 | 88 |\n| Plus-one lower-tail estimate | 0.0011 | 0.00178 |\n\nThe constrained expectation is calculated separately. Its exact expected integer score is `612019253902976/1202967183`, and expected column-mean variance is `4781400421117/32374252828896`. The unchanged observed variance divided by that expectation is `1205373117366/4781400421117`.\n\nThe four sections contain 45, 124, 208 and 87 words. Their boundaries do not reset the column position. The report preserves every section's slot counts in all sixteen columns, exact expected column sums and variances, and all 49,999 null scores. A singleton-section boundary and unequal section sizes are covered by small exhaustive controls.\n\n## What changes between the two models?\n\nThe baseline permits any word length to move to any of the 464 slots. This variant permits a word length to move only to a slot in its original section. The lengths themselves, section order and observed arrangement remain unchanged. A section may occupy different numbers of slots in different columns, so keeping its slots matters as well as keeping its histogram.\n\nThe slot diagram shows those fixed memberships. Colors identify the four sections, not high or low word lengths. The same word may have several interchangeable positions within its color. A single section boundary can cut across a row; the next section continues at the next column.\n\nThe two histogram panels use identical integer-score bins, displayed on a common column-mean variance scale. The dashed line is the unchanged observed variance. Lower variance means more similar column means. Every one of the 49,999 null scores per model contributes to its panel; the complete bin counts are downloadable as CSV. The shared seed number does not pair individual trials because the procedures consume random choices differently.\n\n## Why the expectation changes\n\nUnder unrestricted shuffling, every slot samples the same pool of lengths. Under within-section shuffling, each slot samples only its section's pool. The four pools have different means and variances. Columns also contain different section slot counts. Consequently, their expected sums need not be identical, even though every column still contains 29 words.\n\nFor section size N, population variance v and c slots in one column, its sum contributes variance `c*(N-c)*v/(N-1)`. Contributions from independently shuffled sections add. The expected squared distance from the fixed overall mean also includes the difference between each column's expected sum and the overall mean. The script uses exact fractions; the checker obtains the same expectation through pairwise position moments. The ratio in the table therefore uses each model's own expectation.\n\n## Reproduce\n\nExtract the experiment ZIP with folders intact, or use the repository. Python 3 standard library is sufficient. Run `python experiments/records/lp1-section-balance/run.py --check` to reproduce all constrained scores, run the independent checker and verify the figures. Use `--output section-replay` to retain new files in a new directory.\n\nThe individual stages can also be run from the root with new output paths:\n\n```sh\npython scripts/test_lp1_section_balance.py\npython scripts/lp1_section_balance.py --output section-results.json\npython scripts/check_lp1_section_balance.py section-results.json --receipt section-audit.json\n```\n\nThe [protocol](experiments/plans/lp1-section-balance.md) was committed before constrained shuffles were generated. The producer uses the hashed word ledger and source dependencies. The checker independently scans the original archived text, verifies all 464 words, reconstructs every permutation with explicit index swaps, and calculates the expectation through position-pair second moments. It imports no producer code. Both implementations share Python's pseudorandom primitive.\n\n## Interpretation and publication status\n\nBoth estimates are below the predeclared 0.05 threshold. Preserving section-level length distributions does not remove the low-variance result in this fixed test. The two tests share the same selected arrangement; their p-values must not be combined as independent evidence. The original exploration is not included in either null. Neither model preserves sentence syntax, and neither tests a grille, carrier text, authorial intent or a decryption.\n\nHuman review remains pending. Saved results and the independent receipt are preserved here without overwriting the original baseline. The figures and histogram CSV are generated from those saved reports; the baseline distribution is reused from its published record, not simulated as part of this variant.\n\n## Related explanations\n\nSee [the unrestricted baseline](#/experiments/lp1-word-length-balance), [word-length conventions](#/wiki/word-lengths), and [null models and selection](#/wiki/null-models). The [section-order variant](#/experiments/lp1-section-order) now searches all 24 orders with matching selection in every control. Preserving sentences remains a separate, untested constraint.\n",
       "article_path": "experiments/records/lp1-section-balance/article.md",
       "script_sha256": "36c7f7101d0c5d169e5c56f0ab046fbc4aacab9f17b1009e1d0062e4c2056c89"
+    },
+    {
+      "id": "lp1-section-order",
+      "title": "LP1 column balance after searching section orders",
+      "status": "published",
+      "question": "How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?",
+      "summary": "All 24 orders form six cyclic classes. The original arrangement remains tied for best; matching the order search in every shuffled control gives a plus-one estimate of 0.00882.",
+      "tags": [
+        "464 words",
+        "section order",
+        "cyclic rotations",
+        "column balance",
+        "multiple comparisons",
+        "selection",
+        "word lengths"
+      ],
+      "scope": {
+        "pages": [
+          "lp1-01",
+          "lp1-03",
+          "lp1-04",
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-14",
+          "lp1-15"
+        ],
+        "representation": "Archived ciphertext runes, headings and interrupting F retained. Join slash and newline wraps and consecutive pages within a section. Rune runs with internal apostrophes form one word; apostrophes count zero runes. Other non-runes delimit words. Never merge sections.",
+        "procedure": "Retain all 464 word lengths and continuous 29-by-16 layout. Search all 24 orders of the four intact sections and retain minimum Q. In each control shuffle lengths within sections, search the same 24 orders, and retain its minimum.",
+        "parameters": "16 columns; section sizes 45,124,208,87; all 24 orders represented by six cyclic classes; 49,999 trials; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Earlier fixed-order results known before this protocol.",
+        "exclusions": "Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption."
+      },
+      "outcome": "supported",
+      "finding": "The observed minimum is 128256. Of 49,999 within-section shuffle controls, 440 have a minimum no greater after searching the same 24 orders; plus-one estimate 0.00882.",
+      "limitations": "Accounts only for the declared section-order search, not the earlier choice of word object, width or statistic. Cyclic classes and paired comparisons are not independent evidence. No intent or decryption claim; human review pending.",
+      "next_steps": "Alternative widths and sentence-preserving controls require separately frozen selection rules.",
+      "family": {
+        "id": "lp1-word-length-balance",
+        "title": "LP1 word lengths and column balance",
+        "question": "How unusual is the ordered four-section word-length arrangement under explicitly bounded comparisons?",
+        "baseline": "lp1-word-length-balance"
+      },
+      "variant": {
+        "label": "Search all section orders",
+        "changes": [
+          {
+            "field": "procedure",
+            "before": "Concatenate Warning, Welcome, first koan and second koan in that order; count native runes per word. Compare all 464 values with the supplied vector. Fill 29 rows of 16 columns across rows without resetting at sections. Measure population variance of the 16 column means and divide by its exact finite-population shuffle expectation. Each trial freshly copies and uniformly shuffles the fixed 464 lengths; compare integer scores proportional to variance.",
+            "after": "Retain all 464 word lengths and continuous 29-by-16 layout. Search all 24 orders of the four intact sections and retain minimum Q. In each control shuffle lengths within sections, search the same 24 orders, and retain its minimum.",
+            "reason": "Match the section-order selection in every within-section shuffle control."
+          },
+          {
+            "field": "parameters",
+            "before": "16 columns; 29 words per column; 49,999 shuffles; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Arrangement and approximate ratio were known before the frozen simulation plan.",
+            "after": "16 columns; section sizes 45,124,208,87; all 24 orders represented by six cyclic classes; 49,999 trials; Python random.Random seed 330146; lower tail including ties; (tail_count+1)/50000; threshold 0.05. Earlier fixed-order results known before this protocol.",
+            "reason": "Match the section-order selection in every within-section shuffle control."
+          },
+          {
+            "field": "exclusions",
+            "before": "Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.",
+            "after": "Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.",
+            "reason": "Match the section-order selection in every within-section shuffle control."
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Codex; independent source scan and all 1,199,976 null order scores; exhaustive toy controls; human review pending",
+        "retested_on": "2026-10-21",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/lp1-section-order/run.py --check",
+        "environment": "Python 3 standard library; offline. All source inputs and fixed-order control scores included. Complete order-selected simulation and independent replay.",
+        "script": "experiments/records/lp1-section-order/run.py",
+        "script_sha256": "4da7f606df7311f59474572b272e67e01fe579cacc1b00312885904b67a5e1ef",
+        "inputs": [
+          {
+            "path": "experiments/records/lp1-word-length-balance/plan.json",
+            "sha256": "a921555ccafca50bd44c13e3a65522ef8e0cfccd84f14942bca2e6184e5f5884"
+          },
+          {
+            "path": "experiments/records/lp1-word-length-balance/words.json",
+            "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+          },
+          {
+            "path": "experiments/records/lp1-word-length-balance/submitted-lengths.json",
+            "sha256": "5cc3ef885580f475038a158cf36f2dd679509468cfb8ea07fb7e12f5bef16cff"
+          },
+          {
+            "path": "text/lp1-01.txt",
+            "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+          },
+          {
+            "path": "text/lp1-03.txt",
+            "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+          },
+          {
+            "path": "text/lp1-04.txt",
+            "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+          },
+          {
+            "path": "text/lp1-06.txt",
+            "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+          },
+          {
+            "path": "text/lp1-07.txt",
+            "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+          },
+          {
+            "path": "text/lp1-08.txt",
+            "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+          },
+          {
+            "path": "text/lp1-09.txt",
+            "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+          },
+          {
+            "path": "text/lp1-14.txt",
+            "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+          },
+          {
+            "path": "text/lp1-15.txt",
+            "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+          },
+          {
+            "path": "experiments/plans/lp1-section-order.md",
+            "sha256": "3211434a1f5e64641ec8f96c7057ccc4a2c283519ac4c871c584f1b5f8fd72fe"
+          },
+          {
+            "path": "experiments/records/lp1-section-balance/results.json",
+            "sha256": "ca10968e838db07716104b7c090e91f7132bbf88cf0f3bdb12da29016fc18b94"
+          },
+          {
+            "path": "experiments/records/lp1-section-balance/audit.json",
+            "sha256": "1a64498cd4194c4d701406f93182d328caed7b895d14c1233524a7d0f136e3f5"
+          },
+          {
+            "path": "experiments/plans/lp1-section-order.json",
+            "sha256": "270f19a833c614574ffc7d335905f9f1cd8adefaa9f4fc60b69c97aac775f349"
+          },
+          {
+            "path": "scripts/lp1_section_order.py",
+            "sha256": "0855a593b75b080608391e1cd3303c0cfdc9ba844054a4a7f7c010adf7f149cc"
+          },
+          {
+            "path": "scripts/check_lp1_section_order.py",
+            "sha256": "ea2ffd9bc65cbdef3d35ccd16e1d26549b5bea37e2eddd0b271000228f2acc3c"
+          },
+          {
+            "path": "scripts/test_lp1_section_order.py",
+            "sha256": "8d45c477b06d53707b675af63fae0963eeef19dcf529d64ab3dfdff34583c2de"
+          },
+          {
+            "path": "experiments/records/lp1-section-order/plot.py",
+            "sha256": "3fbf0ab2db564cc96e86c3040d2d2bbb2fb7bef0b6cf701507fd1dc050e99ba0"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/lp1-section-order/results.json",
+            "sha256": "d55d061a8238ac0bdcff1b5f94dda69968d9f6aa03a9ea10ab0bb90a1d6d55f9"
+          },
+          {
+            "path": "experiments/records/lp1-section-order/audit.json",
+            "sha256": "625ee9ba709237181c68959d5f4dee9cf1e6c438ba95e2b5e988452648fe44db"
+          },
+          {
+            "path": "experiments/records/lp1-section-order/order-classes.svg",
+            "sha256": "d72c1bf28faca293aab67662251dab0914bb3c7abcecb4d111147f6f591451f1"
+          },
+          {
+            "path": "experiments/records/lp1-section-order/selected-null.svg",
+            "sha256": "56090fdb7495ad73c09c396061984a722d89f8f6fa848515f1f84d56d195d003"
+          },
+          {
+            "path": "experiments/records/lp1-section-order/histogram.csv",
+            "sha256": "44ee5b23e9a02da367b2cd015d18f92a5f0b05dfc892edc76cd20a1972737666"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Archived transcription and source provenance",
+          "url": "https://jelliottdev.github.io/#/conventions"
+        },
+        {
+          "label": "Search space, bounds and selection",
+          "url": "https://jelliottdev.github.io/#/wiki/search-space"
+        }
+      ],
+      "related": [
+        "lp1-word-length-balance",
+        "lp1-section-balance"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/lp1-section-order/order-classes.svg",
+          "caption": "All 24 section orders in six cyclic classes. Each class shares a score; classes are not independent."
+        },
+        {
+          "path": "experiments/records/lp1-section-order/selected-null.svg",
+          "caption": "Every shuffled control searches all 24 orders. All 49,999 minima are shown; the dashed line marks the observed minimum."
+        }
+      ],
+      "article": "# LP1 column balance after searching section orders\n\nThis variant belongs to the LP1 word-length and column-balance family. Human review remains pending.\n\n## What was tested\n\nThe original 464-word sequence fills a table of 29 rows and 16 columns. Its column totals are unusually similar under the previously declared shuffle controls. This variant asks whether that comparison changes when a solver may rearrange the four intact sections and keep whichever arrangement has the most similar column totals.\n\nThe sections are Warning (45 words), Welcome (124), first koan (208), and second koan (87). Word order within each observed section remains unchanged. Every arrangement fills the table continuously, without resetting at section boundaries. The score is `Q = sum((16 * column_total - 1796)^2)`; lower scores mean more balanced columns.\n\nThe [protocol](experiments/plans/lp1-section-order.md) was committed before calculating the order search. It disclosed the already-known fixed-order results. Each of 49,999 controls shuffles lengths within the original sections, searches the same 24 orders, and retains its minimum. It would be unfair to search the observed data but compare that selected result with controls given only one arrangement.\n\n## Results\n\nNo alternative order improves the original score, **128256**. Four orders tie for that minimum because they are cyclic rotations of the original arrangement.\n\n| Representative order | Score Q |\n| --- | ---: |\n| Warning → Welcome → first koan → second koan | 128256 |\n| Warning → Welcome → second koan → first koan | 295680 |\n| Warning → first koan → Welcome → second koan | 257280 |\n| Warning → first koan → second koan → Welcome | 407296 |\n| Warning → second koan → Welcome → first koan | 215808 |\n| Warning → second koan → first koan → Welcome | 337664 |\n\nEach row represents four cyclic rotations with exactly the same score. Rotating the 464-word sequence shifts its sixteen column totals without changing their balance, since 464 is divisible by 16. Thus the 24 arrangements form six classes; this does **not** make the six scores independent.\n\n**440 of 49,999 controls** have a selected minimum no greater than the observed minimum, ties included. The plus-one estimate is `(440 + 1) / 50000 = 0.00882`. The fixed-order within-section comparison was `0.00178`. The larger estimate reflects the extra opportunities given to every control, even though the observed minimum did not improve.\n\nThe result remains below the protocol's 0.05 threshold. It describes this precise word sequence, table width, score, shuffle model and section-order search. It does not estimate the probability of intentional design, provide a decryption, or correct for the wider exploration that originally selected the 464-word object and sixteen-column layout. The two estimates use the same shuffled sections and are not independent evidence.\n\n## Verification and reproduction\n\nThe independent checker reconstructs the source tokens, generates permutations through explicit index swaps, and computes all 24 scores in every control using section-column accumulation. It does not import the producer. It checks **1,199,976 null order scores**, all observed orders, every minimum and tie list, and the full tail count. Every baseline-order control score also matches the earlier section-preserving report. Both implementations share Python's pseudorandom primitive.\n\nThe toy tests exhaust small section permutations with unequal section sizes and repeated values. A non-divisible example demonstrates why the cyclic reduction requires complete rows.\n\nFrom the repository root, choose new output paths:\n\n```sh\npython scripts/test_lp1_section_order.py\npython scripts/lp1_section_order.py --output order-replay.json\npython scripts/check_lp1_section_order.py order-replay.json --receipt order-replay-audit.json\n```\n\nThe producer checks the frozen input hashes. Compare the replay report's SHA-256 with `report_sha256` in the independent audit receipt. The downloadable result retains the full order mapping, observed scores, all six class scores for every trial, and all minimizing orders; none of the searched arrangements is omitted from that representation.\n\n## Read the figures\n\nThe order diagram lists all 24 arrangements in six groups. Every arrangement in one group has the same Q; the bar represents that shared score. Letters label sections, not rune values. The histogram shows the minimum score retained from every complete 24-order search. Its vertical scale counts trials, and its dashed line is the observed minimum. All 49,999 trials are included; the bin counts are downloadable as CSV.\n\n## Run the complete reproduction\n\nExtract the experiment ZIP with folders intact. Run `python experiments/records/lp1-section-order/run.py --check` from its root. Python 3 standard library is sufficient; the run is offline. Use `--output order-replay` to retain results in a new directory. The wrapper repeats the simulation, independently checks every order score, and reproduces the figures and histogram.\n\nSee the [fixed-order section-preserving comparison](#/experiments/lp1-section-balance), [original baseline](#/experiments/lp1-word-length-balance), and [search-space explanation](#/wiki/search-space).\n",
+      "article_path": "experiments/records/lp1-section-order/article.md",
+      "script_sha256": "4da7f606df7311f59474572b272e67e01fe579cacc1b00312885904b67a5e1ef"
     },
     {
       "id": "lp1-word-length-balance",
