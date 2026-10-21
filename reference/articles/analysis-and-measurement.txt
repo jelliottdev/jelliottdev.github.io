@@ -81,6 +81,27 @@ Known LP readings: check transfer to actual manuscript style and spelling. The p
 
 Start with the baseline for the overall question, then use the controls to judge its limits. A nearest language is not a decryption or a probability that the plaintext uses that language. Each record provides its own scripts, exact inputs and download.
 
+Why length and repetition can disagree
+
+Consider the four-symbol example AAAA. Replacing every A with B gives BBBB. Applying successive shifts of 0, 1, 2 and 3 instead gives ABCD. Both transformations preserve the length, but only the fixed replacement preserves which positions match.
+
+	Sequence	Length	Matching position pairs	Equal neighbors
+
+	AAAA — input	4	6 of 6	3 of 3
+
+	BBBB — fixed replacement	4	6 of 6	3 of 3
+
+	ABCD — successive shifts	4	0 of 6	0 of 3
+
+
+The matching-pair fraction is the index of coincidence. This toy example explains why a length comparison can remain relevant under a changing substitution even when the language's original IoC and doublet rate do not. Length still needs its own assumptions: preserved word boundaries and one counted plaintext unit per rune. Adding nulls or representing several letters with one symbol can change it too.
+
+What would a first-place language mean?
+
+It means that this profile has the smallest measured distance among the profiles supplied. There will be a first-place result even if every candidate is a poor match. Adding another language, changing the genre, or changing how letters become rune units can change the ordering. The eight-language comparison therefore does not rank every possible plaintext language.
+
+Use the full distributions to see where even the nearest profile disagrees, then check the known-English manuscript controls. Some short sections rank another profile first. A useful next test must state what it adds: a new fixed corpus, a different encoding assumption, or a previously untouched section. Choosing whichever spelling or grouping improves a score after seeing it creates a new hypothesis; it does not independently confirm the earlier one.
+
 Download reusable data
 
 These files let you inspect a published calculation or start a comparison without copying values from a table. Keep the source layer and counting unit attached to the data.
@@ -153,7 +174,7 @@ If your measurement suggests a hypothesis, preserve its scope and write a new re
 Before treating an experiment as a rejection of a cipher, read what has actually been ruled out: exact proofs, bounded crib searches and necessary constraints justify different conclusions.
 
 Sources, related references, and files
-- Could the plaintext be another language?; Aligned language profiles
+- Could the plaintext be another language?; Aligned language profiles; full distributions
   https://jelliottdev.github.io/#/experiments/parallel-languages
 - Does a spectrum label identify a hidden number?
   https://jelliottdev.github.io/reference/articles/audio-frequency.html
@@ -165,7 +186,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
 - How evenly are symbol frequencies distributed?
   https://jelliottdev.github.io/reference/articles/rune-entropy.html
-- How unevenly are runes distributed?; Method
+- How unevenly are runes distributed?; index of coincidence; Method
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Which rune sequences repeat, and where?
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
@@ -195,7 +216,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#inputs
 - Shorter aligned passages
   https://jelliottdev.github.io/#/experiments/parallel-language-blocks
-- Known LP readings
+- Known LP readings; known-English manuscript controls
   https://jelliottdev.github.io/#/experiments/known-reading-languages
 - CSV
   https://jelliottdev.github.io/exports/rune-ioc.csv
