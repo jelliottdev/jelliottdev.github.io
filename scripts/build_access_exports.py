@@ -189,6 +189,9 @@ for path in ['exports/section-contributions.json','exports/figures/section-contr
 for path in ['exports/phase-invariant.json','scripts/check_phase_invariant.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='cipher-invariants',aliases=['phase invariant','periodic affine','invertible multiplier'])
+for path in ['exports/cicada-2012-opening.json','scripts/replay_2012_opening.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2012').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
+ files[-1].update(guide='2012-opening',aliases=['2012 opening','first image','duck','OutGuess'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
  register(artifact.relative_to(root).as_posix(),'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])
