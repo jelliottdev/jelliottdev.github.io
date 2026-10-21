@@ -45,3 +45,26 @@ console.log('PASS: all method families and coverage notes link to existing guide
 
 const linked=new Set(families.flatMap(f=>f.related));
 for(const r of experiments.filter(r=>r.status==='published'))assert(linked.has(r.id),'Assign a method family to published experiment: '+r.id);
+
+for(const [query,id] of [
+ ['Have we tried homophonic substitution on LP2-31?','homophonic'],
+ ['Could it be compression?','compression'],
+ ['Try an acrostic','acrostics'],
+ ['Try finite differences','differences'],
+ ['Use a running key','running-key'],
+ ['Use a codebook','codebooks']
+])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
+assert.equal(Coverage.families(families,'LP2-31').length,0);
+assert.equal(Search.experimentDocs(families).length,0);
+const vm=require('node:vm');
+const ui={IdeaCoverage:Coverage,methodFamilyRecords:families,methodFamilyUnavailable:false,ideaCoverageRecords:notes,ideaCoverageUnavailable:false,experimentRecords:experiments,esc:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')};
+vm.createContext(ui);vm.runInContext(fs.readFileSync(require('node:path').join(root,'assistant-ui.js'),'utf8'),ui);
+const emptyFamily=ui.ideaCoverageView('homophonic');
+assert(emptyFamily.includes('#/wiki/method-homophonic'));
+assert(emptyFamily.includes('No experiment is currently linked to this family.'));
+assert(!emptyFamily.includes('Not supported within scope'));
+const existingFamily=ui.ideaCoverageView('running key');
+assert(existingFamily.includes('family-running-key'));
+ui.methodFamilyUnavailable=true;
+assert(ui.ideaCoverageView('unmatched').includes('could not be loaded'));
+console.log('PASS: family-only matches expose guides, distinguish absent links from negative results, and survive index-load failures');

@@ -1,5 +1,5 @@
  'use strict';
-let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false;
+let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false, methodFamilyRecords, methodFamilyUnavailable=false;
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 async function experimentsPage(id, version, query='') {
@@ -11,14 +11,15 @@ async function experimentsPage(id, version, query='') {
     if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
     experimentRecords = data.records;
   }
-  if (!ideaCoverageRecords) {
-    try {
-      const response=await fetch('data/idea-coverage.json');
-      if(!response.ok)throw Error('Coverage unavailable');
-      const data=await response.json();
-      if(!Array.isArray(data.records))throw Error('Invalid coverage');
-      ideaCoverageRecords=data.records;ideaCoverageUnavailable=false;
-    } catch {ideaCoverageRecords=[];ideaCoverageUnavailable=true;}
+  if (!ideaCoverageRecords || !methodFamilyRecords) {
+    const load=async(path,key)=>{const response=await fetch(path);if(!response.ok)throw Error('Index unavailable');const data=await response.json();if(!Array.isArray(data[key]))throw Error('Invalid index');return data[key];};
+    const [notes,families]=await Promise.allSettled([
+      load('data/idea-coverage.json','records'),load('data/method-families.json','families')
+    ]);
+    ideaCoverageUnavailable=notes.status!=='fulfilled';
+    ideaCoverageRecords=ideaCoverageUnavailable?[]:notes.value;
+    methodFamilyUnavailable=families.status!=='fulfilled';
+    methodFamilyRecords=methodFamilyUnavailable?[]:families.value;
   }
   if (!assistantConfig) {
     try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}

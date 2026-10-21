@@ -7,6 +7,9 @@
       const term=normalize(phrase);return text.includes(' '+term+' ')?term.split(' ').length:0;
     }))})).filter(hit=>hit.score>0).sort((a,b)=>b.score-a.score||a.record.id.localeCompare(b.record.id)).slice(0,3).map(hit=>hit.record);
   }
-  const api={match};
+  function families(records,query){
+    return match(records.map(record=>({...record,phrases:[record.title,...record.aliases]})),query);
+  }
+  const api={match,families};
   if(typeof module!=='undefined')module.exports=api;else root.IdeaCoverage=api;
 })(globalThis);
