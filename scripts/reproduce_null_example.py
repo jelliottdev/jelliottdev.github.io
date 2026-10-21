@@ -30,8 +30,14 @@ def report():
     for score in ("equal", "selected"):
         threshold = observed_row[score]
         count = sum(row[score] >= threshold for row in rows)
+        below = sum(row[score] < threshold for row in rows)
+        tied = sum(row[score] == threshold for row in rows)
+        above = sum(row[score] > threshold for row in rows)
         tails[score] = {"observed_score": threshold, "at_least_observed": count,
-                        "total": len(rows), "probability": str(Fraction(count, len(rows)))}
+                        "total": len(rows), "probability": str(Fraction(count, len(rows))),
+                        "below": below, "tied": tied, "above": above,
+                        "inclusive_left": str(Fraction(below+tied, len(rows))),
+                        "strict_right": str(Fraction(above, len(rows)))}
     return {
         "scope": "Synthetic teaching example; not a manuscript experiment.",
         "model": "Equal probability for each distinct arrangement of AABB.",
@@ -58,6 +64,8 @@ def main():
     print("\nUpper tails include ties and the observed arrangement:")
     for name, tail in result["upper_tails_including_ties"].items():
         print(f'{name}: {tail["at_least_observed"]}/{tail["total"]} = {tail["probability"]}')
+        print(f'  Below / tied / above: {tail["below"]} / {tail["tied"]} / {tail["above"]}')
+        print(f'  Inclusive left: {tail["inclusive_left"]}; strict right: {tail["strict_right"]}')
     print("Selecting the better pattern changes the comparison, not the input.")
 
 

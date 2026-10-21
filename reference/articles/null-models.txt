@@ -42,6 +42,31 @@ Our model assigns equal probability to each distinct arrangement of these four s
 
 Two of the six arrangements have a score at least as large as the observed 2. The exact upper-tail probability is therefore 2/6 = 1/3. Ties count, and the observed arrangement belongs to the comparison set. This is the probability of a score at least this large under the specified model; it is not the probability that a cipher theory is false or that the text is random.
 
+Why left and right tails are not always complements
+
+Keep the same six arrangements and the observed equal-neighbor score of 2. Four comparison scores are below 2, two tie it, and none is above it. Those three groups exhaust the comparison set:
+
+	Comparison with the observed score	Count	Fraction
+
+	Strictly below: score < 2	4	4/6
+
+	Tied: score = 2	2	2/6
+
+	Strictly above: score > 2	0	0/6
+
+	Inclusive left: score ≤ 2	6	1
+
+	Inclusive right: score ≥ 2	2	1/3
+
+
+The two inclusive tails overlap at the ties. Therefore 1 − inclusive left gives the strict right tail, not the inclusive right tail. Here that subtraction gives zero, even though two arrangements attain the observed score. Reporting zero as “nothing like this occurs” would discard those two exact ties.
+
+For any finite reference set, let L, E and G count scores below, equal to and above the observation. Then N = L + E + G, the inclusive left fraction is (L + E) / N, and the inclusive right fraction is (G + E) / N. Their sum is 1 + E / N. Declare the direction and tie rule before interpreting the count.
+
+The historical word-length code uses an inclusive left fraction. A question about an excess requires an upper-tail comparison; it cannot be recovered by simply subtracting that left fraction from one when ties occur. Also distinguish a descriptive fraction of corpus files from a calibrated probability under a sampling model. Repeated editions, duplicate files and a first-passage selection affect what population the fraction describes. See the corpus inventory.
+
+The reproduction script below prints the below/tied/above counts and both tail conventions for this exact example. No additional manuscript experiment is implied.
+
 What if you choose the pattern after looking?
 
 Imagine looking for either a large number of equal neighbors or a large number of unequal neighbors, then reporting whichever count is larger. The score is now max(equal, unequal). For AABB it is still 2, but the comparison procedure has changed.
@@ -110,6 +135,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - what cipher operations preserve
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- historical word-length code
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus
+- corpus inventory
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus-inventory
 - the standalone reproduction script
   https://jelliottdev.github.io/scripts/reproduce_null_example.py
 - reference-data bundle
