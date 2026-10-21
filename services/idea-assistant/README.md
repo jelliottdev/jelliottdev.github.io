@@ -33,6 +33,8 @@ Questions and retrieved text are sent to Cloudflare. The Worker does not log req
 
 ## Validation
 
+20 October 2026: deployed technique-phrase retrieval as Worker version `37f91740-5c46-422b-82ee-711aa91f493b`. Complete multiword tags receive a bounded, non-stacking phrase boost; incidental conversational terms no longer dominate the language-comparison question. The same retrieval module serves browser and Worker. Current-record tests use mocked inference, including the full different-language question. No hosted generation was used.
+
 20 October 2026: deployed bounded best-match retention as Worker version `f5599f8a-5d78-4ee9-a463-bad662ad48fb`. The new segment-order record exposed a pair of complete scopes exceeding 9,000 characters. Tests now verify retaining the strongest whole record, refusing an oversized strongest record, and limiting supporting page excerpts to two. Published-record handler tests pass with mocked inference; no hosted model request was made.
 
 20 October 2026: deployed optional-context failure handling and shared index loads as Worker version `4cb2c95a-8273-4480-a1ae-46eaffdfcde2`. Mocked tests cover current published records, complete evidence preservation, five-minute refresh, load failures and retries. Wrangler confirmed deployment with the existing AI and rate-limit bindings. No hosted inference request was made for this deployment; it is not a new model-quality evaluation.

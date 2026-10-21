@@ -1,7 +1,8 @@
 /* Shared browser/Worker retrieval. Page IDs are exact; prose uses lexical ranking. */
 (function(root) {
   const stop = new Set('a an the is it this that to of for on in with and or we i have has had tried try could would can does do what if using use how why are was were about explain compare please page pages test tests tested testing technique method any anyone already every all been done applying apply row rows line lines input inputs data manuscript rune runes result results one each'.split(' '));
-  const aliases={primes:'prime',emirps:'emirp',reversal:'reverse',reversing:'reverse',reversed:'reverse',shifts:'shift',shifted:'shift',shifting:'shift'};
+  for(const word of ['its','than','be','checking','check','whether','know'])stop.add(word);
+  const aliases={languages:'language',primes:'prime',emirps:'emirp',reversal:'reverse',reversing:'reverse',reversed:'reverse',shifts:'shift',shifted:'shift',shifting:'shift'};
   const pageReference=/\blp\s*([12])(?:[\s:\-‐‑–—−]*page\s*)?[\s:#\-‐‑–—−]*(\d{1,2})\b/gi;
   const tokens = text => (String(text).normalize('NFD').replace(/\p{M}/gu,'').toLowerCase().match(/[\p{L}\p{N}]+/gu)||[]).filter(t=>!stop.has(t)).map(t=>aliases[t]||t);
   function pageIds(text) {
@@ -13,7 +14,8 @@
       id:r.id, title:r.title, kind:'experiment', href:`#/experiments/${r.id}`,
       text:JSON.stringify({question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations}),
       // Retrieval can use prose, but evidence always preserves the complete scope.
-      keywords:[r.summary,...(r.tags||[]),r.article||''].join(' ')
+      keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
+      phrases:r.tags||[]
     }));
   }
   function techniqueQuery(query) {
@@ -28,6 +30,14 @@
       let score=0,matched=[];
       for(const term of terms){const n=words.filter(w=>w===term).length;if(!n)continue;matched.push(term);
         score+=Math.log(1+(corpus.length-df.get(term)+.5)/(df.get(term)+.5))*n*2.2/(n+1.2*(.25+.75*words.length/avg));}
+      // A complete authored technique phrase outranks incidental body mentions.
+      // Use only the strongest phrase: duplicate/overlapping tags cannot stack.
+      const queryPhrase=' '+tokens(query).join(' ')+' ';
+      const phraseBoost=Math.max(0,...(document.phrases||[]).map(phrase=>{
+        const parts=tokens(phrase);
+        return parts.length>=2&&queryPhrase.includes(' '+parts.join(' ')+' ')?Math.min(6,parts.length*2):0;
+      }));
+      score+=phraseBoost;
       const pinned=explicit.includes(document.page);
       if(pinned)score+=document.kind==='page'?100:20;
       // Bare generic words must not send arbitrary manuscript metadata to inference.

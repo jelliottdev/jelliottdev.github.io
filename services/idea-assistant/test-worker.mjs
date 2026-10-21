@@ -93,13 +93,15 @@ for(const [query,expected] of [
  ['reverse words on LP2-31','lp2-word-reversal'],
  ['reverse word order on LP2-31','lp2-word-order-reversal'],
  ['trigrams on LP2-31','lp2-trigram-repeats'],
- ['OutGuess on LP2-31','outguess-default-key'],
+ ['OutGuess on LP2-31',['outguess-default-key','outguess-guard-sweep']],
+ ['Have we tried checking if its a different language than English?','parallel-languages'],
 ]){
  const response=await realHandler(request(query),realEnv);
  assert.equal(response.status,200);
- assert.equal((await response.json()).sources[0].id,expected);
+ const first=(await response.json()).sources[0].id;
+ assert((Array.isArray(expected)?expected:[expected]).includes(first));
 }
-assert.equal(realCalls,5);
+assert.equal(realCalls,6);
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
-assert.equal(realCalls,5);
+assert.equal(realCalls,6);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');

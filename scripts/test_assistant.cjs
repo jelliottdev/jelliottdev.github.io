@@ -153,6 +153,17 @@ assert(!experimentContext.experimentSearchResult(totient,['lp2-31']).includes('s
 const liveDocs=Search.experimentDocs(published);
 assert.equal(Search.experiments(liveDocs,'totient of rune values on LP2-31')[0].document.id,totient.id);
 assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'lp2-fibonacci-openings');
-assert.equal(Search.experiments(liveDocs,'OutGuess on LP2-31')[0].document.id,'outguess-default-key');
+assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice(0,2).map(r=>r.document.id)),
+ new Set(['outguess-default-key','outguess-guard-sweep']),'Generic OutGuess retrieval should expose both baseline and guarded-build records');
 assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
 console.log('PASS: method and exclusions remain visible; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
+for(const query of ['Have we tried checking if its a different language than English?',
+ 'another language','could it be German','different languages on LP2-31']){
+ assert.equal(Search.experiments(liveDocs,query)[0].document.id,'parallel-languages',query);
+}
+const tagged={...experiment,phrases:['reverse prime']};
+const repeated={...tagged,phrases:['reverse prime','reverse prime']};
+assert.equal(Search.search([tagged],'reverse prime')[0].score,Search.search([repeated],'reverse prime')[0].score);
+assert.equal(Search.experiments([tagged],'prime reverse')[0].score,
+ Search.experiments([experiment],'prime reverse')[0].score,'Reordered words are not an exact phrase match');
+console.log('PASS: natural-language comparison queries reach the language experiment; phrase boosts do not stack or ignore order.');
