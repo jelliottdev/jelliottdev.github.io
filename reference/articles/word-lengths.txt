@@ -62,7 +62,7 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 	Runes plus six single digits	89	2,902	12,956 runes + 6 digits
 
 
-This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The comparison with a reference corpus still needs its own reproduction.
+This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The complete pinned-corpus comparison now reproduces that separate descriptive calculation with independent source and rank checks.
 
 A bounded check of the comparison corpus
 
@@ -120,7 +120,7 @@ To reproduce, obtain a local clone of the pinned corpus repository, then run the
 
 python scripts/audit_runeberg_prefixes.py /path/to/project-runeberg
 
-Download the audit script · Download the file hashes, counts and exact alphabet. The full historical corpus comparison remains unreproduced.
+Download the audit script · Download the file hashes, counts and exact alphabet. The full prefix census and descriptive comparison are now independently checked. This does not reproduce an unavailable conversion pipeline or validate historical probability claims.
 
 File entries are not independent texts
 
@@ -151,7 +151,7 @@ What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
 
-Liberpedia has reproduced the manuscript-summary match above, not the full corpus comparison or its reported probabilities. A further test must freeze the corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
+Liberpedia has reproduced the manuscript-summary match above and the complete pinned prefix comparison: 25,565 eligible file paths, 25,563 distinct eligible blobs, and all 23 measures under both weights. The independent checks cover source bytes and exact ranks; they do not validate reported language probabilities or an unavailable conversion pipeline. Further variants must freeze their corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
@@ -280,6 +280,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - LP2-38
   https://jelliottdev.github.io/reference/lp2-38.html
+- complete pinned-corpus comparison; full prefix census and descriptive comparison; complete pinned prefix comparison
+  https://jelliottdev.github.io/#/experiments/corpus-prefix-census
 - the pinned corpus repository; Project Runeberg, revision a39e87e
   https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
 - Download the audit script

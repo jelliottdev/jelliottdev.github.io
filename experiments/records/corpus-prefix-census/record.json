@@ -1,0 +1,248 @@
+{
+  "id": "corpus-prefix-census",
+  "title": "Word lengths across the complete historical reference corpus",
+  "status": "published",
+  "question": "Where does the reconstructed 2902-token manuscript summary fall among every eligible prefix in the pinned historical corpus?",
+  "summary": "All eligible prefixes, exact ties and both file-path and byte-deduplicated weighting are independently checked; corpus positions are not language probabilities.",
+  "tags": [
+    "word lengths",
+    "historical corpus",
+    "Project Runeberg",
+    "corpus audit",
+    "2902",
+    "duplicate texts",
+    "empirical ranks",
+    "two rune words",
+    "three rune words"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "exports/unsolved-word-lengths.json",
+      "exports/runeberg-inventory.json"
+    ],
+    "representation": "Reconstructed manuscript rune tokens plus six isolated digits; corpus Unicode-code-point lengths under strict UTF-8 and literal-space tokenization.",
+    "procedure": "Audit every pinned files/ path and its first 2902 nonempty tokens when eligible; calculate all 23 exact descriptive ranks under path and distinct-blob weighting; independently check source bytes and ranks.",
+    "parameters": "25906 paths; 25844 distinct source blobs; 25565 eligible paths and 25563 eligible blobs; 2902 tokens per prefix; bins 1..14 and 15+; n-1 variance and linear quartiles.",
+    "exclusions": "No language identification, random passage sampling, header removal, alphabet filtering, edition deduplication, calibrated p-values or reproduction of the unavailable corpus converter."
+  },
+  "outcome": "supported",
+  "finding": "The census and all 46 comparison rows are independently reproduced. Of 25565 eligible paths, 138 have a smaller length-two proportion than the manuscript and one ties it; all other measures and both weights are retained.",
+  "limitations": "A fixed nonrandom collection of prefixes with undocumented conversion and edition provenance. Corpus code points and manuscript runes plus digits are different units. Descriptive ranks do not identify language or cipher. Human review pending.",
+  "next_steps": "Any changed converter, rune-only target, passage selection or genre-matched reference needs a separately declared variant; do not reinterpret these ranks as probabilities.",
+  "family": {
+    "id": "historical-corpus-lengths",
+    "title": "Historical reference-corpus word lengths",
+    "question": "How do corpus construction and counting conventions affect manuscript length comparisons?",
+    "baseline": "corpus-prefix-census"
+  },
+  "variant": {
+    "label": "Complete pinned prefix census with both weighting rules",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; separate source-byte reconstruction and exact comparison checker; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/corpus-prefix-census/run.py /path/to/project-runeberg --output /path/to/new-corpus-replay",
+    "environment": "Python 3 standard library and Git. Requires an existing corpus clone with pinned objects; source data are external and not included in the bundle. Offline reproduction; see README for retrieval and resume.",
+    "script": "experiments/records/corpus-prefix-census/run.py",
+    "script_sha256": "8543b7712baa4db1379d9ad34c67a07c8a2f7c4ef4e94ea7bc1df2ff1d6a4b02",
+    "inputs": [
+      {
+        "path": "experiments/plans/corpus-prefix-census.json",
+        "sha256": "3da2f6cf2a2f9f304a0c5f3c4536782afc54ce381cf4e4736d4ab88c4962c2a7"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-census.md",
+        "sha256": "af47a54aae3044618c9747ad1f0ceb4eabb97d167641e7c6374e751d24acc23d"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-comparison.json",
+        "sha256": "90fc15c3961cb8da7048e4f8af66d826b05822c00213e76ea479b845a5719388"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-comparison.md",
+        "sha256": "e8a06a54506b86945178c6366dad89408b76db30dccca2d4cf435d79507ce2ee"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/PROVENANCE.md",
+        "sha256": "1f99524a4f90b24af7e88bcbff5c7b3da3b73c28a48a07b0faa0a8cd0e63dcfe"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/README.md",
+        "sha256": "f4e3b516abd2fbe4f3365f68b98cf5a6a0401399b7d9fcf510e4c1bca1517046"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/frozen-resume-test.py.txt",
+        "sha256": "c849872a4a9c68cab0c0cbe6b730c872155e283e4c4e9487368db69f65b4ae1e"
+      },
+      {
+        "path": "exports/runeberg-inventory.json",
+        "sha256": "a22279ce22d01682b350b4b2ca120b05a0b048273f269789504f2871c43bc6ac"
+      },
+      {
+        "path": "exports/sources/runeberg-tree.bin",
+        "sha256": "c52a05ba2cb459334631f1742c18e890bc974897140334bb42f7f0a931dbbd89"
+      },
+      {
+        "path": "exports/sources/unsolved-word-length-summary.csv",
+        "sha256": "1f9c06f7a1e11a98f57533854eff0883b5cb4e4b775dca5625881699c790f1a1"
+      },
+      {
+        "path": "exports/unsolved-word-lengths.json",
+        "sha256": "0b4a4cf7e55ca574bdae083044239ebc91047466f586b80f16033f45aaf30c8d"
+      },
+      {
+        "path": "scripts/check_corpus_comparison.py",
+        "sha256": "bd11854d7d79c5ec42bab0a6f38ebfeae14c6b1bfaac252a4af2e25728a5e78b"
+      },
+      {
+        "path": "scripts/check_corpus_prefixes.py",
+        "sha256": "057f17c618c14f1108b4dcb223b60f7e2e541b2cbe9c37c3b0d5d837d92a1a81"
+      },
+      {
+        "path": "scripts/compare_corpus_prefixes.py",
+        "sha256": "fed8cc85885984ffb88c46be7d71c04cd31743d827e0fd2d632bcf08045e9f35"
+      },
+      {
+        "path": "scripts/corpus_prefix_statistics.py",
+        "sha256": "19e53ce778b657b13a76dff4b1f1d33579a8592bb600cd5527de4492342119dd"
+      },
+      {
+        "path": "scripts/render_corpus_comparison.py",
+        "sha256": "73e7c0565846081c6c7a3ea287b275818ed914df16cbefadfc109c10ff7cccf9"
+      },
+      {
+        "path": "scripts/run_corpus_prefixes.py",
+        "sha256": "f53f5a6c9302e8434754a8cca086e6985d9d15d9af9459242adbd15194057201"
+      },
+      {
+        "path": "scripts/test_corpus_comparison_render.py",
+        "sha256": "80062835694875181a1e758ee4f482bd7b820ecc07f708c869f21d93e4d0cb77"
+      },
+      {
+        "path": "scripts/test_corpus_pipeline.py",
+        "sha256": "acfe9eaff6f83989a2dd0724963692a9700a969e8e166abf0b78343c213815d2"
+      },
+      {
+        "path": "scripts/test_corpus_prefix_statistics.py",
+        "sha256": "e3a5c3f2387e6300d8fb54163dfb1502b4a9c85bc5247cc38030698c5a2fcb46"
+      },
+      {
+        "path": "scripts/test_corpus_resume.py",
+        "sha256": "af3fe14f6a6e3b60e6af1c03f0ff0bf0ffd5e71bcfdc00c81631523f93a25611"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/corpus-prefix-census/audit-receipt.json",
+        "sha256": "aaeecb8421af6af7767b72285aa5b146483e6023a6aafb5f50532d6dc8e7abea"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison-receipt.json",
+        "sha256": "ada1ab302a7e5ee4784b43a811c2373d7be89bfd0940d531983cf58ec653fe56"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.json",
+        "sha256": "714c37096d2da69ee9aaa0d9abe0fc54d1f0f9234e9293d6b0af1211ab349e6c"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.md",
+        "sha256": "1a26c0f49acf3c2738a0c3d1ffc8d1e9a96e433374ec6a2fe7989e856d227b21"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.svg",
+        "sha256": "148e4e92e9954b759d874608b37103e4edd63dd1b42a075024ea55dfd10a5952"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/report.json",
+        "sha256": "eddd67e0242ba18610bec7868e28a631840b0d8d2c68873836afdd078430e6c9"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/specification.json",
+        "sha256": "cd0824c861725ae235b11a1c55c5b9c6dd912e4cf3193101eb34325b9ca1bebf"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned reference corpus",
+      "url": "https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87"
+    },
+    {
+      "label": "Pinned historical word-length analysis",
+      "url": "https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2"
+    }
+  ],
+  "related": [
+    "parallel-languages",
+    "target-sized-languages"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/corpus-prefix-census/comparison.svg",
+      "caption": "All 23 measures under both weighting policies. Each bar partitions the fixed corpus below, equal to and above the manuscript value. The bars are descriptive ranks, not language probabilities."
+    }
+  ]
+}

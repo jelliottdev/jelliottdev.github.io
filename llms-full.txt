@@ -18924,7 +18924,7 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 	Runes plus six single digits	89	2,902	12,956 runes + 6 digits
 
 
-This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The comparison with a reference corpus still needs its own reproduction.
+This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The complete pinned-corpus comparison now reproduces that separate descriptive calculation with independent source and rank checks.
 
 A bounded check of the comparison corpus
 
@@ -18982,7 +18982,7 @@ To reproduce, obtain a local clone of the pinned corpus repository, then run the
 
 python scripts/audit_runeberg_prefixes.py /path/to/project-runeberg
 
-Download the audit script · Download the file hashes, counts and exact alphabet. The full historical corpus comparison remains unreproduced.
+Download the audit script · Download the file hashes, counts and exact alphabet. The full prefix census and descriptive comparison are now independently checked. This does not reproduce an unavailable conversion pipeline or validate historical probability claims.
 
 File entries are not independent texts
 
@@ -19013,7 +19013,7 @@ What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
 
-Liberpedia has reproduced the manuscript-summary match above, not the full corpus comparison or its reported probabilities. A further test must freeze the corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
+Liberpedia has reproduced the manuscript-summary match above and the complete pinned prefix comparison: 25,565 eligible file paths, 25,563 distinct eligible blobs, and all 23 measures under both weights. The independent checks cover source bytes and exact ranks; they do not validate reported language probabilities or an unavailable conversion pipeline. Further variants must freeze their corpus revision, conversion rules, exclusions and sampling method. Check whether introductory material remains, whether editions duplicate one another, and whether a first-passage sample represents the question you intend to ask. Changing to random passages would be a new variant.
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
@@ -19142,6 +19142,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - LP2-38
   https://jelliottdev.github.io/reference/lp2-38.html
+- complete pinned-corpus comparison; full prefix census and descriptive comparison; complete pinned prefix comparison
+  https://jelliottdev.github.io/#/experiments/corpus-prefix-census
 - the pinned corpus repository; Project Runeberg, revision a39e87e
   https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
 - Download the audit script
@@ -22224,6 +22226,260 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "## The model being tested\n\nOn each of [LP2-33](#/reader/lp2-33) and [LP2-39](#/reader/lp2-39), label the three horizontal dots A, B and C from left to right. Draw three circles centered at those dots. Can the circles meet at one point on each page if **the same ordered radii** are used on both pages?\n\nThe two target points may differ. The radius at A must be the same on both pages, likewise B and C. Both pages remain at their original 2400 × 3600 pixel scale; no resizing or refitting is allowed. This is one precise compass construction, not a general test of compass-related ideas.\n\n**Result: no**, for the measured dot centers at each of the three declared grayscale thresholds. An exact rational distance bound rules out every possible ordered radius triple within this model. It does not require selecting radii from the number square or searching a finite list.\n\n## Measure the centers first\n\nThe script reads the original JPEGs, converts RGB to Pillow’s L grayscale, and finds four-connected dark components inside two declared crop boxes. Pixel coordinates are zero-based, with integer coordinates at pixel centers. Crop right and bottom edges are exclusive.\n\n| Page | Crop (left, top, right, bottom) |\n| --- | --- |\n| LP2-33 | (576, 1656, 1824, 1836) |\n| LP2-39 | (1200, 1638, 1800, 1746) |\n\nFor each threshold 100, 140 and 180, a pixel is dark if its grayscale value is strictly below the threshold. Retain components with area greater than 200 pixels, width/height strictly between 0.7 and 1.3, and filled area greater than 60% of the bounding rectangle. Exactly three components must survive; otherwise the script stops.\n\nEach center is the arithmetic mean of its component’s pixel coordinates. The report stores integer coordinate sums and areas, so the subsequent calculation uses exact fractions rather than rounded coordinates. This measures a particular thresholded shape; it is not an assertion that the author placed the dot at that exact rational point.\n\nThe source-region figure shows decoded original JPEG crops with red center marks. It does not threshold or increase contrast in the displayed image; thresholding is used only to calculate the marked centers. Each crop is fitted to the same display width, so the previews have different scales. The separate spacing diagram uses a common horizontal scale.\n\nAt threshold 140, the adjacent center separations on LP2-33 are approximately 417.47 and 478.23 pixels. On LP2-39 they are 196 and 224.5 pixels. The diagram uses one horizontal scale for both pages and separates the rows vertically for readability. It does not show the original vertical positions.\n\n## Why three distances impose a constraint\n\nLet Q be the perpendicular projection of B onto the line through A and C. Write `Q=(1−t)A+tC` and `e=B−Q`. The dots are almost collinear; e measures the middle dot’s small displacement from that line. Let `K=t(1−t)|C−A|²`.\n\nIf X is a target point with distances rA, rB and rC from the three dots, expanding the squared distances gives:\n\n```text\nrB² − (1−t)rA² − t rC² + K\n  = 2 e·(Q−X) + |e|²\n```\n\nThe right-hand side is an affine function of X. Its minimum and maximum over a rectangle occur at corners, so evaluating the four page corners gives an exact residual interval. No grid sampling of target points is necessary.\n\nNow compare the two pages. Their shared radii cancel except for `(t₂−t₁)(rA²−rC²)`. Each squared radius lies between zero and the squared page diagonal, because both its center and target lie on the page. Consequently:\n\n```text\n|residual₂ − residual₁|\n  ≥ |K₂ − K₁| − |t₂ − t₁| × (2399² + 3599²)\n```\n\nThe two corner intervals also give an upper bound on that absolute difference. If the lower bound exceeds the upper bound, no target pair with shared radii can exist.\n\n## The bounds\n\nThe table rounds displayed values to two decimal places. Decisions use exact fractions saved in the report; the unit is squared pixels.\n\n| Threshold | Required lower bound | Allowed upper bound | Compatible? |\n| --- | --- | --- | --- |\n| 100 | 153,322.33 | 119.47 | No |\n| 140 | 155,146.71 | 14.17 | No |\n| 180 | 153,854.17 | 11.88 | No |\n\nAll three declared threshold variants give the same exclusion. This is a sensitivity check, not a confidence interval or a complete treatment of measurement error. The argument treats each measured center as fixed; it does not quantify every plausible alternative center, crop or dot-selection rule.\n\n## Reproduce\n\nExtract the experiment bundle, then extract the [original-images ZIP](downloads/original-images.zip) into the same folder so that `images/lp2-33.jpg` and `images/lp2-39.jpg` are available. Original images are separate from the small experiment ZIP. Install Pillow 11.3.0 in your Python environment, then verify the required image hashes and run:\n\n```text\npython scripts/verify_bundle.py EXPERIMENT-compass-shared-radii-IMAGE-INPUTS.json\npython experiments/records/compass-shared-radii/run.py --check\npython experiments/records/compass-shared-radii/check.py\n```\n\nThe producer uses Pillow 11.3.0 and Python’s standard library. Its version is recorded so a different image-decoding environment does not silently claim an exact replay. The checker needs only the standard library. Neither command calls AI or accesses the network.\n\nThe producer reruns component measurement, the rational certificate and the annotated source-region SVG. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.\n\nBoth checks passed on 20 October 2026. The procedure and controls were recorded in `plan.txt`; the declared thresholds, crops and target rectangle were unchanged after the run. This freshly reconstructs a constrained claim in the supplied research archive; it is not a new discovery. Human review remains pending.\n\n## What remains outside this result\n\nRescaling one page, using different radii on each page, changing which dots receive which radii, placing a target outside the page, stepping a compass between points, or reading pairwise intersections changes the model. Those alternatives are not excluded here. The result supplies no rune selection or plaintext claim.\n\nFor the distinction between an illustration and a specified cipher, see [compass constructions](#/wiki/compass-cipher-tests). For coordinate conventions and original files, see [image regions](#/wiki/image-regions). For how to state this exclusion without overstating it, see [search space and bounds](#/wiki/search-space).\n",
   "article_path": "experiments/records/compass-shared-radii/article.md",
   "script_sha256": "d92b38320e2e705177213030d546b2a8c134356073026c2138b5898e98284274"
+}
+
+---
+
+{
+  "id": "corpus-prefix-census",
+  "title": "Word lengths across the complete historical reference corpus",
+  "status": "published",
+  "question": "Where does the reconstructed 2902-token manuscript summary fall among every eligible prefix in the pinned historical corpus?",
+  "summary": "All eligible prefixes, exact ties and both file-path and byte-deduplicated weighting are independently checked; corpus positions are not language probabilities.",
+  "tags": [
+    "word lengths",
+    "historical corpus",
+    "Project Runeberg",
+    "corpus audit",
+    "2902",
+    "duplicate texts",
+    "empirical ranks",
+    "two rune words",
+    "three rune words"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "exports/unsolved-word-lengths.json",
+      "exports/runeberg-inventory.json"
+    ],
+    "representation": "Reconstructed manuscript rune tokens plus six isolated digits; corpus Unicode-code-point lengths under strict UTF-8 and literal-space tokenization.",
+    "procedure": "Audit every pinned files/ path and its first 2902 nonempty tokens when eligible; calculate all 23 exact descriptive ranks under path and distinct-blob weighting; independently check source bytes and ranks.",
+    "parameters": "25906 paths; 25844 distinct source blobs; 25565 eligible paths and 25563 eligible blobs; 2902 tokens per prefix; bins 1..14 and 15+; n-1 variance and linear quartiles.",
+    "exclusions": "No language identification, random passage sampling, header removal, alphabet filtering, edition deduplication, calibrated p-values or reproduction of the unavailable corpus converter."
+  },
+  "outcome": "supported",
+  "finding": "The census and all 46 comparison rows are independently reproduced. Of 25565 eligible paths, 138 have a smaller length-two proportion than the manuscript and one ties it; all other measures and both weights are retained.",
+  "limitations": "A fixed nonrandom collection of prefixes with undocumented conversion and edition provenance. Corpus code points and manuscript runes plus digits are different units. Descriptive ranks do not identify language or cipher. Human review pending.",
+  "next_steps": "Any changed converter, rune-only target, passage selection or genre-matched reference needs a separately declared variant; do not reinterpret these ranks as probabilities.",
+  "family": {
+    "id": "historical-corpus-lengths",
+    "title": "Historical reference-corpus word lengths",
+    "question": "How do corpus construction and counting conventions affect manuscript length comparisons?",
+    "baseline": "corpus-prefix-census"
+  },
+  "variant": {
+    "label": "Complete pinned prefix census with both weighting rules",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; separate source-byte reconstruction and exact comparison checker; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/corpus-prefix-census/run.py /path/to/project-runeberg --output /path/to/new-corpus-replay",
+    "environment": "Python 3 standard library and Git. Requires an existing corpus clone with pinned objects; source data are external and not included in the bundle. Offline reproduction; see README for retrieval and resume.",
+    "script": "experiments/records/corpus-prefix-census/run.py",
+    "script_sha256": "8543b7712baa4db1379d9ad34c67a07c8a2f7c4ef4e94ea7bc1df2ff1d6a4b02",
+    "inputs": [
+      {
+        "path": "experiments/plans/corpus-prefix-census.json",
+        "sha256": "3da2f6cf2a2f9f304a0c5f3c4536782afc54ce381cf4e4736d4ab88c4962c2a7"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-census.md",
+        "sha256": "af47a54aae3044618c9747ad1f0ceb4eabb97d167641e7c6374e751d24acc23d"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-comparison.json",
+        "sha256": "90fc15c3961cb8da7048e4f8af66d826b05822c00213e76ea479b845a5719388"
+      },
+      {
+        "path": "experiments/plans/corpus-prefix-comparison.md",
+        "sha256": "e8a06a54506b86945178c6366dad89408b76db30dccca2d4cf435d79507ce2ee"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/PROVENANCE.md",
+        "sha256": "1f99524a4f90b24af7e88bcbff5c7b3da3b73c28a48a07b0faa0a8cd0e63dcfe"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/README.md",
+        "sha256": "f4e3b516abd2fbe4f3365f68b98cf5a6a0401399b7d9fcf510e4c1bca1517046"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/frozen-resume-test.py.txt",
+        "sha256": "c849872a4a9c68cab0c0cbe6b730c872155e283e4c4e9487368db69f65b4ae1e"
+      },
+      {
+        "path": "exports/runeberg-inventory.json",
+        "sha256": "a22279ce22d01682b350b4b2ca120b05a0b048273f269789504f2871c43bc6ac"
+      },
+      {
+        "path": "exports/sources/runeberg-tree.bin",
+        "sha256": "c52a05ba2cb459334631f1742c18e890bc974897140334bb42f7f0a931dbbd89"
+      },
+      {
+        "path": "exports/sources/unsolved-word-length-summary.csv",
+        "sha256": "1f9c06f7a1e11a98f57533854eff0883b5cb4e4b775dca5625881699c790f1a1"
+      },
+      {
+        "path": "exports/unsolved-word-lengths.json",
+        "sha256": "0b4a4cf7e55ca574bdae083044239ebc91047466f586b80f16033f45aaf30c8d"
+      },
+      {
+        "path": "scripts/check_corpus_comparison.py",
+        "sha256": "bd11854d7d79c5ec42bab0a6f38ebfeae14c6b1bfaac252a4af2e25728a5e78b"
+      },
+      {
+        "path": "scripts/check_corpus_prefixes.py",
+        "sha256": "057f17c618c14f1108b4dcb223b60f7e2e541b2cbe9c37c3b0d5d837d92a1a81"
+      },
+      {
+        "path": "scripts/compare_corpus_prefixes.py",
+        "sha256": "fed8cc85885984ffb88c46be7d71c04cd31743d827e0fd2d632bcf08045e9f35"
+      },
+      {
+        "path": "scripts/corpus_prefix_statistics.py",
+        "sha256": "19e53ce778b657b13a76dff4b1f1d33579a8592bb600cd5527de4492342119dd"
+      },
+      {
+        "path": "scripts/render_corpus_comparison.py",
+        "sha256": "73e7c0565846081c6c7a3ea287b275818ed914df16cbefadfc109c10ff7cccf9"
+      },
+      {
+        "path": "scripts/run_corpus_prefixes.py",
+        "sha256": "f53f5a6c9302e8434754a8cca086e6985d9d15d9af9459242adbd15194057201"
+      },
+      {
+        "path": "scripts/test_corpus_comparison_render.py",
+        "sha256": "80062835694875181a1e758ee4f482bd7b820ecc07f708c869f21d93e4d0cb77"
+      },
+      {
+        "path": "scripts/test_corpus_pipeline.py",
+        "sha256": "acfe9eaff6f83989a2dd0724963692a9700a969e8e166abf0b78343c213815d2"
+      },
+      {
+        "path": "scripts/test_corpus_prefix_statistics.py",
+        "sha256": "e3a5c3f2387e6300d8fb54163dfb1502b4a9c85bc5247cc38030698c5a2fcb46"
+      },
+      {
+        "path": "scripts/test_corpus_resume.py",
+        "sha256": "af3fe14f6a6e3b60e6af1c03f0ff0bf0ffd5e71bcfdc00c81631523f93a25611"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/corpus-prefix-census/audit-receipt.json",
+        "sha256": "aaeecb8421af6af7767b72285aa5b146483e6023a6aafb5f50532d6dc8e7abea"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison-receipt.json",
+        "sha256": "ada1ab302a7e5ee4784b43a811c2373d7be89bfd0940d531983cf58ec653fe56"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.json",
+        "sha256": "714c37096d2da69ee9aaa0d9abe0fc54d1f0f9234e9293d6b0af1211ab349e6c"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.md",
+        "sha256": "1a26c0f49acf3c2738a0c3d1ffc8d1e9a96e433374ec6a2fe7989e856d227b21"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/comparison.svg",
+        "sha256": "148e4e92e9954b759d874608b37103e4edd63dd1b42a075024ea55dfd10a5952"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/report.json",
+        "sha256": "eddd67e0242ba18610bec7868e28a631840b0d8d2c68873836afdd078430e6c9"
+      },
+      {
+        "path": "experiments/records/corpus-prefix-census/specification.json",
+        "sha256": "cd0824c861725ae235b11a1c55c5b9c6dd912e4cf3193101eb34325b9ca1bebf"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned reference corpus",
+      "url": "https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87"
+    },
+    {
+      "label": "Pinned historical word-length analysis",
+      "url": "https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2"
+    }
+  ],
+  "related": [
+    "parallel-languages",
+    "target-sized-languages"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/corpus-prefix-census/comparison.svg",
+      "caption": "All 23 measures under both weighting policies. Each bar partitions the fixed corpus below, equal to and above the manuscript value. The bars are descriptive ranks, not language probabilities."
+    }
+  ],
+  "article": "## The question this comparison asks\n\nAn earlier word-length analysis compared the unsolved manuscript with thousands of converted texts. Before interpreting a reported rarity, we need to know what was counted, which texts entered the comparison, and whether repeated files received repeated weight.\n\nThis experiment asks a specific descriptive question: **where does the reconstructed 2,902-token manuscript summary fall among the first 2,902 tokens of every eligible file in the pinned reference corpus?** It does not ask which language is most likely. The separate [parallel-language experiments](#/experiments/parallel-languages) compare aligned translations under declared representations.\n\n## What the complete audit found\n\nThe census covers all **25,906 paths** and **25,844 distinct source blobs**. Of these, **25,565 paths** are long enough for the declared prefix, representing **25,563 distinct eligible blobs**. The other 341 paths are retained as ineligible rows. Every source object and all 46 comparison rows passed the separate checks.\n\nThe manuscript has 448 length-two tokens out of 2,902. Only 138 eligible prefixes have a smaller proportion, and one ties it: the inclusive fraction at or below is **139/25,565 (about 0.544%)**. Its 720 length-three tokens give a different position: 24,171 prefixes fall below that proportion, 29 tie it and 1,365 fall above it. These are descriptive counts within this reference collection, not chances that a language or cipher hypothesis is true.\n\nOther measures need not be extreme. The manuscript's variance has 10,995 prefixes below it and 14,570 above it. Its minimum token length of one ties every eligible prefix. Its lack of tokens of length 15 or more is shared by 13,205 prefixes. The complete tables retain these ordinary and tied observations alongside the more unusual proportions.\n\nRemoving byte-identical duplication reduces the eligible denominator by only two. For the length-two proportion, the below and equal counts remain 138 and one; the above count changes from 25,426 to 25,424. This sensitivity removes duplicate bytes, not all related works.\n\n## Why 2,902 rather than 2,896?\n\nThe [word-length guide](#/wiki/word-lengths?section=historical-count) reconstructs the historical summary by including six isolated digits alongside 2,896 rune tokens. Counting each digit as a length-one token reproduces the earlier summary. This does not make those digits runes, nor prove what the original author's parser intended.\n\nThe target for this experiment is that reconstructed historical summary. Switching to the rune-only target would change both the denominator and the reference-prefix length. It belongs in an explicitly declared variant, not an unnoticed correction during the calculation.\n\n## What enters the reference population?\n\nThe pinned source tree contains 25,906 paths under `files/`. Every path is considered. A file is eligible when it has at least 2,902 nonempty tokens separated by the literal space character. Its first 2,902 tokens form its profile; later material is not sampled.\n\nThere is no language selection, header removal or filtering to the 29-rune alphabet. Strict UTF-8 decoding is required. Token length is the number of retained Unicode code points. A newline or another non-space character remains part of its token under this rule. This precision matters: a general whitespace splitter would implement a different experiment.\n\nThe [earlier twelve-prefix audit](#/wiki/word-lengths?section=corpus-inputs) found symbols outside the stored manuscript alphabet. The full census preserves the declared counting rule rather than silently deleting them. Relabeling a symbol one-for-one preserves length; deleting it can change lengths, empty tokens and subsequent prefix selection.\n\n## Two ways to weight the same files\n\nThe primary comparison counts every eligible path. If two filenames contain identical bytes, both contribute. This preserves the historical file-based population.\n\nThe sensitivity comparison counts each distinct eligible Git blob once. This removes byte-identical duplication. It does not deduplicate editions, translations, differently formatted copies or separate excerpts from the same work. Consequently, neither population should be described as thousands of independent books.\n\nBoth versions show the same 23 measures: proportions of lengths 1 through 14 and 15+, mean, sample variance, sample standard deviation, minimum, lower quartile, median, upper quartile and maximum. The 15+ bin retains longer reference tokens even though the manuscript target has none. Measures are related; they are not 23 independent experiments.\n\n## How to read the figure and exact tables\n\nEach bar divides the reference population into values strictly below, equal to and strictly above the manuscript value. “Below” is a numerical relation, not a judgement of which text is more natural or more similar overall. For example, a prefix below the manuscript's length-two proportion simply contains a smaller proportion of length-two tokens.\n\nThe tables also retain two inclusive fractions: `(below + equal) / total` and `(above + equal) / total`. Ties enter both. With three reference values below the target, two equal and five above, the fractions are 5/10 and 7/10. They sum to more than one because both include the two ties. Subtracting either fraction from one would give the other *strict* side, not the other inclusive fraction.\n\nCounts, means, variances and interpolated quartiles are compared using exact rational arithmetic. Standard deviation is ranked through variance, because taking a nonnegative square root preserves order and ties. Rounded values displayed to readers do not decide equality.\n\n## What an extreme rank would establish\n\nAn extreme rank means that few of these particular file prefixes fall on one side of the manuscript under the specified counting rule. It is not a probability that the plaintext is English, a probability that the manuscript is natural language, or a calibrated hypothesis-test p-value.\n\nThe collection is fixed and nonrandom; its edition manifest and conversion procedure remain unavailable. File beginnings can contain material unlike the manuscript. Corpus units count all retained Unicode code points, while the target counts runes plus six digits. These limitations remain even if the arithmetic is reproduced exactly.\n\nFor a one-symbol-for-one-symbol cipher with preserved boundaries, plaintext and ciphertext token lengths agree. A mismatch with a reference corpus still does not identify a length-changing cipher: the text's genre, conversion rules, headings and boundary conventions can also differ. See [cipher invariants](#/wiki/cipher-invariants) and [search space and bounds](#/wiki/search-space).\n\n## Reproduce the comparison\n\nFrom a Liberpedia checkout or complete reproduction bundle, with an existing local corpus clone and a new output directory:\n\n```text\npython experiments/records/corpus-prefix-census/run.py /path/to/project-runeberg --output /path/to/new-corpus-replay\n```\n\nPython's standard library and Git are sufficient. The wrapper runs offline and stops when any stage fails. The [reproduction instructions](experiments/records/corpus-prefix-census/README.md) explain source retrieval, each output, and how to resume an interrupted census. The external corpus is not included in the reproduction bundle.\n\nThe source checker reads every distinct blob, independently reconstructs the token prefix and statistics, and checks every duplicate row. A second checker independently reconstructs all 46 comparison rows with exact ties. Only after both succeed does the renderer create the figure and tables. These are separate implementations within this project, not an external peer review.\n\n## Sources and scope\n\nThe corpus is [mortlach/project-runeberg at revision a39e87e](https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87). The earlier analysis is [mae3301/lp_experiments at revision cb5cdb9](https://github.com/mae3301/lp_experiments/tree/cb5cdb908bb34b68d8a05353eaace56e83d0bbf2). The census and comparison plans retain the counting conventions and input hashes fixed before the complete run.\n\nThe [provenance note](experiments/records/corpus-prefix-census/PROVENANCE.md) preserves a frozen test-file hash and documents corruption checks added later. The calculation and audit code match their recorded hashes.\n\nThis is a fresh implementation of a declared descriptive comparison. It does not execute the historical scripts, validate their entire statistical analysis, or reproduce an unavailable conversion pipeline.\n\n## Complete corpus comparison\n\nEvery planned measure is shown under both weighting rules. Bars partition reference prefixes by whether their value is below, equal to, or above the manuscript value. They do not show probabilities of a language or cipher.\n\nThe two inclusive fractions both contain ties: they can sum to more than one. Distinct Git blobs remove byte-identical duplicates only; editions, translations and overlapping works may remain. Manuscript values are exact fractions; length-bin values are proportions. Standard deviation is shown as a square root, while its ranks use exact variance ordering, which preserves all ties.\n\n### Every eligible path\n\n| Measure | Manuscript value | Below | Equal | Above | At or below | At or above |\n| --- | --- | ---: | ---: | ---: | --- | --- |\n| Length 1 | 89/2902 | 4971 | 192 | 20402 | 5163/25565 | 20594/25565 |\n| Length 2 | 224/1451 | 138 | 1 | 25426 | 139/25565 | 25427/25565 |\n| Length 3 | 360/1451 | 24171 | 29 | 1365 | 24200/25565 | 1394/25565 |\n| Length 4 | 513/2902 | 21752 | 87 | 3726 | 21839/25565 | 3813/25565 |\n| Length 5 | 317/2902 | 16047 | 201 | 9317 | 16248/25565 | 9518/25565 |\n| Length 6 | 128/1451 | 15235 | 333 | 9997 | 15568/25565 | 10330/25565 |\n| Length 7 | 108/1451 | 18726 | 172 | 6667 | 18898/25565 | 6839/25565 |\n| Length 8 | 78/1451 | 19949 | 191 | 5425 | 20140/25565 | 5616/25565 |\n| Length 9 | 39/1451 | 8958 | 262 | 16345 | 9220/25565 | 16607/25565 |\n| Length 10 | 26/1451 | 13985 | 384 | 11196 | 14369/25565 | 11580/25565 |\n| Length 11 | 16/1451 | 16219 | 509 | 8837 | 16728/25565 | 9346/25565 |\n| Length 12 | 9/1451 | 19595 | 717 | 5253 | 20312/25565 | 5970/25565 |\n| Length 13 | 2/1451 | 10212 | 2696 | 12657 | 12908/25565 | 15353/25565 |\n| Length 14 | 3/2902 | 17826 | 2942 | 4797 | 20768/25565 | 7739/25565 |\n| Length 15+ | 0 | 0 | 13205 | 12360 | 13205/25565 | 25565/25565 |\n| Mean | 6481/1451 | 20282 | 12 | 5271 | 20294/25565 | 5283/25565 |\n| Variance | 22676602/4209351 | 10995 | 0 | 14570 | 10995/25565 | 14570/25565 |\n| Standard deviation | √(22676602/4209351) | 10995 | 0 | 14570 | 10995/25565 | 14570/25565 |\n| Minimum | 1 | 0 | 25565 | 0 | 25565/25565 | 25565/25565 |\n| Lower quartile | 3 | 24200 | 1341 | 24 | 25541/25565 | 1365/25565 |\n| Median | 4 | 7318 | 17880 | 367 | 25198/25565 | 18247/25565 |\n| Upper quartile | 6 | 11066 | 12294 | 2205 | 23360/25565 | 14499/25565 |\n| Maximum | 14 | 4766 | 8439 | 12360 | 13205/25565 | 20799/25565 |\n\n### Distinct eligible Git blobs\n\n| Measure | Manuscript value | Below | Equal | Above | At or below | At or above |\n| --- | --- | ---: | ---: | ---: | --- | --- |\n| Length 1 | 89/2902 | 4970 | 192 | 20401 | 5162/25563 | 20593/25563 |\n| Length 2 | 224/1451 | 138 | 1 | 25424 | 139/25563 | 25425/25563 |\n| Length 3 | 360/1451 | 24170 | 29 | 1364 | 24199/25563 | 1393/25563 |\n| Length 4 | 513/2902 | 21750 | 87 | 3726 | 21837/25563 | 3813/25563 |\n| Length 5 | 317/2902 | 16046 | 201 | 9316 | 16247/25563 | 9517/25563 |\n| Length 6 | 128/1451 | 15234 | 333 | 9996 | 15567/25563 | 10329/25563 |\n| Length 7 | 108/1451 | 18724 | 172 | 6667 | 18896/25563 | 6839/25563 |\n| Length 8 | 78/1451 | 19947 | 191 | 5425 | 20138/25563 | 5616/25563 |\n| Length 9 | 39/1451 | 8957 | 262 | 16344 | 9219/25563 | 16606/25563 |\n| Length 10 | 26/1451 | 13984 | 384 | 11195 | 14368/25563 | 11579/25563 |\n| Length 11 | 16/1451 | 16218 | 509 | 8836 | 16727/25563 | 9345/25563 |\n| Length 12 | 9/1451 | 19594 | 717 | 5252 | 20311/25563 | 5969/25563 |\n| Length 13 | 2/1451 | 10212 | 2696 | 12655 | 12908/25563 | 15351/25563 |\n| Length 14 | 3/2902 | 17824 | 2942 | 4797 | 20766/25563 | 7739/25563 |\n| Length 15+ | 0 | 0 | 13204 | 12359 | 13204/25563 | 25563/25563 |\n| Mean | 6481/1451 | 20280 | 12 | 5271 | 20292/25563 | 5283/25563 |\n| Variance | 22676602/4209351 | 10994 | 0 | 14569 | 10994/25563 | 14569/25563 |\n| Standard deviation | √(22676602/4209351) | 10994 | 0 | 14569 | 10994/25563 | 14569/25563 |\n| Minimum | 1 | 0 | 25563 | 0 | 25563/25563 | 25563/25563 |\n| Lower quartile | 3 | 24199 | 1340 | 24 | 25539/25563 | 1364/25563 |\n| Median | 4 | 7317 | 17879 | 367 | 25196/25563 | 18246/25563 |\n| Upper quartile | 6 | 11065 | 12293 | 2205 | 23358/25563 | 14498/25563 |\n| Maximum | 14 | 4766 | 8438 | 12359 | 13204/25563 | 20797/25563 |\n\n",
+  "article_path": "experiments/records/corpus-prefix-census/article.md",
+  "script_sha256": "8543b7712baa4db1379d9ad34c67a07c8a2f7c4ef4e94ea7bc1df2ff1d6a4b02"
 }
 
 ---
