@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "status": "planned after preliminary inspection; amended scores not yet computed",
+  "original_plan_sha256": "17c626fbfd274d5c317a1294497ff46a4c495a6961ec462ba1b63f0746c16d04",
+  "diagnostic_report_sha256": "fa60455ef26c87699016b7544db6b4bdc4c21e5b794c5aa260a07641311cf478",
+  "reason": "The literal LP2-56 field retains the hexadecimal target. Its non-rune Latin characters become apparent words under the baseline tokenizer. This is not ordinary prose and must be distinguished from rune-derived text.",
+  "preserve": "Retain all original literal-label and native-rune results as the unfiltered diagnostic; do not silently replace their selection or call the additional comparison preregistered.",
+  "additional_control": "For every known section, build Latin labels from the verified decoded rune trace while retaining nonalphabetic delimiters from the source transcription. Replace any source alphabetic character that is not a GP rune with a separator. Apply the same letters/folded/gp-length corpus tokenizers and reference profiles. Do not special-case the observed winning languages.",
+  "audit": "Record excluded non-rune alphabetic counts per section and compare native rune lengths with trace-derived units. Verify all source hashes and known readings again. Publish the amendment and distinguish it from the original plan."
+}
