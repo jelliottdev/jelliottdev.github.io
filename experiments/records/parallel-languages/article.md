@@ -90,3 +90,7 @@ The first command verifies input hashes, recomputes the comparisons and the 200 
 - [FLORES-200 documentation](https://github.com/facebookresearch/flores/blob/main/flores200/README.md): aligned translation benchmark and language list.
 - [Original archive](https://dl.fbaipublicfiles.com/nllb/flores200_dataset.tar.gz): exact extracted translation and metadata files; archive and extracted-file hashes are recorded in the plan.
 - [Dataset card and license](https://huggingface.co/datasets/facebook/flores): Creative Commons Attribution-ShareAlike 4.0 International. Source translations are redistributed unchanged. This derived analysis and its article are also offered under CC BY-SA 4.0.
+
+## Check against known LP readings
+
+The [known-reading control](#/experiments/known-reading-languages) now tests all nine established reading sections and their pool. The pool ranks closest to English, while some individual sections do not. It also documents how LP2-56's embedded hash distorts an unfiltered letter-token count. This supplies a manuscript-specific caution beyond the within-FLORES controls.

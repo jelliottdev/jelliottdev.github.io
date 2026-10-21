@@ -35,7 +35,7 @@ That is a control on these eight translated languages within FLORES. It is not a
 - A source article can cross a block boundary. Blocks are therefore not independent draws, and the 64 decisions are not treated as independent trials. No binomial accuracy interval or language posterior is calculated.
 - The manuscript remains pooled LP2-00–55, with headings and the baseline boundary convention. This does not test each section separately.
 - Word-length comparison requires preserved boundaries and one ciphertext rune per counted plaintext unit. GP grouping remains an orthographic sensitivity, not a validated phonetic transcription.
-- No genre-matched corpus or known decoded LP control is included. Those remain separate follow-ups.
+- No genre-matched corpus or known decoded LP control is included in this variant. The separate [known-reading control](#/experiments/known-reading-languages) now covers the nine documented LP sections. A genre-matched corpus remains open.
 
 ## Reproduce
 

@@ -1,6 +1,6 @@
 """Run the frozen known-LP language control into a new local report.
 
-This is preparation for review, not a published experiment record.
+The experiment record documents review status and interpretation.
 """
 import argparse
 from collections import Counter
@@ -26,32 +26,46 @@ def histogram(lengths):
 
 def calculate():
     plan=json.loads(PLAN.read_bytes())
+    amendment_path=PLAN.with_name('known-reading-language-control-amendment.json')
+    amendment=json.loads(amendment_path.read_bytes())
+    assert amendment['original_plan_sha256']==hashlib.sha256(PLAN.read_bytes()).hexdigest()
     for item in plan['inputs']:
         assert hashlib.sha256((ROOT/item['path']).read_bytes()).hexdigest()==item['sha256'],item['path']
     codes=json.loads((BASE/'plan.json').read_bytes())['languages']
     references={}
     for mode in methods.MODES:
         references[mode]={code:histogram([len(w) for line in (BASE/f'{code}.dev.txt').read_text(encoding='utf-8').splitlines() for w in methods.tokenize(line,mode)]) for code in codes}
-    sections=[];pooled={mode:[] for mode in (*methods.MODES,'native-runes')}
+    sections=[];pooled={mode:[] for mode in (*methods.MODES,'native-runes',*('derived-'+m for m in methods.MODES))}
+    excluded={}
     controls=json.loads((ROOT/'data/evidence/reading-methods.json').read_bytes())['controls']
     for control in controls:
-        decoded,_=reproduce(control,ROOT);check(decoded,ROOT)
+        decoded,trace=reproduce(control,ROOT);check(decoded,ROOT)
         literal=''.join(decoded[p] for p in control['pages']).translate(str.maketrans('','','/\r\n'))
         raw=''.join((ROOT/f'text/{p}.txt').read_text(encoding='utf-8') for p in control['pages']).translate(str.maketrans('','','/\r\n'))
+        labels=iter(row[7] for row in trace);derived=[];removed=0
+        for c in raw:
+            if c in RUNES:derived.append(next(labels))
+            elif c.isalpha():derived.append(' ');removed+=1
+            else:derived.append(c)
+        assert next(labels,None) is None
+        excluded[control['id']]=removed
         lengths={mode:[len(w) for w in methods.tokenize(literal,mode)] for mode in methods.MODES}
+        lengths.update({'derived-'+mode:[len(w) for w in methods.tokenize(''.join(derived),mode)] for mode in methods.MODES})
         lengths['native-runes']=[sum(c in RUNES for c in token) for token in re.findall(f"[{RUNES}]+(?:'[{RUNES}]+)*",raw)]
         sections.append((control['id'],control['pages'],lengths))
         for mode,values in lengths.items():pooled[mode].extend(values)
     sections.append(('pooled',[p for c in controls for p in c['pages']],pooled))
     result={'plan_sha256':hashlib.sha256(PLAN.read_bytes()).hexdigest(),
+            'amendment_sha256':hashlib.sha256(amendment_path.read_bytes()).hexdigest(),
+            'excluded_non_rune_alphabetic_characters':excluded,
             'script_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            'review':'Unpublished calculation; independent verification pending','sections':[]}
+            'review':'See the experiment record for computational and human review status','sections':[]}
     for name,pages,lengths in sections:
         row={'id':name,'pages':pages,'profiles':{},'comparisons':{}}
         for representation,values in lengths.items():
             h=histogram(values)
             row['profiles'][representation]={'tokens':len(values),'units':sum(values),'histogram':h}
-            corpus_modes=methods.MODES if representation=='native-runes' else [representation]
+            corpus_modes=methods.MODES if representation=='native-runes' else [representation.removeprefix('derived-')]
             for corpus_mode in corpus_modes:
                 scores=[{'language':codes[code],'code':code,'length_tv':methods.tv(h,ref)} for code,ref in references[corpus_mode].items()]
                 row['comparisons'][representation+' / '+corpus_mode]=sorted(scores,key=lambda x:x['length_tv'])
