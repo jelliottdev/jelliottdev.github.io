@@ -306,3 +306,8 @@ for(const query of ['could my scoring method miss the answer','check my solver']
  assert.equal(search.search(db,query)[0].href,'#/wiki/analysis-and-measurement?section=method-controls',query);
 }
 console.log('PASS: crib definitions, missing-line coverage and solver checks open the relevant explanation.');
+
+for(const query of ['U+16C2','16C2','ᛂ','extra rune','corpus alphabet','corpus symbol inventory','outside alphabet symbols','Runeberg alphabet']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=corpus-symbol-census',query);
+}
+console.log('PASS: corpus symbol names and alphabet differences open the complete audit section.');
