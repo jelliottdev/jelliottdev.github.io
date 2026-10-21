@@ -11792,6 +11792,9 @@ Start with the question you want a measurement to answer. A symbol count, a repe
 Choose a measurement
 
 
+Does random-looking text imply a one-time pad?
+Work through a finite example where each ciphertext symbol is uniform but the pair leaks a plaintext relationship. Distinguish independent keys, short seeds and the limits of a failed search.
+
 How unusual are the word lengths in the historical corpus?
 Inspect all 25,565 eligible file prefixes, exact ties and the effect of counting identical files once. The complete comparison includes every selected measure; its ranks describe this corpus and do not identify a language.
 
@@ -11986,6 +11989,8 @@ If your measurement suggests a hypothesis, preserve its scope and write a new re
 Before treating an experiment as a rejection of a cipher, read what has actually been ruled out: exact proofs, bounded crib searches and necessary constraints justify different conclusions.
 
 Sources, related references, and files
+- Does random-looking text imply a one-time pad?
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - How unusual are the word lengths in the historical corpus?
   https://jelliottdev.github.io/#/experiments/corpus-prefix-census
 - Could the plaintext be another language?; Aligned language profiles; full distributions
@@ -12591,6 +12596,8 @@ Single-rune entropy summarizes a frequency distribution. It is low when most obs
 
 From counts to bits
 
+Uniform counts do not establish independent key symbols. The one-time-pad example shows how individually uniform ciphertext positions can still reveal a plaintext relationship.
+
 Let N be the number of retained runes and c be one rune’s count. Its empirical probability is p = c/N. Compute H = −sum(p × log2(p)) over nonzero counts. A zero count contributes zero; do not attempt to evaluate log2(0). Base-two logarithms give bits per symbol. This is the Shannon-entropy formula applied to observed frequencies; SciPy’s entropy reference documents the formula and logarithm-base convention. The script here uses Python’s standard library.
 
 	Invented input	Counts	Entropy
@@ -12783,6 +12790,8 @@ Entropy script · small-example tests · shared counting implementation. The wor
 Sources, related references, and files
 - IoC
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- one-time-pad example
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html#example
 - SciPy’s entropy reference
   https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.entropy.html
 - reference-data bundle
@@ -13232,6 +13241,8 @@ An invariant is something an operation leaves unchanged. In cipher analysis, inv
 
 First fix what counts as a symbol
 
+Statistical resemblance also differs from identifying a cipher. See one-time pads and short seeds for a worked example of what uniform symbols can still reveal.
+
 For the examples here, one symbol is one of the 29 runes, represented by its zero-based index. A label such as TH or NG still represents one rune. Keep the same input boundaries throughout a comparison: removing a heading or dropping punctuation is a preprocessing decision, not part of the substitution or rearrangement itself. See rune indices and prime values and transcription layers.
 
 What each operation preserves
@@ -13423,6 +13434,8 @@ This conclusion depends on preserving the whole 29-prime alphabet one-to-one. On
 Also distinguish a fixed substitution from a key sequence. Applying one quadratic directly to each prime value is the tested substitution. Calculating a quadratic from position i and combining its output with unknown plaintext is a different model. The latter is not excluded by either the affine or quadratic palette result, nor by the direct-stream test without its additional assumptions. The search-space guide explains how to state these boundaries before claiming that a technique has been ruled out.
 
 Sources, related references, and files
+- one-time pads and short seeds
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - rune indices and prime values
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - transcription layers
@@ -21166,6 +21179,89 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/candidate-readings.html
 
 Article: https://jelliottdev.github.io/reference/articles/key-alignment.html
+
+
+---
+
+One-time pads, short seeds and what statistics can establish
+
+A worked finite example separates uniform symbols from independent keys, and explains why fitted keys or failed searches do not identify a one-time pad.
+
+A flat frequency distribution, a high entropy estimate and an unsuccessful key search answer different questions. None by itself identifies how a key was generated. To assess a one-time-pad claim, separate the observed ciphertext, the proposed encryption rule and the distribution of allowed keys.
+
+What a one-time-pad claim requires
+
+For a fixed-length message of n rune indices, consider Cᵢ = Pᵢ + Kᵢ mod 29. If K is selected uniformly from all 29ⁿ possible keys, independently of P, then each plaintext gives every ciphertext the same probability. For any fixed P and C there is exactly one matching key: Kᵢ = Cᵢ − Pᵢ mod 29. Its probability is 29⁻ⁿ, regardless of P.
+
+This is the fixed-length additive example of perfect secrecy: observing the ciphertext does not change the plaintext probabilities. The underlying definition is in Shannon’s Communication Theory of Secrecy Systems. It concerns a specified probabilistic system, not a visual property of a particular ciphertext. The key must remain secret and must not be reused across messages; length and any unencrypted formatting can still be visible.
+
+Fitting a key is not finding the key
+
+If an arbitrary full-length additive key is permitted, every same-length candidate plaintext has a matching key obtained by subtraction. Producing a readable plaintext and its fitted key therefore does not distinguish that plaintext from alternatives. The useful evidence would be an independently specified way to obtain the key, or a prediction that succeeds on material not used to construct it. See candidate readings and search space and bounds.
+
+Uniform symbols can still reveal a relationship
+
+Use a three-symbol alphabet, indices 0, 1 and 2, and two-symbol messages. With all nine two-symbol keys equally likely, each plaintext can produce all nine ciphertexts equally often. Now allow only the three repeated keys 00, 11 and 22, again equally likely. For each fixed plaintext, either ciphertext position is still uniform over 0, 1 and 2 when the key is sampled. But the two positions are conditionally dependent: knowing one fixes the other for that plaintext.
+
+Subtract the first ciphertext symbol from the second: C₁ − C₀ = (P₁ + k) − (P₀ + k) = P₁ − P₀ mod 3. The repeated key cancels. The ciphertext reveals the plaintext difference exactly, even though either position viewed alone is uniform.
+
+[Image: For ciphertext 0 1 modulo three, all nine possible plaintext pairs have a matching two-symbol key. Only plaintexts 0 1, 1 2 and 2 0 have matching repeated keys.]
+Fix the observed ciphertext to 0 1. All nine plaintexts fit an unrestricted key; only the three shaded rows fit a repeated key. Labels carry the distinction without relying on color. Download figure.
+
+This example distinguishes uniform marginal distributions—the distribution at either position—from independence between positions. It does not claim that the manuscript uses repeated keys. Likewise, single-rune empirical entropy summarizes observed counts and cannot establish the joint distribution of an unknown generator.
+
+A long stream need not contain a long secret
+
+A deterministic generator with b secret seed bits and otherwise fixed public settings produces at most 2ᵇ distinct streams, even when each stream is much longer. Collisions can make that number smaller. For a fixed ciphertext, this gives at most that many plaintext candidates under the specified additive rule. When 2ᵇ < 29ⁿ, this family cannot cover all possible n-symbol keys. Its long output does not supply the key uncertainty of n independent uniform runes.
+
+This counting distinction does not make seed recovery easy. The generator may be difficult to distinguish from independent randomness with practical computation, the seed range may be enormous, or the assumed generator may be wrong. An external book or file is also not automatically a one-time pad: external location says nothing by itself about uniformity, independence, secrecy or reuse.
+
+What statistical tests and searches can establish
+
+NIST’s statistical-test guidance explicitly separates statistical testing from cryptanalysis: passing a battery does not certify a generator. Here, a finite set of measurements can constrain the models actually tested, but it cannot establish an unrestricted claim about the source of the key.
+
+	Observation	Supported conclusion	Still unresolved
+
+	No candidate succeeds in a fixed seed dictionary.	No accepted result under that generator, dictionary, alignment and acceptance rule.	Other seeds, other generators, decoder failure, and whether the true plaintext would pass the scorer.
+
+	The known planted key recovers the planted text.	The method works for that control and its assumptions.	Recovery power for different encoders, languages or lengths.
+
+	Two constructions look alike under the chosen measurements.	Those measurements did not separate those samples.	Equality of the generating distributions or security against other analyses.
+
+
+The bounded-search controls compare missing-key and included-key cases. The decoder controls show how a correct key can fail under the wrong alignment rules, and the scorer controls separate score acceptance from plaintext language. Together they help diagnose a failed search without turning it into an impossibility claim.
+
+Reproduce the finite example
+
+python scripts/pad_identification_example.py
+
+The standard-library script enumerates all 81 plaintext/key pairs in the two-symbol example. It checks the nine-ciphertext uniform distribution for every plaintext, verifies both coordinate marginals for repeated keys, and checks the difference invariant. A separate enumeration of matching keys checks the subtraction-derived rows. This is an exhaustive mathematical illustration, not a manuscript experiment or a new cryptographic result. Download script · Download exact rows.
+
+Sources, related references, and files
+- Shannon’s Communication Theory of Secrecy Systems
+  https://www.apprendre-en-ligne.net/crypto/bibliotheque/PDF/shannon1949.pdf
+- candidate readings
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html
+- search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- For ciphertext 0 1 modulo three, all nine possible plaintext pairs have a matching two-symbol key. Only plaintexts 0 1, 1 2 and 2 0 have matching repeated keys.; Download figure
+  https://jelliottdev.github.io/exports/figures/pad-identification-example.svg
+- empirical entropy
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html
+- statistical-test guidance
+  https://csrc.nist.gov/pubs/sp/800/22/r1/upd1/final
+- bounded-search controls
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- decoder controls
+  https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- scorer controls
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- Download script
+  https://jelliottdev.github.io/scripts/pad_identification_example.py
+- Download exact rows
+  https://jelliottdev.github.io/exports/pad-identification-example.json
+
+Article: https://jelliottdev.github.io/reference/articles/one-time-pad.html
 
 
 ---

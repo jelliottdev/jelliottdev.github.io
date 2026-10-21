@@ -6,6 +6,8 @@ Single-rune entropy summarizes a frequency distribution. It is low when most obs
 
 From counts to bits
 
+Uniform counts do not establish independent key symbols. The one-time-pad example shows how individually uniform ciphertext positions can still reveal a plaintext relationship.
+
 Let N be the number of retained runes and c be one rune’s count. Its empirical probability is p = c/N. Compute H = −sum(p × log2(p)) over nonzero counts. A zero count contributes zero; do not attempt to evaluate log2(0). Base-two logarithms give bits per symbol. This is the Shannon-entropy formula applied to observed frequencies; SciPy’s entropy reference documents the formula and logarithm-base convention. The script here uses Python’s standard library.
 
 	Invented input	Counts	Entropy
@@ -198,6 +200,8 @@ Entropy script · small-example tests · shared counting implementation. The wor
 Sources, related references, and files
 - IoC
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- one-time-pad example
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html#example
 - SciPy’s entropy reference
   https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.entropy.html
 - reference-data bundle

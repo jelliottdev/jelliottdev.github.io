@@ -6,6 +6,8 @@ An invariant is something an operation leaves unchanged. In cipher analysis, inv
 
 First fix what counts as a symbol
 
+Statistical resemblance also differs from identifying a cipher. See one-time pads and short seeds for a worked example of what uniform symbols can still reveal.
+
 For the examples here, one symbol is one of the 29 runes, represented by its zero-based index. A label such as TH or NG still represents one rune. Keep the same input boundaries throughout a comparison: removing a heading or dropping punctuation is a preprocessing decision, not part of the substitution or rearrangement itself. See rune indices and prime values and transcription layers.
 
 What each operation preserves
@@ -197,6 +199,8 @@ This conclusion depends on preserving the whole 29-prime alphabet one-to-one. On
 Also distinguish a fixed substitution from a key sequence. Applying one quadratic directly to each prime value is the tested substitution. Calculating a quadratic from position i and combining its output with unknown plaintext is a different model. The latter is not excluded by either the affine or quadratic palette result, nor by the direct-stream test without its additional assumptions. The search-space guide explains how to state these boundaries before claiming that a technique has been ruled out.
 
 Sources, related references, and files
+- one-time pads and short seeds
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - rune indices and prime values
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - transcription layers
