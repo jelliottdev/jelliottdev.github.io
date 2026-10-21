@@ -16,8 +16,9 @@ function overview(){
   ['spirals','thumbs/lp2-03.jpg','Spirals','Compare curls and spiral borders'],
   ['title-pages','thumbs/lp1-00.jpg','Title & chapter pages','Visible text and embedded OutGuess content']
  ];
- return `<header class="article-top home-heading"><h1>Liberpedia</h1><p class="subline">The Liber Primus research reference</p></header>
+ return `<header class="article-top home-heading"><h1>Liberpedia</h1><p class="subline">Cicada 3301 history and Liber Primus research</p></header>
  <article class="home-index"><p class="home-intro"><i>Liber Primus</i> is the runic manuscript from the 2014 Cicada 3301 puzzle. Explore its original images, known readings, artwork, and cipher methods, with links to sources and reproducible work.</p>
+ <p>Start at the beginning: <a href="#/wiki/cicada-history">follow the 2012, 2013 and 2014 puzzles</a>, or inspect the <a href="#/wiki/historical-book-codes">exact counting rules behind their book codes</a>.</p>
  <nav class="home-start" aria-label="Start exploring"><a href="#/reader/lp1-00">Open the reader</a><a href="#/pages">Find a manuscript page</a><a href="#/wiki/quick-start">New here? Start solving</a></nav>
  <details class="mobile-article-contents"><summary>On this page</summary><a href="#/overview?section=home-visual" data-anchor="home-visual">Find it by sight</a><a href="#/overview?section=home-reading" data-anchor="home-reading">Read &amp; understand</a><a href="#/overview?section=home-methods" data-anchor="home-methods">Decode &amp; measure</a><a href="#/overview?section=home-research" data-anchor="home-research">Investigate an idea</a><a href="#/overview?section=home-releases" data-anchor="home-releases">Manuscript releases</a><a href="#/overview?section=home-evidence" data-anchor="home-evidence">About the evidence</a></details>
  <section class="home-visual" id="home-visual"><div class="home-section-heading"><h2>Find it by sight</h2><a href="#/wiki/visual-index">Full illustrated index →</a></div>
