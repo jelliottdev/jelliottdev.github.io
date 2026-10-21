@@ -1,0 +1,269 @@
+{
+  "description": "Editorial coverage notes, not completed experiments. Related records retain their own bounds and outcomes. Proposed extensions have not been run.",
+  "records": [
+    {
+      "id": "chosen-plaintext",
+      "title": "Choosing a sentence and deriving its key",
+      "status": "Needs a defined rule",
+      "phrases": [
+        "make it say",
+        "desired plaintext",
+        "chosen sentence",
+        "any sentence",
+        "force a sentence",
+        "make sentences fit"
+      ],
+      "coverage": "An unrestricted additive key can be calculated from any equal-length ciphertext and proposed plaintext. A readable output alone cannot choose between those keys. Related seed controls test a narrower, predefined key generator.",
+      "needed": "Specify a key-generation rule independently of the desired sentence, freeze its parameters, and predict text not used to choose them.",
+      "next_test": "Demonstrate several incompatible plaintexts for one synthetic ciphertext, then compare their predictive power under a fixed key rule.",
+      "related": [
+        "seed-crib-controls",
+        "totient-map-route"
+      ],
+      "guide": "method-cribs"
+    },
+    {
+      "id": "adaptive-rules",
+      "title": "Changing decoding rules to keep producing words",
+      "status": "Partially covered",
+      "phrases": [
+        "change the rules",
+        "change rules",
+        "skip letters",
+        "skip runes",
+        "switch signs",
+        "add or subtract",
+        "reset anywhere"
+      ],
+      "coverage": "Existing tests cover selected alignment and F-rune reset rules. They do not cover arbitrary skips, resets or switching operations whenever a word stops looking plausible.",
+      "needed": "Define the permitted choices, their maximum number and the rule that selects them. Apply the same selection procedure to controls.",
+      "next_test": "Compare fixed decoding with bounded adaptive decoding on original and shuffled inputs, recording every intervention.",
+      "related": [
+        "decoder-skip-controls",
+        "lp2-54-55-autokey-reset",
+        "lp2-54-55-autokey-skip"
+      ],
+      "guide": "interruptions"
+    },
+    {
+      "id": "word-hits",
+      "title": "Finding short words among many candidates",
+      "status": "Partially covered",
+      "phrases": [
+        "found a word",
+        "find words",
+        "short words",
+        "looks like english",
+        "readable words",
+        "gibberish"
+      ],
+      "coverage": "Search-maximum and scorer controls address selection effects. Several cipher sweeps only compare nine specific known openings; their failures do not exclude other plaintexts.",
+      "needed": "Fix the dictionary or language score, minimum length, offsets and number of candidates before inspecting outputs. Compare the best result with equally large control searches.",
+      "next_test": "Measure how often short dictionary words occur as candidate counts and searched offsets increase.",
+      "related": [
+        "search-maximum-controls",
+        "english-scorer-controls",
+        "lp2-known-vigenere-keys"
+      ],
+      "guide": "method-automatic-search"
+    },
+    {
+      "id": "anagrams",
+      "title": "Anagrams and freely rearranged words",
+      "status": "Partially covered",
+      "phrases": [
+        "anagram",
+        "anagrams",
+        "rearrange letters",
+        "rearrange words",
+        "scramble words"
+      ],
+      "coverage": "Anagram repetition and fixed reversals have records. Those do not test independently choosing an arrangement for every word to form a sentence.",
+      "needed": "Declare token boundaries, allowed permutations, dictionary and handling of unused letters. Distinguish one shared transposition rule from separate word-by-word choices.",
+      "next_test": "Enumerate dictionary alternatives for each token and compare sentence-selection freedom with matched controls.",
+      "related": [
+        "word-reset-repetition",
+        "lp2-word-reversal",
+        "lp2-word-order-reversal"
+      ],
+      "guide": "transposition"
+    },
+    {
+      "id": "sum-collisions",
+      "title": "Words or sentences chosen to match prime sums",
+      "status": "Partially covered",
+      "phrases": [
+        "word sums",
+        "prime sums",
+        "gematria",
+        "same sum",
+        "sum to",
+        "sums to"
+      ],
+      "coverage": "Selected word-sum audits check specific supplied matches and rune segmentations. They do not establish how many alternative words or sentences fit the same totals.",
+      "needed": "Fix the vocabulary, spelling normalization, rune segmentation rules and target selection. Count competing matches rather than reporting only the preferred wording.",
+      "next_test": "Build a bounded dictionary collision census with all alternatives retained for each target total.",
+      "related": [
+        "mixed-square-word-sums",
+        "selected-phrase-word-sums"
+      ],
+      "guide": "prime-sums"
+    },
+    {
+      "id": "numeric-expressions",
+      "title": "Searching arithmetic until a familiar number appears",
+      "status": "Needs a defined rule",
+      "phrases": [
+        "numerology",
+        "all operations",
+        "every operation",
+        "any operation",
+        "301",
+        "number coincidence",
+        "numerical coincidence",
+        "infinite search"
+      ],
+      "coverage": "Bounded number and prime-sum tests exist. A search allowing unrestricted expressions, bases, reversals and constants has no specified completion condition.",
+      "needed": "List inputs, operations, constants, bases and maximum expression depth. Define equivalent expressions and the target list before searching.",
+      "next_test": "Enumerate one fixed expression grammar and compare target hits with equally sized control target sets.",
+      "related": [
+        "lp2-row-prime-sums",
+        "lp2-row-emirp-sums",
+        "magic-square-freedom"
+      ],
+      "guide": "method-expressions"
+    },
+    {
+      "id": "grid-choice",
+      "title": "Choosing grids, spirals and reading paths",
+      "status": "Partially covered",
+      "phrases": [
+        "spiral",
+        "spirals",
+        "grid dimensions",
+        "reading path",
+        "reading paths",
+        "27x27",
+        "27 x 27"
+      ],
+      "coverage": "Simple row/column routes and a selected totient-map route are documented. Arbitrary grid sizes, padding, origins and path choices are outside those tests.",
+      "needed": "Fix dimensions, padding, starting cells, allowed paths and tie-breaking. Count the whole family searched, including variants that looked unpromising.",
+      "next_test": "Enumerate a finite route family with identical selection and scoring on original and control inputs.",
+      "related": [
+        "lp2-row-column-routes",
+        "totient-map-route",
+        "grid-prime-paths"
+      ],
+      "guide": "method-routes"
+    },
+    {
+      "id": "book-selection",
+      "title": "Trying books or philosophical texts as keys",
+      "status": "Partially covered",
+      "phrases": [
+        "book key",
+        "book keys",
+        "running key",
+        "book cipher",
+        "philosophical text"
+      ],
+      "coverage": "The Emerson record reproduces a historical book cipher. It does not test arbitrary referenced books as keys to unsolved pages.",
+      "needed": "Name exact editions and file hashes, encoding rules, offsets and key operation. Specify how books were selected before reading candidate plaintext.",
+      "next_test": "Compare a fixed set of candidate books with unrelated control books under the same bounded offset search.",
+      "related": [
+        "emerson-book-cipher-control",
+        "seed-crib-controls"
+      ],
+      "guide": "method-running-key"
+    },
+    {
+      "id": "interrupters",
+      "title": "Selecting interrupters or reset positions",
+      "status": "Partially covered",
+      "phrases": [
+        "interrupter",
+        "interrupters",
+        "interruption",
+        "interruptions",
+        "reset points",
+        "reset positions"
+      ],
+      "coverage": "Two LP2-54–55 records test particular F-rune feedback rules. Neither establishes coverage of all interrupters, pages or key-reset systems.",
+      "needed": "Specify which symbols trigger which state changes, whether the trigger consumes a key position, and whether the same rule applies throughout.",
+      "next_test": "Compare a predeclared small reset-rule family with controls and an untouched continuation.",
+      "related": [
+        "lp2-54-55-autokey-reset",
+        "lp2-54-55-autokey-skip",
+        "decoder-skip-controls"
+      ],
+      "guide": "interruptions"
+    },
+    {
+      "id": "boundary-changes",
+      "title": "Changing separators, headings or page joins",
+      "status": "Partially covered",
+      "phrases": [
+        "word breaks",
+        "page joins",
+        "page boundaries",
+        "remove headings",
+        "transcription errors",
+        "word separators"
+      ],
+      "coverage": "Image-row coverage and word-based tests exist, but an exhaustive experiment across all disputed separators and page joins has not been published.",
+      "needed": "Identify image-supported alternatives, preserve original text, and declare how each version changes tokens or key resets. Do not repair text solely to improve a candidate.",
+      "next_test": "Compare the same decoding and statistics across a fixed list of documented transcription variants.",
+      "related": [
+        "image-row-coverage",
+        "word-reset-repetition",
+        "decoder-skip-controls"
+      ],
+      "guide": "transcription-checking"
+    },
+    {
+      "id": "ai-readings",
+      "title": "AI-generated translations and interpretations",
+      "status": "Proposed; not run",
+      "phrases": [
+        "chatgpt",
+        "llm",
+        "language model",
+        "ai translation",
+        "ai translate",
+        "ai solve",
+        "ai decipher"
+      ],
+      "coverage": "No published record here tests whether an AI distinguishes genuine decipherment from plausible interpretation. Language statistics and scorer controls are related background, not that experiment.",
+      "needed": "Freeze model version, prompt, sampling settings, attempts and an objective scoring rule. Include blinded shuffled inputs and known-answer controls; retain every output.",
+      "next_test": "Run a small blinded comparison measuring verifiable recovery and false claims, rather than fluency or thematic plausibility.",
+      "related": [
+        "english-scorer-controls",
+        "known-reading-languages"
+      ],
+      "guide": "method-ai-readings"
+    },
+    {
+      "id": "image-processing",
+      "title": "Searching for images through processing and overlays",
+      "status": "Partially covered",
+      "phrases": [
+        "hidden image",
+        "hidden images",
+        "overlay",
+        "overlays",
+        "contrast",
+        "threshold",
+        "mirror image"
+      ],
+      "coverage": "OutGuess and image-row detection tests cover specific procedures. They do not exclude hidden content under other processing, or establish that an interpreted shape is intentional.",
+      "needed": "Bound transforms, thresholds, rotations, alignment and candidate selection. Apply the same search to controls and distinguish measured features from perceived subjects.",
+      "next_test": "Test one finite processing family using blinded image controls and a declared feature-detection criterion.",
+      "related": [
+        "outguess-default-key",
+        "outguess-guard-sweep",
+        "image-row-coverage"
+      ],
+      "guide": "image-regions"
+    }
+  ]
+}

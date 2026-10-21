@@ -6157,6 +6157,8 @@ Each link below opens a worked step with preserved inputs and a downloadable rep
 
 	2012 Reddit / Mabinogion	Title decoding and all 76 book-code lookups	Duplicate posts affect the ordering. Compare both selection rules.
 
+	2012 countdown and coordinates	Two distinct JPEG payloads and 12 coordinate pairs	Similar artwork does not identify the carrier file.
+
 	2012 Britannica	Every character lookup against the preserved source	The heading is line zero; spaces count.
 
 	2012 Blake second chance	All 22 lookups with numbered working lines	Count spaces and punctuation, and preserve the plate’s line breaks.
@@ -6200,6 +6202,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/2012-opening.html
 - 2012 Reddit / Mabinogion
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion-replay
+- 2012 countdown and coordinates
+  https://jelliottdev.github.io/reference/articles/2012-countdown.html
 - 2012 Britannica; Britannica branch
   https://jelliottdev.github.io/reference/articles/britannica-book-code.html
 - 2012 Blake second chance
@@ -6240,6 +6244,335 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/later-messages.html
 
 Article: https://jelliottdev.github.io/reference/articles/cicada-history.html
+
+
+---
+
+Solving methods: a map of families and variants
+
+Browse 41 overlapping method and diagnostic families, then narrow an idea to a reproducible test.
+
+Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.
+
+A family page is not a completed experiment. It describes the approach and how to specify a test. Linked experiment records cover only their stated inputs, variants and bounds. An empty experiment list means a gap in this catalog, not an untouched or promising approach.
+
+Symbol substitutions
+
+Fixed alphabet substitutions
+Replace each rune consistently with one other symbol.
+
+Homophonic and many-to-one substitutions
+Allow several ciphertext symbols to represent the same plaintext symbol.
+
+Repeating-key and polyalphabetic ciphers
+Change the substitution according to position in a repeated key.
+
+Fractionation and coordinate alphabets
+Split symbols into coordinates, rearrange the components, then regroup.
+
+Block and matrix transformations
+Transform groups of runes together instead of treating each position independently.
+
+
+Keys, sequences and state
+
+Arithmetic keystreams
+Generate shifts from a declared numerical sequence.
+
+Autokey and ciphertext feedback
+Use earlier plaintext or ciphertext to update later decoding state.
+
+Seeded generators and unrestricted additive keys
+Distinguish short reproducible generators from unrestricted per-position keys.
+
+Running keys from external texts
+Convert a specified external text into a stream of key symbols.
+
+Nulls, interruptions and reset rules
+Specify which symbols consume output or key state and when state restarts.
+
+Offsets and key alignment
+Search starting positions and a bounded set of alignment changes.
+
+
+Order and selection
+
+Transposition and permutations
+Change symbol order while preserving the selected symbols.
+
+Grid layouts, spirals and route ciphers
+Choose an explicit layout and traversal through its cells.
+
+Grilles and positional extraction
+Select positions using a mask or indexing rule.
+
+Acrostics and boundary-letter extraction
+Select initial, final or regularly indexed symbols from defined units.
+
+Word, row, page and section boundaries
+Treat boundary choices as explicit input or reset variants.
+
+
+Book ciphers and coordinate lookups select symbols from a specified source text using explicit coordinate and counting rules. Unlike a running key, a coordinate list points directly into that text.
+
+Numbers and representations
+
+Gematria and rune-sum mappings
+Map runes or groups to numerical totals and count competing matches.
+
+Prime indexing and value transforms
+Distinguish rune indices, prime values and prime indices before composing operations.
+
+Bounded arithmetic expressions
+Declare a finite grammar of operations rather than searching unlimited expressions.
+
+Radix changes and byte encodings
+Specify how symbols become digits, integers and bytes.
+
+Bitwise combinations and XOR
+Operate on explicitly encoded bits or bytes, with alignment and key rules.
+
+Magic squares and numerical grids
+Separate reconstructing a grid from using it as a decoding key.
+
+
+Physical and digital carriers
+
+File steganography and embedded payloads
+Recover data using a specified carrier format, extraction tool and key.
+
+Image transforms and overlays
+Measure features under declared processing and alignment choices.
+
+Geometric constructions and navigation
+Turn measured positions into reproducible construction and traversal rules.
+
+Audio and frequency encodings
+Separate signal processing measurements from a proposed symbol encoding.
+
+Layered decoding and file chains
+Specify the order of transformations and verify each intermediate artifact.
+
+Public-key messages and cryptographic artifacts
+Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism.
+
+Hash targets and candidate retrieval
+Define exact candidate bytes and compare the specified digest.
+
+
+Language, clues and search
+
+Language and corpus identification
+Compare declared observables with suitable language controls under explicit cipher assumptions.
+
+Known plaintext and crib searches
+Use a declared plaintext hypothesis to constrain a defined cipher model.
+
+Automatic search and language scoring
+Explore a bounded model with a scorer whose ability and false positives have been checked.
+
+Alternative alphabets and symbolic notations
+Define a symbol inventory and an encoding rule before interpreting resemblance.
+
+Literary references and thematic clues
+Establish a source relationship, then distinguish interpretation from an executable decoding rule.
+
+AI-assisted candidate interpretation
+Treat generated readings as proposals requiring independent, reproducible checks.
+
+
+Diagnosis and validation
+
+Period and key-length diagnostics
+Measure position-dependent patterns with matched null models and correction for searched periods.
+
+Repeats, doublets and word structure
+Test structural constraints without automatically converting them into a cipher identification.
+
+Invariants and bounded exclusions
+State the assumptions under which an operation preserves or forbids an observed property.
+
+Null models and selection effects
+Repeat the whole selection procedure on controls, not just the final attractive candidate.
+
+Source verification and transcription audits
+Verify the input and the scope of its authenticity or transcription evidence.
+
+
+From a family to a test
+For example, “try spirals” names a route family. A test must also fix the pages, grid dimensions, padding, starting cell, directions, any added substitution and the criterion for success. Changing one of these choices creates a variant; changing several may create a new experiment family.
+Use Have we tried it? to inspect published scope. Related methods can be useful even when the exact variant is not covered. Download the family map.
+
+Sources, related references, and files
+- Fixed alphabet substitutions
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- Homophonic and many-to-one substitutions
+  https://jelliottdev.github.io/reference/articles/method-homophonic.html
+- Repeating-key and polyalphabetic ciphers
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- Fractionation and coordinate alphabets
+  https://jelliottdev.github.io/reference/articles/method-fractionation.html
+- Block and matrix transformations
+  https://jelliottdev.github.io/reference/articles/method-blocks.html
+- Arithmetic keystreams
+  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
+- Autokey and ciphertext feedback
+  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+- Seeded generators and unrestricted additive keys
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- Running keys from external texts
+  https://jelliottdev.github.io/reference/articles/method-running-key.html
+- Nulls, interruptions and reset rules
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+- Offsets and key alignment
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- Transposition and permutations
+  https://jelliottdev.github.io/reference/articles/transposition.html
+- Grid layouts, spirals and route ciphers
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- Grilles and positional extraction
+  https://jelliottdev.github.io/reference/articles/grille-carrier.html
+- Acrostics and boundary-letter extraction
+  https://jelliottdev.github.io/reference/articles/method-acrostics.html
+- Word, row, page and section boundaries
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- Book ciphers and coordinate lookups
+  https://jelliottdev.github.io/reference/articles/book-ciphers.html
+- Gematria and rune-sum mappings
+  https://jelliottdev.github.io/reference/articles/prime-sums.html
+- Prime indexing and value transforms
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- Bounded arithmetic expressions
+  https://jelliottdev.github.io/reference/articles/method-expressions.html
+- Radix changes and byte encodings
+  https://jelliottdev.github.io/reference/articles/hexadecimal.html
+- Bitwise combinations and XOR
+  https://jelliottdev.github.io/reference/articles/xor.html
+- Magic squares and numerical grids
+  https://jelliottdev.github.io/reference/articles/magic-squares.html
+- File steganography and embedded payloads
+  https://jelliottdev.github.io/reference/articles/outguess.html
+- Image transforms and overlays
+  https://jelliottdev.github.io/reference/articles/image-regions.html
+- Geometric constructions and navigation
+  https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
+- Audio and frequency encodings
+  https://jelliottdev.github.io/reference/articles/audio-frequency.html
+- Layered decoding and file chains
+  https://jelliottdev.github.io/reference/articles/cover-chain.html
+- Public-key messages and cryptographic artifacts
+  https://jelliottdev.github.io/reference/articles/cover-rsa.html
+- Hash targets and candidate retrieval
+  https://jelliottdev.github.io/reference/articles/hashes-and-addresses.html
+- Language and corpus identification
+  https://jelliottdev.github.io/reference/articles/word-lengths.html
+- Known plaintext and crib searches
+  https://jelliottdev.github.io/reference/articles/method-cribs.html
+- Automatic search and language scoring
+  https://jelliottdev.github.io/reference/articles/method-automatic-search.html
+- Alternative alphabets and symbolic notations
+  https://jelliottdev.github.io/reference/articles/method-symbol-systems.html
+- Literary references and thematic clues
+  https://jelliottdev.github.io/reference/articles/works-and-influences.html
+- AI-assisted candidate interpretation
+  https://jelliottdev.github.io/reference/articles/method-ai-readings.html
+- Period and key-length diagnostics
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html
+- Repeats, doublets and word structure
+  https://jelliottdev.github.io/reference/articles/rune-ngrams.html
+- Invariants and bounded exclusions
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- Null models and selection effects
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- Source verification and transcription audits
+  https://jelliottdev.github.io/reference/articles/pgp-signatures.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+- Download the family map
+  https://jelliottdev.github.io/data/method-families.json
+
+Article: https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+
+---
+
+2012: telephone primes, countdown and coordinates
+
+Follow the prime product and compare two cicada JPEGs with independently extracted payloads.
+
+The Reddit book code supplied a telephone number. The next clue sent solvers back to the original JPEG, then onward to a website whose image changed between stages. This walkthrough separates the reported telephone instruction from the image extractions we can reproduce now.
+
+From the telephone clue to a domain
+
+The archived telephone account and recording describe an instruction to multiply three primes associated with final.jpg, naming 3301 as one. The original image is 509 pixels wide and 503 pixels high. Both dimensions are prime, so 509 × 503 × 3301 = 845145127. That number supplied the historical domain label 845145127.com.
+
+The opening-image audit reads those dimensions from the preserved JPEG and checks primality and multiplication. A resized copy could destroy this clue. The telephone instruction is historical source evidence; this replay did not call the number or verify the recording independently.
+
+Two files with the same-looking artwork
+
+[Image: Countdown-stage JPEG: black cicada with spread wings on a white background.]
+Countdown carrier: 20,858 bytes. Download preserved JPEG.
+
+[Image: Locations-stage JPEG: a visually similar black cicada with spread wings.]
+Locations carrier: 20,892 bytes. Download preserved JPEG.
+
+These previews look alike, but the files have different hashes and different hidden messages. A fresh OutGuess extraction from each file exactly matched its corresponding archived payload. This does not claim that their decoded pixels are identical, or that the byte-length difference alone identifies the hidden content.
+
+	Carrier	Extracted bytes	Message content
+	Countdown	1,001	A return time: 17:00 UTC on 9 January 2012
+	Locations	1,221	Twelve latitude/longitude pairs
+
+The stage archive associates these with the countdown and subsequent location publication. It distinguishes the payload’s coordinate list from additional locations reported on the webpage. The count of twelve here applies only to these extracted bytes, not every reported poster location.
+
+Preserve the coordinate notation
+
+The payload is a PGP cleartext-signed message. Its final coordinate line starts - -33.90281, 151.18421. The first dash and following space are cleartext escaping; removing that prefix leaves a negative latitude. Removing both dashes would move the point into the northern hemisphere. This format handling does not itself verify the signature.
+
+Another line separates the two numbers with whitespace rather than a comma. The coordinate ledger retains each original line alongside its parsed latitude and longitude, so the parsing decisions remain visible. It does not assign street addresses or claim that posters were independently confirmed at those points.
+
+Repeat the extraction
+
+Extract the reference-data ZIP. With Python 3, check the two carriers, stored payloads and coordinate parsing:
+
+python scripts/replay_2012_countdown.py --check
+
+To run OutGuess yourself, supply an installed executable. The script uses temporary output files and compares the newly extracted bytes with the preserved payloads:
+
+python scripts/replay_2012_countdown.py --check --outguess /path/to/outguess
+
+Script · Source hashes and extraction receipts · Countdown payload · Locations payload. Running without OutGuess checks stored evidence only. Signature verification and the subsequent QR-poster route remain separate work. Continue with the 2012 history and the later Britannica book-code branch.
+
+Sources, related references, and files
+- Reddit book code
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion-replay
+- archived telephone account and recording
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/004-phone-number/README.md
+- opening-image audit
+  https://jelliottdev.github.io/reference/articles/2012-opening.html#replay
+- Countdown-stage JPEG: black cicada with spread wings on a white background.; Download preserved JPEG
+  https://jelliottdev.github.io/exports/sources/countdown-2012/countdown.jpg
+- Locations-stage JPEG: a visually similar black cicada with spread wings.; Download preserved JPEG
+  https://jelliottdev.github.io/exports/sources/countdown-2012/locations.jpg
+- stage archive
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/005-845145127.com/README.md
+- coordinate ledger
+  https://jelliottdev.github.io/exports/cicada-2012-countdown.json
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Script
+  https://jelliottdev.github.io/scripts/replay_2012_countdown.py
+- Source hashes and extraction receipts
+  https://jelliottdev.github.io/exports/sources/countdown-2012/manifest.json
+- Countdown payload
+  https://jelliottdev.github.io/exports/sources/countdown-2012/countdown.retrieved.bin
+- Locations payload
+  https://jelliottdev.github.io/exports/sources/countdown-2012/locations.retrieved.bin
+- 2012 history
+  https://jelliottdev.github.io/reference/articles/cicada-history.html#2012
+- Britannica book-code branch
+  https://jelliottdev.github.io/reference/articles/britannica-book-code.html
+
+Article: https://jelliottdev.github.io/reference/articles/2012-countdown.html
 
 
 ---
@@ -6287,7 +6620,7 @@ The message points to the subreddit a2e7j6ic78h0j and supplies 76 line-and-chara
 
 The coordinates are pointers into a text, not a self-contained cipher. The Mabinogion counting guide explains the subsequent decoding, post-order and spacing issues. A complete replay must preserve the ordered post list and each character lookup. Substituting an arbitrary modern edition or a current Reddit display order can change the result.
 
-The dimensions become relevant later, after the telephone-stage instruction asks for three associated primes. All three values are prime, and 509 × 503 × 3301 = 845145127. The audit checks that arithmetic, but it should not be presented as the rule that decoded the appended string. It belongs to a later step in the 2012 route.
+The dimensions become relevant later, after the telephone-stage instruction asks for three associated primes. All three values are prime, and 509 × 503 × 3301 = 845145127. The audit checks that arithmetic, but it should not be presented as the rule that decoded the appended string. Continue with the telephone, countdown and coordinate walkthrough for that later step.
 
 Reproduce these checks
 
@@ -6322,8 +6655,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2012/archived-payload.txt
 - Mabinogion counting guide
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion
-- 2012 route
-  https://jelliottdev.github.io/reference/articles/cicada-history.html#2012
+- telephone, countdown and coordinate walkthrough
+  https://jelliottdev.github.io/reference/articles/2012-countdown.html
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Audit script
@@ -22449,6 +22782,492 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 
 Article: https://jelliottdev.github.io/reference/articles/grille-carrier.html
+
+
+---
+
+Fixed alphabet substitutions
+
+Replace each rune consistently with one other symbol.
+
+One fixed mapping replaces each input symbol throughout the chosen text. Caesar shifts and Atbash are small special cases; a general substitution can have many more choices. On a 29-symbol alphabet, an affine map uses y = ax + b modulo 29 with nonzero a. A permutation preserves symbol counts up to relabeling and preserves the pattern of equal symbols.
+
+Major variants
+
+Variants include Caesar, Atbash, affine maps, arbitrary alphabet permutations and keyed alphabets. A different map for each position belongs to a polyalphabetic or state-dependent family instead.
+
+What a test must specify
+
+Fix the alphabet order, direction of the map, treatment of non-rune marks, text span and permitted mapping class. A search over affine maps is not a search over all substitutions.
+
+How to evaluate a result
+
+Use synthetic encodings with known keys to test recovery. Check preserved equality patterns before language scoring. Evaluate full candidates and untouched text, rather than selecting isolated plausible words.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+LP2-00–55: fixed alphabet transforms against the warning opening
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- LP2-00–55: fixed alphabet transforms against the warning opening
+  https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+
+
+---
+
+Homophonic and many-to-one substitutions
+
+Allow several ciphertext symbols to represent the same plaintext symbol.
+
+A homophonic system may assign several ciphertext symbols to one plaintext symbol. Unlike a one-to-one substitution, it can flatten ciphertext frequencies and obscure repeated-letter patterns. Conversely, merging rune symbols without evidence can manufacture apparent language statistics.
+
+Major variants
+
+Variants differ in their many-to-one assignment, whether each plaintext symbol has a fixed number of alternatives, and whether alternatives depend on position or state. A codebook mapping entire words is a separate model.
+
+What a test must specify
+
+Define ciphertext and plaintext inventories, allowed merges, maximum alternatives per symbol, and whether the mapping stays fixed. Report any symbols discarded or treated as nulls. Do not silently alternate between a 29-rune and a Latin-character model.
+
+How to evaluate a result
+
+Test recovery on synthetic homophonic ciphertexts and on shuffled controls. Count candidate mappings and inspect whether a mapping chosen on one segment predicts another. A frequency fit alone cannot establish the assignment.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-homophonic.html
+
+
+---
+
+Fractionation and coordinate alphabets
+
+Split symbols into coordinates, rearrange the components, then regroup.
+
+Fractionation represents each symbol by several components, such as a row and column in a square. The components can then be rearranged and regrouped into new symbols. This is different from simply reading the original rune grid in another direction.
+
+Major variants
+
+Polybius-style coordinates, Bifid, Trifid and ADFGVX illustrate different combinations of coordinate encoding and rearrangement. Their usual alphabets do not automatically accommodate 29 runes; any adaptation must be stated.
+
+What a test must specify
+
+Specify the coordinate alphabet, grid dimensions, unused cells, key ordering, block length, component traversal and regrouping rule. State how incomplete final blocks are handled. Each choice is part of the search space.
+
+How to evaluate a result
+
+Check that encoding and decoding are inverses under the chosen scheme. Use known-answer examples with the same alphabet size and block rules. Compare language-ranked results with equal-budget searches on controls.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-fractionation.html
+
+
+---
+
+Block and matrix transformations
+
+Transform groups of runes together instead of treating each position independently.
+
+A block method transforms several symbols at once. Matrix multiplication modulo an alphabet size is one possibility; pair-based lookup rules are another. Sharing a block size does not make these mechanisms equivalent.
+
+Major variants
+
+Families include Hill-style linear maps, affine block maps, keyed digraph tables and explicit polygraphic codebooks. Their parameter counts, invertibility conditions and treatment of repeated letters differ.
+
+What a test must specify
+
+Fix alphabet, modulus, block size, orientation, block alignment and padding. For a matrix decoder, establish invertibility under that modulus; over a composite modulus a nonzero determinant alone is insufficient. Keep table-based rules distinct from linear ones.
+
+How to evaluate a result
+
+First round-trip known plaintext through the proposed encoder and decoder. Then test whether enough independent constraints exist to identify parameters. Keys fitted to one block require validation on additional blocks not used in fitting.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-blocks.html
+
+
+---
+
+Running keys from external texts
+
+Convert a specified external text into a stream of key symbols.
+
+A running-key cipher consumes a stream derived from an external text rather than repeatedly cycling a short keyword. The reference work, its edition and conversion into rune indices are all part of the key specification. This differs from a book cipher whose coordinates directly select letters.
+
+Major variants
+
+Variants include continuous additive keys, passage restarts, page-dependent offsets, alternating sources and text-derived numerical streams. Referenced philosophical works can motivate candidates, but thematic similarity does not validate their decoding output.
+
+What a test must specify
+
+Freeze source files and hashes, normalization, rune segmentation, starting offsets, key direction and restart rules. State whether headings, punctuation and footnotes contribute symbols. Bound both the book list and the offsets.
+
+How to evaluate a result
+
+Use an encoder with a known source passage as a positive control and unrelated texts as comparisons. A source or offset selected on an opening should predict an untouched continuation. Keep failed candidate books in the search record.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-running-key.html
+
+
+---
+
+Grid layouts, spirals and route ciphers
+
+Choose an explicit layout and traversal through its cells.
+
+A route cipher reads symbols in a specified traversal of a layout. A printed page, a rectangular reflow of its rune stream and a grid assembled across pages are different inputs, even if they contain the same runes.
+
+Major variants
+
+Row-first, column-first, alternating-direction, spiral, diagonal and rotational routes are useful subfamilies. Arbitrary paths chosen to reach desired letters are not covered by enumerating a few standard spirals.
+
+What a test must specify
+
+Fix dimensions, source order, heading inclusion, empty-cell treatment, origin, direction and traversal. Require a rule for whether cells may repeat or be skipped. Preserve a source-coordinate trace for every output symbol.
+
+How to evaluate a result
+
+For a pure permutation, check that every eligible cell is used exactly once. Compare the best candidate after searching the complete declared route family with controls searched in exactly the same way. Adding substitution creates a combined search with additional choices.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+LP2-00–55: simple row and column reading routes
+LP2-00–02: 27 × 27 totient-map route replay
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- LP2-00–55: simple row and column reading routes
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
+- LP2-00–02: 27 × 27 totient-map route replay
+  https://jelliottdev.github.io/#/experiments/totient-map-route
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-routes.html
+
+
+---
+
+Acrostics and boundary-letter extraction
+
+Select initial, final or regularly indexed symbols from defined units.
+
+An acrostic extracts initial symbols from defined units; a telestich extracts final symbols. The units might be words, lines, paragraphs or pages. Other positional extraction methods select the nth symbol or alternate between boundaries.
+
+Major variants
+
+Variants include first and last runes, initials after transliteration, fixed interior positions and extraction driven by a separate number sequence. These can differ when one rune represents several Latin letters.
+
+What a test must specify
+
+Define units and their boundaries, source layer, heading treatment, indexing origin and behavior for short units. Specify whether positions count runes, transliteration characters or bytes. Fix any alternating or repeating selection pattern before viewing the output.
+
+How to evaluate a result
+
+Retain a trace from each selected symbol to its source unit. Compare the complete extraction with the same procedure on controls. Do not remove inconvenient units or insert spaces only after a phrase appears without recording those extra choices.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-acrostics.html
+
+
+---
+
+Bounded arithmetic expressions
+
+Declare a finite grammar of operations rather than searching unlimited expressions.
+
+A numerical proposal combines source values with arithmetic or representational operations to reach a target. Once arbitrary constants, unlimited expression depth and unrestricted reversals are allowed, there is no useful finite search to report as completed.
+
+Major variants
+
+Possible subfamilies include bounded arithmetic trees, digit reversal, base conversion, prime indexing and fixed recurrences. An observed match motivates a hypothesis but does not specify which of these operations were available before it was found.
+
+What a test must specify
+
+List source numbers, allowable constants, operators, bases, maximum expression depth and target set. Define division, concatenation, leading zeros and equivalent expressions. Include every searched variant in the accounting.
+
+How to evaluate a result
+
+Enumerate one finite grammar and report competing targets and duplicate expressions. Use matched control targets or inputs. A method designed around one target should make additional predictions without expanding its operation list.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+LP2-00–55: emirp row sums with the same page shuffles
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- LP2-00–55: emirp row sums with the same page shuffles
+  https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-expressions.html
+
+
+---
+
+Known plaintext and crib searches
+
+Use a declared plaintext hypothesis to constrain a defined cipher model.
+
+A crib is a proposed plaintext fragment at a declared position. It constrains a cipher only through a specific model. In unrestricted additive decoding, any equal-length plaintext implies a key; computing that key does not independently support the proposed sentence.
+
+Major variants
+
+Variants include exact cribs, partial patterns, unknown-offset cribs, dictionary hypotheses and known-reading prefixes. Searching more phrases and positions creates more opportunities for an accidental match.
+
+What a test must specify
+
+Fix the cipher class, candidate phrases, rune encoding, offsets, allowed mismatches and key constraints. Distinguish a historical known plaintext from a guessed word. Record whether a crib was chosen before or after seeing a candidate.
+
+How to evaluate a result
+
+Use withheld text to test a key derived from a crib. Compare incompatible cribs and matched search controls. The existing nine-opening sweeps test those particular beginnings, not every possible plaintext under their cipher families.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+Does matching the opening text identify a seed?
+LP2-39: twenty proposed red-header cribs
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- Does matching the opening text identify a seed?
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- LP2-39: twenty proposed red-header cribs
+  https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-cribs.html
+
+
+---
+
+Automatic search and language scoring
+
+Explore a bounded model with a scorer whose ability and false positives have been checked.
+
+Automatic search is a way to explore a model, not a cipher family by itself. Exhaustive enumeration can cover a finite domain; hill climbing, simulated annealing, genetic algorithms and beam searches usually visit only part of the available space.
+
+Major variants
+
+Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.
+
+What a test must specify
+
+Declare the model, parameter bounds, compute budget, all selection rules and random seeds. Record how many candidates were evaluated and whether the search is exhaustive. Separate tuning examples from evaluation inputs.
+
+How to evaluate a result
+
+Check that the scorer recognizes known answers under the intended language and encoding. Search control inputs with the same budget and compare maxima. Retain complete high-scoring candidates and avoid interpreting failure of one heuristic as exclusion of the model.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+How does trying more keys change the best score?
+Would an English scorer accept other languages?
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- How does trying more keys change the best score?
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- Would an English scorer accept other languages?
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-automatic-search.html
+
+
+---
+
+Alternative alphabets and symbolic notations
+
+Define a symbol inventory and an encoding rule before interpreting resemblance.
+
+A proposed alternative notation maps visible features to symbols in another system. Dots, bars or gaps might suggest Morse or Braille, but resemblance alone does not determine segmentation, orientation or reading order.
+
+Major variants
+
+Possible subfamilies include binary feature coding, Morse-like durations, Braille cells, Bacon-style groups, musical notation and custom symbol inventories. Each needs its own explicit mapping and applicable source features.
+
+What a test must specify
+
+Define measured features, grouping, orientation, ordering, thresholds, symbol table and invalid-group handling. Keep original image measurements separate from their interpretation. State how missing or ambiguous marks are represented.
+
+How to evaluate a result
+
+Apply the mapping consistently to all eligible features and retain invalid outputs. Compare with controls that preserve relevant layout or feature counts. A few recognizable letters obtained by changing grouping rules are not a complete encoding.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-symbol-systems.html
+
+
+---
+
+AI-assisted candidate interpretation
+
+Treat generated readings as proposals requiring independent, reproducible checks.
+
+A language model can suggest interpretations, candidate keys or code, but a fluent answer is not a recovered plaintext. A useful result must expose an independently executable rule connecting the original input to its output.
+
+Major variants
+Direct translation prompts, image interpretation, key suggestions, script generation and ranking existing candidates are different tasks. Each needs its own success criterion. A program produced with AI assistance can be checked independently; a persuasive explanation alone cannot establish a decoding.
+
+What a test must specify
+Record model version, prompt, input representation, settings, number of attempts and selection procedure. Separate tools that perform arithmetic from model-generated explanations. Retain unsuccessful responses when assessing reliability.
+
+How to evaluate a result
+Use blinded known-answer and shuffled-input controls with objective scoring. Verify proposed transformations with independent code and untouched text. A model should not receive the answer while being evaluated on whether it can recover it.
+
+Documented experiments
+No completed AI-reading evaluation is currently linked here. This documents an approach, not a result or a claim that nobody has tried it.
+
+All solving-method families · Search space and bounds · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-ai-readings.html
 
 
 ---

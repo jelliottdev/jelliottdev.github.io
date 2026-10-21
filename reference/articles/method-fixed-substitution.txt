@@ -1,0 +1,38 @@
+Fixed alphabet substitutions
+
+Replace each rune consistently with one other symbol.
+
+One fixed mapping replaces each input symbol throughout the chosen text. Caesar shifts and Atbash are small special cases; a general substitution can have many more choices. On a 29-symbol alphabet, an affine map uses y = ax + b modulo 29 with nonzero a. A permutation preserves symbol counts up to relabeling and preserves the pattern of equal symbols.
+
+Major variants
+
+Variants include Caesar, Atbash, affine maps, arbitrary alphabet permutations and keyed alphabets. A different map for each position belongs to a polyalphabetic or state-dependent family instead.
+
+What a test must specify
+
+Fix the alphabet order, direction of the map, treatment of non-rune marks, text span and permitted mapping class. A search over affine maps is not a search over all substitutions.
+
+How to evaluate a result
+
+Use synthetic encodings with known keys to test recovery. Check preserved equality patterns before language scoring. Evaluate full candidates and untouched text, rather than selecting isolated plausible words.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+LP2-00–55: fixed alphabet transforms against the warning opening
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- LP2-00–55: fixed alphabet transforms against the warning opening
+  https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html

@@ -83,3 +83,10 @@ Experiments on historical clues or editions need not invent a manuscript page as
 A checksum can be repeated in a record, a plan's input list, and a saved report's `plan_sha256`. Updating the record alone leaves a bundle that verifies its files but cannot reproduce its calculation. After an input changes, inspect the actual difference, update dependent plans, and rerun the affected producer and checker. If the change is provenance-only, compare every result field and confirm that only the plan digest changed; do not infer that from the input's filename or from a passing file manifest.
 
 Run `python scripts/test_experiment_bundles.py` after rebuilding downloads. It checks declared bundle files, plan input hashes and saved plan digests, then runs selected producers and checkers from isolated extractions. It does not rerun every experiment or establish the correctness of every hypothesis. Image prerequisites remain separate from the small experiment ZIPs.
+
+
+## Editorial coverage notes
+
+`data/idea-coverage.json` records common proposals and missing bounds. These notes are not experiments, are not included in completed-record counts, and are not sent to the hosted AI as experimental evidence. The local checker matches explicit phrases and displays up to three related notes; the browse view exposes all notes.
+
+Each note has a coverage status, an explanation, the information needed to make the proposal testable, a proposed extension explicitly marked not run, and links to narrower published experiments. Partial coverage never means that an entire cipher family was excluded. Keep these notes current when a new experiment is published. Run `node scripts/test_idea_coverage.cjs` after edits.

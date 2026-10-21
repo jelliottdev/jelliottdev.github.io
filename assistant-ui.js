@@ -15,12 +15,28 @@ function experimentSearchResult(r, requestedPages=[]){
     <details class="idea-match-details"><summary>Pages, inputs and limitations</summary><dl class="idea-result-scope"><dt>Targets</dt><dd>${experimentScopeLinks(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl></details>
     <p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}</p></article>`;
 }
+function ideaCoverageNote(record){
+  const related=record.related.map(id=>experimentRecords.find(r=>r.id===id)).filter(Boolean);
+  return `<details class="experiment-browse-family"><summary>${esc(record.title)} <span class="small muted">${esc(record.status)}</span></summary>
+    <p><a href="#/wiki/${esc(record.guide)}">Read the method guide</a></p><p>${esc(record.coverage)}</p><p><strong>To make a testable version:</strong> ${esc(record.needed)}</p>
+    <p><strong>Proposed extension — not run:</strong> ${esc(record.next_test)}</p>
+    <p class="small muted">Related tests have narrower scopes; these links do not establish that your proposal was tested.</p>
+    <ul>${related.map(r=>`<li><a href="#/experiments/${r.id}">${esc(r.title)}</a></li>`).join('')}</ul></details>`;
+}
+function ideaCoverageView(query=''){
+  if(ideaCoverageUnavailable)return '<p class="small muted">Coverage notes could not be loaded. Experiment results below are still available; missing notes do not imply an unexplored idea.</p>';
+  const records=query?IdeaCoverage.match(ideaCoverageRecords||[],query):(ideaCoverageRecords||[]);
+  if(!records.length)return '';
+  const body=`<p class="small muted">Editorial coverage notes, not experiment findings. “Needs a defined rule” identifies missing bounds; “Partially covered” links narrower tests. Proposed extensions have not been run.</p>${records.map(ideaCoverageNote).join('')}`;
+  return query?`<h2>Coverage of this idea</h2>${body}`:`<details class="experiment-guide"><summary>Common ideas and gaps in coverage</summary>${body}</details>`;
+}
+
 function renderIdeaChecker(endpoint,query){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
   const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
   main.innerHTML=head('Have we tried it?','Check a technique against documented experiments')+`<article class="reading-width idea-checker">
-    <p>Describe the technique, inputs, and bounds you want to test.</p>
+    <p>Describe the technique, inputs, and bounds you want to test. Still choosing an approach? <a href="#/wiki/solving-methods">Browse solving-method families</a>.</p>
     <form id="experiment-form">
       <label for="experiment-query">Technique or idea</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>
@@ -33,10 +49,11 @@ function renderIdeaChecker(endpoint,query){
       ${endpoint?'<p class="idea-privacy small muted">Questions are processed by Cloudflare. Don’t include private information.</p>':''}
     </form>
     <section id="experiment-answer" aria-label="Experiment comparison"></section>
+    <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="experiment-results" aria-label="Matching experiments"></section>
     <details class="experiment-guide"><summary>Coverage and how to interpret a match</summary>
       <p>This checks published experiment records by technique. A page number alone is not a match. Related work can use different inputs or bounds; inspect the scope before treating it as the same test.</p>
-      <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index.</p>
+      <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index, not that an idea is new or promising. Coverage notes separately identify broader proposals and missing bounds; they are not sent to the AI as experiment evidence.</p>
       <p>Answers may be cached for up to a day and reused for the same question and evidence. Reopening a result does not automatically request a new answer. Sources remain available when AI is busy.</p>
       <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
     </details>${footer()}</article>`;
@@ -94,7 +111,7 @@ function renderIdeaChecker(endpoint,query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim(),matches=searchNow?AssistantSearch.experiments(documents(),idea,pages()):[];
+    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');const matches=searchNow?AssistantSearch.experiments(documents(),idea,pages()):[];
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
     else if(!matches.length)results.innerHTML='<h2>No matching documented technique</h2><p>Try the operation, cipher, key, or transformation rather than only a page number. This index does not cover all previous research.</p>';

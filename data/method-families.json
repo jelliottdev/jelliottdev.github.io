@@ -1,0 +1,607 @@
+{
+  "description": "A non-exclusive map of solving and diagnostic families. Page existence is not evidence of a completed experiment; related records cover only their stated variants.",
+  "families": [
+    {
+      "id": "fixed-substitution",
+      "title": "Fixed alphabet substitutions",
+      "group": "Symbol substitutions",
+      "guide": "method-fixed-substitution",
+      "aliases": [
+        "Atbash",
+        "Caesar",
+        "affine substitution"
+      ],
+      "related": [
+        "lp2-alphabet-warning-prefix"
+      ],
+      "description": "Replace each rune consistently with one other symbol."
+    },
+    {
+      "id": "homophonic",
+      "title": "Homophonic and many-to-one substitutions",
+      "group": "Symbol substitutions",
+      "guide": "method-homophonic",
+      "aliases": [
+        "homophonic",
+        "many to one"
+      ],
+      "related": [],
+      "description": "Allow several ciphertext symbols to represent the same plaintext symbol."
+    },
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "group": "Symbol substitutions",
+      "guide": "vigenere",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key"
+      ],
+      "related": [
+        "lp2-known-vigenere-keys"
+      ],
+      "description": "Change the substitution according to position in a repeated key."
+    },
+    {
+      "id": "fractionation",
+      "title": "Fractionation and coordinate alphabets",
+      "group": "Symbol substitutions",
+      "guide": "method-fractionation",
+      "aliases": [
+        "Polybius",
+        "Bifid",
+        "Trifid",
+        "ADFGVX"
+      ],
+      "related": [],
+      "description": "Split symbols into coordinates, rearrange the components, then regroup."
+    },
+    {
+      "id": "blocks",
+      "title": "Block and matrix transformations",
+      "group": "Symbol substitutions",
+      "guide": "method-blocks",
+      "aliases": [
+        "Hill cipher",
+        "matrix cipher",
+        "digraph",
+        "Playfair"
+      ],
+      "related": [],
+      "description": "Transform groups of runes together instead of treating each position independently."
+    },
+    {
+      "id": "number-streams",
+      "title": "Arithmetic keystreams",
+      "group": "Keys, sequences and state",
+      "guide": "prime-minus-one",
+      "aliases": [
+        "prime shifts",
+        "Fibonacci",
+        "totient sequence"
+      ],
+      "related": [
+        "lp2-prime-minus-one-openings",
+        "lp2-prime-openings",
+        "lp2-fibonacci-openings",
+        "lp2-totient-openings",
+        "direct-polynomial-streams"
+      ],
+      "description": "Generate shifts from a declared numerical sequence."
+    },
+    {
+      "id": "feedback",
+      "title": "Autokey and ciphertext feedback",
+      "group": "Keys, sequences and state",
+      "guide": "lp2-54-55-feedback",
+      "aliases": [
+        "autokey",
+        "feedback"
+      ],
+      "related": [
+        "lp2-54-55-autokey-reset",
+        "lp2-54-55-autokey-skip"
+      ],
+      "description": "Use earlier plaintext or ciphertext to update later decoding state."
+    },
+    {
+      "id": "seeded",
+      "title": "Seeded generators and unrestricted additive keys",
+      "group": "Keys, sequences and state",
+      "guide": "one-time-pad",
+      "aliases": [
+        "PRNG",
+        "seed",
+        "one time pad"
+      ],
+      "related": [
+        "seed-crib-controls"
+      ],
+      "description": "Distinguish short reproducible generators from unrestricted per-position keys."
+    },
+    {
+      "id": "running-key",
+      "title": "Running keys from external texts",
+      "group": "Keys, sequences and state",
+      "guide": "method-running-key",
+      "aliases": [
+        "running key",
+        "book key"
+      ],
+      "related": [],
+      "description": "Convert a specified external text into a stream of key symbols."
+    },
+    {
+      "id": "interruptions",
+      "title": "Nulls, interruptions and reset rules",
+      "group": "Keys, sequences and state",
+      "guide": "interruptions",
+      "aliases": [
+        "nulls",
+        "interrupters",
+        "reset"
+      ],
+      "related": [
+        "decoder-skip-controls"
+      ],
+      "description": "Specify which symbols consume output or key state and when state restarts."
+    },
+    {
+      "id": "alignment",
+      "title": "Offsets and key alignment",
+      "group": "Keys, sequences and state",
+      "guide": "key-alignment",
+      "aliases": [
+        "offset",
+        "alignment",
+        "beam search"
+      ],
+      "related": [
+        "decoder-skip-controls"
+      ],
+      "description": "Search starting positions and a bounded set of alignment changes."
+    },
+    {
+      "id": "transposition",
+      "title": "Transposition and permutations",
+      "group": "Order and selection",
+      "guide": "transposition",
+      "aliases": [
+        "reverse",
+        "columns",
+        "permutation"
+      ],
+      "related": [
+        "lp2-row-column-routes",
+        "lp2-word-reversal",
+        "lp2-word-order-reversal"
+      ],
+      "description": "Change symbol order while preserving the selected symbols."
+    },
+    {
+      "id": "routes",
+      "title": "Grid layouts, spirals and route ciphers",
+      "group": "Order and selection",
+      "guide": "method-routes",
+      "aliases": [
+        "spiral",
+        "route cipher",
+        "boustrophedon"
+      ],
+      "related": [
+        "lp2-row-column-routes",
+        "totient-map-route"
+      ],
+      "description": "Choose an explicit layout and traversal through its cells."
+    },
+    {
+      "id": "grilles",
+      "title": "Grilles and positional extraction",
+      "group": "Order and selection",
+      "guide": "grille-carrier",
+      "aliases": [
+        "grille",
+        "mask",
+        "stencil"
+      ],
+      "related": [],
+      "description": "Select positions using a mask or indexing rule."
+    },
+    {
+      "id": "acrostics",
+      "title": "Acrostics and boundary-letter extraction",
+      "group": "Order and selection",
+      "guide": "method-acrostics",
+      "aliases": [
+        "acrostic",
+        "telestich",
+        "first letters",
+        "last letters"
+      ],
+      "related": [],
+      "description": "Select initial, final or regularly indexed symbols from defined units."
+    },
+    {
+      "id": "segmentation",
+      "title": "Word, row, page and section boundaries",
+      "group": "Order and selection",
+      "guide": "transcription-checking",
+      "aliases": [
+        "page joins",
+        "word breaks",
+        "headings"
+      ],
+      "related": [
+        "word-reset-repetition"
+      ],
+      "description": "Treat boundary choices as explicit input or reset variants."
+    },
+    {
+      "id": "book-codes",
+      "title": "Book ciphers and coordinate lookups",
+      "group": "Order and selection",
+      "guide": "book-ciphers",
+      "aliases": [
+        "book code",
+        "coordinate lookup"
+      ],
+      "related": [
+        "emerson-book-cipher-control"
+      ],
+      "description": "Select symbols from a specified source text using explicit coordinate and counting rules."
+    },
+    {
+      "id": "sums",
+      "title": "Gematria and rune-sum mappings",
+      "group": "Numbers and representations",
+      "guide": "prime-sums",
+      "aliases": [
+        "gematria",
+        "word sums"
+      ],
+      "related": [
+        "mixed-square-word-sums",
+        "selected-phrase-word-sums",
+        "lp2-row-prime-sums"
+      ],
+      "description": "Map runes or groups to numerical totals and count competing matches."
+    },
+    {
+      "id": "prime-indices",
+      "title": "Prime indexing and value transforms",
+      "group": "Numbers and representations",
+      "guide": "prime-indices",
+      "aliases": [
+        "nth prime",
+        "prime ordinal"
+      ],
+      "related": [
+        "position-divisor-labels"
+      ],
+      "description": "Distinguish rune indices, prime values and prime indices before composing operations."
+    },
+    {
+      "id": "expressions",
+      "title": "Bounded arithmetic expressions",
+      "group": "Numbers and representations",
+      "guide": "method-expressions",
+      "aliases": [
+        "numerology",
+        "301",
+        "number coincidence"
+      ],
+      "related": [
+        "lp2-row-emirp-sums"
+      ],
+      "description": "Declare a finite grammar of operations rather than searching unlimited expressions."
+    },
+    {
+      "id": "radix",
+      "title": "Radix changes and byte encodings",
+      "group": "Numbers and representations",
+      "guide": "hexadecimal",
+      "aliases": [
+        "binary",
+        "base 60",
+        "hexadecimal"
+      ],
+      "related": [],
+      "description": "Specify how symbols become digits, integers and bytes."
+    },
+    {
+      "id": "bitwise",
+      "title": "Bitwise combinations and XOR",
+      "group": "Numbers and representations",
+      "guide": "xor",
+      "aliases": [
+        "xor",
+        "bitwise"
+      ],
+      "related": [],
+      "description": "Operate on explicitly encoded bits or bytes, with alignment and key rules."
+    },
+    {
+      "id": "squares",
+      "title": "Magic squares and numerical grids",
+      "group": "Numbers and representations",
+      "guide": "magic-squares",
+      "aliases": [
+        "magic square",
+        "number square"
+      ],
+      "related": [
+        "magic-square-freedom",
+        "grid-prime-paths"
+      ],
+      "description": "Separate reconstructing a grid from using it as a decoding key."
+    },
+    {
+      "id": "steganography",
+      "title": "File steganography and embedded payloads",
+      "group": "Physical and digital carriers",
+      "guide": "outguess",
+      "aliases": [
+        "steganography",
+        "OutGuess"
+      ],
+      "related": [
+        "outguess-default-key",
+        "outguess-guard-sweep"
+      ],
+      "description": "Recover data using a specified carrier format, extraction tool and key."
+    },
+    {
+      "id": "image-processing",
+      "title": "Image transforms and overlays",
+      "group": "Physical and digital carriers",
+      "guide": "image-regions",
+      "aliases": [
+        "overlay",
+        "threshold",
+        "contrast"
+      ],
+      "related": [
+        "image-row-coverage"
+      ],
+      "description": "Measure features under declared processing and alignment choices."
+    },
+    {
+      "id": "geometry",
+      "title": "Geometric constructions and navigation",
+      "group": "Physical and digital carriers",
+      "guide": "compass-cipher-tests",
+      "aliases": [
+        "compass",
+        "geometry",
+        "coordinates"
+      ],
+      "related": [
+        "compass-shared-radii",
+        "totient-map-route"
+      ],
+      "description": "Turn measured positions into reproducible construction and traversal rules."
+    },
+    {
+      "id": "audio",
+      "title": "Audio and frequency encodings",
+      "group": "Physical and digital carriers",
+      "guide": "audio-frequency",
+      "aliases": [
+        "spectrogram",
+        "audio",
+        "FFT"
+      ],
+      "related": [],
+      "description": "Separate signal processing measurements from a proposed symbol encoding."
+    },
+    {
+      "id": "layers",
+      "title": "Layered decoding and file chains",
+      "group": "Physical and digital carriers",
+      "guide": "cover-chain",
+      "aliases": [
+        "nested",
+        "layers",
+        "pipeline"
+      ],
+      "related": [],
+      "description": "Specify the order of transformations and verify each intermediate artifact."
+    },
+    {
+      "id": "cryptographic-artifacts",
+      "title": "Public-key messages and cryptographic artifacts",
+      "group": "Physical and digital carriers",
+      "guide": "cover-rsa",
+      "aliases": [
+        "RSA",
+        "public key"
+      ],
+      "related": [],
+      "description": "Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism."
+    },
+    {
+      "id": "hashes",
+      "title": "Hash targets and candidate retrieval",
+      "group": "Physical and digital carriers",
+      "guide": "hashes-and-addresses",
+      "aliases": [
+        "SHA512",
+        "hash target"
+      ],
+      "related": [],
+      "description": "Define exact candidate bytes and compare the specified digest."
+    },
+    {
+      "id": "language",
+      "title": "Language and corpus identification",
+      "group": "Language, clues and search",
+      "guide": "word-lengths",
+      "aliases": [
+        "Welsh",
+        "language identification",
+        "corpus"
+      ],
+      "related": [
+        "parallel-languages",
+        "target-sized-languages",
+        "known-reading-languages",
+        "corpus-prefix-census"
+      ],
+      "description": "Compare declared observables with suitable language controls under explicit cipher assumptions."
+    },
+    {
+      "id": "cribs",
+      "title": "Known plaintext and crib searches",
+      "group": "Language, clues and search",
+      "guide": "method-cribs",
+      "aliases": [
+        "crib",
+        "known plaintext",
+        "guessed word"
+      ],
+      "related": [
+        "seed-crib-controls",
+        "lp2-39-header-cribs"
+      ],
+      "description": "Use a declared plaintext hypothesis to constrain a defined cipher model."
+    },
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "group": "Language, clues and search",
+      "guide": "method-automatic-search",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force"
+      ],
+      "related": [
+        "search-maximum-controls",
+        "english-scorer-controls"
+      ],
+      "description": "Explore a bounded model with a scorer whose ability and false positives have been checked."
+    },
+    {
+      "id": "symbol-systems",
+      "title": "Alternative alphabets and symbolic notations",
+      "group": "Language, clues and search",
+      "guide": "method-symbol-systems",
+      "aliases": [
+        "Morse",
+        "Braille",
+        "Bacon",
+        "musical notation"
+      ],
+      "related": [],
+      "description": "Define a symbol inventory and an encoding rule before interpreting resemblance."
+    },
+    {
+      "id": "literary",
+      "title": "Literary references and thematic clues",
+      "group": "Language, clues and search",
+      "guide": "works-and-influences",
+      "aliases": [
+        "philosophy",
+        "reference",
+        "inspiration"
+      ],
+      "related": [],
+      "description": "Establish a source relationship, then distinguish interpretation from an executable decoding rule."
+    },
+    {
+      "id": "ai",
+      "title": "AI-assisted candidate interpretation",
+      "group": "Language, clues and search",
+      "guide": "method-ai-readings",
+      "aliases": [
+        "ChatGPT",
+        "LLM",
+        "AI translation"
+      ],
+      "related": [],
+      "description": "Treat generated readings as proposals requiring independent, reproducible checks."
+    },
+    {
+      "id": "periodicity",
+      "title": "Period and key-length diagnostics",
+      "group": "Diagnosis and validation",
+      "guide": "periodic-ioc",
+      "aliases": [
+        "periodic IoC",
+        "key length"
+      ],
+      "related": [
+        "lp2-31-periodic-ioc",
+        "lp2-31-row-shuffle-ioc"
+      ],
+      "description": "Measure position-dependent patterns with matched null models and correction for searched periods."
+    },
+    {
+      "id": "repetition",
+      "title": "Repeats, doublets and word structure",
+      "group": "Diagnosis and validation",
+      "guide": "rune-ngrams",
+      "aliases": [
+        "doublets",
+        "repeated words",
+        "ngrams"
+      ],
+      "related": [
+        "lp2-trigram-repeats",
+        "doublet-event-lags",
+        "uniform-additive-doublets"
+      ],
+      "description": "Test structural constraints without automatically converting them into a cipher identification."
+    },
+    {
+      "id": "invariants",
+      "title": "Invariants and bounded exclusions",
+      "group": "Diagnosis and validation",
+      "guide": "cipher-invariants",
+      "aliases": [
+        "proof",
+        "exclusion",
+        "invariant"
+      ],
+      "related": [
+        "literal-prime-affine",
+        "literal-prime-quadratic",
+        "word-reset-repetition"
+      ],
+      "description": "State the assumptions under which an operation preserves or forbids an observed property."
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "group": "Diagnosis and validation",
+      "guide": "null-models",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing"
+      ],
+      "related": [
+        "search-maximum-controls",
+        "english-scorer-controls"
+      ],
+      "description": "Repeat the whole selection procedure on controls, not just the final attractive candidate."
+    },
+    {
+      "id": "provenance",
+      "title": "Source verification and transcription audits",
+      "group": "Diagnosis and validation",
+      "guide": "pgp-signatures",
+      "aliases": [
+        "signature",
+        "provenance",
+        "transcription"
+      ],
+      "related": [
+        "image-row-coverage"
+      ],
+      "description": "Verify the input and the scope of its authenticity or transcription evidence."
+    }
+  ]
+}

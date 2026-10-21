@@ -1,0 +1,41 @@
+Automatic search and language scoring
+
+Explore a bounded model with a scorer whose ability and false positives have been checked.
+
+Automatic search is a way to explore a model, not a cipher family by itself. Exhaustive enumeration can cover a finite domain; hill climbing, simulated annealing, genetic algorithms and beam searches usually visit only part of the available space.
+
+Major variants
+
+Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.
+
+What a test must specify
+
+Declare the model, parameter bounds, compute budget, all selection rules and random seeds. Record how many candidates were evaluated and whether the search is exhaustive. Separate tuning examples from evaluation inputs.
+
+How to evaluate a result
+
+Check that the scorer recognizes known answers under the intended language and encoding. Search control inputs with the same budget and compare maxima. Retain complete high-scoring candidates and avoid interpreting failure of one heuristic as exclusion of the model.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+How does trying more keys change the best score?
+Would an English scorer accept other languages?
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- How does trying more keys change the best score?
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- Would an English scorer accept other languages?
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-automatic-search.html

@@ -1,0 +1,41 @@
+Grid layouts, spirals and route ciphers
+
+Choose an explicit layout and traversal through its cells.
+
+A route cipher reads symbols in a specified traversal of a layout. A printed page, a rectangular reflow of its rune stream and a grid assembled across pages are different inputs, even if they contain the same runes.
+
+Major variants
+
+Row-first, column-first, alternating-direction, spiral, diagonal and rotational routes are useful subfamilies. Arbitrary paths chosen to reach desired letters are not covered by enumerating a few standard spirals.
+
+What a test must specify
+
+Fix dimensions, source order, heading inclusion, empty-cell treatment, origin, direction and traversal. Require a rule for whether cells may repeat or be skipped. Preserve a source-coordinate trace for every output symbol.
+
+How to evaluate a result
+
+For a pure permutation, check that every eligible cell is used exactly once. Compare the best candidate after searching the complete declared route family with controls searched in exactly the same way. Adding substitution creates a combined search with additional choices.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+LP2-00–55: simple row and column reading routes
+LP2-00–02: 27 × 27 totient-map route replay
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- LP2-00–55: simple row and column reading routes
+  https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
+- LP2-00–02: 27 × 27 totient-map route replay
+  https://jelliottdev.github.io/#/experiments/totient-map-route
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-routes.html

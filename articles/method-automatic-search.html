@@ -1,0 +1,10 @@
+<p>Automatic search is a way to explore a model, not a cipher family by itself. Exhaustive enumeration can cover a finite domain; hill climbing, simulated annealing, genetic algorithms and beam searches usually visit only part of the available space.</p>
+<h2 id="variants">Major variants</h2>
+<p>Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.</p>
+<h2 id="specification">What a test must specify</h2>
+<p>Declare the model, parameter bounds, compute budget, all selection rules and random seeds. Record how many candidates were evaluated and whether the search is exhaustive. Separate tuning examples from evaluation inputs.</p>
+<h2 id="validation">How to evaluate a result</h2>
+<p>Check that the scorer recognizes known answers under the intended language and encoding. Search control inputs with the same budget and compare maxima. Retain complete high-scoring candidates and avoid interpreting failure of one heuristic as exclusion of the model.</p>
+<h2 id="experiments">Documented experiments</h2>
+<p>These records cover particular variants, not this entire family.</p><ul><li><a href="#/experiments/search-maximum-controls">How does trying more keys change the best score?</a></li><li><a href="#/experiments/english-scorer-controls">Would an English scorer accept other languages?</a></li></ul>
+<p><a href="#/wiki/solving-methods">All solving-method families</a> · <a href="#/wiki/search-space">Search space and bounds</a> · <a href="#/wiki/reproducibility">Documenting a test</a> · <a href="#/experiments">Have we tried it?</a></p>

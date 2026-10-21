@@ -1,0 +1,41 @@
+Known plaintext and crib searches
+
+Use a declared plaintext hypothesis to constrain a defined cipher model.
+
+A crib is a proposed plaintext fragment at a declared position. It constrains a cipher only through a specific model. In unrestricted additive decoding, any equal-length plaintext implies a key; computing that key does not independently support the proposed sentence.
+
+Major variants
+
+Variants include exact cribs, partial patterns, unknown-offset cribs, dictionary hypotheses and known-reading prefixes. Searching more phrases and positions creates more opportunities for an accidental match.
+
+What a test must specify
+
+Fix the cipher class, candidate phrases, rune encoding, offsets, allowed mismatches and key constraints. Distinguish a historical known plaintext from a guessed word. Record whether a crib was chosen before or after seeing a candidate.
+
+How to evaluate a result
+
+Use withheld text to test a key derived from a crib. Compare incompatible cribs and matched search controls. The existing nine-opening sweeps test those particular beginnings, not every possible plaintext under their cipher families.
+
+Documented experiments
+
+These records cover particular variants, not this entire family.
+Does matching the opening text identify a seed?
+LP2-39: twenty proposed red-header cribs
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- Does matching the opening text identify a seed?
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- LP2-39: twenty proposed red-header cribs
+  https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-cribs.html

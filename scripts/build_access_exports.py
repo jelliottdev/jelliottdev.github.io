@@ -158,6 +158,8 @@ figure_details = {
 for filename, details in figure_details.items():
  register('exports/figures/'+filename,'Analysis figure')
  files[-1].update(details)
+register('data/idea-coverage.json','Idea coverage notes')
+register('data/method-families.json','Idea coverage notes')
 register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
@@ -201,6 +203,9 @@ for path in ['exports/cicada-2013-liber-al.json','scripts/replay_2013_liber_al.p
 for path in ['exports/cicada-2012-blake.json','scripts/replay_2012_blake.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/blake-2012').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical book-cipher reproduction')
  files[-1].update(guide='historical-book-codes',aliases=['Blake','Voice of the Devil','second chance','line character'])
+for path in ['exports/cicada-2012-countdown.json','scripts/replay_2012_countdown.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/countdown-2012').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical opening provenance')
+ files[-1].update(guide='2012-countdown',aliases=['2012 countdown','2012 coordinates','845145127'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
  register(artifact.relative_to(root).as_posix(),'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])
@@ -661,7 +666,7 @@ for experiment in read('data/experiments.json')['records']:
 for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Known-reading vocabulary map', 'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Structured experiment record'})
- if name=='reference-data':roles.update({'Britannica book-code evidence','Word reset bound','Position divisor bound','Polynomial stream bound','Historical printed spelling evidence','Parable audio evidence','Repeated marker audit','Transcription layer inventory','Wing and Tree window audit','Later-message arithmetic','Historical later-message provenance','Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
+ if name=='reference-data':roles.update({'Idea coverage notes','Britannica book-code evidence','Word reset bound','Position divisor bound','Polynomial stream bound','Historical printed spelling evidence','Parable audio evidence','Repeated marker audit','Transcription layer inventory','Wing and Tree window audit','Later-message arithmetic','Historical later-message provenance','Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
  selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')

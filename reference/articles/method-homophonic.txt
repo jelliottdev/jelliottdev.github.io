@@ -1,0 +1,35 @@
+Homophonic and many-to-one substitutions
+
+Allow several ciphertext symbols to represent the same plaintext symbol.
+
+A homophonic system may assign several ciphertext symbols to one plaintext symbol. Unlike a one-to-one substitution, it can flatten ciphertext frequencies and obscure repeated-letter patterns. Conversely, merging rune symbols without evidence can manufacture apparent language statistics.
+
+Major variants
+
+Variants differ in their many-to-one assignment, whether each plaintext symbol has a fixed number of alternatives, and whether alternatives depend on position or state. A codebook mapping entire words is a separate model.
+
+What a test must specify
+
+Define ciphertext and plaintext inventories, allowed merges, maximum alternatives per symbol, and whether the mapping stays fixed. Report any symbols discarded or treated as nulls. Do not silently alternate between a 29-rune and a Latin-character model.
+
+How to evaluate a result
+
+Test recovery on synthetic homophonic ciphertexts and on shuffled controls. Count candidate mappings and inspect whether a mapping chosen on one segment predicts another. A frequency fit alone cannot establish the assignment.
+
+Documented experiments
+
+No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+
+All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
+
+Sources, related references, and files
+- All solving-method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+
+Article: https://jelliottdev.github.io/reference/articles/method-homophonic.html

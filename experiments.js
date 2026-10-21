@@ -1,5 +1,5 @@
  'use strict';
-let experimentRecords, assistantConfig, experimentRequest;
+let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false;
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 async function experimentsPage(id, version, query='') {
@@ -10,6 +10,15 @@ async function experimentsPage(id, version, query='') {
     const data = await response.json();
     if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
     experimentRecords = data.records;
+  }
+  if (!ideaCoverageRecords) {
+    try {
+      const response=await fetch('data/idea-coverage.json');
+      if(!response.ok)throw Error('Coverage unavailable');
+      const data=await response.json();
+      if(!Array.isArray(data.records))throw Error('Invalid coverage');
+      ideaCoverageRecords=data.records;ideaCoverageUnavailable=false;
+    } catch {ideaCoverageRecords=[];ideaCoverageUnavailable=true;}
   }
   if (!assistantConfig) {
     try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}
