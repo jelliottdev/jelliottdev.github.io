@@ -134,18 +134,19 @@
     },
     {
       "id": "interruptions",
-      "title": "Nulls, interruptions and reset rules",
+      "title": "Keystream interruptions and reset rules",
       "group": "Keys, sequences and state",
       "guide": "interruptions",
       "aliases": [
-        "nulls",
         "interrupters",
-        "reset"
+        "reset",
+        "pause key",
+        "skip key"
       ],
       "related": [
         "decoder-skip-controls"
       ],
-      "description": "Specify which symbols consume output or key state and when state restarts."
+      "description": "Specify when key or feedback state pauses, advances or restarts."
     },
     {
       "id": "alignment",
@@ -717,6 +718,21 @@
         "seed-crib-controls"
       ],
       "description": "Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim."
+    },
+    {
+      "id": "null-removal",
+      "title": "Null symbols, deletion and padding",
+      "group": "Order and selection",
+      "guide": "method-nulls",
+      "aliases": [
+        "nulls",
+        "null symbols",
+        "delete runes",
+        "remove runes",
+        "padding"
+      ],
+      "related": [],
+      "description": "Remove declared symbols or positions while accounting for shortened output and changed alignment."
     }
   ]
 }

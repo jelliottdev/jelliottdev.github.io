@@ -1,0 +1,73 @@
+Null symbols, deletion and padding
+
+Define which symbols are removed, count deletion choices and preserve key-state and source-position rules.
+
+A null-removal hypothesis treats some ciphertext symbols as material that should not appear in the recovered message. The proposed nulls might be a particular rune, positions selected by a pattern, or padding added to fill a block. This is different from an interruption that preserves a rune while pausing the key. Calling both operations “skip” conceals a consequential choice.
+
+What counts as a null?
+
+	Variant	Rule to specify	What can go wrong
+
+	Symbol-based removal	Remove every occurrence of a declared symbol or set.	The same rune may also carry information; choosing only inconvenient occurrences adds position choices.
+
+	Position-based removal	Remove a fixed set or a repeating positional pattern.	Offsets, period and resets create additional variants.
+
+	Marker-delimited material	Declare opening and closing markers and nesting rules.	Ambiguous markers can produce several incompatible retained streams.
+
+	Block padding	Declare block size, padding location and removal convention.	Removing a suffix because it looks unhelpful does not establish that padding was present.
+
+
+Deleting positions creates a search
+
+If exactly d of n positions may be removed, there are n! / (d! × (n − d)!) position subsets. If each position can independently stay or go, there are 2^(n) subsets, including the empty retained stream. These count choices, not necessarily distinct outputs.
+
+For example, delete exactly one position from the invented input 0, 0, 1, 2. Positions are zero-based.
+
+	Deleted position	Retained indices	Distinct output?
+
+	0	0, 1, 2	First occurrence
+
+	1	0, 1, 2	Same retained values as above
+
+	2	0, 0, 2	Different
+
+	3	0, 0, 1	Different
+
+
+There are four deletion choices but only three retained sequences. Preserve the deleted-position list even when values coincide: the source-position trace differs, and later operations that use original positions can distinguish those choices.
+
+Define deletion relative to the cipher
+
+Removing a symbol before decoding can shift every later key assignment. Decoding first and then removing its output consumes that symbol’s key position. Neither operation is equivalent to copying the symbol and pausing the key. The worked skip comparison shows these effects on the same input.
+
+Declare whether retained symbols keep their original indices or receive new consecutive indices, whether deleted symbols update feedback state, and how word boundaries are preserved. Also state whether the rule acts on rune symbols, transliteration characters or raw bytes. Deleting one character from a multi-letter rune label is not deleting one rune.
+
+Require evidence beyond an improved fragment
+
+Freeze the deletion rule and its maximum deletion count before selecting a reading. Apply it to an untouched continuation with the same boundary and state rules. Report the fraction removed, all competing candidates and any changes to word lengths or repeated patterns. A score that rewards a short readable fragment may favor deleting most of the input; the acceptance rule must account for retained length.
+
+Controls should repeat the same deletion search and scoring. Comparing a heavily selected retained fragment with an unselected full-length random stream asks a different question. If the null positions come from independent image evidence, record how they were measured before examining the decoded text.
+
+What has been tested here?
+
+No standalone null-removal experiment is currently linked to this family. The decoder-skip controls test specified key-advancement behavior; they are not an exhaustive deletion search. Likewise, copying an F rune in a known reading is not evidence that every F on an unsolved page is disposable.
+
+Adaptive choices · Positional extraction · Search space · All method families
+
+Sources, related references, and files
+- interruption
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+- worked skip comparison
+  https://jelliottdev.github.io/reference/articles/interruptions.html#choices
+- decoder-skip controls
+  https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- Adaptive choices
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- Positional extraction
+  https://jelliottdev.github.io/reference/articles/grille-carrier.html
+- Search space
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-nulls.html

@@ -1,0 +1,27 @@
+<p>A null-removal hypothesis treats some ciphertext symbols as material that should not appear in the recovered message. The proposed nulls might be a particular rune, positions selected by a pattern, or padding added to fill a block. This is different from an <a href="#/wiki/interruptions">interruption</a> that preserves a rune while pausing the key. Calling both operations “skip” conceals a consequential choice.</p>
+<h2 id="variants">What counts as a null?</h2>
+<div class="table-wrap"><table><thead><tr><th>Variant</th><th>Rule to specify</th><th>What can go wrong</th></tr></thead><tbody>
+<tr><td>Symbol-based removal</td><td>Remove every occurrence of a declared symbol or set.</td><td>The same rune may also carry information; choosing only inconvenient occurrences adds position choices.</td></tr>
+<tr><td>Position-based removal</td><td>Remove a fixed set or a repeating positional pattern.</td><td>Offsets, period and resets create additional variants.</td></tr>
+<tr><td>Marker-delimited material</td><td>Declare opening and closing markers and nesting rules.</td><td>Ambiguous markers can produce several incompatible retained streams.</td></tr>
+<tr><td>Block padding</td><td>Declare block size, padding location and removal convention.</td><td>Removing a suffix because it looks unhelpful does not establish that padding was present.</td></tr>
+</tbody></table></div>
+<h2 id="choices">Deleting positions creates a search</h2>
+<p>If exactly d of n positions may be removed, there are <code>n! / (d! × (n − d)!)</code> position subsets. If each position can independently stay or go, there are 2<sup>n</sup> subsets, including the empty retained stream. These count choices, not necessarily distinct outputs.</p>
+<p>For example, delete exactly one position from the invented input <code>0, 0, 1, 2</code>. Positions are zero-based.</p>
+<div class="table-wrap"><table><thead><tr><th>Deleted position</th><th>Retained indices</th><th>Distinct output?</th></tr></thead><tbody>
+<tr><td>0</td><td>0, 1, 2</td><td>First occurrence</td></tr>
+<tr><td>1</td><td>0, 1, 2</td><td>Same retained values as above</td></tr>
+<tr><td>2</td><td>0, 0, 2</td><td>Different</td></tr>
+<tr><td>3</td><td>0, 0, 1</td><td>Different</td></tr>
+</tbody></table></div>
+<p>There are four deletion choices but only three retained sequences. Preserve the deleted-position list even when values coincide: the source-position trace differs, and later operations that use original positions can distinguish those choices.</p>
+<h2 id="state">Define deletion relative to the cipher</h2>
+<p>Removing a symbol before decoding can shift every later key assignment. Decoding first and then removing its output consumes that symbol’s key position. Neither operation is equivalent to copying the symbol and pausing the key. The <a href="#/wiki/interruptions?section=choices">worked skip comparison</a> shows these effects on the same input.</p>
+<p>Declare whether retained symbols keep their original indices or receive new consecutive indices, whether deleted symbols update feedback state, and how word boundaries are preserved. Also state whether the rule acts on rune symbols, transliteration characters or raw bytes. Deleting one character from a multi-letter rune label is not deleting one rune.</p>
+<h2 id="validation">Require evidence beyond an improved fragment</h2>
+<p>Freeze the deletion rule and its maximum deletion count before selecting a reading. Apply it to an untouched continuation with the same boundary and state rules. Report the fraction removed, all competing candidates and any changes to word lengths or repeated patterns. A score that rewards a short readable fragment may favor deleting most of the input; the acceptance rule must account for retained length.</p>
+<p>Controls should repeat the same deletion search and scoring. Comparing a heavily selected retained fragment with an unselected full-length random stream asks a different question. If the null positions come from independent image evidence, record how they were measured before examining the decoded text.</p>
+<h2 id="coverage">What has been tested here?</h2>
+<p>No standalone null-removal experiment is currently linked to this family. The <a href="#/experiments/decoder-skip-controls">decoder-skip controls</a> test specified key-advancement behavior; they are not an exhaustive deletion search. Likewise, copying an F rune in a known reading is not evidence that every F on an unsolved page is disposable.</p>
+<p><a href="#/wiki/method-adaptive-rules">Adaptive choices</a> · <a href="#/wiki/grille-carrier">Positional extraction</a> · <a href="#/wiki/search-space">Search space</a> · <a href="#/wiki/solving-methods">All method families</a></p>

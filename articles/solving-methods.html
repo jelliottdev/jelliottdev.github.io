@@ -48,7 +48,7 @@
 <dt id="family-running-key"><a href="#/wiki/method-running-key">Running keys from external texts</a></dt><dd><p>Convert a specified external text into a stream of key symbols.</p>
 <p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
 </dd>
-<dt id="family-interruptions"><a href="#/wiki/interruptions">Nulls, interruptions and reset rules</a></dt><dd><p>Specify which symbols consume output or key state and when state restarts.</p>
+<dt id="family-interruptions"><a href="#/wiki/interruptions">Keystream interruptions and reset rules</a></dt><dd><p>Specify when key or feedback state pauses, advances or restarts.</p>
 <details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
 <li><p><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a></p><p><strong>Question tested:</strong> How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?</p><p><strong>Outside this test:</strong> No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.</p></li>
 </ul></details>
@@ -109,6 +109,9 @@
 <li><p><a href="#/experiments/lp1-width-selection">LP1 column balance after searching six widths</a></p><p><strong>Question tested:</strong> Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?</p><p><strong>Outside this test:</strong> Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.</p></li>
 <li><p><a href="#/experiments/lp1-section-balance">LP1 column balance with section-preserving shuffles</a></p><p><strong>Question tested:</strong> Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?</p><p><strong>Outside this test:</strong> Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.</p></li>
 </ul></details>
+</dd>
+<dt id="family-null-removal"><a href="#/wiki/method-nulls">Null symbols, deletion and padding</a></dt><dd><p>Remove declared symbols or positions while accounting for shortened output and changed alignment.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
 </dd>
 </dl>
 <h2 id="numbers-and-representations">Numbers and representations</h2><dl>
