@@ -1,6 +1,27 @@
 <p>A block method transforms several symbols at once. Matrix multiplication modulo an alphabet size is one possibility; pair-based lookup rules are another. Sharing a block size does not make these mechanisms equivalent.</p>
 <h2 id="variants">Major variants</h2>
 <p>Families include Hill-style linear maps, affine block maps, keyed digraph tables and explicit polygraphic codebooks. Their parameter counts, invertibility conditions and treatment of repeated letters differ.</p>
+<h2 id="worked-example">A reversible two-symbol example</h2>
+<p>Represent a block as a column of two rune indices x and y. This invented encoder uses the matrix with rows <code>[1, 2]</code> and <code>[3, 5]</code>, modulo 29:</p>
+<pre><code>first output  = (x + 2y) mod 29
+second output = (3x + 5y) mod 29</code></pre>
+<p>Input <code>[4, 7]</code> gives <code>[18, 18]</code>: the second raw sum is 47, which reduces to 18. The determinant is <code>1 × 5 − 2 × 3 = −1</code>, a nonzero residue modulo the prime 29, so the matrix has an inverse. Its inverse has rows <code>[24, 2]</code> and <code>[3, 28]</code>. Applied to <code>[18, 18]</code>, it recovers <code>[4, 7]</code>.</p>
+<p>This operates on pairs, not independently on each symbol. Two unequal inputs in a block can produce equal output indices without contradicting reversibility of the whole block. Equality-pattern arguments for a single-symbol substitution cannot simply be transferred to this model.</p>
+<h2 id="cribs">One matching block leaves many keys</h2>
+<p>Suppose the matrix is unknown and the only proposed plaintext/ciphertext pair is <code>[4, 7] → [18, 18]</code>. Writing the unknown rows as [a, b] and [c, d] gives two equations in four unknown entries:</p>
+<pre><code>4a + 7b = 18 (mod 29)
+4c + 7d = 18 (mod 29)</code></pre>
+<p>Each choice of a and c fixes b and d because 7 has an inverse modulo 29. That gives 841 matrices, of which 812 are reversible. A matching pair therefore does not identify one key in this model.</p>
+<div class="table-wrap"><table><thead><tr><th>Constraints supplied</th><th>Reversible keys remaining</th><th>What changed?</th></tr></thead><tbody>
+<tr><td>[4, 7] → [18, 18]</td><td>812</td><td>One nonzero input/output pair.</td></tr>
+<tr><td>Above, plus [8, 14] → [7, 7]</td><td>812</td><td>The second pair is twice the first modulo 29; it adds no constraint.</td></tr>
+<tr><td>First pair, plus [1, 0] → [1, 3]</td><td>1</td><td>The independent second input fixes the remaining freedom.</td></tr>
+</tbody></table></div>
+<p>The last row identifies a unique matrix only within this declared linear two-symbol model and the supplied alignments. If both plaintext pairs were guessed or selected from many alternatives, uniqueness after fitting is not independent evidence that they were correct. Test the resulting key on an untouched continuation. Other block sizes, affine offsets and lookup-table rules remain different hypotheses.</p>
+<h2 id="reproduce">Reproduce the counts</h2>
+<pre><code>python scripts/matrix_crib_example.py</code></pre>
+<p>The standard-library script checks both round trips for all 841 two-symbol inputs under the example key. It then enumerates all 841 matrices satisfying the first pair, retains the 812 with nonzero determinant, and applies the two additional constraints separately. <a href="scripts/matrix_crib_example.py" download>Download script</a> · <a href="exports/matrix-crib-example.json" download>Download report</a>. No manuscript text is used.</p>
+<p>See <a href="#/wiki/method-cribs">crib searches</a> for phrase and position choices, and <a href="#/wiki/modular-arithmetic">modular arithmetic</a> for the index calculations.</p>
 <h2 id="specification">What a test must specify</h2>
 <p>Fix alphabet, modulus, block size, orientation, block alignment and padding. For a matrix decoder, establish invertibility under that modulus; over a composite modulus a nonzero determinant alone is insufficient. Keep table-based rules distinct from linear ones.</p>
 <h2 id="validation">How to evaluate a result</h2>

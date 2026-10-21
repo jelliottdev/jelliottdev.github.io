@@ -218,6 +218,9 @@ for path in ['scripts/switching_choices_example.py','exports/switching-choices-e
 for path in ['scripts/fractionation_example.py','exports/fractionation-example.json','exports/figures/fractionation-example.svg']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Analysis figure' if path.endswith('.svg') else 'Mathematical illustration')
  files[-1].update(guide='method-fractionation',aliases=['fractionation','coordinate regrouping'])
+for path in ['scripts/matrix_crib_example.py','exports/matrix-crib-example.json']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Mathematical illustration')
+ files[-1].update(guide='method-blocks',aliases=['matrix cipher','independent cribs'])
 register('exports/doublet-distances.json','Doublet audit')
 files[-1].update(guide='doublets',aliases=['successive doublets','circular distance','8.81'])
 register('exports/unsolved-doublets.json','Doublet audit')
