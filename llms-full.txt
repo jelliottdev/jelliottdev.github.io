@@ -6250,7 +6250,7 @@ Article: https://jelliottdev.github.io/reference/articles/cicada-history.html
 
 Solving methods: a map of families and variants
 
-Browse 41 overlapping method and diagnostic families, then narrow an idea to a reproducible test.
+Browse overlapping method and diagnostic families, then narrow an idea to a reproducible test.
 
 Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.
 
@@ -6296,6 +6296,12 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 
 Block and matrix transformations
 Transform groups of runes together instead of treating each position independently.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
+Codebooks and mixed letter-word systems
+Map defined groups to words, syllables or phrases under a consistent dictionary.
 
 No experiment linked yet. The guide documents the approach; it is not a result.
 
@@ -6464,6 +6470,26 @@ Outside this test: Other editions, other texts, arbitrary coordinate searches, u
 
 
 
+Page and section ordering
+Reorder whole pages or sections while accounting for the arrangements searched.
+
+Documented tests (3)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+LP1 column balance after searching section orders
+Question tested: How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?
+Outside this test: Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.
+
+LP1 column balance after searching six widths
+Question tested: Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?
+Outside this test: Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.
+
+LP1 column balance with section-preserving shuffles
+Question tested: Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?
+Outside this test: Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.
+
+
+
 
 Numbers and representations
 
@@ -6551,6 +6577,12 @@ Outside this test: Alternative layouts, other pages, extraction/signature retest
 
 
 
+Differential and cumulative decoding
+Transform changes between values with declared direction, lag, modulus and initial conditions.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
 
 Physical and digital carriers
 
@@ -6618,6 +6650,12 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 
 Hash targets and candidate retrieval
 Define exact candidate bytes and compare the specified digest.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
+Compression and packed symbol streams
+Specify both the conversion into bytes and the format used to decode those bytes.
 
 No experiment linked yet. The guide documents the approach; it is not a result.
 
@@ -6834,6 +6872,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Block and matrix transformations
   https://jelliottdev.github.io/reference/articles/method-blocks.html
+- Codebooks and mixed letter-word systems
+  https://jelliottdev.github.io/reference/articles/method-codebooks.html
 - Arithmetic keystreams
   https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 - LP2-00–55: prime-minus-one shifts and known openings
@@ -6888,6 +6928,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/book-ciphers.html
 - Emerson book cipher: historical control reproduction
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
+- Page and section ordering
+  https://jelliottdev.github.io/reference/articles/method-page-order.html
+- LP1 column balance after searching section orders
+  https://jelliottdev.github.io/#/experiments/lp1-section-order
+- LP1 column balance after searching six widths
+  https://jelliottdev.github.io/#/experiments/lp1-width-selection
+- LP1 column balance with section-preserving shuffles
+  https://jelliottdev.github.io/#/experiments/lp1-section-balance
 - Gematria and rune-sum mappings
   https://jelliottdev.github.io/reference/articles/prime-sums.html
 - LP1-05: candidate word sums and rune segmentation
@@ -6920,6 +6968,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-prime-paths-page-boundaries
 - LP2-32: grid sums and the 2016 message file
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
+- Differential and cumulative decoding
+  https://jelliottdev.github.io/reference/articles/method-differences.html
 - File steganography and embedded payloads
   https://jelliottdev.github.io/reference/articles/outguess.html
 - Original JPEGs: default-key OutGuess sweep
@@ -6942,6 +6992,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/cover-rsa.html
 - Hash targets and candidate retrieval
   https://jelliottdev.github.io/reference/articles/hashes-and-addresses.html
+- Compression and packed symbol streams
+  https://jelliottdev.github.io/reference/articles/method-compression.html
 - Language and corpus identification
   https://jelliottdev.github.io/reference/articles/word-lengths.html
 - Could the unsolved text be another language? Eight aligned translations
@@ -6996,12 +7048,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
 - Null models and selection effects
   https://jelliottdev.github.io/reference/articles/null-models.html
-- LP1 column balance with section-preserving shuffles
-  https://jelliottdev.github.io/#/experiments/lp1-section-balance
-- LP1 column balance after searching section orders
-  https://jelliottdev.github.io/#/experiments/lp1-section-order
-- LP1 column balance after searching six widths
-  https://jelliottdev.github.io/#/experiments/lp1-width-selection
 - LP1: the 464-word table and column balance
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - Source verification and transcription audits
@@ -23788,6 +23834,197 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments
 
 Article: https://jelliottdev.github.io/reference/articles/method-ai-readings.html
+
+
+---
+
+Codebooks and mixed letter-word systems
+
+Map defined groups to words, syllables or phrases under a consistent dictionary.
+
+A codebook maps symbols or groups to larger units such as words, syllables or phrases. A nomenclator combines code entries with ordinary letter substitutions. This differs from assuming that every rune stands for one plaintext letter or that every visible word boundary is preserved plaintext spacing.
+
+Why a readable assignment needs independent evidence
+
+Consider the invented ciphertext 17 42 17. A fixed codebook assigning 17 → THE and 42 → WAY produces THE WAY THE. Assigning 17 → ONE and 42 → BY produces ONE BY ONE. Both preserve the repeated code group. The repetition constrains the assignment, but it does not choose the vocabulary.
+
+	Code group	Candidate A	Candidate B	Constraint
+	17	THE	ONE	Reuse the same entry wherever 17 occurs
+	42	WAY	BY	Choose independently supported meaning
+
+Major variants
+Variants include fixed word codebooks, syllabic coding, mixed letter-and-word systems, multiple codes for one meaning and separate null groups. A context-dependent codebook adds further rules and must say what determines the context. Arbitrarily giving the same group a new meaning whenever needed removes the repeat constraint.
+
+What a test must specify
+Define code-group boundaries, group length, vocabulary, mapping consistency and treatment of unknown entries. Identify any proposed external codebook by exact source. If a codebook is inferred, count the free assignments and distinguish those fitted to a passage from entries predicted before reading another passage.
+
+Evaluate constraints, not just sentences
+Measure whether the mapping consistently explains all occurrences, including inconvenient ones. Test known-answer examples with comparable codebook size, and compare competing dictionaries. A coherent sentence fitted to unique groups has little opportunity to contradict the chosen assignments.
+
+Documented experiments
+No codebook-decoding experiment is linked yet. Repetition tests can inform structural assumptions, but they do not establish a codebook or recover its entries.
+
+All method families · Homophonic substitutions · Known-plaintext constraints
+
+Sources, related references, and files
+- Repetition tests
+  https://jelliottdev.github.io/#/experiments/word-reset-repetition
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Homophonic substitutions
+  https://jelliottdev.github.io/reference/articles/method-homophonic.html
+- Known-plaintext constraints
+  https://jelliottdev.github.io/reference/articles/method-cribs.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-codebooks.html
+
+
+---
+
+Differential and cumulative decoding
+
+Transform changes between values with declared direction, lag, modulus and initial conditions.
+
+Differential decoding works with changes between values rather than the values themselves. For a rune stream represented by indices 0 through 28, one possible rule is d[i] = (x[i] − x[i−1]) mod 29. This is a precise transformation, but it is only one member of the family. Choosing subtraction after seeing an attractive result does not establish that it was intended.
+
+A small reversible example
+
+This invented sequence illustrates arithmetic only; it is not a manuscript reading. Preserve the first value as an initial condition, then take differences between consecutive values.
+
+	Position	Input index	Operation	Stored value
+	0	27	Keep initial value	27
+	1	1	(1 − 27) mod 29	3
+	2	4	(4 − 1) mod 29	3
+	3	3	(3 − 4) mod 29	28
+
+The differences are 3, 3 and 28. Starting from 27 and cumulatively adding them modulo 29 recovers 27, 1, 4, 3. Without the initial value, there are 29 possible reconstructions differing by a constant shift. A difference stream alone has lost that information.
+
+Variants and boundaries
+
+Variants include signed or absolute differences, larger lags, differences of prime values, cumulative sums, repeated differencing and two-dimensional neighbor rules. Absolute differences discard direction and are generally not invertible without extra information. A page-by-page restart also differs from carrying state across a page boundary.
+
+What a test must specify
+
+Fix the representation, modulus, subtraction direction, lag, traversal and initial conditions. State whether each word, row, page or section resets the calculation. If repeated differences are allowed, bound their depth. Preserve a source-position trace and report any values discarded at boundaries.
+
+What would support the rule?
+
+For a reversible variant, verify the inverse on complete inputs. If a rule is chosen on one segment, test an untouched continuation with the same initial-state policy. Compare the complete selection procedure with controls. A repeated difference or a short word is an observation, not by itself a cipher identification.
+
+Documented experiments
+No differential-decoding experiment is linked yet. Lag coincidences measure equality at a distance; they do not perform this decoding operation.
+
+All method families · Modular arithmetic · Alignment and resets
+
+Sources, related references, and files
+- Lag coincidences
+  https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Modular arithmetic
+  https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+- Alignment and resets
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-differences.html
+
+
+---
+
+Compression and packed symbol streams
+
+Specify both the conversion into bytes and the format used to decode those bytes.
+
+A proposal may treat the manuscript as encoded compressed data rather than direct language ciphertext. That requires two separate specifications: how visible symbols become bytes, and how those bytes are decompressed. Encryption, compression and a change of numeral base are different operations even when all produce unfamiliar-looking output.
+
+Make the stages explicit
+
+Symbols: choose a verified transcription and alphabet.
+Packing: define bit or integer widths, symbol order, byte order and padding.
+Format: name the decompressor, framing rules and any dictionary.
+Validation: check format constraints and retain the complete output.
+
+For example, indices 0–28 can be represented with five bits each, leaving three unused bit patterns. Eight runes then supply 40 bits, or five bytes, under that particular packing. This does not mean the manuscript uses five-bit packing. Changing bit order or the starting bit offset gives another candidate stream.
+
+Major variants
+Variants include fixed-width packing, base-29 integers, dictionary coding, run-length representations and particular compression formats. A raw stream and a file container may need different decoder settings. Arbitrary custom dictionaries can introduce as much freedom as a codebook.
+
+What a test must specify
+Fix the symbol-to-number mapping, packing, alignment, endianness, padding, format, decoder version and dictionary. Bound the number of combinations. Set an output-size limit when testing decompression so a malformed candidate cannot exhaust memory.
+
+A decoder accepting bytes is only the first check
+Record errors and complete outputs. Check declared lengths, checksums where the format provides them, end-of-stream handling and whether trailing bytes are ignored. Use known compressed samples and controls passed through the same packing search. High entropy alone does not identify compression.
+
+Documented experiments
+No compressed-manuscript decoding experiment is linked yet. Rune entropy and byte encoding provide background, not evidence that a compression format was tested.
+
+All method families · File integrity · Codebooks
+
+Sources, related references, and files
+- Rune entropy
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html
+- byte encoding
+  https://jelliottdev.github.io/reference/articles/hexadecimal.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- File integrity
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- Codebooks
+  https://jelliottdev.github.io/reference/articles/method-codebooks.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-compression.html
+
+
+---
+
+Page and section ordering
+
+Reorder whole pages or sections while accounting for the arrangements searched.
+
+Page or section ordering changes the sequence in which material is processed. It can affect continuous key alignment, cross-page words, grid placement and statistical arrangements. Reordering whole sections is a different search from permuting every rune independently.
+
+How quickly the choices grow
+
+	Declared objects and choices	Number of arrangements
+	Four distinct sections, arbitrary order	4! = 24
+	Four distinct sections, each also reversible	4! × 2⁴ = 384
+	Ten distinct pages, arbitrary order	10! = 3,628,800
+
+These count parameter settings under the stated assumptions. Identical objects or reversal symmetries can reduce the number of distinct resulting streams. Conversely, trying several layouts, scorers and boundary rules adds further choices.
+
+Major variants
+Variants include reordering pages within a section, reordering intact sections, reversal, cyclic rotation and adjacency constraints motivated by artwork or text. Rotation may be equivalent under one score but distinct under a cipher with a fixed starting state.
+
+What a test must specify
+Define the movable objects and their original order, allowed permutations, reversals, reset rules and optimization criterion. Keep page identities separate from their positions in a candidate. Say whether ordering constraints came from independent evidence or were chosen after a desirable result appeared.
+
+Account for the ordering search
+A low score after choosing the best of many arrangements should be compared with controls that receive the same search. Report tied arrangements and stable features across them. If artwork suggests an order, test the proposed relation directly rather than interpreting any favorable language statistic as confirmation.
+
+Documented experiments
+All 24 orders of four intact LP1 sections: a column-balance statistic, not a plaintext recovery test.
+Six layout widths: accounts for choosing a favorable width.
+Section-preserving shuffles: preserves section-specific word lengths in the control.
+
+All method families · Transposition · Page joins · Selection effects
+
+Sources, related references, and files
+- All 24 orders of four intact LP1 sections
+  https://jelliottdev.github.io/#/experiments/lp1-section-order
+- Six layout widths
+  https://jelliottdev.github.io/#/experiments/lp1-width-selection
+- Section-preserving shuffles
+  https://jelliottdev.github.io/#/experiments/lp1-section-balance
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Transposition
+  https://jelliottdev.github.io/reference/articles/transposition.html
+- Page joins
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#page-joins
+- Selection effects
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-page-order.html
 
 
 ---

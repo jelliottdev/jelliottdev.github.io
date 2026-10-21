@@ -1,0 +1,39 @@
+Codebooks and mixed letter-word systems
+
+Map defined groups to words, syllables or phrases under a consistent dictionary.
+
+A codebook maps symbols or groups to larger units such as words, syllables or phrases. A nomenclator combines code entries with ordinary letter substitutions. This differs from assuming that every rune stands for one plaintext letter or that every visible word boundary is preserved plaintext spacing.
+
+Why a readable assignment needs independent evidence
+
+Consider the invented ciphertext 17 42 17. A fixed codebook assigning 17 → THE and 42 → WAY produces THE WAY THE. Assigning 17 → ONE and 42 → BY produces ONE BY ONE. Both preserve the repeated code group. The repetition constrains the assignment, but it does not choose the vocabulary.
+
+	Code group	Candidate A	Candidate B	Constraint
+	17	THE	ONE	Reuse the same entry wherever 17 occurs
+	42	WAY	BY	Choose independently supported meaning
+
+Major variants
+Variants include fixed word codebooks, syllabic coding, mixed letter-and-word systems, multiple codes for one meaning and separate null groups. A context-dependent codebook adds further rules and must say what determines the context. Arbitrarily giving the same group a new meaning whenever needed removes the repeat constraint.
+
+What a test must specify
+Define code-group boundaries, group length, vocabulary, mapping consistency and treatment of unknown entries. Identify any proposed external codebook by exact source. If a codebook is inferred, count the free assignments and distinguish those fitted to a passage from entries predicted before reading another passage.
+
+Evaluate constraints, not just sentences
+Measure whether the mapping consistently explains all occurrences, including inconvenient ones. Test known-answer examples with comparable codebook size, and compare competing dictionaries. A coherent sentence fitted to unique groups has little opportunity to contradict the chosen assignments.
+
+Documented experiments
+No codebook-decoding experiment is linked yet. Repetition tests can inform structural assumptions, but they do not establish a codebook or recover its entries.
+
+All method families · Homophonic substitutions · Known-plaintext constraints
+
+Sources, related references, and files
+- Repetition tests
+  https://jelliottdev.github.io/#/experiments/word-reset-repetition
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Homophonic substitutions
+  https://jelliottdev.github.io/reference/articles/method-homophonic.html
+- Known-plaintext constraints
+  https://jelliottdev.github.io/reference/articles/method-cribs.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-codebooks.html

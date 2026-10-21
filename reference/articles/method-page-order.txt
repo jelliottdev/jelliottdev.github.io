@@ -1,0 +1,48 @@
+Page and section ordering
+
+Reorder whole pages or sections while accounting for the arrangements searched.
+
+Page or section ordering changes the sequence in which material is processed. It can affect continuous key alignment, cross-page words, grid placement and statistical arrangements. Reordering whole sections is a different search from permuting every rune independently.
+
+How quickly the choices grow
+
+	Declared objects and choices	Number of arrangements
+	Four distinct sections, arbitrary order	4! = 24
+	Four distinct sections, each also reversible	4! × 2⁴ = 384
+	Ten distinct pages, arbitrary order	10! = 3,628,800
+
+These count parameter settings under the stated assumptions. Identical objects or reversal symmetries can reduce the number of distinct resulting streams. Conversely, trying several layouts, scorers and boundary rules adds further choices.
+
+Major variants
+Variants include reordering pages within a section, reordering intact sections, reversal, cyclic rotation and adjacency constraints motivated by artwork or text. Rotation may be equivalent under one score but distinct under a cipher with a fixed starting state.
+
+What a test must specify
+Define the movable objects and their original order, allowed permutations, reversals, reset rules and optimization criterion. Keep page identities separate from their positions in a candidate. Say whether ordering constraints came from independent evidence or were chosen after a desirable result appeared.
+
+Account for the ordering search
+A low score after choosing the best of many arrangements should be compared with controls that receive the same search. Report tied arrangements and stable features across them. If artwork suggests an order, test the proposed relation directly rather than interpreting any favorable language statistic as confirmation.
+
+Documented experiments
+All 24 orders of four intact LP1 sections: a column-balance statistic, not a plaintext recovery test.
+Six layout widths: accounts for choosing a favorable width.
+Section-preserving shuffles: preserves section-specific word lengths in the control.
+
+All method families · Transposition · Page joins · Selection effects
+
+Sources, related references, and files
+- All 24 orders of four intact LP1 sections
+  https://jelliottdev.github.io/#/experiments/lp1-section-order
+- Six layout widths
+  https://jelliottdev.github.io/#/experiments/lp1-width-selection
+- Section-preserving shuffles
+  https://jelliottdev.github.io/#/experiments/lp1-section-balance
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Transposition
+  https://jelliottdev.github.io/reference/articles/transposition.html
+- Page joins
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#page-joins
+- Selection effects
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-page-order.html

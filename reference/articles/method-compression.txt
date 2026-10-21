@@ -1,0 +1,42 @@
+Compression and packed symbol streams
+
+Specify both the conversion into bytes and the format used to decode those bytes.
+
+A proposal may treat the manuscript as encoded compressed data rather than direct language ciphertext. That requires two separate specifications: how visible symbols become bytes, and how those bytes are decompressed. Encryption, compression and a change of numeral base are different operations even when all produce unfamiliar-looking output.
+
+Make the stages explicit
+
+Symbols: choose a verified transcription and alphabet.
+Packing: define bit or integer widths, symbol order, byte order and padding.
+Format: name the decompressor, framing rules and any dictionary.
+Validation: check format constraints and retain the complete output.
+
+For example, indices 0–28 can be represented with five bits each, leaving three unused bit patterns. Eight runes then supply 40 bits, or five bytes, under that particular packing. This does not mean the manuscript uses five-bit packing. Changing bit order or the starting bit offset gives another candidate stream.
+
+Major variants
+Variants include fixed-width packing, base-29 integers, dictionary coding, run-length representations and particular compression formats. A raw stream and a file container may need different decoder settings. Arbitrary custom dictionaries can introduce as much freedom as a codebook.
+
+What a test must specify
+Fix the symbol-to-number mapping, packing, alignment, endianness, padding, format, decoder version and dictionary. Bound the number of combinations. Set an output-size limit when testing decompression so a malformed candidate cannot exhaust memory.
+
+A decoder accepting bytes is only the first check
+Record errors and complete outputs. Check declared lengths, checksums where the format provides them, end-of-stream handling and whether trailing bytes are ignored. Use known compressed samples and controls passed through the same packing search. High entropy alone does not identify compression.
+
+Documented experiments
+No compressed-manuscript decoding experiment is linked yet. Rune entropy and byte encoding provide background, not evidence that a compression format was tested.
+
+All method families · File integrity · Codebooks
+
+Sources, related references, and files
+- Rune entropy
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html
+- byte encoding
+  https://jelliottdev.github.io/reference/articles/hexadecimal.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- File integrity
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- Codebooks
+  https://jelliottdev.github.io/reference/articles/method-codebooks.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-compression.html
