@@ -42,6 +42,69 @@
 python scripts/transcription_coverage.py</code></pre>
 <p>The <a href="scripts/transcription_coverage.py" download>standard-library script</a> compares exact text and rune streams separately, records each page-record hash and verifies the saved inventory. Before interpreting a difference, open the linked original page and read the correction note. To compare two actual files, use the comparison commands earlier in this guide.</p>
 
+<h2 id="page-joins">Do 32 of 55 page breaks split a word?</h2>
+<p>The archived transcription has <strong>32 rune-to-rune edges among 55 adjacent page boundaries</strong> from LP2-00 through LP2-55. This reproduces the numerical count, but does not establish that all 32 fall inside words. A page ending in a rune and the next beginning with one could also cross a section or an unrecorded separator. The denominator excludes the transitions to LP2-56 and LP2-57.</p>
+<p>The rule is deliberately simple: take the archived raw layer, remove slash row markers, strip outer whitespace, and compare the two edge characters with the 29-rune alphabet. Retain other punctuation. The <a href="exports/page-boundaries.json" download>complete boundary inventory</a> includes original and processed edge slices, source hashes and all 55 classifications. Every boundary is marked <em>visual review not performed; word join undetermined</em>.</p>
+<p>Before using a boundary in a word-edge test, compare both original pages in the reader, check nearby punctuation and section changes, and state whether the test joins or separates them. Where the image remains ambiguous, run both interpretations and report whether the conclusion changes. The published correction table above is a starting point, not an exhaustive list of contested runes and separators.</p>
+<details><summary>Inspect all 55 boundaries</summary><div class="table-wrap"><table><thead><tr><th>Pages in reader</th><th>Transcription edges</th><th>Classification</th></tr></thead><tbody>
+<tr><td><a href="#/reader/lp2-00">LP2-00</a> / <a href="#/reader/lp2-01">LP2-01</a></td><td><code>ᚹ | ᚪ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-01">LP2-01</a> / <a href="#/reader/lp2-02">LP2-02</a></td><td><code>ᛁ | ᛟ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-02">LP2-02</a> / <a href="#/reader/lp2-03">LP2-03</a></td><td><code>$ | ᛚ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-03">LP2-03</a> / <a href="#/reader/lp2-04">LP2-04</a></td><td><code>ᚻ | ᛚ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-04">LP2-04</a> / <a href="#/reader/lp2-05">LP2-05</a></td><td><code>ᚢ | ᚱ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-05">LP2-05</a> / <a href="#/reader/lp2-06">LP2-06</a></td><td><code>ᛏ | ᛉ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-06">LP2-06</a> / <a href="#/reader/lp2-07">LP2-07</a></td><td><code>ᛋ | ᚻ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-07">LP2-07</a> / <a href="#/reader/lp2-08">LP2-08</a></td><td><code>$ | ᛉ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-08">LP2-08</a> / <a href="#/reader/lp2-09">LP2-09</a></td><td><code>ᛇ | ᚣ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-09">LP2-09</a> / <a href="#/reader/lp2-10">LP2-10</a></td><td><code>ᚦ | ᚳ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-10">LP2-10</a> / <a href="#/reader/lp2-11">LP2-11</a></td><td><code>- | ᛡ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-11">LP2-11</a> / <a href="#/reader/lp2-12">LP2-12</a></td><td><code>- | ᚳ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-12">LP2-12</a> / <a href="#/reader/lp2-13">LP2-13</a></td><td><code>- | ᚷ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-13">LP2-13</a> / <a href="#/reader/lp2-14">LP2-14</a></td><td><code>ᛟ | -</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-14">LP2-14</a> / <a href="#/reader/lp2-15">LP2-15</a></td><td><code>$ | ᚠ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-15">LP2-15</a> / <a href="#/reader/lp2-16">LP2-16</a></td><td><code>- | ᛖ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-16">LP2-16</a> / <a href="#/reader/lp2-17">LP2-17</a></td><td><code>ᚷ | ᛚ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-17">LP2-17</a> / <a href="#/reader/lp2-18">LP2-18</a></td><td><code>ᚠ | -</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-18">LP2-18</a> / <a href="#/reader/lp2-19">LP2-19</a></td><td><code>ᚷ | ᚾ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-19">LP2-19</a> / <a href="#/reader/lp2-20">LP2-20</a></td><td><code>ᛇ | ᛈ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-20">LP2-20</a> / <a href="#/reader/lp2-21">LP2-21</a></td><td><code>- | ᚳ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-21">LP2-21</a> / <a href="#/reader/lp2-22">LP2-22</a></td><td><code>ᚩ | ᛝ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-22">LP2-22</a> / <a href="#/reader/lp2-23">LP2-23</a></td><td><code>$ | ᚢ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-23">LP2-23</a> / <a href="#/reader/lp2-24">LP2-24</a></td><td><code>ᚦ | ᛞ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-24">LP2-24</a> / <a href="#/reader/lp2-25">LP2-25</a></td><td><code>ᛁ | ᚻ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-25">LP2-25</a> / <a href="#/reader/lp2-26">LP2-26</a></td><td><code>ᚢ | ᛡ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-26">LP2-26</a> / <a href="#/reader/lp2-27">LP2-27</a></td><td><code>$ | ᛗ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-27">LP2-27</a> / <a href="#/reader/lp2-28">LP2-28</a></td><td><code>ᚠ | ᛈ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-28">LP2-28</a> / <a href="#/reader/lp2-29">LP2-29</a></td><td><code>- | ᚦ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-29">LP2-29</a> / <a href="#/reader/lp2-30">LP2-30</a></td><td><code>ᛗ | ᛞ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-30">LP2-30</a> / <a href="#/reader/lp2-31">LP2-31</a></td><td><code>- | ᚦ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-31">LP2-31</a> / <a href="#/reader/lp2-32">LP2-32</a></td><td><code>ᚩ | ᛚ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-32">LP2-32</a> / <a href="#/reader/lp2-33">LP2-33</a></td><td><code>&amp; | ᛞ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-33">LP2-33</a> / <a href="#/reader/lp2-34">LP2-34</a></td><td><code>ᛒ | ᛗ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-34">LP2-34</a> / <a href="#/reader/lp2-35">LP2-35</a></td><td><code>- | ᛝ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-35">LP2-35</a> / <a href="#/reader/lp2-36">LP2-36</a></td><td><code>ᛇ | ᚣ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-36">LP2-36</a> / <a href="#/reader/lp2-37">LP2-37</a></td><td><code>. | 2</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-37">LP2-37</a> / <a href="#/reader/lp2-38">LP2-38</a></td><td><code>- | ᚢ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-38">LP2-38</a> / <a href="#/reader/lp2-39">LP2-39</a></td><td><code>- | ᛋ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-39">LP2-39</a> / <a href="#/reader/lp2-40">LP2-40</a></td><td><code>$ | ᚠ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-40">LP2-40</a> / <a href="#/reader/lp2-41">LP2-41</a></td><td><code>ᛡ | ᛠ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-41">LP2-41</a> / <a href="#/reader/lp2-42">LP2-42</a></td><td><code>ᛄ | ᛞ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-42">LP2-42</a> / <a href="#/reader/lp2-43">LP2-43</a></td><td><code>ᚫ | ᚻ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-43">LP2-43</a> / <a href="#/reader/lp2-44">LP2-44</a></td><td><code>ᛏ | ᛠ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-44">LP2-44</a> / <a href="#/reader/lp2-45">LP2-45</a></td><td><code>ᛋ | ᚳ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-45">LP2-45</a> / <a href="#/reader/lp2-46">LP2-46</a></td><td><code>ᛝ | ᚻ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-46">LP2-46</a> / <a href="#/reader/lp2-47">LP2-47</a></td><td><code>ᚫ | ᛠ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-47">LP2-47</a> / <a href="#/reader/lp2-48">LP2-48</a></td><td><code>ᚫ | ᚻ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-48">LP2-48</a> / <a href="#/reader/lp2-49">LP2-49</a></td><td><code>ᚠ | ᛡ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-49">LP2-49</a> / <a href="#/reader/lp2-50">LP2-50</a></td><td><code>M | 2</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-50">LP2-50</a> / <a href="#/reader/lp2-51">LP2-51</a></td><td><code>L | 2</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-51">LP2-51</a> / <a href="#/reader/lp2-52">LP2-52</a></td><td><code>ᚠ | ᛈ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-52">LP2-52</a> / <a href="#/reader/lp2-53">LP2-53</a></td><td><code>ᚻ | ᛇ</code></td><td>Rune to rune</td></tr>
+<tr><td><a href="#/reader/lp2-53">LP2-53</a> / <a href="#/reader/lp2-54">LP2-54</a></td><td><code>&amp; | ᚪ</code></td><td>Other edge</td></tr>
+<tr><td><a href="#/reader/lp2-54">LP2-54</a> / <a href="#/reader/lp2-55">LP2-55</a></td><td><code>ᚣ | ᛝ</code></td><td>Rune to rune</td></tr>
+</tbody></table></div></details>
+<p>To reproduce the inventory, extract the <a href="downloads/reference-data.zip" download>reference-data bundle</a> and run <code>python scripts/page_boundary_inventory.py --check</code>. Run without <code>--check</code> to print the full JSON. <a href="scripts/page_boundary_inventory.py" download>Download the script</a>. The check compares current page records with the saved report; it does not perform image review.</p>
+
 <h3 id="image-row-coverage">Can an image detector find a missing line?</h3>
 <p>A comparison that starts with a supplied list of text rows cannot independently check whether that list contains every row. An image-only detector can propose additional regions, but those regions still need interpretation. In our <a href="#/experiments/image-row-coverage">eight-page row-coverage experiment</a>, a fixed detector matched 43 of 65 manually annotated rune rows. Its other proposals included non-runic text, artwork and several rune rows merged into a single band.</p>
 <p>Equal counts can also mislead: LP2-00 had 12 proposals and 12 reference rune rows, yet only nine matched individually. The experiment provides original-image overlays and a reproduction bundle. It tests one segmentation rule; it does not show that a line is missing from the archived transcription.</p>
