@@ -19,6 +19,7 @@ This is a descriptive audit, with no significance threshold or language-ranking 
 python scripts/test_corpus_symbol_inventory.py
 python scripts/corpus_symbol_inventory.py SOURCE_REPOSITORY --output NEW_OUTPUT_DIRECTORY
 python scripts/check_corpus_symbol_inventory.py SOURCE_REPOSITORY NEW_OUTPUT_DIRECTORY/report.json --receipt NEW_RECEIPT.json
+python scripts/export_corpus_symbols.py NEW_OUTPUT_DIRECTORY/report.json NEW_RECEIPT.json --output NEW_TABLE_DIRECTORY
 ```
 
 The runner disables Git lazy fetching and never executes source-repository code. A missing source object stops the run. Existing checkpoints may resume only under an identical specification and script hash; a completed report cannot be overwritten.
@@ -28,3 +29,7 @@ Boundary controls cover leading/repeated spaces, newline retention, exactly 2,90
 The independent checker imports no producer code. It uses literal-space splitting and scalar dictionaries, reads pinned blobs through a single offline Git batch process, checks duplicate rows, and reconstructs all four summary populations. It also reconciles each source hash, byte count and eligibility flag with the completed historical census, and every eligible prefix's exact word-length histogram and total counted units. A receipt is written only after every source row and aggregate passes. It has not yet run on the complete new report.
 
 Publication remains pending: verify all measurements against an independent source scanner, reconcile hashes and eligibility with the existing census, then update the word-length guide and its downloads. No corpus-wide symbol result has yet been accepted from this run.
+
+## Reader-facing tables
+
+The export stage requires a complete report whose hash matches the independent receipt, with the full path and distinct-blob counts. It preserves separate CSVs for all per-file measurements, outside-alphabet characters, and the four populations. The character table distinguishes entry prevalence from occurrence counts and includes Unicode code points and names. The population table keeps zero cases visible; it prevents shorter texts from silently becoming part of the eligible-prefix denominator. Unicode naming database version is recorded in the accompanying text file. Export rejection and denominator-formatting controls are in `scripts/test_export_corpus_symbols.py`.
