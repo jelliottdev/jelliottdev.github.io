@@ -180,6 +180,9 @@ files[-1].update(title='Cuneiform marks: exact pixel comparisons',guide='cuneifo
 for path in ['exports/corpus-pipeline-audit.json','exports/runeberg-inventory.json','exports/sources/runeberg-tree.bin','exports/runeberg-prefix-audit.json','exports/unsolved-word-lengths.json','exports/unsolved-word-tokens.json','exports/sources/unsolved-word-length-summary.csv']:
  register(path,'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['word lengths','2902 words','2896 words','token boundaries'])
+for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
+ register(artifact.relative_to(root).as_posix(),'Word length audit')
+ files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])
 register('exports/doublet-distances.json','Doublet audit')
 files[-1].update(guide='doublets',aliases=['successive doublets','circular distance','8.81'])
 register('exports/unsolved-doublets.json','Doublet audit')
@@ -305,6 +308,9 @@ script_details = {
  'reproduce_cover_rsa.py': ('Reproduce the illustrated-cover RSA message', 'cover-rsa', ['1033', 'compasses', 'OAEP']),
  'reproduce_emerson.py': ('Reproduce the Emerson book cipher', 'emerson-self-reliance', ['Self Reliance', 'Dartmouth', 'book cipher']),
 }
+for script in ['corpus_symbol_inventory.py','check_corpus_symbol_inventory.py','export_corpus_symbols.py','run_corpus_symbol_audit.py','test_corpus_symbol_inventory.py','test_export_corpus_symbols.py']:
+ register('scripts/'+script,'Reproduction script')
+ files[-1].update(guide='word-lengths',title=script.replace('_',' '),aliases=['corpus alphabet','U+16C2'])
 for script in ['theme_vocabulary.py','rune_crib.py','test_rune_crib.py','audit_corpus_pipeline.py','audit_runeberg_inventory.py','audit_runeberg_prefixes.py','reproduce_britannica.py','word_reset_bound.py','position_divisor_bound.py','polynomial_stream_bound.py','compare_five_dots.py','audit_grid_radix.py','image_resolution_inventory.py','parable_mp3_link.py','side_dot_reuse.py','fibonacci_prime_panel.py','repeated_marker_audit.py','transcription_coverage.py','branch_margin_alignment.py','branch_margin_reuse.py','wing_tree_windows.py','later_message_sums.py','compass_mapping_audit.py','reproduce_second_chance.py','grid_prime_paths.py','fft_bin_demo.py','doublet_distances.py','compare_transcriptions.py','test_compare_transcriptions.py','audit_emirp_chain.py','audit_grid_binary.py','audit_jpeg_bytes.py','plot_gap_file_sizes.py','audit_gap_file_sizes.py','audit_lp2_40_crib.py','rune_doublets.py','test_rune_doublets.py','rune_word_lengths.py','test_rune_word_lengths.py','measure_cuneiform_windows.py','plot_rune_lags.py','rune_lag_matches.py','test_rune_lag_matches.py','reproduce_null_example.py','enumerate_shifts.py','test_enumerate_shifts.py','plot_atbash_pairs.py','rune_entropy.py','test_rune_entropy.py','verify_bundle.py','test_verify_bundle.py','rune_ngrams.py','test_rune_ngrams.py','plot_rune_frequencies.py','reading_concordance.py','test_reading_concordance.py','reproduce_emerson.py','reproduce_cover_rsa.py','reproduce_reading.py','reproduce_cover_chain.py','extract_payload.py','check_number_examples.py','inspect_visual_records.py','test_visual_report.py','measure_region.py','test_measure_region.py','reproduce_prime_sums.py','rune_ioc.py','test_rune_ioc.py']:
  register('scripts/'+script,'Reproduction script')
  detail = script_details.get(script)

@@ -18980,7 +18980,52 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 
 This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The complete pinned-corpus comparison now reproduces that separate descriptive calculation with independent source and rank checks.
 
-A bounded check of the comparison corpus
+
+Which symbols occur across the complete reference corpus?
+
+The complete symbol audit uses the same pinned source revision and first-2,902-token rule as the historical prefix comparison. It reads every source path, retains shorter files separately, and compares each selected character with our stored 29-rune alphabet. It does not remove headings, normalize characters or infer the missing conversion rules.
+
+ᛂ (U+16C2, Unicode name RUNIC LETTER E) is the only character outside the stored alphabet in these selected prefixes. It occurs in 25,554 of the 25,565 eligible file-path prefixes. Eleven eligible prefixes contain only characters from the stored alphabet. The independent audit checks every source path and reconciles the byte hashes, eligibility flags and eligible-prefix length histograms with the earlier census.
+
+	Population	Entries	Entries containing ᛂ	Occurrences of ᛂ
+
+	Eligible prefixes, every path	25,565	25,554	538,869
+
+	Eligible prefixes, distinct bytes	25,563	25,552	538,842
+
+	Short files, every path	341	280	4,035
+
+	Short files, distinct bytes	281	280	4,035
+
+
+[Image: Outside-alphabet symbol coverage across four populations, with exact counts: 25554 of 25565 eligible paths, 25552 of 25563 distinct eligible blobs, 280 of 341 short paths, and 280 of 281 distinct short blobs]
+All bars use the same proportion scale. The short-file denominator includes empty files; their absence of characters is not a conversion result.
+
+What the two counts mean
+
+Entries containing a symbol counts each selected prefix once, even if the symbol occurs many times. Occurrences counts each appearance. Path weighting counts every filename; distinct-blob weighting counts byte-identical files once. Neither makes different editions of the same work statistically independent.
+
+Eligible prefixes contain exactly 2,902 selected tokens. Short files contribute only their available tokens to a separate population. Empty files belong to that short-file population and contain no characters; their absence of an outside-alphabet symbol is not evidence about a conversion convention.
+
+What this changes about the comparison
+
+A one-for-one relabeling of an extra symbol leaves every token length unchanged. Deleting it changes lengths and can create empty token slots. Dropping those slots changes the denominator; refilling the prefix changes which text is selected. These are separate choices, not interchangeable ways to clean the data. The twelve-file sensitivity example shows the distinction with explicit counts.
+
+This audit identifies a reproducible difference between symbol inventories. It does not establish an intended converter, recover edition provenance, identify the manuscript language or supply a decryption rule. It inspects selected prefixes, not every character in every full text.
+
+Reproduce and inspect
+
+Extract the reference-data ZIP with folders intact. Use Python 3, Git, the Liberpedia reference files and a local source repository containing the pinned Git objects. The pipeline runs offline and executes no code from the source repository. Use a new output directory:
+
+python scripts/run_corpus_symbol_audit.py SOURCE_REPOSITORY --output symbol-audit
+
+The measurement stage saves source identities and per-blob checkpoints. The independent checker uses a different tokenization implementation, rebuilds every symbol count, checks duplicate rows, and reconciles byte hashes, eligibility and eligible-prefix length histograms with the earlier census. Only after those checks pass does the export stage create the tables and figure. Retain the report and receipt together.
+
+Every file and its symbol counts (CSV) · Symbol totals (CSV) · Population counts (CSV) · Complete report (JSON) · Independent verification receipt. The pipeline script and its dependencies are included in the reference-data ZIP. The external corpus Git objects must be obtained separately; see the pinned-corpus reproduction instructions.
+
+
+
+The earlier twelve-file check
 
 The pinned Project Runeberg repository contains 25,906 files under files. We checked the first twelve filenames in Unicode lexicographic order, taking each file’s first 2,902 nonempty space-separated tokens. This is a deterministic convenience sample, not a random sample or a check of all books. Every selected file has enough tokens.
 
@@ -19203,8 +19248,26 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - LP2-38
   https://jelliottdev.github.io/reference/lp2-38.html
-- complete pinned-corpus comparison; full prefix census and descriptive comparison; complete prefix census; complete pinned prefix comparison
+- complete pinned-corpus comparison; historical prefix comparison; pinned-corpus reproduction instructions; full prefix census and descriptive comparison; complete prefix census; complete pinned prefix comparison
   https://jelliottdev.github.io/#/experiments/corpus-prefix-census
+- Outside-alphabet symbol coverage across four populations, with exact counts: 25554 of 25565 eligible paths, 25552 of 25563 distinct eligible blobs, 280 of 341 short paths, and 280 of 281 distinct short blobs
+  https://jelliottdev.github.io/exports/corpus-symbols/coverage.svg
+- twelve-file sensitivity example
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus-sensitivity
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Every file and its symbol counts (CSV)
+  https://jelliottdev.github.io/exports/corpus-symbols/files.csv
+- Symbol totals (CSV)
+  https://jelliottdev.github.io/exports/corpus-symbols/symbols.csv
+- Population counts (CSV)
+  https://jelliottdev.github.io/exports/corpus-symbols/populations.csv
+- Complete report (JSON)
+  https://jelliottdev.github.io/exports/corpus-symbols/report.json
+- Independent verification receipt
+  https://jelliottdev.github.io/exports/corpus-symbols/audit.json
+- pipeline script
+  https://jelliottdev.github.io/scripts/run_corpus_symbol_audit.py
 - the pinned corpus repository; Project Runeberg, revision a39e87e
   https://github.com/mortlach/project-runeberg/tree/a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87
 - Download the audit script
@@ -19239,8 +19302,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp1-section-balance
 - section-order variant
   https://jelliottdev.github.io/#/experiments/lp1-section-order
-- reference-data ZIP
-  https://jelliottdev.github.io/downloads/reference-data.zip
 - measurement script
   https://jelliottdev.github.io/scripts/rune_word_lengths.py
 - pinned historical CSV
