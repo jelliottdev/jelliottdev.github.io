@@ -12583,6 +12583,8 @@ Periodic IoC groups rune positions by a proposed repeating period and measures c
 
 The calculation is a measurement, not a decryption or a demonstrated key-length test for a manuscript page. To evaluate a proposed period, specify how the key advances, how columns are combined, and how many candidates were searched.
 
+The phasewise substitution proof extends the constant-shift observation to any fixed reversible map per phase. Its checked example shows column IoC staying fixed while whole-stream IoC changes. Once phases are fixed, searching those keys cannot optimize the column score.
+
 A worked example: splitting a trial period into columns
 
 In a simple repeating-key cipher, positions separated by one key period use the same key symbol. Testing a period of two therefore groups positions 0, 2, 4, … into one column and positions 1, 3, 5, … into another. If the proposed period and key-advance rule are right, each column receives a constant shift, which preserves its IoC. This explains why column measurements can be useful; it does not make the highest-scoring trial period the correct one.
@@ -12751,6 +12753,8 @@ For actual archived inputs and the matching-pair definition, use the whole-page 
 Sources, related references, and files
 - whole-page IoC; whole-page baseline
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- phasewise substitution proof
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html#phase-maps
 - repeated rune sequences
   https://jelliottdev.github.io/reference/articles/rune-ngrams.html
 - small example above
@@ -13451,6 +13455,37 @@ What each operation preserves
 
 A necessary condition can constrain a model without rejecting it. For the specific nonzero-key rule Cᵢ − Cᵢ₋₁ = Kᵢ(Pᵢ − 28) mod 29, a doublet is equivalent to plaintext EA. The EA running-sum explanation proves the condition, checks all finite transitions and shows where it fails if assumptions change. The observed 86 doublets require 86 EA events at the measured within-page transitions; no plaintext distribution is inferred.
 
+Repeating substitutions preserve equality within each phase
+
+A phase is a position in a repeating key schedule. With period two and an ordinal starting at zero, positions 0, 2, 4 share one phase; positions 1, 3, 5 share the other. If each phase uses its own fixed one-to-one symbol map, equal symbols remain equal within that phase and unequal symbols remain unequal. Different phases may rename the same symbol differently.
+
+For an affine map, write yᵢ = aᵣxᵢ + bᵣ mod m, with r = i mod t and gcd(aᵣ,m) = 1. For two positions in the same phase, subtraction cancels bᵣ: yᵢ − yⱼ = aᵣ(xᵢ − xⱼ) mod m. Multiplying by the inverse of aᵣ proves that outputs are equal exactly when inputs are equal. This argument covers every integer modulus for which that inverse exists.
+
+Same column counts, different whole-stream IoC
+
+Start with indices 0 0 1 0 1. Leave phase 0 unchanged and add 1 modulo 29 in phase 1. The output is 0 1 1 1 1. Follow the columns separately:
+
+	Positions	Before → after	Matching unordered pairs
+
+	Phase 0: 0, 2, 4	0 1 1 → 0 1 1	1 → 1
+
+	Phase 1: 1, 3	0 0 → 1 1	1 → 1
+
+	Whole stream	0 0 1 0 1 → 0 1 1 1 1	4 → 6
+
+
+Each column keeps its matching-pair count and denominator, so its IoC stays fixed. An ordinary mean or pooled pair rate computed from these same columns also stays fixed. Whole-stream IoC rises from 2/5 to 3/5 because it includes pairs drawn from different phases. See column IoC and its denominators.
+
+Which searches can this save?
+
+For a fixed period, phase clock and input, searching reversible affine keys cannot improve within-phase IoC: every key gives the same score. Calculate it once. Changing the period changes the groups being compared. Skipped key slots, resets or a changing map inside a phase require their own analysis.
+
+Modulo 29, every nonzero multiplier is invertible. Modulo 28, nonzero is not enough: 2 × 0 = 2 × 14 = 0 mod 28 merges distinct inputs. Modulus 28 is an arithmetic counterexample here, not a proposed replacement for the 29-rune alphabet.
+
+This invariant does not exclude periodic substitution of unknown plaintext. It specifies which plaintext and ciphertext equality patterns must agree; rejecting a model requires an additional plaintext constraint that contradicts them. No manuscript period sweep or formal proof-assistant build is claimed.
+
+The finite-control report checks all 336 invertible affine maps modulo 28 and all 812 modulo 29, every ordered input pair, inverse recovery, the worked example and the noninvertible counterexample. The general proof is the algebra above. Extract the reference-data ZIP and run python scripts/check_phase_invariant.py --output my-phase-check.json. Only Python 3’s standard library is needed; no manuscript search or random simulation runs.
+
 A five-rune example
 
 Start with F F U F U, or indices 0 0 1 0 1. It has three F runes and two U runes. Its matching-pair numerator is 3 × 2 + 2 × 1 = 8; dividing by 5 × 4 = 20 gives IoC 2/5.
@@ -13631,6 +13666,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - EA running-sum explanation
   https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
+- column IoC and its denominators
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html#columns
+- finite-control report
+  https://jelliottdev.github.io/exports/phase-invariant.json
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
 - Original indices 0 0 1 0 1, their reversal, and a uniform shift all retain counts three and two and IoC two fifths. Subtracting a repeating zero-one key gives counts two, two and one, with IoC one fifth.; Download diagram (SVG)
   https://jelliottdev.github.io/exports/figures/cipher-invariants.svg
 - IoC formula; IoC guide
@@ -13639,8 +13680,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-42.html
 - LP2-42 token E IA E IA TH has equality pattern 0 1 0 1 2. F U F U TH is compatible. F U F TH O is inconsistent because IA would map to two symbols. F F F F U merges E and IA and fails one-to-one mapping.; Download diagram (SVG)
   https://jelliottdev.github.io/exports/figures/crib-pattern.svg
-- reference-data ZIP
-  https://jelliottdev.github.io/downloads/reference-data.zip
 - word-length ledger
   https://jelliottdev.github.io/exports/unsolved-word-tokens.json
 - candidate readings and acceptance tests

@@ -1,0 +1,130 @@
+{
+  "scope": "Finite controls for phasewise affine equality; no manuscript exclusion.\n\nThe general proof uses invertibility of the multiplier. This exhaustive check\ncovers every multiplier, intercept and input pair for moduli 28 and 29.\n",
+  "finite_checks": [
+    {
+      "modulus": 28,
+      "unit_multipliers": [
+        1,
+        3,
+        5,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+        23,
+        25,
+        27
+      ],
+      "affine_maps": 336,
+      "ordered_pair_checks": 263424
+    },
+    {
+      "modulus": 29,
+      "unit_multipliers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "affine_maps": 812,
+      "ordered_pair_checks": 682892
+    }
+  ],
+  "example": {
+    "modulus": 29,
+    "period": 2,
+    "input": [
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "output": [
+      0,
+      1,
+      1,
+      1,
+      1
+    ],
+    "phase_maps": [
+      "x",
+      "x+1 mod 29"
+    ],
+    "input_phase_streams": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "output_phase_streams": [
+      [
+        0,
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "unordered_matching_pairs_by_phase": [
+      1,
+      1
+    ],
+    "whole_stream_matching_pairs_before_after": [
+      4,
+      6
+    ],
+    "whole_stream_ioc_before_after": [
+      "2/5",
+      "3/5"
+    ]
+  },
+  "nonunit_counterexample": {
+    "modulus": 28,
+    "multiplier": 2,
+    "intercept": 0,
+    "distinct_inputs": [
+      0,
+      14
+    ],
+    "equal_outputs": [
+      0,
+      0
+    ]
+  },
+  "limits": "Invented inputs; no manuscript or period sweep. Fixed phases, fixed injective maps, no skipped slots. Finite checks are not a proof-assistant replay. General-modulus proof is algebraic.",
+  "script_sha256": "c25c6b5f9e906e14e5cbe514852e50f6169572bd5b14e346244fde77d4379693"
+}
