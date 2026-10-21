@@ -15,6 +15,14 @@ This is a descriptive audit, with no significance threshold or language-ranking 
 
 ## Execution and review
 
+With Python 3, Git and all pinned source objects already present, run the full offline pipeline from the Liberpedia repository root:
+
+```sh
+python scripts/run_corpus_symbol_audit.py SOURCE_REPOSITORY --output NEW_OUTPUT_DIRECTORY
+```
+
+This wrapper stops at the first failed stage. It refuses an existing output directory so a new run cannot overwrite evidence. For a deliberately interrupted measurement, the individual measurement command below can resume under its unchanged specification; verification and export must still follow. The earlier census report used for reconciliation remains a required local input under `experiments/records/corpus-prefix-census/report.json`.
+
 ```sh
 python scripts/test_corpus_symbol_inventory.py
 python scripts/corpus_symbol_inventory.py SOURCE_REPOSITORY --output NEW_OUTPUT_DIRECTORY
