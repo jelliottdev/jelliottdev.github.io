@@ -1,7 +1,7 @@
 """Exhaustive small-alphabet and adversarial encoder/transition controls."""
 import itertools
 import unittest
-from decoder_skip_controls import encode, transitions, true_path_failure, key_fixture
+from decoder_skip_controls import encode, transitions, true_path_failure, key_fixture,beam_decode,append_score
 
 
 class Reject:
@@ -75,6 +75,41 @@ class EncoderControls(unittest.TestCase):
         base=key_fixture(0,slots=20)
         self.assertEqual(key_fixture(0,4,80),[v for v in base for _ in range(4)])
         self.assertNotEqual(base,key_fixture(1000,slots=20))
+
+    def test_beam_against_exhaustive_paths(self):
+        labels=['A','BB','C'];model={'ABBA':-1,'BBAB':-2,'CABB':-3};floor=-9
+        key=[0,0,1,2,2,0,1,0,2,1,2,0,1]
+        plain=[0,0,1,2,0]
+        cipher,trace=encode(plain,key,'skip',modulus=3,draws=Reject())
+        candidates=[]
+        for advances in itertools.product(range(3),repeat=len(cipher)-1):
+            slots=[0]
+            for step in advances:slots.append(slots[-1]+1+step)
+            if slots[-1]>=len(key):continue
+            p=[(c-key[s])%3 for c,s in zip(cipher,slots)]
+            if any((p[i]+key[j])%3!=cipher[i-1] for i in range(1,len(cipher)) for j in range(slots[i-1]+1,slots[i])):continue
+            text=''.join(labels[v] for v in p)
+            score=sum(model.get(text[i:i+4],floor) for i in range(len(text)-3))
+            candidates.append((score,tuple(slots),tuple(p),text))
+        expected=min(candidates,key=lambda v:(-v[0],v[1],v[2]))
+        result=beam_decode(cipher,key,1000,2,labels,model,floor,plain,trace,3)
+        self.assertEqual((result['cumulative_score'],tuple(result['slots']),tuple(result['indices']),result['transliteration']),expected)
+
+    def test_structural_failure_and_pruning_are_separate(self):
+        plain=[0,0];key=[0,0,1];c,t=encode(plain,key,'skip',modulus=3,draws=Reject())
+        pruned=beam_decode(c,key,1,1,['A','B','C'],{},-9,plain,t,3)
+        self.assertIsNone(pruned['first_invalid_truth_step'])
+        self.assertEqual(pruned['first_pruned_truth_step'],1)
+        invalid=beam_decode(c,key,1,0,['A','B','C'],{},-9,plain,t,3)
+        self.assertEqual(invalid['first_invalid_truth_step'],1)
+        self.assertIsNone(invalid['first_pruned_truth_step'])
+
+    def test_incremental_scoring_with_multiletter_labels(self):
+        model={'ABCD':-1,'BCDE':-2,'CDEF':-3};floor=-7
+        for parts in [('A','BC','DEF'),('AB','CD','EF'),('ABCDEF',)]:
+            text='';score=0
+            for part in parts:score=append_score(score,text,part,model,floor);text+=part
+            self.assertEqual(score,-6)
 
 
 if __name__=='__main__':unittest.main()
