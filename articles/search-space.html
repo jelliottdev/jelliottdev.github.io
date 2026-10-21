@@ -49,6 +49,8 @@
 
 <p>The <a href="#/experiments/lp1-word-length-balance">464-word column-balance experiment</a> illustrates a different boundary: its low shuffle-tail estimate reproduces for the selected arrangement, but does not account for the exploration that selected it. A fixed simulation plan cannot retroactively remove earlier selection.</p>
 
+<p>The <a href="#/experiments/decoder-skip-controls">planted alignment controls</a> distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.</p>
+
 <h2 id="claim">Write the claim at the same scale as the evidence</h2>
 <div class="table-wrap"><table><thead><tr><th>Too broad</th><th>A checkable claim</th></tr></thead><tbody>
 <tr><td>“We ruled out shifts.”</td><td>“All 58 specified order-and-shift cases completed. None matched the declared prefix at the declared position.” Only use this after performing that comparison.</td></tr>

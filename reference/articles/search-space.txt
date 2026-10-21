@@ -94,6 +94,9 @@ The six-arrangement null-model example shows this numerically. For statistical c
 The 464-word column-balance experiment illustrates a different boundary: its low shuffle-tail estimate reproduces for the selected arrangement, but does not account for the exploration that selected it. A fixed simulation plan cannot retroactively remove earlier selection.
 
 
+The planted alignment controls distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.
+
+
 Write the claim at the same scale as the evidence
 
 	Too broad	A checkable claim
@@ -135,6 +138,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-31-periodic-ioc
 - 464-word column-balance experiment
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
+- planted alignment controls
+  https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reproduce a published experiment

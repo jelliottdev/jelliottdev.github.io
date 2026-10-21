@@ -106,6 +106,190 @@
   &quot;article&quot;: &quot;## The model being tested\n\nOn each of [LP2-33](#/reader/lp2-33) and [LP2-39](#/reader/lp2-39), label the three horizontal dots A, B and C from left to right. Draw three circles centered at those dots. Can the circles meet at one point on each page if **the same ordered radii** are used on both pages?\n\nThe two target points may differ. The radius at A must be the same on both pages, likewise B and C. Both pages remain at their original 2400 × 3600 pixel scale; no resizing or refitting is allowed. This is one precise compass construction, not a general test of compass-related ideas.\n\n**Result: no**, for the measured dot centers at each of the three declared grayscale thresholds. An exact rational distance bound rules out every possible ordered radius triple within this model. It does not require selecting radii from the number square or searching a finite list.\n\n## Measure the centers first\n\nThe script reads the original JPEGs, converts RGB to Pillow’s L grayscale, and finds four-connected dark components inside two declared crop boxes. Pixel coordinates are zero-based, with integer coordinates at pixel centers. Crop right and bottom edges are exclusive.\n\n| Page | Crop (left, top, right, bottom) |\n| --- | --- |\n| LP2-33 | (576, 1656, 1824, 1836) |\n| LP2-39 | (1200, 1638, 1800, 1746) |\n\nFor each threshold 100, 140 and 180, a pixel is dark if its grayscale value is strictly below the threshold. Retain components with area greater than 200 pixels, width/height strictly between 0.7 and 1.3, and filled area greater than 60% of the bounding rectangle. Exactly three components must survive; otherwise the script stops.\n\nEach center is the arithmetic mean of its component’s pixel coordinates. The report stores integer coordinate sums and areas, so the subsequent calculation uses exact fractions rather than rounded coordinates. This measures a particular thresholded shape; it is not an assertion that the author placed the dot at that exact rational point.\n\nThe source-region figure shows decoded original JPEG crops with red center marks. It does not threshold or increase contrast in the displayed image; thresholding is used only to calculate the marked centers. Each crop is fitted to the same display width, so the previews have different scales. The separate spacing diagram uses a common horizontal scale.\n\nAt threshold 140, the adjacent center separations on LP2-33 are approximately 417.47 and 478.23 pixels. On LP2-39 they are 196 and 224.5 pixels. The diagram uses one horizontal scale for both pages and separates the rows vertically for readability. It does not show the original vertical positions.\n\n## Why three distances impose a constraint\n\nLet Q be the perpendicular projection of B onto the line through A and C. Write `Q=(1−t)A+tC` and `e=B−Q`. The dots are almost collinear; e measures the middle dot’s small displacement from that line. Let `K=t(1−t)|C−A|²`.\n\nIf X is a target point with distances rA, rB and rC from the three dots, expanding the squared distances gives:\n\n```text\nrB² − (1−t)rA² − t rC² + K\n  = 2 e·(Q−X) + |e|²\n```\n\nThe right-hand side is an affine function of X. Its minimum and maximum over a rectangle occur at corners, so evaluating the four page corners gives an exact residual interval. No grid sampling of target points is necessary.\n\nNow compare the two pages. Their shared radii cancel except for `(t₂−t₁)(rA²−rC²)`. Each squared radius lies between zero and the squared page diagonal, because both its center and target lie on the page. Consequently:\n\n```text\n|residual₂ − residual₁|\n  ≥ |K₂ − K₁| − |t₂ − t₁| × (2399² + 3599²)\n```\n\nThe two corner intervals also give an upper bound on that absolute difference. If the lower bound exceeds the upper bound, no target pair with shared radii can exist.\n\n## The bounds\n\nThe table rounds displayed values to two decimal places. Decisions use exact fractions saved in the report; the unit is squared pixels.\n\n| Threshold | Required lower bound | Allowed upper bound | Compatible? |\n| --- | --- | --- | --- |\n| 100 | 153,322.33 | 119.47 | No |\n| 140 | 155,146.71 | 14.17 | No |\n| 180 | 153,854.17 | 11.88 | No |\n\nAll three declared threshold variants give the same exclusion. This is a sensitivity check, not a confidence interval or a complete treatment of measurement error. The argument treats each measured center as fixed; it does not quantify every plausible alternative center, crop or dot-selection rule.\n\n## Reproduce\n\nExtract the experiment bundle, then extract the [original-images ZIP](downloads/original-images.zip) into the same folder so that `images/lp2-33.jpg` and `images/lp2-39.jpg` are available. Original images are separate from the small experiment ZIP. Install Pillow 11.3.0 in your Python environment, then verify the required image hashes and run:\n\n```text\npython scripts/verify_bundle.py EXPERIMENT-compass-shared-radii-IMAGE-INPUTS.json\npython experiments/records/compass-shared-radii/run.py --check\npython experiments/records/compass-shared-radii/check.py\n```\n\nThe producer uses Pillow 11.3.0 and Python’s standard library. Its version is recorded so a different image-decoding environment does not silently claim an exact replay. The checker needs only the standard library. Neither command calls AI or accesses the network.\n\nThe producer reruns component measurement, the rational certificate and the annotated source-region SVG. The separate checker verifies source hashes and reconstructs the projection parameter from squared side lengths. It obtains residuals by directly expanding distances to the page corners, without importing the producer. It verifies that identical page geometry is not rejected by the bound. It does **not** independently segment the images or provide a manual review of the dots.\n\nBoth checks passed on 20 October 2026. The procedure and controls were recorded in `plan.txt`; the declared thresholds, crops and target rectangle were unchanged after the run. This freshly reconstructs a constrained claim in the supplied research archive; it is not a new discovery. Human review remains pending.\n\n## What remains outside this result\n\nRescaling one page, using different radii on each page, changing which dots receive which radii, placing a target outside the page, stepping a compass between points, or reading pairwise intersections changes the model. Those alternatives are not excluded here. The result supplies no rune selection or plaintext claim.\n\nFor the distinction between an illustration and a specified cipher, see [compass constructions](#/wiki/compass-cipher-tests). For coordinate conventions and original files, see [image regions](#/wiki/image-regions). For how to state this exclusion without overstating it, see [search space and bounds](#/wiki/search-space).\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/compass-shared-radii/article.md&quot;,
   &quot;script_sha256&quot;: &quot;d92b38320e2e705177213030d546b2a8c134356073026c2138b5898e98284274&quot;
+}</pre></article><article id="decoder-skip-controls"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;decoder-skip-controls&quot;,
+  &quot;title&quot;: &quot;Can a correct key fail under the wrong alignment rule?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?&quot;,
+  &quot;summary&quot;: &quot;Planted controls separate exact rune recovery, permitted alignments, beam pruning and English score acceptance across 216 plants and 2160 decoder results.&quot;,
+  &quot;tags&quot;: [
+    &quot;key skipping&quot;,
+    &quot;decoder controls&quot;,
+    &quot;beam search&quot;,
+    &quot;key alignment&quot;,
+    &quot;doublet suppression&quot;,
+    &quot;value rewriting&quot;,
+    &quot;planted controls&quot;,
+    &quot;known key&quot;,
+    &quot;skip limit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;exports/readings/first-koan.csv&quot;,
+      &quot;exports/readings/instruction.csv&quot;,
+      &quot;exports/readings/loss-of-divinity.csv&quot;,
+      &quot;exports/readings/lp2-56.csv&quot;,
+      &quot;exports/readings/lp2-57.csv&quot;,
+      &quot;exports/readings/second-koan.csv&quot;,
+      &quot;exports/readings/some-wisdom.csv&quot;,
+      &quot;exports/readings/warning.csv&quot;,
+      &quot;exports/readings/welcome.csv&quot;
+    ],
+    &quot;representation&quot;: &quot;First min(240, available) output rune indices from all nine known-reading traces; canonical GP labels only for scoring.&quot;,
+    &quot;procedure&quot;: &quot;Plant ordinary addition, probabilistic collision skipping, value rewriting and one unrelated advance plus skipping; decode with correct/wrong deterministic key fixtures using rigid subtraction and four bounded beams.&quot;,
+    &quot;parameters&quot;: &quot;Nine traces, three seeds, key-value repetitions 1 and 4, 10000 slots; beam widths 16/64 crossed with skip limits 1/3; cumulative quadgram selection, normalized acceptance -5.5; 216 plants and 2160 decoder results.&quot;,
+    &quot;exclusions&quot;: &quot;No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;Correct-key ordinary addition recovers exactly throughout. Skip limits exclude some true alignments; a wider beam cannot repair them. Rewriting often passes the language threshold without exact rune recovery. All wrong-key controls fail exact recovery and the threshold.&quot;,
+  &quot;limitations&quot;: &quot;Artificial encoders and dependent known-text controls, not a fitted manuscript model. Exact alignment and exact plaintext are distinct. Cumulative and normalized scores have different objectives. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Test newly declared alignment mechanisms as separate variants; calibrate best scores from complete bounded wrong-key searches.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;decoder-alignment-controls&quot;,
+    &quot;title&quot;: &quot;Decoder alignment controls&quot;,
+    &quot;question&quot;: &quot;Can declared decoders recover planted plaintext under matching and mismatched alignment rules?&quot;,
+    &quot;baseline&quot;: &quot;decoder-skip-controls&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Four encoders with fixed rigid and beam decoders&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent encoder, candidate and beam replay; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/decoder-skip-controls/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; offline. Independent replay command and source boundaries are in the full account.&quot;,
+    &quot;script&quot;: &quot;experiments/records/decoder-skip-controls/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;eebe6616369dc24047477cd02783ab9eaa45450afefd643ff0eadb29efe4107b&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/readings/first-koan.csv&quot;,
+        &quot;sha256&quot;: &quot;85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/instruction.csv&quot;,
+        &quot;sha256&quot;: &quot;dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/loss-of-divinity.csv&quot;,
+        &quot;sha256&quot;: &quot;695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-56.csv&quot;,
+        &quot;sha256&quot;: &quot;5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-57.csv&quot;,
+        &quot;sha256&quot;: &quot;197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/second-koan.csv&quot;,
+        &quot;sha256&quot;: &quot;8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/some-wisdom.csv&quot;,
+        &quot;sha256&quot;: &quot;c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/warning.csv&quot;,
+        &quot;sha256&quot;: &quot;ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/welcome.csv&quot;,
+        &quot;sha256&quot;: &quot;db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/decoder-skip-controls.md&quot;,
+        &quot;sha256&quot;: &quot;44f808b410b321989556d0126c747cbfbcf6e4434db008b0c40147a9ad731d0b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/decoder-skip-controls.json&quot;,
+        &quot;sha256&quot;: &quot;4aed3e98ebc54ac727420c07ec06153b82d3b4637fdb154097fc1a7ecaed82a1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/decoder_skip_controls.py&quot;,
+        &quot;sha256&quot;: &quot;1a54b2d3ab3eea12c7317421d836cf84a2c0dc661667e9b0b68a731cfa526fc0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/run_decoder_skip_controls.py&quot;,
+        &quot;sha256&quot;: &quot;ae0d12e8b796cc8974153cf41d61bb0bcddfe37039db01fa7e843b6b866662fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/check_decoder_skip_controls.py&quot;,
+        &quot;sha256&quot;: &quot;caa003abbedf6a2911b8cce1b155757b87ffd3b321b3d59909fd22e5d74bad01&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/test_decoder_skip_controls.py&quot;,
+        &quot;sha256&quot;: &quot;814a8bfbfbe7a6c1ca9cf258618c0d1f38e2d8c65c6f479e9cedfcc3f5008d94&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/plot.py&quot;,
+        &quot;sha256&quot;: &quot;91aec8c85b38d2f9a46e9acde1716f1e2a200ea32f22cfcd729bbed6444d570c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/SOURCE.txt&quot;,
+        &quot;sha256&quot;: &quot;26d04bae102a217bf60d0fcdecc0d8a98f9cbde50dd79d2e69b12ce0e2081b61&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/SOURCE-LICENSE.txt&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/results.json&quot;,
+        &quot;sha256&quot;: &quot;a4a1a0e7e235e3143e299dae8fe53caa7349601c51b1707d71cbd455b76e569a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/audit.json&quot;,
+        &quot;sha256&quot;: &quot;7f259b62c0c8eb4416137ea5893b428a60febf770df92e29d7a7280f69cd37e6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/summary.csv&quot;,
+        &quot;sha256&quot;: &quot;b79e2283e6147ecdb0598c82bb4e25244b64fd93c7c914d7977fb9a9e7c730c3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/key-runs-1.svg&quot;,
+        &quot;sha256&quot;: &quot;0125ee463b5295cf49cee695bd22bab02ec4cd0221e813b6996cd933c9017cc9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/key-runs-4.svg&quot;,
+        &quot;sha256&quot;: &quot;feb5776843c04fa1480ece9d52f736b07cc51639fd8b8f9b3b4aeb86bc60a665&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned source benchmark&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/benchmark/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;english-scorer-controls&quot;,
+    &quot;uniform-additive-doublets&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/key-runs-1.svg&quot;,
+      &quot;caption&quot;: &quot;Correct-key controls with key-value repetition 1. Solid bars count exact recovery; outlined bars count score acceptance. Every cell has 27 plants; the complete CSV also retains all wrong-key cells.&quot;
+    },
+    {
+      &quot;path&quot;: &quot;experiments/records/decoder-skip-controls/key-runs-4.svg&quot;,
+      &quot;caption&quot;: &quot;Correct-key controls with key-value repetition 4. Solid bars count exact recovery; outlined bars count score acceptance. Every cell has 27 plants; the complete CSV also retains all wrong-key cells.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## Can a correct key still fail?\n\nYes, under a mismatched decoding rule. This experiment starts with known rune sequences, encrypts them using four precisely specified mechanisms, and asks what rigid subtraction and a skip-aware beam decoder recover. Knowing the answer lets us measure exact recovery rather than judging whether a candidate merely sounds plausible.\n\nAll ordinary-addition controls recover exactly with the correct key. With key skipping and single-value keys, the beam allowing three skips recovers 26 of 27 plants exactly, while rigid subtraction recovers one. Repeating each key value four times changes that result: the same beam recovers eight of 27, with the true recorded alignment outside its transition rules in the other 19. Increasing beam width from 16 to 64 does not repair that structural limit.\n\nThese findings concern the declared artificial encoders. They do not show that the unsolved manuscript uses key skipping, rewriting, or any particular key generator.\n\n## Four ways to consume the same key\n\nEvery operation uses rune indices modulo 29. Ordinary addition emits `c = p + k`; subtraction recovers `p = c − k`. A key slot is a position in the generated sequence, not its numerical value. Several slots can hold the same value.\n\n| Encoder | What happens when the proposed ciphertext repeats the previous rune? | Key alignment |\n| --- | --- | --- |\n| Ordinary addition | Emit it unchanged. | One slot per plaintext rune. |\n| Key skipping | With probability 83/100, reject that key slot and retry the same plaintext rune. | Rejections consume additional slots. |\n| Value rewriting | With probability 83/100, add one to the proposed ciphertext value modulo 29. | Still one slot per plaintext rune. |\n| Unrelated advance plus skipping | Apply the skip rule, but also consume one extra slot halfway through the plaintext, regardless of repetition. | Contains an advance that the collision-only model may not permit. |\n\nThe first emitted rune has no predecessor. The rejection draw occurs only on a collision. Each plant resets its state, and every draw, rejected slot, accepted slot and rewrite is preserved in the report. Exhausting the key is an error; no zero padding is allowed.\n\nThe key fixture hashes a fixed seed label and counter with SHA-256, then reduces each byte modulo 29. This reduction is biased because 256 is not divisible by 29. It is a reproducible test input, not a claim of uniform randomness or a one-time pad. The second fixture repeats each value across four successive slots. Neither fixture was adjusted to match manuscript statistics.\n\n## What the beam can represent\n\nThe rigid decoder consumes one slot at every step. The beam keeps several candidate prefixes. At each step it considers accepting the next key slot, or skipping up to its declared limit. A skipped slot is permitted only when it would have generated a repeat of the preceding ciphertext rune under that candidate plaintext.\n\nBeam width controls how many prefixes survive scoring. The skip limit controls which paths can exist at all. These are different bounds: retaining more paths does not introduce a transition that the model forbids.\n\nWe test widths 16 and 64, each with skip limits one and three. Candidates are ordered by cumulative English quadgram score, then lexicographic key-slot path and rune sequence. The final normalized score is reported separately. Because some rune labels contain multiple letters, maximizing cumulative score is not the same as maximizing normalized score. The experiment preserves this declared selection rule rather than changing it after seeing results.\n\n## The complete control grid\n\nThe nine known-reading traces supply their first 240 rune indices, or their full length if shorter. Three seed IDs, two key fixtures and four encoders produce 216 plants. Every plant is decoded with the correct and wrong key using all five decoder configurations: 2,160 results. These reuse source texts and are not independent trials from a population.\n\nThe figures show every correct-key configuration. The complete summary CSV also includes every wrong-key configuration, all of which produced zero exact recoveries and zero accepted scores. That finite result is not a general false-positive rate and does not calibrate a large key search.\n\nSelected counts below explain the figures; the CSV retains all 80 grouped cells and the JSON retains every individual result. Each cell has 27 plants. “Accepted” means normalized score at least −5.5, not a correct answer.\n\n| Encoder and key fixture | Decoder | Exact | Accepted |\n| --- | --- | ---: | ---: |\n| Ordinary addition, either fixture | Every tested decoder | 27/27 | 27/27 |\n| Skipping, single values | Rigid | 1/27 | 2/27 |\n| Skipping, single values | Beam 64 / 3 | 26/27 | 27/27 |\n| Skipping, four-slot runs | Beam 64 / 1 | 0/27 | 0/27 |\n| Skipping, four-slot runs | Beam 64 / 3 | 8/27 | 18/27 |\n| Rewriting, single values | Every tested decoder | 1/27 | 27/27 |\n| Rewriting, four-slot runs | Every tested decoder | 0/27 | 27/27 |\n| Unrelated advance, single values | Beam 64 / 3 | 2/27 | 22/27 |\n| Unrelated advance, four-slot runs | Beam 64 / 3 | 0/27 | 15/27 |\n\n## Why a passing score is insufficient\n\nRewriting leaves much of the original text intact. The score therefore accepts many candidates even though some rune indices are wrong. This is an especially clear example of why “looks like language” and “reproduces the full plaintext” must be recorded separately. The [scorer-language controls](#/experiments/english-scorer-controls) examine another failure mode: meaningful text in some languages can receive a poor English score.\n\nAn admissible true path also need not finish first. In the single-value skip condition with a three-skip beam, every true path is permitted and none is pruned, yet one plant&#x27;s winning candidate is not exact. A competing retained path scores higher under the declared ordering. The report distinguishes this from structural failure and records the first pruning step if one occurs; no true-prefix pruning was observed in this grid.\n\nAn unrelated advance does not always force failure. If its skipped value happens to satisfy the collision rule, the model can represent it. This explains why some plants in that condition still recover. Conversely, a structurally invalid *recorded alignment* is not a proof that no alternative alignment could spell the same plaintext. Exact candidate recovery is measured independently of the encoder&#x27;s slot path.\n\n## Even the correct key can be ambiguous\n\nA tiny example makes the issue visible without a language model. Work modulo three with key slots `[0, 0, 1]` and always reject collisions. Plaintext `[0, 1]` emits ciphertext `[0, 1]` using slots zero and one. Plaintext `[0, 0]` emits the same ciphertext by rejecting slot one and accepting slot two. The key and ciphertext alone do not distinguish these two plaintexts under this mechanism.\n\nThe stored encoder trace resolves that ambiguity for verification because it contains the answer&#x27;s alignment. A solver does not receive that trace. The trace-assisted inversion check is an oracle control, not an available decryption attack.\n\n## Reproduce and inspect\n\nDownload this experiment&#x27;s ZIP and preserve the directory structure. Python 3 standard-library modules are sufficient; no network access, API, external model download or third-party package is required.\n\n```text\npython experiments/records/decoder-skip-controls/run.py --check\npython scripts/check_decoder_skip_controls.py experiments/records/decoder-skip-controls/results.json --receipt my-decoder-audit.json\npython experiments/records/decoder-skip-controls/plot.py\n```\n\nThe producer checks every frozen input hash. The independent checker imports no producer functions: it reconstructs source prefixes, generated keys and encoder decisions, replays beam selection, and checks every returned rune sequence and diagnostic. It also recomputes full-text scores using a separate calculation. All 216 plants and 2,160 decoder results passed. Ten small-control tests include exhaustive transition comparisons, long rejection runs, rewrite wraparound, exhaustion, ambiguity, and beam output checked against complete path enumeration. Human review remains pending.\n\n## Scope and next steps\n\nThis is a fresh control inspired by [Dukotah&#x27;s benchmark work](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/benchmark/README.md), not a replication of that repository&#x27;s reported percentages. Known readings, including any non-prose material within their selected prefixes, are retained without editing. We do not infer manuscript language, identify its cipher, prove a pad construction, or claim that all skip-aware algorithms share these failures.\n\nA later experiment can change the encoder or alignment rule, but must record those changes and test recovery again. Searching many wrong keys also needs a separate control of the *best score from each entire search*, not just a collection of individual wrong-key scores. See [search space and bounds](#/wiki/search-space) for why the size and selection rule belong in the claim.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/decoder-skip-controls/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;eebe6616369dc24047477cd02783ab9eaa45450afefd643ff0eadb29efe4107b&quot;
 }</pre></article><article id="direct-polynomial-streams"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;direct-polynomial-streams&quot;,
   &quot;title&quot;: &quot;LP2-00–55: direct polynomial streams, degree at most eight&quot;,

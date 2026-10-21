@@ -1,0 +1,182 @@
+{
+  "id": "decoder-skip-controls",
+  "title": "Can a correct key fail under the wrong alignment rule?",
+  "status": "published",
+  "question": "How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?",
+  "summary": "Planted controls separate exact rune recovery, permitted alignments, beam pruning and English score acceptance across 216 plants and 2160 decoder results.",
+  "tags": [
+    "key skipping",
+    "decoder controls",
+    "beam search",
+    "key alignment",
+    "doublet suppression",
+    "value rewriting",
+    "planted controls",
+    "known key",
+    "skip limit"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/readings/first-koan.csv",
+      "exports/readings/instruction.csv",
+      "exports/readings/loss-of-divinity.csv",
+      "exports/readings/lp2-56.csv",
+      "exports/readings/lp2-57.csv",
+      "exports/readings/second-koan.csv",
+      "exports/readings/some-wisdom.csv",
+      "exports/readings/warning.csv",
+      "exports/readings/welcome.csv"
+    ],
+    "representation": "First min(240, available) output rune indices from all nine known-reading traces; canonical GP labels only for scoring.",
+    "procedure": "Plant ordinary addition, probabilistic collision skipping, value rewriting and one unrelated advance plus skipping; decode with correct/wrong deterministic key fixtures using rigid subtraction and four bounded beams.",
+    "parameters": "Nine traces, three seeds, key-value repetitions 1 and 4, 10000 slots; beam widths 16/64 crossed with skip limits 1/3; cumulative quadgram selection, normalized acceptance -5.5; 216 plants and 2160 decoder results.",
+    "exclusions": "No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability."
+  },
+  "outcome": "supported",
+  "finding": "Correct-key ordinary addition recovers exactly throughout. Skip limits exclude some true alignments; a wider beam cannot repair them. Rewriting often passes the language threshold without exact rune recovery. All wrong-key controls fail exact recovery and the threshold.",
+  "limitations": "Artificial encoders and dependent known-text controls, not a fitted manuscript model. Exact alignment and exact plaintext are distinct. Cumulative and normalized scores have different objectives. Human review pending.",
+  "next_steps": "Test newly declared alignment mechanisms as separate variants; calibrate best scores from complete bounded wrong-key searches.",
+  "family": {
+    "id": "decoder-alignment-controls",
+    "title": "Decoder alignment controls",
+    "question": "Can declared decoders recover planted plaintext under matching and mismatched alignment rules?",
+    "baseline": "decoder-skip-controls"
+  },
+  "variant": {
+    "label": "Four encoders with fixed rigid and beam decoders",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent encoder, candidate and beam replay; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/decoder-skip-controls/run.py --check",
+    "environment": "Python 3 standard library; offline. Independent replay command and source boundaries are in the full account.",
+    "script": "experiments/records/decoder-skip-controls/run.py",
+    "script_sha256": "eebe6616369dc24047477cd02783ab9eaa45450afefd643ff0eadb29efe4107b",
+    "inputs": [
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/lp2-56.csv",
+        "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/plans/decoder-skip-controls.md",
+        "sha256": "44f808b410b321989556d0126c747cbfbcf6e4434db008b0c40147a9ad731d0b"
+      },
+      {
+        "path": "experiments/plans/decoder-skip-controls.json",
+        "sha256": "4aed3e98ebc54ac727420c07ec06153b82d3b4637fdb154097fc1a7ecaed82a1"
+      },
+      {
+        "path": "scripts/decoder_skip_controls.py",
+        "sha256": "1a54b2d3ab3eea12c7317421d836cf84a2c0dc661667e9b0b68a731cfa526fc0"
+      },
+      {
+        "path": "scripts/run_decoder_skip_controls.py",
+        "sha256": "ae0d12e8b796cc8974153cf41d61bb0bcddfe37039db01fa7e843b6b866662fa"
+      },
+      {
+        "path": "scripts/check_decoder_skip_controls.py",
+        "sha256": "caa003abbedf6a2911b8cce1b155757b87ffd3b321b3d59909fd22e5d74bad01"
+      },
+      {
+        "path": "scripts/test_decoder_skip_controls.py",
+        "sha256": "814a8bfbfbe7a6c1ca9cf258618c0d1f38e2d8c65c6f479e9cedfcc3f5008d94"
+      },
+      {
+        "path": "experiments/records/decoder-skip-controls/plot.py",
+        "sha256": "91aec8c85b38d2f9a46e9acde1716f1e2a200ea32f22cfcd729bbed6444d570c"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/SOURCE.txt",
+        "sha256": "26d04bae102a217bf60d0fcdecc0d8a98f9cbde50dd79d2e69b12ce0e2081b61"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/SOURCE-LICENSE.txt",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/decoder-skip-controls/results.json",
+        "sha256": "a4a1a0e7e235e3143e299dae8fe53caa7349601c51b1707d71cbd455b76e569a"
+      },
+      {
+        "path": "experiments/records/decoder-skip-controls/audit.json",
+        "sha256": "7f259b62c0c8eb4416137ea5893b428a60febf770df92e29d7a7280f69cd37e6"
+      },
+      {
+        "path": "experiments/records/decoder-skip-controls/summary.csv",
+        "sha256": "b79e2283e6147ecdb0598c82bb4e25244b64fd93c7c914d7977fb9a9e7c730c3"
+      },
+      {
+        "path": "experiments/records/decoder-skip-controls/key-runs-1.svg",
+        "sha256": "0125ee463b5295cf49cee695bd22bab02ec4cd0221e813b6996cd933c9017cc9"
+      },
+      {
+        "path": "experiments/records/decoder-skip-controls/key-runs-4.svg",
+        "sha256": "feb5776843c04fa1480ece9d52f736b07cc51639fd8b8f9b3b4aeb86bc60a665"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned source benchmark",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/benchmark/README.md"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "uniform-additive-doublets"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/decoder-skip-controls/key-runs-1.svg",
+      "caption": "Correct-key controls with key-value repetition 1. Solid bars count exact recovery; outlined bars count score acceptance. Every cell has 27 plants; the complete CSV also retains all wrong-key cells."
+    },
+    {
+      "path": "experiments/records/decoder-skip-controls/key-runs-4.svg",
+      "caption": "Correct-key controls with key-value repetition 4. Solid bars count exact recovery; outlined bars count score acceptance. Every cell has 27 plants; the complete CSV also retains all wrong-key cells."
+    }
+  ]
+}
