@@ -34,3 +34,7 @@ For transcription work, distinguish correct rune identity, segmentation, line co
 ## Integration rule
 
 Group related encoder variants in one family and record exactly which assumptions changed. Keep source-reported outcomes as leads until freshly reproduced with pinned inputs and an independent check. Any final article should include a clear model diagram and a complete control table, with equal treatment of the languages. No hosted AI calls or large seed sweeps are necessary for this initial review.
+
+## Planted decoder follow-up
+
+The [decoder protocol](../experiments/plans/decoder-skip-controls.md) is frozen before local beam scoring. Encoder and transition controls now exhaust small three-symbol fixtures and check long rejection runs, rewrite wraparound, key exhaustion and an unrelated advance. A two-symbol ciphertext example also demonstrates that even the correct key can permit multiple plaintexts under key skipping; beam recovery must not be described as guaranteed inversion. The full 216-plant, 2,160-decoder benchmark and independent beam replay remain pending. These controls are infrastructure, not a new completed manuscript experiment.
