@@ -325,3 +325,25 @@ for(const query of ['word lookup','304 forms','216 repeated positions']){
 console.log('PASS: word lookup and repeated-position counts reach the identity audit.');
 assert.equal(search.search(db,'grille mask')[0].href,'#/wiki/grille-carrier?section=definition');
 assert.equal(search.search(db,'grille readout')[0].href,'#/wiki/grille-carrier?section=testable-rule');
+
+// Common reproduction questions must reach the worked step, not its broad introduction.
+assert.equal(search.search(db,"Reddit post order")[0].href,"#/wiki/historical-book-codes?section=post-order","Reddit post order");
+assert.equal(search.search(db,"third and fourth lines")[0].href,"#/wiki/historical-book-codes?section=post-order","third and fourth lines");
+assert.equal(search.search(db,"CAMT")[0].href,"#/wiki/historical-book-codes?section=post-order","CAMT");
+assert.equal(search.search(db,"CageThrottleUs")[0].href,"#/wiki/historical-book-codes?section=post-order","CageThrottleUs");
+assert.equal(search.search(db,"Mabinogion replay")[0].href,"#/wiki/historical-book-codes?section=mabinogion-replay","Mabinogion replay");
+assert.equal(search.search(db,"missing h")[0].href,"#/wiki/historical-book-codes?section=liber-al-replay","missing h");
+assert.equal(search.search(db,"Liber AL counting")[0].href,"#/wiki/historical-book-codes?section=liber-al-replay","Liber AL counting");
+assert.equal(search.search(db,"2013 book code")[0].href,"#/wiki/historical-book-codes?section=liber-al-replay","2013 book code");
+assert.equal(search.search(db,"Blake counting")[0].href,"#/wiki/historical-book-codes?section=blake-replay","Blake counting");
+assert.equal(search.search(db,"Voice of the Devil")[0].href,"#/wiki/historical-book-codes?section=blake-replay","Voice of the Devil");
+assert.equal(search.search(db,"Blake replay")[0].href,"#/wiki/historical-book-codes?section=blake-replay","Blake replay");
+assert.equal(search.search(db,"page joins")[0].href,"#/wiki/transcription-checking?section=page-joins","page joins");
+assert.equal(search.search(db,"page breaks")[0].href,"#/wiki/transcription-checking?section=page-joins","page breaks");
+assert.equal(search.search(db,"split words")[0].href,"#/wiki/transcription-checking?section=page-joins","split words");
+assert.equal(search.search(db,"cross-page words")[0].href,"#/wiki/transcription-checking?section=page-joins","cross-page words");
+assert.equal(search.search(db,"32 of 55")[0].href,"#/wiki/transcription-checking?section=page-joins","32 of 55");
+assert.equal(search.search(db,"disputed runes")[0].href,"#/wiki/transcription-checking?section=coverage","disputed runes");
+assert.equal(search.search(db,"contested readings")[0].href,"#/wiki/transcription-checking?section=coverage","contested readings");
+assert.equal(search.search(db,"word separators")[0].href,"#/wiki/transcription-checking?section=coverage","word separators");
+console.log('PASS: historical replay questions and disputed-boundary queries reach the relevant sections.');
