@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="445" viewBox="0 0 360 445" role="img" aria-labelledby="t d">
+<title id="t">One rejected key slot changes the alignment</title><desc id="d">Plaintext 24,7,16 with key values 5,22,1,3. First emit zero. Reject the second key value because seven plus twenty-two also gives zero modulo twenty-nine. Retry seven with one, emitting eight. Then sixteen plus three emits nineteen.</desc>
+<rect width="360" height="445" fill="#faf9f5"/><g font-family="Arial,sans-serif" fill="#293d47">
+<text x="16" y="28" font-size="17" font-weight="bold">Plaintext stays; the key advances</text>
+<text x="16" y="52" font-size="13">All arithmetic is modulo 29.</text>
+<g font-size="13"><text x="16" y="86">Plaintext</text><text x="108" y="86">Key slot / value</text><text x="252" y="86">Decision</text></g>
+<path d="M16 98H344" stroke="#b9c3c8"/>
+<g font-size="15"><text x="38" y="128">24</text><text x="122" y="128">0 / 5</text><text x="252" y="128">Emit 0</text></g>
+<text x="16" y="154" font-size="12">24 + 5 = 29 ≡ 0</text>
+<path d="M16 168H344" stroke="#d6dcdf"/>
+<g font-size="15"><text x="38" y="198">7</text><text x="122" y="198">1 / 22</text><text x="252" y="198" fill="#805c35">Reject 0</text></g>
+<text x="16" y="224" font-size="12">7 + 22 ≡ 0: repeats the previous output.</text>
+<path d="M16 238H344" stroke="#d6dcdf"/>
+<g font-size="15"><text x="38" y="268">7</text><text x="122" y="268">2 / 1</text><text x="252" y="268">Emit 8</text></g>
+<text x="16" y="294" font-size="12">Same plaintext rune, next key slot.</text>
+<path d="M16 308H344" stroke="#d6dcdf"/>
+<g font-size="15"><text x="38" y="338">16</text><text x="122" y="338">3 / 3</text><text x="252" y="338">Emit 19</text></g>
+<text x="16" y="364" font-size="12">Now both plaintext and key advance.</text>
+<path d="M16 382H344" stroke="#b9c3c8"/>
+<text x="16" y="408" font-size="15" font-weight="bold">Ciphertext: [0, 8, 19]</text>
+<text x="16" y="431" font-size="12">Constructed example, not an unsolved-page reading.</text>
+</g></svg>

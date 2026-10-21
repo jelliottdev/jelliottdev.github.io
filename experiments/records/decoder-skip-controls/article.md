@@ -21,6 +21,8 @@ The first emitted rune has no predecessor. The rejection draw occurs only on a c
 
 The key fixture hashes a fixed seed label and counter with SHA-256, then reduces each byte modulo 29. This reduction is biased because 256 is not divisible by 29. It is a reproducible test input, not a claim of uniform randomness or a one-time pad. The second fixture repeats each value across four successive slots. Neither fixture was adjusted to match manuscript statistics.
 
+For an introductory numerical diagram, see [key alignment, skip limits and beam search](#/wiki/key-alignment).
+
 ## What the beam can represent
 
 The rigid decoder consumes one slot at every step. The beam keeps several candidate prefixes. At each step it considers accepting the next key slot, or skipping up to its declared limit. A skipped slot is permitted only when it would have generated a repeat of the preceding ciphertext rune under that candidate plaintext.

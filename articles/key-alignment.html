@@ -1,0 +1,35 @@
+<p>A key is a sequence of values. An <strong>alignment</strong> says which position in that sequence applies to each ciphertext rune. Knowing the sequence does not automatically tell you the alignment. This distinction matters whenever a proposal skips key values, inserts an interrupter, or resets the key at a word, line or page boundary.</p>
+<p>This guide explains the terms used in the <a href="#/experiments/decoder-skip-controls">planted decoder controls</a>. Its numerical example is constructed for teaching; it is not a decoding of an unsolved manuscript page.</p>
+
+<h2 id="slots">Key values and key slots</h2>
+<p>A <strong>key value</strong> is the number used in the arithmetic. A <strong>key slot</strong> is its position in the sequence. In <code>[5, 22, 1, 3]</code>, slot zero holds 5 and slot one holds 22. Two different slots can contain the same value, so tracking values alone can lose alignment information.</p>
+<p>For ordinary addition on the 29-rune alphabet, encryption is <code>c = (p + k) mod 29</code> and decryption is <code>p = (c − k) mod 29</code>. Here <code>p</code>, <code>c</code> and <code>k</code> are indices or residues, not Gematria Primus prime values. See <a href="#/wiki/rune-values">rune indices and prime values</a> for that distinction.</p>
+
+<h2 id="skip-example">A single rejected key slot changes what follows</h2>
+<p>Take plaintext indices <code>[24, 7, 16]</code> and key slots <code>[5, 22, 1, 3]</code>. In this example only, always reject a key slot when it would repeat the previous ciphertext rune. Rejection consumes the key slot but keeps the same plaintext rune for another attempt.</p>
+<figure class="evidence-figure"><img src="exports/figures/key-alignment-example.svg" width="360" height="445" loading="lazy" alt="Three plaintext runes consume four key slots. The second slot is rejected because 7 plus 22 repeats ciphertext zero; retrying with key value one emits eight. The final ciphertext is zero, eight, nineteen."><figcaption>Constructed modulo-29 example. Slot numbers start at zero. The rejected slot changes which key value applies to later runes.</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>Decode <code>[0, 8, 19]</code> using</th><th>Key values</th><th>Recovered indices</th></tr></thead><tbody><tr><td>Correct accepted slots 0, 2, 3</td><td>5, 1, 3</td><td>24, 7, 16</td></tr><tr><td>Rigid slots 0, 1, 2</td><td>5, 22, 1</td><td>24, 15, 18</td></tr></tbody></table></div>
+<p>The rigid decoder gets the first rune right and then uses the wrong slots. Its failure does not show that the key values are wrong. Conversely, granting arbitrary skips would add many choices: an alignment rule needs a stated reason for each permitted skip.</p>
+
+<h2 id="transitions">A decoder's permitted moves</h2>
+<p>A <strong>transition rule</strong> defines how a candidate can move from one position to the next. The collision-only decoder in our experiment permits a skipped slot only if that slot, combined with the candidate plaintext rune, would have reproduced the preceding ciphertext rune.</p>
+<p>A <strong>skip limit</strong> caps the number of consecutive rejected slots considered at one step. If the true alignment needs four skips and the decoder allows at most three, that path is outside the model. Increasing the number of candidates retained does not introduce the missing fourth-skip transition.</p>
+<p>An extra advance caused by a line boundary or another rule is a different mechanism. It might accidentally satisfy the collision test, but it is not generally covered by it. State reset and advance rules explicitly; “skip-aware” does not mean “can handle every alignment.”</p>
+
+<h2 id="beam">What beam width controls</h2>
+<p>A <strong>beam search</strong> keeps several candidate prefixes as it reads the ciphertext. It extends each retained prefix using the permitted transitions, scores the extensions, and keeps only a fixed number. That number is the <strong>beam width</strong>. Pruning means discarding a candidate to stay within the width.</p>
+<p>A width of 64 does not mean 64 complete keys or 64 total trials. Up to 64 prefixes can survive each step, and each may have several allowed extensions. The complete set of attempted extensions depends on the earlier pruning decisions.</p>
+<p>A wider beam can retain a promising path that a narrower one discarded. It cannot fix a prohibited transition, and it does not guarantee that the final highest-scoring output is the true plaintext. In our declared implementation, the score ranks cumulative quadgram totals, with a deterministic tie rule. The separately reported normalized score has a different denominator when rune labels contain different numbers of letters.</p>
+
+<h2 id="diagnosis">Four different outcomes to record</h2>
+<div class="table-wrap"><table><thead><tr><th>Outcome</th><th>Meaning in a planted control</th></tr></thead><tbody>
+<tr><td>True alignment is invalid</td><td>A required transition is prohibited by the model or skip bound.</td></tr>
+<tr><td>True prefix is pruned</td><td>The path was permitted but lost its place among the retained candidates.</td></tr>
+<tr><td>True path survives but does not win</td><td>Another retained candidate ranks higher under the declared score and tie rule.</td></tr>
+<tr><td>Winning text passes the score threshold</td><td>The score accepts it; its rune sequence can still be incorrect.</td></tr>
+</tbody></table></div>
+<p>These distinctions require known truth, so a planted control records exact rune recovery and the encoder's accepted slots. In a real unsolved-page search, those answers are unavailable. A high score alone cannot tell you which explanation applies. Also distinguish exact plaintext from exact slot alignment: different paths can sometimes produce the same plaintext, or different plaintexts can share a ciphertext under a lossy rule.</p>
+
+<h2 id="practice">Use the controls before interpreting a failure</h2>
+<p>First verify ordinary addition with a known key. Then introduce the particular skip, rewrite or reset rule you want to investigate and keep its parameters fixed. Test wrong keys too. Save the complete output, every alignment choice, the selection rule and exact-recovery measurements. The <a href="#/experiments/decoder-skip-controls">decoder experiment</a> supplies all these traces for four artificial encoders.</p>
+<p>The <a href="#/experiments/english-scorer-controls">scorer controls</a> examine whether a fixed English score accepts meaningful text in different languages. The <a href="#/experiments/search-maximum-controls">search-maximum controls</a> examine the effect of keeping the best result from many keys. Neither replaces testing the decoder's own transition rules. Continue with <a href="#/wiki/search-space">search space and bounds</a> and <a href="#/wiki/candidate-readings">evaluating candidate readings</a>.</p>
