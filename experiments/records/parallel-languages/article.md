@@ -25,6 +25,14 @@ The distance is **total variation** between word-length distributions: half the 
 
 Welsh therefore does rank relatively high in this particular test. Its second-place result should not be exaggerated: it is farther from the manuscript than English, and the position changes with the representation. Giving Welsh its own mechanical digraph units—CH, DD, FF, NG, LL, PH, RH and TH—reduces its distance to **0.1466**. This is a separate sensitivity check, not permission to choose whichever conversion wins. Digraph parsing across morphemes and loanwords is not resolved here.
 
+## Why the rankings differ
+
+The distributions show more than the rank alone. **Three-rune tokens make up 24.86% of the manuscript**, compared with 19.07% three-letter words in the English sample and 12.93% in Welsh. At length one, the manuscript has 2.87%, English 2.56%, and Welsh 10.40%.
+
+Thus Welsh's relatively high position does not mean its most distinctive short-word frequencies match. Its one- and three-letter bins together contribute more than half of its total variation distance from the manuscript. English is closer overall, but still has substantially fewer three-letter words than the manuscript has three-rune tokens. That residual difference needs explanation; a first-place rank does not make it disappear.
+
+[Open the distribution chart](experiments/records/parallel-languages/distributions.svg). All three panels use the same vertical scale. Lengths 9 and above are combined only to make the phone-sized chart legible; the experiment still scores its original 16 bins. English and Welsh are shown to explain the leading result and the requested Welsh comparison, not as a new two-language candidate selection. All eight full distributions remain in the results JSON.
+
 ## The assumptions that make lengths useful
 
 This comparison requires manuscript word boundaries to preserve plaintext word boundaries, and one counted plaintext unit to correspond to one ciphertext rune. A position-dependent substitution can preserve lengths even when letter frequencies change. Inserted nulls, deleted symbols, word splitting, different spacing, or units representing syllables can break the comparison.
@@ -70,9 +78,10 @@ Download this experiment's bundle. It includes the source translations, source-a
 ```sh
 python experiments/records/parallel-languages/run.py --check
 python experiments/records/parallel-languages/check.py
+python experiments/records/parallel-languages/distribution_figure.py --check
 ```
 
-The first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, Welsh digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).
+The first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, Welsh digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).
 
 [Raw results](experiments/records/parallel-languages/results.json) · [Frozen plan](experiments/records/parallel-languages/plan.json) · [Source attribution](experiments/records/parallel-languages/SOURCE.txt)
 
