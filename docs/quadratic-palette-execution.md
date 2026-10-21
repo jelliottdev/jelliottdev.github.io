@@ -1,6 +1,6 @@
 # Quadratic palette replication: execution notes
 
-The scope and proof obligations are fixed in `experiments/plans/literal-prime-quadratic.md`. These scripts are preparation for a related variant of the literal-prime affine experiment. They do not yet constitute a published, reviewed experiment record.
+The scope and proof obligations are fixed in `experiments/plans/literal-prime-quadratic.md`. These scripts are preparation for a related variant of the literal-prime affine experiment. The related quadratic variant is registered with the affine experiment family; computational review is complete and human review remains pending.
 
 From the repository root, with Python's standard library:
 
@@ -16,4 +16,4 @@ The checker does not import the producer. It constructs divisors from prime fact
 
 The first producer run found 261,346 coprime-to-6 candidate moduli and 2,420,451 singular candidate moduli. These yield 261,346 and 7,993,284 coefficient checks respectively. It retained only the exact anchor branch `(2, 3, 5)` and found no nonidentity survivors. The complete independent audit passed and reproduced these counts. Its receipt is `exports/literal-prime-quadratic-audit.json`; the checked certificate is `exports/literal-prime-quadratic.json` (SHA-256 `ff4ed02dc3344cd16870caabc86aca5e019149ffd6f21307e466457de456aa33`).
 
-The article draft explains why the finite certificate covers every modulus above 109 and includes the scope counterexamples. Before publication, add and visually inspect the branch diagram, register the related variant, and verify its reproducible download bundle alongside the existing affine family. In particular, distinguish a polynomial's coefficients from its function: nonzero quadratic coefficients can still represent the identity. Human review remains pending despite the successful computational audit.
+The article draft explains why the finite certificate covers every modulus above 109 and includes the scope counterexamples. The branch diagram has been inspected at a phone viewport, the variant is registered with the existing affine family, and its isolated download reproduced the complete certificate. In particular, distinguish a polynomial's coefficients from its function: nonzero quadratic coefficients can still represent the identity. Human review remains pending despite the successful computational audit.

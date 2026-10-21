@@ -1,0 +1,127 @@
+{
+  "id": "literal-prime-quadratic",
+  "title": "Literal prime alphabet: quadratic permutations for every modulus above 109",
+  "status": "published",
+  "question": "Can a fixed quadratic map nontrivially permute the full literal-prime alphabet for any modulus above 109?",
+  "summary": "All 21,924 anchor choices are checked through a finite certificate and an identity-branch bound. Only identity survives; partial alphabets and changing keys remain outside scope.",
+  "tags": [
+    "literal primes",
+    "prime palette",
+    "quadratic",
+    "polynomial",
+    "bijection",
+    "all moduli",
+    "C09"
+  ],
+  "family": {
+    "id": "literal-prime-maps",
+    "title": "Literal-prime alphabet transformations",
+    "question": "Which fixed maps preserve the literal Gematria Primus prime palette?",
+    "baseline": "literal-prime-affine"
+  },
+  "variant": {
+    "label": "Full-palette quadratic maps; all integer moduli above 109",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Enumerate distinct anchor outputs of 2 and 3; reduce each nonidentity branch to divisors of nonzero witness differences; verify full palette equality.",
+        "after": "Enumerate distinct images of 2, 3 and 5; reduce nonexact branches to finite divisors; solve all coefficient congruences and verify full palette equality; bound the identity-anchor branch.",
+        "reason": "A quadratic needs three anchor images and explicit handling when 6 is not invertible."
+      },
+      {
+        "field": "parameters",
+        "before": "All integer m>109; all coefficient residues a,b modulo m; 812 distinct anchor pairs; no language score.",
+        "after": "All integer m>109; all quadratic coefficient residues a,b,c; 21,924 ordered distinct anchor triples; no language score.",
+        "reason": "Add the quadratic coefficient while retaining the all-modulus scope."
+      },
+      {
+        "field": "exclusions",
+        "before": "Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.",
+        "after": "Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.",
+        "reason": "Degree two is now tested; higher degrees remain excluded."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "data/index.json"
+    ],
+    "representation": "The 29 stored Gematria Primus prime values, from 2 through 109; literal values, not rune indices.",
+    "procedure": "Enumerate distinct images of 2, 3 and 5; reduce nonexact branches to finite divisors; solve all coefficient congruences and verify full palette equality; bound the identity-anchor branch.",
+    "parameters": "All integer m>109; all quadratic coefficient residues a,b,c; 21,924 ordered distinct anchor triples; no language score.",
+    "exclusions": "Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys."
+  },
+  "outcome": "not-supported",
+  "finding": "No nonidentity permutation within scope. Independent reconstruction verifies 8,254,630 finite-branch coefficient checks and the bounded identity branch.",
+  "limitations": "Full literal-prime alphabet and degree at most two only. Not partial supports, rune indices, higher degrees or position-dependent keys. Human review pending; no proof-assistant rerun.",
+  "next_steps": "Investigate partial supports or higher-degree maps only under separately declared bounds.",
+  "reproduction": {
+    "command": "python experiments/records/literal-prime-quadratic/run.py",
+    "environment": "Python 3 standard library. Independent audit: python scripts/check_quadratic_palette.py exports/literal-prime-quadratic.json --receipt quadratic-audit-new.json",
+    "script": "experiments/records/literal-prime-quadratic/run.py",
+    "script_sha256": "5aca7221cf7857cdced38d4cd595bbce6725d00bfb416f77fb354957c1886186",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142"
+      },
+      {
+        "path": "experiments/plans/literal-prime-quadratic.md",
+        "sha256": "df798f0a6ad175e2fa115e97f4519c6c51523c31c6487baeb391057ca51764a3"
+      },
+      {
+        "path": "experiments/plans/literal-prime-quadratic.json",
+        "sha256": "89f37d0d0b29ff6046e970a45c84bc8c1031a4a8316fa757aff1952d349b1a61"
+      },
+      {
+        "path": "scripts/run_quadratic_palette.py",
+        "sha256": "4cc60d6a153dd682e2f92079af41380f1e5d4865570a49e346756a892c83aa57"
+      },
+      {
+        "path": "scripts/check_quadratic_palette.py",
+        "sha256": "55281dcf576ecfd5c0ed2d0ed1f72bfffd2d514d5385e1bdcde7b516d4793cb6"
+      },
+      {
+        "path": "scripts/test_quadratic_palette.py",
+        "sha256": "5a3cb5be4ba319732e63add0defa9986bded2f8a598374e27c47f3dd177528a6"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/literal-prime-quadratic.json",
+        "sha256": "ff4ed02dc3344cd16870caabc86aca5e019149ffd6f21307e466457de456aa33"
+      },
+      {
+        "path": "exports/literal-prime-quadratic-audit.json",
+        "sha256": "904bbe9adda77e9e8396b4a5756383d7c629795e88daeaaeef5fd2dccc1b80a5"
+      },
+      {
+        "path": "exports/figures/literal-prime-quadratic.svg",
+        "sha256": "dae0de342f56a4f775d1ea9d726aaed291ed6d0b107a2cf66ee955c80f4b702d"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent factorization and integer-lift certificate audit; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Stored Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/data/index.json"
+    }
+  ],
+  "related": [
+    "literal-prime-affine",
+    "literal-prime-affine-pages"
+  ],
+  "visuals": [
+    {
+      "path": "exports/figures/literal-prime-quadratic.svg",
+      "caption": "The finite-divisor branches and the separately bounded identity branch cover all moduli above 109."
+    }
+  ]
+}

@@ -1915,7 +1915,7 @@
   &quot;outcome&quot;: &quot;not-supported&quot;,
   &quot;finding&quot;: &quot;No nonidentity permutation exists within scope: 812 anchor pairs reduce to the identity branch and 13,212 candidate maps with no survivors.&quot;,
   &quot;limitations&quot;: &quot;Full literal-prime alphabet only; not rune indices, partial page support, noninjective maps or position-dependent rules. Human review pending. No proof-assistant rerun.&quot;,
-  &quot;next_steps&quot;: &quot;The page-support variant now checks the archived LP2 supports and documents two LP2-55 exceptions. Nonlinear and position-dependent maps require separate tests.&quot;,
+  &quot;next_steps&quot;: &quot;The page-support variant documents two LP2-55 exceptions. The quadratic variant now covers degree two on the full alphabet; higher degrees and changing keys remain separate questions.&quot;,
   &quot;reproduction&quot;: {
     &quot;command&quot;: &quot;python experiments/records/literal-prime-affine/run.py --check&quot;,
     &quot;environment&quot;: &quot;Python 3 standard library; no network or AI. Independent checker: python experiments/records/literal-prime-affine/check.py&quot;,
@@ -1959,7 +1959,8 @@
     }
   ],
   &quot;related&quot;: [
-    &quot;literal-prime-affine-pages&quot;
+    &quot;literal-prime-affine-pages&quot;,
+    &quot;literal-prime-quadratic&quot;
   ],
   &quot;visuals&quot;: [
     {
@@ -2438,6 +2439,135 @@
   &quot;article&quot;: &quot;## What changes from the baseline?\n\nThe [baseline](#/experiments/literal-prime-affine) requires one affine map to permute the entire 29-prime alphabet. This variant uses the prime values actually present on each archived LP2-00–55 page. Outputs may be any of the 29 allowed primes, but distinct observed inputs must still have distinct outputs. A page may use its own fixed coefficients and modulus.\n\nThe modulus range remains **every integer m greater than 109**. We do not score English or select a proposed reading. The supplied archive’s C08 claim predicted two LP2-55 exceptions; the fresh calculation retained all survivors rather than filtering for that prediction.\n\n## Results\n\n| Archived page support | Pages | Candidate maps checked per distinct support | Nonidentity maps |\n| --- | --- | --- | --- |\n| All 29 prime values | 53 pages | 13,212 | None |\n| 28 values, missing 7 | LP2-49 | 14,901 | None |\n| 25 values, missing 7, 29, 59, 103 | LP2-55 | 14,901 | Two |\n| No rune values | LP2-50 | Not tested | No conclusion |\n\nThus **54 of the 55 nonempty rune pages allow only identity** under this exact model. LP2-55 has two additional maps. LP2-50 contains the alphanumeric panel rather than a rune stream; this procedure does not interpret its characters as GP runes.\n\nThe counts refer to distinct input supports, not a separate rerun for each of the 53 identical full-support cases. There are 43,014 candidate-map checks across the three supports. The all-modulus identity branch is handled separately.\n\n## The two LP2-55 exceptions\n\n| Coefficients (a, b, m) | Image of prime 2 | Images of observed odd primes |\n| --- | --- | --- |\n| (58, 57, 114) | 59: rune label T | Unchanged |\n| (102, 101, 202) | 103: rune label Y | Unchanged |\n\nBoth have the form `a=m/2+1`, `b=m/2`. For an odd prime p,\n\n```text\nap+b = p + (m/2)(p+1) ≡ p (mod m)\n```\n\nbecause p+1 is even. At p=2, the result is `2+m/2`: 59 for m=114 and 103 for m=202. Each map therefore changes only F to T or Y on this page. It does not decode the remaining runes or recover word boundaries.\n\nNeither 59 nor 103 occurs in LP2-55’s observed input support. Sending 2 to either value therefore does not collide with another observed input. On the full alphabet, the odd input 59 or 103 is fixed too, so two inputs would have the same output. That is why these exceptions do not contradict the baseline.\n\nThe coefficients 58 and 102 are not units modulo 114 and 202 respectively: each gcd is 2. Requiring the affine map to be invertible on the entire residue ring would discard them. Our stated model requires injectivity only on the observed prime support, so they must be retained.\n\n## Complete enumeration without a modulus cutoff\n\nEvery nonempty page support contains primes 2 and 3. Assign distinct allowed images u and v to them, giving 812 anchor choices per support. These determine `a=v−u` and `b=3u−2v` modulo m.\n\nFor each pair, examine the unreduced expression `L(p)=u+(p−2)(v−u)` on the page’s support. If every integer output is already allowed, record that branch separately. In this dataset the only such branch is identity. Otherwise choose the first supported prime whose L(p) is outside the full palette. Every valid modulus must divide one of the nonzero differences `L(p)−y`, where y is an allowed target prime.\n\nThe script tests every resulting divisor above 109, requiring both allowed outputs and no collisions on the observed support. The complete report retains each anchor’s witness and candidate list, the two surviving maps and their full outputs, and every page’s source hash. There is no arbitrary upper modulus bound.\n\n## Reproduce\n\nExtract this variant’s bundle with its folders intact:\n\n```text\npython experiments/records/literal-prime-affine-pages/run.py --check\npython experiments/records/literal-prime-affine-pages/check.py\n```\n\nPython’s standard library is sufficient. The bundle includes the baseline’s divisor helper and all 56 archived page texts. No network or AI requests are made.\n\nThe independent checker does not import the producer or divisor helper. It reconstructs page support by counting each alphabet symbol, verifies page hashes, enumerates the possible moduli directly within each witness’s mathematical bound, and checks every survivor. It also verifies that both LP2-55 exceptions fix all its odd input primes and move 2 to a previously absent value.\n\nBoth commands passed on 20 October 2026. The method and controls were recorded in `plan.txt`; no input boundaries, candidate criteria or modulus bounds were changed after inspecting the result. Human review is pending. This is an elementary calculation with a checked certificate, not a proof-assistant build or a new decipherment.\n\n## Limits\n\nThe result concerns the archived rune transcription and one fixed literal-prime affine map per page. It does not cover corrected symbol streams that change a page’s support, position-dependent transformations, noninjective maps, nonlinear rules, rune indices modulo 29, or prime-derived keystreams. A change in any of those assumptions requires a separate variant.\n\nSee [rune values](#/wiki/rune-values), [the full-alphabet baseline](#/experiments/literal-prime-affine), and [search space and bounds](#/wiki/search-space) for the distinction between checking a model completely and claiming a general decryption.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/literal-prime-affine-pages/article.md&quot;,
   &quot;script_sha256&quot;: &quot;2eebb404162dbcf25288e036dca2cd0cdfa3393d7a7eb9982437fd63d73f890f&quot;
+}</pre></article><article id="literal-prime-quadratic"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;literal-prime-quadratic&quot;,
+  &quot;title&quot;: &quot;Literal prime alphabet: quadratic permutations for every modulus above 109&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Can a fixed quadratic map nontrivially permute the full literal-prime alphabet for any modulus above 109?&quot;,
+  &quot;summary&quot;: &quot;All 21,924 anchor choices are checked through a finite certificate and an identity-branch bound. Only identity survives; partial alphabets and changing keys remain outside scope.&quot;,
+  &quot;tags&quot;: [
+    &quot;literal primes&quot;,
+    &quot;prime palette&quot;,
+    &quot;quadratic&quot;,
+    &quot;polynomial&quot;,
+    &quot;bijection&quot;,
+    &quot;all moduli&quot;,
+    &quot;C09&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;literal-prime-maps&quot;,
+    &quot;title&quot;: &quot;Literal-prime alphabet transformations&quot;,
+    &quot;question&quot;: &quot;Which fixed maps preserve the literal Gematria Primus prime palette?&quot;,
+    &quot;baseline&quot;: &quot;literal-prime-affine&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Full-palette quadratic maps; all integer moduli above 109&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Enumerate distinct anchor outputs of 2 and 3; reduce each nonidentity branch to divisors of nonzero witness differences; verify full palette equality.&quot;,
+        &quot;after&quot;: &quot;Enumerate distinct images of 2, 3 and 5; reduce nonexact branches to finite divisors; solve all coefficient congruences and verify full palette equality; bound the identity-anchor branch.&quot;,
+        &quot;reason&quot;: &quot;A quadratic needs three anchor images and explicit handling when 6 is not invertible.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;All integer m&gt;109; all coefficient residues a,b modulo m; 812 distinct anchor pairs; no language score.&quot;,
+        &quot;after&quot;: &quot;All integer m&gt;109; all quadratic coefficient residues a,b,c; 21,924 ordered distinct anchor triples; no language score.&quot;,
+        &quot;reason&quot;: &quot;Add the quadratic coefficient while retaining the all-modulus scope.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.&quot;,
+        &quot;after&quot;: &quot;Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.&quot;,
+        &quot;reason&quot;: &quot;Degree two is now tested; higher degrees remain excluded.&quot;
+      }
+    ]
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;data/index.json&quot;
+    ],
+    &quot;representation&quot;: &quot;The 29 stored Gematria Primus prime values, from 2 through 109; literal values, not rune indices.&quot;,
+    &quot;procedure&quot;: &quot;Enumerate distinct images of 2, 3 and 5; reduce nonexact branches to finite divisors; solve all coefficient congruences and verify full palette equality; bound the identity-anchor branch.&quot;,
+    &quot;parameters&quot;: &quot;All integer m&gt;109; all quadratic coefficient residues a,b,c; 21,924 ordered distinct anchor triples; no language score.&quot;,
+    &quot;exclusions&quot;: &quot;Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;No nonidentity permutation within scope. Independent reconstruction verifies 8,254,630 finite-branch coefficient checks and the bounded identity branch.&quot;,
+  &quot;limitations&quot;: &quot;Full literal-prime alphabet and degree at most two only. Not partial supports, rune indices, higher degrees or position-dependent keys. Human review pending; no proof-assistant rerun.&quot;,
+  &quot;next_steps&quot;: &quot;Investigate partial supports or higher-degree maps only under separately declared bounds.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/literal-prime-quadratic/run.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library. Independent audit: python scripts/check_quadratic_palette.py exports/literal-prime-quadratic.json --receipt quadratic-audit-new.json&quot;,
+    &quot;script&quot;: &quot;experiments/records/literal-prime-quadratic/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;5aca7221cf7857cdced38d4cd595bbce6725d00bfb416f77fb354957c1886186&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;8e386b43d608e11b78dde8a1d0bbfd9398a6d0db982701f6a5cde4fef2943142&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/literal-prime-quadratic.md&quot;,
+        &quot;sha256&quot;: &quot;df798f0a6ad175e2fa115e97f4519c6c51523c31c6487baeb391057ca51764a3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/literal-prime-quadratic.json&quot;,
+        &quot;sha256&quot;: &quot;89f37d0d0b29ff6046e970a45c84bc8c1031a4a8316fa757aff1952d349b1a61&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/run_quadratic_palette.py&quot;,
+        &quot;sha256&quot;: &quot;4cc60d6a153dd682e2f92079af41380f1e5d4865570a49e346756a892c83aa57&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/check_quadratic_palette.py&quot;,
+        &quot;sha256&quot;: &quot;55281dcf576ecfd5c0ed2d0ed1f72bfffd2d514d5385e1bdcde7b516d4793cb6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/test_quadratic_palette.py&quot;,
+        &quot;sha256&quot;: &quot;5a3cb5be4ba319732e63add0defa9986bded2f8a598374e27c47f3dd177528a6&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/literal-prime-quadratic.json&quot;,
+        &quot;sha256&quot;: &quot;ff4ed02dc3344cd16870caabc86aca5e019149ffd6f21307e466457de456aa33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/literal-prime-quadratic-audit.json&quot;,
+        &quot;sha256&quot;: &quot;904bbe9adda77e9e8396b4a5756383d7c629795e88daeaaeef5fd2dccc1b80a5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/figures/literal-prime-quadratic.svg&quot;,
+        &quot;sha256&quot;: &quot;dae0de342f56a4f775d1ea9d726aaed291ed6d0b107a2cf66ee955c80f4b702d&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent factorization and integer-lift certificate audit; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-20&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Stored Gematria Primus alphabet&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/data/index.json&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;literal-prime-affine&quot;,
+    &quot;literal-prime-affine-pages&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;exports/figures/literal-prime-quadratic.svg&quot;,
+      &quot;caption&quot;: &quot;The finite-divisor branches and the separately bounded identity branch cover all moduli above 109.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## What was tested\n\nSuppose a rune is replaced by its Gematria Primus prime value: F becomes 2, U becomes 3, and so on through the 29-value alphabet ending at 109. Could one fixed quadratic formula rearrange that entire alphabet without producing any values outside it?\n\nWe tested `f(x) = ax² + bx + c (mod m)` for **every integer modulus m greater than 109**, requiring all 29 output values to be distinct members of the same prime alphabet. The result is identity only: under these assumptions, each prime must map back to itself.\n\nThis is a replication of the quadratic claim in the supplied research archive. The earlier scripts and reported result were inspected before the plan was written. It is not a new discovery or a blind test. A fresh enumerator and a separately implemented checker agree; human review remains pending.\n\nThis extends the [full-alphabet affine experiment](#/experiments/literal-prime-affine) by allowing a quadratic term. It does not extend the result to every arithmetic cipher. In particular, a changing key added to plaintext has a different equation and is outside this test.\n\n## Why an infinite range can be checked\n\nTrying moduli up to a convenient maximum would leave every larger modulus unresolved. Instead, three chosen inputs restrict which moduli can work.\n\nCall the prime alphabet S. The images of 2, 3 and 5 must be three different members of S; write them as u, v and w. There are `29 × 28 × 27 = 21,924` ordered choices. These three images determine the following integer expression:\n\n```text\nQ(x) = 2u(x−3)(x−5) − 3v(x−2)(x−5) + w(x−2)(x−3)\n```\n\nFor any polynomial fitting those three images, `6f(x) ≡ Q(x) (mod m)`. The factor 6 matters: it cannot simply be cancelled when the modulus is divisible by 2 or 3.\n\nFor each choice of u, v and w, find the first alphabet value x for which Q(x) is not six times an alphabet value. If the final output is some y in S, then m must divide the **nonzero integer** `Q(x) − 6y`. A nonzero integer has only finitely many positive divisors. Taking the divisors for all 29 possible y therefore gives a complete finite list for this branch, including moduli larger than a guessed search cutoff.\n\nThe downloaded certificate records each branch&#x27;s three images, the chosen witness x, its Q(x), and every candidate modulus. For each candidate the scripts recover all possible coefficients and check the entire output alphabet directly.\n\n## The branch without a finite witness\n\nExactly one choice escapes that divisor reduction: `(u,v,w) = (2,3,5)`. In this branch Q(x) is exactly 6x as an integer, so a different argument is needed. All its possible maps have the form\n\n```text\nf(x) = x + a(x−2)(x−3) (mod m), with 6a ≡ 0 (mod m).\n```\n\nFor every integer x, `(x−2)(x−3)` is either 0 or 2 modulo 6. The only possible changes from identity are therefore a shift by 2a; the input 7 already tests that shift. If it is nonzero, its circular distance from zero is m/3. But two members of this alphabet differ by at most `109−2 = 107`. A valid nonidentity map in this branch would consequently need `m ≤ 321`.\n\nThe checker directly scans the coefficient residues for all moduli 110 through 321. None gives a nonidentity permutation of the alphabet. The argument above handles every larger modulus; those larger moduli are not silently dropped.\n\n## Results\n\n| Finite branches | Candidate-modulus checks | Coefficient checks | Surviving maps |\n| --- | ---: | ---: | ---: |\n| Modulus coprime to 6 | 261,346 | 261,346 | 0 |\n| Modulus divisible by 2 or 3 | 2,420,451 | 7,993,284 | 0 |\n\nThese counts are branch checks: a modulus can occur under several different choices of anchor images. They are not counts of distinct modulus values across the whole experiment.\n\nThe separate identity-anchor branch contains 318 coefficient expressions representing identity within the checked interval. **Different coefficients need not mean a different function.** For example, modulo 110,\n\n```text\n55x² + 56x = x + 55x(x+1) ≡ x.\n```\n\nThe product x(x+1) is always even, so the extra term is divisible by 110. Reporting that quadratic coefficient as a nonidentity solution would be a mistake.\n\n## Where the conclusion stops\n\nThe requirement to preserve the **whole** alphabet is essential. On only the three inputs `{2,3,5}`, the quadratic `22x² + 16x + 10 (mod 127)` swaps 2 and 3 and fixes 5. However, it sends 7 to 57, outside the prime alphabet. A smaller observed alphabet can therefore permit maps excluded by the full-alphabet test. See the [affine page-support variant](#/experiments/literal-prime-affine-pages) for a separate example of why page-level scope matters.\n\nInjectivity is essential too: the constant function f(x)=2 always stays inside S, but destroys the distinctions between runes. Working with rune indices instead of their literal primes changes the domain. Higher-degree formulas, word-dependent operations, varying coefficients, and polynomial key sequences combined with unknown plaintext are also outside this experiment.\n\nNo candidate plaintext was scored. There was no selection of words that happened to look meaningful, and no claim about the language of the unsolved pages follows from this result.\n\n## How to reproduce it\n\nUse Python 3 with its standard library. No network service or model is needed. From the repository root, choose output filenames that do not already exist:\n\n```sh\npython -m unittest discover -s scripts -p test_quadratic_palette.py\npython scripts/run_quadratic_palette.py --output quadratic-certificate.json\npython scripts/check_quadratic_palette.py quadratic-certificate.json --receipt quadratic-audit.json\n```\n\nThe first command compares both coefficient solvers against every coefficient triple for moduli 2 through 18, including cases where division by 6 is invalid. It also checks divisor generation and the scope counterexamples above.\n\nThe producer scans divisor pairs up to the square root and solves congruences using modular inverses after accounting for the greatest common divisor. The checker imports none of that code: it reconstructs divisors by prime factorization and obtains coefficient solutions by lifting a congruence to integer equations. It then checks every finite branch and the bounded identity branch against the saved certificate. The receipt identifies the certificate and checker by SHA-256.\n\nAgreement between these implementations supports the computation. The all-modulus conclusion additionally depends on the reduction explained above. It has not been presented as a proof-assistant result or as completed human review.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/literal-prime-quadratic/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5aca7221cf7857cdced38d4cd595bbce6725d00bfb416f77fb354957c1886186&quot;
 }</pre></article><article id="lp1-word-length-balance"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp1-word-length-balance&quot;,
   &quot;title&quot;: &quot;LP1: the 464-word table and column balance&quot;,
