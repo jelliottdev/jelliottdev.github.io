@@ -316,10 +316,12 @@ for(const query of ['unchanged runes','fixed points','copied rune','zero key val
 }
 console.log('PASS: unchanged-rune and zero-shift queries reach the fixed-point distinction.');
 for(const query of ['928','928 words','928-word carrier','grille','carrier midpoint']){
- assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=carrier-928',query);
+ assert.equal(search.search(db,query)[0].href,'#/wiki/grille-carrier?section=carrier-928',query);
 }
 console.log('PASS: carrier and grille queries open the bounded carrier inventory.');
 for(const query of ['word lookup','304 forms','216 repeated positions']){
- assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=word-identity',query);
+ assert.equal(search.search(db,query)[0].href,'#/wiki/grille-carrier?section=word-identity',query);
 }
 console.log('PASS: word lookup and repeated-position counts reach the identity audit.');
+assert.equal(search.search(db,'grille mask')[0].href,'#/wiki/grille-carrier?section=definition');
+assert.equal(search.search(db,'grille readout')[0].href,'#/wiki/grille-carrier?section=testable-rule');
