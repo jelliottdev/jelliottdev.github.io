@@ -3,6 +3,7 @@ import itertools
 import unittest
 
 from run_quadratic_palette import coefficients, divisors
+from check_quadratic_palette import lifted_coefficients, factored_divisors
 
 
 class QuadraticControls(unittest.TestCase):
@@ -16,10 +17,12 @@ class QuadraticControls(unittest.TestCase):
                 direct.setdefault(images, set()).add((a,b,c))
             for images in itertools.product(range(m), repeat=3):
                 self.assertEqual(set(coefficients(*images,m)), direct.get(images,set()), (m,images))
+                self.assertEqual(set(lifted_coefficients(*images,m)), direct.get(images,set()), (m,images))
 
     def test_divisors_against_linear_scan(self):
         for n in range(1,1000):
             self.assertEqual(divisors(n), {d for d in range(1,n+1) if n % d == 0})
+            self.assertEqual(set(factored_divisors(n)), {d for d in range(1,n+1) if n % d == 0})
 
     def test_scope_counterexamples(self):
         self.assertEqual([(22*x*x+16*x+10) % 127 for x in (2,3,5)], [3,2,5])
