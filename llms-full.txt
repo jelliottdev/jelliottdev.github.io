@@ -16309,6 +16309,38 @@ python scripts/branch_margin_reuse.py
 
 The script recomputes the report without changing it. The saved result was produced with Pillow 11.3.0; record your decoder version if it differs. A mismatch is a reason to inspect decoder or input differences, not to overwrite the expected hashes. Compare the separate side-dot reuse study, which uses its own windows and page set.
 
+Across the margins: translation without reflection
+
+The right-side branch on LP2-09 and left-side branch on LP2-10 can be compared directly after a horizontal translation. This is a separate measurement from the exact within-side RGB reuse above. It compares thresholded dark-pixel masks rather than asserting identical JPEG pixels.
+
+For LP2-09, take rectangle [1800, 600, 550, 2350]; for LP2-10, take [0, 600, 550, 2350]. Convert to Pillow grayscale and mark pixels below 128. Within those crop coordinates, moving the right-hand mask 16 pixels right, with no vertical shift or reflection, gives 98.49% Dice overlap. In full-page coordinates this maps x_left = x_right − 1784 and leaves y unchanged.
+
+Dice overlap is 2 × intersection / (source dark pixels + target dark pixels). Here the counts are 44,806 source pixels, 44,805 target pixels and 44,129 shared pixels. White background does not inflate this score. The result describes the selected masks, not a probability that two drawings share a source.
+
+	Orientation tested	Best overlap in the stated range
+	Same orientation	98.49%
+	Horizontal reflection	18.44%
+	Vertical reflection	9.78%
+	Both reflections (180° turn)	15.95%
+
+Each orientation was tested at 3,417 integer translations: x shifts −100 through 100 and y shifts −8 through 8, inclusive, within the crop coordinates. The crop and search bounds were chosen after viewing the originals; this is an exploratory comparison, not a preregistered significance test. No scaling or flexible warping was searched. The reflected results are only maxima within these bounds.
+
+[Image: Top of the aligned branch masks: shared dark pixels dominate, with small blue and orange differences along the edges.]
+Measurement overlay, not an original page image. Dark pixels are shared; blue appears only in translated LP2-09, orange only in LP2-10. The preview shows the upper 800 pixels of the tested window. Select it for the full overlay.
+
+The fixed same-orientation shift was then applied to all nine combinations of right-side pages 09/11/13 and left-side pages 10/12/14. Every pair gives the same score at each tested threshold: 97.84% below 64, 98.49% below 128, and 98.80% below 192. These similar pages are not independent evidence samples. LP2-08 is outside this alignment comparison.
+
+The measurement supports translated reuse in the same orientation for these windows. It does not reconstruct the author’s processing steps, explain the remaining pixel differences, or support reversing the ciphertext on alternate pages.
+
+Reproduce the alignment
+
+Use the reference-data bundle with the original images extracted into the same directory. This script was checked with Pillow 11.3.0 and NumPy 2.5.4. It verifies the fixed-shift intersections independently with Pillow logical masks in addition to the NumPy calculation.
+
+python -m pip install Pillow==11.3.0 numpy==2.5.4
+python scripts/branch_margin_alignment.py --check
+
+Coordinates, source hashes and all comparison counts (JSON) · Reproduction script · Full measurement overlay.
+
 Curled borders and the pale tree
 On LP2-40, branching forms are part of the curled drawings on both sides of the text. LP2-55 has that border style as well as a much lighter tree-shaped drawing in the central space above the insect. Its low contrast is itself a reason to consult the original image rather than relying on a transcription.
 [Image: LP2-40 cropped page preview]
@@ -16451,6 +16483,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/branch_margin_reuse.py
 - side-dot reuse study; spiral and branching borders
   https://jelliottdev.github.io/reference/articles/spirals.html
+- Top of the aligned branch masks: shared dark pixels dominate, with small blue and orange differences along the edges.; Full measurement overlay
+  https://jelliottdev.github.io/exports/figures/branch-alignment-overlay.png
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original images
+  https://jelliottdev.github.io/downloads/original-images.zip
+- Coordinates, source hashes and all comparison counts (JSON)
+  https://jelliottdev.github.io/exports/branch-margin-alignment.json
+- Reproduction script
+  https://jelliottdev.github.io/scripts/branch_margin_alignment.py
 - LP2-40 cropped page preview; LP2-40
   https://jelliottdev.github.io/reference/lp2-40.html
 - LP2-40 cropped page preview
