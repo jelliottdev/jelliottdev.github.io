@@ -13352,11 +13352,19 @@ If a rune always labels a divisor q of N+s*i, then q divides the differences bet
 For a guide to the logical strength of these findings, see what has actually been ruled out. It distinguishes exact exclusions from necessary constraints and explains how a counterexample limits a broader claim.
 
 
-Fixed affine maps of the literal prime alphabet
+Fixed maps of the literal prime alphabet
 
 The full-palette affine experiment covers every integer modulus above 109. A fixed affine rule that bijectively maps all 29 literal prime values back into the same palette acts as identity. Its divisor certificate replaces an arbitrary modulus cutoff; the record includes a worked branch and counterexamples for noninjective maps and partial palettes. This does not apply to affine maps on rune indices modulo 29 or prime-derived running keys.
 
 The page-support variant checks all nonempty LP2-00–55 rune supports. LP2-55 has two additional maps that change F to T or Y and fix its other rune values. This exception illustrates why the full-alphabet result cannot simply be applied to a smaller support. Neither map is a recovered reading.
+
+Does adding a squared term help?
+
+A quadratic rule adds a squared input term: f(x) = ax² + bx + c mod m. Here x is a literal Gematria Primus prime, not a rune index, and the same coefficients are used for every occurrence. The full-alphabet quadratic experiment tests every integer modulus above 109 and again leaves only identity. It uses three anchors—chosen inputs 2, 3 and 5 whose possible outputs are enumerated—to reduce the infinite modulus range to finite divisibility checks and one separately bounded case.
+
+This conclusion depends on preserving the whole 29-prime alphabet one-to-one. On the smaller set {2, 3, 5}, the rule 22x² + 16x + 10 mod 127 swaps 2 and 3 and fixes 5. But it sends 7 to 57, which is not in the prime alphabet. That concrete counterexample explains why the full-alphabet result cannot rule out the same kind of formula on an arbitrary smaller set of observed symbols.
+
+Also distinguish a fixed substitution from a key sequence. Applying one quadratic directly to each prime value is the tested substitution. Calculating a quadratic from position i and combining its output with unknown plaintext is a different model. The latter is not excluded by either the affine or quadratic palette result, nor by the direct-stream test without its additional assumptions. The search-space guide explains how to state these boundaries before claiming that a technique has been ruled out.
 
 Sources, related references, and files
 - rune indices and prime values
@@ -13389,13 +13397,13 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transposition.html
 - the reproduction guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
-- search space
+- search space; search-space guide
   https://jelliottdev.github.io/reference/articles/search-space.html
 - the Warning’s archived and Atbash-decoded sums
   https://jelliottdev.github.io/reference/articles/prime-sums.html#before-after
 - word lengths and corpus comparisons
   https://jelliottdev.github.io/reference/articles/word-lengths.html
-- direct polynomial stream experiment
+- direct polynomial stream experiment; direct-stream test
   https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
 - position-divisor experiment
   https://jelliottdev.github.io/#/experiments/position-divisor-labels
@@ -13405,6 +13413,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/literal-prime-affine
 - page-support variant
   https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
+- full-alphabet quadratic experiment
+  https://jelliottdev.github.io/#/experiments/literal-prime-quadratic
 
 Article: https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 
