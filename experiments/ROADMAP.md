@@ -55,7 +55,7 @@ Keep related questions as scoped variants, not a combined result:
 - Alternative widths remain untested in this family. Freeze the width set and selection rule before calculation; unequal column sizes require an explicitly appropriate statistic.
 - Decompose section contributions without presenting descriptive cancellation as a new significance test.
 - Define deletion versus fixed-position masking before testing sentence removal; compare against all eligible windows and disclose selection.
-- Independently reconstruct the proposed 928-word carrier; distinguish rune-words from red decimal labels and verify page numbering.
+- The proposed 928-word carrier now has a transcription-based inventory in `exports/carrier-928.json` and a reproducible dual-scanner audit. LP2-23–39 gives 224 + 326 + 378 words under the site's explicit group ranges, not the supplied 224 + 349 + 355 allocation. Five decimal labels are separate. The halfway pair lies on LP2-30 (combined scan 47), final row, across an ordinary word separator, visually checked. The original attached inventory is unavailable; no grille operation or significance claim follows.
 - The [unchanged-rune audit](../docs/reading-fixed-points.md) now checks all 1,796 rune positions in these four sections: 147 unchanged, comprising 134 ordinary fixed points and 13 recorded interruptions. All original reproduction traces and literal readings agree. These are rune-position counts; unchanged words and a grille extraction remain separate questions requiring fixed rules.
 - Corpus comparisons need exact source editions, rune conversion and tokenization. Overlapping windows are dependent; their fraction is not automatically a population-level p-value.
 
