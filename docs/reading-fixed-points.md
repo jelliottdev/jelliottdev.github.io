@@ -23,3 +23,11 @@ python scripts/audit_reading_fixed_points.py --output fixed-point-replay.json
 ```
 
 The result uses known keys and previously aligned interruptions. It does not infer an unknown skip rule, test statistical significance, count unchanged words, or define a grille. A grille proposal still needs explicit carrier coordinates, placement, orientation and readout order; selecting unchanged runes alone does not supply those rules.
+
+## Arithmetic and LP2-56 extension
+
+`scripts/audit_fixed_point_extension.py` checks the stored GP values against independently enumerated primes and sums the baseline positions by rune. The 134 ordinary fixed points sum to **4,826**, an even composite number. The 13 interruption runes sum to **26**. The reported 4,759 total does not reproduce for this 134-position set. The difference is 67, but that arithmetic alone does not identify which position or convention produced the earlier total; do not invent an omitted-rune explanation.
+
+Adding the explicitly separate LP2-56 known control adds 85 runes and four unchanged positions. Ordinals 16, 50 and 70 consume prime-minus-one shifts 58, 232 and 348, each divisible by 29; their key counters advance normally. Ordinal 56 is the one recorded interruption, and its key counter remains 56. The combined five-section object therefore has 1,881 runes and 151 unchanged positions: 137 ordinary fixed points plus 14 interruptions. It is not the original 464-word object.
+
+The extension auditor checks all 85 trace rows against original rune order, prime enumeration and key counters. The original LP2-56 reproduction also matches its stored literal reading. `exports/reading-fixed-point-extension.json` retains the per-rune GP subtotals, all four extension positions, source hashes and combined counts. This remains a descriptive known-reading audit, not a new grille test or a statistical claim.

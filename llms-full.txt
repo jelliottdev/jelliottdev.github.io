@@ -7633,11 +7633,36 @@ For Vigenère, subtracting a key value of zero leaves every input index unchange
 
 The trace’s copied column records membership in the interruption list. It is not a test of whether the input and output indices are equal. Use the index columns for equality and the key-counter columns for advancement; see the trace-column guide.
 
+What do the unchanged runes sum to?
+
+Assign each of the 134 ordinary fixed points its Gematria Primus prime value, counting every occurrence. Their total is 4,826, an even composite number. The 13 recorded interruptions are all F runes, worth 2 each, and total 26 separately. A proposed total of 4,759 does not reproduce for this 134-position set. Without an exact alternative list of positions and counting rules, the discrepancy cannot be explained by the total alone.
+
+Adding “An End”: a separate population
+
+The known reading of LP2-56, “An End”, adds 85 runes and four unchanged positions. Three are ordinary transformations: subtracting a multiple of 29 preserves a rune’s index. Only the fourth is an interruption.
+
+	Rune position (zero-based)	Subtracted value	Key counter	Reason unchanged
+
+	16	58 = 2 × 29	16 → 17	Zero shift modulo 29
+
+	50	232 = 8 × 29	50 → 51	Zero shift modulo 29
+
+	56	None	56 → 56	Recorded interruption
+
+	70	348 = 12 × 29	69 → 70	Zero shift modulo 29
+
+
+The combined five-section population has 1,881 runes and 151 unchanged positions: 137 ordinary fixed points and 14 interruptions. It is not the original four-section, 464-word population. Adding a page changes the object being measured; these counts do not establish a grille or the significance of a pattern.
+
 Reproduce and inspect the positions
 
 Extract the reference-data ZIP with folders intact. Python 3 standard library is sufficient; no source download or hosted service is needed for this audit. Choose a new output filename:
 
 python scripts/audit_reading_fixed_points.py --output fixed-point-replay.json
+
+To check the prime-value totals and every LP2-56 trace row, run the extension auditor. Its saved report includes per-rune subtotals, all four added positions and input hashes. Both files are included in the reference-data ZIP.
+
+python scripts/audit_fixed_point_extension.py --output fixed-point-extension-replay.json
 
 The audit script checks every saved trace against the archived rune stream, declared cipher arithmetic, interruption list and key counters. The original reproduction code was also rerun: its complete traces and literal readings agree. Download all 147 positions, section totals and input hashes. Page and section ordinals are zero-based; section ordinals carry across the pages in these controls. The figure script checks the saved audit again before drawing.
 
@@ -7666,7 +7691,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/prime-indices.html#digits
 - Welcome counter diagram and walkthrough
   https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
-- rune indices
+- rune indices; Gematria Primus prime value
   https://jelliottdev.github.io/reference/articles/rune-values.html
 - 464-word experiment
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
@@ -7678,16 +7703,20 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - trace-column guide
   https://jelliottdev.github.io/reference/articles/running-scripts.html
+- LP2-56, “An End”; prime-minus-one
+  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
+- extension auditor
+  https://jelliottdev.github.io/scripts/audit_fixed_point_extension.py
+- saved report
+  https://jelliottdev.github.io/exports/reading-fixed-point-extension.json
 - audit script
   https://jelliottdev.github.io/scripts/audit_reading_fixed_points.py
 - Download all 147 positions, section totals and input hashes
   https://jelliottdev.github.io/exports/reading-fixed-points.json
 - figure script
   https://jelliottdev.github.io/scripts/plot_reading_fixed_points.py
-- prime-minus-one
-  https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 - the LP2-54–55 feedback study
   https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
 - reset the previous ciphertext value to zero
@@ -7756,6 +7785,8 @@ key_slot_before is blank throughout this control. That column describes a repeat
 
 This interruption position is a parameter of the published reproduction control, recorded through alignment with the archived known reading. It is not inferred automatically by this script and is not a rule to copy every F on an unsolved page. See keystream positions and interruptions.
 
+Four positions in this reading have equal input and output indices, but only one interrupts the key stream. The other three subtract multiples of 29. See the position-by-position audit for the shifts, counters and reproducible counts.
+
 How to replicate LP2-56
 Use Python 3 from the repository or extracted reference-data ZIP. No additional package or AI service is needed.
 python scripts/reproduce_reading.py lp2-56
@@ -7784,6 +7815,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
 - keystream positions and interruptions
   https://jelliottdev.github.io/reference/articles/interruptions.html
+- position-by-position audit
+  https://jelliottdev.github.io/reference/articles/interruptions.html#an-end-extension
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the literal reading
