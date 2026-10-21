@@ -7374,6 +7374,9 @@ Testing geometric interpretations
 
 The compass and geometric cipher guide shows why one matched index pair does not identify Atbash, how a full mapping can be checked, and which coordinates and transformation rules make an image overlay reproducible.
 
+
+The unchanged-rune audit separates ordinary fixed points from recorded interruptions across the four LP1 sections. An equal input and output index does not by itself show that the key counter paused.
+
 Sources, related references, and files
 - The warning
   https://jelliottdev.github.io/reference/lp1-01.html
@@ -7409,6 +7412,8 @@ Sources, related references, and files
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
 - compass and geometric cipher guide
   https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
+- unchanged-rune audit
+  https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
 
 Article: https://jelliottdev.github.io/reference/articles/atbash.html
 
@@ -7500,6 +7505,9 @@ The known-key reuse experiment tests both recorded vectors at every phase, with 
 Sources and verification
 Control parameters and interruption provenance · Reproduction script · Pinned historical walkthrough. The eight-rune example and positions 47–49 were checked against the Welcome trace on 20 October 2026. Recipes reproduce published controls; they are not new solutions.
 
+
+The unchanged-rune audit separates ordinary fixed points from recorded interruptions across the four LP1 sections. An equal input and output index does not by itself show that the key counter paused.
+
 Sources, related references, and files
 - welcome
   https://jelliottdev.github.io/reference/lp1-03.html
@@ -7525,6 +7533,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/reproduce_reading.py
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+- unchanged-rune audit
+  https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
 
 Article: https://jelliottdev.github.io/reference/articles/vigenere.html
 
@@ -7606,6 +7616,33 @@ In the recorded trace, Welcome ordinal 47 is an F rune transformed with shift 26
 
 A copied rune still occupies a position in the input. Removing it before counting changes later ordinals. Similarly, counting punctuation or the Latin letters in a multi-letter rune label would create a different coordinate system. Use rune indices and the trace’s named columns rather than offsets in a displayed English sentence.
 
+An unchanged rune is not necessarily an interruption
+
+Compare an input rune with its aligned output rune. If their indices are equal, the rune is unchanged. That observation does not tell you whether the decoder paused its key counter. The ordinary transformation may itself leave that index unchanged: this is a fixed point.
+
+We checked all 1,796 rune positions in the Warning, Welcome, first koan and second koan—the four sections used by the 464-word experiment. There are 147 unchanged positions: 134 ordinary fixed points and 13 recorded interruptions. These are counts of rune positions, not unchanged words or different rune types.
+
+[Image: Four-section audit: Warning has 2 ordinary fixed points and no interruptions; Welcome has 11 interruptions; first koan has 34 ordinary fixed points; second koan has 98 ordinary fixed points and 2 interruptions.]
+Every unchanged position is assigned a reason from the declared control. Bars count positions on the same scale; they are not percentages of each section. Download SVG.
+
+Why the ordinary rules can preserve a rune
+
+Ordinary Atbash maps index 14 to itself: 28 − 14 = 14. The first koan’s shifted Atbash maps index 1 to itself: (28 − 1 + 3) mod 29 = 1. Neither operation needs an interruption at those positions.
+
+For Vigenère, subtracting a key value of zero leaves every input index unchanged: (c − 0) mod 29 = c. The Welcome’s key contains no zero-valued slots. The second koan’s repeating key has four zero-valued slots among thirteen, producing its 98 ordinary unchanged positions under the recorded alignment. Its two interruptions are counted separately. At a zero-valued key slot the key counter advances; at a recorded interruption it stays put.
+
+The trace’s copied column records membership in the interruption list. It is not a test of whether the input and output indices are equal. Use the index columns for equality and the key-counter columns for advancement; see the trace-column guide.
+
+Reproduce and inspect the positions
+
+Extract the reference-data ZIP with folders intact. Python 3 standard library is sufficient; no source download or hosted service is needed for this audit. Choose a new output filename:
+
+python scripts/audit_reading_fixed_points.py --output fixed-point-replay.json
+
+The audit script checks every saved trace against the archived rune stream, declared cipher arithmetic, interruption list and key counters. The original reproduction code was also rerun: its complete traces and literal readings agree. Download all 147 positions, section totals and input hashes. Page and section ordinals are zero-based; section ordinals carry across the pages in these controls. The figure script checks the saved audit again before drawing.
+
+This is a descriptive check of known readings, not a statistical test or a newly discovered skip rule. Using these positions as a grille would additionally require a specified carrier, placement, orientation and readout order. The counts alone do not define that procedure.
+
 Inspect alignment
 python scripts/reproduce_reading.py welcome --trace
 python scripts/reproduce_reading.py lp2-56 --trace
@@ -7631,8 +7668,24 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/vigenere.html#alignment-diagram
 - rune indices
   https://jelliottdev.github.io/reference/articles/rune-values.html
+- 464-word experiment
+  https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
+- Four-section audit: Warning has 2 ordinary fixed points and no interruptions; Welcome has 11 interruptions; first koan has 34 ordinary fixed points; second koan has 98 ordinary fixed points and 2 interruptions.; Download SVG
+  https://jelliottdev.github.io/exports/figures/reading-fixed-points.svg
+- Atbash
+  https://jelliottdev.github.io/reference/articles/atbash.html
 - Vigenère
   https://jelliottdev.github.io/reference/articles/vigenere.html
+- trace-column guide
+  https://jelliottdev.github.io/reference/articles/running-scripts.html
+- reference-data ZIP
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- audit script
+  https://jelliottdev.github.io/scripts/audit_reading_fixed_points.py
+- Download all 147 positions, section totals and input hashes
+  https://jelliottdev.github.io/exports/reading-fixed-points.json
+- figure script
+  https://jelliottdev.github.io/scripts/plot_reading_fixed_points.py
 - prime-minus-one
   https://jelliottdev.github.io/reference/articles/prime-minus-one.html
 - the LP2-54–55 feedback study
@@ -19225,6 +19278,9 @@ The section-preserving variant keeps the same observed arrangement but shuffles 
 
 This is sensitivity to a null-model assumption, not independent confirmation. Both comparisons use the same previously selected arrangement and neither preserves coherent sentences or accounts for the original search over arrangements.
 
+
+The unchanged-rune audit separates ordinary fixed points from recorded interruptions across the four LP1 sections. An equal input and output index does not by itself show that the key counter paused.
+
 Sources, related references, and files
 - rune indices and labels
   https://jelliottdev.github.io/reference/articles/rune-values.html
@@ -19328,6 +19384,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/target-sized-languages
 - language-comparison overview
   https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
+- unchanged-rune audit
+  https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
 
 Article: https://jelliottdev.github.io/reference/articles/word-lengths.html
 

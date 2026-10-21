@@ -183,6 +183,9 @@ for path in ['exports/corpus-pipeline-audit.json','exports/runeberg-inventory.js
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
  register(artifact.relative_to(root).as_posix(),'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])
+for path in ['exports/reading-fixed-points.json','exports/figures/reading-fixed-points.svg','scripts/audit_reading_fixed_points.py','scripts/plot_reading_fixed_points.py']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
+ files[-1].update(guide='interruptions',aliases=['unchanged runes','fixed points','zero key value'])
 register('exports/doublet-distances.json','Doublet audit')
 files[-1].update(guide='doublets',aliases=['successive doublets','circular distance','8.81'])
 register('exports/unsolved-doublets.json','Doublet audit')

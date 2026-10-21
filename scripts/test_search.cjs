@@ -311,3 +311,7 @@ for(const query of ['U+16C2','16C2','ᛂ','extra rune','corpus alphabet','corpus
  assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=corpus-symbol-census',query);
 }
 console.log('PASS: corpus symbol names and alphabet differences open the complete audit section.');
+for(const query of ['unchanged runes','fixed points','copied rune','zero key value','147 unchanged runes']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/interruptions?section=unchanged',query);
+}
+console.log('PASS: unchanged-rune and zero-shift queries reach the fixed-point distinction.');

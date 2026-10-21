@@ -1,6 +1,6 @@
 # Unchanged runes in the four-section LP1 object
 
-Computation complete; public explanation, figure and download registration pending.
+The interruptions guide now includes the explanation, audited counts, phone-reviewed figure and reproduction downloads. Atbash, Vigenere and word-length guides cross-link it. The extracted reference bundle reproduces every audited position and the SVG; targeted search aliases open the new section directly.
 
 This descriptive audit checks the four known-reading sections underlying the 464-word column-balance object. They contain 1,796 runes. Counts refer to aligned rune positions, not words or the number of different symbols.
 
