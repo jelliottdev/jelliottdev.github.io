@@ -10,9 +10,12 @@
 <tr><td>Reverse the decimal digits of 8734</td><td>4378</td></tr>
 <tr><td>Replace each decimal digit d with 9 − d</td><td>1265</td></tr>
 <tr><td>Negate the integer 8734</td><td>−8734</td></tr>
+<tr><td>Complement the 14-bit representation of 8734</td><td>7649</td></tr>
+<tr><td>Complement the 16-bit representation of 8734</td><td>56801</td></tr>
 <tr><td>Reverse the decimal digits of 7649</td><td>9467</td></tr>
 </tbody></table></div>
-<p>These are different operations, although several might informally be called “inverting.” None of the first four gives 7649. A proposed route from 8734 to 7649 therefore needs its own explicit transformation; the fact that 7649 and 9467 are both prime does not supply that missing step.</p>
+<p>These are different operations, although several might informally be called “inverting.” The supplied proposal specifies a binary complement. It gives 7649 when the width is fixed at 14 bits: <code>(2<sup>14</sup> − 1) − 8734 = 7649</code>. Fourteen is the shortest binary width that holds 8734; choosing 16 bits gives a different answer. The <a href="prime-indices.html#unicode-chain">complete chain audit</a> preserves this width choice, the subsequent decimal reversal and the prime-index lookups. Their arithmetic is reproducible; it does not establish that the drawing was intended as a Unicode instruction.</p>
+<p>The same audit checks the supplied reference count: <a href="prime-indices.html#emirp-reference">67 of 204 four-digit emirps</a> have an nth prime that is also an emirp. That proportion describes the defined set of numbers. It is not a probability that a proposed manuscript connection is intentional.</p>
 <h2 id="encoding">A code point is not a byte sequence</h2>
 <p>The same infinity character has code-point value 8734 and UTF-8 bytes <code>E2 88 9E</code>. The former is a number assigned to the character; the latter is one encoding of it. Reversing decimal digits, reversing hexadecimal characters, and reversing encoded bytes are distinct tests. Always record which representation is being used before applying a numerical operation.</p>
 <p>This Python 3 check reproduces the character conversion, byte encoding, and two decimal transformations without any external package:</p>

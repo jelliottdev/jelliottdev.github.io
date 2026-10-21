@@ -58,7 +58,7 @@ Keep related questions as scoped variants, not a combined result:
 - Count unchanged input/output runes from aligned decoding traces; distinguish word counts, rune counts and skipped F. A grille still needs a fixed placement and readout rule.
 - Corpus comparisons need exact source editions, rune conversion and tokenization. Overlapping windows are dependent; their fraction is not automatically a population-level p-value.
 
-Additional supplied proposals await review: 301/prime-ordinal arithmetic now specifies binary inversion (must specify bit width), Unicode claims, 4x4 numerical spiral routes and forced prime-step changes; do not silently substitute the previously discussed decimal interpretation. Source screenshots and named attachments not actually supplied are not available evidence.
+The supplied 301/prime-ordinal arithmetic now has a completed [prime-index audit](../articles/prime-indices.html): 14-bit complement, Unicode names, decimal reversal, both nth-prime lookups, the exact product and the complete digit-plus-prime sequence. The [emirp reference population](../exports/emirp-chain-audit.json) independently reproduces 67 of 204 under the stated definition. These are arithmetic results, not ciphertext decoding. The proposed LP2-00–02 subtraction/mirroring routes still lack exact coordinates and traversal rules; the forced prime-step exception needs an unambiguous advancement rule. The established [LP2-15 panel construction](../articles/lp2-15-panel.html) is separately reproduced and must not be confused with an arbitrary new spiral-key proposal. Source screenshots and named attachments not actually supplied are not available evidence.
 
 ## Ciphertext autokey and F interruptions on LP2-54–55
 

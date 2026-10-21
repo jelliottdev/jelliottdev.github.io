@@ -9334,10 +9334,16 @@ That conversion is exact for the Unicode character ∞. Choosing that character 
 
 	Negate the integer 8734	−8734
 
+	Complement the 14-bit representation of 8734	7649
+
+	Complement the 16-bit representation of 8734	56801
+
 	Reverse the decimal digits of 7649	9467
 
 
-These are different operations, although several might informally be called “inverting.” None of the first four gives 7649. A proposed route from 8734 to 7649 therefore needs its own explicit transformation; the fact that 7649 and 9467 are both prime does not supply that missing step.
+These are different operations, although several might informally be called “inverting.” The supplied proposal specifies a binary complement. It gives 7649 when the width is fixed at 14 bits: (2^(14) − 1) − 8734 = 7649. Fourteen is the shortest binary width that holds 8734; choosing 16 bits gives a different answer. The complete chain audit preserves this width choice, the subsequent decimal reversal and the prime-index lookups. Their arithmetic is reproducible; it does not establish that the drawing was intended as a Unicode instruction.
+
+The same audit checks the supplied reference count: 67 of 204 four-digit emirps have an nth prime that is also an emirp. That proportion describes the defined set of numbers. It is not a probability that a proposed manuscript connection is intentional.
 
 A code point is not a byte sequence
 
@@ -9388,6 +9394,10 @@ Sources, related references, and files
   https://www.unicode.org/charts/PDF/U2200.pdf
 - open crossed-loop drawing on LP2-15
   https://jelliottdev.github.io/reference/articles/mobius.html
+- complete chain audit
+  https://jelliottdev.github.io/reference/articles/prime-indices.html#unicode-chain
+- 67 of 204 four-digit emirps
+  https://jelliottdev.github.io/reference/articles/prime-indices.html#emirp-reference
 - the two nth-prime lookups and their product
   https://jelliottdev.github.io/reference/articles/prime-indices.html#examples
 - prime indices
