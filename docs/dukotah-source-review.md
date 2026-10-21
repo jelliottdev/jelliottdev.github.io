@@ -42,3 +42,13 @@ The [decoder protocol](../experiments/plans/decoder-skip-controls.md) is frozen 
 ## Search-maximum follow-up
 
 The [bounded-search protocol](../experiments/plans/search-maximum-controls.md) is frozen and executed: nine trace prefixes, 32 paired searches each, and nested dictionaries of 1, 4, 16, 64 and 256 derived keys. Independent reconstruction verifies all 147,456 wrong-key scores, 288 true-key controls, winner/tie rules and true-key inclusion counts. Null maxima rise with the search budget but none crosses the fixed -5.5 threshold in this grid; all included true keys win and recover exactly. These finite controls do not calibrate other key families or adaptive selection. The preserved report and receipt are under `experiments/records/search-maximum-controls/`; the public figures, full account and reproduction bundle now accompany them.
+
+## Image-row coverage follow-up
+
+The source review now distinguishes three stages instead of treating the repository as one transcription method:
+
+- `round10/L1-template/read4.py` classifies candidate components from saved geometry and templates. Its classifier does not read canonical rune labels, but it consumes precomputed components and bands; this inspection alone does not establish their independence.
+- `round19/T2/indel.py` probes insertion and deletion within supplied forced sequences. Its planted single-rune controls are not whole-line omission controls.
+- `transcription/linecrop.py` has an image-only `detect_rows` helper: it uses the central 22–78% of the image, a grayscale threshold of 128, a 1% ink threshold, minimum active height 20 and merge gap below 12. Its separate command-line presentation pairs proposed bands with canonical lines by index and asks for visual mapping when counts differ. Thus it would be incorrect to say that every row-related helper in the repository depends on the canonical line count.
+
+The paper itself leaves whole-line omissions outside its reported coverage. We have not rerun its classifier or verified its numerical accuracy/confidence claims. Hashes of these three inspected sources are retained in the source manifest. The [image-row coverage protocol](../experiments/plans/image-row-coverage.md) fixes a fresh eight-page control before detector execution. It requires an image-first reference inventory, all unmodified-baseline disagreements, unchanged-image omission controls, an independent interval implementation and visual overlays. No completed experiment record exists yet.
