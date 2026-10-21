@@ -21,3 +21,13 @@ For a partial clone, `--allow-fetch` explicitly permits missing-object retrieval
 The initial offline smoke run measured 70 cached objects and stopped on a missing object. It produced no complete report. That run used the initial runner before clearer stop messages were added; retain it as a smoke-run artifact, not a checkpoint for the current hashed specification.
 
 Before publication, finish the census, independently check saved rows, retain the source hashes and eligibility ledger, and compare any claim with its exact reference population. In particular, do not silently substitute the 2,896 rune-only manuscript tokens for the historical 2,902-unit summary.
+
+## Independent audit after completion
+
+The separate checker reads the pinned source bytes through a single Git batch reader. It reconstructs prefixes with a regex scanner, checks exact histograms and duplicate rows, and uses Python's statistics module for sample variance and inclusive quantiles rather than calling the producer's calculator. Floating summary values use an explicit 1e-12 comparison tolerance.
+
+```text
+python scripts/check_corpus_prefixes.py /path/to/project-runeberg /path/to/census/report.json --receipt /path/to/new-audit-receipt.json
+```
+
+The receipt path must be new. No successful full-corpus audit is claimed until this command completes. The checker is syntax-checked; its full source-byte validation is pending the finished census.
