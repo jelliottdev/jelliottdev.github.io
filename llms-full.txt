@@ -21143,6 +21143,9 @@ Read n-grams for other repeated windows, lag matches for equal runes farther apa
 
 This is a descriptive audit with explicit comparison expectations, reproduced on 20 October 2026. No new cipher-search result or adjusted probability is claimed.
 
+
+For one mechanism that can reduce visible repeats without removing plaintext symbols, see the homophonic-substitution example. Its invented alphabet illustrates a possibility; it does not identify the cause of these measured counts.
+
 Sources, related references, and files
 - Doublet counts in the 29-rune alphabet order; O R C, J EO P and OE D A each have counts 4, 2, 1. The total is 86.
   https://jelliottdev.github.io/exports/figures/doublets.svg
@@ -21182,6 +21185,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/word-lengths.html
 - fixed reversible substitution
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- homophonic-substitution example
+  https://jelliottdev.github.io/reference/articles/method-homophonic.html#doublets
 
 Article: https://jelliottdev.github.io/reference/articles/doublets.html
 
@@ -23502,6 +23507,59 @@ Major variants
 
 Variants differ in their many-to-one assignment, whether each plaintext symbol has a fixed number of alternatives, and whether alternatives depend on position or state. A codebook mapping entire words is a separate model.
 
+More than one way to encode the same symbol
+
+Consider this invented mapping. Each ciphertext symbol has exactly one plaintext meaning, but A and B each have two possible encodings:
+
+	Plaintext	Allowed ciphertext symbols	Decoding rule
+
+	A	0 or 1	Both 0 and 1 decode to A.
+
+	B	2 or 3	Both 2 and 3 decode to B.
+
+	C	4	4 decodes to C.
+
+
+The encoder must still choose between alternatives. Choosing independently at random, cycling through them and selecting them from a keyed state are different mechanisms. The mapping table does not determine that choice. If the same ciphertext symbol were also allowed to mean different plaintext symbols, decoding would require another disambiguation rule.
+
+How a repeated plaintext can lose its visible doublets
+
+Encode AAAA using the A row above. With four independent choices between 0 and 1, there are 16 possible ciphertexts. For example, 0000 has three equal adjacent pairs, 0011 has two, and 0101 has none. Every one decodes to the same AAAA.
+
+	Equal adjacent ciphertext pairs	Number of the 16 outputs
+
+	0	2
+	1	6
+	2	6
+	3	2
+
+
+If the two alternatives are equally likely and selected independently at each position, all 16 outputs are equally likely. The expected doublet count is then 1.5, compared with three in AAAA. An encoder forced to alternate produces none. That is a different selection rule, not evidence that the independent-choice model predicts zero doublets.
+
+This example shows a possible mechanism. It does not fit an LP mapping or explain the manuscript’s measured counts. Read the doublet measurements with their exact boundary rules; many different mechanisms can affect the same statistic.
+
+What a fixed many-to-one decoder preserves
+
+Under a fixed one-symbol-to-one-symbol decoder, equal ciphertext symbols always give equal plaintext symbols. Distinct ciphertext symbols may also become equal after merging. Thus decoding by merges can add equal adjacent pairs, but cannot remove an already equal adjacent pair when positions and boundaries are unchanged.
+
+This is a conditional constraint. Deleting symbols, changing segmentation, using variable-length outputs or changing the mapping with state leaves that simple model. State those changes explicitly rather than treating a mismatch as permission to adjust the assignment.
+
+Enumerate the toy example
+
+from collections import Counter
+from itertools import product
+
+outputs = list(product((0, 1), repeat=4))
+counts = Counter(sum(a == b for a, b in zip(word, word[1:]))
+                 for word in outputs)
+assert counts == {0: 2, 1: 6, 2: 6, 3: 2}
+assert sum(n * frequency for n, frequency in counts.items()) / 16 == 1.5
+decode = {0: "A", 1: "A"}
+assert all("".join(decode[symbol] for symbol in word) == "AAAA" for word in outputs)
+print(dict(sorted(counts.items())))
+
+This Python enumeration checks all 16 outputs. It is a mathematical illustration, not a manuscript experiment or a frequency-based language identification.
+
 What a test must specify
 
 Define ciphertext and plaintext inventories, allowed merges, maximum alternatives per symbol, and whether the mapping stays fixed. Report any symbols discarded or treated as nulls. Do not silently alternate between a 29-rune and a Latin-character model.
@@ -23517,6 +23575,8 @@ No completed experiment is linked to this family in the current catalog. That de
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- doublet measurements
+  https://jelliottdev.github.io/reference/articles/doublets.html
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds

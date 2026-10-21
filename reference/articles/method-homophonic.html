@@ -1,6 +1,37 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homophonic and many-to-one substitutions — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · <a href="../index.html#guides-cipher-methods">Runes and cipher methods</a> · <a href="../../index.html#/wiki/method-homophonic">Open in wiki</a> · <a href="method-homophonic.txt">Plain text</a></nav><h1>Homophonic and many-to-one substitutions</h1><p>Allow several ciphertext symbols to represent the same plaintext symbol.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#variants">Major variants</a></li><li><a href="#specification">What a test must specify</a></li><li><a href="#validation">How to evaluate a result</a></li><li><a href="#experiments">Documented experiments</a></li></ul></nav></details><p>A homophonic system may assign several ciphertext symbols to one plaintext symbol. Unlike a one-to-one substitution, it can flatten ciphertext frequencies and obscure repeated-letter patterns. Conversely, merging rune symbols without evidence can manufacture apparent language statistics.</p>
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Homophonic and many-to-one substitutions — Liberpedia</title><link rel="stylesheet" href="../../style.css"><body><main class="standalone-article"><nav aria-label="Article navigation"><a href="../../reference/index.html">Reference index</a> · <a href="../index.html#guides-cipher-methods">Runes and cipher methods</a> · <a href="../../index.html#/wiki/method-homophonic">Open in wiki</a> · <a href="method-homophonic.txt">Plain text</a></nav><h1>Homophonic and many-to-one substitutions</h1><p>Allow several ciphertext symbols to represent the same plaintext symbol.</p><details class="standalone-contents"><summary>On this page</summary><nav aria-label="Article sections"><ul class="guide-contents-list"><li><a href="#variants">Major variants</a></li><li><a href="#mapping">More than one way to encode the same symbol</a></li><li><a href="#doublets">How a repeated plaintext can lose its visible doublets</a></li><li><a href="#constraints">What a fixed many-to-one decoder preserves</a></li><li><a href="#reproduce">Enumerate the toy example</a></li><li><a href="#specification">What a test must specify</a></li><li><a href="#validation">How to evaluate a result</a></li><li><a href="#experiments">Documented experiments</a></li></ul></nav></details><p>A homophonic system may assign several ciphertext symbols to one plaintext symbol. Unlike a one-to-one substitution, it can flatten ciphertext frequencies and obscure repeated-letter patterns. Conversely, merging rune symbols without evidence can manufacture apparent language statistics.</p>
 <h2 id="variants">Major variants</h2>
 <p>Variants differ in their many-to-one assignment, whether each plaintext symbol has a fixed number of alternatives, and whether alternatives depend on position or state. A codebook mapping entire words is a separate model.</p>
+<h2 id="mapping">More than one way to encode the same symbol</h2>
+<p>Consider this invented mapping. Each ciphertext symbol has exactly one plaintext meaning, but A and B each have two possible encodings:</p>
+<div class="table-wrap"><table><thead><tr><th>Plaintext</th><th>Allowed ciphertext symbols</th><th>Decoding rule</th></tr></thead><tbody>
+<tr><td>A</td><td>0 or 1</td><td>Both 0 and 1 decode to A.</td></tr>
+<tr><td>B</td><td>2 or 3</td><td>Both 2 and 3 decode to B.</td></tr>
+<tr><td>C</td><td>4</td><td>4 decodes to C.</td></tr>
+</tbody></table></div>
+<p>The encoder must still choose between alternatives. Choosing independently at random, cycling through them and selecting them from a keyed state are different mechanisms. The mapping table does not determine that choice. If the same ciphertext symbol were also allowed to mean different plaintext symbols, decoding would require another disambiguation rule.</p>
+<h2 id="doublets">How a repeated plaintext can lose its visible doublets</h2>
+<p>Encode AAAA using the A row above. With four independent choices between 0 and 1, there are 16 possible ciphertexts. For example, 0000 has three equal adjacent pairs, 0011 has two, and 0101 has none. Every one decodes to the same AAAA.</p>
+<div class="table-wrap"><table><thead><tr><th>Equal adjacent ciphertext pairs</th><th>Number of the 16 outputs</th></tr></thead><tbody>
+<tr><td>0</td><td>2</td></tr><tr><td>1</td><td>6</td></tr><tr><td>2</td><td>6</td></tr><tr><td>3</td><td>2</td></tr>
+</tbody></table></div>
+<p>If the two alternatives are equally likely and selected independently at each position, all 16 outputs are equally likely. The expected doublet count is then 1.5, compared with three in AAAA. An encoder forced to alternate produces none. That is a different selection rule, not evidence that the independent-choice model predicts zero doublets.</p>
+<p>This example shows a possible mechanism. It does not fit an LP mapping or explain the manuscript’s measured counts. Read the <a href="doublets.html">doublet measurements</a> with their exact boundary rules; many different mechanisms can affect the same statistic.</p>
+<h2 id="constraints">What a fixed many-to-one decoder preserves</h2>
+<p>Under a fixed one-symbol-to-one-symbol decoder, equal ciphertext symbols always give equal plaintext symbols. Distinct ciphertext symbols may also become equal after merging. Thus decoding by merges can add equal adjacent pairs, but cannot remove an already equal adjacent pair when positions and boundaries are unchanged.</p>
+<p>This is a conditional constraint. Deleting symbols, changing segmentation, using variable-length outputs or changing the mapping with state leaves that simple model. State those changes explicitly rather than treating a mismatch as permission to adjust the assignment.</p>
+<h2 id="reproduce">Enumerate the toy example</h2>
+<pre><code>from collections import Counter
+from itertools import product
+
+outputs = list(product((0, 1), repeat=4))
+counts = Counter(sum(a == b for a, b in zip(word, word[1:]))
+                 for word in outputs)
+assert counts == {0: 2, 1: 6, 2: 6, 3: 2}
+assert sum(n * frequency for n, frequency in counts.items()) / 16 == 1.5
+decode = {0: "A", 1: "A"}
+assert all("".join(decode[symbol] for symbol in word) == "AAAA" for word in outputs)
+print(dict(sorted(counts.items())))</code></pre>
+<p>This Python enumeration checks all 16 outputs. It is a mathematical illustration, not a manuscript experiment or a frequency-based language identification.</p>
 <h2 id="specification">What a test must specify</h2>
 <p>Define ciphertext and plaintext inventories, allowed merges, maximum alternatives per symbol, and whether the mapping stays fixed. Report any symbols discarded or treated as nulls. Do not silently alternate between a 29-rune and a Latin-character model.</p>
 <h2 id="validation">How to evaluate a result</h2>
@@ -8,4 +39,4 @@
 <h2 id="experiments">Documented experiments</h2>
 <p>No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.</p>
 <p><a href="solving-methods.html">All solving-method families</a> · <a href="search-space.html">Search space and bounds</a> · <a href="reproducibility.html">Documenting a test</a> · <a href="../../index.html#/experiments">Have we tried it?</a></p>
-<h2>Guides linking here</h2><ul><li><a href="solving-methods.html">Solving methods: a map of families and variants</a></li><li><a href="method-codebooks.html">Codebooks and mixed letter-word systems</a></li></ul></main></body></html>
+<h2>Guides linking here</h2><ul><li><a href="solving-methods.html">Solving methods: a map of families and variants</a></li><li><a href="doublets.html">Doublets and the 4–2–1 count pattern</a></li><li><a href="method-codebooks.html">Codebooks and mixed letter-word systems</a></li></ul></main></body></html>
