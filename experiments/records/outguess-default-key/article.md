@@ -24,6 +24,28 @@ All 77 invocations were attempted. Ten controls matched. **The other 67 images a
 
 The repeated output length 58,152 occurs in 19 candidate records. It is a reported extraction length, not a discovered structure in the manuscript. The 21 candidate byte streams have distinct hashes. None contains the ASCII marker `-----BEGIN PGP SIGNED MESSAGE-----`; that limited observation neither validates nor rules out a different encoding or payload type. No signature verification or interpretation of candidate contents was performed in this experiment.
 
+## What the failure diagnostics tell us
+
+The decimal process code `3221225620` is `0xC0000094`. Microsoft's [NTSTATUS reference](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55) assigns that value to `STATUS_INTEGER_DIVIDE_BY_ZERO`. This identifies the Windows status associated with the saved exits. It does not locate an instruction, identify a faulty source line, or prove whether the cause lies in upstream code, port changes, or another part of the build. No crash dump or debugger stack trace is available in this record.
+
+A separate audit of the saved diagnostics finds the reported header `seed: 41408, len: 58152` on 65 images:
+
+| Recorded outcome for that same header | Images | Output recorded |
+| --- | --- | --- |
+| Exit 0, unverified candidate bytes | 19 | 58,152 bytes each |
+| Exit 1, retrieval rejected | 5 | Zero bytes |
+| Exit 0xC0000094, abnormal termination | 41 | Zero bytes |
+
+Thus the repeated header occurs with three different outcomes. The `len` diagnostic is the length reported by the tool, not confirmation that a valid payload of that size exists. Nor do the shared values establish intentional repeated content in the JPEGs. The logs alone do not explain their cause. Two other candidate outputs have different headers; the ten positive controls also use different headers.
+
+The [diagnostic audit JSON](experiments/records/outguess-default-key/results/diagnostic-audit.json) preserves each image's reported seed, length, exit code and output size, tied to the original report's checksum. Reproduce this comparison from the experiment bundle without installing OutGuess or downloading the images:
+
+```text
+python experiments/records/outguess-default-key/audit_diagnostics.py
+```
+
+This command checks existing evidence; it is not another extraction trial. A useful debugging comparison would retain a positive control, a byte-producing case with the shared header, a rejected case, and an abnormal case. Keep the original files and key fixed, record the replacement executable and build settings, and collect a stack trace if it also terminates abnormally. A successful run with another build would still require checking the extracted bytes; it would not automatically validate them as a message.
+
 ## How to reproduce
 
 Use Python 3.12.10 and a locally available OutGuess executable. See the [OutGuess guide](#/wiki/outguess) for original-file selection and the known-payload controls.

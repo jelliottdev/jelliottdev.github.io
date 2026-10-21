@@ -96,6 +96,9 @@ The collection records ten default-key extractions: eight LP1 images checked on 
 
 Eight-image LP1 manifest · Opening-image record · Compasses-cover record · Extraction wrapper. These records retain original-image and payload hashes. Signature evidence is separate from extraction evidence.
 
+
+The default-key sweep now includes a saved-log audit: one reported seed/length pair occurs in successful exits with unverified bytes, rejected retrievals, and abnormal exits. Its Windows code corresponds to integer division by zero, but the saved logs do not locate the cause. The audit can be reproduced without running OutGuess; it does not replace the still-needed comparison with another documented build.
+
 Sources, related references, and files
 - The dark 2014 opening image with white text; Opening image
   https://jelliottdev.github.io/reference/articles/opening-2014.html
@@ -129,7 +132,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 - hexadecimal
   https://jelliottdev.github.io/reference/articles/hexadecimal.html
-- the default-key OutGuess experiment
+- the default-key OutGuess experiment; default-key sweep
   https://jelliottdev.github.io/#/experiments/outguess-default-key
 - Eight-image LP1 manifest
   https://jelliottdev.github.io/data/evidence/embedded-payloads.json
