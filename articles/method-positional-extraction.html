@@ -1,0 +1,21 @@
+<p>Positional extraction reads only selected parts of an input: every third rune, marked cells, the first word of each line, or positions exposed by a grille. The selection rule determines what survives. A matching length or a visually appealing mask does not by itself establish where to place the mask or how to read it.</p>
+<h2 id="stride">Every kth symbol</h2>
+<p>Fix a stride k and a starting offset s, then select original positions <code>s, s + k, s + 2k, …</code> while they remain inside the input. With zero-based positions, s = 0 means start at the first symbol. On an invented ten-symbol input:</p>
+<div class="table-wrap"><table><thead><tr><th>Input positions</th><th>Stride</th><th>Offset</th><th>Selected positions</th></tr></thead><tbody>
+<tr><td>0 through 9</td><td>3</td><td>0</td><td>0, 3, 6, 9</td></tr>
+<tr><td>0 through 9</td><td>3</td><td>1</td><td>1, 4, 7</td></tr>
+<tr><td>0 through 9</td><td>3</td><td>2</td><td>2, 5, 8</td></tr>
+</tbody></table></div>
+<p>“Every third rune” can mean the first row or the third row depending on where counting starts. Specify the offset. Starting again at each printed line also differs from carrying the count across lines. If the route wraps around the end, define a stopping rule and whether repeated positions are allowed; that is a different extraction.</p>
+<h2 id="masks">Masks and grilles</h2>
+<p>A mask selects positions in a fixed layout. Declare the dimensions, placement, orientation, holes and readout order. If a mask rotates or reflects, record the sequence of placements and whether repeated cells are read again. If the mask is derived from another page, explain the alignment between the two sources.</p>
+<p>The <a href="#/wiki/grille-carrier">464/928-word carrier study</a> checks a particular proposed population and its word identities. Its counts do not supply a general mask. The <a href="#/wiki/method-routes">route guide</a> addresses traversal; <a href="#/wiki/method-acrostics">acrostics</a> cover selection at word or line boundaries.</p>
+<h2 id="bounds">Count the selection choices</h2>
+<p>Searching strides 1 through K and offsets 0 through k − 1 for each stride gives <code>K(K + 1)/2</code> configurations per input before adding directions or reset rules. Some can be empty or produce the same output on short inputs. Enumerate the actual selections and retain original positions.</p>
+<p>An arbitrary mask selecting exactly m of n positions has <code>n! / (m! × (n − m)!)</code> possibilities. If their order may also change freely, there are <code>n! / (n − m)!</code> ordered selections without replacement. Allowing the solver to choose the mask and order after seeing a desired phrase is therefore much more flexible than one independently specified grille.</p>
+<h2 id="validation">Account for what was not read</h2>
+<p>Report selected and omitted positions, retained length, boundaries and all tried settings. Use an acceptance criterion that does not reward arbitrarily short fragments. Apply the same search to controls and test a continuation using a selection rule fixed beforehand. If the rule is supposed to divide the entire message into several streams, show all of them, not only the most readable stream.</p>
+<p>Extraction can combine with substitution or numerical shifts. Specify whether those use the original positions or the shorter extracted sequence; see <a href="#/wiki/method-composition">ordered pipelines</a>. A deletion-based description of the same selection belongs to the <a href="#/wiki/method-nulls">null-removal family</a> too. These are overlapping classifications, not independent evidence.</p>
+<h2 id="coverage">Current coverage</h2>
+<p>No standalone stride or general grille-decoding experiment is linked here yet. The carrier study is an input inventory. It should not be read as a completed test of all masks that could be placed on that carrier.</p>
+<p><a href="#/wiki/solving-methods">All method families</a> · <a href="#/wiki/search-space">Search space and bounds</a></p>

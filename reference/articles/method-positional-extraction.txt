@@ -1,0 +1,62 @@
+Positional extraction, strides and grilles
+
+Specify which positions survive, how counting starts and how masks are placed and read.
+
+Positional extraction reads only selected parts of an input: every third rune, marked cells, the first word of each line, or positions exposed by a grille. The selection rule determines what survives. A matching length or a visually appealing mask does not by itself establish where to place the mask or how to read it.
+
+Every kth symbol
+
+Fix a stride k and a starting offset s, then select original positions s, s + k, s + 2k, … while they remain inside the input. With zero-based positions, s = 0 means start at the first symbol. On an invented ten-symbol input:
+
+	Input positions	Stride	Offset	Selected positions
+
+	0 through 9	3	0	0, 3, 6, 9
+
+	0 through 9	3	1	1, 4, 7
+
+	0 through 9	3	2	2, 5, 8
+
+
+“Every third rune” can mean the first row or the third row depending on where counting starts. Specify the offset. Starting again at each printed line also differs from carrying the count across lines. If the route wraps around the end, define a stopping rule and whether repeated positions are allowed; that is a different extraction.
+
+Masks and grilles
+
+A mask selects positions in a fixed layout. Declare the dimensions, placement, orientation, holes and readout order. If a mask rotates or reflects, record the sequence of placements and whether repeated cells are read again. If the mask is derived from another page, explain the alignment between the two sources.
+
+The 464/928-word carrier study checks a particular proposed population and its word identities. Its counts do not supply a general mask. The route guide addresses traversal; acrostics cover selection at word or line boundaries.
+
+Count the selection choices
+
+Searching strides 1 through K and offsets 0 through k − 1 for each stride gives K(K + 1)/2 configurations per input before adding directions or reset rules. Some can be empty or produce the same output on short inputs. Enumerate the actual selections and retain original positions.
+
+An arbitrary mask selecting exactly m of n positions has n! / (m! × (n − m)!) possibilities. If their order may also change freely, there are n! / (n − m)! ordered selections without replacement. Allowing the solver to choose the mask and order after seeing a desired phrase is therefore much more flexible than one independently specified grille.
+
+Account for what was not read
+
+Report selected and omitted positions, retained length, boundaries and all tried settings. Use an acceptance criterion that does not reward arbitrarily short fragments. Apply the same search to controls and test a continuation using a selection rule fixed beforehand. If the rule is supposed to divide the entire message into several streams, show all of them, not only the most readable stream.
+
+Extraction can combine with substitution or numerical shifts. Specify whether those use the original positions or the shorter extracted sequence; see ordered pipelines. A deletion-based description of the same selection belongs to the null-removal family too. These are overlapping classifications, not independent evidence.
+
+Current coverage
+
+No standalone stride or general grille-decoding experiment is linked here yet. The carrier study is an input inventory. It should not be read as a completed test of all masks that could be placed on that carrier.
+
+All method families · Search space and bounds
+
+Sources, related references, and files
+- 464/928-word carrier study
+  https://jelliottdev.github.io/reference/articles/grille-carrier.html
+- route guide
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- acrostics
+  https://jelliottdev.github.io/reference/articles/method-acrostics.html
+- ordered pipelines
+  https://jelliottdev.github.io/reference/articles/method-composition.html
+- null-removal family
+  https://jelliottdev.github.io/reference/articles/method-nulls.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-positional-extraction.html

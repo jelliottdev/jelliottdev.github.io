@@ -52,7 +52,14 @@ for(const [query,id] of [
  ['Try an acrostic','acrostics'],
  ['Try finite differences','differences'],
  ['Use a running key','running-key'],
- ['Use a codebook','codebooks']
+ ['Use a codebook','codebooks'],
+ ['Read every third rune on page 31','grilles'],
+ ['Could a keyboard layout explain it?','symbol-systems'],
+ ['Try Morse code','symbol-systems'],
+ ['Read backwards','transposition'],
+ ['Read in a snake pattern','routes'],
+ ['Combine ciphers','composition'],
+ ['Remove some runes first','null-removal']
 ])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
 assert.equal(Coverage.families(families,'LP2-31').length,0);
 assert.equal(Search.experimentDocs(families).length,0);
