@@ -90,3 +90,6 @@ Run `python scripts/test_experiment_bundles.py` after rebuilding downloads. It c
 `data/idea-coverage.json` records common proposals and missing bounds. These notes are not experiments, are not included in completed-record counts, and are not sent to the hosted AI as experimental evidence. The local checker matches explicit phrases and displays up to three related notes; the browse view exposes all notes.
 
 Each note has a coverage status, an explanation, the information needed to make the proposal testable, a proposed extension explicitly marked not run, and links to narrower published experiments. Partial coverage never means that an entire cipher family was excluded. Keep these notes current when a new experiment is published. Run `node scripts/test_idea_coverage.cjs` after edits.
+
+
+The solving-method directory is built from `data/method-families.json` by `scripts/build_method_map.py`, called during the article build. When publishing a result, assign it to at least one relevant method family. These links are editorial associations, not claims that a whole family has been tested. The directory copies each linked record's question and exclusions so changes to scope do not leave stale summaries.

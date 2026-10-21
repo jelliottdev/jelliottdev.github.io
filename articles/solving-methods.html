@@ -1,58 +1,226 @@
 <p>Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.</p>
-<p><strong>A family page is not a completed experiment.</strong> It describes the approach and how to specify a test. Linked experiment records cover only their stated inputs, variants and bounds. An empty experiment list means a gap in this catalog, not an untouched or promising approach.</p>
-<h2 id="symbol-substitutions">Symbol substitutions</h2>
-<dl><dt><a href="#/wiki/method-fixed-substitution">Fixed alphabet substitutions</a></dt><dd>Replace each rune consistently with one other symbol.</dd>
-<dt><a href="#/wiki/method-homophonic">Homophonic and many-to-one substitutions</a></dt><dd>Allow several ciphertext symbols to represent the same plaintext symbol.</dd>
-<dt><a href="#/wiki/vigenere">Repeating-key and polyalphabetic ciphers</a></dt><dd>Change the substitution according to position in a repeated key.</dd>
-<dt><a href="#/wiki/method-fractionation">Fractionation and coordinate alphabets</a></dt><dd>Split symbols into coordinates, rearrange the components, then regroup.</dd>
-<dt><a href="#/wiki/method-blocks">Block and matrix transformations</a></dt><dd>Transform groups of runes together instead of treating each position independently.</dd>
+<p><strong>A family page is not a completed experiment.</strong> Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.</p>
+<h2 id="symbol-substitutions">Symbol substitutions</h2><dl>
+<dt id="family-fixed-substitution"><a href="#/wiki/method-fixed-substitution">Fixed alphabet substitutions</a></dt><dd><p>Replace each rune consistently with one other symbol.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-alphabet-warning-prefix">LP2-00–55: fixed alphabet transforms against the warning opening</a></p><p><strong>Question tested:</strong> Do shifts, alphabet reversal, or whole-stream reversal recover the first 12 decoded warning runes at the start of an archived LP2-00–55 page?</p><p><strong>Outside this test:</strong> Other openings or positions, heading removal, regional or line-wise reversal, arbitrary substitution alphabets, other affine multipliers, Vigenère, corrections and language scoring.</p></li>
+</ul></details>
+</dd>
+<dt id="family-homophonic"><a href="#/wiki/method-homophonic">Homophonic and many-to-one substitutions</a></dt><dd><p>Allow several ciphertext symbols to represent the same plaintext symbol.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-polyalphabetic"><a href="#/wiki/vigenere">Repeating-key and polyalphabetic ciphers</a></dt><dd><p>Change the substitution according to position in a repeated key.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-known-vigenere-keys">LP2-00–55: two known Vigenère keys and nine openings</a></p><p><strong>Question tested:</strong> Do either of the two known Vigenere keys recover a 12-rune known-reading opening at the start of an LP2-00–55 page under uninterrupted repeating-key decoding?</p><p><strong>Outside this test:</strong> Other keys, interruption placement, noninitial positions, heading removal, cross-page carry, alternative alphabets, transposition and language scoring.</p></li>
+</ul></details>
+</dd>
+<dt id="family-fractionation"><a href="#/wiki/method-fractionation">Fractionation and coordinate alphabets</a></dt><dd><p>Split symbols into coordinates, rearrange the components, then regroup.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-blocks"><a href="#/wiki/method-blocks">Block and matrix transformations</a></dt><dd><p>Transform groups of runes together instead of treating each position independently.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
 </dl>
-<h2 id="keys-sequences-and-state">Keys, sequences and state</h2>
-<dl><dt><a href="#/wiki/prime-minus-one">Arithmetic keystreams</a></dt><dd>Generate shifts from a declared numerical sequence.</dd>
-<dt><a href="#/wiki/lp2-54-55-feedback">Autokey and ciphertext feedback</a></dt><dd>Use earlier plaintext or ciphertext to update later decoding state.</dd>
-<dt><a href="#/wiki/one-time-pad">Seeded generators and unrestricted additive keys</a></dt><dd>Distinguish short reproducible generators from unrestricted per-position keys.</dd>
-<dt><a href="#/wiki/method-running-key">Running keys from external texts</a></dt><dd>Convert a specified external text into a stream of key symbols.</dd>
-<dt><a href="#/wiki/interruptions">Nulls, interruptions and reset rules</a></dt><dd>Specify which symbols consume output or key state and when state restarts.</dd>
-<dt><a href="#/wiki/key-alignment">Offsets and key alignment</a></dt><dd>Search starting positions and a bounded set of alignment changes.</dd>
+<h2 id="keys-sequences-and-state">Keys, sequences and state</h2><dl>
+<dt id="family-number-streams"><a href="#/wiki/prime-minus-one">Arithmetic keystreams</a></dt><dd><p>Generate shifts from a declared numerical sequence.</p>
+<details><summary>Documented tests (5)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-prime-minus-one-openings">LP2-00–55: prime-minus-one shifts and known openings</a></p><p><strong>Question tested:</strong> Does uninterrupted prime-minus-one arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?</p><p><strong>Outside this test:</strong> Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.</p></li>
+<li><p><a href="#/experiments/lp2-prime-openings">LP2-00–55: ordinary primes instead of primes minus one</a></p><p><strong>Question tested:</strong> Does uninterrupted prime arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?</p><p><strong>Outside this test:</strong> Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.</p></li>
+<li><p><a href="#/experiments/lp2-fibonacci-openings">LP2-00–55: Fibonacci shifts and repeated phases</a></p><p><strong>Question tested:</strong> Does uninterrupted Fibonacci arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?</p><p><strong>Outside this test:</strong> Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.</p></li>
+<li><p><a href="#/experiments/lp2-totient-openings">LP2-00–55: totients of consecutive integers</a></p><p><strong>Question tested:</strong> Does uninterrupted consecutive-integer totient arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?</p><p><strong>Outside this test:</strong> Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.</p></li>
+<li><p><a href="#/experiments/direct-polynomial-streams">LP2-00–55: direct polynomial streams, degree at most eight</a></p><p><strong>Question tested:</strong> Can a fixed-modulus integer polynomial of degree at most eight directly generate each page, in index or prime coordinates?</p><p><strong>Outside this test:</strong> Unknown plaintext or keystream mixing, degree above eight, extra output maps, skipped clock positions, internal resets, alternative transcriptions and LP2-56–57.</p></li>
+</ul></details>
+</dd>
+<dt id="family-feedback"><a href="#/wiki/lp2-54-55-feedback">Autokey and ciphertext feedback</a></dt><dd><p>Use earlier plaintext or ciphertext to update later decoding state.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-54-55-autokey-reset">LP2-54–55: reset ciphertext state at selected F runes</a></p><p><strong>Question tested:</strong> Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?</p><p><strong>Outside this test:</strong> Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.</p></li>
+<li><p><a href="#/experiments/lp2-54-55-autokey-skip">LP2-54–55: skip selected F runes in ciphertext feedback</a></p><p><strong>Question tested:</strong> Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?</p><p><strong>Outside this test:</strong> Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.</p></li>
+</ul></details>
+</dd>
+<dt id="family-seeded"><a href="#/wiki/one-time-pad">Seeded generators and unrestricted additive keys</a></dt><dd><p>Distinguish short reproducible generators from unrestricted per-position keys.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/seed-crib-controls">Does matching the opening text identify a seed?</a></p><p><strong>Question tested:</strong> Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?</p><p><strong>Outside this test:</strong> No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.</p></li>
+</ul></details>
+</dd>
+<dt id="family-running-key"><a href="#/wiki/method-running-key">Running keys from external texts</a></dt><dd><p>Convert a specified external text into a stream of key symbols.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-interruptions"><a href="#/wiki/interruptions">Nulls, interruptions and reset rules</a></dt><dd><p>Specify which symbols consume output or key state and when state restarts.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a></p><p><strong>Question tested:</strong> How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?</p><p><strong>Outside this test:</strong> No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.</p></li>
+</ul></details>
+</dd>
+<dt id="family-alignment"><a href="#/wiki/key-alignment">Offsets and key alignment</a></dt><dd><p>Search starting positions and a bounded set of alignment changes.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a></p><p><strong>Question tested:</strong> How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?</p><p><strong>Outside this test:</strong> No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.</p></li>
+</ul></details>
+</dd>
 </dl>
-<h2 id="order-and-selection">Order and selection</h2>
-<dl><dt><a href="#/wiki/transposition">Transposition and permutations</a></dt><dd>Change symbol order while preserving the selected symbols.</dd>
-<dt><a href="#/wiki/method-routes">Grid layouts, spirals and route ciphers</a></dt><dd>Choose an explicit layout and traversal through its cells.</dd>
-<dt><a href="#/wiki/grille-carrier">Grilles and positional extraction</a></dt><dd>Select positions using a mask or indexing rule.</dd>
-<dt><a href="#/wiki/method-acrostics">Acrostics and boundary-letter extraction</a></dt><dd>Select initial, final or regularly indexed symbols from defined units.</dd>
-<dt><a href="#/wiki/transcription-checking">Word, row, page and section boundaries</a></dt><dd>Treat boundary choices as explicit input or reset variants.</dd>
+<h2 id="order-and-selection">Order and selection</h2><dl>
+<dt id="family-transposition"><a href="#/wiki/transposition">Transposition and permutations</a></dt><dd><p>Change symbol order while preserving the selected symbols.</p>
+<details><summary>Documented tests (3)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-row-column-routes">LP2-00–55: simple row and column reading routes</a></p><p><strong>Question tested:</strong> Do simple row/column traversals of archived LP2-00–55 rune layouts recover any of nine known 12-rune openings without substitution?</p><p><strong>Outside this test:</strong> Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions.</p></li>
+<li><p><a href="#/experiments/lp2-word-reversal">LP2-00–55: reverse runes within word-like segments</a></p><p><strong>Question tested:</strong> Does reversing runes within declared word-like segments recover any of nine known 12-rune openings on LP2-00–55?</p><p><strong>Outside this test:</strong> Word-order reversal, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.</p></li>
+<li><p><a href="#/experiments/lp2-word-order-reversal">LP2-00–55: reverse the order of word-like segments</a></p><p><strong>Question tested:</strong> Does reversing the order of declared word-like segments, while preserving runes inside each segment, recover any of nine known 12-rune openings on LP2-00–55?</p><p><strong>Outside this test:</strong> Within-segment reversal, reversal limited to each row, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.</p></li>
+</ul></details>
+</dd>
+<dt id="family-routes"><a href="#/wiki/method-routes">Grid layouts, spirals and route ciphers</a></dt><dd><p>Choose an explicit layout and traversal through its cells.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-row-column-routes">LP2-00–55: simple row and column reading routes</a></p><p><strong>Question tested:</strong> Do simple row/column traversals of archived LP2-00–55 rune layouts recover any of nine known 12-rune openings without substitution?</p><p><strong>Outside this test:</strong> Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions.</p></li>
+<li><p><a href="#/experiments/totient-map-route">LP2-00–02: 27 × 27 totient-map route replay</a></p><p><strong>Question tested:</strong> Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?</p><p><strong>Outside this test:</strong> Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods.</p></li>
+</ul></details>
+</dd>
+<dt id="family-grilles"><a href="#/wiki/grille-carrier">Grilles and positional extraction</a></dt><dd><p>Select positions using a mask or indexing rule.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-acrostics"><a href="#/wiki/method-acrostics">Acrostics and boundary-letter extraction</a></dt><dd><p>Select initial, final or regularly indexed symbols from defined units.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-segmentation"><a href="#/wiki/transcription-checking">Word, row, page and section boundaries</a></dt><dd><p>Treat boundary choices as explicit input or reset variants.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/word-reset-repetition">LP2-00–55: exact words and anagram repetition</a></p><p><strong>Question tested:</strong> Do interior ciphertext tokens repeat exactly or as anagrams under two apostrophe policies?</p><p><strong>Outside this test:</strong> Claims that plaintext must repeat, changing effective keys or state, different word maps, alternative boundaries, page-edge tokens, language significance tests, and a general rejection of word ciphers.</p></li>
+</ul></details>
+</dd>
+<dt id="family-book-codes"><a href="#/wiki/book-ciphers">Book ciphers and coordinate lookups</a></dt><dd><p>Select symbols from a specified source text using explicit coordinate and counting rules.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/emerson-book-cipher-control">Emerson book cipher: historical control reproduction</a></p><p><strong>Question tested:</strong> Do the archived opening-image coordinates reproduce the documented historical string with the frozen Emerson PDF derivative and its declared conventions?</p><p><strong>Outside this test:</strong> Other editions, other texts, arbitrary coordinate searches, unsolved-page transfer and validation of any current network destination.</p></li>
+</ul></details>
+</dd>
 </dl>
-<p><a href="#/wiki/book-ciphers">Book ciphers and coordinate lookups</a> select symbols from a specified source text using explicit coordinate and counting rules. Unlike a running key, a coordinate list points directly into that text.</p>
-<h2 id="numbers-and-representations">Numbers and representations</h2>
-<dl><dt><a href="#/wiki/prime-sums">Gematria and rune-sum mappings</a></dt><dd>Map runes or groups to numerical totals and count competing matches.</dd>
-<dt><a href="#/wiki/prime-indices">Prime indexing and value transforms</a></dt><dd>Distinguish rune indices, prime values and prime indices before composing operations.</dd>
-<dt><a href="#/wiki/method-expressions">Bounded arithmetic expressions</a></dt><dd>Declare a finite grammar of operations rather than searching unlimited expressions.</dd>
-<dt><a href="#/wiki/hexadecimal">Radix changes and byte encodings</a></dt><dd>Specify how symbols become digits, integers and bytes.</dd>
-<dt><a href="#/wiki/xor">Bitwise combinations and XOR</a></dt><dd>Operate on explicitly encoded bits or bytes, with alignment and key rules.</dd>
-<dt><a href="#/wiki/magic-squares">Magic squares and numerical grids</a></dt><dd>Separate reconstructing a grid from using it as a decoding key.</dd>
+<h2 id="numbers-and-representations">Numbers and representations</h2><dl>
+<dt id="family-sums"><a href="#/wiki/prime-sums">Gematria and rune-sum mappings</a></dt><dd><p>Map runes or groups to numerical totals and count competing matches.</p>
+<details><summary>Documented tests (4)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/mixed-square-word-sums">LP1-05: candidate word sums and rune segmentation</a></p><p><strong>Question tested:</strong> Do the sixteen supplied Latin word candidates admit the claimed GP sums, and are those sums forced by their spellings?</p><p><strong>Outside this test:</strong> Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.</p></li>
+<li><p><a href="#/experiments/selected-phrase-word-sums">Selected phrase and MYRMELEONTIDAE: five word-sum candidates</a></p><p><strong>Question tested:</strong> Do the selected PROVE WORTHIER FIND TRUTHS and MYRMELEONTIDAE candidates admit their proposed sums under the baseline rules?</p><p><strong>Outside this test:</strong> Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.</p></li>
+<li><p><a href="#/experiments/lp2-row-prime-sums">LP2-00–55: prime row sums against shuffled pages</a></p><p><strong>Question tested:</strong> Do the archived row boundaries on LP2-00–55 produce more prime-valued Gematria Primus row sums than within-page rune shuffles?</p><p><strong>Outside this test:</strong> Emirps, prime ordinals, decoded text, arbitrary regions, changed spellings, other boundaries and page-specific significance claims.</p></li>
+<li><p><a href="#/experiments/wing-tree-eleven-rune-windows">LP2-27–32: eleven-rune sums of 563 and 569</a></p><p><strong>Question tested:</strong> Do sums 563 and 569 recur in eleven consecutive runes elsewhere in the Wing and Tree section?</p><p><strong>Outside this test:</strong> Grid columns and perimeters, manuscript-row selection, other lengths or targets, cross-page windows, file-dimension retesting, null-model simulations, image provenance and decryption.</p></li>
+</ul></details>
+</dd>
+<dt id="family-prime-indices"><a href="#/wiki/prime-indices">Prime indexing and value transforms</a></dt><dd><p>Distinguish rune indices, prime values and prime indices before composing operations.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/position-divisor-labels">LP2-00–55: fixed divisor labels of rune positions</a></p><p><strong>Question tested:</strong> Can fixed divisors greater than one label consecutive rune positions, with any starting integer?</p><p><strong>Outside this test:</strong> Irregular clocks, within-page resets, time-varying labels, transformed outputs, plaintext mixing, general rejection of noncoprime strides, and LP2-56–57.</p></li>
+</ul></details>
+</dd>
+<dt id="family-expressions"><a href="#/wiki/method-expressions">Bounded arithmetic expressions</a></dt><dd><p>Declare a finite grammar of operations rather than searching unlimited expressions.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-row-emirp-sums">LP2-00–55: emirp row sums with the same page shuffles</a></p><p><strong>Question tested:</strong> Do archived LP2-00–55 row sums contain more emirps than the same page shuffles used in the prime-sum baseline?</p><p><strong>Outside this test:</strong> Prime palindromes, prime ordinals, decoded text, arbitrary regions, changed spellings, other bases or boundaries and page-specific significance claims.</p></li>
+</ul></details>
+</dd>
+<dt id="family-radix"><a href="#/wiki/hexadecimal">Radix changes and byte encodings</a></dt><dd><p>Specify how symbols become digits, integers and bytes.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-bitwise"><a href="#/wiki/xor">Bitwise combinations and XOR</a></dt><dd><p>Operate on explicitly encoded bits or bytes, with alignment and key rules.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-squares"><a href="#/wiki/magic-squares">Magic squares and numerical grids</a></dt><dd><p>Separate reconstructing a grid from using it as a decoding key.</p>
+<details><summary>Documented tests (4)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/magic-square-freedom">Magic squares: does one fixed entry determine the rest?</a></p><p><strong>Question tested:</strong> Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?</p><p><strong>Outside this test:</strong> No other primality, distinctness, normal-square or server-validation requirements; no enumeration of all positive grids; no historical 7x7 transcription or cipher search.</p></li>
+<li><p><a href="#/experiments/grid-prime-paths">LP2-49–51: directional prime-path reconstruction</a></p><p><strong>Question tested:</strong> Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?</p><p><strong>Outside this test:</strong> Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.</p></li>
+<li><p><a href="#/experiments/grid-prime-paths-page-boundaries">LP2-49–51: prime paths confined to each page</a></p><p><strong>Question tested:</strong> Does forbidding page crossings preserve the same three missing prime values?</p><p><strong>Outside this test:</strong> Other layouts, path lengths, cross-page paths, removal of 4 cells, null-model simulation, decipherment and authorial intent.</p></li>
+<li><p><a href="#/experiments/lp2-32-message-grid">LP2-32: grid sums and the 2016 message file</a></p><p><strong>Question tested:</strong> Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?</p><p><strong>Outside this test:</strong> Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.</p></li>
+</ul></details>
+</dd>
 </dl>
-<h2 id="physical-and-digital-carriers">Physical and digital carriers</h2>
-<dl><dt><a href="#/wiki/outguess">File steganography and embedded payloads</a></dt><dd>Recover data using a specified carrier format, extraction tool and key.</dd>
-<dt><a href="#/wiki/image-regions">Image transforms and overlays</a></dt><dd>Measure features under declared processing and alignment choices.</dd>
-<dt><a href="#/wiki/compass-cipher-tests">Geometric constructions and navigation</a></dt><dd>Turn measured positions into reproducible construction and traversal rules.</dd>
-<dt><a href="#/wiki/audio-frequency">Audio and frequency encodings</a></dt><dd>Separate signal processing measurements from a proposed symbol encoding.</dd>
-<dt><a href="#/wiki/cover-chain">Layered decoding and file chains</a></dt><dd>Specify the order of transformations and verify each intermediate artifact.</dd>
-<dt><a href="#/wiki/cover-rsa">Public-key messages and cryptographic artifacts</a></dt><dd>Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism.</dd>
-<dt><a href="#/wiki/hashes-and-addresses">Hash targets and candidate retrieval</a></dt><dd>Define exact candidate bytes and compare the specified digest.</dd>
+<h2 id="physical-and-digital-carriers">Physical and digital carriers</h2><dl>
+<dt id="family-steganography"><a href="#/wiki/outguess">File steganography and embedded payloads</a></dt><dd><p>Recover data using a specified carrier format, extraction tool and key.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/outguess-default-key">Original JPEGs: default-key OutGuess sweep</a></p><p><strong>Question tested:</strong> What does default-key OutGuess retrieval return from all 75 manuscript JPEGs and the two historical cover/opening images?</p><p><strong>Outside this test:</strong> Other keys, other builds/platforms, other steganographic methods, recompressed files, signature verification, and interpretation of candidate bytes.</p></li>
+<li><p><a href="#/experiments/outguess-guard-sweep">Original JPEGs: guarded OutGuess build comparison</a></p><p><strong>Question tested:</strong> Does a clean build with explicit iterator guards change the baseline retrieval results on the same 77 images?</p><p><strong>Outside this test:</strong> Other keys, other platforms, independent OutGuess implementations, other steganographic methods, transformed images, payload authentication, and a stack trace of the original executable.</p></li>
+</ul></details>
+</dd>
+<dt id="family-image-processing"><a href="#/wiki/image-regions">Image transforms and overlays</a></dt><dd><p>Measure features under declared processing and alignment choices.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/image-row-coverage">Can image-only detection find every rune row?</a></p><p><strong>Question tested:</strong> Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?</p><p><strong>Outside this test:</strong> No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.</p></li>
+</ul></details>
+</dd>
+<dt id="family-geometry"><a href="#/wiki/compass-cipher-tests">Geometric constructions and navigation</a></dt><dd><p>Turn measured positions into reproducible construction and traversal rules.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/compass-shared-radii">LP2-33 and LP2-39: shared three-circle radii at native scale</a></p><p><strong>Question tested:</strong> Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?</p><p><strong>Outside this test:</strong> Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext.</p></li>
+<li><p><a href="#/experiments/totient-map-route">LP2-00–02: 27 × 27 totient-map route replay</a></p><p><strong>Question tested:</strong> Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?</p><p><strong>Outside this test:</strong> Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods.</p></li>
+</ul></details>
+</dd>
+<dt id="family-audio"><a href="#/wiki/audio-frequency">Audio and frequency encodings</a></dt><dd><p>Separate signal processing measurements from a proposed symbol encoding.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-layers"><a href="#/wiki/cover-chain">Layered decoding and file chains</a></dt><dd><p>Specify the order of transformations and verify each intermediate artifact.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-cryptographic-artifacts"><a href="#/wiki/cover-rsa">Public-key messages and cryptographic artifacts</a></dt><dd><p>Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-hashes"><a href="#/wiki/hashes-and-addresses">Hash targets and candidate retrieval</a></dt><dd><p>Define exact candidate bytes and compare the specified digest.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
 </dl>
-<h2 id="language-clues-and-search">Language, clues and search</h2>
-<dl><dt><a href="#/wiki/word-lengths">Language and corpus identification</a></dt><dd>Compare declared observables with suitable language controls under explicit cipher assumptions.</dd>
-<dt><a href="#/wiki/method-cribs">Known plaintext and crib searches</a></dt><dd>Use a declared plaintext hypothesis to constrain a defined cipher model.</dd>
-<dt><a href="#/wiki/method-automatic-search">Automatic search and language scoring</a></dt><dd>Explore a bounded model with a scorer whose ability and false positives have been checked.</dd>
-<dt><a href="#/wiki/method-symbol-systems">Alternative alphabets and symbolic notations</a></dt><dd>Define a symbol inventory and an encoding rule before interpreting resemblance.</dd>
-<dt><a href="#/wiki/works-and-influences">Literary references and thematic clues</a></dt><dd>Establish a source relationship, then distinguish interpretation from an executable decoding rule.</dd>
-<dt><a href="#/wiki/method-ai-readings">AI-assisted candidate interpretation</a></dt><dd>Treat generated readings as proposals requiring independent, reproducible checks.</dd>
+<h2 id="language-clues-and-search">Language, clues and search</h2><dl>
+<dt id="family-language"><a href="#/wiki/word-lengths">Language and corpus identification</a></dt><dd><p>Compare declared observables with suitable language controls under explicit cipher assumptions.</p>
+<details><summary>Documented tests (5)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/parallel-languages">Could the unsolved text be another language? Eight aligned translations</a></p><p><strong>Question tested:</strong> Which of eight languages best matches the unsolved text under word-length and fixed-substitution assumptions?</p><p><strong>Outside this test:</strong> No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference.</p></li>
+<li><p><a href="#/experiments/target-sized-languages">Language controls with exactly 2,896 tokens per sample</a></p><p><strong>Question tested:</strong> Do fixed language profiles distinguish samples the same token size as the unsolved manuscript?</p><p><strong>Outside this test:</strong> No genre matching, posterior, all-language coverage, equal translated passage boundaries, independent-trial accuracy or cipher identification.</p></li>
+<li><p><a href="#/experiments/known-reading-languages">Language comparison checked against known LP readings</a></p><p><strong>Question tested:</strong> Does the eight-language length comparison recognize the established English readings of Liber Primus?</p><p><strong>Outside this test:</strong> No blind decryption, posterior, accuracy inference from independent random trials, new language labels for solved sections, or authentication of source readings. No new unknown-page results. GP grouping is an orthographic sensitivity.</p></li>
+<li><p><a href="#/experiments/corpus-prefix-census">Word lengths across the complete historical reference corpus</a></p><p><strong>Question tested:</strong> Where does the reconstructed 2902-token manuscript summary fall among every eligible prefix in the pinned historical corpus?</p><p><strong>Outside this test:</strong> No language identification, random passage sampling, header removal, alphabet filtering, edition deduplication, calibrated p-values or reproduction of the unavailable corpus converter.</p></li>
+<li><p><a href="#/experiments/parallel-language-blocks">Language comparison: shorter aligned passage controls</a></p><p><strong>Question tested:</strong> Does the eight-language length comparison remain stable on shorter aligned passages?</p><p><strong>Outside this test:</strong> Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity. Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference.</p></li>
+</ul></details>
+</dd>
+<dt id="family-cribs"><a href="#/wiki/method-cribs">Known plaintext and crib searches</a></dt><dd><p>Use a declared plaintext hypothesis to constrain a defined cipher model.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/seed-crib-controls">Does matching the opening text identify a seed?</a></p><p><strong>Question tested:</strong> Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?</p><p><strong>Outside this test:</strong> No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.</p></li>
+<li><p><a href="#/experiments/lp2-39-header-cribs">LP2-39: twenty proposed red-header cribs</a></p><p><strong>Question tested:</strong> Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?</p><p><strong>Outside this test:</strong> Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim.</p></li>
+</ul></details>
+</dd>
+<dt id="family-automatic-search"><a href="#/wiki/method-automatic-search">Automatic search and language scoring</a></dt><dd><p>Explore a bounded model with a scorer whose ability and false positives have been checked.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/search-maximum-controls">How does trying more keys change the best score?</a></p><p><strong>Question tested:</strong> How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?</p><p><strong>Outside this test:</strong> No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.</p></li>
+<li><p><a href="#/experiments/english-scorer-controls">Would an English scorer accept other languages?</a></p><p><strong>Question tested:</strong> Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?</p><p><strong>Outside this test:</strong> No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.</p></li>
+</ul></details>
+</dd>
+<dt id="family-symbol-systems"><a href="#/wiki/method-symbol-systems">Alternative alphabets and symbolic notations</a></dt><dd><p>Define a symbol inventory and an encoding rule before interpreting resemblance.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-literary"><a href="#/wiki/works-and-influences">Literary references and thematic clues</a></dt><dd><p>Establish a source relationship, then distinguish interpretation from an executable decoding rule.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
+<dt id="family-ai"><a href="#/wiki/method-ai-readings">AI-assisted candidate interpretation</a></dt><dd><p>Treat generated readings as proposals requiring independent, reproducible checks.</p>
+<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>
+</dd>
 </dl>
-<h2 id="diagnosis-and-validation">Diagnosis and validation</h2>
-<dl><dt><a href="#/wiki/periodic-ioc">Period and key-length diagnostics</a></dt><dd>Measure position-dependent patterns with matched null models and correction for searched periods.</dd>
-<dt><a href="#/wiki/rune-ngrams">Repeats, doublets and word structure</a></dt><dd>Test structural constraints without automatically converting them into a cipher identification.</dd>
-<dt><a href="#/wiki/cipher-invariants">Invariants and bounded exclusions</a></dt><dd>State the assumptions under which an operation preserves or forbids an observed property.</dd>
-<dt><a href="#/wiki/null-models">Null models and selection effects</a></dt><dd>Repeat the whole selection procedure on controls, not just the final attractive candidate.</dd>
-<dt><a href="#/wiki/pgp-signatures">Source verification and transcription audits</a></dt><dd>Verify the input and the scope of its authenticity or transcription evidence.</dd>
+<h2 id="diagnosis-and-validation">Diagnosis and validation</h2><dl>
+<dt id="family-periodicity"><a href="#/wiki/periodic-ioc">Period and key-length diagnostics</a></dt><dd><p>Measure position-dependent patterns with matched null models and correction for searched periods.</p>
+<details><summary>Documented tests (2)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-31-periodic-ioc">LP2-31: periodic IoC for periods 2-20</a></p><p><strong>Question tested:</strong> Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?</p><p><strong>Outside this test:</strong> Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.</p></li>
+<li><p><a href="#/experiments/lp2-31-row-shuffle-ioc">LP2-31: periodic IoC with within-row shuffles</a></p><p><strong>Question tested:</strong> Does the largest pooled column IoC over periods 2–20 exceed shuffles that preserve every archived row’s rune multiset?</p><p><strong>Outside this test:</strong> Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.</p></li>
+</ul></details>
+</dd>
+<dt id="family-repetition"><a href="#/wiki/rune-ngrams">Repeats, doublets and word structure</a></dt><dd><p>Test structural constraints without automatically converting them into a cipher identification.</p>
+<details><summary>Documented tests (4)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/lp2-trigram-repeats">LP2-00–55: repeated trigrams against page shuffles</a></p><p><strong>Question tested:</strong> Does LP2-00–55 have an excess of within-page matching trigram pairs compared with independent whole-page fixed-count shuffles?</p><p><strong>Outside this test:</strong> Other window lengths, between-page matches, per-page significance, selected subsections, decoded readings, approximate matches, key-length inference and a deficit test.</p></li>
+<li><p><a href="#/experiments/doublet-event-lags">LP2-00–55: distances between doublet events</a></p><p><strong>Question tested:</strong> Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?</p><p><strong>Outside this test:</strong> Other transcriptions, collapsed runs, word-only extraction, page-reset comparisons, other lags, permutation tail probabilities and cipher searches.</p></li>
+<li><p><a href="#/experiments/uniform-additive-doublets">LP2-00–55: uniform additive keys and adjacent matches</a></p><p><strong>Question tested:</strong> Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?</p><p><strong>Outside this test:</strong> Nonuniform or dependent keys, fixed-count shuffles, other cipher equations, altered boundaries, output filters, plaintext identification and correction for historical feature selection.</p></li>
+<li><p><a href="#/experiments/n-rune-gaps">LP2-00–02: N-rune distances and prime-value labels</a></p><p><strong>Question tested:</strong> Which prime-value labels result from successive N-rune gaps under two distance definitions and two page-boundary rules?</p><p><strong>Outside this test:</strong> Other runes, punctuation-based gaps, heading removal, anagrams, significance testing and interpretation of signpost artwork.</p></li>
+</ul></details>
+</dd>
+<dt id="family-invariants"><a href="#/wiki/cipher-invariants">Invariants and bounded exclusions</a></dt><dd><p>State the assumptions under which an operation preserves or forbids an observed property.</p>
+<details><summary>Documented tests (4)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/literal-prime-affine">Literal prime alphabet: affine permutations for every modulus above 109</a></p><p><strong>Question tested:</strong> Can a fixed affine map modulo any integer greater than 109 nontrivially permute the full 29-prime alphabet?</p><p><strong>Outside this test:</strong> Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.</p></li>
+<li><p><a href="#/experiments/literal-prime-quadratic">Literal prime alphabet: quadratic permutations for every modulus above 109</a></p><p><strong>Question tested:</strong> Can a fixed quadratic map nontrivially permute the full literal-prime alphabet for any modulus above 109?</p><p><strong>Outside this test:</strong> Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.</p></li>
+<li><p><a href="#/experiments/word-reset-repetition">LP2-00–55: exact words and anagram repetition</a></p><p><strong>Question tested:</strong> Do interior ciphertext tokens repeat exactly or as anagrams under two apostrophe policies?</p><p><strong>Outside this test:</strong> Claims that plaintext must repeat, changing effective keys or state, different word maps, alternative boundaries, page-edge tokens, language significance tests, and a general rejection of word ciphers.</p></li>
+<li><p><a href="#/experiments/literal-prime-affine-pages">LP2 page supports: literal-prime affine maps and the two page-55 exceptions</a></p><p><strong>Question tested:</strong> Which fixed affine maps into the prime palette remain injective on each archived LP2-00–55 page support?</p><p><strong>Outside this test:</strong> Noninjective, nonlinear and position-dependent rules; rune-index transforms; altered transcriptions; plaintext scoring or recovery.</p></li>
+</ul></details>
+</dd>
+<dt id="family-controls"><a href="#/wiki/null-models">Null models and selection effects</a></dt><dd><p>Repeat the whole selection procedure on controls, not just the final attractive candidate.</p>
+<details><summary>Documented tests (6)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/search-maximum-controls">How does trying more keys change the best score?</a></p><p><strong>Question tested:</strong> How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?</p><p><strong>Outside this test:</strong> No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.</p></li>
+<li><p><a href="#/experiments/english-scorer-controls">Would an English scorer accept other languages?</a></p><p><strong>Question tested:</strong> Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?</p><p><strong>Outside this test:</strong> No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.</p></li>
+<li><p><a href="#/experiments/lp1-section-balance">LP1 column balance with section-preserving shuffles</a></p><p><strong>Question tested:</strong> Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?</p><p><strong>Outside this test:</strong> Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.</p></li>
+<li><p><a href="#/experiments/lp1-section-order">LP1 column balance after searching section orders</a></p><p><strong>Question tested:</strong> How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?</p><p><strong>Outside this test:</strong> Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.</p></li>
+<li><p><a href="#/experiments/lp1-width-selection">LP1 column balance after searching six widths</a></p><p><strong>Question tested:</strong> Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?</p><p><strong>Outside this test:</strong> Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.</p></li>
+<li><p><a href="#/experiments/lp1-word-length-balance">LP1: the 464-word table and column balance</a></p><p><strong>Question tested:</strong> Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?</p><p><strong>Outside this test:</strong> Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.</p></li>
+</ul></details>
+</dd>
+<dt id="family-provenance"><a href="#/wiki/pgp-signatures">Source verification and transcription audits</a></dt><dd><p>Verify the input and the scope of its authenticity or transcription evidence.</p>
+<details><summary>Documented tests (1)</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>
+<li><p><a href="#/experiments/image-row-coverage">Can image-only detection find every rune row?</a></p><p><strong>Question tested:</strong> Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?</p><p><strong>Outside this test:</strong> No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.</p></li>
+</ul></details>
+</dd>
 </dl>
 <h2 id="narrowing">From a family to a test</h2><p>For example, “try spirals” names a route family. A test must also fix the pages, grid dimensions, padding, starting cell, directions, any added substitution and the criterion for success. Changing one of these choices creates a variant; changing several may create a new experiment family.</p><p>Use <a href="#/experiments">Have we tried it?</a> to inspect published scope. Related methods can be useful even when the exact variant is not covered. <a href="data/method-families.json" download>Download the family map</a>.</p>

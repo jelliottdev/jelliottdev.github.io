@@ -8,6 +8,10 @@ from urllib.parse import urljoin, parse_qs, quote
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Keep the family directory synchronized with published experiment scopes.
+import runpy
+runpy.run_path(str(ROOT / 'scripts/build_method_map.py'))
+
 def linked_reference_text(text):
     """Keep reference text intact while making its explicit HTTP(S) URLs usable."""
     parts = []

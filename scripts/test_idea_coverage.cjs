@@ -42,3 +42,6 @@ for(const f of families){
  for(const id of f.related)assert(experiments.some(r=>r.id===id),id);
 }
 console.log('PASS: all method families and coverage notes link to existing guides and experiment records');
+
+const linked=new Set(families.flatMap(f=>f.related));
+for(const r of experiments.filter(r=>r.status==='published'))assert(linked.has(r.id),'Assign a method family to published experiment: '+r.id);
