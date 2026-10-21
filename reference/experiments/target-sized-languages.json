@@ -1,0 +1,290 @@
+{
+  "id": "target-sized-languages",
+  "title": "Language controls with exactly 2,896 tokens per sample",
+  "status": "published",
+  "question": "Do fixed language profiles distinguish samples the same token size as the unsolved manuscript?",
+  "summary": "Equal-token controls distinguish the eight reference languages, while manuscript distances lie beyond every observed same-language control range. All languages and representations remain visible.",
+  "tags": [
+    "language",
+    "different language",
+    "not English",
+    "Welsh",
+    "Cymraeg",
+    "English",
+    "German",
+    "French",
+    "Spanish",
+    "Italian",
+    "Portuguese",
+    "Finnish",
+    "FLORES",
+    "parallel corpus",
+    "word lengths",
+    "IoC",
+    "language identification"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [],
+    "representation": "Existing 2896-token rune target and three inherited common corpus representations: letters, folded letters and GP grouping; documented dotted-I boundary amendment.",
+    "procedure": "Partition each evaluation token stream into complete disjoint blocks of 2896; compare all blocks and manuscript with eight full development profiles using exact rational length TV; retain ties, margins, endpoints and remainders.",
+    "parameters": "Eight fixed languages; 59 complete blocks per representation, three representations, bins 1..15 and16+; no resampling, fitting or score-based selection.",
+    "exclusions": "No genre matching, posterior, all-language coverage, equal translated passage boundaries, independent-trial accuracy or cipher identification."
+  },
+  "outcome": "inconclusive",
+  "finding": "All 59 complete samples per representation have their own language as unique nearest profile. English is nearest to the manuscript, but all 24 manuscript-to-profile distances exceed the corresponding observed control maxima.",
+  "limitations": "Descriptive sample ranges, not rejection thresholds or language probabilities. Shared benchmark, different genre and uncertain rune-to-letter units; disjoint blocks may share articles. Human review pending.",
+  "next_steps": "A separately fixed genre-matched corpus remains useful. Do not infer a language posterior from within-benchmark controls.",
+  "family": {
+    "id": "plaintext-language",
+    "title": "Plaintext language comparisons",
+    "question": "What can preserved statistics tell us about plaintext language?",
+    "baseline": "parallel-languages"
+  },
+  "variant": {
+    "label": "Exactly 2,896 tokens per reference sample",
+    "changes": [
+      {
+        "field": "representation",
+        "before": "Existing rune-only joined LP2-00–55 token ledger, 2896 tokens, headings included; no decimal tokens. Three shared representations plus a Welsh digraph sensitivity; details in plan.",
+        "after": "Existing 2896-token rune target and three inherited common corpus representations: letters, folded letters and GP grouping; documented dotted-I boundary amendment.",
+        "reason": "Hold token count equal to the manuscript while preserving the inherited model and explicitly reporting its boundaries."
+      },
+      {
+        "field": "procedure",
+        "before": "Total variation distance between word-length histograms, bins 1..15 and16+. Lower is closer. Rank eight languages separately for each of first three representations. Never combine metrics into a language probability. IoC and within-word adjacent-identical fraction; separate distances under fixed bijective substitution only. Distinct symbol inventory reported. Dev language profiles classify each whole devtest language by word-length distance (8 held-out documents per representation). No tuning after scoring.",
+        "after": "Partition each evaluation token stream into complete disjoint blocks of 2896; compare all blocks and manuscript with eight full development profiles using exact rational length TV; retain ties, margins, endpoints and remainders.",
+        "reason": "Hold token count equal to the manuscript while preserving the inherited model and explicitly reporting its boundaries."
+      },
+      {
+        "field": "parameters",
+        "before": "Eight fixed languages; all 997 dev and 1012 devtest aligned sentences; 281 devtest article clusters; 200 paired bootstrap draws; seed 3301; 16 length bins.",
+        "after": "Eight fixed languages; 59 complete blocks per representation, three representations, bins 1..15 and16+; no resampling, fitting or score-based selection.",
+        "reason": "Hold token count equal to the manuscript while preserving the inherited model and explicitly reporting its boundaries."
+      },
+      {
+        "field": "exclusions",
+        "before": "No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference.",
+        "after": "No genre matching, posterior, all-language coverage, equal translated passage boundaries, independent-trial accuracy or cipher identification.",
+        "reason": "Hold token count equal to the manuscript while preserving the inherited model and explicitly reporting its boundaries."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent regex source reconstruction of all 177 profiles and exact decisions; human review pending",
+    "retested_on": "2026-10-20",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/target-sized-languages/run.py",
+    "environment": "Python 3 standard library; offline. Independent checker: python scripts/check_target_sized_languages.py experiments/records/target-sized-languages/results.json --receipt my-audit.json",
+    "script": "experiments/records/target-sized-languages/run.py",
+    "script_sha256": "4e5ecb7db9496ebc02395fb6ff064e196972d435bddf9e59e1880ffa93762544",
+    "inputs": [
+      {
+        "path": "experiments/records/parallel-languages/cym_Latn.dev.txt",
+        "sha256": "384b2d60a58ffa69686fd0a786cab0797d5a10aa774223087661ce4ee34ea747"
+      },
+      {
+        "path": "experiments/records/parallel-languages/cym_Latn.devtest.txt",
+        "sha256": "94bdd16fe4141e5bef227bcd49dd283e1397e993ef0ab3e8db281175e536551f"
+      },
+      {
+        "path": "experiments/records/parallel-languages/deu_Latn.dev.txt",
+        "sha256": "12fac774c6f79d966774a1829648a6e107700662e9e7b9e31ad08541382b97aa"
+      },
+      {
+        "path": "experiments/records/parallel-languages/deu_Latn.devtest.txt",
+        "sha256": "9a1bfa90d153fedb7ff80047f4a63d493998888eddb056e8a28e24592f26e5f2"
+      },
+      {
+        "path": "experiments/records/parallel-languages/eng_Latn.dev.txt",
+        "sha256": "51a25f527fd81f428b6933d85a2f5e5544af92aa82042c7fbf0c4120327fba0a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/eng_Latn.devtest.txt",
+        "sha256": "612e9fbe87997617c0fa8fa8929654a4f49b728d96738112c2b86ef6a1d78d88"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fin_Latn.dev.txt",
+        "sha256": "9769916f6411822e510b47b1aac01fb123061a0da9ef14a621540b81c490ef4a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fin_Latn.devtest.txt",
+        "sha256": "26b0906ca080c5602eec4a769b0ac24169ca8fa484f95fc8f41ca5212fa2632c"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fra_Latn.dev.txt",
+        "sha256": "7c1e1043b9d8cc6cb6fd4388ce068060f36518fd3597357a381cfdbe8ce5ab00"
+      },
+      {
+        "path": "experiments/records/parallel-languages/fra_Latn.devtest.txt",
+        "sha256": "82f5b000db419ef9254eea7857cce82943b361090942f17ed696e3dce2944f42"
+      },
+      {
+        "path": "experiments/records/parallel-languages/ita_Latn.dev.txt",
+        "sha256": "192429adab7b6c43f75db8363151a91b7a21cdb83bafc2a1d5ee2f1dec7f81c6"
+      },
+      {
+        "path": "experiments/records/parallel-languages/ita_Latn.devtest.txt",
+        "sha256": "4166da51aba285736535916870142d7e9491494cee52b1db0808533399796a94"
+      },
+      {
+        "path": "experiments/records/parallel-languages/por_Latn.dev.txt",
+        "sha256": "cf748f9311660dbfc4dbaad9301c98865c6b6f72fba86ee496e7b00e3472575e"
+      },
+      {
+        "path": "experiments/records/parallel-languages/por_Latn.devtest.txt",
+        "sha256": "1a04351c9b8c99a1808bb5da9051c06ffd1d65a5fe7236e40a80568abdbc67e7"
+      },
+      {
+        "path": "experiments/records/parallel-languages/spa_Latn.dev.txt",
+        "sha256": "9a99ddc459542da2d980b21cc049e799172545938cb02a5e7c92ebd8234b2121"
+      },
+      {
+        "path": "experiments/records/parallel-languages/spa_Latn.devtest.txt",
+        "sha256": "40fcb836b49b0a461a14c00b8bce1f03113f8d2668132af424e74b2421d18ce9"
+      },
+      {
+        "path": "exports/unsolved-word-tokens.json",
+        "sha256": "fd6a8d02d472567a06fc85384d4961971cb67c93720b3d2b0ad7c53ec39cdb8a"
+      },
+      {
+        "path": "experiments/records/parallel-languages/plan.json",
+        "sha256": "9b5236fcafbd2931ab1d4b36438a50b89b4b090243ada5e03501704041d378f4"
+      },
+      {
+        "path": "experiments/records/parallel-languages/run.py",
+        "sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c"
+      },
+      {
+        "path": "experiments/plans/target-sized-language-controls.md",
+        "sha256": "80999b052ce6cef0df28a27df7050757f72b4f8878f46fabf4357e95b9d3e18d"
+      },
+      {
+        "path": "experiments/plans/target-sized-language-controls.json",
+        "sha256": "a20ccce471fe06135f894a0b398e58179f22edf2724d9cbcecc6bde39017208f"
+      },
+      {
+        "path": "experiments/plans/target-sized-language-controls-amendment.md",
+        "sha256": "cfebdbc454e0e0a7160bad8bae1f4fdca30807c149783f0861074ca57450e5cd"
+      },
+      {
+        "path": "scripts/run_target_sized_languages.py",
+        "sha256": "feef8694cd1c23ee8e2839717ce422df2e308361489e2ed98e32da3a2c48fda2"
+      },
+      {
+        "path": "scripts/check_target_sized_languages.py",
+        "sha256": "542f8c2a34dd803f9dd2012f8b5a7f6ccb10bb8baee37b07b978433f3bb7579e"
+      },
+      {
+        "path": "scripts/test_target_sized_languages.py",
+        "sha256": "a7b512fedc49b43339c100cd4206305850fdecb6b9bc3d4f9d8118f48518ab45"
+      },
+      {
+        "path": "experiments/records/target-sized-languages/plot.py",
+        "sha256": "268d9e5ce5411a5eca3fa174d9be2b631cad59f3b1d24167e2ff71dd2147255c"
+      },
+      {
+        "path": "experiments/records/parallel-languages/SOURCE.txt",
+        "sha256": "0ac2331dc1c4b5045c672a9a16e3044c34481ebfe6320eb0f08a620fca6f5056"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/target-sized-languages/results.json",
+        "sha256": "17e6cba45082dcdfe3605c56d1a563f0ecec7b8499812174bdf05f256a5f2f25"
+      },
+      {
+        "path": "experiments/records/target-sized-languages/audit.json",
+        "sha256": "39c80bbdd821f09698e78d9a9f6d5d665d3c01565449100b1b566aac35de9902"
+      },
+      {
+        "path": "experiments/records/target-sized-languages/comparison.svg",
+        "sha256": "677640991cbbdef050f12a5201eca8bfd5e46bf4539c9251097c0d7fe5f68ea7"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "FLORES-200 official documentation",
+      "url": "https://github.com/facebookresearch/flores/blob/main/flores200/README.md"
+    },
+    {
+      "label": "Dataset card, attribution and CC BY-SA 4.0 license",
+      "url": "https://huggingface.co/datasets/facebook/flores"
+    }
+  ],
+  "related": [
+    "parallel-languages",
+    "parallel-language-blocks",
+    "known-reading-languages"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/target-sized-languages/comparison.svg",
+      "caption": "Identical axes and styling for all eight languages. Blue ranges are observed reference-sample distances; diamonds are manuscript distances. Ranges are not confidence limits."
+    }
+  ],
+  "article": "## Why match the number of tokens?\n\nThe [aligned-language baseline](#/experiments/parallel-languages) compares the manuscript with much longer reference texts. This control asks a narrower question: how do those reference languages behave when each sample contains exactly **2,896 tokens**, the size of the unsolved rune-token target?\n\nEvery complete reference sample is nearest to its own language profile. However, **the manuscript is farther from every language profile than any of that language's reference samples are**. English is still the nearest of the eight candidates, but nearest does not mean that its profile closely explains the manuscript. These are observed distances, not probabilities or statistical rejection thresholds.\n\n## What is held fixed\n\nThe languages, translations, development profiles, three common representations and total-variation distance are inherited from the baseline. There is no fitted classifier or new language selection. Each evaluation translation is tokenized sentence by sentence, then divided in original order into disjoint blocks of 2,896 tokens. Every complete block is retained; the final incomplete remainder is counted and reported but not scored as an equal-size sample.\n\nThis produces seven blocks each for English and German, eight each for French, Italian, Portuguese, Spanish and Welsh, and five for Finnish. The three representations reuse the same texts. The resulting 177 profile checks are **not 177 independent trials**, and they are not pooled into a claimed general classification accuracy.\n\nEqual token counts do not preserve identical translated passages: different languages use different numbers of words for the same content. This control addresses size. The [aligned-block variant](#/experiments/parallel-language-blocks) separately preserves sentence ranges across languages. Neither controls for the difference between translated web material and Liber Primus's style.\n\n## Reading the distances\n\nEach sample is compared with all eight full development profiles using length bins 1 through 15 and 16+. Total variation is half the sum of the absolute differences in bin proportions. Zero means matching distributions; larger values mean greater separation. All distances are stored as exact rational numbers, and ties would be retained rather than broken by language order.\n\n| Language | Complete blocks per representation | Largest letter-control distance | Manuscript to letter profile |\n| --- | ---: | ---: | ---: |\n| English | 7 | 0.0508 | 0.0831 |\n| Finnish | 5 | 0.0466 | 0.4051 |\n| French | 8 | 0.0514 | 0.1781 |\n| German | 7 | 0.0561 | 0.1665 |\n| Italian | 8 | 0.0436 | 0.2375 |\n| Portuguese | 8 | 0.0426 | 0.2114 |\n| Spanish | 8 | 0.0456 | 0.2230 |\n| Welsh | 8 | 0.0404 | 0.1650 |\n\n“Largest control distance” means the farthest observed sample from its own language's development profile. It is not a confidence limit. The manuscript lies beyond those observed ranges for all eight languages in all three representations, including GP-style grouping. That grouping is an orthographic sensitivity, not a validated conversion of each language into runes.\n\nWithin this corpus, all complete samples have a unique nearest profile matching their known language. The manuscript's nearest profile is English in all three representations. The report preserves every competing distance and the margin over the nearest competing language, so this statement can be checked without relying on a winner-only table.\n\n## A Unicode exception found before scoring\n\nThe original follow-up plan assumed that all three representations would preserve token boundaries. The implementation stopped when that check failed. Lowercasing the capital dotted I in “İzmir” creates an i followed by a combining dot; the inherited raw-letter tokenizer treats the mark as a separator. Accent folding removes it, joining the word. Three source sentences are affected.\n\nAn amendment was committed after inspecting that tokenization issue and before inspecting follow-up scores. The baseline tokenizer was not silently changed. Each representation is partitioned independently, its endpoint ledger is retained, and the report states whether boundaries agree. Folded letters and GP grouping do share boundaries. The original plan remains available alongside the amendment.\n\n## What this does not establish\n\nThe control does not identify the manuscript's language, eliminate the eight languages, or estimate a posterior probability. The sample ranges are small, adjacent blocks can share a source article, and both reference splits come from the same benchmark. The manuscript has different genre, spelling, unit and boundary uncertainties. Even its closest reference profile can therefore be a poor match for reasons other than language.\n\nThe [known-reading control](#/experiments/known-reading-languages) supplies a complementary warning: some short, established English sections rank nearest to other language profiles. The [cipher-invariants guide](#/wiki/cipher-invariants) explains which transformations preserve lengths and which change the assumptions behind this comparison.\n\n## Reproduce and inspect\n\nPython 3's standard library is sufficient; no API or model is involved. From the repository or extracted reproduction bundle, choose new output filenames:\n\n```sh\npython scripts/run_target_sized_languages.py --output my-language-controls.json\npython scripts/check_target_sized_languages.py my-language-controls.json --receipt my-language-audit.json\npython -m unittest discover -s scripts -p test_target_sized_languages.py\n```\n\nThe independent checker imports neither the producer nor the baseline tokenizer. It reconstructs words with a regex tokenizer, calculates distances from integer histogram counts, and checks all sample boundaries, remainders, 177 profiles, competing distances, margins and summary decisions. Its saved receipt records the report and checker hashes. Computational verification has passed; human review remains pending.\n\nFLORES translations and this derived account are provided under CC BY-SA 4.0. The baseline's source attribution is included with the reproduction files.\n",
+  "article_path": "experiments/records/target-sized-languages/article.md",
+  "script_sha256": "4e5ecb7db9496ebc02395fb6ff064e196972d435bddf9e59e1880ffa93762544"
+}
