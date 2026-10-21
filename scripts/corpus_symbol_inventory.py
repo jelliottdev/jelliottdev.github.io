@@ -17,6 +17,24 @@ import subprocess
 ROOT=Path(__file__).resolve().parents[1]
 REVISION='a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87'
 
+class BlobReader:
+    """Keep Git transport open; source identity is still checked per blob."""
+    def __init__(self,repo,env):
+        self.process=subprocess.Popen(['git','-C',str(repo),'cat-file','--batch'],
+            stdin=subprocess.PIPE,stdout=subprocess.PIPE,env=env)
+    def read(self,oid):
+        p=self.process;p.stdin.write((oid+'\n').encode());p.stdin.flush()
+        header=p.stdout.readline().split()
+        if len(header)!=3 or header[0].decode()!=oid or header[1]!=b'blob':
+            raise ValueError('Missing or invalid pinned source blob: '+oid)
+        size=int(header[2]);raw=p.stdout.read(size)
+        if len(raw)!=size or p.stdout.read(1)!=b'\n':raise ValueError('Incomplete Git blob stream')
+        return raw
+    def __enter__(self):return self
+    def __exit__(self,kind,value,trace):
+        self.process.stdin.close();self.process.stdout.close();code=self.process.wait()
+        if kind is None and code:raise RuntimeError('Git batch reader failed')
+
 def measure(raw,alphabet):
     text=raw.decode('utf-8',errors='strict')
     tokens=[m.group() for m in islice(re.finditer('[^ ]+',text),2902)]
@@ -52,17 +70,18 @@ def run(repo,output):
     if (output/'report.json').exists():raise ValueError('Complete report exists; choose a new output directory')
     cache=output/'blobs';cache.mkdir(exist_ok=True)
     rows=[]
-    for i,(name,oid) in enumerate(sorted(entries),1):
-        p=cache/(oid+'.json')
-        if p.exists():row=json.loads(p.read_bytes())
-        else:
-            raw=git('cat-file','blob',oid)
-            assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==oid
-            row={'object_id':oid,**measure(raw,set(alphabet))}
-            tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(row,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n');tmp.replace(p)
-        assert row['object_id']==oid
-        rows.append({'file':name,**row})
-        if i%1000==0:print(f'{i}/25906 paths measured',flush=True)
+    with BlobReader(repo,env) as reader:
+        for i,(name,oid) in enumerate(sorted(entries),1):
+            p=cache/(oid+'.json')
+            if p.exists():row=json.loads(p.read_bytes())
+            else:
+                raw=reader.read(oid)
+                assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==oid
+                row={'object_id':oid,**measure(raw,set(alphabet))}
+                tmp=p.with_suffix('.tmp');tmp.write_text(json.dumps(row,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n');tmp.replace(p)
+            assert row['object_id']==oid
+            rows.append({'file':name,**row})
+            if i%1000==0:print(f'{i}/25906 paths measured',flush=True)
     summaries={}
     for eligible in [True,False]:
         selected=[r for r in rows if r['eligible']==eligible]

@@ -24,6 +24,8 @@ python scripts/export_corpus_symbols.py NEW_OUTPUT_DIRECTORY/report.json NEW_REC
 
 The runner disables Git lazy fetching and never executes source-repository code. A missing source object stops the run. Existing checkpoints may resume only under an identical specification and script hash; a completed report cannot be overwritten.
 
+The initial run was deliberately stopped after preserving 8,091 distinct-blob checkpoints to replace one Git process per blob with a persistent batch reader. This changes transport overhead, not tokenization or measurement. The replacement run uses a new output directory and specification hash; it does not silently reuse checkpoints from a changed script. The original partial directory is retained for overlap comparison. Neither partial directory constitutes a completed census.
+
 Boundary controls cover leading/repeated spaces, newline retention, exactly 2,902 selected tokens, an outside-alphabet symbol immediately after the prefix, empty input and invalid UTF-8. The two scanners also agree on all 1,365 strings of length zero through five over a four-character alphabet containing an ordinary rune, the outside-alphabet rune, space and newline.
 
 The independent checker imports no producer code. It uses literal-space splitting and scalar dictionaries, reads pinned blobs through a single offline Git batch process, checks duplicate rows, and reconstructs all four summary populations. It also reconciles each source hash, byte count and eligibility flag with the completed historical census, and every eligible prefix's exact word-length histogram and total counted units. A receipt is written only after every source row and aggregate passes. It has not yet run on the complete new report.
