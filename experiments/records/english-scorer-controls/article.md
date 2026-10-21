@@ -39,7 +39,7 @@ This scorer can reject intact language while accepting a different non-English l
 
 The shuffles preserve single-letter frequencies but destroy order. They are not wrong-key outputs from a specified cipher. Zero acceptances in this finite collection does not imply zero false positives, especially after searching millions of candidates and keeping the maximum. The overlapping sample lengths, reused translations and shared model also prevent treating these cells as independent trials or a general accuracy estimate. Model-training overlap with the benchmark has not been independently excluded.
 
-This is not decoder recovery power: it bypasses decoding entirely. A later planted-cipher variant should separately measure exact recovery and score acceptance under fixed encoder, key, skip rules and search budget. A search-size control should score the maximum from each complete null search rather than individual null strings alone.
+This is not decoder recovery power: it bypasses decoding entirely. The completed [planted decoder controls](#/experiments/decoder-skip-controls) separately measure exact recovery and score acceptance under fixed encoder, key and skip rules. The [bounded search-maximum controls](#/experiments/search-maximum-controls) retain the maximum from each complete null search rather than treating individual null strings as equivalent to selected winners. These are separate experiments; neither retroactively turns this scorer-only test into a manuscript decryption test. The [newcomer control walkthrough](#/wiki/first-experiment?section=search-controls) explains how to read them together.
 
 ## Reproduce and inspect
 

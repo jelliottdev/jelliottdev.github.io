@@ -6483,6 +6483,39 @@ The registry groups related methods into families, but its records do not all an
 	Historical control	Emerson book cipher	Reproduces the documented historical string with fixed source and counting conventions. It does not establish that the same book or method decrypts another page.
 
 
+Would your search recognize an answer?
+
+Before interpreting “nothing found,” give the search a problem whose answer you know. A planted control starts with known plaintext, encrypts it under a specified rule, and asks the proposed search to recover it. Keep the plaintext aside for checking; do not let the search use it unless known plaintext is explicitly part of the model. This separates several failures that otherwise look identical.
+
+
+Is the answer inside the search? Record whether the true key, generator, offset and alignment are included. An omitted-key control should remain visibly separate from one that includes the true key. The bounded search controls compare both situations rather than treating every missed answer as a scoring failure.
+
+Can the decoder represent it? Even the correct key can fail when the encoder skips key slots and the decoder assumes uninterrupted addition. The alignment controls retain exact rune recovery separately from score acceptance. The worked alignment guide explains why a wider beam cannot recover a path prohibited by the skip bound.
+
+Would the scoring rule accept it? Test intact known text before involving a cipher. In the eight-language scorer control, the fixed English model accepts every tested English and French excerpt, but no Finnish or Welsh excerpt. The same failure label can therefore mean “wrong candidate” or “meaningful text this score rejects.” These results apply to the recorded excerpts and preprocessing, not every text in those languages.
+
+What does choosing the best candidate change? Give each null control the whole search, including its key budget and selection rule. A single wrong-key output is not a control for the winner of thousands of attempts. The search-maximum experiment retains complete searches at five nested dictionary sizes, with all settings fixed.
+
+Does the candidate predict anything unused? Reserve part of the plaintext for checking after candidate selection. In the known-crib seed controls, two-rune openings admit false matches, including under a wrong generator or incorrect crib. Matching that opening and predicting the withheld remainder are different achievements.
+
+
+Read the two outcomes separately
+
+	Exact planted plaintext recovered?	Score accepts it?	What to investigate
+
+	Yes	Yes	The pipeline succeeds on this fixture. Test other declared conditions before claiming wider recovery power.
+
+	Yes	No	The scoring gate rejects the answer. Inspect language, text representation, length and threshold.
+
+	No	Yes	The score accepts an incorrect output. Inspect the complete sequence; a plausible-looking score is not exact recovery.
+
+	No	No	Check coverage and decoder behavior before blaming the scorer. The answer may be absent or unreachable.
+
+
+This table is available for planted controls because their plaintext is known. For an unsolved manuscript page, the exact-recovery column is unknown. A high score cannot fill it in. Preserve the distinction when reading the experiment figures: acceptance counts and exact-recovery counts measure different things.
+
+Use controls resembling the proposed search in length, symbol conversion, key mechanism, interruption rules and budget. A successful plain-addition control does not validate an unrelated skip-aware decoder. Reusing one fixture to tune settings also makes it development data; reserve other fixtures before tuning if you want a separate check. None of the linked tests establishes a universal false-positive rate or rules out every cipher in its family.
+
 What has actually been ruled out?
 
 The following published results show why “we tried it” needs more than an outcome label. They all use exact calculations, but their conclusions have different logical strength.
@@ -6562,6 +6595,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/outguess-default-key
 - Emerson book cipher
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
+- bounded search controls; search-maximum experiment
+  https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- alignment controls
+  https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- worked alignment guide
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- eight-language scorer control
+  https://jelliottdev.github.io/#/experiments/english-scorer-controls
+- known-crib seed controls
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - fixed alphabet transform search
   https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
 - A shared deterministic reset preserves exact repetitions; a shared symbol map plus independent within-word shuffling preserves symbol counts instead.
@@ -6681,6 +6724,8 @@ The 464-word column-balance experiment illustrates a different boundary: its low
 The planted alignment controls distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.
 
 
+Before interpreting a completed negative search, follow the planted-control walkthrough: check that an answer is included, representable by the decoder, recognizable by the scorer, and tested against the same complete selection process. Exact coverage of a dictionary and the ability to recognize its correct member are separate requirements.
+
 Write the claim at the same scale as the evidence
 
 	Too broad	A checkable claim
@@ -6730,6 +6775,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - planted alignment controls
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- the planted-control walkthrough
+  https://jelliottdev.github.io/reference/articles/first-experiment.html#search-controls
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reproduce a published experiment
@@ -11961,6 +12008,8 @@ Search contextual sections, or locate literal decoded wording on an exact page a
 
 For completed records, the experiment reading guide distinguishes arithmetic audits, statistical comparisons, bounded cipher searches and tool checks, with examples of what each result establishes.
 
+For cipher searches, begin with would your search recognize an answer? It connects the planted-key, decoder, language-score, search-budget and withheld-text controls, with a table separating exact recovery from score acceptance.
+
 Understand your result
 
 Keep the output beside the exact command that produced it. Then choose the question that matches what surprised you:
@@ -12149,6 +12198,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reading-concordance.html
 - experiment reading guide
   https://jelliottdev.github.io/reference/articles/first-experiment.html#evidence-types
+- would your search recognize an answer?
+  https://jelliottdev.github.io/reference/articles/first-experiment.html#search-controls
 - Two pages have the same IoC but different entropy. Is that an error?
   https://jelliottdev.github.io/reference/articles/rune-entropy.html#ioc-comparison
 - Why does a squared-frequency calculation disagree with IoC?
@@ -24452,7 +24503,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "caption": "Every language uses the same marks and axes. Original scores are blue; gray ranges contain all shuffles. The dashed threshold is fixed at -5.5."
     }
   ],
-  "article": "## Would our scorer recognize a real answer?\n\nA search can recover meaningful text and still discard it if its scoring rule expects the wrong language. This experiment isolates that last step: give a fixed English four-letter scoring model known text in eight languages, then shuffle the same letters as a control. No cipher or decoder is involved.\n\nThe model accepts all English and French samples in this run, some German, Italian, Portuguese and Spanish samples, and none of the Finnish or Welsh samples. It accepts none of the 7,680 shuffled controls. That is useful separation from these shuffles, but **acceptance is neither English identification nor proof of a decryption**. Rejection also cannot rule out meaningful plaintext in another language.\n\n## Source and scope\n\nThe idea follows the scorer-language investigation in [Dukotah's repository](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md). We pin that revision and reuse its English quadgram count file and −5.5 threshold. We run a new, narrower control on our existing aligned FLORES translations; we do not reproduce the repository's full decoder benchmark or import its conclusions about the unsolved cipher.\n\nThe [language comparison experiments](#/experiments/parallel-languages) ask which reference profiles resemble manuscript statistics. This experiment instead asks what a candidate-selection tool accepts when the input is already known text. There are no unsolved-page inputs here.\n\n## Fixed procedure\n\nDivide each of the eight 1,012-sentence translations into the same eight consecutive sentence blocks: four of 127 sentences and four of 126. Join sentences with spaces. Apply each of two rules: uppercase and retain A–Z only; or uppercase, canonically decompose Unicode, remove combining marks, and then retain A–Z. The second rule folds many accented letters but is not a general transliteration system. Uppercasing can expand characters, such as ß to SS. The report records retained lengths and discarded alphabetic characters for each block.\n\nTake the first 120, 240 and 400 retained letters from every block. These are nested samples, not three independent passages. Aligned sentence blocks preserve source content boundaries, but equal character prefixes do not necessarily end at the same translated idea. Generate 20 deterministic shuffles of each excerpt, preserving its exact letter counts. Keep all 384 original cells and all 7,680 controls; there is no selection by score.\n\nFor each overlapping group of four letters, use log₁₀(count / total model count). An unseen group receives log₁₀(0.01 / total). Average over the length minus three groups. Accept a sample when this average is at least −5.5. This threshold belongs to this model and preprocessing; it is not portable to an arbitrary language scorer.\n\n## All conditions\n\nEach cell below is accepted originals out of eight blocks. Every condition also has 160 shuffles per language; all have zero accepted shuffles. The figure shows individual original scores and the full observed shuffled range, not a confidence interval.\n\n| Language | A–Z 120 | A–Z 240 | A–Z 400 | Folded 120 | Folded 240 | Folded 400 |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |\n| English | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| Finnish | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n| French | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| German | 6/8 | 6/8 | 6/8 | 6/8 | 6/8 | 8/8 |\n| Italian | 7/8 | 8/8 | 8/8 | 7/8 | 8/8 | 8/8 |\n| Portuguese | 5/8 | 7/8 | 7/8 | 6/8 | 7/8 | 7/8 |\n| Spanish | 6/8 | 7/8 | 7/8 | 8/8 | 7/8 | 7/8 |\n| Welsh | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n\n## What this does and does not establish\n\nThis scorer can reject intact language while accepting a different non-English language. A successful candidate therefore needs more than crossing a threshold: a reproducible decoding rule, declared choices, coherent extended output and checks against controls appropriate to the whole search.\n\nThe shuffles preserve single-letter frequencies but destroy order. They are not wrong-key outputs from a specified cipher. Zero acceptances in this finite collection does not imply zero false positives, especially after searching millions of candidates and keeping the maximum. The overlapping sample lengths, reused translations and shared model also prevent treating these cells as independent trials or a general accuracy estimate. Model-training overlap with the benchmark has not been independently excluded.\n\nThis is not decoder recovery power: it bypasses decoding entirely. A later planted-cipher variant should separately measure exact recovery and score acceptance under fixed encoder, key, skip rules and search budget. A search-size control should score the maximum from each complete null search rather than individual null strings alone.\n\n## Reproduce and inspect\n\nDownload the experiment bundle and extract it with its directory structure. No network access, API key or third-party Python package is required.\n\n```text\npython experiments/records/english-scorer-controls/run.py --check\npython scripts/check_english_scorer_controls.py experiments/records/english-scorer-controls/results.json --receipt my-scorer-audit.json\npython experiments/records/english-scorer-controls/plot.py\n```\n\nThe producer checks every pinned input hash. The independent checker reconstructs the source excerpts and shuffles, calculates scores by counting four-letter groups rather than importing the producer, and checks every decision within an absolute numerical tolerance of 10⁻¹². Both computations passed; human review remains pending. The saved JSON includes excerpts, hashes, seeds, individual scores and normalization diagnostics, so every plotted mark can be traced back to its input.\n",
+  "article": "## Would our scorer recognize a real answer?\n\nA search can recover meaningful text and still discard it if its scoring rule expects the wrong language. This experiment isolates that last step: give a fixed English four-letter scoring model known text in eight languages, then shuffle the same letters as a control. No cipher or decoder is involved.\n\nThe model accepts all English and French samples in this run, some German, Italian, Portuguese and Spanish samples, and none of the Finnish or Welsh samples. It accepts none of the 7,680 shuffled controls. That is useful separation from these shuffles, but **acceptance is neither English identification nor proof of a decryption**. Rejection also cannot rule out meaningful plaintext in another language.\n\n## Source and scope\n\nThe idea follows the scorer-language investigation in [Dukotah's repository](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md). We pin that revision and reuse its English quadgram count file and −5.5 threshold. We run a new, narrower control on our existing aligned FLORES translations; we do not reproduce the repository's full decoder benchmark or import its conclusions about the unsolved cipher.\n\nThe [language comparison experiments](#/experiments/parallel-languages) ask which reference profiles resemble manuscript statistics. This experiment instead asks what a candidate-selection tool accepts when the input is already known text. There are no unsolved-page inputs here.\n\n## Fixed procedure\n\nDivide each of the eight 1,012-sentence translations into the same eight consecutive sentence blocks: four of 127 sentences and four of 126. Join sentences with spaces. Apply each of two rules: uppercase and retain A–Z only; or uppercase, canonically decompose Unicode, remove combining marks, and then retain A–Z. The second rule folds many accented letters but is not a general transliteration system. Uppercasing can expand characters, such as ß to SS. The report records retained lengths and discarded alphabetic characters for each block.\n\nTake the first 120, 240 and 400 retained letters from every block. These are nested samples, not three independent passages. Aligned sentence blocks preserve source content boundaries, but equal character prefixes do not necessarily end at the same translated idea. Generate 20 deterministic shuffles of each excerpt, preserving its exact letter counts. Keep all 384 original cells and all 7,680 controls; there is no selection by score.\n\nFor each overlapping group of four letters, use log₁₀(count / total model count). An unseen group receives log₁₀(0.01 / total). Average over the length minus three groups. Accept a sample when this average is at least −5.5. This threshold belongs to this model and preprocessing; it is not portable to an arbitrary language scorer.\n\n## All conditions\n\nEach cell below is accepted originals out of eight blocks. Every condition also has 160 shuffles per language; all have zero accepted shuffles. The figure shows individual original scores and the full observed shuffled range, not a confidence interval.\n\n| Language | A–Z 120 | A–Z 240 | A–Z 400 | Folded 120 | Folded 240 | Folded 400 |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: |\n| English | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| Finnish | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n| French | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |\n| German | 6/8 | 6/8 | 6/8 | 6/8 | 6/8 | 8/8 |\n| Italian | 7/8 | 8/8 | 8/8 | 7/8 | 8/8 | 8/8 |\n| Portuguese | 5/8 | 7/8 | 7/8 | 6/8 | 7/8 | 7/8 |\n| Spanish | 6/8 | 7/8 | 7/8 | 8/8 | 7/8 | 7/8 |\n| Welsh | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |\n\n## What this does and does not establish\n\nThis scorer can reject intact language while accepting a different non-English language. A successful candidate therefore needs more than crossing a threshold: a reproducible decoding rule, declared choices, coherent extended output and checks against controls appropriate to the whole search.\n\nThe shuffles preserve single-letter frequencies but destroy order. They are not wrong-key outputs from a specified cipher. Zero acceptances in this finite collection does not imply zero false positives, especially after searching millions of candidates and keeping the maximum. The overlapping sample lengths, reused translations and shared model also prevent treating these cells as independent trials or a general accuracy estimate. Model-training overlap with the benchmark has not been independently excluded.\n\nThis is not decoder recovery power: it bypasses decoding entirely. The completed [planted decoder controls](#/experiments/decoder-skip-controls) separately measure exact recovery and score acceptance under fixed encoder, key and skip rules. The [bounded search-maximum controls](#/experiments/search-maximum-controls) retain the maximum from each complete null search rather than treating individual null strings as equivalent to selected winners. These are separate experiments; neither retroactively turns this scorer-only test into a manuscript decryption test. The [newcomer control walkthrough](#/wiki/first-experiment?section=search-controls) explains how to read them together.\n\n## Reproduce and inspect\n\nDownload the experiment bundle and extract it with its directory structure. No network access, API key or third-party Python package is required.\n\n```text\npython experiments/records/english-scorer-controls/run.py --check\npython scripts/check_english_scorer_controls.py experiments/records/english-scorer-controls/results.json --receipt my-scorer-audit.json\npython experiments/records/english-scorer-controls/plot.py\n```\n\nThe producer checks every pinned input hash. The independent checker reconstructs the source excerpts and shuffles, calculates scores by counting four-letter groups rather than importing the producer, and checks every decision within an absolute numerical tolerance of 10⁻¹². Both computations passed; human review remains pending. The saved JSON includes excerpts, hashes, seeds, individual scores and normalization diagnostics, so every plotted mark can be traced back to its input.\n",
   "article_path": "experiments/records/english-scorer-controls/article.md",
   "script_sha256": "bd7e40313e33f9098629450c74044c159dc1ea6a43dde32750e8285b52c97c9d"
 }

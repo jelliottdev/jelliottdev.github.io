@@ -97,6 +97,8 @@ The 464-word column-balance experiment illustrates a different boundary: its low
 The planted alignment controls distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.
 
 
+Before interpreting a completed negative search, follow the planted-control walkthrough: check that an answer is included, representable by the decoder, recognizable by the scorer, and tested against the same complete selection process. Exact coverage of a dictionary and the ability to recognize its correct member are separate requirements.
+
 Write the claim at the same scale as the evidence
 
 	Too broad	A checkable claim
@@ -146,6 +148,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - planted alignment controls
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- the planted-control walkthrough
+  https://jelliottdev.github.io/reference/articles/first-experiment.html#search-controls
 - documenting a reproducible attempt
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - reproduce a published experiment

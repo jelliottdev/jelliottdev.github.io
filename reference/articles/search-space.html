@@ -51,6 +51,7 @@
 
 <p>The <a href="../../index.html#/experiments/decoder-skip-controls">planted alignment controls</a> distinguish two bounds that are easy to confuse. A beam width limits how many candidate prefixes survive scoring; a skip limit defines which alignments are permitted. Increasing the former cannot repair a true path excluded by the latter. The experiment keeps exact recovery separate from language-score acceptance, including failures with the correct key.</p>
 
+<p>Before interpreting a completed negative search, follow <a href="first-experiment.html#search-controls">the planted-control walkthrough</a>: check that an answer is included, representable by the decoder, recognizable by the scorer, and tested against the same complete selection process. Exact coverage of a dictionary and the ability to recognize its correct member are separate requirements.</p>
 <h2 id="claim">Write the claim at the same scale as the evidence</h2>
 <div class="table-wrap"><table><thead><tr><th>Too broad</th><th>A checkable claim</th></tr></thead><tbody>
 <tr><td>“We ruled out shifts.”</td><td>“All 58 specified order-and-shift cases completed. None matched the declared prefix at the declared position.” Only use this after performing that comparison.</td></tr>
