@@ -30,10 +30,14 @@ The separate checker reads the pinned source bytes through a single Git batch re
 python scripts/check_corpus_prefixes.py /path/to/project-runeberg /path/to/census/report.json --receipt /path/to/new-audit-receipt.json
 ```
 
-The receipt path must be new. No successful full-corpus audit is claimed until this command completes. The checker is syntax-checked; its full source-byte validation is pending the finished census.
+The receipt path must be new. No successful full-corpus audit is claimed until this command completes. The checker has passed the synthetic report checks below; its real full-corpus source-byte validation is pending the finished census.
 
 The variance implementation uses the exact identity `(n * sum(x*x) - sum(x)**2) / (n * (n-1))` with integer sums and a rational final division. This replaces per-item rational subtraction without changing the statistical definition. The plan hashes were updated before the full census execution.
 
 ## Interruption and resume check
 
 `python scripts/test_corpus_resume.py` uses a synthetic 25,906-path tree with three tiny source objects. It forces one source to be unavailable, verifies that no complete report appears, resumes from the saved measurement, and confirms that duplicated paths retain their full weight. It also checks that changed calculation code is refused and a completed report is not overwritten. The synthetic counts are test fixtures, not corpus measurements. This check passed before the full census was completed.
+
+## Checker corruption controls
+
+The same synthetic tree now exercises the independent checker against a completed 25,906-row fixture, backed by three source objects. Its Git batch-reader protocol is simulated in memory, so this is not an integration test of a live Git process. The checker accepts the intact fixture and rejects five deliberately damaged reports: a changed variance, changed histogram, inconsistent duplicate-object row, wrong eligible-entry total, and missing row. This checks report integrity and failure paths without downloading data. It does not replace the planned check of every real source blob.
