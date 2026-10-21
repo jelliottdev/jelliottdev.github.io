@@ -2018,6 +2018,211 @@
       "script_sha256": "6563dbbb499abaa1a5b7cb09de56335424d1a8d92ac853cdd597098bd7369e1d"
     },
     {
+      "id": "image-row-coverage",
+      "title": "Can image-only detection find every rune row?",
+      "status": "published",
+      "question": "Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?",
+      "summary": "Eight page overlays show where a fixed image-only detector merges rune rows or proposes artwork and other text. A separate implementation verifies the interval matches.",
+      "tags": [
+        "transcription",
+        "missing line",
+        "whole line omission",
+        "row detection",
+        "image segmentation",
+        "image-only",
+        "coverage",
+        "OCR"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-03",
+          "lp2-15",
+          "lp2-31",
+          "lp2-39",
+          "lp2-50",
+          "lp2-56",
+          "lp2-57"
+        ],
+        "artifacts": [
+          "images/lp2-00.jpg",
+          "images/lp2-03.jpg",
+          "images/lp2-15.jpg",
+          "images/lp2-31.jpg",
+          "images/lp2-39.jpg",
+          "images/lp2-50.jpg",
+          "images/lp2-56.jpg",
+          "images/lp2-57.jpg"
+        ],
+        "representation": "Original JPEG grayscale horizontal projections and frozen manual half-open rune-body intervals; no canonical transcription input.",
+        "procedure": "Fixed image-only proposals; maximum-cardinality one-to-one interval matching; each annotated rune row separately omitted from a hypothetical candidate inventory while the image stays unchanged.",
+        "parameters": "Central 22–78% width; grayscale <128; active ink >1%; discard active heights <20 before merging gaps <12 pixels; interval IoU >=0.5; eight selected images and 65 rune reference rows.",
+        "exclusions": "No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning."
+      },
+      "outcome": "not-supported",
+      "finding": "The fixed detector does not recover all individual rune rows: 43 of 65 match. Its 83 proposals comprise 43 individual rune rows, 24 other text rows, seven merged rune-row bands and nine artwork bands.",
+      "limitations": "Selected layouts and approximate manual intervals, not independent random trials. Both implementations use Pillow decoding. Prior page familiarity is disclosed; human annotation review remains pending.",
+      "next_steps": "Compare explicitly declared segmentation variants against this baseline, preserving all misses and non-runic proposals; add independently reviewed references before broadening coverage claims.",
+      "family": {
+        "id": "image-row-coverage",
+        "title": "Image-only row coverage",
+        "question": "Can image segmentation independently cover the text rows that a transcription comparison needs?",
+        "baseline": "image-row-coverage"
+      },
+      "variant": {
+        "label": "Fixed central-column projection on eight layouts",
+        "changes": []
+      },
+      "review": {
+        "reviewer": "Codex; independent scalar-pixel and exhaustive interval replay, all eight overlays inspected; human review pending",
+        "retested_on": "2026-10-21",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/image-row-coverage/run.py --check",
+        "environment": "Python 3 and Pillow 11.3.0; offline. Also extract original-images.zip into the same root; the experiment ZIP contains the frozen reference and plans.",
+        "script": "experiments/records/image-row-coverage/run.py",
+        "script_sha256": "7b258ffe338acc11039736f852d4850eb5432f668b6c7b692d3af55644b6093c",
+        "inputs": [
+          {
+            "path": "images/lp2-00.jpg",
+            "sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e"
+          },
+          {
+            "path": "images/lp2-03.jpg",
+            "sha256": "1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117"
+          },
+          {
+            "path": "images/lp2-15.jpg",
+            "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5"
+          },
+          {
+            "path": "images/lp2-31.jpg",
+            "sha256": "0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a"
+          },
+          {
+            "path": "images/lp2-39.jpg",
+            "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00"
+          },
+          {
+            "path": "images/lp2-50.jpg",
+            "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+          },
+          {
+            "path": "images/lp2-56.jpg",
+            "sha256": "a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc"
+          },
+          {
+            "path": "images/lp2-57.jpg",
+            "sha256": "1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b"
+          },
+          {
+            "path": "experiments/plans/image-row-coverage.md",
+            "sha256": "3b0a50ab9f42c93548e7c66b58dd797a5a7b5bc43c0a57d82e1383ef17493e9a"
+          },
+          {
+            "path": "experiments/plans/image-row-coverage.json",
+            "sha256": "8bfd79cd48ae46440dbf26b0a9085bbc6d90b0cf39b5d60d78555c96ffd13823"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/visual-reference.json",
+            "sha256": "d09db33d464fb2149a77a71bc616e645ed7bd16d85f68ed4111963023ebb229e"
+          },
+          {
+            "path": "scripts/image_row_coverage.py",
+            "sha256": "2077067111f4a38d82b1930da4392d0744847a956689d9516833e9b68225eeb2"
+          },
+          {
+            "path": "scripts/check_image_row_coverage.py",
+            "sha256": "099af8483e652da2d67634c4f7d7f048382df015c306c44ff6c021e300974fc7"
+          },
+          {
+            "path": "scripts/render_image_row_coverage.py",
+            "sha256": "a08586480c2bf53c4e4b55c4507f037dae0ae3089c51be9ac1c26047fd26a9c8"
+          },
+          {
+            "path": "scripts/test_image_row_matching.py",
+            "sha256": "a47bfc6a504fbc04387765658ed09bc9eaed5d55b727ad011be1fb0140b27e04"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/plot.py",
+            "sha256": "a2a14097195bf8c3507cd94c1b6d22d8b240ca80e4aea27a4cf8c59c87b188ea"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/image-row-coverage/results.json",
+            "sha256": "f7fe7b1d03ff2e6e29b04c1422162c775fd9bfe0341b9139115557b4c2c7aa6d"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/audit.json",
+            "sha256": "61c1626b3f9bce238ef369982092f1f92cc9797bb4fd7c2f4f52bac0f23de3a5"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlay-review.json",
+            "sha256": "0ba5501ac2e697c97f07a9e3b7a0ca78d72253a1f8e928b3b47acc49b1a92a4b"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/summary.svg",
+            "sha256": "28f19c199582d057a394ee9fa89b9cc2fb72f5fbeb23bbaffc3624f06bf43ea2"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/summary.md",
+            "sha256": "fa25c695009033cd6933e36fe47aa3074777dbf1f8115f46050b71518f8c6d4d"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-00.svg",
+            "sha256": "7c65b4d5bf1efbd6b61beaa1134dc42f05a8d401bd4a85f77ab110ab88693392"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-03.svg",
+            "sha256": "913dfb7bcc5c0cb41c2732f874e134c3e110b05d542b36b072da1ec9045ede5b"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-15.svg",
+            "sha256": "800f5cba12a57df43785be01fbd8db804c515418799e298fc03471ec6f2795ee"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-31.svg",
+            "sha256": "e94fa7df20f4e3f3e3d79bbee1c94a36cbfa785ebee03342bf93d7ffa16a8bdf"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-39.svg",
+            "sha256": "9ddef071690d289a06b14eb0a409f1ffd9bf4ddf68aa07b3b60dd9778c650e0f"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-50.svg",
+            "sha256": "53ae8bb62da3a312111d24dccb067c7822786e0db18df57d508a2841bf4d5c8f"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-56.svg",
+            "sha256": "2f57b680f0b5c98d02c64128b10162b76fc347a200cebeebe881afd52363a480"
+          },
+          {
+            "path": "experiments/records/image-row-coverage/overlays/lp2-57.svg",
+            "sha256": "386df65c8d5f2d161cc6ebf3cea4ab4774e90403d68ca6d4eb40b817cb646eeb"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned source image-only row helper",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/transcription/linecrop.py"
+        }
+      ],
+      "related": [],
+      "visuals": [
+        {
+          "path": "experiments/records/image-row-coverage/summary.svg",
+          "caption": "Matched and unmatched individual rune rows under the frozen interval rule. LP2-50 contains no reference rune rows; it is a non-runic control. The full account links all eight annotated page overlays."
+        }
+      ],
+      "article": "# Can image-only detection find every rune row?\n\nThis fixed detector does not reliably recover individual rune rows across the eight selected page layouts. It proposes 83 image bands; 43 match the 65 manually annotated rune rows under the frozen one-to-one interval rule. This is a segmentation control, not evidence of an omitted line in the archive.\n\nThe computation, independent check and visual review are preserved with this experiment. They establish the behavior of this fixed detector on the selected images; they do not certify the transcription.\n\n## What was tested\n\nThe source lead is Dukotah/cicada3301 at revision `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`, specifically `liber-primus/analysis/transcription/linecrop.py`. Its row-detection helper operates on the image alone; the later command-line mapping uses canonical rows. We implemented the fixed image-only rule separately rather than executing downloaded code.\n\nThe protocol and manual image reference were frozen before detector execution. The detector examines the central 22–78% of each image. Pixels darker than grayscale 128 contribute to the horizontal projection. A scanline is active when more than 1% of the examined columns are dark. Contiguous active intervals shorter than 20 pixels are discarded before remaining intervals separated by fewer than 12 pixels are merged. No thresholds were tuned after seeing these results.\n\nA proposal matches a reference interval when their intersection divided by their union is at least 0.5. Maximum-cardinality one-to-one matching prevents a large band from counting as several recovered rows. The result retains all eligible edges, matching alternatives and omission controls.\n\n## Results and overlays\n\n| Page | Reference rune rows | Image proposals | Matched rune rows | Overlay |\n| --- | ---: | ---: | ---: | --- |\n| LP2-00 | 12 | 12 | 9 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-00.svg) |\n| LP2-03 | 11 | 6 | 4 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-03.svg) |\n| LP2-15 | 8 | 11 | 5 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-15.svg) |\n| LP2-31 | 12 | 12 | 12 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-31.svg) |\n| LP2-39 | 12 | 12 | 9 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-39.svg) |\n| LP2-50 | 0 | 13 | Not applicable | [Inspect](experiments/records/image-row-coverage/overlays/lp2-50.svg) |\n| LP2-56 | 5 | 10 | 2 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-56.svg) |\n| LP2-57 | 5 | 7 | 2 | [Inspect](experiments/records/image-row-coverage/overlays/lp2-57.svg) |\n\nLP2-50 contains alphanumeric rows in this inventory, not rune rows. It is a non-runic control, not a zero-percent rune-recovery result.\n\nEvery overlay preserves the source JPEG beneath the annotations. Orange R brackets identify reference rune rows, gray N brackets identify other text rows, and blue D rectangles identify image-only proposals. Visual inspection classified all 83 proposals: 43 individual rune rows, 24 non-runic text rows, seven bands spanning multiple rune rows, and nine artwork bands. No reference interval was changed after detection. These categories describe visible regions; they do not identify precisely which pixels caused a merge.\n\nThe numerical count alone is insufficient: LP2-00 has 12 proposals and 12 reference rune rows, yet only nine match. Artwork and merged rows can conceal each other's count discrepancy.\n\n## Omission controls and limits\n\nEach of the 65 reference rune rows is separately treated as absent from a hypothetical candidate inventory while the image and its proposals remain unchanged. The report records whether that row can or must receive a match across all maximum matchings. These are deterministic coverage checks on shared images, not 65 independent trials or 65 actual transcription errors.\n\nAn inventory-only comparison cannot visit a row omitted from that inventory by construction. That comparison illustrates a coverage restriction; it does not reproduce the source repository's classifier or measure its accuracy.\n\nThe pages were selected for different layouts, not randomly sampled. The reference intervals are approximate manual body intervals and prior familiarity with pages is disclosed. Human review remains pending. This experiment does not recognize rune identities, audit within-row insertions or deletions, certify all 75 pages, or show that an archive row is missing.\n\n## Reproduce\n\nExtract the reproduction bundle and original-images.zip into the same root, or use the repository. With Python 3 and Pillow 11.3.0, run `python experiments/records/image-row-coverage/run.py --check` from the root. This reproduces the saved results and all eight overlays in a temporary directory and runs the independent check. To retain new output, use `--output row-replay` instead.\n\nFor the individual stages, choose output paths that do not exist:\n\n```sh\npython scripts/test_image_row_matching.py\npython scripts/image_row_coverage.py --output row-results.json\npython scripts/check_image_row_coverage.py row-results.json --receipt row-audit.json\npython scripts/render_image_row_coverage.py row-results.json row-audit.json --output row-overlays\n```\n\nThe producer checks the frozen plan, reference and image hashes. The independent checker uses scalar pixel bytes, regular-expression active runs, rational interval arithmetic and exhaustive matching enumeration without importing the producer. Both use Pillow to decode the JPEGs, so decoding is a shared dependency. The matching unit controls exhaust all 512 bipartite graphs with three vertices on each side.\n\n`results.json` is the untouched first-run report; its status describes the state at computation time. `audit.json` supplies the subsequent independent computational check. `overlay-review.json` records the later visual review and hashes of all eight overlays. Do not edit the first report to imply that review occurred before it was produced.\n\nFuture variants should change one declared segmentation assumption at a time and retain this baseline. More permissive matching alone is not evidence of better row detection.\n\n## Related explanations\n\nSee [transcription checking](#/wiki/transcription-checking?section=coverage-limits) for the difference between a recorded correction and complete review, and [search spaces and bounds](#/wiki/search-space) for why a result applies only to the declared test.\n",
+      "article_path": "experiments/records/image-row-coverage/article.md",
+      "script_sha256": "7b258ffe338acc11039736f852d4850eb5432f668b6c7b692d3af55644b6093c"
+    },
+    {
       "id": "known-reading-languages",
       "title": "Language comparison checked against known LP readings",
       "status": "published",

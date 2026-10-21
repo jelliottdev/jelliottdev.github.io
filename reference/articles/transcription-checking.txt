@@ -94,6 +94,13 @@ python scripts/transcription_coverage.py
 
 The standard-library script compares exact text and rune streams separately, records each page-record hash and verifies the saved inventory. Before interpreting a difference, open the linked original page and read the correction note. To compare two actual files, use the comparison commands earlier in this guide.
 
+
+Can an image detector find a missing line?
+
+A comparison that starts with a supplied list of text rows cannot independently check whether that list contains every row. An image-only detector can propose additional regions, but those regions still need interpretation. In our eight-page row-coverage experiment, a fixed detector matched 43 of 65 manually annotated rune rows. Its other proposals included non-runic text, artwork and several rune rows merged into a single band.
+
+Equal counts can also mislead: LP2-00 had 12 proposals and 12 reference rune rows, yet only nine matched individually. The experiment provides original-image overlays and a reproduction bundle. It tests one segmentation rule; it does not show that a line is missing from the archived transcription.
+
 Sources, related references, and files
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
@@ -135,5 +142,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/transcription-coverage.json
 - standard-library script
   https://jelliottdev.github.io/scripts/transcription_coverage.py
+- eight-page row-coverage experiment
+  https://jelliottdev.github.io/#/experiments/image-row-coverage
 
 Article: https://jelliottdev.github.io/reference/articles/transcription-checking.html

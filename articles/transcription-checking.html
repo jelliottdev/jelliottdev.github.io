@@ -41,3 +41,7 @@
 <pre><code>python scripts/transcription_coverage.py --check
 python scripts/transcription_coverage.py</code></pre>
 <p>The <a href="scripts/transcription_coverage.py" download>standard-library script</a> compares exact text and rune streams separately, records each page-record hash and verifies the saved inventory. Before interpreting a difference, open the linked original page and read the correction note. To compare two actual files, use the comparison commands earlier in this guide.</p>
+
+<h3 id="image-row-coverage">Can an image detector find a missing line?</h3>
+<p>A comparison that starts with a supplied list of text rows cannot independently check whether that list contains every row. An image-only detector can propose additional regions, but those regions still need interpretation. In our <a href="#/experiments/image-row-coverage">eight-page row-coverage experiment</a>, a fixed detector matched 43 of 65 manually annotated rune rows. Its other proposals included non-runic text, artwork and several rune rows merged into a single band.</p>
+<p>Equal counts can also mislead: LP2-00 had 12 proposals and 12 reference rune rows, yet only nine matched individually. The experiment provides original-image overlays and a reproduction bundle. It tests one segmentation rule; it does not show that a line is missing from the archived transcription.</p>
