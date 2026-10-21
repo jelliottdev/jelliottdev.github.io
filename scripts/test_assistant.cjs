@@ -172,3 +172,9 @@ for(const query of ["English scorer", "scorer calibration", "quadgrams shuffled 
  assert.equal(Search.experiments(liveDocs,query)[0].document.id,"english-scorer-controls",query);
 }
 console.log("PASS: scorer calibration queries retrieve scorer controls, distinct from language identification.");
+
+for(const query of ['Project Runeberg','historical corpus word lengths','Have we compared word lengths with books?']){
+ assert.equal(Search.experiments(liveDocs,query)[0].document.id,'corpus-prefix-census',query);
+}
+assert.equal(Search.experiments(liveDocs,'different language than English')[0].document.id,'parallel-languages');
+console.log('PASS: historical corpus questions reach the complete census while language identification retains its own baseline.');
