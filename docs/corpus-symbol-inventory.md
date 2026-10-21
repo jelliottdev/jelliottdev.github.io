@@ -38,7 +38,9 @@ Boundary controls cover leading/repeated spaces, newline retention, exactly 2,90
 
 The independent checker imports no producer code. It uses literal-space splitting and scalar dictionaries, reads pinned blobs through a single offline Git batch process, checks duplicate rows, and reconstructs all four summary populations. It also reconciles each source hash, byte count and eligibility flag with the completed historical census, and every eligible prefix's exact word-length histogram and total counted units. A receipt is written only after every source row and aggregate passes. It has not yet run on the complete new report.
 
-Publication remains pending: verify all measurements against an independent source scanner, reconcile hashes and eligibility with the existing census, then update the word-length guide and its downloads. No corpus-wide symbol result has yet been accepted from this run.
+The complete measurement and independent source audit have now passed for all 25,906 paths and 25,844 distinct blobs. Source hashes, eligibility and all eligible-prefix word-length histograms reconcile with the earlier census. The report SHA-256 is `e05dc11dc320aae3571bc2fd50aefb054df437d5a033abbed3db5cd9526239f9`; the report, receipt and generated tables are preserved under `exports/corpus-symbols/`. U+16C2 is the only outside-alphabet code point in these selected prefixes. It occurs in 25,554 of 25,565 eligible paths (538,869 occurrences), or 25,552 of 25,563 distinct eligible blobs (538,842 occurrences). The 280 nonempty short-file blobs all contain it; the remaining short blob is empty and appears at 61 paths. These are prefix-inventory findings, not converter reconstruction or language evidence.
+
+Publication still requires rendered figure review, guide integration and download/catalog verification. The complete audit is finished; a second full source scan is not required merely to publish its preserved outputs.
 
 ## Reader-facing tables
 
