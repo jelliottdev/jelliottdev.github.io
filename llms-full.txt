@@ -7003,7 +7003,7 @@ Sources, related references, and files
 - LP2-00–55: emirp row sums with the same page shuffles
   https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
 - Radix changes and byte encodings
-  https://jelliottdev.github.io/reference/articles/hexadecimal.html
+  https://jelliottdev.github.io/reference/articles/method-representations.html
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Magic squares and numerical grids
@@ -10228,6 +10228,9 @@ LP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion
 Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
+
+For choosing and bounding other representations, see radix changes and byte encodings.
+
 Sources, related references, and files
 - XOR trace
   https://jelliottdev.github.io/reference/articles/xor.html#trace
@@ -10237,6 +10240,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Pinned historical walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
+- radix changes and byte encodings
+  https://jelliottdev.github.io/reference/articles/method-representations.html
 
 Article: https://jelliottdev.github.io/reference/articles/hexadecimal.html
 
@@ -24835,6 +24840,84 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-source-audits.html
+
+
+---
+
+Radix changes and byte encodings
+
+Separate numeral interpretation, base conversion, byte order and text decoding before testing a representation.
+
+A representation tells us how symbols stand for values. Before trying a base conversion, distinguish reading a numeral, writing the same value in another base, and interpreting the resulting bytes as text. Each step needs its own convention. A readable result obtained after trying many conventions must be evaluated against that whole search.
+
+One value, several written forms
+
+	Representation	Written form of decimal 65	How to read it
+
+	Base 2	1000001	2⁶ + 1
+
+	Base 10	65	6 × 10 + 5
+
+	Base 16	41	4 × 16 + 1
+
+	Base 29	Digit values [2, 7]	2 × 29 + 7
+
+
+These are the same number. Reading the string 41 in base 10 instead would give 41, not 65. Changing the base used to interpret an existing string is therefore different from converting a known value into a new written form.
+
+For base 29, the table uses a list of digit values to avoid silently choosing a glyph alphabet. An actual rune-based numeral would need a declared assignment of the 29 runes to digit values 0–28. Alphabet indices and Gematria Primus prime values are different representations.
+
+Grouping determines the input
+
+The same runes could be interpreted as one long numeral, separate word-sized numerals, fixed-size groups, or independent symbol values. Those choices produce different outputs. Define group boundaries before converting, including what happens to a final incomplete group and any leading zeros.
+
+A byte contains eight bits. Converting an integer to bytes also requires a length and byte order when more than one byte is involved. For example, decimal 258 fits the two-byte sequence 01 02 with the most significant byte first, or 02 01 with it last. Those are distinct files despite representing the same integer under their respective conventions.
+
+The hexadecimal guide explains the further distinction between decoded bytes and the text characters used to write those bytes. The packing guide addresses fitting rune values into bit fields. Packing alone does not imply compression or encryption.
+
+Let constraints narrow the base
+
+In a conventional positional numeral, every digit value must be smaller than the base. Output bounds can supply an upper limit as well. The alphanumeric-grid guide gives the specific base-60 case: under the declared digit ordering, x has value 59, requiring base at least 60; if 4F is one byte, then 4b + 15 ≤ 255, requiring base at most 60. Together those assumptions force 60.
+
+The assumptions matter. A different digit alphabet, grouping or permitted output range changes the argument. The conclusion is about that representation, not a proof that every alphanumeric passage in Liber Primus uses base 60.
+
+Specify a finite conversion search
+
+List permitted digit alphabets, bases, group sizes, traversal orders, byte orders and text interpretations. Decide how invalid digits, incomplete groups and invalid text sequences are handled. Keep failures in the report; silently dropping invalid groups can manufacture an attractive surviving fragment.
+
+If the digit alphabet itself can be rearranged freely, that is also a substitution search. If values are combined with arithmetic before interpretation, include those operations in the expression bounds. A base conversion does not remove those extra degrees of freedom.
+
+Check a small conversion
+
+value = 65
+assert int("1000001", 2) == int("41", 16) == value
+assert 2 * 29 + 7 == value
+assert (258).to_bytes(2, "big").hex() == "0102"
+assert (258).to_bytes(2, "little").hex() == "0201"
+
+These Python statements check the examples above. They do not decode manuscript text. No general base-and-encoding search experiment is currently linked to this family; the specific grid and payload guides document their own evidence.
+
+All method families · Search space and bounds
+
+Sources, related references, and files
+- Gematria Primus prime values
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- hexadecimal guide
+  https://jelliottdev.github.io/reference/articles/hexadecimal.html
+- packing guide
+  https://jelliottdev.github.io/reference/articles/method-compression.html
+- alphanumeric-grid guide
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
+- substitution search
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- expression bounds
+  https://jelliottdev.github.io/reference/articles/method-expressions.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-representations.html
 
 
 ---

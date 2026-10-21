@@ -1,0 +1,28 @@
+<p>A representation tells us how symbols stand for values. Before trying a base conversion, distinguish reading a numeral, writing the same value in another base, and interpreting the resulting bytes as text. Each step needs its own convention. A readable result obtained after trying many conventions must be evaluated against that whole search.</p>
+<h2 id="same-value">One value, several written forms</h2>
+<div class="table-wrap"><table><thead><tr><th>Representation</th><th>Written form of decimal 65</th><th>How to read it</th></tr></thead><tbody>
+<tr><td>Base 2</td><td>1000001</td><td>2⁶ + 1</td></tr>
+<tr><td>Base 10</td><td>65</td><td>6 × 10 + 5</td></tr>
+<tr><td>Base 16</td><td>41</td><td>4 × 16 + 1</td></tr>
+<tr><td>Base 29</td><td>Digit values [2, 7]</td><td>2 × 29 + 7</td></tr>
+</tbody></table></div>
+<p>These are the same number. Reading the string <code>41</code> in base 10 instead would give 41, not 65. Changing the base used to interpret an existing string is therefore different from converting a known value into a new written form.</p>
+<p>For base 29, the table uses a list of digit values to avoid silently choosing a glyph alphabet. An actual rune-based numeral would need a declared assignment of the 29 runes to digit values 0–28. Alphabet indices and <a href="#/wiki/prime-indices">Gematria Primus prime values</a> are different representations.</p>
+<h2 id="boundaries">Grouping determines the input</h2>
+<p>The same runes could be interpreted as one long numeral, separate word-sized numerals, fixed-size groups, or independent symbol values. Those choices produce different outputs. Define group boundaries before converting, including what happens to a final incomplete group and any leading zeros.</p>
+<p>A byte contains eight bits. Converting an integer to bytes also requires a length and byte order when more than one byte is involved. For example, decimal 258 fits the two-byte sequence <code>01 02</code> with the most significant byte first, or <code>02 01</code> with it last. Those are distinct files despite representing the same integer under their respective conventions.</p>
+<p>The <a href="#/wiki/hexadecimal">hexadecimal guide</a> explains the further distinction between decoded bytes and the text characters used to write those bytes. The <a href="#/wiki/method-compression">packing guide</a> addresses fitting rune values into bit fields. Packing alone does not imply compression or encryption.</p>
+<h2 id="constraints">Let constraints narrow the base</h2>
+<p>In a conventional positional numeral, every digit value must be smaller than the base. Output bounds can supply an upper limit as well. The <a href="#/wiki/alphanumeric-grids">alphanumeric-grid guide</a> gives the specific base-60 case: under the declared digit ordering, x has value 59, requiring base at least 60; if 4F is one byte, then <code>4b + 15 ≤ 255</code>, requiring base at most 60. Together those assumptions force 60.</p>
+<p>The assumptions matter. A different digit alphabet, grouping or permitted output range changes the argument. The conclusion is about that representation, not a proof that every alphanumeric passage in Liber Primus uses base 60.</p>
+<h2 id="test">Specify a finite conversion search</h2>
+<p>List permitted digit alphabets, bases, group sizes, traversal orders, byte orders and text interpretations. Decide how invalid digits, incomplete groups and invalid text sequences are handled. Keep failures in the report; silently dropping invalid groups can manufacture an attractive surviving fragment.</p>
+<p>If the digit alphabet itself can be rearranged freely, that is also a <a href="#/wiki/method-fixed-substitution">substitution search</a>. If values are combined with arithmetic before interpretation, include those operations in the <a href="#/wiki/method-expressions">expression bounds</a>. A base conversion does not remove those extra degrees of freedom.</p>
+<h2 id="reproduce">Check a small conversion</h2>
+<pre><code>value = 65
+assert int("1000001", 2) == int("41", 16) == value
+assert 2 * 29 + 7 == value
+assert (258).to_bytes(2, "big").hex() == "0102"
+assert (258).to_bytes(2, "little").hex() == "0201"</code></pre>
+<p>These Python statements check the examples above. They do not decode manuscript text. No general base-and-encoding search experiment is currently linked to this family; the specific grid and payload guides document their own evidence.</p>
+<p><a href="#/wiki/solving-methods">All method families</a> · <a href="#/wiki/search-space">Search space and bounds</a></p>

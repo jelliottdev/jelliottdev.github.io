@@ -198,7 +198,7 @@
       "https://jelliottdev.github.io/#/experiments/position-divisor-labels",
       "https://jelliottdev.github.io/reference/articles/method-expressions.html",
       "https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums",
-      "https://jelliottdev.github.io/reference/articles/hexadecimal.html",
+      "https://jelliottdev.github.io/reference/articles/method-representations.html",
       "https://jelliottdev.github.io/reference/articles/xor.html",
       "https://jelliottdev.github.io/reference/articles/magic-squares.html",
       "https://jelliottdev.github.io/#/experiments/magic-square-freedom",
@@ -257,7 +257,6 @@
       "cover-chain",
       "cover-rsa",
       "hashes-and-addresses",
-      "hexadecimal",
       "image-regions",
       "interruptions",
       "key-alignment",
@@ -283,6 +282,7 @@
       "method-nulls",
       "method-page-order",
       "method-positional-extraction",
+      "method-representations",
       "method-routes",
       "method-running-key",
       "method-seeded-generators",
@@ -1462,15 +1462,17 @@
       "hex decoding": "replicate",
       "bytes.fromhex": "replicate"
     },
-    "text": "Two digits per byte\nHexadecimal uses 0–9 and a–f for values 0–15. Each digit encodes four bits; two encode one byte. Hex 41 is decimal 65, the ASCII byte for A. Leading zeros matter.\n\nRead one pair by place value\n\nFor a two-digit hexadecimal byte, multiply the left digit’s value by 16 and add the right digit’s value. The letters a, b, c, d, e and f stand for 10, 11, 12, 13, 14 and 15. Uppercase and lowercase denote the same values.\n\n\tHex pair\tCalculation\tDecimal value\tEight bits\n\n\t04\t0 × 16 + 4\t4\t0000 0100\n\n\t41\t4 × 16 + 1\t65\t0100 0001\n\n\t5d\t5 × 16 + 13\t93\t0101 1101\n\n\t77\t7 × 16 + 7\t119\t0111 0111\n\n\tff\t15 × 16 + 15\t255\t1111 1111\n\n\nThe space in each bit string separates the two four-bit groups for readability. A byte has eight bits and can hold an unsigned value from 0 through 255. Interpreting that byte as a character is another step: 65 represents A in ASCII, but arbitrary payload bytes need not form readable text.\n\nLeading zeros preserve byte boundaries\n\nAs integers, hexadecimal 4 and 04 have the same value. As a written byte stream, each byte still needs two digits. For example, 04 10 encodes two bytes with decimal values 4 and 16. Removing the first zero leaves 410, which has an unmatched digit; it does not encode the same two-byte stream under this convention.\n\nThe 0x prefix marks an integer literal in Python, as in 0x41 == 65. It is not part of the payload’s hexadecimal digit pairs. Python’s bytes.fromhex(\"41\") decodes a byte, while bytes.fromhex(\"0x41\") rejects the prefix. Likewise, do not convert an entire payload to an integer and back without preserving its byte length: leading zero bytes can otherwise disappear.\n\nWritten characters versus decoded bytes\n\nA byte written 04 is one byte whose value is four. It is not the two text characters “0” and “4.” In the LP1-00 body, the first six hexadecimal characters are 775d04; decoding them gives three bytes, 77 5d 04. Encoding the literal characters as ASCII instead would give six bytes, 37 37 35 64 30 34.\n\nhex_text = \"775d04\"\ndecoded = bytes.fromhex(hex_text)\ncharacters = hex_text.encode(\"ascii\")\nprint(decoded.hex(\" \"))    # 77 5d 04\nprint(characters.hex(\" \")) # 37 37 35 64 30 34\nassert len(decoded) == 3\nassert len(characters) == 6\n\nThis is why the XOR trace operates after hex decoding. The characters used to write a byte and the byte they represent are different inputs.\n\nDecode a cover body\nfrom pathlib import Path\nbody = Path(\"exports/steganography/lp1-00.body.txt\").read_text()\ndata = bytes.fromhex(body)\nassert len(data) == 991\nWhitespace may separate complete byte pairs. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is bytewise XOR.\n\nRun from the extracted reference-data bundle or the repository root. Python’s bytes.fromhex accepts whitespace between complete byte pairs and either letter case. An unmatched final digit or a non-hex character raises ValueError. Do not repair such an error by silently dropping characters: check that you selected the message body, kept its bytes intact, and excluded prose or signature delimiters.\n\nDo not decode prose as hex\nLP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.\nSources and verification\nPinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.",
+    "text": "Two digits per byte\nHexadecimal uses 0–9 and a–f for values 0–15. Each digit encodes four bits; two encode one byte. Hex 41 is decimal 65, the ASCII byte for A. Leading zeros matter.\n\nRead one pair by place value\n\nFor a two-digit hexadecimal byte, multiply the left digit’s value by 16 and add the right digit’s value. The letters a, b, c, d, e and f stand for 10, 11, 12, 13, 14 and 15. Uppercase and lowercase denote the same values.\n\n\tHex pair\tCalculation\tDecimal value\tEight bits\n\n\t04\t0 × 16 + 4\t4\t0000 0100\n\n\t41\t4 × 16 + 1\t65\t0100 0001\n\n\t5d\t5 × 16 + 13\t93\t0101 1101\n\n\t77\t7 × 16 + 7\t119\t0111 0111\n\n\tff\t15 × 16 + 15\t255\t1111 1111\n\n\nThe space in each bit string separates the two four-bit groups for readability. A byte has eight bits and can hold an unsigned value from 0 through 255. Interpreting that byte as a character is another step: 65 represents A in ASCII, but arbitrary payload bytes need not form readable text.\n\nLeading zeros preserve byte boundaries\n\nAs integers, hexadecimal 4 and 04 have the same value. As a written byte stream, each byte still needs two digits. For example, 04 10 encodes two bytes with decimal values 4 and 16. Removing the first zero leaves 410, which has an unmatched digit; it does not encode the same two-byte stream under this convention.\n\nThe 0x prefix marks an integer literal in Python, as in 0x41 == 65. It is not part of the payload’s hexadecimal digit pairs. Python’s bytes.fromhex(\"41\") decodes a byte, while bytes.fromhex(\"0x41\") rejects the prefix. Likewise, do not convert an entire payload to an integer and back without preserving its byte length: leading zero bytes can otherwise disappear.\n\nWritten characters versus decoded bytes\n\nA byte written 04 is one byte whose value is four. It is not the two text characters “0” and “4.” In the LP1-00 body, the first six hexadecimal characters are 775d04; decoding them gives three bytes, 77 5d 04. Encoding the literal characters as ASCII instead would give six bytes, 37 37 35 64 30 34.\n\nhex_text = \"775d04\"\ndecoded = bytes.fromhex(hex_text)\ncharacters = hex_text.encode(\"ascii\")\nprint(decoded.hex(\" \"))    # 77 5d 04\nprint(characters.hex(\" \")) # 37 37 35 64 30 34\nassert len(decoded) == 3\nassert len(characters) == 6\n\nThis is why the XOR trace operates after hex decoding. The characters used to write a byte and the byte they represent are different inputs.\n\nDecode a cover body\nfrom pathlib import Path\nbody = Path(\"exports/steganography/lp1-00.body.txt\").read_text()\ndata = bytes.fromhex(body)\nassert len(data) == 991\nWhitespace may separate complete byte pairs. Each of the first three bodies has 1,982 hex digits and decodes to 991 bytes. Those bytes need not be readable. The next step is bytewise XOR.\n\nRun from the extracted reference-data bundle or the repository root. Python’s bytes.fromhex accepts whitespace between complete byte pairs and either letter case. An unmatched final digit or a non-hex character raises ValueError. Do not repair such an error by silently dropping characters: check that you selected the message body, kept its bytes intact, and excluded prose or signature delimiters.\n\nDo not decode prose as hex\nLP1-03 contains prose followed by hex-encoded JPEG data. Isolate the hex portion before decoding and retain the complete signed body separately from the derivative image.\nSources and verification\nPinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.\n\n\nFor choosing and bounding other representations, see radix changes and byte encodings.",
     "references": [
       "https://jelliottdev.github.io/reference/articles/xor.html#trace",
       "https://jelliottdev.github.io/reference/articles/cover-chain.html",
       "https://jelliottdev.github.io/downloads/reference-data.zip",
-      "https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md"
+      "https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md",
+      "https://jelliottdev.github.io/reference/articles/method-representations.html"
     ],
     "linked_articles": [
       "cover-chain",
+      "method-representations",
       "xor"
     ]
   },
@@ -8537,6 +8539,41 @@
       "running-scripts",
       "solving-methods",
       "transcription-checking"
+    ]
+  },
+  {
+    "id": "method-representations",
+    "title": "Radix changes and byte encodings",
+    "summary": "Separate numeral interpretation, base conversion, byte order and text decoding before testing a representation.",
+    "category": "Runes and cipher methods",
+    "pages": [],
+    "aliases": [
+      "radix conversion",
+      "base conversion",
+      "byte order",
+      "little endian",
+      "big endian"
+    ],
+    "text": "A representation tells us how symbols stand for values. Before trying a base conversion, distinguish reading a numeral, writing the same value in another base, and interpreting the resulting bytes as text. Each step needs its own convention. A readable result obtained after trying many conventions must be evaluated against that whole search.\n\nOne value, several written forms\n\n\tRepresentation\tWritten form of decimal 65\tHow to read it\n\n\tBase 2\t1000001\t2⁶ + 1\n\n\tBase 10\t65\t6 × 10 + 5\n\n\tBase 16\t41\t4 × 16 + 1\n\n\tBase 29\tDigit values [2, 7]\t2 × 29 + 7\n\n\nThese are the same number. Reading the string 41 in base 10 instead would give 41, not 65. Changing the base used to interpret an existing string is therefore different from converting a known value into a new written form.\n\nFor base 29, the table uses a list of digit values to avoid silently choosing a glyph alphabet. An actual rune-based numeral would need a declared assignment of the 29 runes to digit values 0–28. Alphabet indices and Gematria Primus prime values are different representations.\n\nGrouping determines the input\n\nThe same runes could be interpreted as one long numeral, separate word-sized numerals, fixed-size groups, or independent symbol values. Those choices produce different outputs. Define group boundaries before converting, including what happens to a final incomplete group and any leading zeros.\n\nA byte contains eight bits. Converting an integer to bytes also requires a length and byte order when more than one byte is involved. For example, decimal 258 fits the two-byte sequence 01 02 with the most significant byte first, or 02 01 with it last. Those are distinct files despite representing the same integer under their respective conventions.\n\nThe hexadecimal guide explains the further distinction between decoded bytes and the text characters used to write those bytes. The packing guide addresses fitting rune values into bit fields. Packing alone does not imply compression or encryption.\n\nLet constraints narrow the base\n\nIn a conventional positional numeral, every digit value must be smaller than the base. Output bounds can supply an upper limit as well. The alphanumeric-grid guide gives the specific base-60 case: under the declared digit ordering, x has value 59, requiring base at least 60; if 4F is one byte, then 4b + 15 ≤ 255, requiring base at most 60. Together those assumptions force 60.\n\nThe assumptions matter. A different digit alphabet, grouping or permitted output range changes the argument. The conclusion is about that representation, not a proof that every alphanumeric passage in Liber Primus uses base 60.\n\nSpecify a finite conversion search\n\nList permitted digit alphabets, bases, group sizes, traversal orders, byte orders and text interpretations. Decide how invalid digits, incomplete groups and invalid text sequences are handled. Keep failures in the report; silently dropping invalid groups can manufacture an attractive surviving fragment.\n\nIf the digit alphabet itself can be rearranged freely, that is also a substitution search. If values are combined with arithmetic before interpretation, include those operations in the expression bounds. A base conversion does not remove those extra degrees of freedom.\n\nCheck a small conversion\n\nvalue = 65\nassert int(\"1000001\", 2) == int(\"41\", 16) == value\nassert 2 * 29 + 7 == value\nassert (258).to_bytes(2, \"big\").hex() == \"0102\"\nassert (258).to_bytes(2, \"little\").hex() == \"0201\"\n\nThese Python statements check the examples above. They do not decode manuscript text. No general base-and-encoding search experiment is currently linked to this family; the specific grid and payload guides document their own evidence.\n\nAll method families · Search space and bounds",
+    "references": [
+      "https://jelliottdev.github.io/reference/articles/prime-indices.html",
+      "https://jelliottdev.github.io/reference/articles/hexadecimal.html",
+      "https://jelliottdev.github.io/reference/articles/method-compression.html",
+      "https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html",
+      "https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html",
+      "https://jelliottdev.github.io/reference/articles/method-expressions.html",
+      "https://jelliottdev.github.io/reference/articles/solving-methods.html",
+      "https://jelliottdev.github.io/reference/articles/search-space.html"
+    ],
+    "linked_articles": [
+      "alphanumeric-grids",
+      "hexadecimal",
+      "method-compression",
+      "method-expressions",
+      "method-fixed-substitution",
+      "prime-indices",
+      "search-space",
+      "solving-methods"
     ]
   },
   {
