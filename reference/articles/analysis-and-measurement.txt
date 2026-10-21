@@ -146,6 +146,12 @@ Check the method before trusting its answer
 A failed search can have several causes: the intended answer may be outside the tested keys, the decoder may not represent its alignment, or the scoring rule may reject meaningful text. These controls isolate different parts of that process. Choose the question that matches your method:
 
 
+Could the transcription comparison miss an entire line?
+Check whether text regions are found from the image or supplied by an existing row list. The eight-page control shows why equal row counts can conceal merged text and artwork detections. It does not claim that an archived line is actually missing.
+
+Does a matching opening predict the rest of the text?
+Keep every seed matching an assumed opening, then test its prediction on the remaining text. The synthetic controls separate a correct seed from an omitted seed, the wrong generator and an incorrect crib. What is a crib?
+
 Would this score recognize meaningful text?
 Give the scorer known text before asking it to recognize an unknown answer. The eight-language control measures fixed-threshold acceptance alongside letter shuffles. It tests the score, not a decoder or the manuscript’s language.
 
@@ -288,6 +294,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/image-regions.html#measure-dots
 - download catalogue
   https://jelliottdev.github.io/#/downloads
+- Could the transcription comparison miss an entire line?
+  https://jelliottdev.github.io/#/experiments/image-row-coverage
+- Does a matching opening predict the rest of the text?
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- What is a crib?
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html#crib
 - Would this score recognize meaningful text?
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
 - Can this decoder recover what its encoder produced?

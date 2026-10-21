@@ -11931,6 +11931,12 @@ Check the method before trusting its answer
 A failed search can have several causes: the intended answer may be outside the tested keys, the decoder may not represent its alignment, or the scoring rule may reject meaningful text. These controls isolate different parts of that process. Choose the question that matches your method:
 
 
+Could the transcription comparison miss an entire line?
+Check whether text regions are found from the image or supplied by an existing row list. The eight-page control shows why equal row counts can conceal merged text and artwork detections. It does not claim that an archived line is actually missing.
+
+Does a matching opening predict the rest of the text?
+Keep every seed matching an assumed opening, then test its prediction on the remaining text. The synthetic controls separate a correct seed from an omitted seed, the wrong generator and an incorrect crib. What is a crib?
+
 Would this score recognize meaningful text?
 Give the scorer known text before asking it to recognize an unknown answer. The eight-language control measures fixed-threshold acceptance alongside letter shuffles. It tests the score, not a decoder or the manuscript’s language.
 
@@ -12073,6 +12079,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/image-regions.html#measure-dots
 - download catalogue
   https://jelliottdev.github.io/#/downloads
+- Could the transcription comparison miss an entire line?
+  https://jelliottdev.github.io/#/experiments/image-row-coverage
+- Does a matching opening predict the rest of the text?
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
+- What is a crib?
+  https://jelliottdev.github.io/reference/articles/candidate-readings.html#crib
 - Would this score recognize meaningful text?
   https://jelliottdev.github.io/#/experiments/english-scorer-controls
 - Can this decoder recover what its encoder produced?
@@ -18833,6 +18845,18 @@ The eight-language scorer controls now test a fixed English threshold on known t
 
 If a candidate looks promising
 
+Cribs and text reserved for checking a prediction
+
+A crib is an assumed piece of plaintext at a specified position. For example, assuming that the first three decoded rune indices spell a particular word supplies a constraint on the key. The spelling, rune encoding and location are part of that assumption. A word that merely sounds plausible is not independently known plaintext.
+
+The withheld continuation is text that you did not use to choose the candidate. Freeze the key and decoding rules before inspecting it. Then ask whether the same rule predicts the continuation without new exceptions. If you use the continuation to change the key, choose a different path or repair the spelling, it has become part of development rather than an untouched check.
+
+The known-crib seed controls make this distinction measurable. At two opening runes, the four searches containing their planted generator and seed retain 4, 6, 11 and 8 candidates. Only the true generating pair in each search predicts the complete remaining passage. Other controls obtain prefix matches even with a wrong generator or an incorrect crib. These are synthetic fixtures with known answers, not new readings of the unsolved pages.
+
+For an unsolved passage, the continuation has no known answer to compare against. Record what would count as corroboration before inspecting it: exact additional text specified by an independent source, reproducible constraints, or a separately justified decoding result. Readability judged after trying many alternatives remains a selection process; a longer attractive phrase alone does not provide the same check as exact recovery of withheld known text.
+
+Preserve the complete candidate
+
 Save the complete output and the exact settings before making interpretive changes. Check the transcription against the image, then apply the same declared rule to the rest of the stated input. Mark every exception, skipped rune and inserted word. A short attractive phrase should not hide unexplained text elsewhere.
 
 Distinguish a control from a prediction. Recovering a known reading can show that an implementation handles a documented method. If you designed a rule around that reading, recovering it does not independently establish the rule on an unsolved page. A useful follow-up specifies what additional text or feature the rule should explain before inspecting that result.
@@ -18864,6 +18888,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - search-maximum control
   https://jelliottdev.github.io/#/experiments/search-maximum-controls
+- known-crib seed controls
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - reproducibility guide
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Have we tried it?

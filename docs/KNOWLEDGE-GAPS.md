@@ -1,6 +1,6 @@
 # Evidence coverage and remaining work
 
-Reviewed 20 October 2026 against the authored guides, scripts, reports and experiment records. This reconciles the supplied gap audit with subsequent work. It is a maintenance queue, not a public claim that the whole knowledge base is complete. A report's presence establishes that an account is available; it does not certify every interpretation or external source.
+Reviewed through 21 October 2026 against the authored guides, scripts, reports and experiment records. This reconciles the supplied gap audit with subsequent work. It is a maintenance queue, not a public claim that the whole knowledge base is complete. A report's presence establishes that an account is available; it does not certify every interpretation or external source.
 
 ## Supplied gap audit
 
@@ -29,6 +29,8 @@ The full-corpus comparison now has a receipt-gated renderer (`scripts/render_cor
 6. **27 × 27 totient traversal.** [Selected-route replay](../experiments/records/totient-map-route/article.md) and independent transition calculations are available. Automatic node/path selection remains unspecified. A new variant should freeze those choices and test an unseen continuation; more fits to the supplied route are not held-out evidence.
 
 ## How to close a row
+
+The Dukotah source-review follow-ups now include separate published controls for English scorer sensitivity, decoder alignment, search maxima, image-row coverage and known-crib seed searches; see the [source review](dukotah-source-review.md) for their scope. These validate particular instruments and expose failure modes. They do not close the manuscript cipher search. In particular, the [row experiment](../experiments/records/image-row-coverage/article.md) covers eight selected images and leaves rune identity and complete transcription certification open. The [seed experiment](../experiments/records/seed-crib-controls/article.md) supplies exact cribs to synthetic fixtures; unknown alignment, uncertain cribs and the manuscript's actual generator remain unresolved.
 
 Link the authoritative authored page, exact inputs, runnable script, machine-readable results and relevant check. State what remains outside the result. Update the existing topic or experiment family rather than creating a duplicate per parameter or source post. New observations need searchable terms and page links; new computational claims need a reproducible bundle.
 

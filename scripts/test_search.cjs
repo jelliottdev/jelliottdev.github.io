@@ -295,3 +295,14 @@ assert.equal(noNotes.title,'LP2-00 · Page title');
 assert(noNotes.text.startsWith('Listed in Example guide.'));
 assert(!noNotes.text.includes('Not page evidence'));
 console.log('PASS: feature results use page titles and recorded visual evidence, with an explicit fallback');
+
+for(const query of ['crib','known plaintext crib','withheld text','withheld continuation','prefix match']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/candidate-readings?section=crib',query);
+}
+for(const query of ['missing line','image row coverage','whole line omission']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/transcription-checking?section=image-row-coverage',query);
+}
+for(const query of ['could my scoring method miss the answer','check my solver']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/analysis-and-measurement?section=method-controls',query);
+}
+console.log('PASS: crib definitions, missing-line coverage and solver checks open the relevant explanation.');
