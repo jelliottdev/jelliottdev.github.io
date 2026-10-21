@@ -12816,6 +12816,130 @@
   &quot;article&quot;: &quot;## Why test a whole search?\n\nA candidate can look better simply because we tried more keys. Comparing that winner with one randomly chosen wrong key ignores the selection that produced it. This experiment repeats an entire declared search on null ciphertexts, retaining its best score each time.\n\nThe best null scores rise as the nested dictionary grows from one to 256 keys, but none crosses the fixed −5.5 acceptance threshold in this grid. Searches of positive ciphertext also fail that threshold when the true key is absent. Appending the true key makes every positive control recover exactly and pass. These outcomes describe this finite search; they are not a guarantee against false positives in larger or different searches.\n\n## Three conditions, kept separate\n\n| Condition | Ciphertext | Keys searched | What it checks |\n| --- | --- | --- | --- |\n| Null | Reproducible uniform pseudorandom rune indices | A declared wrong-key dictionary | The best score selected from the whole dictionary under this null generator. |\n| Positive, key absent | A known rune prefix encrypted by addition modulo 29 | The same dictionary, excluding its true seed | What a search reports when its intended answer is outside its bounds. |\n| Positive, key included | The same positive ciphertext | That dictionary plus its true key | Whether inclusion recovers the known answer and whether it wins the scoring comparison. |\n\nThe included condition has **one more candidate** than the stated wrong-key budget. At budget 256 it compares 257 candidates. Its known key is not secretly inserted into the other conditions, and its exact-recovery check is separate from score acceptance.\n\n## Inputs and bounds\n\nAll nine known-reading traces contribute their first 240 output rune indices, or their full length when shorter. Their lengths range from 85 to 240 runes. These are existing trace outputs, not edited English converted back into runes. No section is removed because of a poor score or unusual content.\n\nFor each section, 32 replicates generate a null ciphertext and a positive ciphertext of that section&#x27;s length. Each null uses a fresh, recorded Python pseudorandom-generator seed and uniform draws from indices 0–28. Each positive uses the known prefix and a recorded derived key. The paired controls share length and search settings; they do not share ciphertext.\n\nThe candidate keys use SHA-256 over a fixed ASCII seed label and a four-byte big-endian counter, with digest bytes reduced modulo 29. Because 256 is not divisible by 29, this reduction is biased. It is an explicit fixture, not a uniform-pad claim. Candidate seeds are 0–255; positive seeds are 100000–100031 and therefore absent from that dictionary.\n\nFor every candidate, subtract its key from the ciphertext modulo 29, transliterate with the canonical rune labels, and average the English quadgram log scores. The unseen-quadgram count is 0.01 and the threshold is −5.5, inherited unchanged from the [scorer controls](#/experiments/english-scorer-controls). There are no offsets, alternate signs, skip rules or word-boundary adjustments.\n\n## Nested search budgets\n\nEvery search retains all 256 individual candidate scores and examines dictionary prefixes of 1, 4, 16, 64 and 256 keys. A larger budget contains every candidate in the smaller one. Its maximum therefore cannot decrease. Ties use the smallest seed ID, including when comparing an appended true key.\n\nThe figures preserve all nine source sections. At each budget, a dot is the median of the 32 best scores and the vertical line is their full observed range. Neither is a confidence interval. All panels share a score scale. The positive included condition has a constant score within a section because exact decryption returns the same known rune prefix despite different encryption keys.\n\n| Wrong-key budget | Null accepted | Positive accepted, true key absent | Positive exact and accepted, true key included |\n| --- | ---: | ---: | ---: |\n| 1 | 0/288 | 0/288 | 288/288 (2 candidates) |\n| 4 | 0/288 | 0/288 | 288/288 (5 candidates) |\n| 16 | 0/288 | 0/288 | 288/288 (17 candidates) |\n| 64 | 0/288 | 0/288 | 288/288 (65 candidates) |\n| 256 | 0/288 | 0/288 | 288/288 (257 candidates) |\n\nThese are counts over the fixed grid, not independent-trial accuracy estimates. The full CSV keeps each section separate across all 135 section/budget/condition combinations. The JSON retains all 147,456 wrong-key scores, 288 true-key controls, ciphertexts, seeds, candidate hashes and search winners.\n\n## What a zero count means\n\nWe observed no threshold exceedances among these null searches. That does not prove the threshold is safe for a million-key search, a beam decoder, several language models, or repeated human choices about which output to keep. Such procedures offer different opportunities to find a high-scoring candidate and need their own controls.\n\nThe sections share source material, the dictionary is reused, and budgets are nested. Repetition does not turn this into 288 independent texts drawn from all possible plaintext. The null generator is also a chosen model, not an established description of the manuscript. We do not estimate a probability that a manuscript candidate is correct, pool the scores into an anomaly verdict, or infer a cipher family.\n\nThe [decoder alignment controls](#/experiments/decoder-skip-controls) demonstrate a complementary limitation: even a correct key can fail under an unsuitable decoder, and an incorrect rune sequence can pass a language score. Here the positive controls validate only ordinary modular addition and this declared dictionary search.\n\n## Reproduce and inspect\n\nExtract the experiment ZIP with its folder structure intact. Python 3 and its standard library are sufficient; there are no network requests, API calls or paid services.\n\n```text\npython experiments/records/search-maximum-controls/run.py --check\npython scripts/check_search_maximum_controls.py experiments/records/search-maximum-controls/results.json --receipt my-search-audit.json\npython experiments/records/search-maximum-controls/plot.py\n```\n\nThe independent checker imports no producer functions. It rebuilds the source prefixes, null ciphertexts and derived keys, checks every candidate hash, recalculates scores using counted quadgrams, and reconstructs every winner and tie decision. It also checks monotonic maxima and the additional candidate count when the true key is appended. All 288 paired searches passed; human review remains pending.\n\nThe practical lesson is to compare a selected result with controls that undergo the same selection. See [search space and bounds](#/wiki/search-space) and [null models](#/wiki/null-models). A different dictionary, decoder, scoring rule or adaptive workflow should be a documented variant, with the complete search repeated in its controls.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/search-maximum-controls/article.md&quot;,
   &quot;script_sha256&quot;: &quot;4c51eedad0337fca6101d6050f852ad96e76a5dac749eab4a0ace799b438b824&quot;
+}</pre></article><article id="seed-crib-controls"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;seed-crib-controls&quot;,
+  &quot;title&quot;: &quot;Does matching the opening text identify a seed?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?&quot;,
+  &quot;summary&quot;: &quot;Two fixed hash generators and 4096 seeds each distinguish short-prefix agreement from complete plaintext recovery across 120 synthetic control cells.&quot;,
+  &quot;tags&quot;: [
+    &quot;short seed&quot;,
+    &quot;known plaintext&quot;,
+    &quot;crib&quot;,
+    &quot;seed search&quot;,
+    &quot;withheld text&quot;,
+    &quot;hash generator&quot;,
+    &quot;keystream&quot;,
+    &quot;dictionary bounds&quot;,
+    &quot;prefix match&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;exports/readings/lp2-57.csv&quot;
+    ],
+    &quot;representation&quot;: &quot;All 95 known output rune indices from LP2-57, encrypted into six new synthetic additive ciphertexts.&quot;,
+    &quot;procedure&quot;: &quot;Search each generator dictionary for exact crib compatibility; retain all survivors and independently compare the full decoded passage and withheld suffix. Never select using withheld text.&quot;,
+    &quot;parameters&quot;: &quot;SHA-256/SHA-512; fixed ASCII domain and unsigned four-byte big-endian seed/counter; reject bytes &gt;=232 then reduce mod 29; searched seeds 0..4095; planted seeds 17,4095,4096; cribs 2,4,8,16,32; correct or first-rune-plus-one crib; 120 cells.&quot;,
+    &quot;exclusions&quot;: &quot;No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;Matching two opening runes does not identify a seed: every control retains multiple candidates. Only the true generating pairs recover the complete withheld text. At four or more tested crib runes, included-pair searches retain only their true seed; other controls retain none.&quot;,
+  &quot;limitations&quot;: &quot;One known passage and dependent deterministic fixtures; exact crib and alignment are supplied. Results apply only to two specified generators and dictionaries. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Test separately declared offsets, uncertain cribs or alternative generator encodings with planted controls before applying them to unknown text.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;seed-crib-controls&quot;,
+    &quot;title&quot;: &quot;Known-plaintext seed searches&quot;,
+    &quot;question&quot;: &quot;Do exact crib matches predict withheld plaintext within a declared seed search?&quot;,
+    &quot;baseline&quot;: &quot;seed-crib-controls&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Two fixed hash generators with exact-alignment cribs&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent reconstruction of every stream, planted input and survivor; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-21&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/seed-crib-controls/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; offline. All required inputs are in the experiment ZIP.&quot;,
+    &quot;script&quot;: &quot;experiments/records/seed-crib-controls/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;cc328de8bb18f1b8d7f3d9178391996dd3cf6577898dc92babc12183d433b8da&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-57.csv&quot;,
+        &quot;sha256&quot;: &quot;197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/seed-crib-controls.md&quot;,
+        &quot;sha256&quot;: &quot;091233a7f806668c5a436f87ad2d5be5a76476fdc98e8d55f66e8af22eb0f185&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/plans/seed-crib-controls.json&quot;,
+        &quot;sha256&quot;: &quot;3c05cc4dff65835879f513d629cd0f0b43ece0d48fb1b1d31bddbdf2bdced456&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/seed_crib_controls.py&quot;,
+        &quot;sha256&quot;: &quot;c930c83620287d47806f402a82eadec7e56d545f4d935e9b5fb4485a49c77d79&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/check_seed_crib_controls.py&quot;,
+        &quot;sha256&quot;: &quot;8fe88abf9df1e85319532743d162b3b42df50684733cf42f3255704afac4db46&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/summarize_seed_crib_controls.py&quot;,
+        &quot;sha256&quot;: &quot;b34f942632f487ee23a8bdfa6e0a82009f11346f7c1000ac741fa13250489f49&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/test_seed_crib_controls.py&quot;,
+        &quot;sha256&quot;: &quot;3304a9730ec5e8c9ce69e4026c79b47c76152c274dfb8b100b0f5732f2ad0b1b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/seed-crib-controls/plot.py&quot;,
+        &quot;sha256&quot;: &quot;36f7c518b92b309d8891a14e32cfdd466d33d0da5f2a076888bb0c94616f15a5&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/seed-crib-controls/results.json&quot;,
+        &quot;sha256&quot;: &quot;9a935fd63ed68283e1f2bf5747aa5ecb7b2801d6e086421ddd3431c1fa1703c9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/seed-crib-controls/audit.json&quot;,
+        &quot;sha256&quot;: &quot;5038a5f7c668520bd5a290d414f2008d521c4342df752ca3b0e118f8783fa1d4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/seed-crib-controls/summary.csv&quot;,
+        &quot;sha256&quot;: &quot;928f551191e67297c5ad50ee38c989379ac7323d4b36edaf3f8326e4a5169345&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/seed-crib-controls/prefix-matches.svg&quot;,
+        &quot;sha256&quot;: &quot;f3b62a4ed54f6c7eab10d38a5be681d926dec8bd93a8db7b4edfd211a47cf1a0&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned repository discussion motivating short-seed controls&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;search-maximum-controls&quot;,
+    &quot;decoder-skip-controls&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/seed-crib-controls/prefix-matches.svg&quot;,
+      &quot;caption&quot;: &quot;Minimum and maximum surviving seed counts across every search in each group. Counts are dependent control results, not confidence intervals. All five crib lengths and zero-result conditions are retained.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Does matching the opening text identify a seed?\n\nA short readable opening can have several explanations. This experiment plants a known 95-rune passage under two fixed keystream generators, searches a finite seed dictionary, and asks whether seeds that reproduce the opening also predict the remaining text. No candidate is selected by looking at that remaining text.\n\nA **crib** is an assumed exact plaintext sequence at an exact position. Here the crib is supplied as part of the control. It is not guessed from the ciphertext or inferred from a language score. The **withheld suffix** is everything after the crib: the part reserved for checking a prediction.\n\nWith two crib runes, every tested search retains several seeds. Only the true generating pairs recover the complete passage. At four or more crib runes, those generating pairs are the only survivors in the searches that include them; the other controls retain none. This is a result for these fixtures and dictionaries, not a general four-rune requirement.\n\n## What is searched?\n\nThe plaintext is the 95 output rune indices from the known reading of LP2-57. New ciphertexts are generated from it. This is not a new attempt to decrypt the original LP2-57 image, and it supplies no claim about the unsolved pages.\n\nThe two generators use SHA-256 and SHA-512. Each hashes the ASCII domain separator `liberpedia-seed-control:v1:`, followed by a four-byte unsigned big-endian seed and a four-byte unsigned big-endian counter starting at zero. Digest bytes of 232 or greater are discarded; the remaining bytes are reduced modulo 29. Digests are concatenated until 95 indices are available. There are no skips, offsets, resets or alternate signs.\n\nEach generator plants seeds 17, 4095 and 4096. Each search tests seeds **0 through 4095**, inclusive, under one generator. Seed 4096 is deliberately absent from both search dictionaries even though it is a valid generator input. Thus an unsuccessful search can simply mean the needed seed is outside its bounds.\n\nEncryption is `cipher[i] = (plain[i] + key[i]) mod 29`. A seed survives when it reproduces every assumed crib rune at the start. Every survivor is retained; there is no English score, best-candidate ranking or phrase selection. Its complete decoded sequence is then compared with the known plaintext, keeping full-passage equality and withheld-suffix equality separate.\n\n## Results\n\nThe figure reports the range of candidate counts across the searches in each control group. These ranges are not confidence intervals. The incorrect-crib group changes only the first rune by adding one modulo 29, leaving the rest of the assumed opening unchanged. It includes both matching and mismatched search generators.\n\n| Control | Searches per crib length | Survivors with 2 crib runes | Survivors with 4, 8, 16 or 32 crib runes |\n| --- | ---: | --- | --- |\n| Correct crib; generating pair included | 4 | 4, 6, 11, 8 | Exactly 1 per search |\n| Correct crib; matching generator but seed outside range | 2 | 5, 4 | 0 |\n| Correct crib; wrong generator | 6 | 8, 5, 10, 6, 8, 2 | 0 |\n| Incorrect first crib rune | 12 | 6, 5, 2, 7, 4, 3, 8, 6, 7, 4, 4, 6 | 0 |\n\nAt length two, the four included-pair searches contain 29 survivors in total. Four are the true generating pairs; the other 25 fail to predict the complete 93-rune withheld suffix. All survivors in the other three control groups also fail that complete suffix test. They may agree with individual withheld runes, which is why the full report preserves both exact equality and the number of correct positions.\n\nFor all longer tested cribs, each included-pair search retains exactly the true seed, which recovers all 95 runes. An incorrect first crib rune prevents full-passage equality by construction; the independently evaluated suffix test is a separate check.\n\nThe complete summary retains all **120 cells**, including zero-survivor cases. The full JSON also stores every searched keystream, every planted ciphertext and every surviving candidate&#x27;s decoded sequence. A generating-pair identity and an exact finite-stream match are conceptually different; no alternative pair recovers the whole passage in these controls.\n\n## What an empty search establishes\n\nAn empty result excludes only the tested generator/seed pairs under the exact crib and alignment. It does not exclude seeds outside the dictionary, other generators, another seed encoding, a different crib, an unknown offset or a different cipher mechanism. The two omitted-seed fixtures demonstrate this directly: their ciphertexts are generated by a tested generator, yet the bounded correct-crib searches retain no seed once the crib reaches four runes.\n\nThese cells reuse one plaintext and fixed dictionaries. They are dependent controls, not independent samples from a population of ciphers. Short prefixes can match accidentally; no probability that an LP proposal is correct follows from these counts. Random-looking ciphertext also does not establish an independent one-time pad.\n\n## Reproduce and inspect\n\nExtract this experiment&#x27;s ZIP with folders intact, or use the repository. Python 3 and its standard library are sufficient; no additional corpus, original-image download, API or model is needed.\n\n```sh\npython experiments/records/seed-crib-controls/run.py --check\n```\n\nThe command reconstructs the result, independently checks every stream and survivor, and compares the complete summary and figure. Use `--output seed-replay` instead to retain newly generated reports in a new directory. The plot can also be regenerated with `python experiments/records/seed-crib-controls/plot.py`.\n\nThe protocol was committed before candidate generation. The checker imports no producer code: it separately packs seed/counter bytes, uses division to implement rejection conversion and checks compatibility by directly encrypting the assumed crib. Both implementations share Python&#x27;s hash primitives. Boundary and exhaustive toy controls test byte order, the 231/232 cutoff and the difference between prefix, suffix and whole-text agreement. Human review remains pending.\n\n## Related explanations\n\nRead [search spaces and bounds](#/wiki/search-space) for interpreting an empty search, [one-time pads and short seeds](#/wiki/one-time-pad) for the identification limits, and [search-maximum controls](#/experiments/search-maximum-controls) for the different problem of selecting the highest language score.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/seed-crib-controls/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;cc328de8bb18f1b8d7f3d9178391996dd3cf6577898dc92babc12183d433b8da&quot;
 }</pre></article><article id="selected-phrase-word-sums"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;selected-phrase-word-sums&quot;,
   &quot;title&quot;: &quot;Selected phrase and MYRMELEONTIDAE: five word-sum candidates&quot;,

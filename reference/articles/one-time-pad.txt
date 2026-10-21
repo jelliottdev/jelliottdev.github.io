@@ -52,6 +52,13 @@ python scripts/pad_identification_example.py
 
 The standard-library script enumerates all 81 plaintext/key pairs in the two-symbol example. It checks the nine-ciphertext uniform distribution for every plaintext, verifies both coordinate marginals for repeated keys, and checks the difference invariant. A separate enumeration of matching keys checks the subtraction-derived rows. This is an exhaustive mathematical illustration, not a manuscript experiment or a new cryptographic result. Download script · Download exact rows.
 
+
+Test a short-seed search with known text
+
+A guessed opening can match several seeds without identifying the intended one. Our known-crib seed experiment uses synthetic ciphertexts and reserves the text after the opening for verification. It tests included and omitted seeds, the wrong generator and an incorrect first crib rune. All two-rune searches retain multiple candidates; only the true generating pairs predict the entire withheld continuation.
+
+The experiment makes the bounds explicit: two specified hash generators, 4,096 seeds each and exact alignment. Its omitted-seed controls show why an empty dictionary search does not exclude the generator itself. It does not identify the generator used by Liber Primus.
+
 Sources, related references, and files
 - Shannon’s Communication Theory of Secrecy Systems
   https://www.apprendre-en-ligne.net/crypto/bibliotheque/PDF/shannon1949.pdf
@@ -75,5 +82,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/pad_identification_example.py
 - Download exact rows
   https://jelliottdev.github.io/exports/pad-identification-example.json
+- known-crib seed experiment
+  https://jelliottdev.github.io/#/experiments/seed-crib-controls
 
 Article: https://jelliottdev.github.io/reference/articles/one-time-pad.html

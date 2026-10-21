@@ -1,0 +1,122 @@
+{
+  "id": "seed-crib-controls",
+  "title": "Does matching the opening text identify a seed?",
+  "status": "published",
+  "question": "Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?",
+  "summary": "Two fixed hash generators and 4096 seeds each distinguish short-prefix agreement from complete plaintext recovery across 120 synthetic control cells.",
+  "tags": [
+    "short seed",
+    "known plaintext",
+    "crib",
+    "seed search",
+    "withheld text",
+    "hash generator",
+    "keystream",
+    "dictionary bounds",
+    "prefix match"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/readings/lp2-57.csv"
+    ],
+    "representation": "All 95 known output rune indices from LP2-57, encrypted into six new synthetic additive ciphertexts.",
+    "procedure": "Search each generator dictionary for exact crib compatibility; retain all survivors and independently compare the full decoded passage and withheld suffix. Never select using withheld text.",
+    "parameters": "SHA-256/SHA-512; fixed ASCII domain and unsigned four-byte big-endian seed/counter; reject bytes >=232 then reduce mod 29; searched seeds 0..4095; planted seeds 17,4095,4096; cribs 2,4,8,16,32; correct or first-rune-plus-one crib; 120 cells.",
+    "exclusions": "No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability."
+  },
+  "outcome": "not-supported",
+  "finding": "Matching two opening runes does not identify a seed: every control retains multiple candidates. Only the true generating pairs recover the complete withheld text. At four or more tested crib runes, included-pair searches retain only their true seed; other controls retain none.",
+  "limitations": "One known passage and dependent deterministic fixtures; exact crib and alignment are supplied. Results apply only to two specified generators and dictionaries. Human review pending.",
+  "next_steps": "Test separately declared offsets, uncertain cribs or alternative generator encodings with planted controls before applying them to unknown text.",
+  "family": {
+    "id": "seed-crib-controls",
+    "title": "Known-plaintext seed searches",
+    "question": "Do exact crib matches predict withheld plaintext within a declared seed search?",
+    "baseline": "seed-crib-controls"
+  },
+  "variant": {
+    "label": "Two fixed hash generators with exact-alignment cribs",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; independent reconstruction of every stream, planted input and survivor; human review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/seed-crib-controls/run.py --check",
+    "environment": "Python 3 standard library; offline. All required inputs are in the experiment ZIP.",
+    "script": "experiments/records/seed-crib-controls/run.py",
+    "script_sha256": "cc328de8bb18f1b8d7f3d9178391996dd3cf6577898dc92babc12183d433b8da",
+    "inputs": [
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "experiments/plans/seed-crib-controls.md",
+        "sha256": "091233a7f806668c5a436f87ad2d5be5a76476fdc98e8d55f66e8af22eb0f185"
+      },
+      {
+        "path": "experiments/plans/seed-crib-controls.json",
+        "sha256": "3c05cc4dff65835879f513d629cd0f0b43ece0d48fb1b1d31bddbdf2bdced456"
+      },
+      {
+        "path": "scripts/seed_crib_controls.py",
+        "sha256": "c930c83620287d47806f402a82eadec7e56d545f4d935e9b5fb4485a49c77d79"
+      },
+      {
+        "path": "scripts/check_seed_crib_controls.py",
+        "sha256": "8fe88abf9df1e85319532743d162b3b42df50684733cf42f3255704afac4db46"
+      },
+      {
+        "path": "scripts/summarize_seed_crib_controls.py",
+        "sha256": "b34f942632f487ee23a8bdfa6e0a82009f11346f7c1000ac741fa13250489f49"
+      },
+      {
+        "path": "scripts/test_seed_crib_controls.py",
+        "sha256": "3304a9730ec5e8c9ce69e4026c79b47c76152c274dfb8b100b0f5732f2ad0b1b"
+      },
+      {
+        "path": "experiments/records/seed-crib-controls/plot.py",
+        "sha256": "36f7c518b92b309d8891a14e32cfdd466d33d0da5f2a076888bb0c94616f15a5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/seed-crib-controls/results.json",
+        "sha256": "9a935fd63ed68283e1f2bf5747aa5ecb7b2801d6e086421ddd3431c1fa1703c9"
+      },
+      {
+        "path": "experiments/records/seed-crib-controls/audit.json",
+        "sha256": "5038a5f7c668520bd5a290d414f2008d521c4342df752ca3b0e118f8783fa1d4"
+      },
+      {
+        "path": "experiments/records/seed-crib-controls/summary.csv",
+        "sha256": "928f551191e67297c5ad50ee38c989379ac7323d4b36edaf3f8326e4a5169345"
+      },
+      {
+        "path": "experiments/records/seed-crib-controls/prefix-matches.svg",
+        "sha256": "f3b62a4ed54f6c7eab10d38a5be681d926dec8bd93a8db7b4edfd211a47cf1a0"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned repository discussion motivating short-seed controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/PAPER.md"
+    }
+  ],
+  "related": [
+    "search-maximum-controls",
+    "decoder-skip-controls"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/seed-crib-controls/prefix-matches.svg",
+      "caption": "Minimum and maximum surviving seed counts across every search in each group. Counts are dependent control results, not confidence intervals. All five crib lengths and zero-result conditions are retained."
+    }
+  ]
+}

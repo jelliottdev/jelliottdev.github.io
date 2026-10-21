@@ -178,3 +178,11 @@ for(const query of ['Project Runeberg','historical corpus word lengths','Have we
 }
 assert.equal(Search.experiments(liveDocs,'different language than English')[0].document.id,'parallel-languages');
 console.log('PASS: historical corpus questions reach the complete census while language identification retains its own baseline.');
+
+for(const query of ['known plaintext seed search','crib withheld text','seed dictionary bounds']){
+ assert.equal(Search.experiments(liveDocs,query)[0].document.id,'seed-crib-controls',query);
+}
+for(const query of ['image-only row detection','whole line omission']){
+ assert.equal(Search.experiments(liveDocs,query)[0].document.id,'image-row-coverage',query);
+}
+console.log('PASS: known-crib seed controls and image-row coverage have distinct experiment destinations.');
