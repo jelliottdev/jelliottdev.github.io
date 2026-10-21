@@ -1,0 +1,54 @@
+Cipher composition and ordered pipelines
+
+Define the order, depth and parameters of combined transformations, and count equivalent outputs.
+
+A composed cipher applies several transformations to the same data. A proposal might rearrange runes, subtract a key and then reverse the alphabet. Each component can be simple while the combined search becomes large. Record the complete ordered pipeline: listing the ingredients alone does not define the decoder.
+
+Order sometimes changes the answer
+
+Here is an invented three-symbol example using indices modulo 29. Let R reverse the sequence and K subtract the position-dependent key [1, 2, 3].
+
+	Pipeline	Input	After first operation	After second operation
+
+	R, then K	0, 1, 2	2, 1, 0	1, 28, 26
+
+	K, then R	0, 1, 2	28, 28, 28	28, 28, 28
+
+
+The key stays attached to the current positions in this example. If it instead travels with the original symbols, that is another rule. In contrast, applying the same fixed substitution to every symbol commutes with a permutation of positions: either order gives the same output. Searching both orders then adds configurations without adding results.
+
+Bound the pipeline itself
+
+Specify the available operations, their parameter ranges, the maximum number of stages and whether repetition is allowed. With m operations and exactly d stages, allowing repetition gives m^(d) operation sequences before counting parameters. With depths 1 through D, the count is the sum of m^(d) over those depths. Commuting operations, inverses and repeated outputs can make many sequences equivalent.
+
+An unlimited instruction to “keep adding transformations until it reads” has no finite completion criterion. A bounded search can be useful, but it must include every pipeline tried and the rule used to select the winner. Finding a word after trying many pipelines is not the same evidence as predicting that word with one independently specified pipeline.
+
+Keep each intermediate representation
+
+Save the source positions, the output of each stage and any lost information. State when punctuation disappears, how values become rune indices, and whether a later operation uses original or current boundaries. For a reversible pipeline, apply the inverses in reverse order and verify recovery of the input. A successful round trip checks implementation, not historical intent.
+
+Where this family meets existing work
+
+No general bounded pipeline-search experiment is linked here yet. Existing route, substitution and keystream tests cover their declared variants; separately testing components does not test their combinations.
+
+The cover file chain documents a different kind of layering: one recovered artifact supplies the input to the next stage. It can motivate careful intermediate records, but does not establish that an unsolved rune passage uses a particular cipher composition.
+
+All method families · Search space and bounds · Selection controls
+
+Sources, related references, and files
+- route
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- substitution
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- keystream
+  https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
+- cover file chain
+  https://jelliottdev.github.io/reference/articles/cover-chain.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Selection controls
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-composition.html

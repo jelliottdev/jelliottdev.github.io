@@ -1,0 +1,19 @@
+<p>A switching rule changes the operation during decoding. The switch might depend on position, a visible marker, a running state or a recovered symbol. Such a cipher can be precisely defined. The difficulty comes when the solver chooses the switch after deciding which output looks best: those choices become part of the key and the search.</p>
+<h2 id="types">Three different kinds of switching</h2>
+<div class="table-wrap"><table><thead><tr><th>Rule</th><th>Example</th><th>What must be recorded</th></tr></thead><tbody>
+<tr><td>Position-driven</td><td>Add on even positions, subtract on odd positions.</td><td>Index origin, signs and reset boundaries.</td></tr>
+<tr><td>Input- or state-driven</td><td>A specified marker changes the mode for the next symbol.</td><td>Trigger, timing, state transition and treatment of the marker.</td></tr>
+<tr><td>Solver-selected</td><td>Choose whichever operation gives a plausible next letter.</td><td>Every allowed choice, selection criterion and resulting search size.</td></tr>
+</tbody></table></div>
+<p>The first two can be evaluated as fixed algorithms once all their details are declared. The third can also be studied, but the decoder is no longer specified by its few arithmetic operations alone. Its sequence of choices must be counted and tested.</p>
+<h2 id="example">How local choices accumulate</h2>
+<p>If every one of n positions independently allows addition or subtraction of a fixed shift, there are 2<sup>n</sup> choice sequences. At 20 positions that is 1,048,576 configurations. Some may coincide—for example, adding and subtracting zero give the same result—so report distinct outputs as well as configurations.</p>
+<p>More extreme freedom makes a proposed reading unavoidable: for any desired rune sequence p and ciphertext c, choosing a separate shift <code>k[i] = (c[i] − p[i]) mod 29</code> makes <code>c[i] − k[i]</code> reproduce p. This proves only that an unrestricted per-position shift can fit that target. It does not disprove a separately specified switching algorithm or an independently obtained key.</p>
+<h2 id="specification">What turns a proposal into a test?</h2>
+<p>Declare the modes, triggers, initial state, switch timing and maximum number of switches. If the solver chooses switch positions, list the permitted positions and enumerate the choices. Specify whether copied runes update state. If a language score chooses the path automatically, preserve its exact scoring and tie-breaking rules; that is a search procedure whose full selection process needs controls.</p>
+<p>Replacing an inconvenient prime with zero, changing direction at a promising fragment, or restarting a key because the text stops reading are all additional choices unless an earlier rule predicted them. Record them explicitly rather than removing them from the recipe once a candidate sentence is found.</p>
+<h2 id="validation">Test prediction beyond the fitted fragment</h2>
+<p>Freeze the rule before decoding an untouched continuation. If new exceptions are necessary, report that the original rule did not predict the continuation. Compare the same number of choices and the same selection procedure on controls. Retain competing candidates: several equally good outputs weaken a claim that one reading is uniquely determined.</p>
+<h2 id="coverage">Related experiments</h2>
+<p>The <a href="#/experiments/lp2-54-55-autokey-reset">LP2-54–55 reset</a> and <a href="#/experiments/lp2-54-55-autokey-skip">skip</a> experiments enumerate subsets of six declared candidate interruptions under specific rules. They illustrate finite choices, not a test of arbitrary switching everywhere. No general solver-selected switching experiment is linked here yet.</p>
+<p><a href="#/wiki/method-feedback">Feedback and state</a> · <a href="#/wiki/interruptions">Interruptions</a> · <a href="#/wiki/method-automatic-search">Automatic search</a> · <a href="#/wiki/solving-methods">All method families</a></p>

@@ -1,0 +1,17 @@
+<p>A composed cipher applies several transformations to the same data. A proposal might rearrange runes, subtract a key and then reverse the alphabet. Each component can be simple while the combined search becomes large. Record the complete ordered pipeline: listing the ingredients alone does not define the decoder.</p>
+<h2 id="order">Order sometimes changes the answer</h2>
+<p>Here is an invented three-symbol example using indices modulo 29. Let R reverse the sequence and K subtract the position-dependent key [1, 2, 3].</p>
+<div class="table-wrap"><table><thead><tr><th>Pipeline</th><th>Input</th><th>After first operation</th><th>After second operation</th></tr></thead><tbody>
+<tr><td>R, then K</td><td>0, 1, 2</td><td>2, 1, 0</td><td>1, 28, 26</td></tr>
+<tr><td>K, then R</td><td>0, 1, 2</td><td>28, 28, 28</td><td>28, 28, 28</td></tr>
+</tbody></table></div>
+<p>The key stays attached to the current positions in this example. If it instead travels with the original symbols, that is another rule. In contrast, applying the same fixed substitution to every symbol commutes with a permutation of positions: either order gives the same output. Searching both orders then adds configurations without adding results.</p>
+<h2 id="bounds">Bound the pipeline itself</h2>
+<p>Specify the available operations, their parameter ranges, the maximum number of stages and whether repetition is allowed. With m operations and exactly d stages, allowing repetition gives m<sup>d</sup> operation sequences before counting parameters. With depths 1 through D, the count is the sum of m<sup>d</sup> over those depths. Commuting operations, inverses and repeated outputs can make many sequences equivalent.</p>
+<p>An unlimited instruction to “keep adding transformations until it reads” has no finite completion criterion. A bounded search can be useful, but it must include every pipeline tried and the rule used to select the winner. Finding a word after trying many pipelines is not the same evidence as predicting that word with one independently specified pipeline.</p>
+<h2 id="trace">Keep each intermediate representation</h2>
+<p>Save the source positions, the output of each stage and any lost information. State when punctuation disappears, how values become rune indices, and whether a later operation uses original or current boundaries. For a reversible pipeline, apply the inverses in reverse order and verify recovery of the input. A successful round trip checks implementation, not historical intent.</p>
+<h2 id="coverage">Where this family meets existing work</h2>
+<p>No general bounded pipeline-search experiment is linked here yet. Existing <a href="#/wiki/method-routes">route</a>, <a href="#/wiki/method-fixed-substitution">substitution</a> and <a href="#/wiki/method-arithmetic-streams">keystream</a> tests cover their declared variants; separately testing components does not test their combinations.</p>
+<p>The <a href="#/wiki/cover-chain">cover file chain</a> documents a different kind of layering: one recovered artifact supplies the input to the next stage. It can motivate careful intermediate records, but does not establish that an unsolved rune passage uses a particular cipher composition.</p>
+<p><a href="#/wiki/solving-methods">All method families</a> · <a href="#/wiki/search-space">Search space and bounds</a> · <a href="#/wiki/null-models">Selection controls</a></p>

@@ -6395,6 +6395,28 @@ Outside this test: No manuscript cipher identification, general recovery guarant
 
 
 
+Cipher composition and ordered pipelines
+Combine a bounded set of transformations in a declared order, tracking intermediate representations.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
+Switching rules and adaptive decoding
+Change modes using declared triggers or explicitly counted solver choices.
+
+Documented tests (2)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+LP2-54–55: reset ciphertext state at selected F runes
+Question tested: Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
+Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+LP2-54–55: skip selected F runes in ciphertext feedback
+Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
+Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+
+
 
 Order and selection
 
@@ -6904,6 +6926,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
+- Cipher composition and ordered pipelines
+  https://jelliottdev.github.io/reference/articles/method-composition.html
+- Switching rules and adaptive decoding
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Transposition and permutations
   https://jelliottdev.github.io/reference/articles/transposition.html
 - LP2-00–55: simple row and column reading routes
@@ -23596,6 +23622,9 @@ LP2-00–02: 27 × 27 totient-map route replay
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
+
+For proposals combining or changing operations, see cipher composition and ordered pipelines.
+
 Sources, related references, and files
 - LP2-00–55: simple row and column reading routes
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
@@ -23609,6 +23638,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Have we tried it?
   https://jelliottdev.github.io/#/experiments
+- cipher composition and ordered pipelines
+  https://jelliottdev.github.io/reference/articles/method-composition.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-routes.html
 
@@ -24240,6 +24271,9 @@ Save the source position, input, state before decoding, output and state afterwa
 
 Choose the rule on one segment and apply it unchanged to a continuation. Any seed, reset or correction added after inspecting that continuation becomes another fitted choice. Compare the complete search with controls, including its selection of the best-looking output. See null models, differential decoding and all method families.
 
+
+For proposals combining or changing operations, see switching rules and adaptive decoding.
+
 Sources, related references, and files
 - repeating-key cipher
   https://jelliottdev.github.io/reference/articles/vigenere.html
@@ -24255,6 +24289,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-differences.html
 - all method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
+- switching rules and adaptive decoding
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-feedback.html
 
@@ -24323,6 +24359,124 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-geometry.html
+
+
+---
+
+Cipher composition and ordered pipelines
+
+Define the order, depth and parameters of combined transformations, and count equivalent outputs.
+
+A composed cipher applies several transformations to the same data. A proposal might rearrange runes, subtract a key and then reverse the alphabet. Each component can be simple while the combined search becomes large. Record the complete ordered pipeline: listing the ingredients alone does not define the decoder.
+
+Order sometimes changes the answer
+
+Here is an invented three-symbol example using indices modulo 29. Let R reverse the sequence and K subtract the position-dependent key [1, 2, 3].
+
+	Pipeline	Input	After first operation	After second operation
+
+	R, then K	0, 1, 2	2, 1, 0	1, 28, 26
+
+	K, then R	0, 1, 2	28, 28, 28	28, 28, 28
+
+
+The key stays attached to the current positions in this example. If it instead travels with the original symbols, that is another rule. In contrast, applying the same fixed substitution to every symbol commutes with a permutation of positions: either order gives the same output. Searching both orders then adds configurations without adding results.
+
+Bound the pipeline itself
+
+Specify the available operations, their parameter ranges, the maximum number of stages and whether repetition is allowed. With m operations and exactly d stages, allowing repetition gives m^(d) operation sequences before counting parameters. With depths 1 through D, the count is the sum of m^(d) over those depths. Commuting operations, inverses and repeated outputs can make many sequences equivalent.
+
+An unlimited instruction to “keep adding transformations until it reads” has no finite completion criterion. A bounded search can be useful, but it must include every pipeline tried and the rule used to select the winner. Finding a word after trying many pipelines is not the same evidence as predicting that word with one independently specified pipeline.
+
+Keep each intermediate representation
+
+Save the source positions, the output of each stage and any lost information. State when punctuation disappears, how values become rune indices, and whether a later operation uses original or current boundaries. For a reversible pipeline, apply the inverses in reverse order and verify recovery of the input. A successful round trip checks implementation, not historical intent.
+
+Where this family meets existing work
+
+No general bounded pipeline-search experiment is linked here yet. Existing route, substitution and keystream tests cover their declared variants; separately testing components does not test their combinations.
+
+The cover file chain documents a different kind of layering: one recovered artifact supplies the input to the next stage. It can motivate careful intermediate records, but does not establish that an unsolved rune passage uses a particular cipher composition.
+
+All method families · Search space and bounds · Selection controls
+
+Sources, related references, and files
+- route
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- substitution
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- keystream
+  https://jelliottdev.github.io/reference/articles/method-arithmetic-streams.html
+- cover file chain
+  https://jelliottdev.github.io/reference/articles/cover-chain.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Selection controls
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-composition.html
+
+
+---
+
+Switching rules and adaptive decoding
+
+Distinguish predetermined switches from choices fitted to a desired reading.
+
+A switching rule changes the operation during decoding. The switch might depend on position, a visible marker, a running state or a recovered symbol. Such a cipher can be precisely defined. The difficulty comes when the solver chooses the switch after deciding which output looks best: those choices become part of the key and the search.
+
+Three different kinds of switching
+
+	Rule	Example	What must be recorded
+
+	Position-driven	Add on even positions, subtract on odd positions.	Index origin, signs and reset boundaries.
+
+	Input- or state-driven	A specified marker changes the mode for the next symbol.	Trigger, timing, state transition and treatment of the marker.
+
+	Solver-selected	Choose whichever operation gives a plausible next letter.	Every allowed choice, selection criterion and resulting search size.
+
+
+The first two can be evaluated as fixed algorithms once all their details are declared. The third can also be studied, but the decoder is no longer specified by its few arithmetic operations alone. Its sequence of choices must be counted and tested.
+
+How local choices accumulate
+
+If every one of n positions independently allows addition or subtraction of a fixed shift, there are 2^(n) choice sequences. At 20 positions that is 1,048,576 configurations. Some may coincide—for example, adding and subtracting zero give the same result—so report distinct outputs as well as configurations.
+
+More extreme freedom makes a proposed reading unavoidable: for any desired rune sequence p and ciphertext c, choosing a separate shift k[i] = (c[i] − p[i]) mod 29 makes c[i] − k[i] reproduce p. This proves only that an unrestricted per-position shift can fit that target. It does not disprove a separately specified switching algorithm or an independently obtained key.
+
+What turns a proposal into a test?
+
+Declare the modes, triggers, initial state, switch timing and maximum number of switches. If the solver chooses switch positions, list the permitted positions and enumerate the choices. Specify whether copied runes update state. If a language score chooses the path automatically, preserve its exact scoring and tie-breaking rules; that is a search procedure whose full selection process needs controls.
+
+Replacing an inconvenient prime with zero, changing direction at a promising fragment, or restarting a key because the text stops reading are all additional choices unless an earlier rule predicted them. Record them explicitly rather than removing them from the recipe once a candidate sentence is found.
+
+Test prediction beyond the fitted fragment
+
+Freeze the rule before decoding an untouched continuation. If new exceptions are necessary, report that the original rule did not predict the continuation. Compare the same number of choices and the same selection procedure on controls. Retain competing candidates: several equally good outputs weaken a claim that one reading is uniquely determined.
+
+Related experiments
+
+The LP2-54–55 reset and skip experiments enumerate subsets of six declared candidate interruptions under specific rules. They illustrate finite choices, not a test of arbitrary switching everywhere. No general solver-selected switching experiment is linked here yet.
+
+Feedback and state · Interruptions · Automatic search · All method families
+
+Sources, related references, and files
+- LP2-54–55 reset
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
+- skip
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- Feedback and state
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
+- Interruptions
+  https://jelliottdev.github.io/reference/articles/interruptions.html
+- Automatic search
+  https://jelliottdev.github.io/reference/articles/method-automatic-search.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 
 
 ---
