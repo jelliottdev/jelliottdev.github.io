@@ -1,0 +1,33 @@
+{
+  "question": "What descriptive prefix-length statistics result from every file at the pinned corpus revision under the historical 2902-token selection?",
+  "status": "prepared; full census not yet completed",
+  "revision": "a39e87ece3e6cbb0f00f7ad5fff9183da5c66d87",
+  "file_entries": 25906,
+  "selection": "Every files/ path in lexical order; retain duplicate file weights; exclude files with fewer than 2902 nonempty literal-space tokens. No content-dependent selection.",
+  "units": "Unicode code points in each token, not filtered Gematria Primus runes. UTF-8 strict; no whitespace normalization or header removal.",
+  "statistics": "Counts for every observed length; mean; sample variance and standard deviation with n-1; linearly interpolated quartiles at (n-1)q; median; minimum; maximum.",
+  "exclusions": "Language classification; source-edition deduplication; new conversion rules; random passages; significance or cipher conclusions. Empirical tails require a separate declared comparison.",
+  "completion": "Every path must have a saved row; missing source objects or decoding failures stop the census. Retain incomplete checkpoints, but do not publish them as a complete reference distribution. Independently audit calculations before promoting a finished report.",
+  "inputs": [
+    {
+      "path": "scripts/corpus_prefix_statistics.py",
+      "sha256": "941644494719572886752405a5f13d25f99a9c2ccc12471c7700828b882c95b2"
+    },
+    {
+      "path": "scripts/run_corpus_prefixes.py",
+      "sha256": "f53f5a6c9302e8434754a8cca086e6985d9d15d9af9459242adbd15194057201"
+    },
+    {
+      "path": "scripts/test_corpus_prefix_statistics.py",
+      "sha256": "303a8290faf985a1c8df3c3cc6e8ca30b45dda70b5c4edab4a48eafcaf3c3f56"
+    },
+    {
+      "path": "exports/runeberg-inventory.json",
+      "sha256": "a22279ce22d01682b350b4b2ca120b05a0b048273f269789504f2871c43bc6ac"
+    },
+    {
+      "path": "exports/sources/runeberg-tree.bin",
+      "sha256": "c52a05ba2cb459334631f1742c18e890bc974897140334bb42f7f0a931dbbd89"
+    }
+  ]
+}
