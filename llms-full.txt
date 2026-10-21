@@ -6887,7 +6887,7 @@ Sources, related references, and files
 - LP2-00–55: direct polynomial streams, degree at most eight
   https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
 - Autokey and ciphertext feedback
-  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
 - LP2-54–55: reset ciphertext state at selected F runes
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - LP2-54–55: skip selected F runes in ciphertext feedback
@@ -6981,7 +6981,7 @@ Sources, related references, and files
 - Can image-only detection find every rune row?
   https://jelliottdev.github.io/#/experiments/image-row-coverage
 - Geometric constructions and navigation
-  https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
+  https://jelliottdev.github.io/reference/articles/method-geometry.html
 - LP2-33 and LP2-39: shared three-circle radii at native scale
   https://jelliottdev.github.io/#/experiments/compass-shared-radii
 - Audio and frequency encodings
@@ -22522,6 +22522,9 @@ The shared-radius experiment measures the three horizontal dots on each original
 
 This does not exclude rescaling, different radii on each page, reassignment of radii to dots, pairwise intersections or compass stepping. The thresholds check sensitivity to one measurement choice; they do not establish a full uncertainty bound for the centers.
 
+
+For the broader approach, its variants and test requirements, see the geometric-method family guide.
+
 Sources, related references, and files
 - The archived 1033.jpg collage, with drawing compasses in the upper and lower central panels
   https://jelliottdev.github.io/images/1033.jpg
@@ -22559,6 +22562,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/later-messages.html
 - shared-radius experiment
   https://jelliottdev.github.io/#/experiments/compass-shared-radii
+- geometric-method family guide
+  https://jelliottdev.github.io/reference/articles/method-geometry.html
 
 Article: https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
 
@@ -22812,6 +22817,9 @@ A cipher rule derived reproducibly from the border marks, tree or winged figure.
 
 Each changes the hypothesis or its acceptance rule. Record such changes as related variants with fixed search bounds. The interruption guide explains why copying a rune, advancing a key and changing feedback state must be specified separately.
 
+
+For the broader approach, its variants and test requirements, see the autokey and ciphertext-feedback family guide.
+
 Sources, related references, and files
 - LP2-54: red opening, black rune text and curled side borders.
   https://jelliottdev.github.io/#/reader/lp2-54
@@ -22839,6 +22847,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - interruption guide
   https://jelliottdev.github.io/reference/articles/interruptions.html
+- autokey and ciphertext-feedback family guide
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
 
 Article: https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
 
@@ -24187,6 +24197,132 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transcription-checking.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-language-identification.html
+
+
+---
+
+Autokey and ciphertext feedback
+
+Trace seeds, state updates and interruptions before testing a feedback decoding rule.
+
+In a feedback cipher, decoding one position changes the state used at later positions. The state may contain previous ciphertext, recovered plaintext or several earlier values. This is a family of rules, not a single algorithm: “autokey” is not enough information to reproduce a proposed reading.
+
+Plaintext and ciphertext feedback are different
+
+Consider two subtraction rules on rune indices modulo 29. Both start with a one-symbol seed of 3. After decoding a symbol, the first rule stores the ciphertext just read; the second stores the plaintext just produced. These invented values demonstrate the difference and are not a manuscript reading.
+
+	Position	Ciphertext	Ciphertext-feedback state before step	Output	Plaintext-feedback state before step	Output
+
+	0	10	3	7	3	7
+
+	1	20	10	10	7	13
+
+	2	5	20	14	13	21
+
+
+At position 2, the calculations wrap: 5 − 20 ≡ 14 (mod 29) and 5 − 13 ≡ 21 (mod 29). The first output agrees because the seeds agree. Later outputs diverge because the update rules differ.
+
+With a longer seed of length L, one possible plaintext-autokey rule uses the seed for the first L positions, then uses plaintext from L positions earlier. A ciphertext version uses earlier ciphertext instead. That is different from repeating the seed forever, as in a repeating-key cipher. State length, lag and update timing belong in the specification.
+
+An interruption needs a complete state rule
+
+“Skip F” can mean omitting it, copying it without updating state, copying it while updating state, or resetting the state before the next symbol. Those choices may agree at F and disagree everywhere afterward. Specify the output, state update and counter update separately. Also declare whether headings, spaces and page breaks affect the state.
+
+The LP2-54–55 case study works through a particular previous-ciphertext rule with six candidate interruption positions. Its reset and skip records test different state policies. Despite “autokey” in their record identifiers, the documented state comes from ciphertext. These records do not test every plaintext-autokey construction.
+
+Define a finite search
+
+An unrestricted L-rune seed has 29^L possibilities. A word list gives a smaller, explicitly different search. For m fixed candidate interruptions, independently selecting or rejecting each gives 2^m subsets. Searching seed length, feedback source, lag, sign and interruption policies adds further choices. Count the combinations actually tried and deduplicate identical outputs.
+
+Check the state trace, then the reading
+
+Save the source position, input, state before decoding, output and state afterward. For an intended reversible cipher, verify that the corresponding encoder recovers the full input. A round trip checks the implementation; it does not prove that the cipher was used in Liber Primus.
+
+Choose the rule on one segment and apply it unchanged to a continuation. Any seed, reset or correction added after inspecting that continuation becomes another fitted choice. Compare the complete search with controls, including its selection of the best-looking output. See null models, differential decoding and all method families.
+
+Sources, related references, and files
+- repeating-key cipher
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- LP2-54–55 case study
+  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+- reset
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
+- skip
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- differential decoding
+  https://jelliottdev.github.io/reference/articles/method-differences.html
+- all method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-feedback.html
+
+
+---
+
+Geometric constructions and navigation
+
+Connect measured landmarks to explicit constructions, tolerances and decoding rules.
+
+A geometric proposal turns locations, distances, angles or paths into a decoding operation. Examples include compass constructions, reflections, folds, nearest-neighbor routes and coordinate lookups. The essential step is explaining how a measured feature determines a symbol or an operation. Recognizing an interesting shape alone does not supply that rule.
+
+Keep the construction traceable
+
+	Stage	What to record	Example of an unresolved choice
+
+	Source image	File, checksum, dimensions and crop	Original JPEG or resized preview?
+
+	Landmarks	Coordinates and point-selection procedure	Center of a dot, its edge, or a nearby intersection?
+
+	Construction	Origin, axes, units and transformations	Reflect before rotating, or afterward?
+
+	Selection	Hit tolerance, traversal order and tie handling	What happens when a line passes between two runes?
+
+	Decoding	Symbol mapping, sequence rule and boundaries	Read the touched rune or use its index as a shift?
+
+
+Each stage should have a saved output so another person can locate the first disagreement. Annotated overlays are especially useful: show the original landmarks, rejected alternatives and tolerances, rather than only the final successful path.
+
+Coordinates need a declared frame
+
+A point measured at pixel coordinates (x, y) depends on the image size and crop. Normalizing x and y separately by width and height makes coordinates comparable across proportional resizing, but changes distance and angle calculations if the axes receive different scale factors. State whether geometry uses original pixel units, a common scale, or a deliberately normalized rectangle.
+
+For a rotation about a chosen center, record the angle and direction; for reflection, record the axis. A transformation of positions becomes a substitution only after labels and a selection rule are attached. The compass guide explains why a half-turn of 29 equally spaced labels falls between labels and does not automatically implement Atbash.
+
+Tolerance is a parameter, not a repair tool
+
+If a construction selects every center within radius r of a predicted point, choose r before examining the resulting text. Define what happens with zero hits or multiple hits. Increasing r until a desired rune is selected changes the experiment. Small landmark perturbations can reveal whether a result is stable or relies on a particular pixel placement; report the perturbation range and all resulting changes.
+
+Existing tests and useful extensions
+
+The shared-radii experiment tests its declared landmark and distance construction. The totient-map route experiment evaluates a different proposed coordinate route with its own choices. Neither result covers all geometric constructions.
+
+A new test should fix its landmarks, allowed transformations and scoring rule, then apply the same procedure to appropriate controls. Depending on the claim, controls might shuffle labels while preserving the geometry, or perturb positions while preserving labels. These ask different questions and must not be substituted silently. If many paths or tolerances compete, controls must repeat that search too.
+
+Repeated artwork also matters: an identical border on several pages is not several independent examples of a construction. Inspect the margin-reuse evidence before counting repetitions. For discrete grid paths, see route methods; for image transformations without a geometric decoding rule, see image processing.
+
+All method families · Null models and controls
+
+Sources, related references, and files
+- compass guide
+  https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
+- shared-radii experiment
+  https://jelliottdev.github.io/#/experiments/compass-shared-radii
+- totient-map route experiment
+  https://jelliottdev.github.io/#/experiments/totient-map-route
+- margin-reuse evidence
+  https://jelliottdev.github.io/reference/articles/branches.html#margin-reuse
+- route methods
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- image processing
+  https://jelliottdev.github.io/reference/articles/image-regions.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Null models and controls
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-geometry.html
 
 
 ---

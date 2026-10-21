@@ -1,0 +1,56 @@
+Autokey and ciphertext feedback
+
+Trace seeds, state updates and interruptions before testing a feedback decoding rule.
+
+In a feedback cipher, decoding one position changes the state used at later positions. The state may contain previous ciphertext, recovered plaintext or several earlier values. This is a family of rules, not a single algorithm: “autokey” is not enough information to reproduce a proposed reading.
+
+Plaintext and ciphertext feedback are different
+
+Consider two subtraction rules on rune indices modulo 29. Both start with a one-symbol seed of 3. After decoding a symbol, the first rule stores the ciphertext just read; the second stores the plaintext just produced. These invented values demonstrate the difference and are not a manuscript reading.
+
+	Position	Ciphertext	Ciphertext-feedback state before step	Output	Plaintext-feedback state before step	Output
+
+	0	10	3	7	3	7
+
+	1	20	10	10	7	13
+
+	2	5	20	14	13	21
+
+
+At position 2, the calculations wrap: 5 − 20 ≡ 14 (mod 29) and 5 − 13 ≡ 21 (mod 29). The first output agrees because the seeds agree. Later outputs diverge because the update rules differ.
+
+With a longer seed of length L, one possible plaintext-autokey rule uses the seed for the first L positions, then uses plaintext from L positions earlier. A ciphertext version uses earlier ciphertext instead. That is different from repeating the seed forever, as in a repeating-key cipher. State length, lag and update timing belong in the specification.
+
+An interruption needs a complete state rule
+
+“Skip F” can mean omitting it, copying it without updating state, copying it while updating state, or resetting the state before the next symbol. Those choices may agree at F and disagree everywhere afterward. Specify the output, state update and counter update separately. Also declare whether headings, spaces and page breaks affect the state.
+
+The LP2-54–55 case study works through a particular previous-ciphertext rule with six candidate interruption positions. Its reset and skip records test different state policies. Despite “autokey” in their record identifiers, the documented state comes from ciphertext. These records do not test every plaintext-autokey construction.
+
+Define a finite search
+
+An unrestricted L-rune seed has 29^L possibilities. A word list gives a smaller, explicitly different search. For m fixed candidate interruptions, independently selecting or rejecting each gives 2^m subsets. Searching seed length, feedback source, lag, sign and interruption policies adds further choices. Count the combinations actually tried and deduplicate identical outputs.
+
+Check the state trace, then the reading
+
+Save the source position, input, state before decoding, output and state afterward. For an intended reversible cipher, verify that the corresponding encoder recovers the full input. A round trip checks the implementation; it does not prove that the cipher was used in Liber Primus.
+
+Choose the rule on one segment and apply it unchanged to a continuation. Any seed, reset or correction added after inspecting that continuation becomes another fitted choice. Compare the complete search with controls, including its selection of the best-looking output. See null models, differential decoding and all method families.
+
+Sources, related references, and files
+- repeating-key cipher
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- LP2-54–55 case study
+  https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
+- reset
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
+- skip
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- differential decoding
+  https://jelliottdev.github.io/reference/articles/method-differences.html
+- all method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-feedback.html

@@ -1,0 +1,62 @@
+Geometric constructions and navigation
+
+Connect measured landmarks to explicit constructions, tolerances and decoding rules.
+
+A geometric proposal turns locations, distances, angles or paths into a decoding operation. Examples include compass constructions, reflections, folds, nearest-neighbor routes and coordinate lookups. The essential step is explaining how a measured feature determines a symbol or an operation. Recognizing an interesting shape alone does not supply that rule.
+
+Keep the construction traceable
+
+	Stage	What to record	Example of an unresolved choice
+
+	Source image	File, checksum, dimensions and crop	Original JPEG or resized preview?
+
+	Landmarks	Coordinates and point-selection procedure	Center of a dot, its edge, or a nearby intersection?
+
+	Construction	Origin, axes, units and transformations	Reflect before rotating, or afterward?
+
+	Selection	Hit tolerance, traversal order and tie handling	What happens when a line passes between two runes?
+
+	Decoding	Symbol mapping, sequence rule and boundaries	Read the touched rune or use its index as a shift?
+
+
+Each stage should have a saved output so another person can locate the first disagreement. Annotated overlays are especially useful: show the original landmarks, rejected alternatives and tolerances, rather than only the final successful path.
+
+Coordinates need a declared frame
+
+A point measured at pixel coordinates (x, y) depends on the image size and crop. Normalizing x and y separately by width and height makes coordinates comparable across proportional resizing, but changes distance and angle calculations if the axes receive different scale factors. State whether geometry uses original pixel units, a common scale, or a deliberately normalized rectangle.
+
+For a rotation about a chosen center, record the angle and direction; for reflection, record the axis. A transformation of positions becomes a substitution only after labels and a selection rule are attached. The compass guide explains why a half-turn of 29 equally spaced labels falls between labels and does not automatically implement Atbash.
+
+Tolerance is a parameter, not a repair tool
+
+If a construction selects every center within radius r of a predicted point, choose r before examining the resulting text. Define what happens with zero hits or multiple hits. Increasing r until a desired rune is selected changes the experiment. Small landmark perturbations can reveal whether a result is stable or relies on a particular pixel placement; report the perturbation range and all resulting changes.
+
+Existing tests and useful extensions
+
+The shared-radii experiment tests its declared landmark and distance construction. The totient-map route experiment evaluates a different proposed coordinate route with its own choices. Neither result covers all geometric constructions.
+
+A new test should fix its landmarks, allowed transformations and scoring rule, then apply the same procedure to appropriate controls. Depending on the claim, controls might shuffle labels while preserving the geometry, or perturb positions while preserving labels. These ask different questions and must not be substituted silently. If many paths or tolerances compete, controls must repeat that search too.
+
+Repeated artwork also matters: an identical border on several pages is not several independent examples of a construction. Inspect the margin-reuse evidence before counting repetitions. For discrete grid paths, see route methods; for image transformations without a geometric decoding rule, see image processing.
+
+All method families · Null models and controls
+
+Sources, related references, and files
+- compass guide
+  https://jelliottdev.github.io/reference/articles/compass-cipher-tests.html
+- shared-radii experiment
+  https://jelliottdev.github.io/#/experiments/compass-shared-radii
+- totient-map route experiment
+  https://jelliottdev.github.io/#/experiments/totient-map-route
+- margin-reuse evidence
+  https://jelliottdev.github.io/reference/articles/branches.html#margin-reuse
+- route methods
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- image processing
+  https://jelliottdev.github.io/reference/articles/image-regions.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Null models and controls
+  https://jelliottdev.github.io/reference/articles/null-models.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-geometry.html
