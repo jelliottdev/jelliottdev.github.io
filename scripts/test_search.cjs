@@ -315,3 +315,7 @@ for(const query of ['unchanged runes','fixed points','copied rune','zero key val
  assert.equal(search.search(db,query)[0].href,'#/wiki/interruptions?section=unchanged',query);
 }
 console.log('PASS: unchanged-rune and zero-shift queries reach the fixed-point distinction.');
+for(const query of ['928','928 words','928-word carrier','grille','carrier midpoint']){
+ assert.equal(search.search(db,query)[0].href,'#/wiki/word-lengths?section=carrier-928',query);
+}
+console.log('PASS: carrier and grille queries open the bounded carrier inventory.');
