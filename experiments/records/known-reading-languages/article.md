@@ -40,6 +40,6 @@ The replay first reproduces the literal readings exactly against the stored page
 
 [Current results](experiments/records/known-reading-languages/results.json) · [Original diagnostic](experiments/records/known-reading-languages/diagnostic-original.json) · [Original plan](experiments/plans/known-reading-language-control.json) · [Amendment](experiments/plans/known-reading-language-control-amendment.json)
 
-See [known readings](#/readings), [word-length conventions](#/wiki/word-lengths), and the [shorter aligned-passage controls](#/experiments/parallel-language-blocks). Genre-matched parallel material, per-section unsolved analysis and exact target-size calibration remain separate work.
+See [known readings](#/readings), [word-length conventions](#/wiki/word-lengths), and the [shorter aligned-passage controls](#/experiments/parallel-language-blocks). The [equal-token control](#/experiments/target-sized-languages) now checks reference samples of exactly 2,896 tokens. It does not lengthen these known-reading sections or turn them into independent trials. Genre-matched parallel material and per-section unsolved analysis remain separate work.
 
 FLORES translations and this derived account are provided under CC BY-SA 4.0; source attribution is included in the bundle. Manuscript/source provenance remains documented separately in the page records.

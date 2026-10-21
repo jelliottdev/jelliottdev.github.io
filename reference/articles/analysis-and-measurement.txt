@@ -73,13 +73,15 @@ None of these answers replaces checking the transcription. If the rune count its
 
 Language comparison: choose the right control
 
-A language ranking needs more than a list of scores. These three records answer different questions and share one experiment family:
+A language ranking needs more than a list of scores. These four records answer different questions and share one experiment family:
 
 Aligned language profiles: compare the same FLORES passages in eight languages. Word-length similarity and fixed-substitution repetition statistics have different assumptions.
 Shorter aligned passages: check whether the ranking persists across eight disjoint sentence blocks, and whether known corpus languages match their corresponding reference profiles.
 Known LP readings: check transfer to actual manuscript style and spelling. The pool ranks closest to English, but some individual known-English sections rank other language profiles first. The record also shows how an embedded hash can distort an unfiltered word count.
+Exactly 2,896 tokens per sample: control the reference sample size. All complete reference samples are nearest to their own language profile, but the manuscript is farther from every profile than any of that language’s observed control samples. The reference ranges are descriptive, not confidence limits or rejection thresholds. Unlike the aligned-passage control, equal-token blocks do not cover identical translated passages.
 
 Start with the baseline for the overall question, then use the controls to judge its limits. A nearest language is not a decryption or a probability that the plaintext uses that language. Each record provides its own scripts, exact inputs and download.
+
 
 Why length and repetition can disagree
 
@@ -99,6 +101,8 @@ The matching-pair fraction is the index of coincidence. This toy example explain
 What would a first-place language mean?
 
 It means that this profile has the smallest measured distance among the profiles supplied. There will be a first-place result even if every candidate is a poor match. Adding another language, changing the genre, or changing how letters become rune units can change the ordering. The eight-language comparison therefore does not rank every possible plaintext language.
+
+A concrete example comes from the equal-token control. The manuscript’s letter-length distance to the English development profile is 0.0831, compared with a largest observed English control distance of 0.0508. English wins the relative comparison while still lying beyond that observed reference range. This does not reject English: genre, spelling and the correspondence between letters and runes remain uncontrolled. It shows why a ranking and an absolute fit assessment are different questions.
 
 Use the full distributions to see where even the nearest profile disagrees, then check the known-English manuscript controls. Some short sections rank another profile first. A useful next test must state what it adds: a new fixed corpus, a different encoding assumption, or a previously untouched section. Choosing whichever spelling or grouping improves a score after seeing it creates a new hypothesis; it does not independently confirm the earlier one.
 
@@ -218,6 +222,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/parallel-language-blocks
 - Known LP readings; known-English manuscript controls
   https://jelliottdev.github.io/#/experiments/known-reading-languages
+- Exactly 2,896 tokens per sample
+  https://jelliottdev.github.io/#/experiments/target-sized-languages
 - CSV
   https://jelliottdev.github.io/exports/rune-ioc.csv
 - JSON
