@@ -30,3 +30,26 @@ assert before['lp1-14']['returncode'] == 3221225620
 assert after['lp1-14']['returncode'] == 1
 assert 'Guard: iterator skipmod zero at off=645437 bits=645682' in after['lp1-14']['diagnostic']
 print('PASS: 13 image/output bindings, ten controls, two unchanged cases, one explicit guard rejection')
+
+# Recompute equality from saved evidence rather than trusting comparison flags.
+build = json.loads((HERE/'clean-build-report.json').read_bytes())
+comparison = json.loads((HERE/'clean-results/comparison.json').read_bytes())
+for key, name in (('build_script_sha256', 'build.py'),
+                  ('build_spec_sha256', 'build-spec.json'),
+                  ('patch_audit_sha256', 'source-audit.json')):
+    assert build[key] == sha(HERE/name)
+for key, name in (('pilot_plan_sha256', 'plan.json'),
+                  ('baseline_report_sha256', 'results/report.json'),
+                  ('build_report_sha256', 'clean-build-report.json')):
+    assert comparison[key] == sha(HERE/name)
+assert comparison['tool_sha256'] == build['executable_sha256']
+assert [r['image'] for r in comparison['records']] == [r['image'] for r in rows]
+for fresh, previous in zip(comparison['records'], rows):
+    payload = HERE/'clean-results'/(fresh['image']+'.bin')
+    assert sha(payload) == fresh['sha256']
+    assert payload.stat().st_size == fresh['bytes']
+    assert payload.read_bytes() == (HERE/'results'/previous['output']).read_bytes()
+    assert fresh['returncode'] == previous['returncode']
+    assert fresh['diagnostic'] == previous['diagnostic']
+    assert all(fresh[k] is True for k in ('same_returncode', 'same_diagnostic', 'same_payload_bytes'))
+print('PASS: clean-build provenance and all 13 saved code/diagnostic/byte comparisons')

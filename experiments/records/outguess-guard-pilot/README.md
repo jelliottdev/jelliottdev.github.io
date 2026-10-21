@@ -1,6 +1,6 @@
 # Guarded OutGuess diagnostic pilot
 
-This is research preparation, not a published Have we tried it record. The plan and runner were committed as `4210429` before the fresh 20 October 2026 run. The existing guarded binary's hash matches its archived build record; both patched source files match their recorded hashes and exact edits after CRLF normalization. This is not a clean rebuild establishing binary-to-source correspondence.
+This is research preparation, not a published Have we tried it record. The plan and runner were committed as `4210429` before the fresh 20 October 2026 run. The archived guarded binary's hash matches its build record; both patched source files match their recorded hashes and exact edits after CRLF normalization. A separate clean build now reproduces all 13 pilot results, as described below.
 
 ## Fixed scope and result
 
@@ -24,6 +24,24 @@ python experiments/records/outguess-guard-pilot/run.py --outguess /path/to/outgu
 
 The runner requires the planned binary hash. A different binary is a different comparison. It does not fetch or install executable software.
 
+## Build from source and compare
+
+The build specification and comparison runner were committed as `e3921c5` before the clean binary's retrieval run. Using MinGW-W64 GCC 16.1.0 on Windows, `build.py` compiled all 54 C files afresh from upstream commit `24810e14327c2bbeedeaadd3e24491f2a4425c02`. It checks the checkout, applies the recorded portability and diagnostic patches, verifies normalized source hashes, and records compiler identity and commands. It does not download software or execute the resulting program during compilation.
+
+Given a clean checkout of [the upstream source](https://github.com/resurrecting-open-source-projects/outguess/tree/24810e14327c2bbeedeaadd3e24491f2a4425c02) at that commit and an installed compatible GCC toolchain:
+
+```text
+python experiments/records/outguess-guard-pilot/build.py --source /path/to/outguess-source --output /path/to/new-build
+python experiments/records/outguess-guard-pilot/compare_rebuild.py --outguess /path/to/new-build/outguess.exe --output /path/to/new-comparison
+python experiments/records/outguess-guard-pilot/check.py
+```
+
+Both output directories must be new. The comparison command requires the exact executable hash recorded in `clean-build-report.json`; if a local build differs, retain its report and treat it as a separate build comparison rather than replacing the expected hash. The last command audits the committed evidence, not the new output directory.
+
+The recorded clean executable has SHA-256 `bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273`. It is not byte-identical to the archived executable. Nevertheless, all ten positive controls and three selected cases reproduce the same return codes, normalized diagnostics and exact payload byte streams. `clean-results/comparison.json` records those comparisons and binds them to the plan, archived report and clean-build report. The checker independently recomputes equality from the saved files.
+
+This establishes behavior on these 13 inputs for this recorded build. It does not establish bit-for-bit reproducible compilation, behavior on other platforms, or equivalence on every possible input.
+
 ## Before publication
 
-Document a distributable, reproducible build procedure and independently check the full claim. Keep this pilot separate from any later 77-image sweep, and retain its preselected scope. No general success, payload-validity or hidden-data absence claim follows from these 13 cases. Human review remains pending.
+Prepare a reviewed experiment record and downloadable reproduction materials. Keep this pilot separate from any later 77-image sweep, and retain its preselected scope. No general success, payload-validity or hidden-data absence claim follows from these 13 cases. Human review remains pending.
