@@ -10,7 +10,8 @@ The registry contains bounded, reproducible experiments. Earlier work is not aut
 4. Fill `record.json`. Specify exact pages, transcription choice, transformations, parameter ranges, and exclusions. List every input and output with its SHA-256.
 5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
 6. Retest and review the precise claims, populate the actual reviewer and retest date, and change `status` to `published`. Computational review must identify the agent and explicitly state that human review is pending; never present it as independent human review. Publication means the documented result is available, not that its interpretation is endorsed.
-7. Run `python scripts/build_experiments.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing.
+7. Assign the published record's type and method links as described under **Connect a published record to the method map** below. Do not add draft IDs to that map.
+8. Run `python scripts/build_experiments.py`, `python scripts/build_articles.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing. The article build refreshes the method map after the experiment registry changes.
 
 Drafts never enter the public search index. Files committed to a public repository remain publicly readable; never commit private drafts. The builder validates fields, paths, file hashes, page IDs, and related records. For a conventional `plan.json`, it also requires the plan and its listed dependencies to be declared hashed inputs, checks their recorded digests, and checks `plan_sha256` when present in a declared `results.json`. This catches stale nested references even when the outer record hashes match. It does not run scripts or certify findings; other plan/report formats still need their own validation.
 
@@ -93,3 +94,22 @@ Each note has a coverage status, an explanation, the information needed to make 
 
 
 The solving-method directory is built from `data/method-families.json` by `scripts/build_method_map.py`, called during the article build. When publishing a result, assign it to at least one relevant method family. These links are editorial associations, not claims that a whole family has been tested. The directory copies each linked record's question and exclusions so changes to scope do not leave stale summaries.
+
+## Connect a published record to the method map
+
+Three different fields organize the work:
+
+| Field | Purpose | Example |
+| --- | --- | --- |
+| `record.json` → `family` and `variant` | Group a baseline and follow-ups addressing the same bounded research question. | One row-sum experiment and a variant changing its boundary policy. |
+| `data/method-families.json` → `families[].related` | Link records to broad method guides. Membership is non-exclusive. | A route-plus-key test can link to both route and key families. |
+| `data/method-families.json` → `record_kind_by_id` | Describe the role of the evidence. This is not an outcome or confidence rating. | A synthetic decoder check is a control, not a manuscript analysis. |
+
+When the retested record is ready to publish:
+
+1. Add its exact ID to `related` for at least one relevant method family. Link only families that help describe the actual procedure; a word mentioned in the background is not enough. Do not create a new broad family for every parameter change.
+2. Add its ID to `record_kind_by_id` with an existing key from `record_kinds`: `manuscript`, `control`, `alphabet`, `audit`, `historical`, or `replay`. Read the definitions in the same file before choosing. A method replay can reproduce a proposed procedure without confirming its reading.
+3. Keep these edits together with the record's publication. The experiment builder requires type assignments to cover exactly the published records. The method-map builder requires linked records to be published. Drafts must therefore remain absent from both structures.
+4. Run the build commands above, then `node scripts/test_idea_coverage.cjs` and `python scripts/check_article_links.py`. Inspect the experiment's type label, its method-guide links, and its placement among baseline/variants. These checks validate organization and references; they do not reproduce the scientific calculation.
+
+If withdrawing a record to draft, remove its type assignment and method links in the same change, and review published records that reference it. Do not replace a missing or withdrawn test with a family-level claim that the method failed. If a retest changes only the result of an existing record, keep its identity and update the scope, outputs and explanation as required.
