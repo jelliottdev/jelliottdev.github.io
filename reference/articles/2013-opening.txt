@@ -1,0 +1,58 @@
+The 2013 opening image and hidden book code
+
+Inspect the original JPEG, reproduce its OutGuess extraction and signature check, then follow the riddle into the Liber AL book code.
+
+The 2013 puzzle reopened with a JPEG telling readers that its first clue was hidden inside the image. The pinned artifact archive preserves that JPEG and a separately saved OutGuess payload. We have now extracted the payload again from the hosted image and compared the bytes.
+
+
+[Image: Black 2013 opening JPEG, headed Hello again, saying the first clue is hidden within the image]
+The original 571 × 577 JPEG used for this replay. Download its exact bytes; SHA-256: 6e95b0011a9103dc97cc453d094b7815ce900e83e910f29e1f7a0ef822d2b67b. A screenshot would not preserve its embedded data.
+
+
+Recover the hidden instruction
+
+OutGuess with its retrieval mode, outguess -r 232.jpg 232.jpg.asc, extracted 1,459 bytes from the saved JPEG. The fresh output matched the archived payload byte for byte. The extraction diagnostic reported seed 170. The payload starts “Welcome again,” then gives a riddle about a forbidden book and a series of 44 chapter–verse–character coordinates. Two standalone digits, 5 and 0, occur within the coordinate list. The closing 3301 is a sign-off beneath the coordinates, not a third inserted book-code digit.
+
+The payload is a clear-signed OpenPGP message. A fresh GPG check succeeded against the preserved public key, fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. This confirms that the extracted message matches that key; the key is not independently certified to a real-world identity.
+
+
+From the riddle to the book code
+
+The riddle’s opening identifies a book whose study is forbidden and which should be destroyed after reading. The Liber AL counting guide separates that book identification from the next mechanical step: choose the archived chapter texts, split at numbered verses, remove verse labels and spaces while retaining punctuation, and apply each coordinate. Its full lookup trace includes all 44 references and the two literal digits. A reader can check the source text and each selected character instead of trusting a reported address.
+
+
+Reproduce the file checks
+
+
+Download 232.jpg, the saved payload, the public key and the replay script, keeping the repository folder paths if running the script directly.
+
+Run python scripts/replay_2013_opening.py --output opening-2013-check.json for the saved hashes and coordinate count. This does not run OutGuess or GPG.
+
+To repeat the extraction and signature check, run python scripts/replay_2013_opening.py --outguess /path/to/outguess --gpg /path/to/gpg --output opening-2013-fresh.json. The GPG check uses a temporary keyring. The published run report records both fresh checks and the tool hash.
+
+
+The source manifest pins the archived file URLs and hashes. The archive describes a 4chan posting, but this replay does not verify its original upload time or reconstruct a live 2013 board. Continue with the 2013 route after the book-code lookup.
+
+Sources, related references, and files
+- pinned artifact archive
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/001-232.jpg
+- Black 2013 opening JPEG, headed Hello again, saying the first clue is hidden within the image; Download its exact bytes; 232.jpg
+  https://jelliottdev.github.io/exports/sources/cicada-2013/232.jpg
+- archived payload; saved payload
+  https://jelliottdev.github.io/exports/sources/cicada-2013/232.jpg.asc
+- preserved public key; public key
+  https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- Liber AL counting guide
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#liber-al
+- full lookup trace
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#liber-al-replay
+- replay script
+  https://jelliottdev.github.io/scripts/replay_2013_opening.py
+- published run report
+  https://jelliottdev.github.io/exports/cicada-2013-opening.json
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2013/manifest.json
+- 2013 route
+  https://jelliottdev.github.io/reference/articles/cicada-history.html#2013
+
+Article: https://jelliottdev.github.io/reference/articles/2013-opening.html
