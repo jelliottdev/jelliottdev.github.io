@@ -25340,6 +25340,28 @@ Specify the available operations, their parameter ranges, the maximum number of 
 
 An unlimited instruction to “keep adding transformations until it reads” has no finite completion criterion. A bounded search can be useful, but it must include every pipeline tried and the rule used to select the winner. Finding a word after trying many pipelines is not the same evidence as predicting that word with one independently specified pipeline.
 
+More stages can describe the same cipher
+
+Two successive affine substitutions are still one affine substitution. On indices modulo 29, applying y = ax + b and then z = cy + d gives z = (ca)x + (cb + d). With nonzero a and c, the combined multiplier remains nonzero.
+
+For example, 2x + 5 followed by 3y + 4 is simply 6x + 19 mod 29. Reversing those stages gives 6x + 13 mod 29, generally a different map. Both nevertheless belong to the same 812-map affine family.
+
+	Pipeline choice	Settings counted	Distinct complete transformations
+	One affine stage	812	812
+	Two independent affine stages	812² = 659,344	812
+	Reverse the complete stream twice	One fixed two-stage sequence	The identity: every position returns to its start.
+	Atbash twice on the same alphabet	One fixed two-stage sequence	The identity: 28 − (28 − x) = x.
+
+Every final affine map has exactly 812 ordered two-stage decompositions: choose the first invertible map freely, then the second is uniquely determined by the desired final map and the first map's inverse. Thus allowing two arbitrary affine stages adds no new transformations beyond searching one arbitrary affine stage. This statement assumes the same full alphabet and no intervening selection, reset or representation change.
+
+Likewise, subtracting two position-wise keys in succession is equivalent to subtracting their pointwise sum modulo 29, provided both keys apply to the same positions and neither stage changes alignment or length. Restricted key families may still yield a larger set of combined keys than either family alone; state those restrictions before claiming that a combination is redundant.
+
+Distinguish equivalent rules from matching samples
+
+A mathematical identity such as two affine stages collapsing to one holds for every permitted input. Two candidate programs producing the same output on one short passage is a weaker observation. They may disagree on another passage, a different starting state or a longer continuation.
+
+For search accounting, retain the tested parameter settings and group identical outputs without silently declaring their rules equivalent. If you eliminate whole pipelines as duplicates, document why their transformations agree across the declared domain. A small known-answer example can expose an error, but agreement on that example alone is not a proof of equivalence.
+
 Keep each intermediate representation
 
 Save the source positions, the output of each stage and any lost information. State when punctuation disappears, how values become rune indices, and whether a later operation uses original or current boundaries. For a reversible pipeline, apply the inverses in reverse order and verify recovery of the input. A successful round trip checks implementation, not historical intent.
