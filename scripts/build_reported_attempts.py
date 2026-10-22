@@ -66,7 +66,9 @@ def build():
                      f'Supplied transcript SHA-256: <code>{e(source["sha256"])}</code>.</p>')
         if source.get('public_url'):
             parts.append(f'<p><a href="{e(source["public_url"])}">Related public material</a> '
-                         '(current URL; exact version not yet pinned).</p>')
+                         + (f'(repository revision <code>{e(source["public_revision"])}</code>; correspondence to the historical input may still be unresolved).'
+                            if source.get('public_revision') else '(current URL; exact version not yet pinned).')
+                         + '</p>')
         parts.append('</details></section>')
     if reconciled:
         parts.append('<h2 id="reconciled">Source notes with a reproduced scope</h2>'

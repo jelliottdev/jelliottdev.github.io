@@ -30,6 +30,9 @@ for entry in entries:
     assert all(source[field].strip() for field in ('title', 'author', 'reported', 'attachment_id', 'sha256'))
     assert re.fullmatch(r'[0-9a-f]{64}', source['sha256'])
     assert source.get('public_url', 'https://example.invalid').startswith('https://')
+    if source.get('public_revision'):
+        assert re.fullmatch(r'[0-9a-f]{40}', source['public_revision'])
+        assert source['public_revision'] in source['public_url']
     assert article.count(f'<section id="{entry["id"]}">') == 1
     local = Path.home() / '.codex' / 'attachments' / source['attachment_id'] / 'Pasted text.txt'
     if local.exists():
