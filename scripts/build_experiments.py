@@ -123,6 +123,18 @@ def build(root=ROOT):
         d['script_sha256'] = script_digest
         records.append(d)
     ids = {d['id'] for d in records}
+    # Editorial record types travel with complete evidence, including offline exports.
+    type_path = root / 'data/method-families.json'
+    if type_path.exists():
+        types = json.loads(type_path.read_text(encoding='utf-8'))
+        assignments = types['record_kind_by_id']
+        require(set(assignments) == ids, 'Record types must cover exactly the published records')
+        for record in records:
+            kind_id = assignments[record['id']]
+            definition = types['record_kinds'][kind_id]
+            text(definition.get('label'), 'record type label')
+            text(definition.get('description'), 'record type description')
+            record['record_type'] = {'id': kind_id, **definition}
     for d in records:
         require(all(x in ids and x != d['id'] for x in d['related']),
                 'Related IDs must name other published records')

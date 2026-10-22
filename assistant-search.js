@@ -12,7 +12,7 @@
   function experimentDocs(records) {
     return records.filter(r=>r.status==='published').map(r=>({
       id:r.id, title:r.title, kind:'experiment', href:`#/experiments/${r.id}`,
-      text:JSON.stringify({question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations}),
+      text:JSON.stringify({record_type:r.record_type,question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations}),
       // Retrieval can use prose, but evidence always preserves the complete scope.
       keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
       phrases:r.tags||[]

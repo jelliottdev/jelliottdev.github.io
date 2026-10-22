@@ -8,6 +8,20 @@ let docs=Search.experimentDocs([record]),calls=0;
 const env={SITE_ORIGIN:origin,IDEA_LIMIT:{limit:async()=>({success:true})},AI:{run:async()=>{calls++;return {choices:[{message:{content:'One row only [1].'}}]};}}};
 const request=(query='reverse',pages=[],headers={})=>new Request('https://fixture.workers.dev/ask',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...headers},body:JSON.stringify({query,pages})});
 const handle=createHandler(async()=>docs);
+// Complete evidence carries editorial type, but the type is not a new experiment.
+const typed={...record,record_type:{id:'control',label:'Control',description:'Synthetic recovery control; no unsolved-page decoding.'}};
+const typedDocs=Search.experimentDocs([typed]);
+assert.deepEqual(JSON.parse(typedDocs[0].text).record_type,typed.record_type);
+const typedHandler=createHandler(async()=>typedDocs);
+let captured;
+await typedHandler(request(),{...env,AI:{run:async(model,options)=>{
+ captured=options.messages;
+ return {choices:[{message:{content:'This is a synthetic control [1].'}}]};
+}}});
+assert(captured[0].content.includes('Use each record_type'));
+assert(captured[0].content.includes('If record_type is absent'));
+const supplied=JSON.parse(captured[1].content).records;
+assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
 assert.equal((await (await createHandler(async()=>[])(request(),env)).json()).reason,'no-matching-records');
 assert.equal((await (await handle(request('Vigenere on page 31'),env)).json()).reason,'no-matching-records');assert.equal(calls,0);
 for(const query of ['has anyone tried LP2–15','has anyone tested page #15','has anyone tested pages #15–#16']){
