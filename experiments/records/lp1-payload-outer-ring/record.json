@@ -1,0 +1,68 @@
+{
+  "id": "lp1-payload-outer-ring",
+  "title": "LP1 embedded messages: remove the changing outer digit",
+  "status": "published",
+  "question": "Does a fixed one-character perimeter removal make the four LP1-10–13 signed-message diagrams identical inside, and does the same reading apply to the two visible LP1 five-by-five squares?",
+  "summary": "The four extracted diagrams have border digits 3, 3, 0 and 1 but the same three-by-three interior after fixed perimeter removal. The two visible five-by-five squares have wholly different interiors; these are distinct source objects. No LP2 decryption follows.",
+  "tags": ["LP1-10", "LP1-11", "LP1-12", "LP1-13", "OutGuess", "signed messages", "shed circumference", "magic square", "source identity", "3301"],
+  "family": {
+    "id": "lp1-payload-outer-ring",
+    "title": "LP1 signed-message diagram borders",
+    "question": "Which exact repeated diagram changes at its perimeter while preserving its interior?",
+    "baseline": "lp1-payload-outer-ring"
+  },
+  "variant": {"label": "Fixed one-character perimeter", "changes": []},
+  "scope": {
+    "pages": ["lp1-10", "lp1-11", "lp1-12", "lp1-13", "lp1-05", "lp1-16"],
+    "artifacts": ["experiments/records/lp1-payload-outer-ring/plan.json"],
+    "representation": "The exact ASCII bodies of four extracted PGP-verified OutGuess messages, with verification status read from page metadata; separately the printed LP1-05 mixed square converted by GP values and LP1-16 decimal square.",
+    "procedure": "Hash-check all inputs, locate each unique seven-line 16-column ASCII diagram, remove only its top/bottom rows and first/last character of other rows, and compare the resulting interior bytes and parsed decimal values in page order. Separately remove one-cell perimeters from both visible five-by-five squares to exclude that reading.",
+    "parameters": "Exactly LP1-10–13 in page order; one-character ASCII perimeter; no rotation, reflection, recoding or searched crop. The alternate LP1-05/16 check uses the canonical GP table from data/index.json.",
+    "exclusions": "No new GPG verification, no interpretation of the 3301 border sequence as a cipher, no LP2 text transformation, no claim that the common three-by-three is a magic square."
+  },
+  "outcome": "supported",
+  "finding": "All four signed-message bodies yield the same original-orientation interior [[10,12,10],[12,14,12],[10,12,10]] under the fixed crop. Their border digits read 3301 in page order. The inner row sums are 32, 38 and 32, so the interior is not magic. The visible LP1-05 and LP1-16 three-by-three cores are unequal and share no value.",
+  "limitations": "The supplied discussion has image placeholders and does not name the four diagrams precisely; the identification here follows the thread's four repeated diagrams and the archived signed bodies. GPG validity is taken from preexisting page metadata, not newly reverified. This is an audit of a reported observation, not evidence of a decryption method or intended connection to the solved wording. Human review pending.",
+  "next_steps": "If proposing perimeter removal for LP2, specify the exact page objects, border definition, selection rule and predicted output before testing. Keep the signed diagrams separate from the two visible five-by-five squares.",
+  "reproduction": {
+    "command": "python experiments/records/lp1-payload-outer-ring/run.py --check && python experiments/records/lp1-payload-outer-ring/check.py && python experiments/records/lp1-payload-outer-ring/plot.py --check",
+    "environment": "Python 3 standard library; no network or AI service. Run from the repository root or extracted bundle root.",
+    "script": "experiments/records/lp1-payload-outer-ring/run.py",
+    "script_sha256": "396db6e46449d96e68f876eb38b91d2cb045c811569db8a8cc0a59875da526fc",
+    "inputs": [
+      {"path": "experiments/records/lp1-payload-outer-ring/plan.json", "sha256": "5682cb978907746950c3b0c48dab00606143a0ed262207aa0112cbecc3764bb3"},
+      {"path": "experiments/records/lp1-payload-outer-ring/check.py", "sha256": "3404b3aaab37d1281dab5a4d9cad735ea3c2001635573f13cc3794472f04d533"},
+      {"path": "experiments/records/lp1-payload-outer-ring/plot.py", "sha256": "ad6b3006986c6868d34fd600ae2790f75fe373d0eaec8257bc4ceea47243fab2"},
+      {"path": "exports/steganography/lp1-10.body.txt", "sha256": "a1e0adf6ffa363b8c1847ec2db807adba3ab4e8e11d25654935f7319441ead4d"},
+      {"path": "exports/steganography/lp1-11.body.txt", "sha256": "a1e0adf6ffa363b8c1847ec2db807adba3ab4e8e11d25654935f7319441ead4d"},
+      {"path": "exports/steganography/lp1-12.body.txt", "sha256": "9a108efecfe9a12260577473d7c9cfd8ce452d31b761d3fe4d8f485fc162334b"},
+      {"path": "exports/steganography/lp1-13.body.txt", "sha256": "5c17f1bd9fae6c500352d5849a000150a1433ea89a9380efd8a38432f9dadef0"},
+      {"path": "data/pages/lp1-10.json", "sha256": "62de5c58842d30d359e514450b9a6bc75020adf472dd0ccfcdbc5795c5860f9b"},
+      {"path": "data/pages/lp1-11.json", "sha256": "b5d54900e6883f96c6da7f1abe2fcd7a83ded8b5686684c098383a53de2a171d"},
+      {"path": "data/pages/lp1-12.json", "sha256": "d2d6971ef1cb0430827b347dcd6fdc018de6245112c6dcfab5b795e618889504"},
+      {"path": "data/pages/lp1-13.json", "sha256": "bd4c0fcab4fc5bdaafb929e10ac59f9b67a6ae99072de20f91286002b32dbe02"},
+      {"path": "data/pages/lp1-05.json", "sha256": "eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826"},
+      {"path": "data/pages/lp1-16.json", "sha256": "e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe"},
+      {"path": "data/index.json", "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/lp1-payload-outer-ring/results.json", "sha256": "fd49e05263f75946674b7a794cf8a6474a5efe6faabb53f27de493b0c7a64b87"},
+      {"path": "experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg", "sha256": "cb7b229bc24771cfc9db8439a2bb61e729d680faae4888b7777167cbe91ca263"}
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; exact source-body parse, recorded signature-status check, independent regex oracle, alternate visible-square comparison; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {"label": "Reported observation and source transcript hash", "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=shed-circumference-square-inner-grid"},
+    {"label": "LP1-10 extracted signed message", "url": "https://jelliottdev.github.io/#/page/lp1-10?section=embedded"},
+    {"label": "Magic squares and the distinct visible five-by-five grids", "url": "https://jelliottdev.github.io/#/wiki/magic-squares"}
+  ],
+  "related": ["magic-square-freedom"],
+  "visuals": [
+    {"path": "experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg", "caption": "The four signed messages preserve one interior beneath changing perimeter digits 3, 3, 0 and 1; the retained three-by-three is not itself a magic square."}
+  ]
+}

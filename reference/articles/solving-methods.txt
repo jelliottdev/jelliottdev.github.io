@@ -99,7 +99,7 @@ Outside this test: Unknown plaintext or keystream mixing, degree above eight, ex
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-Related records (5)
+Related records (6)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Ciphertext symbols and differences around LP2 doublets
@@ -126,6 +126,11 @@ LP2-54–55: skip selected F runes in ciphertext feedback
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+LP2-54: fixed ciphertext and plaintext feedback on the red header
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: What do the two explicit one-step feedback rules produce for the nine red runes when the first plaintext rune is A, I or O?
+Outside this test: Eight-rune dictionary census; other C/K/D functions; alphabet permutation; lag greater than one; interruption choices; a second encryption layer; language scoring; a claim that all autokey variants fail.
 
 
 
@@ -189,7 +194,14 @@ Outside this test: N-gram scoring; periodic IoC; additions, multiplication or XO
 Cipher composition and ordered pipelines
 Combine a bounded set of transformations in a declared order, tracking intermediate representations.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
+Related records (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+LP2-40: replay the FOR EVERY opening arithmetic
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Do the fixed shift, Atbash and prime-minus-one steps in the reported FOR EVERY proposal predict its eight-position LP2-40 opening without a fitted residual?
+Outside this test: No verified meaning assigned to flower details; no fixed Möbius seed, trigram state table or key schedule; no untouched continuation, language score, full-page decoding or test of later Slidefair/Quagmire/Fibonacci follow-ups.
+
 
 
 Switching rules and adaptive decoding
@@ -447,7 +459,7 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-Related records (5)
+Related records (7)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Magic squares: does one fixed entry determine the rest?
@@ -474,6 +486,16 @@ LP2-32: grid sums and the 2016 message file
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?
 Outside this test: Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.
+
+Arithmetic Möbius values of the LP2-15 panel
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?
+Outside this test: The missing source output image, 3301-derived values, a conjectured key or rune-shift rule, plaintext, and statistical significance.
+
+LP1 embedded messages: remove the changing outer digit
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Does a fixed one-character perimeter removal make the four LP1-10–13 signed-message diagrams identical inside, and does the same reading apply to the two visible LP1 five-by-five squares?
+Outside this test: No new GPG verification, no interpretation of the 3301 border sequence as a cipher, no LP2 text transformation, no claim that the common three-by-three is a magic square.
 
 
 
@@ -968,6 +990,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - LP2-54–55: skip selected F runes in ciphertext feedback
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- LP2-54: fixed ciphertext and plaintext feedback on the red header
+  https://jelliottdev.github.io/#/experiments/lp2-54-header-feedback
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
@@ -986,6 +1010,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/spiral-branches-paired-subtraction
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
+- LP2-40: replay the FOR EVERY opening arithmetic
+  https://jelliottdev.github.io/#/experiments/page40-for-every-arithmetic
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Unrestricted additive keys and one-time-pad hypotheses
@@ -1072,6 +1098,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-prime-path-null
 - LP2-32: grid sums and the 2016 message file
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
+- Arithmetic Möbius values of the LP2-15 panel
+  https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
+- LP1 embedded messages: remove the changing outer digit
+  https://jelliottdev.github.io/#/experiments/lp1-payload-outer-ring
 - Differential and cumulative decoding
   https://jelliottdev.github.io/reference/articles/method-differences.html
 - Error detection, parity and correction

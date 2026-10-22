@@ -153,13 +153,14 @@
         "public_url": "https://docs.google.com/spreadsheets/d/1FSvL82JXvpr8d-non7S6Fswwf9dU5jRdsmSgTJno28k/edit"
       },
       "reported_idea": "Treat FOR EVERY as a candidate red-header reading, combine a shift of 18 and Atbash, interpret floral details as 13 and 31, skip a chosen rune, then investigate a Möbius-directed running/autokey and trigram structure.",
-      "coverage": "The cited header, visual interpretation and composite key rule have not been replayed together in the experiment registry. Other running-key and crib records test different inputs or rules.",
+      "coverage": "A new source-bound audit verifies the posted shift-18, Atbash and prime-minus-one arithmetic for FOR EVERY. Those fixed layers match zero of seven non-F archived ciphertext positions; the residual key is calculated from the target. The proposed Möbius state rule and its later variations remain unspecified, so no complete decryption has been replayed.",
       "related_records": [
+        "page40-for-every-arithmetic",
         "emerson-running-key",
         "lp2-39-header-cribs"
       ],
-      "replay_needed": "Snapshot the changing spreadsheet, separate a fixed FOR EVERY crib test from the artwork-derived parameters, specify the complete key clock and skipped-rune rule, and score the untouched continuation against matched controls.",
-      "status": "related-only"
+      "replay_needed": "Snapshot the changing spreadsheet or provide a complete fixed state table; specify the Möbius argument, starting point, sign/zero handling, key clock and skipped-rune rule before computing new ciphertext. Then score an untouched continuation against matched controls.",
+      "status": "partial"
     },
     {
       "id": "lanfear-six-f-interrupters",
@@ -459,13 +460,14 @@
         "sha256": "10cdadc1f184ad6b2f5c9859fbc65d73a044205574fecaaa117e6d9be2d11e76"
       },
       "reported_idea": "Use the red one-rune plus eight-rune header as a constrained crib, enumerate candidate words with exactly eight GP runes, and test explicit ciphertext-feedback versus plaintext-feedback recurrences. The discussion corrects a confusion between those two clocks; it does not provide a completed candidate census.",
-      "coverage": "Published LP2-54–55 experiments assess two F-interruption rules by periodic IoC. They do not enumerate header words or test either autokey recurrence against a held-out continuation.",
+      "coverage": "A fixed-rule baseline now enumerates all 29 primers under each of the discussion's explicit ciphertext- and plaintext-feedback recurrences, with complete LP2-54 outputs and the six A/I/O openings. Earlier LP2-54–55 experiments assess F-interruption rules by periodic IoC. None enumerates eight-rune dictionary words, the source's unspecified C/K/D functions or a held-out reading.",
       "related_records": [
+        "lp2-54-header-feedback",
         "lp2-54-55-autokey-skip",
         "lp2-54-55-autokey-reset"
       ],
-      "replay_needed": "Pin the header transcription and word list, define GP transliteration and both recurrences including the initial state, enumerate all length-compatible candidates and keys, then score full-text continuations against a fixed control set. Report the complete candidate count, not just readable snippets.",
-      "status": "related-only"
+      "replay_needed": "Pin a word list and transliteration rule for eight-rune candidates, then define each additional C/K/D function before searching. Count all tried functions and words, run a known-reading control, and test any selected candidate on untouched continuation; report every candidate rather than only readable snippets.",
+      "status": "partial"
     },
     {
       "id": "spirals-branches-2883-alignment",
@@ -851,10 +853,10 @@
         "sha256": "df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb"
       },
       "reported_idea": "Apply the Möbius function to the numbers at the top of LP2-15 and inspect the resulting arrangement. The supplied thread refers to an image of the output without retaining its pixels or a full interpretation rule.",
-      "coverage": "The LP2-15 panel and its prime-distance/Fibonacci construction are documented, but no published record replays this exact Möbius transform or a subsequent cipher operation.",
-      "related_records": [],
-      "replay_needed": "List the selected printed cells, distinguish arithmetic Möbius μ(n) from any other Möbius usage, publish each input/output value and traversal order, then state a specific rune operation and control before interpreting any pattern.",
-      "status": "not-replayed"
+      "coverage": "A new panel audit applies arithmetic Möbius μ(n) to all sixteen printed cells in original row order, with a factorization ledger and independent checker. Twelve outputs are zero and the four nonzero values occupy row two. The source's referred-to image is absent, so its exact historical output cannot be compared; no subsequent cipher operation was specified.",
+      "related_records": ["lp2-15-mobius-panel"],
+      "replay_needed": "Recover the original output image for exact historical comparison. Before treating this as a key, specify a traversal, zero handling, a rule mapping μ values to rune operations, and a complete-text control without adapting those choices to output.",
+      "status": "partial"
     },
     {
       "id": "rune-stream-as-executable-bytes",
@@ -1102,6 +1104,82 @@
       "status": "not-replayed"
     },
     {
+      "id": "shed-circumference-square-inner-grid",
+      "title": "Remove the outer ring of the LP1-10–13 message grids",
+      "phrases": ["shed circumference magic square", "LP1 squares inner grid", "remove outer numbers square", "identical number grid inner"],
+      "family": "squares",
+      "pages": ["lp1-10", "lp1-11", "lp1-12", "lp1-13"],
+      "source": {
+        "title": "Magic-square order and outer-ring discussion",
+        "author": "Donger and participants",
+        "reported": "2025-02-17",
+        "attachment_id": "7f8558ce-8a7c-4eeb-94f2-5952329b08d7",
+        "sha256": "df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb"
+      },
+      "reported_idea": "A participant connects the solved 'shed the circumference' wording to the four signed ASCII number grids embedded in LP1-10–13, reporting that removing each grid's outer ring leaves the same inner numbers. The later discussion separately turns to the 5×5 LP1 magic squares; those are different objects. The post does not report a decryption of LP2.",
+      "coverage": "The source-bound audit checks the four extracted LP1-10–13 signed-message grids: their outer digits change 3, 3, 0, 1, while one-cell border removal leaves the same 3×3 interior. It also separates these from the visible LP1-05 and LP1-16 5×5 squares. The related magic-square freedom record answers a different constraint question.",
+      "related_records": ["lp1-payload-outer-ring", "magic-square-freedom"],
+      "replay_needed": "An LP2 application remains untested. Fix a target, traversal, rune operation and prediction before reading output.",
+      "status": "partial"
+    },
+    {
+      "id": "shed-circumference-page-margin-join",
+      "title": "Trim manuscript margins and join consecutive pages",
+      "phrases": ["shed circumference cut margins", "join manuscript pages side by side", "remove LP margins", "text guide you margin transposition"],
+      "family": "geometry",
+      "pages": [],
+      "source": {
+        "title": "Its words are the map, their meaning is the road",
+        "author": "tz18 and participants",
+        "reported": "2026-02-05",
+        "attachment_id": "c1c1edd9-ecef-4085-b2d5-dd5c41b93856",
+        "sha256": "1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042"
+      },
+      "reported_idea": "Interpret the solved 'shed the circumference' wording together with a cited 'Let the text guide you' payload as a reason to cut page margins and place manuscript pages side by side, then inspect whether their text lines align or continue. The post says the author might try this; it does not report a completed comparison or extracted text.",
+      "coverage": "The page-join sensitivity record tests alternative text boundaries, not trimming page images and physically aligning lines. The source discussion itself notes that row positions can move between pages.",
+      "related_records": ["page-join-sensitivity"],
+      "replay_needed": "Specify page sequence, exact image hashes, crop rectangles, scale and row-registration convention before looking for alignments. Publish all adjacent joins, including failures; compare rune-line continuity against the untrimmed layout and nonadjacent page controls.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "rune-poem-meaning-artwork-map",
+      "title": "Map Old English rune-poem meanings to LP artwork",
+      "phrases": ["rune poem artwork clue", "rune meanings LP illustrations", "Old English rune poem section hints", "illustration rune meaning cipher"],
+      "family": "symbol-systems",
+      "pages": [],
+      "source": {
+        "title": "Order-and-value, rune-poem and artwork discussion",
+        "author": "acabadabra and participants",
+        "reported": "2025-02-15",
+        "attachment_id": "fe1feb80-b63d-4e07-b0c7-4a94fb768de1",
+        "sha256": "9bfdd6cec749779f733c39a8f79bb2a76464aebf085fca6dc63a1ee9bed5fb7f"
+      },
+      "reported_idea": "The source compares Gematria Primus's 29 runes and order with the Old English rune poem, then considers whether historical rune meanings might link particular LP illustrations to the cipher used in their sections. The author reports abandoning their tentative image-to-meaning associations because the connections felt strained; no mappings or cipher outputs are preserved.",
+      "coverage": "Liberpedia explains the GP alphabet and indexes manuscript artwork, but those resources do not establish a rune-poem meaning-to-image mapping or test a resulting decryption rule.",
+      "related_records": [],
+      "replay_needed": "Pin an edition and translation of the rune poem, enumerate its rune meanings, select page illustrations from the original scans, and state one-to-one or many-to-one matching rules before examining cipher results. Preserve every candidate and mismatch, and test whether an independently chosen page prediction follows.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "lp2-56-hash-solved-text-checksum",
+      "title": "LP2-56 hash as a checksum for a completed reading",
+      "phrases": ["LP2 hash solved text checksum", "deep web hash full LP", "page 56 hash plaintext", "LP2-56 completed reading checksum"],
+      "family": "hashes",
+      "pages": ["lp2-56"],
+      "source": {
+        "title": "LP2-56 hash-target hypotheses",
+        "author": "DorkyHead101 and participants",
+        "reported": "2026-09-23",
+        "attachment_id": "bc2d6c57-8156-439e-8dd4-1aa3592a4999",
+        "sha256": "005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f"
+      },
+      "reported_idea": "A participant suggests that the long LP2-56 digest could authenticate the completed LP reading, rather than point to a webpage. The posted discussion offers this as a possible interpretation of the deep-web-hash text; it does not supply a completed plaintext, exact hash algorithm or matching digest.",
+      "coverage": "Liberpedia's hash tests cover pinned candidate files and other target classes. They cannot confirm or reject a checksum of a complete reading that has not yet been recovered.",
+      "related_records": [],
+      "replay_needed": "When a complete reading is proposed, archive its exact byte sequence and encoding, fix whether headings, spaces, line breaks and all LP sections are included, and calculate the stated digest algorithm before applying any normalization alternatives. Record every attempted serialization and compare against the printed hex string.",
+      "status": "not-replayed"
+    },
+    {
       "id": "bible-977-gp-offset",
       "title": "Leviticus and 2 Maccabees at a reported 977 offset",
       "phrases": ["bible 977 offset", "Leviticus 2 Maccabees GP", "977 bible book code", "Bible 995 1000 offset"],
@@ -1166,7 +1244,7 @@
       "attachment_id": "7f8558ce-8a7c-4eeb-94f2-5952329b08d7",
       "sha256": "df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb",
       "label": "Magic-square order discussion",
-      "next_check": "The corrected square freedom count is checked; separate the outer-ring, date-path and LP2-15 Möbius suggestions.",
+      "next_check": "The corrected freedom count is checked and the 'shed the circumference' outer-ring comparison is registered. The date-path drawing lacks its source image; the LP2-15 Möbius suggestion has a separate intake entry.",
       "triage_lane": "extract-new"
     },
     {
@@ -1187,14 +1265,14 @@
       "attachment_id": "bc2d6c57-8156-439e-8dd4-1aa3592a4999",
       "sha256": "005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f",
       "label": "LP2-56 hash-target hypotheses",
-      "next_check": "Separate verifiable hash syntax from unbounded guesses at target content.",
+      "next_check": "A completed-LP checksum interpretation is registered as untested; identify any original bytes or exact target class before treating other webpage, onion or checksum guesses as tests. Verify hash syntax independently.",
       "triage_lane": "extract-new"
     },
     {
       "attachment_id": "c1c1edd9-ecef-4085-b2d5-dd5c41b93856",
       "sha256": "1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042",
       "label": "Other solved-text hint suggestions",
-      "next_check": "Section-title cribs and the 389 spelling dependence are recorded; screen remaining thematic/artwork associations for a fixed prediction.",
+      "next_check": "Section-title cribs, their 389 spelling dependence, and the proposed margin-cut page join are recorded. LP1 square-word-to-artwork associations lack fixed mappings; seek an original worked selection before making another entry.",
       "triage_lane": "extract-new"
     },
     {
@@ -1222,7 +1300,7 @@
       "attachment_id": "edacef84-a430-43d4-8540-47a01a00ecef",
       "sha256": "da5eda73ef7664e6761e37e81f4a4f3618c30f2d899555f66c9839579da8991e",
       "label": "Epiphany and historical-message wording",
-      "next_check": "Locate the exact message references and any falsifiable prediction.",
+      "next_check": "The excerpt supplies message wording and a page-55 factor idea but no fixed key stream or result. Verify the original signed messages and look for a later worked operation before registering a separate attempt.",
       "triage_lane": "extract-new"
     },
     {
@@ -1243,7 +1321,7 @@
       "attachment_id": "fe1feb80-b63d-4e07-b0c7-4a94fb768de1",
       "sha256": "9bfdd6cec749779f733c39a8f79bb2a76464aebf085fca6dc63a1ee9bed5fb7f",
       "label": "English Qaballa wording lead",
-      "next_check": "The English Qaballa lead is registered; verify its source alphabet and separately screen the rune-poem, audio and manuscript-history suggestions in this file.",
+      "next_check": "The English Qaballa and tentative rune-poem-to-artwork leads are registered. Check the separate audio-frequency observations and manuscript-history claims as provenance, without treating them as an LP decryption.",
       "triage_lane": "extract-new"
     }
   ]

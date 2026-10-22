@@ -1,0 +1,16 @@
+{
+  "schema": "liberpedia-lp2-54-header-feedback-v1",
+  "source_report_sha256": "10cdadc1f184ad6b2f5c9859fbc65d73a044205574fecaaa117e6d9be2d11e76",
+  "input": {"path": "text/lp2-54.txt", "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"},
+  "alphabet": "ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ",
+  "labels": ["F", "U", "TH", "O", "R", "C/K", "G", "W", "H", "N", "I", "J", "EO", "P", "X", "S", "T", "B", "E", "M", "L", "NG", "OE", "D", "A", "AE", "Y", "IA/IO", "EA"],
+  "header_source_prefix": "ᚪ-ᛗᛝᛞᛡᚦᛉᛁᛗ.",
+  "header_rune_count": 9,
+  "first_plain_rune_candidates": ["A", "I", "O"],
+  "primer_range": [0, 28],
+  "modes": {
+    "ciphertext_feedback": "P[0]=(C[0]-k) mod 29; P[i]=(C[i]-C[i-1]) mod 29 for i>0",
+    "plaintext_feedback": "P[0]=(C[0]-k) mod 29; P[i]=(C[i]-P[i-1]) mod 29 for i>0"
+  },
+  "scope": "One continuous 232-rune LP2-54 stream, including red header; non-rune punctuation is removed for the arithmetic. Enumerate all 29 primers for both one-step recurrences, highlighting the six A/I/O openings. No alphabet permutation, extra layer, interruption, word reset, word list or language score."
+}

@@ -1,0 +1,104 @@
+{
+  "id": "lp2-54-header-feedback",
+  "title": "LP2-54: fixed ciphertext and plaintext feedback on the red header",
+  "status": "published",
+  "question": "What do the two explicit one-step feedback rules produce for the nine red runes when the first plaintext rune is A, I or O?",
+  "summary": "All 58 primer-and-rule outputs are archived. The A/I/O cribs give six deterministic header strings; under ciphertext feedback the following eight runes do not depend on the primer.",
+  "tags": [
+    "LP2-54",
+    "LP2-55",
+    "red header",
+    "header crib",
+    "ciphertext feedback",
+    "plaintext feedback",
+    "autokey",
+    "one rune eight runes",
+    "A I O"
+  ],
+  "family": {
+    "id": "lp2-54-header-feedback",
+    "title": "LP2-54 red-header feedback cribs",
+    "question": "Can a specified feedback recurrence and primer read the red one-plus-eight-rune header?",
+    "baseline": "lp2-54-header-feedback"
+  },
+  "variant": {
+    "label": "Two one-step recurrences and all 29 primers",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-54"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-54-header-feedback/plan.json"
+    ],
+    "representation": "Archived 232-rune LP2-54 stream in canonical zero-based GP order, with the first nine red runes checked against the literal source prefix; punctuation has no cipher position.",
+    "procedure": "For each primer 0–28, decrypt the entire stream by P0=C0-k modulo 29 and then either P_i=C_i-C_(i-1) or P_i=C_i-P_(i-1) modulo 29. Re-encrypt every output and independently verify every saved equation. Compare the six outputs whose first rune is A, I or O.",
+    "parameters": "29 primers × 2 recurrences = 58 complete outputs of 232 runes; one continuous stream, no word or row reset; one-rune ciphertext or plaintext feedback; no adaptive key or candidate selection.",
+    "exclusions": "Eight-rune dictionary census; other C/K/D functions; alphabet permutation; lag greater than one; interruption choices; a second encryption layer; language scoring; a claim that all autokey variants fail."
+  },
+  "outcome": "inconclusive",
+  "finding": "The exact red cipher indices are 24,19,21,23,27,2,14,10,19. For A/I/O first-rune cribs, ciphertext feedback always makes the following eight labels A TH TH R R EO AE N. Plaintext feedback gives three different eight-rune outputs. The source's two named clocks therefore cannot be substituted for each other, and the simple cases do not establish a header reading.",
+  "limitations": "The source proposes many unspecified functions and possible words; this bounded run implements only the two explicit one-step recurrences. It has no language score or calibrated null, and does not test whether another layer turns the output into text. Human review pending.",
+  "next_steps": "Pin one additional recurrence, dictionary and rune conversion before searching; count all tried candidates, test known solved text under the same pipeline and score untouched continuation against matched controls.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py && python experiments/records/lp2-54-header-feedback/plot.py --check",
+    "environment": "Python 3.12 standard library; no network or API. Run from the repository or extracted bundle root.",
+    "script": "experiments/records/lp2-54-header-feedback/run.py",
+    "script_sha256": "7cb6a8a8621b45cdcdadc889494db3db2421ca55a9621f86aac0fa35b7b4e462",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-54-header-feedback/plan.json",
+        "sha256": "892e0461eb0be7f7353a0877e4a27c16bf3f7684ff1d4e9756c87370d42614ee"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/check.py",
+        "sha256": "61dbac170d73e0de841f00f4af86afc1ff404144fce92aa10a97aaf33e058ca7"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/plot.py",
+        "sha256": "c211252dcdf3ecef6cb2f698ca660bcf44b27714d10b58b038075f2203485c83"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-54-header-feedback/results.json",
+        "sha256": "36174b5c2dfd05c3b4124cd94bf9a84536874421abbafb6ef8d49f8594efc904"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
+        "sha256": "dc177d93febe77837c8e4a7aa5b10ffe31ae9af90584620ffdec2e9a07c1efd3"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — full 58-case census, round-trip encryption and independent per-position equation check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific report and supplied discussion hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-54-header-autokey-crib"
+    },
+    {
+      "label": "LP2-54 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-54"
+    }
+  ],
+  "related": [
+    "lp2-54-55-autokey-reset",
+    "lp2-54-55-autokey-skip"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
+      "caption": "The six A/I/O outputs under fixed ciphertext and plaintext feedback. The vertical rule separates the one-rune and eight-rune header words."
+    }
+  ]
+}

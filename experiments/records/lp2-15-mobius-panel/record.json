@@ -1,0 +1,57 @@
+{
+  "id": "lp2-15-mobius-panel",
+  "title": "Arithmetic Möbius values of the LP2-15 panel",
+  "status": "published",
+  "question": "What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?",
+  "summary": "The complete printed panel maps to twelve zeros and the second row −1, −1, −1, +1. The source discussion's output image is absent, and no rune operation was specified.",
+  "tags": [
+    "LP2-15",
+    "Möbius",
+    "Mobius",
+    "number panel",
+    "squarefree",
+    "red 3299",
+    "reported attempt"
+  ],
+  "scope": {
+    "pages": ["lp2-15"],
+    "representation": "All 16 printed decimal cells in the original 4×4 page order, taken from the hashed archived page record.",
+    "procedure": "Factor each positive integer and evaluate arithmetic μ(n) by the prime-square and parity rules; independently check by square-divisor enumeration.",
+    "parameters": "One fixed arithmetic function; every cell; original rows and columns; no traversal-dependent output.",
+    "exclusions": "The missing source output image, 3301-derived values, a conjectured key or rune-shift rule, plaintext, and statistical significance."
+  },
+  "outcome": "inconclusive",
+  "finding": "The exact operation produces rows 0000, −1−1−1+1, 0000 and 0000. Twelve values have a squared prime factor; the four nonzero values are squarefree.",
+  "limitations": "This is a deterministic transform audit of a reported idea, not a solving experiment. The supplied transcript does not preserve the referenced image, and no continuation into a cipher operation is stated.",
+  "next_steps": "Recover the historical output image if possible; only then compare it with the reconstructed matrix. For a cipher test, declare one fixed traversal and a complete rule mapping −1/0/+1 to rune operations before reading output.",
+  "review": {
+    "reviewer": "Codex; independent prime-square and factor-parity checker; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-15-mobius-panel/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py and plot.py --check",
+    "script": "experiments/records/lp2-15-mobius-panel/run.py",
+    "script_sha256": "62c6571e6a4368717fb1d323c7bd7870ba5cf6c3a704d752a59b3b5e92cb5cd1",
+    "inputs": [
+      {"path": "data/pages/lp2-15.json", "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"},
+      {"path": "experiments/records/lp2-15-mobius-panel/plan.json", "sha256": "ca7cbdf869c209546e3af0eced58de7af96092b3078eba7e8c0396b48f7baa0b"},
+      {"path": "experiments/records/lp2-15-mobius-panel/check.py", "sha256": "d8808ea5eb40a841900481266c2acbe98c6ae043e347b2478cc78d1face40da1"},
+      {"path": "experiments/records/lp2-15-mobius-panel/plot.py", "sha256": "c82cd4fe8c8f6c3fbf1e0924162e4eb14b7f14596b0017e586a9667a8e6eac24"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/lp2-15-mobius-panel/results.json", "sha256": "2cbabf6349683c0a7cf73064fa9742af8b36f97bdb043cf1b5cd3a260f9d0b70"},
+      {"path": "experiments/records/lp2-15-mobius-panel/panel.svg", "sha256": "2f840c2f1292220cc2b7e2b35e564cd8900098f2e2687bbc97e5e6d85fd45a15"}
+    ]
+  },
+  "visuals": [
+    {"path": "experiments/records/lp2-15-mobius-panel/panel.svg", "caption": "Printed panel values paired with their calculated arithmetic Möbius values in the original page positions."}
+  ],
+  "sources": [
+    {"label": "Original LP2-15 page and panel transcription", "url": "https://jelliottdev.github.io/#/page/lp2-15"},
+    {"label": "Reported proposal and source hash", "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-mobius-square-transform"}
+  ],
+  "related": []
+}

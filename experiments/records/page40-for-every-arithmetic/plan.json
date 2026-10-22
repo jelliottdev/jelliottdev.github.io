@@ -1,0 +1,21 @@
+{
+  "schema": "liberpedia-page40-for-every-arithmetic-v1",
+  "source_report_sha256": "2338de900f4ec231d42791c988640317241880675b35ff68af42ee162cb6573a",
+  "source_report_date": "2023-10-13",
+  "question": "Do the posted fixed arithmetic steps predict the LP2-40 first-eight-rune ciphertext without a fitted residual key?",
+  "source_crib": "FOR EVERY",
+  "source_crib_indices": [0, 3, 4, 18, 1, 18, 4, 26],
+  "source_transformed_indices": [0, 7, 6, 21, 9, 21, 6, 13],
+  "source_totient_stream": [0, 1, 2, 4, 6, 10, 12, 16],
+  "source_intermediate_indices": [0, 8, 8, 25, 15, 2, 18, 0],
+  "source_ciphertext_indices": [0, 9, 19, 26, 6, 23, 25, 8],
+  "source_signed_residuals": [0, 1, 11, 1, 20, -8, 7, 8],
+  "fixed_rule": "Use the author's F-as-zero placeholder at position 1. For each other proposed plaintext index p, compute atbash((p+18) mod 29) = (28-(p+18)) mod 29. Add the posted prime-minus-one stream modulo 29. Compare to the first eight archived page runes. The residual key is computed as (ciphertext-intermediate) modulo 29 and is not a prediction.",
+  "prime_sum_rule": "Segment FOR EVERY as the eight source indices, sum the corresponding GP prime values for FOR, EVERY and the whole phrase, and test each sum for primality. This is only a property of a proposed crib, not independent plaintext evidence.",
+  "success_criterion": "Count exact matches of the fixed intermediate against all eight source positions and against the seven non-F positions. No fitted residual may count as a prediction.",
+  "stopping_rule": "Stop after the fixed eight-position source example; do not choose a key-state table or tune variants from the ciphertext.",
+  "inputs": [
+    {"path": "data/index.json", "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"},
+    {"path": "text/lp2-40.txt", "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"}
+  ]
+}

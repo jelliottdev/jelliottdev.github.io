@@ -6752,7 +6752,7 @@ Outside this test: Unknown plaintext or keystream mixing, degree above eight, ex
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-Related records (5)
+Related records (6)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Ciphertext symbols and differences around LP2 doublets
@@ -6779,6 +6779,11 @@ LP2-54–55: skip selected F runes in ciphertext feedback
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+
+LP2-54: fixed ciphertext and plaintext feedback on the red header
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: What do the two explicit one-step feedback rules produce for the nine red runes when the first plaintext rune is A, I or O?
+Outside this test: Eight-rune dictionary census; other C/K/D functions; alphabet permutation; lag greater than one; interruption choices; a second encryption layer; language scoring; a claim that all autokey variants fail.
 
 
 
@@ -6842,7 +6847,14 @@ Outside this test: N-gram scoring; periodic IoC; additions, multiplication or XO
 Cipher composition and ordered pipelines
 Combine a bounded set of transformations in a declared order, tracking intermediate representations.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
+Related records (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+LP2-40: replay the FOR EVERY opening arithmetic
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Do the fixed shift, Atbash and prime-minus-one steps in the reported FOR EVERY proposal predict its eight-position LP2-40 opening without a fitted residual?
+Outside this test: No verified meaning assigned to flower details; no fixed Möbius seed, trigram state table or key schedule; no untouched continuation, language score, full-page decoding or test of later Slidefair/Quagmire/Fibonacci follow-ups.
+
 
 
 Switching rules and adaptive decoding
@@ -7100,7 +7112,7 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-Related records (5)
+Related records (7)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Magic squares: does one fixed entry determine the rest?
@@ -7127,6 +7139,16 @@ LP2-32: grid sums and the 2016 message file
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?
 Outside this test: Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.
+
+Arithmetic Möbius values of the LP2-15 panel
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?
+Outside this test: The missing source output image, 3301-derived values, a conjectured key or rune-shift rule, plaintext, and statistical significance.
+
+LP1 embedded messages: remove the changing outer digit
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Does a fixed one-character perimeter removal make the four LP1-10–13 signed-message diagrams identical inside, and does the same reading apply to the two visible LP1 five-by-five squares?
+Outside this test: No new GPG verification, no interpretation of the 3301 border sequence as a cipher, no LP2 text transformation, no claim that the common three-by-three is a magic square.
 
 
 
@@ -7621,6 +7643,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - LP2-54–55: skip selected F runes in ciphertext feedback
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- LP2-54: fixed ciphertext and plaintext feedback on the red header
+  https://jelliottdev.github.io/#/experiments/lp2-54-header-feedback
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
@@ -7639,6 +7663,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/spiral-branches-paired-subtraction
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
+- LP2-40: replay the FOR EVERY opening arithmetic
+  https://jelliottdev.github.io/#/experiments/page40-for-every-arithmetic
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Unrestricted additive keys and one-time-pad hypotheses
@@ -7725,6 +7751,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-prime-path-null
 - LP2-32: grid sums and the 2016 message file
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
+- Arithmetic Möbius values of the LP2-15 panel
+  https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
+- LP1 embedded messages: remove the changing outer digit
+  https://jelliottdev.github.io/#/experiments/lp1-payload-outer-ring
 - Differential and cumulative decoding
   https://jelliottdev.github.io/reference/articles/method-differences.html
 - Error detection, parity and correction
@@ -12881,7 +12911,7 @@ LP1-10 through LP1-13 contain signed instructions referring to three magic squar
 10 12 10
 12 14 12
 10 12 10
-Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.
+Its row sums are 32, 38, and 32. It is not itself a magic square under the definition above. The source-bound outer-ring audit checks all four extracted signed-message grids, their changing 3-3-0-1 perimeters, and the separate visible 5×5 squares. Do not label the visible number arrangement as a solved magic square merely because the surrounding prose mentions them.
 The historical walkthrough later describes an input form accepting squares subject to criteria, with an order-5 square summing to 3301 as one example. This wiki has not independently reconstructed the historical server validator. That report does not prove that the earlier 1033 square was the required submission.
 
 The LP2-15 decimal panel is another distinct arrangement; its printed row and column sums are unequal.
@@ -13000,6 +13030,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp1-10.html
 - LP1-13
   https://jelliottdev.github.io/reference/lp1-13.html
+- source-bound outer-ring audit
+  https://jelliottdev.github.io/#/experiments/lp1-payload-outer-ring
 - Pinned 2014 walkthrough
   https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/2014.md
 - LP1-10 body
@@ -13162,6 +13194,8 @@ The first command verifies the saved ledger; the second prints every step. The P
 
 This explains the number panel. It does not yet tell us how to apply the sequence to runes, whether to repeat it, where a key starts, or how interruptions work. Those are separate experimental choices. In particular, the construction does not establish a reading of the red heading.
 
+A separate arithmetic Möbius audit applies μ directly to all sixteen printed cells. It yields twelve zeros and a nonzero second row. That is a reproducible transformation of the panel, not a rule for decoding runes; the source discussion's output image was not preserved for exact comparison.
+
 Straightforward arithmetic
 The row sums are 12670, 12713, 12350, and 8250. The column sums are 14340, 11021, 10454, and 10168. The two main diagonals sum to 11673 and 14146. All sixteen entries sum to 45983.
 These unequal totals mean that the printed panel is not a magic square under the ordinary equal-line-sums definition. This says nothing about a proposed transformation of the entries; a transformed panel would be a different object and require its own stated rule.
@@ -13290,6 +13324,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/fibonacci-prime-panel.json
 - experimental choices; search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
+- arithmetic Möbius audit
+  https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
 - magic square
   https://jelliottdev.github.io/reference/articles/magic-squares.html
 - the two directions of a prime lookup
@@ -25327,6 +25363,8 @@ LP2-55 page record · Original JPEG
 
 Use the page records’ detail controls to inspect the border marks and red closing cluster. The tree-source comparison and border guide address the artwork. The feedback experiments below operate on rune indices; they do not derive a key from these drawings.
 
+The red opening on LP2-54 also prompted a separate header-crib replay. It enumerates all 29 primers under two explicit one-step feedback rules and displays the six A/I/O openings. The one-rune-plus-eight layout is visible; those candidate letters and rules are assumptions. That replay asks a different question from the interruption tests below.
+
 The tested input and six possible interruptions
 
 The tests concatenate LP2-54 followed by LP2-55, retain headings and remove all non-rune characters. The resulting stream has 308 runes. The ciphertext state carries across the page boundary. Neither record uses a separate reviewed-text layer or removes the red opening.
@@ -25387,7 +25425,7 @@ What remains untested?
 
 Resetting state at the boundary between LP2-54 and LP2-55.
 Removing the heading or using other candidate interruption symbols.
-Plaintext autokey, different primers, or additional substitution stages.
+Plaintext autokey beyond the one-step, 29-primer header baseline, or additional substitution stages.
 A language score that can recognize unfamiliar plaintext rather than a periodic-IoC peak.
 A cipher rule derived reproducibly from the border marks, tree or winged figure.
 
@@ -25413,6 +25451,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#shared-tree
 - border guide
   https://jelliottdev.github.io/reference/articles/spirals.html
+- header-crib replay; one-step, 29-primer header baseline
+  https://jelliottdev.github.io/#/experiments/lp2-54-header-feedback
 - index of coincidence
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html
 - Reset
@@ -28593,7 +28633,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 76 published reproducible records: 16 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 10 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 80 published reproducible records: 17 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 13 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 20 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -28780,17 +28820,17 @@ Reported attempts awaiting exact replay
 
 Source-specific proposals from prior solver notes, mapped to narrower records and the work required to reproduce them.
 
-This intake accounts for 44 supplied source files: 37 source-specific proposals or analyses, 12 notes matched to a checked scope, and 15 files awaiting full method extraction. They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.
+This intake accounts for 44 supplied source files: 41 source-specific proposals or analyses, 12 notes matched to a checked scope, and 15 files awaiting full method extraction. They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.
 
 The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. A public link, when present, may change and has not yet been pinned to a revision. Start with Have we tried it? for completed records, or the method map for a broader family.
 
-Not replayed: 14 · Related work only: 12 · Partly replayed: 11
+Not replayed: 16 · Related work only: 10 · Partly replayed: 15
 
 Find an attempt
 
 Grid bytes as a QR or data-matrix image · Related work only
 
-LP2-40 FOR EVERY, reflected florals and a Möbius running key · Related work only
+LP2-40 FOR EVERY, reflected florals and a Möbius running key · Partly replayed
 
 Six F interrupters and periodic IoC on LP2-54–55 · Partly replayed
 
@@ -28812,7 +28852,7 @@ Möbius-of-totient zero mask and proposed LP2-00 reading · Partly replayed
 
 JPEG byte histograms and alleged null-heavy page classes · Partly replayed
 
-LP2-54–55 header crib under ciphertext and plaintext autokey · Related work only
+LP2-54–55 header crib under ciphertext and plaintext autokey · Partly replayed
 
 2,883-rune Spirals–Branches stream alignment · Partly replayed
 
@@ -28838,7 +28878,7 @@ Cuneiform numbers as pointers to CicadaOS 560 files · Not replayed
 
 Thick and thin LP2 spaces as a binary channel · Not replayed
 
-Möbius transform of LP2-15 panel numbers · Not replayed
+Möbius transform of LP2-15 panel numbers · Partly replayed
 
 Rune indices or word sums packed as bytes · Related work only
 
@@ -28857,6 +28897,14 @@ Transform earlier poster coordinates to search for the signpost · Not replayed
 Match section lengths after omitting F runes · Partly replayed
 
 Look for crib-derived difference sequences elsewhere in LP · Not replayed
+
+Remove the outer ring of the LP1-10–13 message grids · Partly replayed
+
+Trim manuscript margins and join consecutive pages · Not replayed
+
+Map Old English rune-poem meanings to LP artwork · Not replayed
+
+LP2-56 hash as a checksum for a completed reading · Not replayed
 
 Leviticus and 2 Maccabees at a reported 977 offset · Not replayed
 
@@ -28877,12 +28925,12 @@ An attempt at finding a data matrix in the base60 of pages 49 - 51 · CurtbroG �
 
 
 LP2-40 FOR EVERY, reflected florals and a Möbius running key
-Related work only · Cipher composition and ordered pipelines · LP2-40
+Partly replayed · Cipher composition and ordered pipelines · LP2-40
 Reported approach. Treat FOR EVERY as a candidate red-header reading, combine a shift of 18 and Atbash, interpret floral details as 13 and 31, skip a chosen rune, then investigate a Möbius-directed running/autokey and trigram structure.
-Current archive coverage. The cited header, visual interpretation and composite key rule have not been replayed together in the experiment registry. Other running-key and crib records test different inputs or rules.
-Replay requirement. Snapshot the changing spreadsheet, separate a fixed FOR EVERY crib test from the artwork-derived parameters, specify the complete key clock and skipped-rune rule, and score the untouched continuation against matched controls.
+Current archive coverage. A new source-bound audit verifies the posted shift-18, Atbash and prime-minus-one arithmetic for FOR EVERY. Those fixed layers match zero of seven non-F archived ciphertext positions; the residual key is calculated from the target. The proposed Möbius state rule and its later variations remain unspecified, so no complete decryption has been replayed.
+Replay requirement. Snapshot the changing spreadsheet or provide a complete fixed state table; specify the Möbius argument, starting point, sign/zero handling, key clock and skipped-rune rule before computing new ciphertext. Then score an untouched continuation against matched controls.
 
-Related records with narrower scopes: emerson running key, lp2 39 header cribs.
+Related records with narrower scopes: page40 for every arithmetic, emerson running key, lp2 39 header cribs.
 
 Source identification
 Page 40: For Every and the Potential for a Mobius based Running Key · Scott · 2023-10-13. Supplied transcript SHA-256: 2338de900f4ec231d42791c988640317241880675b35ff68af42ee162cb6573a.
@@ -29015,12 +29063,12 @@ Related public material (current URL; exact version not yet pinned).
 
 
 LP2-54–55 header crib under ciphertext and plaintext autokey
-Related work only · Autokey and ciphertext feedback · LP2-54, LP2-55
+Partly replayed · Autokey and ciphertext feedback · LP2-54, LP2-55
 Reported approach. Use the red one-rune plus eight-rune header as a constrained crib, enumerate candidate words with exactly eight GP runes, and test explicit ciphertext-feedback versus plaintext-feedback recurrences. The discussion corrects a confusion between those two clocks; it does not provide a completed candidate census.
-Current archive coverage. Published LP2-54–55 experiments assess two F-interruption rules by periodic IoC. They do not enumerate header words or test either autokey recurrence against a held-out continuation.
-Replay requirement. Pin the header transcription and word list, define GP transliteration and both recurrences including the initial state, enumerate all length-compatible candidates and keys, then score full-text continuations against a fixed control set. Report the complete candidate count, not just readable snippets.
+Current archive coverage. A fixed-rule baseline now enumerates all 29 primers under each of the discussion's explicit ciphertext- and plaintext-feedback recurrences, with complete LP2-54 outputs and the six A/I/O openings. Earlier LP2-54–55 experiments assess F-interruption rules by periodic IoC. None enumerates eight-rune dictionary words, the source's unspecified C/K/D functions or a held-out reading.
+Replay requirement. Pin a word list and transliteration rule for eight-rune candidates, then define each additional C/K/D function before searching. Count all tried functions and words, run a known-reading control, and test any selected candidate on untouched continuation; report every candidate rather than only readable snippets.
 
-Related records with narrower scopes: lp2 54 55 autokey skip, lp2 54 55 autokey reset.
+Related records with narrower scopes: lp2 54 header feedback, lp2 54 55 autokey skip, lp2 54 55 autokey reset.
 
 Source identification
 LP2-54–55 autokey and header-crib discussion · igloo party and participants · 2025-01-12. Supplied transcript SHA-256: 10cdadc1f184ad6b2f5c9859fbc65d73a044205574fecaaa117e6d9be2d11e76.
@@ -29165,10 +29213,12 @@ Line and word-spacing discussion · Shiroshi, xenai and participants · 2026-10-
 
 
 Möbius transform of LP2-15 panel numbers
-Not replayed · Magic squares and numerical grids · LP2-15
+Partly replayed · Magic squares and numerical grids · LP2-15
 Reported approach. Apply the Möbius function to the numbers at the top of LP2-15 and inspect the resulting arrangement. The supplied thread refers to an image of the output without retaining its pixels or a full interpretation rule.
-Current archive coverage. The LP2-15 panel and its prime-distance/Fibonacci construction are documented, but no published record replays this exact Möbius transform or a subsequent cipher operation.
-Replay requirement. List the selected printed cells, distinguish arithmetic Möbius μ(n) from any other Möbius usage, publish each input/output value and traversal order, then state a specific rune operation and control before interpreting any pattern.
+Current archive coverage. A new panel audit applies arithmetic Möbius μ(n) to all sixteen printed cells in original row order, with a factorization ledger and independent checker. Twelve outputs are zero and the four nonzero values occupy row two. The source's referred-to image is absent, so its exact historical output cannot be compared; no subsequent cipher operation was specified.
+Replay requirement. Recover the original output image for exact historical comparison. Before treating this as a key, specify a traversal, zero handling, a rule mapping μ values to rune operations, and a complete-text control without adapting those choices to output.
+
+Related records with narrower scopes: lp2 15 mobius panel.
 
 Source identification
 Magic-square and panel-number discussion · Donger and participants · 2024-11-18. Supplied transcript SHA-256: df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb.
@@ -29282,6 +29332,50 @@ Source identification
 Mixed numerical and section-count discussion · C and participants · 2026-09-25. Supplied transcript SHA-256: e7f90ade745e6367b90a8bffe83e68f92f7ec316f60ad7be409ec9f876deed3b.
 
 
+Remove the outer ring of the LP1-10–13 message grids
+Partly replayed · Magic squares and numerical grids · LP1-10, LP1-11, LP1-12, LP1-13
+Reported approach. A participant connects the solved 'shed the circumference' wording to the four signed ASCII number grids embedded in LP1-10–13, reporting that removing each grid's outer ring leaves the same inner numbers. The later discussion separately turns to the 5×5 LP1 magic squares; those are different objects. The post does not report a decryption of LP2.
+Current archive coverage. The source-bound audit checks the four extracted LP1-10–13 signed-message grids: their outer digits change 3, 3, 0, 1, while one-cell border removal leaves the same 3×3 interior. It also separates these from the visible LP1-05 and LP1-16 5×5 squares. The related magic-square freedom record answers a different constraint question.
+Replay requirement. An LP2 application remains untested. Fix a target, traversal, rune operation and prediction before reading output.
+
+Related records with narrower scopes: lp1 payload outer ring, magic square freedom.
+
+Source identification
+Magic-square order and outer-ring discussion · Donger and participants · 2025-02-17. Supplied transcript SHA-256: df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb.
+
+
+Trim manuscript margins and join consecutive pages
+Not replayed · Geometric constructions and navigation
+Reported approach. Interpret the solved 'shed the circumference' wording together with a cited 'Let the text guide you' payload as a reason to cut page margins and place manuscript pages side by side, then inspect whether their text lines align or continue. The post says the author might try this; it does not report a completed comparison or extracted text.
+Current archive coverage. The page-join sensitivity record tests alternative text boundaries, not trimming page images and physically aligning lines. The source discussion itself notes that row positions can move between pages.
+Replay requirement. Specify page sequence, exact image hashes, crop rectangles, scale and row-registration convention before looking for alignments. Publish all adjacent joins, including failures; compare rune-line continuity against the untrimmed layout and nonadjacent page controls.
+
+Related records with narrower scopes: page join sensitivity.
+
+Source identification
+Its words are the map, their meaning is the road · tz18 and participants · 2026-02-05. Supplied transcript SHA-256: 1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042.
+
+
+Map Old English rune-poem meanings to LP artwork
+Not replayed · Alternative alphabets and symbolic notations
+Reported approach. The source compares Gematria Primus's 29 runes and order with the Old English rune poem, then considers whether historical rune meanings might link particular LP illustrations to the cipher used in their sections. The author reports abandoning their tentative image-to-meaning associations because the connections felt strained; no mappings or cipher outputs are preserved.
+Current archive coverage. Liberpedia explains the GP alphabet and indexes manuscript artwork, but those resources do not establish a rune-poem meaning-to-image mapping or test a resulting decryption rule.
+Replay requirement. Pin an edition and translation of the rune poem, enumerate its rune meanings, select page illustrations from the original scans, and state one-to-one or many-to-one matching rules before examining cipher results. Preserve every candidate and mismatch, and test whether an independently chosen page prediction follows.
+
+Source identification
+Order-and-value, rune-poem and artwork discussion · acabadabra and participants · 2025-02-15. Supplied transcript SHA-256: 9bfdd6cec749779f733c39a8f79bb2a76464aebf085fca6dc63a1ee9bed5fb7f.
+
+
+LP2-56 hash as a checksum for a completed reading
+Not replayed · Hash targets and candidate retrieval · LP2-56
+Reported approach. A participant suggests that the long LP2-56 digest could authenticate the completed LP reading, rather than point to a webpage. The posted discussion offers this as a possible interpretation of the deep-web-hash text; it does not supply a completed plaintext, exact hash algorithm or matching digest.
+Current archive coverage. Liberpedia's hash tests cover pinned candidate files and other target classes. They cannot confirm or reject a checksum of a complete reading that has not yet been recovered.
+Replay requirement. When a complete reading is proposed, archive its exact byte sequence and encoding, fix whether headings, spaces, line breaks and all LP sections are included, and calculate the stated digest algorithm before applying any normalization alternatives. Record every attempted serialization and compare against the printed hex string.
+
+Source identification
+LP2-56 hash-target hypotheses · DorkyHead101 and participants · 2026-09-23. Supplied transcript SHA-256: 005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f.
+
+
 Leviticus and 2 Maccabees at a reported 977 offset
 Not replayed · Codebooks and mixed letter-word systems
 Reported approach. Try Leviticus and 2 Maccabees at a 977 offset based on GP values. The same exchange separately mentions a 995–1000 range and subtracting 1033 from a puzzle year, without a worked link among those numbers. It supplies no fixed edition, coordinate rule, target ciphertext or extracted output.
@@ -29341,7 +29435,7 @@ Bible-book coordinate suggestion · The 977-offset suggestion is registered; ins
 Other numerical correspondences and square-center observations · The 464-word pointer and all six section-count equalities are audited; the crib-difference method is registered. Screen remaining emirp, totient and magic-square-center chains as observations or bounded methods; several source images are absent. Source ID and checksum
 4d80ab80-eab0-4f0d-b595-68e0167eb871 · SHA-256: e7f90ade745e6367b90a8bffe83e68f92f7ec316f60ad7be409ec9f876deed3b
 
-Magic-square order discussion · The corrected square freedom count is checked; separate the outer-ring, date-path and LP2-15 Möbius suggestions. Source ID and checksum
+Magic-square order discussion · The corrected freedom count is checked and the 'shed the circumference' outer-ring comparison is registered. The date-path drawing lacks its source image; the LP2-15 Möbius suggestion has a separate intake entry. Source ID and checksum
 7f8558ce-8a7c-4eeb-94f2-5952329b08d7 · SHA-256: df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb
 
 Artwork provenance and signpost reuse · The N-rune gap extraction is reproduced; verify the independent artwork-source and copy-paste claims. Source ID and checksum
@@ -29350,10 +29444,10 @@ Artwork provenance and signpost reuse · The N-rune gap extraction is reproduced
 Mayfly image provenance · The rune-byte suggestion and partial hash sweep are recorded; verify the claimed source of the Mayfly image separately. Source ID and checksum
 9c66f80f-13cb-48ed-97bf-35d80f450fed · SHA-256: 9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728
 
-LP2-56 hash-target hypotheses · Separate verifiable hash syntax from unbounded guesses at target content. Source ID and checksum
+LP2-56 hash-target hypotheses · A completed-LP checksum interpretation is registered as untested; identify any original bytes or exact target class before treating other webpage, onion or checksum guesses as tests. Verify hash syntax independently. Source ID and checksum
 bc2d6c57-8156-439e-8dd4-1aa3592a4999 · SHA-256: 005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f
 
-Other solved-text hint suggestions · Section-title cribs and the 389 spelling dependence are recorded; screen remaining thematic/artwork associations for a fixed prediction. Source ID and checksum
+Other solved-text hint suggestions · Section-title cribs, their 389 spelling dependence, and the proposed margin-cut page join are recorded. LP1 square-word-to-artwork associations lack fixed mappings; seek an original worked selection before making another entry. Source ID and checksum
 c1c1edd9-ecef-4085-b2d5-dd5c41b93856 · SHA-256: 1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042
 
 Way, map and compass theme · Record cross-message references separately from a geometric cipher rule. Source ID and checksum
@@ -29362,13 +29456,13 @@ de9ea317-1049-4472-9104-509cfc8e5dc5 · SHA-256: d09063a07e519f402c1f19802997418
 Proposed manual transcription audit · OBSCURA arithmetic, proposed word-specific use and transcription audit are recorded; examine later page-spacing and source-layout claims for exact inputs. Source ID and checksum
 eb0557f3-815d-4b6f-9f12-eced5b37b0d3 · SHA-256: 0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7
 
-Epiphany and historical-message wording · Locate the exact message references and any falsifiable prediction. Source ID and checksum
+Epiphany and historical-message wording · The excerpt supplies message wording and a page-55 factor idea but no fixed key stream or result. Verify the original signed messages and look for a later worked operation before registering a separate attempt. Source ID and checksum
 edacef84-a430-43d4-8540-47a01a00ecef · SHA-256: da5eda73ef7664e6761e37e81f4a4f3618c30f2d899555f66c9839579da8991e
 
 Dot measurements, cuneiform files and spacing · Dot mirrors and the CicadaOS file suggestion are now recorded; examine Orion-ratio, page-37 punctuation and dot-scaling claims for separate reproducible scopes. Source ID and checksum
 fb8502fe-819f-4048-ad12-a1d73a32a438 · SHA-256: a43d49a4568e17141c94c09fd827c16bd1f8405e3382ff22eeca14320a42560d
 
-English Qaballa wording lead · The English Qaballa lead is registered; verify its source alphabet and separately screen the rune-poem, audio and manuscript-history suggestions in this file. Source ID and checksum
+English Qaballa wording lead · The English Qaballa and tentative rune-poem-to-artwork leads are registered. Check the separate audio-frequency observations and manuscript-history claims as provenance, without treating them as an LP decryption. Source ID and checksum
 fe1feb80-b63d-4e07-b0c7-4a94fb768de1 · SHA-256: 9bfdd6cec749779f733c39a8f79bb2a76464aebf085fca6dc63a1ee9bed5fb7f
 
 
@@ -29461,6 +29555,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#cross-section-f-omitted-count-links
 - Look for crib-derived difference sequences elsewhere in LP
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#crib-difference-rune-stream-search
+- Remove the outer ring of the LP1-10–13 message grids
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#shed-circumference-square-inner-grid
+- Trim manuscript margins and join consecutive pages
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#shed-circumference-page-margin-join
+- Map Old English rune-poem meanings to LP artwork
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#rune-poem-meaning-artwork-map
+- LP2-56 hash as a checksum for a completed reading
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#lp2-56-hash-solved-text-checksum
 - Leviticus and 2 Maccabees at a reported 977 offset
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#bible-977-gp-offset
 - An order and a value as an English Qaballa lead
@@ -29473,6 +29575,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
+- page40 for every arithmetic
+  https://jelliottdev.github.io/#/experiments/page40-for-every-arithmetic
 - emerson running key
   https://jelliottdev.github.io/#/experiments/emerson-running-key
 - lp2 39 header cribs; Read the checked scope
@@ -29531,6 +29635,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/jpeg-byte-distribution.html
 - Related public material
   https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved
+- lp2 54 header feedback
+  https://jelliottdev.github.io/#/experiments/lp2-54-header-feedback
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - spiral branches paired subtraction
@@ -29571,6 +29677,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/cross-source-word-boundaries
 - Layered decoding and file chains
   https://jelliottdev.github.io/reference/articles/cover-chain.html
+- lp2 15 mobius panel
+  https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Hash targets and candidate retrieval
@@ -29587,6 +29695,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html
 - Related public material
   https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit
+- lp1 payload outer ring
+  https://jelliottdev.github.io/#/experiments/lp1-payload-outer-ring
+- magic square freedom; Read the checked scope
+  https://jelliottdev.github.io/#/experiments/magic-square-freedom
+- page join sensitivity
+  https://jelliottdev.github.io/#/experiments/page-join-sensitivity
 - Alternative alphabets and symbolic notations
   https://jelliottdev.github.io/reference/articles/method-symbol-systems.html
 - Read the checked scope
@@ -29595,8 +29709,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/doublets.html
 - Read the checked scope
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
-- Read the checked scope
-  https://jelliottdev.github.io/#/experiments/magic-square-freedom
 - Read the checked scope
   https://jelliottdev.github.io/reference/articles/dots.html
 - Read the checked scope
@@ -38649,6 +38761,170 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "lp1-payload-outer-ring",
+  "title": "LP1 embedded messages: remove the changing outer digit",
+  "status": "published",
+  "question": "Does a fixed one-character perimeter removal make the four LP1-10–13 signed-message diagrams identical inside, and does the same reading apply to the two visible LP1 five-by-five squares?",
+  "summary": "The four extracted diagrams have border digits 3, 3, 0 and 1 but the same three-by-three interior after fixed perimeter removal. The two visible five-by-five squares have wholly different interiors; these are distinct source objects. No LP2 decryption follows.",
+  "tags": [
+    "LP1-10",
+    "LP1-11",
+    "LP1-12",
+    "LP1-13",
+    "OutGuess",
+    "signed messages",
+    "shed circumference",
+    "magic square",
+    "source identity",
+    "3301"
+  ],
+  "family": {
+    "id": "lp1-payload-outer-ring",
+    "title": "LP1 signed-message diagram borders",
+    "question": "Which exact repeated diagram changes at its perimeter while preserving its interior?",
+    "baseline": "lp1-payload-outer-ring"
+  },
+  "variant": {
+    "label": "Fixed one-character perimeter",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-05",
+      "lp1-16"
+    ],
+    "artifacts": [
+      "experiments/records/lp1-payload-outer-ring/plan.json"
+    ],
+    "representation": "The exact ASCII bodies of four extracted PGP-verified OutGuess messages, with verification status read from page metadata; separately the printed LP1-05 mixed square converted by GP values and LP1-16 decimal square.",
+    "procedure": "Hash-check all inputs, locate each unique seven-line 16-column ASCII diagram, remove only its top/bottom rows and first/last character of other rows, and compare the resulting interior bytes and parsed decimal values in page order. Separately remove one-cell perimeters from both visible five-by-five squares to exclude that reading.",
+    "parameters": "Exactly LP1-10–13 in page order; one-character ASCII perimeter; no rotation, reflection, recoding or searched crop. The alternate LP1-05/16 check uses the canonical GP table from data/index.json.",
+    "exclusions": "No new GPG verification, no interpretation of the 3301 border sequence as a cipher, no LP2 text transformation, no claim that the common three-by-three is a magic square."
+  },
+  "outcome": "supported",
+  "finding": "All four signed-message bodies yield the same original-orientation interior [[10,12,10],[12,14,12],[10,12,10]] under the fixed crop. Their border digits read 3301 in page order. The inner row sums are 32, 38 and 32, so the interior is not magic. The visible LP1-05 and LP1-16 three-by-three cores are unequal and share no value.",
+  "limitations": "The supplied discussion has image placeholders and does not name the four diagrams precisely; the identification here follows the thread's four repeated diagrams and the archived signed bodies. GPG validity is taken from preexisting page metadata, not newly reverified. This is an audit of a reported observation, not evidence of a decryption method or intended connection to the solved wording. Human review pending.",
+  "next_steps": "If proposing perimeter removal for LP2, specify the exact page objects, border definition, selection rule and predicted output before testing. Keep the signed diagrams separate from the two visible five-by-five squares.",
+  "reproduction": {
+    "command": "python experiments/records/lp1-payload-outer-ring/run.py --check && python experiments/records/lp1-payload-outer-ring/check.py && python experiments/records/lp1-payload-outer-ring/plot.py --check",
+    "environment": "Python 3 standard library; no network or AI service. Run from the repository root or extracted bundle root.",
+    "script": "experiments/records/lp1-payload-outer-ring/run.py",
+    "script_sha256": "396db6e46449d96e68f876eb38b91d2cb045c811569db8a8cc0a59875da526fc",
+    "inputs": [
+      {
+        "path": "experiments/records/lp1-payload-outer-ring/plan.json",
+        "sha256": "5682cb978907746950c3b0c48dab00606143a0ed262207aa0112cbecc3764bb3"
+      },
+      {
+        "path": "experiments/records/lp1-payload-outer-ring/check.py",
+        "sha256": "3404b3aaab37d1281dab5a4d9cad735ea3c2001635573f13cc3794472f04d533"
+      },
+      {
+        "path": "experiments/records/lp1-payload-outer-ring/plot.py",
+        "sha256": "ad6b3006986c6868d34fd600ae2790f75fe373d0eaec8257bc4ceea47243fab2"
+      },
+      {
+        "path": "exports/steganography/lp1-10.body.txt",
+        "sha256": "a1e0adf6ffa363b8c1847ec2db807adba3ab4e8e11d25654935f7319441ead4d"
+      },
+      {
+        "path": "exports/steganography/lp1-11.body.txt",
+        "sha256": "a1e0adf6ffa363b8c1847ec2db807adba3ab4e8e11d25654935f7319441ead4d"
+      },
+      {
+        "path": "exports/steganography/lp1-12.body.txt",
+        "sha256": "9a108efecfe9a12260577473d7c9cfd8ce452d31b761d3fe4d8f485fc162334b"
+      },
+      {
+        "path": "exports/steganography/lp1-13.body.txt",
+        "sha256": "5c17f1bd9fae6c500352d5849a000150a1433ea89a9380efd8a38432f9dadef0"
+      },
+      {
+        "path": "data/pages/lp1-10.json",
+        "sha256": "62de5c58842d30d359e514450b9a6bc75020adf472dd0ccfcdbc5795c5860f9b"
+      },
+      {
+        "path": "data/pages/lp1-11.json",
+        "sha256": "b5d54900e6883f96c6da7f1abe2fcd7a83ded8b5686684c098383a53de2a171d"
+      },
+      {
+        "path": "data/pages/lp1-12.json",
+        "sha256": "d2d6971ef1cb0430827b347dcd6fdc018de6245112c6dcfab5b795e618889504"
+      },
+      {
+        "path": "data/pages/lp1-13.json",
+        "sha256": "bd4c0fcab4fc5bdaafb929e10ac59f9b67a6ae99072de20f91286002b32dbe02"
+      },
+      {
+        "path": "data/pages/lp1-05.json",
+        "sha256": "eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826"
+      },
+      {
+        "path": "data/pages/lp1-16.json",
+        "sha256": "e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp1-payload-outer-ring/results.json",
+        "sha256": "fd49e05263f75946674b7a794cf8a6474a5efe6faabb53f27de493b0c7a64b87"
+      },
+      {
+        "path": "experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg",
+        "sha256": "cb7b229bc24771cfc9db8439a2bb61e729d680faae4888b7777167cbe91ca263"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; exact source-body parse, recorded signature-status check, independent regex oracle, alternate visible-square comparison; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Reported observation and source transcript hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=shed-circumference-square-inner-grid"
+    },
+    {
+      "label": "LP1-10 extracted signed message",
+      "url": "https://jelliottdev.github.io/#/page/lp1-10?section=embedded"
+    },
+    {
+      "label": "Magic squares and the distinct visible five-by-five grids",
+      "url": "https://jelliottdev.github.io/#/wiki/magic-squares"
+    }
+  ],
+  "related": [
+    "magic-square-freedom"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg",
+      "caption": "The four signed messages preserve one interior beneath changing perimeter digits 3, 3, 0 and 1; the retained three-by-three is not itself a magic square."
+    }
+  ],
+  "article": "# What remains when the four LP1 message borders are removed?\n\nThe four signed messages hidden in **LP1-10–13** display the same seven-row ASCII number diagram with a changing outer digit. In page order, the border digits are **3, 3, 0, 1**. Remove the top and bottom rows and the first and last character from each remaining row: the interior is byte-identical in all four messages, without rotation or reflection.\n\n![Four ASCII diagrams with their changing perimeter marked in orange and common interior in blue](experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg)\n\nThis checks a reported observation connected to the solved text's phrase about *shedding the circumference*. The source note says removing the outer number of each repeated square leaves an identical number grid. It does **not** supply an LP2 decryption rule or an output. The match is a property of the four embedded messages, not evidence that stripping a perimeter solves an unsolved manuscript page.\n\n## The four source objects\n\nEach page image has an extracted OutGuess payload containing a PGP-signed instruction. The repository retains the exact body text and page metadata recording successful signature verification. This audit rechecks the body hashes and that recorded verification status; it does not independently re-run GPG. The bodies instruct the reader to create a Tor hidden service and submit three magic squares. Their diagrams have the same spacing and numeric interior. LP1-10 and LP1-11's whole body files are byte-identical; LP1-12 and LP1-13 change the diagram's border digit.\n\n| Embedded body | Border digit | Retained numeric rows |\n| --- | ---: | --- |\n| LP1-10 | 3 | `10 12 10` / `12 14 12` / `10 12 10` |\n| LP1-11 | 3 | Same |\n| LP1-12 | 0 | Same |\n| LP1-13 | 1 | Same |\n\nThe [fixed plan](experiments/records/lp1-payload-outer-ring/plan.json) defines the operation before comparison. It requires exactly one diagram bounded by two 16-character rows of equal digits; removes only that one-character perimeter; retains spacing in the five interior rows; and parses the three numbered rows. The [complete result](experiments/records/lp1-payload-outer-ring/results.json) preserves every original and retained line, the source hashes, and the derived matrix.\n\nThe common matrix is:\n\n```text\n10  12  10\n12  14  12\n10  12  10\n```\n\nIts row sums are **32, 38, 32**. It is therefore not a magic square under the ordinary equal-row-sum definition. The border sequence happens to read `3301` in page order; the audit does not infer a further instruction from that fact.\n\n## A distinct reading that fails\n\nThere are also two *visible* five-by-five LP1 squares: the mixed number-and-rune square on LP1-05, which needs Gematria Primus conversion, and the decimal square on LP1-16. If “remove the outer ring” is instead applied to those, their central three-by-three grids differ:\n\n```text\nLP1-05 converted       LP1-16 printed\n199 130 320            812 934 280\n245  91 245            620 809 620\n320 130 199            280 934 812\n```\n\nNone of the five-by-five core values occurs in the other core. Rotation or reflection cannot make them identical. These are not the repeated signed-message diagrams described in the source discussion. Keeping the objects separate matters: the same verbal instruction cannot be reported as verified on a different pair of squares.\n\n## Reproduce the comparison\n\nFrom the repository root, with Python 3 and no added packages:\n\n```text\npython experiments/records/lp1-payload-outer-ring/run.py --check\npython experiments/records/lp1-payload-outer-ring/check.py\npython experiments/records/lp1-payload-outer-ring/plot.py --check\n```\n\nThe run script extracts the diagrams from four hashed message bodies and converts the separate LP1-05 and LP1-16 page transcriptions for the exclusion check. The independent checker parses the ASCII blocks with a different pattern and compares all four exact lines and all nine core values against an explicit oracle. The result is an input and source-identity audit. It does not test whether a perimeter-removal operation helps decrypt LP2.\n",
+  "article_path": "experiments/records/lp1-payload-outer-ring/article.md",
+  "script_sha256": "396db6e46449d96e68f876eb38b91d2cb045c811569db8a8cc0a59875da526fc",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}
+
+---
+
+{
   "id": "lp1-section-balance",
   "title": "LP1 column balance with section-preserving shuffles",
   "status": "published",
@@ -39458,6 +39734,103 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "lp2-15-mobius-panel",
+  "title": "Arithmetic Möbius values of the LP2-15 panel",
+  "status": "published",
+  "question": "What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?",
+  "summary": "The complete printed panel maps to twelve zeros and the second row −1, −1, −1, +1. The source discussion's output image is absent, and no rune operation was specified.",
+  "tags": [
+    "LP2-15",
+    "Möbius",
+    "Mobius",
+    "number panel",
+    "squarefree",
+    "red 3299",
+    "reported attempt"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-15"
+    ],
+    "representation": "All 16 printed decimal cells in the original 4×4 page order, taken from the hashed archived page record.",
+    "procedure": "Factor each positive integer and evaluate arithmetic μ(n) by the prime-square and parity rules; independently check by square-divisor enumeration.",
+    "parameters": "One fixed arithmetic function; every cell; original rows and columns; no traversal-dependent output.",
+    "exclusions": "The missing source output image, 3301-derived values, a conjectured key or rune-shift rule, plaintext, and statistical significance."
+  },
+  "outcome": "inconclusive",
+  "finding": "The exact operation produces rows 0000, −1−1−1+1, 0000 and 0000. Twelve values have a squared prime factor; the four nonzero values are squarefree.",
+  "limitations": "This is a deterministic transform audit of a reported idea, not a solving experiment. The supplied transcript does not preserve the referenced image, and no continuation into a cipher operation is stated.",
+  "next_steps": "Recover the historical output image if possible; only then compare it with the reconstructed matrix. For a cipher test, declare one fixed traversal and a complete rule mapping −1/0/+1 to rune operations before reading output.",
+  "review": {
+    "reviewer": "Codex; independent prime-square and factor-parity checker; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-15-mobius-panel/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py and plot.py --check",
+    "script": "experiments/records/lp2-15-mobius-panel/run.py",
+    "script_sha256": "62c6571e6a4368717fb1d323c7bd7870ba5cf6c3a704d752a59b3b5e92cb5cd1",
+    "inputs": [
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "experiments/records/lp2-15-mobius-panel/plan.json",
+        "sha256": "ca7cbdf869c209546e3af0eced58de7af96092b3078eba7e8c0396b48f7baa0b"
+      },
+      {
+        "path": "experiments/records/lp2-15-mobius-panel/check.py",
+        "sha256": "d8808ea5eb40a841900481266c2acbe98c6ae043e347b2478cc78d1face40da1"
+      },
+      {
+        "path": "experiments/records/lp2-15-mobius-panel/plot.py",
+        "sha256": "c82cd4fe8c8f6c3fbf1e0924162e4eb14b7f14596b0017e586a9667a8e6eac24"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-15-mobius-panel/results.json",
+        "sha256": "2cbabf6349683c0a7cf73064fa9742af8b36f97bdb043cf1b5cd3a260f9d0b70"
+      },
+      {
+        "path": "experiments/records/lp2-15-mobius-panel/panel.svg",
+        "sha256": "2f840c2f1292220cc2b7e2b35e564cd8900098f2e2687bbc97e5e6d85fd45a15"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-15-mobius-panel/panel.svg",
+      "caption": "Printed panel values paired with their calculated arithmetic Möbius values in the original page positions."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Original LP2-15 page and panel transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-15"
+    },
+    {
+      "label": "Reported proposal and source hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-mobius-square-transform"
+    }
+  ],
+  "related": [],
+  "article": "# Möbius values of the LP2-15 number panel\n\nA [reported suggestion](#/wiki/reported-attempts?section=lp2-15-mobius-square-transform) applies the arithmetic Möbius function to the numbers at the top of [LP2-15](#/reader/lp2-15). This is a small but exact question: what comes out when we transform **all sixteen printed entries in place**? The source transcript refers to an output image that is not retained in the supplied text, so this is a reconstruction of the stated operation, **not an exact comparison with that historical image**.\n\nThe numbers in the upper part of each cell below are printed on the page; the `μ` values beneath them are calculated. The red `3299` stays in its original row and column. Neither a Fibonacci spiral nor subtraction from 3301 is applied here.\n\n![Four-by-four LP2-15 panel showing each printed decimal number above its calculated arithmetic Möbius value. Only the second row is nonzero.](experiments/records/lp2-15-mobius-panel/panel.svg)\n\n[Open the diagram](experiments/records/lp2-15-mobius-panel/panel.svg) · [View the original page](images/lp2-15.jpg)\n\nThe output matrix, in printed row order, is:\n\n| Row | Column 1 | Column 2 | Column 3 | Column 4 |\n| --- | ---: | ---: | ---: | ---: |\n| 1 | 0 | 0 | 0 | 0 |\n| 2 | −1 | −1 | −1 | +1 |\n| 3 | 0 | 0 | 0 | 0 |\n| 4 | 0 | 0 | 0 | 0 |\n\nFor a positive integer `n`, the arithmetic Möbius function is **zero if a prime square divides `n`**. Otherwise it is `−1` for an odd number of distinct prime factors and `+1` for an even number. That rule accounts for each cell; no visual judgement is required to obtain this matrix.\n\n| Printed cell | Factorization | μ |\n| --- | --- | ---: |\n| r1c1 · 3258 | 2 × 3² × 181 | 0 |\n| r1c2 · 3222 | 2 × 3² × 179 | 0 |\n| r1c3 · 3152 | 2⁴ × 197 | 0 |\n| r1c4 · 3038 | 2 × 7² × 31 | 0 |\n| r2c1 · 3278 | 2 × 11 × 149 | −1 |\n| r2c2 · **3299, printed red** | 3299 (prime) | −1 |\n| r2c3 · 3298 | 2 × 17 × 97 | −1 |\n| r2c4 · 2838 | 2 × 3 × 11 × 43 | +1 |\n| r3c1 · 3288 | 2³ × 3 × 137 | 0 |\n| r3c2 · 3294 | 2 × 3³ × 61 | 0 |\n| r3c3 · 3296 | 2⁵ × 103 | 0 |\n| r3c4 · 2472 | 2³ × 3 × 103 | 0 |\n| r4c1 · 4516 | 2² × 1129 | 0 |\n| r4c2 · 1206 | 2 × 3² × 67 | 0 |\n| r4c3 · 708 | 2² × 3 × 59 | 0 |\n| r4c4 · 1820 | 2² × 5 × 7 × 13 | 0 |\n\nTwelve entries vanish; the only nonzero row is `−1, −1, −1, +1`. All but the red entry are even, but **evenness alone does not imply μ = 0**: the three other numbers in row 2 are squarefree. The table shows which prime square makes every zero. The row alignment is an observation of this fixed transform, not a decryption or a significance estimate after possible functions and arrangements have been considered.\n\n## Reproduce it\n\nFrom a checkout or the experiment download, run:\n\n```text\npython experiments/records/lp2-15-mobius-panel/run.py --check\npython experiments/records/lp2-15-mobius-panel/check.py\npython experiments/records/lp2-15-mobius-panel/plot.py --check\n```\n\nThe [plan](experiments/records/lp2-15-mobius-panel/plan.json) fixes the source page hash and all sixteen inputs. The producer uses integer factorization; the separate checker searches independently for prime-square divisors and counts distinct prime factors. The [results](experiments/records/lp2-15-mobius-panel/results.json) preserve every coordinate, number, factorization, calculated μ value and the matrix. The diagram is generated from that ledger. The source transcript is identified by hash in the [reported-attempt register](#/wiki/reported-attempts?section=lp2-15-mobius-square-transform), rather than reproduced without its missing image.\n\n**What this establishes:** the stated arithmetic operation is reproducible on the complete printed panel. It does not show that this was exactly the unseen image in the discussion, that a particular row or spiral is a key, or how a `−1/0/+1` stream would act on the runes. A solving test would first have to fix that operation, its order, boundaries and acceptance criterion, then compare continuous output with controls.\n",
+  "article_path": "experiments/records/lp2-15-mobius-panel/article.md",
+  "script_sha256": "62c6571e6a4368717fb1d323c7bd7870ba5cf6c3a704d752a59b3b5e92cb5cd1",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}
+
+---
+
+{
   "id": "lp2-31-periodic-ioc",
   "title": "LP2-31: periodic IoC for periods 2-20",
   "status": "published",
@@ -40199,6 +40572,121 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "measurement",
     "label": "Manuscript measurement",
     "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}
+
+---
+
+{
+  "id": "lp2-54-header-feedback",
+  "title": "LP2-54: fixed ciphertext and plaintext feedback on the red header",
+  "status": "published",
+  "question": "What do the two explicit one-step feedback rules produce for the nine red runes when the first plaintext rune is A, I or O?",
+  "summary": "All 58 primer-and-rule outputs are archived. The A/I/O cribs give six deterministic header strings; under ciphertext feedback the following eight runes do not depend on the primer.",
+  "tags": [
+    "LP2-54",
+    "LP2-55",
+    "red header",
+    "header crib",
+    "ciphertext feedback",
+    "plaintext feedback",
+    "autokey",
+    "one rune eight runes",
+    "A I O"
+  ],
+  "family": {
+    "id": "lp2-54-header-feedback",
+    "title": "LP2-54 red-header feedback cribs",
+    "question": "Can a specified feedback recurrence and primer read the red one-plus-eight-rune header?",
+    "baseline": "lp2-54-header-feedback"
+  },
+  "variant": {
+    "label": "Two one-step recurrences and all 29 primers",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-54"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-54-header-feedback/plan.json"
+    ],
+    "representation": "Archived 232-rune LP2-54 stream in canonical zero-based GP order, with the first nine red runes checked against the literal source prefix; punctuation has no cipher position.",
+    "procedure": "For each primer 0–28, decrypt the entire stream by P0=C0-k modulo 29 and then either P_i=C_i-C_(i-1) or P_i=C_i-P_(i-1) modulo 29. Re-encrypt every output and independently verify every saved equation. Compare the six outputs whose first rune is A, I or O.",
+    "parameters": "29 primers × 2 recurrences = 58 complete outputs of 232 runes; one continuous stream, no word or row reset; one-rune ciphertext or plaintext feedback; no adaptive key or candidate selection.",
+    "exclusions": "Eight-rune dictionary census; other C/K/D functions; alphabet permutation; lag greater than one; interruption choices; a second encryption layer; language scoring; a claim that all autokey variants fail."
+  },
+  "outcome": "inconclusive",
+  "finding": "The exact red cipher indices are 24,19,21,23,27,2,14,10,19. For A/I/O first-rune cribs, ciphertext feedback always makes the following eight labels A TH TH R R EO AE N. Plaintext feedback gives three different eight-rune outputs. The source's two named clocks therefore cannot be substituted for each other, and the simple cases do not establish a header reading.",
+  "limitations": "The source proposes many unspecified functions and possible words; this bounded run implements only the two explicit one-step recurrences. It has no language score or calibrated null, and does not test whether another layer turns the output into text. Human review pending.",
+  "next_steps": "Pin one additional recurrence, dictionary and rune conversion before searching; count all tried candidates, test known solved text under the same pipeline and score untouched continuation against matched controls.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-54-header-feedback/run.py --check && python experiments/records/lp2-54-header-feedback/check.py && python experiments/records/lp2-54-header-feedback/plot.py --check",
+    "environment": "Python 3.12 standard library; no network or API. Run from the repository or extracted bundle root.",
+    "script": "experiments/records/lp2-54-header-feedback/run.py",
+    "script_sha256": "7cb6a8a8621b45cdcdadc889494db3db2421ca55a9621f86aac0fa35b7b4e462",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-54-header-feedback/plan.json",
+        "sha256": "892e0461eb0be7f7353a0877e4a27c16bf3f7684ff1d4e9756c87370d42614ee"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/check.py",
+        "sha256": "61dbac170d73e0de841f00f4af86afc1ff404144fce92aa10a97aaf33e058ca7"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/plot.py",
+        "sha256": "c211252dcdf3ecef6cb2f698ca660bcf44b27714d10b58b038075f2203485c83"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-54-header-feedback/results.json",
+        "sha256": "36174b5c2dfd05c3b4124cd94bf9a84536874421abbafb6ef8d49f8594efc904"
+      },
+      {
+        "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
+        "sha256": "dc177d93febe77837c8e4a7aa5b10ffe31ae9af90584620ffdec2e9a07c1efd3"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — full 58-case census, round-trip encryption and independent per-position equation check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific report and supplied discussion hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-54-header-autokey-crib"
+    },
+    {
+      "label": "LP2-54 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-54"
+    }
+  ],
+  "related": [
+    "lp2-54-55-autokey-reset",
+    "lp2-54-55-autokey-skip"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-54-header-feedback/header-feedback.svg",
+      "caption": "The six A/I/O outputs under fixed ciphertext and plaintext feedback. The vertical rule separates the one-rune and eight-rune header words."
+    }
+  ],
+  "article": "# LP2-54: what do simple autokey rules make of the red header?\n\nThe [reported header-crib proposal](#/wiki/reported-attempts?section=lp2-54-header-autokey-crib) singles out the nine red runes on [LP2-54](#/reader/lp2-54): one rune, then eight. It suggests a first word such as **A**, **I** or **O**, followed by an eight-rune word. The discussion also corrects a consequential distinction: ciphertext feedback uses the previous **ciphertext** rune, while plaintext feedback uses the previous **plaintext** rune. Those are different recurrences even when both are called “autokey.”\n\nThis record tests just those two one-step recurrences, without changing the alphabet or selecting words after seeing output. It is a bounded baseline for the larger proposal, not a replay of the proposed search over hundreds of words and unspecified functions.\n\nThe clue-to-rule chain has an important break: the **red one-plus-eight layout is visible on the page**, while A/I/O and either feedback recurrence are solver hypotheses. The manuscript does not explicitly assign those letters or tell us to use autokey. That distinction matters when deciding whether a short output would count as evidence.\n\n## Inputs and fixed choices\n\nThe archived red prefix is `ᚪ-ᛗᛝᛞᛡᚦᛉᛁᛗ.`. The hyphen separates the first rune from the following eight, and the period ends the header. In the canonical zero-based Gematria Primus order the nine cipher indices are **24, 19, 21, 23, 27, 2, 14, 10, 19**. The index labels A, I and O are **24, 10 and 3**. A single primer `k` ranges over all 29 indices; each first-rune crib picks one primer, so the six displayed rows are not an open-ended key search.\n\nFor ciphertext feedback, `P[0] = C[0] − k` and `P[i] = C[i] − C[i−1]`. For plaintext feedback, `P[0] = C[0] − k` and `P[i] = C[i] − P[i−1]`. All subtraction is modulo 29. Neither rule resets at the word separator, line break or page edge. The complete run processes **all 232 runes on LP2-54**, not just the header. Punctuation is retained in the source but has no arithmetic slot.\n\nThe [frozen plan](experiments/records/lp2-54-header-feedback/plan.json) names the source-discussion hash, transcription hash, alphabet and exact bounds. The [full result](experiments/records/lp2-54-header-feedback/results.json) contains all **58** mode-and-primer combinations, including each full 232-rune output. The producer checks that re-encryption returns every original rune; an independent checker verifies the equations at every position.\n\n## Header outputs\n\n![The nine source positions above six fixed-rule outputs, with the separator after the first rune.](experiments/records/lp2-54-header-feedback/header-feedback.svg)\n\n[Open the comparison at full size](experiments/records/lp2-54-header-feedback/header-feedback.svg).\n\n| Feedback | First-rune crib | Primer | Nine output labels, separated after rune one |\n| --- | --- | ---: | --- |\n| Ciphertext | A | 0 | A · A TH TH R R EO AE N |\n| Ciphertext | I | 14 | I · A TH TH R R EO AE N |\n| Ciphertext | O | 21 | O · A TH TH R R EO AE N |\n| Plaintext | A | 0 | A · A Y Y U U P Y OE |\n| Plaintext | I | 14 | I · N EO J T S EA J H |\n| Plaintext | O | 21 | O · T C/K E N OE NG E U |\n\nThe ciphertext-feedback second word is the **same for all 29 primers**, because every position after the first subtracts two known cipher runes. Choosing A, I or O therefore changes only the first rune in that model. Plaintext feedback propagates the primer choice through later positions. This is why confusing the two clocks can produce a different purported header reading.\n\nThese rune-label strings are transparent outputs, not established English or a scored decryption. Even an apparent word from a larger search would require the complete search budget, a fixed word list and transliteration, a known-reading control, and an untouched continuation. An extra encryption layer, alphabet permutation, different lag, interruption rule or manually chosen function could change every output. None is tested here.\n\n## Reproduce\n\nFrom a checkout or the [downloadable bundle](downloads/experiments/lp2-54-header-feedback.zip):\n\n```text\npython experiments/records/lp2-54-header-feedback/run.py --check\npython experiments/records/lp2-54-header-feedback/check.py\npython experiments/records/lp2-54-header-feedback/plot.py --check\n```\n\nNo external service or Python package is needed. The run was not altered after inspecting output. This census **does not support a header reading by these six simple fixed-rule candidates**, but it does not rule out the broad autokey family or the original proposal’s other, unspecified C/K/D functions. The related [LP2-54–55 interruption tests](#/experiments/lp2-54-55-autokey-reset) ask a separate periodicity question and should not be counted as independent confirmation of this header test.\n",
+  "article_path": "experiments/records/lp2-54-header-feedback/article.md",
+  "script_sha256": "7cb6a8a8621b45cdcdadc889494db3db2421ca55a9621f86aac0fa35b7b4e462",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
   }
 }
 
@@ -48029,6 +48517,127 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "# How much do unresolved LP2 page joins change word-length counts?\n\nThe published LP2 word-length census joins adjacent pages when their archived text meets rune to rune. That rule yields **2,896 rune tokens**. If a separator is inserted at each of the **32 rune-to-rune page edges**, the same 12,956 runes yield **2,928 tokens**. This experiment measures how much the statistics depend on that parsing choice. It does not decide which edges actually split words in the manuscript.\n\n![Side-by-side rune-token length counts for joined and separated page edges](experiments/records/page-join-sensitivity/token-lengths.svg)\n\n## Fixed comparison\n\nUse the archived text for LP2-00–55 and the site's 29-rune alphabet. Remove slash and CR/LF row wraps, retain headings and other punctuation, and count rune runs with optional internal apostrophes. There are three prespecified readings: concatenate every page; insert a space at all 32 edges whose archived end and start are both runes; and insert a space at each such edge one at a time. No rune is changed or omitted. The [boundary inventory](#/wiki/transcription-checking?section=page-joins) supplies the distinction between a rune-to-rune candidate and a verified word join.\n\n| Measure | All edges joined | All 32 candidates separated |\n| --- | ---: | ---: |\n| Rune tokens | 2,896 | 2,928 |\n| One-rune tokens | 83 | 99 |\n| Two-rune tokens | 448 | 465 |\n| Three-rune tokens | 720 | 726 |\n| Tokens at least 10 runes long | 109 | 104 |\n| Maximum token length | 14 | 14 |\n| 11–11–10 length windows | 1 | 1 |\n\nAll 32 individual splits add exactly one token under this tokenizer. Five individual edges—LP2-21/22, 24/25, 42/43, 46/47 and 52/53—each reduce the number of tokens at least 10 runes long by one. The [machine-readable result](experiments/records/page-join-sensitivity/results.json) lists every edge separately. The LP2-21 11–11–10 observation survives both endpoint policies, but this says nothing about its chance frequency or interpretation.\n\nThese endpoints are sensitivity cases, not manuscript corrections. A real reading could join some edges and split others. The source text can also omit a mark, and rune-to-rune edges can cross section boundaries. Word counts, repeated-token counts and word-reset cipher inputs depend on the boundary rule; rune frequencies and whole-stream IoC do not, because both versions contain the identical ordered runes. The reported 2,896 tokens are a transparent parsing convention, not 2,896 established words.\n\n## Reproduce and extend\n\nWith Python 3 and no packages, run `python experiments/records/page-join-sensitivity/run.py --check` and `python experiments/records/page-join-sensitivity/check.py` from the repository root or the [experiment bundle](downloads/experiments/page-join-sensitivity.zip). The first command checks the source hashes, complete report and figure. The second uses an independent character scanner to verify the 32 candidate edges, the two histograms, every one-edge token count, and the invariant 12,956-rune total. The plan fixes the inputs and three comparisons before interpreting them.\n\nThe next useful refinement is to record image-reviewed separators at particular edges and rerun the same script with those decisions frozen. Until then, a word-based cipher claim should specify its page-edge policy and show whether its result survives plausible changes at the relevant edges. See the [word-length guide](#/wiki/word-lengths) for the counting rules and complete token ledger.\n",
   "article_path": "experiments/records/page-join-sensitivity/article.md",
   "script_sha256": "42348625496957f855de1ad41411e8fea4b523a179437e8ac5c798e5b0cff771",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}
+
+---
+
+{
+  "id": "page40-for-every-arithmetic",
+  "title": "LP2-40: replay the FOR EVERY opening arithmetic",
+  "status": "published",
+  "question": "Do the fixed shift, Atbash and prime-minus-one steps in the reported FOR EVERY proposal predict its eight-position LP2-40 opening without a fitted residual?",
+  "summary": "The source's printed intermediate arithmetic checks out, but the seven non-F positions have no fixed-layer match. Their required key values are differences calculated from the observed ciphertext; the proposed Möbius state rule is not specified well enough to replay.",
+  "tags": [
+    "LP2-40",
+    "FOR EVERY",
+    "red header",
+    "crib",
+    "Atbash",
+    "shift 18",
+    "Möbius",
+    "running key",
+    "prime sum",
+    "floral marks"
+  ],
+  "family": {
+    "id": "page40-for-every-arithmetic",
+    "title": "LP2-40 FOR EVERY proposal",
+    "question": "Which parts of the proposed LP2-40 reading are fixed by the source's arithmetic, and which require a selected key?",
+    "baseline": "page40-for-every-arithmetic"
+  },
+  "variant": {
+    "label": "Fixed arithmetic and residual audit",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-40"
+    ],
+    "representation": "The first three- and five-rune groups of archived LP2-40, the 29-entry stored GP alphabet, and the eight source-reported FOR EVERY indices and transformation rows; source discussion pinned by SHA-256 in plan.json.",
+    "procedure": "Confirm the archived opening's indices; hold first F as the source's zero placeholder; shift the next seven proposed plaintext indices by 18 modulo 29, then Atbash, then add the posted prime-minus-one stream modulo 29. Count exact matches. Compute the residual from ciphertext only as a diagnostic and separately verify GP sums.",
+    "parameters": "One fixed eight-rune crib, first two printed groups, zero-based GP indices, shift +18, Atbash x→28−x modulo 29, source totient stream [0,1,2,4,6,10,12,16], no tuned variants or body text.",
+    "exclusions": "No verified meaning assigned to flower details; no fixed Möbius seed, trigram state table or key schedule; no untouched continuation, language score, full-page decoding or test of later Slidefair/Quagmire/Fibonacci follow-ups."
+  },
+  "outcome": "inconclusive",
+  "finding": "The posted fixed transformation reproduces its intermediate row exactly. Against the archived ciphertext it matches 1 of 8 positions—the held F—and 0 of 7 non-F positions. The eight residual key values are congruent with the post, but are calculated from the target. FOR sums to 20 (composite), EVERY to 251 (prime), and the full phrase to 271 (prime).",
+  "limitations": "The source presents an additional running-key theory, not a claim that the fixed layers alone decrypt the page. Its Möbius argument, starting point, eight-state operation map, sign/zero handling and key clock are not frozen in the supplied discussion; the linked spreadsheet was described as changing. The pasted discussion refers to images that are not present in its text export. The source's 13/31 floral reading is treated as a proposal, not an independently established measurement. Human review pending.",
+  "next_steps": "Preserve a dated spreadsheet snapshot or equivalent complete key rule; predeclare state mapping, clock and feedback choices, then test a continuous untouched section with fixed acceptance criteria and matched controls.",
+  "reproduction": {
+    "command": "python experiments/records/page40-for-every-arithmetic/run.py --check && python experiments/records/page40-for-every-arithmetic/check.py && python experiments/records/page40-for-every-arithmetic/plot.py --check",
+    "environment": "Python 3.12 standard library; no network or AI service. Run from repository or extracted bundle root.",
+    "script": "experiments/records/page40-for-every-arithmetic/run.py",
+    "script_sha256": "98b9828471565b1017714879af2c1bad56e75cf50e4f126c5ca24385822d4b02",
+    "inputs": [
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/plan.json",
+        "sha256": "7f8d9b804cee37a892fb626eedcd9b14d3debdf99bab2136873635f6eea443bd"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/check.py",
+        "sha256": "60e2944de1e2c6b96524d64d3f5fd8814e25d407eb298983184eaf7f4c8b0829"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/plot.py",
+        "sha256": "fab8eddbfbb18051efe7e47b854a4ece302ccd7b433cca0b06df1e3122580289"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/results.json",
+        "sha256": "25dff034b4300e7f6f3710f7eccddd7e4af46b52d4e0c762ff15288e1ff5781b"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg",
+        "sha256": "5be2fb3e2d0d00e9f6dc6e34f8bda4baac3e0d55232509867ac90444af0947f4"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — independent source-rune, modular-arithmetic and prime-sum check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific reported attempt and discussion hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=page40-for-every-mobius"
+    },
+    {
+      "label": "LP2-40 original image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-40"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
+  ],
+  "related": [
+    "lp2-39-header-cribs",
+    "emerson-running-key"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg",
+      "caption": "The fixed layers reproduce the source's intermediate row but match none of the seven non-F cipher runes. The last row is a residual fitted from the observed ciphertext."
+    }
+  ],
+  "article": "# What does the LP2-40 “FOR EVERY” calculation actually establish?\n\nA [reported attempt](#/wiki/reported-attempts?section=page40-for-every-mobius) reads the first two rune groups on [LP2-40](#/reader/lp2-40) as **FOR EVERY**. It interprets mirrored border work as a reason to use Atbash, floral details as the numbers 13 and 31, and their difference, 18, as a shift. It then adds a prime-minus-one stream, treats the initial F as a skipped zero, and suggests a Möbius-directed running key for the difference still needed. Those links from artwork to operations are the solver's proposed interpretation; this audit does not establish them as intended clues.\n\nThe source discussion itself describes the example as a working theory built partly backwards from a desired reading. Its linked spreadsheet was described as changing over time. We identify the preserved discussion by SHA-256 `2338de900f4ec231d42791c988640317241880675b35ff68af42ee162cb6573a`; the file is not redistributed here. The replay uses the numerical rows printed in that discussion, the [archived LP2-40 transcription](#/page/lp2-40), and the stored Gematria Primus table.\n\n## Eight positions, one fixed calculation\n\nThe first two archived groups contain three and five runes. Their indices are `0, 9, 19 / 26, 6, 23, 25, 8`, matching the source's quoted ciphertext row. The proposed **FOR EVERY** indices are `0, 3, 4 / 18, 1, 18, 4, 26`. On the seven positions after F, shifting each proposed plaintext index by 18 and reflecting with Atbash gives `7, 6, 21, 9, 21, 6, 13`. Adding the source's prime-minus-one stream modulo 29 gives the intermediate row `0, 8, 8 / 25, 15, 2, 18, 0`.\n\n![The fixed rule is compared with eight archived indices. Seven non-F outputs differ; the final row is a residual derived from the observed ciphertext.](experiments/records/page40-for-every-arithmetic/first-eight-trace.svg)\n\nThe fixed layers match **zero of seven non-F positions**. The initial F matches because the source holds it at zero rather than transforming it. Subtracting the intermediate row from the observed ciphertext yields residuals `0, 1, 11, 1, 20, 21, 7, 8` modulo 29. The source writes `−8` instead of `21` at the sixth position; these are the same modulo 29. These residuals are calculated *after looking at the ciphertext*. Adding them back necessarily reconstructs the target and is not yet evidence for a running-key rule.\n\nThe proposed phrase's GP sums are **FOR = 20** (composite), **EVERY = 251** (prime), and **FOR EVERY = 271** (prime). Thus the whole phrase satisfies a prime-sum filter, while both words individually do not. A prime sum is a property of this candidate, not an independent reading of the runes.\n\n## Where the replay stops\n\nThe discussion does not fix the Möbius argument or starting point, how neighboring values form the proposed trigram state, which of the eight possible key formulas belongs to each state, how signs and zero are treated, or exactly when the stream advances over F and separators. Its later notes explore modified Slidefair, Quagmire-like matrices and a Fibonacci autokey as different follow-ups; those are **not** tested here. The incomplete spreadsheet and absent fixed state table prevent an honest end-to-end replay of the proposed running key. The source itself says the state flexibility could make the arithmetic fit.\n\nTo turn the running-key idea into a test, choose a complete state table and seed **before** inspecting additional text; specify plaintext-versus-ciphertext feedback, order of operations, F handling and word boundaries; then compare a continuous output on held-out page text with matched controls. A crib fit on these eight positions alone cannot do that work.\n\n## Reproduce this audit\n\nFrom the repository root or [downloadable experiment bundle](downloads/experiments/page40-for-every-arithmetic.zip), run:\n\n```text\npython experiments/records/page40-for-every-arithmetic/run.py --check\npython experiments/records/page40-for-every-arithmetic/check.py\npython experiments/records/page40-for-every-arithmetic/plot.py --check\n```\n\nThe [plan](experiments/records/page40-for-every-arithmetic/plan.json) pins the source's printed rows, input hashes, fixed formula, success criterion and stopping rule. The [complete result](experiments/records/page40-for-every-arithmetic/results.json) lists every intermediate and fitted difference. The checker independently reads the rune text, recomputes the seven transformed indices and verifies each congruence and prime sum. This is an **arithmetic audit of one proposed opening**, not a disproof of every artwork-based or running-key method.\n",
+  "article_path": "experiments/records/page40-for-every-arithmetic/article.md",
+  "script_sha256": "98b9828471565b1017714879af2c1bad56e75cf50e4f126c5ca24385822d4b02",
   "record_type": {
     "id": "audit",
     "label": "Source or input audit",
