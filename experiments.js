@@ -34,7 +34,9 @@ async function experimentsPage(id, version, query='') {
   if (id) {
     const record = experimentRecords.find(r => r.id === id);
     if (!record) throw Error('That experiment has no published record.');
-    main.innerHTML = experimentArticle(record); return;
+    main.innerHTML = experimentArticle(record);
+    bindRouteIllustration();
+    return;
   }
   const endpoint=typeof assistantConfig.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
   renderIdeaChecker(endpoint,query);
@@ -103,10 +105,54 @@ function experimentDownloads(r){
     {path:r.article_path,label:'Full account'}];
   return `<ul class="experiment-downloads">${links.map(f=>`<li><a href="${esc(f.path)}" download><strong>${esc(f.label)}</strong><span>${esc(f.path.split('/').pop())}</span></a></li>`).join('')}</ul>`;
 }
+// The first four rune positions on LP2-31 source lines 1–4, checked against
+// lp2-row-column-routes/results.json source_positions (line, rune_position, index).
+const routeExcerpt=[[2,5,17,21],[8,13,12,1],[27,3,15,19],[20,7,15,4]];
+function routeExcerptOrder(axis,alternating){
+  const cells=[];
+  for(let outer=0;outer<4;outer++)for(let inner=0;inner<4;inner++){
+    const position=alternating&&outer%2?3-inner:inner;
+    cells.push(axis==='row'?[outer,position]:[position,outer]);
+  }
+  return cells;
+}
+function routeIllustration(){
+  const rows=routeExcerpt.map((values,row)=>`<tr><th scope="row">${row+1}</th>${values.map((value,col)=>`<td data-route-cell="${row}-${col}"><span class="route-demo-step"></span><strong class="route-demo-index">${value}</strong></td>`).join('')}</tr>`).join('');
+  return `<div class="route-demo" aria-label="Illustration of row and column routes on a cropped LP2-31 excerpt">
+    <h3>How the route changes</h3>
+    <p class="route-demo-note">Illustration only: the first four rune positions on each of LP2-31’s first four source lines. The complete test uses all 269 positions, including unequal line lengths.</p>
+    <div class="route-demo-controls"><div role="group" aria-label="Reading order"><button type="button" data-route-axis="row" aria-pressed="false">Rows first</button><button type="button" data-route-axis="column" aria-pressed="true">Columns first</button></div><div role="group" aria-label="Direction within each row or column"><button type="button" data-route-pattern="straight" aria-pressed="true">Same direction</button><button type="button" data-route-pattern="alternating" aria-pressed="false">Alternate direction</button></div></div>
+    <div class="route-demo-table"><table><caption>LP2-31 rune indices; the numbered marker shows output order</caption><thead><tr><th scope="col">Line</th><th scope="col">Rune 1</th><th scope="col">Rune 2</th><th scope="col">Rune 3</th><th scope="col">Rune 4</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="route-demo-reading" aria-live="polite"></p>
+  </div>`;
+}
+function bindRouteIllustration(){
+  const demo=main.querySelector('.route-demo');
+  if(!demo)return;
+  const update=()=>{
+    const axis=demo.querySelector('[data-route-axis][aria-pressed="true"]').dataset.routeAxis;
+    const alternating=demo.querySelector('[data-route-pattern][aria-pressed="true"]').dataset.routePattern==='alternating';
+    const order=routeExcerptOrder(axis,alternating);
+    order.forEach(([row,col],i)=>{
+      const cell=demo.querySelector(`[data-route-cell="${row}-${col}"]`);
+      cell.querySelector('.route-demo-step').textContent=`#${i+1}`;
+      cell.setAttribute('aria-label',`Source line ${row+1}, rune ${col+1}: index ${routeExcerpt[row][col]}, output step ${i+1}`);
+    });
+    demo.querySelector('.route-demo-reading').textContent=`First eight indices: ${order.slice(0,8).map(([row,col])=>routeExcerpt[row][col]).join(' → ')}.`;
+  };
+  demo.addEventListener('click',event=>{
+    const button=event.target.closest('button[data-route-axis],button[data-route-pattern]');
+    if(!button||!demo.contains(button))return;
+    const attribute=button.hasAttribute('data-route-axis')?'data-route-axis':'data-route-pattern';
+    demo.querySelectorAll(`button[${attribute}]`).forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    update();
+  });
+  update();
+}
 function experimentVisual(r,v){
   if(r.id==='lp2-row-column-routes'&&v.path.endsWith('/source-trace.svg')){
     const rows=[[1,1,1,2],[2,2,1,8],[3,3,1,27],[4,4,1,20],[5,5,1,17],[6,6,1,19]];
-    return `<figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>LP2-31 · column-first route</strong><span>Down each ordinal column, then move right</span></div><table><thead><tr><th scope="col">Output step</th><th scope="col">Source line · rune</th><th scope="col">Rune index</th></tr></thead><tbody>${rows.map(([step,line,rune,index])=>`<tr><th scope="row">${step}</th><td>${line} · ${rune}</td><td>${index}</td></tr>`).join('')}</tbody></table><p>First six of 269 source positions. The complete route uses each position once.</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure>`;
+    return `${routeIllustration()}<details class="experiment-extra route-trace-disclosure"><summary>See the exact full-page trace</summary><figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>LP2-31 · column-first route</strong><span>Down each ordinal column, then move right</span></div><table><thead><tr><th scope="col">Output step</th><th scope="col">Source line · rune</th><th scope="col">Rune index</th></tr></thead><tbody>${rows.map(([step,line,rune,index])=>`<tr><th scope="row">${step}</th><td>${line} · ${rune}</td><td>${index}</td></tr>`).join('')}</tbody></table><p>First six of 269 source positions. The complete route uses each position once.</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure></details>`;
   }
   const comparisons={
     'lp2-word-order-reversal':{
@@ -142,7 +188,7 @@ function experimentArticle(r){
   return head(r.title,`${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome])}`,'Research records')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
-    <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
+    <p class="experiment-mobile-jump"><a href="#/experiments/${esc(r.id)}?section=experiment-reproduce" data-anchor="experiment-reproduce">Jump to files and steps ↓</a></p>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
       <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/\s*Human review pending\./g,''))}</p>
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}

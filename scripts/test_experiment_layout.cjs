@@ -17,7 +17,7 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
   fs.mkdirSync(output, {recursive: true});
   const browser = await chromium.launch({channel: 'msedge', headless: true});
   try {
-    for (const width of [390, 1280]) {
+    for (const width of [320, 390, 1280]) {
       const page = await browser.newPage({viewport: {width, height: 844}});
       await page.goto(base + '#/experiments/lp2-row-column-routes');
       await page.waitForSelector('.experiment-article');
@@ -27,6 +27,22 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
       assert.equal(await page.locator('.route-trace img').count(), 0);
       const displayedRows = await page.locator('.route-trace tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent.trim())));
       assert.deepEqual(displayedRows, expectedRows);
+      assert.equal(await page.locator('.route-demo-table tbody tr').count(), 4);
+      assert.match(await page.locator('.route-demo-reading').innerText(), /2 → 8 → 27 → 20/);
+      await page.getByRole('button', {name: 'Rows first'}).click();
+      await page.getByRole('button', {name: 'Alternate direction'}).click();
+      assert.match(await page.locator('.route-demo-reading').innerText(), /2 → 5 → 17 → 21 → 1 → 12 → 13 → 8/);
+      assert.equal(await page.locator('[data-route-cell="1-3"] .route-demo-step').innerText(), '#5');
+      await page.getByRole('button', {name: 'Columns first'}).click();
+      await page.getByRole('button', {name: 'Same direction'}).click();
+      if (width === 390) {
+        await page.getByRole('link', {name: /Jump to files and steps/}).click();
+        assert.match(page.url(), /section=experiment-reproduce/);
+        assert(await page.locator('#experiment-reproduce').isVisible());
+        await page.goto(base + '#/experiments/lp2-row-column-routes');
+        await page.waitForSelector('.route-demo');
+      }
+      await page.evaluate(() => { document.activeElement.blur(); scrollTo(0, 0); });
       await page.screenshot({path: path.join(output, `row-column-${width}.png`), fullPage: true});
       await page.evaluate(() => scrollTo(0, 500));
       await page.waitForTimeout(250);
@@ -55,6 +71,6 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
       await page.screenshot({path: path.join(output, `${id}-390.png`), fullPage: true});
       await page.close();
     }
-    console.log('PASS: experiment layout at 390 and 1280px; three native traces match saved results.');
+    console.log('PASS: experiment layout at 320, 390 and 1280px; route controls and native traces match saved results.');
   } finally { await browser.close(); }
 })().catch(error => {console.error(error); process.exit(1)});

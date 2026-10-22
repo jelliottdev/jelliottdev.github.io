@@ -592,6 +592,7 @@ section[id],.topic-entry,#corrections,#experiment-family{scroll-margin-top:20px}
 /* Experiment records show the conclusion and test boundary first. */
 .experiment-article{max-width:810px}
 .experiment-article>.lede{font:17px/1.58 Arial,Helvetica,sans-serif;color:var(--ink);margin:0 0 18px;max-width:68ch}
+.experiment-mobile-jump{display:none}
 .experiment-article .experiment-section-nav{margin:12px 0 22px;gap:8px 24px}
 .experiment-article section>h2{margin:26px 0 10px}
 .experiment-finding{font-size:18px;line-height:1.55;margin:12px 0}
@@ -614,6 +615,8 @@ section[id],.topic-entry,#corrections,#experiment-family{scroll-margin-top:20px}
 @media(max-width:760px){
  #sidebar{top:108px;height:calc(100dvh - 108px)}
  .experiment-article>.lede{font-size:16px;line-height:1.55}
+ .experiment-mobile-jump{display:block;margin:-4px 0 18px;font-size:13px}
+ .experiment-mobile-jump a{display:inline-flex;align-items:center;min-height:32px}
  .experiment-finding{font-size:17px}
  .experiment-figure{margin-inline:0;padding:8px}
  .experiment-article section>h2{margin-top:22px}
@@ -632,3 +635,36 @@ section[id],.topic-entry,#corrections,#experiment-family{scroll-margin-top:20px}
 .route-trace>p{font-size:13px;margin:12px 0 4px;color:#45525c}
 .route-trace figcaption a{white-space:normal}
 @media(max-width:430px){.route-trace{padding:10px}.route-trace th,.route-trace td{padding:7px 6px}.route-trace thead th{font-size:11px}.route-trace-head strong{font-size:19px}}
+
+/* Small source-backed examples stay legible without a tall poster image. */
+.switching-choices-example{max-width:36rem}
+.switching-choices-example figcaption{margin:0 0 10px}
+.switching-choices-example .table-wrap{margin:0}
+.switching-choices-example table{width:100%;font-variant-numeric:tabular-nums}
+.switching-choices-example th,.switching-choices-example td{padding:7px 10px}
+.switching-choices-example caption{text-align:left;font-size:13px;color:var(--muted);padding:4px 0 8px}
+.switching-choices-comparison{margin-top:12px;border-top:1px solid var(--line)}
+.switching-choices-comparison>summary{display:flex;align-items:center;min-height:44px;font-weight:600}
+
+/* The route example uses manuscript indices and lets the reading order change in place. */
+.route-demo{border:1px solid var(--line);background:#f3f5f6;padding:16px 18px;margin:18px 0 4px;max-width:590px}
+.route-demo h3{font:22px/1.3 Georgia,serif;margin:0 0 7px}
+.route-demo-note{font-size:14px;line-height:1.55;color:#45525c;margin:0 0 14px}
+.route-demo-controls{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 14px}
+.route-demo-controls [role=group]{display:flex;flex-wrap:wrap;gap:4px}
+.route-demo-controls button{border:1px solid #a6b4be;background:#fff;color:#243b4a;border-radius:3px;min-height:40px;padding:6px 10px;font:600 13px/1.3 Arial,Helvetica,sans-serif;cursor:pointer}
+.route-demo-controls button[aria-pressed=true]{border-color:#315c79;background:#315c79;color:#fff}
+.route-demo-controls button:focus-visible{outline:3px solid #7ba9cc;outline-offset:2px}
+.route-demo-table{overflow-x:auto}
+.route-demo-table table{width:100%;min-width:265px;border-collapse:collapse;table-layout:fixed;background:#fff;font-variant-numeric:tabular-nums}
+.route-demo-table caption{text-align:left;font-size:12px;line-height:1.4;color:#45525c;margin-bottom:7px}
+.route-demo-table th,.route-demo-table td{border:1px solid #cdd5da;text-align:center;padding:4px 2px}
+.route-demo-table thead th{background:#e7edf1;color:#45525c;font:600 11px/1.35 Arial,Helvetica,sans-serif}
+.route-demo-table tbody th{background:#e7edf1;font:600 12px/1.3 Arial,Helvetica,sans-serif}
+.route-demo-table td{height:52px}
+.route-demo-step{display:block;color:#315c79;font:700 11px/1.2 Arial,Helvetica,sans-serif}
+.route-demo-index{display:block;color:var(--ink);font:600 16px/1.35 Georgia,serif}
+.route-demo-reading{font-size:13px;line-height:1.5;margin:12px 0 0;color:#45525c;overflow-wrap:anywhere}
+.route-trace-disclosure{max-width:590px;margin:0 0 18px}
+.route-trace-disclosure>.route-trace{margin:4px 0 0}
+@media(max-width:430px){.route-demo{padding:11px}.route-demo h3{font-size:19px}.route-demo-controls{gap:6px}.route-demo-controls [role=group]{width:100%;display:grid;grid-template-columns:1fr 1fr}.route-demo-controls button{padding:6px 4px}.route-demo-table td{height:45px}.route-demo-index{font-size:15px}}

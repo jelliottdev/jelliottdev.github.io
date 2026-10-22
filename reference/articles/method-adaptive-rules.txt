@@ -21,8 +21,54 @@ How local choices accumulate
 
 If every one of n positions independently allows addition or subtraction of a fixed shift, there are 2^(n) choice sequences. At 20 positions that is 1,048,576 configurations. Some may coincide—for example, adding and subtracting zero give the same result—so report distinct outputs as well as configurations.
 
-[Image: Eight add-or-subtract combinations for ciphertext 10, 10, 10 and shifts 1, 2, 3, with all output indices. A zero middle shift reduces distinct outputs to four.]
-Each row uses the same invented input and shifts. Only the signs change. No row is selected as a reading. Download figure.
+
+Invented input 10, 10, 10, with shifts 1, 2, 3 modulo 29. Each sign sequence produces the three output indices shown. No row is selected as a reading.
+
+All eight add-or-subtract configurations produce eight distinct outputs.
+	Signs	Output indices
+
+	− − −	9, 8, 7
+
+	− − +	9, 8, 13
+
+	− + −	9, 12, 7
+
+	− + +	9, 12, 13
+
+	+ − −	11, 8, 7
+
+	+ − +	11, 8, 13
+
+	+ + −	11, 12, 7
+
+	+ + +	11, 12, 13
+
+
+Set the middle shift to zero: eight configurations, four distinct outputs
+With shifts 1, 0, 3, adding or subtracting at the middle position has the same effect. The duplicate rows remain visible so the difference between choice count and output count is explicit.
+
+All eight configurations with a zero middle shift.
+	Signs	Output indices
+
+	− − −	9, 10, 7
+
+	− − +	9, 10, 13
+
+	− + −	9, 10, 7
+
+	− + +	9, 10, 13
+
+	+ − −	11, 10, 7
+
+	+ − +	11, 10, 13
+
+	+ + −	11, 10, 7
+
+	+ + +	11, 10, 13
+
+
+Download archived SVG.
+
 
 Reproduce both enumerations with python scripts/switching_choices_example.py. The standard-library script writes the figure and exact rows, checking configuration counts and distinct outputs. Download script · Download rows. This is a mathematical illustration, not an LP decoding test.
 
@@ -45,7 +91,7 @@ The LP2-54–55 reset and skip experiments enumerate subsets of six declared can
 Feedback and state · Interruptions · Automatic search · All method families
 
 Sources, related references, and files
-- Eight add-or-subtract combinations for ciphertext 10, 10, 10 and shifts 1, 2, 3, with all output indices. A zero middle shift reduces distinct outputs to four.; Download figure
+- Download archived SVG
   https://jelliottdev.github.io/exports/figures/switching-choices-example.svg
 - Download script
   https://jelliottdev.github.io/scripts/switching_choices_example.py
