@@ -10,7 +10,47 @@ Possible subfamilies include bounded arithmetic trees, digit reversal, base conv
 
 What a test must specify
 
+A search grammar is the complete set of rules for building expressions. “Use primes” is not enough: it leaves open which primes, how often they can be used, and what may be done to them. Specify both the available ingredients and the permitted expression structure.
+
 List source numbers, allowable constants, operators, bases, maximum expression depth and target set. Define division, concatenation, leading zeros and equivalent expressions. Include every searched variant in the accounting.
+
+Forty-eight expressions, eight answers
+
+Take the invented input set 2, 3, 5. Use each number exactly once, permit only addition and multiplication, allow every input order, and try both parenthesizations: (a op b) op c and a op (b op c). No other constants, digit reversals or operations are allowed.
+
+There are six input orders, four choices for the two operators, and two tree shapes: 6 × 4 × 2 = 48 expression settings. They produce only eight distinct values.
+
+	Output value	Expression settings	One example
+	10	12	(2 + 3) + 5
+	11	4	(2 × 3) + 5
+	13	4	(2 × 5) + 3
+	16	4	2 × (3 + 5)
+	17	4	2 + (3 × 5)
+	21	4	3 × (2 + 5)
+	25	4	(2 + 3) × 5
+	30	12	(2 × 3) × 5
+
+These are different written expressions, not 48 independent pieces of evidence. Commutativity and associativity explain many duplicates. If the target were 21, this grammar would reach it in four settings; if it were 22, it would not reach it at all. Adding subtraction or another input would create a new search, whose coverage would need to be reported separately.
+
+Run python scripts/expression_example.py to reproduce the enumeration. Download the script · Download all 48 expressions grouped by output. This is a mathematical illustration, not an experiment on LP.
+
+A count is not yet a chance probability
+
+The table does not imply a one-in-eight probability of any particular result. That would require a model selecting the eight values uniformly. Selecting expression settings uniformly would instead give 10 and 30 probabilities of 12/48 each and the other values probabilities of 4/48 each. Neither model automatically describes how a person notices a number, chooses inputs or develops a rule.
+
+A target chosen before the search differs from a target noticed among its outputs. Include all eligible targets in the success criterion: full numbers, prefixes, reversed forms, prime indices and values obtained after another conversion are separate opportunities unless equivalence was declared in advance. Related targets can also be dependent; do not multiply their apparent probabilities as if they were independent confirmations.
+
+Why unrestricted constants make a match inevitable
+
+For any source number x and desired target T, allowing an arbitrary added constant supplies the expression x + (T − x) = T. The equality is correct, but the fitted constant encodes the answer. Giving the constant an interpretation after finding it does not make it an independently predicted quantity.
+
+A useful next test fixes the constant and complete rule, then applies them to new inputs with a stated expected relationship. If the rule changes again for each target, record those changes as additional choices. See adaptive rules and ordered pipelines.
+
+Keep each intermediate value inspectable
+
+Record an expression tree or step-by-step trace with exact integer or rational values. State whether a “prime index” means the index of a prime or the prime at an index, and whether counting begins at zero or one. A bit complement needs an explicit width; reversing decimal digits is another operation entirely. The prime-index guide and representation guide explain these distinctions.
+
+If arithmetic output becomes a key, preserve that decoding as a separate stage with its alphabet, alignment, reset policy and complete output. A numerical identity can be reproducible while its proposed connection to the ciphertext remains untested.
 
 How to evaluate a result
 
@@ -24,6 +64,18 @@ LP2-00–55: emirp row sums with the same page shuffles
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- Download the script
+  https://jelliottdev.github.io/scripts/expression_example.py
+- Download all 48 expressions grouped by output
+  https://jelliottdev.github.io/exports/expression-example.json
+- adaptive rules
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- ordered pipelines
+  https://jelliottdev.github.io/reference/articles/method-composition.html
+- prime-index guide
+  https://jelliottdev.github.io/reference/articles/prime-indices.html
+- representation guide
+  https://jelliottdev.github.io/reference/articles/method-representations.html
 - LP2-00–55: emirp row sums with the same page shuffles
   https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
 - All solving-method families

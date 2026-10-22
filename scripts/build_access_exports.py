@@ -215,6 +215,9 @@ for path in ['exports/reading-fixed-points.json','exports/reading-fixed-point-ex
 for path in ['scripts/switching_choices_example.py','exports/switching-choices-example.json','exports/figures/switching-choices-example.svg']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Analysis figure' if path.endswith('.svg') else 'Mathematical illustration')
  files[-1].update(guide='method-adaptive-rules',aliases=['switching rules','sign choices','distinct outputs'])
+for path in ['scripts/expression_example.py','exports/expression-example.json']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Mathematical illustration')
+ files[-1].update(guide='method-expressions',aliases=['arithmetic expressions','number coincidence'])
 for path in ['scripts/compression_example.py','exports/compression-example.json']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Mathematical illustration')
  files[-1].update(guide='method-compression',aliases=['compression','bit packing','zlib'])
