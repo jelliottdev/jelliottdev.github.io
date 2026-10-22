@@ -10,6 +10,8 @@ Read LP2-00–55 in numerical order, including headings. Retain only the 29 alph
 
 At lag one, compare each event with the next; at lag three, compare it with the event three places later. For example, in an event sequence A, B, C, D, the first lag-three comparison is A to D. This lag measures **event positions**, not rune positions or page distance.
 
+The [short rune-lag profile](#/experiments/doublet-lag-profile) instead compares positions in the original rune streams before extracting doublets. Its lag-three denominator is 12,791 rune pairs, not the 83 event pairs counted here.
+
 For indices a and b, the directed difference is `(b-a) mod 29`. The circular distance is the smaller of that difference and its reverse. Thus +4 and −4 share circular distance 4 but occupy different directed bins, 4 and 25. The proposed +4 claim is directional.
 
 ## Complete comparison

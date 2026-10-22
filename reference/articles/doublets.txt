@@ -56,6 +56,8 @@ Shuffling within each page separately gives an expected total of 439.166, compar
 
 An expectation is not a p-value. This audit has not computed a tail probability, searched candidate ciphers or adjusted for selecting an interesting pattern. Randomly permuting runes also does not model English grammar, word boundaries or every possible cipher. See null models and selection before using the size of this difference as evidence for a particular explanation.
 
+The short-lag profile asks whether the deficit extends beyond adjacent runes. Under fixed-count shuffles within pages, lag one has 86 matches against 439.17 expected, while lags two through five have 435, 434, 451 and 463 matches, each within its seeded shuffle reference band. That distinction is useful for evaluating a proposed mechanism: a model that suppresses all nearby repeats makes a different prediction from one that acts only on immediate neighbors.
+
 Why ciphertext autokey comes up
 
 For the specific additive rule Cᵢ = Pᵢ + Cᵢ₋₁ (mod 29), subtract the previous ciphertext value: Pᵢ = Cᵢ − Cᵢ₋₁. At every ordinary feedback step, Cᵢ = Cᵢ₋₁ exactly when Pᵢ = 0. Thus the number of internal ciphertext doublets equals the number of zero-valued recovered symbols at those steps.
@@ -159,6 +161,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/alphabet
 - null models and selection
   https://jelliottdev.github.io/reference/articles/null-models.html
+- short-lag profile
+  https://jelliottdev.github.io/#/experiments/doublet-lag-profile
 - F-reset
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - F-skip

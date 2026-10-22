@@ -10,6 +10,8 @@ For every plaintext rune, independently choose a key uniformly from 0 through 28
 
 The prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript's observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.
 
+The [short-lag profile](#/experiments/doublet-lag-profile) uses that different, fixed-count page-shuffle reference. It shows the deficit at adjacent positions but not at rune distances two through five. Its bands must not be read as the exact uniform-key probability computed here.
+
 ## Why overlapping pairs still give a binomial law here
 
 Adjacent comparisons share positions: the first pair of ABC uses A and B, and the next uses B and C. Shared positions do not automatically make these match indicators dependent under this particular uniform model.

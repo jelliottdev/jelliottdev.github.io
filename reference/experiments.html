@@ -1795,16 +1795,398 @@
       &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/doublets&quot;
     }
   ],
-  &quot;related&quot;: [],
+  &quot;related&quot;: [
+    &quot;doublet-lag-profile&quot;
+  ],
   &quot;visuals&quot;: [
     {
       &quot;path&quot;: &quot;experiments/records/doublet-event-lags/distribution.svg&quot;,
       &quot;caption&quot;: &quot;Lag-three forward differences: all 29 bins, split into within-page and cross-page comparisons. Of the ten +4 matches, three stay within one page and seven cross pages. Brown marks show fixed-event shuffle expectations, not significance thresholds.&quot;
     }
   ],
-  &quot;article&quot;: &quot;# Distances between doublet events\n\nThe proposal asks whether repeated runes, extracted in manuscript order, form a patterned sequence of their own. This recount finds **10 forward +4 differences at lag three, out of 83 comparisons (12.05%)**. It does not reproduce the reported 12.9%, and it does not verify the proposed p-value.\n\n“Not supported” refers to reproducing the exact numerical claims with these inputs and rules. It does not mean that every doublet-based cipher has been tested or rejected.\n\n## What is an event?\n\nRead LP2-00–55 in numerical order, including headings. Retain only the 29 alphabet runes within each page. Count overlapping adjacent equal pairs: AAA contributes two A events. Never create an event across a page boundary. Then join the extracted events in page order. The result is 86 events.\n\nAt lag one, compare each event with the next; at lag three, compare it with the event three places later. For example, in an event sequence A, B, C, D, the first lag-three comparison is A to D. This lag measures **event positions**, not rune positions or page distance.\n\nFor indices a and b, the directed difference is `(b-a) mod 29`. The circular distance is the smaller of that difference and its reverse. Thus +4 and −4 share circular distance 4 but occupy different directed bins, 4 and 25. The proposed +4 claim is directional.\n\n## Complete comparison\n\n| Event lag | Comparisons | Cross-page comparisons | Mean circular distance | Forward +4 | Circular distances 5, 12 or 14 |\n| --- | --- | --- | --- | --- | --- |\n| 1 | 85 | 41 | 734/85 ≈ 8.6353 | 2 | 31 |\n| 2 | 84 | 63 | 52/7 ≈ 7.4286 | 1 | 22 |\n| 3 | 83 | 75 | 626/83 ≈ 7.5422 | 10 | 14 |\n\nThe earlier proposed lag-one mean was 8.81. These inputs instead give 8.6353. The exact reason for the difference cannot be determined without the original event list and counting implementation. The stored output includes all events and every comparison so a future comparison can locate the first divergence.\n\nPage boundaries matter here: 75 of 83 lag-three comparisons cross them. Resetting the comparisons at page boundaries would answer a different question; it is not an interchangeable implementation detail.\n\n## What should the +4 baseline be?\n\nUnder a uniform shuffle of this fixed event multiset, the exact probability of a forward +4 difference between distinct positions is **8/215 ≈ 3.7209%**. It is not exactly 1/29, because these event symbols have unequal frequencies. For counts c(a), sum `c(a) × c((a+4) mod 29)` over all a and divide by `86 × 85`.\n\nThis probability is an expectation for a single ordered comparison. Multiplying it by 83 gives the expected lag-three count, approximately 3.0884. It is **not** the probability of observing ten or more matches: comparisons share events, and a binomial independence assumption is not justified by this calculation.\n\nNo permutation tail probability is calculated here. Selecting +4, lag three, or the group of distances 5, 12 and 14 after inspecting data introduces selection choices. A later significance test must state which choices it addresses. See [null models](#/wiki/null-models) and [search space](#/wiki/search-space).\n\n## Reproduce and inspect\n\nExtract the experiment ZIP with its folders intact. No packages, network access or AI service are required.\n\n```text\npython experiments/records/doublet-event-lags/run.py --check\npython experiments/records/doublet-event-lags/check.py\n```\n\nThe producer uses the included doublet extractor and prints fresh JSON without `--check`. The independent checker uses overlapping regular-expression matches on the archived rune text, then checks every event, lag pair, histogram, distance and boundary flag. It also computes shuffle expectations from symbol frequencies instead of enumerating pairs of event positions.\n\nThese checks establish agreement about the archived transcription. They do not independently settle ambiguous handwriting. The [doublet guide](#/wiki/doublets) explains the source rules and supplies the original pair coordinates.\n\n## Read and reproduce the figure\n\nThe figure shows every possible forward difference, including bins with zero occurrences. Dark bars count within-page comparisons; pale bars count cross-page comparisons. The ten +4 matches split into **three within-page and seven cross-page** comparisons. These counts have different opportunities: only eight lag-three comparisons stay within a page, while 75 cross pages. Comparing raw bar lengths alone would overlook that imbalance.\n\nBrown marks show the expected total count per bin after shuffling the fixed multiset of 86 events. They are not confidence limits or a cutoff for significance. The chart does not assign separate null expectations to the two boundary groups.\n\nThe SVG is included in the download. To regenerate a figure, install Matplotlib in your Python environment, then run:\n\n```text\npython experiments/records/doublet-event-lags/plot.py --output my-distribution.svg\n```\n\nThe script refuses to overwrite an existing file. The numerical producer and independent checker still require only the standard library; plotting is optional.\n&quot;,
+  &quot;article&quot;: &quot;# Distances between doublet events\n\nThe proposal asks whether repeated runes, extracted in manuscript order, form a patterned sequence of their own. This recount finds **10 forward +4 differences at lag three, out of 83 comparisons (12.05%)**. It does not reproduce the reported 12.9%, and it does not verify the proposed p-value.\n\n“Not supported” refers to reproducing the exact numerical claims with these inputs and rules. It does not mean that every doublet-based cipher has been tested or rejected.\n\n## What is an event?\n\nRead LP2-00–55 in numerical order, including headings. Retain only the 29 alphabet runes within each page. Count overlapping adjacent equal pairs: AAA contributes two A events. Never create an event across a page boundary. Then join the extracted events in page order. The result is 86 events.\n\nAt lag one, compare each event with the next; at lag three, compare it with the event three places later. For example, in an event sequence A, B, C, D, the first lag-three comparison is A to D. This lag measures **event positions**, not rune positions or page distance.\n\nThe [short rune-lag profile](#/experiments/doublet-lag-profile) instead compares positions in the original rune streams before extracting doublets. Its lag-three denominator is 12,791 rune pairs, not the 83 event pairs counted here.\n\nFor indices a and b, the directed difference is `(b-a) mod 29`. The circular distance is the smaller of that difference and its reverse. Thus +4 and −4 share circular distance 4 but occupy different directed bins, 4 and 25. The proposed +4 claim is directional.\n\n## Complete comparison\n\n| Event lag | Comparisons | Cross-page comparisons | Mean circular distance | Forward +4 | Circular distances 5, 12 or 14 |\n| --- | --- | --- | --- | --- | --- |\n| 1 | 85 | 41 | 734/85 ≈ 8.6353 | 2 | 31 |\n| 2 | 84 | 63 | 52/7 ≈ 7.4286 | 1 | 22 |\n| 3 | 83 | 75 | 626/83 ≈ 7.5422 | 10 | 14 |\n\nThe earlier proposed lag-one mean was 8.81. These inputs instead give 8.6353. The exact reason for the difference cannot be determined without the original event list and counting implementation. The stored output includes all events and every comparison so a future comparison can locate the first divergence.\n\nPage boundaries matter here: 75 of 83 lag-three comparisons cross them. Resetting the comparisons at page boundaries would answer a different question; it is not an interchangeable implementation detail.\n\n## What should the +4 baseline be?\n\nUnder a uniform shuffle of this fixed event multiset, the exact probability of a forward +4 difference between distinct positions is **8/215 ≈ 3.7209%**. It is not exactly 1/29, because these event symbols have unequal frequencies. For counts c(a), sum `c(a) × c((a+4) mod 29)` over all a and divide by `86 × 85`.\n\nThis probability is an expectation for a single ordered comparison. Multiplying it by 83 gives the expected lag-three count, approximately 3.0884. It is **not** the probability of observing ten or more matches: comparisons share events, and a binomial independence assumption is not justified by this calculation.\n\nNo permutation tail probability is calculated here. Selecting +4, lag three, or the group of distances 5, 12 and 14 after inspecting data introduces selection choices. A later significance test must state which choices it addresses. See [null models](#/wiki/null-models) and [search space](#/wiki/search-space).\n\n## Reproduce and inspect\n\nExtract the experiment ZIP with its folders intact. No packages, network access or AI service are required.\n\n```text\npython experiments/records/doublet-event-lags/run.py --check\npython experiments/records/doublet-event-lags/check.py\n```\n\nThe producer uses the included doublet extractor and prints fresh JSON without `--check`. The independent checker uses overlapping regular-expression matches on the archived rune text, then checks every event, lag pair, histogram, distance and boundary flag. It also computes shuffle expectations from symbol frequencies instead of enumerating pairs of event positions.\n\nThese checks establish agreement about the archived transcription. They do not independently settle ambiguous handwriting. The [doublet guide](#/wiki/doublets) explains the source rules and supplies the original pair coordinates.\n\n## Read and reproduce the figure\n\nThe figure shows every possible forward difference, including bins with zero occurrences. Dark bars count within-page comparisons; pale bars count cross-page comparisons. The ten +4 matches split into **three within-page and seven cross-page** comparisons. These counts have different opportunities: only eight lag-three comparisons stay within a page, while 75 cross pages. Comparing raw bar lengths alone would overlook that imbalance.\n\nBrown marks show the expected total count per bin after shuffling the fixed multiset of 86 events. They are not confidence limits or a cutoff for significance. The chart does not assign separate null expectations to the two boundary groups.\n\nThe SVG is included in the download. To regenerate a figure, install Matplotlib in your Python environment, then run:\n\n```text\npython experiments/records/doublet-event-lags/plot.py --output my-distribution.svg\n```\n\nThe script refuses to overwrite an existing file. The numerical producer and independent checker still require only the standard library; plotting is optional.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/doublet-event-lags/article.md&quot;,
   &quot;script_sha256&quot;: &quot;d0b36611edc20cb81d7b7f3ad19c3dfe8239b430f85e03270bc444029eb43bbc&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;manuscript&quot;,
+    &quot;label&quot;: &quot;Manuscript analysis&quot;,
+    &quot;description&quot;: &quot;Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.&quot;
+  }
+}</pre></article><article id="doublet-lag-profile"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;doublet-lag-profile&quot;,
+  &quot;title&quot;: &quot;LP2-00–55: equal rune pairs at lags one through five&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the low count of adjacent equal runes extend to distances two through five under fixed-count page shuffles?&quot;,
+  &quot;summary&quot;: &quot;Lag one has 86 matches versus 439.17 page-shuffle expected; lags two through five have 435, 434, 451 and 463, each inside the corresponding central 95% shuffle range.&quot;,
+  &quot;tags&quot;: [
+    &quot;doublets&quot;,
+    &quot;adjacent matches&quot;,
+    &quot;rune lag&quot;,
+    &quot;lag matches&quot;,
+    &quot;page shuffle&quot;,
+    &quot;repeat suppression&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;representation&quot;: &quot;Archived LP2-00–55 29-rune streams, including headings; remove other characters within pages.&quot;,
+    &quot;procedure&quot;: &quot;Count equal forward pairs at lags one through five, then independently shuffle each page&#x27;s fixed rune multiset 2,000 times.&quot;,
+    &quot;parameters&quot;: &quot;No page crossing or circular wrap; 2,000 seeded shuffles; exact expected counts and nearest-rank central intervals.&quot;,
+    &quot;exclusions&quot;: &quot;Alternative transcriptions, word-internal only pairs, other lags, cipher-key simulations, plaintext inference, corrected multiple-testing claims.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;The observed adjacency deficit is not a comparable deficit at rune lags two through five under this specified page-shuffle reference.&quot;,
+  &quot;limitations&quot;: &quot;Exploratory: lag-one suppression was already known. Fixed-count page shuffles are not a model of English or a specific cipher. The source is an archived transcription; human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Check boundary-sensitive versions and competing cipher models as separately frozen variants; audit uncertain source glyphs before making stronger claims.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;rune-lag-equality&quot;,
+    &quot;title&quot;: &quot;Equality at short rune lags&quot;,
+    &quot;question&quot;: &quot;Which nearby rune distances show a repeat deficit under declared boundaries and reference models?&quot;,
+    &quot;baseline&quot;: &quot;doublet-lag-profile&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Within-page runes at lags one through five&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent regex extraction and exact expectation check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-21&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/doublet-lag-profile/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; deterministic random seed and 2,000 shuffles.&quot;,
+    &quot;script&quot;: &quot;experiments/records/doublet-lag-profile/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;f6f0ae5f77a311c446fde23afe9bd01ae6ed0f0c81cd3da035140e4a86c9157a&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/run.py&quot;,
+        &quot;sha256&quot;: &quot;f6f0ae5f77a311c446fde23afe9bd01ae6ed0f0c81cd3da035140e4a86c9157a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/check.py&quot;,
+        &quot;sha256&quot;: &quot;e965b20be1d9a5c19fb7dc0500bb88cba0bc3918e00b6567bb73dfeef99c5a15&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/plan.txt&quot;,
+        &quot;sha256&quot;: &quot;a99a567da897f2bd46fa425eb7c426c9abdcb897e67ac491757c11e7568a538c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/results.json&quot;,
+        &quot;sha256&quot;: &quot;012caaedd7894fcf43d0145b40fa81a00fb4ac3c779458910906c11eaf5f5338&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/profile.svg&quot;,
+        &quot;sha256&quot;: &quot;8a668795eebb3c89b7950afad97c9ce8458062b4383c011daf6409422c373de9&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Doublet count, conventions and source ledger&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/doublets&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;doublet-event-lags&quot;,
+    &quot;uniform-additive-doublets&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/doublet-lag-profile/profile.svg&quot;,
+      &quot;caption&quot;: &quot;Observed equal-rune pairs (dots) compared with exact page-shuffle expectations (thin marks) and central ranges across 2,000 shuffles (bands).&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Equal-rune pairs at distances one through five\n\nThe 86 neighboring equal-rune pairs are unusual under a count-preserving page shuffle. **The same deficit does not continue through lags 2–5** under this particular reference model. This narrows the observation: it concerns adjacency, rather than a blanket avoidance of repeating a rune within five positions.\n\n## Exactly what was compared\n\nFor each archived LP2-00–55 page, retain the 29 alphabet runes in order, including headings, and remove other characters. At lag *d*, compare rune *i* with rune *i + d* for every position that fits. Pairs may cross a word or line break after filtering; none cross a page boundary. LP2-50 contributes no rune pairs. A lag is measured in **rune positions**, not in the sequence of extracted doublet events used in the [event-lag experiment](#/experiments/doublet-event-lags).\n\n| Rune lag | Equal pairs | Pairs compared | Page-shuffle expected | Central 95% of 2,000 shuffles |\n| ---: | ---: | ---: | ---: | ---: |\n| 1 | 86 | 12,901 | 439.17 | 398–480 |\n| 2 | 435 | 12,846 | 437.29 | 396–479 |\n| 3 | 434 | 12,791 | 435.42 | 396–476 |\n| 4 | 451 | 12,736 | 433.55 | 392–472 |\n| 5 | 463 | 12,681 | 431.68 | 391–469 |\n\n![Five horizontal rows show observed equal-rune pair counts against the page-shuffle central ranges. Lag one is far left of its range; lags two through five lie within theirs.](experiments/records/doublet-lag-profile/profile.svg)\n\nThe dark dot is the observed count, the pale band is the middle 95% of seeded shuffles, and the thin mark is the exact expected count. The band is a visual reference for one shuffle model, not a general confidence interval for possible ciphers. Lag five sits near its upper edge; its 463 matches were met or exceeded in 109 of the 2,000 shuffles. This is not a basis for selecting lag five as a discovery after seeing the chart.\n\n## Why the shuffle expectation changes with lag\n\nFor a page with *n* runes and symbol counts *c*, any pair of distinct positions matches with probability `Σ c(c−1) / [n(n−1)]` after uniformly shuffling that page. A lag *d* supplies `max(n−d, 0)` pairs. Multiply and sum over pages to get the exact expected count shown above. The denominator falls as the lag grows; the expectation therefore changes even when the per-pair shuffled probability is the same.\n\nEach of the 2,000 trials independently permutes the filtered runes **within each page**, preserving the page lengths and rune frequencies. It does not simulate English, a running-sum cipher, or a key process. None of those trials had as few as 86 lag-one matches, but `0/2,000` only bounds what this Monte Carlo run observed. The [uniform additive-key record](#/experiments/uniform-additive-doublets) supplies an exact probability for a different, more restrictive model; its tail should not be transferred to this shuffle model.\n\nThe observed contrast is compatible with several mechanisms: a rule that avoids immediate repeats, a plaintext/cipher relation that makes adjacent repeats rare, or preprocessing that alters adjacent symbols. It does not identify which one applies. Also, lags 2–5 were selected after the adjacency anomaly was known. The shaded bands are descriptive and unadjusted for multiple looks.\n\n## Reproduce\n\nExtract the experiment download without flattening folders. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/doublet-lag-profile/run.py --check\npython experiments/records/doublet-lag-profile/check.py\n```\n\nThe producer records SHA-256 hashes of all 56 page texts and the index. Run `--write` to regenerate the stored JSON and SVG. The second script independently extracts Runic Unicode characters with a regular expression, recounts each lag and derives the exact shuffle expectations. The JSON includes exact fractional expectations, shuffle intervals, counts on either side of each observed result, seed and quantile convention. This is a transcription-based analysis; it does not resolve disputed glyph readings in the source photographs. For the complete 86-event ledger and the algebraic EA proposal, see [the doublet guide](#/wiki/doublets).\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/doublet-lag-profile/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;f6f0ae5f77a311c446fde23afe9bd01ae6ed0f0c81cd3da035140e4a86c9157a&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;manuscript&quot;,
     &quot;label&quot;: &quot;Manuscript analysis&quot;,
@@ -15344,7 +15726,8 @@
   ],
   &quot;related&quot;: [
     &quot;doublet-event-lags&quot;,
-    &quot;parallel-languages&quot;
+    &quot;parallel-languages&quot;,
+    &quot;doublet-lag-profile&quot;
   ],
   &quot;visuals&quot;: [
     {
@@ -15352,7 +15735,7 @@
       &quot;caption&quot;: &quot;Binomial probabilities in ten-count bins under independent uniform additive keys. The observed count is 86; the expected count is about 445. Display ends at 649, with the remaining probability retained in JSON. This is a specific model comparison, not a plaintext-language probability.&quot;
     }
   ],
-  &quot;article&quot;: &quot;## What was tested\n\nThe archived LP2-00–55 text has **86 adjacent equal-rune pairs across 12,901 within-page edges**. Independent uniform additive keys modulo 29 would produce about **444.86 matches on average**. The exact probability of 86 or fewer under that model is approximately **1.0708 × 10⁻⁹⁸**.\n\nThis is a strong disagreement with one precisely defined model. It does not rule out encryption, random choices in other constructions, or any particular plaintext language. The low count and an earlier statement of this model were known before the replication. The probability is conditional on the model and is not adjusted for the historical search across manuscript features.\n\n## The model in ordinary terms\n\nFor every plaintext rune, independently choose a key uniformly from 0 through 28 and add it modulo 29. The plaintext may be any fixed sequence. Each resulting ciphertext rune is uniform, and different positions are independent. Keep the observed page lengths fixed.\n\nThe prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript&#x27;s observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.\n\n## Why overlapping pairs still give a binomial law here\n\nAdjacent comparisons share positions: the first pair of ABC uses A and B, and the next uses B and C. Shared positions do not automatically make these match indicators dependent under this particular uniform model.\n\nWithin one page, replace the ciphertext sequence by its first rune and the successive differences modulo 29. This transformation is reversible: start at the first rune and add each difference to recover the page. A reversible transformation of the uniformly distributed full sequence remains uniform over all such coordinate tuples. The differences are therefore independent uniform residues. A pair matches exactly when its difference is zero, which has probability 1/29.\n\nApply this separately to each page. There are 12,956 runes on 55 nonempty pages, hence **12,956 − 55 = 12,901 differences**. LP2-50 has no alphabet runes and adds no edge. Their zero count has the binomial distribution with 12,901 trials and success probability 1/29.\n\nUniformity matters. For independent binary symbols with probabilities 3/4 and 1/4, one pair matches with probability 5/8. Both overlapping pairs match with probability 7/16, which is different from (5/8)² = 25/64. The corresponding independence argument fails for that nonuniform model.\n\n## Reading the figure and the probability\n\nThe bars show probabilities for ten-count intervals under the uniform model. The observed count is far to the left of the main mass; its tiny probability cannot be resolved at this linear plotting scale. Values 650 and above are retained in one overflow bin in the JSON but omitted from the displayed range. The exact lower tail includes every count from zero through 86, not just the probability of exactly 86.\n\nThe numerator is the integer sum `Σ comb(E,j) × 28^(E−j)` for j from 0 through D, and the denominator is `29^E`, with E = 12,901 and D = 86. The script uses exact integers for that sum and 80-digit decimal arithmetic to render the ratio. It records hashes of both exact integers and supplies their reconstruction formulas. No normal approximation is used.\n\nThe separate checker reconstructs the same integer masses using a recurrence. It verifies the entire set of plotting bins against exact integer totals, independently recounts all 56 source files with regular expressions, and exhausts twelve small uniform-alphabet/page-length cases. Those controls include overlapping edges, multiple pages, empty pages and single-rune pages. They check the calculation and boundary handling; they do not authenticate the underlying handwriting.\n\n## What remains possible\n\nThe model assigns this event a very small but nonzero probability. That is statistical evidence against the model, not a mathematical impossibility certificate. It neither selects an alternative model nor explains the suppression.\n\nIn particular, the [multiplicative running-sum model](#/wiki/doublets?section=ea-constraint) has a different equation. There, with nonzero keys modulo 29, a repeat can be determined by a particular plaintext rune. Uniform selection of its nonzero keys does not imply a repeat probability of 1/29. This experiment must not be used to reject that construction.\n\n## Reproduce the comparison\n\nDownload this experiment&#x27;s bundle and preserve its folders. Python 3 standard library only; no network, API, or model is required.\n\n```text\npython experiments/records/uniform-additive-doublets/run.py --check\npython experiments/records/uniform-additive-doublets/check.py\npython experiments/records/uniform-additive-doublets/plot.py --check\n```\n\nThe first verifies the input hashes, per-page counts, exact tail and saved bins. The second uses the independent recurrence and controls. The third checks the chart against the saved probabilities. To regenerate, run the producer with `--write` and the plotter without `--check`.\n\nThe [committed plan](experiments/plans/uniform-additive-doublets.md) was fixed before these new calculations, after the prior count and claim were known. This is computationally checked replication; human review is pending. See [doublet definitions](#/wiki/doublets), [null-model selection](#/wiki/null-models), and [what a scoped exclusion means](#/wiki/first-experiment?section=exclusions).\n&quot;,
+  &quot;article&quot;: &quot;## What was tested\n\nThe archived LP2-00–55 text has **86 adjacent equal-rune pairs across 12,901 within-page edges**. Independent uniform additive keys modulo 29 would produce about **444.86 matches on average**. The exact probability of 86 or fewer under that model is approximately **1.0708 × 10⁻⁹⁸**.\n\nThis is a strong disagreement with one precisely defined model. It does not rule out encryption, random choices in other constructions, or any particular plaintext language. The low count and an earlier statement of this model were known before the replication. The probability is conditional on the model and is not adjusted for the historical search across manuscript features.\n\n## The model in ordinary terms\n\nFor every plaintext rune, independently choose a key uniformly from 0 through 28 and add it modulo 29. The plaintext may be any fixed sequence. Each resulting ciphertext rune is uniform, and different positions are independent. Keep the observed page lengths fixed.\n\nThe prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript&#x27;s observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.\n\nThe [short-lag profile](#/experiments/doublet-lag-profile) uses that different, fixed-count page-shuffle reference. It shows the deficit at adjacent positions but not at rune distances two through five. Its bands must not be read as the exact uniform-key probability computed here.\n\n## Why overlapping pairs still give a binomial law here\n\nAdjacent comparisons share positions: the first pair of ABC uses A and B, and the next uses B and C. Shared positions do not automatically make these match indicators dependent under this particular uniform model.\n\nWithin one page, replace the ciphertext sequence by its first rune and the successive differences modulo 29. This transformation is reversible: start at the first rune and add each difference to recover the page. A reversible transformation of the uniformly distributed full sequence remains uniform over all such coordinate tuples. The differences are therefore independent uniform residues. A pair matches exactly when its difference is zero, which has probability 1/29.\n\nApply this separately to each page. There are 12,956 runes on 55 nonempty pages, hence **12,956 − 55 = 12,901 differences**. LP2-50 has no alphabet runes and adds no edge. Their zero count has the binomial distribution with 12,901 trials and success probability 1/29.\n\nUniformity matters. For independent binary symbols with probabilities 3/4 and 1/4, one pair matches with probability 5/8. Both overlapping pairs match with probability 7/16, which is different from (5/8)² = 25/64. The corresponding independence argument fails for that nonuniform model.\n\n## Reading the figure and the probability\n\nThe bars show probabilities for ten-count intervals under the uniform model. The observed count is far to the left of the main mass; its tiny probability cannot be resolved at this linear plotting scale. Values 650 and above are retained in one overflow bin in the JSON but omitted from the displayed range. The exact lower tail includes every count from zero through 86, not just the probability of exactly 86.\n\nThe numerator is the integer sum `Σ comb(E,j) × 28^(E−j)` for j from 0 through D, and the denominator is `29^E`, with E = 12,901 and D = 86. The script uses exact integers for that sum and 80-digit decimal arithmetic to render the ratio. It records hashes of both exact integers and supplies their reconstruction formulas. No normal approximation is used.\n\nThe separate checker reconstructs the same integer masses using a recurrence. It verifies the entire set of plotting bins against exact integer totals, independently recounts all 56 source files with regular expressions, and exhausts twelve small uniform-alphabet/page-length cases. Those controls include overlapping edges, multiple pages, empty pages and single-rune pages. They check the calculation and boundary handling; they do not authenticate the underlying handwriting.\n\n## What remains possible\n\nThe model assigns this event a very small but nonzero probability. That is statistical evidence against the model, not a mathematical impossibility certificate. It neither selects an alternative model nor explains the suppression.\n\nIn particular, the [multiplicative running-sum model](#/wiki/doublets?section=ea-constraint) has a different equation. There, with nonzero keys modulo 29, a repeat can be determined by a particular plaintext rune. Uniform selection of its nonzero keys does not imply a repeat probability of 1/29. This experiment must not be used to reject that construction.\n\n## Reproduce the comparison\n\nDownload this experiment&#x27;s bundle and preserve its folders. Python 3 standard library only; no network, API, or model is required.\n\n```text\npython experiments/records/uniform-additive-doublets/run.py --check\npython experiments/records/uniform-additive-doublets/check.py\npython experiments/records/uniform-additive-doublets/plot.py --check\n```\n\nThe first verifies the input hashes, per-page counts, exact tail and saved bins. The second uses the independent recurrence and controls. The third checks the chart against the saved probabilities. To regenerate, run the producer with `--write` and the plotter without `--check`.\n\nThe [committed plan](experiments/plans/uniform-additive-doublets.md) was fixed before these new calculations, after the prior count and claim were known. This is computationally checked replication; human review is pending. See [doublet definitions](#/wiki/doublets), [null-model selection](#/wiki/null-models), and [what a scoped exclusion means](#/wiki/first-experiment?section=exclusions).\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/uniform-additive-doublets/article.md&quot;,
   &quot;script_sha256&quot;: &quot;ce541bd6740626fb01f9360e0b6a78ba6fa2c1d47f89fe2a46f18e9d04625064&quot;,
   &quot;record_type&quot;: {
