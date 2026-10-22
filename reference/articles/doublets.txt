@@ -103,6 +103,8 @@ The EA frequency control now uses actual decoded GP indices from solved pages ra
 
 The nonzero-difference check tests the stronger assumption that every nonzero key is independent and uniform. Its residue histogram restates the earlier difference IoC at fixed zero count; its adjacent-difference count adds an order-sensitive comparison. Neither recovers a key or establishes which plaintext rune occurs at a doublet.
 
+The doublet-context control examines the ciphertext symbols at all 86 events and the differences immediately beside them. The repeated ciphertext rune can be any GP symbol under the EA-stalling equation; it is not a plaintext EA label. The observed symbol collisions and before/after difference imbalance sit within a control that fixes the zero mask and each page's nonzero difference inventory. This is a check of local ordering, not another independent test of the marginal difference histogram.
+
 Reproduce the counts
 
 Download the reference-data bundle or use the repository. Python 3.12 and its standard library are sufficient. Run from the extracted root:
@@ -185,6 +187,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
 - nonzero-difference check
   https://jelliottdev.github.io/#/experiments/ea-difference-independence
+- doublet-context control
+  https://jelliottdev.github.io/#/experiments/doublet-context
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Counting and chart script
