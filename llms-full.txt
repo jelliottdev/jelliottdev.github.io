@@ -25311,6 +25311,36 @@ A point measured at pixel coordinates (x, y) depends on the image size and crop.
 
 For a rotation about a chosen center, record the angle and direction; for reflection, record the axis. A transformation of positions becomes a substitution only after labels and a selection rule are attached. The compass guide explains why a half-turn of 29 equally spaced labels falls between labels and does not automatically implement Atbash.
 
+Convert a preview measurement back to the source
+
+Suppose a crop begins at source position (50, 100) and measures 400 × 600 source pixels. It is displayed at 200 × 300 pixels. A point 25 pixels from the displayed crop's left edge and 50 from its top edge corresponds to:
+
+x_source = 50 + 25 × (400 / 200) = 100
+y_source = 100 + 50 × (600 / 300) = 200
+
+The display coordinates are relative to the image crop, not the browser window. Borders, page margins and scrolling do not belong in the source-coordinate calculation. This example assumes the crop is displayed without further trimming, rotation or stretching. Keep crop origin, source dimensions and displayed image dimensions with the measurement.
+
+Different horizontal and vertical scale factors distort geometry. A source displacement of (3, 4) has Euclidean length 5. Doubling both coordinates gives (6, 8), length 10, preserving its direction. Doubling only the horizontal coordinate gives (6, 4), length √52 ≈ 7.21, and changes the direction. A circle under that nonuniform scaling becomes an ellipse.
+
+Points used to fit a transformation do not independently validate it
+
+A translation has two freely chosen offsets. One matched point supplies both: to send (10, 20) to (13, 25), choose (dx, dy) = (3, 5). The exact agreement at that point follows from how the offsets were selected.
+
+Freeze that translation and test another landmark. It predicts that (30, 40) maps to (33, 45). A separately measured target at (34, 45) has a residual distance of one pixel from that prediction. Whether this is acceptable depends on a declared tolerance and measurement uncertainty, not on whether the selected rune looks useful.
+
+Keep fitting landmarks separate from evaluation landmarks, and distinguish an independently identified correspondence from a point chosen because it falls near the transformed position. Allowing rotation, scale, stretching or local warping adds flexibility. Report every allowed transformation and the fitting procedure before interpreting a close overlay as evidence.
+
+A larger radius changes which symbols qualify
+
+For an invented predicted point at (0, 0) and candidate rune centers at (2, 0) and (4, 0), define a hit as distance ≤ r:
+
+	Radius r	Qualifying centers	Required outcome
+	1	None	Record a miss.
+	2	Only (2, 0)	One geometrically eligible symbol.
+	4	Both centers	Apply the declared multiple-hit rule.
+
+Choosing the nearest center is a different rule from accepting every center inside a radius. Without a maximum distance, nearest-center selection will return something whenever candidates exist, even if the construction misses them all by a large margin. Preserve distances, misses and ties alongside the output symbols.
+
 Tolerance is a parameter, not a repair tool
 
 If a construction selects every center within radius r of a predicted point, choose r before examining the resulting text. Define what happens with zero hits or multiple hits. Increasing r until a desired rune is selected changes the experiment. Small landmark perturbations can reveal whether a result is stable or relies on a particular pixel placement; report the perturbation range and all resulting changes.
