@@ -171,13 +171,18 @@ Outside this test: No manuscript cipher identification, general recovery guarant
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-Related records (1)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can a correct key fail under the wrong alignment rule?
 Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?
 Outside this test: No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.
+
+LP2: pair the 2,883-rune sections by subtraction
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: Do five fixed pairwise-subtraction variants of the two 2,883-rune streams produce unusually high whole-stream IoC after selection among the variants?
+Outside this test: N-gram scoring; periodic IoC; additions, multiplication or XOR; arbitrary offsets; alternative page ranges; page-heading removal; other interruption conventions; full historical discovery-search correction; plaintext claims.
 
 
 
@@ -967,6 +972,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
+- LP2: pair the 2,883-rune sections by subtraction
+  https://jelliottdev.github.io/#/experiments/spiral-branches-paired-subtraction
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - Switching rules and adaptive decoding
