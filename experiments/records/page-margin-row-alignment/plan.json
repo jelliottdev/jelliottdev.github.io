@@ -1,0 +1,66 @@
+{
+  "schema": "liberpedia-page-margin-row-alignment-plan-v1",
+  "question": "Does fixed-crop text-row alignment distinguish consecutive LP2 pages from other same-layout pairs?",
+  "source_report": {
+    "attachment_id": "c1c1edd9-ecef-4085-b2d5-dd5c41b93856",
+    "sha256": "1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042"
+  },
+  "scope": "LP2-40\u201348, one continuous text-heavy run with the same border layout; all 8 adjacent pairs and all 28 nonadjacent within-run controls. Scope chosen as a coherent visual baseline, not specified by the original proposal.",
+  "inputs": [
+    {
+      "path": "images/lp2-40.jpg",
+      "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69"
+    },
+    {
+      "path": "images/lp2-41.jpg",
+      "sha256": "134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2"
+    },
+    {
+      "path": "images/lp2-42.jpg",
+      "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6"
+    },
+    {
+      "path": "images/lp2-43.jpg",
+      "sha256": "dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415"
+    },
+    {
+      "path": "images/lp2-44.jpg",
+      "sha256": "463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208"
+    },
+    {
+      "path": "images/lp2-45.jpg",
+      "sha256": "898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9"
+    },
+    {
+      "path": "images/lp2-46.jpg",
+      "sha256": "05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301"
+    },
+    {
+      "path": "images/lp2-47.jpg",
+      "sha256": "08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8"
+    },
+    {
+      "path": "images/lp2-48.jpg",
+      "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea"
+    }
+  ],
+  "crop": [
+    650,
+    620,
+    1750,
+    2900
+  ],
+  "crop_reason": "A single central text column excludes plant margins, red side marker, top whitespace and lower page blank on all nine 2400\u00d73600 images. No per-page crop fitting.",
+  "gray_threshold": 90,
+  "x_step": 3,
+  "minimum_sampled_ink_pixels": 12,
+  "registration": "Keep source image coordinates. Compare identical y rows, no fitted translation, scaling, rotation or elastic warp.",
+  "score": "For each y row, mark occupied when more than 12 sampled pixels in the crop are grayscale below 90. Compare two masks by intersection divided by union (Jaccard).",
+  "decision": "Report every pair and group descriptives. A distinctive adjacency pattern would require adjacent scores reliably above nonadjacent controls. The test cannot decide glyph or word continuation, or validate a decryption.",
+  "limits": [
+    "The report did not fix target pages, cropping, transformation or success threshold.",
+    "The fixed row mask ignores rune identity and x-position.",
+    "Red enlarged initials and atypical spacing change row bands.",
+    "Pairs share pages and are not independent samples; no p-value is assigned."
+  ]
+}

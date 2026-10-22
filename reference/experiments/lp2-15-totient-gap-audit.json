@@ -1,0 +1,97 @@
+{
+  "id": "lp2-15-totient-gap-audit",
+  "title": "LP2-15: prime-only totient and Fibonacci-gap proposal",
+  "status": "published",
+  "question": "Does the reported totient-before-prime-gap sequence reconstruct all sixteen LP2-15 cells and its own Fibonacci-gap array under one stated rule?",
+  "summary": "The source's totient array matches all sixteen cells after changing only prime 3299 to 3298. Its prime candidates require two addition choices despite a subtraction label; fourteen of fifteen specified predecessor gaps match, while one reports 317 instead of 377.",
+  "tags": [
+    "LP2-15",
+    "Euler totient",
+    "Fibonacci",
+    "prime ordinal",
+    "number panel",
+    "reported attempt",
+    "source audit"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-15"
+    ],
+    "representation": "The printed 4×4 decimal panel and all three 4×4 source arrays preserved in plan.json, including one question mark.",
+    "procedure": "Apply phi to printed prime cells, enumerate 3301 ± each result, independently compute prime ordinals and compare the posted predecessor-Fibonacci gaps without repairing them.",
+    "parameters": "All sixteen image-order cells; base 3301; both signs logged; zero-based prime indices; source-stated cells compared individually. No rune operation.",
+    "exclusions": "No interpretation of the missing screenshot, inferred decryption method, rune shift, selective omission of the duplicate 3 or correction of 317 in the source array."
+  },
+  "outcome": "inconclusive",
+  "finding": "The first array matches 16/16; the second matches 16/16 with two plus signs. Primality alone leaves two ambiguous sign cells. All selected candidates have Fibonacci-valued prime indices, but index 1 is duplicated and index 0 absent. The final array matches 14/15 specified predecessor gaps, with row 4 column 1 inconsistent and row 2 column 2 uncertain.",
+  "limitations": "This is a source-bound reconstruction of derived arithmetic, not an independent construction of the printed panel or a cipher test. The source supplies no complete rune transformation, and its sign-selection and repeated-one assignment are not fixed as forward rules.",
+  "next_steps": "A future decoding proposal must freeze its sign rule, the treatment of duplicate prime 3, the 317/377 disagreement, a panel traversal, rune operation and untouched validation target before inspecting plaintext.",
+  "review": {
+    "reviewer": "Codex; independent coprimality, sieve and Fibonacci checker; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-15-totient-gap-audit/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py and plot.py --check",
+    "script": "experiments/records/lp2-15-totient-gap-audit/run.py",
+    "script_sha256": "4369043dd2ee08e320f78559ea661e321c9f77bbfde3d151e603c8f8d04418ad",
+    "inputs": [
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "experiments/records/lp2-15-totient-gap-audit/plan.json",
+        "sha256": "764c9e43a7cd8771e5a964ba04d682e349ccd67663bf94a12f2e2344d67cf0e5"
+      },
+      {
+        "path": "experiments/records/lp2-15-totient-gap-audit/check.py",
+        "sha256": "2bde6b4d6083568ff320976bdb937d2954ecab30cfa48270a1dd400e35290946"
+      },
+      {
+        "path": "experiments/records/lp2-15-totient-gap-audit/plot.py",
+        "sha256": "96e9970548229930e07189ed2705ed40e5dd20e067e0bc7437ac275e8f691006"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-15-totient-gap-audit/results.json",
+        "sha256": "1714f799c9596b3189f1c6d8528e8a540daa8cd2492f70fd09adf4cbf7e6aaa1"
+      },
+      {
+        "path": "experiments/records/lp2-15-totient-gap-audit/panel-audit.svg",
+        "sha256": "b3bbeaea9cfb094a6ebf437f2f0755e8d4549763230b8dab20ed252fad3c230b"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-15-totient-gap-audit/panel-audit.svg",
+      "caption": "Cellwise comparison of the printed panel, reported prime candidates, zero-based ordinals and reported predecessor gaps."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Original LP2-15 page and panel",
+      "url": "https://jelliottdev.github.io/#/page/lp2-15"
+    },
+    {
+      "label": "Source report and attached transcript hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-totient-before-prime-gap"
+    }
+  ],
+  "related": [
+    "lp2-15-mobius-panel",
+    "lp2-panel-prime-openings"
+  ],
+  "article": "# A totient variant of the LP2-15 number panel\n\nThe printed [LP2-15](#/page/lp2-15) panel has sixteen integers. One is prime: the red **3299**. A supplied January 2026 discussion proposes taking Euler’s totient of the prime entries, subtracting the results from 3301, and reading Fibonacci gaps in the resulting prime positions. Its three 4×4 arrays make most of that proposal checkable. They do **not** specify a rule for turning the numbers into plaintext.\n\nThis audit keeps the reported arrays intact. The exact posted gap at row 4, column 1 is **317**, and the row 2, column 2 gap is marked uncertain; neither is silently corrected. The [source intake entry](#/wiki/reported-attempts?section=lp2-15-totient-before-prime-gap) identifies the supplied transcript and its SHA-256 hash.\n\n![Every printed panel cell beside the source's prime candidate, ordinal and proposed Fibonacci gap](experiments/records/lp2-15-totient-gap-audit/panel-audit.svg)\n\n## What the arithmetic actually does\n\nEuler’s totient φ(n) counts positive integers at most n that are coprime to n. For a prime p, φ(p) = p − 1. Only **3299** is prime among the sixteen printed cells, so this first step changes only that cell, to **3298**. The source’s post-totient array matches the computed array in all 16 positions. It now has two adjacent 3298s.\n\nFor each post-totient value x, we calculated **both** 3301 − x and 3301 + x. The source’s second array matches one of these two values at every cell, and all sixteen selected values are prime. Fourteen selected values use subtraction; the entries **4516** and **1206** in the bottom row use addition, producing **7817** and **4507**. Thus the posted label “3301 − X” does not describe the whole array. A single literal subtraction rule would miss those two cells.\n\nPrimality alone leaves a further choice at both 3298 cells: **3** and **6599** are prime. Their zero-based prime ordinals are **1** and **852** respectively. Requiring a *Fibonacci-valued ordinal* selects 3, since 1 is a Fibonacci value and 852 is not. This filter leaves one sign per cell, but the source does not state it as a forward sign-selection rule. The two 3298 cells both become prime **3**, so ordinal **1** is duplicated and ordinal **0** (prime 2) is absent.\n\n| Stage | Match with posted array | Qualification |\n| --- | ---: | --- |\n| Prime-only totient of printed panel | 16/16 | Changes only red 3299. |\n| Candidate from 3301 ± transformed cell | 16/16 | Two cells require `+`; primality alone leaves two cells with either sign. |\n| Selected candidate has Fibonacci zero-based prime index | 16/16 | This condition resolves the sign ambiguity after the candidate set is inspected. |\n| Posted Fibonacci predecessor gap | 14/15 specified | Row 4, column 1 reports 317, while index 987 follows 610 and gives 377; one other cell is marked `?`. |\n\nThe gap calculation is easiest to see in the first row. Prime **43** has zero-based ordinal **13**; the preceding distinct Fibonacci value is **8**, so its gap is **5**. Prime **79** has ordinal **21**, following 13, so its gap is **8**. At bottom left, prime **7817** has ordinal **987**, following **610**, so the corresponding gap is **377**, not the posted 317. The source’s comment `0 /* ? */` leaves the other exceptional cell unresolved. Because the canonical Fibonacci sequence starts **0, 1, 1**, the predecessor of an occurrence of ordinal 1 also depends on which repeated 1 that occurrence is assigned to. The post does not give that assignment.\n\n## What this settles—and what it does not\n\nThe arithmetic reproduces a coherent **derived pattern** from the printed square if the two plus signs and Fibonacci-index sign filter are allowed. It does not construct the original square from independent inputs: it begins with the printed numbers, changes the red one, and then selects signs that produce the reported primes. The established [Fibonacci-indexed prime construction](#/wiki/lp2-15-panel) starts independently with a declared index list, uses absolute distance from 3301, and matches all sixteen printed cells. These are different claims.\n\nNo rule is supplied for which of the source’s arrays should become a cipher key, how it advances through runes, what to do with the duplicate 3 or uncertain gap, or how to score a result. The discussion itself suggests only that a related manipulation *might* apply to the text. This record therefore audits the numbers; it is **inconclusive as a decoding method**.\n\n## Reproduce the audit\n\nFrom the repository root or this experiment’s extracted ZIP, use Python 3 with no external packages:\n\n```text\npython experiments/records/lp2-15-totient-gap-audit/run.py --check\npython experiments/records/lp2-15-totient-gap-audit/check.py\npython experiments/records/lp2-15-totient-gap-audit/plot.py --check\n```\n\nThe [plan](experiments/records/lp2-15-totient-gap-audit/plan.json) fixes the source’s three arrays and source hash. The [results](experiments/records/lp2-15-totient-gap-audit/results.json) retain both signs, primality and prime ordinal for every cell. The independent checker uses a sieve and a coprimality count rather than the producer’s factoring and totient implementation. Neither script chooses a plaintext interpretation.\n",
+  "article_path": "experiments/records/lp2-15-totient-gap-audit/article.md",
+  "script_sha256": "4369043dd2ee08e320f78559ea661e321c9f77bbfde3d151e603c8f8d04418ad",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

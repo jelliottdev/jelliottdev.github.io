@@ -273,6 +273,9 @@ for path in ['exports/cicada-2012-blake.json','scripts/replay_2012_blake.py'] + 
 for path in ['exports/cicada-2012-countdown.json','scripts/replay_2012_countdown.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/countdown-2012').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical opening provenance')
  files[-1].update(guide='2012-countdown',aliases=['2012 countdown','2012 coordinates','845145127'])
+for path in ['exports/cicada-2012-whitespace.json','scripts/replay_2012_whitespace.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/whitespace-2012').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
+ files[-1].update(guide='2012-whitespace',aliases=['2012 whitespace','space tab binary','signed image numbers','845145127'])
 for artifact in sorted((root/'exports/corpus-symbols').iterdir()):
  register(artifact.relative_to(root).as_posix(),'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['corpus alphabet','U+16C2','corpus symbol inventory'])

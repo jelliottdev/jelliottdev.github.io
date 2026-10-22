@@ -1,0 +1,31 @@
+{
+  "question": "Does the reported prime-only totient and 3301 gap construction reproduce its own arrays and the LP2-15 panel without unreported choices?",
+  "source_report": {
+    "attachment_id": "1f8c3c55-0e08-443b-939e-1db48e03a7e7",
+    "sha256": "66bd173de561829a90cb0b04cce4546c602f2adaa1a710ad4d3c0f263f42bfdf",
+    "date": "2026-01-18",
+    "author": "prime_1033",
+    "note": "The pasted exchange includes three explicit 4-by-4 arrays. It does not give a unique operation on the rune text. The second array is labeled '3301 - X' even though two cells use addition."
+  },
+  "inputs": [
+    {
+      "path": "data/pages/lp2-15.json",
+      "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+    }
+  ],
+  "source_arrays": {
+    "post_totient": [[3258,3222,3152,3038],[3278,3298,3298,2838],[3288,3294,3296,2472],[4516,1206,708,1820]],
+    "prime_candidates": [[43,79,149,263],[23,3,3,463],[13,7,5,829],[7817,4507,2593,1481]],
+    "fibonacci_gaps": [[5,8,13,21],[3,null,0,34],[2,1,1,55],[317,233,144,89]],
+    "question_mark_cell": [2,2],
+    "question_mark_as_pasted": "0 /* ? */"
+  },
+  "fixed_reconstruction": [
+    "Evaluate Euler phi(n) for every printed prime; leave all composite cells alone.",
+    "For each transformed cell x, enumerate both 3301-x and 3301+x. Compare the reported prime candidate to both; do not silently choose a sign.",
+    "Compute zero-based ordinal of each reported prime candidate and ask whether it is a Fibonacci value.",
+    "For ordinals greater than 1, compare the reported gap to the difference from the preceding distinct Fibonacci value. At ordinal 1, mark the predecessor ambiguous because the canonical sequence has two initial 1s."
+  ],
+  "comparison": "Compare all 16 source-array cells at each stage, retain the question mark and every discrepancy, and count sign choices that survive primality alone versus primality plus Fibonacci-index membership.",
+  "exclusions": "No inferred missing rune key, arbitrary source gap correction, cryptanalytic test, probability of authorial intent, or claims about unprovided images."
+}

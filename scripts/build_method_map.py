@@ -16,13 +16,16 @@ guides={r['id'] for r in read('articles/index.json')}
 assert len({f['id'] for f in families})==len(families)
 parts=['''<p>Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.</p>
 <p><strong>A family page is not a completed experiment.</strong> Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.</p>''']
+parts.append('<p>A record can be relevant to more than one family. Its full description appears at its first listing below; other families retain a short cross-reference to the same record.</p>')
 parts.append('<p><a href="#/wiki/solving-methods?section=record-types">What the record types mean</a>: distinguish bounded solving tests from measurements, controls, audits and reproductions.</p>')
 linked=set()
+first_listing={}
 for group in dict.fromkeys(f['group'] for f in families):
     anchor=group.lower().replace(',','').replace(' ','-')
     parts.append(f'<h2 id="{anchor}">{html.escape(group)}</h2><dl>')
     for family in (f for f in families if f['group']==group):
         assert family['guide'] in guides
+        assert len(family['related']) == len(set(family['related'])), f'Duplicate record in {family["id"]}'
         parts.append(f'<dt id="family-{family["id"]}"><a href="#/wiki/{family["guide"]}">{html.escape(family["title"])}</a></dt><dd><p>{html.escape(family["description"])}</p>')
         records=[experiments[eid] for eid in family['related']]
         assert all(r['status']=='published' for r in records)
@@ -31,7 +34,12 @@ for group in dict.fromkeys(f['group'] for f in families):
             parts.append(f'<details><summary>Related records ({len(records)})</summary><p>Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.</p><ul>')
             for r in records:
                 kind=record_kinds[record_kind_by_id[r['id']]]
-                parts.append(f'<li><p><a href="#/experiments/{r["id"]}">{html.escape(r["title"])}</a></p><p><strong>Record type:</strong> {html.escape(kind["label"])}. {html.escape(kind["description"])}</p><p><strong>Question tested:</strong> {html.escape(r["question"])}</p><p><strong>Outside this test:</strong> {html.escape(r["scope"]["exclusions"])}</p></li>')
+                first=first_listing.get(r['id'])
+                if first:
+                    parts.append(f'<li><a href="#/experiments/{r["id"]}">{html.escape(r["title"])}</a> <span class="small muted">· {html.escape(kind["label"])}; full description under <a href="#/wiki/solving-methods?section=family-{first["id"]}">{html.escape(first["title"])}</a></span></li>')
+                else:
+                    first_listing[r['id']]=family
+                    parts.append(f'<li><p><a href="#/experiments/{r["id"]}">{html.escape(r["title"])}</a></p><p><strong>Record type:</strong> {html.escape(kind["label"])}. {html.escape(kind["description"])}</p><p><strong>Question tested:</strong> {html.escape(r["question"])}</p><p><strong>Outside this test:</strong> {html.escape(r["scope"]["exclusions"])}</p></li>')
             parts.append('</ul></details>')
         else:
             parts.append('<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>')

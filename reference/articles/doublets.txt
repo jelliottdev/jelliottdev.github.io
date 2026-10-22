@@ -103,6 +103,12 @@ The downloadable doublet report checks all 23,548 combinations of previous state
 
 The EA frequency control now uses actual decoded GP indices from solved pages rather than guessing rune boundaries from ordinary English letters. Solved LP1 has 20 EA runes at 2,782 within-page transition positions (0.719%); the unsolved doublet rate is 86/12,901 (0.667%). These close rates meet a necessary frequency plausibility check, but do not validate this equation or a key schedule. That record also shows how erasing word boundaries creates eleven false EA labels and examines the difference IoC under a separate conditional model.
 
+The solved-text rate rests on only 20 events. A conventional 95% Wilson interval would be 0.466–1.108% if the positions were independent samples with one shared EA probability; that assumption does not hold for ordinary prose or establish that LP1 and unsolved LP2 share a distribution. The full comparison also gives a page-resampling range. The observed closeness is a useful constraint on the proposed equation, not a likelihood that it is true.
+
+There is a sharper identification problem. At each nonzero ciphertext difference, any of the 28 non-EA plaintext symbols can fit: it determines a unique nonzero key by dividing the difference by Pᵢ − 28 modulo 29. Unless a key schedule or other cross-position rule is supplied, this equation does not decipher those symbols. An independently uniform key makes nonzero differences uniform even when the hidden plaintext is English. The conditional difference test examines that stronger key assumption, and its histogram and the earlier difference IoC reuse the same counts.
+
+Twenty-two of the 86 observed doublets cross a stored hyphen. The doublet⇔EA identity applies there only if the recurrence continues across the boundary; a word reset would remove those edges from the identity. No verified plaintext EA positions or word contexts have been recovered from ciphertext. To test a proposed clock and key without fitting it after the fact, fix the starting state, advancement, resets, and success rule independently, then ask it to predict untouched text. The existing rate and difference comparisons were chosen after observing the doublet deficit.
+
 The nonzero-difference check tests the stronger assumption that every nonzero key is independent and uniform. Its residue histogram restates the earlier difference IoC at fixed zero count; its adjacent-difference count adds an order-sensitive comparison. Neither recovers a key or establishes which plaintext rune occurs at a doublet.
 
 The doublet-context control examines the ciphertext symbols at all 86 events and the differences immediately beside them. The repeated ciphertext rune can be any GP symbol under the EA-stalling equation; it is not a plaintext EA label. The observed symbol collisions and before/after difference imbalance sit within a control that fixes the zero mask and each page's nonzero difference inventory. This is a check of local ordering, not another independent test of the marginal difference histogram.
@@ -187,9 +193,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
 - uniform-additive-key experiment
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
-- EA frequency control
+- EA frequency control; full comparison
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
-- nonzero-difference check
+- conditional difference test; nonzero-difference check
   https://jelliottdev.github.io/#/experiments/ea-difference-independence
 - doublet-context control
   https://jelliottdev.github.io/#/experiments/doublet-context

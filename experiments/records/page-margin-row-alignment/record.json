@@ -1,0 +1,149 @@
+{
+  "id": "page-margin-row-alignment",
+  "title": "LP2 margin trimming: do neighboring text rows align uniquely?",
+  "status": "published",
+  "question": "After one fixed image crop and zero-shift registration, are consecutive LP2 text-row positions distinctive relative to nonconsecutive same-layout pages?",
+  "summary": "Across LP2-40\u201348, four adjacent pairs have identical occupied-row masks, but six nonadjacent pairs do too. Line alignment alone does not identify a page join.",
+  "tags": [
+    "page margins",
+    "image geometry",
+    "row alignment",
+    "controls",
+    "shed the circumference",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48"
+    ],
+    "artifacts": [
+      "images/lp2-40.jpg",
+      "images/lp2-41.jpg",
+      "images/lp2-42.jpg",
+      "images/lp2-43.jpg",
+      "images/lp2-44.jpg",
+      "images/lp2-45.jpg",
+      "images/lp2-46.jpg",
+      "images/lp2-47.jpg",
+      "images/lp2-48.jpg"
+    ],
+    "representation": "Original 2400\u00d73600 JPEG pixels converted to grayscale; one fixed central text crop and y-row occupancy mask.",
+    "procedure": "Crop every page to x=650\u20131749, y=620\u20132899; sample every third x pixel; mark rows with >12 samples below gray 90; score all 36 unordered page pairs by occupied-row Jaccard without shifting.",
+    "parameters": "9 images, 8 adjacent pairs, 28 nonadjacent controls, zero fitted parameters; x step 3, threshold 90, row occupancy >12.",
+    "exclusions": "No rune recognition, word-boundary judgment, page-order search, best-fit registration, decryption, or claim that this is the original proposer\u2019s exact intended test."
+  },
+  "outcome": "not-supported",
+  "finding": "Adjacent mean 0.764289935; nonadjacent mean 0.672274805. Four adjacent pairs and six nonadjacent controls score 1.000. LP2-44\u201348 share the same measured row mask under the fixed rule, so perfect line alignment is not unique to consecutive pages.",
+  "limitations": "The source proposed a possible image join but fixed no target pages, crop or success rule. This audit uses a chosen coherent page run. Row masks ignore glyph identity and horizontal seam continuity; enlarged initials and gap variation affect scores. Pairs share pages, so no significance test is assigned.",
+  "next_steps": "A rune-level seam proposal must declare a crop, ordering, pair orientation, alignment tolerance and predicted continuation before inspection, then preserve all mismatches and template-matched nonadjacent controls.",
+  "family": {
+    "id": "page-margin-row-alignment",
+    "title": "Image-level page-join baseline",
+    "question": "Does visual row registration distinguish adjacent pages?",
+    "baseline": "page-margin-row-alignment"
+  },
+  "variant": {
+    "label": "Fixed central crop with unshifted y rows",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex \u2014 deterministic image rerun and independent cropped-buffer scan; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/page-margin-row-alignment/run.py --check",
+    "environment": "Python 3 with Pillow 11.3 or compatible; no network. Run from repository root or extracted experiment bundle.",
+    "script": "experiments/records/page-margin-row-alignment/run.py",
+    "script_sha256": "31c525aa49bd665f866c1b096149cd6cfe5a510466a56ee542a0681dc59c140f",
+    "inputs": [
+      {
+        "path": "experiments/records/page-margin-row-alignment/plan.json",
+        "sha256": "b393f7285e176c8cbcbda37bbadc40b09aa544d53cf66e07e93bc69d876a0367"
+      },
+      {
+        "path": "experiments/records/page-margin-row-alignment/check.py",
+        "sha256": "47bdadcf2369aa72925a67a521453128ddbec203b3381997b11f77238b84ccd9"
+      },
+      {
+        "path": "experiments/records/page-margin-row-alignment/plot.py",
+        "sha256": "9a865947fca9c2d5eae59d7c253832393873c2cb8cbce40a8158bde814aac6e8"
+      },
+      {
+        "path": "images/lp2-40.jpg",
+        "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69"
+      },
+      {
+        "path": "images/lp2-41.jpg",
+        "sha256": "134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2"
+      },
+      {
+        "path": "images/lp2-42.jpg",
+        "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6"
+      },
+      {
+        "path": "images/lp2-43.jpg",
+        "sha256": "dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415"
+      },
+      {
+        "path": "images/lp2-44.jpg",
+        "sha256": "463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208"
+      },
+      {
+        "path": "images/lp2-45.jpg",
+        "sha256": "898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9"
+      },
+      {
+        "path": "images/lp2-46.jpg",
+        "sha256": "05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301"
+      },
+      {
+        "path": "images/lp2-47.jpg",
+        "sha256": "08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8"
+      },
+      {
+        "path": "images/lp2-48.jpg",
+        "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/page-margin-row-alignment/results.json",
+        "sha256": "8c85577be55a3014365400e50bd4125e026738dbfa42136d63a7a412d793a377"
+      },
+      {
+        "path": "experiments/records/page-margin-row-alignment/row-alignment.svg",
+        "sha256": "e78848e3691aa5ae7daad9418668989e5c75bbdd4b2fa414608c8dec8fa09a7b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Reported page-margin-join suggestion and source limits",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=shed-circumference-page-margin-join"
+    },
+    {
+      "label": "LP2 page source and image manifest",
+      "url": "https://jelliottdev.github.io/#/pages"
+    }
+  ],
+  "related": [
+    "page-join-sensitivity",
+    "lp1-payload-outer-ring"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/page-margin-row-alignment/row-alignment.svg",
+      "caption": "All 36 fixed-crop row-mask similarities. Adjacent pairs are outlined; several nonadjacent controls are equally perfect."
+    }
+  ]
+}

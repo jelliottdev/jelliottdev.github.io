@@ -1,0 +1,49 @@
+{
+  "id": "lp2-15-totient-gap-audit",
+  "title": "LP2-15: prime-only totient and Fibonacci-gap proposal",
+  "status": "published",
+  "question": "Does the reported totient-before-prime-gap sequence reconstruct all sixteen LP2-15 cells and its own Fibonacci-gap array under one stated rule?",
+  "summary": "The source's totient array matches all sixteen cells after changing only prime 3299 to 3298. Its prime candidates require two addition choices despite a subtraction label; fourteen of fifteen specified predecessor gaps match, while one reports 317 instead of 377.",
+  "tags": ["LP2-15", "Euler totient", "Fibonacci", "prime ordinal", "number panel", "reported attempt", "source audit"],
+  "scope": {
+    "pages": ["lp2-15"],
+    "representation": "The printed 4×4 decimal panel and all three 4×4 source arrays preserved in plan.json, including one question mark.",
+    "procedure": "Apply phi to printed prime cells, enumerate 3301 ± each result, independently compute prime ordinals and compare the posted predecessor-Fibonacci gaps without repairing them.",
+    "parameters": "All sixteen image-order cells; base 3301; both signs logged; zero-based prime indices; source-stated cells compared individually. No rune operation.",
+    "exclusions": "No interpretation of the missing screenshot, inferred decryption method, rune shift, selective omission of the duplicate 3 or correction of 317 in the source array."
+  },
+  "outcome": "inconclusive",
+  "finding": "The first array matches 16/16; the second matches 16/16 with two plus signs. Primality alone leaves two ambiguous sign cells. All selected candidates have Fibonacci-valued prime indices, but index 1 is duplicated and index 0 absent. The final array matches 14/15 specified predecessor gaps, with row 4 column 1 inconsistent and row 2 column 2 uncertain.",
+  "limitations": "This is a source-bound reconstruction of derived arithmetic, not an independent construction of the printed panel or a cipher test. The source supplies no complete rune transformation, and its sign-selection and repeated-one assignment are not fixed as forward rules.",
+  "next_steps": "A future decoding proposal must freeze its sign rule, the treatment of duplicate prime 3, the 317/377 disagreement, a panel traversal, rune operation and untouched validation target before inspecting plaintext.",
+  "review": {
+    "reviewer": "Codex; independent coprimality, sieve and Fibonacci checker; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-15-totient-gap-audit/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py and plot.py --check",
+    "script": "experiments/records/lp2-15-totient-gap-audit/run.py",
+    "script_sha256": "4369043dd2ee08e320f78559ea661e321c9f77bbfde3d151e603c8f8d04418ad",
+    "inputs": [
+      {"path": "data/pages/lp2-15.json", "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"},
+      {"path": "experiments/records/lp2-15-totient-gap-audit/plan.json", "sha256": "764c9e43a7cd8771e5a964ba04d682e349ccd67663bf94a12f2e2344d67cf0e5"},
+      {"path": "experiments/records/lp2-15-totient-gap-audit/check.py", "sha256": "2bde6b4d6083568ff320976bdb937d2954ecab30cfa48270a1dd400e35290946"},
+      {"path": "experiments/records/lp2-15-totient-gap-audit/plot.py", "sha256": "96e9970548229930e07189ed2705ed40e5dd20e067e0bc7437ac275e8f691006"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/lp2-15-totient-gap-audit/results.json", "sha256": "1714f799c9596b3189f1c6d8528e8a540daa8cd2492f70fd09adf4cbf7e6aaa1"},
+      {"path": "experiments/records/lp2-15-totient-gap-audit/panel-audit.svg", "sha256": "b3bbeaea9cfb094a6ebf437f2f0755e8d4549763230b8dab20ed252fad3c230b"}
+    ]
+  },
+  "visuals": [
+    {"path": "experiments/records/lp2-15-totient-gap-audit/panel-audit.svg", "caption": "Cellwise comparison of the printed panel, reported prime candidates, zero-based ordinals and reported predecessor gaps."}
+  ],
+  "sources": [
+    {"label": "Original LP2-15 page and panel", "url": "https://jelliottdev.github.io/#/page/lp2-15"},
+    {"label": "Source report and attached transcript hash", "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-totient-before-prime-gap"}
+  ],
+  "related": ["lp2-15-mobius-panel", "lp2-panel-prime-openings"]
+}

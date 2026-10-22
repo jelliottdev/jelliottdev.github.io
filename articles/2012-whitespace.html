@@ -1,0 +1,23 @@
+<p>After the <a href="#/wiki/2012-countdown">2012 countdown and location list</a>, the archived 845145127 site changed again. Its page appears almost blank, but the source contains a <code>&lt;pre&gt;</code> block made of spaces, tabs and line breaks. Decoding those exact characters yields a signed message with ten twelve-digit image numbers. This page reproduces that transition from the preserved HTML; it does not rely on a screenshot of a blank page.</p>
+
+<h2 id="source">The two source files</h2>
+<p>The <a href="exports/sources/whitespace-2012/whitespace.html" download>preserved HTML</a> is 7,978 bytes. Its single preformatted block has 3,628 spaces and 4,244 tabs across 32 encoded rows. We also host the archive’s <a href="exports/sources/whitespace-2012/whitespace.asc" download>decoded clear-signed message</a> and the original <a href="exports/sources/whitespace-2012/extract-binary.py" download>solver script</a>. The <a href="exports/sources/whitespace-2012/manifest.json" download>source manifest</a> fixes their bytes and links each file to a specific archive revision. The site HTML is the input; the signed text is a comparison target, not an input to the decoder.</p>
+
+<h2 id="decode">From invisible characters to bytes</h2>
+<p>Within the preformatted block, read a <strong>space as 1</strong> and a <strong>tab as 0</strong>. Divide each line into eight-bit groups, convert each group to one ASCII byte and retain the line breaks. The first encoded row is empty. The next row begins as follows:</p>
+<div class="table-wrap"><table><caption>The first byte of the signed-message marker</caption><thead><tr><th>Position</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><th>HTML character</th><td>tab</td><td>tab</td><td>space</td><td>tab</td><td>space</td><td>space</td><td>tab</td><td>space</td></tr><tr><th>Bit</th><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr></tbody></table></div>
+<p><code>00101101</code> is decimal 45, the ASCII hyphen at the start of <code>-----BEGIN PGP SIGNED MESSAGE-----</code>. Every encoded line has a whole number of bytes. The 7,872 bits yield 984 data bytes; retaining the 31 line breaks produces <strong>1,015 bytes</strong>. The freshly decoded bytes match the archived signed text exactly, including its opening blank line and spaces after the first number. The <a href="exports/cicada-2012-whitespace.json" download>replay report</a> records the counts, hashes and all ten numbers.</p>
+
+<h2 id="numbers">What the signed message supplies</h2>
+<p>The message lists ten distinct twelve-digit strings:</p>
+<pre><code>162667212858  414974253863  598852142735  876873892385  935691396441
+316744223127  427566844663  644169769482  889296759263  963846244281</code></pre>
+<p>The <a href="https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/005-845145127.com">pinned artifact archive</a> reports that these were JPEG names at the historical puzzle domain and preserves two examples. The replay establishes the ten strings and the signature; it does not freshly retrieve all ten historical JPEGs or decode every physical poster’s QR code. Keep those later steps separate from the whitespace decoding.</p>
+
+<h2 id="signature">Signature and provenance</h2>
+<p>The recovered text declares <code>Hash: SHA1</code>. A fresh GnuPG 2.5.21 check returned a valid signature against the <a href="exports/steganography/cicada-public-key.asc" download>preserved 3301 public key</a>, fingerprint <code>6D854CD7933322A601C3286D181F01E57A35090F</code>. This confirms consistency with that key; its association with a real-world identity is not independently certified. The original archive’s decoder requires BeautifulSoup and uses a global variable inside its byte-conversion helper. Our standard-library replay parses only the single preformatted block and independently checks its exact output against the saved signed text.</p>
+
+<h2 id="reproduce">Run the replay</h2>
+<p>Extract the <a href="downloads/reference-data.zip" download>reference-data bundle</a> with folders intact. With Python 3, run:</p>
+<pre><code>python scripts/replay_2012_whitespace.py --check</code></pre>
+<p>To verify the signature again, add <code>--gpg /path/to/gpg</code>. The script creates a temporary keyring, imports only the preserved public key and checks for its full fingerprint. <a href="scripts/replay_2012_whitespace.py" download>Download the replay script</a> · <a href="exports/sources/whitespace-2012/manifest.json" download>source hashes</a>.</p>

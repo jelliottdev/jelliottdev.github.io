@@ -3,7 +3,7 @@
   "title": "Ciphertext symbols and differences around LP2 doublets",
   "status": "published",
   "question": "Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?",
-  "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance both fall inside 5,000 fixed-mask, within-page permutation ranges. The repeated ciphertext rune does not itself label plaintext EA.",
+  "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance fall inside fixed-mask controls. A companion comparison of the 22 hyphen-crossing and 63 within-token events finds no unusual whole-label context separation under its conditional controls.",
   "tags": [
     "doublets",
     "EA",
@@ -72,13 +72,13 @@
       "lp2-55"
     ],
     "representation": "Archived LP2-00--55 ciphertext rune indices and within-page differences; zero positions and each page nonzero-difference multiset retained.",
-    "procedure": "Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune.",
-    "parameters": "29-rune modulus; 5,000 conditional permutations; seed 330122; two fixed diagnostics; no cross-page transitions.",
+    "procedure": "Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune. In a companion audit, join boundary categories to event positions and compare complete before/after ciphertext-rune distributions under global and within-page boundary-label shuffles.",
+    "parameters": "29-rune modulus; 5,000 difference permutations with seed 330122; 10,000 global and within-page boundary-label permutations with seed 33012217; no cross-page transitions.",
     "exclusions": "Plaintext recovery, key inference, probability of the 86-event zero mask, independent full image transcription, English context scoring and post-selection significance."
   },
   "outcome": "inconclusive",
-  "finding": "There are 123 same-symbol event pairs and a before/after imbalance of 27.786; both sit within their declared conditional ranges. The 29 event-symbol counts span 0 to 7, and 85 nonzero differences are available on each side.",
-  "limitations": "Conditioning fixes the 86 zero positions and pagewise difference inventories, so this control cannot explain the low doublet count or test triple rarity. Metrics respond to earlier observations and do not supply prospective p-values. The input is archived text, not a new image review.",
+  "finding": "There are 123 same-symbol event pairs and a before/after imbalance of 27.786; both sit within their declared conditional ranges. The 29 event-symbol counts span 0 to 7, and 85 nonzero differences are available on each side. The hyphen-versus-within-token whole-label score is 51.321; 6,495/10,000 global and 8,626/10,000 page-stratified conditional shuffles reach at least that score.",
+  "limitations": "Conditioning fixes the 86 zero positions and pagewise difference inventories, so these controls cannot explain the low doublet count or test triple rarity. Boundary-label exchangeability is also only a descriptive benchmark; only 40 events can move in the page-stratified control. Metrics respond to earlier observations and do not supply prospective p-values. The input is archived text, not a new image review.",
   "next_steps": "Check a fully specified key generator against held-out positions or an independent transcription; do not treat ciphertext neighbors as English plaintext cribs.",
   "family": {
     "id": "ea-running-sum-controls",
@@ -235,13 +235,13 @@
       {
         "field": "procedure",
         "before": "Count EA at within-page solved positions and equal unsolved ciphertext neighbors; check literal-token parsing, page-mix sensitivity and a conditional uniform-nonzero difference-IoC control.",
-        "after": "Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune.",
+        "after": "Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune. In a companion audit, join boundary categories to event positions and compare complete before/after ciphertext-rune distributions under global and within-page boundary-label shuffles.",
         "reason": "This variant studies local ciphertext context under a fixed-mask, fixed-page-difference control rather than transferring solved-page EA frequency."
       },
       {
         "field": "parameters",
         "before": "EA is GP index 28; nonzero keys 1–28 in the proposed equation; 10,000 LP1 page resamples and 2,000 seeded conditional IoC trials.",
-        "after": "29-rune modulus; 5,000 conditional permutations; seed 330122; two fixed diagnostics; no cross-page transitions.",
+        "after": "29-rune modulus; 5,000 difference permutations with seed 330122; 10,000 global and within-page boundary-label permutations with seed 33012217; no cross-page transitions.",
         "reason": "This variant studies local ciphertext context under a fixed-mask, fixed-page-difference control rather than transferring solved-page EA frequency."
       },
       {
@@ -503,6 +503,18 @@
       {
         "path": "experiments/records/doublet-context/check.py",
         "sha256": "cc8502efd3e46c71364dab91cffd4f9384de9c4f3ab4c2b8144a7a828e75aa0d"
+      },
+      {
+        "path": "experiments/records/doublet-boundaries/results.json",
+        "sha256": "3feac0659e5a3dc8b47206d6c6e625727a746642899e156990e89b60d423e5ec"
+      },
+      {
+        "path": "experiments/records/doublet-context/boundary-context-plan.json",
+        "sha256": "0412f912ad689f8d2debe5b9bd59aea8816b35459d6001fa842adb04cae4bbb6"
+      },
+      {
+        "path": "experiments/records/doublet-context/boundary_context.py",
+        "sha256": "732d05fc1cfdd17c88d2143258e52ada5aa192bb62bd8a6592af5fcfdf58524d"
       }
     ],
     "outputs": [
@@ -513,6 +525,10 @@
       {
         "path": "experiments/records/doublet-context/context.svg",
         "sha256": "3bd0f4d5a4bc4e8cb133c717c211a6ec9baf026b6ec5b1516eed7238168ca212"
+      },
+      {
+        "path": "experiments/records/doublet-context/boundary-context.json",
+        "sha256": "34434fb8675545789c2b42d941435a7bc2ab4f5b85341bd7e2ed5a355177e55b"
       }
     ]
   },

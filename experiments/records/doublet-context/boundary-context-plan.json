@@ -1,0 +1,15 @@
+{
+  "question": "Do the ciphertext runes immediately before and after the 22 hyphen-crossing doublets differ from those surrounding the 63 within-token doublets?",
+  "inputs": [
+    {"path": "experiments/records/doublet-context/results.json", "sha256": "97aaae7e114cdcaa26236fdf7291c37506bbfc47d0728e4517245c8f305658e7"},
+    {"path": "experiments/records/doublet-boundaries/results.json", "sha256": "3feac0659e5a3dc8b47206d6c6e625727a746642899e156990e89b60d423e5ec"},
+    {"path": "data/index.json", "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"}
+  ],
+  "join": "Match doublet-context's zero-based second-rune index to doublet-boundaries' zero-based left-rune index plus one, within the same page. Require exactly 86 unique matches.",
+  "groups": "Hyphen category versus contiguous, row-wrap only, or apostrophe/soft-wrap categories (published within-token convention). Retain the one other-separator event in the ledger but exclude it from the two-group comparison.",
+  "neighbors": "At a repeat of ciphertext symbol s with preceding difference dL and following difference dR, infer preceding rune (s-dL) mod 29 and following rune (s+dR) mod 29. Keep absent within-page neighbors as a distinct missing category, not as rune zero.",
+  "primary_statistic": "Sum Pearson 2-by-30 association chi-square values over before and after neighbor labels, including missing as category 29. For each side, omit columns with pooled zero count. This tests the whole distribution without choosing noteworthy labels after inspection.",
+  "controls": "10,000 seeded permutations (seed 33012217): globally reassign exactly 22 hyphen labels among the 85 eligible context vectors; independently, reassign labels only within each page while preserving each page's hyphen count. Both retain each before/after pair and the 63/22 comparison groups; neither models English or a cipher. Report inclusive upper ranks and the number of pages/events with movable labels.",
+  "descriptive": "Report complete before and after 29-rune count arrays, missing-neighbor counts and mean circular distance from the repeated rune in each group. The one other-separator event is separately identified.",
+  "interpretation": "Exploratory post-hoc diagnostic. Its small groups and page clustering prevent a manuscript-wide probabilistic conclusion. Ciphertext neighbors cannot be read as English context for hypothetical plaintext EA without an independently fixed key."
+}

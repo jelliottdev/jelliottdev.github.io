@@ -2373,7 +2373,7 @@
   &quot;title&quot;: &quot;Ciphertext symbols and differences around LP2 doublets&quot;,
   &quot;status&quot;: &quot;published&quot;,
   &quot;question&quot;: &quot;Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?&quot;,
-  &quot;summary&quot;: &quot;Across 86 doublets, same-symbol collisions and before/after difference imbalance both fall inside 5,000 fixed-mask, within-page permutation ranges. The repeated ciphertext rune does not itself label plaintext EA.&quot;,
+  &quot;summary&quot;: &quot;Across 86 doublets, same-symbol collisions and before/after difference imbalance fall inside fixed-mask controls. A companion comparison of the 22 hyphen-crossing and 63 within-token events finds no unusual whole-label context separation under its conditional controls.&quot;,
   &quot;tags&quot;: [
     &quot;doublets&quot;,
     &quot;EA&quot;,
@@ -2442,13 +2442,13 @@
       &quot;lp2-55&quot;
     ],
     &quot;representation&quot;: &quot;Archived LP2-00--55 ciphertext rune indices and within-page differences; zero positions and each page nonzero-difference multiset retained.&quot;,
-    &quot;procedure&quot;: &quot;Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune.&quot;,
-    &quot;parameters&quot;: &quot;29-rune modulus; 5,000 conditional permutations; seed 330122; two fixed diagnostics; no cross-page transitions.&quot;,
+    &quot;procedure&quot;: &quot;Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune. In a companion audit, join boundary categories to event positions and compare complete before/after ciphertext-rune distributions under global and within-page boundary-label shuffles.&quot;,
+    &quot;parameters&quot;: &quot;29-rune modulus; 5,000 difference permutations with seed 330122; 10,000 global and within-page boundary-label permutations with seed 33012217; no cross-page transitions.&quot;,
     &quot;exclusions&quot;: &quot;Plaintext recovery, key inference, probability of the 86-event zero mask, independent full image transcription, English context scoring and post-selection significance.&quot;
   },
   &quot;outcome&quot;: &quot;inconclusive&quot;,
-  &quot;finding&quot;: &quot;There are 123 same-symbol event pairs and a before/after imbalance of 27.786; both sit within their declared conditional ranges. The 29 event-symbol counts span 0 to 7, and 85 nonzero differences are available on each side.&quot;,
-  &quot;limitations&quot;: &quot;Conditioning fixes the 86 zero positions and pagewise difference inventories, so this control cannot explain the low doublet count or test triple rarity. Metrics respond to earlier observations and do not supply prospective p-values. The input is archived text, not a new image review.&quot;,
+  &quot;finding&quot;: &quot;There are 123 same-symbol event pairs and a before/after imbalance of 27.786; both sit within their declared conditional ranges. The 29 event-symbol counts span 0 to 7, and 85 nonzero differences are available on each side. The hyphen-versus-within-token whole-label score is 51.321; 6,495/10,000 global and 8,626/10,000 page-stratified conditional shuffles reach at least that score.&quot;,
+  &quot;limitations&quot;: &quot;Conditioning fixes the 86 zero positions and pagewise difference inventories, so these controls cannot explain the low doublet count or test triple rarity. Boundary-label exchangeability is also only a descriptive benchmark; only 40 events can move in the page-stratified control. Metrics respond to earlier observations and do not supply prospective p-values. The input is archived text, not a new image review.&quot;,
   &quot;next_steps&quot;: &quot;Check a fully specified key generator against held-out positions or an independent transcription; do not treat ciphertext neighbors as English plaintext cribs.&quot;,
   &quot;family&quot;: {
     &quot;id&quot;: &quot;ea-running-sum-controls&quot;,
@@ -2605,13 +2605,13 @@
       {
         &quot;field&quot;: &quot;procedure&quot;,
         &quot;before&quot;: &quot;Count EA at within-page solved positions and equal unsolved ciphertext neighbors; check literal-token parsing, page-mix sensitivity and a conditional uniform-nonzero difference-IoC control.&quot;,
-        &quot;after&quot;: &quot;Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune.&quot;,
+        &quot;after&quot;: &quot;Measure doublet-symbol collision pairs and before/after difference imbalance, then shuffle only nonzero differences separately within each page while keeping the observed zero mask and first ciphertext rune. In a companion audit, join boundary categories to event positions and compare complete before/after ciphertext-rune distributions under global and within-page boundary-label shuffles.&quot;,
         &quot;reason&quot;: &quot;This variant studies local ciphertext context under a fixed-mask, fixed-page-difference control rather than transferring solved-page EA frequency.&quot;
       },
       {
         &quot;field&quot;: &quot;parameters&quot;,
         &quot;before&quot;: &quot;EA is GP index 28; nonzero keys 1–28 in the proposed equation; 10,000 LP1 page resamples and 2,000 seeded conditional IoC trials.&quot;,
-        &quot;after&quot;: &quot;29-rune modulus; 5,000 conditional permutations; seed 330122; two fixed diagnostics; no cross-page transitions.&quot;,
+        &quot;after&quot;: &quot;29-rune modulus; 5,000 difference permutations with seed 330122; 10,000 global and within-page boundary-label permutations with seed 33012217; no cross-page transitions.&quot;,
         &quot;reason&quot;: &quot;This variant studies local ciphertext context under a fixed-mask, fixed-page-difference control rather than transferring solved-page EA frequency.&quot;
       },
       {
@@ -2873,6 +2873,18 @@
       {
         &quot;path&quot;: &quot;experiments/records/doublet-context/check.py&quot;,
         &quot;sha256&quot;: &quot;cc8502efd3e46c71364dab91cffd4f9384de9c4f3ab4c2b8144a7a828e75aa0d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-boundaries/results.json&quot;,
+        &quot;sha256&quot;: &quot;3feac0659e5a3dc8b47206d6c6e625727a746642899e156990e89b60d423e5ec&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-context/boundary-context-plan.json&quot;,
+        &quot;sha256&quot;: &quot;0412f912ad689f8d2debe5b9bd59aea8816b35459d6001fa842adb04cae4bbb6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-context/boundary_context.py&quot;,
+        &quot;sha256&quot;: &quot;732d05fc1cfdd17c88d2143258e52ada5aa192bb62bd8a6592af5fcfdf58524d&quot;
       }
     ],
     &quot;outputs&quot;: [
@@ -2883,6 +2895,10 @@
       {
         &quot;path&quot;: &quot;experiments/records/doublet-context/context.svg&quot;,
         &quot;sha256&quot;: &quot;3bd0f4d5a4bc4e8cb133c717c211a6ec9baf026b6ec5b1516eed7238168ca212&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/doublet-context/boundary-context.json&quot;,
+        &quot;sha256&quot;: &quot;34434fb8675545789c2b42d941435a7bc2ab4f5b85341bd7e2ed5a355177e55b&quot;
       }
     ]
   },
@@ -2908,7 +2924,7 @@
       &quot;caption&quot;: &quot;All 29 ciphertext symbols at doublet positions, compared with conditional permutation means; ticks are not individual significance thresholds.&quot;
     }
   ],
-  &quot;article&quot;: &quot;# What surrounds the 86 ciphertext doublets?\n\nThe [doublet guide](#/wiki/doublets?section=ea-constraint) describes one proposed equation in which a repeated ciphertext rune would mark a plaintext EA. That statement is easy to overread. It fixes the **plaintext symbol at a transition** under the equation; it does not say that the repeated *ciphertext* rune is the EA rune, or that the neighboring ciphertext runes should spell an English word. This experiment records those local ciphertext values and asks whether they have extra ordering structure under a declared conditional control.\n\n![Counts of all 29 ciphertext symbols at the 86 doublet positions, compared with means from fixed-mask within-page permutations.](experiments/records/doublet-context/context.svg)\n\n## What the equation predicts\n\nFor `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29` with nonzero `Kᵢ`, `Cᵢ = Cᵢ₋₁` if and only if `Pᵢ = 28` (EA). The doublet&#x27;s visible rune is `Cᵢ`, the **current ciphertext state**. It can be any of the 29 runes. A doublet on AE does not make AE the proposed plaintext; a doublet on EA does not offer special confirmation.\n\nIf the *following* plaintext rune is not EA and its key is independently uniform on 1–28, its difference `Cᵢ₊₁ − Cᵢ` is uniform on those 28 nonzero residues. The next ciphertext rune is then uniform over the 28 symbols **other than** `Cᵢ`. It is not independent of `Cᵢ` in absolute symbol terms, because equality is forbidden. If the following plaintext is EA, the next difference is zero and a triple results. The observed doublet mask has no consecutive zeros, so this record cannot use a fixed-mask control to judge how surprising that absence is.\n\n## The actual local inventory\n\nFrom the archived LP2-00–55 text, filter to the 29 GP runes, keep headings, and compare neighbors only within pages. This gives **86 zero differences in 12,901 transitions**. Each event is recorded by page and zero-based rune index in the [result ledger](experiments/records/doublet-context/results.json). One event has no preceding within-page difference; one has no following one. None has a zero difference immediately beside it. The remaining 85 preceding and 85 following differences are tabulated separately in all 28 nonzero residues.\n\nThe event-symbol counts range from **0 to 7**, rather than 3 to 7. GP index 17 (B) has no event; index 25 (AE) has seven; index 28 (EA) has three. The latter labels are ciphertext symbols, not decoded plaintext. Across all 29 bins there are **123 pairs of events sharing the same ciphertext symbol**. The local before-versus-after residue imbalance, defined in the [plan](experiments/records/doublet-context/plan.txt), is **27.786**. Both summaries were selected before this control was run, but the underlying doublet observation had already been seen.\n\n## A control that holds the known anomalies fixed\n\nFor each page, retain its first ciphertext rune, the positions of all zero differences and the multiset of all nonzero differences. Shuffle only the nonzero difference order within that page, then cumulatively add the differences modulo 29 to rebuild a synthetic ciphertext page. This preserves the **86-event mask exactly** and also preserves each page&#x27;s difference histogram. It asks whether *placement relative to those zeros* adds anything beyond those known properties. It does not simulate English, a key generator, or the chance of obtaining 86 zeros in the first place.\n\n| Diagnostic | Observed | Central 95% of 5,000 conditional permutations | Trials at least observed |\n| --- | ---: | ---: | ---: |\n| Same-symbol pairs among doublet events | 123 | 108–150 | 2,950 / 5,000 |\n| Before/after difference imbalance | 27.786 | 12.745–34.259 | 854 / 5,000 |\n\nBoth observed values sit inside these conditional ranges. In the figure, blue bars are the complete observed 29-symbol inventory and red ticks are the average count for each bin across the permutations. The ticks are not 29 separate significance cutoffs. The report also includes all 28 before and after residue bins, every event location, the seed (`330122`), and both inclusive rank directions.\n\nThis is **not independent corroboration** of the earlier [nonzero-difference histogram](#/experiments/ea-difference-independence). The same source differences are reused, and the new control deliberately fixes their pagewise histograms. The broad question “are these 86 positions really plaintext EA?” remains unanswered. A proposed key schedule would have to predict something further that can be checked without freely choosing plaintext neighbors after seeing the ciphertext.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it, then run:\n\n```text\npython experiments/records/doublet-context/run.py --check\npython experiments/records/doublet-context/check.py\n```\n\nThe producer reruns all 5,000 seeded conditional permutations and checks the saved JSON and SVG byte for byte. The separate checker re-extracts the Runic Unicode block, recomputes all 86 event locations and both diagnostics, and verifies each source hash. This checks the archived text, not a fresh image transcription. Neither the control nor the exact algebra identifies the cipher, and these exploratory ranks are not adjusted for the wider history of questions asked of the same 86 events. See the [boundary audit](#/experiments/doublet-boundaries) and [placement audit](#/experiments/doublet-placement) for other, non-interchangeable scopes.\n&quot;,
+  &quot;article&quot;: &quot;# What surrounds the 86 ciphertext doublets?\n\nThe [doublet guide](#/wiki/doublets?section=ea-constraint) describes one proposed equation in which a repeated ciphertext rune would mark a plaintext EA. That statement is easy to overread. It fixes the **plaintext symbol at a transition** under the equation; it does not say that the repeated *ciphertext* rune is the EA rune, or that the neighboring ciphertext runes should spell an English word. This experiment records those local ciphertext values and asks whether they have extra ordering structure under a declared conditional control.\n\n![Counts of all 29 ciphertext symbols at the 86 doublet positions, compared with means from fixed-mask within-page permutations.](experiments/records/doublet-context/context.svg)\n\n## What the equation predicts\n\nFor `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29` with nonzero `Kᵢ`, `Cᵢ = Cᵢ₋₁` if and only if `Pᵢ = 28` (EA). The doublet&#x27;s visible rune is `Cᵢ`, the **current ciphertext state**. It can be any of the 29 runes. A doublet on AE does not make AE the proposed plaintext; a doublet on EA does not offer special confirmation.\n\nIf the *following* plaintext rune is not EA and its key is independently uniform on 1–28, its difference `Cᵢ₊₁ − Cᵢ` is uniform on those 28 nonzero residues. The next ciphertext rune is then uniform over the 28 symbols **other than** `Cᵢ`. It is not independent of `Cᵢ` in absolute symbol terms, because equality is forbidden. If the following plaintext is EA, the next difference is zero and a triple results. The observed doublet mask has no consecutive zeros, so this record cannot use a fixed-mask control to judge how surprising that absence is.\n\n## The actual local inventory\n\nFrom the archived LP2-00–55 text, filter to the 29 GP runes, keep headings, and compare neighbors only within pages. This gives **86 zero differences in 12,901 transitions**. Each event is recorded by page and zero-based rune index in the [result ledger](experiments/records/doublet-context/results.json). One event has no preceding within-page difference; one has no following one. None has a zero difference immediately beside it. The remaining 85 preceding and 85 following differences are tabulated separately in all 28 nonzero residues.\n\nThe event-symbol counts range from **0 to 7**, rather than 3 to 7. GP index 17 (B) has no event; index 25 (AE) has seven; index 28 (EA) has three. The latter labels are ciphertext symbols, not decoded plaintext. Across all 29 bins there are **123 pairs of events sharing the same ciphertext symbol**. The local before-versus-after residue imbalance, defined in the [plan](experiments/records/doublet-context/plan.txt), is **27.786**. Both summaries were selected before this control was run, but the underlying doublet observation had already been seen.\n\n## A control that holds the known anomalies fixed\n\nFor each page, retain its first ciphertext rune, the positions of all zero differences and the multiset of all nonzero differences. Shuffle only the nonzero difference order within that page, then cumulatively add the differences modulo 29 to rebuild a synthetic ciphertext page. This preserves the **86-event mask exactly** and also preserves each page&#x27;s difference histogram. It asks whether *placement relative to those zeros* adds anything beyond those known properties. It does not simulate English, a key generator, or the chance of obtaining 86 zeros in the first place.\n\n| Diagnostic | Observed | Central 95% of 5,000 conditional permutations | Trials at least observed |\n| --- | ---: | ---: | ---: |\n| Same-symbol pairs among doublet events | 123 | 108–150 | 2,950 / 5,000 |\n| Before/after difference imbalance | 27.786 | 12.745–34.259 | 854 / 5,000 |\n\nBoth observed values sit inside these conditional ranges. In the figure, blue bars are the complete observed 29-symbol inventory and red ticks are the average count for each bin across the permutations. The ticks are not 29 separate significance cutoffs. The report also includes all 28 before and after residue bins, every event location, the seed (`330122`), and both inclusive rank directions.\n\nThis is **not independent corroboration** of the earlier [nonzero-difference histogram](#/experiments/ea-difference-independence). The same source differences are reused, and the new control deliberately fixes their pagewise histograms. The broad question “are these 86 positions really plaintext EA?” remains unanswered. A proposed key schedule would have to predict something further that can be checked without freely choosing plaintext neighbors after seeing the ciphertext.\n\n## Do hyphen-crossing doublets have different neighbors?\n\nThe [boundary ledger](#/experiments/doublet-boundaries) classifies **22** doublets as crossing a hyphen, **63** as within a rune token under the site&#x27;s rule, and **one** as crossing other punctuation. The last event is kept in the [complete companion ledger](experiments/records/doublet-context/boundary-context.json) but excluded from this two-group comparison. Calling all 64 non-hyphen events “within-word” would misclassify that one event; even the 63-token group is a transcription convention, not a fresh image review.\n\nFor a repeated ciphertext rune at position `i`, the immediately preceding rune is at `i−2` and the following rune at `i+1`, if those positions exist within the same page. The table counts **ciphertext** GP labels. Circular distance means the smaller of the two distances between their indices around the 29-symbol alphabet; it does not measure English-letter similarity.\n\n| Doublet group | Events | Before available / distinct labels | Mean before distance | After available / distinct labels | Mean after distance |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| Hyphen-crossing | 22 | 22 / 16 | 5.95 | 22 / 17 | 8.23 |\n| Within-token | 63 | 62 / 25 | 8.06 | 62 / 25 | 7.87 |\n| Other separator, excluded from comparison | 1 | 1 / 1 | 2.00 | 1 / 1 | 5.00 |\n\nThere is a visible difference in the *mean preceding circular distance*, but that summary was inspected after this question arose. For a broader comparison fixed in the [companion plan](experiments/records/doublet-context/boundary-context-plan.json), we sum the two-group Pearson association scores over all 29 before-rune labels and all 29 after-rune labels, retaining a separate category for a missing page-edge neighbor. The observed score is **51.321**. We then keep every observed before/after context vector intact and permute which 22 of the 85 eligible events carry the hyphen label. In **6,495 of 10,000** global shuffles the score is at least this large; the central 95% of shuffled scores is **39.592–71.390**. A second control preserves each page&#x27;s hyphen count and yields **8,626 of 10,000** at least as large, with a central range of **46.195–75.474**. Only **13 pages and 40 events** have labels that can move in that stricter control.\n\nThese are exploratory conditional ranks, not prospective p-values or a test that the 22 marks were placed randomly. The 22-event group is small, many labels are sparse, and page layout can affect both boundary status and ciphertext context. The whole-label statistic does not stand out under either stated comparison; it does not rule out a particular word-boundary cipher rule. In the proposed EA-stalling equation, the runes around a doublet remain ciphertext states. They cannot be compared directly with English words containing EA without a separately fixed key and boundary clock.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it, then run:\n\n```text\npython experiments/records/doublet-context/run.py --check\npython experiments/records/doublet-context/check.py\npython experiments/records/doublet-context/boundary_context.py --check\n```\n\nThe producer reruns all 5,000 seeded conditional permutations and checks the saved JSON and SVG byte for byte. The separate checker re-extracts the Runic Unicode block, recomputes all 86 event locations and both diagnostics, and verifies each source hash. The companion script hashes both source ledgers, joins all 86 events by page and rune position, verifies neighboring runes against the archived page text, and reruns both 10,000-draw boundary-label controls. This checks the archived text, not a fresh image transcription. Neither control nor the exact algebra identifies the cipher, and these exploratory ranks are not adjusted for the wider history of questions asked of the same 86 events. See the [boundary audit](#/experiments/doublet-boundaries) and [placement audit](#/experiments/doublet-placement) for other, non-interchangeable scopes.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/doublet-context/article.md&quot;,
   &quot;script_sha256&quot;: &quot;21b3bb14818a8ba8a96b9b1949818af153e1abfd840a8856ef08b9189072790d&quot;,
   &quot;record_type&quot;: {
@@ -5198,7 +5214,7 @@
       &quot;caption&quot;: &quot;Solved LP1 decoded EA rate and unsolved LP2 doublet rate, each with its own numerator and denominator. Rate similarity is not confirmation of the running-sum model.&quot;
     }
   ],
-  &quot;article&quot;: &quot;# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site&#x27;s solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw&#x27;s rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\nThe [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n&quot;,
+  &quot;article&quot;: &quot;# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site&#x27;s solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nIf those within-page positions were independent draws with one fixed EA probability, a 95% **Wilson score interval** for 20/2,782 would be **0.466–1.108%**. Applying the same calculation to 86/12,901 gives **0.540–0.822%**. For either count, set `p = events / positions` and `z = 1.9599639845`; the two endpoints are `[p + z²/(2n) ± z√(p(1−p)/n + z²/(4n²))] / [1 + z²/n]`, with `n = positions`. The intervals overlap, but that does not establish equal rates or a cipher: adjacent rune positions in prose are dependent, and the LP1 and LP2 sources are not samples randomly drawn from one common process. The page-resampling range below addresses a different source of variation. It also remains descriptive, not a probability distribution for unknown plaintext.\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw&#x27;s rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe key layer explains the limitation. Write the observed difference as `Dᵢ = Cᵢ − Cᵢ₋₁`. For each **nonzero** Dᵢ and every one of the **28 non-EA plaintext symbols** Pᵢ, there is exactly one allowed nonzero key, `Kᵢ = Dᵢ(Pᵢ − 28)⁻¹ mod 29`. Thus an unconstrained key per position can fit *any* proposed non-EA plaintext at those positions. Conversely, an independently uniform nonzero key makes Dᵢ uniform on 1–28 regardless of how uneven the non-EA plaintext letter frequencies are. The conditional IoC can challenge that extra independent-uniform-key assumption; it cannot identify plaintext, establish EA at the 86 positions, or test an unspecified deterministic key schedule. Simply deleting the 86 zero differences leaves the same 12,815 nonzero values whose histogram is tested in the [companion record](#/experiments/ea-difference-independence). Deleting ciphertext runes instead creates new adjacencies and is a different operation.\n\nUnder the archived boundary rule, **22 of the 86 doublets cross a hyphen**. They are legitimate consecutive runes in the filtered stream but are not within-token repeats. If the proposed recurrence resets at word boundaries, those 22 edges no longer fall under its doublet⇔EA identity. If the key continues over boundaries, the identity still applies to the second rune of each edge, with the hyphen ignored by the cipher clock. The [separator audit](#/experiments/doublet-boundaries) lists every such position; the current count cannot decide which clock Cicada used.\n\nAll of these comparisons were designed after the low doublet count was known. A confirmatory version would need a key schedule, starting state, boundary/reset rule, rune mapping and success criterion fixed from evidence independent of the test output, then a prediction of untouched ciphertext or a verified plaintext passage. Merely changing an interval method or reserving positions after inspecting this corpus cannot turn the existing rate match into a prospective test.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\nThe [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/ea-frequency-control/article.md&quot;,
   &quot;script_sha256&quot;: &quot;dda6228d312ac99db8c671f82c34bac5613c78d3a416364975c223bfca7c449e&quot;,
   &quot;record_type&quot;: {
@@ -8875,6 +8891,102 @@
   &quot;article&quot;: &quot;# Möbius values of the LP2-15 number panel\n\nA [reported suggestion](#/wiki/reported-attempts?section=lp2-15-mobius-square-transform) applies the arithmetic Möbius function to the numbers at the top of [LP2-15](#/reader/lp2-15). This is a small but exact question: what comes out when we transform **all sixteen printed entries in place**? The source transcript refers to an output image that is not retained in the supplied text, so this is a reconstruction of the stated operation, **not an exact comparison with that historical image**.\n\nThe numbers in the upper part of each cell below are printed on the page; the `μ` values beneath them are calculated. The red `3299` stays in its original row and column. Neither a Fibonacci spiral nor subtraction from 3301 is applied here.\n\n![Four-by-four LP2-15 panel showing each printed decimal number above its calculated arithmetic Möbius value. Only the second row is nonzero.](experiments/records/lp2-15-mobius-panel/panel.svg)\n\n[Open the diagram](experiments/records/lp2-15-mobius-panel/panel.svg) · [View the original page](images/lp2-15.jpg)\n\nThe output matrix, in printed row order, is:\n\n| Row | Column 1 | Column 2 | Column 3 | Column 4 |\n| --- | ---: | ---: | ---: | ---: |\n| 1 | 0 | 0 | 0 | 0 |\n| 2 | −1 | −1 | −1 | +1 |\n| 3 | 0 | 0 | 0 | 0 |\n| 4 | 0 | 0 | 0 | 0 |\n\nFor a positive integer `n`, the arithmetic Möbius function is **zero if a prime square divides `n`**. Otherwise it is `−1` for an odd number of distinct prime factors and `+1` for an even number. That rule accounts for each cell; no visual judgement is required to obtain this matrix.\n\n| Printed cell | Factorization | μ |\n| --- | --- | ---: |\n| r1c1 · 3258 | 2 × 3² × 181 | 0 |\n| r1c2 · 3222 | 2 × 3² × 179 | 0 |\n| r1c3 · 3152 | 2⁴ × 197 | 0 |\n| r1c4 · 3038 | 2 × 7² × 31 | 0 |\n| r2c1 · 3278 | 2 × 11 × 149 | −1 |\n| r2c2 · **3299, printed red** | 3299 (prime) | −1 |\n| r2c3 · 3298 | 2 × 17 × 97 | −1 |\n| r2c4 · 2838 | 2 × 3 × 11 × 43 | +1 |\n| r3c1 · 3288 | 2³ × 3 × 137 | 0 |\n| r3c2 · 3294 | 2 × 3³ × 61 | 0 |\n| r3c3 · 3296 | 2⁵ × 103 | 0 |\n| r3c4 · 2472 | 2³ × 3 × 103 | 0 |\n| r4c1 · 4516 | 2² × 1129 | 0 |\n| r4c2 · 1206 | 2 × 3² × 67 | 0 |\n| r4c3 · 708 | 2² × 3 × 59 | 0 |\n| r4c4 · 1820 | 2² × 5 × 7 × 13 | 0 |\n\nTwelve entries vanish; the only nonzero row is `−1, −1, −1, +1`. All but the red entry are even, but **evenness alone does not imply μ = 0**: the three other numbers in row 2 are squarefree. The table shows which prime square makes every zero. The row alignment is an observation of this fixed transform, not a decryption or a significance estimate after possible functions and arrangements have been considered.\n\n## Reproduce it\n\nFrom a checkout or the experiment download, run:\n\n```text\npython experiments/records/lp2-15-mobius-panel/run.py --check\npython experiments/records/lp2-15-mobius-panel/check.py\npython experiments/records/lp2-15-mobius-panel/plot.py --check\n```\n\nThe [plan](experiments/records/lp2-15-mobius-panel/plan.json) fixes the source page hash and all sixteen inputs. The producer uses integer factorization; the separate checker searches independently for prime-square divisors and counts distinct prime factors. The [results](experiments/records/lp2-15-mobius-panel/results.json) preserve every coordinate, number, factorization, calculated μ value and the matrix. The diagram is generated from that ledger. The source transcript is identified by hash in the [reported-attempt register](#/wiki/reported-attempts?section=lp2-15-mobius-square-transform), rather than reproduced without its missing image.\n\n**What this establishes:** the stated arithmetic operation is reproducible on the complete printed panel. It does not show that this was exactly the unseen image in the discussion, that a particular row or spiral is a key, or how a `−1/0/+1` stream would act on the runes. A solving test would first have to fix that operation, its order, boundaries and acceptance criterion, then compare continuous output with controls.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/lp2-15-mobius-panel/article.md&quot;,
   &quot;script_sha256&quot;: &quot;62c6571e6a4368717fb1d323c7bd7870ba5cf6c3a704d752a59b3b5e92cb5cd1&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="lp2-15-totient-gap-audit"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-15-totient-gap-audit&quot;,
+  &quot;title&quot;: &quot;LP2-15: prime-only totient and Fibonacci-gap proposal&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the reported totient-before-prime-gap sequence reconstruct all sixteen LP2-15 cells and its own Fibonacci-gap array under one stated rule?&quot;,
+  &quot;summary&quot;: &quot;The source&#x27;s totient array matches all sixteen cells after changing only prime 3299 to 3298. Its prime candidates require two addition choices despite a subtraction label; fourteen of fifteen specified predecessor gaps match, while one reports 317 instead of 377.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-15&quot;,
+    &quot;Euler totient&quot;,
+    &quot;Fibonacci&quot;,
+    &quot;prime ordinal&quot;,
+    &quot;number panel&quot;,
+    &quot;reported attempt&quot;,
+    &quot;source audit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-15&quot;
+    ],
+    &quot;representation&quot;: &quot;The printed 4×4 decimal panel and all three 4×4 source arrays preserved in plan.json, including one question mark.&quot;,
+    &quot;procedure&quot;: &quot;Apply phi to printed prime cells, enumerate 3301 ± each result, independently compute prime ordinals and compare the posted predecessor-Fibonacci gaps without repairing them.&quot;,
+    &quot;parameters&quot;: &quot;All sixteen image-order cells; base 3301; both signs logged; zero-based prime indices; source-stated cells compared individually. No rune operation.&quot;,
+    &quot;exclusions&quot;: &quot;No interpretation of the missing screenshot, inferred decryption method, rune shift, selective omission of the duplicate 3 or correction of 317 in the source array.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;The first array matches 16/16; the second matches 16/16 with two plus signs. Primality alone leaves two ambiguous sign cells. All selected candidates have Fibonacci-valued prime indices, but index 1 is duplicated and index 0 absent. The final array matches 14/15 specified predecessor gaps, with row 4 column 1 inconsistent and row 2 column 2 uncertain.&quot;,
+  &quot;limitations&quot;: &quot;This is a source-bound reconstruction of derived arithmetic, not an independent construction of the printed panel or a cipher test. The source supplies no complete rune transformation, and its sign-selection and repeated-one assignment are not fixed as forward rules.&quot;,
+  &quot;next_steps&quot;: &quot;A future decoding proposal must freeze its sign rule, the treatment of duplicate prime 3, the 317/377 disagreement, a panel traversal, rune operation and untouched validation target before inspecting plaintext.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent coprimality, sieve and Fibonacci checker; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-15-totient-gap-audit/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; independent check.py and plot.py --check&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;4369043dd2ee08e320f78559ea661e321c9f77bbfde3d151e603c8f8d04418ad&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/plan.json&quot;,
+        &quot;sha256&quot;: &quot;764c9e43a7cd8771e5a964ba04d682e349ccd67663bf94a12f2e2344d67cf0e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/check.py&quot;,
+        &quot;sha256&quot;: &quot;2bde6b4d6083568ff320976bdb937d2954ecab30cfa48270a1dd400e35290946&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/plot.py&quot;,
+        &quot;sha256&quot;: &quot;96e9970548229930e07189ed2705ed40e5dd20e067e0bc7437ac275e8f691006&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/results.json&quot;,
+        &quot;sha256&quot;: &quot;1714f799c9596b3189f1c6d8528e8a540daa8cd2492f70fd09adf4cbf7e6aaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/panel-audit.svg&quot;,
+        &quot;sha256&quot;: &quot;b3bbeaea9cfb094a6ebf437f2f0755e8d4549763230b8dab20ed252fad3c230b&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/panel-audit.svg&quot;,
+      &quot;caption&quot;: &quot;Cellwise comparison of the printed panel, reported prime candidates, zero-based ordinals and reported predecessor gaps.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Original LP2-15 page and panel&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-15&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Source report and attached transcript hash&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-totient-before-prime-gap&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-15-mobius-panel&quot;,
+    &quot;lp2-panel-prime-openings&quot;
+  ],
+  &quot;article&quot;: &quot;# A totient variant of the LP2-15 number panel\n\nThe printed [LP2-15](#/page/lp2-15) panel has sixteen integers. One is prime: the red **3299**. A supplied January 2026 discussion proposes taking Euler’s totient of the prime entries, subtracting the results from 3301, and reading Fibonacci gaps in the resulting prime positions. Its three 4×4 arrays make most of that proposal checkable. They do **not** specify a rule for turning the numbers into plaintext.\n\nThis audit keeps the reported arrays intact. The exact posted gap at row 4, column 1 is **317**, and the row 2, column 2 gap is marked uncertain; neither is silently corrected. The [source intake entry](#/wiki/reported-attempts?section=lp2-15-totient-before-prime-gap) identifies the supplied transcript and its SHA-256 hash.\n\n![Every printed panel cell beside the source&#x27;s prime candidate, ordinal and proposed Fibonacci gap](experiments/records/lp2-15-totient-gap-audit/panel-audit.svg)\n\n## What the arithmetic actually does\n\nEuler’s totient φ(n) counts positive integers at most n that are coprime to n. For a prime p, φ(p) = p − 1. Only **3299** is prime among the sixteen printed cells, so this first step changes only that cell, to **3298**. The source’s post-totient array matches the computed array in all 16 positions. It now has two adjacent 3298s.\n\nFor each post-totient value x, we calculated **both** 3301 − x and 3301 + x. The source’s second array matches one of these two values at every cell, and all sixteen selected values are prime. Fourteen selected values use subtraction; the entries **4516** and **1206** in the bottom row use addition, producing **7817** and **4507**. Thus the posted label “3301 − X” does not describe the whole array. A single literal subtraction rule would miss those two cells.\n\nPrimality alone leaves a further choice at both 3298 cells: **3** and **6599** are prime. Their zero-based prime ordinals are **1** and **852** respectively. Requiring a *Fibonacci-valued ordinal* selects 3, since 1 is a Fibonacci value and 852 is not. This filter leaves one sign per cell, but the source does not state it as a forward sign-selection rule. The two 3298 cells both become prime **3**, so ordinal **1** is duplicated and ordinal **0** (prime 2) is absent.\n\n| Stage | Match with posted array | Qualification |\n| --- | ---: | --- |\n| Prime-only totient of printed panel | 16/16 | Changes only red 3299. |\n| Candidate from 3301 ± transformed cell | 16/16 | Two cells require `+`; primality alone leaves two cells with either sign. |\n| Selected candidate has Fibonacci zero-based prime index | 16/16 | This condition resolves the sign ambiguity after the candidate set is inspected. |\n| Posted Fibonacci predecessor gap | 14/15 specified | Row 4, column 1 reports 317, while index 987 follows 610 and gives 377; one other cell is marked `?`. |\n\nThe gap calculation is easiest to see in the first row. Prime **43** has zero-based ordinal **13**; the preceding distinct Fibonacci value is **8**, so its gap is **5**. Prime **79** has ordinal **21**, following 13, so its gap is **8**. At bottom left, prime **7817** has ordinal **987**, following **610**, so the corresponding gap is **377**, not the posted 317. The source’s comment `0 /* ? */` leaves the other exceptional cell unresolved. Because the canonical Fibonacci sequence starts **0, 1, 1**, the predecessor of an occurrence of ordinal 1 also depends on which repeated 1 that occurrence is assigned to. The post does not give that assignment.\n\n## What this settles—and what it does not\n\nThe arithmetic reproduces a coherent **derived pattern** from the printed square if the two plus signs and Fibonacci-index sign filter are allowed. It does not construct the original square from independent inputs: it begins with the printed numbers, changes the red one, and then selects signs that produce the reported primes. The established [Fibonacci-indexed prime construction](#/wiki/lp2-15-panel) starts independently with a declared index list, uses absolute distance from 3301, and matches all sixteen printed cells. These are different claims.\n\nNo rule is supplied for which of the source’s arrays should become a cipher key, how it advances through runes, what to do with the duplicate 3 or uncertain gap, or how to score a result. The discussion itself suggests only that a related manipulation *might* apply to the text. This record therefore audits the numbers; it is **inconclusive as a decoding method**.\n\n## Reproduce the audit\n\nFrom the repository root or this experiment’s extracted ZIP, use Python 3 with no external packages:\n\n```text\npython experiments/records/lp2-15-totient-gap-audit/run.py --check\npython experiments/records/lp2-15-totient-gap-audit/check.py\npython experiments/records/lp2-15-totient-gap-audit/plot.py --check\n```\n\nThe [plan](experiments/records/lp2-15-totient-gap-audit/plan.json) fixes the source’s three arrays and source hash. The [results](experiments/records/lp2-15-totient-gap-audit/results.json) retain both signs, primality and prime ordinal for every cell. The independent checker uses a sieve and a coprimality count rather than the producer’s factoring and totient implementation. Neither script chooses a plaintext interpretation.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-15-totient-gap-audit/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;4369043dd2ee08e320f78559ea661e321c9f77bbfde3d151e603c8f8d04418ad&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;audit&quot;,
     &quot;label&quot;: &quot;Source or input audit&quot;,
@@ -13502,6 +13614,109 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="lp2-spacing-gap-audit"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-spacing-gap-audit&quot;,
+  &quot;title&quot;: &quot;LP2-15 number-row spacing: a source-bound line-gap audit&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Is the reported extra vertical gap before the fourth LP2-15 number row measurable on the original JPEG, and how does it compare with neighboring text rows?&quot;,
+  &quot;summary&quot;: &quot;The four number rows leave 62, 61 and 79 blank-pixel gaps. The last is at least 17 pixels wider than the earlier panel gaps; selected neighboring rune-text gaps are 73–75 pixels. No word-gap bitstream or font cause is established.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-15&quot;,
+    &quot;line spacing&quot;,
+    &quot;word gaps&quot;,
+    &quot;binary hypothesis&quot;,
+    &quot;typography&quot;,
+    &quot;number panel&quot;,
+    &quot;reported attempt&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;
+    ],
+    &quot;representation&quot;: &quot;Fixed source-image rectangles on the three hashed 2400×3600 JPEGs; vertical ink-row bands and blank interline rows, not text transcription.&quot;,
+    &quot;procedure&quot;: &quot;Threshold grayscale pixels, group ink rows into printed lines, list every line box and intervening blank-row count; independently rederive at the main threshold and repeat at two alternative thresholds.&quot;,
+    &quot;parameters&quot;: &quot;Rectangles, cutoff 160, five ink pixels per row, maximum 14 blank rows within a printed line, threshold sensitivity 100 and 200; all fixed in plan.json.&quot;,
+    &quot;exclusions&quot;: &quot;The absent forum screenshots and specific word-gap examples, bit interpretation, fallback-font mechanism, and any claim about LP2 plaintext.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;At threshold 160 the LP2-15 number-row gaps are 62, 61, 79 pixels. The final anomaly persists with the same 17-pixel separation at thresholds 100 and 200. Lower LP2-15 rune text has six 74-pixel gaps; selected LP2-14/16 text gaps are 73–75 pixels.&quot;,
+  &quot;limitations&quot;: &quot;This verifies one reported line-gap observation, not the word-gap hypothesis or a binary channel. The numeric panel and runic controls use different content and layout, so their difference cannot identify typesetting cause. The source screenshots are not preserved in the supplied transcript.&quot;,
+  &quot;next_steps&quot;: &quot;Recover the original word-gap screenshots or identify exact page/row/glyph coordinates; independently annotate a frozen sample and compare font/kerning controls before defining a binary classification and decoder.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent byte-row projection check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;image-measurement&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-spacing-gap-audit/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 and Pillow; independent check.py and plot.py --check&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-spacing-gap-audit/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;4822a97469c433f3d1923165cc32c985129ed20aeeeab8cd0f657dc491fdc1b0&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;images/lp2-14.jpg&quot;,
+        &quot;sha256&quot;: &quot;861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-15.jpg&quot;,
+        &quot;sha256&quot;: &quot;5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-16.jpg&quot;,
+        &quot;sha256&quot;: &quot;39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6d8701ea01d139d10871ac315243b0b2b6da8905ea3f11b22b2cf29383740fbe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/check.py&quot;,
+        &quot;sha256&quot;: &quot;819c01b53fedf1f009fcc2ebc72ab90c12917af0ffbdf1b714a6c8449b4eba25&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/plot.py&quot;,
+        &quot;sha256&quot;: &quot;7d7161ecdf71bb01b47da1a4c0bfce03e93731aabf529a1638fbd637de8277aa&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/results.json&quot;,
+        &quot;sha256&quot;: &quot;515fefabc18a8b3ef5bb7f3ce25239c2c8341c7d5581efe147c1fc8235bf7b43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/line-gaps.svg&quot;,
+        &quot;sha256&quot;: &quot;9f75489773069e0668a5592a832a5bcc814254a89c23f1fe1116c27f9d6b4ffa&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/line-gaps.svg&quot;,
+      &quot;caption&quot;: &quot;Three LP2-15 number-panel interline gaps and descriptive controls on adjacent rune-text pages.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Original LP2-15 page image&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/reader/lp2-15&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Source-hashed spacing discussion&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-spacing-as-bits&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;article&quot;: &quot;# LP2 spacing: an observed line-gap difference\n\nThe supplied discussion proposes reading thick and thin spaces as binary. It does not preserve the screenshots used for the original word-gap examples, so their coordinates cannot be reconstructed from the transcript. It does give one checkable example: **the last row of the LP2-15 number panel sits farther from the preceding row**. This record measures that *line gap* on the archived page image. A line gap is the blank vertical distance between rows; it is not a word gap between adjacent runes on one row.\n\n![Five measured gap comparisons: 62, 61 and 79 pixels in the LP2-15 number panel, with adjacent rune-text controls near 74 pixels.](experiments/records/lp2-spacing-gap-audit/line-gaps.svg)\n\n## Fixed measurement\n\nThe [plan](experiments/records/lp2-spacing-gap-audit/plan.json) fixes four image rectangles before classification: the four-number-row panel and lower rune text on LP2-15, plus rune text on adjacent LP2-14 and LP2-16. Every input is the original 2400 × 3600 JPEG, checked by SHA-256. Within each rectangle the script counts a horizontal row as ink when at least five grayscale pixels are darker than 160. Ink rows separated by no more than 14 blank rows form one printed line. The gap is the number of wholly blank rows from one line&#x27;s last ink row to the next line&#x27;s first ink row. The [result file](experiments/records/lp2-spacing-gap-audit/results.json) records **every** line&#x27;s inclusive y coordinates, not just selected gaps.\n\nThe panel row boxes are y=876–953, 1016–1093, 1155–1232 and 1312–1389. Their intervening clear gaps are **62, 61 and 79 pixels**. The final one is 17 pixels wider than the larger of the first two. The six rune-text gaps lower on LP2-15 are all 74 pixels. The six LP2-14 text gaps and eleven LP2-16 text gaps range from 73 to 75 pixels. Repeating the extraction at darkness thresholds 100 and 200 preserves the 17-pixel difference between the last panel gap and the earlier panel gaps; at threshold 200 all three panel gaps shrink by one pixel.\n\nThese controls show that the panel anomaly is not merely the ordinary one-pixel jitter in neighboring text lines. They **do not** identify its cause. The panel uses decimal numerals and a different layout from the rune text. A separate typesetting or font mechanism could account for it; only editable source or a controlled reproduction could resolve that. The transcript&#x27;s suggested apostrophe/quotation/fallback-font explanation applies to other examples and was not tested by these selected rows.\n\n## What this does and does not test\n\nFour panel rows supply only three vertical gaps; even a chosen threshold would give at most three bits. There is no documented rule for treating this number-panel exception as a bit, ordering it with other pages, or choosing a character encoding. This experiment therefore publishes **no bitstream or decoded text**. It also does not test the original word-spacing examples because their screenshots are missing and no exact gaps were identified. A proper word-gap test would first publish page, row, adjacent-glyph coordinates and ambiguous marks; then compare predeclared gap classes with ordinary kerning and fallback-font controls before attempting a decode.\n\nTo reproduce from the repository root, run `python experiments/records/lp2-spacing-gap-audit/run.py --check`, then `python experiments/records/lp2-spacing-gap-audit/check.py` and `python experiments/records/lp2-spacing-gap-audit/plot.py --check`. The independent checker derives line boxes through a separate byte-row projection and verifies every measured value.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-spacing-gap-audit/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;4822a97469c433f3d1923165cc32c985129ed20aeeeab8cd0f657dc491fdc1b0&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
 }</pre></article><article id="lp2-totient-openings"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;lp2-totient-openings&quot;,
   &quot;title&quot;: &quot;LP2-00–55: totients of consecutive integers&quot;,
@@ -17924,6 +18139,162 @@
   &quot;article&quot;: &quot;# How much do unresolved LP2 page joins change word-length counts?\n\nThe published LP2 word-length census joins adjacent pages when their archived text meets rune to rune. That rule yields **2,896 rune tokens**. If a separator is inserted at each of the **32 rune-to-rune page edges**, the same 12,956 runes yield **2,928 tokens**. This experiment measures how much the statistics depend on that parsing choice. It does not decide which edges actually split words in the manuscript.\n\n![Side-by-side rune-token length counts for joined and separated page edges](experiments/records/page-join-sensitivity/token-lengths.svg)\n\n## Fixed comparison\n\nUse the archived text for LP2-00–55 and the site&#x27;s 29-rune alphabet. Remove slash and CR/LF row wraps, retain headings and other punctuation, and count rune runs with optional internal apostrophes. There are three prespecified readings: concatenate every page; insert a space at all 32 edges whose archived end and start are both runes; and insert a space at each such edge one at a time. No rune is changed or omitted. The [boundary inventory](#/wiki/transcription-checking?section=page-joins) supplies the distinction between a rune-to-rune candidate and a verified word join.\n\n| Measure | All edges joined | All 32 candidates separated |\n| --- | ---: | ---: |\n| Rune tokens | 2,896 | 2,928 |\n| One-rune tokens | 83 | 99 |\n| Two-rune tokens | 448 | 465 |\n| Three-rune tokens | 720 | 726 |\n| Tokens at least 10 runes long | 109 | 104 |\n| Maximum token length | 14 | 14 |\n| 11–11–10 length windows | 1 | 1 |\n\nAll 32 individual splits add exactly one token under this tokenizer. Five individual edges—LP2-21/22, 24/25, 42/43, 46/47 and 52/53—each reduce the number of tokens at least 10 runes long by one. The [machine-readable result](experiments/records/page-join-sensitivity/results.json) lists every edge separately. The LP2-21 11–11–10 observation survives both endpoint policies, but this says nothing about its chance frequency or interpretation.\n\nThese endpoints are sensitivity cases, not manuscript corrections. A real reading could join some edges and split others. The source text can also omit a mark, and rune-to-rune edges can cross section boundaries. Word counts, repeated-token counts and word-reset cipher inputs depend on the boundary rule; rune frequencies and whole-stream IoC do not, because both versions contain the identical ordered runes. The reported 2,896 tokens are a transparent parsing convention, not 2,896 established words.\n\n## Reproduce and extend\n\nWith Python 3 and no packages, run `python experiments/records/page-join-sensitivity/run.py --check` and `python experiments/records/page-join-sensitivity/check.py` from the repository root or the [experiment bundle](downloads/experiments/page-join-sensitivity.zip). The first command checks the source hashes, complete report and figure. The second uses an independent character scanner to verify the 32 candidate edges, the two histograms, every one-edge token count, and the invariant 12,956-rune total. The plan fixes the inputs and three comparisons before interpreting them.\n\nThe next useful refinement is to record image-reviewed separators at particular edges and rerun the same script with those decisions frozen. Until then, a word-based cipher claim should specify its page-edge policy and show whether its result survives plausible changes at the relevant edges. See the [word-length guide](#/wiki/word-lengths) for the counting rules and complete token ledger.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/page-join-sensitivity/article.md&quot;,
   &quot;script_sha256&quot;: &quot;42348625496957f855de1ad41411e8fea4b523a179437e8ac5c798e5b0cff771&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="page-margin-row-alignment"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;page-margin-row-alignment&quot;,
+  &quot;title&quot;: &quot;LP2 margin trimming: do neighboring text rows align uniquely?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;After one fixed image crop and zero-shift registration, are consecutive LP2 text-row positions distinctive relative to nonconsecutive same-layout pages?&quot;,
+  &quot;summary&quot;: &quot;Across LP2-40–48, four adjacent pairs have identical occupied-row masks, but six nonadjacent pairs do too. Line alignment alone does not identify a page join.&quot;,
+  &quot;tags&quot;: [
+    &quot;page margins&quot;,
+    &quot;image geometry&quot;,
+    &quot;row alignment&quot;,
+    &quot;controls&quot;,
+    &quot;shed the circumference&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;images/lp2-40.jpg&quot;,
+      &quot;images/lp2-41.jpg&quot;,
+      &quot;images/lp2-42.jpg&quot;,
+      &quot;images/lp2-43.jpg&quot;,
+      &quot;images/lp2-44.jpg&quot;,
+      &quot;images/lp2-45.jpg&quot;,
+      &quot;images/lp2-46.jpg&quot;,
+      &quot;images/lp2-47.jpg&quot;,
+      &quot;images/lp2-48.jpg&quot;
+    ],
+    &quot;representation&quot;: &quot;Original 2400×3600 JPEG pixels converted to grayscale; one fixed central text crop and y-row occupancy mask.&quot;,
+    &quot;procedure&quot;: &quot;Crop every page to x=650–1749, y=620–2899; sample every third x pixel; mark rows with &gt;12 samples below gray 90; score all 36 unordered page pairs by occupied-row Jaccard without shifting.&quot;,
+    &quot;parameters&quot;: &quot;9 images, 8 adjacent pairs, 28 nonadjacent controls, zero fitted parameters; x step 3, threshold 90, row occupancy &gt;12.&quot;,
+    &quot;exclusions&quot;: &quot;No rune recognition, word-boundary judgment, page-order search, best-fit registration, decryption, or claim that this is the original proposer’s exact intended test.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;Adjacent mean 0.764289935; nonadjacent mean 0.672274805. Four adjacent pairs and six nonadjacent controls score 1.000. LP2-44–48 share the same measured row mask under the fixed rule, so perfect line alignment is not unique to consecutive pages.&quot;,
+  &quot;limitations&quot;: &quot;The source proposed a possible image join but fixed no target pages, crop or success rule. This audit uses a chosen coherent page run. Row masks ignore glyph identity and horizontal seam continuity; enlarged initials and gap variation affect scores. Pairs share pages, so no significance test is assigned.&quot;,
+  &quot;next_steps&quot;: &quot;A rune-level seam proposal must declare a crop, ordering, pair orientation, alignment tolerance and predicted continuation before inspection, then preserve all mismatches and template-matched nonadjacent controls.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;page-margin-row-alignment&quot;,
+    &quot;title&quot;: &quot;Image-level page-join baseline&quot;,
+    &quot;question&quot;: &quot;Does visual row registration distinguish adjacent pages?&quot;,
+    &quot;baseline&quot;: &quot;page-margin-row-alignment&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Fixed central crop with unshifted y rows&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex — deterministic image rerun and independent cropped-buffer scan; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/page-margin-row-alignment/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 with Pillow 11.3 or compatible; no network. Run from repository root or extracted experiment bundle.&quot;,
+    &quot;script&quot;: &quot;experiments/records/page-margin-row-alignment/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;31c525aa49bd665f866c1b096149cd6cfe5a510466a56ee542a0681dc59c140f&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/plan.json&quot;,
+        &quot;sha256&quot;: &quot;b393f7285e176c8cbcbda37bbadc40b09aa544d53cf66e07e93bc69d876a0367&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/check.py&quot;,
+        &quot;sha256&quot;: &quot;47bdadcf2369aa72925a67a521453128ddbec203b3381997b11f77238b84ccd9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/plot.py&quot;,
+        &quot;sha256&quot;: &quot;9a865947fca9c2d5eae59d7c253832393873c2cb8cbce40a8158bde814aac6e8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-40.jpg&quot;,
+        &quot;sha256&quot;: &quot;3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-41.jpg&quot;,
+        &quot;sha256&quot;: &quot;134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-42.jpg&quot;,
+        &quot;sha256&quot;: &quot;e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-43.jpg&quot;,
+        &quot;sha256&quot;: &quot;dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-44.jpg&quot;,
+        &quot;sha256&quot;: &quot;463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-45.jpg&quot;,
+        &quot;sha256&quot;: &quot;898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-46.jpg&quot;,
+        &quot;sha256&quot;: &quot;05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-47.jpg&quot;,
+        &quot;sha256&quot;: &quot;08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-48.jpg&quot;,
+        &quot;sha256&quot;: &quot;341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/results.json&quot;,
+        &quot;sha256&quot;: &quot;8c85577be55a3014365400e50bd4125e026738dbfa42136d63a7a412d793a377&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/row-alignment.svg&quot;,
+        &quot;sha256&quot;: &quot;e78848e3691aa5ae7daad9418668989e5c75bbdd4b2fa414608c8dec8fa09a7b&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Reported page-margin-join suggestion and source limits&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=shed-circumference-page-margin-join&quot;
+    },
+    {
+      &quot;label&quot;: &quot;LP2 page source and image manifest&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/pages&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;page-join-sensitivity&quot;,
+    &quot;lp1-payload-outer-ring&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/page-margin-row-alignment/row-alignment.svg&quot;,
+      &quot;caption&quot;: &quot;All 36 fixed-crop row-mask similarities. Adjacent pairs are outlined; several nonadjacent controls are equally perfect.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Does trimming page margins reveal a special line alignment?\n\nA source discussion suggested reading “shed the circumference” as an instruction to remove manuscript margins and place pages side by side. It described this as something to try, not as a finished decryption. A side-by-side picture is easy to make but easy to overread: text lines can align because pages share a layout. This experiment asks the narrower, measurable question: **do adjacent LP2 pages line up more distinctively than other pages of the same design?**\n\n![All 36 fixed-crop row-alignment scores among LP2-40–48; outlined cells are adjacent pairs](experiments/records/page-margin-row-alignment/row-alignment.svg)\n\n## What was fixed\n\nThe nine original JPEGs LP2-40–48 are all 2400 × 3600 pixels. This is a continuous run of text-heavy pages with the same plant-border design; the source proposal did **not** designate these pages. From every image, take the same rectangle, x = 650–1749 and y = 620–2899. This sheds both illustrated sides and keeps the central writing. Preserve the original y coordinates: no page is shifted to fit another.\n\nFor each y row, sample every third x pixel. Call the row occupied when more than 12 samples have grayscale value below 90. The similarity of two row masks is their occupied-row intersection divided by their union (Jaccard score). Compare all **eight consecutive pairs** with **all 28 nonconsecutive pairs** from the same run. The [plan](experiments/records/page-margin-row-alignment/plan.json) fixes the crop, threshold, score and controls; [results.json](experiments/records/page-margin-row-alignment/results.json) gives every pair and each page’s row bands.\n\n## What the pages show\n\nThe mean score is 0.764 for consecutive pages and 0.672 for controls. That difference by itself is not evidence of a special join: four adjacent pairs score exactly 1.000, **but six nonadjacent controls also score 1.000**. In particular, every pair within LP2-44–48 has the same row mask under this rule. The text grid is reused across multiple pages, so an apparently perfect horizontal alignment cannot identify the correct next page. LP2-40’s enlarged red initial and the larger gaps on some earlier pages also change the measured bands. Every pair, including poor fits, appears in the figure and result file.\n\nThis tests only vertical placement of dark text rows after one fixed crop. It cannot tell whether the final rune of one line continues at the beginning of another, whether a word crosses a page boundary, or whether “shed the circumference” refers to physical page margins at all. The source left crop, page order, registration and success condition open. Selecting those *after* seeing an attractive join would create a large search space. The observed score difference has no significance test because pair comparisons share pages and the groups were not random independent samples.\n\n## Reproduce or extend\n\nRun `python experiments/records/page-margin-row-alignment/run.py --check` and `python experiments/records/page-margin-row-alignment/check.py` from the repository root or extracted bundle. They require Python 3 and Pillow. `run.py` checks each JPEG’s SHA-256 and the complete saved result; `check.py` scans the image buffers independently and recomputes all 36 scores. `plot.py` regenerates the SVG.\n\nA stronger visual continuation test would need a page sequence and a predeclared rune-level seam rule, plus nonadjacent pages matched for template and line count. The [page-join sensitivity record](#/experiments/page-join-sensitivity) separately measures what happens to word statistics when text transcripts are joined or split at page edges. Neither result supplies an LP2 plaintext.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/page-margin-row-alignment/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;31c525aa49bd665f866c1b096149cd6cfe5a510466a56ee542a0681dc59c140f&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;audit&quot;,
     &quot;label&quot;: &quot;Source or input audit&quot;,

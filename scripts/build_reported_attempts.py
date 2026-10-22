@@ -23,13 +23,18 @@ def build():
     published = {record['id'] for record in json.loads((ROOT / 'data/experiments.json').read_text(encoding='utf-8'))['records']}
     families = {family['id']: family for family in json.loads((ROOT / 'data/method-families.json').read_text(encoding='utf-8'))['families']}
     unique_sources = {item['source']['attachment_id'] for item in entries} | {item['attachment_id'] for item in reconciled} | {item['attachment_id'] for item in queue}
-    parts = [f'<p>This intake accounts for <strong>{len(unique_sources)} supplied source files</strong>: '
-             f'<strong>{len(entries)} source-specific proposals or analyses</strong>, '
+    entry_sources = {item['source']['attachment_id'] for item in entries}
+    parts = [f'<p>This intake draws on <strong>{len(unique_sources)} distinct supplied source files</strong>. '
+             f'It contains <strong>{len(entries)} source-specific proposals or analyses from {len(entry_sources)} files</strong>, '
              f'<strong>{len(reconciled)} notes matched to a checked scope</strong>, and '
-             f'<strong>{len(queue)} files awaiting full method extraction</strong>. '
+             f'<strong>{len(queue)} files still in the screening queue for remaining claims</strong>. '
+             'These categories overlap: one source can yield several proposals, have a checked observation, and still have claims to screen. '
              'They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, '
              'our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.</p>',
              '<p>The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. '
+             'Many entries have <strong>no public source URL</strong>. A hash verifies a copy someone already holds; '
+             'it cannot retrieve a private transcript or independently establish the attribution. '
+             'These entries are source leads, not a complete public history of prior attempts. '
              'A public link, when present, may change and has not yet been pinned to a revision. '
              'Start with <a href="#/experiments">Have we tried it?</a> for completed records, '
              'or the <a href="#/wiki/solving-methods">method map</a> for a broader family.</p>']
@@ -69,6 +74,8 @@ def build():
                          + (f'(repository revision <code>{e(source["public_revision"])}</code>; correspondence to the historical input may still be unresolved).'
                             if source.get('public_revision') else '(current URL; exact version not yet pinned).')
                          + '</p>')
+        else:
+            parts.append('<p>No public URL is recorded for this source. The supplied transcript hash is not a retrievable citation.</p>')
         parts.append('</details></section>')
     if reconciled:
         parts.append('<h2 id="reconciled">Source notes with a reproduced scope</h2>'

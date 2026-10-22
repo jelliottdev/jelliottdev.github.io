@@ -1,0 +1,70 @@
+2012: the whitespace message and ten image numbers
+
+Decode tabs and spaces from the preserved site HTML into the signed image-number list, then verify its signature.
+
+After the 2012 countdown and location list, the archived 845145127 site changed again. Its page appears almost blank, but the source contains a <pre> block made of spaces, tabs and line breaks. Decoding those exact characters yields a signed message with ten twelve-digit image numbers. This page reproduces that transition from the preserved HTML; it does not rely on a screenshot of a blank page.
+
+
+The two source files
+
+The preserved HTML is 7,978 bytes. Its single preformatted block has 3,628 spaces and 4,244 tabs across 32 encoded rows. We also host the archive’s decoded clear-signed message and the original solver script. The source manifest fixes their bytes and links each file to a specific archive revision. The site HTML is the input; the signed text is a comparison target, not an input to the decoder.
+
+
+From invisible characters to bytes
+
+Within the preformatted block, read a space as 1 and a tab as 0. Divide each line into eight-bit groups, convert each group to one ASCII byte and retain the line breaks. The first encoded row is empty. The next row begins as follows:
+
+The first byte of the signed-message marker
+	Position	1	2	3	4	5	6	7	8
+	HTML character	tab	tab	space	tab	space	space	tab	space
+	Bit	0	0	1	0	1	1	0	1
+
+00101101 is decimal 45, the ASCII hyphen at the start of -----BEGIN PGP SIGNED MESSAGE-----. Every encoded line has a whole number of bytes. The 7,872 bits yield 984 data bytes; retaining the 31 line breaks produces 1,015 bytes. The freshly decoded bytes match the archived signed text exactly, including its opening blank line and spaces after the first number. The replay report records the counts, hashes and all ten numbers.
+
+
+What the signed message supplies
+
+The message lists ten distinct twelve-digit strings:
+
+162667212858  414974253863  598852142735  876873892385  935691396441
+316744223127  427566844663  644169769482  889296759263  963846244281
+
+The pinned artifact archive reports that these were JPEG names at the historical puzzle domain and preserves two examples. The replay establishes the ten strings and the signature; it does not freshly retrieve all ten historical JPEGs or decode every physical poster’s QR code. Keep those later steps separate from the whitespace decoding.
+
+
+Signature and provenance
+
+The recovered text declares Hash: SHA1. A fresh GnuPG 2.5.21 check returned a valid signature against the preserved 3301 public key, fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. This confirms consistency with that key; its association with a real-world identity is not independently certified. The original archive’s decoder requires BeautifulSoup and uses a global variable inside its byte-conversion helper. Our standard-library replay parses only the single preformatted block and independently checks its exact output against the saved signed text.
+
+
+Run the replay
+
+Extract the reference-data bundle with folders intact. With Python 3, run:
+
+python scripts/replay_2012_whitespace.py --check
+
+To verify the signature again, add --gpg /path/to/gpg. The script creates a temporary keyring, imports only the preserved public key and checks for its full fingerprint. Download the replay script · source hashes.
+
+Sources, related references, and files
+- 2012 countdown and location list
+  https://jelliottdev.github.io/reference/articles/2012-countdown.html
+- preserved HTML
+  https://jelliottdev.github.io/exports/sources/whitespace-2012/whitespace.html
+- decoded clear-signed message
+  https://jelliottdev.github.io/exports/sources/whitespace-2012/whitespace.asc
+- solver script
+  https://jelliottdev.github.io/exports/sources/whitespace-2012/extract-binary.py
+- source manifest; source hashes
+  https://jelliottdev.github.io/exports/sources/whitespace-2012/manifest.json
+- replay report
+  https://jelliottdev.github.io/exports/cicada-2012-whitespace.json
+- pinned artifact archive
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/005-845145127.com
+- preserved 3301 public key
+  https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Download the replay script
+  https://jelliottdev.github.io/scripts/replay_2012_whitespace.py
+
+Article: https://jelliottdev.github.io/reference/articles/2012-whitespace.html

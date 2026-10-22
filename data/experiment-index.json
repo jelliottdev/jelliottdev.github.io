@@ -549,7 +549,7 @@
       "id": "doublet-context",
       "title": "Ciphertext symbols and differences around LP2 doublets",
       "question": "Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?",
-      "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance both fall inside 5,000 fixed-mask, within-page permutation ranges. The repeated ciphertext rune does not itself label plaintext EA.",
+      "summary": "Across 86 doublets, same-symbol collisions and before/after difference imbalance fall inside fixed-mask controls. A companion comparison of the 22 hyphen-crossing and 63 within-token events finds no unusual whole-label context separation under its conditional controls.",
       "tags": [
         "doublets",
         "EA",
@@ -2020,6 +2020,33 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-15-mobius-panel.zip"
     },
     {
+      "id": "lp2-15-totient-gap-audit",
+      "title": "LP2-15: prime-only totient and Fibonacci-gap proposal",
+      "question": "Does the reported totient-before-prime-gap sequence reconstruct all sixteen LP2-15 cells and its own Fibonacci-gap array under one stated rule?",
+      "summary": "The source's totient array matches all sixteen cells after changing only prime 3299 to 3298. Its prime candidates require two addition choices despite a subtraction label; fourteen of fifteen specified predecessor gaps match, while one reports 317 instead of 377.",
+      "tags": [
+        "LP2-15",
+        "Euler totient",
+        "Fibonacci",
+        "prime ordinal",
+        "number panel",
+        "reported attempt",
+        "source audit"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-15"
+      ],
+      "artifacts": [],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-22",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-15-totient-gap-audit",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/lp2-15-totient-gap-audit.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/lp2-15-totient-gap-audit/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-15-totient-gap-audit.zip"
+    },
+    {
       "id": "lp2-31-periodic-ioc",
       "title": "LP2-31: periodic IoC for periods 2-20",
       "question": "Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?",
@@ -3056,6 +3083,35 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-row-prime-sums.zip"
     },
     {
+      "id": "lp2-spacing-gap-audit",
+      "title": "LP2-15 number-row spacing: a source-bound line-gap audit",
+      "question": "Is the reported extra vertical gap before the fourth LP2-15 number row measurable on the original JPEG, and how does it compare with neighboring text rows?",
+      "summary": "The four number rows leave 62, 61 and 79 blank-pixel gaps. The last is at least 17 pixels wider than the earlier panel gaps; selected neighboring rune-text gaps are 73–75 pixels. No word-gap bitstream or font cause is established.",
+      "tags": [
+        "LP2-15",
+        "line spacing",
+        "word gaps",
+        "binary hypothesis",
+        "typography",
+        "number panel",
+        "reported attempt"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-14",
+        "lp2-15",
+        "lp2-16"
+      ],
+      "artifacts": [],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-22",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-spacing-gap-audit",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/lp2-spacing-gap-audit.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/lp2-spacing-gap-audit/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/lp2-spacing-gap-audit.zip"
+    },
+    {
       "id": "lp2-totient-openings",
       "title": "LP2-00–55: totients of consecutive integers",
       "question": "Does uninterrupted consecutive-integer totient arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?",
@@ -3789,6 +3845,55 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/page-join-sensitivity.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/page-join-sensitivity/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/page-join-sensitivity.zip"
+    },
+    {
+      "id": "page-margin-row-alignment",
+      "title": "LP2 margin trimming: do neighboring text rows align uniquely?",
+      "question": "After one fixed image crop and zero-shift registration, are consecutive LP2 text-row positions distinctive relative to nonconsecutive same-layout pages?",
+      "summary": "Across LP2-40–48, four adjacent pairs have identical occupied-row masks, but six nonadjacent pairs do too. Line alignment alone does not identify a page join.",
+      "tags": [
+        "page margins",
+        "image geometry",
+        "row alignment",
+        "controls",
+        "shed the circumference",
+        "LP2"
+      ],
+      "family": {
+        "id": "page-margin-row-alignment",
+        "title": "Image-level page-join baseline",
+        "question": "Does visual row registration distinguish adjacent pages?",
+        "baseline": "page-margin-row-alignment"
+      },
+      "variant_label": "Fixed central crop with unshifted y rows",
+      "pages": [
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48"
+      ],
+      "artifacts": [
+        "images/lp2-40.jpg",
+        "images/lp2-41.jpg",
+        "images/lp2-42.jpg",
+        "images/lp2-43.jpg",
+        "images/lp2-44.jpg",
+        "images/lp2-45.jpg",
+        "images/lp2-46.jpg",
+        "images/lp2-47.jpg",
+        "images/lp2-48.jpg"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-22",
+      "url": "https://jelliottdev.github.io/#/experiments/page-margin-row-alignment",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/page-margin-row-alignment.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/page-margin-row-alignment/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/page-margin-row-alignment.zip"
     },
     {
       "id": "page40-for-every-arithmetic",

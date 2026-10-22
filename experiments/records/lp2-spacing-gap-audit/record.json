@@ -1,0 +1,44 @@
+{
+  "id": "lp2-spacing-gap-audit",
+  "title": "LP2-15 number-row spacing: a source-bound line-gap audit",
+  "status": "published",
+  "question": "Is the reported extra vertical gap before the fourth LP2-15 number row measurable on the original JPEG, and how does it compare with neighboring text rows?",
+  "summary": "The four number rows leave 62, 61 and 79 blank-pixel gaps. The last is at least 17 pixels wider than the earlier panel gaps; selected neighboring rune-text gaps are 73–75 pixels. No word-gap bitstream or font cause is established.",
+  "tags": ["LP2-15", "line spacing", "word gaps", "binary hypothesis", "typography", "number panel", "reported attempt"],
+  "scope": {
+    "pages": ["lp2-14", "lp2-15", "lp2-16"],
+    "representation": "Fixed source-image rectangles on the three hashed 2400×3600 JPEGs; vertical ink-row bands and blank interline rows, not text transcription.",
+    "procedure": "Threshold grayscale pixels, group ink rows into printed lines, list every line box and intervening blank-row count; independently rederive at the main threshold and repeat at two alternative thresholds.",
+    "parameters": "Rectangles, cutoff 160, five ink pixels per row, maximum 14 blank rows within a printed line, threshold sensitivity 100 and 200; all fixed in plan.json.",
+    "exclusions": "The absent forum screenshots and specific word-gap examples, bit interpretation, fallback-font mechanism, and any claim about LP2 plaintext."
+  },
+  "outcome": "inconclusive",
+  "finding": "At threshold 160 the LP2-15 number-row gaps are 62, 61, 79 pixels. The final anomaly persists with the same 17-pixel separation at thresholds 100 and 200. Lower LP2-15 rune text has six 74-pixel gaps; selected LP2-14/16 text gaps are 73–75 pixels.",
+  "limitations": "This verifies one reported line-gap observation, not the word-gap hypothesis or a binary channel. The numeric panel and runic controls use different content and layout, so their difference cannot identify typesetting cause. The source screenshots are not preserved in the supplied transcript.",
+  "next_steps": "Recover the original word-gap screenshots or identify exact page/row/glyph coordinates; independently annotate a frozen sample and compare font/kerning controls before defining a binary classification and decoder.",
+  "review": {"reviewer": "Codex; independent byte-row projection check; human review pending", "retested_on": "2026-10-22", "kind": "image-measurement", "human_review": "pending"},
+  "reproduction": {
+    "command": "python experiments/records/lp2-spacing-gap-audit/run.py --check",
+    "environment": "Python 3.12 and Pillow; independent check.py and plot.py --check",
+    "script": "experiments/records/lp2-spacing-gap-audit/run.py",
+    "script_sha256": "4822a97469c433f3d1923165cc32c985129ed20aeeeab8cd0f657dc491fdc1b0",
+    "inputs": [
+      {"path": "images/lp2-14.jpg", "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"},
+      {"path": "images/lp2-15.jpg", "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5"},
+      {"path": "images/lp2-16.jpg", "sha256": "39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d"},
+      {"path": "experiments/records/lp2-spacing-gap-audit/plan.json", "sha256": "6d8701ea01d139d10871ac315243b0b2b6da8905ea3f11b22b2cf29383740fbe"},
+      {"path": "experiments/records/lp2-spacing-gap-audit/check.py", "sha256": "819c01b53fedf1f009fcc2ebc72ab90c12917af0ffbdf1b714a6c8449b4eba25"},
+      {"path": "experiments/records/lp2-spacing-gap-audit/plot.py", "sha256": "7d7161ecdf71bb01b47da1a4c0bfce03e93731aabf529a1638fbd637de8277aa"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/lp2-spacing-gap-audit/results.json", "sha256": "515fefabc18a8b3ef5bb7f3ce25239c2c8341c7d5581efe147c1fc8235bf7b43"},
+      {"path": "experiments/records/lp2-spacing-gap-audit/line-gaps.svg", "sha256": "9f75489773069e0668a5592a832a5bcc814254a89c23f1fe1116c27f9d6b4ffa"}
+    ]
+  },
+  "visuals": [{"path": "experiments/records/lp2-spacing-gap-audit/line-gaps.svg", "caption": "Three LP2-15 number-panel interline gaps and descriptive controls on adjacent rune-text pages."}],
+  "sources": [
+    {"label": "Original LP2-15 page image", "url": "https://jelliottdev.github.io/#/reader/lp2-15"},
+    {"label": "Source-hashed spacing discussion", "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-spacing-as-bits"}
+  ],
+  "related": []
+}

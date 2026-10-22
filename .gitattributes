@@ -58,3 +58,12 @@ exports/sources/cicada-2014-seventh-onion/manifest.json text eol=lf
 
 # Preserve the upstream GPL word-corpus bytes and their pinned manifest.
 experiments/records/word-sum-corpus-control/source/* -text
+
+# These audited outputs are hashed byte-for-byte, including their original line endings.
+experiments/records/lp2-15-totient-gap-audit/* -text -eol
+experiments/records/lp2-spacing-gap-audit/* -text -eol
+experiments/records/page-margin-row-alignment/* -text -eol
+experiments/records/doublet-context/boundary* -text -eol
+
+# Spaces, tabs, line endings and trailing blanks carry the historical message.
+exports/sources/whitespace-2012/* -text -eol whitespace=-blank-at-eol,-blank-at-eof

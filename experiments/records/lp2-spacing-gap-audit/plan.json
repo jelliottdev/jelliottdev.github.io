@@ -1,0 +1,19 @@
+{
+  "question": "Is the reported LP2-15 extra interline gap measurable on the original JPEG, and how does it compare with local page-layout controls?",
+  "source_report": {"attachment_id": "eb0557f3-815d-4b6f-9f12-eced5b37b0d3", "sha256": "0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7", "scope": "The supplied discussion suggests both word gaps and line gaps as bits, but the original screenshots are unavailable. It specifically notes the gap before the final LP2-15 number row."},
+  "inputs": [
+    {"path": "images/lp2-14.jpg", "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"},
+    {"path": "images/lp2-15.jpg", "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5"},
+    {"path": "images/lp2-16.jpg", "sha256": "39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d"}
+  ],
+  "regions": [
+    {"id": "lp2-15-panel", "page": "lp2-15", "role": "numeric panel; reported exception", "rectangle_xyxy": [580, 850, 1800, 1430], "expected_rows": 4},
+    {"id": "lp2-15-runes", "page": "lp2-15", "role": "lower rune-text control, red margin excluded", "rectangle_xyxy": [760, 1700, 1810, 3000], "expected_rows": 7},
+    {"id": "lp2-14-runes", "page": "lp2-14", "role": "adjacent rune-text control, left drawing excluded", "rectangle_xyxy": [600, 650, 1810, 1940], "expected_rows": 7},
+    {"id": "lp2-16-runes", "page": "lp2-16", "role": "adjacent rune-text control", "rectangle_xyxy": [580, 650, 1820, 2900], "expected_rows": 12}
+  ],
+  "segmentation": "Original 2400×3600 grayscale JPEG pixels, no resizing. A row is ink if at least five pixels in the fixed x-range have grayscale <160. Contiguous ink-row runs separated by at most 14 blank rows are one printed line. Measure blank rows from a line's last ink row to the next line's first ink row. No automated text/word parsing.",
+  "sensitivity": "Repeat all four regions at gray cutoffs 100 and 200, keeping every other setting fixed. This is a threshold robustness check, not a model fitted to the outlier.",
+  "comparison": "Report every line box and interline gap. Contrast the final numeric-panel gap against the panel's first two and the adjacent rune-text controls. Do not concatenate gaps into bits.",
+  "exclusions": "No original forum screenshot coordinate can be inferred; word-space thickness, punctuation/fallback-font causation, page-wide binary decoding, and the intended purpose of LP2-15 layout are outside this test."
+}

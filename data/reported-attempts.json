@@ -627,10 +627,10 @@
         "sha256": "66bd173de561829a90cb0b04cce4546c602f2adaa1a710ad4d3c0f263f42bfdf"
       },
       "reported_idea": "Starting from the page-15 square, apply Euler’s totient to a prime-related sequence, subtract values from 3301, and interpret the resulting gaps as a Fibonacci arrangement. The thread then proposes applying corresponding manipulations to rune text.",
-      "coverage": "The published square construction reproduces the printed entries using Fibonacci-indexed primes and distance from 3301. This is a different transformation. The transcript gives candidate arrays but no unique, complete decryption rule.",
-      "related_records": [],
-      "replay_needed": "Freeze the ordered input primes, every totient/subtraction step, spiral orientation and cell mapping; compare all 16 printed cells, then define one forward cipher operation and held-out rune output before interpreting words.",
-      "status": "related-only"
+      "coverage": "A source-bound audit compares all sixteen cells in the posted arrays. The prime candidates fit after two addition choices despite a subtraction label; one specified predecessor gap is 317 in the source but computes to 377. No forward rune rule is supplied.",
+      "related_records": ["lp2-15-totient-gap-audit"],
+      "replay_needed": "Freeze sign selection, repeated prime-index handling, panel traversal and a rune operation before testing an untouched target. Retain the source's 317/377 disagreement and uncertain cell.",
+      "status": "partial"
     },
     {
       "id": "music-reverse-table-canon",
@@ -828,10 +828,10 @@
         "sha256": "0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7"
       },
       "reported_idea": "Classify visibly thick and thin word or line gaps as two symbols, then read them as bits. The discussion also offers a mundane typography mechanism: apostrophes, quotation marks and other fallback-font glyphs may change line metrics.",
-      "coverage": "No bitstream or font-control comparison for the supplied measurements is in the experiment archive. The screenshots referred to in the pasted text are placeholders, so exact sampled gaps are unavailable there.",
-      "related_records": [],
-      "replay_needed": "Choose page images and gap coordinates in advance; estimate widths at original pixel scale, compare with glyph/fallback-font and layout controls, publish every classified gap and byte order, and test output against the same pipeline on other page layouts.",
-      "status": "not-replayed"
+      "coverage": "A bounded audit measures the LP2-15 number-panel line gaps on the original JPEG and compares selected nearby text-line gaps. Its wider final panel gap survives threshold changes. The source screenshots are unavailable, so the proposed word-gap bitstream and fallback-font explanation remain untested.",
+      "related_records": ["lp2-spacing-gap-audit"],
+      "replay_needed": "Recover the original word-gap screenshots or fix page and glyph coordinates before testing a binary classification, byte order and font/layout controls.",
+      "status": "partial"
     },
     {
       "id": "lp2-15-mobius-square-transform",
@@ -1136,10 +1136,10 @@
         "sha256": "1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042"
       },
       "reported_idea": "Interpret the solved 'shed the circumference' wording together with a cited 'Let the text guide you' payload as a reason to cut page margins and place manuscript pages side by side, then inspect whether their text lines align or continue. The post says the author might try this; it does not report a completed comparison or extracted text.",
-      "coverage": "The page-join sensitivity record tests alternative text boundaries, not trimming page images and physically aligning lines. The source discussion itself notes that row positions can move between pages.",
-      "related_records": ["page-join-sensitivity"],
-      "replay_needed": "Specify page sequence, exact image hashes, crop rectangles, scale and row-registration convention before looking for alignments. Publish all adjacent joins, including failures; compare rune-line continuity against the untrimmed layout and nonadjacent page controls.",
-      "status": "not-replayed"
+      "coverage": "A fixed-crop baseline checks row positions across LP2-40–48. Some neighboring pages align perfectly, but nonneighboring controls do too; row alignment alone is not distinctive. It does not test rune continuation across a joined seam. The source discussion fixed no pages or trim rule.",
+      "related_records": ["page-join-sensitivity", "page-margin-row-alignment"],
+      "replay_needed": "Specify page sequence, exact image hashes, crop rectangles, scale and row-registration convention before looking for seam continuity. Publish failures and compare against nonadjacent page controls.",
+      "status": "partial"
     },
     {
       "id": "rune-poem-meaning-artwork-map",
