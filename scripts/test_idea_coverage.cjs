@@ -84,9 +84,22 @@ for(const [query,id] of [
  ['beam search','automatic-search'],
  ['Try a SAT solver','constraints'],
  ['Use Z3 on page 31','constraints'],
- ['Try constraint solving','constraints']
+ ['Try constraint solving','constraints'],
+ ['Have we tried spirals?','routes'],
+ ['Try acrostics on page 31','acrostics'],
+ ['Take the first runes of each word','acrostics'],
+ ['Try anagrams','transposition'],
+ ['Reorder pages before decoding','page-order'],
+ ['Compare the SHA-512 target','hashes'],
+ ['Could the text be compressed?','compression'],
+ ['Try 5-bit packing','compression'],
+ ['Try zlib','compression'],
+ ['Look for number coincidences','expressions'],
+ ['Use SAT solvers','constraints'],
+ ['Could it be non-English?','language']
 ])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
 assert.equal(Coverage.families(families,'LP2-31').length,0);
+assert.equal(Coverage.families(families,'hashish seedlings').length,0,'Aliases must match whole words, not substrings');
 assert.equal(Search.experimentDocs(families).length,0);
 const vm=require('node:vm');
 const ui={IdeaCoverage:Coverage,methodFamilyRecords:families,methodFamilyUnavailable:false,ideaCoverageRecords:notes,ideaCoverageUnavailable:false,experimentRecords:experiments,esc:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')};
