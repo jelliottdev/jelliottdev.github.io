@@ -5930,6 +5930,8 @@ Liber Primus combines visible artwork, rune text, numbers, and hidden file conte
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
 
+This guide starts with the manuscript. To follow the puzzle from its first 2012 image through the 2013 steps and into the 2014 manuscript, use the separate Cicada history route. Earlier steps give context; they are not presumed keys to LP2.
+
 The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
 
 [Image: The warning page used for the first reading exercise]
@@ -6083,6 +6085,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-31.html
 - numbering cross-reference
   https://jelliottdev.github.io/#/numbering
+- Cicada history route
+  https://jelliottdev.github.io/reference/articles/cicada-history.html#replays
 - illustrated cover with compasses
   https://jelliottdev.github.io/reference/articles/illustrated-cover.html
 - The warning page used for the first reading exercise; the warning in the reader; the original warning image
@@ -7478,6 +7482,8 @@ Archived opening JPEG, 509 × 503 pixels. Download original bytes. A screenshot 
 
 JPEG images use an end marker, hexadecimal FF D9. In this archived file, text follows that marker. It invokes a Roman emperor and contains the encoded string lxxt>33m2mqkyv2gsq3q=w]O2ntk. Our byte-level report preserves the exact trailer and its offset. Finding appended text is different from extracting the OutGuess payload.
 
+On macOS or Linux, a quick inspection of the preserved file is file final.jpg followed by tail -c 61 final.jpg. The latter displays this file’s 61 bytes after the JPEG end marker, including the Caesar clue. It is a shortcut for this exact archived file, not a general JPEG parser; the replay script below verifies the marker and offset. On Windows, use the cross-platform Python replay below.
+
 2. Shift character codes, including punctuation
 
 Subtract four from every character’s ASCII value. The beginning lxxt>33 becomes http://: l → h, x → t, > → :, and 3 → /. A letters-only Caesar substitution would leave the punctuation wrong. The full output is the historical address http://i.imgur.com/m9sYK.jpg.
@@ -7506,7 +7512,7 @@ The message points to the subreddit a2e7j6ic78h0j and supplies 76 line-and-chara
 
 5. The next stage needs an ordered text
 
-The coordinates are pointers into a text, not a self-contained cipher. The Mabinogion counting guide explains the subsequent decoding, post-order and spacing issues. A complete replay must preserve the ordered post list and each character lookup. Substituting an arbitrary modern edition or a current Reddit display order can change the result.
+The coordinates are pointers into a text, not a self-contained cipher. The Mabinogion counting guide explains the subsequent decoding, post-order and spacing issues. A complete replay must preserve the ordered post list and each character lookup. Substituting an arbitrary modern edition or a current Reddit display order can change the result. The 76 coordinates refer to lines in that separate post collection; the number of posts cannot pad or change the opening JPEG’s byte length.
 
 The dimensions become relevant later, after the telephone-stage instruction asks for three associated primes. All three values are prime, and 509 × 503 × 3301 = 845145127. The audit checks that arithmetic, but it should not be presented as the rule that decoded the appended string. Continue with the telephone, countdown and coordinate walkthrough for that later step.
 
@@ -7691,7 +7697,15 @@ The title string a2e7j6ic78h0j7eiejd0120 gives the numeric key by interpreting d
 
 Under the named-account rule, all 76 coordinates extract CALL US AT US TELE PHONE NUMBER TWO ONE FOUR THREE NINE OH NINE SIX OH EIGHT. The ledger retains every input title, timestamp, selection decision, decoded line and lookup. The comparison was exploratory, prompted by the ordering complaint; the author filter is not cryptographic authentication. It reproduces the archived text, not a freshly retrieved 2012 Reddit page.
 
+Why are there more post lines than lookups?
+
+The preserved snapshot has 192 post records. After the stated image and duplicate filters, it yields 186 text lines under the all-author rule or 185 under the named-account rule. The 76 coordinates range from line 1 to line 76; this particular lookup never reads the remaining 110 or 109 selected lines. A separately copied 183-line text may reflect different selection or snapshot rules and should be compared line by line before use.
+
+These counts establish the unused range, not why the extra posts were present. They do not show deliberate filler, reverse-order indexing or a hidden second code. The posts are separate from the opening JPEG, so their number cannot increase that image’s file size for the later prime-dimension calculation. To test a proposed use for the remaining lines, fix the post selection and order first, then state the extraction rule and a checkable expected result.
+
 No extra space was inserted after a period in this replay. The contemporary account’s spacing repair remains a separate historical observation: archive agreement does not prove its bytes are identical to that solver’s original copy. Preserve both facts rather than declaring either source universally correct.
+
+The preserved double spaces can change a lookup. In the named-account trace, line 58 reads FOUR-AND-TWENTY DAMSELS, EMBROIDERING SATIN AT A WINDOW.  AND THIS I. Coordinate 58:64 selects H; collapsing the two spaces after the period selects I instead. The ledger keeps the original line and selected character, so this is directly checkable.
 
 Extract the reference-data ZIP, then run python scripts/replay_2012_subreddit.py --output subreddit-replay.json with Python 3. The script checks source hashes, inverse letter shifts and coordinate selection, and preserves both outcomes. Replay script · Archived post records · Source manifest. The opening coordinates come from the freshly extracted JPEG payload.
 
@@ -7815,7 +7829,7 @@ Sources, related references, and files
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/parse-decrypt-analyze.py
 - anomaly log
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/anomalies.txt
-- fresh replay ledger
+- fresh replay ledger; ledger
   https://jelliottdev.github.io/exports/cicada-2012-subreddit.json
 - reference-data ZIP; reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
@@ -16745,20 +16759,9 @@ In Zen contexts, a kōan can take the form of a puzzling question or encounter u
 
 That background helps explain why a master might reject an answer that is factually correct. It does not identify Liber Primus’s dialogues with any particular traditional case. The manuscript gives the genre label but supplies no author, collection, case number or lineage for either story.
 
-Zen, Rinzai, and Sōtō
+Zen context
 
-These names describe a religious and philosophical setting, rather than three kinds of puzzle:
-
-Zen
-A Buddhist tradition whose Japanese name comes from Chinese Chán, ultimately related to Sanskrit dhyāna, meditation. The practical setting matters: a dialogue belongs to a wider discipline, not just a collection of clever answers.
-Rinzai
-A Japanese Zen school particularly associated with organized kōan training and consultation with a teacher.
-Sōtō
-A Japanese Zen school associated with shikantaza, or “just sitting.” It does not use the same elaborate kōan training system.
-
-This brief distinction follows sections 1–2 of the Stanford Encyclopedia of Philosophy’s account of Japanese Zen (revised 7 March 2024). It introduces the terms; it is not a complete account of either school.
-
-Liber Primus supplies the heading A KOAN and a master–student exchange. It does not name Rinzai, Sōtō, a teacher’s lineage, or a traditional case collection. The useful comparison is therefore at the level of literary form and the questioning of ordinary answers. A stronger attribution would need the specific textual evidence described below.
+Rinzai Zen is particularly associated with formal kōan practice and teacher–student exchanges. That makes it useful background for reading the two dialogues. Liber Primus names neither Rinzai nor a traditional case or teacher, so the resemblance does not establish a school or source. See the Stanford Encyclopedia of Philosophy’s Japanese Zen entry, sections 1–2, for the wider history.
 
 First koan: what an answer describes
 
@@ -16834,10 +16837,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reading-second-koan.html
 - Stanford Encyclopedia of Philosophy’s account of Japanese Zen
   https://plato.stanford.edu/archives/spr2020/entries/japanese-zen/
-- Stanford Encyclopedia of Philosophy’s account of Japanese Zen
+- Stanford Encyclopedia of Philosophy’s Japanese Zen entry
   https://plato.stanford.edu/entries/japanese-zen/
-- specific textual evidence described below
-  https://jelliottdev.github.io/reference/articles/koans.html#investigate
 - Lower passage on LP1-09: large red initial and red heading followed by three rows of runic text.; Original JPEG
   https://jelliottdev.github.io/images/lp1-09.jpg
 - See its position on the complete page
