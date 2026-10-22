@@ -39,7 +39,7 @@ function renderIdeaChecker(endpoint,query){
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
   const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
   main.innerHTML=head('Have we tried it?','Check a technique against documented experiments')+`<article class="reading-width idea-checker">
-    <p>Describe the technique, inputs, and bounds you want to test. Still choosing an approach? <a href="#/wiki/solving-methods">Browse solving-method families</a>.</p>
+    <p>Describe the technique, inputs, and bounds you want to test. Still choosing an approach? <a href="#/wiki/solving-methods">Browse solving-method families</a>. For what the archive covers and what comes next, see <a href="#/wiki/research-coverage">research coverage</a>.</p>
     <form id="experiment-form">
       <label for="experiment-query">Technique or idea</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>

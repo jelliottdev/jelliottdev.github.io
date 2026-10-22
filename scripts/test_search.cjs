@@ -61,6 +61,7 @@ for(const [queries,id,pageIds] of [
 for(const q of ['cuni','moeb','compass'])assert(search.search(db,q).length,'Spelling variants must work while typing');
 assert.equal(search.search(db,'spirals')[0].href,'#/wiki/spirals');
 assert.equal(search.search(db,'branches')[0].href,'#/wiki/branches');
+for(const q of ['long-haired figures','women with long hair'])assert.equal(search.search(db,q)[0].href,'#/wiki/visual-index?section=lp1-frame',q);
 console.log('PASS: visual names, spelling variants, partial aliases, direct page results, and subject anchors');
 
 // These features share broad guide categories but belong to different sheets.

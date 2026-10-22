@@ -1,0 +1,65 @@
+Error detection, parity and correction
+
+Define valid blocks and error assumptions before treating repetition, marks or spelling differences as redundancy.
+
+An error-detecting or error-correcting code adds a declared kind of redundancy to a message. A solver might propose that some runes, marks or spellings act as parity symbols or repeated data. To test this, define the input units, grouping, valid encoded blocks and what kinds of errors the code is meant to detect or correct.
+
+Three claims with different evidence
+
+	Claim	What the rule does	What a test must establish
+	Detection	Marks some altered blocks as invalid.	Which changes are guaranteed to be noticed under a fixed code.
+	Correction	Selects an original block from a received one.	When that selection is unique, and when it is ambiguous.
+	Authentication or file integrity	Compares bytes with a stored digest or verified signature.	The exact bytes and trusted reference, not a correction of unknown text.
+
+These roles can coexist in a larger system, but a familiar repeated shape or a spelling variant does not by itself identify any of them. The file-checksum guide concerns known digital files; the question here is whether an explicit redundancy rule can be demonstrated in a proposed manuscript representation.
+
+A small correction example
+
+In an invented binary code, let the only valid three-bit words be 000 and 111. Their Hamming distance is three: all three positions differ. If 001 is received, it is one bit from 000 and two bits from 111. Assuming at most one bit changed, the original word is uniquely 000.
+
+	Received word	Distance to 000	Distance to 111	Conclusion under the one-error limit
+	001	1	2	Correct to 000.
+	110	2	1	Correct to 111.
+	010	1	2	Correct to 000.
+
+If two bits may have changed, receiving 001 could also result from 111. The correction claim would no longer follow. For an equal-length code whose minimum distance is d, the usual distance bound detects every change affecting at most d − 1 symbols and uniquely corrects at most floor((d − 1) / 2). These guarantees assume the proposed valid-word set and that an error changes a symbol rather than inserting or deleting one. See MIT's worked explanation of distance and correction.
+
+Detection is weaker than correction
+
+Suppose instead that a three-bit block is valid whenever it has an even number of ones. The valid set is 000, 011, 101, 110. Every single-bit flip produces an invalid odd-parity block, so one changed bit is detectable.
+
+Receiving 001 does not identify the original: 000, 011 and 101 are each one bit away. Choosing the correction that makes a desired word would add a choice the parity rule did not supply. Two flips can turn one even-parity word into another valid one and escape this check.
+
+First show what the codewords are
+
+Binary examples do not automatically transfer to runes. A 29-rune proposal needs a defined alphabet of values, block size and set of valid codewords or parity equations. If marks are classified as bits, preserve their original measurements and ambiguous cases. If spelling variants supply parity, specify which positions are data, which are checks, and how the check value is calculated.
+
+Changing word breaks, deleting symbols or adding a rune shifts block boundaries. A distance calculation on a corrected transcription answers a different question from one on the archived rune stream. Identify the presumed error process: substitution, insertion, deletion or damaged image measurement. A code designed for one type does not automatically correct the others.
+
+Count the ways the code was selected
+
+Searching many block sizes, starting offsets, bit assignments, parity equations and candidate corrections creates opportunities for a fit. Publish the entire declared set, including blocks that fail its checks. Compare with controls that preserve relevant counts and layout while receiving the same search.
+
+A successful check on a block used to choose the code is internal consistency. Freeze the rule and test untouched blocks. Report how often they are accepted, rejected or corrected, and whether the corrections are unique. Do not discard blocks that remain ambiguous or classify them by the readability of a proposed output.
+
+Documented experiments
+
+No error-correcting-code manuscript experiment is linked here yet. This guide states how to define one; it does not claim that observed spellings or repeated symbols encode parity.
+
+All method families · Alternative symbol systems · Transcription checking · Search space and bounds
+
+Sources, related references, and files
+- file-checksum guide
+  https://jelliottdev.github.io/reference/articles/checksums.html
+- MIT's worked explanation of distance and correction
+  https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c1/c1s1/
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Alternative symbol systems
+  https://jelliottdev.github.io/reference/articles/method-symbol-systems.html
+- Transcription checking
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-error-correction.html
