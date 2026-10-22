@@ -217,6 +217,9 @@ for path in ['exports/cicada-2014-response.json','scripts/replay_2014_onion_resp
 for path in ['exports/cicada-2014-stage04.json','scripts/replay_2014_stage04.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2014-stage04').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
  files[-1].update(guide='2014-stage04',aliases=['2014 stage04','server-status','LP1-03','LP1-04','LP1-05','embedded matrix'])
+for path in ['exports/cicada-2014-stage05.json','scripts/replay_2014_stage05.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2014-stage05').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
+ files[-1].update(guide='2014-stage05',aliases=['2014 fourth onion','first koan source','LP1-06','LP1-07','LP1-08','LP1-09','gzip response'])
 for path in ['exports/cicada-2013-twitter.json','exports/cicada-2013-twitter-outguess.json','exports/cicada-2013-twitter-signature.json','exports/figures/cicada-2013-twitter-chain.svg','scripts/replay_2013_twitter.py','scripts/test_replay_2013_twitter.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013-twitter').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
  files[-1].update(guide='2013-twitter-gematria',aliases=['2013 Twitter','761.mp3','Gematria Primus origin','twitter.bin','gematria.jpg'])
