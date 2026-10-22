@@ -25,7 +25,7 @@ The reflected upper fit uses scale 0.550 and translation `(230,94)` relative to 
 
 The two declared alignments favor a horizontally reflected source photograph, including the lower region that did not choose the fit. This supports a specific image-source relationship more strongly than a general resemblance between bare trees. The test does not calculate a chance probability against a collection of other tree photographs. It does not establish the exact crop, layer opacity, drawing/filter steps or software used to make LP2-55. Fine branches and the lower trunk differ visibly in the overlay.
 
-The [branches guide](#/wiki/branches?section=shared-tree) compares the related treatments on LP2-32 and in the 2016 message. Those carriers are **not** fit by this script; each would need its own frozen crop and control comparison. Nothing in this image alignment implies a rune operation.
+The [branches guide](#/wiki/branches?section=shared-tree) compares the related treatments on LP2-32 and in the 2016 message. Those carriers are **not** fit by this script. A <a href="#/experiments/dead-tree-cross-carrier">related experiment</a> now gives each its own crop, response rule and orientation control. Nothing in this image alignment implies a rune operation.
 
 ## Reproduce
 

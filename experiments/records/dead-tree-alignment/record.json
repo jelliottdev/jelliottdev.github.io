@@ -39,7 +39,7 @@
   "outcome": "supported",
   "finding": "Under the declared search, reflection improves whole-region correlation from 0.377 to 0.623; fitting upper branches yields lower-region correlations 0.456 reflected versus −0.095 original.",
   "limitations": "Image, crop and response parameters were chosen after visual inspection. The lower-region check is within the same selected images and is not a blind independent holdout. It does not establish the author’s exact compositing steps or the probability of a coincidental match among other photographs.",
-  "next_steps": "Freeze an alignment rule for LP2-32 and the 2016 message; compare other tree photographs with the same selection process; inspect unmatched branch regions and tonal transformations.",
+  "next_steps": "Compare unrelated tree photographs under the same frozen selection budget; reconstruct intermediate tonal and branch-removal steps separately. The LP2-32 and 2016 carrier fits are now documented in the related cross-carrier record.",
   "reproduction": {
     "command": "python experiments/records/dead-tree-alignment/run.py --check",
     "environment": "Python 3 with NumPy and OpenCV; recorded with OpenCV 5.0.0. The experiment ZIP includes the Commons source JPEG but omits images/lp2-55.jpg; extract original-images.zip alongside it or download that original page. No network or AI is used by the checker.",
@@ -86,7 +86,9 @@
       "url": "https://jelliottdev.github.io/images/lp2-55.jpg"
     }
   ],
-  "related": [],
+  "related": [
+    "dead-tree-cross-carrier"
+  ],
   "visuals": [
     {
       "path": "exports/figures/dead-tree-alignment.png",

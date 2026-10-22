@@ -1,0 +1,10 @@
+Two related comparisons, both visually selected before numerical scoring:
+
+1. LP2-55 original JPEG -> LP2-32 original JPEG. Source crop [600,1450,1800,2500]; target crop [550,2000,1850,3500]. Grayscale darkness response clip((250-L)/45,0,1) for source, clip((230-L)/160,0,1) for target. Gaussian sigma 15. Scales 0.650 to 1.225 by 0.025. Compare source orientation and horizontal reflection.
+2. R. Neil Marshman / Brookie Commons DeadTree.jpg -> original 2016 message JPEG. Source crop [100,500,1750,1950]; target crop [145,270,425,475]. Grayscale source darkness response clip((170-L)/130,0,1); message tree is light on black, so response clip((L-2)/28,0,1), with pixels above brightness 100 masked to zero to suppress bright message letters. Gaussian sigma 1.5. Scales 0.065 to 0.140 by 0.003. Compare original orientation and horizontal reflection.
+
+For every scale, search all integer translations retaining the whole resized source crop inside the target crop. Score with OpenCV TM_CCOEFF_NORMED over either all of the template or its upper 60%. In the latter case, Pearson-score the lower 40% at the chosen scale/translation without refitting. The lower-region check remains within the same selected image. Source images, crops, response levels, mask, blur and scale ranges were picked after inspection; this is not a blinded probability test.
+
+All image byte hashes are checked by run.py and recorded in record.json. Crops use original pixel coordinates with exclusive right/bottom bounds. This tests source-image correspondence under simple alignment, not the software or exact authoring procedure. The 2016 message's displayed visualization increases tree contrast and masks bright lettering; it is not an unmodified carrier. No rune operation is inferred.
+
+Commons attribution: R. Neil Marshman / Brookie, DeadTree.jpg, CC BY-SA 3.0, https://commons.wikimedia.org/wiki/File:DeadTree.jpg .

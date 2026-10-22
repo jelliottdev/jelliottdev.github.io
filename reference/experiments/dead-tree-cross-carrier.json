@@ -1,0 +1,180 @@
+{
+  "id": "dead-tree-cross-carrier",
+  "title": "Shared tree across LP2-32 and the 2016 message",
+  "status": "published",
+  "question": "Do the LP2-32 and 2016 tree renderings align with the already identified tree source under bounded scale, translation and orientation comparisons?",
+  "summary": "LP2-55 and LP2-32 align more strongly in the same orientation; the Commons photograph and 2016 message align more strongly after reflection. Both use separate response rules and lower-region checks.",
+  "tags": [
+    "tree",
+    "LP2-32",
+    "LP2-55",
+    "2016 message",
+    "DeadTree.jpg",
+    "image alignment",
+    "horizontal reflection",
+    "same artwork",
+    "source image"
+  ],
+  "family": {
+    "id": "dead-tree-source",
+    "title": "Shared dead-tree artwork source",
+    "question": "How do the photographed tree and its manuscript/message treatments correspond?",
+    "baseline": "dead-tree-alignment"
+  },
+  "variant": {
+    "label": "Two related carriers: LP2-55 to LP2-32; Commons photograph to 2016",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-55"
+        ],
+        "after": [
+          "lp2-32",
+          "lp2-55"
+        ],
+        "reason": "Adds LP2-32 while retaining LP2-55 as the manuscript reference."
+      },
+      {
+        "field": "artifacts",
+        "before": [
+          "exports/sources/commons/DeadTree.jpg"
+        ],
+        "after": [
+          "images/message-2016.jpg",
+          "exports/sources/commons/DeadTree.jpg"
+        ],
+        "reason": "Adds the original 2016 carrier to the Commons source dependency."
+      },
+      {
+        "field": "representation",
+        "before": "Original 1894x2606 Commons JPEG and archived 2400x3600 LP2-55 JPEG; declared grayscale crop responses.",
+        "after": "Original LP2-32 and LP2-55 JPEGs; original Commons DeadTree.jpg and archived 2016 message JPEG; two declared grayscale-response comparisons.",
+        "reason": "Uses two separate cross-carrier grayscale comparisons rather than one source-to-LP2-55 fit."
+      },
+      {
+        "field": "procedure",
+        "before": "Search 23 scales and all in-crop integer translations for two orientations. Compare full-region normalized correlation, then fit the upper 60% and score the lower 40% at that same transform.",
+        "after": "For each source-target pair, search specified scales and every in-crop integer translation in two orientations; maximize normalized correlation over the full crop or upper 60%, then score the lower 40% without refitting.",
+        "reason": "Fits each target with its own orientation control and lower-region check."
+      },
+      {
+        "field": "parameters",
+        "before": "Source crop [100,500,1750,1950]; manuscript crop [550,1300,1850,2550]; clipped darkness levels 170/130 and 250/45; Gaussian sigma 7; scales 0.370–0.700 step 0.015; no rotation or shear.",
+        "after": "LP2-55→LP2-32 crops [600,1450,1800,2500] and [550,2000,1850,3500], darkness levels 250/45 and 230/160, sigma 15, 24 scales 0.650–1.225. Commons→2016 crops [100,500,1750,1950] and [145,270,425,475], source darkness 170/130, message lightness 2/28 with pixels >100 masked, sigma 1.5, 26 scales 0.065–0.140.",
+        "reason": "Sets crop, brightness, mask, blur and scale ranges appropriate to the distinct carriers."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images.",
+        "after": "Other source photographs and processing choices; rotation, shear, warps, exact authoring recipe; any cipher, rune or decryption operation; a calibrated chance probability.",
+        "reason": "Separates these cross-carrier limits from the LP2-55 source comparison."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-32",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "images/message-2016.jpg",
+      "exports/sources/commons/DeadTree.jpg"
+    ],
+    "representation": "Original LP2-32 and LP2-55 JPEGs; original Commons DeadTree.jpg and archived 2016 message JPEG; two declared grayscale-response comparisons.",
+    "procedure": "For each source-target pair, search specified scales and every in-crop integer translation in two orientations; maximize normalized correlation over the full crop or upper 60%, then score the lower 40% without refitting.",
+    "parameters": "LP2-55→LP2-32 crops [600,1450,1800,2500] and [550,2000,1850,3500], darkness levels 250/45 and 230/160, sigma 15, 24 scales 0.650–1.225. Commons→2016 crops [100,500,1750,1950] and [145,270,425,475], source darkness 170/130, message lightness 2/28 with pixels >100 masked, sigma 1.5, 26 scales 0.065–0.140.",
+    "exclusions": "Other source photographs and processing choices; rotation, shear, warps, exact authoring recipe; any cipher, rune or decryption operation; a calibrated chance probability."
+  },
+  "outcome": "supported",
+  "finding": "LP2-55→LP2-32 whole-region correlation is 0.623 same orientation versus 0.483 reflected; lower-region checks after upper fits are 0.600 versus 0.353. Commons→2016 whole-region correlation is 0.854 reflected versus 0.566 original; lower-region checks are 0.858 versus 0.442.",
+  "limitations": "The sources, crops, contrast mappings and scale ranges were chosen after viewing the images. Lower-region checks are within the same selected carriers, not blind holdouts. Correlations are descriptive and do not recover the compositing process or probability against unrelated trees.",
+  "next_steps": "Freeze a broader decoy set of unrelated tree photographs and apply the same selection budget; reconstruct intermediate tonal and branch-removal operations separately if source-processing history is sought.",
+  "reproduction": {
+    "command": "python experiments/records/dead-tree-cross-carrier/run.py --check",
+    "environment": "Python 3 with NumPy and OpenCV; recorded with OpenCV 5.0.0. The experiment ZIP includes the Commons source but omits the three JPEGs under images/; extract original-images.zip or download them at their declared paths. No network or AI is used by the checker.",
+    "script": "experiments/records/dead-tree-cross-carrier/run.py",
+    "script_sha256": "75a50c67cfdfa3bc48e9abf8177c91c1603ca3347041faf8b2c49d2b71817878",
+    "inputs": [
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "images/lp2-32.jpg",
+        "sha256": "c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72"
+      },
+      {
+        "path": "images/message-2016.jpg",
+        "sha256": "a8340ad04b83fb3130e7ed9172867a440812e87089d6aa2b932d97c6ae38aebe"
+      },
+      {
+        "path": "exports/sources/commons/DeadTree.jpg",
+        "sha256": "608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29"
+      },
+      {
+        "path": "experiments/records/dead-tree-cross-carrier/plan.txt",
+        "sha256": "e7240afdfee566e3a489353982169647d7e8b00e2c097dc14cb9d312e45d2b33"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/dead-tree-cross-carrier.json",
+        "sha256": "236b613cbd3c7536bf9161a0fcab77aa3c5df3e5e4763828d5d3e2d16fd1af58"
+      },
+      {
+        "path": "exports/figures/dead-tree-manuscript.png",
+        "sha256": "2a7aa40a7ca83e656f80bc2daa0e3b7f52225183852757a58691ad5f1696e35d"
+      },
+      {
+        "path": "exports/figures/dead-tree-message.png",
+        "sha256": "5d7496b8a2bf7e0da29c440e94cf1ea4fa36d3891b075e806ea76bc040ffea79"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; numeric replay, original-file hashes and visual overlay inspection; independent photographic review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Wikimedia Commons original file and attribution",
+      "url": "https://commons.wikimedia.org/wiki/File:DeadTree.jpg"
+    },
+    {
+      "label": "Original LP2-32 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-32.jpg"
+    },
+    {
+      "label": "Original LP2-55 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-55.jpg"
+    },
+    {
+      "label": "Archived 2016 message JPEG",
+      "url": "https://jelliottdev.github.io/images/message-2016.jpg"
+    }
+  ],
+  "related": [
+    "dead-tree-alignment"
+  ],
+  "visuals": [
+    {
+      "path": "exports/figures/dead-tree-manuscript.png",
+      "caption": "LP2-55 grayscale-response tree fitted to LP2-32 in the same orientation, target response and overlay. Derived comparison images; original JPEGs remain linked."
+    },
+    {
+      "path": "exports/figures/dead-tree-message.png",
+      "caption": "Reflected Commons photograph fitted to the 2016 message tree with bright lettering masked; R. Neil Marshman / Brookie, CC BY-SA 3.0. This is a contrast-mapped comparison, not the unmodified carrier."
+    }
+  ],
+  "article": "## One source family, two different treatments\n\nThe [LP2-55 source comparison](#/experiments/dead-tree-alignment) favored a horizontally reflected version of R. Neil Marshman’s [DeadTree.jpg](https://commons.wikimedia.org/wiki/File:DeadTree.jpg). Two related images remain: a broad, soft tree on [LP2-32](#/reader/lp2-32), and a faint tree behind text in the [2016 message](images/message-2016.jpg). This record measures them separately. The first comparison uses LP2-55 as the reference image; the second returns to the Commons photograph. It does not assume identical blur, brightness or scale across carriers.\n\nThe result supports the shared tree artwork under the declared comparisons. It does not recover how the author processed any image, prove a decryption step or assign a probability of chance resemblance across other photographs.\n\n## LP2-55 → LP2-32: same orientation\n\nThe script compares the tree region of two original 2,400 × 3,600 JPEGs. It maps their differently rendered dark and pale shapes to grayscale responses, blurs with sigma 15 and searches scales 0.650–1.225 in 0.025 steps. It searches every integer translation keeping the source crop fully inside the LP2-32 crop. Both the original LP2-55 orientation and its horizontal reflection are scored.\n\n![LP2-55 tree aligned to LP2-32, with target and overlay](exports/figures/dead-tree-manuscript.png)\n\nThe displayed panels are contrast-mapped and blurred for this comparison; open the [unmodified LP2-55](images/lp2-55.jpg) and [LP2-32](images/lp2-32.jpg) images to inspect the real artwork. The unchanged orientation aligns the broad top forks and carries more of that alignment into the lower trunk. The figure shows its upper-region fit and a half-opacity overlay, not an original image layer.\n\n| LP2-55 orientation | Whole-region best | Upper 60% fit | Lower 40% at upper fit |\n| --- | ---: | ---: | ---: |\n| Same | **0.623** | **0.704** | **0.600** |\n| Horizontally reflected | 0.483 | 0.514 | 0.353 |\n\nThe same-orientation upper fit uses scale 0.900 and translation `(123,186)` inside the LP2-32 crop. This says that the two *manuscript treatments* preserve orientation relative to each other. It does not contradict the preceding experiment, where both were compared with an originally unreflected photograph.\n\n## Commons photograph → 2016: reflected orientation\n\nThe 2016 JPEG is only 563 × 569 pixels and puts pale message text over a very dark tree. The script crops the central tree, maps pixel brightness above the black background to a response, and masks pixels brighter than 100 to reduce the white lettering. It uses Gaussian sigma 1.5 and searches 26 scales from 0.065 to 0.140. The source photograph’s original and horizontally reflected orientations are both compared.\n\n![Mirrored Commons tree aligned to the faint 2016 background tree, with target and overlay](exports/figures/dead-tree-message.png)\n\nThis figure increases contrast and removes much of the bright text **for inspection only**; it is not the original message. The source photograph is R. Neil Marshman / Brookie, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), cropped, mirrored, resized and contrast-mapped here. [Original Commons JPEG](exports/sources/commons/DeadTree.jpg) · [original 2016 message](images/message-2016.jpg).\n\n| Photograph orientation | Whole-region best | Upper 60% fit | Lower 40% at upper fit |\n| --- | ---: | ---: | ---: |\n| Original | 0.566 | 0.644 | 0.442 |\n| Horizontal reflection | **0.854** | **0.826** | **0.858** |\n\nThe reflected upper fit uses scale 0.089 and translation `(69,29)` within the message crop. The lower region matches at that fixed transform despite not setting the transform in the declared search. The photograph, crop, text mask and response were still chosen after seeing the images, so these correlations are descriptive, **not** a calibrated chance probability.\n\n## Bounds, files and next checks\n\nThe [complete result JSON](exports/dead-tree-cross-carrier.json) records both orientations, 24 and 26 scale values, crops, settings, coordinates and scores. This is one family of related source-image comparisons, not a blanket assertion that every tree image was made with the same filter. Fine branches and the amount of visible trunk vary. No source was inferred from manuscript text or rune values.\n\nThe lower 40% check is useful but not fully independent: all preprocessing choices and the two target images were selected during exploration. A stronger source-identification test would score a preregistered set of unrelated tree photographs under the same search budget and report the winner and gap. An exact production reconstruction would need to explain the tonal treatment and branch omissions as well as geometry. Those questions remain open.\n\nDownload the [experiment bundle](downloads/experiments/dead-tree-cross-carrier.zip); it contains the Commons photograph, plan, script, report and figures. Place the original LP2-55, LP2-32 and 2016 JPEGs in its `images/` directory, or extract the site’s original-images ZIP there. Install Python 3, NumPy and OpenCV (the recorded run used OpenCV 5.0.0), verify the bundled files and image hashes using the `START-HERE` instructions, then run:\n\n```text\npython experiments/records/dead-tree-cross-carrier/run.py --check\n```\n\nThe [plan](experiments/records/dead-tree-cross-carrier/plan.txt) lists every input and preprocessing choice. Edit a copy and save separate results for any changed crop, mask, threshold, scale range or image set. The [script](experiments/records/dead-tree-cross-carrier/run.py) does not access a network or AI service.\n",
+  "article_path": "experiments/records/dead-tree-cross-carrier/article.md",
+  "script_sha256": "75a50c67cfdfa3bc48e9abf8177c91c1603ca3347041faf8b2c49d2b71817878",
+  "record_type": {
+    "id": "audit",
+    "label": "Input audit",
+    "description": "Checks extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}
