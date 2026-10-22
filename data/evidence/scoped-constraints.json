@@ -1,0 +1,107 @@
+{
+  "schema": "liberpedia-scoped-constraints-v1",
+  "scope": "Curated register of exact contradictions, invariants, statistical tests and necessary conditions already supported by published Liberpedia guides or experiment records. Not an inventory of every historical attempt or every possible cipher.",
+  "reviewed_on": "2026-10-21",
+  "entries": [
+    {
+      "id": "strict-no-repeat",
+      "kind": "exact contradiction",
+      "model": "A direct output stream with no equal adjacent runes at any within-page position",
+      "assumptions": "The output is compared directly with the archived LP2-00–55 rune stream; no later insertion, deletion, reset exception or position-dependent relabeling creates repeats.",
+      "observation": "The saved stream has 86 equal-adjacent pairs over 12,901 within-page pairs.",
+      "conclusion": "A stream that guarantees zero such pairs cannot equal this saved stream.",
+      "still_open": "Rules that permit repeats or add another layer, and any claim about a different transcription.",
+      "evidence": ["#/wiki/doublets?section=counts", "#/wiki/cipher-invariants"]
+    },
+    {
+      "id": "fixed-injective-doublets",
+      "kind": "invariant",
+      "model": "One fixed injective substitution of rune symbols",
+      "assumptions": "The same one-to-one map acts at every position and positions are neither moved nor added or removed.",
+      "observation": "Equality of two adjacent input symbols is equivalent to equality of their mapped outputs.",
+      "conclusion": "Such a map preserves the exact doublet locations and count; changing rune names alone cannot create or remove the observed repeats.",
+      "still_open": "A fixed substitution of unknown plaintext already having the same equality pattern, and noninjective or position-dependent maps.",
+      "evidence": ["#/wiki/cipher-invariants?section=comparison", "#/wiki/doublets"]
+    },
+    {
+      "id": "transposition-global-ioc",
+      "kind": "invariant",
+      "model": "Pure rearrangements of a fixed rune multiset",
+      "assumptions": "Exactly the same runes are retained, with no symbol replacement, insertion or deletion; the score is whole-stream IoC.",
+      "observation": "Whole-stream IoC depends only on rune counts, not their positions.",
+      "conclusion": "Whole-stream IoC cannot rank routes that only reorder these runes.",
+      "still_open": "Routes evaluated by order-sensitive scores, selected columns or decoded language; the route itself is not excluded.",
+      "evidence": ["#/wiki/cipher-invariants?section=comparison", "#/wiki/transposition"]
+    },
+    {
+      "id": "uniform-independent-additive",
+      "kind": "statistical test",
+      "model": "Independent uniform additive keys over all 29 rune indices at every position",
+      "assumptions": "Keys are independent of plaintext and one another; no output filter; 12,901 within-page adjacencies under the archived transcription.",
+      "observation": "The model expects about 444.86 doublets; 86 are observed. Its conditional lower-tail probability is about 1.0708e-98.",
+      "conclusion": "The observed suppression is extremely poor support for this specified random-key model; it is not a logical impossibility.",
+      "still_open": "Dependent, nonuniform or constrained keys, altered boundaries and different equations; the test does not identify plaintext.",
+      "evidence": ["#/experiments/uniform-additive-doublets"]
+    },
+    {
+      "id": "phasewise-ioc",
+      "kind": "invariant",
+      "model": "Fixed one-to-one substitution within each phase of a declared periodic clock",
+      "assumptions": "Period and phase membership stay fixed; each phase uses an injective map; no skipped key slots or changing map inside a phase.",
+      "observation": "Within each phase, equal-symbol pairs and IoC remain unchanged even if whole-stream IoC moves.",
+      "conclusion": "Searching keys in this class cannot improve within-phase IoC for the same period and clock; compute that score once.",
+      "still_open": "Different periods, clocks, skip rules, plaintext constraints and other statistics; this does not reject periodic substitution.",
+      "evidence": ["#/wiki/cipher-invariants?section=phase-maps", "#/wiki/periodic-ioc"]
+    },
+    {
+      "id": "literal-prime-affine-full-palette",
+      "kind": "bounded exclusion",
+      "model": "A fixed affine permutation of the complete 29-value Gematria Primus prime palette modulo an integer greater than 109",
+      "assumptions": "All 29 literal prime values map bijectively within the same palette; one rule for the whole alphabet; no position key or hidden relabeling.",
+      "observation": "The finite-branch search and bound leave only the identity permutation.",
+      "conclusion": "There is no nonidentity map of this exact form over the full palette.",
+      "still_open": "Partial palettes, page-specific support, rune-index arithmetic, noninjective or more general nonlinear maps. LP2-55 admits two extra affine maps on its restricted support.",
+      "evidence": ["#/experiments/literal-prime-affine", "#/experiments/literal-prime-affine-pages"]
+    },
+    {
+      "id": "literal-prime-quadratic-full-palette",
+      "kind": "bounded exclusion",
+      "model": "A fixed quadratic permutation of the complete 29-value literal prime palette modulo an integer greater than 109",
+      "assumptions": "One polynomial of degree at most two, bijective on the full palette, with outputs in that same palette.",
+      "observation": "The recorded finite-branch check has no nonidentity survivor.",
+      "conclusion": "No nonidentity map satisfies these constraints.",
+      "still_open": "Partial palettes, degree above two, arbitrary nonlinear maps, rune-index arithmetic and position-dependent operations.",
+      "evidence": ["#/experiments/literal-prime-quadratic"]
+    },
+    {
+      "id": "direct-polynomial-degree-eight",
+      "kind": "bounded exclusion",
+      "model": "Direct integer-polynomial output streams of degree at most eight",
+      "assumptions": "A fixed signed-stride clock, either of the two declared output representations, and direct comparison with the archived rune stream, without unknown plaintext or key mixing.",
+      "observation": "All 880 saved degree/page checks have the disqualifying gcd value 1; 55 nonempty LP2 pages were checked.",
+      "conclusion": "No direct stream in the tested degree range matches those page sequences.",
+      "still_open": "Degree above eight, irregular clocks or resets, other representations, hidden plaintext or keystream mixing, and LP2-56–57.",
+      "evidence": ["#/experiments/direct-polynomial-streams"]
+    },
+    {
+      "id": "position-divisor-unit-stride",
+      "kind": "bounded exclusion",
+      "model": "A fixed divisor label of each consecutive rune position with unit stride",
+      "assumptions": "One origin and unit-step position clock per page, with a fixed divisor-label rule and no resets or extra output transform.",
+      "observation": "All 55 nonempty LP2 page streams violate the necessary condition for this specified model.",
+      "conclusion": "The unit-stride divisor-label model cannot directly generate these saved page streams.",
+      "still_open": "Irregular clocks, resets, time-varying labels, noncoprime strides and layers mixing in plaintext.",
+      "evidence": ["#/experiments/position-divisor-labels"]
+    },
+    {
+      "id": "word-reset-repeat-condition",
+      "kind": "necessary condition",
+      "model": "The same deterministic encoding resets to the same key and state for each selected word-like unit",
+      "assumptions": "The published token and page-edge policy, identical effective context for repeats, and the same deterministic function for each unit.",
+      "observation": "The selected archived ciphertext tokens have no exact repeated pair; the related shared-map-and-shuffle variant has no anagram pair of length five or more.",
+      "conclusion": "Under the first model, corresponding selected plaintext units must be distinct. Under the second, equal plaintext rune words of length five or more cannot yield the observed selected outputs.",
+      "still_open": "Plaintext with no such repetitions, changed keys or state, other boundary policies, padding, fractionation and page-edge units; this is not a general rejection of word ciphers.",
+      "evidence": ["#/experiments/word-reset-repetition"]
+    }
+  ]
+}

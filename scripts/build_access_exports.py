@@ -160,6 +160,8 @@ for filename, details in figure_details.items():
  files[-1].update(details)
 register('data/idea-coverage.json','Idea coverage notes')
 register('data/method-families.json','Idea coverage notes')
+register('data/evidence/scoped-constraints.json','Scoped cipher constraints')
+files[-1].update(title='Scoped constraints and surviving variants (JSON)',guide='scoped-constraints',aliases=['ruled out','exclusions','invariants','negative results','proof scope'])
 register('data/evidence/artwork-sources.json','Artwork catalogue evidence')
 for record in read('data/evidence/artwork-sources.json')['records']:
  register(record['path'],'Artwork catalogue evidence')
