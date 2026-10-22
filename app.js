@@ -14,8 +14,8 @@ function overview(){
   ['dots','thumbs/lp2-33.jpg','Dots & punctuation','Large dots, small marks, and measured clusters'],
   ['mobius','thumbs/lp2-15.jpg','Möbius & number panel','The crossed loop and red 3299']
  ];
- return `<header class="article-top home-heading"><h1>Liberpedia</h1><p class="subline">The Liber Primus manuscript and Cicada 3301</p></header>
- <article class="home-index"><div class="home-opening"><div class="home-opening-copy"><p class="home-intro">Explore <i>Liber Primus</i>, the runic manuscript from Cicada 3301. Read documented translations, inspect original pages, and investigate the remaining puzzles.</p>
+ return `<header class="article-top home-heading"><h1>Liber Primus</h1><p class="subline">A research reference for Cicada 3301</p></header>
+ <article class="home-index"><div class="home-opening"><div class="home-opening-copy"><p class="home-intro">Read the manuscript, inspect original pages and documented translations, and check proposed methods against reproducible tests.</p>
  <nav class="home-start" aria-label="Start exploring"><a href="#/wiki/quick-start">Start here</a><a href="#/reader/lp1-00">Open manuscript</a></nav><nav class="home-release-strip" aria-label="Browse the two releases"><a href="#/pages/LP1"><strong>LP1</strong><span>17 pages · decoded passages</span></a><a href="#/pages/LP2"><strong>LP2</strong><span>58 pages · 00–55 without accepted readings</span></a></nav><p class="home-orientation">Reading status checked 5 October 2026</p></div><a class="home-opening-page" href="#/reader/lp1-01"><img src="thumbs/lp1-01.jpg" alt="Ornamented first runic page of Liber Primus" width="343" height="480"><span>First runic page <span aria-hidden="true">↗</span></span></a></div>
  <nav class="home-task-links" aria-label="What would you like to do?"><a href="#/readings"><strong>Read decoded passages</strong><span>Start with text we can already read.</span></a><a href="#/wiki/visual-index"><strong>Identify a visual feature</strong><span>Find a page from a symbol or image.</span></a><a href="#/experiments"><strong>Check previous research</strong><span>See what a method actually tested.</span></a></nav>
 

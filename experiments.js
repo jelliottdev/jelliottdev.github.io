@@ -103,6 +103,29 @@ function experimentDownloads(r){
     {path:r.article_path,label:'Full account'}];
   return `<ul class="experiment-downloads">${links.map(f=>`<li><a href="${esc(f.path)}" download><strong>${esc(f.label)}</strong><span>${esc(f.path.split('/').pop())}</span></a></li>`).join('')}</ul>`;
 }
+function experimentVisual(r,v){
+  if(r.id==='lp2-row-column-routes'&&v.path.endsWith('/source-trace.svg')){
+    const rows=[[1,1,1,2],[2,2,1,8],[3,3,1,27],[4,4,1,20],[5,5,1,17],[6,6,1,19]];
+    return `<figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>LP2-31 · column-first route</strong><span>Down each ordinal column, then move right</span></div><table><thead><tr><th scope="col">Output step</th><th scope="col">Source line · rune</th><th scope="col">Rune index</th></tr></thead><tbody>${rows.map(([step,line,rune,index])=>`<tr><th scope="row">${step}</th><td>${line} · ${rune}</td><td>${index}</td></tr>`).join('')}</tbody></table><p>First six of 269 source positions. The complete route uses each position once.</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure>`;
+  }
+  const comparisons={
+    'lp2-word-order-reversal':{
+      path:'source-trace.svg',title:'LP2-31 · reverse segment order',
+      note:'The first six outputs agree under both boundary rules; the complete routes diverge later.',
+      rows:[[0,266,266],[1,267,267],[2,268,268],[3,258,258],[4,259,259],[5,260,260]]
+    },
+    'lp2-word-reversal':{
+      path:'boundary-trace.svg',title:'LP2-31 · reverse within segments',
+      note:'These are the first six outputs where the two boundary rules differ.',
+      rows:[[43,44,48],[44,43,47],[45,48,46],[46,47,45],[47,46,44],[48,45,43]]
+    }
+  };
+  const comparison=comparisons[r.id];
+  if(comparison&&v.path.endsWith('/'+comparison.path)){
+    return `<figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>${comparison.title}</strong><span>Original source rune positions, counted from zero</span></div><table><thead><tr><th scope="col">Output</th><th scope="col">Split lines</th><th scope="col">Join lines</th></tr></thead><tbody>${comparison.rows.map(([output,split,joined])=>`<tr><th scope="row">${output}</th><td>${split}</td><td>${joined}</td></tr>`).join('')}</tbody></table><p>${comparison.note}</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure>`;
+  }
+  return `<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`;
+}
 function experimentArticle(r){
   const solving=['method','replay'].includes(r.record_type?.id);
   const pageLinks=experimentScopeLinks(r);
@@ -122,7 +145,7 @@ function experimentArticle(r){
     <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
       <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/\s*Human review pending\./g,''))}</p>
-      ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
+      ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2>${solving?'':'<p class="small">This record does not establish that an LP2 decoding method was tried.</p>'}<dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><details class="experiment-extra"><summary>Exact input and procedure</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
     ${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}
