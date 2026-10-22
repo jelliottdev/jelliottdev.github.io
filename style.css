@@ -581,3 +581,43 @@ details[open]>summary::after{transform:translateY(-25%) rotate(225deg)}
 .sequence-case p strong{display:block;font-size:14px;color:var(--ink)}
 .sequence-figure figcaption{font-size:13px;line-height:1.55;color:var(--muted);padding-top:10px}
 @media(max-width:650px){.sequence-case{grid-template-columns:1fr auto;gap:7px}.sequence-values{grid-column:1/-1;grid-row:2}.sequence-case p{grid-column:2;grid-row:1}.sequence-figure{padding:6px 12px 12px}}
+
+/* Reading pages scroll as a document: no persistent header or reader controls. */
+.topbar,.reader-active .topbar{position:relative;top:auto;transform:none;transition:none}
+.reader-toolbar,.reader-active .reader-toolbar{position:static;top:auto}
+#sidebar{top:0;height:100dvh}
+.contents,.page-aside,.reader-image-pane{top:20px}
+section[id],.topic-entry,#corrections,#experiment-family{scroll-margin-top:20px}
+
+/* Experiment records show the conclusion and test boundary first. */
+.experiment-article{max-width:810px}
+.experiment-article>.lede{font:17px/1.58 Arial,Helvetica,sans-serif;color:var(--ink);margin:0 0 18px;max-width:68ch}
+.experiment-article .experiment-section-nav{margin:12px 0 22px;gap:8px 24px}
+.experiment-article section>h2{margin:26px 0 10px}
+.experiment-finding{font-size:18px;line-height:1.55;margin:12px 0}
+.experiment-limit{color:#4c5963;border-left:2px solid #b8c4cc;padding-left:12px;margin:16px 0 22px}
+.experiment-figure{max-width:540px;margin:18px 0 20px;border:1px solid var(--line);padding:12px;background:#f3f5f6}
+.experiment-figure img{max-width:100%!important;background:white}
+.experiment-figure figcaption{font-size:13px;color:#4f5961}
+.experiment-scope{margin:8px 0 14px}
+.experiment-scope dt,.experiment-scope dd{padding:9px 0;line-height:1.5}
+.experiment-extra,.experiment-account,.experiment-review{border-top:1px solid var(--line);margin:0}
+.experiment-extra>summary,.experiment-account>summary,.experiment-review>summary{font-size:15px;color:var(--blue);font-weight:600;min-height:48px;padding:12px 34px 12px 0;display:flex;align-items:center}
+.experiment-extra[open],.experiment-account[open],.experiment-review[open]{padding-bottom:14px}
+.experiment-extra ul{margin:6px 0 12px;padding-left:22px}
+.experiment-extra li{margin:7px 0}
+.experiment-bundle-link{display:inline-flex;align-items:center;min-height:44px;padding:7px 14px;margin:0 8px 6px 0;background:#315c79;color:#fff;border-radius:3px;font-weight:600}
+.experiment-bundle-link:hover{background:#244761;color:#fff;text-decoration:none}
+.experiment-article #experiment-reproduce .reading-text{font-size:13px;line-height:1.6;padding:12px 14px;margin:10px 0 18px}
+.experiment-article #experiment-reproduce>p{margin:10px 0}
+.experiment-method-disclosure #experiment-methods li{line-height:1.55}
+@media(max-width:760px){
+ #sidebar{top:108px;height:calc(100dvh - 108px)}
+ .experiment-article>.lede{font-size:16px;line-height:1.55}
+ .experiment-finding{font-size:17px}
+ .experiment-figure{margin-inline:0;padding:8px}
+ .experiment-article section>h2{margin-top:22px}
+ .experiment-scope{grid-template-columns:1fr}
+ .experiment-scope dt{padding-bottom:2px}
+ .experiment-scope dd{padding-top:0}
+}

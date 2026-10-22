@@ -168,16 +168,4 @@ async function startWiki(){
 }
 startWiki();
 window.addEventListener('hashchange',route);
-let priorScrollY=window.scrollY,scrollFrame=0;
-window.addEventListener('scroll',()=>{
- if(scrollFrame)return;
- scrollFrame=requestAnimationFrame(()=>{
-  scrollFrame=0;
-  const y=window.scrollY,delta=y-priorScrollY;
-  priorScrollY=y;
-  if(!window.matchMedia('(max-width:760px)').matches||document.body.classList.contains('nav-open')||document.activeElement?.closest('.topbar')||document.querySelector('#image-dialog')?.open){document.body.classList.remove('header-hidden');return}
-  if(y<110||delta<-7)document.body.classList.remove('header-hidden');
-  else if(y>170&&delta>7)document.body.classList.add('header-hidden');
- });
-},{passive:true});
 $('#fit-width').onclick=()=>{const a=$('#viewer-scroll'),i=$('#viewer-image');zoom=(a.clientWidth-40)/i.naturalWidth;applyZoom();a.scrollTop=0;a.scrollLeft=0};

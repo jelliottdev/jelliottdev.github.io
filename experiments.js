@@ -89,10 +89,10 @@ function experimentRecordType(r){
   return `<p class="small muted"><strong>${esc(kind.label)}</strong> · <a href="#/wiki/solving-methods?section=record-types">About record types</a></p>`;
 }
 function experimentMethodGuides(r){
-  if(methodFamilyUnavailable)return '<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>The method index could not be loaded. You can still read this experiment and browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></section>';
+  if(methodFamilyUnavailable)return '<div id="experiment-methods"><p>The method index could not be loaded. You can still browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></div>';
   const families=(methodFamilyRecords||[]).filter(f=>f.related.includes(r.id));
   if(!families.length)return '';
-  return `<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>This record relates to the approaches below. Its result covers only the scope stated above; the guides explain broader variants and assumptions.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> — ${esc(f.description)}</p><p class="small"><a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Compare this family’s documented records</a></p></li>`).join('')}</ul></section>`;
+  return `<div id="experiment-methods"><ul>${families.map(f=>`<li><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> — ${esc(f.description)} <a class="small" href="#/wiki/solving-methods?section=family-${esc(f.id)}">Compare tests</a></li>`).join('')}</ul></div>`;
 }
 function experimentDownloads(r){
   const root=`experiments/records/${r.id}/`;
@@ -106,39 +106,41 @@ function experimentDownloads(r){
 function experimentArticle(r){
   const solving=['method','replay'].includes(r.record_type?.id);
   const pageLinks=experimentScopeLinks(r);
-  const fields=[['Targets',r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)],['Parameter bounds',esc(r.scope.parameters)],['Excluded',esc(r.scope.exclusions)]];
+  const targets=r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks;
+  const fields=[['Targets',targets],['Tested bounds',esc(r.scope.parameters)],['Not covered',esc(r.scope.exclusions)]];
+  const exactFields=[['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)]];
   const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
   const methodGuides=experimentMethodGuides(r);
-  const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],...(methodGuides?[['experiment-methods','Method guides']]:[]),['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
+  const sections=[['experiment-finding','Result'],['experiment-scope','Scope'],...(methodGuides?[['experiment-methods','Methods']]:[]),['experiment-reproduce','Reproduce'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   return head(r.title,`${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome])}`,'Research records')+`<article class="reading-width experiment-article">
-    <p><a href="#/experiments">← Research archive</a></p>
     <p class="lede">${esc(r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
     <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
-    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Finding</h2><p>${esc(r.finding)}</p>
-      <h3>What this does and does not establish</h3><p>${esc(r.limitations)}</p>
+    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
+      <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/\s*Human review pending\./g,''))}</p>
       ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
     </section>
-    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>${solving?'Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test.':'This record checks a measurement, control or source question. Its scope does not establish that an LP2 decoding method was tried.'} <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
-    ${methodGuides}
+    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2>${solving?'':'<p class="small">This record does not establish that an LP2 decoding method was tried.</p>'}<dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><details class="experiment-extra"><summary>Exact input and procedure</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
+    ${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
-      <p>Download <a href="downloads/experiments/${esc(r.id)}.zip" download>this record’s files (ZIP)</a> and extract them with their folders intact. The archive includes scripts, input data, recorded results, and a <code>START-HERE</code> file with verification instructions.${needsImages?' Original image inputs are separate: also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''}</p>
-      <p>Install the prerequisites listed below, then run the command from the extracted folder. See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> remains available for working across experiments.</p>
-      <p>${esc(r.reproduction.environment)}</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>
-      <h3>Individual files</h3><p class="small muted">Use these to inspect the method or results. The run script also needs the inputs listed below.</p>
-      ${experimentDownloads(r)}
-      <details><summary>All files &amp; SHA-256 checksums</summary><p class="hash">Script SHA-256: ${esc(r.script_sha256)}</p><h3>Inputs</h3>${fileList(r.reproduction.inputs)}<h3>Outputs</h3>${fileList(r.reproduction.outputs)}</details>
+      <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download this experiment (ZIP)</a> <span class="small muted">Scripts, inputs, results and a start file.</span></p>
+      <p>Run from the extracted folder:</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>
+      <details class="experiment-extra"><summary>Setup and individual files</summary><p>${esc(r.reproduction.environment)}${needsImages?' Original image inputs are separate: extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''} See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> is available for work across experiments.</p>${experimentDownloads(r)}<details><summary>All files &amp; SHA-256 checksums</summary><p class="hash">Script SHA-256: ${esc(r.script_sha256)}</p><h3>Inputs</h3>${fileList(r.reproduction.inputs)}<h3>Outputs</h3>${fileList(r.reproduction.outputs)}</details></details>
     </section>
-    ${r.family?`<div id="experiment-family">${experimentFamily(r)}</div>`:''}
-    <h2 id="experiment-remaining">Remaining work</h2><p>${esc(r.next_steps)}</p>
-    <details class="experiment-account"><summary>Full account: method, results, and retest</summary><div class="experiment-prose">${renderExperimentMarkdown(r.article,[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)])}</div></details>
-    <h2 id="experiment-sources">Sources</h2><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
-    <details class="experiment-review"><summary>Record checks and review</summary><p>${esc(r.review.kind||'Computational')} check recorded on ${esc(r.review.retested_on)}. Human review: ${esc(r.review.human_review||'not recorded')}. ${esc(r.review.reviewer)}</p></details>
-    ${related.length?`<h2>Related experiments</h2><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}${footer()}</article>`;
+    <details class="experiment-extra"><summary>Related tests and next steps</summary>
+      ${r.family?`<div id="experiment-family">${experimentFamily(r)}</div>`:''}
+      ${related.length?`<h3>Other related experiments</h3><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}
+      <h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>
+    </details>
+    <details class="experiment-extra"><summary>Full account and sources</summary>
+      <details class="experiment-account"><summary>Method, results and retest</summary><div class="experiment-prose">${renderExperimentMarkdown(r.article,[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)])}</div></details>
+      <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
+    </details>
+    ${footer()}</article>`;
 }
 
 // Authored experiment Markdown: escaped text, links, headings, lists, simple tables and code; no embedded HTML.
