@@ -6,15 +6,31 @@ Start with the kind of operation an idea proposes, then narrow it to a specific 
 
 A family page is not a completed experiment. Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.
 
+What the record types mean
+Manuscript analysis
+Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
+Control
+Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
+Alphabet-wide analysis
+Studies a declared mathematical mapping over the alphabet, rather than decoding an unsolved page.
+Input audit
+Checks extraction or input coverage against a declared reference; it does not establish a decryption.
+Historical reproduction
+Replays a documented historical step with specified source material and conventions.
+Method replay
+Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
+These describe the role of a record, not its outcome or confidence. A control linked to a method is not a test of that method on every unsolved page.
+
 Symbol substitutions
 
 Fixed alphabet substitutions
 Replace each rune consistently with one other symbol.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: fixed alphabet transforms against the warning opening
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do shifts, alphabet reversal, or whole-stream reversal recover the first 12 decoded warning runes at the start of an archived LP2-00–55 page?
 Outside this test: Other openings or positions, heading removal, regional or line-wise reversal, arbitrary substitution alphabets, other affine multipliers, Vigenère, corrections and language scoring.
 
@@ -29,10 +45,11 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: two known Vigenère keys and nine openings
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do either of the two known Vigenere keys recover a 12-rune known-reading opening at the start of an LP2-00–55 page under uninterrupted repeating-key decoding?
 Outside this test: Other keys, interruption placement, noninitial positions, heading removal, cross-page carry, alternative alphabets, transposition and language scoring.
 
@@ -62,26 +79,31 @@ Keys, sequences and state
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-Documented tests (5)
+Related records (5)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: prime-minus-one shifts and known openings
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does uninterrupted prime-minus-one arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
 Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
 
 LP2-00–55: ordinary primes instead of primes minus one
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does uninterrupted prime arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
 Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
 
 LP2-00–55: Fibonacci shifts and repeated phases
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does uninterrupted Fibonacci arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
 Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
 
 LP2-00–55: totients of consecutive integers
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does uninterrupted consecutive-integer totient arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
 Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
 
 LP2-00–55: direct polynomial streams, degree at most eight
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Can a fixed-modulus integer polynomial of degree at most eight directly generate each page, in index or prime coordinates?
 Outside this test: Unknown plaintext or keystream mixing, degree above eight, extra output maps, skipped clock positions, internal resets, alternative transcriptions and LP2-56–57.
 
@@ -90,14 +112,16 @@ Outside this test: Unknown plaintext or keystream mixing, degree above eight, ex
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-54–55: reset ciphertext state at selected F runes
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
 
 LP2-54–55: skip selected F runes in ciphertext feedback
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
 
@@ -106,10 +130,11 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 Seeded generators and generated keystreams
 Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Does matching the opening text identify a seed?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
 Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
 
@@ -124,10 +149,11 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can a correct key fail under the wrong alignment rule?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?
 Outside this test: No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.
 
@@ -136,10 +162,11 @@ Outside this test: No manuscript cipher identification, general recovery guarant
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can a correct key fail under the wrong alignment rule?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?
 Outside this test: No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.
 
@@ -154,14 +181,16 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Switching rules and adaptive decoding
 Change modes using declared triggers or explicitly counted solver choices.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-54–55: reset ciphertext state at selected F runes
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
 
 LP2-54–55: skip selected F runes in ciphertext feedback
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
 Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
 
@@ -170,10 +199,11 @@ Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary prim
 Unrestricted additive keys and one-time-pad hypotheses
 Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Does matching the opening text identify a seed?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
 Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
 
@@ -185,18 +215,21 @@ Order and selection
 Transposition and permutations
 Change symbol order while preserving the selected symbols.
 
-Documented tests (3)
+Related records (3)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: simple row and column reading routes
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do simple row/column traversals of archived LP2-00–55 rune layouts recover any of nine known 12-rune openings without substitution?
 Outside this test: Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions.
 
 LP2-00–55: reverse runes within word-like segments
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does reversing runes within declared word-like segments recover any of nine known 12-rune openings on LP2-00–55?
 Outside this test: Word-order reversal, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.
 
 LP2-00–55: reverse the order of word-like segments
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does reversing the order of declared word-like segments, while preserving runes inside each segment, recover any of nine known 12-rune openings on LP2-00–55?
 Outside this test: Within-segment reversal, reversal limited to each row, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.
 
@@ -205,14 +238,16 @@ Outside this test: Within-segment reversal, reversal limited to each row, arbitr
 Grid layouts, spirals and route ciphers
 Choose an explicit layout and traversal through its cells.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: simple row and column reading routes
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do simple row/column traversals of archived LP2-00–55 rune layouts recover any of nine known 12-rune openings without substitution?
 Outside this test: Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions.
 
 LP2-00–02: 27 × 27 totient-map route replay
+Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
 Question tested: Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?
 Outside this test: Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods.
 
@@ -233,10 +268,11 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Word, row, page and section boundaries
 Treat boundary choices as explicit input or reset variants.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: exact words and anagram repetition
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do interior ciphertext tokens repeat exactly or as anagrams under two apostrophe policies?
 Outside this test: Claims that plaintext must repeat, changing effective keys or state, different word maps, alternative boundaries, page-edge tokens, language significance tests, and a general rejection of word ciphers.
 
@@ -245,10 +281,11 @@ Outside this test: Claims that plaintext must repeat, changing effective keys or
 Book ciphers and coordinate lookups
 Select symbols from a specified source text using explicit coordinate and counting rules.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Emerson book cipher: historical control reproduction
+Record type: Historical reproduction. Replays a documented historical step with specified source material and conventions.
 Question tested: Do the archived opening-image coordinates reproduce the documented historical string with the frozen Emerson PDF derivative and its declared conventions?
 Outside this test: Other editions, other texts, arbitrary coordinate searches, unsolved-page transfer and validation of any current network destination.
 
@@ -257,18 +294,21 @@ Outside this test: Other editions, other texts, arbitrary coordinate searches, u
 Page and section ordering
 Reorder whole pages or sections while accounting for the arrangements searched.
 
-Documented tests (3)
+Related records (3)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP1 column balance after searching section orders
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?
 Outside this test: Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.
 
 LP1 column balance after searching six widths
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?
 Outside this test: Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.
 
 LP1 column balance with section-preserving shuffles
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?
 Outside this test: Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.
 
@@ -286,22 +326,26 @@ Numbers and representations
 Gematria and rune-sum mappings
 Map runes or groups to numerical totals and count competing matches.
 
-Documented tests (4)
+Related records (4)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP1-05: candidate word sums and rune segmentation
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do the sixteen supplied Latin word candidates admit the claimed GP sums, and are those sums forced by their spellings?
 Outside this test: Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.
 
 Selected phrase and MYRMELEONTIDAE: five word-sum candidates
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do the selected PROVE WORTHIER FIND TRUTHS and MYRMELEONTIDAE candidates admit their proposed sums under the baseline rules?
 Outside this test: Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.
 
 LP2-00–55: prime row sums against shuffled pages
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do the archived row boundaries on LP2-00–55 produce more prime-valued Gematria Primus row sums than within-page rune shuffles?
 Outside this test: Emirps, prime ordinals, decoded text, arbitrary regions, changed spellings, other boundaries and page-specific significance claims.
 
 LP2-27–32: eleven-rune sums of 563 and 569
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do sums 563 and 569 recur in eleven consecutive runes elsewhere in the Wing and Tree section?
 Outside this test: Grid columns and perimeters, manuscript-row selection, other lengths or targets, cross-page windows, file-dimension retesting, null-model simulations, image provenance and decryption.
 
@@ -310,10 +354,11 @@ Outside this test: Grid columns and perimeters, manuscript-row selection, other 
 Prime indexing and value transforms
 Distinguish rune indices, prime values and prime indices before composing operations.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: fixed divisor labels of rune positions
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Can fixed divisors greater than one label consecutive rune positions, with any starting integer?
 Outside this test: Irregular clocks, within-page resets, time-varying labels, transformed outputs, plaintext mixing, general rejection of noncoprime strides, and LP2-56–57.
 
@@ -322,10 +367,11 @@ Outside this test: Irregular clocks, within-page resets, time-varying labels, tr
 Bounded arithmetic expressions
 Declare a finite grammar of operations rather than searching unlimited expressions.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: emirp row sums with the same page shuffles
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do archived LP2-00–55 row sums contain more emirps than the same page shuffles used in the prime-sum baseline?
 Outside this test: Prime palindromes, prime ordinals, decoded text, arbitrary regions, changed spellings, other bases or boundaries and page-specific significance claims.
 
@@ -346,22 +392,26 @@ No experiment linked yet. The guide documents the approach; it is not a result.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-Documented tests (4)
+Related records (4)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Magic squares: does one fixed entry determine the rest?
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?
 Outside this test: No other primality, distinctness, normal-square or server-validation requirements; no enumeration of all positive grids; no historical 7x7 transcription or cipher search.
 
 LP2-49–51: directional prime-path reconstruction
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?
 Outside this test: Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.
 
 LP2-49–51: prime paths confined to each page
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does forbidding page crossings preserve the same three missing prime values?
 Outside this test: Other layouts, path lengths, cross-page paths, removal of 4 cells, null-model simulation, decipherment and authorial intent.
 
 LP2-32: grid sums and the 2016 message file
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?
 Outside this test: Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.
 
@@ -379,14 +429,16 @@ Physical and digital carriers
 File steganography and embedded payloads
 Recover data using a specified carrier format, extraction tool and key.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Original JPEGs: default-key OutGuess sweep
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: What does default-key OutGuess retrieval return from all 75 manuscript JPEGs and the two historical cover/opening images?
 Outside this test: Other keys, other builds/platforms, other steganographic methods, recompressed files, signature verification, and interpretation of candidate bytes.
 
 Original JPEGs: guarded OutGuess build comparison
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does a clean build with explicit iterator guards change the baseline retrieval results on the same 77 images?
 Outside this test: Other keys, other platforms, independent OutGuess implementations, other steganographic methods, transformed images, payload authentication, and a stack trace of the original executable.
 
@@ -395,10 +447,11 @@ Outside this test: Other keys, other platforms, independent OutGuess implementat
 Image transforms and overlays
 Measure features under declared processing and alignment choices.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can image-only detection find every rune row?
+Record type: Input audit. Checks extraction or input coverage against a declared reference; it does not establish a decryption.
 Question tested: Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?
 Outside this test: No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.
 
@@ -407,14 +460,16 @@ Outside this test: No rune recognition, actual omitted archive line finding, cla
 Geometric constructions and navigation
 Turn measured positions into reproducible construction and traversal rules.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-33 and LP2-39: shared three-circle radii at native scale
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?
 Outside this test: Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext.
 
 LP2-00–02: 27 × 27 totient-map route replay
+Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
 Question tested: Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?
 Outside this test: Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods.
 
@@ -456,26 +511,31 @@ Language, clues and search
 Language and corpus identification
 Compare declared observables with suitable language controls under explicit cipher assumptions.
 
-Documented tests (5)
+Related records (5)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Could the unsolved text be another language? Eight aligned translations
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Which of eight languages best matches the unsolved text under word-length and fixed-substitution assumptions?
 Outside this test: No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference.
 
 Language controls with exactly 2,896 tokens per sample
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do fixed language profiles distinguish samples the same token size as the unsolved manuscript?
 Outside this test: No genre matching, posterior, all-language coverage, equal translated passage boundaries, independent-trial accuracy or cipher identification.
 
 Language comparison checked against known LP readings
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Does the eight-language length comparison recognize the established English readings of Liber Primus?
 Outside this test: No blind decryption, posterior, accuracy inference from independent random trials, new language labels for solved sections, or authentication of source readings. No new unknown-page results. GP grouping is an orthographic sensitivity.
 
 Word lengths across the complete historical reference corpus
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Where does the reconstructed 2902-token manuscript summary fall among every eligible prefix in the pinned historical corpus?
 Outside this test: No language identification, random passage sampling, header removal, alphabet filtering, edition deduplication, calibrated p-values or reproduction of the unavailable corpus converter.
 
 Language comparison: shorter aligned passage controls
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the eight-language length comparison remain stable on shorter aligned passages?
 Outside this test: Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity. Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference.
 
@@ -484,14 +544,16 @@ Outside this test: Not matched-length random samples; not genre-matched; no know
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Does matching the opening text identify a seed?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
 Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
 
 LP2-39: twenty proposed red-header cribs
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?
 Outside this test: Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim.
 
@@ -500,14 +562,16 @@ Outside this test: Spelling aliases, phonetic encodings, alternate rune orders, 
 Automatic search and language scoring
 Explore a bounded model with a scorer whose ability and false positives have been checked.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 How does trying more keys change the best score?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?
 Outside this test: No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.
 
 Would an English scorer accept other languages?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?
 Outside this test: No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.
 
@@ -537,14 +601,16 @@ Diagnosis and validation
 Period and key-length diagnostics
 Measure position-dependent patterns with matched null models and correction for searched periods.
 
-Documented tests (2)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-31: periodic IoC for periods 2-20
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?
 Outside this test: Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.
 
 LP2-31: periodic IoC with within-row shuffles
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the largest pooled column IoC over periods 2–20 exceed shuffles that preserve every archived row’s rune multiset?
 Outside this test: Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.
 
@@ -553,22 +619,26 @@ Outside this test: Other pages, periods outside 2-20, regional variants, correct
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-Documented tests (4)
+Related records (4)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: repeated trigrams against page shuffles
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does LP2-00–55 have an excess of within-page matching trigram pairs compared with independent whole-page fixed-count shuffles?
 Outside this test: Other window lengths, between-page matches, per-page significance, selected subsections, decoded readings, approximate matches, key-length inference and a deficit test.
 
 LP2-00–55: distances between doublet events
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?
 Outside this test: Other transcriptions, collapsed runs, word-only extraction, page-reset comparisons, other lags, permutation tail probabilities and cipher searches.
 
 LP2-00–55: uniform additive keys and adjacent matches
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?
 Outside this test: Nonuniform or dependent keys, fixed-count shuffles, other cipher equations, altered boundaries, output filters, plaintext identification and correction for historical feature selection.
 
 LP2-00–02: N-rune distances and prime-value labels
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Which prime-value labels result from successive N-rune gaps under two distance definitions and two page-boundary rules?
 Outside this test: Other runes, punctuation-based gaps, heading removal, anagrams, significance testing and interpretation of signpost artwork.
 
@@ -577,22 +647,26 @@ Outside this test: Other runes, punctuation-based gaps, heading removal, anagram
 Invariants and bounded exclusions
 State the assumptions under which an operation preserves or forbids an observed property.
 
-Documented tests (4)
+Related records (4)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Literal prime alphabet: affine permutations for every modulus above 109
+Record type: Alphabet-wide analysis. Studies a declared mathematical mapping over the alphabet, rather than decoding an unsolved page.
 Question tested: Can a fixed affine map modulo any integer greater than 109 nontrivially permute the full 29-prime alphabet?
 Outside this test: Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.
 
 Literal prime alphabet: quadratic permutations for every modulus above 109
+Record type: Alphabet-wide analysis. Studies a declared mathematical mapping over the alphabet, rather than decoding an unsolved page.
 Question tested: Can a fixed quadratic map nontrivially permute the full literal-prime alphabet for any modulus above 109?
 Outside this test: Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.
 
 LP2-00–55: exact words and anagram repetition
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Do interior ciphertext tokens repeat exactly or as anagrams under two apostrophe policies?
 Outside this test: Claims that plaintext must repeat, changing effective keys or state, different word maps, alternative boundaries, page-edge tokens, language significance tests, and a general rejection of word ciphers.
 
 LP2 page supports: literal-prime affine maps and the two page-55 exceptions
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Which fixed affine maps into the prime palette remain injective on each archived LP2-00–55 page support?
 Outside this test: Noninjective, nonlinear and position-dependent rules; rune-index transforms; altered transcriptions; plaintext scoring or recovery.
 
@@ -601,30 +675,36 @@ Outside this test: Noninjective, nonlinear and position-dependent rules; rune-in
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-Documented tests (6)
+Related records (6)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 How does trying more keys change the best score?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?
 Outside this test: No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.
 
 Would an English scorer accept other languages?
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
 Question tested: Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?
 Outside this test: No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.
 
 LP1 column balance with section-preserving shuffles
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?
 Outside this test: Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.
 
 LP1 column balance after searching section orders
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?
 Outside this test: Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.
 
 LP1 column balance after searching six widths
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?
 Outside this test: Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.
 
 LP1: the 464-word table and column balance
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?
 Outside this test: Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.
 
@@ -633,10 +713,11 @@ Outside this test: Other widths, section orders, constrained shuffles, prose cor
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-Documented tests (1)
+Related records (1)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can image-only detection find every rune row?
+Record type: Input audit. Checks extraction or input coverage against a declared reference; it does not establish a decryption.
 Question tested: Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?
 Outside this test: No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.
 

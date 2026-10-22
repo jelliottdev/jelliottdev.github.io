@@ -36,6 +36,19 @@ console.log('PASS: 12 coverage families, related published records, phrase bound
 const guides=new Set(read('articles/index.json').map(r=>r.id));
 for(const n of notes)assert(guides.has(n.guide),n.id);
 const families=read('data/method-families.json').families;
+const familyData=read('data/method-families.json');
+assert.deepEqual(Object.keys(familyData.record_kind_by_id).sort(),experiments.map(r=>r.id).sort());
+for(const kind of Object.values(familyData.record_kind_by_id)){
+ assert(familyData.record_kinds[kind]?.label);
+ assert(familyData.record_kinds[kind]?.description);
+}
+assert.equal(familyData.record_kind_by_id['seed-crib-controls'],'control');
+assert.equal(familyData.record_kind_by_id['known-reading-languages'],'control');
+assert.equal(familyData.record_kind_by_id['image-row-coverage'],'audit');
+assert.equal(familyData.record_kind_by_id['literal-prime-affine'],'alphabet');
+assert.equal(familyData.record_kind_by_id['totient-map-route'],'replay');
+assert.equal(familyData.record_kind_by_id['emerson-book-cipher-control'],'historical');
+assert.equal(familyData.record_kind_by_id['lp2-prime-minus-one-openings'],'manuscript');
 assert.equal(new Set(families.map(f=>f.id)).size,families.length);
 for(const f of families){
  assert(guides.has(f.guide),f.id);
