@@ -8,6 +8,40 @@ Major variants
 
 Variants include exact cribs, partial patterns, unknown-offset cribs, dictionary hypotheses and known-reading prefixes. Searching more phrases and positions creates more opportunities for an accidental match.
 
+Derive the key, then test its restrictions
+
+For the additive convention c[i] = p[i] + k[i] mod 29, a guessed plaintext implies k[i] = c[i] − p[i] mod 29. This subtraction always produces values. The useful question is whether those values obey the independently specified key rule.
+
+Here is an invented example. Suppose the ciphertext starts 10, 20, 5, and the proposed plaintext is 3, 9, 27. The implied key values are 7, 11, 7.
+
+	Assumed key model	Does the crib fit?	What the fit establishes
+	One fixed shift	No	The required shifts 7 and 11 differ.
+	A key repeating every two positions	Yes	The third key value agrees with the first.
+	A key repeating every three positions	Yes	Only the first period is specified; no repeated position has been checked.
+	An unrestricted key value at each position	Yes	The guessed plaintext merely defines the required three key values.
+
+Changing the third plaintext symbol to 28 would imply 7, 11, 6, contradicting the period-two rule. It would still fit the unrestricted model. That is why a crib cannot be assessed independently of the cipher and key restrictions. See repeating-key decoding and unrestricted keys.
+
+Separate fitting positions from prediction positions
+
+In the toy example, the first two ciphertext/plaintext pairs determine the period-two key 7, 11. The third pair then checks a repeated key position. If all three plaintext values were supplied as the crib, that check is internal consistency, not a test on withheld text.
+
+Freeze the key, period, alignment and decoding rule before examining a continuation. With the next ciphertext values 8, 12, 7, the same period-two candidate predicts plaintext 26, 5, 25. A period-three candidate repeating 7, 11, 7 instead predicts 1, 1, 0. Both fit the opening, but make different later predictions.
+
+The continuation values in this demonstration are invented; they do not establish which model a manuscript uses. In a real test, compare a predicted continuation with independently known text or a declared evaluation rule. If you change the period, reset point or spelling after seeing it, that continuation has become tuning material. Preserve the changed hypothesis and seek new evaluation material.
+
+How many key values did the crib constrain?
+
+For a known period L and fixed alignment, a contiguous m-symbol crib fixes at most min(m, L) distinct key positions. If its repeated-position requirements are consistent, the number of full L-position key arrays remaining is 29^(L − min(m, L)). If they conflict, no array in that model fits.
+
+For example, a two-symbol crib with period four leaves 29² = 841 full key arrays. With period two it determines one array. Neither statement says the crib is true. These counts allow keys whose smallest repeating period divides L; requiring a smallest period of exactly L is an additional restriction. Cribs with gaps or resets require counting the key positions actually reached instead.
+
+Unknown position is another search
+
+An m-symbol crib can start at N − m + 1 positions in an N-symbol stream when 1 ≤ m ≤ N, with no wrapping. A three-symbol crib in ten symbols has eight possible starts. If word boundaries restrict starts, enumerate that smaller set explicitly. Testing several phrases of different lengths requires summing their allowed placements, not multiplying by one common placement count.
+
+Count alternative rune spellings, reading directions, key periods and allowed mismatches too. A header guessed because it resembles a familiar phrase is an exploratory candidate. Report its full search history rather than attaching a chance probability calculated as though the phrase and location were fixed beforehand.
+
 What a test must specify
 
 Fix the cipher class, candidate phrases, rune encoding, offsets, allowed mismatches and key constraints. Distinguish a historical known plaintext from a guessed word. Record whether a crib was chosen before or after seeing a candidate.
@@ -28,6 +62,10 @@ All solving-method families · Search space and bounds · Documenting a test · 
 The matrix example shows why a second matching block may add no information when it repeats the first constraint, and why a unique fitted key still needs independent validation.
 
 Sources, related references, and files
+- repeating-key decoding
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- unrestricted keys
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
 - Does matching the opening text identify a seed?
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - LP2-39: twenty proposed red-header cribs
