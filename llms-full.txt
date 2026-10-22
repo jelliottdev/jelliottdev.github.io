@@ -7870,7 +7870,7 @@ The message points to the subreddit a2e7j6ic78h0j and supplies 76 line-and-chara
 
 5. The next stage needs an ordered text
 
-The coordinates are pointers into a text, not a self-contained cipher. The Mabinogion counting guide explains the subsequent decoding, post-order and spacing issues. A complete replay must preserve the ordered post list and each character lookup. Substituting an arbitrary modern edition or a current Reddit display order can change the result. The 76 coordinates refer to lines in that separate post collection; the number of posts cannot pad or change the opening JPEG’s byte length.
+The coordinates are pointers into a text, not a self-contained cipher. The Mabinogion counting guide explains the subsequent decoding, post-order and spacing issues. We host the complete 1849 book scan, a page grab at the line-76/77 passage, and the archived post records, with source and checksum details. The scan is a comparison source; the puzzle’s working lines came from the posts, and their exact historical book edition is unverified. A complete replay must preserve the ordered post list and each character lookup. Substituting an arbitrary modern edition or a current Reddit display order can change the result. The 76 coordinates refer to lines in that separate post collection; the number of posts cannot pad or change the opening JPEG’s byte length.
 
 The dimensions become relevant later, after the telephone-stage instruction asks for three associated primes. All three values are prime, and 509 × 503 × 3301 = 845145127. The audit checks that arithmetic, but it should not be presented as the rule that decoded the appended string. Continue with the telephone, countdown and coordinate walkthrough for that later step.
 
@@ -7907,6 +7907,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2012/archived-payload.txt
 - Mabinogion counting guide
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion
+- complete 1849 book scan
+  https://jelliottdev.github.io/exports/sources/mabinogion-1849-volume-1.pdf
+- a page grab at the line-76/77 passage
+  https://jelliottdev.github.io/exports/sources/mabinogion-1849-page-43.png
+- archived post records
+  https://jelliottdev.github.io/exports/sources/cicada-2012/subreddit-posts.json
+- source and checksum details
+  https://jelliottdev.github.io/exports/sources/mabinogion-source-captures.json
 - telephone, countdown and coordinate walkthrough
   https://jelliottdev.github.io/reference/articles/2012-countdown.html
 - reference-data ZIP
@@ -11971,7 +11979,20 @@ Five grid cells to review against the images
 	LP2-50	Row 12, column 5	2s	2S
 	LP2-51	Row 8, column 7	3i	3I
 
-Grid rows start with the first grid row on each page, excluding runic rows. The five-cell CSV is ready for a targeted visual review. The grid guide counts 256 entries and 161 distinct tokens using the wiki text; interestingly, both text sets produce those same aggregate counts despite the five different entries. A matching aggregate statistic cannot settle an individual glyph.
+Grid rows start with the first grid row on each page, excluding runic rows. The five-cell CSV gives the exact coordinates. We made unenhanced page grabs from the archived seventh-onion JPEGs, not from retyped grid text. Select a grab for its full-size PNG, or open the corresponding complete JPEG to check the surrounding page.
+
+[Image: Original-pixel crop of LP2-49 grid rows 6 and 7, including the straight stems in cells 6:6 and 7:3.]
+LP2-49, rows 6–7. The last character of 1L/1l and 0L/0l has no visible foot. Download crop · complete archived JPEG.
+
+[Image: Original-pixel crop of LP2-50 grid rows 10 to 12, including cells 11:6 and 12:5.]
+LP2-50, rows 10–12. Cell 11:6 is a plain stem; cell 12:5 has a full-height S, unlike the nearby lowercase s in 0s. Download crop · complete archived JPEG.
+
+[Image: Original-pixel crop of LP2-51 grid rows 7 and 8, including the undotted stem in cell 8:7.]
+LP2-51, rows 7–8. Cell 8:7 has no dot above its stem, unlike lowercase i elsewhere in the grid. Download crop · complete archived JPEG.
+
+The image supports uppercase 2S at LP2-50 row 12, column 5, and rules out lowercase 3i at LP2-51 row 8, column 7. It also rules out a footed capital L in the two LP2-49 cells. But a bare vertical stem does not uniquely identify lowercase l versus uppercase I in these images; LP2-50 row 11, column 6 remains unresolved between the two recorded readings. The other bare-stem cells should likewise retain that qualification even where one of the transcriptions looks more plausible. These are visual judgments, not an OCR result or a proof of a cipher alphabet.
+
+The capture manifest pins each source JPEG and crop by SHA-256 and records the original pixel rectangles. Download the crop script to regenerate or check the page grabs. The grid guide counts 256 entries and 161 distinct tokens using the wiki text; both text sets produce those same aggregate counts despite five different entries. A matching aggregate statistic cannot settle an individual glyph.
 
 Why the non-rune changes matter
 
@@ -12000,6 +12021,22 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/reader/lp2-51
 - five-cell CSV
   https://jelliottdev.github.io/exports/seventh-onion-grid-variants.csv
+- Original-pixel crop of LP2-49 grid rows 6 and 7, including the straight stems in cells 6:6 and 7:3.; Download crop
+  https://jelliottdev.github.io/exports/figures/grid-review-lp2-49.png
+- complete archived JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/49.jpg
+- Original-pixel crop of LP2-50 grid rows 10 to 12, including cells 11:6 and 12:5.; Download crop
+  https://jelliottdev.github.io/exports/figures/grid-review-lp2-50.png
+- complete archived JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/50.jpg
+- Original-pixel crop of LP2-51 grid rows 7 and 8, including the undotted stem in cell 8:7.; Download crop
+  https://jelliottdev.github.io/exports/figures/grid-review-lp2-51.png
+- complete archived JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/51.jpg
+- capture manifest
+  https://jelliottdev.github.io/data/evidence/seventh-onion-grid-crops.json
+- Download the crop script
+  https://jelliottdev.github.io/scripts/capture_seventh_onion_grid.py
 - grid guide
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 - transcription-checking guide

@@ -158,6 +158,9 @@ figure_details = {
  'second-koan-argument.svg': {'title':'Second koan: how the argument works (SVG)', 'guide':'koans', 'aliases':['koan diagram','inner voice','self reference'], 'pages':['lp1-14','lp1-15'], 'release':'LP1'},
  'seventh-onion-jpeg-versions.svg': {'title':'LP2 JPEG source-version differences (SVG)', 'guide':'2014-seventh-onion', 'aliases':['LP2 JPEG versions','JFIF header comparison','58 page source audit'], 'pages':[f'lp2-{i:02}' for i in range(58)], 'release':'LP2'},
  'seventh-onion-transcription-variants.svg': {'title':'LP2 non-rune transcription differences (SVG)', 'guide':'seventh-onion-transcriptions', 'aliases':['disputed word breaks','LP2 transcription variants','grid cell disagreements'], 'pages':[f'lp2-{i:02}' for i in range(58)], 'release':'LP2'},
+ 'grid-review-lp2-49.png': {'title':'LP2-49 disputed grid cells: source-pixel grab (PNG)', 'guide':'seventh-onion-transcriptions', 'aliases':['grid glyph','1L','1l','0L','0l'], 'pages':['lp2-49'], 'release':'LP2'},
+ 'grid-review-lp2-50.png': {'title':'LP2-50 disputed grid cells: source-pixel grab (PNG)', 'guide':'seventh-onion-transcriptions', 'aliases':['grid glyph','0I','0l','2S','2s'], 'pages':['lp2-50'], 'release':'LP2'},
+ 'grid-review-lp2-51.png': {'title':'LP2-51 disputed grid cell: source-pixel grab (PNG)', 'guide':'seventh-onion-transcriptions', 'aliases':['grid glyph','3I','3i'], 'pages':['lp2-51'], 'release':'LP2'},
  'prime-sum-claims.svg': {'title':'Prime sums: arithmetic, pattern, and intention (SVG)', 'guide':'testing-knowledge', 'aliases':['prime sum diagram','spelling diagram','numerical claims','author intention']},
  'relief-printing.svg': {'title':'Relief printing: plate and printed marks (SVG)', 'guide':'blake-printmaking', 'aliases':['Blake printing diagram','relief etching','illuminated printing','printing plate','impression']},
 }
@@ -247,7 +250,7 @@ for path in ['exports/cicada-2014-seventh-onion.json','exports/cicada-2014-seven
  if page:files[-1]['title']=page.upper()+' seventh-onion archive JPEG ('+name+'); compare with wiki page file'
  if name.endswith('.runes.txt'):files[-1].update(guide='seventh-onion-transcriptions',title='Archived seventh-onion rune text ('+name+')',aliases=['LP2 transcription variants','historical rune text','disputed separators'])
  if name.endswith('.runes-possibilities.txt'):files[-1].update(guide='seventh-onion-transcriptions',title='Archived generated candidate output; not established plaintext ('+name+')',aliases=['historical possibilities','not established plaintext'])
-for path in ['exports/seventh-onion-transcription-variants.json','exports/seventh-onion-transcription-pages.csv','exports/seventh-onion-grid-variants.csv','scripts/audit_seventh_onion_transcriptions.py','scripts/plot_seventh_onion_transcriptions.py']:
+for path in ['exports/seventh-onion-transcription-variants.json','exports/seventh-onion-transcription-pages.csv','exports/seventh-onion-grid-variants.csv','data/evidence/seventh-onion-grid-crops.json','scripts/audit_seventh_onion_transcriptions.py','scripts/plot_seventh_onion_transcriptions.py','scripts/capture_seventh_onion_grid.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical transcription comparison')
  files[-1].update(guide='seventh-onion-transcriptions',aliases=['LP2 transcription variants','grid cell disagreements','word separators','0-55 rune text'])
 for path in ['exports/cicada-2013-twitter.json','exports/cicada-2013-twitter-outguess.json','exports/cicada-2013-twitter-signature.json','exports/figures/cicada-2013-twitter-chain.svg','scripts/replay_2013_twitter.py','scripts/test_replay_2013_twitter.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013-twitter').iterdir())]:
