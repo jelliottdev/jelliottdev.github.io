@@ -23962,6 +23962,31 @@ What a test must specify
 
 Fix dimensions, source order, heading inclusion, empty-cell treatment, origin, direction and traversal. Require a rule for whether cells may repeat or be skipped. Preserve a source-coordinate trace for every output symbol.
 
+The same grid, three reading orders
+
+Imagine twelve symbols placed in three rows of four. Number their original positions from 0 to 11. The numbers below identify positions; they are not rune values. Each route visits every position once, but puts its symbol at a different point in the output.
+
+[Image: Three numbered grids comparing row-first, column-first and alternating-row reading, with each complete position order listed underneath.]
+An invented layout illustrating three fixed routes. Dashed arrows connect the end of one row or column to the next. This is a demonstration, not a test of a manuscript page.
+
+To undo a route, put each output symbol back at its recorded source position. Reading the output along the same route again is not generally the inverse. Keeping the position trace makes this check straightforward, even when repeated symbols make two outputs look similar.
+
+What if the grid does not fill?
+
+With ten symbols in a four-column grid, the last row has only positions 8 and 9. Under a skip-empty-cells rule, column-first reading becomes 0, 4, 8, 1, 5, 9, 2, 6, 3, 7. Adding two padding symbols would instead change the input and produce twelve output symbols. Neither convention can be silently substituted for the other when comparing results.
+
+What a route can and cannot change
+
+A pure rearrangement preserves every symbol count. It therefore preserves whole-stream index of coincidence and single-symbol entropy. Searching thousands of routes cannot improve either statistic on the same complete stream.
+
+It can change adjacent pairs, repeated word-like sequences and which symbols fall into periodic columns. Those are possible scoring targets, but selecting the highest score from many routes also selects some chance successes. Compare against controls given the same search budget. See cipher invariants for the distinction between properties of the whole stream and properties of its order.
+
+Reproduce the illustration
+
+From a repository checkout, run python scripts/route_order_example.py. The script checks that each route uses all twelve positions once, restores the original stream through its inverse, preserves symbol counts and retains all ten occupied positions in the unpadded example.
+
+Download the Python script · Download the position traces · Download the diagram
+
 How to evaluate a result
 
 For a pure permutation, check that every eligible cell is used exactly once. Compare the best candidate after searching the complete declared route family with controls searched in exactly the same way. Adding substitution creates a combined search with additional choices.
@@ -23978,6 +24003,20 @@ All solving-method families · Search space and bounds · Documenting a test · 
 For proposals combining or changing operations, see cipher composition and ordered pipelines.
 
 Sources, related references, and files
+- Three numbered grids comparing row-first, column-first and alternating-row reading, with each complete position order listed underneath.; Download the diagram
+  https://jelliottdev.github.io/exports/figures/route-order-example.svg
+- index of coincidence
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- single-symbol entropy
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html
+- periodic columns
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html
+- cipher invariants
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+- Download the Python script
+  https://jelliottdev.github.io/scripts/route_order_example.py
+- Download the position traces
+  https://jelliottdev.github.io/exports/route-order-example.json
 - LP2-00–55: simple row and column reading routes
   https://jelliottdev.github.io/#/experiments/lp2-row-column-routes
 - LP2-00–02: 27 × 27 totient-map route replay
