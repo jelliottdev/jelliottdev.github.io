@@ -1,6 +1,7 @@
 'use strict';
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let db, currentPage, renderId=0, zoom=1, viewMode='runes';
+let unavailableData={};
 const cache=new Map(), main=$('#main');
 const label=p=>`${p.release} · Page ${String(p.release_index).padStart(2,'0')}`;
 const kind=p=>p.kind==='cover/title'?'Title page':p.kind==='runic-text'?'Runic text':p.kind.replaceAll('-',' ');
@@ -79,7 +80,7 @@ function applyZoom(){
 }
 function zoomImage(factor){const area=$('#viewer-scroll'),img=$('#viewer-image'),before=img.getBoundingClientRect(),frame=area.getBoundingClientRect();const x=(frame.left+area.clientWidth/2-before.left)/before.width,y=(frame.top+area.clientHeight/2-before.top)/before.height;zoom=Math.max(.05,Math.min(4,zoom*factor));applyZoom();const after=img.getBoundingClientRect();area.scrollLeft+=after.left+x*after.width-frame.left-area.clientWidth/2;area.scrollTop+=after.top+y*after.height-frame.top-area.clientHeight/2;}
 $('#zoom-in').onclick=()=>zoomImage(1.5);$('#zoom-out').onclick=()=>zoomImage(1/1.5);$('#fit').onclick=()=>{const a=$('#viewer-scroll'),i=$('#viewer-image');zoom=Math.min((a.clientWidth-40)/i.naturalWidth,(a.clientHeight-40)/i.naturalHeight);applyZoom();a.scrollTop=0;a.scrollLeft=0};$('#close-viewer').onclick=()=>$('#image-dialog').close();
-function setNavigation(open){$('#sidebar').classList.toggle('open',open);$('#menu').setAttribute('aria-expanded',String(open));$('#nav-backdrop').hidden=!open;document.body.classList.toggle('nav-open',open);const modal=open&&matchMedia('(max-width:760px)').matches;main.inert=modal;}
+function setNavigation(open){if(open){const active=$('#sidebar .mobile-nav a.active');active?.closest('details')?.setAttribute('open','');}$('#sidebar').classList.toggle('open',open);$('#menu').setAttribute('aria-expanded',String(open));$('#nav-backdrop').hidden=!open;document.body.classList.toggle('nav-open',open);const modal=open&&matchMedia('(max-width:760px)').matches;main.inert=modal;}
 $('#menu').onclick=()=>setNavigation(!$('#sidebar').classList.contains('open'));
 $('#nav-backdrop').onclick=()=>setNavigation(false);
 $('#sidebar').addEventListener('click',e=>{
@@ -100,13 +101,84 @@ document.addEventListener('click',e=>{
  e.preventDefault();
  const routeSection=/^#\/(?:wiki|overview|experiments)(?:[/?]|$)/.test(a.getAttribute('href')||'');
  if(routeSection){const contents=a.closest('details.mobile-article-contents');if(contents)contents.open=false;}
+ for(let panel=target.closest?.('details');panel;panel=panel.parentElement?.closest?.('details'))panel.open=true;
  target.scrollIntoView({behavior:'auto'});
  if(a.classList.contains('skip'))main.focus();
  else if(routeSection){history.replaceState(null,'',a.getAttribute('href'));if(!target.hasAttribute('tabindex'))target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
  else if(currentPage&&location.hash.startsWith('/page/',1))history.replaceState(null,'',`#/page/${currentPage.id}?section=${encodeURIComponent(a.dataset.anchor)}`);
 });
-async function route(){if(!db)return;closeSearchSuggestions();const v=++renderId;const hash=location.hash.slice(1)||'/overview', [path,params]=hash.split('?');const parts=path.split('/').filter(Boolean),type=parts[0]||'overview';const headerSearch=document.getElementById('search');if(type!=='search'&&headerSearch)headerSearch.value='';document.body.classList.toggle('reader-active',type==='reader');main.innerHTML='<div class="loading" role="status">Loading page…</div>';setNavigation(false);const navLinks=[...document.querySelectorAll('#sidebar nav > a')];const exact=navLinks.find(a=>a.getAttribute('href')==='#'+path);const guideNav=type==='wiki'?wikiSidebarHref(parts[1]):null;navLinks.forEach(a=>{const active=exact?a===exact:guideNav?a.getAttribute('href')===guideNav:a.dataset.nav===type||(type==='page'&&a.dataset.nav==='pages');a.classList.toggle('active',active);if(active)a.setAttribute('aria-current',exact?'page':'location');else a.removeAttribute('aria-current')});document.querySelectorAll('.page-grid a').forEach(a=>a.classList.toggle('current',a.hash===location.hash.split('?')[0]));
-try{stopExperimentAI();if(type==='wiki'){await ensureWikiArticle(parts[1]||'');if(v!==renderId)return;main.innerHTML=wikiPage(parts[1]||'');bindChoiceExplorer()}else if(type==='experiments'){await experimentsPage(parts[1]||'',v,new URLSearchParams(params||'').get('q')||'')}else if(type==='reader'){if(!db.pages.some(p=>p.id===parts[1]))throw Error('Choose a valid manuscript page from the index.');await readerPage(parts[1],v)}else if(type==='downloads'){await downloadsPage(decodeURIComponent(parts.slice(1).join('/')),v)}else if(type==='page'){if(!db.pages.some(p=>p.id===parts[1]))throw Error('That page is not in the manuscript index.');await showPage(parts[1],v)}else if(type==='pages')researchCatalogue(parts[1]||'',new URLSearchParams(params||'').get('q')||'',new URLSearchParams(params||'').get('coverage')||'');else if(type==='search')researchCatalogue(new URLSearchParams(params||'').get('release')||'',decodeURIComponent(parts.slice(1).join('/')),new URLSearchParams(params||'').get('coverage')||'',true);else if(type==='topics'){main.innerHTML=topicsPage();bindTopics()}else if(type==='readings')main.innerHTML=readingsPage();else if(type==='spelling')main.innerHTML=spellingArticle();else if(type==='numbering'){main.innerHTML=numberingPage();bindNumbering()}else if(type==='alphabet')main.innerHTML=alphabet();else if(type==='conventions')main.innerHTML=conventions();else if(type==='sources'){main.innerHTML=sources();bindSourceFilter()}else if(type==='overview')main.innerHTML=overview();else main.innerHTML=head('Page not found','That address is not in this edition.')+'<article class="reading-width"><p>Check the address or use the indexes below to find the page you wanted.</p><p><a href="#/search">Search Liberpedia</a> · <a href="#/pages">Browse manuscript pages</a> · <a href="#/overview">Home</a></p></article>';if(v!==renderId)return;document.title=type==='overview'?'Liberpedia — Liber Primus reference':`${main.querySelector('h1')?.textContent||'Reference'} — Liberpedia`;if(v>1)main.focus({preventScroll:true});window.scrollTo(0,0);const queryParams=new URLSearchParams(params||'');const requestedMode=queryParams.get('mode');if(type==='page'&&['runes','latin','numbers','reviewed'].includes(requestedMode)&&currentPage.raw&&(requestedMode!=='reviewed'||currentPage.reviewed_text)){viewMode=requestedMode;drawLines(currentPage)}const section=queryParams.get('section')||(type==='downloads'&&parts[1]?'individual-files':null),topic=queryParams.get('topic');const destination=(topic&&type==='topics'?document.getElementById('topic-'+topic):null)||(section?document.getElementById(section):null);if(destination){for(let panel=destination.closest?.('details');panel;panel=panel.parentElement?.closest?.('details'))panel.open=true;destination.scrollIntoView({block:'start'});const focusTarget=destination.querySelector('h1,h2,h3,h4')||destination;if(!focusTarget.hasAttribute('tabindex'))focusTarget.setAttribute('tabindex','-1');focusTarget.focus({preventScroll:true});}const line=queryParams.get('line');if(line){const el=document.getElementById(`line-${line}`);el?.scrollIntoView({block:'center'});if(el){el.style.background='#fff3cc';el.setAttribute('tabindex','-1');el.focus({preventScroll:true});}}}catch(e){if(v!==renderId)return;main.innerHTML=`<div class="error"><h1>Page unavailable</h1><p>${esc(e.message)}</p><a href="#/pages">Return to the page index</a> · <button onclick="location.reload()">Retry</button></div>`}}
-Promise.all(['data/index.json','data/topics.json','data/evidence/reading-methods.json','data/evidence/spelling-sums.json','data/article-search.json','data/evidence/embedded-payloads.json','data/guide-categories.json'].map(url=>fetch(url,{cache:"no-cache"}).then(r=>{if(!r.ok)throw Error('The reference index could not be loaded.');return r.json()}))).then(([data,topics,methods,spelling,articles,payloads,guideCategories])=>{const topicOrder=['Finding a page','Image details','Reading the text','Ideas and referenced works','Decoding and analysis','Source corrections','Checking a source'];topics.sort((a,b)=>topicOrder.indexOf(a.category)-topicOrder.indexOf(b.category));db={...data,topics,methods,spelling,articles,payloads,guideCategories};bindWikiSearch();db.pages.forEach(p=>{if(payloads.records.some(r=>r.page===p.id))p.embedded_text="OutGuess embedded hidden signed payload hexadecimal PGP "+p.title});['LP1','LP2'].forEach(release=>{$(`#${release.toLowerCase()}-nav`).innerHTML=db.pages.filter(p=>p.release===release).map(p=>`<a href="${link(p)}" title="${label(p)}" aria-label="${label(p)}">${String(p.release_index).padStart(2,'0')}</a>`).join('')});route()}).catch(e=>{main.innerHTML=`<div class="error"><h1>Unable to load the wiki</h1><p>${esc(e.message)}</p><button onclick="location.reload()">Retry</button><p>If loading still fails, use the <a href="reference/index.html">static reference index</a>, <a href="reference/articles/quick-start.html">start guide</a>, or <a href="reference/experiments.html">experiment archive</a>.</p></div>`});
+function requireStartupData(key,label,staticHref){
+ if(!unavailableData[key])return;
+ const error=Error(`${label} could not be loaded. Other parts of Liberpedia are still available.`);
+ error.staticHref=staticHref;
+ throw error;
+}
+function partialDataNotice(keys){
+ const missing=keys.filter(key=>unavailableData[key]);
+ if(!missing.length)return '';
+ const names={topics:'topics',articles:'guides',methods:'method details',payloads:'hidden-content records'};
+ return `<p class="data-notice" role="status">${missing.map(key=>names[key]).join(' and ')} ${missing.length===1?'is':'are'} temporarily unavailable, so this view may omit related information. <button type="button" onclick="location.reload()">Retry loading</button></p>`;
+}
+async function route(){if(!db)return;closeSearchSuggestions();document.body.classList.remove('header-hidden');const v=++renderId;const hash=location.hash.slice(1)||'/overview', [path,params]=hash.split('?');const parts=path.split('/').filter(Boolean),type=parts[0]||'overview';const headerSearch=document.getElementById('search');if(type!=='search'&&headerSearch)headerSearch.value='';document.body.classList.toggle('reader-active',type==='reader');main.innerHTML='<div class="loading" role="status">Loading page…</div>';setNavigation(false);const navLinks=[...document.querySelectorAll('#sidebar nav a')].filter(a=>!a.closest('.page-grid'));const exact=navLinks.some(a=>a.getAttribute('href')==='#'+path);const guideNav=type==='wiki'?wikiSidebarHref(parts[1]):null;navLinks.forEach(a=>{const active=exact?a.getAttribute('href')==='#'+path:guideNav?a.getAttribute('href')===guideNav:a.dataset.nav===type||(type==='page'&&a.dataset.nav==='pages');a.classList.toggle('active',active);if(active)a.setAttribute('aria-current',exact?'page':'location');else a.removeAttribute('aria-current')});document.querySelectorAll('.page-grid a').forEach(a=>a.classList.toggle('current',a.hash===location.hash.split('?')[0]));
+try{stopExperimentAI();if(type==='wiki'){requireStartupData('articles','Guides','reference/index.html');await ensureWikiArticle(parts[1]||'');if(v!==renderId)return;main.innerHTML=wikiPage(parts[1]||'');bindChoiceExplorer()}else if(type==='experiments'){await experimentsPage(parts[1]||'',v,new URLSearchParams(params||'').get('q')||'')}else if(type==='reader'){if(!db.pages.some(p=>p.id===parts[1]))throw Error('Choose a valid manuscript page from the index.');await readerPage(parts[1],v)}else if(type==='downloads'){await downloadsPage(decodeURIComponent(parts.slice(1).join('/')),v)}else if(type==='page'){if(!db.pages.some(p=>p.id===parts[1]))throw Error('That page is not in the manuscript index.');await showPage(parts[1],v)}else if(type==='pages')researchCatalogue(parts[1]||'',new URLSearchParams(params||'').get('q')||'',new URLSearchParams(params||'').get('coverage')||'');else if(type==='search')researchCatalogue(new URLSearchParams(params||'').get('release')||'',decodeURIComponent(parts.slice(1).join('/')),new URLSearchParams(params||'').get('coverage')||'',true);else if(type==='topics'){requireStartupData('topics','The topic index','reference/topics.txt');main.innerHTML=topicsPage();bindTopics()}else if(type==='readings')main.innerHTML=readingsPage();else if(type==='spelling'){requireStartupData('spelling','The spelling reference','reference/spelling.txt');main.innerHTML=spellingArticle()}else if(type==='numbering'){main.innerHTML=numberingPage();bindNumbering()}else if(type==='alphabet')main.innerHTML=alphabet();else if(type==='conventions')main.innerHTML=conventions();else if(type==='sources'){main.innerHTML=sources();bindSourceFilter()}else if(type==='overview')main.innerHTML=overview();else main.innerHTML=head('Page not found','That address is not in this edition.')+'<article class="reading-width"><p>Check the address or use the indexes below to find the page you wanted.</p><p><a href="#/search">Search Liberpedia</a> · <a href="#/pages">Browse manuscript pages</a> · <a href="#/overview">Home</a></p></article>';if(v!==renderId)return;const degraded=type==='search'?partialDataNotice(['articles','topics']):type==='reader'?partialDataNotice(['payloads']):type==='page'?partialDataNotice(['articles','topics','methods','payloads']):type==='readings'?partialDataNotice(['methods','articles']):'';if(degraded)main.innerHTML=degraded+main.innerHTML;document.title=type==='overview'?'Liberpedia — Liber Primus reference':`${main.querySelector('h1')?.textContent||'Reference'} — Liberpedia`;if(v>1)main.focus({preventScroll:true});window.scrollTo(0,0);const queryParams=new URLSearchParams(params||'');const requestedMode=queryParams.get('mode');if(type==='page'&&['runes','latin','numbers','reviewed'].includes(requestedMode)&&currentPage.raw&&(requestedMode!=='reviewed'||currentPage.reviewed_text)){viewMode=requestedMode;drawLines(currentPage)}const section=queryParams.get('section')||(type==='downloads'&&parts[1]?'individual-files':null),topic=queryParams.get('topic');const destination=(topic&&type==='topics'?document.getElementById('topic-'+topic):null)||(section?document.getElementById(section):null);if(destination){for(let panel=destination.closest?.('details');panel;panel=panel.parentElement?.closest?.('details'))panel.open=true;destination.scrollIntoView({block:'start'});const focusTarget=destination.querySelector('h1,h2,h3,h4')||destination;if(!focusTarget.hasAttribute('tabindex'))focusTarget.setAttribute('tabindex','-1');focusTarget.focus({preventScroll:true});}const line=queryParams.get('line');if(line){const el=document.getElementById(`line-${line}`);el?.scrollIntoView({block:'center'});if(el){el.style.background='#fff3cc';el.setAttribute('tabindex','-1');el.focus({preventScroll:true});}}}catch(e){if(v!==renderId)return;main.innerHTML=`<div class="error"><h1>Page unavailable</h1><p>${esc(e.message)}</p>${e.staticHref?`<a href="${esc(e.staticHref)}">Open the static reference</a> · `:''}<a href="#/pages">Return to the page index</a> · <button onclick="location.reload()">Retry</button></div>`}}
+const optionalStartupData=[
+ {key:'topics',url:'data/topics.json',fallback:[],valid:Array.isArray},
+ {key:'methods',url:'data/evidence/reading-methods.json',fallback:{controls:[]},valid:value=>Array.isArray(value?.controls)},
+ {key:'spelling',url:'data/evidence/spelling-sums.json',fallback:{words:[]},valid:value=>Array.isArray(value?.words)},
+ {key:'articles',url:'data/article-search.json',fallback:[],valid:Array.isArray},
+ {key:'payloads',url:'data/evidence/embedded-payloads.json',fallback:{records:[]},valid:value=>Array.isArray(value?.records)},
+ {key:'guideCategories',url:'data/guide-categories.json',fallback:[],valid:Array.isArray}
+];
+const OPTIONAL_STARTUP_TIMEOUT_MS=5000;
+async function fetchStartupJson(url,timeoutMs=0){
+ const controller=timeoutMs?new AbortController():null;
+ const timer=controller?setTimeout(()=>controller.abort(),timeoutMs):null;
+ try{
+  const response=await fetch(url,{cache:'no-cache',...(controller?{signal:controller.signal}:{})});
+  if(!response.ok)throw Error('Could not load '+url);
+  return await response.json();
+ }finally{if(timer!==null)clearTimeout(timer)}
+}
+async function startWiki(){
+ // Only the manuscript index is needed by every route. Keep other data failures local.
+ // Bound optional waits so a stalled server cannot hold the entire reference open.
+ const extras=Promise.allSettled(optionalStartupData.map(item=>fetchStartupJson(item.url,OPTIONAL_STARTUP_TIMEOUT_MS).then(value=>{
+  if(!item.valid(value))throw Error('Invalid '+item.url);
+  return value;
+ })));
+ try{
+  const data=await fetchStartupJson('data/index.json');
+  if(!Array.isArray(data.pages)||!Array.isArray(data.alphabet)||!Array.isArray(data.sources))throw Error('The manuscript index is invalid.');
+  const results=await extras;
+  unavailableData={};
+  const optional={};
+  optionalStartupData.forEach((item,i)=>{
+   if(results[i].status==='fulfilled')optional[item.key]=results[i].value;
+   else{optional[item.key]=item.fallback;unavailableData[item.key]=true}
+  });
+  const topicOrder=['Finding a page','Image details','Reading the text','Ideas and referenced works','Decoding and analysis','Source corrections','Checking a source'];
+  optional.topics.sort((a,b)=>topicOrder.indexOf(a.category)-topicOrder.indexOf(b.category));
+  db={...data,...optional};
+  bindWikiSearch();
+  db.pages.forEach(p=>{if(db.payloads.records.some(r=>r.page===p.id))p.embedded_text="OutGuess embedded hidden signed payload hexadecimal PGP "+p.title});
+  ['LP1','LP2'].forEach(release=>{$(`#${release.toLowerCase()}-nav`).innerHTML=db.pages.filter(p=>p.release===release).map(p=>`<a href="${link(p)}" title="${label(p)}" aria-label="${label(p)}">${String(p.release_index).padStart(2,'0')}</a>`).join('')});
+  route();
+ }catch(error){
+  main.innerHTML=`<div class="error"><h1>Unable to load the manuscript index</h1><p>${esc(error.message)}</p><button onclick="location.reload()">Retry</button><p>If loading still fails, use the <a href="reference/index.html">static reference index</a>, <a href="reference/articles/quick-start.html">start guide</a>, or <a href="reference/experiments.html">experiment archive</a>.</p></div>`;
+ }
+}
+startWiki();
 window.addEventListener('hashchange',route);
+let priorScrollY=window.scrollY,scrollFrame=0;
+window.addEventListener('scroll',()=>{
+ if(scrollFrame)return;
+ scrollFrame=requestAnimationFrame(()=>{
+  scrollFrame=0;
+  const y=window.scrollY,delta=y-priorScrollY;
+  priorScrollY=y;
+  if(!window.matchMedia('(max-width:760px)').matches||document.body.classList.contains('nav-open')||document.activeElement?.closest('.topbar')||document.querySelector('#image-dialog')?.open){document.body.classList.remove('header-hidden');return}
+  if(y<110||delta<-7)document.body.classList.remove('header-hidden');
+  else if(y>170&&delta>7)document.body.classList.add('header-hidden');
+ });
+},{passive:true});
 $('#fit-width').onclick=()=>{const a=$('#viewer-scroll'),i=$('#viewer-image');zoom=(a.clientWidth-40)/i.naturalWidth;applyZoom();a.scrollTop=0;a.scrollLeft=0};

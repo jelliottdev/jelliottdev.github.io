@@ -370,6 +370,12 @@ main dt[id^="family-"]{scroll-margin-top:calc(var(--header) + 18px)}
  #image-dialog .viewer-toolbar button{min-height:44px;width:100%;padding:4px 2px;font-size:12px}
  #image-dialog .viewer-toolbar output{min-width:0}
 }
+
+/* Reading pages use a calmer measure than indexes and exact-data tables. */
+.wiki-article,.standalone-article,.experiment-article{font-size:16px;line-height:1.68}
+.wiki-article,.standalone-article{max-width:72ch}
+.wiki-article figcaption,.standalone-article figcaption{font-size:14px}
+@media(max-width:760px){.wiki-article,.experiment-article{font-size:16px;line-height:1.65}}
 @media(min-width:390px) and (max-width:760px){
  .reader-active .reader-toolbar{display:flex;align-items:center;gap:8px;padding:6px 8px}
  .reader-active .reader-pagination{flex:1;grid-template-columns:40px minmax(0,1fr) 40px;min-width:0}
@@ -412,3 +418,99 @@ main dt[id^="family-"]{scroll-margin-top:calc(var(--header) + 18px)}
 .choice-explorer-steps li{font-size:12px;color:var(--muted);border-top:2px solid #b9c3cb;padding-top:7px}
 .choice-explorer-steps strong{display:block;font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
 @media(max-width:620px){.choice-explorer-controls{grid-template-columns:1fr}.choice-explorer-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Page and reading indexes use browsable rows, not compressed tables. */
+.page-catalogue,.reading-index{list-style:none;padding:0;margin:16px 0 30px;border-top:1px solid var(--line)}
+.catalogue-item{display:grid;grid-template-columns:56px minmax(0,1fr);align-items:start;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.catalogue-thumb{display:block;width:56px;min-height:72px;background:#f4f4f1;border:1px solid var(--line)}
+.catalogue-thumb img{display:block;width:100%;height:72px;object-fit:cover}
+.catalogue-item-body{min-width:0}
+.catalogue-item h3{font:400 17px/1.35 Georgia,serif;margin:0}
+.catalogue-item h3 a{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;min-height:44px;padding:5px 0}
+.catalogue-page-id{font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;white-space:nowrap}
+.catalogue-page-title{color:var(--ink)}
+.catalogue-meta{font-size:12px;color:var(--muted);margin:0 0 1px}
+.catalogue-match{font-size:13px;line-height:1.55;margin:6px 0 0;max-width:78ch;overflow-wrap:anywhere}
+.reading-index-item{display:grid;grid-template-columns:minmax(200px,1.2fr) minmax(150px,1fr) minmax(150px,1fr);column-gap:18px;padding:13px 0;border-bottom:1px solid var(--line);align-items:start}
+.reading-index-item h2{font:400 19px/1.35 Georgia,serif;border:0;margin:0;padding:0}
+.reading-index-item h2 a{display:inline-flex;align-items:center;min-height:44px}
+.reading-index-pages{display:flex;flex-wrap:wrap;gap:2px 14px;margin:0;font-size:13px}
+.reading-index-pages a{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap}
+.reading-index-method{font-size:13px;color:var(--muted);margin:11px 0 0}
+.reading-index-item .method-details{grid-column:1/-1}
+.reading-index-item .method-details summary{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-size:13px}
+@media(max-width:950px){.reading-index-item{display:block}.reading-index-pages{gap:0 16px}.reading-index-method{margin:2px 0 0}}
+@media(max-width:760px){
+ .catalogue-item{grid-template-columns:48px minmax(0,1fr);gap:12px;padding:12px 0}
+ .catalogue-thumb{width:48px;min-height:68px}
+ .catalogue-thumb img{height:68px}
+ .catalogue-item h3{font-size:16px}
+ .catalogue-item h3 a{display:flex;flex-direction:column;align-items:flex-start;gap:0;justify-content:center;padding:2px 0}
+ .catalogue-page-id{font-size:13px}
+ .catalogue-meta{font-size:12px}
+ .reading-index-item{display:block;padding:10px 0 13px}
+ .reading-index-item h2{font-size:18px}
+ .reading-index-pages{gap:0 16px}
+ .reading-index-method{margin:2px 0 0}
+}
+
+#sidebar .mobile-nav{display:none}
+@media(max-width:760px){
+ #sidebar .desktop-nav{display:none}
+ #sidebar .mobile-nav{display:block}
+ #sidebar .mobile-nav>a{font-size:16px;min-height:50px;padding:12px 4px;border-bottom:1px solid var(--line)}
+ #sidebar .mobile-nav details{border-bottom:1px solid var(--line)}
+ #sidebar .mobile-nav summary{font-size:16px;min-height:50px;padding:13px 4px;font-weight:600}
+ #sidebar .mobile-nav details>div{padding:0 0 8px 12px}
+ #sidebar .mobile-nav details a{display:flex;align-items:center;min-height:44px;font-size:15px;padding:8px 4px;color:#3b4652}
+ #sidebar .mobile-nav a.active{color:var(--blue);font-weight:700}
+}
+/* The Runic Unicode block is served locally; other scripts retain their existing faces. */
+@font-face{
+  font-family:"Liberpedia Runic";
+  src:url("fonts/NotoSansRunic-Regular.ttf") format("truetype");
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  unicode-range:U+16A0-16FF;
+}
+body{font-family:"Liberpedia Runic",Arial,Helvetica,sans-serif}
+.rune-line,.rune,.alphabet-table .rune,#reader-text.reader-runes,
+.wiki-article pre.rune-line,.standalone-article pre.rune-line{
+  font-family:"Liberpedia Runic","Segoe UI Historic",serif;
+}
+.reading-text,.wiki-article code,.standalone-article code,
+.wiki-article pre code,.standalone-article pre code{
+  font-family:"Liberpedia Runic",ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+.wiki-article pre.rune-line code,.standalone-article pre.rune-line code{font-family:inherit}
+
+/* Long reference articles show a compact section outline on phones. */
+.wiki-section{border:0}
+.wiki-section>summary{display:block;list-style:none;padding:0}
+.wiki-section>summary::-webkit-details-marker{display:none}
+.wiki-section>summary h2{margin:0}
+.wiki-section>summary h2::before{content:"";display:none}
+.article-related,.article-tools{border-top:1px solid var(--line);margin:24px 0 0;padding:2px 0}
+.article-related summary,.article-tools summary{font-size:14px;min-height:44px;display:list-item;align-content:center;color:var(--blue)}
+.article-related h2{font-size:20px;margin-top:18px}
+.article-tools p{font-size:14px;margin:4px 0 14px}
+@media(max-width:760px){
+ .topbar{transition:transform .18s ease}
+ .header-hidden .topbar{transform:translateY(-100%);pointer-events:none}
+ .header-hidden .reader-toolbar,.header-hidden.reader-active .reader-toolbar{top:0}
+ .wiki-sectioned>.mobile-article-contents,.wiki-sectioned>.section-nav{display:none}
+ .wiki-section{border-top:1px solid var(--line)}
+ .wiki-section:last-of-type{border-bottom:1px solid var(--line)}
+ .wiki-section>summary{min-height:52px;padding:10px 4px;display:flex;align-items:center;gap:11px}
+ .wiki-section>summary::before{content:"⌄";display:inline-block;flex:none;width:20px;color:var(--muted);font-size:20px;line-height:1;transform:rotate(-90deg);transition:transform .15s ease}
+ .wiki-section[open]>summary::before{transform:none}
+ .wiki-section>summary h2{font:400 22px/1.28 Georgia,serif;border:0;padding:0;flex:1}
+ .wiki-section>summary:hover h2{color:var(--blue)}
+ .wiki-section>summary:focus-visible{outline:3px solid #437fb8;outline-offset:2px}
+ .wiki-section>summary h2:focus{outline:none}
+ .wiki-section>summary+*{margin-top:12px}
+ .wiki-section[open]{padding-bottom:14px}
+ .wiki-article>.small:first-child{font-size:13px;line-height:1.45}
+}
+@media(prefers-reduced-motion:reduce){.topbar,.wiki-section>summary::before{transition:none}}

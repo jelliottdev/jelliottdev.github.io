@@ -18,7 +18,7 @@ async function checkNavigationRace(oldRequestFails){
  const pending=new Map();
  const main={innerHTML:'',focus(){},querySelector(){return {textContent:this.innerHTML}}};
  const sandbox={
-  db:{articles:[{id:'older'},{id:'newer'}]},main,renderId:0,URLSearchParams,
+  db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},main,renderId:0,URLSearchParams,
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
   window:{scrollTo(){}},
@@ -30,8 +30,8 @@ async function checkNavigationRace(oldRequestFails){
  vm.runInContext(fs.readFileSync(path.join(root,'wiki.js'),'utf8'),sandbox);
  // Exercise the production route with only DOM rendering replaced.
  const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
- const start=app.indexOf('async function route()');
- const end=app.indexOf("\nPromise.all([",start);
+ const start=app.indexOf('function requireStartupData(');
+ const end=app.indexOf('\nconst optionalStartupData=',start);
  assert(start>=0&&end>start,'Locate the complete production router');
  vm.runInContext(app.slice(start,end),sandbox);
  vm.runInContext('wikiPage=id=>db.articles.find(a=>a.id===id).html',sandbox);

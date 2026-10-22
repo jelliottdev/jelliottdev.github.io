@@ -1,0 +1,39 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const assert=require('node:assert/strict');
+const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
+(async()=>{
+ const browser=await chromium.launch({channel:'msedge',headless:true});
+ try{
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  await page.goto(base+'#/wiki/visual-index');
+  await page.waitForSelector('.wiki-section');
+  const sections=page.locator('.wiki-section');
+  assert((await sections.count())>=10);
+  assert(await sections.first().evaluate(el=>el.open));
+  assert.equal(await sections.nth(1).evaluate(el=>el.open),false);
+  if(process.env.OUTLINE_TOP_SCREENSHOT)await page.screenshot({path:process.env.OUTLINE_TOP_SCREENSHOT,fullPage:false});
+  const compactHeight=await page.evaluate(()=>document.documentElement.scrollHeight);
+  await sections.nth(1).locator('summary').click();
+  assert(await sections.nth(1).evaluate(el=>el.open));
+  assert((await page.evaluate(()=>document.documentElement.scrollHeight))>compactHeight);
+  await page.evaluate(()=>window.scrollTo(0,200));
+  await page.waitForTimeout(100);
+  await page.evaluate(()=>window.scrollTo(0,800));
+  await page.waitForTimeout(300);
+  assert(await page.locator('body').evaluate(el=>el.classList.contains('header-hidden')));
+  await page.evaluate(()=>window.scrollBy(0,-220));
+  await page.waitForTimeout(300);
+  assert(!await page.locator('body').evaluate(el=>el.classList.contains('header-hidden')));
+  await page.goto(base+'#/wiki/visual-index?section=dots');
+  await page.waitForSelector('#dots');
+  assert(await page.locator('#dots').evaluate(el=>el.closest('.wiki-section').open));
+  assert(await page.locator('.article-tools summary').count());
+  assert.equal(await page.locator('.article-tools').evaluate(el=>el.open),false);
+  if(process.env.OUTLINE_SCREENSHOT)await page.screenshot({path:process.env.OUTLINE_SCREENSHOT,fullPage:false});
+  await page.setViewportSize({width:1440,height:900});
+  await page.reload();
+  await page.waitForSelector('.wiki-section');
+  assert(await page.locator('.wiki-section').evaluateAll(all=>all.every(el=>el.open)));
+  console.log('PASS: compact mobile article sections, scroll header, and deep links.');
+ }finally{await browser.close()}
+})().catch(error=>{console.error(error);process.exitCode=1});

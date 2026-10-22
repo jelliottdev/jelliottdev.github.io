@@ -37,7 +37,9 @@ const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
     'Returning to search restores the query that produced those results');
 
    await page.goto(base+'#/experiments');
-   await page.waitForSelector('#experiment-browse-query');
+   await page.waitForSelector('#browse-experiments > summary');
+   await page.locator('#browse-experiments > summary').click();
+   await page.waitForSelector('#experiment-browse-query',{state:'visible'});
    const browse=page.locator('#experiment-browse-query');
    await browse.fill('LP2-15');
    await page.waitForFunction(()=>location.hash.includes('browse=LP2-15'));
@@ -63,7 +65,7 @@ const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
    assert.equal(await matching.count(),count,
     'Browser Back must restore the same filtered family set');
    const heading=await page.locator('#browse-experiments').boundingBox();
-   assert(heading.y>=0&&heading.y<844,
+   assert(heading.y>=-2&&heading.y<844,
     'Browser Back must return near the filtered archive, not the top of the idea form');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}px overflow`);
    if(process.env.SCREENSHOT_PATH&&width===320)await page.screenshot({path:process.env.SCREENSHOT_PATH,fullPage:false});

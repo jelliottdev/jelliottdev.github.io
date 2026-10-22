@@ -54,6 +54,18 @@ function wikiPage(id='') {
  });
  const contentsList=groups=>`<ul class="guide-contents-list">${groups.map(({heading:h,children})=>`<li><a href="#/wiki/${id}?section=${encodeURIComponent(h.id)}" data-anchor="${h.id}">${esc(h.textContent)}</a>${children.length?contentsList(children):''}</li>`).join('')}</ul>`;
  const contentsHTML=contentsList(contentsGroups);
+ // Keep the opening context visible. On narrow screens, the article's major
+ // sections become a short, browsable outline; their full text remains in place.
+ const topSections=id==='quick-start'?[]:[...doc.body.children].filter(el=>el.tagName==='H2'&&el.id);
+ if(topSections.length){
+  topSections.forEach((heading,index)=>{
+   const panel=doc.createElement('details');panel.className='wiki-section';
+   if(index===0||!window.matchMedia('(max-width:760px)').matches)panel.open=true;
+   const summary=doc.createElement('summary');
+   heading.before(panel);panel.append(summary);summary.append(heading);
+   while(panel.nextElementSibling&&panel.nextElementSibling.tagName!=='H2')panel.append(panel.nextElementSibling);
+  });
+ }
  doc.querySelectorAll('pre').forEach((pre,i)=>{
   const wrapper=doc.createElement('div');wrapper.className='copyable-block';
   const tools=doc.createElement('div');tools.className='block-tools';
@@ -68,10 +80,9 @@ function wikiPage(id='') {
  });
  const backlinks=articles.filter(b=>b.id!==id&&b.linked_articles?.includes(id));
  const breadcrumb=wikiBreadcrumb(a);
- return head(a.title,esc(a.summary),breadcrumb.label,breadcrumb.href)+`<div class="article-grid"><article class="wiki-article">
- <p class="small"><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p>
+ return head(a.title,esc(a.summary),breadcrumb.label,breadcrumb.href)+`<div class="article-grid"><article class="wiki-article${topSections.length?' wiki-sectioned':''}">
  <details class="mobile-article-contents"><summary>On this page</summary>${contentsHTML}</details>
- ${doc.body.innerHTML}${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}${footer()}</article>
+ ${doc.body.innerHTML}${a.pages?.length||backlinks.length?`<details class="article-related"><summary>Related pages and guides</summary>${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}</details>`:''}<details class="article-tools"><summary>Page tools</summary><p><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p></details>${footer()}</article>
  <aside class="contents"><strong>On this page</strong>${contentsHTML}</aside></div>`;
 }
 function bindChoiceExplorer(){

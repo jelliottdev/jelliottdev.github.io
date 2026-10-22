@@ -6237,14 +6237,8 @@ Know the collection
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
 Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
 
-This guide starts with the manuscript. To follow the puzzle from its first 2012 image through the 2013 steps and into the 2014 manuscript, use the separate Cicada history route. Earlier steps give context; they are not presumed keys to LP2.
+To follow the earlier puzzle stages, start with Cicada history. The compasses cover belongs to that earlier sequence; it is separate from LP1-00.
 
-The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
-
-[Image: The warning page used for the first reading exercise]
-LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.
-[Image: LP2-31, an unsolved page used in the statistics guide]
-LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
 
 Verify the complete reading with Python (optional)
 Then verify the complete reading with Python
@@ -6276,6 +6270,7 @@ This verifies one row, not the whole square. The full explanation shows all five
 The important distinction is the input: the printed decimal numbers stay as numbers, while rune words are replaced by additive prime values. Do not apply a prime-index lookup to every entry or replace the words with ordinary English spelling. Those would be different procedures.
 New to the terminal? Running the reproduction scripts walks through setup, expected results, trace columns, and common errors.
 
+Explore ciphers and the other layers
 Explore the other layers
 Rune indices and prime values: cipher arithmetic versus prime sums.
 Vigenère: keys, direction, and continuity across pages.
@@ -6286,6 +6281,8 @@ For the ideas behind the decoded passages, follow the philosophy reading route, 
 
 Before choosing a large test, read search space and bounds: count the choices, decide what would count as success, and distinguish a completed search from an interrupted one.
 
+
+Turn an idea into a test
 Make an idea testable
 Choose a page, a region, a transformation, and a rule for judging the output. “Try primes” leaves all four undecided. A narrower proposal is: start at the first rune of LP2-31, subtract consecutive prime-minus-one values modulo 29, advance the prime sequence only on runes, and continue through punctuation without resetting or skipping runes. This tells someone what to calculate; it still does not say what result would count as a match.
 State that criterion before inspecting the output. For example, you could require an exact, specified 12-rune opening, then report every configuration tested and every match. This would test that opening under those rules, not establish that the method is correct for the page.
@@ -6318,6 +6315,8 @@ Identify the next distinct question. If your idea is outside those bounds, state
 
 Use the experiment-organization guide to decide whether that next question belongs as a variant of an existing test. A controlled extension is useful; a new title for the same calculation does not add coverage.
 
+
+Choose another guided exercise
 Choose one first investigation
 
 You do not need to learn every technique at once. Choose a route that produces a small result someone else can inspect.
@@ -6366,6 +6365,7 @@ Keep the location with your note: “LP1-10, literal reading, lines 1–2; word 
 
 With Python, repeat the lookup using python scripts/reading_concordance.py "circumference practices" --literal. Add --json to retain the exact excerpt, character offsets, and page-record checksum. The concordance guide explains those fields and why character positions are not rune indices. This exercise works with a known reading; it does not search for English words inside unsolved ciphertext.
 
+
 Ready to contribute
 You should be able to identify an exact image, distinguish raw from corrected transcription, reproduce a known reading, and explain what would count against your hypothesis. You do not need to understand every cipher before inspecting a well-defined detail.
 For a worked descriptive analysis, use the index-of-coincidence baseline: exact rune counts, downloadable results, reproduction commands and the limits of frequency evidence.
@@ -6373,7 +6373,7 @@ Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
 Sources, related references, and files
-- the warning in the reader; the original warning image; The warning page used for the first reading exercise
+- the warning in the reader; the original warning image
   https://jelliottdev.github.io/#/reader/lp1-01
 - the complete warning reading
   https://jelliottdev.github.io/reference/articles/reading-warning.html
@@ -6391,20 +6391,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/pages/LP1
 - second release
   https://jelliottdev.github.io/#/pages/LP2
-- LP2-31; LP2-31, an unsolved page used in the statistics guide; LP2-31: a later investigation
+- LP2-31
   https://jelliottdev.github.io/reference/lp2-31.html
 - numbering cross-reference
   https://jelliottdev.github.io/#/numbering
-- Cicada history route
+- Cicada history
   https://jelliottdev.github.io/reference/articles/cicada-history.html#replays
-- illustrated cover with compasses
+- compasses cover
   https://jelliottdev.github.io/reference/articles/illustrated-cover.html
-- The warning page used for the first reading exercise
-  https://jelliottdev.github.io/thumbs/lp1-01.jpg
-- LP1-01: start here
-  https://jelliottdev.github.io/reference/lp1-01.html
-- LP2-31, an unsolved page used in the statistics guide
-  https://jelliottdev.github.io/thumbs/lp2-31.jpg
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the setup check
