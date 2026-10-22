@@ -26,6 +26,8 @@ Subtract each within-page ciphertext rune from the next modulo 29. This gives 12
 
 So 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.
 
+The [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.
+
 ## Reproduce and limits
 
 Extract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:

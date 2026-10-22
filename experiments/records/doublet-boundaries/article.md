@@ -27,6 +27,8 @@ The [full doublet guide](#/wiki/doublets) explains the 86-event count and provid
 
 The [EA frequency control](#/experiments/ea-frequency-control) asks a separate question: whether the 86 observed repeat positions are numerically plausible as plaintext EA under one exact running-sum equation. It uses decoded GP indices from solved pages rather than assigning English digraphs by eye.
 
+The [placement audit](#/experiments/doublet-placement) asks whether the event positions cluster by page or sit unusually close together after preserving the number of available within-page edges.
+
 ## Reproduce and inspect
 
 Extract the experiment ZIP without flattening folders. Python 3.12 and its standard library suffice:
