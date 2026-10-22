@@ -1,0 +1,63 @@
+{
+  "id": "grid-stem-uncertainty",
+  "title": "LP2-49–51: ten visually ambiguous grid stems",
+  "status": "published",
+  "question": "Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?",
+  "summary": "Ten cells have a bare vertical stem. Enumerating all 1,024 I/l alternatives changes the distinct-token count from the wiki's 161 to a possible 160–163 under the stated bounds.",
+  "tags": ["LP2-49", "LP2-50", "LP2-51", "grid", "alphanumeric", "transcription", "I versus l", "ambiguous glyph", "base 60", "source audit"],
+  "scope": {
+    "pages": ["lp2-49", "lp2-50", "lp2-51"],
+    "artifacts": ["exports/alphanumeric-grids.csv", "exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt"],
+    "representation": "All 256 wiki grid tokens in their exported row-major order, the archived seventh-onion text for comparison, and both preserved JPEG copies of each page for visual review.",
+    "procedure": "Locate every wiki grid token with a second character I or l; compare its archived text reading and image shape. Keep all other cells fixed and enumerate I/l at those ten positions. Convert each two-character token with the declared conditional base-60 byte alphabet and count distinct tokens, one-bits and even bytes.",
+    "parameters": "Three pages, 32 rows total, eight columns, ten binary stem choices, 1,024 complete inventories. The distinct 2S/2s cell remains fixed at wiki 2S.",
+    "exclusions": "Other potential glyph ambiguities including 0/O; choosing a definitive I or l; changing the numeral base or S/s cell; grid traversals, candidate plaintext, and any claim of an intended byte encoding."
+  },
+  "outcome": "supported",
+  "finding": "Ten bare-stem positions were registered. Under the fixed 256-cell base-60 byte representation, independent I/l toggles yield 160–163 distinct tokens, 1,006–1,026 set bits and 129–139 even bytes. The current wiki text has 161, 1,017 and 134 respectively.",
+  "limitations": "The visual classification is a manual review awaiting human confirmation; scripts verify source hashes and arithmetic, not pixels as letters. The ten independent toggles define an envelope, not equally likely transcriptions. Images and texts share source lineage; agreement is not independent validation. Only the listed cells and conditional byte rule were tested.",
+  "next_steps": "Carry the ten coordinate-level alternatives into any route, image, checksum or token-frequency claim that depends on those cells; review 0/O and other glyph classes separately before calling the grid image-verified.",
+  "family": {
+    "id": "grid-stem-uncertainty",
+    "title": "Grid transcription sensitivity",
+    "question": "Which source-dependent grid glyphs alter downstream byte and token calculations?",
+    "baseline": "grid-stem-uncertainty"
+  },
+  "variant": {"label": "Baseline: ten I/l stems with all other grid tokens fixed", "changes": []},
+  "review": {
+    "reviewer": "Codex — manual image inspection, deterministic enumeration and independent page-record replay; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational and visual",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-stem-uncertainty/run.py --check && python experiments/records/grid-stem-uncertainty/check.py",
+    "environment": "Python 3 standard library; no network or AI calls. Run from repository root or extracted experiment ZIP. Image interpretation requires human review.",
+    "script": "experiments/records/grid-stem-uncertainty/run.py",
+    "script_sha256": "5d7a953a3ac7d44db3ce10134fa3e9cb53ae6ee3c014350820efc2222b79a5ee",
+    "inputs": [
+      {"path": "experiments/records/grid-stem-uncertainty/plan.json", "sha256": "d14f04023961418e08e94afc79c2a66c217e47d5a4752c11147c3185dca7a3a4"},
+      {"path": "experiments/records/grid-stem-uncertainty/check.py", "sha256": "4f20019aaf4a3f7bb6c7c949b0e642cc666a10332ed200f66adf81e1209cc00a"},
+      {"path": "exports/alphanumeric-grids.csv", "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"},
+      {"path": "exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt", "sha256": "0d2cbf1139d3f2ae60e63fce3e0c210d5b0d35f0cf0029cf0063dcf0e7bb992a"},
+      {"path": "exports/sources/cicada-2014-seventh-onion/49.jpg", "sha256": "d2ab68d9d784e45f225e1a319cc2c162181cb19df491dd3ab066f6017db02faf"},
+      {"path": "exports/sources/cicada-2014-seventh-onion/50.jpg", "sha256": "f1fc2b109f94649c1dcbed7ca71dd60e36d3e195219051b34e5305b1059ee58a"},
+      {"path": "exports/sources/cicada-2014-seventh-onion/51.jpg", "sha256": "8e523c297fc2c6c10dbfb19a592e8d0ea784ac871ded255cdfff77f7d5681521"},
+      {"path": "images/lp2-49.jpg", "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"},
+      {"path": "images/lp2-50.jpg", "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"},
+      {"path": "images/lp2-51.jpg", "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/grid-stem-uncertainty/results.json", "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"},
+      {"path": "experiments/records/grid-stem-uncertainty/stem-map.svg", "sha256": "b746e971dd49e2a79960a314157ca88d075dbfba916d51db02fa0ecfec823c34"}
+    ]
+  },
+  "sources": [
+    {"label": "Preserved seventh-onion grid images and text", "url": "https://jelliottdev.github.io/#/wiki/2014-seventh-onion"},
+    {"label": "Grid transcription and conditional byte interpretation", "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"}
+  ],
+  "related": ["cross-source-word-boundaries", "transcription-correction-sensitivity", "grid-prime-paths"],
+  "visuals": [
+    {"path": "experiments/records/grid-stem-uncertainty/stem-map.svg", "caption": "Ten I/l bare-stem cells across LP2-49–51, with the separate S/s disagreement marked in tan."}
+  ]
+}

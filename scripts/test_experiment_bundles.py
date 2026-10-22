@@ -53,8 +53,13 @@ def main():
                     if "plan_sha256" in result_record:
                         assert result_record["plan_sha256"] == hashlib.sha256(plan_file.read_bytes()).hexdigest(), experiment_id
                 for dependency in plan.get("inputs", []):
-                    data = (target / dependency["path"]).read_bytes()
-                    assert hashlib.sha256(data).hexdigest() == dependency["sha256"], (experiment_id, dependency["path"])
+                    name = dependency["path"]
+                    if name in images:
+                        # Original page JPEGs are supplied by the separate image bundle.
+                        assert images[name]["sha256"] == dependency["sha256"], (experiment_id, name)
+                    else:
+                        data = (target / name).read_bytes()
+                        assert hashlib.sha256(data).hexdigest() == dependency["sha256"], (experiment_id, name)
             if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-fibonacci-openings", "lp2-totient-openings", "lp2-trigram-repeats"):
                 for script, args in (("run.py", ["--check"]), ("check.py", [])):
                     result = subprocess.run(

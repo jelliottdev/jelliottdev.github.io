@@ -7410,7 +7410,7 @@ Outside this test: Other widths, section orders, constrained shuffles, prose cor
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-Related records (4)
+Related records (5)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can image-only detection find every rune row?
@@ -7432,6 +7432,11 @@ Two LP2 transcriptions: word-boundary sensitivity
 Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
 Question tested: Do any of the 33 non-rune differences between preserved seventh-onion and wiki texts on LP2-00–55 change the published joined-page rune-token positions or lengths?
 Outside this test: LP2-56–57 and their three additional gap differences; punctuation-sensitive key resets, printed-number consumption, alphanumeric-grid bytes, visual adjudication, and any claim that the two texts are interchangeable for all methods.
+
+LP2-49–51: ten visually ambiguous grid stems
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?
+Outside this test: Other potential glyph ambiguities including 0/O; choosing a definitive I or l; changing the numeral base or S/s cell; grid traversals, candidate plaintext, and any claim of an intended byte encoding.
 
 
 
@@ -7711,6 +7716,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/page-join-sensitivity
 - Two LP2 transcriptions: word-boundary sensitivity
   https://jelliottdev.github.io/#/experiments/cross-source-word-boundaries
+- LP2-49–51: ten visually ambiguous grid stems
+  https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - Rune frequencies and distribution diagnostics
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Have we tried it?
@@ -12031,6 +12038,8 @@ LP2-51, rows 7–8. Cell 8:7 has no dot above its stem, unlike lowercase i elsew
 
 The image supports uppercase 2S at LP2-50 row 12, column 5, and rules out lowercase 3i at LP2-51 row 8, column 7. It also rules out a footed capital L in the two LP2-49 cells. But a bare vertical stem does not uniquely identify lowercase l versus uppercase I in these images; LP2-50 row 11, column 6 remains unresolved between the two recorded readings. The other bare-stem cells should likewise retain that qualification even where one of the transcriptions looks more plausible. These are visual judgments, not an OCR result or a proof of a cipher alphabet.
 
+The complete ten-stem register locates every grid token written with I or l in the current wiki text, including six positions where both transcriptions agree. It records both conditional byte readings at each coordinate and measures how much those unresolved choices can change aggregate grid statistics. Text-source agreement alone cannot resolve visually identical stems.
+
 What changes in a base-60 interpretation?
 
 The declared base-60 conversion treats 0–9 A–Z a–x as values 0–59, then turns each pair into one byte. Under that conditional rule, a change in letter case can change several bits. The table below compares the two transcriptions; it does not choose the correct one.
@@ -12093,6 +12102,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/figures/grid-review-lp2-51.png
 - complete archived JPEG
   https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/51.jpg
+- complete ten-stem register
+  https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - declared base-60 conversion
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#binary
 - capture manifest
@@ -21372,6 +21383,8 @@ What can be counted directly
 
 Together, the grids contain (10 + 13 + 9) × 8 = 256 entries. Each entry contains two characters. The count 256 is therefore a count of entries, not runes, bytes, or distinct values. Calling these bytes would require an explicit decoding rule and a check of its outputs. The statistics below use the wiki transcription; five cells differ in the separate seventh-onion text.
 
+There is a second input issue beyond the five text disagreements: ten grid cells contain a visually bare I/l stem. Six are written the same way in both preserved transcriptions but are still not resolved by the letter shape. Under the stated base-60 byte rule, allowing only those ten choices moves the distinct-token count between 160 and 163. Use the coordinate register before treating an exact token, byte or bit pattern as image-verified.
+
 Repeated entries and distinct tokens
 
 Counting exact two-character strings across all three archived grids gives 161 distinct tokens among the 256 entries. Of these, 92 occur once and 69 occur more than once. “Distinct tokens” counts different spellings; “entries” counts positions, including repetitions.
@@ -21614,6 +21627,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
 - five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
+- ten grid cells contain a visually bare I/l stem
+  https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
 - page image
@@ -27846,6 +27861,8 @@ Give each disputed mark a stable location and preserve its original crop. Record
 
 With m independent disputed positions and two readings at each, there are 2^(m) combinations. Some disputes are linked rather than independent, and some alternatives produce identical analysis inputs. Describe those constraints and count the actual inputs instead of assuming every theoretical combination is meaningful.
 
+The LP2 grid-stem audit applies this rule to ten fixed positions. It keeps the image locations and both text readings, then measures all 1,024 conditional byte inventories without claiming that all combinations are equally likely or that a preferred decoding has been found.
+
 Start with a reproducible comparison
 
 From the extracted reference-data bundle, compare two UTF-8 transcriptions with:
@@ -27869,6 +27886,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/transcription-checking.html
 - image-row coverage experiment
   https://jelliottdev.github.io/#/experiments/image-row-coverage
+- LP2 grid-stem audit
+  https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - setup and output guide
   https://jelliottdev.github.io/reference/articles/transcription-checking.html#compare
 - Documenting an experiment
@@ -28264,7 +28283,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 66 published reproducible records: 14 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 6 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 22 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 67 published reproducible records: 14 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 7 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 22 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -28302,7 +28321,7 @@ Current gaps with the greatest downstream effect
 
 	Gap	Why it matters	Next bounded piece of work
 
-	Unresolved image glyphs	Five archived-versus-wiki grid cells alter 20 bits in a declared byte rendering and 16 prime-path suffix strings, although the prime counts survive. Other bare I/l stems have not been reviewed as a complete set.	Register every visually ambiguous cell with both original JPEG copies, its pixel location, alternate readings and the exact derived outputs it could change. Keep uncertainty in the dataset instead of silently choosing a glyph.
+	Unresolved image glyphs	Five archived-versus-wiki grid cells alter 20 bits in a declared byte rendering and 16 prime-path suffix strings. The ten-stem register shows that source agreement does not settle every I/l shape: under one byte rule, their alternatives move the distinct-token count from 161 to a range of 160–163.	Carry coordinate-level alternatives through any dependent grid test. Audit other confusable glyphs, especially 0/O, against the preserved images before treating the full 256-cell transcription as image-verified.
 
 	Page-boundary and separator decisions	Rune-only agreement between two text sources does not settle word joining, punctuation or key-clock resets. A test may use these marks even when its rune frequency is unchanged.	Make a page-by-page contestable-location register, then rerun one fixed word-edge or reset experiment with one change at a time.
 
@@ -28389,6 +28408,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/later-messages.html
 - Unresolved image glyphs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
+- ten-stem register
+  https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - Search-pattern controls
   https://jelliottdev.github.io/#/experiments/grid-prime-path-null
 - Transcription sensitivity
@@ -35295,6 +35316,150 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "measurement",
     "label": "Manuscript measurement",
     "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}
+
+---
+
+{
+  "id": "grid-stem-uncertainty",
+  "title": "LP2-49–51: ten visually ambiguous grid stems",
+  "status": "published",
+  "question": "Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?",
+  "summary": "Ten cells have a bare vertical stem. Enumerating all 1,024 I/l alternatives changes the distinct-token count from the wiki's 161 to a possible 160–163 under the stated bounds.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "grid",
+    "alphanumeric",
+    "transcription",
+    "I versus l",
+    "ambiguous glyph",
+    "base 60",
+    "source audit"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.csv",
+      "exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt"
+    ],
+    "representation": "All 256 wiki grid tokens in their exported row-major order, the archived seventh-onion text for comparison, and both preserved JPEG copies of each page for visual review.",
+    "procedure": "Locate every wiki grid token with a second character I or l; compare its archived text reading and image shape. Keep all other cells fixed and enumerate I/l at those ten positions. Convert each two-character token with the declared conditional base-60 byte alphabet and count distinct tokens, one-bits and even bytes.",
+    "parameters": "Three pages, 32 rows total, eight columns, ten binary stem choices, 1,024 complete inventories. The distinct 2S/2s cell remains fixed at wiki 2S.",
+    "exclusions": "Other potential glyph ambiguities including 0/O; choosing a definitive I or l; changing the numeral base or S/s cell; grid traversals, candidate plaintext, and any claim of an intended byte encoding."
+  },
+  "outcome": "supported",
+  "finding": "Ten bare-stem positions were registered. Under the fixed 256-cell base-60 byte representation, independent I/l toggles yield 160–163 distinct tokens, 1,006–1,026 set bits and 129–139 even bytes. The current wiki text has 161, 1,017 and 134 respectively.",
+  "limitations": "The visual classification is a manual review awaiting human confirmation; scripts verify source hashes and arithmetic, not pixels as letters. The ten independent toggles define an envelope, not equally likely transcriptions. Images and texts share source lineage; agreement is not independent validation. Only the listed cells and conditional byte rule were tested.",
+  "next_steps": "Carry the ten coordinate-level alternatives into any route, image, checksum or token-frequency claim that depends on those cells; review 0/O and other glyph classes separately before calling the grid image-verified.",
+  "family": {
+    "id": "grid-stem-uncertainty",
+    "title": "Grid transcription sensitivity",
+    "question": "Which source-dependent grid glyphs alter downstream byte and token calculations?",
+    "baseline": "grid-stem-uncertainty"
+  },
+  "variant": {
+    "label": "Baseline: ten I/l stems with all other grid tokens fixed",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — manual image inspection, deterministic enumeration and independent page-record replay; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational and visual",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-stem-uncertainty/run.py --check && python experiments/records/grid-stem-uncertainty/check.py",
+    "environment": "Python 3 standard library; no network or AI calls. Run from repository root or extracted experiment ZIP. Image interpretation requires human review.",
+    "script": "experiments/records/grid-stem-uncertainty/run.py",
+    "script_sha256": "5d7a953a3ac7d44db3ce10134fa3e9cb53ae6ee3c014350820efc2222b79a5ee",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-stem-uncertainty/plan.json",
+        "sha256": "d14f04023961418e08e94afc79c2a66c217e47d5a4752c11147c3185dca7a3a4"
+      },
+      {
+        "path": "experiments/records/grid-stem-uncertainty/check.py",
+        "sha256": "4f20019aaf4a3f7bb6c7c949b0e642cc666a10332ed200f66adf81e1209cc00a"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt",
+        "sha256": "0d2cbf1139d3f2ae60e63fce3e0c210d5b0d35f0cf0029cf0063dcf0e7bb992a"
+      },
+      {
+        "path": "exports/sources/cicada-2014-seventh-onion/49.jpg",
+        "sha256": "d2ab68d9d784e45f225e1a319cc2c162181cb19df491dd3ab066f6017db02faf"
+      },
+      {
+        "path": "exports/sources/cicada-2014-seventh-onion/50.jpg",
+        "sha256": "f1fc2b109f94649c1dcbed7ca71dd60e36d3e195219051b34e5305b1059ee58a"
+      },
+      {
+        "path": "exports/sources/cicada-2014-seventh-onion/51.jpg",
+        "sha256": "8e523c297fc2c6c10dbfb19a592e8d0ea784ac871ded255cdfff77f7d5681521"
+      },
+      {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-stem-uncertainty/results.json",
+        "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"
+      },
+      {
+        "path": "experiments/records/grid-stem-uncertainty/stem-map.svg",
+        "sha256": "b746e971dd49e2a79960a314157ca88d075dbfba916d51db02fa0ecfec823c34"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Preserved seventh-onion grid images and text",
+      "url": "https://jelliottdev.github.io/#/wiki/2014-seventh-onion"
+    },
+    {
+      "label": "Grid transcription and conditional byte interpretation",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    }
+  ],
+  "related": [
+    "cross-source-word-boundaries",
+    "transcription-correction-sensitivity",
+    "grid-prime-paths"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-stem-uncertainty/stem-map.svg",
+      "caption": "Ten I/l bare-stem cells across LP2-49–51, with the separate S/s disagreement marked in tan."
+    }
+  ],
+  "article": "# The ten bare stems in the LP2-49–51 grids\n\n**Ten of the 256 grid entries contain a character shaped like a bare vertical stem.** The current wiki text writes that character as either uppercase `I` or lowercase `l`. The preserved page images show no dot or horizontal foot at these positions, so the shape alone does not settle the case. Six of the ten positions agree across the two preserved text transcriptions; agreement does not turn an indistinguishable shape into a verified character.\n\nThis is an **input audit**, not a proposed LP2 decryption. It supplies exact coordinates and a bounded sensitivity calculation for readers who convert the two-character entries into bytes. It does not change the published transcription silently.\n\n## Locate the marks\n\nGrid rows begin at the first alphanumeric row on each page, excluding any runic lines. Columns run left to right from 1 to 8. The diagram maps the ten stems and, in tan, the separate `2S`/`2s` transcription disagreement. Select it for the complete SVG, and inspect the [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images before choosing a reading.\n\n![Ten bare-stem positions mapped across the three eight-column grids; one separate S/s disagreement is marked.](experiments/records/grid-stem-uncertainty/stem-map.svg)\n\n| Page | Row, column | Seventh-onion text | Wiki text | If `I` | If `l` |\n| --- | --- | --- | --- | ---: | ---: |\n| LP2-49 | 1, 3 | `2l` | `2l` | 138 | 167 |\n| LP2-49 | 4, 2 | `3I` | `3I` | 198 | 227 |\n| LP2-49 | 6, 6 | `1L` | `1l` | 78 | 107 |\n| LP2-49 | 7, 3 | `0L` | `0l` | 18 | 47 |\n| LP2-50 | 2, 3 | `3I` | `3I` | 198 | 227 |\n| LP2-50 | 11, 6 | `0l` | `0I` | 18 | 47 |\n| LP2-50 | 12, 8 | `0I` | `0I` | 18 | 47 |\n| LP2-50 | 13, 7 | `2l` | `2l` | 138 | 167 |\n| LP2-51 | 2, 8 | `0l` | `0l` | 18 | 47 |\n| LP2-51 | 8, 7 | `3i` | `3I` | 198 | 227 |\n\nThe last two columns use the **conditional** digit order `0–9`, `A–Z`, `a–x` and the rule `byte = 60 × first digit + second digit`. They are not a claim that the manuscript intended base 60 or bytes. Changing `I` to `l` adds 29 to the value at every listed cell, but the number of changed bits depends on the first digit. The [full JSON report](experiments/records/grid-stem-uncertainty/results.json) keeps all coordinates, both values and the bit differences.\n\nThe `1L` and `0L` readings in the seventh-onion text would require an uppercase L with a foot; that foot is not visible in these image locations. The `3i` reading would require a dot; none is visible there. These observations constrain the historic transcriptions without deciding between `I` and `l`. At LP2-50 row 12, column 5, the distinct `2s`/`2S` disagreement is **not** a bare-stem case. In a close view, both preserved JPEG versions appear to show uppercase `S`; this remains a visual judgment for human review. The [five-source-difference guide](#/wiki/seventh-onion-transcriptions?section=grid) retains both text readings.\n\n## What changes if the ten cases remain open?\n\nStarting from the wiki's 256 tokens, the script changes **only** these ten second characters. Each may be `I` or `l`, giving `2^10 = 1,024` complete inventories. The other 246 entries, including `2S`, remain fixed. This is a sensitivity envelope, not a claim that all 1,024 combinations are equally plausible. A consistent font or a future source could constrain several together.\n\n| Inventory measure | Current wiki text | Range across 1,024 variants |\n| --- | ---: | ---: |\n| Distinct two-character tokens | 161 | 160–163 |\n| Set bits in the 256 conditional bytes | 1,017 | 1,006–1,026 |\n| Even-valued conditional bytes | 134 | 129–139 |\n\nThe widely cited **161 distinct tokens** is therefore a property of one transcription, not an image-settled invariant. A later analysis that depends on exact token equality, a checksum, a bit image, or a route through these cells should specify its readings and rerun under relevant alternatives. This audit does not test any route or candidate plaintext.\n\n## Reproduce and review\n\nFrom the repository root, use Python 3's standard library. If using the experiment ZIP, also extract [original-images.zip](downloads/original-images.zip) into the same folder before running the scripts; the experiment ZIP names and hashes its required page JPEGs but keeps those large images in the shared download.\n\n```text\npython experiments/records/grid-stem-uncertainty/run.py --check\npython experiments/records/grid-stem-uncertainty/check.py\n```\n\nThe first script verifies SHA-256 hashes for the wiki grid export, archived text and both preserved JPEG copies for each page, then enumerates every one of the 1,024 variants. The second rebuilds the 256 entries from the structured page records and independently checks every saved variant and metric. These checks verify the arithmetic and provenance; a person must still inspect the image shapes. The image files are preserved at [wiki LP2-49](images/lp2-49.jpg), [LP2-50](images/lp2-50.jpg), [LP2-51](images/lp2-51.jpg), and the [seventh-onion source collection](#/wiki/2014-seventh-onion?section=download).\n\nThe enumeration does **not** cover `0`/`O` or all conceivable glyph ambiguities, changes in numeral base, or the separate `2S`/`2s` choice. It also does not establish that independently changing the ten cases is typographically natural. Its purpose is to prevent a downstream result from being reported as robust merely because two text sources agree at a visually ambiguous stem.\n",
+  "article_path": "experiments/records/grid-stem-uncertainty/article.md",
+  "script_sha256": "5d7a953a3ac7d44db3ce10134fa3e9cb53ae6ee3c014350820efc2222b79a5ee",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
   }
 }
 
