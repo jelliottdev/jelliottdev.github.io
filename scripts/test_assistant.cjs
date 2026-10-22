@@ -164,6 +164,12 @@ const lagMatches=Search.classify(liveDocs,lagClaim);
 assert.equal(lagMatches.tests.length,0,'A measurement must not be presented as a solving test');
 assert.deepEqual(lagMatches.supporting.map(hit=>hit.document.id),['word-internal-affine-lags'],
  'A precise relation must not retrieve unrelated geometry or generic doublet tests');
+assert.equal(Search.supporting(liveDocs,'Have we tried a block size of 7 for avoiding doublets?')[0].document.id,
+ 'block-boundary-doublets');
+assert.equal(Search.experiments(liveDocs,'Has multiplicative ciphertext autokey been tested?')[0].document.id,
+ 'multiplicative-ciphertext-autokey');
+assert.equal(Search.supporting(liveDocs,'Could Beaufort ciphertext autokey explain rare doublets?')[0].document.id,
+ 'linear-ciphertext-feedback');
 assert.equal(Search.experiments(liveDocs,'totient of rune values on LP2-31')[0].document.id,totient.id);
 assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'lp2-fibonacci-openings');
 assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice(0,2).map(r=>r.document.id)),

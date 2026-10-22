@@ -344,13 +344,16 @@
         "sha256": "30f94b899ef7cdda333ac595f4f9a30d8cd694a1729212f8be062d5e0ec756ec"
       },
       "reported_idea": "Compare additive, Beaufort and multiplicative ciphertext feedback with deletion, insertion and reordering as distinct explanations for the low doublet rate.",
-      "coverage": "The archive measures doublets and tests uniform additive keys and one-rune deletion. It does not treat this mechanism list as one tested cipher or cover all listed variants.",
+      "coverage": "The archive now tests uniform additive keys, fixed single-rune deletion, literal additive/Beaufort/subtractive feedback identities, literal multiplicative feedback, and page-anchored block-boundary placement. Multiplication fails at 450 zero-to-nonzero edges; sizes 5, 7 and 13 show no boundary enrichment under fixed-count controls. These are narrower tests, not a replay of every proposed mechanism.",
       "related_records": [
         "uniform-additive-doublets",
         "single-rune-null-doublets",
+        "linear-ciphertext-feedback",
+        "multiplicative-ciphertext-autokey",
+        "block-boundary-doublets",
         "doublet-context"
       ],
-      "replay_needed": "Split the list into separately bounded families; for each, state the operation and zero handling, predict the observed doublet count on known readings, and score any output with held-out text rather than doublet fit alone.",
+      "replay_needed": "Define and test the remaining inserted filler symbols, dynamic key switching, and zero-skip/reset variants separately. Each needs a complete reversible rule and held-out reading control.",
       "status": "partial"
     },
     {
@@ -629,7 +632,9 @@
       },
       "reported_idea": "Starting from the page-15 square, apply Euler’s totient to a prime-related sequence, subtract values from 3301, and interpret the resulting gaps as a Fibonacci arrangement. The thread then proposes applying corresponding manipulations to rune text.",
       "coverage": "A source-bound audit compares all sixteen cells in the posted arrays. The prime candidates fit after two addition choices despite a subtraction label; one specified predecessor gap is 317 in the source but computes to 377. No forward rune rule is supplied.",
-      "related_records": ["lp2-15-totient-gap-audit"],
+      "related_records": [
+        "lp2-15-totient-gap-audit"
+      ],
       "replay_needed": "Freeze sign selection, repeated prime-index handling, panel traversal and a rune operation before testing an untouched target. Retain the source's 317/377 disagreement and uncertain cell.",
       "status": "partial"
     },
@@ -830,7 +835,9 @@
       },
       "reported_idea": "Classify visibly thick and thin word or line gaps as two symbols, then read them as bits. The discussion also offers a mundane typography mechanism: apostrophes, quotation marks and other fallback-font glyphs may change line metrics.",
       "coverage": "A bounded audit measures the LP2-15 number-panel line gaps on the original JPEG and compares selected nearby text-line gaps. Its wider final panel gap survives threshold changes. The source screenshots are unavailable, so the proposed word-gap bitstream and fallback-font explanation remain untested.",
-      "related_records": ["lp2-spacing-gap-audit"],
+      "related_records": [
+        "lp2-spacing-gap-audit"
+      ],
       "replay_needed": "Recover the original word-gap screenshots or fix page and glyph coordinates before testing a binary classification, byte order and font/layout controls.",
       "status": "partial"
     },
@@ -855,7 +862,9 @@
       },
       "reported_idea": "Apply the Möbius function to the numbers at the top of LP2-15 and inspect the resulting arrangement. The supplied thread refers to an image of the output without retaining its pixels or a full interpretation rule.",
       "coverage": "A new panel audit applies arithmetic Möbius μ(n) to all sixteen printed cells in original row order, with a factorization ledger and independent checker. Twelve outputs are zero and the four nonzero values occupy row two. The source's referred-to image is absent, so its exact historical output cannot be compared; no subsequent cipher operation was specified.",
-      "related_records": ["lp2-15-mobius-panel"],
+      "related_records": [
+        "lp2-15-mobius-panel"
+      ],
       "replay_needed": "Recover the original output image for exact historical comparison. Before treating this as a key, specify a traversal, zero handling, a rule mapping μ values to rune operations, and a complete-text control without adapting those choices to output.",
       "status": "partial"
     },
@@ -1076,7 +1085,9 @@
       },
       "reported_idea": "Count selected LP sections with F (ᚠ) removed and compare sums of section lengths. The corrected post reports equalities at 2,883, 1,894, 1,433, 1,814, 695 and 91; one 1,433 equality uses Wing Tree, F-omitted Cuneiform, and F-omitted Koan 2 plus Spirals. These are length observations proposed as possible cross-section alignment hints, not a specified decryption.",
       "coverage": "The public count-sheet CSV is pinned and all 23 section rows and six stated count equalities have been recalculated from archived rune text. A separate bounded experiment now pairs the two 2,883-rune streams under five modular-subtraction variants, with alignment-aware controls. The other count equalities and possible operations remain untested as cipher claims.",
-      "related_records": ["spiral-branches-paired-subtraction"],
+      "related_records": [
+        "spiral-branches-paired-subtraction"
+      ],
       "replay_needed": "For the other equal-length pairings, specify the two streams, F handling, direction, operation and success score before reading output. The published 2,883 subtraction result does not cover those variants or establish a decryption rule.",
       "status": "partial",
       "related_guides": [
@@ -1103,16 +1114,28 @@
       },
       "reported_idea": "Choose likely plaintext cribs, compute position-by-position Gematria Primus differences against aligned LP ciphertext, and search other LP rune streams for that difference sequence as a possible key source. The post does not say whether “GP index difference” means alphabet indices modulo 29 or prime-value differences, and supplies no fixed crib list, positions, search scope or result.",
       "coverage": "A bounded record uses the existing twenty LP2-39 red-header crib words, takes seventeen exact three-rune GP encodings, computes forward mod-29 differences and searches seventy-one other runic pages. Nine exact hits are no excess over page-preserving controls. This tests a short source-stream overlap, not a derived key or the original unfixed proposal.",
-      "related_records": ["crib-difference-stream-search"],
+      "related_records": [
+        "crib-difference-stream-search"
+      ],
       "replay_needed": "Fix a longer independent crib, target location, index or prime-value difference convention, source-scope and interruption rule before searching; test any resulting key on untouched ciphertext.",
       "status": "partial"
     },
     {
       "id": "shed-circumference-square-inner-grid",
       "title": "Remove the outer ring of the LP1-10–13 message grids",
-      "phrases": ["shed circumference magic square", "LP1 squares inner grid", "remove outer numbers square", "identical number grid inner"],
+      "phrases": [
+        "shed circumference magic square",
+        "LP1 squares inner grid",
+        "remove outer numbers square",
+        "identical number grid inner"
+      ],
       "family": "squares",
-      "pages": ["lp1-10", "lp1-11", "lp1-12", "lp1-13"],
+      "pages": [
+        "lp1-10",
+        "lp1-11",
+        "lp1-12",
+        "lp1-13"
+      ],
       "source": {
         "title": "Magic-square order and outer-ring discussion",
         "author": "Donger and participants",
@@ -1122,14 +1145,22 @@
       },
       "reported_idea": "A participant connects the solved 'shed the circumference' wording to the four signed ASCII number grids embedded in LP1-10–13, reporting that removing each grid's outer ring leaves the same inner numbers. The later discussion separately turns to the 5×5 LP1 magic squares; those are different objects. The post does not report a decryption of LP2.",
       "coverage": "The source-bound audit checks the four extracted LP1-10–13 signed-message grids: their outer digits change 3, 3, 0, 1, while one-cell border removal leaves the same 3×3 interior. It also separates these from the visible LP1-05 and LP1-16 5×5 squares. The related magic-square freedom record answers a different constraint question.",
-      "related_records": ["lp1-payload-outer-ring", "magic-square-freedom"],
+      "related_records": [
+        "lp1-payload-outer-ring",
+        "magic-square-freedom"
+      ],
       "replay_needed": "An LP2 application remains untested. Fix a target, traversal, rune operation and prediction before reading output.",
       "status": "partial"
     },
     {
       "id": "shed-circumference-page-margin-join",
       "title": "Trim manuscript margins and join consecutive pages",
-      "phrases": ["shed circumference cut margins", "join manuscript pages side by side", "remove LP margins", "text guide you margin transposition"],
+      "phrases": [
+        "shed circumference cut margins",
+        "join manuscript pages side by side",
+        "remove LP margins",
+        "text guide you margin transposition"
+      ],
       "family": "geometry",
       "pages": [],
       "source": {
@@ -1141,14 +1172,22 @@
       },
       "reported_idea": "Interpret the solved 'shed the circumference' wording together with a cited 'Let the text guide you' payload as a reason to cut page margins and place manuscript pages side by side, then inspect whether their text lines align or continue. The post says the author might try this; it does not report a completed comparison or extracted text.",
       "coverage": "A fixed-crop baseline checks row positions across LP2-40–48. Some neighboring pages align perfectly, but nonneighboring controls do too; row alignment alone is not distinctive. It does not test rune continuation across a joined seam. The source discussion fixed no pages or trim rule.",
-      "related_records": ["page-join-sensitivity", "page-margin-row-alignment"],
+      "related_records": [
+        "page-join-sensitivity",
+        "page-margin-row-alignment"
+      ],
       "replay_needed": "Specify page sequence, exact image hashes, crop rectangles, scale and row-registration convention before looking for seam continuity. Publish failures and compare against nonadjacent page controls.",
       "status": "partial"
     },
     {
       "id": "rune-poem-meaning-artwork-map",
       "title": "Map Old English rune-poem meanings to LP artwork",
-      "phrases": ["rune poem artwork clue", "rune meanings LP illustrations", "Old English rune poem section hints", "illustration rune meaning cipher"],
+      "phrases": [
+        "rune poem artwork clue",
+        "rune meanings LP illustrations",
+        "Old English rune poem section hints",
+        "illustration rune meaning cipher"
+      ],
       "family": "symbol-systems",
       "pages": [],
       "source": {
@@ -1167,9 +1206,16 @@
     {
       "id": "lp2-56-hash-solved-text-checksum",
       "title": "LP2-56 hash as a checksum for a completed reading",
-      "phrases": ["LP2 hash solved text checksum", "deep web hash full LP", "page 56 hash plaintext", "LP2-56 completed reading checksum"],
+      "phrases": [
+        "LP2 hash solved text checksum",
+        "deep web hash full LP",
+        "page 56 hash plaintext",
+        "LP2-56 completed reading checksum"
+      ],
       "family": "hashes",
-      "pages": ["lp2-56"],
+      "pages": [
+        "lp2-56"
+      ],
       "source": {
         "title": "LP2-56 hash-target hypotheses",
         "author": "DorkyHead101 and participants",
@@ -1186,9 +1232,18 @@
     {
       "id": "lp2-fehu-coordinate-triad",
       "title": "59-Fehu coordinate windows and three 2016-message sums",
-      "phrases": ["59 Fehu windows", "F182 F240", "3001 2819 2579", "Fehu coordinate triad", "29 wide F grid"],
+      "phrases": [
+        "59 Fehu windows",
+        "F182 F240",
+        "3001 2819 2579",
+        "Fehu coordinate triad",
+        "29 wide F grid"
+      ],
       "family": "sums",
-      "pages": ["lp2-00", "lp2-57"],
+      "pages": [
+        "lp2-00",
+        "lp2-57"
+      ],
       "source": {
         "title": "Epiphany and historical-message wording",
         "author": "twocool",
@@ -1198,16 +1253,25 @@
       },
       "reported_idea": "Number F runes in LP2 only. For three overlapping 59-Fehu windows starting 29 Fehus apart, map distance from a specified origin to X or Y on a 29-column grid, convert coordinate indices to GP prime values, and sum. The reported F182 start gives 3001, 2819 and 2579, linked in the discussion to adjusted 2016-message values.",
       "coverage": "The bounded replay checks the complete supplied coordinate streams and all 350 eligible starts. F182 is the one exact ordered match under this fixed rule. This does not test how many window lengths, axis orders, origin resets or message segmentations were explored before the rule was chosen, nor does it produce plaintext.",
-      "related_records": ["fehu-coordinate-triad"],
+      "related_records": [
+        "fehu-coordinate-triad"
+      ],
       "replay_needed": "Independently establish the message-value targets from original signed bytes, reconstruct the explored rule family and compare its best match with selection-aware controls. Require a frozen operation to predict a held-out key or reading; conditional uniqueness alone does not supply one.",
       "status": "partial"
     },
     {
       "id": "gnunet-known-carrier-roots-report",
       "title": "Reported GNUnet roots for 86 preserved carriers",
-      "phrases": ["GNUnet 0.10.1", "GNUNET_ROOTS.tsv", "GNUnet CHK", "AN END GNUnet hash"],
+      "phrases": [
+        "GNUnet 0.10.1",
+        "GNUNET_ROOTS.tsv",
+        "GNUnet CHK",
+        "AN END GNUnet hash"
+      ],
       "family": "hashes",
-      "pages": ["lp2-56"],
+      "pages": [
+        "lp2-56"
+      ],
       "source": {
         "title": "LP2-56 hash-target hypotheses",
         "author": "catlover883",
@@ -1224,7 +1288,12 @@
     {
       "id": "bible-977-gp-offset",
       "title": "Leviticus and 2 Maccabees at a reported 977 offset",
-      "phrases": ["bible 977 offset", "Leviticus 2 Maccabees GP", "977 bible book code", "Bible 995 1000 offset"],
+      "phrases": [
+        "bible 977 offset",
+        "Leviticus 2 Maccabees GP",
+        "977 bible book code",
+        "Bible 995 1000 offset"
+      ],
       "family": "codebooks",
       "pages": [],
       "source": {
@@ -1243,7 +1312,12 @@
     {
       "id": "english-qaballa-order-value",
       "title": "An order and a value as an English Qaballa lead",
-      "phrases": ["English Qaballa order and value", "English Qaballa LP", "every eleventh letter EQ", "order and a value Qaballa"],
+      "phrases": [
+        "English Qaballa order and value",
+        "English Qaballa LP",
+        "every eleventh letter EQ",
+        "order and a value Qaballa"
+      ],
       "family": "symbol-systems",
       "pages": [],
       "source": {

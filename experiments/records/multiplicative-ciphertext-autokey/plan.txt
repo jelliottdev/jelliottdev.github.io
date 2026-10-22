@@ -1,0 +1,7 @@
+Question: Can the literal multiplicative ciphertext-autokey recurrence c[i] = p[i] * c[i-1] (mod 29) produce the LP2-00–55 rune stream?
+Inputs: archived LP2-00–55 transcription and 29-rune index, with F = 0.
+Rule: apply the recurrence to every rune after each page start. No skipped zeroes, resets, inserted symbols, keyed offsets, or changed alphabet.
+Invariant: c[i-1] = 0 forces c[i] = 0 for every plaintext value.
+Measure: enumerate every zero-to-nonzero within-page edge and count affected pages. Also count nonzero doublets; for a nonzero previous ciphertext, equality requires p[i] = 1.
+Control: encrypt a short synthetic plaintext that enters zero and verify that every later ciphertext remains zero.
+Conclusion scope: any observed zero-to-nonzero edge contradicts this literal rule, independent of a language scorer. Modified recurrences need new specifications and tests.

@@ -48,6 +48,7 @@ async function experimentsPage(id, version, query='') {
     bindRouteIllustration();
     bindLanguageBlockFigure();
     bindAffineLagFigure();
+    bindBlockBoundaryFigure();
     startExperimentSupport();
     return;
   }
@@ -196,6 +197,10 @@ function bindLanguageBlockFigure(){
   });
 }
 function experimentVisual(r,v){
+  if(r.id==='block-boundary-doublets'&&v.path.endsWith('/boundaries.svg')){
+    const sizes=Array.from({length:28},(_,index)=>`<option value="${index+2}">${index+2}</option>`).join('');
+    return `<figure class="experiment-figure affine-lag-figure block-boundary-figure" data-results="experiments/records/block-boundary-doublets/results.json"><figcaption><strong>Inspect the 434 placements</strong><br>Choose a block size and a shared phase. Phase zero places a boundary after every full block, counting from the start of each page.</figcaption><div class="affine-lag-controls"><label>Block size<select data-block-size>${sizes}</select></label><label>Phase<select data-block-phase></select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><p class="small muted">The size and phase search was compared with the same search on 3,000 fixed-count controls. A single appealing row is not a selected-search result.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
+  }
   if(r.id==='word-internal-affine-lags'&&v.path.endsWith('/comparison.svg')){
     const choices=Array.from({length:29},(_,n)=>`<option value="${n}">${n}</option>`).join('');
     return `<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Explore the 841 lag-six maps</strong><br>Choose coefficients for c′ = ac + b (mod 29). Counts use the same 1,267 word-internal pairs.</figcaption><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><p class="small muted">The shuffle range shown for the highlighted formula does not transfer to every selected map. The downloadable result holds all 841 observed counts and word-shuffle expectations.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
@@ -235,7 +240,7 @@ function experimentVisual(r,v){
   return `<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`;
 }
 async function bindAffineLagFigure(){
-  const figure=main.querySelector('.affine-lag-figure');
+  const figure=main.querySelector('.affine-lag-figure:not(.block-boundary-figure)');
   if(!figure)return;
   const a=figure.querySelector('[data-affine-a]'),b=figure.querySelector('[data-affine-b]');
   a.value='27';b.value='24';
@@ -253,6 +258,31 @@ async function bindAffineLagFigure(){
       figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${observed} matches</strong> <span>of 1,267 pairs</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${Math.min(100,observed/80*100).toFixed(1)}%"></span></div><p>Word-shuffle expectation: <strong>${mean.toFixed(1)}</strong> · Rank among 841 maps: <strong>${rank}</strong>${rank===1?' (highest)':''}.</p>`;
     };
     a.addEventListener('change',update);b.addEventListener('change',update);update();
+  }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
+}
+async function bindBlockBoundaryFigure(){
+  const figure=main.querySelector('.block-boundary-figure');
+  if(!figure)return;
+  const size=figure.querySelector('[data-block-size]'),phase=figure.querySelector('[data-block-phase]');
+  size.value='5';
+  try{
+    const response=await fetch(figure.dataset.results);
+    if(!response.ok)throw Error();
+    const data=await response.json();
+    if(!figure.isConnected)return;
+    const rows=new Map(data.all_placements.map(row=>[`${row.size}:${row.phase}`,row]));
+    if(rows.size!==434)throw Error();
+    const setPhases=()=>{
+      const previous=Number(phase.value);
+      phase.innerHTML=Array.from({length:Number(size.value)},(_,n)=>`<option value="${n}">${n}</option>`).join('');
+      phase.value=String(previous<Number(size.value)?previous:0);
+    };
+    const update=()=>{
+      const row=rows.get(`${size.value}:${phase.value}`);
+      figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${row.matches} doublets</strong> <span>of 86 on these edges</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${Math.min(100,row.matches/30*100).toFixed(1)}%"></span></div><p>Expected with page counts fixed: <strong>${row.expected.toFixed(1)}</strong> · Standardized excess: <strong>${row.z.toFixed(2)}</strong>.</p>`;
+    };
+    size.addEventListener('change',()=>{setPhases();update()});phase.addEventListener('change',update);
+    setPhases();update();
   }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
 }
 function experimentArticle(r){

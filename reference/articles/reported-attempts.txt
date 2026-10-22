@@ -209,10 +209,10 @@ No public URL is recorded for this source. The supplied transcript hash is not a
 Proposed mechanisms for scarce adjacent doublets
 Partly replayed · Autokey and ciphertext feedback
 Reported approach. Compare additive, Beaufort and multiplicative ciphertext feedback with deletion, insertion and reordering as distinct explanations for the low doublet rate.
-Current archive coverage. The archive measures doublets and tests uniform additive keys and one-rune deletion. It does not treat this mechanism list as one tested cipher or cover all listed variants.
-Replay requirement. Split the list into separately bounded families; for each, state the operation and zero handling, predict the observed doublet count on known readings, and score any output with held-out text rather than doublet fit alone.
+Current archive coverage. The archive now tests uniform additive keys, fixed single-rune deletion, literal additive/Beaufort/subtractive feedback identities, literal multiplicative feedback, and page-anchored block-boundary placement. Multiplication fails at 450 zero-to-nonzero edges; sizes 5, 7 and 13 show no boundary enrichment under fixed-count controls. These are narrower tests, not a replay of every proposed mechanism.
+Replay requirement. Define and test the remaining inserted filler symbols, dynamic key switching, and zero-skip/reset variants separately. Each needs a complete reversible rule and held-out reading control.
 
-Related records with narrower scopes: uniform additive doublets, single rune null doublets, doublet context.
+Related records with narrower scopes: uniform additive doublets, single rune null doublets, linear ciphertext feedback, multiplicative ciphertext autokey, block boundary doublets, doublet context.
 
 Source identification
 List of ways to reduce doublets · ozon · 2024-07-04. Supplied transcript SHA-256: 30f94b899ef7cdda333ac595f4f9a30d8cd694a1729212f8be062d5e0ec756ec.
@@ -909,6 +909,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - single rune null doublets
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
+- linear ciphertext feedback
+  https://jelliottdev.github.io/#/experiments/linear-ciphertext-feedback
+- multiplicative ciphertext autokey
+  https://jelliottdev.github.io/#/experiments/multiplicative-ciphertext-autokey
+- block boundary doublets
+  https://jelliottdev.github.io/#/experiments/block-boundary-doublets
 - doublet context
   https://jelliottdev.github.io/#/experiments/doublet-context
 - cross section index inversion

@@ -1,0 +1,8 @@
+Question: Do rare adjacent equal runes in LP2 cluster at periodic block boundaries?
+Input: LP2-00–55 archived rune transcription, filtered to the 29 alphabet symbols within each page.
+Event: an edge between adjacent equal runes. There are 86 events among 12,901 within-page edges.
+Block convention: a page starts at position zero. The edge from rune i to i+1 has phase (i+1) mod block size. Phase zero is a block boundary.
+Prespecified examples: block sizes 5, 7 and 13, phase zero.
+Exploratory search: sizes 2–29 and every common phase across pages, 434 configurations in total. Rank by the standardized excess over per-page conditional expectation.
+Control: for each of 3,000 seeded trials, keep each page's doublet count and choose its event positions uniformly without replacement. Repeat the full 434-way search and compare its maximum with the observed maximum.
+Limits: this tests where observed doublets fall, not their low total, plaintext, unknown page-specific resets, interrupted clocks, or a full encryption algorithm.

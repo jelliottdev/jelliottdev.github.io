@@ -1,0 +1,6 @@
+Question: What exactly do additive, Beaufort and subtractive ciphertext-feedback recurrences predict about LP2 doublets?
+Input: archived LP2-00–55 rune transcription and its 29-symbol index.
+Rules: c_i=p_i+c_(i-1), c_i=c_(i-1)-p_i, and c_i=p_i-c_(i-1), all modulo 29. No extra key, reset, skip or other layer.
+Method: invert each observed adjacent ciphertext pair within each page, count the values 0..28, and verify the zero-position algebra with a separate direct checker and short synthetic pair examples.
+Exact result being tested: additive and Beaufort inverse outputs are negatives of each other; they have the same zero-output positions, exactly ciphertext doublets. The subtractive inverse has a different zero condition.
+Limit: this is an invariant and literal inverse census, not a language score or claim that any output is the plaintext. An added key or interruption changes the rule.
