@@ -2,6 +2,34 @@
 <h2 id="example">Why a readable assignment needs independent evidence</h2>
 <p>Consider the invented ciphertext <code>17 42 17</code>. A fixed codebook assigning 17 → THE and 42 → WAY produces THE WAY THE. Assigning 17 → ONE and 42 → BY produces ONE BY ONE. Both preserve the repeated code group. The repetition constrains the assignment, but it does not choose the vocabulary.</p>
 <div class="table-wrap"><table><thead><tr><th>Code group</th><th>Candidate A</th><th>Candidate B</th><th>Constraint</th></tr></thead><tbody><tr><td>17</td><td>THE</td><td>ONE</td><td>Reuse the same entry wherever 17 occurs</td></tr><tr><td>42</td><td>WAY</td><td>BY</td><td>Choose independently supported meaning</td></tr></tbody></table></div>
+<h2 id="boundaries">A codebook can be known while the parsing is ambiguous</h2>
+<p>Suppose a toy codebook maps <code>0 → A</code>, <code>01 → B</code> and <code>1 → C</code>. With no separators, the stream <code>01</code> admits two complete readings:</p>
+<div class="table-wrap"><table><thead><tr><th>Code groups</th><th>Output</th><th>Rule used</th></tr></thead><tbody>
+<tr><td>01</td><td>B</td><td>One two-character group</td></tr>
+<tr><td>0 | 1</td><td>AC</td><td>Two one-character groups</td></tr>
+</tbody></table></div>
+<p>Choosing the longest available group would select B, but that is an added parsing rule. It does not follow from the three assignments alone. Fixed group widths, explicit separators or a suitably designed code inventory can remove such ambiguity; the proposal must specify which mechanism applies.</p>
+<p>The same issue arises when some entries encode letters and others encode words. Report both the segmentation and the mapping. Do not assume that the manuscript’s printed separators are code-group boundaries merely because that produces a readable candidate.</p>
+<h2 id="assignment-count">Count the free meanings</h2>
+<p>If u distinct code groups can each be assigned any of m declared vocabulary entries, there are m<sup>u</sup> mappings when different groups may share a meaning. If the mapping must be injective, there are <code>m! / (m − u)!</code> assignments for u ≤ m, and none for u &gt; m. These counts assume fixed group boundaries and a fixed vocabulary.</p>
+<p>In the earlier <code>17 42 17</code> example, a vocabulary of 100 entries permits 10,000 assignments, or 9,900 if the two groups must have different meanings. The third occurrence adds a consistency check, not another free assignment. Permitting a different meaning for each occurrence would remove that useful constraint.</p>
+<p>Searching several segmentations, vocabularies or context rules adds choices beyond these counts. When all groups in a short passage are unique, an unrestricted word assignment can fit any sequence of that many words. The important evidence is a reason for the entries that was not derived solely from the desired sentence.</p>
+<h2 id="reproduce">Enumerate the ambiguous parsing</h2>
+<pre><code>codebook = {"0": "A", "01": "B", "1": "C"}
+
+def readings(stream):
+    if not stream:
+        return [((), "")]
+    results = []
+    for group, meaning in codebook.items():
+        if stream.startswith(group):
+            for suffix_groups, suffix_text in readings(stream[len(group):]):
+                results.append(((group,) + suffix_groups, meaning + suffix_text))
+    return results
+
+assert set(readings("01")) == {(("01",), "B"), (("0", "1"), "AC")}
+print(readings("01"))</code></pre>
+<p>This short Python example retains every complete parse, including its groups. It is a demonstration with invented symbols, not a parser or codebook proposed for Liber Primus.</p>
 <h2 id="variants">Major variants</h2><p>Variants include fixed word codebooks, syllabic coding, mixed letter-and-word systems, multiple codes for one meaning and separate null groups. A context-dependent codebook adds further rules and must say what determines the context. Arbitrarily giving the same group a new meaning whenever needed removes the repeat constraint.</p>
 <h2 id="specification">What a test must specify</h2><p>Define code-group boundaries, group length, vocabulary, mapping consistency and treatment of unknown entries. Identify any proposed external codebook by exact source. If a codebook is inferred, count the free assignments and distinguish those fitted to a passage from entries predicted before reading another passage.</p>
 <h2 id="validation">Evaluate constraints, not just sentences</h2><p>Measure whether the mapping consistently explains all occurrences, including inconvenient ones. Test known-answer examples with comparable codebook size, and compare competing dictionaries. A coherent sentence fitted to unique groups has little opportunity to contradict the chosen assignments.</p>

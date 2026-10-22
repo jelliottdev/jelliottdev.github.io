@@ -12,6 +12,48 @@ Consider the invented ciphertext 17 42 17. A fixed codebook assigning 17 → THE
 	17	THE	ONE	Reuse the same entry wherever 17 occurs
 	42	WAY	BY	Choose independently supported meaning
 
+A codebook can be known while the parsing is ambiguous
+
+Suppose a toy codebook maps 0 → A, 01 → B and 1 → C. With no separators, the stream 01 admits two complete readings:
+
+	Code groups	Output	Rule used
+
+	01	B	One two-character group
+
+	0 | 1	AC	Two one-character groups
+
+
+Choosing the longest available group would select B, but that is an added parsing rule. It does not follow from the three assignments alone. Fixed group widths, explicit separators or a suitably designed code inventory can remove such ambiguity; the proposal must specify which mechanism applies.
+
+The same issue arises when some entries encode letters and others encode words. Report both the segmentation and the mapping. Do not assume that the manuscript’s printed separators are code-group boundaries merely because that produces a readable candidate.
+
+Count the free meanings
+
+If u distinct code groups can each be assigned any of m declared vocabulary entries, there are m^(u) mappings when different groups may share a meaning. If the mapping must be injective, there are m! / (m − u)! assignments for u ≤ m, and none for u > m. These counts assume fixed group boundaries and a fixed vocabulary.
+
+In the earlier 17 42 17 example, a vocabulary of 100 entries permits 10,000 assignments, or 9,900 if the two groups must have different meanings. The third occurrence adds a consistency check, not another free assignment. Permitting a different meaning for each occurrence would remove that useful constraint.
+
+Searching several segmentations, vocabularies or context rules adds choices beyond these counts. When all groups in a short passage are unique, an unrestricted word assignment can fit any sequence of that many words. The important evidence is a reason for the entries that was not derived solely from the desired sentence.
+
+Enumerate the ambiguous parsing
+
+codebook = {"0": "A", "01": "B", "1": "C"}
+
+def readings(stream):
+    if not stream:
+        return [((), "")]
+    results = []
+    for group, meaning in codebook.items():
+        if stream.startswith(group):
+            for suffix_groups, suffix_text in readings(stream[len(group):]):
+                results.append(((group,) + suffix_groups, meaning + suffix_text))
+    return results
+
+assert set(readings("01")) == {(("01",), "B"), (("0", "1"), "AC")}
+print(readings("01"))
+
+This short Python example retains every complete parse, including its groups. It is a demonstration with invented symbols, not a parser or codebook proposed for Liber Primus.
+
 Major variants
 Variants include fixed word codebooks, syllabic coding, mixed letter-and-word systems, multiple codes for one meaning and separate null groups. A context-dependent codebook adds further rules and must say what determines the context. Arbitrarily giving the same group a new meaning whenever needed removes the repeat constraint.
 
