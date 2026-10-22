@@ -37,7 +37,7 @@ Each of its five rows, five columns and two main diagonals totals 1033. It is th
 
 Replay and verify
 
-Download the reference-data bundle and run python scripts/replay_2014_stage04.py --check from its root. The script checks the archived source hashes, performs both image recoveries, compares all three outputs with the hosted originals, extracts the matrix, and checks all twelve sums. Add --extract-dir recovered-pages to save the three verified JPEGs without replacing existing files. The replay report gives every byte count and output hash; the manifest pins the source files to a specific archive revision.
+Download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/replay_2014_stage04.py --check from that folder. The script checks the archived source hashes, performs both image recoveries, compares all three outputs with the hosted originals, extracts the matrix, and checks all twelve sums. Add --extract-dir recovered-pages to save the three verified JPEGs without replacing existing files. The replay report gives every byte count and output hash; the manifest pins the source files to a specific archive revision.
 
 The captures and matrix are hosted here so their availability does not depend on the external archive. For provenance, compare the pinned stage04 directory. The page-image equality is a direct byte comparison; it does not establish the timing of the live service or a unique purpose for every embedded byte.
 
@@ -76,8 +76,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2014-stage04/matrix.txt
 - rune words printed on LP1-05
   https://jelliottdev.github.io/reference/articles/magic-squares.html#historical
-- reference-data bundle
+- reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/replay_2014_stage04.py
 - replay report

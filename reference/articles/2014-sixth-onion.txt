@@ -1,0 +1,84 @@
+2014 sixth onion: four pages in one JPEG stream
+
+Split the archived response into LP1-10 through LP1-13, distinguish the LP1-10 page JPEG from its four-page carrier, and verify the later signed form.
+
+The preserved response from the historical sixth onion service contains the four pages of The Loss of Divinity, LP1-10 through LP1-13. Its HTML body is hexadecimal; decoding it produces 4,240,957 bytes. Four JPEGs follow one another in that stream, without reversal or leftover bytes. A later saved page from the same service contains a signed instruction about submitting the magic squares.
+
+The preceding fifth-onion book-code account reports the sixth onion address. The archived response and exact page-image recovery can be checked independently of those book lookups.
+
+From response body to four pages
+
+The original saved response begins with <!--761-->. The saved HTTP headers also record X-Cicada: 1033; this is an archived header value, not a property inferred from the decoded pages. Hex-decode only the text inside the HTML <body>. Starting at byte zero, take each JPEG through its first ff d9 end marker and continue with the remainder.
+
+	Page	JPEG bytes	Download the page only
+	LP1-10	754,662	LP1-10 page JPEG
+	LP1-11	712,733	LP1-11 JPEG
+	LP1-12	703,428	LP1-12 JPEG
+	LP1-13	2,070,134	LP1-13 JPEG
+
+LP1-10 has two useful file forms. The archived 4,240,957-byte carrier includes all four JPEGs back to back. Image viewers display its first page and generally ignore the appended bytes. The 754,662-byte page-only JPEG stops at the first end marker. Our earlier page catalogue called the aggregate simply “LP1-10.jpg”; this distinction is now explicit in the reader and downloads. Preserve the carrier when analyzing source bytes or historical packaging. Use the page-only file when you need just LP1-10 as an image.
+
+[Image: LP1-10 page-only JPEG showing the opening of The Loss of Divinity]
+LP1-10 · Page-only JPEG
+[Image: LP1-11 manuscript page]
+LP1-11 · JPEG
+[Image: LP1-12 manuscript page]
+LP1-12 · JPEG
+[Image: LP1-13 manuscript page]
+LP1-13 · JPEG
+
+A later signed submission form
+
+The archive preserves a later HTML form containing a clear-signed instruction. The saved signature verifies under the preserved Cicada key. It asks readers to paste the magic squares into the form, provide a Tor hidden-service URL, host a file-upload script at /cgi-bin/upload, and place their public key at /key.asc. This confirms what the archived instruction said; it does not prove that a particular submission was made or accepted. The three archived square blocks are documented separately.
+
+Replay with the preserved files
+
+Download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/replay_2014_sixth_onion.py --check from that folder with GnuPG installed. The script checks source hashes, splits four JPEGs, compares the page-only copies and aggregate carrier, then verifies the later instruction in an isolated keyring. Add --extract-dir recovered-pages to save the four page-only JPEGs without replacing existing files. The report gives each byte count and hash; the manifest pins the captures to the historical repository revision.
+
+Sources, related references, and files
+- The Loss of Divinity
+  https://jelliottdev.github.io/reference/articles/reading-loss-of-divinity.html
+- fifth-onion book-code account
+  https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html
+- original saved response
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.html
+- HTTP headers
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.headers
+- LP1-10; LP1-10 page-only JPEG showing the opening of The Loss of Divinity
+  https://jelliottdev.github.io/#/reader/lp1-10
+- LP1-10 page JPEG; 754,662-byte page-only JPEG; LP1-10 page-only JPEG showing the opening of The Loss of Divinity; Page-only JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/10-page.jpg
+- LP1-11; LP1-11 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-11
+- LP1-11 JPEG; LP1-11 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-11.jpg
+- LP1-12; LP1-12 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-12
+- LP1-12 JPEG; LP1-12 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-12.jpg
+- LP1-13; LP1-13 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-13
+- LP1-13 JPEG; LP1-13 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-13.jpg
+- 4,240,957-byte carrier
+  https://jelliottdev.github.io/images/lp1-10.jpg
+- later HTML form
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.v2-form.html
+- clear-signed instruction
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.v2-form.html.asc
+- three archived square blocks
+  https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html#audio
+- reference-data.zip
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/replay_2014_sixth_onion.py
+- report
+  https://jelliottdev.github.io/exports/cicada-2014-sixth-onion.json
+- manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/manifest.json
+- historical repository revision
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/008-sixth-onion
+
+Article: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html

@@ -21,7 +21,7 @@ Decode the complete response’s hex, XOR every resulting byte with 0xFF, and sp
 	1,645,490–1,820,648	Reverse all segment bytes	LP1-02 JPEG
 
 
-Run python scripts/replay_2014_onion_response.py --check after extracting the reference-data bundle. Add --extract-dir recovered-pages to save the three checked JPEGs without overwriting existing files. The script, replay report and source manifest pin every input and output hash. The archive’s original notes are preserved too.
+Extract reference-data.zip and original-images.zip into the same folder, then run python scripts/replay_2014_onion_response.py --check there. Add --extract-dir recovered-pages to save the three checked JPEGs without overwriting existing files. The script, replay report and source manifest pin every input and output hash. The archive’s original notes are preserved too.
 
 The 541-byte first capture contains only 256 decoded hex bytes and is not a prefix of the complete response. The archive describes a changing response, but these two files alone do not establish its exact update schedule. The replay begins from the saved complete capture and makes no request to the historical service.
 
@@ -104,8 +104,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp1-01.jpg
 - LP1-02 JPEG; LP1-02: chapter title
   https://jelliottdev.github.io/images/lp1-02.jpg
-- reference-data bundle
+- reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/replay_2014_onion_response.py
 - replay report

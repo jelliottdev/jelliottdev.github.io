@@ -855,6 +855,8 @@ Image SHA-256: 12ebfe421c129f2ef78d527c1630e358963da8d8dfdf9620eb977980d7967376
 Structured record: https://jelliottdev.github.io/data/pages/lp1-10.json
 Human reader: https://jelliottdev.github.io/#/reader/lp1-10
 
+File distinction: the cataloged image is the 4,240,957-byte four-JPEG carrier. The 754,662-byte LP1-10 page-only JPEG is https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/10-page.jpg. See https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html for the exact split and hashes.
+
 ## Visual observations
 
 Long-haired women framing the text: Two long-haired female figures flank the central rectangular text panel. Their faces are visible near the top; sweeping curved lines connect the upper decoration, and further loops appear below the panel. The composition has a broadly bilateral arrangement. This observation does not establish exact pixel reflection, identify the figures, or attribute a source artwork.
@@ -931,6 +933,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 Transliteration and literal readings: https://jelliottdev.github.io/reference/articles/transliteration.html
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+2014 sixth onion: four pages in one JPEG stream: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
 Reproducing rune prime sums: https://jelliottdev.github.io/reference/articles/prime-sums.html
 Philosophical themes in Liber Primus: https://jelliottdev.github.io/reference/articles/philosophical-themes.html
@@ -1024,6 +1027,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+2014 sixth onion: four pages in one JPEG stream: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
 Philosophical themes in Liber Primus: https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 Testing knowledge, certainty, and authority: https://jelliottdev.github.io/reference/articles/testing-knowledge.html
@@ -1114,6 +1118,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+2014 sixth onion: four pages in one JPEG stream: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
 Philosophical themes in Liber Primus: https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 Testing knowledge, certainty, and authority: https://jelliottdev.github.io/reference/articles/testing-knowledge.html
@@ -1209,6 +1214,7 @@ THE LOSS OF DIVINITY THE CIRCUMFERENCE PRACTICES THREE BEHAVIORS WHICH CAUSE THE
 
 Direct reading: https://jelliottdev.github.io/reference/articles/direct-reading.html
 Embedded OutGuess payloads: https://jelliottdev.github.io/reference/articles/embedded-payloads.html
+2014 sixth onion: four pages in one JPEG stream: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 Magic squares in the 2014 puzzle: https://jelliottdev.github.io/reference/articles/magic-squares.html
 Philosophical themes in Liber Primus: https://jelliottdev.github.io/reference/articles/philosophical-themes.html
 Testing knowledge, certainty, and authority: https://jelliottdev.github.io/reference/articles/testing-knowledge.html
@@ -6252,6 +6258,8 @@ Each link below opens a worked step with preserved inputs and a downloadable rep
 
 	2014 fifth onion	Signed MP3, three clue files and book-code pointers	Signatures, derived files and archived square sums checked; book lookups remain source-attributed.
 
+	2014 sixth onion	Four JPEGs in one response, followed by a signed form	Separate LP1-10–13 page images reproduced; LP1-10’s aggregate carrier labeled explicitly.
+
 	2014 Emerson	The historical book-cipher control	Use the declared paragraph, sentence, word and letter rules.
 
 
@@ -6315,6 +6323,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/2014-stage05.html
 - 2014 fifth onion
   https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html
+- 2014 sixth onion
+  https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 - 2014 Emerson; reproduction record
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
 - contemporary solver account
@@ -11037,7 +11047,7 @@ Decode the complete response’s hex, XOR every resulting byte with 0xFF, and sp
 	1,645,490–1,820,648	Reverse all segment bytes	LP1-02 JPEG
 
 
-Run python scripts/replay_2014_onion_response.py --check after extracting the reference-data bundle. Add --extract-dir recovered-pages to save the three checked JPEGs without overwriting existing files. The script, replay report and source manifest pin every input and output hash. The archive’s original notes are preserved too.
+Extract reference-data.zip and original-images.zip into the same folder, then run python scripts/replay_2014_onion_response.py --check there. Add --extract-dir recovered-pages to save the three checked JPEGs without overwriting existing files. The script, replay report and source manifest pin every input and output hash. The archive’s original notes are preserved too.
 
 The 541-byte first capture contains only 256 decoded hex bytes and is not a prefix of the complete response. The archive describes a changing response, but these two files alone do not establish its exact update schedule. The replay begins from the saved complete capture and makes no request to the historical service.
 
@@ -11120,8 +11130,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp1-01.jpg
 - LP1-02 JPEG; LP1-02: chapter title
   https://jelliottdev.github.io/images/lp1-02.jpg
-- reference-data bundle
+- reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/replay_2014_onion_response.py
 - replay report
@@ -11191,7 +11203,7 @@ Each of its five rows, five columns and two main diagonals totals 1033. It is th
 
 Replay and verify
 
-Download the reference-data bundle and run python scripts/replay_2014_stage04.py --check from its root. The script checks the archived source hashes, performs both image recoveries, compares all three outputs with the hosted originals, extracts the matrix, and checks all twelve sums. Add --extract-dir recovered-pages to save the three verified JPEGs without replacing existing files. The replay report gives every byte count and output hash; the manifest pins the source files to a specific archive revision.
+Download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/replay_2014_stage04.py --check from that folder. The script checks the archived source hashes, performs both image recoveries, compares all three outputs with the hosted originals, extracts the matrix, and checks all twelve sums. Add --extract-dir recovered-pages to save the three verified JPEGs without replacing existing files. The replay report gives every byte count and output hash; the manifest pins the source files to a specific archive revision.
 
 The captures and matrix are hosted here so their availability does not depend on the external archive. For provenance, compare the pinned stage04 directory. The page-image equality is a direct byte comparison; it does not establish the timing of the live service or a unique purpose for every embedded byte.
 
@@ -11230,8 +11242,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2014-stage04/matrix.txt
 - rune words printed on LP1-05
   https://jelliottdev.github.io/reference/articles/magic-squares.html#historical
-- reference-data bundle
+- reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/replay_2014_stage04.py
 - replay report
@@ -11283,7 +11297,7 @@ LP1-09 · Original JPEG
 
 Download and verify
 
-The reference-data bundle includes the raw captures, the replay script, the output report, and the source manifest. Run python scripts/replay_2014_stage05.py --check from the extracted bundle’s root. It checks the archive files, decodes and splits the stream, and compares each result to the hosted original. Add --extract-dir recovered-pages to save copies without overwriting files.
+The reference-data bundle includes the raw captures, the replay script, the output report, and the source manifest. Extract it alongside original-images.zip in the same folder, then run python scripts/replay_2014_stage05.py --check from that folder. The script decodes and splits the stream and compares each result to the hosted original. Add --extract-dir recovered-pages to save copies without overwriting files.
 
 The hosted capture is pinned to an archive revision; its historical notes describe the same split. Matching the JPEGs establishes the path from these particular saved bytes to the four pages. It does not verify any claimed live-service timing or explain the separate OutGuess layer in LP1-08.
 
@@ -11322,6 +11336,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/cicada-2014-stage05.json
 - source manifest
   https://jelliottdev.github.io/exports/sources/cicada-2014-stage05/manifest.json
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
 - archive revision
   https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/006-fourth-onion
 - historical notes
@@ -11369,6 +11385,8 @@ The archive identifies a second clear-signed message as an OutGuess extraction f
 
 The same signed message lists book-code pointers such as 3PI:6:1:3 and LML:1:1:1, literal digits 3 and 7, and a final ONION. The historical lookup account reads chapter abbreviation, dialogue exchange, word and letter and reports ut3qtzbrvs7dtvzp.onion. Our script checks the exact signed pointer list. It does not independently validate every letter against a specified printed edition of the book, so that output remains attributed to the historical account.
 
+The preserved response from that address can be decoded and split into LP1-10 through LP1-13 without relying on the book-code account.
+
 Reproduce the checks
 
 Download the reference-data bundle and run python scripts/replay_2014_fifth_onion.py --check from its root with GnuPG installed. The script verifies both signatures in a temporary keyring, compares the decoded audio and three clue files, reads the pointer list, and computes every square sum. The source manifest pins each archived file to one repository revision. The audio, images, signed captures and text are hosted here so the working evidence does not depend on that repository remaining available.
@@ -11410,6 +11428,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/03.mp3
 - historical lookup account
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/007-fifth-onion/README.md#book-code
+- preserved response from that address
+  https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - script
@@ -11420,6 +11440,94 @@ Sources, related references, and files
   https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/007-fifth-onion
 
 Article: https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html
+
+
+---
+
+2014 sixth onion: four pages in one JPEG stream
+
+Split the archived response into LP1-10 through LP1-13, distinguish the LP1-10 page JPEG from its four-page carrier, and verify the later signed form.
+
+The preserved response from the historical sixth onion service contains the four pages of The Loss of Divinity, LP1-10 through LP1-13. Its HTML body is hexadecimal; decoding it produces 4,240,957 bytes. Four JPEGs follow one another in that stream, without reversal or leftover bytes. A later saved page from the same service contains a signed instruction about submitting the magic squares.
+
+The preceding fifth-onion book-code account reports the sixth onion address. The archived response and exact page-image recovery can be checked independently of those book lookups.
+
+From response body to four pages
+
+The original saved response begins with <!--761-->. The saved HTTP headers also record X-Cicada: 1033; this is an archived header value, not a property inferred from the decoded pages. Hex-decode only the text inside the HTML <body>. Starting at byte zero, take each JPEG through its first ff d9 end marker and continue with the remainder.
+
+	Page	JPEG bytes	Download the page only
+	LP1-10	754,662	LP1-10 page JPEG
+	LP1-11	712,733	LP1-11 JPEG
+	LP1-12	703,428	LP1-12 JPEG
+	LP1-13	2,070,134	LP1-13 JPEG
+
+LP1-10 has two useful file forms. The archived 4,240,957-byte carrier includes all four JPEGs back to back. Image viewers display its first page and generally ignore the appended bytes. The 754,662-byte page-only JPEG stops at the first end marker. Our earlier page catalogue called the aggregate simply “LP1-10.jpg”; this distinction is now explicit in the reader and downloads. Preserve the carrier when analyzing source bytes or historical packaging. Use the page-only file when you need just LP1-10 as an image.
+
+[Image: LP1-10 page-only JPEG showing the opening of The Loss of Divinity]
+LP1-10 · Page-only JPEG
+[Image: LP1-11 manuscript page]
+LP1-11 · JPEG
+[Image: LP1-12 manuscript page]
+LP1-12 · JPEG
+[Image: LP1-13 manuscript page]
+LP1-13 · JPEG
+
+A later signed submission form
+
+The archive preserves a later HTML form containing a clear-signed instruction. The saved signature verifies under the preserved Cicada key. It asks readers to paste the magic squares into the form, provide a Tor hidden-service URL, host a file-upload script at /cgi-bin/upload, and place their public key at /key.asc. This confirms what the archived instruction said; it does not prove that a particular submission was made or accepted. The three archived square blocks are documented separately.
+
+Replay with the preserved files
+
+Download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/replay_2014_sixth_onion.py --check from that folder with GnuPG installed. The script checks source hashes, splits four JPEGs, compares the page-only copies and aggregate carrier, then verifies the later instruction in an isolated keyring. Add --extract-dir recovered-pages to save the four page-only JPEGs without replacing existing files. The report gives each byte count and hash; the manifest pins the captures to the historical repository revision.
+
+Sources, related references, and files
+- The Loss of Divinity
+  https://jelliottdev.github.io/reference/articles/reading-loss-of-divinity.html
+- fifth-onion book-code account
+  https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html
+- original saved response
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.html
+- HTTP headers
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.headers
+- LP1-10; LP1-10 page-only JPEG showing the opening of The Loss of Divinity
+  https://jelliottdev.github.io/#/reader/lp1-10
+- LP1-10 page JPEG; 754,662-byte page-only JPEG; LP1-10 page-only JPEG showing the opening of The Loss of Divinity; Page-only JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/10-page.jpg
+- LP1-11; LP1-11 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-11
+- LP1-11 JPEG; LP1-11 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-11.jpg
+- LP1-12; LP1-12 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-12
+- LP1-12 JPEG; LP1-12 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-12.jpg
+- LP1-13; LP1-13 manuscript page
+  https://jelliottdev.github.io/#/reader/lp1-13
+- LP1-13 JPEG; LP1-13 manuscript page; JPEG
+  https://jelliottdev.github.io/images/lp1-13.jpg
+- 4,240,957-byte carrier
+  https://jelliottdev.github.io/images/lp1-10.jpg
+- later HTML form
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.v2-form.html
+- clear-signed instruction
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.v2-form.html.asc
+- three archived square blocks
+  https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html#audio
+- reference-data.zip
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/replay_2014_sixth_onion.py
+- report
+  https://jelliottdev.github.io/exports/cicada-2014-sixth-onion.json
+- manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/manifest.json
+- historical repository revision
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/008-sixth-onion
+
+Article: https://jelliottdev.github.io/reference/articles/2014-sixth-onion.html
 
 
 ---
