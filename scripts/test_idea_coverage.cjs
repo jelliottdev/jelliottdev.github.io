@@ -149,7 +149,7 @@ vm.runInContext(fs.readFileSync(require('node:path').join(root,'assistant-ui.js'
 const control=experiments.find(r=>r.id==='seed-crib-controls');
 assert(detail.experimentSearchResult(control).includes('<strong>Control</strong>'));
 vm.runInContext('methodRecordKinds={};',detail);
-assert.equal(detail.experimentRecordType(control),'');
+assert(detail.experimentRecordType(control).includes('<strong>Control</strong>'));
 vm.runInContext('methodFamilyUnavailable=true;',detail);
 assert(detail.experimentMethodGuides(experiments[0]).includes('could not be loaded'));
 assert(!detail.experimentMethodGuides(experiments[0]).includes('No experiment'));

@@ -109,6 +109,8 @@ for(const record of published)assert.equal(browse.split(`href="#/experiments/${r
 assert(!browse.includes('<details class="experiment-browse-family" open'),'Browse families start collapsed');
 assert(browse.indexOf('href="#/experiments/lp2-prime-minus-one-openings"')<browse.indexOf('href="#/experiments/lp2-fibonacci-openings"'),'Baseline precedes its variants');
 assert(!browse.includes('Retested '),'Full review metadata belongs to the record rather than every browse entry');
+assert(browse.includes(`Human review is pending for all ${published.length} records.`));
+assert(browse.includes('Control · Supported within scope'));
 assert(!experimentContext.experimentBrowse([{id:'safe',title:'<img src=x>',summary:'<script>unsafe</script>'}]).includes('<script>'));
 console.log('PASS: family browsing retains one direct link per record, baseline order and escaped content.');
 experimentContext.published=published;

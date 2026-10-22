@@ -54,13 +54,15 @@ function experimentBrowse(records){
     families.get(key).push(record);
   }
   const title=group=>group[0].family?.title||group[0].title;
-  return `<h2 id="browse-experiments">Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p><p class="small muted">Published means the result is documented, not that a proposed decryption is endorsed. Each record identifies its computational and human review status. <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p>
+  const pending=records.filter(r=>r.review?.human_review==='pending').length;
+  return `<h2 id="browse-experiments">Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p><p class="small muted">Published means the result is documented, not that a proposed decryption is endorsed. “Supported” refers only to the record’s exact question; controls and source audits do not validate a cipher on unsolved pages. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p>
     <div class="experiment-browser">${[...families.values()].sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
       const family=group[0].family;
       const members=[...group].sort((a,b)=>Number(b.id===family?.baseline)-Number(a.id===family?.baseline)||a.title.localeCompare(b.title));
       return `<details class="experiment-browse-family"><summary><span>${esc(title(group))}</span><span class="small muted">${members.length} ${members.length===1?'record':'records'}</span></summary>
         ${family?`<p class="small muted">${esc(family.question)}</p>`:''}
         <ul>${members.map(record=>`<li><h3><a href="#/experiments/${record.id}">${esc(record.title)}</a></h3>
+          <p class="small muted">${esc(record.record_type?.label||'Experiment')} · ${esc(outcomes[record.outcome]||record.outcome||'Outcome unavailable')}</p>
           ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
           <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
     }).join('')}</div>`;
@@ -79,7 +81,7 @@ function experimentScopeLinks(r){
   return [...r.scope.pages.map(id=>`<a href="#/page/${id}">${esc(id.toUpperCase())}</a>`),...(r.scope.artifacts||[]).map(path=>`<a href="${esc(path)}">${esc(path.split('/').pop())}</a>`)].join(', ');
 }
 function experimentRecordType(r){
-  const kind=methodRecordKinds[methodRecordKindById[r.id]];
+  const kind=r.record_type||methodRecordKinds[methodRecordKindById[r.id]];
   if(!kind?.label)return '';
   return `<p class="small muted"><strong>${esc(kind.label)}</strong> · <a href="#/wiki/solving-methods?section=record-types">About record types</a></p>`;
 }
@@ -116,7 +118,7 @@ function experimentArticle(r){
     <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Finding</h2><p>${esc(r.finding)}</p>
       <h3>What this does and does not establish</h3><p>${esc(r.limitations)}</p>
-      <p class="small muted">${esc(r.review.reviewer)}</p>
+      <p class="small muted"><strong>Review status:</strong> ${esc(r.review.kind||'Computational')} check recorded; human review ${esc(r.review.human_review||'not recorded')}. ${esc(r.review.reviewer)}</p>
       ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test. <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
