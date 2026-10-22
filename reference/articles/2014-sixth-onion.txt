@@ -31,6 +31,8 @@ A later signed submission form
 
 The archive preserves a later HTML form containing a clear-signed instruction. The saved signature verifies under the preserved Cicada key. It asks readers to paste the magic squares into the form, provide a Tor hidden-service URL, host a file-upload script at /cgi-bin/upload, and place their public key at /key.asc. This confirms what the archived instruction said; it does not prove that a particular submission was made or accepted. The three archived square blocks are documented separately.
 
+The next archived stage preserves three further page JPEGs and a signed follow-up. Its first page survives in a smaller source copy, so the two file versions are labelled separately there.
+
 Replay with the preserved files
 
 Download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/replay_2014_sixth_onion.py --check from that folder with GnuPG installed. The script checks source hashes, splits four JPEGs, compares the page-only copies and aggregate carrier, then verifies the later instruction in an isolated keyring. Add --extract-dir recovered-pages to save the four page-only JPEGs without replacing existing files. The report gives each byte count and hash; the manifest pins the captures to the historical repository revision.
@@ -68,6 +70,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2014-sixth-onion/ut3qtzbrvs7dtvzp.onion.v2-form.html.asc
 - three archived square blocks
   https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html#audio
+- next archived stage
+  https://jelliottdev.github.io/reference/articles/2014-square-submission.html
 - reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
 - original-images.zip

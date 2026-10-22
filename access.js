@@ -46,7 +46,7 @@ async function readerPage(id,version){
 function downloadTypeMatches(file,type){
  if(type==='experiments')return file.role==='Experiment ZIP';
  if(type==='records')return file.role==='Structured experiment record';
- if(type==='images')return ['Original JPEG','Page-only JPEG','Historical illustrated cover','Historical opening image'].includes(file.role);
+ if(type==='images')return ['Original JPEG','Page-only JPEG','Historical page copy','Historical illustrated cover','Historical opening image'].includes(file.role);
  if(type==='scripts')return file.path.endsWith('.py');
  if(type==='data')return /\.(json|csv|tsv)$/.test(file.path);
  return true;
