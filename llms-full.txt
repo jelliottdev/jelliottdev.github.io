@@ -11992,6 +11992,25 @@ LP2-51, rows 7–8. Cell 8:7 has no dot above its stem, unlike lowercase i elsew
 
 The image supports uppercase 2S at LP2-50 row 12, column 5, and rules out lowercase 3i at LP2-51 row 8, column 7. It also rules out a footed capital L in the two LP2-49 cells. But a bare vertical stem does not uniquely identify lowercase l versus uppercase I in these images; LP2-50 row 11, column 6 remains unresolved between the two recorded readings. The other bare-stem cells should likewise retain that qualification even where one of the transcriptions looks more plausible. These are visual judgments, not an OCR result or a proof of a cipher alphabet.
 
+What changes in a base-60 interpretation?
+
+The declared base-60 conversion treats 0–9 A–Z a–x as values 0–59, then turns each pair into one byte. Under that conditional rule, a change in letter case can change several bits. The table below compares the two transcriptions; it does not choose the correct one.
+
+	Cell	Seventh-onion token → byte	Wiki token → byte	Different bits
+
+	LP2-49 6:6	1L → 81	1l → 107	4
+
+	LP2-49 7:3	0L → 21	0l → 47	4
+
+	LP2-50 11:6	0l → 47	0I → 18	5
+
+	LP2-50 12:5	2s → 174	2S → 148	4
+
+	LP2-51 8:7	3i → 224	3I → 198	3
+
+
+That is five of 256 positions and 20 of 2,048 rendered bits. A binary image, checksum, byte-frequency count, or candidate decode based on one transcription can therefore differ from the other. Neither version changes the grid dimensions, the presence of 0x and 4F used in the conditional base-60 bound, or the headline count of 161 distinct tokens. Matching those aggregate facts is no reason to treat individual bytes as settled. More I/l stems appear elsewhere in the grid, so the five recorded disagreements are not a complete visual uncertainty inventory.
+
 The capture manifest pins each source JPEG and crop by SHA-256 and records the original pixel rectangles. Download the crop script to regenerate or check the page grabs. The grid guide counts 256 entries and 161 distinct tokens using the wiki text; both text sets produce those same aggregate counts despite five different entries. A matching aggregate statistic cannot settle an individual glyph.
 
 Why the non-rune changes matter
@@ -12033,6 +12052,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/figures/grid-review-lp2-51.png
 - complete archived JPEG
   https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/51.jpg
+- declared base-60 conversion
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html#binary
 - capture manifest
   https://jelliottdev.github.io/data/evidence/seventh-onion-grid-crops.json
 - Download the crop script
@@ -21348,7 +21369,7 @@ Preserve the spelling of each entry
 
 The first grid row on LP2-49 is 3N 3p 2l 36 1b 3v 26 33. Uppercase and lowercase letters both matter to the record: 0X and 0x, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.
 
-Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison names exact coordinates for a review; it does not decide which version is correct. See the transcription guide for the distinction between an image and its text representation.
+Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; a plain vertical stem may still be unresolved between I and l. These five are not a census of every potentially ambiguous cell. See the transcription guide for the distinction between an image and its text representation.
 
 What an encoding proposal needs to specify
 
@@ -21461,6 +21482,8 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. Other bare stems still need a full visual audit.
+
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
 Removing spaces and interpreting all 512 characters as one enormous base-60 integer is a third operation. It uses powers of 60 across the entire string instead of treating each two-character token as a separate byte. Likewise, wrapping the resulting bits at a different width, adding padding, reversing bit order or joining other manuscript numbers creates additional variants. Record each change; do not silently replace one representation with another.
@@ -21546,7 +21569,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp2-51.jpg
 - surrounding runic pages
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
-- five cells differ in the separate seventh-onion text; five-cell comparison
+- five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
@@ -21568,6 +21591,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order; Download the SVG
   https://jelliottdev.github.io/exports/figures/grid-binary.svg
+- source-sensitivity report
+  https://jelliottdev.github.io/exports/grid-source-sensitivity.json
+- its script
+  https://jelliottdev.github.io/scripts/audit_grid_source_sensitivity.py
 - standard-library script
   https://jelliottdev.github.io/scripts/audit_grid_binary.py
 - JSON report
@@ -24244,6 +24271,8 @@ Reconstructing the directional prime search
 
 The published prime-path CSV can be reproduced from this archive. The result is 191 occurrences of 46 distinct decimal primes, rather than 191 different primes. The independently generated occurrences agree with all 191 source records’ coordinates, extracted suffix strings, decimal values, base-4 values and base-4 primality flags.
 
+Those prime counts use only the first character of each grid pair. The five known transcription disagreements change second characters only, so they do not change the 191 prime occurrences or the three missing decimal values. They do change the extracted suffix strings for 16 of the 191 retained paths; the page-confined variant changes 15 of 151. The coordinate-bearing sensitivity report lists every affected hit. This checks the two preserved text versions, not every visually ambiguous stem on the pages.
+
 Exact rules and bounds
 
 Stack the original grid rows in page order 49, 50, 51, making 32 rows and eight columns. Do not rearrange them into a 16 × 16 square.
@@ -24301,6 +24330,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 - published prime-path CSV
   https://github.com/o3rynn/cicada-faw/blob/72f92e7ac8acf9b2e660e23d654107652cb00fb0/resources/find_a_word_primes.csv
+- five known transcription disagreements
+  https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
+- coordinate-bearing sensitivity report
+  https://jelliottdev.github.io/exports/grid-source-sensitivity.json
 - null models and selection
   https://jelliottdev.github.io/reference/articles/null-models.html
 - reference-data bundle

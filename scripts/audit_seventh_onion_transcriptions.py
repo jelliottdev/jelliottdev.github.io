@@ -20,10 +20,18 @@ CSV = ROOT / "exports/seventh-onion-transcription-pages.csv"
 GRID_CSV = ROOT / "exports/seventh-onion-grid-variants.csv"
 RUNE = re.compile(r"[\u16a0-\u16ff]")
 GRID_ROW = re.compile(r"[0-9A-Za-z]{2}(?:[\t -]+[0-9A-Za-z]{2}){7}/?")
+DIGITS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx"
 
 
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def base60_byte(token):
+    value = 60 * DIGITS.index(token[0]) + DIGITS.index(token[1])
+    if value > 255:
+        raise ValueError(f"Grid token does not fit the stated byte interpretation: {token}")
+    return value
 
 
 def page_texts(files):
@@ -82,8 +90,11 @@ def audit():
             for row, (source_cells, current_cells) in enumerate(zip(source_rows, current_rows), 1):
                 for column, (left, right) in enumerate(zip(source_cells, current_cells), 1):
                     if left != right:
+                        old, new = base60_byte(left), base60_byte(right)
                         grid_changes.append({"page": page, "row": row, "column": column,
-                                             "archive_token": left, "wiki_token": right})
+                                             "archive_token": left, "wiki_token": right,
+                                             "archive_base60_byte": old, "wiki_base60_byte": new,
+                                             "differing_bits": (old ^ new).bit_count()})
         pages.append({"page": page, "rune_count": len(source_runes),
                       "archive_text_sha256": sha256(source_text.encode("utf-8")),
                       "wiki_file_sha256": sha256(current_bytes),
@@ -99,7 +110,9 @@ def audit():
         "comparison": "Archive 0-55, 56 and 57 rune text versus current wiki text/lp2-NN.txt; edge newlines removed for text comparison only.",
         "summary": {"pages": 58, "ordered_rune_stream_matches": 58,
                     "exact_text_matches": 32, "pages_with_non_rune_changes": 26,
-                    "non_rune_boundary_changes": 36, "grid_token_changes": 5},
+                    "non_rune_boundary_changes": 36, "grid_token_changes": 5,
+                    "grid_base60_differing_bits": sum(row["differing_bits"] for row in grid_changes)},
+        "grid_byte_rule": "Conditional: digits 0-9 A-Z a-x have values 0-59; each token is 60*first+second; compare resulting eight-bit bytes.",
         "pages": pages, "non_rune_boundary_changes": boundary_changes,
         "grid_token_changes": grid_changes,
         "limits": [
@@ -122,7 +135,8 @@ def main():
     pages = csv_bytes(report["pages"], ["page", "rune_count", "archive_text_sha256", "wiki_file_sha256",
                                           "exact_text_match_after_edge_newlines", "ordered_runes_match",
                                           "non_rune_boundary_changes", "grid_token_changes"])
-    cells = csv_bytes(report["grid_token_changes"], ["page", "row", "column", "archive_token", "wiki_token"])
+    cells = csv_bytes(report["grid_token_changes"], ["page", "row", "column", "archive_token", "wiki_token",
+                                                       "archive_base60_byte", "wiki_base60_byte", "differing_bits"])
     if args.check and (REPORT.read_bytes() != encoded or CSV.read_bytes() != pages or GRID_CSV.read_bytes() != cells):
         raise SystemExit("Published transcription report or CSV differs from the audit")
     if args.write:

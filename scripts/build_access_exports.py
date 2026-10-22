@@ -253,6 +253,9 @@ for path in ['exports/cicada-2014-seventh-onion.json','exports/cicada-2014-seven
 for path in ['exports/seventh-onion-transcription-variants.json','exports/seventh-onion-transcription-pages.csv','exports/seventh-onion-grid-variants.csv','data/evidence/seventh-onion-grid-crops.json','scripts/audit_seventh_onion_transcriptions.py','scripts/plot_seventh_onion_transcriptions.py','scripts/capture_seventh_onion_grid.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical transcription comparison')
  files[-1].update(guide='seventh-onion-transcriptions',aliases=['LP2 transcription variants','grid cell disagreements','word separators','0-55 rune text'])
+for path in ['exports/grid-source-sensitivity.json','scripts/audit_grid_source_sensitivity.py']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical transcription comparison')
+ files[-1].update(guide='alphanumeric-grids',aliases=['grid source sensitivity','I versus l','grid binary variants','prime path suffixes'])
 for path in ['exports/cicada-2013-twitter.json','exports/cicada-2013-twitter-outguess.json','exports/cicada-2013-twitter-signature.json','exports/figures/cicada-2013-twitter-chain.svg','scripts/replay_2013_twitter.py','scripts/test_replay_2013_twitter.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013-twitter').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
  files[-1].update(guide='2013-twitter-gematria',aliases=['2013 Twitter','761.mp3','Gematria Primus origin','twitter.bin','gematria.jpg'])

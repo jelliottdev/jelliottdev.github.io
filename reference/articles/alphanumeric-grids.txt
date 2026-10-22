@@ -69,7 +69,7 @@ Preserve the spelling of each entry
 
 The first grid row on LP2-49 is 3N 3p 2l 36 1b 3v 26 33. Uppercase and lowercase letters both matter to the record: 0X and 0x, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.
 
-Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison names exact coordinates for a review; it does not decide which version is correct. See the transcription guide for the distinction between an image and its text representation.
+Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; a plain vertical stem may still be unresolved between I and l. These five are not a census of every potentially ambiguous cell. See the transcription guide for the distinction between an image and its text representation.
 
 What an encoding proposal needs to specify
 
@@ -182,6 +182,8 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. Other bare stems still need a full visual audit.
+
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
 Removing spaces and interpreting all 512 characters as one enormous base-60 integer is a third operation. It uses powers of 60 across the entire string instead of treating each two-character token as a separate byte. Likewise, wrapping the resulting bits at a different width, adding padding, reversing bit order or joining other manuscript numbers creates additional variants. Record each change; do not silently replace one representation with another.
@@ -267,7 +269,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/images/lp2-51.jpg
 - surrounding runic pages
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
-- five cells differ in the separate seventh-onion text; five-cell comparison
+- five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
@@ -289,6 +291,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 - 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order; Download the SVG
   https://jelliottdev.github.io/exports/figures/grid-binary.svg
+- source-sensitivity report
+  https://jelliottdev.github.io/exports/grid-source-sensitivity.json
+- its script
+  https://jelliottdev.github.io/scripts/audit_grid_source_sensitivity.py
 - standard-library script
   https://jelliottdev.github.io/scripts/audit_grid_binary.py
 - JSON report
