@@ -4,7 +4,18 @@
   "status": "published",
   "question": "Do the fixed shift, Atbash and prime-minus-one steps in the reported FOR EVERY proposal predict its eight-position LP2-40 opening without a fitted residual?",
   "summary": "The source's printed intermediate arithmetic checks out, but the seven non-F positions have no fixed-layer match. Their required key values are differences calculated from the observed ciphertext; the proposed Möbius state rule is not specified well enough to replay.",
-  "tags": ["LP2-40", "FOR EVERY", "red header", "crib", "Atbash", "shift 18", "Möbius", "running key", "prime sum", "floral marks"],
+  "tags": [
+    "LP2-40",
+    "FOR EVERY",
+    "red header",
+    "crib",
+    "Atbash",
+    "shift 18",
+    "Möbius",
+    "running key",
+    "prime sum",
+    "floral marks"
+  ],
   "family": {
     "id": "page40-for-every-arithmetic",
     "title": "LP2-40 FOR EVERY proposal",
@@ -16,7 +27,9 @@
     "changes": []
   },
   "scope": {
-    "pages": ["lp2-40"],
+    "pages": [
+      "lp2-40"
+    ],
     "representation": "The first three- and five-rune groups of archived LP2-40, the 29-entry stored GP alphabet, and the eight source-reported FOR EVERY indices and transformation rows; source discussion pinned by SHA-256 in plan.json.",
     "procedure": "Confirm the archived opening's indices; hold first F as the source's zero placeholder; shift the next seven proposed plaintext indices by 18 modulo 29, then Atbash, then add the posted prime-minus-one stream modulo 29. Count exact matches. Compute the residual from ciphertext only as a diagnostic and separately verify GP sums.",
     "parameters": "One fixed eight-rune crib, first two printed groups, zero-based GP indices, shift +18, Atbash x→28−x modulo 29, source totient stream [0,1,2,4,6,10,12,16], no tuned variants or body text.",
@@ -32,15 +45,36 @@
     "script": "experiments/records/page40-for-every-arithmetic/run.py",
     "script_sha256": "98b9828471565b1017714879af2c1bad56e75cf50e4f126c5ca24385822d4b02",
     "inputs": [
-      {"path": "experiments/records/page40-for-every-arithmetic/plan.json", "sha256": "7f8d9b804cee37a892fb626eedcd9b14d3debdf99bab2136873635f6eea443bd"},
-      {"path": "experiments/records/page40-for-every-arithmetic/check.py", "sha256": "60e2944de1e2c6b96524d64d3f5fd8814e25d407eb298983184eaf7f4c8b0829"},
-      {"path": "experiments/records/page40-for-every-arithmetic/plot.py", "sha256": "fab8eddbfbb18051efe7e47b854a4ece302ccd7b433cca0b06df1e3122580289"},
-      {"path": "data/index.json", "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"},
-      {"path": "text/lp2-40.txt", "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"}
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/plan.json",
+        "sha256": "7f8d9b804cee37a892fb626eedcd9b14d3debdf99bab2136873635f6eea443bd"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/check.py",
+        "sha256": "60e2944de1e2c6b96524d64d3f5fd8814e25d407eb298983184eaf7f4c8b0829"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/plot.py",
+        "sha256": "fab8eddbfbb18051efe7e47b854a4ece302ccd7b433cca0b06df1e3122580289"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      }
     ],
     "outputs": [
-      {"path": "experiments/records/page40-for-every-arithmetic/results.json", "sha256": "25dff034b4300e7f6f3710f7eccddd7e4af46b52d4e0c762ff15288e1ff5781b"},
-      {"path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg", "sha256": "5be2fb3e2d0d00e9f6dc6e34f8bda4baac3e0d55232509867ac90444af0947f4"}
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/results.json",
+        "sha256": "c86b8b84852385ebc8c13c4f7dccba78da29bc0df906f2b2fc36f25092540121"
+      },
+      {
+        "path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg",
+        "sha256": "0362ca9fa59f8f2a401a93993dc912ff140eaf96b265a7cbaeaf710c66428dd9"
+      }
     ]
   },
   "review": {
@@ -50,12 +84,27 @@
     "human_review": "pending"
   },
   "sources": [
-    {"label": "Source-specific reported attempt and discussion hash", "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=page40-for-every-mobius"},
-    {"label": "LP2-40 original image and archived transcription", "url": "https://jelliottdev.github.io/#/page/lp2-40"},
-    {"label": "Gematria Primus alphabet", "url": "https://jelliottdev.github.io/#/alphabet"}
+    {
+      "label": "Source-specific reported attempt and discussion hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=page40-for-every-mobius"
+    },
+    {
+      "label": "LP2-40 original image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-40"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    }
   ],
-  "related": ["lp2-39-header-cribs", "emerson-running-key"],
+  "related": [
+    "lp2-39-header-cribs",
+    "emerson-running-key"
+  ],
   "visuals": [
-    {"path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg", "caption": "The fixed layers reproduce the source's intermediate row but match none of the seven non-F cipher runes. The last row is a residual fitted from the observed ciphertext."}
+    {
+      "path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg",
+      "caption": "The fixed layers reproduce the source's intermediate row but match none of the seven non-F cipher runes. The last row is a residual fitted from the observed ciphertext."
+    }
   ]
 }

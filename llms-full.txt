@@ -6719,7 +6719,7 @@ Keys, sequences and state
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-Related records (5)
+Related records (6)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: prime-minus-one shifts and known openings
@@ -6736,6 +6736,11 @@ LP2-00–55: Fibonacci shifts and repeated phases
 Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
 Question tested: Does uninterrupted Fibonacci arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
 Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
+
+LP2-00–55: LP2-15 spiral-prime shifts
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: Does the sixteen-prime LP2-15 spiral, repeated as modulo-29 shifts, recover any of nine fixed 12-rune openings on LP2-00–55?
+Outside this test: Other page starts, noncyclic use, reversed or reordered spiral, prime-index values, interruptions, heading removal, word or row resets, cross-page carry and language scoring.
 
 LP2-00–55: totients of consecutive integers
 Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
@@ -7627,6 +7632,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-prime-openings
 - LP2-00–55: Fibonacci shifts and repeated phases
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
+- LP2-00–55: LP2-15 spiral-prime shifts
+  https://jelliottdev.github.io/#/experiments/lp2-panel-prime-openings
 - LP2-00–55: totients of consecutive integers
   https://jelliottdev.github.io/#/experiments/lp2-totient-openings
 - LP2-00–55: direct polynomial streams, degree at most eight
@@ -13192,7 +13199,7 @@ python scripts/fibonacci_prime_panel.py
 
 The first command verifies the saved ledger; the second prints every step. The Python script generates primes by trial division, generates the Fibonacci values and spiral, and compares each result with the stored manuscript matrix. It uses only Python’s standard library and works in the reference-data bundle. Download the ledger with source hashes · Download the diagram.
 
-This explains the number panel. It does not yet tell us how to apply the sequence to runes, whether to repeat it, where a key starts, or how interruptions work. Those are separate experimental choices. In particular, the construction does not establish a reading of the red heading.
+This explains the number panel. It does not yet tell us how to apply the sequence to runes, whether to repeat it, where a key starts, or how interruptions work. Those are separate experimental choices. A bounded shift-stream experiment repeats the sixteen selected primes against fixed known openings; its result belongs to that one declared operation. In particular, the construction does not establish a reading of the red heading.
 
 A separate arithmetic Möbius audit applies μ directly to all sixteen printed cells. It yields twelve zeros and a nonzero second row. That is a reproducible transformation of the panel, not a rule for decoding runes; the source discussion's output image was not preserved for exact comparison.
 
@@ -13324,6 +13331,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/fibonacci-prime-panel.json
 - experimental choices; search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
+- bounded shift-stream experiment
+  https://jelliottdev.github.io/#/experiments/lp2-panel-prime-openings
 - arithmetic Möbius audit
   https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
 - magic square
@@ -28633,7 +28642,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 80 published reproducible records: 17 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 13 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 20 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 81 published reproducible records: 18 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 13 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 20 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -38875,11 +38884,11 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "outputs": [
       {
         "path": "experiments/records/lp1-payload-outer-ring/results.json",
-        "sha256": "fd49e05263f75946674b7a794cf8a6474a5efe6faabb53f27de493b0c7a64b87"
+        "sha256": "3d41987f2c7ebd722fe485fdfd0b134eff482b5528decc7bd3577ecf25a8dc8b"
       },
       {
         "path": "experiments/records/lp1-payload-outer-ring/four-borders-one-interior.svg",
-        "sha256": "cb7b229bc24771cfc9db8439a2bb61e729d680faae4888b7777167cbe91ca263"
+        "sha256": "be7b04e9d68a66d5296c7bb5f18c687c0118953962595a799e64d442204d9847"
       }
     ]
   },
@@ -41942,6 +41951,467 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "article": "# Two known Vigenère keys against known openings\n\n## Why this test?\n\nReusing a key that already worked elsewhere is an understandable first attempt. The known Welcome and second-koan readings supply two concrete key vectors. This experiment asks whether uninterrupted use of either vector recovers any of nine recorded openings at the beginning of an archived LP2-00–55 page.\n\nIt is an exact-opening search, not a general language test. There is no reason every valid plaintext must reuse one of these openings. A negative result therefore rules out only the declared combinations and criterion.\n\n## Plan fixed before running\n\nThe plan and runner were committed as `8a93183` before execution. The selected input is the complete archived rune stream for each of LP2-00–55, including headings. Non-alphabet characters are removed. There are no corrections, reversals, interruptions or cross-page carry.\n\nThe two key vectors are copied from the published reading parameters, without re-encoding their labels as prime values:\n\n| Known reading | Key indices | Phases |\n| --- | --- | --- |\n| Welcome | 23, 10, 1, 10, 9, 10, 16, 26 | 0–7 |\n| Second koan | 0, 10, 4, 0, 1, 19, 0, 18, 4, 18, 9, 0, 18 | 0–12 |\n\nFor each phase, both subtraction and addition are tested modulo 29. Each page starts independently at the selected phase. Every rune consumes one key value; punctuation consumes none. The known interruption lists are not transplanted onto unrelated pages, and there is no rule to skip every F.\n\nThis makes 42 parameter cases per page, or 2352 across 56 pages. These are parameter cases, not a claim that every output string is unique.\n\n## Exact comparison\n\nEach output's first 12 rune indices are compared with the first 12 indices from nine known-reading traces: Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. The vectors, trace paths and hashes are fixed in the plan. Comparing rune indices avoids ambiguity from multi-letter Latin labels.\n\nEach of the 2352 candidates receives nine exact comparisons: 21,168 in total. Nothing is searched at later positions. The criterion does not ask whether a candidate resembles English, has familiar short fragments, or scores well under a language model.\n\n## Results\n\nAll 2352 cases completed, and no candidate matched any of the nine specified opening vectors. Every complete candidate sequence is retained, including its page, key ID, phase, arithmetic sign, and list of matching opening IDs. The list is empty for every case in this run.\n\nThis is not evidence that repeating keys cannot work on these pages. Different keys, interruption schedules, headings, beginnings, or page boundaries remain outside the test. It does not estimate a probability that any cipher hypothesis is true.\n\n## Controls and independent check\n\nThe 17 known page readings reproduced before the search. Those controls use their own recorded boundary and interruption conventions; they are not counted among the 2352 unknown-page candidates.\n\nThe new decoder also recovers the first 12 known output indices of both Welcome and the second koan at phase zero with subtraction. Neither control has an interruption in those first 12 positions. This checks the same uninterrupted operation used in the new search.\n\nA separate checker verifies every candidate using a rotated key iterator and explicit wraparound arithmetic, checks all nine opening vectors against the trace CSVs, and checks that every parameter tuple occurs exactly once. The complete runner was then repeated and every saved candidate and match decision agreed.\n\n## Reproduce\n\nUse Python 3.12.10 and a repository checkout. No third-party package, network connection or AI service is used.\n\n```\npython experiments/records/lp2-known-vigenere-keys/run.py --check\npython experiments/records/lp2-known-vigenere-keys/check.py\n```\n\nTo save a separate report:\n\n```\npython experiments/records/lp2-known-vigenere-keys/run.py --output my-known-key-scan.json\n```\n\nThe output file must not already exist. [Download the saved candidates](experiments/records/lp2-known-vigenere-keys/results.json). The `alphabet` field maps indices back to runes; `sign` is -1 for subtraction and +1 for addition. Phase is the first key slot consumed at the beginning of that page. This convention resets for every case.\n\n## Retest and later changes\n\nCodex performed the complete rerun and independent checker on 20 October 2026. No keys, phases, opening vectors, input rules or matching criteria changed after the first result. The checker and coverage diagram were added after the search to verify and explain the saved result. Human review remains pending.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) tests a different transformation family and a single warning prefix. Its result must not be added to this record as if the criteria were identical. The [Vigenère guide](#/wiki/vigenere) explains the known key use, and the [interruption guide](#/wiki/interruptions) explains why key alignment needs care.\n\nA justified new key list, heading convention or interruption hypothesis needs a separately declared variant. An interruption search can grow rapidly; its bounds and stopping rule must be fixed before inspecting candidate text. Do not add exceptions merely until a fragment appears readable.\n",
   "article_path": "experiments/records/lp2-known-vigenere-keys/article.md",
   "script_sha256": "8a76a9610ec49765b563e9222e288f523c7ebd4d6dce9a7377d286f085a3c762",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}
+
+---
+
+{
+  "id": "lp2-panel-prime-openings",
+  "title": "LP2-00–55: LP2-15 spiral-prime shifts",
+  "status": "published",
+  "question": "Does the sixteen-prime LP2-15 spiral, repeated as modulo-29 shifts, recover any of nine fixed 12-rune openings on LP2-00–55?",
+  "summary": "A cyclic shift stream from all sixteen LP2-15 spiral primes yields 1760 distinct page outputs and no exact match to nine fixed 12-rune openings.",
+  "tags": [
+    "LP2-15",
+    "Fibonacci prime spiral",
+    "numerical keystream",
+    "prime sequence",
+    "modulo 29",
+    "known plaintext",
+    "repeating key"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "All recognized runes in archived order, including headings. Ignore other characters. Empty pages contribute no candidates.",
+    "procedure": "Repeat the sixteen panel-derived primes in spiral order as modulo-29 shifts, with addition and subtraction, and compare first twelve output indices to nine fixed openings.",
+    "parameters": "Offsets 0–15; two directions; independent page reset; one term per rune; no interruptions. 55 rune-bearing pages, 1760 cases and 15840 comparisons.",
+    "exclusions": "Other page starts, noncyclic use, reversed or reordered spiral, prime-index values, interruptions, heading removal, word or row resets, cross-page carry and language scoring."
+  },
+  "outcome": "not-supported",
+  "finding": "Zero fixed-opening matches among 1760 distinct complete page outputs. The independent checker reconstructs all sixteen primes from the panel ledger and inverts every transformed rune.",
+  "limitations": "The shift operation and cyclic repetition are added assumptions, not instructions printed on LP2-15. Only nine fixed 12-rune beginnings are tested; this does not rule out other uses of the panel or other cipher classes. Computational review only; human review pending.",
+  "next_steps": "A different panel operation needs its own frozen route, advancement and evaluation rule; do not treat the absence of these nine openings as a global exclusion of the spiral clue.",
+  "family": {
+    "id": "numerical-keystream-openings",
+    "title": "Numerical keystreams and known openings",
+    "question": "Do declared numerical schedules recover fixed known openings under explicit offset and advancement rules?",
+    "baseline": "lp2-prime-minus-one-openings"
+  },
+  "variant": {
+    "label": "Sixteen LP2-15 spiral primes; other opening-test settings fixed",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Apply prime-minus-one shifts modulo 29, with both subtraction and addition. Compare the first 12 output indices with nine fixed known openings; retain full candidates.",
+        "after": "Repeat the sixteen panel-derived primes in spiral order as modulo-29 shifts, with addition and subtraction, and compare first twelve output indices to nine fixed openings.",
+        "reason": "Use the sixteen panel-derived primes as the key rather than prime-minus-one values."
+      },
+      {
+        "field": "parameters",
+        "before": "Offsets 0–28 inclusive; two directions; independent page reset; one term per rune; no interruptions. 55 rune-bearing pages, 3190 candidates, 28710 comparisons.",
+        "after": "Offsets 0–15; two directions; independent page reset; one term per rune; no interruptions. 55 rune-bearing pages, 1760 cases and 15840 comparisons.",
+        "reason": "A cyclic list of sixteen values has sixteen starting phases, so the finite search has fewer configurations."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.",
+        "after": "Other page starts, noncyclic use, reversed or reordered spiral, prime-index values, interruptions, heading removal, word or row resets, cross-page carry and language scoring.",
+        "reason": "State the excluded panel-specific variations and changed offset range explicitly."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — complete rerun and independent inverse-arithmetic audit; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-panel-prime-openings/run.py --check",
+    "environment": "Python 3.12, standard library. Independent audit: python experiments/records/lp2-panel-prime-openings/check.py",
+    "script": "experiments/records/lp2-panel-prime-openings/run.py",
+    "script_sha256": "700aa4ec788d9d07d0e9febd4f6bb4f8c9fe501ce63458fadff3e031ad307d6d",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/lp2-56.csv",
+        "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "exports/fibonacci-prime-panel.json",
+        "sha256": "b79d136815eafba8c9a099613eec09ffd6face5a08f8781fd35a4f809e880d5a"
+      },
+      {
+        "path": "experiments/records/lp2-fibonacci-openings/plan.json",
+        "sha256": "260b0040349ce426064d87c5d0b51481b25f29cbb7fd43560d55c2e7dec9812b"
+      },
+      {
+        "path": "experiments/records/lp2-panel-prime-openings/plan.json",
+        "sha256": "7fafa7f3d121f3a55fbd2c5069722566bf5465b93f438fa9a1bc2b5b9ee74975"
+      },
+      {
+        "path": "experiments/records/lp2-panel-prime-openings/check.py",
+        "sha256": "004e1de1f29cde08d8911a803e3259c3444324a05e9dc62df0c5e78e4a7e6fee"
+      },
+      {
+        "path": "experiments/records/lp2-panel-prime-openings/plot.py",
+        "sha256": "84543a89f0691c3742f8c46d61de00f582b7b00cf9959a0b4ce81281ee8f56ae"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-panel-prime-openings/results.json",
+        "sha256": "d78bc73a0fabe0a70937ae3ab787b6160c9481935b1627a8281e5e6147787d50"
+      },
+      {
+        "path": "experiments/records/lp2-panel-prime-openings/key-cycle.svg",
+        "sha256": "c74ce702fee21636dc1374d95dea5d7c3d9e119f736f38e0f9490277d6db0cc4"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-panel-prime-openings/key-cycle.svg",
+      "caption": "All sixteen spiral-selected prime values and their modulo-29 shifts in repeating-key order."
+    }
+  ],
+  "related": [
+    "lp2-fibonacci-openings",
+    "lp2-prime-minus-one-openings",
+    "lp2-prime-openings"
+  ],
+  "sources": [
+    {
+      "label": "LP2-15 full panel construction",
+      "url": "https://jelliottdev.github.io/#/wiki/lp2-15-panel?section=construction"
+    },
+    {
+      "label": "Saved output for every tested shift",
+      "url": "https://jelliottdev.github.io/experiments/records/lp2-panel-prime-openings/results.json"
+    }
+  ],
+  "article": "# Does the LP2-15 spiral supply a repeating rune key?\n\nThe [LP2-15 number panel](#/wiki/lp2-15-panel?section=construction) has a complete, reproducible construction: Fibonacci values select sixteen prime numbers, whose absolute distances from 3301 fill the printed spiral. A supplied solver proposal asks whether the resulting sequence might act as a key. This experiment tests one finite version of that suggestion. **It finds no exact match** to nine fixed 12-rune openings on LP2-00–55.\n\n![The sixteen selected primes and their modulo-29 shifts, in panel spiral order.](experiments/records/lp2-panel-prime-openings/key-cycle.svg)\n\n## The rule tested\n\nThe prime stream in spiral order is `2, 3, 5, 7, 13, 23, 43, 79, 149, 263, 463, 829, 1481, 2593, 4507, 7817`. The last two primes are recovered by the *absolute-distance construction*; simply calculating `3301 − printed value` would give the wrong primes there. The [construction ledger](exports/fibonacci-prime-panel.json) fixes every number and panel coordinate.\n\nFor each rune index `c` at position `j`, apply `output = (c + sign × key[(j + offset) mod 16]) mod 29`. The sign is `−1` or `+1`; the offset is one of `0–15`. Every rune advances the key, including a heading rune. Non-rune punctuation does not. Restart at each page and compare the first twelve output runes against the same [nine archived known openings](#/experiments/lp2-fibonacci-openings) used by the Fibonacci-shift baseline. The complete output for every case is saved, not only an opening score.\n\n**Repeating the sixteen numbers is a test assumption.** The page specifies neither a modulo-29 shift nor repetition, direction, starting offset, or which pages should receive the key. We chose this compact family because it changes the baseline's schedule while preserving its input, signs, clock and exact-match criterion. It does not claim to represent every plausible use of the panel.\n\n## Complete result\n\nLP2-50 has no runes in the archived transcription. The remaining 55 pages produce **1,760 cases**: 55 pages × 16 offsets × 2 directions. All 1,760 page outputs are distinct. Against nine fixed openings, that is **15,840 exact comparisons**, with **zero matches**. The [results file](experiments/records/lp2-panel-prime-openings/results.json) retains all output indices and match decisions. Distinct full outputs avoid counting a repeated configuration twice; these comparisons are still highly dependent, not 15,840 independent statistical trials.\n\nThis excludes only a continuous cyclic shift stream with these sixteen primes, page-local reset and the declared opening test. A shorter accidental word elsewhere would be a different, much larger search. So would taking prime *indices* rather than values, reversing the spiral, advancing over separators, using autokey feedback or joining pages. Those choices should be declared as separate variants before inspecting their outputs.\n\n## Reproduce\n\nExtract the [experiment bundle](downloads/experiments/lp2-panel-prime-openings.zip) with its folders intact, then run from its root with Python 3:\n\n```text\npython experiments/records/lp2-panel-prime-openings/run.py --check\npython experiments/records/lp2-panel-prime-openings/check.py\npython experiments/records/lp2-panel-prime-openings/plot.py --check\n```\n\nThe independent checker reconstructs the sixteen primes against the printed LP2-15 cells, verifies the nine opening files, and inverts every transformed rune to its archived input. The figure is generated from the saved key. These checks verify the declared calculation, not the claim that the manuscript intended this cipher.\n",
+  "article_path": "experiments/records/lp2-panel-prime-openings/article.md",
+  "script_sha256": "700aa4ec788d9d07d0e9febd4f6bb4f8c9fe501ce63458fadff3e031ad307d6d",
   "record_type": {
     "id": "method",
     "label": "Bounded solving test",
@@ -48597,11 +49067,11 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "outputs": [
       {
         "path": "experiments/records/page40-for-every-arithmetic/results.json",
-        "sha256": "25dff034b4300e7f6f3710f7eccddd7e4af46b52d4e0c762ff15288e1ff5781b"
+        "sha256": "c86b8b84852385ebc8c13c4f7dccba78da29bc0df906f2b2fc36f25092540121"
       },
       {
         "path": "experiments/records/page40-for-every-arithmetic/first-eight-trace.svg",
-        "sha256": "5be2fb3e2d0d00e9f6dc6e34f8bda4baac3e0d55232509867ac90444af0947f4"
+        "sha256": "0362ca9fa59f8f2a401a93993dc912ff140eaf96b265a7cbaeaf710c66428dd9"
       }
     ]
   },
