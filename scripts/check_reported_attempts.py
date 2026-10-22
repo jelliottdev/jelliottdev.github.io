@@ -52,6 +52,7 @@ assert len(queue) == len({row['attachment_id'] for row in queue})
 assert {row['attachment_id'] for row in queue}.isdisjoint({row['source']['attachment_id'] for row in entries} | {row['attachment_id'] for row in reconciled})
 for row in queue:
     assert all(row[field].strip() for field in ('attachment_id', 'sha256', 'label', 'next_check'))
+    assert row['triage_lane'] in {'compare-existing', 'extract-new', 'context-check', 'exclusion-check'}
     assert re.fullmatch(r'[0-9a-f]{64}', row['sha256'])
     local = Path.home() / '.codex' / 'attachments' / row['attachment_id'] / 'Pasted text.txt'
     if local.exists():

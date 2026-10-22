@@ -86,13 +86,24 @@ def build():
         parts.append('<h2 id="screening-queue">Source files still to screen</h2>'
                      '<p>These files have only had an initial scan. A single discussion can contain several distinct claims; '
                      'the label below does not certify complete coverage. Files move out of this queue only when their '
-                     'specific claims are separated into replay entries or precisely matched to existing work.</p><ul>')
-        for item in queue:
-            parts.append(f'<li><strong>{e(item["label"])}</strong> · {e(item["next_check"])} '
-                         f'<details><summary>Source ID and checksum</summary><p class="small muted">'
-                         f'{e(item["attachment_id"])} · SHA-256: <code>{e(item["sha256"])}</code>'
-                         '</p></details></li>')
-        parts.append('</ul>')
+                     'specific claims are separated into replay entries or precisely matched to existing work.</p>')
+        lanes = [
+            ('compare-existing', 'Compare with existing coverage'),
+            ('extract-new', 'Extract a testable method or source claim'),
+            ('context-check', 'Check whether the note contains an experiment'),
+            ('exclusion-check', 'Check whether the file belongs in this archive'),
+        ]
+        for lane, heading in lanes:
+            subset = [item for item in queue if item['triage_lane'] == lane]
+            if not subset:
+                continue
+            parts.append(f'<h3>{e(heading)} <span class="small muted">({len(subset)})</span></h3><ul>')
+            for item in subset:
+                parts.append(f'<li><strong>{e(item["label"])}</strong> · {e(item["next_check"])} '
+                             f'<details><summary>Source ID and checksum</summary><p class="small muted">'
+                             f'{e(item["attachment_id"])} · SHA-256: <code>{e(item["sha256"])}</code>'
+                             '</p></details></li>')
+            parts.append('</ul>')
     parts.append('<p>The register is an intake, not a census of all historical solver work. '
                  'Its entries should be promoted to completed experiments only after their inputs, exact rule, '
                  'controls and outputs have been saved and independently checked. '
