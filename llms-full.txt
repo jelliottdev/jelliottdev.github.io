@@ -25135,6 +25135,31 @@ Use translations of the same source to reduce differences in subject and structu
 
 A language ranking answers “which of these reference samples fits this observable best under these assumptions?” It is not a probability that the plaintext is that language. The true language may be absent, the reference genre may be unsuitable, or the cipher may not preserve the observable. Welsh belongs in the comparison on the same terms as every other language.
 
+A ranking always has a winner
+
+Consider an invented one-number comparison in which smaller absolute distance is better. Reference samples A, B and C have feature values 0.20, 0.30 and 0.40; the target has value 0.80.
+
+	Reference	Feature value	Distance from target	Rank
+	A	0.20	0.60	3
+	B	0.30	0.50	2
+	C	0.40	0.40	1
+
+C is closest among those references. The table does not show that a distance of 0.40 is typical of genuine samples from C, or that any reference is a good fit. Adding a reference at 0.70 would produce a new winner without changing the target. These values illustrate ranking only; they are not language measurements or results from an LP experiment.
+
+To interpret fit, measure how held-out texts from each known language compare with its references under the same sampling and normalization rules. Also inspect languages and text types absent from the reference set. A system forced to choose one label will still choose something when none of its labels is appropriate.
+
+Test the option that none of the references fits
+
+A useful proposed extension is to withhold one language completely from the reference set, then compare its samples as unknowns. Report whether the procedure rejects them or confidently assigns another language. Repeat the holdout for each language rather than selecting the most favorable case. This checks a specific missing-language scenario; it does not reproduce every way a manuscript can differ from a corpus.
+
+If using a rejection threshold, choose it on separate development data and freeze it before evaluation. Publish rejected cases as well as winners. A threshold that accepts all known-language controls can still accept unsuitable text, and a threshold rejecting everything provides no useful identification. Report the actual acceptances, rejections and misclassifications.
+
+Keep reference and evaluation material separate
+
+Overlapping passages can make a comparison look more stable than it is. Record source-text and passage identifiers before splitting material. If several translations cover the same passage, keep that passage group together when the claim concerns generalization to new passages. If the claim concerns new works or genres, hold out complete works or genres instead. Those answer different questions.
+
+Similarly, selecting a rune-conversion policy because it improves the target's rank is part of the search. Report every tested policy, not just the preferred one. Ranking stability across several choices is useful descriptive evidence, but those choices are not automatically independent confirmations. Keep the actual feature values and distances alongside ranks so readers can see how large the differences are.
+
 Read the existing comparisons together
 
 
