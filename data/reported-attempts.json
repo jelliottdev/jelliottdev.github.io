@@ -373,12 +373,13 @@
         "sha256": "774e72b180f00f6da2037a991f96c7fa5b561a4db969241431aa9b20bf2a21bc"
       },
       "reported_idea": "Use 729 divided by a rune's ordinal, reduce modulo 29, then choose among base and line-dependent neighboring rune labels from the fractional part. The post allows further letter rearrangement and removal to interpret output.",
-      "coverage": "The published 27 by 27 totient-map replay is a different algorithm; it does not reproduce this 729/ordinal/fraction rule.",
+      "coverage": "A new source-bound audit traces 729 divided by the zero-based GP index at every archived rune position. It confirms the 729-rune total and identifies the worked first word's index-28 use for prime 107, whose canonical zero-based index is 27. It also quantifies 34 undefined F positions and the effect of unspecified line and wrap conventions. It does not reproduce the post's manual letter rearrangement or claimed reading.",
       "related_records": [
+        "cross-section-index-inversion",
         "totient-map-route"
       ],
-      "replay_needed": "Define the zero-ordinal case, precise decimal/rounding rule, line numbering, branch choice and allowed postprocessing; emit the full rune trace and all candidate outputs before evaluating against predeclared language controls.",
-      "status": "related-only"
+      "replay_needed": "Recover or fix one rule for F, line-clock reset, out-of-range indices, neighbor selection and permitted postprocessing. Then compare complete unedited output and a held-out continuation with declared language controls. The 27×27 totient-map route is a separate algorithm.",
+      "status": "partial"
     },
     {
       "id": "mobius-totient-zero-mask",

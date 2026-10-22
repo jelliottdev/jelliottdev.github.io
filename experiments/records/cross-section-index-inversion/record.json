@@ -1,0 +1,122 @@
+{
+  "id": "cross-section-index-inversion",
+  "title": "LP2-00–02: audit the 729 ÷ rune-index proposal",
+  "status": "published",
+  "question": "Does the posted 729 divided by GP-index rule reproduce its worked first word and specify a complete output on the 729-rune section?",
+  "summary": "The 729-rune count is correct, but the worked example uses index 28 for prime 107, which has zero-based index 27. F makes division undefined at 34 positions; line clock and wrap choices change hundreds more outputs.",
+  "tags": [
+    "729",
+    "27x27",
+    "LP2-00",
+    "LP2-01",
+    "LP2-02",
+    "inversion",
+    "Gematria Primus",
+    "zero index",
+    "line offset",
+    "cross section"
+  ],
+  "family": {
+    "id": "cross-section-index-inversion",
+    "title": "LP2 cross-section index inversion",
+    "question": "Can the reported 729/index arithmetic be reproduced with one complete set of input and line rules?",
+    "baseline": "cross-section-index-inversion"
+  },
+  "variant": {
+    "label": "Posted arithmetic and complete-source audit",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "artifacts": [
+      "experiments/records/cross-section-index-inversion/plan.json"
+    ],
+    "representation": "Every archived rune of LP2-00–02 in printed line order, GP prime values and zero-based 29-rune indices. The source's eight first-word indices are fixed in the plan, including its 28 for prime 107.",
+    "procedure": "Verify the 729-rune count, then for every nonzero index j calculate floor(729/j), remainder, base index modulo 29, and the posted fractional threshold with both global and page-reset line counts. Keep both raw and wrapped candidate indices; mark zero-index F undefined. Compare the first eight source indices and labels with the claimed worked example.",
+    "parameters": "Three pages, 33 source rune rows, exact rational fractional comparisons, line numbering from one, no word rearrangement or removal. Modulo-29 wrapping is an explicitly additional convention for comparison, not a source claim.",
+    "exclusions": "A fixed rule for F; chosen neighboring letters; letter rearrangement or dummy-word removal; image-level review of every rune; a full plaintext or a statistical language claim; other 729-based constructions."
+  },
+  "outcome": "not-supported",
+  "finding": "All three pages contain 729 runes, but the claimed first-word index for prime 107 is 28 rather than its canonical zero-based 27. Literal arithmetic with the archived rune gives Y rather than the report's AE at that position. The 34 F runes have index zero and no quotient. Without wrapping, 335 of 695 non-F outputs fall outside the alphabet under global line counting; global and page-reset wrapped outputs differ at 396 of 695 positions.",
+  "limitations": "The supplied post names no complete F handling, wrap rule, global-versus-page line clock or deterministic selection from its neighboring letters. Its excerpted image is unavailable; this audit identifies the post by hash and uses the archived transcription. The chosen full-stream conventions are declared extensions and do not recreate all manual postprocessing in the discussion. Human review pending.",
+  "next_steps": "If pursuing this method, freeze zero handling, line clock, wrap and branch selection before reading output; preserve punctuation and all 729 rune positions, then test complete text and an untouched continuation under matched controls.",
+  "reproduction": {
+    "command": "python experiments/records/cross-section-index-inversion/run.py --check && python experiments/records/cross-section-index-inversion/check.py && python experiments/records/cross-section-index-inversion/plot.py --check",
+    "environment": "Python 3.12 standard library; no network or AI service. Run from the repository or extracted bundle root.",
+    "script": "experiments/records/cross-section-index-inversion/run.py",
+    "script_sha256": "019b510634977e1f3d33123a1c2be7166fbcfbbb46843a94b5299aba57cfb3b0",
+    "inputs": [
+      {
+        "path": "experiments/records/cross-section-index-inversion/plan.json",
+        "sha256": "f713433c92a29cbb6b7fe329cb1d8ff5de80ddb2b6e6c0a7af6124a9cd2a2733"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/check.py",
+        "sha256": "17a126d719b2f094b2b887d132514590afc936546f02da984b2f8e0114bf9e6f"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/plot.py",
+        "sha256": "2b5e2a191c741217f5bda88dca4ba2a9d8ce5b6cc9231a18d2a2fc86468ceda8"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/cross-section-index-inversion/results.json",
+        "sha256": "8a8e5bb6132ab26712f444aa11d270dc1184f481b033baf642b4b78e6ec32c55"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/first-word-trace.svg",
+        "sha256": "b52bdfcca00a2dcba62f8b8240482728f282b6e65f4a8af9d82df34b3a2bf5fc"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — all-position source and exact-fraction oracle, prime-table check, two line conventions and independent first-word audit; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific reported-attempt entry and transcript hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=cross-section-inversion-729"
+    },
+    {
+      "label": "LP2-00 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-00"
+    },
+    {
+      "label": "LP2-01 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-01"
+    },
+    {
+      "label": "LP2-02 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-02"
+    }
+  ],
+  "related": [
+    "totient-map-route"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/cross-section-index-inversion/first-word-trace.svg",
+      "caption": "The source's first-word table agrees for six indices, uses 28 rather than 27 for prime 107, and leaves F at index zero undefined."
+    }
+  ]
+}

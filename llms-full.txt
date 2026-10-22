@@ -7189,13 +7189,18 @@ Outside this test: Other source photographs and processing choices; rotation, sh
 Geometric constructions and navigation
 Turn measured positions into reproducible construction and traversal rules.
 
-Related records (2)
+Related records (3)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-33 and LP2-39: shared three-circle radii at native scale
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?
 Outside this test: Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext.
+
+LP2-00–02: audit the 729 ÷ rune-index proposal
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Does the posted 729 divided by GP-index rule reproduce its worked first word and specify a complete output on the 729-rune section?
+Outside this test: A fixed rule for F; chosen neighboring letters; letter rearrangement or dummy-word removal; image-level review of every rune; a full plaintext or a statistical language claim; other 729-based constructions.
 
 LP2-00–02: 27 × 27 totient-map route replay
 Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
@@ -7742,6 +7747,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-geometry.html
 - LP2-33 and LP2-39: shared three-circle radii at native scale
   https://jelliottdev.github.io/#/experiments/compass-shared-radii
+- LP2-00–02: audit the 729 ÷ rune-index proposal
+  https://jelliottdev.github.io/#/experiments/cross-section-index-inversion
 - Audio and frequency encodings
   https://jelliottdev.github.io/reference/articles/audio-frequency.html
 - Layered decoding and file chains
@@ -28586,7 +28593,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 75 published reproducible records: 16 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 9 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 76 published reproducible records: 16 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 10 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -28777,7 +28784,7 @@ This intake accounts for 44 supplied source files: 35 source-specific proposals 
 
 The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. A public link, when present, may change and has not yet been pinned to a revision. Start with Have we tried it? for completed records, or the method map for a broader family.
 
-Not replayed: 12 · Related work only: 13 · Partly replayed: 10
+Not replayed: 12 · Related work only: 12 · Partly replayed: 11
 
 Find an attempt
 
@@ -28799,7 +28806,7 @@ Large line gaps, punctuation and JPEG size · Related work only
 
 Proposed mechanisms for scarce adjacent doublets · Partly replayed
 
-729-cell cross-section inversion and fractional rune choices · Related work only
+729-cell cross-section inversion and fractional rune choices · Partly replayed
 
 Möbius-of-totient zero mask and proposed LP2-00 reading · Partly replayed
 
@@ -28966,12 +28973,12 @@ List of ways to reduce doublets · ozon · 2024-07-04. Supplied transcript SHA-2
 
 
 729-cell cross-section inversion and fractional rune choices
-Related work only · Geometric constructions and navigation · LP2-00, LP2-01, LP2-02
+Partly replayed · Geometric constructions and navigation · LP2-00, LP2-01, LP2-02
 Reported approach. Use 729 divided by a rune's ordinal, reduce modulo 29, then choose among base and line-dependent neighboring rune labels from the fractional part. The post allows further letter rearrangement and removal to interpret output.
-Current archive coverage. The published 27 by 27 totient-map replay is a different algorithm; it does not reproduce this 729/ordinal/fraction rule.
-Replay requirement. Define the zero-ordinal case, precise decimal/rounding rule, line numbering, branch choice and allowed postprocessing; emit the full rune trace and all candidate outputs before evaluating against predeclared language controls.
+Current archive coverage. A new source-bound audit traces 729 divided by the zero-based GP index at every archived rune position. It confirms the 729-rune total and identifies the worked first word's index-28 use for prime 107, whose canonical zero-based index is 27. It also quantifies 34 undefined F positions and the effect of unspecified line and wrap conventions. It does not reproduce the post's manual letter rearrangement or claimed reading.
+Replay requirement. Recover or fix one rule for F, line-clock reset, out-of-range indices, neighbor selection and permitted postprocessing. Then compare complete unedited output and a held-out continuation with declared language controls. The 27×27 totient-map route is a separate algorithm.
 
-Related records with narrower scopes: totient map route.
+Related records with narrower scopes: cross section index inversion, totient map route.
 
 Source identification
 Sign post Cross section - Inversion · 89ron · 2023-12-02. Supplied transcript SHA-256: 774e72b180f00f6da2037a991f96c7fa5b561a4db969241431aa9b20bf2a21bc.
@@ -29480,6 +29487,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
 - doublet context
   https://jelliottdev.github.io/#/experiments/doublet-context
+- cross section index inversion
+  https://jelliottdev.github.io/#/experiments/cross-section-index-inversion
 - totient map route; Read the checked scope
   https://jelliottdev.github.io/#/experiments/totient-map-route
 - Bounded arithmetic expressions
@@ -31024,6 +31033,139 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "measurement",
     "label": "Manuscript measurement",
     "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}
+
+---
+
+{
+  "id": "cross-section-index-inversion",
+  "title": "LP2-00–02: audit the 729 ÷ rune-index proposal",
+  "status": "published",
+  "question": "Does the posted 729 divided by GP-index rule reproduce its worked first word and specify a complete output on the 729-rune section?",
+  "summary": "The 729-rune count is correct, but the worked example uses index 28 for prime 107, which has zero-based index 27. F makes division undefined at 34 positions; line clock and wrap choices change hundreds more outputs.",
+  "tags": [
+    "729",
+    "27x27",
+    "LP2-00",
+    "LP2-01",
+    "LP2-02",
+    "inversion",
+    "Gematria Primus",
+    "zero index",
+    "line offset",
+    "cross section"
+  ],
+  "family": {
+    "id": "cross-section-index-inversion",
+    "title": "LP2 cross-section index inversion",
+    "question": "Can the reported 729/index arithmetic be reproduced with one complete set of input and line rules?",
+    "baseline": "cross-section-index-inversion"
+  },
+  "variant": {
+    "label": "Posted arithmetic and complete-source audit",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "artifacts": [
+      "experiments/records/cross-section-index-inversion/plan.json"
+    ],
+    "representation": "Every archived rune of LP2-00–02 in printed line order, GP prime values and zero-based 29-rune indices. The source's eight first-word indices are fixed in the plan, including its 28 for prime 107.",
+    "procedure": "Verify the 729-rune count, then for every nonzero index j calculate floor(729/j), remainder, base index modulo 29, and the posted fractional threshold with both global and page-reset line counts. Keep both raw and wrapped candidate indices; mark zero-index F undefined. Compare the first eight source indices and labels with the claimed worked example.",
+    "parameters": "Three pages, 33 source rune rows, exact rational fractional comparisons, line numbering from one, no word rearrangement or removal. Modulo-29 wrapping is an explicitly additional convention for comparison, not a source claim.",
+    "exclusions": "A fixed rule for F; chosen neighboring letters; letter rearrangement or dummy-word removal; image-level review of every rune; a full plaintext or a statistical language claim; other 729-based constructions."
+  },
+  "outcome": "not-supported",
+  "finding": "All three pages contain 729 runes, but the claimed first-word index for prime 107 is 28 rather than its canonical zero-based 27. Literal arithmetic with the archived rune gives Y rather than the report's AE at that position. The 34 F runes have index zero and no quotient. Without wrapping, 335 of 695 non-F outputs fall outside the alphabet under global line counting; global and page-reset wrapped outputs differ at 396 of 695 positions.",
+  "limitations": "The supplied post names no complete F handling, wrap rule, global-versus-page line clock or deterministic selection from its neighboring letters. Its excerpted image is unavailable; this audit identifies the post by hash and uses the archived transcription. The chosen full-stream conventions are declared extensions and do not recreate all manual postprocessing in the discussion. Human review pending.",
+  "next_steps": "If pursuing this method, freeze zero handling, line clock, wrap and branch selection before reading output; preserve punctuation and all 729 rune positions, then test complete text and an untouched continuation under matched controls.",
+  "reproduction": {
+    "command": "python experiments/records/cross-section-index-inversion/run.py --check && python experiments/records/cross-section-index-inversion/check.py && python experiments/records/cross-section-index-inversion/plot.py --check",
+    "environment": "Python 3.12 standard library; no network or AI service. Run from the repository or extracted bundle root.",
+    "script": "experiments/records/cross-section-index-inversion/run.py",
+    "script_sha256": "019b510634977e1f3d33123a1c2be7166fbcfbbb46843a94b5299aba57cfb3b0",
+    "inputs": [
+      {
+        "path": "experiments/records/cross-section-index-inversion/plan.json",
+        "sha256": "f713433c92a29cbb6b7fe329cb1d8ff5de80ddb2b6e6c0a7af6124a9cd2a2733"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/check.py",
+        "sha256": "17a126d719b2f094b2b887d132514590afc936546f02da984b2f8e0114bf9e6f"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/plot.py",
+        "sha256": "2b5e2a191c741217f5bda88dca4ba2a9d8ce5b6cc9231a18d2a2fc86468ceda8"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/cross-section-index-inversion/results.json",
+        "sha256": "8a8e5bb6132ab26712f444aa11d270dc1184f481b033baf642b4b78e6ec32c55"
+      },
+      {
+        "path": "experiments/records/cross-section-index-inversion/first-word-trace.svg",
+        "sha256": "b52bdfcca00a2dcba62f8b8240482728f282b6e65f4a8af9d82df34b3a2bf5fc"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — all-position source and exact-fraction oracle, prime-table check, two line conventions and independent first-word audit; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific reported-attempt entry and transcript hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=cross-section-inversion-729"
+    },
+    {
+      "label": "LP2-00 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-00"
+    },
+    {
+      "label": "LP2-01 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-01"
+    },
+    {
+      "label": "LP2-02 original image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-02"
+    }
+  ],
+  "related": [
+    "totient-map-route"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/cross-section-index-inversion/first-word-trace.svg",
+      "caption": "The source's first-word table agrees for six indices, uses 28 rather than 27 for prime 107, and leaves F at index zero undefined."
+    }
+  ],
+  "article": "# What does the 729 ÷ rune-index proposal actually produce?\n\nA [reported approach to LP2-00–02](#/wiki/reported-attempts?section=cross-section-inversion-729) starts from the section's 729 runes. For each rune, it divides 729 by that rune's zero-based Gematria Primus alphabet index, reduces the integer part modulo 29, then moves by the current line number according to the fractional part. The original discussion also allows neighboring letters, rearrangement and removal when interpreting the result.\n\nThis audit checks the **arithmetic and input conventions**, not a candidate reading. The 729-rune total is correct: the three archived pages contain 262, 266 and 201 runes. They occupy **33 printed rune rows** (12, 12 and 9); the number 27 is an arithmetic factor of 729, not the count of printed rows in this transcription.\n\n## The posted first word\n\nThe first word on [LP2-00](#/reader/lp2-00) is `ᛋᚻᛖᚩᚷᛗᛡᚠ`. Its GP prime values match all eight numbers quoted in the discussion. The first six zero-based indices also match. For the seventh rune, however, the report treats prime **107** as index **28**; it is at index **27** in the same zero-based 29-rune table that puts prime 53 at index 15. The last rune is F at index zero, making `729 ÷ 0` undefined.\n\n![Eight columns compare the worked example's claimed rune indices with the canonical GP indices and literal outputs.](experiments/records/cross-section-index-inversion/first-word-trace.svg)\n\n[Open the first-word diagram at full size](experiments/records/cross-section-index-inversion/first-word-trace.svg). The independent checker verifies the eight indices against a separately generated prime list. The first seven literal outputs, when the posted less-than-half rule includes an exact zero fractional part, are `L O J I C/K H Y`; the eighth has no output. The report's `AE` at position seven comes from its index-28 calculation, not from the archived rune's GP index. This does not identify why the report used 28.\n\n## Complete arithmetic trace\n\nThe [plan](experiments/records/cross-section-index-inversion/plan.json) fixes a transparent convention for a full trace: for nonzero index `j`, compute `q = floor(729/j)`, `r = 729 mod j`, and `base = q mod 29`. Move `+line` if `2r > j`, `−line` if `2r < j`, and zero if equal. Both a global line counter and a counter reset on each page are reported. We save the unwrapped candidate index **and** its modulo-29 form because the discussion does not define how out-of-range positions wrap. F remains undefined rather than being silently changed or omitted.\n\n| Check | Result |\n| --- | ---: |\n| Runes in LP2-00–02 | 729 |\n| Printed rune rows | 33 |\n| F runes requiring division by zero | 34 |\n| Non-F positions with an out-of-range raw index, global line count | 335 of 695 |\n| Same, page-reset line count | 124 of 695 |\n| Positions where wrapped global and page-reset outputs differ | 396 of 695 |\n\nThese last three counts show how much a complete output depends on two conventions the original post does not settle. They are not chance probabilities or language scores. The [complete results](experiments/records/cross-section-index-inversion/results.json) give all 729 source positions, prime values, quotient/remainder pairs, line numbers, raw candidates and wrapped candidates. No words are moved or deleted in that trace.\n\n## Reproduce and scope\n\nFrom a checkout or the [experiment bundle](downloads/experiments/cross-section-index-inversion.zip), run:\n\n```text\npython experiments/records/cross-section-index-inversion/run.py --check\npython experiments/records/cross-section-index-inversion/check.py\npython experiments/records/cross-section-index-inversion/plot.py --check\n```\n\nThe producer verifies the three archived transcription hashes. The checker independently walks every rune, generates the first 29 primes, uses exact fractions to verify the threshold and checks both line conventions. The source discussion is identified by hash in the [reported-attempt entry](#/wiki/reported-attempts?section=cross-section-inversion-729); its pasted text is not redistributed.\n\n**The worked first word is not reproduced by one consistent zero-based GP index rule**, and the formula leaves 34 runes without a result. The proposal could be completed by declaring an F rule, one line clock, one wrap rule and one fixed letter choice, but those would be additional hypotheses. A complete decryption claim would then need continuous output, intact punctuation and word order, and a test on text not used to choose the rules. This audit does not exclude every 729-based or geometric approach.\n",
+  "article_path": "experiments/records/cross-section-index-inversion/article.md",
+  "script_sha256": "019b510634977e1f3d33123a1c2be7166fbcfbbb46843a94b5299aba57cfb3b0",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
   }
 }
 

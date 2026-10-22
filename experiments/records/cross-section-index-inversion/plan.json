@@ -1,0 +1,16 @@
+{
+  "schema": "liberpedia-cross-section-index-inversion-v1",
+  "source_report_sha256": "774e72b180f00f6da2037a991f96c7fa5b561a4db969241431aa9b20bf2a21bc",
+  "source_first_word_claimed_indices": [15, 8, 18, 3, 6, 19, 28, 0],
+  "source_first_word_claimed_values": [53, 23, 67, 7, 17, 71, 107, 2],
+  "runes": "ᚠᚢᚦᚩᚱᚳᚷᚹᚻᚾᛁᛄᛇᛈᛉᛋᛏᛒᛖᛗᛚᛝᛟᛞᚪᚫᚣᛡᛠ",
+  "latin_labels": ["F", "U", "TH", "O", "R", "C/K", "G", "W", "H", "N", "I", "J", "EO", "P", "X", "S", "T", "B", "E", "M", "L", "NG", "OE", "D", "A", "AE", "Y", "IA/IO", "EA"],
+  "prime_values": [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109],
+  "arithmetic": "For nonzero zero-based rune index j, compute q=floor(729/j), r=729 mod j, base=q mod 29. Apply +line when 2r>j, -line when 2r<j, and 0 when 2r=j; the literal <0.5 case includes r=0. The source does not specify wrap, so the trace reports both raw and modulo-29 candidate indices. F has j=0 and remains undefined.",
+  "line_conventions": "Report both a line number continuous across LP2-00–02 and one reset at each page. Rune rows are nonempty text lines. The posted example uses line 1, where both conventions agree.",
+  "inputs": [
+    {"path": "text/lp2-00.txt", "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"},
+    {"path": "text/lp2-01.txt", "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"},
+    {"path": "text/lp2-02.txt", "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"}
+  ]
+}
