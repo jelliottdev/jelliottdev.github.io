@@ -90,14 +90,25 @@ function experimentFamily(r){
   if(!r.family)return '';
   const f=r.family,members=experimentRecords.filter(x=>x.family?.id===f.id);
   members.sort((a,b)=>Number(b.id===f.baseline)-Number(a.id===f.baseline)||a.id.localeCompare(b.id));
-  if(members.length===1)return `<section><h2>Record family</h2><p><strong>${esc(f.title)}</strong></p><p>${esc(f.question)}</p><p class="small muted">This record is the baseline. No completed variants have been published yet.</p></section>`;
-  const names={pages:'Pages',artifacts:'Source artifacts',representation:'Input representation',procedure:'Procedure',parameters:'Parameter bounds',exclusions:'Exclusions'};
-  const value=v=>esc(Array.isArray(v)?v.join(', '):v);
-  return `<section aria-label="Experiment family comparison"><h2>${esc(f.title)}</h2><p>${esc(f.question)}</p>${members.map(x=>`<article class="family-member"><h3><a href="#/experiments/${x.id}" ${x.id===r.id?'aria-current="page"':''}>${esc(x.variant.label)}</a></h3><p>${esc(x.summary)}</p>${x.id===f.baseline?'<p class="small muted">Baseline for the comparisons below.</p>':`<p><strong>Changed:</strong> ${[...new Set(x.variant.changes.map(c=>c.reason))].map(esc).join(' ')}</p><details><summary>Compare exact scope with baseline</summary>${x.variant.changes.map(c=>`<h4>${esc(names[c.field]||c.field)}</h4><dl><dt>Baseline</dt><dd>${value(c.before)}</dd><dt>This variant</dt><dd>${value(c.after)}</dd></dl>`).join('')}</details>`}</article>`).join('')}<p class="small muted">Each record retains its own scope and findings. A match to this family does not mean every variant of an idea has been tested.</p></section>`;
+  if(members.length===1)return '<p>No other completed variant in this family yet.</p>';
+  return `<section aria-label="Experiment family comparison"><h2>${esc(f.title)}</h2><p>${esc(f.question)}</p><ul class="experiment-related-list">${members.map(x=>`<li><a href="#/experiments/${x.id}" ${x.id===r.id?'aria-current="page"':''}>${esc(x.variant.label)}</a><p>${esc(x.finding)}</p></li>`).join('')}</ul></section>`;
 }
 
 function experimentScopeLinks(r){
   return [...r.scope.pages.map(id=>`<a href="#/page/${id}">${esc(id.toUpperCase())}</a>`),...(r.scope.artifacts||[]).map(path=>`<a href="${esc(path)}">${esc(path.split('/').pop())}</a>`)].join(', ');
+}
+function experimentDetailedTargets(r){
+  if(r.scope.pages.length<=8)return experimentScopeLinks(r);
+  const first=r.scope.pages[0],last=r.scope.pages[r.scope.pages.length-1];
+  return `<a href="#/page/${first}">${esc(first.toUpperCase())}</a>–<a href="#/page/${last}">${esc(last.slice(4))}</a> · ${r.scope.pages.length} pages. <a href="reference/experiments/${esc(r.id)}.json">Exact page list and record</a>.`;
+}
+function experimentTargetSummary(r){
+  const pages=r.scope.pages||[];
+  if(!pages.length)return (r.scope.artifacts||[]).length?`${r.scope.artifacts.length} source ${(r.scope.artifacts||[]).length===1?'file':'files'}`:'No manuscript page';
+  if(pages.length===1)return pages[0].toUpperCase();
+  const first=pages[0],last=pages[pages.length-1],release=first.slice(0,3);
+  const consecutive=pages.every((page,index)=>page.slice(0,3)===release&&Number(page.slice(4))===Number(first.slice(4))+index);
+  return consecutive?`${first.toUpperCase()}–${last.slice(4)} · ${pages.length} pages`:`${pages.length} manuscript pages`;
 }
 function experimentRecordType(r){
   const kind=r.record_type||methodRecordKinds[methodRecordKindById[r.id]];
@@ -203,7 +214,7 @@ function experimentVisual(r,v){
   }
   if(r.id==='word-internal-affine-lags'&&v.path.endsWith('/comparison.svg')){
     const choices=Array.from({length:29},(_,n)=>`<option value="${n}">${n}</option>`).join('');
-    return `<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Explore the 841 lag-six maps</strong><br>Choose coefficients for c′ = ac + b (mod 29). Counts use the same 1,267 word-internal pairs.</figcaption><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><p class="small muted">The shuffle range shown for the highlighted formula does not transfer to every selected map. The downloadable result holds all 841 observed counts and word-shuffle expectations.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
+    return `<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Actual text against a shuffled baseline</strong><br>Of 1,267 rune pairs six places apart inside words, how many fit the selected rule?</figcaption><div class="affine-lag-readout" role="status">Loading the verified counts…</div><details class="affine-lag-options"><summary>Explore other rules</summary><p>Change the coefficients in c′ = ac + b (mod 29). The highlighted rule is a = 27, b = 24.</p><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div></details><p class="small muted">The baseline shuffles runes within each word. It preserves word lengths, but it does not simulate an encryption method. <a href="${esc(v.path)}" download>Download the summary figure</a>.</p></figure>`;
   }
   if(r.id==='lp1-width-selection'&&v.path.endsWith('/width-comparison.svg')){
     const rows=widthSelectionComparison.map(([width,fraction,tail])=>{
@@ -255,7 +266,8 @@ async function bindAffineLagFigure(){
     const update=()=>{
       const multiplier=Number(a.value),offset=Number(b.value),observed=counts[multiplier][offset],mean=expected[multiplier][offset];
       const rank=1+all.filter(value=>value>observed).length;
-      figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${observed} matches</strong> <span>of 1,267 pairs</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${Math.min(100,observed/80*100).toFixed(1)}%"></span></div><p>Word-shuffle expectation: <strong>${mean.toFixed(1)}</strong> · Rank among 841 maps: <strong>${rank}</strong>${rank===1?' (highest)':''}.</p>`;
+      const scale=Math.max(80,observed,mean)*1.05;
+      figure.querySelector('.affine-lag-readout').innerHTML=`<div class="affine-comparison" role="img" aria-label="Actual text: ${observed} matching pairs. Average after shuffling within words: ${mean.toFixed(1)} matching pairs."><div class="affine-comparison-row"><span>Actual text</span><div class="affine-comparison-track"><i style="width:${(observed/scale*100).toFixed(1)}%"></i></div><strong>${observed}</strong></div><div class="affine-comparison-row"><span>Shuffled words</span><div class="affine-comparison-track"><i style="width:${(mean/scale*100).toFixed(1)}%"></i></div><strong>${mean.toFixed(1)}</strong></div></div><p>This rule ranks <strong>${rank} of 841</strong> formulas checked at this distance.${multiplier===27&&offset===24?' Only <strong>3 of 2,000</strong> shuffles produced a best-rule count at least this high.':''}</p>`;
     };
     a.addEventListener('change',update);b.addEventListener('change',update);update();
   }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
@@ -286,40 +298,40 @@ async function bindBlockBoundaryFigure(){
   }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
 }
 function experimentArticle(r){
-  const pageLinks=experimentScopeLinks(r);
-  const targets=r.scope.pages.length>8?`<details><summary>${esc(r.pages_note||`${r.scope.pages.length} manuscript pages — show exact list`)}</summary><p>${pageLinks}</p></details>`:pageLinks;
-  const fields=[['Targets',targets],['Tested bounds',esc(r.bounds_note||r.scope.parameters)]];
-  const exactFields=[['Not covered',esc(r.scope.exclusions)],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)]];
-  const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
   const methodGuides=experimentMethodGuides(r);
-  const sections=[['experiment-finding','Result'],['experiment-scope','Scope'],['experiment-reproduce','Reproduce'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
+  const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
-  return head(r.title,`${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome])}`,'Research records')+`<article class="reading-width experiment-article">
-    <p class="lede">${esc(r.question)}</p>
+  const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
+  const articleFinding=r.article.match(/^## Finding\s*\n\s*\n([^\n]+(?:\n(?!\n)[^\n]+)*)/m);
+  const findingHTML=articleFinding?renderExperimentMarkdown(articleFinding[1],accountFiles):`<p>${esc(r.finding)}</p>`;
+  const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
+  return head(r.title,esc(r.record_type?.label||'Research record'),'Research records')+`<article class="reading-width experiment-article">
+    <p class="lede">${esc(r.reader_question||r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
-    <p class="experiment-mobile-jump"><a href="#/experiments/${esc(r.id)}?section=experiment-reproduce" data-anchor="experiment-reproduce">Jump to files and steps ↓</a></p>
-    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
-      <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
-    </section>
-    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+    <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">What we found</h2><div class="experiment-finding">${findingHTML}</div>
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
-      <details class="experiment-extra"><summary>Exclusions and exact method</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
-    <div id="experiment-method-guides">${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}</div>
-    <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
-      <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download this experiment (ZIP)</a> <span class="small muted">Scripts, inputs, results and a start file.</span></p>
-      <div class="copyable-block experiment-command"><div class="experiment-command-heading"><p>Run from the extracted folder:</p><span role="status"></span><button type="button" data-copy-block>Copy command</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment command">${esc(r.reproduction.command)}</pre></div>
-      <details class="experiment-extra"><summary>Setup and individual files</summary><p>${esc(r.reproduction.environment)}${needsImages?' Original image inputs are separate: extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''} See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> is available for work across experiments.</p>${experimentDownloads(r)}<details><summary>All files &amp; SHA-256 checksums</summary><p class="hash">Script SHA-256: ${esc(r.script_sha256)}</p><h3>Inputs</h3>${fileList(r.reproduction.inputs)}<h3>Outputs</h3>${fileList(r.reproduction.outputs)}</details></details>
+      ${r.reader_note?`<div class="experiment-meaning"><h3>What it means</h3><p>${esc(r.reader_note)}</p></div>`:''}
+      <p id="experiment-scope" class="experiment-checked"><strong>Checked:</strong> ${checked}</p>
+      <p class="experiment-limit"><strong>Still unknown:</strong> ${esc(r.reader_limit||r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
     </section>
-    <details class="experiment-extra"><summary>Related tests and next steps</summary>
+    <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Get the files</h2>
+      <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download experiment ZIP</a></p>
+      <details class="experiment-extra"><summary>Run it yourself and browse individual files</summary><p>${esc(r.reproduction.environment)}${needsImages?' Original image inputs are separate: extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''} The <a href="#/wiki/running-scripts">script setup guide</a> explains how to run the command below.</p>
+        <div class="copyable-block experiment-command"><div class="experiment-command-heading"><p>Run from the extracted folder:</p><span role="status"></span><button type="button" data-copy-block>Copy command</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment command">${esc(r.reproduction.command)}</pre></div>
+        ${experimentDownloads(r)}<p class="small">Verify downloaded files against the <a href="downloads/SHA256SUMS.txt">checksums</a>, or get the <a href="downloads/reference-data.zip" download>complete reference bundle</a>.</p></details>
+    </section>
+    <details class="experiment-extra"><summary>Related tests</summary>
       ${r.family?`<div id="experiment-family">${experimentFamily(r)}</div>`:''}
       ${related.length?`<h3>Other related experiments</h3><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}
       <h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>
     </details>
-    <details class="experiment-extra"><summary>Full account and sources</summary>
-      <details class="experiment-account"><summary>Method, results and retest</summary><div class="experiment-prose">${renderExperimentMarkdown(r.article,[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)])}</div></details>
+    <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
+      <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Not tested</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
+      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles)}</div>
+      <div id="experiment-method-guides">${methodGuides?`<h3>Method guides</h3>${methodGuides}`:''}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     </details>
     ${footer()}</article>`;
@@ -337,7 +349,7 @@ function renderExperimentMarkdown(markdown,files=[]){
     if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
     const link=part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
     if(link)return safeLink(link[2])?`<a href="${esc(link[2])}">${esc(link[1])}</a>`:esc(part);
-    return esc(part).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    return esc(part).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g,'<em>$1</em>');
   }).join('');
   const closeList=()=>{if(listType){html.push(`</${listType}>`);listType='';}};
   const flush=()=>{if(paragraph.length){html.push('<p>'+inline(paragraph.join(' '))+'</p>');paragraph=[];}};

@@ -597,15 +597,30 @@ section[id],.topic-entry,#corrections,#experiment-family{scroll-margin-top:20px}
 .experiment-article{max-width:810px}
 main:has(>.experiment-article)>.article-top,main:has(>.experiment-article)>.breadcrumb{max-width:810px}
 .experiment-article>.lede{font:17px/1.58 Arial,Helvetica,sans-serif;color:var(--ink);margin:0 0 18px;max-width:68ch}
-.experiment-mobile-jump{display:none}
 .experiment-article .experiment-section-nav{margin:12px 0 22px;gap:8px 24px}
 .experiment-article section>h2{margin:26px 0 10px}
 .experiment-finding{font-size:18px;line-height:1.55;margin:12px 0}
+.experiment-finding p{margin:0 0 14px}
+.experiment-meaning{margin:22px 0 20px;max-width:68ch}
+.experiment-meaning h3{font:600 18px/1.4 Arial,Helvetica,sans-serif;margin:0 0 7px}
+.experiment-meaning p{margin:0;line-height:1.62}
+.experiment-checked{font-size:14px;line-height:1.55;color:#4c5963;border-top:1px solid var(--line);padding-top:14px;margin:22px 0 14px}
 .experiment-limit{color:#4c5963;border-left:2px solid #b8c4cc;padding-left:12px;margin:16px 0 22px}
 .experiment-figure{max-width:540px;margin:18px 0 20px;border:1px solid var(--line);padding:12px;background:#f3f5f6}
 .experiment-figure img{max-width:100%!important;background:white}
 .experiment-figure figcaption{font-size:13px;color:#4f5961}
 .experiment-scope{margin:8px 0 14px}
+.experiment-target-list{margin:4px 0 0}
+.experiment-target-list>summary{font-size:14px;color:var(--blue);font-weight:600}
+.experiment-target-list p{font-size:14px;line-height:1.55}
+.experiment-result-action{margin-top:12px}
+.experiment-result-action a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
+.experiment-related-list{list-style:none;padding:0;margin:10px 0}
+.experiment-related-list li{border-top:1px solid var(--line);padding:12px 0}
+.experiment-related-list p{margin:5px 0 0}
+#experiment-results>.experiment-result:first-of-type{border-top:1px solid var(--line)}
+#experiment-results>h2{margin-top:28px}
+#experiment-answer{border-top:1px solid var(--line);margin-top:28px}
 .experiment-scope dt,.experiment-scope dd{padding:9px 0;line-height:1.5}
 .experiment-extra,.experiment-account,.experiment-review{border-top:1px solid var(--line);margin:0}
 .experiment-extra>summary,.experiment-account>summary,.experiment-review>summary{font-size:15px;color:var(--blue);font-weight:600;min-height:48px;padding:12px 34px 12px 0;display:flex;align-items:center}
@@ -626,8 +641,6 @@ main:has(>.experiment-article)>.article-top,main:has(>.experiment-article)>.brea
 @media(max-width:760px){
  #sidebar{top:108px;height:calc(100dvh - 108px)}
  .experiment-article>.lede{font-size:16px;line-height:1.55}
- .experiment-mobile-jump{display:block;margin:-4px 0 18px;font-size:13px}
- .experiment-mobile-jump a{display:inline-flex;align-items:center;min-height:32px}
  .experiment-finding{font-size:17px}
  .experiment-figure{margin-inline:0;padding:8px}
  .experiment-article section>h2{margin-top:22px}
@@ -719,6 +732,19 @@ main:has(>.experiment-article)>.article-top,main:has(>.experiment-article)>.brea
 .affine-lag-track{height:16px;max-width:370px;margin-top:8px;background:#dce2e6}
 .affine-lag-track span{display:block;height:100%;background:#255f79}
 .affine-lag-figure>.small{font-size:13px;line-height:1.5}
+.affine-lag-figure:not(.block-boundary-figure){max-width:38rem;background:#f5f7f8;border:1px solid #d9dfe3}
+.affine-lag-figure:not(.block-boundary-figure) .affine-lag-readout{margin:18px 0 20px}
+.affine-comparison{display:grid;gap:12px}
+.affine-comparison-row{display:grid;grid-template-columns:8.4rem minmax(0,1fr) 3.3rem;align-items:center;gap:10px;font-size:14px}
+.affine-comparison-row>strong{text-align:right;font-size:17px}
+.affine-comparison-track{height:18px;background:#e0e5e8}
+.affine-comparison-track i{display:block;height:100%;background:#315f78}
+.affine-comparison-row:nth-child(2) .affine-comparison-track i{background:#93a0a8}
+.affine-lag-options{border-top:1px solid #d1d9de;padding-top:12px}
+.affine-lag-options summary{font-weight:600;color:#25536d}
+.affine-lag-options p{margin:10px 0;font-size:14px;line-height:1.5}
+.affine-lag-figure:not(.block-boundary-figure)>.small{margin-bottom:0}
+@media(max-width:430px){.affine-comparison-row{grid-template-columns:6.8rem minmax(0,1fr) 2.8rem;gap:7px;font-size:13px}.affine-comparison-row>strong{font-size:15px}}
 
 /* LP2-15 construction: source-backed, keyboard-operable spiral. */
 .fib-panel{max-width:650px;margin:22px 0;padding:18px;background:#f4f6f7;border:1px solid #c6cdd1}

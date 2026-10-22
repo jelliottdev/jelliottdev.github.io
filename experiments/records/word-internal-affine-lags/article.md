@@ -1,6 +1,6 @@
 ## Finding
 
-The proposed relation **c′ = 24 − 2c (mod 29)** appears **77 times among 1,267 pairs** six rune positions apart inside visible words on LP2-00–55. Shuffling rune order *within each word* gives an exact expected count of **44.8** and a central range of **32–58** in 2,000 trials. The proposed map has the highest observed count among the **841 affine maps** at lag six. Only **3 of 2,000** word-shuffled trials had *any* affine map with at least 77 matches.
+The relation **c′ = 24 − 2c (mod 29)** appears **77 times in 1,267 eligible pairs**, compared with **44.8 expected** when runes are shuffled within each word. It ranks first among 841 affine maps at lag six; only **3 of 2,000 shuffles** reached 77 matches after choosing their best map.
 
 ![Observed lag-six count compared with fixed-map and best-of-841 word-shuffle means.](experiments/records/word-internal-affine-lags/comparison.svg)
 

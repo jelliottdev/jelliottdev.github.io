@@ -9,12 +9,11 @@ async function loadSupportingIndex(){
 }
 function experimentSearchResult(r, requestedPages=[]){
   const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
-  const solving=['method','replay'].includes(r.record_type?.id);
   return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
-    <p class="small muted">${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome]||r.outcome)}</p>
+    <p class="small muted">${esc(r.record_type?.label||'Research record')} · ${esc(experimentTargetSummary(r))}</p>
     <p>${esc(r.finding)}</p>
     ${missing.length?`<p class="scope-mismatch">Not in this record’s page scope: ${missing.map(id=>esc(id.toUpperCase())).join(', ')}.</p>`:''}
-    <details class="idea-match-details"><summary>What was ${solving?'tested':'checked'} and what it covers</summary><dl class="idea-result-scope"><dt>Targets</dt><dd>${experimentScopeLinks(r)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Excluded</dt><dd>${esc(r.scope.exclusions)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl></details></article>`;
+    <p class="experiment-result-action"><a href="#/experiments/${r.id}">Read findings, method and files</a></p></article>`;
 }
 function ideaCoverageNote(record){
   const related=record.related.map(id=>experimentRecords.find(r=>r.id===id)).filter(Boolean);
@@ -26,7 +25,7 @@ function ideaCoverageNote(record){
 }
 function ideaCoverageView(query=''){
   const families=query?IdeaCoverage.families(methodFamilyRecords||[],query):[];
-  const familyHTML=families.length?`<h2>Related method families</h2><p class="small muted">These guides describe approaches. They are not evidence that your specific proposal has been tested.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a></p><p>${esc(f.description)}</p><p class="small muted">${f.related.length?`${f.related.length} narrower research ${f.related.length===1?'record is':'records are'} linked in the family map.`:'No research record is currently linked to this family.'} <a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Inspect family coverage</a></p></li>`).join('')}</ul>`:'';
+  const familyHTML=families.length?`<details class="experiment-guide"><summary>Related method guides</summary><ul>${families.map(f=>`<li><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> · <a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Related records</a></li>`).join('')}</ul></details>`:'';
   const failures=(methodFamilyUnavailable?'<p class="small muted">The method-family index could not be loaded. This is not evidence of missing research.</p>':'')+(ideaCoverageUnavailable?'<p class="small muted">Coverage notes could not be loaded. Experiment results remain available.</p>':'');
   const pending=query&&(methodFamilyPending||ideaCoveragePending)?'<p class="small muted" role="status">Checking method families and coverage notes…</p>':'';
   const records=query?IdeaCoverage.match(ideaCoverageRecords||[],query):(ideaCoverageRecords||[]);
@@ -64,8 +63,8 @@ function renderIdeaChecker(query){
       <div class="idea-actions"><button id="idea-submit" type="submit">Check idea</button><button id="idea-cancel" type="button" hidden>Stop waiting</button><span id="idea-status" class="small muted" role="status"></span></div>
       <p id="idea-privacy" class="idea-privacy small muted" ${assistantEndpoint()?'':'hidden'}>Questions are processed by Cloudflare. Don’t include private information.</p>
     </form>
-    <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="experiment-results" aria-label="Matching research records"></section>
+    <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="reported-attempts" aria-label="Earlier reported approaches"></section>
     <details class="experiment-guide"><summary>What does a match mean?</summary>
@@ -107,7 +106,7 @@ function renderIdeaChecker(query){
   const experimentDocuments=AssistantSearch.experimentDocs(experimentRecords);
   const documents=()=>experimentDocuments;
   const cacheKey=()=>JSON.stringify([input.value.trim().replace(/\s+/g,' '),pages(),
-    AssistantSearch.experiments(experimentDocuments,input.value.trim(),pages()).slice(0,2).map(r=>r.document)]);
+    AssistantSearch.select(experimentDocuments,input.value.trim(),pages()).slice(0,2).map(r=>r.id)]);
   const busy=value=>{submit.disabled=value;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));};
   const reset=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);status.textContent='';answer.replaceChildren();};
   function sourceExcerpt(s){
@@ -157,16 +156,17 @@ function renderIdeaChecker(query){
   }
   function draw(searchNow,requestAI=false){
     reset();const idea=input.value.trim();shownIdea=searchNow?idea:'';refreshIdeaSupport();const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
-    const selected=items=>experimentGroups(items.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]));
+    const selected=items=>items.slice(0,3).map(m=>experimentRecords.find(r=>r.id===m.document.id)).filter(Boolean)
+      .map(r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])])).join('');
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>No tests have been added to this index. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
-    else results.innerHTML=`<h2>${matches.length?`${matches.length} related solving ${matches.length===1?'test':'tests'}`:supporting.length?'Relevant measurement, no matching decoding test':'No matching bounded solving test'}</h2><p class="small muted">${matches.length?'Compare the exact method and exclusions before treating a record as the same test.':supporting.length?'The record below checks a feature of the idea. It does not test a complete decoding rule.':'This index does not cover all previous research.'}</p>${selected(matches)}${supporting.length?`<h2>Measurements and source checks</h2>${selected(supporting)}`:''}`;
-    if(matches.length&&assistantEndpoint()){
+    else results.innerHTML=`<h2>${matches.length?'Related tests':supporting.length?'Related measurements':'No matching record'}</h2>${selected(matches)}${supporting.length?`${matches.length?'<h2>Measurements and controls</h2>':''}${selected(supporting)}`:''}${matches.length>3||supporting.length>3?`<p class="small"><a href="#/experiments?browse=${encodeURIComponent(idea)}&section=browse-experiments">Browse more records</a></p>`:''}`;
+    if((matches.length||supporting.length)&&assistantEndpoint()){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});
       else if(requestAI)compare(idea);
       else status.textContent='Press Check idea to compare the documented scope.';
-    } else if(matches.length&&requestAI&&!assistantConfig){
+    } else if((matches.length||supporting.length)&&requestAI&&!assistantConfig){
       const token=++pendingConfigRequest;
       status.textContent='Preparing the comparison…';
       assistantConfigPromise.then(()=>{
