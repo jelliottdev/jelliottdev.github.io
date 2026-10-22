@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 register = json.loads((ROOT / 'data/reported-attempts.json').read_text(encoding='utf-8'))
 entries = register['entries']
 reconciled = register.get('reconciled_sources', [])
+queue = register.get('screening_queue', [])
 assert register['schema'] == 'liberpedia-reported-attempts-v1'
 assert len(entries) == len({entry['id'] for entry in entries})
 families = {row['id'] for row in json.loads((ROOT / 'data/method-families.json').read_text(encoding='utf-8'))['families']}
@@ -22,6 +23,7 @@ for entry in entries:
     assert entry['status'] in {'not-replayed', 'related-only', 'partial'}
     assert entry['family'] in families
     assert all(record in experiments for record in entry['related_records'])
+    assert all(guide in guides for guide in entry.get('related_guides', []))
     assert all(re.fullmatch(r'lp[12]-\d{2}', page) for page in entry['pages'])
     assert all(entry[field].strip() for field in ('title', 'reported_idea', 'coverage', 'replay_needed'))
     source = entry['source']
@@ -46,4 +48,14 @@ for row in reconciled:
         assert hashlib.sha256(local.read_bytes()).hexdigest() == row['sha256'], local
         local_sources_checked += 1
 assert article.count('<h2 id="reconciled">') == (1 if reconciled else 0)
-print(f'PASS: {len(entries)} reported attempts, {len(reconciled)} reconciled sources, valid links and {local_sources_checked} available source hashes.')
+assert len(queue) == len({row['attachment_id'] for row in queue})
+assert {row['attachment_id'] for row in queue}.isdisjoint({row['source']['attachment_id'] for row in entries} | {row['attachment_id'] for row in reconciled})
+for row in queue:
+    assert all(row[field].strip() for field in ('attachment_id', 'sha256', 'label', 'next_check'))
+    assert re.fullmatch(r'[0-9a-f]{64}', row['sha256'])
+    local = Path.home() / '.codex' / 'attachments' / row['attachment_id'] / 'Pasted text.txt'
+    if local.exists():
+        assert hashlib.sha256(local.read_bytes()).hexdigest() == row['sha256'], local
+        local_sources_checked += 1
+assert article.count('<h2 id="screening-queue">') == (1 if queue else 0)
+print(f'PASS: {len(entries)} reported attempts, {len(reconciled)} reconciled sources, {len(queue)} queued files, valid links and {local_sources_checked} available source hashes.')

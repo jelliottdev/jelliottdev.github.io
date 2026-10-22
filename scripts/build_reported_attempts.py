@@ -17,11 +17,16 @@ def build():
     register = json.loads(DATA.read_text(encoding='utf-8'))
     entries = register['entries']
     reconciled = register.get('reconciled_sources', [])
+    queue = register.get('screening_queue', [])
     assert register['schema'] == 'liberpedia-reported-attempts-v1'
     assert len(entries) == len({item['id'] for item in entries})
     published = {record['id'] for record in json.loads((ROOT / 'data/experiments.json').read_text(encoding='utf-8'))['records']}
     families = {family['id']: family for family in json.loads((ROOT / 'data/method-families.json').read_text(encoding='utf-8'))['families']}
-    parts = [f'<p>This intake currently names <strong>{len(entries)} source-specific proposals or analyses</strong>. '
+    unique_sources = {item['source']['attachment_id'] for item in entries} | {item['attachment_id'] for item in reconciled} | {item['attachment_id'] for item in queue}
+    parts = [f'<p>This intake accounts for <strong>{len(unique_sources)} supplied source files</strong>: '
+             f'<strong>{len(entries)} source-specific proposals or analyses</strong>, '
+             f'<strong>{len(reconciled)} notes matched to a checked scope</strong>, and '
+             f'<strong>{len(queue)} files awaiting full method extraction</strong>. '
              'They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, '
              'our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.</p>',
              '<p>The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. '
@@ -52,6 +57,10 @@ def build():
             links = ', '.join(f'<a href="#/experiments/{e(record)}">{e(record.replace("-", " "))}</a>'
                               for record in item['related_records'])
             parts.append(f'<p><strong>Related records with narrower scopes:</strong> {links}.</p>')
+        if item.get('related_guides'):
+            links = ', '.join(f'<a href="#/wiki/{e(guide)}">{e(guide.replace("-", " "))}</a>'
+                              for guide in item['related_guides'])
+            parts.append(f'<p><strong>Related source guide:</strong> {links}.</p>')
         parts.append(f'<details><summary>Source identification</summary><p>{e(source["title"])} · '
                      f'{e(source["author"])} · {e(source["reported"])}. '
                      f'Supplied transcript SHA-256: <code>{e(source["sha256"])}</code>.</p>')
@@ -72,6 +81,17 @@ def build():
             parts.append(f'<li><strong>{e(item["title"])}</strong> · {e(item["author"])}. '
                          f'{e(item["covered_scope"])} <a href="{link}">Read the checked scope</a>. '
                          f'<span class="small muted">Source SHA-256: <code>{e(item["sha256"])}</code></span></li>')
+        parts.append('</ul>')
+    if queue:
+        parts.append('<h2 id="screening-queue">Source files still to screen</h2>'
+                     '<p>These files have only had an initial scan. A single discussion can contain several distinct claims; '
+                     'the label below does not certify complete coverage. Files move out of this queue only when their '
+                     'specific claims are separated into replay entries or precisely matched to existing work.</p><ul>')
+        for item in queue:
+            parts.append(f'<li><strong>{e(item["label"])}</strong> · {e(item["next_check"])} '
+                         f'<details><summary>Source ID and checksum</summary><p class="small muted">'
+                         f'{e(item["attachment_id"])} · SHA-256: <code>{e(item["sha256"])}</code>'
+                         '</p></details></li>')
         parts.append('</ul>')
     parts.append('<p>The register is an intake, not a census of all historical solver work. '
                  'Its entries should be promoted to completed experiments only after their inputs, exact rule, '

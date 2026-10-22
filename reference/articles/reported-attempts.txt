@@ -2,11 +2,11 @@ Reported attempts awaiting exact replay
 
 Source-specific proposals from prior solver notes, mapped to narrower records and the work required to reproduce them.
 
-This intake currently names 16 source-specific proposals or analyses. They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.
+This intake accounts for 45 supplied source files: 20 source-specific proposals or analyses, 6 notes matched to a checked scope, and 20 files awaiting full method extraction. They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.
 
 The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. A public link, when present, may change and has not yet been pinned to a revision. Start with Have we tried it? for completed records, or the method map for a broader family.
 
-Not replayed: 5 · Related work only: 7 · Partly replayed: 4
+Not replayed: 7 · Related work only: 9 · Partly replayed: 4
 
 Find an attempt
 
@@ -41,6 +41,14 @@ LP2-54–55 header crib under ciphertext and plaintext autokey · Related work o
 LP2-15 word sums, nearest-prime distances and reverse-add palindromes · Partly replayed
 
 First-release star marks and artwork layering · Not replayed
+
+Night Thoughts as a 729-rune book-code source · Related work only
+
+Totients before the LP2-15 prime-gap construction · Related work only
+
+Reverse and table-canon readings of Cicada music · Not replayed
+
+Acoustic watermark search in Cicada tracks · Not replayed
 
 Source-specific entries
 
@@ -236,6 +244,50 @@ Source identification
 Star-mark visibility and image-layer discussion · acabadabra, tz18, and participants · 2024-05-15. Supplied transcript SHA-256: d49e8efe2323c540e44d3709f567c3ced4e386de27adbb7490ef6ebcb468c33d.
 
 
+Night Thoughts as a 729-rune book-code source
+Related work only · Book ciphers and coordinate lookups · LP2-00, LP2-01, LP2-02
+Reported approach. Use the 729 runes in LP2-00–02 as a pointer into Edward Young’s Night Thoughts, possibly in an illustrated Blake edition. The discussion points to a line 729 in one Night and explores matching imagery and wording.
+Current archive coverage. The Night Thoughts source guide verifies the 729-rune count and distinguishes the 1797 illustrated edition from a later text; it has not established the proposed line lookup or a cipher use. The supplied discussion includes image placeholders and no fixed extraction coordinates.
+Replay requirement. Pin a scan and transcription of the exact edition; define Night, line and character numbering, including headers and wrapped lines; specify a finite pointer list before reading outputs; test it on the named passage and comparison texts.
+
+Related records with narrower scopes: totient map route.
+
+Related source guide: night thoughts.
+
+Source identification
+Night Thoughts and LP2-00–02 discussion · Zaveon Carlio and participants · 2026-10-02. Supplied transcript SHA-256: 6507348ad2a403ac66aa04cb439633c7103e6530ef907c89a3b1401ca11097ce.
+
+
+Totients before the LP2-15 prime-gap construction
+Related work only · Magic squares and numerical grids · LP2-15
+Reported approach. Starting from the page-15 square, apply Euler’s totient to a prime-related sequence, subtract values from 3301, and interpret the resulting gaps as a Fibonacci arrangement. The thread then proposes applying corresponding manipulations to rune text.
+Current archive coverage. The published square construction reproduces the printed entries using Fibonacci-indexed primes and distance from 3301. This is a different transformation. The transcript gives candidate arrays but no unique, complete decryption rule.
+Replay requirement. Freeze the ordered input primes, every totient/subtraction step, spiral orientation and cell mapping; compare all 16 printed cells, then define one forward cipher operation and held-out rune output before interpreting words.
+
+Source identification
+LP2-15 Fibonacci and totient discussion · prime_1033 and participants · 2026-01-18. Supplied transcript SHA-256: 66bd173de561829a90cb0b04cce4546c602f2adaa1a710ad4d3c0f263f42bfdf.
+
+
+Reverse and table-canon readings of Cicada music
+Not replayed · Audio and frequency encodings
+Reported approach. Reverse a named track, join it to its forward version, and test a table-canon reading; the thread also describes rhythmic alignments between instruments and repetition in The Instar Emergence.
+Current archive coverage. Music references and general audio methods do not replay this particular transform or establish a decoded message. The source conversation does not fix the exact audio master, alignment, voices or acceptance criterion.
+Replay requirement. Pin source-file hashes and sample rate; choose the track, reversal boundary, instrument separation and canonical alignment in advance; publish waveform/spectrogram and exact output, including negative controls made from other tracks.
+
+Source identification
+Music structure, reversal and watermark discussion · Nostalgico and participants · 2026-04-15. Supplied transcript SHA-256: 558462fe6d4ac9a9ce127b4cdf444bd6072845a99fab51db473253f6f699b3b5.
+
+
+Acoustic watermark search in Cicada tracks
+Not replayed · Audio and frequency encodings
+Reported approach. Look for a deliberately embedded acoustic watermark in the published music. The discussion raises this as a question rather than giving a detector, payload or reported extraction.
+Current archive coverage. No watermark-specific detector result is recorded. Existing file-steganography and audio-method guides cover other mechanisms and cannot be used as evidence for this proposal.
+Replay requirement. Choose specific original files and hashes, state the watermark family and detector parameters, record a detection threshold before inspection, and compare positives and false positives on matched non-Cicada audio.
+
+Source identification
+Music structure, reversal and watermark discussion · Nostalgico and participants · 2026-05-16. Supplied transcript SHA-256: 558462fe6d4ac9a9ce127b4cdf444bd6072845a99fab51db473253f6f699b3b5.
+
+
 Source notes with a reproduced scope
 These supplied notes point to work already checked here. The link covers only the precise claim described, not every suggestion in its source thread.
 
@@ -246,6 +298,74 @@ Observation on rune frequency · TheScareworkBoo and participants. The doublet g
 possible hint/s · OH and participants. The fixed LP2-32 grid arrangement reproduces 563, 569 and 1,136 against the 2016 image dimensions and extracted byte length. Later alignments and candidate plaintexts in the thread are separate proposals. Read the checked scope. Source SHA-256: 9f86aac1ec4cb4d9fe6539b0097874b11342d176020f565ab379335906d87967
 
 LP2-39 red-header word suggestions · tz18 and participants. The twenty suggested words, including LAW and BEING, were all checked against the three red runes under a specified affine substitution. Other cipher classes and proposed section themes remain untested by that record. Read the checked scope. Source SHA-256: 60cc04ac65bd4770fb0a21d2c22130e23eff09484fb931cb521c1ce625ea08a0
+
+Do Four... hundred and sixty-four unreasonable things each day · hcaltrom and participants. The fixed 464-word, 16-column length-balance statistic and specified comparison corpora are replayed. The thread also proposes grilles, runic selections and other interpretations; those are not established by the balance test. Read the checked scope. Source SHA-256: 71ebba621c13bc6371e16f454dcc4da93b4005d17e5a782365479a5609aa55b8
+
+27×27 three-rune-node totient route discussion · Moon and participants. The published route replay pins the author repository, checks the 27×27 map and selected arithmetic, and measures how much ciphertext the proposed reading uses. It does not establish that the chosen path is unique or decrypts LP2. Read the checked scope. Source SHA-256: cf2c84d9d55b44e3a1213d4acd42594712cf1f510174310c3834aa037b2cefc6
+
+
+Source files still to screen
+These files have only had an initial scan. A single discussion can contain several distinct claims; the label below does not certify complete coverage. Files move out of this queue only when their specific claims are separated into replay entries or precisely matched to existing work.
+
+Bible-book coordinate suggestion · Book/coordinate rule and cited passage need extraction. Source ID and checksum
+2117fd95-c250-4e15-9854-83da0b9b7582 · SHA-256: 5044a16de1fa6652048f101a2e921c27ce4b3fcef22e0c97773abc88ee408156
+
+Mixed image and candidate-reading discussion · Separate the proposed image operations from adaptive word fitting. Source ID and checksum
+35713cca-a62e-4180-9393-5bc183c70362 · SHA-256: d224f84f997324b2af592eb546ba1ea6e480a70d246b45b0231ef34d03b82bcd
+
+Koan and GP arithmetic discussion · Extract exact arithmetic after the author’s corrected sum. Source ID and checksum
+4d80ab80-eab0-4f0d-b595-68e0167eb871 · SHA-256: e7f90ade745e6367b90a8bffe83e68f92f7ec316f60ad7be409ec9f876deed3b
+
+Research questions supplied for review · These are questions and audit suggestions, not a historical experiment report. Source ID and checksum
+618a613e-5e2e-470c-9592-8d16c8394c4f · SHA-256: 51bb2136883ed6e6ed9804302ba26fc35f48dd5544dec06ed21e4accb04ebd6e
+
+LP1 word sums and candidate strings · Compare the exact candidate set with the published magic-square scope. Source ID and checksum
+67334819-b455-4bdc-b865-20664a9468b8 · SHA-256: aefff204248ab0dc7e08180d8b681eaa7a4e96a21d1deb9a54796900cb81d7d1
+
+Magic-square order discussion · Check whether a distinct traversal or only known square constraints are proposed. Source ID and checksum
+7f8558ce-8a7c-4eeb-94f2-5952329b08d7 · SHA-256: df0ced68eeefa2cd0f6354cc0e1480709ca6c3abbc102e81351b2bf757f1eefb
+
+Artwork provenance and N-rune distances · Split image-source claims from the numerical-distance hypothesis. Source ID and checksum
+86509e17-894e-47c7-bda3-7136f4e1683d · SHA-256: 564fecb15bcb68bd57d29066217b41b07c2154ed2ddc58b74d8e4b5f232f057f
+
+Rune values as bytes and Mayfly image · Separate a byte-decoding rule from the proposed artwork source. Source ID and checksum
+9c66f80f-13cb-48ed-97bf-35d80f450fed · SHA-256: 9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728
+
+Five-dot image and symbolic alphabet · Identify the exact reference and positional overlay before testing. Source ID and checksum
+ad8cc121-47ca-4c93-87eb-9c85f985d0ff · SHA-256: ca06293235ae92bbe62d84c3a7209f934378ba35ed1eb7bac3d6244e25034463
+
+LP2-56 hash-target hypotheses · Separate verifiable hash syntax from unbounded guesses at target content. Source ID and checksum
+bc2d6c57-8156-439e-8dd4-1aa3592a4999 · SHA-256: 005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f
+
+Known-reading hint chain · Extract predictions made before examining unsolved-page candidates. Source ID and checksum
+c1c1edd9-ecef-4085-b2d5-dd5c41b93856 · SHA-256: 1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042
+
+Unreasonable Way research essay · Methodological essay; identify any testable claim before filing an experiment. Source ID and checksum
+c1f2d919-7020-47d6-9344-24e59a1a1782 · SHA-256: 42a747151f69b3b0210b39c33821b27af3db57ac0c777dfc88d1c19f194a4e56
+
+Way, map and compass theme · Record cross-message references separately from a geometric cipher rule. Source ID and checksum
+de9ea317-1049-4472-9104-509cfc8e5dc5 · SHA-256: d09063a07e519f402c1f19802997418fed75c9843de897207bcad16c201664aa
+
+Proposed manual transcription audit · Check whether a completed rune-by-rune comparison is supplied. Source ID and checksum
+eb0557f3-815d-4b6f-9f12-eced5b37b0d3 · SHA-256: 0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7
+
+Epiphany and historical-message wording · Locate the exact message references and any falsifiable prediction. Source ID and checksum
+edacef84-a430-43d4-8540-47a01a00ecef · SHA-256: da5eda73ef7664e6761e37e81f4a4f3618c30f2d899555f66c9839579da8991e
+
+Mixed solver discussion · Screen the full thread for a specified transform or source lead. Source ID and checksum
+f2ad6491-1cd3-43d3-ae73-b05b88d1c14c · SHA-256: a73976af78ae6c94d0dffffe5c87266fad568a0b4dd26cb2c29f10b34f5fb429
+
+Music and counterpoint discussion · Extract a concrete musical comparison if one is stated. Source ID and checksum
+f49d5f9b-2b1f-425c-9500-3ae985480130 · SHA-256: 3e61084a945f0e6f746d5d2ac4b60a3a9cdb1c8243f6301af76aaba3d8f062f5
+
+Doublet and rune-frequency discussion · Compare exact counts and corpus normalization with the published guide. Source ID and checksum
+fb8502fe-819f-4048-ad12-a1d73a32a438 · SHA-256: a43d49a4568e17141c94c09fd827c16bd1f8405e3382ff22eeca14320a42560d
+
+Course-page paste · Appears unrelated to the puzzle; confirm before excluding. Source ID and checksum
+fcc886a9-d8f9-49aa-87d0-0c89a9afbb7c · SHA-256: 1fbea5e345b33e6fcb999896186e413f54b6f2763c41c7d0aacc2f067be5ed1d
+
+English Qaballa wording lead · Verify textual source and distinguish quotation from a usable mapping. Source ID and checksum
+fe1feb80-b63d-4e07-b0c7-4a94fb768de1 · SHA-256: 9bfdd6cec749779f733c39a8f79bb2a76464aebf085fca6dc63a1ee9bed5fb7f
 
 
 The register is an intake, not a census of all historical solver work. Its entries should be promoted to completed experiments only after their inputs, exact rule, controls and outputs have been saved and independently checked. Download the structured intake.
@@ -287,6 +407,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#lp2-15-prime-distance-palindromes
 - First-release star marks and artwork layering
   https://jelliottdev.github.io/reference/articles/reported-attempts.html#lp1-star-background-layering
+- Night Thoughts as a 729-rune book-code source
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#night-thoughts-729-book-pointer
+- Totients before the LP2-15 prime-gap construction
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#lp2-15-totient-before-prime-gap
+- Reverse and table-canon readings of Cicada music
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#music-reverse-table-canon
+- Acoustic watermark search in Cicada tracks
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#cicada-audio-watermark
 - Radix changes and byte encodings
   https://jelliottdev.github.io/reference/articles/method-representations.html
 - grid direct bytes
@@ -337,7 +465,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
 - doublet context
   https://jelliottdev.github.io/#/experiments/doublet-context
-- totient map route
+- totient map route; Read the checked scope
   https://jelliottdev.github.io/#/experiments/totient-map-route
 - Bounded arithmetic expressions
   https://jelliottdev.github.io/reference/articles/method-expressions.html
@@ -357,12 +485,22 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums
 - Image transforms and overlays
   https://jelliottdev.github.io/reference/articles/image-regions.html
+- Book ciphers and coordinate lookups
+  https://jelliottdev.github.io/reference/articles/book-ciphers.html
+- night thoughts
+  https://jelliottdev.github.io/reference/articles/night-thoughts.html
+- Magic squares and numerical grids
+  https://jelliottdev.github.io/reference/articles/magic-squares.html
+- Audio and frequency encodings
+  https://jelliottdev.github.io/reference/articles/audio-frequency.html
 - Read the checked scope
   https://jelliottdev.github.io/#/experiments/corpus-prefix-census
 - Read the checked scope
   https://jelliottdev.github.io/reference/articles/doublets.html
 - Read the checked scope
   https://jelliottdev.github.io/#/experiments/lp2-32-message-grid
+- Read the checked scope
+  https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
 - Download the structured intake
   https://jelliottdev.github.io/data/reported-attempts.json
 
