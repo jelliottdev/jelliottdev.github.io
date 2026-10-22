@@ -5,8 +5,10 @@
   function render(text,sources=[]){
     const inline=(s,depth=0)=>{
       if(depth>3)return esc(s);
-      return s.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]\n]+\]\([^)]+\)|\[\d+\])/g).map(part=>{
+      return s.split(/(`[^`]+`|\$[^$\n]+\$|\\\([^\n]+?\\\)|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]\n]+\]\([^)]+\)|\[\d+\])/g).map(part=>{
         if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
+        if(/^\$[^$\n]+\$$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
+        if(/^\\\([^\n]+\\\)$/.test(part))return '<code>'+esc(part.slice(2,-2))+'</code>';
         if(/^\*\*[^*]+\*\*$/.test(part))return '<strong>'+inline(part.slice(2,-2),depth+1)+'</strong>';
         if(/^\*[^*]+\*$/.test(part))return '<em>'+inline(part.slice(1,-1),depth+1)+'</em>';
         const citation=part.match(/^\[(\d+)\]$/);

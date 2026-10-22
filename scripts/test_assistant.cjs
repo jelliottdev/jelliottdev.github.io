@@ -36,6 +36,9 @@ const html=Markdown.render('# Scope\n\n**One row** [1].\n\n- First\n- Second\n\n
 assert(html.includes('<strong>One row</strong>'));assert(html.includes('<table>'));assert(html.includes('<li>Second</li>'));
 assert(!html.includes('<img'));assert(!html.includes('<script>'));assert(!html.includes('href="javascript:'));assert(html.includes('href="#/experiments/test"'));
 assert(!Markdown.render('`[1]`',sources).includes('<a '));
+assert(Markdown.render('WHY fit at $a=7, b=7$ [1].',sources).includes('<code>a=7, b=7</code>'));
+assert(Markdown.render('WHY fit at \\(a=7, b=7\\) [1].',sources).includes('<code>a=7, b=7</code>'));
+assert(!Markdown.render('$<img src=x>$').includes('<img'));
 console.log('PASS: no page-only experiment matches, scope separation, page ID parsing, Markdown tables/lists/code, citation links and HTML/URL escaping.');
 
 // Published experiment prose must preserve literal reproduction syntax.
