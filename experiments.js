@@ -51,7 +51,6 @@ function experimentGroups(records, render){
 }
 function experimentBrowse(records){
   const title=group=>group[0].family?.title||group[0].title;
-  const pending=records.filter(r=>r.review?.human_review==='pending').length;
   const familyKey=record=>record.family?.id||record.id;
   const solvingFamilies=new Set(records.filter(r=>['method','replay'].includes(r.record_type?.id)).map(familyKey));
   const primary=records.filter(r=>solvingFamilies.has(familyKey(r)));
@@ -66,9 +65,10 @@ function experimentBrowse(records){
         <ul>${members.map(record=>`<li><h3><a href="#/experiments/${record.id}">${esc(record.title)}</a></h3>
           <p class="small muted">${esc(record.record_type?.label||'Experiment')} · ${esc(outcomes[record.outcome]||record.outcome||'Outcome unavailable')}</p>
           ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
-          <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
+          <p>${esc(record.finding)}</p></li>`).join('')}</ul></details>`;
     }).join('')}</div>`;
-  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">Search for a technique or page, then open a record to see what was tested and what remains open. Solving tests check a specific decoding or extraction rule; measurements and source checks provide supporting evidence.</p><div class="experiment-browse-filter"><label for="experiment-browse-query">Find a published record</label><input id="experiment-browse-query" type="search" placeholder="Method, title, or page ID (e.g. LP2-15)" autocomplete="off"><p id="experiment-browse-status" class="small muted" role="status"></p></div><p class="small muted experiment-browse-caveat">“Supported” applies only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><div class="experiment-browse-section"><h3>Solving methods and linked evidence</h3><p class="small muted">Related variants and supporting records stay together.</p>${cards(primary)}</div><div class="experiment-browse-section"><h3>Measurements, controls and source checks</h3><p class="small muted">These inform the research; they do not independently decode an unsolved page.</p>${cards(supporting)}</div>`;
+  const params=new URLSearchParams(location.hash.split('?')[1]||'');
+  return `<details id="browse-experiments" class="experiment-archive" ${params.get('section')==='browse-experiments'||params.has('browse')?'open':''}><summary><span>Browse published research</span><span class="small muted">${records.length} records, grouped by method</span></summary><div class="experiment-archive-body"><p>Search for a technique or page. Open a group to compare its tests. Measurements and source checks are listed separately from solving methods.</p><div class="experiment-browse-filter"><label for="experiment-browse-query">Find a published record</label><input id="experiment-browse-query" type="search" placeholder="Method, title, or page ID (e.g. LP2-15)" autocomplete="off"><p id="experiment-browse-status" class="small muted" role="status"></p></div><p class="small muted experiment-browse-caveat">An outcome applies only to its stated question and bounds. <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><div class="experiment-browse-section"><h2>Solving methods and linked evidence</h2><p class="small muted">Related variants and supporting records stay together.</p>${cards(primary)}</div><div class="experiment-browse-section"><h2>Measurements, controls and source checks</h2><p class="small muted">These inform the research; they do not independently decode an unsolved page.</p>${cards(supporting)}</div></div></details>`;
 }
 function experimentFamily(r){
   if(!r.family)return '';
@@ -114,15 +114,13 @@ function experimentArticle(r){
   const methodGuides=experimentMethodGuides(r);
   const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],...(methodGuides?[['experiment-methods','Method guides']]:[]),['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
-  return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Research records')+`<article class="reading-width experiment-article">
+  return head(r.title,`${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome])}`,'Research records')+`<article class="reading-width experiment-article">
     <p><a href="#/experiments">← Research archive</a></p>
     <p class="lede">${esc(r.question)}</p>
-    ${experimentRecordType(r)}
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
     <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Finding</h2><p>${esc(r.finding)}</p>
       <h3>What this does and does not establish</h3><p>${esc(r.limitations)}</p>
-      <p class="small muted"><strong>Review status:</strong> ${esc(r.review.kind||'Computational')} check recorded; human review ${esc(r.review.human_review||'not recorded')}. ${esc(r.review.reviewer)}</p>
       ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>${solving?'Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test.':'This record checks a measurement, control or source question. Its scope does not establish that an LP2 decoding method was tried.'} <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
@@ -139,6 +137,7 @@ function experimentArticle(r){
     <h2 id="experiment-remaining">Remaining work</h2><p>${esc(r.next_steps)}</p>
     <details class="experiment-account"><summary>Full account: method, results, and retest</summary><div class="experiment-prose">${renderExperimentMarkdown(r.article,[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)])}</div></details>
     <h2 id="experiment-sources">Sources</h2><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
+    <details class="experiment-review"><summary>Record checks and review</summary><p>${esc(r.review.kind||'Computational')} check recorded on ${esc(r.review.retested_on)}. Human review: ${esc(r.review.human_review||'not recorded')}. ${esc(r.review.reviewer)}</p></details>
     ${related.length?`<h2>Related experiments</h2><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}${footer()}</article>`;
 }
 

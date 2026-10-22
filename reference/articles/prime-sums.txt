@@ -2,18 +2,33 @@ Reproducing rune prime sums
 
 Compute exact sentence and word totals, test explicit spelling changes, and keep arithmetic separate from intent.
 
-A prime-sum claim is a claim about a particular sequence of runes under a particular counting rule. Before asking why a spelling was chosen, establish which text was counted and whether the claimed total can be reproduced. The spelling reference discusses individual cases; this guide walks through the calculation.
+Each rune in Gematria Primus has a prime-number value. A prime sum adds those values across a stated piece of text: one word, a sentence, or a whole page. The total need not itself be prime. The boundary and the rune sequence matter. This guide shows how to calculate a sum, why an archived ciphertext sum can differ from a decoded reading, and what a numerical match can actually tell us. For individual spellings, see the spelling reference.
+
+Start with one word: CWESTIAN
+
+The second word of the Instruction reading on LP1-16 contains seven runes. Written as arithmetic labels, they are C, W, E, S, T, IA and N. The final three Latin letters in “TIAN” therefore do not name three separate runes: IA stands for one rune worth 107.
+
+C    W    E    S    T    IA    N
+13 + 19 + 67 + 53 + 59 + 107 + 29 = 347
+
+Reverse the decimal digits: 347 → 743
+Both are prime, and they are different: 347 is an emirp.
+
+This establishes the arithmetic for that seven-rune reading. It does not prove why the word was written that way or supply a cipher key. The spelling comparisons below change one rune at a time to show which alternatives alter the sum.
 
 Choose the input layer
 
-The page record’s ordinary prime sum describes its archived runes. For an encrypted page, this is a ciphertext sum. The examples here instead use the known decoded rune sequence, with the documented correction and cipher rules applied. These are different quantities even when both are called “the page sum.”
+First decide which runes you are adding. The sum beside a manuscript image describes its archived transcription. On an encrypted page, that is a ciphertext sum. A known reading has a separate decoded rune sequence, after the documented correction and cipher rules. Its sum may differ even if the rune count stays the same.
 
-Use the rune’s Gematria Primus prime value, not its zero-based cipher index. Count each rune once. The rule here excludes spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG denotes one rune; it must not automatically become two individual letter-runes.
+Then decide where to stop: word, sentence, or page. Use each rune’s prime value, not its zero-based cipher index. Count each rune once; exclude spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG can denote one rune and must not automatically become two letter-runes.
 
 Reproduce the sum displayed on a page
 
 The metadata beside each manuscript image reports the archived rune count and prime sum. For LP2-31, these are 269 runes and 13,680. They describe the encrypted transcription, not a proposed plaintext.
 
+You can check those numbers against the archive text and alphabet. This establishes that the displayed metadata matches the stored transcription; it does not independently verify each rune against the image.
+
+Show the Python check and expected output
 Use this Python 3 example from the repository root or extracted reference-data bundle. Change page_id to another page with an archived rune transcription. The script reads the archive text, looks up each rune’s prime value, and checks both results against the page record:
 
 import json
@@ -37,7 +52,8 @@ Expected output:
 Archived runes: 269
 Archived prime sum: 13680
 
-Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing. This checks the published metadata against its transcription and alphabet; it is not an independent verification of the image transcription.
+Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing.
+
 
 A sum preserves no ordering information: rearranging the same runes gives the same total. Matching 13,680 therefore cannot establish that two transcriptions are identical or that a rearrangement is correct. Use the exact source file and its checksum to identify the input; use cipher invariants to understand which transformations can change the statistic. The first-row example explains why Latin-letter counts differ from rune counts.
 
@@ -111,19 +127,7 @@ The complete archived MP3 was checked when preparing this ledger. Its hash ident
 
 What does a spelling change actually do?
 
-Start with the exact original sequence, specify an alternate sequence, and subtract their totals. For a replacement of one rune by several, the change is the sum of the inserted rune values minus the removed rune value.
-
-Worked example: CWESTIAN
-
-The second word of the Instruction reading on LP1-16 contains seven runes. In the labels used by the arithmetic evidence, they are C, W, E, S, T, IA and N. The final three Latin letters in “TIAN” therefore do not represent three separate runes: IA is one alphabet entry worth 107.
-
-C    W    E    S    T    IA    N
-13 + 19 + 67 + 53 + 59 + 107 + 29 = 347
-
-Reverse the decimal digits: 347 → 743
-Both are prime, and they are different: 347 is an emirp.
-
-Now construct an alternative that represents the sound with separate I and O runes. Keep every other rune fixed. Their combined value is 31 + 7 = 38, so replacing 107 with 38 gives 347 − 107 + 38 = 278. This is a real arithmetic difference. Writing the original rune’s label as IO instead of IA, or C as K, would leave the underlying seven runes and their sum unchanged. See transliteration conventions before comparing Latin spellings.
+Start with the exact original rune sequence, write down an alternate sequence, and subtract their totals. For a replacement of one rune by several, add the inserted values and subtract the removed value. In the CWESTIAN example above, an alternative that represents the sound with separate I and O runes replaces the 107-valued IA with 31 + 7 = 38. Its total becomes 347 − 107 + 38 = 278. That changes the arithmetic. Merely writing the same rune’s label as IO instead of IA, or C as K, leaves the seven runes and their total unchanged. Check the transliteration conventions before comparing Latin spellings.
 
 Compare the other cases
 
@@ -191,6 +195,7 @@ Reproduce the exact minima
 
 This Python example uses dynamic programming. For each smaller total, it retains a shortest available value sequence. Extending those solutions by each allowed value finds a shortest sequence for the next total. It reads the alphabet from the reference-data bundle and makes no network requests.
 
+Show the shortest-sequence Python calculation
 import json
 from pathlib import Path
 
@@ -208,6 +213,7 @@ for target in (131, 151, 809, 3299):
     witness = best[target]
     assert witness is not None and sum(witness) == target
     print(target, len(witness), witness)
+
 
 The minimum counts are 3, 3, 9 and 31. A shortest witness need not be unique; the program’s ordering merely selects one. It neither enumerates all words nor estimates how likely a matching word is. For a fixed list of actual word candidates, see the complete segmentation audit. For defining a wider vocabulary search, see search space and bounds.
 
@@ -246,10 +252,16 @@ The later-message worked example reproduces the original 59-rune group sums, the
 Widsom in the Britannica scans documents three printed occurrences with image details and full-page downloads. The shared spelling is a source lead; borrowing by Liber Primus has not been established.
 
 Sources, related references, and files
+- Gematria Primus
+  https://jelliottdev.github.io/reference/articles/rune-values.html
 - spelling reference
   https://jelliottdev.github.io/#/spelling
-- Gematria Primus prime value
-  https://jelliottdev.github.io/reference/articles/rune-values.html
+- Instruction reading
+  https://jelliottdev.github.io/reference/articles/reading-instruction.html
+- LP1-16
+  https://jelliottdev.github.io/reference/lp1-16.html
+- spelling comparisons below
+  https://jelliottdev.github.io/reference/articles/prime-sums.html#change
 - LP2-31
   https://jelliottdev.github.io/reference/lp2-31.html
 - reference-data bundle; reference-data ZIP
@@ -288,10 +300,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/parable-mp3-link.json
 - verification script
   https://jelliottdev.github.io/scripts/parable_mp3_link.py
-- Instruction reading
-  https://jelliottdev.github.io/reference/articles/reading-instruction.html
-- LP1-16
-  https://jelliottdev.github.io/reference/lp1-16.html
+- CWESTIAN example above
+  https://jelliottdev.github.io/reference/articles/prime-sums.html#worked-word
 - transliteration conventions; transcription correction
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - the source register

@@ -1,0 +1,14 @@
+{
+  "schema": "liberpedia-grid-barcode-fixed-render-plan-v1",
+  "question": "Does the declared eight-bit rendering of LP2-49–51, whole or separated at manuscript page boundaries, decode as a QR Code or Data Matrix under fixed planar transformations?",
+  "source_rule": "Use the pinned grid-binary audit: wiki transcription, declared 60-digit alphabet, each token as one unsigned byte, eight most-significant-first bits per token and eight tokens per manuscript row.",
+  "canvases": ["all-32-rows", "lp2-49-10-rows", "lp2-50-13-rows", "lp2-51-9-rows"],
+  "geometry": "Keep the 64-bit manuscript row width. Apply eight D4 planar transforms (four rotations, with and without a horizontal mirror) and both black/white polarities to each canvas. Render each bit as an 8 by 8 pixel square with a four-module white quiet zone. No resampling, cropping, reflow, inserted finder patterns or bit deletion.",
+  "decoder": "zxing-cpp 3.1.1 Python binding; formats restricted to QRCode and DataMatrix; try_rotate=False, try_invert=False, try_downscale=False; default local-average binarizer; only a valid decoded barcode with nonempty content counts.",
+  "control": "Generate one QR Code and one Data Matrix carrying fixed distinct strings with the same zxing-cpp installation. Each must decode to its exact string and requested format with the same decoder settings. As a background check, shuffle each canvas's bits eight times with a fixed seed, preserving dimensions and black-cell count, and scan the same 16 transforms. These shuffles are descriptive, not a calibrated chance model for manuscript art.",
+  "decision": "Report every decoded candidate; if none, mark this exact representation unsupported, not the entire barcode family. Retain the number of canvases, transforms and shuffled controls actually scanned.",
+  "exclusions": "Other glyph readings, base or digit order, bit order, variable-width binary, 16 by 16 reflow, page permutations, shifts, padded/cropped subwindows, damaged-barcode recovery beyond this decoder, other barcode standards, and any encrypted payload without a valid barcode wrapper.",
+  "inputs": [
+    {"path": "exports/grid-binary-audit.json", "sha256": "c01f294ddeef3a2bd3e3c507594add17c670aff25a23306f79fbce6577844919"}
+  ]
+}

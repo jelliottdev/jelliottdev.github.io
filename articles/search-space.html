@@ -8,7 +8,21 @@
 
 <h2 id="count">Count the choices before running</h2>
 <p>Take all recognized runes in the archived LP2-31 transcription. Allow two whole-page orders: original and reversed. For each order, subtract every fixed shift from 0 through 28, using <a href="#/wiki/modular-arithmetic">arithmetic modulo 29</a>. There are <strong>2 × 29 = 58 configurations</strong>.</p>
-<figure class="evidence-figure"><img style="width:100%;max-width:360px;height:auto" src="exports/figures/search-space.svg" width="360" height="340" loading="lazy" alt="One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total."><figcaption>Multiply the number of choices when every combination is allowed. The branches count configurations, not successful decryptions. <a href="exports/figures/search-space.svg">Download diagram</a>.</figcaption></figure>
+<figure class="evidence-figure choice-explorer" id="choice-explorer">
+<div class="choice-explorer-static"><img style="width:100%;max-width:360px;height:auto" src="exports/figures/search-space.svg" width="360" height="340" loading="lazy" alt="One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total."></div>
+<div class="choice-explorer-live" hidden>
+<p class="choice-explorer-prompt">Change one choice and watch the number of tests grow.</p>
+<div class="choice-explorer-controls">
+<label>Pages <output for="choice-pages">1</output><input id="choice-pages" type="range" min="1" max="10" value="1"></label>
+<label>Page orders <output for="choice-orders">2</output><input id="choice-orders" type="range" min="1" max="2" value="2"></label>
+<label>Shifts <output for="choice-shifts">29</output><input id="choice-shifts" type="range" min="1" max="29" value="29"></label>
+<label>Starting offsets <output for="choice-offsets">1</output><input id="choice-offsets" type="range" min="1" max="29" value="1"></label>
+</div>
+<p class="choice-explorer-result"><span id="choice-formula">1 × 2 × 29 × 1</span> = <strong id="choice-total" role="status" aria-live="polite">58 configurations</strong></p>
+<ol class="choice-explorer-steps" aria-label="Cumulative choices"><li>Pages <strong id="choice-step-pages">1</strong></li><li>Orders <strong id="choice-step-orders">2</strong></li><li>Shifts <strong id="choice-step-shifts">58</strong></li><li>Offsets <strong id="choice-step-offsets">58</strong></li></ol>
+</div>
+<figcaption>Every combination counts as one configuration. Different configurations may produce the same output, and this count is not a probability of success. <a href="exports/figures/search-space.svg">Download the fixed 58-case diagram</a>.</figcaption>
+</figure>
 <p>If you also allow three distinct starting offsets, the count becomes 2 × 29 × 3 = 174 configurations. That is a different search, and you must specify what an offset does: discard leading runes, move a keystream’s starting point, or something else. If some choices are only allowed on particular branches, count each branch separately and add the totals.</p>
 <div class="table-wrap"><table><thead><tr><th>Declared choices</th><th>Configurations</th><th>What the number assumes</th></tr></thead><tbody>
 <tr><td>Two orders and 29 fixed shifts</td><td>58</td><td>Both orders use every shift.</td></tr>

@@ -74,6 +74,28 @@ function wikiPage(id='') {
  ${doc.body.innerHTML}${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}${footer()}</article>
  <aside class="contents"><strong>On this page</strong>${contentsHTML}</aside></div>`;
 }
+function bindChoiceExplorer(){
+ const figure=document.getElementById('choice-explorer');
+ if(!figure)return;
+ const controls=figure.querySelector('.choice-explorer-live');
+ const fallback=figure.querySelector('.choice-explorer-static');
+ const fields=['pages','orders','shifts','offsets'].map(name=>figure.querySelector('#choice-'+name));
+ if(!controls||fields.some(field=>!field))return;
+ controls.hidden=false;fallback.hidden=true;
+ const update=()=>{
+  let total=1;
+  const values=fields.map(field=>Number(field.value));
+  fields.forEach((field,index)=>{
+   total*=values[index];
+   figure.querySelector(`output[for="${field.id}"]`).textContent=String(values[index]);
+   figure.querySelector('#choice-step-'+field.id.slice(7)).textContent=total.toLocaleString('en-US');
+  });
+  figure.querySelector('#choice-formula').textContent=values.join(' × ');
+  figure.querySelector('#choice-total').textContent=total.toLocaleString('en-US')+' configurations';
+ };
+ fields.forEach(field=>field.addEventListener('input',update));
+ update();
+}
 document.addEventListener('click',async event=>{
  const wrap=event.target.closest('[data-wrap-block]');
  if(wrap){

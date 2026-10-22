@@ -20,8 +20,28 @@ Count the choices before running
 
 Take all recognized runes in the archived LP2-31 transcription. Allow two whole-page orders: original and reversed. For each order, subtract every fixed shift from 0 through 28, using arithmetic modulo 29. There are 2 × 29 = 58 configurations.
 
+
 [Image: One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.]
-Multiply the number of choices when every combination is allowed. The branches count configurations, not successful decryptions. Download diagram.
+
+
+Change one choice and watch the number of tests grow.
+
+
+Pages 1
+Page orders 2
+Shifts 29
+Starting offsets 1
+
+1 × 2 × 29 × 1 = 58 configurations
+
+Pages 1
+Orders 2
+Shifts 58
+Offsets 58
+
+
+Every combination counts as one configuration. Different configurations may produce the same output, and this count is not a probability of success. Download the fixed 58-case diagram.
+
 
 If you also allow three distinct starting offsets, the count becomes 2 × 29 × 3 = 174 configurations. That is a different search, and you must specify what an offset does: discard leading runes, move a keystream’s starting point, or something else. If some choices are only allowed on particular branches, count each branch separately and add the totals.
 
@@ -128,7 +148,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/prime-sums.html#length-bounds
 - arithmetic modulo 29
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
-- One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.; Download diagram
+- One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.; Download the fixed 58-case diagram
   https://jelliottdev.github.io/exports/figures/search-space.svg
 - the shift enumeration walkthrough
   https://jelliottdev.github.io/reference/articles/reproducibility.html#generate-candidates

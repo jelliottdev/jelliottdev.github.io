@@ -6215,22 +6215,9 @@ Start solving: a practical introduction
 
 Find the right pages, reproduce known results, and turn an idea into a test someone else can repeat.
 
-Liber Primus combines pictures, rune text, printed numbers, and data hidden inside image files. Start by asking which layer a claim concerns. A title page can have no runic paragraph yet still carry a message extracted from its image file with OutGuess, a steganography tool. Decoding visible runes and extracting hidden bytes are separate checks.
+Start with a small check you can do in your browser. After that, choose whether to study the pages, follow an earlier puzzle, or try a research method.
 
-1. Know the collection
-The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
-Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
-
-This guide starts with the manuscript. To follow the puzzle from its first 2012 image through the 2013 steps and into the 2014 manuscript, use the separate Cicada history route. Earlier steps give context; they are not presumed keys to LP2.
-
-The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
-
-[Image: The warning page used for the first reading exercise]
-LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.
-[Image: LP2-31, an unsolved page used in the statistics guide]
-LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
-
-2. Reproduce one short reading
+Try one reading: three runes
 Open the warning in the reader. Compare the original image with its runes, then follow the complete warning reading and its Atbash explanation. Use the 29-symbol alphabet, not English A–Z. Count a multi-letter rune as one symbol.
 
 Start in the browser
@@ -6246,6 +6233,20 @@ Compare the shapes with the original warning image and the alphabet chart. The l
 
 Continue with the worked Atbash table, or download the complete warning trace (CSV) to inspect every rune. The trace explanation describes its columns and source record. Checking three symbols confirms those three calculations; it does not yet verify the entire page.
 
+Know the collection
+The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
+Use IDs such as LP2-31. “Page 31” without a release or archive name is ambiguous. The numbering cross-reference maps release IDs to archive filenames.
+
+This guide starts with the manuscript. To follow the puzzle from its first 2012 image through the 2013 steps and into the 2014 manuscript, use the separate Cicada history route. Earlier steps give context; they are not presumed keys to LP2.
+
+The illustrated cover with compasses comes from an earlier puzzle stage and has its own entry. It is different from LP1-00, the plain title page, and does not change the release numbering.
+
+[Image: The warning page used for the first reading exercise]
+LP1-01: start here. Its known Atbash reading makes a short, checkable first exercise.
+[Image: LP2-31, an unsolved page used in the statistics guide]
+LP2-31: a later investigation. Its recorded measurements describe the text; they do not supply a decryption.
+
+Verify the complete reading with Python (optional)
 Then verify the complete reading with Python
 
 python scripts/verify_bundle.py REFERENCE-DATA-CONTENTS.json
@@ -6264,6 +6265,8 @@ PASS: 17 literal page readings match the published controls exactly.
 This confirms that the supplied recipes reproduce the stored known outputs. It does not independently authenticate the source files or validate a proposed solution to an unsolved page. Use the download catalogue for file hashes and the transliteration guide for the difference between literal labels and contextual English.
 
 
+
+Check one row of the number grid (optional)
 Optional second check: one row of the number grid
 Open LP1-05 and find the five-by-five grid below the text. Its first row mixes four printed numbers with one rune word. In the known reading that word is labeled SHADOWS.
 Leave the printed entries 272, 138, 131 and 151 unchanged.
@@ -6272,7 +6275,8 @@ Add the row: 272 + 138 + 341 + 131 + 151 = 1033.
 This verifies one row, not the whole square. The full explanation shows all five rows, five columns and two main diagonals. If you have Python, python scripts/check_number_examples.py reproduces those checks from the included page and alphabet records.
 The important distinction is the input: the printed decimal numbers stay as numbers, while rune words are replaced by additive prime values. Do not apply a prime-index lookup to every entry or replace the words with ordinary English spelling. Those would be different procedures.
 New to the terminal? Running the reproduction scripts walks through setup, expected results, trace columns, and common errors.
-3. Learn the other layers
+
+Explore the other layers
 Rune indices and prime values: cipher arithmetic versus prime sums.
 Vigenère: keys, direction, and continuity across pages.
 The cover payload chain: OutGuess, hexadecimal, XOR, signatures, and transposition.
@@ -6282,7 +6286,7 @@ For the ideas behind the decoded passages, follow the philosophy reading route, 
 
 Before choosing a large test, read search space and bounds: count the choices, decide what would count as success, and distinguish a completed search from an interrupted one.
 
-4. Make an idea testable
+Make an idea testable
 Choose a page, a region, a transformation, and a rule for judging the output. “Try primes” leaves all four undecided. A narrower proposal is: start at the first rune of LP2-31, subtract consecutive prime-minus-one values modulo 29, advance the prime sequence only on runes, and continue through punctuation without resetting or skipping runes. This tells someone what to calculate; it still does not say what result would count as a match.
 State that criterion before inspecting the output. For example, you could require an exact, specified 12-rune opening, then report every configuration tested and every match. This would test that opening under those rules, not establish that the method is correct for the page.
 Check Have we tried it? for the technique and scope. Browse the published experiment families or describe a technique to find related records. Open the individual record and compare its inputs, boundary rules, parameters and exclusions with your proposal. An empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
@@ -6369,26 +6373,8 @@ Sources and verification
 Pinned historical walkthrough. Recipes reproduce published controls; they are not new solutions. Local computational verification: 19 October 2026.
 
 Sources, related references, and files
-- first release
-  https://jelliottdev.github.io/#/pages/LP1
-- second release
-  https://jelliottdev.github.io/#/pages/LP2
-- LP2-31; LP2-31, an unsolved page used in the statistics guide; LP2-31: a later investigation
-  https://jelliottdev.github.io/reference/lp2-31.html
-- numbering cross-reference
-  https://jelliottdev.github.io/#/numbering
-- Cicada history route
-  https://jelliottdev.github.io/reference/articles/cicada-history.html#replays
-- illustrated cover with compasses
-  https://jelliottdev.github.io/reference/articles/illustrated-cover.html
-- The warning page used for the first reading exercise; the warning in the reader; the original warning image
+- the warning in the reader; the original warning image; The warning page used for the first reading exercise
   https://jelliottdev.github.io/#/reader/lp1-01
-- The warning page used for the first reading exercise
-  https://jelliottdev.github.io/thumbs/lp1-01.jpg
-- LP1-01: start here
-  https://jelliottdev.github.io/reference/lp1-01.html
-- LP2-31, an unsolved page used in the statistics guide
-  https://jelliottdev.github.io/thumbs/lp2-31.jpg
 - the complete warning reading
   https://jelliottdev.github.io/reference/articles/reading-warning.html
 - Atbash explanation
@@ -6401,6 +6387,24 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/readings/warning.csv
 - trace explanation
   https://jelliottdev.github.io/reference/articles/reading-warning.html#trace
+- first release
+  https://jelliottdev.github.io/#/pages/LP1
+- second release
+  https://jelliottdev.github.io/#/pages/LP2
+- LP2-31; LP2-31, an unsolved page used in the statistics guide; LP2-31: a later investigation
+  https://jelliottdev.github.io/reference/lp2-31.html
+- numbering cross-reference
+  https://jelliottdev.github.io/#/numbering
+- Cicada history route
+  https://jelliottdev.github.io/reference/articles/cicada-history.html#replays
+- illustrated cover with compasses
+  https://jelliottdev.github.io/reference/articles/illustrated-cover.html
+- The warning page used for the first reading exercise
+  https://jelliottdev.github.io/thumbs/lp1-01.jpg
+- LP1-01: start here
+  https://jelliottdev.github.io/reference/lp1-01.html
+- LP2-31, an unsolved page used in the statistics guide
+  https://jelliottdev.github.io/thumbs/lp2-31.jpg
 - reference-data ZIP
   https://jelliottdev.github.io/downloads/reference-data.zip
 - the setup check
@@ -6664,906 +6668,549 @@ Solving methods: a map of families and variants
 
 Browse overlapping method and diagnostic families, then narrow an idea to a reproducible test.
 
-Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.
+Choose the kind of approach you want to try. Each family links to an explanation and, where available, records of specific tests. A listed test covers its stated variant, not every possible version of the idea.
 
-A family page is not a completed experiment. Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.
+For example, “read the runes in a spiral” still needs a page, starting point, direction and rule for reading the result. Have we tried it? compares those exact choices.
 
-A record can be relevant to more than one family. Its full description appears at its first listing below; other families retain a short cross-reference to the same record.
-
-What the record types mean: distinguish bounded solving tests from measurements, controls, audits and reproductions.
+Jump to a category
+Symbol substitutions 6
+Keys, sequences and state 10
+Order and selection 9
+Numbers and representations 8
+Physical and digital carriers 8
+Language, clues and search 7
+Diagnosis and validation 6
 
 Symbol substitutions
-
+6 method families
 Fixed alphabet substitutions
 Replace each rune consistently with one other symbol.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-00–55: fixed alphabet transforms against the warning opening
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Do shifts, alphabet reversal, or whole-stream reversal recover the first 12 decoded warning runes at the start of an archived LP2-00–55 page?
-Outside this test: Other openings or positions, heading removal, regional or line-wise reversal, arbitrary substitution alphabets, other affine multipliers, Vigenère, corrections and language scoring.
+1 related record
+LP2-00–55: fixed alphabet transforms against the warning opening · Bounded solving test
 
 
 
 Homophonic and many-to-one substitutions
 Allow several ciphertext symbols to represent the same plaintext symbol.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-00–55: two known Vigenère keys and nine openings
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Do either of the two known Vigenere keys recover a 12-rune known-reading opening at the start of an LP2-00–55 page under uninterrupted repeating-key decoding?
-Outside this test: Other keys, interruption placement, noninitial positions, heading removal, cross-page carry, alternative alphabets, transposition and language scoring.
+1 related record
+LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 
 
 Fractionation and coordinate alphabets
 Split symbols into coordinates, rearrange the components, then regroup.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Block and matrix transformations
 Transform groups of runes together instead of treating each position independently.
-
-No experiment linked yet. The guide documents the approach; it is not a result.
 
 
 Codebooks and mixed letter-word systems
 Map defined groups to words, syllables or phrases under a consistent dictionary.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Keys, sequences and state
-
+10 method families
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-Related records (6)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+6 related records
+LP2-00–55: prime-minus-one shifts and known openings · Bounded solving test
 
-LP2-00–55: prime-minus-one shifts and known openings
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does uninterrupted prime-minus-one arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
-Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
+LP2-00–55: ordinary primes instead of primes minus one · Bounded solving test
 
-LP2-00–55: ordinary primes instead of primes minus one
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does uninterrupted prime arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
-Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
+LP2-00–55: Fibonacci shifts and repeated phases · Bounded solving test
 
-LP2-00–55: Fibonacci shifts and repeated phases
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does uninterrupted Fibonacci arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
-Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
+LP2-00–55: LP2-15 spiral-prime shifts · Bounded solving test
 
-LP2-00–55: LP2-15 spiral-prime shifts
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does the sixteen-prime LP2-15 spiral, repeated as modulo-29 shifts, recover any of nine fixed 12-rune openings on LP2-00–55?
-Outside this test: Other page starts, noncyclic use, reversed or reordered spiral, prime-index values, interruptions, heading removal, word or row resets, cross-page carry and language scoring.
+LP2-00–55: totients of consecutive integers · Bounded solving test
 
-LP2-00–55: totients of consecutive integers
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does uninterrupted consecutive-integer totient arithmetic recover any of nine fixed 12-rune openings at the start of an LP2-00–55 page?
-Outside this test: Other beginnings, offsets above 28, interruptions, heading removal, reversed input, word or row resets, cross-page carry, other numerical schedules and language scoring.
-
-LP2-00–55: direct polynomial streams, degree at most eight
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Can a fixed-modulus integer polynomial of degree at most eight directly generate each page, in index or prime coordinates?
-Outside this test: Unknown plaintext or keystream mixing, degree above eight, extra output maps, skipped clock positions, internal resets, alternative transcriptions and LP2-56–57.
+LP2-00–55: direct polynomial streams, degree at most eight · Bounded solving test
 
 
 
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-Related records (6)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+6 related records
+Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
-Ciphertext symbols and differences around LP2 doublets
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do doublet symbols or their neighboring ciphertext differences show extra local ordering beyond the observed zero mask and each page difference inventory?
-Outside this test: Plaintext recovery, key inference, probability of the 86-event zero mask, independent full image transcription, English context scoring and post-selection significance.
+Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
 
-Nonzero difference uniformity and order under EA-stalling keys
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Conditional on the 86 zero differences, do the remaining LP2-00--55 differences match the uniform and lag-one independence predictions of one independently uniform nonzero-key running-sum model?
-Outside this test: Plaintext or key recovery, structured and nonuniform keys, cross-page transitions, other lags, alternate rune mappings, image transcription and selection-adjusted inference.
+Solved GP EA frequency versus unsolved LP2 doublets · Control
 
-Solved GP EA frequency versus unsolved LP2 doublets
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Is the observed LP2 doublet rate compatible with the EA frequency in known decoded GP text under one proposed nonzero-key running-sum equation?
-Outside this test: Plaintext recovery, key inference, independent full image transcription, external English-corpus transfer, other equations and corrected post-selection significance.
+LP2-54–55: reset ciphertext state at selected F runes · Manuscript measurement
 
-LP2-54–55: reset ciphertext state at selected F runes
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the reset interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
-Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
+LP2-54–55: skip selected F runes in ciphertext feedback · Manuscript measurement
 
-LP2-54–55: skip selected F runes in ciphertext feedback
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the skip interruption rule produce an unusually high maximum periodic IoC across the declared 64 masks and periods 2–30?
-Outside this test: Plaintext autokey; Other interruption symbols; Arbitrary primers or keys; Heading removal; Page-local state resets; Other period ranges; Language-score or plaintext claims; Significance of original exploratory search.
-
-LP2-54: fixed ciphertext and plaintext feedback on the red header
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: What do the two explicit one-step feedback rules produce for the nine red runes when the first plaintext rune is A, I or O?
-Outside this test: Eight-rune dictionary census; other C/K/D functions; alphabet permutation; lag greater than one; interruption choices; a second encryption layer; language scoring; a claim that all autokey variants fail.
+LP2-54: fixed ciphertext and plaintext feedback on the red header · Bounded solving test
 
 
 
 Seeded generators and generated keystreams
 Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Does matching the opening text identify a seed?
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Which seeds survive exact plaintext prefixes, and do they predict withheld text under included-seed, omitted-seed, wrong-generator and incorrect-crib controls?
-Outside this test: No unsolved-page decoding, unknown-position search, language score, adaptive dictionary expansion, generator identification or population recovery probability.
+1 related record
+Does matching the opening text identify a seed? · Control
 
 
 
 Running keys from external texts
 Convert a specified external text into a stream of key symbols.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Emerson as an additive LP2 running key
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?
-Outside this test: Other source texts or editions, a GP segmentation of source English, reverse arithmetic, source wrapping, passage restarts, word/page-dependent key clocks, other LP2 pages or positions, non-English scoring, and any claim that running keys in general are excluded.
+1 related record
+Emerson as an additive LP2 running key · Bounded solving test
 
 
 
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Can a correct key fail under the wrong alignment rule?
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: How do rigid and skip-aware decoders recover known rune sequences under four declared encoder mechanisms?
-Outside this test: No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.
+1 related record
+Can a correct key fail under the wrong alignment rule? · Control
 
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+Can a correct key fail under the wrong alignment rule? · Control
 
-Can a correct key fail under the wrong alignment rule? · Control; full description under Keystream interruptions and reset rules
-
-LP2: pair the 2,883-rune sections by subtraction
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Do five fixed pairwise-subtraction variants of the two 2,883-rune streams produce unusually high whole-stream IoC after selection among the variants?
-Outside this test: N-gram scoring; periodic IoC; additions, multiplication or XOR; arbitrary offsets; alternative page ranges; page-heading removal; other interruption conventions; full historical discovery-search correction; plaintext claims.
+LP2: pair the 2,883-rune sections by subtraction · Bounded solving test
 
 
 
 Cipher composition and ordered pipelines
 Combine a bounded set of transformations in a declared order, tracking intermediate representations.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-40: replay the FOR EVERY opening arithmetic
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Do the fixed shift, Atbash and prime-minus-one steps in the reported FOR EVERY proposal predict its eight-position LP2-40 opening without a fitted residual?
-Outside this test: No verified meaning assigned to flower details; no fixed Möbius seed, trigram state table or key schedule; no untouched continuation, language score, full-page decoding or test of later Slidefair/Quagmire/Fibonacci follow-ups.
+1 related record
+LP2-40: replay the FOR EVERY opening arithmetic · Source or input audit
 
 
 
 Switching rules and adaptive decoding
 Change modes using declared triggers or explicitly counted solver choices.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+LP2-54–55: reset ciphertext state at selected F runes · Manuscript measurement
 
-LP2-54–55: reset ciphertext state at selected F runes · Manuscript measurement; full description under Autokey and ciphertext feedback
-
-LP2-54–55: skip selected F runes in ciphertext feedback · Manuscript measurement; full description under Autokey and ciphertext feedback
+LP2-54–55: skip selected F runes in ciphertext feedback · Manuscript measurement
 
 
 
 Unrestricted additive keys and one-time-pad hypotheses
 Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Does matching the opening text identify a seed? · Control; full description under Seeded generators and generated keystreams
+1 related record
+Does matching the opening text identify a seed? · Control
 
 
 
 Moving disks, rotors and evolving alphabets
 Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Order and selection
-
+9 method families
 Transposition and permutations
 Change symbol order while preserving the selected symbols.
 
-Related records (3)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+3 related records
+LP2-00–55: simple row and column reading routes · Bounded solving test
 
-LP2-00–55: simple row and column reading routes
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Do simple row/column traversals of archived LP2-00–55 rune layouts recover any of nine known 12-rune openings without substitution?
-Outside this test: Arbitrary column permutations, spiral paths, rectangular reflow, physical x-coordinate alignment, heading removal, substitution, alternative openings and other text regions.
+LP2-00–55: reverse runes within word-like segments · Bounded solving test
 
-LP2-00–55: reverse runes within word-like segments
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does reversing runes within declared word-like segments recover any of nine known 12-rune openings on LP2-00–55?
-Outside this test: Word-order reversal, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.
-
-LP2-00–55: reverse the order of word-like segments
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does reversing the order of declared word-like segments, while preserving runes inside each segment, recover any of nine known 12-rune openings on LP2-00–55?
-Outside this test: Within-segment reversal, reversal limited to each row, arbitrary regrouping, heading removal, additional substitution, later-position search, alternative openings and general language ranking.
+LP2-00–55: reverse the order of word-like segments · Bounded solving test
 
 
 
 Grid layouts, spirals and route ciphers
 Choose an explicit layout and traversal through its cells.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+LP2-00–55: simple row and column reading routes · Bounded solving test
 
-LP2-00–55: simple row and column reading routes · Bounded solving test; full description under Transposition and permutations
-
-LP2-00–02: 27 × 27 totient-map route replay
-Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
-Question tested: Do the selected three-rune-node readings and transition rules reproduce, and what selections remain unresolved?
-Outside this test: Automatic route discovery; original image transcription review; significance of numerical/thematic coincidences; new THE continuation after THEN; complete rule-space enumeration; probability of intended English; all possible totient/geometric methods.
+LP2-00–02: 27 × 27 totient-map route replay · Method replay
 
 
 
 Grilles and positional extraction
 Select positions using a mask or indexing rule.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Acrostics and boundary-letter extraction
 Select initial, final or regularly indexed symbols from defined units.
-
-No experiment linked yet. The guide documents the approach; it is not a result.
 
 
 Word, row, page and section boundaries
 Treat boundary choices as explicit input or reset variants.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-00–55: exact words and anagram repetition
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do interior ciphertext tokens repeat exactly or as anagrams under two apostrophe policies?
-Outside this test: Claims that plaintext must repeat, changing effective keys or state, different word maps, alternative boundaries, page-edge tokens, language significance tests, and a general rejection of word ciphers.
+1 related record
+LP2-00–55: exact words and anagram repetition · Manuscript measurement
 
 
 
 Book ciphers and coordinate lookups
 Select symbols from a specified source text using explicit coordinate and counting rules.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Emerson book cipher: historical control reproduction
-Record type: Historical reproduction. Replays a documented historical step with specified source material and conventions.
-Question tested: Do the archived opening-image coordinates reproduce the documented historical string with the frozen Emerson PDF derivative and its declared conventions?
-Outside this test: Other editions, other texts, arbitrary coordinate searches, unsolved-page transfer and validation of any current network destination.
+1 related record
+Emerson book cipher: historical control reproduction · Historical reproduction
 
 
 
 Page and section ordering
 Reorder whole pages or sections while accounting for the arrangements searched.
 
-Related records (3)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+3 related records
+LP1 column balance after searching section orders · Manuscript measurement
 
-LP1 column balance after searching section orders
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: How unusual is the flattest arrangement after searching all 24 orders of the four intact LP1 sections?
-Outside this test: Other widths, reversals, sentence removal, sentence-preserving shuffles, prose comparisons, original exploratory multiplicity, independent confirmation, authorial intent and decryption.
+LP1 column balance after searching six widths · Manuscript measurement
 
-LP1 column balance after searching six widths
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Is the minimum normalized column imbalance unusually low after searching widths 2, 4, 8, 16, 32 and 64?
-Outside this test: Other widths; section reordering; start rotations; padding; within-section or sentence-preserving nulls; choosing the smallest fixed-width p-value; original exploratory multiplicity; authorial intent; decryption.
-
-LP1 column balance with section-preserving shuffles
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the fixed 464-word arrangement retain unusually low column-mean variance when each section keeps its own word lengths and occupied slots?
-Outside this test: Other widths, section orders, sentence-preserving shuffles, coherent-prose comparisons, sentence removal, grille extraction, carrier matching, original-search multiplicity, independent confirmation, authorial intent and decryption.
+LP1 column balance with section-preserving shuffles · Manuscript measurement
 
 
 
 Null symbols, deletion and padding
 Remove declared symbols or positions while accounting for shortened output and changed alignment.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Deleting one fixed rune type: adjacent-pair census
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does deleting every occurrence of any one of the 29 rune types reduce LP2's within-page adjacent equal-rune count?
-Outside this test: Multi-type or position-specific deletion; word-boundary-dependent counting; changed cipher alignment after deletion; alternative transcriptions; LP2-56–57; a claim of general null impossibility.
+1 related record
+Deleting one fixed rune type: adjacent-pair census · Manuscript measurement
 
 
 
 Interleaved streams and separate decoding
 Split by a declared assignment, decode each stream, and specify whether outputs are interleaved again or concatenated.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Numbers and representations
-
+8 method families
 Gematria and rune-sum mappings
 Map runes or groups to numerical totals and count competing matches.
 
-Related records (8)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+8 related records
+LP1-05: candidate word sums and rune segmentation · Manuscript measurement
 
-LP1-05: candidate word sums and rune segmentation
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do the sixteen supplied Latin word candidates admit the claimed GP sums, and are those sums forced by their spellings?
-Outside this test: Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.
+Selected phrase and MYRMELEONTIDAE: five word-sum candidates · Manuscript measurement
 
-Selected phrase and MYRMELEONTIDAE: five word-sum candidates
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do the selected PROVE WORTHIER FIND TRUTHS and MYRMELEONTIDAE candidates admit their proposed sums under the baseline rules?
-Outside this test: Other words, synonyms, alternate spellings, altered rune values, key searches, manuscript decryption and statistical significance.
+LP2-00–55: prime row sums against shuffled pages · Manuscript measurement
 
-LP2-00–55: prime row sums against shuffled pages
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do the archived row boundaries on LP2-00–55 produce more prime-valued Gematria Primus row sums than within-page rune shuffles?
-Outside this test: Emirps, prime ordinals, decoded text, arbitrary regions, changed spellings, other boundaries and page-specific significance claims.
+LP2-15 reported reverse-add palindrome: arithmetic and control · Method replay
 
-LP2-15 reported reverse-add palindrome: arithmetic and control
-Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
-Question tested: Does the reported 53-digit reverse-add example hold, and how often do its own digits give palindromes after shuffling?
-Outside this test: Derivation of GP word sums and nearest-prime distances, alternative zero groupings, a complete search-adjusted p-value, plaintext recovery, and evidence of authorial intent.
+LP2-15–16: derive the reported prime-distance digits · Source or input audit
 
-LP2-15–16: derive the reported prime-distance digits
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Does the reported 53-digit nearest-prime sequence follow word by word from the archived first-section rune transcription?
-Outside this test: Image-level certification of each rune and separator; other page or section selections; altered word segmentation; other prime mappings; full discovery-search correction; a decryption of LP2-15–22.
+LP2-27–32: eleven-rune sums of 563 and 569 · Manuscript measurement
 
-LP2-27–32: eleven-rune sums of 563 and 569
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do sums 563 and 569 recur in eleven consecutive runes elsewhere in the Wing and Tree section?
-Outside this test: Grid columns and perimeters, manuscript-row selection, other lengths or targets, cross-page windows, file-dimension retesting, null-model simulations, image provenance and decryption.
+LP1 square: dictionary candidate space for the selected phrase · Control
 
-LP1 square: dictionary candidate space for the selected phrase
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: How many words in a pinned crib corpus fit the four reported GP totals and rune lengths before a meaningful phrase is selected?
-Outside this test: The historical worddata.csv attachment, alternative rune segmentations, semantic or grammatical scoring, dictionary expansion, a phrase-generation search, any LP2 key operation and statistical inference about author intent.
-
-LP2: replaying the 59-Fehu coordinate triad
-Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
-Question tested: Does the reported LP2-only Fehu-coordinate construction reproduce its three numerical targets, and is its ordered match unique among starts under that fixed rule?
-Outside this test: LP1, alternate windows or axes, target permutations, message-segment adjustments, other origins, near misses, chance probability across the exploratory search, and a cipher key or plaintext.
+LP2: replaying the 59-Fehu coordinate triad · Method replay
 
 
 
 Prime indexing and value transforms
 Distinguish rune indices, prime values and prime indices before composing operations.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-00–55: fixed divisor labels of rune positions
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Can fixed divisors greater than one label consecutive rune positions, with any starting integer?
-Outside this test: Irregular clocks, within-page resets, time-varying labels, transformed outputs, plaintext mixing, general rejection of noncoprime strides, and LP2-56–57.
+1 related record
+LP2-00–55: fixed divisor labels of rune positions · Manuscript measurement
 
 
 
 Bounded arithmetic expressions
 Declare a finite grammar of operations rather than searching unlimited expressions.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-00–55: emirp row sums with the same page shuffles
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do archived LP2-00–55 row sums contain more emirps than the same page shuffles used in the prime-sum baseline?
-Outside this test: Prime palindromes, prime ordinals, decoded text, arbitrary regions, changed spellings, other bases or boundaries and page-specific significance claims.
+1 related record
+LP2-00–55: emirp row sums with the same page shuffles · Manuscript measurement
 
 
 
 Radix changes and byte encodings
 Specify how symbols become digits, integers and bytes.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+LP2-49–51: direct text and file-header screen · Bounded solving test
 
-LP2-49–51: direct text and file-header screen
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Do the conditional base-60 grid bytes directly form complete ASCII or UTF-8 text, or begin with a PNG, gzip, ZIP or zlib header, under fixed rectangular routes and the ten I/l stem readings?
-Outside this test: Other alphabets, bases, glyph changes, 16 by 16 reflow, inserted or removed bytes, nonzero file offsets, XOR or other transforms, raw DEFLATE, unrecognized formats, short text fragments and meaningful-language assessment.
+LP2-49–51: fixed bit-grid barcode scan · Bounded solving test
 
 
 
 Bitwise combinations and XOR
 Operate on explicitly encoded bits or bytes, with alignment and key rules.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-Related records (8)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+8 related records
+Magic squares: does one fixed entry determine the rest? · Manuscript measurement
 
-Magic squares: does one fixed entry determine the rest?
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do fixed line sums and half-turn symmetry make either LP1 five-by-five square unique once one entry is fixed?
-Outside this test: No other primality, distinctness, normal-square or server-validation requirements; no enumeration of all positive grids; no historical 7x7 transcription or cipher search.
+LP2-49–51: directional prime-path reconstruction · Manuscript measurement
 
-LP2-49–51: directional prime-path reconstruction
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the specified four-cell search reproduce 191 occurrences and the missing values 1033, 2213 and 3301?
-Outside this test: Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.
+LP2-49–51: prime paths confined to each page · Manuscript measurement
 
-LP2-49–51: prime paths confined to each page
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does forbidding page crossings preserve the same three missing prime values?
-Outside this test: Other layouts, path lengths, cross-page paths, removal of 4 cells, null-model simulation, decipherment and authorial intent.
+LP2-49–51: missing-prime shuffle controls · Control
 
-LP2-49–51: missing-prime shuffle controls
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Is the count of three absent decimal-prime values unusual under two fixed first-digit shuffle controls?
-Outside this test: No alternative path rule, suffix reading, text decryption, test of the specific three named omissions, correction for prior pattern search, or claim about authorship.
+LP2-32: grid sums and the 2016 message file · Manuscript measurement
 
-LP2-32: grid sums and the 2016 message file
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do the first row, first column and central 5x5 perimeter of a row-major 11x11 grid match the 2016 image dimensions and payload length?
-Outside this test: Alternative layouts, other pages, extraction/signature retesting, null-model simulations, image identity, intentionality and decryption.
+Arithmetic Möbius values of the LP2-15 panel · Source or input audit
 
-Arithmetic Möbius values of the LP2-15 panel
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: What does the arithmetic Möbius function return for all sixteen printed LP2-15 panel numbers?
-Outside this test: The missing source output image, 3301-derived values, a conjectured key or rune-shift rule, plaintext, and statistical significance.
+LP1 embedded messages: remove the changing outer digit · Source or input audit
 
-LP1 embedded messages: remove the changing outer digit
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Does a fixed one-character perimeter removal make the four LP1-10–13 signed-message diagrams identical inside, and does the same reading apply to the two visible LP1 five-by-five squares?
-Outside this test: No new GPG verification, no interpretation of the 3301 border sequence as a cipher, no LP2 text transformation, no claim that the common three-by-three is a magic square.
-
-LP2-15: prime-only totient and Fibonacci-gap proposal
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Does the reported totient-before-prime-gap sequence reconstruct all sixteen LP2-15 cells and its own Fibonacci-gap array under one stated rule?
-Outside this test: No interpretation of the missing screenshot, inferred decryption method, rune shift, selective omission of the duplicate 3 or correction of 317 in the source array.
+LP2-15: prime-only totient and Fibonacci-gap proposal · Source or input audit
 
 
 
 Differential and cumulative decoding
 Transform changes between values with declared direction, lag, modulus and initial conditions.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-LP2-39: do crib-difference triplets recur elsewhere?
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do fixed GP-index differences from proposed LP2-39 red-header cribs match other LP rune streams more often than page-preserving shuffles?
-Outside this test: Other cribs, prime-value differences, reverse or gapped searches, source text outside LP, key-layer decipherment and withheld-text prediction.
+1 related record
+LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement
 
 
 
 Error detection, parity and correction
 Test a defined redundancy code and its correction limits under explicit symbol, block and error rules.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Physical and digital carriers
-
+8 method families
 File steganography and embedded payloads
 Recover data using a specified carrier format, extraction tool and key.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+Original JPEGs: default-key OutGuess sweep · Bounded solving test
 
-Original JPEGs: default-key OutGuess sweep
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: What does default-key OutGuess retrieval return from all 75 manuscript JPEGs and the two historical cover/opening images?
-Outside this test: Other keys, other builds/platforms, other steganographic methods, recompressed files, signature verification, and interpretation of candidate bytes.
-
-Original JPEGs: guarded OutGuess build comparison
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Does a clean build with explicit iterator guards change the baseline retrieval results on the same 77 images?
-Outside this test: Other keys, other platforms, independent OutGuess implementations, other steganographic methods, transformed images, payload authentication, and a stack trace of the original executable.
+Original JPEGs: guarded OutGuess build comparison · Bounded solving test
 
 
 
 Image transforms and overlays
 Measure features under declared processing and alignment choices.
 
-Related records (3)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+3 related records
+Can image-only detection find every rune row? · Source or input audit
 
-Can image-only detection find every rune row?
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?
-Outside this test: No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.
+LP2-55 tree: reflected photograph alignment · Source or input audit
 
-LP2-55 tree: reflected photograph alignment
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Under one frozen crop, grayscale response and scale/translation search, does the horizontally reflected Commons tree photograph fit LP2-55 better than its original orientation?
-Outside this test: Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images.
-
-Shared tree across LP2-32 and the 2016 message
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Do the LP2-32 and 2016 tree renderings align with the already identified tree source under bounded scale, translation and orientation comparisons?
-Outside this test: Other source photographs and processing choices; rotation, shear, warps, exact authoring recipe; any cipher, rune or decryption operation; a calibrated chance probability.
+Shared tree across LP2-32 and the 2016 message · Source or input audit
 
 
 
 Geometric constructions and navigation
 Turn measured positions into reproducible construction and traversal rules.
 
-Related records (6)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+6 related records
+LP2-33 and LP2-39: shared three-circle radii at native scale · Manuscript measurement
 
-LP2-33 and LP2-39: shared three-circle radii at native scale
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Can the same ordered three radii centered on the horizontal dots meet at an in-page point on each page?
-Outside this test: Rescaling; page-dependent radii; reassigned radius order; outside-page targets; different dots; pairwise intersections; compass stepping; rune selection and plaintext.
+LP2-00–02: audit the 729 ÷ rune-index proposal · Source or input audit
 
-LP2-00–02: audit the 729 ÷ rune-index proposal
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Does the posted 729 divided by GP-index rule reproduce its worked first word and specify a complete output on the 729-rune section?
-Outside this test: A fixed rule for F; chosen neighboring letters; letter rearrangement or dummy-word removal; image-level review of every rune; a full plaintext or a statistical language claim; other 729-based constructions.
+LP2-00–02: 27 × 27 totient-map route replay · Method replay
 
-LP2-00–02: 27 × 27 totient-map route replay · Method replay; full description under Grid layouts, spirals and route ciphers
+LP2 margin trimming: do neighboring text rows align uniquely? · Source or input audit
 
-LP2 margin trimming: do neighboring text rows align uniquely?
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: After one fixed image crop and zero-shift registration, are consecutive LP2 text-row positions distinctive relative to nonconsecutive same-layout pages?
-Outside this test: No rune recognition, word-boundary judgment, page-order search, best-fit registration, decryption, or claim that this is the original proposer’s exact intended test.
+LP2-15 number-row spacing: a source-bound line-gap audit · Source or input audit
 
-LP2-15 number-row spacing: a source-bound line-gap audit
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Is the reported extra vertical gap before the fourth LP2-15 number row measurable on the original JPEG, and how does it compare with neighboring text rows?
-Outside this test: The absent forum screenshots and specific word-gap examples, bit interpretation, fallback-font mechanism, and any claim about LP2 plaintext.
-
-LP2: replaying the 59-Fehu coordinate triad · Method replay; full description under Gematria and rune-sum mappings
+LP2: replaying the 59-Fehu coordinate triad · Method replay
 
 
 
 Audio and frequency encodings
 Separate signal processing measurements from a proposed symbol encoding.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Layered decoding and file chains
 Specify the order of transformations and verify each intermediate artifact.
-
-No experiment linked yet. The guide documents the approach; it is not a result.
 
 
 Public-key messages and cryptographic artifacts
 Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Hash targets and candidate retrieval
 Define exact candidate bytes and compare the specified digest.
-
-No experiment linked yet. The guide documents the approach; it is not a result.
 
 
 Compression and packed symbol streams
 Specify both the conversion into bytes and the format used to decode those bytes.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Language, clues and search
-
+7 method families
 Language and corpus identification
 Compare declared observables with suitable language controls under explicit cipher assumptions.
 
-Related records (5)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+5 related records
+Could the unsolved text be another language? Eight aligned translations · Manuscript measurement
 
-Could the unsolved text be another language? Eight aligned translations
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Which of eight languages best matches the unsolved text under word-length and fixed-substitution assumptions?
-Outside this test: No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference.
+Language controls with exactly 2,896 tokens per sample · Manuscript measurement
 
-Language controls with exactly 2,896 tokens per sample
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do fixed language profiles distinguish samples the same token size as the unsolved manuscript?
-Outside this test: No genre matching, posterior, all-language coverage, equal translated passage boundaries, independent-trial accuracy or cipher identification.
+Language comparison checked against known LP readings · Control
 
-Language comparison checked against known LP readings
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Does the eight-language length comparison recognize the established English readings of Liber Primus?
-Outside this test: No blind decryption, posterior, accuracy inference from independent random trials, new language labels for solved sections, or authentication of source readings. No new unknown-page results. GP grouping is an orthographic sensitivity.
+Word lengths across the complete historical reference corpus · Manuscript measurement
 
-Word lengths across the complete historical reference corpus
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Where does the reconstructed 2902-token manuscript summary fall among every eligible prefix in the pinned historical corpus?
-Outside this test: No language identification, random passage sampling, header removal, alphabet filtering, edition deduplication, calibrated p-values or reproduction of the unavailable corpus converter.
-
-Language comparison: shorter aligned passage controls
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the eight-language length comparison remain stable on shorter aligned passages?
-Outside this test: Not matched-length random samples; not genre-matched; no known decoded LP control; no cipher recovery or all-language inference. GP grouping remains an unvalidated orthographic sensitivity. Blocks preserve sentence alignment, not exact token counts. Report every count and ratio to2896. Adjacent blocks may share source articles, so neither blocks nor64 decisions are independent samples. No confidence intervals or binomial accuracy inference.
+Language comparison: shorter aligned passage controls · Manuscript measurement
 
 
 
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-Related records (4)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+4 related records
+Does matching the opening text identify a seed? · Control
 
-Does matching the opening text identify a seed? · Control; full description under Seeded generators and generated keystreams
+LP2-39: twenty proposed red-header cribs · Bounded solving test
 
-LP2-39: twenty proposed red-header cribs
-Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
-Question tested: Which of twenty fixed candidate words fit the three red runes under an affine substitution modulo 29?
-Outside this test: Spelling aliases, phonetic encodings, alternate rune orders, other words or ciphers, body-text scoring, statistical significance and a plaintext claim.
+LP1 square: dictionary candidate space for the selected phrase · Control
 
-LP1 square: dictionary candidate space for the selected phrase · Control; full description under Gematria and rune-sum mappings
-
-LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement; full description under Differential and cumulative decoding
+LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement
 
 
 
 Automatic search and language scoring
 Explore a bounded model with a scorer whose ability and false positives have been checked.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+How does trying more keys change the best score? · Control
 
-How does trying more keys change the best score?
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: How do complete-search maxima change under fixed nested key budgets, with the true key absent or included?
-Outside this test: No unknown-page test, adaptive search, beam decoder, offsets, alternate signs, language identification or population false-positive estimate.
-
-Would an English scorer accept other languages?
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Does a fixed English quadgram threshold accept known text and reject letter shuffles across eight languages?
-Outside this test: No cipher, decoder, manuscript score, language identification, wrong-key search, recovery-power estimate or general false-positive probability.
+Would an English scorer accept other languages? · Control
 
 
 
 Alternative alphabets and symbolic notations
 Define a symbol inventory and an encoding rule before interpreting resemblance.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Literary references and thematic clues
 Establish a source relationship, then distinguish interpretation from an executable decoding rule.
-
-No experiment linked yet. The guide documents the approach; it is not a result.
 
 
 AI-assisted candidate interpretation
 Treat generated readings as proposals requiring independent, reproducible checks.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 Constraint solving, SAT and SMT
 Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
-
 
 
 Diagnosis and validation
-
+6 method families
 Period and key-length diagnostics
 Measure position-dependent patterns with matched null models and correction for searched periods.
 
-Related records (2)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+2 related records
+LP2-31: periodic IoC for periods 2-20 · Manuscript measurement
 
-LP2-31: periodic IoC for periods 2-20
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the maximum pooled column IoC over periods 2-20 exceed the fixed-multiset shuffle reference?
-Outside this test: Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.
-
-LP2-31: periodic IoC with within-row shuffles
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the largest pooled column IoC over periods 2–20 exceed shuffles that preserve every archived row’s rune multiset?
-Outside this test: Other pages, periods outside 2-20, regional variants, corrected streams, word/punctuation-preserving nulls, decryption and key searches.
+LP2-31: periodic IoC with within-row shuffles · Manuscript measurement
 
 
 
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-Related records (11)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+11 related records
+LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
-LP2-00–55: repeated trigrams against page shuffles
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does LP2-00–55 have an excess of within-page matching trigram pairs compared with independent whole-page fixed-count shuffles?
-Outside this test: Other window lengths, between-page matches, per-page significance, selected subsections, decoded readings, approximate matches, key-length inference and a deficit test.
+LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
 
-LP2-00–55: doublets across words, wraps and stored corrections
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: How many of the 86 filtered within-page equal-rune pairs cross stored separators, and do published LP2 reviewed-text edits change them?
-Outside this test: Second complete independent transcription, new glyph corrections, manual scan verification, alternate word-separator interpretations and cipher identification.
+Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
-Ciphertext symbols and differences around LP2 doublets · Manuscript measurement; full description under Autokey and ciphertext feedback
+LP2-00–55: distances between doublet events · Manuscript measurement
 
-LP2-00–55: distances between doublet events
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?
-Outside this test: Other transcriptions, collapsed runs, word-only extraction, page-reset comparisons, other lags, permutation tail probabilities and cipher searches.
+Doublet events: global versus within-page shuffle controls · Control
 
-Doublet events: global versus within-page shuffle controls
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?
-Outside this test: Original unpublished event list and code, other transcriptions, unseen page subsets, all unreported model searches, cipher inference and confirmatory significance claims.
+LP2-00–55: equal rune pairs at lags one through five · Manuscript measurement
 
-LP2-00–55: equal rune pairs at lags one through five
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the low count of adjacent equal runes extend to distances two through five under fixed-count page shuffles?
-Outside this test: Alternative transcriptions, word-internal only pairs, other lags, cipher-key simulations, plaintext inference, corrected multiple-testing claims.
+LP2-00–55: placement of the 86 doublets · Manuscript measurement
 
-LP2-00–55: placement of the 86 doublets
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: After fixing the observed total of 86 equal-rune events, do their page counts and positions differ from explicit length-aware placement controls?
-Outside this test: Cipher or plaintext simulation, alternate transcriptions, image verification, word-only event definitions, page-reset gap definitions and confirmatory post-selection probabilities.
+Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
 
-Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement; full description under Autokey and ciphertext feedback
+Solved GP EA frequency versus unsolved LP2 doublets · Control
 
-Solved GP EA frequency versus unsolved LP2 doublets · Control; full description under Autokey and ciphertext feedback
+LP2-00–55: uniform additive keys and adjacent matches · Manuscript measurement
 
-LP2-00–55: uniform additive keys and adjacent matches
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the observed number of within-page adjacent matches agree with independent uniform additive keys modulo 29?
-Outside this test: Nonuniform or dependent keys, fixed-count shuffles, other cipher equations, altered boundaries, output filters, plaintext identification and correction for historical feature selection.
-
-LP2-00–02: N-rune distances and prime-value labels
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Which prime-value labels result from successive N-rune gaps under two distance definitions and two page-boundary rules?
-Outside this test: Other runes, punctuation-based gaps, heading removal, anagrams, significance testing and interpretation of signpost artwork.
+LP2-00–02: N-rune distances and prime-value labels · Manuscript measurement
 
 
 
 Invariants and bounded exclusions
 State the assumptions under which an operation preserves or forbids an observed property.
 
-Related records (4)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+4 related records
+Literal prime alphabet: affine permutations for every modulus above 109 · Alphabet-wide analysis
 
-Literal prime alphabet: affine permutations for every modulus above 109
-Record type: Alphabet-wide analysis. Studies a declared mathematical mapping over the alphabet, rather than decoding an unsolved page.
-Question tested: Can a fixed affine map modulo any integer greater than 109 nontrivially permute the full 29-prime alphabet?
-Outside this test: Partial palettes, ordinal/rune-index transforms, noninjective maps, nonlinear maps, and position-dependent keys.
+Literal prime alphabet: quadratic permutations for every modulus above 109 · Alphabet-wide analysis
 
-Literal prime alphabet: quadratic permutations for every modulus above 109
-Record type: Alphabet-wide analysis. Studies a declared mathematical mapping over the alphabet, rather than decoding an unsolved page.
-Question tested: Can a fixed quadratic map nontrivially permute the full literal-prime alphabet for any modulus above 109?
-Outside this test: Partial palettes, ordinal/rune-index transforms, noninjective maps, degree above two, and position-dependent keys.
+LP2-00–55: exact words and anagram repetition · Manuscript measurement
 
-LP2-00–55: exact words and anagram repetition · Manuscript measurement; full description under Word, row, page and section boundaries
-
-LP2 page supports: literal-prime affine maps and the two page-55 exceptions
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Which fixed affine maps into the prime palette remain injective on each archived LP2-00–55 page support?
-Outside this test: Noninjective, nonlinear and position-dependent rules; rune-index transforms; altered transcriptions; plaintext scoring or recovery.
+LP2 page supports: literal-prime affine maps and the two page-55 exceptions · Manuscript measurement
 
 
 
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-Related records (9)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+9 related records
+How does trying more keys change the best score? · Control
 
-How does trying more keys change the best score? · Control; full description under Automatic search and language scoring
+Would an English scorer accept other languages? · Control
 
-Would an English scorer accept other languages? · Control; full description under Automatic search and language scoring
+LP1 column balance with section-preserving shuffles · Manuscript measurement
 
-LP1 column balance with section-preserving shuffles · Manuscript measurement; full description under Page and section ordering
+LP1 column balance after searching section orders · Manuscript measurement
 
-LP1 column balance after searching section orders · Manuscript measurement; full description under Page and section ordering
+LP1 column balance after searching six widths · Manuscript measurement
 
-LP1 column balance after searching six widths · Manuscript measurement; full description under Page and section ordering
+LP1: the 464-word table and column balance · Manuscript measurement
 
-LP1: the 464-word table and column balance
-Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
-Question tested: Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?
-Outside this test: Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.
+Doublet events: global versus within-page shuffle controls · Control
 
-Doublet events: global versus within-page shuffle controls · Control; full description under Repeats, doublets and word structure
+Möbius zero-mask rule against a solved LP2 page · Control
 
-Möbius zero-mask rule against a solved LP2 page
-Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
-Question tested: Does the reported Möbius-of-totient zero-preservation rule hold under the published LP2-56 decoding?
-Outside this test: The proposed LP2-00 candidate sentence, its semantic ranking and word list, other cipher families, proof against a page-specific rule, and significance of a post-selected phrase.
-
-LP1 square: dictionary candidate space for the selected phrase · Control; full description under Gematria and rune-sum mappings
+LP1 square: dictionary candidate space for the selected phrase · Control
 
 
 
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-Related records (6)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+6 related records
+Can image-only detection find every rune row? · Source or input audit
 
-Can image-only detection find every rune row? · Source or input audit; full description under Image transforms and overlays
+Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
-Stored transcription corrections: LP2 word lengths and IoC
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Do the seven published LP2 reviewed-text corrections change the joined-page rune-token sequence, word-length distribution, or whole-stream IoC under the site's published counting rule?
-Outside this test: Unrecorded disputed marks; new photographic review; alternative word delimiters; punctuation-driven cipher resets; page-local tokenization; LP2-56–57; any claim that the entire transcription is correct.
+LP2 page joins: sensitivity of word-length counts · Source or input audit
 
-LP2 page joins: sensitivity of word-length counts
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: How much do word-based LP2 statistics change when each unresolved rune-to-rune page edge is treated as a separator?
-Outside this test: No image review, inferred English words, plaintext scoring, cipher trial, alternate transcription, LP2-56–57, or claim that either endpoint is the intended manuscript segmentation.
+Two LP2 transcriptions: word-boundary sensitivity · Source or input audit
 
-Two LP2 transcriptions: word-boundary sensitivity
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Do any of the 33 non-rune differences between preserved seventh-onion and wiki texts on LP2-00–55 change the published joined-page rune-token positions or lengths?
-Outside this test: LP2-56–57 and their three additional gap differences; punctuation-sensitive key resets, printed-number consumption, alphanumeric-grid bytes, visual adjudication, and any claim that the two texts are interchangeable for all methods.
+LP2-49–51: ten visually ambiguous grid stems · Source or input audit
 
-LP2-49–51: ten visually ambiguous grid stems
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?
-Outside this test: Other potential glyph ambiguities including 0/O; choosing a definitive I or l; changing the numeral base or S/s cell; grid traversals, candidate plaintext, and any claim of an intended byte encoding.
-
-LP2-49–51: zero and capital O register
-Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
-Question tested: Which grid cells are written with digit zero or capital O, and how can their printed shapes be reviewed against the original images?
-Outside this test: Characters transcribed as neither 0 nor O, other lookalike classes, exhaustive blind image recognition, authorial cipher meaning, and all non-base-60 byte interpretations.
+LP2-49–51: zero and capital O register · Source or input audit
 
 
 
 Rune frequencies and distribution diagnostics
 Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.
 
-Related records (1)
-Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
-
-Stored transcription corrections: LP2 word lengths and IoC · Source or input audit; full description under Source verification and transcription audits
+1 related record
+Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
 
 
 
-What the record types mean
+Reading the records
+Tests, measurements and source checks answer different questions. Open a record for its result and exact limits.
+What each record type means
 Bounded solving test
 Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
 Manuscript measurement
@@ -7578,15 +7225,27 @@ Historical reproduction
 Replays a documented historical step with specified source material and conventions.
 Method replay
 Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
-These describe the role of a record, not its outcome or confidence. A control linked to a method is not a test of that method on every unsolved page.
 
-From a family to a test
-For example, “try spirals” names a route family. A test must also fix the pages, grid dimensions, padding, starting cell, directions, any added substitution and the criterion for success. Changing one of these choices creates a variant; changing several may create a new experiment family.
-Use Have we tried it? to inspect published scope. Related methods can be useful even when the exact variant is not covered. Download the family map.
+Turn a method into a test
+Fix the input, rule and stopping point before checking whether an output looks promising. For a spiral, that means naming the page, grid, start, direction and what counts as a result. Learn why bounds matter · Download the complete method map.
 
 Sources, related references, and files
-- What the record types mean
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#record-types
+- Have we tried it?
+  https://jelliottdev.github.io/#/experiments
+- Symbol substitutions
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#symbol-substitutions
+- Keys, sequences and state
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#keys-sequences-and-state
+- Order and selection
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#order-and-selection
+- Numbers and representations
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#numbers-and-representations
+- Physical and digital carriers
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#physical-and-digital-carriers
+- Language, clues and search
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#language-clues-and-search
+- Diagnosis and validation
+  https://jelliottdev.github.io/reference/articles/solving-methods.html#diagnosis-and-validation
 - Fixed alphabet substitutions
   https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
 - LP2-00–55: fixed alphabet transforms against the warning opening
@@ -7645,8 +7304,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
-- Keystream interruptions and reset rules
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-interruptions
 - LP2: pair the 2,883-rune sections by subtraction
   https://jelliottdev.github.io/#/experiments/spiral-branches-paired-subtraction
 - Cipher composition and ordered pipelines
@@ -7655,12 +7312,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/page40-for-every-arithmetic
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
-- Autokey and ciphertext feedback
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-feedback
 - Unrestricted additive keys and one-time-pad hypotheses
   https://jelliottdev.github.io/reference/articles/one-time-pad.html
-- Seeded generators and generated keystreams
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-seeded
 - Moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - Transposition and permutations
@@ -7673,8 +7326,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-word-order-reversal
 - Grid layouts, spirals and route ciphers
   https://jelliottdev.github.io/reference/articles/method-routes.html
-- Transposition and permutations
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-transposition
 - LP2-00–02: 27 × 27 totient-map route replay
   https://jelliottdev.github.io/#/experiments/totient-map-route
 - Grilles and positional extraction
@@ -7733,6 +7384,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-representations.html
 - LP2-49–51: direct text and file-header screen
   https://jelliottdev.github.io/#/experiments/grid-direct-bytes
+- LP2-49–51: fixed bit-grid barcode scan
+  https://jelliottdev.github.io/#/experiments/grid-barcode-fixed-render
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Magic squares and numerical grids
@@ -7779,14 +7432,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/compass-shared-radii
 - LP2-00–02: audit the 729 ÷ rune-index proposal
   https://jelliottdev.github.io/#/experiments/cross-section-index-inversion
-- Grid layouts, spirals and route ciphers
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-routes
 - LP2 margin trimming: do neighboring text rows align uniquely?
   https://jelliottdev.github.io/#/experiments/page-margin-row-alignment
 - LP2-15 number-row spacing: a source-bound line-gap audit
   https://jelliottdev.github.io/#/experiments/lp2-spacing-gap-audit
-- Gematria and rune-sum mappings
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-sums
 - Audio and frequency encodings
   https://jelliottdev.github.io/reference/articles/audio-frequency.html
 - Layered decoding and file chains
@@ -7813,8 +7462,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-cribs.html
 - LP2-39: twenty proposed red-header cribs
   https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
-- Differential and cumulative decoding
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-differences
 - Automatic search and language scoring
   https://jelliottdev.github.io/reference/articles/method-automatic-search.html
 - How does trying more keys change the best score?
@@ -7859,26 +7506,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/literal-prime-affine
 - Literal prime alphabet: quadratic permutations for every modulus above 109
   https://jelliottdev.github.io/#/experiments/literal-prime-quadratic
-- Word, row, page and section boundaries
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-segmentation
 - LP2 page supports: literal-prime affine maps and the two page-55 exceptions
   https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
 - Null models and selection effects
   https://jelliottdev.github.io/reference/articles/null-models.html
-- Automatic search and language scoring
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-automatic-search
-- Page and section ordering
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-page-order
 - LP1: the 464-word table and column balance
   https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
-- Repeats, doublets and word structure
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-repetition
 - Möbius zero-mask rule against a solved LP2 page
   https://jelliottdev.github.io/#/experiments/mobius-zero-mask-known-page
 - Source verification and transcription audits
   https://jelliottdev.github.io/reference/articles/method-source-audits.html
-- Image transforms and overlays
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-image-processing
 - Stored transcription corrections: LP2 word lengths and IoC
   https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
 - LP2 page joins: sensitivity of word-length counts
@@ -7891,11 +7528,9 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-round-glyphs
 - Rune frequencies and distribution diagnostics
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
-- Source verification and transcription audits
-  https://jelliottdev.github.io/reference/articles/solving-methods.html#family-provenance
-- Have we tried it?
-  https://jelliottdev.github.io/#/experiments
-- Download the family map
+- Learn why bounds matter
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Download the complete method map
   https://jelliottdev.github.io/data/method-families.json
 
 Article: https://jelliottdev.github.io/reference/articles/solving-methods.html
@@ -9268,8 +8903,28 @@ Count the choices before running
 
 Take all recognized runes in the archived LP2-31 transcription. Allow two whole-page orders: original and reversed. For each order, subtract every fixed shift from 0 through 28, using arithmetic modulo 29. There are 2 × 29 = 58 configurations.
 
+
 [Image: One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.]
-Multiply the number of choices when every combination is allowed. The branches count configurations, not successful decryptions. Download diagram.
+
+
+Change one choice and watch the number of tests grow.
+
+
+Pages 1
+Page orders 2
+Shifts 29
+Starting offsets 1
+
+1 × 2 × 29 × 1 = 58 configurations
+
+Pages 1
+Orders 2
+Shifts 58
+Offsets 58
+
+
+Every combination counts as one configuration. Different configurations may produce the same output, and this count is not a probability of success. Download the fixed 58-case diagram.
+
 
 If you also allow three distinct starting offsets, the count becomes 2 × 29 × 3 = 174 configurations. That is a different search, and you must specify what an offset does: discard leading runes, move a keystream’s starting point, or something else. If some choices are only allowed on particular branches, count each branch separately and add the totals.
 
@@ -9376,7 +9031,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/prime-sums.html#length-bounds
 - arithmetic modulo 29
   https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
-- One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.; Download diagram
+- One fixed input branches into original and reversed order. Each branch contains shifts zero through twenty-eight, giving twenty-nine configurations per branch and fifty-eight in total.; Download the fixed 58-case diagram
   https://jelliottdev.github.io/exports/figures/search-space.svg
 - the shift enumeration walkthrough
   https://jelliottdev.github.io/reference/articles/reproducibility.html#generate-candidates
@@ -14066,18 +13721,33 @@ Reproducing rune prime sums
 
 Compute exact sentence and word totals, test explicit spelling changes, and keep arithmetic separate from intent.
 
-A prime-sum claim is a claim about a particular sequence of runes under a particular counting rule. Before asking why a spelling was chosen, establish which text was counted and whether the claimed total can be reproduced. The spelling reference discusses individual cases; this guide walks through the calculation.
+Each rune in Gematria Primus has a prime-number value. A prime sum adds those values across a stated piece of text: one word, a sentence, or a whole page. The total need not itself be prime. The boundary and the rune sequence matter. This guide shows how to calculate a sum, why an archived ciphertext sum can differ from a decoded reading, and what a numerical match can actually tell us. For individual spellings, see the spelling reference.
+
+Start with one word: CWESTIAN
+
+The second word of the Instruction reading on LP1-16 contains seven runes. Written as arithmetic labels, they are C, W, E, S, T, IA and N. The final three Latin letters in “TIAN” therefore do not name three separate runes: IA stands for one rune worth 107.
+
+C    W    E    S    T    IA    N
+13 + 19 + 67 + 53 + 59 + 107 + 29 = 347
+
+Reverse the decimal digits: 347 → 743
+Both are prime, and they are different: 347 is an emirp.
+
+This establishes the arithmetic for that seven-rune reading. It does not prove why the word was written that way or supply a cipher key. The spelling comparisons below change one rune at a time to show which alternatives alter the sum.
 
 Choose the input layer
 
-The page record’s ordinary prime sum describes its archived runes. For an encrypted page, this is a ciphertext sum. The examples here instead use the known decoded rune sequence, with the documented correction and cipher rules applied. These are different quantities even when both are called “the page sum.”
+First decide which runes you are adding. The sum beside a manuscript image describes its archived transcription. On an encrypted page, that is a ciphertext sum. A known reading has a separate decoded rune sequence, after the documented correction and cipher rules. Its sum may differ even if the rune count stays the same.
 
-Use the rune’s Gematria Primus prime value, not its zero-based cipher index. Count each rune once. The rule here excludes spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG denotes one rune; it must not automatically become two individual letter-runes.
+Then decide where to stop: word, sentence, or page. Use each rune’s prime value, not its zero-based cipher index. Count each rune once; exclude spaces, punctuation, line-wrap markers and printed decimal numbers. A Latin label such as IA or NG can denote one rune and must not automatically become two letter-runes.
 
 Reproduce the sum displayed on a page
 
 The metadata beside each manuscript image reports the archived rune count and prime sum. For LP2-31, these are 269 runes and 13,680. They describe the encrypted transcription, not a proposed plaintext.
 
+You can check those numbers against the archive text and alphabet. This establishes that the displayed metadata matches the stored transcription; it does not independently verify each rune against the image.
+
+Show the Python check and expected output
 Use this Python 3 example from the repository root or extracted reference-data bundle. Change page_id to another page with an archived rune transcription. The script reads the archive text, looks up each rune’s prime value, and checks both results against the page record:
 
 import json
@@ -14101,7 +13771,8 @@ Expected output:
 Archived runes: 269
 Archived prime sum: 13680
 
-Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing. This checks the published metadata against its transcription and alphabet; it is not an independent verification of the image transcription.
+Only recognized rune symbols contribute. Archive delimiters, line endings and decimal digits do not. Unknown characters within the Unicode Runic block cause an error instead of silently disappearing.
+
 
 A sum preserves no ordering information: rearranging the same runes gives the same total. Matching 13,680 therefore cannot establish that two transcriptions are identical or that a rearrangement is correct. Use the exact source file and its checksum to identify the input; use cipher invariants to understand which transformations can change the statistic. The first-row example explains why Latin-letter counts differ from rune counts.
 
@@ -14175,19 +13846,7 @@ The complete archived MP3 was checked when preparing this ledger. Its hash ident
 
 What does a spelling change actually do?
 
-Start with the exact original sequence, specify an alternate sequence, and subtract their totals. For a replacement of one rune by several, the change is the sum of the inserted rune values minus the removed rune value.
-
-Worked example: CWESTIAN
-
-The second word of the Instruction reading on LP1-16 contains seven runes. In the labels used by the arithmetic evidence, they are C, W, E, S, T, IA and N. The final three Latin letters in “TIAN” therefore do not represent three separate runes: IA is one alphabet entry worth 107.
-
-C    W    E    S    T    IA    N
-13 + 19 + 67 + 53 + 59 + 107 + 29 = 347
-
-Reverse the decimal digits: 347 → 743
-Both are prime, and they are different: 347 is an emirp.
-
-Now construct an alternative that represents the sound with separate I and O runes. Keep every other rune fixed. Their combined value is 31 + 7 = 38, so replacing 107 with 38 gives 347 − 107 + 38 = 278. This is a real arithmetic difference. Writing the original rune’s label as IO instead of IA, or C as K, would leave the underlying seven runes and their sum unchanged. See transliteration conventions before comparing Latin spellings.
+Start with the exact original rune sequence, write down an alternate sequence, and subtract their totals. For a replacement of one rune by several, add the inserted values and subtract the removed value. In the CWESTIAN example above, an alternative that represents the sound with separate I and O runes replaces the 107-valued IA with 31 + 7 = 38. Its total becomes 347 − 107 + 38 = 278. That changes the arithmetic. Merely writing the same rune’s label as IO instead of IA, or C as K, leaves the seven runes and their total unchanged. Check the transliteration conventions before comparing Latin spellings.
 
 Compare the other cases
 
@@ -14255,6 +13914,7 @@ Reproduce the exact minima
 
 This Python example uses dynamic programming. For each smaller total, it retains a shortest available value sequence. Extending those solutions by each allowed value finds a shortest sequence for the next total. It reads the alphabet from the reference-data bundle and makes no network requests.
 
+Show the shortest-sequence Python calculation
 import json
 from pathlib import Path
 
@@ -14272,6 +13932,7 @@ for target in (131, 151, 809, 3299):
     witness = best[target]
     assert witness is not None and sum(witness) == target
     print(target, len(witness), witness)
+
 
 The minimum counts are 3, 3, 9 and 31. A shortest witness need not be unique; the program’s ordering merely selects one. It neither enumerates all words nor estimates how likely a matching word is. For a fixed list of actual word candidates, see the complete segmentation audit. For defining a wider vocabulary search, see search space and bounds.
 
@@ -14310,10 +13971,16 @@ The later-message worked example reproduces the original 59-rune group sums, the
 Widsom in the Britannica scans documents three printed occurrences with image details and full-page downloads. The shared spelling is a source lead; borrowing by Liber Primus has not been established.
 
 Sources, related references, and files
+- Gematria Primus
+  https://jelliottdev.github.io/reference/articles/rune-values.html
 - spelling reference
   https://jelliottdev.github.io/#/spelling
-- Gematria Primus prime value
-  https://jelliottdev.github.io/reference/articles/rune-values.html
+- Instruction reading
+  https://jelliottdev.github.io/reference/articles/reading-instruction.html
+- LP1-16
+  https://jelliottdev.github.io/reference/lp1-16.html
+- spelling comparisons below
+  https://jelliottdev.github.io/reference/articles/prime-sums.html#change
 - LP2-31
   https://jelliottdev.github.io/reference/lp2-31.html
 - reference-data bundle; reference-data ZIP
@@ -14352,10 +14019,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/parable-mp3-link.json
 - verification script
   https://jelliottdev.github.io/scripts/parable_mp3_link.py
-- Instruction reading
-  https://jelliottdev.github.io/reference/articles/reading-instruction.html
-- LP1-16
-  https://jelliottdev.github.io/reference/lp1-16.html
+- CWESTIAN example above
+  https://jelliottdev.github.io/reference/articles/prime-sums.html#worked-word
 - transliteration conventions; transcription correction
   https://jelliottdev.github.io/reference/articles/transliteration.html
 - the source register
@@ -22685,11 +22350,12 @@ Word lengths and corpus comparisons
 
 Count rune tokens, reconcile the 2896 and 2902 conventions, and separate manuscript measurements from English-corpus claims.
 
-Word lengths can reveal structure that a one-rune-for-one-rune cipher preserves. Before comparing them with English, define the units and boundaries. A count of Latin letters, a count of runes, and a count that includes decimal labels can describe different datasets.
+The archived unsolved LP2 text has 2,896 rune tokens containing 12,956 runes when page wraps are joined and decimal labels are excluded. An older 2,902-token summary is explained by counting six isolated digits as tokens. Neither count identifies a language or cipher by itself.
 
-This guide answers three practical questions. What lengths are in the archived unsolved text? The first count gives the input rules and a download of every token. Why do older summaries disagree? The later audit isolates six decimal labels and other boundary choices. Does the distribution identify English? That requires a comparable reference corpus and a specified test; the raw histogram cannot answer it.
+This guide defines the boundaries behind those numbers, shows the distribution, and explains what a fair corpus comparison would require. Detailed source audits and special cases are available below when you need to reproduce or challenge a claim.
 
-For the different question of runes per named section, including the reported equalities after omitting ᚠ, use the section-count audit. Some of those sections start or end partway through a manuscript page.
+The measured lengthsWhy 2,902 also appearsComparing with proseWhat lengths can rule outSources and checks
+For the different question of runes per named section, including the reported equalities after omitting ᚠ, use the section-count audit. Some sections start or end partway through a manuscript page.
 
 Count runes, not the letters in their labels
 
@@ -22710,6 +22376,7 @@ Joining pages matters. Parsing every page separately with the same within-page r
 
 The two-transcription sensitivity audit asks a separate question: do the 33 non-rune differences between archived seventh-onion and wiki text on LP2-00–55 move any of these token starts? Under this exact tokenizer, none does; both complete sources also yield the same ordered token lengths. This does not settle the page joins above or any punctuation-driven key-reset rule.
 
+LP2-21 example: the 11–11–10 token chain
 LP2-21: three consecutive lengths of 11, 11 and 10
 
 On LP2-21, three consecutive rune tokens have lengths 11–11–10. They are tokens 1,167–1,169 in the joined LP2-00–55 ledger, not word numbers printed on the page. The exact pattern occurs once among the ledger’s 2,894 overlapping three-token windows. This is a descriptive count under the conventions above, not an English-language probability.
@@ -22726,6 +22393,7 @@ On LP2-21, three consecutive rune tokens have lengths 11–11–10. They are tok
 The middle token crosses a line wrap. Treating that wrap as a separator would split it into lengths 10 and 1 and erase the reported chain. Under the archived conventions, slash and line breaks are transparent while the surrounding hyphens delimit tokens. None of these three tokens crosses a page boundary or contains an apostrophe. The summary report now includes the matching tokens and their source offsets; the independent scanner checks the middle token’s 10+1 split.
 
 A one-rune-for-one-rune cipher that preserves boundaries must preserve this length sequence. It does not follow that the three plaintext words have 11, 11 and 10 Latin letters: TH, NG and other multi-letter labels can represent single runes. Nor does this observation by itself reject English or establish a boundary-changing cipher. A comparison needs a frozen rune-conversion rule, a stated corpus and a rule for selecting unusual patterns. Choosing this chain after inspecting the page and then treating it as a preselected test would overstate its significance. No solved-text baseline or statistical significance result is claimed for this chain here.
+
 
 Why an earlier summary has 2,902 tokens
 
@@ -22753,6 +22421,7 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 
 This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The complete pinned-corpus comparison now reproduces that separate descriptive calculation with independent source and rank checks.
 
+Corpus audit detail: symbol inventory, twelve-file check, and duplicate paths
 
 Which symbols occur across the complete reference corpus?
 
@@ -22881,6 +22550,7 @@ python scripts/audit_runeberg_inventory.py /path/to/project-runeberg
 
 The script reads committed Git metadata and one blob for each duplicate group; it does not run third-party code. A partial clone may fetch those blobs. The inventory report includes every duplicate path, object identifiers, SHA-256 hashes, byte sizes and the exact token rule. The raw NUL-delimited Git tree listing preserves the full path inventory. The audit script is included in the reference-data bundle. These checks do not reproduce the full corpus statistics or their reported probabilities.
 
+
 What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
@@ -22889,6 +22559,14 @@ Liberpedia has reproduced the manuscript-summary match above and the complete pi
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
+Could the plaintext be another language?
+The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
+
+
+For the limits of this language comparison on actual manuscript prose, see the known-LP reading control. Its pool and individual sections can rank differently. The equal-token control compares samples of exactly 2,896 tokens: English remains the manuscript’s nearest tested profile, but the manuscript is farther from each language profile than that language’s observed reference samples. The language-comparison overview explains how all four related records fit together.
+
+
+Corpus implementation detail: two source-code repairs and synthetic controls
 Two code repairs to declare before a replay
 
 Our pinned-source code audit checks two specific defects. It uses small synthetic inputs and does not run the corpus or reproduce historical probability claims.
@@ -22912,12 +22590,14 @@ python scripts/audit_corpus_pipeline.py /path/to/lp_experiments/code
 
 Use the pinned source directory. The audit script and saved report are included in the reference-data bundle. A changed source file is rejected rather than silently treated as the audited revision. A full replay still needs pinned package versions and explicit aggregation, quantile, missing-value and sampling conventions.
 
+
 What does a length difference imply?
 
 If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
 
 The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Its within-section shuffle variant preserves each section’s length distribution; the section-order variant also searches every arrangement in both the observed data and the controls. They address different choices in the same LP1 comparison, rather than supplying three independent confirmations.
 
+Reproduce the 2,896-token count and download the token ledger
 Reproduce the count and inspect every token
 
 Extract the reference-data ZIP with its folders intact. Python 3 is sufficient; no corpus download, network access or third-party package is required for this audit.
@@ -22929,6 +22609,8 @@ The first command reconstructs the reports and chart. The second uses an indepen
 
 To rebuild the local generated files after a deliberate change, run python scripts/rune_word_lengths.py --write. A changed input or counting convention defines a changed measurement; retain its provenance and compare it separately.
 
+
+LP2-18 example: two tokens whose prime sums add to 987
 LP2-18: how two tokens become a 17-rune candidate
 
 A proposed Fibonacci connection used a 17-rune sequence with prime-value sum 987. The sum reproduces, but the archived transcription places a clause separator inside that sequence. Under this guide’s token rules it is two tokens, not one long word.
@@ -22970,11 +22652,13 @@ for token in (left, right, left + right):
 
 The transcription-checking guide explains how formatting-only differences can change a word-based experiment while leaving the whole-page rune stream unchanged. For a different question, the Fibonacci opening experiment tests a specified sequence as shifts against fixed opening texts. Neither result settles every Fibonacci-based proposal.
 
+
 Sources and status
 
 Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; the prefix audit processes only the twelve specified prefixes, while the separate tree inventory covers every path and decodes only the three repeated content objects. Counts and the summary reconciliation were checked on 20 October 2026.
 
 
+Other word-boundary examples: short headers and repeated tokens
 A short-header example: BEING and THUS
 
 The LP2-39 header-crib experiment tests twenty proposed words against three red runes. BEING needs four or five runes under the exact stored GP labels: EI is not one of those labels. THUS can use three or four. After this length check, seventeen segmentations remain for a complete affine-key search. WHY fits one key, but the three-symbol fit does not establish the reading. The experiment retains every rejected candidate and explains what a test beyond the header would need to show.
@@ -22985,13 +22669,8 @@ Word-local ciphers and repetition
 The word-reset repetition experiment uses a deliberately different selection: separate pages, omit each page’s first and last token, and compare the remaining ciphertext tokens of at least four runes. It finds no exact repeats under either apostrophe policy and only four anagram pairs, all length four. Its explanation distinguishes a shared deterministic word function from a shared symbol substitution followed by word-local shuffling. Neither result proves that the unknown plaintext must repeat.
 
 
-Could the plaintext be another language?
-The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
 
-
-For the limits of this language comparison on actual manuscript prose, see the known-LP reading control. Its pool and individual sections can rank differently. The equal-token control compares samples of exactly 2,896 tokens: English remains the manuscript’s nearest tested profile, but the manuscript is farther from each language profile than that language’s observed reference samples. The language-comparison overview explains how all four related records fit together.
-
-
+LP1 comparison detail: the selected 464-word column balance
 Does the 464-word balance depend on mixing sections?
 
 The section-preserving variant keeps the same observed arrangement but shuffles lengths only within each section’s original slots. It still finds low column-mean variance under that model: 88 of 49,999 trials are at least as flat, giving a plus-one lower-tail estimate of 0.00178. The shared-scale histograms and slot map show what changes from the unrestricted baseline.
@@ -23018,6 +22697,8 @@ The combined value also checks against the original balance statistic: its saved
 
 Extract the reference-data ZIP, retain its folders, and run python scripts/audit_section_contributions.py --output my-section-contributions.json with Python 3. The script rebuilds the original word inventory, checks the column totals by direct ordinal assignment, and verifies every pair contribution through a direct word-pair expansion. It performs no random trials. Exact counts and contributions (JSON) · Audit script · Figure script.
 
+
+Further word-position leads: the proposed 928-word carrier
 The proposed 928-word carrier
 
 The carrier and word-matching guide contains the complete LP2-23–39 inventory, group-boundary diagram, halfway split and downloadable audit. The total is 928 rune-words; five decimal labels are counted separately. A matching total does not specify a grille operation.
@@ -23027,15 +22708,20 @@ Can a word identify a unique position?
 In the solved 464-word arrangement, 216 ciphertext positions have a word form that occurs elsewhere in the same object. The word-lookup audit explains the difference between distinct forms and ambiguous positions, with the full occurrence lists and a comparison to decoded rune text.
 
 
+
 For the broader approach and its other variants, see the language and corpus identification guide.
 
 Sources, related references, and files
-- What lengths are in the archived unsolved text?
+- The measured lengths
   https://jelliottdev.github.io/reference/articles/word-lengths.html#counts
-- Why do older summaries disagree?
+- Why 2,902 also appears
   https://jelliottdev.github.io/reference/articles/word-lengths.html#historical-count
-- Does the distribution identify English?
+- Comparing with prose
   https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus
+- What lengths can rule out
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#cipher
+- Sources and checks
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#sources
 - section-count audit
   https://jelliottdev.github.io/reference/articles/section-rune-counts.html
 - rune indices and labels
@@ -23104,6 +22790,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
+- eight-language parallel-corpus experiment
+  https://jelliottdev.github.io/#/experiments/parallel-languages
+- known-LP reading control
+  https://jelliottdev.github.io/#/experiments/known-reading-languages
+- equal-token control
+  https://jelliottdev.github.io/#/experiments/target-sized-languages
+- language-comparison overview
+  https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - pinned-source code audit
   https://jelliottdev.github.io/exports/corpus-pipeline-audit.json
 - pinned source directory
@@ -23136,14 +22830,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
 - word-reset repetition experiment
   https://jelliottdev.github.io/#/experiments/word-reset-repetition
-- eight-language parallel-corpus experiment
-  https://jelliottdev.github.io/#/experiments/parallel-languages
-- known-LP reading control
-  https://jelliottdev.github.io/#/experiments/known-reading-languages
-- equal-token control
-  https://jelliottdev.github.io/#/experiments/target-sized-languages
-- language-comparison overview
-  https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - unchanged-rune audit
   https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
 - six-width comparison
@@ -28872,11 +28558,11 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 86 published reproducible records: 18 bounded solving or extraction tests, 3 proposed-method replay, 36 manuscript measurements, 10 controls, 16 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 19 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 87 published reproducible records: 19 bounded solving or extraction tests, 3 proposed-method replay, 36 manuscript measurements, 10 controls, 16 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 19 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
-What remains in the supplied-source intake: 14 reported ideas are not replayed, 20 are partly replayed, and 9 have related work but no exact replay. Of 15 additional supplied source files, 15 have been screened: 12 retain specific follow-ups, 3 yielded no further distinct claim in the supplied file, and 0 remain unscreened. Screening classifies the supplied extracts; it does not complete their replays. These groups count reports and files, not additional experiments: equivalent claims can share a test, while one report may need several fixed variants. The source-specific intake names the exact missing work.
+What remains in the supplied-source intake: 14 reported ideas are not replayed, 21 are partly replayed, and 8 have related work but no exact replay. Of 15 additional supplied source files, 15 have been screened: 12 retain specific follow-ups, 3 yielded no further distinct claim in the supplied file, and 0 remain unscreened. Screening classifies the supplied extracts; it does not complete their replays. These groups count reports and files, not additional experiments: equivalent claims can share a test, while one report may need several fixed variants. The source-specific intake names the exact missing work.
 
 
 Start with the observation index when a count, pattern or visual feature prompts the idea. Use Have we tried it? to check a specific proposal against exact scopes, or the method-family map when you are still defining a method. This page tracks the work needed to make these routes a reliable account of what is known and what has been tested.
@@ -29065,11 +28751,11 @@ This intake draws on 44 distinct supplied source files. It contains 43 source-sp
 
 The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. Of the 43 source-specific entries, 7 link to related public material and 36 have no public URL recorded. Even a related public link may not expose the exact supplied post. A hash verifies a copy someone already holds; it cannot retrieve a private transcript or independently establish the attribution. These entries are source leads, not a complete public history of prior attempts. A public link, when present, may change and has not yet been pinned to a revision. Start with Have we tried it? for completed records, or the method map for a broader family.
 
-Entry status (one per proposal): Not replayed: 14 · Related work only: 9 · Partly replayed: 20 · Total: 43
+Entry status (one per proposal): Not replayed: 14 · Related work only: 8 · Partly replayed: 21 · Total: 43
 
 Find an attempt
 
-Grid bytes as a QR or data-matrix image · Related work only
+Grid bytes as a QR or data-matrix image · Partly replayed
 
 LP2-40 FOR EVERY, reflected florals and a Möbius running key · Partly replayed
 
@@ -29158,12 +28844,12 @@ An order and a value as an English Qaballa lead · Not replayed
 Source-specific entries
 
 Grid bytes as a QR or data-matrix image
-Related work only · Radix changes and byte encodings · LP2-15, LP2-49, LP2-50, LP2-51
+Partly replayed · Radix changes and byte encodings · LP2-15, LP2-49, LP2-50, LP2-51
 Reported approach. Convert the LP2-49–51 base-60 pairs to fixed-width bits and plot them as a black-white matrix; the report also describes earlier LP2-15 and solved-page number layouts, a mistaken base-62 pass, and a corrected bit layout.
-Current archive coverage. The grid guide reproduces base-60 bytes and one fixed 64 by 32 bit rendering. The direct-byte experiment screens text and headers; neither reproduces every matrix shape or image-recognition attempt in this report.
-Replay requirement. Recover the exact corrected bit stream and plotting script, declare widths, bit order, padding, source transcription and image acceptance rule, then run the same detector on matched random bit grids.
+Current archive coverage. The grid guide reproduces base-60 bytes and a fixed 64 by 32 bit rendering. A bounded barcode experiment scans that whole image and its three original page groups under sixteen planar/polarity transforms each: no QR Code or Data Matrix payload decodes, while both positive controls decode. This is a new declared variant, not a replay of every historical image or the earlier page-15 layout.
+Replay requirement. Recover the report's omitted final images and plotting script for exact historical comparison. Other widths, uncertain glyphs, alternate bit rules, cropped windows and the separate page-15 number rendering require prespecified tests and their own controls.
 
-Related records with narrower scopes: grid direct bytes, grid stem uncertainty.
+Related records with narrower scopes: grid direct bytes, grid stem uncertainty, grid barcode fixed render.
 
 Source identification
 An attempt at finding a data matrix in the base60 of pages 49 - 51 · CurtbroG · 2023-08-27. Supplied transcript SHA-256: 14bb1f011181a07fd3cb3c84c32c77e238133529f401e9b62a1a06621ea4bb12.
@@ -29789,7 +29475,7 @@ Mayfly image provenance · The byte and hash-sweep ideas are registered; the all
 LP2-56 hash-target hypotheses · The reported GNUnet 0.10.1 comparison is now registered, but its named TSV and offline-reference outputs are absent from the supplied text; it is not our replay. Read the source-intake note. Source ID and checksum
 bc2d6c57-8156-439e-8dd4-1aa3592a4999 · SHA-256: 005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f
 
-Other solved-text hint suggestions · Fixed title-crib variants are registered; LP1 word totals need a declared tokenization and recount, while artwork-word matches lack a fixed map. Read the source-intake note. Source ID and checksum
+Other solved-text hint suggestions · Fixed title-crib variants are registered. A declared-tokenization recount found 694 LP1 rune words (681 excluding the 13 grid words), not the reported totals; artwork-word matches still lack a fixed map. See lp1-word-count-audit.json. Read the source-intake note. Source ID and checksum
 c1c1edd9-ecef-4085-b2d5-dd5c41b93856 · SHA-256: 1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042
 
 Way, map and compass theme · Navigation-language cross-references are contextual; a route cipher still needs a fixed path, and a wording-freedom control needs a sampling protocol. Read the source-intake note. Source ID and checksum
@@ -29804,7 +29490,7 @@ edacef84-a430-43d4-8540-47a01a00ecef · SHA-256: da5eda73ef7664e6761e37e81f4a4f3
 Mixed solver discussion · Audio-bin interpretation is covered; the proposed LP2-54–55 labyrinth and whole-word-to-base-7 music method lack fixed routes or output rules. Read the source-intake note. Source ID and checksum
 f2ad6491-1cd3-43d3-ae73-b05b88d1c14c · SHA-256: a73976af78ae6c94d0dffffe5c87266fad568a0b4dd26cb2c29f10b34f5fb429
 
-Dot measurements, cuneiform files and spacing · Dots and cuneiform links overlap current entries; the Orion ratio, LP2-37 punctuation and image-resampling claims need exact source inputs. Read the source-intake note. Source ID and checksum
+Dot measurements, cuneiform files and spacing · Dots and cuneiform links overlap current entries. The archived LP2-37/38 images confirm the punctuation placement; the suggested layout motive is unsupported. The Orion ratio and resampling claims still need exact inputs. See lp2-37-punctuation-audit.md. Read the source-intake note. Source ID and checksum
 fb8502fe-819f-4048-ad12-a1d73a32a438 · SHA-256: a43d49a4568e17141c94c09fd827c16bd1f8405e3382ff22eeca14320a42560d
 
 English Qaballa wording lead · English Qaballa and rune-poem leads are registered; distinct audio, message-sum and manuscript-provenance claims need sourced checks. Read the source-intake note. Source ID and checksum
@@ -29922,6 +29608,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-direct-bytes
 - grid stem uncertainty
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
+- grid barcode fixed render
+  https://jelliottdev.github.io/#/experiments/grid-barcode-fixed-render
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - page40 for every arithmetic
@@ -37683,6 +37371,129 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "replay",
     "label": "Method replay",
     "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
+
+---
+
+{
+  "id": "grid-barcode-fixed-render",
+  "title": "LP2-49–51: fixed bit-grid barcode scan",
+  "status": "published",
+  "question": "Does the pinned 64-bit-wide grid rendering, whole or separated by manuscript page, decode as a QR Code or Data Matrix under fixed planar transformations?",
+  "summary": "No QR Code or Data Matrix payload decoded in 64 fixed-grid scans; the same decoder read both generated positive controls.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "base 60",
+    "QR code",
+    "Data Matrix",
+    "binary grid",
+    "barcode",
+    "bounded search"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/grid-binary-audit.json",
+      "exports/alphanumeric-grids.csv"
+    ],
+    "representation": "Pinned wiki transcription, declared base-60 byte mapping, eight most-significant-first bits per entry; 64 bits per manuscript row, with all 32 rows or the three original page groups.",
+    "procedure": "Scan each of four bit canvases under eight D4 rotations/reflections and two color polarities with zxing-cpp restricted to QR Code and Data Matrix; verify generated positives and scan fixed-seed bit shuffles.",
+    "parameters": "Four canvases times 16 transforms = 64 original scans; eight shuffles per canvas times 16 transforms = 512 comparison scans; bit scale 8 pixels, white quiet zone four modules; zxing-cpp 3.1.1 with rotate, invert and downscale retries disabled.",
+    "exclusions": "Other glyph readings, alphabets, bases, bit orders, grid widths, cropping, padding, inserted finder patterns, page permutations, altered decoder settings, other barcode formats and encrypted payloads without a valid barcode wrapper."
+  },
+  "outcome": "not-supported",
+  "finding": "Zero valid nonempty decodes across the 64 declared manuscript scans; zero across 512 matched bit-shuffle scans. Both generated positive controls decoded exactly.",
+  "limitations": "The supplied historical report lacks its final plot images and full settings, so this is a new fixed variant, not an exact replay of all reported images. Zero decodes is conditional on the transcription, layout, search space and zxing-cpp settings; shuffled bitmaps do not provide a post-selection probability.",
+  "next_steps": "Only expand the barcode search with a prespecified change to glyphs, grid geometry or decoder rule; preserve every attempted candidate and validate any hit as a full payload.",
+  "family": {
+    "id": "grid-barcode-fixed-render",
+    "title": "Grid barcode renderings",
+    "question": "Does a declared bit rendering of the grid contain a decodable barcode?",
+    "baseline": "grid-barcode-fixed-render"
+  },
+  "variant": {
+    "label": "Baseline: fixed manuscript-row rendering, page slices and planar transforms",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — fixed-rule decoder scan, independently rebuilt source bits and positive controls",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-barcode-fixed-render/run.py --check && python experiments/records/grid-barcode-fixed-render/check.py && python experiments/records/grid-barcode-fixed-render/plot.py --check",
+    "environment": "Python 3 with zxing-cpp==3.1.1 and numpy; local pinned inputs only, no network or AI calls during replay.",
+    "script": "experiments/records/grid-barcode-fixed-render/run.py",
+    "script_sha256": "148862031632ade9f19f1055373abbd9e67956f4ddbb38174fc1f2e444106099",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/plan.json",
+        "sha256": "a17ce40e730ae9971ec43cd63421d3648525f2855755ca3d5255bfb361338f9f"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/check.py",
+        "sha256": "502e431d1bc97616c730d66b8afd1c4c55de4dde0c1db7242502b99c94d14c97"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/plot.py",
+        "sha256": "2c8b39c131f83de07ffa8d81ddf5c5ff13b46c6ab1c16e3a8a1fac37ece00fd5"
+      },
+      {
+        "path": "exports/grid-binary-audit.json",
+        "sha256": "c01f294ddeef3a2bd3e3c507594add17c670aff25a23306f79fbce6577844919"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/results.json",
+        "sha256": "1a9e00d46d3673b6677d4fe16caa7c05800d671279dc74f687f755880786ac8b"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/bit-canvases.svg",
+        "sha256": "919e88c33e9c23e0dd076ca70775d501d957c22a33b7da7f01e6f53e0b3d675b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid transcription and bit conversion",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "zxing-cpp reader and writer",
+      "url": "https://github.com/zxing-cpp/zxing-cpp"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "grid-stem-uncertainty",
+    "grid-round-glyphs"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-barcode-fixed-render/bit-canvases.svg",
+      "caption": "Four fixed manuscript-width bit canvases; none decoded under sixteen declared planar and polarity transformations."
+    }
+  ],
+  "article": "# LP2-49–51: does the fixed bit grid decode as a barcode?\n\n**No valid QR Code or Data Matrix payload was found in the declared bit rendering.** The decoder returned zero valid payloads from 64 fixed-grid scans. It did decode both generated positive controls, so the null result is not simply a nonworking decoder. This result applies to the rendering and transformations below; it does not settle every way to rearrange the grid.\n\nThe [LP2-49–51 grid](#/wiki/alphanumeric-grids) contains 256 two-character entries. A [reported exploration](#/wiki/reported-attempts) converted them to binary and looked for QR-like or Data Matrix-like images. Its referenced result pictures and complete final plotting parameters were not preserved in the supplied text. We therefore test a **new, fully specified version** of that idea, rather than claiming an exact replay of every historical image.\n\n## What went into the decoder\n\nThe pinned [grid-bit audit](exports/grid-binary-audit.json) reads each entry under the stated base-60 alphabet as one byte, then writes that byte as exactly eight bits, most significant first. Eight entries make a 64-bit manuscript row. We tested the complete 32-row grid and the original page groups separately: 10 rows from [LP2-49](#/reader/lp2-49), 13 from [LP2-50](#/reader/lp2-50), and 9 from [LP2-51](#/reader/lp2-51). The conditional base-60 and byte assumptions are explained in the grid guide; they are not an established cipher solution.\n\n![Four fixed-width bit canvases, each with zero valid barcode decodes after 16 declared transformations.](experiments/records/grid-barcode-fixed-render/bit-canvases.svg)\n\nFor each canvas we tried four right-angle rotations, each with and without a horizontal reflection, in both color polarities: **16 scans per canvas, 64 total**. Every bit was an 8×8-pixel square with a four-module white border. We allowed no crop, row reflow, page permutation, added finder pattern, or missing bit. The scan used `zxing-cpp` 3.1.1 and accepted only a valid, nonempty QR Code or Data Matrix decode.\n\nTwo synthetic barcodes—one QR Code and one Data Matrix—decoded to their exact known strings with the same software and scan settings. Eight fixed-seed bit shuffles per canvas retained each canvas's dimensions and number of black bits; their 512 scans also yielded no valid payload. Those shuffles illustrate the background behavior of this detector, **not** the probability that the manuscript encodes a barcode. The [JSON report](experiments/records/grid-barcode-fixed-render/results.json) lists all 64 original transformations, image hashes, control settings, and outcomes.\n\n## Reproduce and interpret\n\nFrom the repository root, install the pinned Python dependency, then run:\n\n```text\npython -m pip install zxing-cpp==3.1.1 numpy\npython experiments/records/grid-barcode-fixed-render/run.py --check\npython experiments/records/grid-barcode-fixed-render/check.py\npython experiments/records/grid-barcode-fixed-render/plot.py --check\n```\n\nThe main script pins the input and plan hashes and rescans every case. The checker independently converts the [grid CSV](exports/alphanumeric-grids.csv) back to 2,048 bits, verifies manuscript row boundaries, and checks the saved census and controls. The figure script rebuilds the four pictured canvases from the same pinned bits.\n\nThis is a **negative result for four fixed canvases under 16 planar transformations each**. It does not test other disputed glyph readings, bit order, alternate widths, subwindows, padding, decoder settings, or other barcode types. Any broader image search should declare those choices and count every image examined before treating one apparent pattern as evidence.\n",
+  "article_path": "experiments/records/grid-barcode-fixed-render/article.md",
+  "script_sha256": "148862031632ade9f19f1055373abbd9e67956f4ddbb38174fc1f2e444106099",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
   }
 }
 

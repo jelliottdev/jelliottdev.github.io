@@ -1,0 +1,112 @@
+{
+  "id": "grid-barcode-fixed-render",
+  "title": "LP2-49–51: fixed bit-grid barcode scan",
+  "status": "published",
+  "question": "Does the pinned 64-bit-wide grid rendering, whole or separated by manuscript page, decode as a QR Code or Data Matrix under fixed planar transformations?",
+  "summary": "No QR Code or Data Matrix payload decoded in 64 fixed-grid scans; the same decoder read both generated positive controls.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "base 60",
+    "QR code",
+    "Data Matrix",
+    "binary grid",
+    "barcode",
+    "bounded search"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/grid-binary-audit.json",
+      "exports/alphanumeric-grids.csv"
+    ],
+    "representation": "Pinned wiki transcription, declared base-60 byte mapping, eight most-significant-first bits per entry; 64 bits per manuscript row, with all 32 rows or the three original page groups.",
+    "procedure": "Scan each of four bit canvases under eight D4 rotations/reflections and two color polarities with zxing-cpp restricted to QR Code and Data Matrix; verify generated positives and scan fixed-seed bit shuffles.",
+    "parameters": "Four canvases times 16 transforms = 64 original scans; eight shuffles per canvas times 16 transforms = 512 comparison scans; bit scale 8 pixels, white quiet zone four modules; zxing-cpp 3.1.1 with rotate, invert and downscale retries disabled.",
+    "exclusions": "Other glyph readings, alphabets, bases, bit orders, grid widths, cropping, padding, inserted finder patterns, page permutations, altered decoder settings, other barcode formats and encrypted payloads without a valid barcode wrapper."
+  },
+  "outcome": "not-supported",
+  "finding": "Zero valid nonempty decodes across the 64 declared manuscript scans; zero across 512 matched bit-shuffle scans. Both generated positive controls decoded exactly.",
+  "limitations": "The supplied historical report lacks its final plot images and full settings, so this is a new fixed variant, not an exact replay of all reported images. Zero decodes is conditional on the transcription, layout, search space and zxing-cpp settings; shuffled bitmaps do not provide a post-selection probability.",
+  "next_steps": "Only expand the barcode search with a prespecified change to glyphs, grid geometry or decoder rule; preserve every attempted candidate and validate any hit as a full payload.",
+  "family": {
+    "id": "grid-barcode-fixed-render",
+    "title": "Grid barcode renderings",
+    "question": "Does a declared bit rendering of the grid contain a decodable barcode?",
+    "baseline": "grid-barcode-fixed-render"
+  },
+  "variant": {
+    "label": "Baseline: fixed manuscript-row rendering, page slices and planar transforms",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — fixed-rule decoder scan, independently rebuilt source bits and positive controls",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-barcode-fixed-render/run.py --check && python experiments/records/grid-barcode-fixed-render/check.py && python experiments/records/grid-barcode-fixed-render/plot.py --check",
+    "environment": "Python 3 with zxing-cpp==3.1.1 and numpy; local pinned inputs only, no network or AI calls during replay.",
+    "script": "experiments/records/grid-barcode-fixed-render/run.py",
+    "script_sha256": "148862031632ade9f19f1055373abbd9e67956f4ddbb38174fc1f2e444106099",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/plan.json",
+        "sha256": "a17ce40e730ae9971ec43cd63421d3648525f2855755ca3d5255bfb361338f9f"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/check.py",
+        "sha256": "502e431d1bc97616c730d66b8afd1c4c55de4dde0c1db7242502b99c94d14c97"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/plot.py",
+        "sha256": "2c8b39c131f83de07ffa8d81ddf5c5ff13b46c6ab1c16e3a8a1fac37ece00fd5"
+      },
+      {
+        "path": "exports/grid-binary-audit.json",
+        "sha256": "c01f294ddeef3a2bd3e3c507594add17c670aff25a23306f79fbce6577844919"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/results.json",
+        "sha256": "1a9e00d46d3673b6677d4fe16caa7c05800d671279dc74f687f755880786ac8b"
+      },
+      {
+        "path": "experiments/records/grid-barcode-fixed-render/bit-canvases.svg",
+        "sha256": "919e88c33e9c23e0dd076ca70775d501d957c22a33b7da7f01e6f53e0b3d675b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid transcription and bit conversion",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "zxing-cpp reader and writer",
+      "url": "https://github.com/zxing-cpp/zxing-cpp"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "grid-stem-uncertainty",
+    "grid-round-glyphs"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-barcode-fixed-render/bit-canvases.svg",
+      "caption": "Four fixed manuscript-width bit canvases; none decoded under sixteen declared planar and polarity transformations."
+    }
+  ]
+}

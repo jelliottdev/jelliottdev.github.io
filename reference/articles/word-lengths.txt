@@ -2,11 +2,12 @@ Word lengths and corpus comparisons
 
 Count rune tokens, reconcile the 2896 and 2902 conventions, and separate manuscript measurements from English-corpus claims.
 
-Word lengths can reveal structure that a one-rune-for-one-rune cipher preserves. Before comparing them with English, define the units and boundaries. A count of Latin letters, a count of runes, and a count that includes decimal labels can describe different datasets.
+The archived unsolved LP2 text has 2,896 rune tokens containing 12,956 runes when page wraps are joined and decimal labels are excluded. An older 2,902-token summary is explained by counting six isolated digits as tokens. Neither count identifies a language or cipher by itself.
 
-This guide answers three practical questions. What lengths are in the archived unsolved text? The first count gives the input rules and a download of every token. Why do older summaries disagree? The later audit isolates six decimal labels and other boundary choices. Does the distribution identify English? That requires a comparable reference corpus and a specified test; the raw histogram cannot answer it.
+This guide defines the boundaries behind those numbers, shows the distribution, and explains what a fair corpus comparison would require. Detailed source audits and special cases are available below when you need to reproduce or challenge a claim.
 
-For the different question of runes per named section, including the reported equalities after omitting ᚠ, use the section-count audit. Some of those sections start or end partway through a manuscript page.
+The measured lengthsWhy 2,902 also appearsComparing with proseWhat lengths can rule outSources and checks
+For the different question of runes per named section, including the reported equalities after omitting ᚠ, use the section-count audit. Some sections start or end partway through a manuscript page.
 
 Count runes, not the letters in their labels
 
@@ -27,6 +28,7 @@ Joining pages matters. Parsing every page separately with the same within-page r
 
 The two-transcription sensitivity audit asks a separate question: do the 33 non-rune differences between archived seventh-onion and wiki text on LP2-00–55 move any of these token starts? Under this exact tokenizer, none does; both complete sources also yield the same ordered token lengths. This does not settle the page joins above or any punctuation-driven key-reset rule.
 
+LP2-21 example: the 11–11–10 token chain
 LP2-21: three consecutive lengths of 11, 11 and 10
 
 On LP2-21, three consecutive rune tokens have lengths 11–11–10. They are tokens 1,167–1,169 in the joined LP2-00–55 ledger, not word numbers printed on the page. The exact pattern occurs once among the ledger’s 2,894 overlapping three-token windows. This is a descriptive count under the conventions above, not an English-language probability.
@@ -43,6 +45,7 @@ On LP2-21, three consecutive rune tokens have lengths 11–11–10. They are tok
 The middle token crosses a line wrap. Treating that wrap as a separator would split it into lengths 10 and 1 and erase the reported chain. Under the archived conventions, slash and line breaks are transparent while the surrounding hyphens delimit tokens. None of these three tokens crosses a page boundary or contains an apostrophe. The summary report now includes the matching tokens and their source offsets; the independent scanner checks the middle token’s 10+1 split.
 
 A one-rune-for-one-rune cipher that preserves boundaries must preserve this length sequence. It does not follow that the three plaintext words have 11, 11 and 10 Latin letters: TH, NG and other multi-letter labels can represent single runes. Nor does this observation by itself reject English or establish a boundary-changing cipher. A comparison needs a frozen rune-conversion rule, a stated corpus and a rule for selecting unusual patterns. Choosing this chain after inspecting the page and then treating it as a preselected test would overstate its significance. No solved-text baseline or statistical significance result is claimed for this chain here.
+
 
 Why an earlier summary has 2,902 tokens
 
@@ -70,6 +73,7 @@ Including these as length-one tokens reproduces all fourteen length proportions 
 
 This is a reconstruction consistent with the published summary, not proof of the original tokenization code’s intent. Its original per-token ledger was not available in the inspected repository. The difference also does not remove the reported contrast between two- and three-rune counts: those counts remain 448 and 720; only their denominator changes. The complete pinned-corpus comparison now reproduces that separate descriptive calculation with independent source and rank checks.
 
+Corpus audit detail: symbol inventory, twelve-file check, and duplicate paths
 
 Which symbols occur across the complete reference corpus?
 
@@ -198,6 +202,7 @@ python scripts/audit_runeberg_inventory.py /path/to/project-runeberg
 
 The script reads committed Git metadata and one blob for each duplicate group; it does not run third-party code. A partial clone may fetch those blobs. The inventory report includes every duplicate path, object identifiers, SHA-256 hashes, byte sizes and the exact token rule. The raw NUL-delimited Git tree listing preserves the full path inventory. The audit script is included in the reference-data bundle. These checks do not reproduce the full corpus statistics or their reported probabilities.
 
+
 What is needed for an English comparison?
 
 The checked-in corpus script takes the first 2,902 space-separated tokens of each eligible text. It does not draw a random passage. Its call to process_word_counts omits the required word_count argument, so this revision needs repair before execution. The statistics script uses an inclusive left-tail comparison, distribution <= value. These details matter to an exact reproduction.
@@ -206,6 +211,14 @@ Liberpedia has reproduced the manuscript-summary match above and the complete pi
 
 A left-tail fraction asks how often a reference value is no greater than the observed value. A claim of excess needs an upper-tail comparison, with ties handled explicitly. Testing many lengths and statistics and reporting only the most striking difference introduces selection. Set the question, direction and selection correction before a new comparison; see null models and search space and bounds.
 
+Could the plaintext be another language?
+The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
+
+
+For the limits of this language comparison on actual manuscript prose, see the known-LP reading control. Its pool and individual sections can rank differently. The equal-token control compares samples of exactly 2,896 tokens: English remains the manuscript’s nearest tested profile, but the manuscript is farther from each language profile than that language’s observed reference samples. The language-comparison overview explains how all four related records fit together.
+
+
+Corpus implementation detail: two source-code repairs and synthetic controls
 Two code repairs to declare before a replay
 
 Our pinned-source code audit checks two specific defects. It uses small synthetic inputs and does not run the corpus or reproduce historical probability claims.
@@ -229,12 +242,14 @@ python scripts/audit_corpus_pipeline.py /path/to/lp_experiments/code
 
 Use the pinned source directory. The audit script and saved report are included in the reference-data bundle. A changed source file is rejected rather than silently treated as the audited revision. A full replay still needs pinned package versions and explicit aggregation, quantile, missing-value and sampling conventions.
 
+
 What does a length difference imply?
 
 If a transformation emits exactly one rune for every input rune and leaves the boundaries fixed, it preserves token lengths. A substitution can change which runes occur without changing this histogram. But a mismatch with one prose corpus does not uniquely identify a length-changing cipher. Conversion choices, style, headings, number labels and boundary conventions may also affect the comparison. See cipher invariants.
 
 The 464-word column-balance experiment concerns a different population and statistic: four solved LP1 sections arranged in sixteen columns. It does not establish an English baseline for the unsolved pages. Its within-section shuffle variant preserves each section’s length distribution; the section-order variant also searches every arrangement in both the observed data and the controls. They address different choices in the same LP1 comparison, rather than supplying three independent confirmations.
 
+Reproduce the 2,896-token count and download the token ledger
 Reproduce the count and inspect every token
 
 Extract the reference-data ZIP with its folders intact. Python 3 is sufficient; no corpus download, network access or third-party package is required for this audit.
@@ -246,6 +261,8 @@ The first command reconstructs the reports and chart. The second uses an indepen
 
 To rebuild the local generated files after a deliberate change, run python scripts/rune_word_lengths.py --write. A changed input or counting convention defines a changed measurement; retain its provenance and compare it separately.
 
+
+LP2-18 example: two tokens whose prime sums add to 987
 LP2-18: how two tokens become a 17-rune candidate
 
 A proposed Fibonacci connection used a 17-rune sequence with prime-value sum 987. The sum reproduces, but the archived transcription places a clause separator inside that sequence. Under this guide’s token rules it is two tokens, not one long word.
@@ -287,11 +304,13 @@ for token in (left, right, left + right):
 
 The transcription-checking guide explains how formatting-only differences can change a word-based experiment while leaving the whole-page rune stream unchanged. For a different question, the Fibonacci opening experiment tests a specified sequence as shifts against fixed opening texts. Neither result settles every Fibonacci-based proposal.
 
+
 Sources and status
 
 Manuscript inputs are the archived LP2-00–55 transcription files, each hashed in the report. The historical summary and code are pinned to mae3301/lp_experiments, revision cb5cdb9. The referenced corpus is Project Runeberg, revision a39e87e; the prefix audit processes only the twelve specified prefixes, while the separate tree inventory covers every path and decodes only the three repeated content objects. Counts and the summary reconciliation were checked on 20 October 2026.
 
 
+Other word-boundary examples: short headers and repeated tokens
 A short-header example: BEING and THUS
 
 The LP2-39 header-crib experiment tests twenty proposed words against three red runes. BEING needs four or five runes under the exact stored GP labels: EI is not one of those labels. THUS can use three or four. After this length check, seventeen segmentations remain for a complete affine-key search. WHY fits one key, but the three-symbol fit does not establish the reading. The experiment retains every rejected candidate and explains what a test beyond the header would need to show.
@@ -302,13 +321,8 @@ Word-local ciphers and repetition
 The word-reset repetition experiment uses a deliberately different selection: separate pages, omit each page’s first and last token, and compare the remaining ciphertext tokens of at least four runes. It finds no exact repeats under either apostrophe policy and only four anagram pairs, all length four. Its explanation distinguishes a shared deterministic word function from a shared symbol substitution followed by word-local shuffling. Neither result proves that the unknown plaintext must repeat.
 
 
-Could the plaintext be another language?
-The eight-language parallel-corpus experiment compares the same FLORES passages in English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. English is closest by word lengths; the order of other close candidates changes with the symbol representation. The report separates this conditional ranking from IoC and repeated-letter comparisons, and includes source files, a chart and offline reproduction scripts. These scores do not identify the plaintext language.
 
-
-For the limits of this language comparison on actual manuscript prose, see the known-LP reading control. Its pool and individual sections can rank differently. The equal-token control compares samples of exactly 2,896 tokens: English remains the manuscript’s nearest tested profile, but the manuscript is farther from each language profile than that language’s observed reference samples. The language-comparison overview explains how all four related records fit together.
-
-
+LP1 comparison detail: the selected 464-word column balance
 Does the 464-word balance depend on mixing sections?
 
 The section-preserving variant keeps the same observed arrangement but shuffles lengths only within each section’s original slots. It still finds low column-mean variance under that model: 88 of 49,999 trials are at least as flat, giving a plus-one lower-tail estimate of 0.00178. The shared-scale histograms and slot map show what changes from the unrestricted baseline.
@@ -335,6 +349,8 @@ The combined value also checks against the original balance statistic: its saved
 
 Extract the reference-data ZIP, retain its folders, and run python scripts/audit_section_contributions.py --output my-section-contributions.json with Python 3. The script rebuilds the original word inventory, checks the column totals by direct ordinal assignment, and verifies every pair contribution through a direct word-pair expansion. It performs no random trials. Exact counts and contributions (JSON) · Audit script · Figure script.
 
+
+Further word-position leads: the proposed 928-word carrier
 The proposed 928-word carrier
 
 The carrier and word-matching guide contains the complete LP2-23–39 inventory, group-boundary diagram, halfway split and downloadable audit. The total is 928 rune-words; five decimal labels are counted separately. A matching total does not specify a grille operation.
@@ -344,15 +360,20 @@ Can a word identify a unique position?
 In the solved 464-word arrangement, 216 ciphertext positions have a word form that occurs elsewhere in the same object. The word-lookup audit explains the difference between distinct forms and ambiguous positions, with the full occurrence lists and a comparison to decoded rune text.
 
 
+
 For the broader approach and its other variants, see the language and corpus identification guide.
 
 Sources, related references, and files
-- What lengths are in the archived unsolved text?
+- The measured lengths
   https://jelliottdev.github.io/reference/articles/word-lengths.html#counts
-- Why do older summaries disagree?
+- Why 2,902 also appears
   https://jelliottdev.github.io/reference/articles/word-lengths.html#historical-count
-- Does the distribution identify English?
+- Comparing with prose
   https://jelliottdev.github.io/reference/articles/word-lengths.html#corpus
+- What lengths can rule out
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#cipher
+- Sources and checks
+  https://jelliottdev.github.io/reference/articles/word-lengths.html#sources
 - section-count audit
   https://jelliottdev.github.io/reference/articles/section-rune-counts.html
 - rune indices and labels
@@ -421,6 +442,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/null-models.html
 - search space and bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
+- eight-language parallel-corpus experiment
+  https://jelliottdev.github.io/#/experiments/parallel-languages
+- known-LP reading control
+  https://jelliottdev.github.io/#/experiments/known-reading-languages
+- equal-token control
+  https://jelliottdev.github.io/#/experiments/target-sized-languages
+- language-comparison overview
+  https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - pinned-source code audit
   https://jelliottdev.github.io/exports/corpus-pipeline-audit.json
 - pinned source directory
@@ -453,14 +482,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
 - word-reset repetition experiment
   https://jelliottdev.github.io/#/experiments/word-reset-repetition
-- eight-language parallel-corpus experiment
-  https://jelliottdev.github.io/#/experiments/parallel-languages
-- known-LP reading control
-  https://jelliottdev.github.io/#/experiments/known-reading-languages
-- equal-token control
-  https://jelliottdev.github.io/#/experiments/target-sized-languages
-- language-comparison overview
-  https://jelliottdev.github.io/reference/articles/analysis-and-measurement.html#languages
 - unchanged-rune audit
   https://jelliottdev.github.io/reference/articles/interruptions.html#unchanged
 - six-width comparison

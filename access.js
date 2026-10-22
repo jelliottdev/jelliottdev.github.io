@@ -2,6 +2,20 @@ let readerMode='raw',readerSize=20,readerView=null;
 const fileSize=n=>n>=1048576?`${(n/1048576).toFixed(1)} MB`:n>=1024?`${(n/1024).toFixed(1)} KB`:`${n} bytes`;
 async function readerPage(id,version){
  let p=cache.get(id);if(!p){const response=await fetch(`data/pages/${id}.json`,{cache:"no-cache"});if(!response.ok)throw Error('The reader could not load this page.');p=await response.json();cache.set(id,p)}if(version!==renderId)return;currentPage=p;
+ const topbar=document.querySelector('.topbar');
+ let searchToggle=document.getElementById('reader-search-toggle');
+ if(!searchToggle){
+  searchToggle=document.createElement('button');searchToggle.id='reader-search-toggle';searchToggle.type='button';
+  searchToggle.textContent='Search';searchToggle.setAttribute('aria-label','Search Liberpedia');
+  searchToggle.setAttribute('aria-controls','search-form');topbar.append(searchToggle);
+  searchToggle.onclick=()=>{
+   const open=document.body.classList.toggle('reader-search-open');
+   searchToggle.setAttribute('aria-expanded',String(open));
+   if(open)document.getElementById('search').focus();else searchToggle.focus();
+  };
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&document.body.classList.contains('reader-search-open')){document.body.classList.remove('reader-search-open');searchToggle.setAttribute('aria-expanded','false');searchToggle.focus();}},true);
+ }
+ document.body.classList.remove('reader-search-open');searchToggle.setAttribute('aria-expanded','false');
  const i=db.pages.findIndex(x=>x.id===id),prev=db.pages[i-1],next=db.pages[i+1];
  const readingGuide=p.reading&&db.articles.find(a=>a.id==='reading-'+p.reading.section);
  if(!readerView)readerView=matchMedia('(max-width:900px)').matches?'image':'compare';
