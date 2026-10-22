@@ -1,0 +1,88 @@
+2014 fifth onion: audio, squares and book code
+
+Inspect the signed Interconnectedness carrier, preserved magic squares, Goya portrait, three clue files and the pointers that led to the next address.
+
+After the four pages of the first koan, a transposition in LP1-08’s embedded message pointed solvers to a fifth historical onion service. Its preserved material branches into audio, number squares, an altered portrait, and a signed book-code message. This page keeps those artifacts together and shows which steps can be checked directly from the saved bytes.
+
+The signed audio carrier
+
+The saved clear-signed response verifies under the preserved Cicada PGP key. Its signed text is hexadecimal. Decode it to obtain the 6,651,873-byte MP3 hosted below; its ID3 fields read Interconnectedness and 3301. The signature authenticates the saved text against that key, while the hex conversion explains exactly where this audio copy came from.
+
+Your browser does not support audio playback.
+Download the verified MP3 · View its SHA-256 and replay report.
+
+The historical archive notes report an OpenPuff v4.00 extraction from this MP3 using password 33011033, password fields B and C disabled, and 50% bit selection. They preserve the resulting magicsquares.txt. Our replay confirms that text matches the pinned archive and tests its arithmetic; it has not freshly extracted the text with OpenPuff. That distinction matters if you are testing the carrier rather than studying the saved output.
+
+	Block in archived text	Order	Rows, columns and diagonals
+	First	5 × 5	3301 each
+	Second	7 × 7	1033 each
+	Third	5 × 5	1033 each
+
+The third block repeats the numbers derived from the rune-and-number square on LP1-05. The other two blocks belong to this archived audio branch. Matching a magic sum is a property of these arrays, not an instruction to apply them to every unsolved page.
+
+The later portrait
+
+The archive also preserves a later puzzle JPEG made from Goya’s Don Andrés del Peral. Compare it with the reference JPEG preserved in the same archive. The underlying portrait’s identity is supported by the National Gallery collection record. The dark upper-right region differs visibly in the puzzle copy; the archive proposes further image operations, but this page does not assign an unverified cipher role to the change.
+
+[Image: Reference copy of Goya's portrait of Don Andrés del Peral]
+Archived reference image · Download
+[Image: Puzzle copy of the Peral portrait, with a faint dark form above and to the right of the sitter]
+Preserved puzzle JPEG · Download
+
+Three clue files and a book code
+
+The archive identifies a second clear-signed message as an OutGuess extraction from the portrait carrier. Its saved signature verifies with the same key; a fresh OutGuess extraction has not been checked here. It contains three hexadecimal blocks. The hosted first, second, and third blocks match the signed text exactly and decode to a tiny equation JPEG, an eye JPEG, and a short audio fragment. These clues led historical solvers to Douglas Hofstadter’s Gödel, Escher, Bach.
+
+The same signed message lists book-code pointers such as 3PI:6:1:3 and LML:1:1:1, literal digits 3 and 7, and a final ONION. The historical lookup account reads chapter abbreviation, dialogue exchange, word and letter and reports ut3qtzbrvs7dtvzp.onion. Our script checks the exact signed pointer list. It does not independently validate every letter against a specified printed edition of the book, so that output remains attributed to the historical account.
+
+Reproduce the checks
+
+Download the reference-data bundle and run python scripts/replay_2014_fifth_onion.py --check from its root with GnuPG installed. The script verifies both signatures in a temporary keyring, compares the decoded audio and three clue files, reads the pointer list, and computes every square sum. The source manifest pins each archived file to one repository revision. The audio, images, signed captures and text are hosted here so the working evidence does not depend on that repository remaining available.
+
+Sources, related references, and files
+- four pages of the first koan
+  https://jelliottdev.github.io/reference/articles/2014-stage05.html
+- saved clear-signed response
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/q4utgdi2n4m4uim5.asc
+- Download the verified MP3
+  https://jelliottdev.github.io/exports/audio/interconnectedness.mp3
+- View its SHA-256 and replay report
+  https://jelliottdev.github.io/exports/cicada-2014-fifth-onion.json
+- historical archive notes
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/README.md
+- magicsquares.txt
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/magicsquares.txt
+- rune-and-number square on LP1-05
+  https://jelliottdev.github.io/reference/articles/magic-squares.html#historical
+- puzzle JPEG; Puzzle copy of the Peral portrait, with a faint dark form above and to the right of the sitter; Download
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/q4utgdi2n4m4uim5.onion.jpeg
+- reference JPEG preserved in the same archive; Reference copy of Goya's portrait of Don Andrés del Peral; Download
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/goya-peral-reference.jpg
+- National Gallery collection record
+  https://www.nationalgallery.org.uk/paintings/francisco-de-goya-don-andres-del-peral
+- clear-signed message
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/q4utgdi2n4m4uim5.onion.asc
+- first
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/01.hex
+- second
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/02.hex
+- third
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/03.hex
+- equation JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/01.jpg
+- eye JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/02.jpg
+- audio fragment
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/03.mp3
+- historical lookup account
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/007-fifth-onion/README.md#book-code
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- script
+  https://jelliottdev.github.io/scripts/replay_2014_fifth_onion.py
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage06/manifest.json
+- one repository revision
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2014/007-fifth-onion
+
+Article: https://jelliottdev.github.io/reference/articles/2014-fifth-onion.html
