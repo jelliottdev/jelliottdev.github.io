@@ -53,7 +53,7 @@ def figure(report):
         svg.append(f'<text x="10" y="{y+20}" font-size="12">{escape(row["label"])}</text>')
         for i, term in enumerate(TERMS):
             value = row['counts'][term]
-            fill = '#d8e7ed' if value else '#f4f4f1'
+            fill = '#d8e7ed' if value else '#f2f4f5'
             svg.append(f'<rect x="{142+i*52}" y="{y}" width="48" height="27" fill="{fill}"/>')
             svg.append(f'<text x="{166+i*52}" y="{y+19}" text-anchor="middle" font-size="14">{value}</text>')
     svg += ['<text x="10" y="385" font-size="12">Shading marks presence; numbers give counts.</text>',

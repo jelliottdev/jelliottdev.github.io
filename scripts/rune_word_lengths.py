@@ -71,7 +71,7 @@ def measure():
 
 
 def figure(report):
-    rows=['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="315" viewBox="0 0 360 315" role="img" aria-labelledby="title desc">','<title id="title">Rune-token lengths in LP2-00 to LP2-55</title>','<desc id="desc">2896 rune-only tokens, with headings and joined line/page wraps. Three-rune tokens are most frequent at 720; two-rune tokens number 448. Decimal labels are excluded. No English corpus comparison is shown.</desc>','<rect width="360" height="315" fill="#faf9f5"/>','<g font-family="Arial,sans-serif" fill="#263b45">','<text x="16" y="25" font-size="18">Lengths in the archived runes</text>','<text x="16" y="48" font-size="13">LP2-00 to LP2-55 · 2,896 rune tokens</text>']
+    rows=['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="315" viewBox="0 0 360 315" role="img" aria-labelledby="title desc">','<title id="title">Rune-token lengths in LP2-00 to LP2-55</title>','<desc id="desc">2896 rune-only tokens, with headings and joined line/page wraps. Three-rune tokens are most frequent at 720; two-rune tokens number 448. Decimal labels are excluded. No English corpus comparison is shown.</desc>','<rect width="360" height="315" fill="#ffffff"/>','<g font-family="Arial,sans-serif" fill="#263b45">','<text x="16" y="25" font-size="18">Lengths in the archived runes</text>','<text x="16" y="48" font-size="13">LP2-00 to LP2-55 · 2,896 rune tokens</text>']
     for count in range(0,801,200):
         y=245-count*.2
         rows.append(f'<path d="M40 {y}H332" stroke="#d8dcd9"/><text x="35" y="{y+4}" text-anchor="end" font-size="12">{count}</text>')
