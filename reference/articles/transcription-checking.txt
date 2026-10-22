@@ -81,6 +81,8 @@ For the seven punctuation-only changes, any calculation using exactly the same r
 
 The archived-versus-reviewed sensitivity audit measures the current layers under the published joined-page word-length rule. All seven LP2 edits leave the 2,896-token rune sequence, length histogram and whole-stream IoC unchanged; LP1-10 changes six ordered-bigram type counts while preserving its token lengths. That observed null effect is specific to these edits and this tokenizer. A punctuation-sensitive key clock or a newly corrected rune still requires a separate test.
 
+The doublet separator audit checks the same seven LP2 layers against all 86 equal-rune pairs. It reports exactly which pairs cross a hyphen, row wrap or other mark and finds no changed pair classification under the stored edits. A full comparison against an independent transcription remains open.
+
 A correction is not a whole-page certification
 
 A reviewed layer preserves the documented correction alongside the archive. It does not claim that every rune, dot, color and line on that page has been independently checked. Conversely, no separate layer can mean that no correction was published; it does not establish that nobody inspected the page. The next step toward comprehensive review is to record the region and features examined, including unchanged and uncertain readings.
@@ -270,6 +272,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-37.html
 - archived-versus-reviewed sensitivity audit
   https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
+- doublet separator audit
+  https://jelliottdev.github.io/#/experiments/doublet-boundaries
 - complete 75-page inventory
   https://jelliottdev.github.io/exports/transcription-coverage.json
 - standard-library script

@@ -26,6 +26,8 @@ Each of the 2,000 trials independently permutes the filtered runes **within each
 
 The observed contrast is compatible with several mechanisms: a rule that avoids immediate repeats, a plaintext/cipher relation that makes adjacent repeats rare, or preprocessing that alters adjacent symbols. It does not identify which one applies. Also, lags 2–5 were selected after the adjacency anomaly was known. The shaded bands are descriptive and unadjusted for multiple looks.
 
+This profile filters out the separators between runes. The [boundary audit](#/experiments/doublet-boundaries) shows that 26 of the 86 adjacent equal-rune pairs have an intervening row wrap or punctuation mark in the archived text.
+
 ## Reproduce
 
 Extract the experiment download without flattening folders. Python 3.12 and its standard library suffice:

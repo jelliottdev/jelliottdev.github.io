@@ -49,3 +49,5 @@ python experiments/records/transcription-correction-sensitivity/check.py
 The first command recomputes every page and the complete LP2 corpus, then compares `results.json` and the SVG. The second independently reconstructs the reviewed strings and scans rune tokens with a separate parser. `run.py` without flags prints a compact summary. The full machine-readable result includes per-page histograms, correction fields, hashes and the exact IoC pair counts.
 
 The next variants should test a *specified* punctuation-sensitive key clock or tokenization policy, then add newly image-reviewed disputed marks one at a time. Retain this archived-versus-reviewed baseline so any changed conclusion can be attributed to the exact edit that caused it.
+
+For a more specific statistic on the same seven LP2 reviewed layers, the [doublet boundary audit](#/experiments/doublet-boundaries) checks all 86 equal-rune pairs and whether any stored mark edit changes the intervening-separator class.
