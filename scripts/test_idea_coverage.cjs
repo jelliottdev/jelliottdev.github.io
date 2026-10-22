@@ -90,6 +90,13 @@ for(const f of families){
 console.log('PASS: all method families and coverage notes link to existing guides and experiment records');
 
 const linked=new Set(families.flatMap(f=>f.related));
+const methodArticle=fs.readFileSync(require('node:path').join(root,'articles/solving-methods.html'),'utf8');
+for(const id of linked){
+ const memberships=families.filter(f=>f.related.includes(id)).length;
+ assert.equal(methodArticle.split(`href="#/experiments/${id}"`).length-1,memberships,`method links: ${id}`);
+ assert.equal(methodArticle.split(`<li><p><a href="#/experiments/${id}">`).length-1,1,`full method description: ${id}`);
+ if(memberships>1)assert(methodArticle.includes(`full description under`),`cross-reference: ${id}`);
+}
 for(const r of experiments.filter(r=>r.status==='published'))assert(linked.has(r.id),'Assign a method family to published experiment: '+r.id);
 
 for(const [query,id] of [

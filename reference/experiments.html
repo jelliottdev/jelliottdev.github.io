@@ -366,6 +366,404 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="crib-difference-stream-search"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;crib-difference-stream-search&quot;,
+  &quot;title&quot;: &quot;LP2-39: do crib-difference triplets recur elsewhere?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do fixed GP-index differences from proposed LP2-39 red-header cribs match other LP rune streams more often than page-preserving shuffles?&quot;,
+  &quot;summary&quot;: &quot;Seventeen fixed three-rune candidates yield nine exact source hits across 71 other text pages, below the 10.615 mean in 2,000 within-page shuffles.&quot;,
+  &quot;tags&quot;: [
+    &quot;crib difference&quot;,
+    &quot;known plaintext&quot;,
+    &quot;key stream&quot;,
+    &quot;GP index&quot;,
+    &quot;red header&quot;,
+    &quot;LP2-39&quot;,
+    &quot;source stream&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-39&quot;
+    ],
+    &quot;representation&quot;: &quot;Zero-based indices of the stored 29-rune GP alphabet; all other LP1 and LP2 rune-text pages as source streams.&quot;,
+    &quot;procedure&quot;: &quot;Generate every length-three exact GP segmentation of the 20 fixed header-crib words; subtract plaintext indices from the LP2-39 red prefix modulo 29; search exact forward adjacent triplets elsewhere and repeat on 2,000 within-page shuffles.&quot;,
+    &quot;parameters&quot;: &quot;17 eligible triplets; 71 source pages; punctuation removed; page boundaries retained; seed 330139; inclusive plus-one Monte Carlo tails.&quot;,
+    &quot;exclusions&quot;: &quot;Other cribs, prime-value differences, reverse or gapped searches, source text outside LP, key-layer decipherment and withheld-text prediction.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The fixed source-stream search finds nine matches; 1,499 of 2,000 controls have at least nine. A triplet hit alone does not identify a key or reveal plaintext.&quot;,
+  &quot;limitations&quot;: &quot;Three runes are short. The header and candidate list were known before this bounded test; the page shuffle is a conditional baseline, not an authorial null. No public URL for the exact user-supplied source discussion. Human review pending.&quot;,
+  &quot;next_steps&quot;: &quot;Require a longer independently selected crib and a source rule predicting withheld ciphertext; predeclare any new direction, interruption or source-scope variants.&quot;,
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/matching-windows.svg&quot;,
+      &quot;caption&quot;: &quot;The observed nine matching windows compared with 2,000 page-preserving shuffled source scans.&quot;
+    }
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;crib-difference-source-searches&quot;,
+    &quot;title&quot;: &quot;Crib-derived key-source searches&quot;,
+    &quot;question&quot;: &quot;Does a fixed candidate plaintext imply a key sequence with distinctive matches and independent predictions?&quot;,
+    &quot;baseline&quot;: &quot;crib-difference-stream-search&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;LP2-39 red triplet; 20-word fixed crib list; all other LP text pages&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent reconstruction from page lines and all observed-window recount; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/crib-difference-stream-search/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; offline. Also run check.py and plot.py --check.&quot;,
+    &quot;script&quot;: &quot;experiments/records/crib-difference-stream-search/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;62b7289fabf80ade09d218af5b5c7d06eb7fca4b6a1fca607d38807eb404043a&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/plan.json&quot;,
+        &quot;sha256&quot;: &quot;77230b71094be22a249590123d8d9418e0eaf1ae99269885dd684f79f342e00f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-39-header-cribs/plan.json&quot;,
+        &quot;sha256&quot;: &quot;4a3007543eae8a003eb7e95eaf091447edc79775fd9d48ce9b669f5ccff89dbf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-01.json&quot;,
+        &quot;sha256&quot;: &quot;5c93bc312f1608038f486d86f6560cd5635e142e9a521a1df0984c21aca7a0d0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-03.json&quot;,
+        &quot;sha256&quot;: &quot;1d98dffa8f8a9198a627edbe54c8170f8b919cfee42f5bd63499e4ace789ced7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-04.json&quot;,
+        &quot;sha256&quot;: &quot;dc070cbf19a3a399540dd040aa25467780445ec7e5623b7fe464ba6151c08642&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-05.json&quot;,
+        &quot;sha256&quot;: &quot;eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-06.json&quot;,
+        &quot;sha256&quot;: &quot;6e1d8c083d87a6ce0c7f1035599735c461038ff286dc3d48a54b2ec2cd260692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-07.json&quot;,
+        &quot;sha256&quot;: &quot;082370c0f23c8c626bec9e892f245a64bf65053e60830c8f034ca741b4fd9797&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-08.json&quot;,
+        &quot;sha256&quot;: &quot;4bed0573a39072fd9e47993224858112c54220c396afb09ac8d2a022f98b919c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-09.json&quot;,
+        &quot;sha256&quot;: &quot;1c668d9e8b3c6082c22fee32cec43c7abee38e093135a1b8f2cbf805db5fbd1a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-10.json&quot;,
+        &quot;sha256&quot;: &quot;62de5c58842d30d359e514450b9a6bc75020adf472dd0ccfcdbc5795c5860f9b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-11.json&quot;,
+        &quot;sha256&quot;: &quot;b5d54900e6883f96c6da7f1abe2fcd7a83ded8b5686684c098383a53de2a171d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-12.json&quot;,
+        &quot;sha256&quot;: &quot;d2d6971ef1cb0430827b347dcd6fdc018de6245112c6dcfab5b795e618889504&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-13.json&quot;,
+        &quot;sha256&quot;: &quot;bd4c0fcab4fc5bdaafb929e10ac59f9b67a6ae99072de20f91286002b32dbe02&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-14.json&quot;,
+        &quot;sha256&quot;: &quot;9ba8c89ed16cb93932617e37519c5bfb543014beab081ea8dd17f4a429d20ace&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-15.json&quot;,
+        &quot;sha256&quot;: &quot;add0203dfa99705777a748c41b7457a834dd3a2cd3c1c47d55338aceb7548f48&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-16.json&quot;,
+        &quot;sha256&quot;: &quot;e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-56.json&quot;,
+        &quot;sha256&quot;: &quot;be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-57.json&quot;,
+        &quot;sha256&quot;: &quot;7280faf3a70763706946653487885f44743731fb526ab87ffd8ab265e84aef00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/check.py&quot;,
+        &quot;sha256&quot;: &quot;47806d8e4e905f5c0d2213985bb1195252203441da24de3cfe0cd60a6c46ce3b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/plot.py&quot;,
+        &quot;sha256&quot;: &quot;74630a6edd79dec1d0c2d6669062decd571b31ec49807547ef1e3779356f48e5&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/results.json&quot;,
+        &quot;sha256&quot;: &quot;dcf74893e727fed01182ecfeab665e0a5a0e6b424f853c6cb80adcc38dfb7130&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/crib-difference-stream-search/matching-windows.svg&quot;,
+        &quot;sha256&quot;: &quot;ef26e7f76b945abb7dc006f8b798bde58a3471c2924f65e64dfb869f4c1717e0&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Original bounded crib list used here&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived LP2-39 page&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-39&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-39-header-cribs&quot;,
+    &quot;seed-crib-controls&quot;
+  ],
+  &quot;article&quot;: &quot;# Crib differences as a source-stream search\n\nA proposed approach is to guess a plaintext word, subtract its Gematria Primus indices from the aligned ciphertext indices, and look for that difference sequence elsewhere in *Liber Primus*. This record runs one fixed version of that idea. **Nine exact three-rune matches occur, fewer than the 10.615 mean in 2,000 page-preserving shuffles.** It does not identify a key source or test a decryption.\n\n![Histogram of matching windows across 2,000 within-page shuffles, with the nine observed matches highlighted.](experiments/records/crib-difference-stream-search/matching-windows.svg)\n\nThe suggestion was supplied in a 25 September 2026 discussion. It gave no fixed cribs, positions, direction of subtraction or source scope. Those choices here are ours, made for a bounded test. This is **not** a replay of an unpublished result by the poster.\n\n## Rule fixed before the scan\n\nThe target is the three red runes opening the lower block of [LP2-39](#/page/lp2-39), with zero-based alphabet indices **27, 5, 15**. We reuse the existing [20-word header-crib list](#/experiments/lp2-39-header-cribs) rather than selecting words after seeing source hits. Exact GP spelling and segmentation leave **17 three-rune candidates**, each producing a distinct difference triplet. For a candidate with plaintext indices P and target indices C, the proposed key triplet is `(C − P) mod 29`. For example, WAY becomes indices 7, 24, 26 under the stored alphabet and gives 20, 10, 18. The [plan](experiments/records/crib-difference-stream-search/plan.json) fixes the entire rule.\n\nSearch the other **71 archived text pages**, LP1 and LP2, for an exact forward occurrence of each triplet. Remove punctuation but keep rune order. A three-rune window may cross a printed word or row break within one page; it may not cross a page boundary. No reverse direction, gaps, alphabet rotation, wildcard or prime-value subtraction is allowed. The LP2-39 target page is excluded from its own source search.\n\n| Measure | Result |\n| --- | ---: |\n| Source runes | 15,693 |\n| Three-rune crib candidates | 17 |\n| Matching source windows | 9 |\n| Different candidate triplets with a hit | 9 |\n| Control mean, 2,000 within-page shuffles | 10.615 |\n| Shuffles with at least nine hits | 1,499 / 2,000 |\n\nThe inclusive upper-tail Monte Carlo estimate is `(1499 + 1) / 2001 = 0.7496`. The lower-tail estimate is 0.3833. Neither suggests an unusual excess or deficit of matches under this control. The [complete JSON](experiments/records/crib-difference-stream-search/results.json) lists every candidate spelling, derived triplet, page and zero-based rune offset, plus the complete control histogram. A hit is a sequence coincidence, not a plaintext reading.\n\n## Why the comparison matters\n\nEach shuffled source preserves every page&#x27;s rune count and length while destroying its original order. The same 17 triplets are searched in every shuffled collection. This accounts for trying the entire fixed crib list, rather than judging whichever single candidate happens to match. It does not model an author&#x27;s construction process, and it destroys real repeated words and other local structure. The candidate list and three-rune target were already available before this plan, so the result cannot be treated as a prospective test of the broad idea.\n\nA planted positive control inserts the first derived triplet at rune offset zero of the first source page; the scanner recovers it. A separate checker reconstructs source streams from individual stored lines, independently recomputes the GP differences and all observed hits. The producer reruns the seeded shuffles byte for byte.\n\n## Reproduce and extend\n\nDownload this record&#x27;s experiment bundle and run Python 3.12 or later, with no packages or network connection:\n\n```text\npython experiments/records/crib-difference-stream-search/run.py --check\npython experiments/records/crib-difference-stream-search/check.py\npython experiments/records/crib-difference-stream-search/plot.py --check\n```\n\nAn actual cipher test would need a longer independently chosen crib, a justified key-source location and a rule that predicts **withheld** ciphertext. Searching a longer phrase after seeing these hits, trying both subtraction directions, or allowing interrupted matches creates new search space and needs a new plan and controls. This record leaves those possibilities open; it only tests the rule and source scope above.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/crib-difference-stream-search/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;62b7289fabf80ade09d218af5b5c7d06eb7fca4b6a1fca607d38807eb404043a&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
 }</pre></article><article id="cross-section-index-inversion"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;cross-section-index-inversion&quot;,
   &quot;title&quot;: &quot;LP2-00–02: audit the 729 ÷ rune-index proposal&quot;,
@@ -5214,7 +5612,7 @@
       &quot;caption&quot;: &quot;Solved LP1 decoded EA rate and unsolved LP2 doublet rate, each with its own numerator and denominator. Rate similarity is not confirmation of the running-sum model.&quot;
     }
   ],
-  &quot;article&quot;: &quot;# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site&#x27;s solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nIf those within-page positions were independent draws with one fixed EA probability, a 95% **Wilson score interval** for 20/2,782 would be **0.466–1.108%**. Applying the same calculation to 86/12,901 gives **0.540–0.822%**. For either count, set `p = events / positions` and `z = 1.9599639845`; the two endpoints are `[p + z²/(2n) ± z√(p(1−p)/n + z²/(4n²))] / [1 + z²/n]`, with `n = positions`. The intervals overlap, but that does not establish equal rates or a cipher: adjacent rune positions in prose are dependent, and the LP1 and LP2 sources are not samples randomly drawn from one common process. The page-resampling range below addresses a different source of variation. It also remains descriptive, not a probability distribution for unknown plaintext.\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw&#x27;s rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe key layer explains the limitation. Write the observed difference as `Dᵢ = Cᵢ − Cᵢ₋₁`. For each **nonzero** Dᵢ and every one of the **28 non-EA plaintext symbols** Pᵢ, there is exactly one allowed nonzero key, `Kᵢ = Dᵢ(Pᵢ − 28)⁻¹ mod 29`. Thus an unconstrained key per position can fit *any* proposed non-EA plaintext at those positions. Conversely, an independently uniform nonzero key makes Dᵢ uniform on 1–28 regardless of how uneven the non-EA plaintext letter frequencies are. The conditional IoC can challenge that extra independent-uniform-key assumption; it cannot identify plaintext, establish EA at the 86 positions, or test an unspecified deterministic key schedule. Simply deleting the 86 zero differences leaves the same 12,815 nonzero values whose histogram is tested in the [companion record](#/experiments/ea-difference-independence). Deleting ciphertext runes instead creates new adjacencies and is a different operation.\n\nUnder the archived boundary rule, **22 of the 86 doublets cross a hyphen**. They are legitimate consecutive runes in the filtered stream but are not within-token repeats. If the proposed recurrence resets at word boundaries, those 22 edges no longer fall under its doublet⇔EA identity. If the key continues over boundaries, the identity still applies to the second rune of each edge, with the hyphen ignored by the cipher clock. The [separator audit](#/experiments/doublet-boundaries) lists every such position; the current count cannot decide which clock Cicada used.\n\nAll of these comparisons were designed after the low doublet count was known. A confirmatory version would need a key schedule, starting state, boundary/reset rule, rune mapping and success criterion fixed from evidence independent of the test output, then a prediction of untouched ciphertext or a verified plaintext passage. Merely changing an interval method or reserving positions after inspecting this corpus cannot turn the existing rate match into a prospective test.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\nThe [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n&quot;,
+  &quot;article&quot;: &quot;# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site&#x27;s solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nIf those within-page positions were independent draws with one fixed EA probability, a 95% **Wilson score interval** for 20/2,782 would be **0.466–1.108%**. Applying the same calculation to 86/12,901 gives **0.540–0.822%**. For either count, set `p = events / positions` and `z = 1.9599639845`; the two endpoints are `[p + z²/(2n) ± z√(p(1−p)/n + z²/(4n²))] / [1 + z²/n]`, with `n = positions`. The intervals overlap, but that does not establish equal rates or a cipher: adjacent rune positions in prose are dependent, and the LP1 and LP2 sources are not samples randomly drawn from one common process. The page-resampling range below addresses a different source of variation. It also remains descriptive, not a probability distribution for unknown plaintext.\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw&#x27;s rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference: 54 of 2,000 draws were at least as high (2.7%). The observed value is still inside the central 95% simulation range. This is a mild tension with that one extra uniform-key assumption, not a test of the running-sum equation as a whole and not standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe key layer explains the limitation. Write the observed difference as `Dᵢ = Cᵢ − Cᵢ₋₁`. For each **nonzero** Dᵢ and every one of the **28 non-EA plaintext symbols** Pᵢ, there is exactly one allowed nonzero key, `Kᵢ = Dᵢ(Pᵢ − 28)⁻¹ mod 29`. Thus an unconstrained key per position can fit *any* proposed non-EA plaintext at those positions. Conversely, an independently uniform nonzero key makes Dᵢ uniform on 1–28 regardless of how uneven the non-EA plaintext letter frequencies are. The conditional IoC can challenge that extra independent-uniform-key assumption; it cannot identify plaintext, establish EA at the 86 positions, or test an unspecified deterministic key schedule. **No fixed key schedule has been applied to unsolved LP2 in this record.** Doing so would be a different, stronger experiment with a declared generator and fixed parameters. Simply deleting the 86 zero differences leaves the same 12,815 nonzero values whose histogram is tested in the [companion record](#/experiments/ea-difference-independence). Deleting ciphertext runes instead creates new adjacencies and is a different operation.\n\nUnder the archived boundary rule, **22 of the 86 doublets cross a hyphen**. They are legitimate consecutive runes in the filtered stream but are not within-token repeats. If the proposed recurrence resets at word boundaries, those 22 edges no longer fall under its doublet⇔EA identity. If the key continues over boundaries, the identity still applies to the second rune of each edge, with the hyphen ignored by the cipher clock. The [separator audit](#/experiments/doublet-boundaries) lists every such position; the current count cannot decide which clock Cicada used.\n\nAll of these comparisons were designed after the low doublet count was known. A confirmatory version would need a key schedule, starting state, boundary/reset rule, rune mapping and success criterion fixed from evidence independent of the test output, then a prediction of untouched ciphertext or a verified plaintext passage. Merely changing an interval method or reserving positions after inspecting this corpus cannot turn the existing rate match into a prospective test.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\nThe [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/ea-frequency-control/article.md&quot;,
   &quot;script_sha256&quot;: &quot;dda6228d312ac99db8c671f82c34bac5613c78d3a416364975c223bfca7c449e&quot;,
   &quot;record_type&quot;: {

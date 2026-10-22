@@ -1,6 +1,7 @@
 """Check reported-attempt intake without treating it as experiment evidence."""
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 import re
 
@@ -15,6 +16,25 @@ families = {row['id'] for row in json.loads((ROOT / 'data/method-families.json')
 experiments = {row['id'] for row in json.loads((ROOT / 'data/experiments.json').read_text(encoding='utf-8'))['records']}
 guides = {row['id'] for row in json.loads((ROOT / 'articles/index.json').read_text(encoding='utf-8'))}
 article = (ROOT / 'articles/reported-attempts.html').read_text(encoding='utf-8')
+entry_sources = {row['source']['attachment_id'] for row in entries}
+checked_sources = {row['attachment_id'] for row in reconciled}
+queued_sources = {row['attachment_id'] for row in queue}
+all_sources = entry_sources | checked_sources | queued_sources
+memberships = len(entry_sources) + len(checked_sources) + len(queued_sources)
+overlapping = sum(sum(source in group for group in (entry_sources, checked_sources, queued_sources)) > 1
+                  for source in all_sources)
+statuses = Counter(row['status'] for row in entries)
+linked_entries = sum(bool(row['source'].get('public_url')) for row in entries)
+assert sum(statuses.values()) == len(entries)
+for phrase in (f'{len(all_sources)} distinct supplied source files',
+               f'{len(entries)} source-specific proposal or analysis entries from {len(entry_sources)} files',
+               f'{overlapping} files appear in more than one list',
+               f'accounts for {memberships - len(all_sources)} repeated memberships',
+               f'{linked_entries} link to related public material',
+               f'{len(entries) - linked_entries} have no public URL recorded',
+               f'Entry status (one per proposal):',
+               f'Total: {len(entries)}'):
+    assert phrase in article, phrase
 local_sources_checked = 0
 for entry in entries:
     assert re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', entry['id'])

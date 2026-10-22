@@ -75,6 +75,20 @@ function renderIdeaChecker(endpoint,query){
       <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
     </details>${footer()}</article>`;
   const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
+  results.addEventListener('input',event=>{
+    if(event.target.id!=='experiment-browse-query')return;
+    const query=event.target.value.trim();
+    let visible=0;
+    for(const section of results.querySelectorAll('.experiment-browse-section')){
+      let sectionVisible=0;
+      for(const family of section.querySelectorAll('.experiment-browse-family')){
+        family.hidden=Boolean(query)&&!WikiSearch.has(family.dataset.search,query);
+        if(!family.hidden){visible++;sectionVisible++;}
+      }
+      section.hidden=sectionVisible===0;
+    }
+    $('#experiment-browse-status').textContent=query?(visible?`${visible} matching ${visible===1?'family':'families'}. Open a family to inspect its records.`:'No published record matches these terms. Try a shorter method name or page ID.'):'';
+  });
   const pages=()=>[...new Set([$('#idea-page-one').value,$('#idea-page-two').value].filter(Boolean))].sort();
   const experimentDocuments=AssistantSearch.experimentDocs(experimentRecords);
   const documents=()=>experimentDocuments;

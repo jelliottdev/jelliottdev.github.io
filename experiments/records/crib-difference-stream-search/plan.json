@@ -1,0 +1,15 @@
+{
+  "question": "Do the LP2-39 red-header crib differences appear elsewhere in the archived rune stream more often than expected from page-preserving shuffles?",
+  "target_page": "lp2-39",
+  "target_line_index": 6,
+  "target_prefix": "ᛡᚳᛋ.",
+  "crib_source": "experiments/records/lp2-39-header-cribs/plan.json",
+  "crib_rule": "Use all and only exact GP-label segmentations of the existing 20 predeclared words that produce three runes; do not select cribs by hit count.",
+  "difference": "(ciphertext_index - plaintext_index) modulo 29, position by position; GP alphabet index, not prime-value subtraction.",
+  "source": "Every archived LP1 and LP2 page with rune text except target LP2-39; punctuation removed; page-internal adjacent runes may cross printed row or word breaks, but never page boundaries.",
+  "search": "Exact forward three-rune windows only, no reverse, rotation, gap, Atbash or wildcard; retain every source coordinate and candidate alias.",
+  "control": "2000 independent seeded within-page shuffles of rune indices, retaining each source page's length and marginal rune counts; recompute the complete all-crib search each time. Seed 330139.",
+  "statistic": "Total matching windows for the union of distinct derived sequences; also distinct cribs with at least one hit. Compare observed to upper and lower null tails inclusively with plus-one correction.",
+  "positive_control": "Replace the first three runes of the first source page with the first derived sequence and verify its hit is recovered at offset zero.",
+  "exclusions": "No claim that LP2-39 red runes have any chosen plaintext; no key-layer or withheld-text validation; no prime-value differences; no other crib lists, offsets, source ordering or cipher families."
+}

@@ -13,6 +13,12 @@ Three checks, three different questions
 
 Several repositories may descend from the same source. Agreement among them is then useful for tracking copies, but is not several independent visual checks. Likewise, decoding a solved page into recognizable language can help diagnose a mistake without proving every copied rune or separator correct. Preserve the original evidence when proposing a correction.
 
+What the page status and index flags mean
+
+The 75-page index labels all 17 LP1 pages and LP2-56–57 as solved, and LP2-00–55 as unsolved. Its original status basis is the dated CicadaSolvers quickstart snapshot of 2026-10-05. A separate, revision-pinned page-by-page account provides a second published check: it lists LP1’s 17 pages, leaves LP2-00–55 without a known key, and gives the methods and English readings for LP2-56 and LP2-57. This corroborates the published status classification, but the two accounts may draw on the same community knowledge. It is not an independent creator statement, proof that nobody has an unpublished solution, or a fresh verification of every image.
+
+has_reading means that this site has a decoded reading attached to that page record; it does not mean the page has text, was visually reviewed, or was solved independently here. There are 17 such records. The two status-solved LP1 pages without a reading flag are the cover and chapter-title images, LP1-00 and LP1-02. has_notes means that an editorial note is present, not that a human certified the transcription: all 75 currently have notes. The flags are generated from the page records and are checked by this index audit (python scripts/check_page_status_flags.py).
+
 Compare two files
 
 Extract the reference-data bundle, keeping its scripts and data folders together. Put the two UTF-8 text files you want to compare in that folder. Run:
@@ -64,7 +70,7 @@ Which pages have a reviewed text layer?
 
 For exact stored character offsets, neighboring text and original-image links, use the reviewed-edit register.
 
-The current published records contain eight separate reviewed-text layers. Seven change only non-rune characters; one changes the rune sequence. The other 67 records do not contain a separate reviewed layer. These are counts of published data layers, not counts of pages certified as correct or incorrect.
+The current published records contain eight separate reviewed-text derivatives. Seven LP2 derivatives change only non-rune characters; the LP1-10 derivative changes the rune sequence. The other 67 records do not contain a separate derivative. These are counts of documented edits, not eight independent whole-page transcriptions or eight certifications that every mark was checked. The image-review scope is limited to the recorded correction at each location.
 
 	Page	Recorded change	Effect to check
 
@@ -240,6 +246,12 @@ Equal counts can also mislead: LP2-00 had 12 proposals and 12 reference rune row
 For how this check fits the complete evidence trail, see source verification and transcription audits.
 
 Sources, related references, and files
+- CicadaSolvers quickstart
+  https://www.cicadasolvers.com/wiki/liber-primus/lp2/
+- revision-pinned page-by-page account
+  https://github.com/scream314/cicada3301/blob/10733feb487bb8beb9966d534727ee5897aa54fc/liber_primus.md
+- this index audit
+  https://jelliottdev.github.io/scripts/check_page_status_flags.py
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - running the scripts

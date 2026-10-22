@@ -107,7 +107,9 @@ assert(!experimentContext.experimentScopeLinks(artifactRecord).includes('#/page/
 console.log('PASS: artifact-only controls retain file targets without inventing manuscript-page coverage.');
 const published=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/experiments.json'),'utf8')).records;
 const browse=experimentContext.experimentBrowse(published);
-assert.equal((browse.match(/<details class="experiment-browse-family">/g)||[]).length,new Set(published.map(r=>r.family?.id||r.id)).size);
+assert.equal((browse.match(/<details class="experiment-browse-family" data-search=/g)||[]).length,new Set(published.map(r=>r.family?.id||r.id)).size);
+assert(browse.includes('id="experiment-browse-query"'));
+assert(browse.includes('lp2-15'),'Archive filter includes scoped page IDs');
 for(const record of published)assert.equal(browse.split(`href="#/experiments/${record.id}"`).length-1,1,'Each record has one direct browse link');
 assert(!browse.includes('<details class="experiment-browse-family" open'),'Browse families start collapsed');
 assert(browse.indexOf('href="#/experiments/lp2-prime-minus-one-openings"')<browse.indexOf('href="#/experiments/lp2-fibonacci-openings"'),'Baseline precedes its variants');

@@ -28,7 +28,8 @@ class RegistryTests(unittest.TestCase):
             'scope': {'pages': ['lp2-15'], 'representation': 'raw runes', 'procedure': 'sum',
                       'parameters': 'one row', 'exclusions': 'other rows'},
             'outcome': 'inconclusive', 'finding': 'A limited result', 'limitations': 'Limited scope',
-            'next_steps': 'Review another row', 'review': {'reviewer': 'Test fixture', 'retested_on': '2026-01-01'},
+            'next_steps': 'Review another row', 'review': {'reviewer': 'Test fixture', 'retested_on': '2026-01-01',
+                                                          'kind': 'computational', 'human_review': 'pending'},
             'reproduction': {'command': 'python '+prefix+'run.py', 'environment': 'Python 3',
                              'script': prefix+'run.py', 'script_sha256': file('run.py')['sha256'], 'inputs': [file('input.txt')], 'outputs': [file('output.txt')]},
             'sources': [{'label': 'Fixture', 'url': 'https://example.com/source'}], 'related': []
@@ -121,6 +122,22 @@ class RegistryTests(unittest.TestCase):
             if change == 'related': record['related'] = ['missing']
             with self.subTest(change=change), self.assertRaises(ValueError):
                 self.run_build(record)
+
+    def test_human_review_requires_named_dated_findings(self):
+        for field in ('kind', 'human_review'):
+            record = copy.deepcopy(self.record)
+            record['review'].pop(field)
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                self.run_build(record)
+        record = copy.deepcopy(self.record)
+        record['review']['human_review'] = 'complete'
+        for field in ('human_reviewer', 'human_reviewed_on', 'human_findings'):
+            with self.subTest(missing=field), self.assertRaises(ValueError):
+                self.run_build(record)
+            record['review'][field] = ('2026-01-02' if field == 'human_reviewed_on'
+                                       else 'Independent reviewer' if field == 'human_reviewer'
+                                       else 'Compared the declared source and output.')
+        self.assertEqual(len(self.run_build(record)), 1)
 
     def test_family_baseline_and_variant_differences(self):
         self.record['family'] = {'id': 'test-family', 'title': 'Pair counts',

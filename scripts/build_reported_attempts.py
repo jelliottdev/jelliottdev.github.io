@@ -24,22 +24,34 @@ def build():
     families = {family['id']: family for family in json.loads((ROOT / 'data/method-families.json').read_text(encoding='utf-8'))['families']}
     unique_sources = {item['source']['attachment_id'] for item in entries} | {item['attachment_id'] for item in reconciled} | {item['attachment_id'] for item in queue}
     entry_sources = {item['source']['attachment_id'] for item in entries}
+    linked_entries = sum(bool(item['source'].get('public_url')) for item in entries)
+    reconciled_sources = {item['attachment_id'] for item in reconciled}
+    queued_sources = {item['attachment_id'] for item in queue}
+    memberships = len(entry_sources) + len(reconciled_sources) + len(queued_sources)
+    overlapping_files = sum(sum(source in group for group in
+                                (entry_sources, reconciled_sources, queued_sources)) > 1
+                            for source in unique_sources)
+    counts = Counter(item['status'] for item in entries)
+    assert sum(counts.values()) == len(entries)
     parts = [f'<p>This intake draws on <strong>{len(unique_sources)} distinct supplied source files</strong>. '
-             f'It contains <strong>{len(entries)} source-specific proposals or analyses from {len(entry_sources)} files</strong>, '
-             f'<strong>{len(reconciled)} notes matched to a checked scope</strong>, and '
-             f'<strong>{len(queue)} files still in the screening queue for remaining claims</strong>. '
-             'These categories overlap: one source can yield several proposals, have a checked observation, and still have claims to screen. '
+             f'It contains <strong>{len(entries)} source-specific proposal or analysis entries from {len(entry_sources)} files</strong>, '
+             f'<strong>{len(reconciled)} checked-scope notes from {len(reconciled_sources)} files</strong>, and '
+             f'<strong>{len(queue)} queued files with claims still to screen</strong>. '
+             f'These are different units: {len(entries)} counts entries, while {len(unique_sources)} counts distinct files. '
+             f'The three file lists have {memberships} memberships because {overlapping_files} files appear in more than one list; '
+             f'their overlap accounts for {memberships - len(unique_sources)} repeated memberships. '
+             'A source can yield several entries, have a checked observation, and still have claims to screen. '
              'They are reports of prior work, not completed Liberpedia experiments. Each entry separates the original idea, '
              'our narrower coverage, and the missing steps for an exact replay. A related record never closes the reported idea by itself.</p>',
              '<p>The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. '
-             'Many entries have <strong>no public source URL</strong>. A hash verifies a copy someone already holds; '
+             f'Of the {len(entries)} source-specific entries, <strong>{linked_entries} link to related public material</strong> and '
+             f'<strong>{len(entries) - linked_entries} have no public URL recorded</strong>. Even a related public link may not expose the exact supplied post. A hash verifies a copy someone already holds; '
              'it cannot retrieve a private transcript or independently establish the attribution. '
              'These entries are source leads, not a complete public history of prior attempts. '
              'A public link, when present, may change and has not yet been pinned to a revision. '
              'Start with <a href="#/experiments">Have we tried it?</a> for completed records, '
              'or the <a href="#/wiki/solving-methods">method map</a> for a broader family.</p>']
-    counts = Counter(item['status'] for item in entries)
-    parts.append('<p class="small muted">' + ' · '.join(f'{e(LABELS[s])}: {counts[s]}' for s in LABELS if counts[s]) + '</p>')
+    parts.append('<p class="small muted">Entry status (one per proposal): ' + ' · '.join(f'{e(LABELS[s])}: {counts[s]}' for s in LABELS if counts[s]) + f' · Total: {len(entries)}</p>')
     parts.append('<nav aria-label="Reported attempt index"><h2 id="index">Find an attempt</h2><ul>')
     for item in entries:
         parts.append(f'<li><a href="#/wiki/reported-attempts?section={e(item["id"])}">{e(item["title"])}</a> '

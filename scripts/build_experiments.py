@@ -82,6 +82,14 @@ def build(root=ROOT):
                     and all(isinstance(x, str) and x.strip() for x in d[key]), 'Invalid ' + key)
         review = d.get('review', {})
         text(review.get('reviewer'), 'review.reviewer')
+        text(review.get('kind'), 'review.kind')
+        require(review.get('human_review') in ('pending', 'complete'),
+                f'{identifier}: human review must be explicitly pending or complete')
+        if review['human_review'] == 'complete':
+            text(review.get('human_reviewer'), 'review.human_reviewer')
+            text(review.get('human_findings'), 'review.human_findings')
+            human_date = datetime.date.fromisoformat(review.get('human_reviewed_on', ''))
+            require(human_date <= datetime.date.today(), 'Human review date is in the future')
         date = datetime.date.fromisoformat(review.get('retested_on', ''))
         require(date <= datetime.date.today(), 'Retest date is in the future')
         reproduction = d.get('reproduction', {})

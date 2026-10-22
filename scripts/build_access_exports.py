@@ -216,6 +216,9 @@ for path in ['exports/cicada-2012-opening.json','scripts/replay_2012_opening.py'
   files[-1].update(guide='historical-book-codes',aliases=['Mabinogion','Reddit ordering','third and fourth lines'])
  else:
   files[-1].update(guide='2012-opening',aliases=['2012 opening','first image','duck','OutGuess'])
+for path in ['exports/cicada-2012-subreddit-images.json','scripts/replay_2012_subreddit_images.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2012-subreddit').iterdir())]:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
+ files[-1].update(guide='2012-subreddit-images',aliases=['KXLOP','8D7hN','Maya banner','subreddit image payloads'])
 for path in ['exports/cicada-2012-source-comparison.json','exports/sources/gutenberg-5160-2021.txt','exports/sources/gutenberg-5160-landing-2026.html','exports/sources/mabinogion-1849-volume-1.pdf','exports/sources/mabinogion-1849-page-42.png','exports/sources/mabinogion-1849-page-43.png','exports/sources/mabinogion-1849-page-44.png','exports/sources/mabinogion-source-captures.json','scripts/compare_2012_mabinogion_source.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical source scan' if path.endswith('mabinogion-1849-volume-1.pdf') else 'Historical book-cipher reproduction')
  files[-1].update(guide='historical-book-codes',aliases=['Mabinogion source comparison','Project Gutenberg 5160','1849 scan','printed page 43','2012 Reddit text'])

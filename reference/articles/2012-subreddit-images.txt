@@ -1,0 +1,66 @@
+2012 subreddit: the banner and two signed images
+
+Inspect the preserved banner, extract both hidden messages, and trace the visible title-key prefix.
+
+The 2012 subreddit was more than a list of encrypted story titles. Its banner displayed a numerical clue, while two posted JPEGs carried signed instructions. Those three artifacts clarify where the title key and its signing key entered the public route. The saved files come from a pinned artifact archive; its accompanying post inventory identifies the two image posts as o3hoi (“Welcome”) and o6n9a (“Problems?”). That inventory is a later snapshot, not a contemporaneous capture of every edit.
+
+
+The welcome mat establishes a signing key
+
+[Image: A Welcome mat posted to the 2012 puzzle subreddit]
+The archived KXLOP.jpg. Download original JPEG.
+
+A fresh outguess -r KXLOP.jpg run extracted 1,089 bytes, exactly matching the archive’s saved payload. The text says subsequent messages will be signed with the key identified in the subreddit information as 7A35090F, and asks for patience. GPG accepted its signature under the preserved full fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. This verifies the message against that key; it does not independently establish who controlled the key or Reddit account.
+
+
+The banner shows the start of the title key
+
+[Image: Thirteen Maya-style numeral groups in the archived subreddit banner]
+Archived subreddit banner. Download PNG.
+
+Reading a bar as five and a dot as one gives 10, 2, 14, 7, 19, 6, 18, 12, 7, 8, 17, 0, 19; the eye-shaped twelfth mark is read as zero in the archive’s stage account. These thirteen values equal the prefix a2e7j6ic78h0j when letters represent a=10 through z=35 and digits retain their values. The complete archived subreddit-info string continues as a2e7j6ic78h0j7eiejd0120. The banner alone does not display that longer suffix, so a reader must not infer the full title-decryption key from the picture alone. The Mabinogion walkthrough applies the full key to the ordered post titles.
+
+
+The later image points back to the visible key
+
+[Image: A stereogram assembled from repeated King Arthur tapestry panels]
+Archived 8D7hN.jpg, a stereogram. Download original JPEG.
+
+Fresh OutGuess retrieval from this file produced 1,041 bytes, again identical to the archived payload. Its signed text says the key has been “right in front of your eyes” and warns against making the quest harder. GPG verified the same preserved fingerprint. This wording is consistent with looking back at visible subreddit material, but the payload does not formally specify a cipher algorithm or prove which visual detail a solver noticed first.
+
+
+Check the preserved files
+
+The replay script checks all five artifact hashes and the two saved payloads. With an OutGuess executable and GPG installed, it also performs both extractions and signature checks in a temporary directory:
+
+python scripts/replay_2012_subreddit_images.py --outguess /path/to/outguess --gpg /path/to/gpg --output subreddit-images-check.json
+
+Without those optional executables, the script checks only saved files. Our published run report records two successful fresh byte comparisons and two valid signatures. The post inventory also contains an earlier deleted “Problems?” image link; this replay addresses the later 8D7hN.jpg carrier, not that deleted upload. Continue to the post-title and book-code replay for the next operation.
+
+Sources, related references, and files
+- pinned artifact archive
+  https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit
+- A Welcome mat posted to the 2012 puzzle subreddit; Download original JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2012-subreddit/KXLOP.jpg
+- saved payload
+  https://jelliottdev.github.io/exports/sources/cicada-2012-subreddit/KXLOP.jpg.asc
+- Thirteen Maya-style numeral groups in the archived subreddit banner; Download PNG
+  https://jelliottdev.github.io/exports/sources/cicada-2012-subreddit/UMa-nedknxEIvArh.png
+- stage account
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012/003-subreddit/README.md
+- Mabinogion walkthrough
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion
+- A stereogram assembled from repeated King Arthur tapestry panels; Download original JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2012-subreddit/8D7hN.jpg
+- archived payload
+  https://jelliottdev.github.io/exports/sources/cicada-2012-subreddit/8D7hN.jpg.asc
+- replay script
+  https://jelliottdev.github.io/scripts/replay_2012_subreddit_images.py
+- published run report
+  https://jelliottdev.github.io/exports/cicada-2012-subreddit-images.json
+- post inventory
+  https://jelliottdev.github.io/exports/sources/cicada-2012/subreddit-posts.json
+- post-title and book-code replay
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#mabinogion-replay
+
+Article: https://jelliottdev.github.io/reference/articles/2012-subreddit-images.html
