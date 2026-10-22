@@ -99,7 +99,9 @@ for(const [query,id] of [
  ['Could it be non-English?','language'],
  ['Try a cipher disk','moving-alphabets'],
  ['Use rotors','moving-alphabets'],
- ['Could an evolving alphabet work?','moving-alphabets']
+ ['Could an evolving alphabet work?','moving-alphabets'],
+ ['Decode odd and even positions separately','interleaving'],
+ ['Try interleaved streams','interleaving']
 ])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
 assert.equal(Coverage.families(families,'LP2-31').length,0);
 assert.equal(Coverage.families(families,'hashish seedlings').length,0,'Aliases must match whole words, not substrings');

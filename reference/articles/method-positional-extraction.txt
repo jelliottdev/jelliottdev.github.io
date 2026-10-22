@@ -6,6 +6,8 @@ Positional extraction reads only selected parts of an input: every third rune, m
 
 Every kth symbol
 
+If the proposal retains and separately decodes every stride rather than selecting just one, see interleaved streams. Splitting, decoding and recombining require separate rules.
+
 Fix a stride k and a starting offset s, then select original positions s, s + k, s + 2k, … while they remain inside the input. With zero-based positions, s = 0 means start at the first symbol. On an invented ten-symbol input:
 
 	Input positions	Stride	Offset	Selected positions
@@ -44,6 +46,8 @@ No standalone stride or general grille-decoding experiment is linked here yet. T
 All method families · Search space and bounds
 
 Sources, related references, and files
+- interleaved streams
+  https://jelliottdev.github.io/reference/articles/method-interleaving.html
 - 464/928-word carrier study
   https://jelliottdev.github.io/reference/articles/grille-carrier.html
 - route guide

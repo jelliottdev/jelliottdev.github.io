@@ -1,5 +1,6 @@
 <p>Positional extraction reads only selected parts of an input: every third rune, marked cells, the first word of each line, or positions exposed by a grille. The selection rule determines what survives. A matching length or a visually appealing mask does not by itself establish where to place the mask or how to read it.</p>
 <h2 id="stride">Every kth symbol</h2>
+<p>If the proposal retains and separately decodes every stride rather than selecting just one, see <a href="#/wiki/method-interleaving">interleaved streams</a>. Splitting, decoding and recombining require separate rules.</p>
 <p>Fix a stride k and a starting offset s, then select original positions <code>s, s + k, s + 2k, …</code> while they remain inside the input. With zero-based positions, s = 0 means start at the first symbol. On an invented ten-symbol input:</p>
 <div class="table-wrap"><table><thead><tr><th>Input positions</th><th>Stride</th><th>Offset</th><th>Selected positions</th></tr></thead><tbody>
 <tr><td>0 through 9</td><td>3</td><td>0</td><td>0, 3, 6, 9</td></tr>

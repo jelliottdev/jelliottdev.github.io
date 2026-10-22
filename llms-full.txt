@@ -6612,6 +6612,12 @@ Remove declared symbols or positions while accounting for shortened output and c
 No experiment linked yet. The guide documents the approach; it is not a result.
 
 
+Interleaved streams and separate decoding
+Split by a declared assignment, decode each stream, and specify whether outputs are interleaved again or concatenated.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
 
 Numbers and representations
 
@@ -7138,6 +7144,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp1-section-balance
 - Null symbols, deletion and padding
   https://jelliottdev.github.io/reference/articles/method-nulls.html
+- Interleaved streams and separate decoding
+  https://jelliottdev.github.io/reference/articles/method-interleaving.html
 - Gematria and rune-sum mappings
   https://jelliottdev.github.io/reference/articles/prime-sums.html
 - LP1-05: candidate word sums and rune segmentation
@@ -25643,6 +25651,8 @@ Positional extraction reads only selected parts of an input: every third rune, m
 
 Every kth symbol
 
+If the proposal retains and separately decodes every stride rather than selecting just one, see interleaved streams. Splitting, decoding and recombining require separate rules.
+
 Fix a stride k and a starting offset s, then select original positions s, s + k, s + 2k, … while they remain inside the input. With zero-based positions, s = 0 means start at the first symbol. On an invented ten-symbol input:
 
 	Input positions	Stride	Offset	Selected positions
@@ -25681,6 +25691,8 @@ No standalone stride or general grille-decoding experiment is linked here yet. T
 All method families · Search space and bounds
 
 Sources, related references, and files
+- interleaved streams
+  https://jelliottdev.github.io/reference/articles/method-interleaving.html
 - 464/928-word carrier study
   https://jelliottdev.github.io/reference/articles/grille-carrier.html
 - route guide
@@ -26010,6 +26022,77 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
+
+
+---
+
+Interleaved streams and separate decoding
+
+Split symbols into declared streams, preserve local and source positions, and distinguish recombination from concatenation.
+
+An interleaving proposal treats the observed rune sequence as several streams woven together. For example, symbols at positions 0, 2, 4, … might belong to one stream and positions 1, 3, 5, … to another. The proposal must specify how to split the input, how each stream is processed, and how the outputs are recombined.
+
+Split, decode and put positions back
+
+Use the invented ciphertext 10, 20, 11, 21, 12. Number source positions from zero. Assign even positions to stream A and odd positions to stream B. Subtract 3 modulo 29 in A and 7 in B.
+
+	Stream	Source positions	Input	Decoded values
+	A	0, 2, 4	10, 11, 12	7, 8, 9
+	B	1, 3	20, 21	13, 14
+
+Putting the decoded values back at their source positions gives 7, 13, 8, 14, 9. Concatenating A followed by B instead gives 7, 8, 9, 13, 14. These are different output orders. The shorter B stream needs no padding under the stated rule.
+
+Keeping every stream is different from extracting only one stride. A split followed by immediate recombination should restore the original input exactly. Preserve source-position lists so missing, duplicated and misplaced symbols can be detected. See positional extraction and reading routes.
+
+Sometimes this is just a repeating key
+
+The example is equivalent to subtracting the repeating key 3, 7 directly from the original stream. Searching all fixed shifts for the two streams gives 29² = 841 key settings, exactly the set of two-position additive keys under the same alignment. Describing it as two streams does not create a new transformation family in that restricted case.
+
+More generally, k regularly interleaved streams, each using a repeating additive key of length L and advancing its key only when its own stream receives a symbol, can be represented by one repeating key of length kL. This assumes a common fixed start, no resets or interruptions, and recombination in original position order. The smallest actual period may be shorter.
+
+Separate feedback states, unequal key lengths, irregular assignments or concatenated output need their own analysis. A stream-local feedback rule remembers previous symbols in that stream, not necessarily the immediately preceding source symbol. See feedback, repeating keys and equivalent pipelines.
+
+Define what advances the stream counter
+
+Specify whether assignment uses rune count, transliteration characters, printed columns or all characters including punctuation. State whether headings are included and whether the count restarts at a word, line, page or section. Restarting after an odd-length row swaps which source positions go to A and B compared with a continuous two-stream assignment.
+
+Distinguish source position from local position. In the example, source position 4 is local position 2 in A. A formula using one of these indices will generally differ from the same formula using the other. Record both.
+
+Count assignment choices as well as keys
+
+A fixed residue-class split, stream = source_position mod k, determines the assignment once k and the starting convention are fixed. Allowing each of N positions to choose freely among k labeled streams instead gives k^N assignments, including assignments with empty streams. These are settings, not necessarily distinct results.
+
+Choosing a stream to make the next letter plausible introduces those assignment choices into the decoder. It cannot be evaluated as though the stream split was independently known. If the assignment comes from artwork or colored marks, preserve the measurements and uncertainty separately from the decoding.
+
+Evaluate every stream and the complete result
+
+Report all retained streams, their lengths, keys, state traces and outputs. If only one stream looks readable, do not silently discard the others or change their order without recording that decision. Controls should repeat the complete split, key and output-order search. Freeze the procedure before applying it to an untouched continuation.
+
+Documented experiments
+
+No dedicated interleaved-stream experiment is linked yet. Periodic statistics and repeating-key tests can inform particular variants, but do not establish that arbitrary stream assignments or separate feedback systems have been tested.
+
+All method families · Periodicity diagnostics · Search space and bounds
+
+Sources, related references, and files
+- positional extraction
+  https://jelliottdev.github.io/reference/articles/method-positional-extraction.html
+- reading routes
+  https://jelliottdev.github.io/reference/articles/method-routes.html
+- feedback
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
+- repeating keys
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- equivalent pipelines
+  https://jelliottdev.github.io/reference/articles/method-composition.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Periodicity diagnostics
+  https://jelliottdev.github.io/reference/articles/periodic-ioc.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-interleaving.html
 
 
 ---
