@@ -7012,7 +7012,7 @@ Numbers and representations
 Gematria and rune-sum mappings
 Map runes or groups to numerical totals and count competing matches.
 
-Related records (6)
+Related records (7)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP1-05: candidate word sums and rune segmentation
@@ -7034,6 +7034,11 @@ LP2-15 reported reverse-add palindrome: arithmetic and control
 Record type: Method replay. Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.
 Question tested: Does the reported 53-digit reverse-add example hold, and how often do its own digits give palindromes after shuffling?
 Outside this test: Derivation of GP word sums and nearest-prime distances, alternative zero groupings, a complete search-adjusted p-value, plaintext recovery, and evidence of authorial intent.
+
+LP2-15–16: derive the reported prime-distance digits
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Does the reported 53-digit nearest-prime sequence follow word by word from the archived first-section rune transcription?
+Outside this test: Image-level certification of each rune and separator; other page or section selections; altered word segmentation; other prime mappings; full discovery-search correction; a decryption of LP2-15–22.
 
 LP2-27–32: eleven-rune sums of 563 and 569
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
@@ -7683,6 +7688,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums
 - LP2-15 reported reverse-add palindrome: arithmetic and control
   https://jelliottdev.github.io/#/experiments/prime-distance-reverse-add
+- LP2-15–16: derive the reported prime-distance digits
+  https://jelliottdev.github.io/#/experiments/prime-distance-word-derivation
 - LP2-27–32: eleven-rune sums of 563 and 569
   https://jelliottdev.github.io/#/experiments/wing-tree-eleven-rune-windows
 - LP1 square: dictionary candidate space for the selected phrase
@@ -28579,7 +28586,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 74 published reproducible records: 16 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 8 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 75 published reproducible records: 16 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 9 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -29025,10 +29032,10 @@ Spirals and Branches equal-length stream discussion · heck, Joel, and Vatoshi V
 LP2-15 word sums, nearest-prime distances and reverse-add palindromes
 Partly replayed · Gematria and rune-sum mappings · LP2-15, LP2-16
 Reported approach. Map each word's GP sum to its distance from a nearest prime, concatenate those distances under selected zero separators, and add the resulting decimal number to its digit reversal. The thread reports several palindromes and later corrects an earlier 46-digit claim to 53 digits.
-Current archive coverage. The selected 53-digit decimal equality is now reproduced, with a no-carry explanation and a fixed-digit shuffle control. The archive also checks row sums and the LP2-15 number square. None of these records derives the reported word-level nearest-prime sequence from the manuscript.
-Replay requirement. Freeze the page transcription, word segmentation, nearest-prime tie rule, leading-zero handling and exact grouping before calculation. Derive every digit from the runes, enumerate all eligible sections and zero groupings, then compare the full selection process with matched controls.
+Current archive coverage. The reported 53-digit reverse-add equality and its fixed-digit shuffle control are reproduced. A companion audit now derives all 57 first-section word distances from the hashed LP2-15–16 transcription and compares every digit with the reported 53. The complete archive-derived sequence also yields a palindrome, but the source report does not specify how its shorter sequence was obtained.
+Replay requirement. Recover the author's exact transcription or omitted-word rule to explain the 53-versus-57 difference. A cipher claim would then need a fixed use of the distances on unsolved text, with all selected section and grouping choices included in its control.
 
-Related records with narrower scopes: prime distance reverse add, lp2 row prime sums.
+Related records with narrower scopes: prime distance reverse add, prime distance word derivation, lp2 row prime sums.
 
 Source identification
 Magic-square observations and word-sum follow-up · lolo and participants · 2025-07-25. Supplied transcript SHA-256: 8972147d268ee1910444a63caf71421ceac5c727fd3a36b6dfdd81454c6baf7c.
@@ -29497,6 +29504,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/prime-sums.html
 - prime distance reverse add
   https://jelliottdev.github.io/#/experiments/prime-distance-reverse-add
+- prime distance word derivation
+  https://jelliottdev.github.io/#/experiments/prime-distance-word-derivation
 - lp2 row prime sums
   https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums
 - Image transforms and overlays
@@ -49087,7 +49096,8 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     }
   ],
   "related": [
-    "lp2-row-prime-sums"
+    "lp2-row-prime-sums",
+    "prime-distance-word-derivation"
   ],
   "visuals": [
     {
@@ -49095,13 +49105,182 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "caption": "Every paired digit sum in the reported decimal string remains below the carry threshold of ten."
     }
   ],
-  "article": "# Why the reported 53-digit reverse-add result is a palindrome\n\n## The precise claim\n\nA [prior LP2-15 discussion](#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes) reports distances from word-level GP sums to nearby primes. After concatenating a selected sequence of those distances, the author added the 53-character decimal string to its reversal and obtained a 53-digit palindrome. The thread corrected an earlier 46-digit claim to 53 digits.\n\nThis experiment checks **that arithmetic and one conditional baseline**. It does not reconstruct the word-to-distance sequence from the manuscript, certify the zero-based grouping, or test a decipherment rule. The exact source excerpt is identified in the [structured intake](data/reported-attempts.json) by SHA-256. The decimal string and claimed sum are copied into `plan.json`, so the arithmetic replay needs no external account or chat export.\n\n## Input and result\n\n```text\n  02311171210211215142515300303126131002122052400021111\n+ 11112000425022120013162130300351524151211201217111320\n= 13423171635233335155677430603477655153333253617132431\n```\n\nThe addition is correct and the result reads identically in either direction. The first operand's leading zero is retained when constructing the reversal; as an integer it has no value, but dropping it before reversing would define a different operation.\n\nThe more informative fact is that **every paired digit sum is at most 7**. No column carries. If a decimal string has digits `d[0] ... d[n−1]`, adding it to its reversal pairs `d[i]` with `d[n−1−i]`. These pair sums are necessarily mirror-symmetric. Whenever all are below ten, and the outer pair is nonzero, the decimal result must be a palindrome. The reported example meets both conditions. Its palindromicity follows from this elementary rule; it does not require a cipher mechanism.\n\n![Fifty-three source-derived paired sums mirror around the center and all remain below the decimal carry line of ten.](experiments/records/prime-distance-reverse-add/paired-sums.svg)\n\n## A matched-digit control\n\nThe plan fixes 100,000 pseudorandom shuffles of the **same 53 characters**, with Python's `random.Random(3301)` and no restrictions on a leading zero in the shuffled string. Each shuffled string is reversed and added as an integer exactly as above. **50,442 of 100,000** shuffles yield palindromes. In this run, exactly the same 50,442 satisfy the no-carry condition with a nonzero outer pair.\n\nThis is a conditional, descriptive control: it preserves the selected digit multiset but not any GP word order. It is not a p-value for the full search that produced the string. That search could choose pages, word boundaries, nearest-prime ties, zero separators, and which examples to present. A null model for the whole idea must include those choices. Randomly shuffling uniform decimal digits would be a different and less relevant comparison, because the reported distances concentrate at small digits (11 zeroes, 18 ones, 11 twos).\n\n## Reproduce\n\nExtract the [experiment bundle](downloads/experiments/prime-distance-reverse-add.zip) with folders intact, then run from its root:\n\n```text\npython experiments/records/prime-distance-reverse-add/run.py --check\npython experiments/records/prime-distance-reverse-add/check.py\npython experiments/records/prime-distance-reverse-add/plot.py\n```\n\nThe first command recomputes the arithmetic and all 100,000 fixed shuffles. The independent checker verifies the 53 column sums, their symmetry, the no-carry proof condition, and the saved control's internal consistency. The plotter regenerates the SVG from `results.json`. All use the Python standard library. `plan.json` specifies the original digits, seed, trial count and post-selection scope; `results.json` preserves the full paired-sum list and control counts.\n\n## What remains open\n\nThe decimal result is reproducible, but the **source-to-digits derivation** is not yet. An end-to-end replay must pin the LP2-15/16 transcription, GP alphabet, word and section boundaries, nearest-prime tie rule, and treatment of zeros and leading zeros. It should enumerate every eligible section and grouping before selecting a notable output, then apply the identical search to matched controls. A rare result under that complete search would be more informative than a rare-looking decimal string chosen after several transformations.\n\nThis computational audit was run and checked by Codex on 2026-10-22. Human review of the source grouping and the mathematical interpretation is pending.\n",
+  "article": "# Why the reported 53-digit reverse-add result is a palindrome\n\n## The precise claim\n\nA [prior LP2-15 discussion](#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes) reports distances from word-level GP sums to nearby primes. After concatenating a selected sequence of those distances, the author added the 53-character decimal string to its reversal and obtained a 53-digit palindrome. The thread corrected an earlier 46-digit claim to 53 digits.\n\nThis experiment checks **that arithmetic and one conditional baseline**. The companion [word-by-word source audit](#/experiments/prime-distance-word-derivation) now reconstructs the same section from the archived LP2-15–16 rune text; its complete 57-word sequence differs from the 53 reported digits. This record retains the exact reported string as its input so the historical arithmetic claim remains independently inspectable. The source excerpt is identified in the [structured intake](data/reported-attempts.json) by SHA-256.\n\n## Input and result\n\n```text\n  02311171210211215142515300303126131002122052400021111\n+ 11112000425022120013162130300351524151211201217111320\n= 13423171635233335155677430603477655153333253617132431\n```\n\nThe addition is correct and the result reads identically in either direction. The first operand's leading zero is retained when constructing the reversal; as an integer it has no value, but dropping it before reversing would define a different operation.\n\nThe more informative fact is that **every paired digit sum is at most 7**. No column carries. If a decimal string has digits `d[0] ... d[n−1]`, adding it to its reversal pairs `d[i]` with `d[n−1−i]`. These pair sums are necessarily mirror-symmetric. Whenever all are below ten, and the outer pair is nonzero, the decimal result must be a palindrome. The reported example meets both conditions. Its palindromicity follows from this elementary rule; it does not require a cipher mechanism.\n\n![Fifty-three paired sums from the reported digits mirror around the center and all remain below the decimal carry line of ten.](experiments/records/prime-distance-reverse-add/paired-sums.svg)\n\n## A matched-digit control\n\nThe plan fixes 100,000 pseudorandom shuffles of the **same 53 characters**, with Python's `random.Random(3301)` and no restrictions on a leading zero in the shuffled string. Each shuffled string is reversed and added as an integer exactly as above. **50,442 of 100,000** shuffles yield palindromes. In this run, exactly the same 50,442 satisfy the no-carry condition with a nonzero outer pair.\n\nThis is a conditional, descriptive control: it preserves the selected digit multiset but not any GP word order. It is not a p-value for the full search that produced the string. That search could choose pages, word boundaries, nearest-prime ties, zero separators, and which examples to present. A null model for the whole idea must include those choices. Randomly shuffling uniform decimal digits would be a different and less relevant comparison, because the reported distances concentrate at small digits (11 zeroes, 18 ones, 11 twos).\n\n## Reproduce\n\nExtract the [experiment bundle](downloads/experiments/prime-distance-reverse-add.zip) with folders intact, then run from its root:\n\n```text\npython experiments/records/prime-distance-reverse-add/run.py --check\npython experiments/records/prime-distance-reverse-add/check.py\npython experiments/records/prime-distance-reverse-add/plot.py\n```\n\nThe first command recomputes the arithmetic and all 100,000 fixed shuffles. The independent checker verifies the 53 column sums, their symmetry, the no-carry proof condition, and the saved control's internal consistency. The plotter regenerates the SVG from `results.json`. All use the Python standard library. `plan.json` specifies the original digits, seed, trial count and post-selection scope; `results.json` preserves the full paired-sum list and control counts.\n\n## What remains open\n\nThe [companion audit](#/experiments/prime-distance-word-derivation) pins one source-to-digits derivation. Its archived first-section reading has 57 words, compared with 53 reported digits, and also yields a carry-free palindrome. The author's exact transcription or segmentation choices are not preserved in the supplied report. A full cipher test would still need a fixed operation on unsolved text and a comparison that repeats the complete choice of section, grouping and method.\n\nThis computational audit was run and checked by Codex on 2026-10-22. Human review of the source grouping and the mathematical interpretation is pending.\n",
   "article_path": "experiments/records/prime-distance-reverse-add/article.md",
   "script_sha256": "983ef2b33b1d09bc437fefa33332726a8b7e9574e97e4be9cf7bad358600cde5",
   "record_type": {
     "id": "replay",
     "label": "Method replay",
     "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
+
+---
+
+{
+  "id": "prime-distance-word-derivation",
+  "title": "LP2-15–16: derive the reported prime-distance digits",
+  "status": "published",
+  "question": "Does the reported 53-digit nearest-prime sequence follow word by word from the archived first-section rune transcription?",
+  "summary": "The archived first section yields 57 word distances, not the reported 53. Their minimum edit distance is seven. The full 57-digit sequence still makes a palindrome on the first reverse-add; 53,845 of 100,000 fixed-multiset shuffles do likewise.",
+  "tags": [
+    "LP2-15",
+    "LP2-16",
+    "Gematria Primus",
+    "prime sums",
+    "nearest prime",
+    "word boundaries",
+    "reverse-add",
+    "palindrome",
+    "source audit"
+  ],
+  "family": {
+    "id": "prime-distance-reverse-add",
+    "title": "Prime-distance reverse-add claims",
+    "question": "Which numerical claims about reported word-sum distance strings survive exact arithmetic and matched controls?",
+    "baseline": "prime-distance-reverse-add"
+  },
+  "variant": {
+    "label": "Full manuscript-to-digits source audit",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-15"
+        ],
+        "after": [
+          "lp2-15",
+          "lp2-16"
+        ],
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      },
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/prime-distance-reverse-add/plan.json"
+        ],
+        "after": [
+          "experiments/records/prime-distance-word-derivation/plan.json"
+        ],
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      },
+      {
+        "field": "representation",
+        "before": "The exact 53-character decimal string reported for an LP2-15 word-sum-distance construction, including its leading zero; no rune or word transcription is used in this arithmetic-only replay.",
+        "after": "Archived 29-rune LP2-15 heading and first LP2-15–16 section through the word preceding the next section's ᛈᚹᚷᚷ. Slash-newline and the page break join rune words; hyphens and periods separate words. Each word is mapped to its Gematria Primus prime sum and closest-prime absolute distance.",
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      },
+      {
+        "field": "procedure",
+        "before": "Add the string to its full character reversal as integers, verify all 53 paired decimal columns and carries, then shuffle the fixed digit multiset 100,000 times with seed 3301 and apply the same operation to each.",
+        "after": "Compute all 57 word distances from the hashed archived text and compare their string to the reported 53-digit source string. Audit reverse-add arithmetic on the complete archive-derived string, then shuffle its fixed digit multiset 100,000 times with the same operation.",
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      },
+      {
+        "field": "parameters",
+        "before": "One selected 53-character example; 100,000 conditional random permutations; Python random.Random seed 3301; leading zero allowed in shuffled strings.",
+        "after": "First section only; 29 GP values; nearest-prime distance without directional preference; leading zero retained for reversal; 100,000 random.Random shuffles, seed 33011516; report sequence alignment is descriptive and may be non-unique.",
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      },
+      {
+        "field": "exclusions",
+        "before": "Derivation of GP word sums and nearest-prime distances, alternative zero groupings, a complete search-adjusted p-value, plaintext recovery, and evidence of authorial intent.",
+        "after": "Image-level certification of each rune and separator; other page or section selections; altered word segmentation; other prime mappings; full discovery-search correction; a decryption of LP2-15–22.",
+        "reason": "This companion audit derives every word distance from archived LP2-15–16 instead of accepting the reported decimal string as a fixed input."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-15",
+      "lp2-16"
+    ],
+    "artifacts": [
+      "experiments/records/prime-distance-word-derivation/plan.json"
+    ],
+    "representation": "Archived 29-rune LP2-15 heading and first LP2-15–16 section through the word preceding the next section's ᛈᚹᚷᚷ. Slash-newline and the page break join rune words; hyphens and periods separate words. Each word is mapped to its Gematria Primus prime sum and closest-prime absolute distance.",
+    "procedure": "Compute all 57 word distances from the hashed archived text and compare their string to the reported 53-digit source string. Audit reverse-add arithmetic on the complete archive-derived string, then shuffle its fixed digit multiset 100,000 times with the same operation.",
+    "parameters": "First section only; 29 GP values; nearest-prime distance without directional preference; leading zero retained for reversal; 100,000 random.Random shuffles, seed 33011516; report sequence alignment is descriptive and may be non-unique.",
+    "exclusions": "Image-level certification of each rune and separator; other page or section selections; altered word segmentation; other prime mappings; full discovery-search correction; a decryption of LP2-15–22."
+  },
+  "outcome": "not-supported",
+  "finding": "The 53 reported digits do not match the 57 distances under the declared archived segmentation. A minimum of seven digit edits separates them. The 57-digit reverse-add result is nevertheless a palindrome because every mirrored digit pair sums to at most eight. In 100,000 matched digit-multiset shuffles, 53,845 results are palindromes.",
+  "limitations": "The pasted source does not preserve the author's full transcription, exact separator choices or computation script. The figure gives one of multiple possible minimum alignments; it cannot identify which words the author omitted or changed. The archived text, though source-hashed, has not been reverified rune by rune against the image for this audit. The shuffle is conditional on a selected section and digit multiset. Human review pending.",
+  "next_steps": "Verify disputed word breaks directly against page images and search for the original calculation, then define any cipher operation using the distance stream before treating it as a solving method.",
+  "reproduction": {
+    "command": "python experiments/records/prime-distance-word-derivation/run.py --check && python experiments/records/prime-distance-word-derivation/check.py && python experiments/records/prime-distance-word-derivation/plot.py --check",
+    "environment": "Python 3.12 standard library, no network or AI service. Run from the repository or extracted bundle root.",
+    "script": "experiments/records/prime-distance-word-derivation/run.py",
+    "script_sha256": "ebba69b7c6379dd376c1ecfe6e1b4936b1883dc170f4a3606839617caca3383e",
+    "inputs": [
+      {
+        "path": "experiments/records/prime-distance-word-derivation/plan.json",
+        "sha256": "55ae76c20b55ecaaafc24c70f8b1b3165723f25020584310daf905a4a612643d"
+      },
+      {
+        "path": "experiments/records/prime-distance-word-derivation/check.py",
+        "sha256": "cbf5553a1c3e4d7f5b262133b9fb15b2e66cd0a68bf0bedb5d184eac98e27f02"
+      },
+      {
+        "path": "experiments/records/prime-distance-word-derivation/plot.py",
+        "sha256": "11677918d10622c4203a9ab93be1c0f606fa088b80d151eb0cd6af53f8586f14"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/prime-distance-word-derivation/results.json",
+        "sha256": "64a581500962ed9b8729ff868ee795c6cf33b07f96d270f2c8f51e4531b58a5f"
+      },
+      {
+        "path": "experiments/records/prime-distance-word-derivation/word-distance-alignment.svg",
+        "sha256": "1ca6f0ad50f288c7d0a12ea17761aa539261eecbb7856cda9fcc8a184c645257"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex — full rerun, independent word scanner and prime-distance oracle, minimum edit-distance check, column arithmetic and matched-shuffle replay; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Source-specific reported-attempt intake and transcript hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes"
+    },
+    {
+      "label": "LP2-15 manuscript image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-15"
+    },
+    {
+      "label": "LP2-16 manuscript image and archived transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-16"
+    }
+  ],
+  "related": [
+    "prime-distance-reverse-add"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/prime-distance-word-derivation/word-distance-alignment.svg",
+      "caption": "One minimum alignment of 57 archive-derived word distances and the 53 reported digits. Four gap columns and three differing-digit columns are highlighted."
+    }
+  ],
+  "article": "# Can the reported prime-distance digits be derived from LP2-15–16?\n\nThe earlier [reverse-add record](#/experiments/prime-distance-reverse-add) checks the arithmetic of a reported 53-digit string. It does not show how each digit came from the manuscript. This source audit makes that missing step explicit: read every word in the same first section, sum its Gematria Primus rune values, and record its distance to the nearest prime.\n\nThe archived transcription yields **57 word distances**, while the supplied report lists **53**. The two strings have a minimum digit-edit distance of seven under ordinary insertion, deletion and substitution. That discrepancy matters for reproducing the reported derivation. It does **not** make the reverse-add observation disappear: the complete 57-digit sequence also produces a palindrome on the first addition.\n\n## Frozen reading rule\n\nThe input is the archived [LP2-15](#/reader/lp2-15) and [LP2-16](#/reader/lp2-16) rune transcription. We use the two-word heading on LP2-15, then every rune word after its `$` section marker through the word before the next section's `ᛈᚹᚷᚷ` on LP2-16. The first five values agree with the report's “red header” sequence; the first three body words are red on the page image. Printed square numbers are not words in this calculation.\n\nA hyphen or period separates words. A `/` followed by a line break is typographic wrapping, so runes on either side remain one word unless a hyphen intervenes. The page boundary also does not split its continuing word. For each word, sum the first 29 primes in Gematria Primus order and use the *absolute* distance to the closest integer prime. A tie between equidistant primes does not change the distance. The [plan](experiments/records/prime-distance-word-derivation/plan.json) pins both text hashes, the rune-to-prime table, the section end marker and the report's 53 digits.\n\nFor example, the heading words give `ᚠᚢᛚᛗ → 149 → 0` and `ᚪᛠᚣᛟᚪ → 489 → 2`. The [full token trace](experiments/records/prime-distance-word-derivation/results.json) lists all 57 words, their prime sums and nearest-prime distances, so any disputed separator or rune has an exact place to challenge.\n\n## Where the sequences differ\n\n```text\nReported: 02311171210211215142515300303126131002122052400021111   (53 digits)\nArchive:  023111712102410211215142515300303126141002122142400021111 (57 digits)\n```\n\n![The reported 53 digits aligned with 57 distances independently derived from archived LP2-15–16 words. Ochre columns mark gaps or differing digits.](experiments/records/prime-distance-word-derivation/word-distance-alignment.svg)\n\n[Open the alignment at full size](experiments/records/prime-distance-word-derivation/word-distance-alignment.svg).\n\nThe figure shows **one** minimum alignment: four archive word positions have no partner in the report and three paired digits differ. The minimum edit count is independently checked by dynamic programming. Repeated digits make the precise alignment non-unique, so these positions should not be read as proof of which words the original author skipped or transcribed differently. The reported list and archived source cannot be made identical under the stated rule without additional choices or corrections.\n\n## What happens to the palindrome?\n\nAdding the archive-derived string to its reversal gives:\n\n```text\n  023111712102410211215142515300303126141002122142400021111\n+ 111120004241221200141621303003515241512112014201217111320\n= 134231716343631411356763818303818367653114136343617132431\n```\n\nThe [independent checker](experiments/records/prime-distance-word-derivation/check.py) verifies the integer sum and each mirrored digit pair. The largest paired sum is eight, so no decimal carry occurs. That is why the 57-digit sum remains a palindrome.\n\nAs a conditional baseline, we shuffled the same **57 distance digits** 100,000 times with a fixed seed, reversed and added each shuffle, and obtained **53,845 palindromes**. This preserves the short-digit distribution that makes carry-free addition frequent. It does not reproduce the full historical search over pages, section boundaries and prime-related transformations. The sibling record's 53-digit control gives 50,442 palindromes in 100,000 shuffles of *its* fixed digit multiset. Neither rate is a probability of intentional construction.\n\n## Reproduce and limits\n\nFrom a full checkout or the [experiment ZIP](downloads/experiments/prime-distance-word-derivation.zip), run:\n\n```text\npython experiments/records/prime-distance-word-derivation/run.py --check\npython experiments/records/prime-distance-word-derivation/check.py\npython experiments/records/prime-distance-word-derivation/plot.py --check\n```\n\nThe first command recomputes every word and all 100,000 shuffles. The checker uses a separate word scanner, a different nearest-prime search, direct column arithmetic, a minimum-edit calculation and a second control replay. The supplied discussion is identified by SHA-256 in the [reported-attempt intake](#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes); its full pasted transcript is not redistributed. The report may have used a different transcription or unpublished segmentation choices. Image-level verification of every word break and human review are still pending.\n\nThis is an **input-derivation audit**, not a decryption of LP2-15–22. A future cipher test would need a fixed way to use these distances on an unsolved passage and evaluate the complete output on text that did not determine the rule.\n",
+  "article_path": "experiments/records/prime-distance-word-derivation/article.md",
+  "script_sha256": "ebba69b7c6379dd376c1ecfe6e1b4936b1883dc170f4a3606839617caca3383e",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
   }
 }
 

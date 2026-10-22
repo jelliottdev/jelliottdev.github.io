@@ -4,7 +4,7 @@
 
 A [prior LP2-15 discussion](#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes) reports distances from word-level GP sums to nearby primes. After concatenating a selected sequence of those distances, the author added the 53-character decimal string to its reversal and obtained a 53-digit palindrome. The thread corrected an earlier 46-digit claim to 53 digits.
 
-This experiment checks **that arithmetic and one conditional baseline**. It does not reconstruct the word-to-distance sequence from the manuscript, certify the zero-based grouping, or test a decipherment rule. The exact source excerpt is identified in the [structured intake](data/reported-attempts.json) by SHA-256. The decimal string and claimed sum are copied into `plan.json`, so the arithmetic replay needs no external account or chat export.
+This experiment checks **that arithmetic and one conditional baseline**. The companion [word-by-word source audit](#/experiments/prime-distance-word-derivation) now reconstructs the same section from the archived LP2-15–16 rune text; its complete 57-word sequence differs from the 53 reported digits. This record retains the exact reported string as its input so the historical arithmetic claim remains independently inspectable. The source excerpt is identified in the [structured intake](data/reported-attempts.json) by SHA-256.
 
 ## Input and result
 
@@ -18,7 +18,7 @@ The addition is correct and the result reads identically in either direction. Th
 
 The more informative fact is that **every paired digit sum is at most 7**. No column carries. If a decimal string has digits `d[0] ... d[n−1]`, adding it to its reversal pairs `d[i]` with `d[n−1−i]`. These pair sums are necessarily mirror-symmetric. Whenever all are below ten, and the outer pair is nonzero, the decimal result must be a palindrome. The reported example meets both conditions. Its palindromicity follows from this elementary rule; it does not require a cipher mechanism.
 
-![Fifty-three source-derived paired sums mirror around the center and all remain below the decimal carry line of ten.](experiments/records/prime-distance-reverse-add/paired-sums.svg)
+![Fifty-three paired sums from the reported digits mirror around the center and all remain below the decimal carry line of ten.](experiments/records/prime-distance-reverse-add/paired-sums.svg)
 
 ## A matched-digit control
 
@@ -40,6 +40,6 @@ The first command recomputes the arithmetic and all 100,000 fixed shuffles. The 
 
 ## What remains open
 
-The decimal result is reproducible, but the **source-to-digits derivation** is not yet. An end-to-end replay must pin the LP2-15/16 transcription, GP alphabet, word and section boundaries, nearest-prime tie rule, and treatment of zeros and leading zeros. It should enumerate every eligible section and grouping before selecting a notable output, then apply the identical search to matched controls. A rare result under that complete search would be more informative than a rare-looking decimal string chosen after several transformations.
+The [companion audit](#/experiments/prime-distance-word-derivation) pins one source-to-digits derivation. Its archived first-section reading has 57 words, compared with 53 reported digits, and also yields a carry-free palindrome. The author's exact transcription or segmentation choices are not preserved in the supplied report. A full cipher test would still need a fixed operation on unsolved text and a comparison that repeats the complete choice of section, grouping and method.
 
 This computational audit was run and checked by Codex on 2026-10-22. Human review of the source grouping and the mathematical interpretation is pending.

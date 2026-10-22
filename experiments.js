@@ -52,8 +52,10 @@ function experimentGroups(records, render){
 function experimentBrowse(records){
   const title=group=>group[0].family?.title||group[0].title;
   const pending=records.filter(r=>r.review?.human_review==='pending').length;
-  const primary=records.filter(r=>['method','replay'].includes(r.record_type?.id));
-  const supporting=records.filter(r=>!['method','replay'].includes(r.record_type?.id));
+  const familyKey=record=>record.family?.id||record.id;
+  const solvingFamilies=new Set(records.filter(r=>['method','replay'].includes(r.record_type?.id)).map(familyKey));
+  const primary=records.filter(r=>solvingFamilies.has(familyKey(r)));
+  const supporting=records.filter(r=>!solvingFamilies.has(familyKey(r)));
   const groups=items=>{const families=new Map();for(const record of items){const key=record.family?.id||record.id;if(!families.has(key))families.set(key,[]);families.get(key).push(record);}return [...families.values()];};
   const cards=items=>`<div class="experiment-browser">${groups(items).sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
       const family=group[0].family;
@@ -65,7 +67,7 @@ function experimentBrowse(records){
           ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
           <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
     }).join('')}</div>`;
-  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">These are reproducible records with different purposes. A bounded solving test applies a specified decoding, extraction or payload check. A measurement or source audit can inform a proposed method, but is not itself an LP2 solve attempt.</p><p class="small muted">“Supported” refers only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><h3>Solving and extraction tests</h3><p class="small muted">Includes bounded tests and clearly marked replays of proposed methods.</p>${cards(primary)}<h3>Measurements, controls and source checks</h3><p class="small muted">Useful evidence and reproducible checks; these do not independently validate a decryption.</p>${cards(supporting)}`;
+  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">These are reproducible records with different purposes. A bounded solving test applies a specified decoding, extraction or payload check. A measurement or source audit can inform a proposed method, but is not itself an LP2 solve attempt.</p><p class="small muted">“Supported” refers only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><h3>Solving methods and linked evidence</h3><p class="small muted">Bounded tests, proposed-method replays and their supporting records stay together. Each record states its own purpose.</p>${cards(primary)}<h3>Measurements, controls and source checks</h3><p class="small muted">Useful evidence and reproducible checks; these do not independently validate a decryption.</p>${cards(supporting)}`;
 }
 function experimentFamily(r){
   if(!r.family)return '';
