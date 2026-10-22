@@ -200,6 +200,9 @@ for path in ['exports/carrier-928.json','exports/figures/carrier-928.svg','scrip
 for path in ['exports/section-contributions.json','exports/figures/section-contributions.svg','scripts/audit_section_contributions.py','scripts/plot_section_contributions.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['section contributions','column cancellation','464 words'])
+for path in ['exports/464-pointer.json','scripts/audit_464_pointer.py']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical arithmetic audit')
+ files[-1].update(guide='prime-sums',aliases=['464 words','STUDY HERE','331 133 pointer','71963','26893'])
 for path in ['exports/phase-invariant.json','scripts/check_phase_invariant.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='cipher-invariants',aliases=['phase invariant','periodic affine','invertible multiplier'])

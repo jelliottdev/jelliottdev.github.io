@@ -137,6 +137,12 @@ BELIEUE ↔ BELEIUE: exchanging I and E also preserves the total, 369. The docum
 
 These alternatives are explicitly constructed comparisons. They are not additional text found on the manuscript.
 
+A proposed “ALL THINGS” crib
+
+A source discussion pairs the labels D J U B E I AE with the phrase “OF ALL THINGS” because both are said to sum to 389. The first string does: 89 + 37 + 3 + 61 + 67 + 31 + 101 = 389. On the proposed plaintext side, O F A L L TH NG S also gives 7 + 2 + 97 + 73 + 73 + 5 + 79 + 53 = 389—but that spells OF ALL THNGS in rune labels. The ordinary spelling with a separate I, O F A L L TH I NG S, gives 420. Splitting NG into N and G instead would give a different total again.
+
+The 389 match is a reproducible arithmetic observation conditional on a missing I; it does not provide a letterwise decoding rule or an independently confirmed heading. Record the exact rune sequence and spelling policy before using it as a crib. The proposed source-text chain and remaining test requirements are in the source register.
+
 A quick arithmetic check
 
 Only the F rune has the even prime value 2; every other rune value is odd. The sum is odd exactly when the number of non-F runes is odd. An even total greater than 2 cannot be prime. This provides a quick necessary check before trial division, not a sufficient test: many odd totals are composite.
@@ -212,6 +218,17 @@ Read-only reproduction script · Known-reading implementation · Method paramete
 The LP1-05 opposite-cell comparison gives concrete equal-sum examples: SHADOWS and CABAL both give 341, while the printed tokens differ. It separates symmetry of the converted number grid from symmetry of the original writing.
 
 
+The reported 464-word “STUDY HERE” pointer
+
+A source discussion numbers 464 known words in both directions, then reads forward position 331 and reverse position 133 as STUDY HERE. The archived 464-word ledger supplies a fixed version of those words: Warning, Welcome and both koans, with headings, in manuscript order. Its known reading has STUDY at forward word 331 and HERE at forward word 332. Since reverse position 133 is 464 − 133 + 1 = 332, the two index choices select adjacent words around a 331/133 split. The words are already present in the solved first koan; the indices do not decrypt them.
+
+	Ciphertext block	Reported GP sum	Archived 464-word ledger	Result
+	First 331 words	71,963	72,065	Different; 72,065 = 5 × 7 × 29 × 71
+	Last 133 words	26,893	26,893	Matches; prime
+
+The first-block difference is 102. We cannot attribute it to an arithmetic error without the reporter’s exact ciphertext word list or transcription. The read-only audit script independently tokenizes the nine archived source pages, checks them against the 464-word ledger, aligns the known readings, and recalculates every word sum. Its complete output includes input hashes and all 464 words and sums. The historical claim and its remaining source requirements are indexed under reported attempts.
+
+
 Testing row sums against a comparison
 The archived-row prime-sum experiment tests one global count across LP2-00–55. It finds 76 prime sums among 594 eligible rows; 843 of 999 shuffled datasets have at least as many (corrected one-sided p = 0.844). It does not support an excess under that model. Individual rows, emirps, other boundaries and decoded text are outside the test.
 
@@ -277,6 +294,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp1-16.html
 - transliteration conventions; transcription correction
   https://jelliottdev.github.io/reference/articles/transliteration.html
+- the source register
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#solved-text-section-title-cribs
 - primality and divinity
   https://jelliottdev.github.io/reference/articles/primality-and-divinity.html
 - selection effects and reproducible scope
@@ -293,6 +312,14 @@ Sources, related references, and files
   https://jelliottdev.github.io/data/evidence/reading-methods.json
 - LP1-05 opposite-cell comparison
   https://jelliottdev.github.io/reference/articles/magic-squares.html#sum-collisions
+- archived 464-word ledger
+  https://jelliottdev.github.io/#/experiments/lp1-word-length-balance
+- read-only audit script
+  https://jelliottdev.github.io/scripts/audit_464_pointer.py
+- complete output
+  https://jelliottdev.github.io/exports/464-pointer.json
+- reported attempts
+  https://jelliottdev.github.io/reference/articles/reported-attempts.html#lp1-464-word-study-here-pointer
 - archived-row prime-sum experiment
   https://jelliottdev.github.io/#/experiments/lp2-row-prime-sums
 - arithmetic replay and digit-matched control
