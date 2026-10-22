@@ -6407,8 +6407,13 @@ Outside this test: Unknown plaintext or keystream mixing, degree above eight, ex
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-Related records (3)
+Related records (4)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+Nonzero difference uniformity and order under EA-stalling keys
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
+Question tested: Conditional on the 86 zero differences, do the remaining LP2-00--55 differences match the uniform and lag-one independence predictions of one independently uniform nonzero-key running-sum model?
+Outside this test: Plaintext or key recovery, structured and nonuniform keys, cross-page transitions, other lags, alternate rune mappings, image transcription and selection-adjusted inference.
 
 Solved GP EA frequency versus unsolved LP2 doublets
 Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
@@ -6953,7 +6958,7 @@ Outside this test: Other pages, periods outside 2-20, regional variants, correct
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-Related records (8)
+Related records (9)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: repeated trigrams against page shuffles
@@ -6980,6 +6985,11 @@ LP2-00–55: placement of the 86 doublets
 Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
 Question tested: After fixing the observed total of 86 equal-rune events, do their page counts and positions differ from explicit length-aware placement controls?
 Outside this test: Cipher or plaintext simulation, alternate transcriptions, image verification, word-only event definitions, page-reset gap definitions and confirmatory post-selection probabilities.
+
+Nonzero difference uniformity and order under EA-stalling keys
+Record type: Manuscript analysis. Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.
+Question tested: Conditional on the 86 zero differences, do the remaining LP2-00--55 differences match the uniform and lag-one independence predictions of one independently uniform nonzero-key running-sum model?
+Outside this test: Plaintext or key recovery, structured and nonuniform keys, cross-page transitions, other lags, alternate rune mappings, image transcription and selection-adjusted inference.
 
 Solved GP EA frequency versus unsolved LP2 doublets
 Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
@@ -7148,6 +7158,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
 - Autokey and ciphertext feedback
   https://jelliottdev.github.io/reference/articles/method-feedback.html
+- Nonzero difference uniformity and order under EA-stalling keys
+  https://jelliottdev.github.io/#/experiments/ea-difference-independence
 - Solved GP EA frequency versus unsolved LP2 doublets
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
 - LP2-54–55: reset ciphertext state at selected F runes
@@ -21450,6 +21462,8 @@ The downloadable doublet report checks all 23,548 combinations of previous state
 
 The EA frequency control now uses actual decoded GP indices from solved pages rather than guessing rune boundaries from ordinary English letters. Solved LP1 has 20 EA runes at 2,782 within-page transition positions (0.719%); the unsolved doublet rate is 86/12,901 (0.667%). These close rates meet a necessary frequency plausibility check, but do not validate this equation or a key schedule. That record also shows how erasing word boundaries creates eleven false EA labels and examines the difference IoC under a separate conditional model.
 
+The nonzero-difference check tests the stronger assumption that every nonzero key is independent and uniform. Its residue histogram restates the earlier difference IoC at fixed zero count; its adjacent-difference count adds an order-sensitive comparison. Neither recovers a key or establishes which plaintext rune occurs at a doublet.
+
 Reproduce the counts
 
 Download the reference-data bundle or use the repository. Python 3.12 and its standard library are sufficient. Run from the extracted root:
@@ -21530,6 +21544,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - EA frequency control
   https://jelliottdev.github.io/#/experiments/ea-frequency-control
+- nonzero-difference check
+  https://jelliottdev.github.io/#/experiments/ea-difference-independence
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Counting and chart script
@@ -26447,7 +26463,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The experiment archive is a set of reproducible, bounded tests. It is not a census of every attempt made by every solver. As of 21 October 2026, it contains 59 published records and a separate map of 54 method families. Twenty-four of those families have no linked completed record. A family without a record means not documented here, not “never tried”; a linked record covers only its named inputs and variants.
+The experiment archive is a set of reproducible, bounded tests. It is not a census of every attempt made by every solver. As of 21 October 2026, it contains 60 published records and a separate map of 54 method families. Twenty-four of those families have no linked completed record. A family without a record means not documented here, not “never tried”; a linked record covers only its named inputs and variants.
 
 Start with the observation index when a count, pattern or visual feature prompts the idea. Use Have we tried it? to check a specific proposal against exact scopes, or the method-family map when you are still defining a method. This page tracks the work needed to make these routes a reliable account of what is known and what has been tested.
 
@@ -30716,6 +30732,559 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
 ---
 
 {
+  "id": "ea-difference-independence",
+  "title": "Nonzero difference uniformity and order under EA-stalling keys",
+  "status": "published",
+  "question": "Conditional on the 86 zero differences, do the remaining LP2-00--55 differences match the uniform and lag-one independence predictions of one independently uniform nonzero-key running-sum model?",
+  "summary": "The 28-bin chi-square is 42.056 (69/2,000 conditional draws at least as high); it restates the earlier difference IoC. Adjacent nonzero differences match 432/12,676 times, inside the conditional 412--492 range. Neither statistic identifies the cipher.",
+  "tags": [
+    "EA",
+    "doublets",
+    "running sum",
+    "difference sequence",
+    "independent keys",
+    "conditional simulation",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Archived LP2-00--55 rune indices and their successive within-page modular differences; original zero positions retained.",
+    "procedure": "Count all 28 nonzero difference residues and adjacent equal nonzero differences; compare both with a zero-mask-preserving independent-uniform reference.",
+    "parameters": "Modulus 29; residues 1--28; lag-one adjacent nonzero differences only; 2,000 simulations with seed 33012026; no chosen page or bin subset.",
+    "exclusions": "Plaintext or key recovery, structured and nonuniform keys, cross-page transitions, other lags, alternate rune mappings, image transcription and selection-adjusted inference."
+  },
+  "outcome": "inconclusive",
+  "finding": "The histogram imbalance is near the upper end of the conditional reference, but it is algebraically the same information as the previous difference IoC at fixed zero count. The new order-sensitive adjacent-equality count is inside its reference range.",
+  "limitations": "Model and diagnostics were chosen after the doublet and difference-IoC observations. Conditional simulation ranks are unadjusted for selection; a near match or modest discrepancy cannot identify a cipher. This does not test deterministic or nonuniform keys, alternate boundaries, or plaintext recovery.",
+  "next_steps": "A stronger test needs a predeclared key schedule or plaintext constraint with predictions beyond the marginal zero count and a held-out page or passage. Compare exact page resets and key-clock rules as separate variants, retaining this baseline.",
+  "family": {
+    "id": "ea-running-sum-controls",
+    "title": "EA-stalling running-sum controls",
+    "question": "Which observations follow from the exact nonzero-key running-sum equation, and which can distinguish it from alternatives?",
+    "baseline": "ea-frequency-control"
+  },
+  "variant": {
+    "label": "Residual uniformity and adjacent-difference order with the zero mask fixed",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-01",
+          "lp1-03",
+          "lp1-04",
+          "lp1-05",
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-10",
+          "lp1-11",
+          "lp1-12",
+          "lp1-13",
+          "lp1-14",
+          "lp1-15",
+          "lp1-16",
+          "lp2-56",
+          "lp2-57",
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "after": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "reason": "The companion test fixes the observed zero mask and examines residual values and their order on unsolved LP2 rather than transferring an EA rate from solved pages."
+      },
+      {
+        "field": "representation",
+        "before": "Known decoded GP rune indices and literal labels for 17 solved control pages; archived LP2-00–55 ciphertext rune streams.",
+        "after": "Archived LP2-00--55 rune indices and their successive within-page modular differences; original zero positions retained.",
+        "reason": "The companion test fixes the observed zero mask and examines residual values and their order on unsolved LP2 rather than transferring an EA rate from solved pages."
+      },
+      {
+        "field": "procedure",
+        "before": "Count EA at within-page solved positions and equal unsolved ciphertext neighbors; check literal-token parsing, page-mix sensitivity and a conditional uniform-nonzero difference-IoC control.",
+        "after": "Count all 28 nonzero difference residues and adjacent equal nonzero differences; compare both with a zero-mask-preserving independent-uniform reference.",
+        "reason": "The companion test fixes the observed zero mask and examines residual values and their order on unsolved LP2 rather than transferring an EA rate from solved pages."
+      },
+      {
+        "field": "parameters",
+        "before": "EA is GP index 28; nonzero keys 1–28 in the proposed equation; 10,000 LP1 page resamples and 2,000 seeded conditional IoC trials.",
+        "after": "Modulus 29; residues 1--28; lag-one adjacent nonzero differences only; 2,000 simulations with seed 33012026; no chosen page or bin subset.",
+        "reason": "The companion test fixes the observed zero mask and examines residual values and their order on unsolved LP2 rather than transferring an EA rate from solved pages."
+      },
+      {
+        "field": "exclusions",
+        "before": "Plaintext recovery, key inference, independent full image transcription, external English-corpus transfer, other equations and corrected post-selection significance.",
+        "after": "Plaintext or key recovery, structured and nonuniform keys, cross-page transitions, other lags, alternate rune mappings, image transcription and selection-adjusted inference.",
+        "reason": "The companion test fixes the observed zero mask and examines residual values and their order on unsolved LP2 rather than transferring an EA rate from solved pages."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent Runic-block extraction, exact count-square identity and adjacent-pair recount; human review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/ea-difference-independence/run.py --check",
+    "environment": "Python 3.12 standard library; independent check: python experiments/records/ea-difference-independence/check.py",
+    "script": "experiments/records/ea-difference-independence/run.py",
+    "script_sha256": "ed9e118f14945daf3384572e34c4750b1a042de316890a42eb90c05c8b9c0f00",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/ea-difference-independence/run.py",
+        "sha256": "ed9e118f14945daf3384572e34c4750b1a042de316890a42eb90c05c8b9c0f00"
+      },
+      {
+        "path": "experiments/records/ea-difference-independence/check.py",
+        "sha256": "d1425e5f884ff0c425a696f64a478a0b374d65ab50fc2f86de2ec8eaf6c0fa5c"
+      },
+      {
+        "path": "experiments/records/ea-difference-independence/plan.txt",
+        "sha256": "86565aa2d7086bb24b37798d66305e7a7ee6905fb3677d81ba5cbb739b0e983a"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/ea-difference-independence/results.json",
+        "sha256": "b44246f53112e8a2419d8518b21f19fcf4f01a508f567f7e23d04743885a2ac4"
+      },
+      {
+        "path": "experiments/records/ea-difference-independence/differences.svg",
+        "sha256": "8d9d32e14ae2f37b16feaa9e37cb390d1d9425a8228da07f3dbb20dfbba733a4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Doublet counts, EA equation and source-location rules",
+      "url": "https://jelliottdev.github.io/#/wiki/doublets"
+    },
+    {
+      "label": "EA frequency and difference-IoC control",
+      "url": "https://jelliottdev.github.io/#/experiments/ea-frequency-control"
+    }
+  ],
+  "related": [
+    "ea-frequency-control",
+    "doublet-lag-profile",
+    "doublet-placement",
+    "doublet-boundaries"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/ea-difference-independence/differences.svg",
+      "caption": "Counts for all 28 nonzero difference residues against the equal-count reference; the chart also reports the adjacent nonzero-difference match count."
+    }
+  ],
+  "article": "# Are the nonzero differences independent under the EA-stalling model?\n\nThe [EA-frequency control](#/experiments/ea-frequency-control) compared the 86 LP2 doublets with decoded GP EA on solved pages and examined the index of coincidence (IoC) of successive ciphertext differences. This companion check asks what the **specific independent-nonzero-key version** of that equation predicts beyond the zero count. It keeps the observed zero positions and page boundaries fixed; it does not search for plaintext or keys.\n\nUnder `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with each key independently uniform on 1–28 and independent of a fixed plaintext, every plaintext EA gives difference zero. For any other plaintext rune, multiplication by its nonzero offset permutes 1–28. Therefore, **conditional on the zero mask**, the other differences must be independent uniform draws from those 28 residues. This is a prediction of the declared key model, not of every running-sum cipher. A periodic, deterministic or nonuniform key need not have it.\n\n![Counts of the 28 nonzero difference residues on LP2-00–55, with their equal-count reference marked in red.](experiments/records/ea-difference-independence/differences.svg)\n\n## Input and two diagnostics\n\nRead archived LP2-00–55, including headings. Retain the 29 GP runes, discard other characters, and subtract each previous rune index from the next **within the same page** modulo 29. There are 12,901 differences: **86 zero** and **12,815 nonzero**. No pair is formed across a page boundary. The zero mask remains at its observed positions in all simulations.\n\nThe first diagnostic is the Pearson chi-square of the 28 nonzero residue counts against an equal-count reference. The expected count per residue is **12,815 / 28 ≈ 457.68**. The second counts equal neighboring nonzero differences. Both difference positions must be consecutive within one page; a zero between them breaks the comparison. That leaves **12,676 eligible pairs**, with **452.71** expected equalities if the nonzero draws are independent uniform residues.\n\n| Diagnostic | Observed | Central 95% of 2,000 conditional draws | Draws at least observed |\n| --- | ---: | ---: | ---: |\n| 28-bin Pearson chi-square | 42.056 | 14.403–43.092 | 69 / 2,000 |\n| Equal neighboring nonzero differences | 432 / 12,676 | 412–492 | 1,685 / 2,000 |\n\nThe histogram statistic is near the high end of this seeded conditional reference. The order-sensitive count sits within it. The simulation uses seed `33012026`; every trial fills only nonzero-mask slots with independent draws from 1–28. In a positive control, those synthetic differences were accumulated into ciphertext and differenced again, recovering the simulated values exactly. The complete result stores all 28 observed bins, both tails of each simulated rank, source hashes and the plan.\n\n## The histogram is not independent evidence from the previous IoC\n\nLet `m = 12,815` and let `c₁ … c₂₈` be the nonzero difference counts. The chi-square is `28 Σ cᵣ² / m − m`. With the **86 zero differences fixed**, the full difference IoC has numerator `86 × 85 + Σ cᵣ(cᵣ − 1) = 86 × 85 + Σ cᵣ² − m` and a fixed denominator `12,901 × 12,900`. Both statistics are increasing functions of the same `Σ cᵣ²`. They rank every conditional simulated histogram in exactly the same order. The histogram makes the individual residues inspectable; its 69/2,000 upper rank is **not a second independent hint** alongside the earlier IoC result.\n\nNeighboring equality instead uses the **order** of nonzero differences. A page can keep every residue count—and thus the chi-square and IoC—while a rearrangement changes this adjacent-pair statistic. Here 432 equalities are below the 452.71 uniform expectation but inside the simulated central range. It would be a mistake to infer a periodic key, or its absence, from this one lag-one check.\n\n## What the result leaves open\n\nThe model and diagnostics were selected after the low doublet count and difference IoC were already known. These inclusive Monte Carlo ranks are descriptive and unadjusted for that selection or for examining two related summaries. They do not provide a prospective probability that the manuscript uses this cipher. A near-uniform residual distribution is compatible with many mechanisms; a small departure would challenge only the independently uniform nonzero-key version under these boundaries and transcription choices.\n\nNo plaintext EA positions have been verified, no key has been recovered, and no unknown page has been read. A deterministic key schedule, a clock that pauses on EA, word or page resets, changed rune mapping, and alternate transcription layers require separately declared tests. See the [doublet guide](#/wiki/doublets?section=ea-constraint) for the algebra and the [placement audit](#/experiments/doublet-placement) for the spatial distribution of the 86 zeros.\n\n## Reproduce\n\nExtract this experiment's ZIP without flattening folders. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-difference-independence/run.py --check\npython experiments/records/ea-difference-independence/check.py\n```\n\nThe producer reruns the 2,000 conditional draws and checks the saved JSON and SVG byte for byte. The independent checker extracts the Runic Unicode block with a different parser, verifies every source hash, recomputes the 28 bins and adjacent statistic, and calculates chi-square from an exact rational formula. Both use archived text, not a fresh manual rereading of the JPEGs. The [test plan](experiments/records/ea-difference-independence/plan.txt), [result data](experiments/records/ea-difference-independence/results.json) and [figure](experiments/records/ea-difference-independence/differences.svg) are available separately.\n",
+  "article_path": "experiments/records/ea-difference-independence/article.md",
+  "script_sha256": "ed9e118f14945daf3384572e34c4750b1a042de316890a42eb90c05c8b9c0f00",
+  "record_type": {
+    "id": "manuscript",
+    "label": "Manuscript analysis",
+    "description": "Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions."
+  }
+}
+
+---
+
+{
   "id": "ea-frequency-control",
   "title": "Solved GP EA frequency versus unsolved LP2 doublets",
   "status": "published",
@@ -31107,6 +31676,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
   "related": [
     "doublet-boundaries",
     "doublet-lag-profile",
+    "ea-difference-independence",
     "uniform-additive-doublets",
     "doublet-placement"
   ],
@@ -31116,7 +31686,7 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
       "caption": "Solved LP1 decoded EA rate and unsolved LP2 doublet rate, each with its own numerator and denominator. Rate similarity is not confirmation of the running-sum model."
     }
   ],
-  "article": "# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site's solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw's rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n",
+  "article": "# Does EA occur often enough in solved text?\n\nThe proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.\n\nThe site's solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.\n\n![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)\n\n| Source and measurement | Events | Positions | Rate |\n| --- | ---: | ---: | ---: |\n| Solved LP1-01, 03–16: decoded GP EA | 20 | 2,782 | 0.719% |\n| Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |\n| Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |\n\nThe two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw's rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.\n\n## Why the spelling conversion matters\n\nThe known-reading source preserves actual decoded **GP rune indices** alongside their literal Latin labels. In all 17 solved control pages, removing row wraps and greedily taking the longest GP labels **within each printed token** reconstructs the stored index sequence exactly. That is a check on this literal source layer, not a license to parse normalized English the same way.\n\nIf all token boundaries are erased first, greedy parsing finds **31 EA labels** across the solved LP1 pages instead of the actual **20 EA runes**. The eleven extras are cross-word `E|A` joins such as `ONE | ALONG` and `STRUGGLE | AND`. The downloaded report lists all eleven. Even inside one ordinary English word, the letters `EA` do not prove the manuscript used the single EA rune: `REACT` could be segmented `R·EA·C·T` or `R·E·A·C·T`. In Gematria Primus, EA has prime value 109, while E plus A totals 67 + 97 = 164. Preserve original rune boundaries when testing a frequency or prime sum.\n\n## What about the difference IoC?\n\nSubtract each within-page ciphertext rune from the next modulo 29. This gives 12,901 differences, including 86 zeros. Their observed index of coincidence is **0.035325**. Under an additional idealized assumption—condition on exactly 86 zero differences, then draw all 12,815 nonzero values independently and uniformly from residues 1–28—the expected IoC is **0.035284**. In 2,000 seeded simulations, the central 95% interval was **0.035249–0.035326**; 54 trials reached or exceeded the observed value.\n\nSo 0.0353 is near the upper edge of this **conditional nonzero-uniform** reference, not a standalone confirmation. The reference was chosen after the zero deficit and IoC were known, and other features and baselines have also been examined. Shuffling the ciphertext runes within pages would change the zero count and ask a different question. Uniform nonzero differences are what independently uniform nonzero keys would imply at non-EA positions for this particular equation; other key schedules can behave differently.\n\nThe [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.\n\nThe [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.\n\n## Reproduce and limits\n\nExtract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:\n\n```text\npython experiments/records/ea-frequency-control/run.py --check\npython experiments/records/ea-frequency-control/check.py\n```\n\nThe producer hashes the known-reading extract, alphabet and all 56 unsolved text files. The independent checker recounts decoded EA indices, reconstructs literal labels, verifies the cross-word joins, and recalculates the exact difference IoC. The source extract uses established decoded readings and a documented LP1-10 correction; this experiment is not a fresh image audit. It cannot tell whether the 86 doublets are plaintext EA, nor recover the nonzero key sequence. See [the doublet guide](#/wiki/doublets?section=ea-constraint) for the equation and its assumptions, and the [boundary audit](#/experiments/doublet-boundaries) for where the 86 pairs sit relative to stored separators.\n",
   "article_path": "experiments/records/ea-frequency-control/article.md",
   "script_sha256": "dda6228d312ac99db8c671f82c34bac5613c78d3a416364975c223bfca7c449e",
   "record_type": {

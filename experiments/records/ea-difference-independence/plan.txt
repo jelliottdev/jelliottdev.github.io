@@ -1,0 +1,13 @@
+Question: Under the proposed EA-stalling equation with independently uniform nonzero keys, do the nonzero ciphertext differences on LP2-00--55 look uniform and independent at lag one?
+
+This is an exploratory follow-up to a known low-doublet count and the published difference-IoC control. The two diagnostics below were chosen with knowledge of that earlier result. Do not describe their Monte Carlo ranks as prospective discovery probabilities or as a cipher identification.
+
+Input: archived text/lp2-00.txt through text/lp2-55.txt, including headings. Retain only the 29 characters in data/index.json alphabet order. No comparisons cross a page boundary. Set D_i=(C_i-C_(i-1)) mod 29 for every within-page transition. Keep the observed zero mask fixed, including the count of 86.
+
+Assumed model: C_i=C_(i-1)+K_i(P_i-28) mod 29, with K_i independently uniform on residues 1--28 and independent of a fixed but unknown plaintext. At P_i=28 the difference is zero; at any other plaintext value multiplication permutes the 28 nonzero residues. Conditional on the zero mask, all other D_i are therefore independent uniform draws from 1--28. This implication would fail for a structured key, a changing alphabet, altered clock, or a nonuniform key distribution.
+
+Diagnostics: (1) Pearson chi-square of the 28 nonzero difference counts against equal counts. (2) Number of equal consecutive nonzero D_i values, counting only neighboring transitions in the same page where neither is zero. Report opportunities and exact uniform expectation. Do not optimize a lag, bin subset or page subset.
+
+Reference: 2,000 seeded draws (seed 33012026) of independent uniform residues at every nonzero-mask slot, preserving page lengths and the zero positions. For each diagnostic report observed value, central empirical 95% range and inclusive upper/lower rank counts. This is conditional and descriptive because the model and diagnostics follow earlier observations. Do not treat the two diagnostics as independent confirmatory tests or promote an unadjusted tail to a decryption claim.
+
+Positive control: reconstruct each synthetic D stream from a chosen initial ciphertext rune and verify that differencing it recovers every simulated D. Independent checker: parse the archived runes with a different extraction method, recompute the exact observed counts and metrics, and verify output invariants and source hashes.

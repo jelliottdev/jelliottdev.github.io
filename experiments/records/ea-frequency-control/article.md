@@ -28,6 +28,8 @@ So 0.0353 is near the upper edge of this **conditional nonzero-uniform** referen
 
 The [doublet placement audit](#/experiments/doublet-placement) tests a different implication: whether the 86 candidate EA positions have unusual page counts or short gaps under explicit event-placement controls. Those controls also cannot establish a plaintext reading.
 
+The [nonzero-difference companion](#/experiments/ea-difference-independence) keeps the observed zero positions fixed and checks residue balance and adjacent differences. Its 28-bin chi-square is algebraically the same information as the difference IoC reported above, so the two histogram summaries must not be counted as independent evidence.
+
 ## Reproduce and limits
 
 Extract the experiment ZIP without flattening it. Python 3.12 and its standard library suffice:

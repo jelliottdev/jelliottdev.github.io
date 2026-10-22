@@ -1,4 +1,4 @@
-"""Validate reviewed records and build the public experiment index. No scripts are executed."""
+"""Validate published record files and build the public index. No scripts are executed."""
 import datetime
 import hashlib
 import html
@@ -221,7 +221,7 @@ def build(root=ROOT):
         '<title>Experiments — Liberpedia</title><body>'
         '<a href="../index.html#/experiments">Have we tried it?</a><main>' + body + '</main></body></html>',
         encoding='utf-8', newline='\n')
-    print(f'Published {len(records)} reviewed experiment records')
+    print(f'Published {len(records)} experiment records with stated review status')
     return records
 
 
