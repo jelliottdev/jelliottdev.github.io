@@ -7020,7 +7020,14 @@ Outside this test: Prime palindromes, prime ordinals, decoded text, arbitrary re
 Radix changes and byte encodings
 Specify how symbols become digits, integers and bytes.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
+Related records (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+LP2-49–51: direct text and file-header screen
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: Do the conditional base-60 grid bytes directly form complete ASCII or UTF-8 text, or begin with a PNG, gzip, ZIP or zlib header, under fixed rectangular routes and the ten I/l stem readings?
+Outside this test: Other alphabets, bases, glyph changes, 16 by 16 reflow, inserted or removed bytes, nonzero file offsets, XOR or other transforms, raw DEFLATE, unrecognized formats, short text fragments and meaningful-language assessment.
+
 
 
 Bitwise combinations and XOR
@@ -7598,6 +7605,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-row-emirp-sums
 - Radix changes and byte encodings
   https://jelliottdev.github.io/reference/articles/method-representations.html
+- LP2-49–51: direct text and file-header screen
+  https://jelliottdev.github.io/#/experiments/grid-direct-bytes
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Magic squares and numerical grids
@@ -21538,7 +21547,7 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
-This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. Other bare stems still need a full visual audit.
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers the additional I/l locations, including cells where the texts agree; other glyph classes remain open.
 
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
@@ -21627,7 +21636,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
 - five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
-- ten grid cells contain a visually bare I/l stem
+- ten grid cells contain a visually bare I/l stem; ten-stem register
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
@@ -27939,6 +27948,8 @@ In a conventional positional numeral, every digit value must be smaller than the
 
 The assumptions matter. A different digit alphabet, grouping or permitted output range changes the argument. The conclusion is about that representation, not a proof that every alphanumeric passage in Liber Primus uses base 60.
 
+The LP2-49–51 direct-byte test applies that conditional base-60 rule to all 256 grid entries. Sixteen fixed row and column routes, each with 1,024 registered I/l readings, produced no complete ASCII or UTF-8 stream and no declared PNG, gzip, ZIP or zlib start. The record gives the exact route grammar, screen definitions and exclusions; it does not close other byte interpretations.
+
 Specify a finite conversion search
 
 List permitted digit alphabets, bases, group sizes, traversal orders, byte orders and text interpretations. Decide how invalid digits, incomplete groups and invalid text sequences are handled. Keep failures in the report; silently dropping invalid groups can manufacture an attractive surviving fragment.
@@ -27966,6 +27977,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-compression.html
 - alphanumeric-grid guide
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
+- LP2-49–51 direct-byte test
+  https://jelliottdev.github.io/#/experiments/grid-direct-bytes
 - substitution search
   https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
 - expression bounds
@@ -28283,7 +28296,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 67 published reproducible records: 14 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 7 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 22 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 68 published reproducible records: 15 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 7 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -34927,6 +34940,149 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "control",
     "label": "Control",
     "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}
+
+---
+
+{
+  "id": "grid-direct-bytes",
+  "title": "LP2-49–51: direct text and file-header screen",
+  "status": "published",
+  "question": "Do the conditional base-60 grid bytes directly form complete ASCII or UTF-8 text, or begin with a PNG, gzip, ZIP or zlib header, under fixed rectangular routes and the ten I/l stem readings?",
+  "summary": "Across 16 fixed full-grid routes and 1,024 ten-stem readings, none of 16,384 direct 256-byte streams passes the specified whole-text or offset-zero file-header screens.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "alphanumeric grid",
+    "base 60",
+    "byte encoding",
+    "ASCII",
+    "UTF-8",
+    "file signature",
+    "search bounds"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.csv",
+      "experiments/records/grid-stem-uncertainty/results.json"
+    ],
+    "representation": "The 256 grid entries in page order, treated as a 32 by 8 rectangle; each token is one unsigned byte under the declared 60-digit order.",
+    "procedure": "Enumerate row- or column-wise reading with both outer directions, both initial inner directions and constant or alternating inner directions. Repeat all sixteen routes for all ten-bit I/l stem masks; apply six fixed text or file-header screens at byte offset zero.",
+    "parameters": "16 full-length routes times 1,024 stem masks = 16,384 byte streams, 256 bytes apiece; all other cells fixed, including 2S.",
+    "exclusions": "Other alphabets, bases, glyph changes, 16 by 16 reflow, inserted or removed bytes, nonzero file offsets, XOR or other transforms, raw DEFLATE, unrecognized formats, short text fragments and meaningful-language assessment."
+  },
+  "outcome": "not-supported",
+  "finding": "Zero streams passed each of the six declared screens: all-byte printable/control ASCII, strict full-stream UTF-8, PNG signature, gzip prefix, ZIP local-file prefix, or zlib header predicate.",
+  "limitations": "This closes only a direct, untransformed, header-at-offset-zero model over sixteen rectangular routes and ten registered I/l stem variants. A signature screen would not itself validate a full file; no signature passed. Other glyphs and encodings remain untested.",
+  "next_steps": "Keep byte-representation proposals separate by their declared route, transform and acceptance rule; do not rerun this exact direct model without a new input or a reason to question the pinned transcription.",
+  "family": {
+    "id": "grid-direct-bytes",
+    "title": "Grid direct-byte interpretations",
+    "question": "Do grid cells yield a direct text stream or recognizable file start under a fixed byte rule?",
+    "baseline": "grid-direct-bytes"
+  },
+  "variant": {
+    "label": "Baseline: conditional base-60 bytes, 16 routes, ten stem toggles",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — deterministic enumeration, independent page-record replay and synthetic positive controls",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-direct-bytes/run.py --check && python experiments/records/grid-direct-bytes/check.py",
+    "environment": "Python 3 standard library; no network or AI calls. Run from repository root or extracted experiment ZIP.",
+    "script": "experiments/records/grid-direct-bytes/run.py",
+    "script_sha256": "f1bdc9c212b7d66ddc879e7c161f43fe9f59c4d765700f413f274763bd4d40fe",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-direct-bytes/plan.json",
+        "sha256": "0a550a216f50e22f24659fa8518a4fa7fc19e51ab99a00d45c722371206be6c4"
+      },
+      {
+        "path": "experiments/records/grid-direct-bytes/check.py",
+        "sha256": "c885c6155e4bfade4e4224dc3c0f788ff9e877a6ac6416d1073c6df17d9bf646"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "experiments/records/grid-stem-uncertainty/results.json",
+        "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-direct-bytes/results.json",
+        "sha256": "19116cf42d9aa80526feb1927325324e58b540272107f953e39f5b78c8c69ab4"
+      },
+      {
+        "path": "experiments/records/grid-direct-bytes/route-screen.svg",
+        "sha256": "5d4e12e8bf98a941574d36bd29c3e292c57d5349650fe3650ea726fd047879b5"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid transcription and base-60 conditions",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "PNG specification",
+      "url": "https://www.w3.org/TR/png-3/#5PNG-file-signature"
+    },
+    {
+      "label": "RFC 1952: gzip format",
+      "url": "https://www.rfc-editor.org/rfc/rfc1952.html"
+    },
+    {
+      "label": "RFC 1950: zlib format",
+      "url": "https://www.rfc-editor.org/rfc/rfc1950.html"
+    },
+    {
+      "label": "PKWARE ZIP APPNOTE",
+      "url": "https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT"
+    }
+  ],
+  "related": [
+    "grid-stem-uncertainty",
+    "grid-prime-paths"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-direct-bytes/route-screen.svg",
+      "caption": "Six direct-format screens for 16 complete grid traversals, each across 1,024 stem settings."
+    }
+  ],
+  "article": "# LP2-49–51: do the grid entries directly form a text or file?\n\n**None of the 16,384 byte streams in this bounded test passed a whole-stream ASCII or UTF-8 screen or began with one of the four specified file headers.** This rules out a straightforward reading of the grid under these particular byte and traversal rules. It does not rule out a different encoding, a later transformation, or a file header elsewhere in a stream.\n\nThe [LP2-49–51 grid](#/wiki/alphanumeric-grids) has 256 two-character entries. If each is read as one byte using the declared base-60 digit order `0–9, A–Z, a–x`, the most immediate question is whether those bytes already say something. This test checks that question without choosing a route after seeing the output. Base 60 is **conditional** on the one-byte and digit-order assumptions; neither is established as the intended interpretation.\n\n## What was tested\n\nThe 10 rows on [LP2-49](#/reader/lp2-49), 13 on [LP2-50](#/reader/lp2-50), and 9 on [LP2-51](#/reader/lp2-51) are joined in that order into a 32 × 8 rectangle. Each pair becomes `60 × first digit + second digit`, with no wrapping or omitted entry. The [ten bare-stem audit](#/experiments/grid-stem-uncertainty) supplies the only transcription alternatives: `I` or `l` in ten fixed cells. All 1,024 settings are tested; the other 246 entries, including the separate `2S` cell, stay as in the wiki transcription.\n\nFor both row-wise and column-wise reading, the script varies the outer direction, initial inner direction, and whether the inner direction alternates after each row or column. Those three binary switches make eight routes per axis, or **16 complete routes**. Each visits every cell exactly once. The complete scope is therefore `16 × 1,024 = 16,384` streams of 256 bytes each.\n\n![Six direct-format screens across sixteen complete grid routes; all cells show zero matches among 1,024 stem settings per route.](experiments/records/grid-direct-bytes/route-screen.svg)\n\nThe labels in the chart encode the three switches: outer reverse, initial inner reverse, and alternation, with `0` for forward/constant and `1` for reverse/alternate. A cell counts how many of the 1,024 stem settings pass that screen. Its zeroes concern only the screen named at the column top.\n\n| Screen | Exact acceptance rule | Passing streams |\n| --- | --- | ---: |\n| ASCII text | Every byte is printable ASCII or tab, LF, or CR | 0 |\n| UTF-8 text | Strict UTF-8 decoding accepts all 256 bytes | 0 |\n| PNG | First eight bytes equal the [PNG signature](https://www.w3.org/TR/png-3/#5PNG-file-signature) | 0 |\n| gzip | First three bytes are `1f 8b 08`, including compression method 8 ([RFC 1952](https://www.rfc-editor.org/rfc/rfc1952.html)) | 0 |\n| ZIP | First four bytes are the local-file signature `50 4b 03 04` ([PKWARE APPNOTE](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT)) | 0 |\n| zlib | First two bytes satisfy CM=8, CINFO≤7 and the modulo-31 header check ([RFC 1950](https://www.rfc-editor.org/rfc/rfc1950.html)) | 0 |\n\nA header match would have been a **candidate for further validation**, not proof of a working file. UTF-8 validity would not by itself establish meaningful language. No stream reached either threshold here. The two text screens require the *entire* stream to pass; they do not inspect short readable fragments.\n\n## Reproduce it\n\nDownload this experiment's ZIP from the record, or run these commands from the repository root:\n\n```text\npython experiments/records/grid-direct-bytes/run.py --check\npython experiments/records/grid-direct-bytes/check.py\n```\n\nThe first script pins the SHA-256 hashes of the grid export and ten-stem register, then recomputes every case and the [JSON report](experiments/records/grid-direct-bytes/results.json). That report retains each route, ten-bit mask, stream hash, first eight bytes and six outcomes. The independent checker rebuilds the entries from the page records, replays every route and mask, and tests positive synthetic controls for all six screens. Both use only Python's standard library and make no network or AI calls.\n\nThis result says nothing about a 16 × 16 reflow, a different digit assignment, other glyph uncertainties, a header at a nonzero offset, XOR, compression without one of these headers, or bytes embedded in a larger construction. Those are distinct tests with their own search spaces. The useful stopping point here is narrower: **a direct 256-byte text or one of these four offset-zero file starts does not emerge from these 16 routes and ten stem choices**.\n",
+  "article_path": "experiments/records/grid-direct-bytes/article.md",
+  "script_sha256": "f1bdc9c212b7d66ddc879e7c161f43fe9f59c4d765700f413f274763bd4d40fe",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
   }
 }
 

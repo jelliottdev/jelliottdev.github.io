@@ -184,7 +184,7 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
-This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. Other bare stems still need a full visual audit.
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers the additional I/l locations, including cells where the texts agree; other glyph classes remain open.
 
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
@@ -273,7 +273,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
 - five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
-- ten grid cells contain a visually bare I/l stem
+- ten grid cells contain a visually bare I/l stem; ten-stem register
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json

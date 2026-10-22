@@ -1,0 +1,24 @@
+{
+  "schema": "liberpedia-grid-direct-bytes-plan-v1",
+  "question": "Do direct base-60 bytes from the 256 LP2-49–51 grid entries produce full ASCII or UTF-8 text, or a declared PNG, gzip, ZIP or zlib header, under 16 fixed rectangular routes and all ten I/l stem choices?",
+  "scope": "Use the wiki 256-entry grid in page order as one 32 by 8 rectangle. Convert each two-character token to one byte. The only transcription variants toggle the ten I/l cells from the pinned stem audit; all other cells, including 2S, remain fixed.",
+  "digit_alphabet": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx",
+  "byte_rule": "60 times first digit plus second digit; require integer 0-255; no wrapping, padding or XOR.",
+  "routes": "For row-major and column-major separately, choose outer-axis direction forward or reverse, initial inner-axis direction forward or reverse, and constant or alternating inner-axis direction after each outer row/column. This gives 2*2*2*2=16 routes; every route emits all 256 cells exactly once.",
+  "stem_variants": "All 2^10=1024 I/l assignments from the pinned ten-stem coordinate register; mask bit i selects lowercase l at stem i, otherwise uppercase I.",
+  "screens": {
+    "ASCII": "All 256 bytes are tab, LF, CR or printable 0x20-0x7e.",
+    "UTF-8": "Python strict UTF-8 decoder accepts the entire 256-byte stream, regardless of linguistic content.",
+    "PNG": "First eight bytes equal 89 50 4e 47 0d 0a 1a 0a.",
+    "gzip": "First three bytes equal 1f 8b 08.",
+    "ZIP": "First four bytes equal 50 4b 03 04.",
+    "zlib": "First two bytes satisfy RFC 1950 CM=8, CINFO<=7, and (CMF*256+FLG) modulo 31 equals zero; this is a header screen, not decompression."
+  },
+  "decision": "Enumerate every route and stem mask with no adaptation; retain each stream hash and screen outcome. Report hits as format candidates requiring validation, not as decoded files. A null excludes only this direct, header-at-offset-zero model.",
+  "controls": "Synthetic 256-byte ASCII text and injected PNG/gzip/ZIP/zlib headers must trigger their matching screens. Every route must be a permutation of 0..255 and have a distinct declared parameter tuple.",
+  "excluded": "Other glyph changes, other digit alphabets or bases, 16x16 or geometric reflow, offsets inside a stream, added or removed bytes, XOR/other transforms, raw DEFLATE, unknown formats, partially readable text, and any encrypted or compressed payload lacking the declared header.",
+  "inputs": [
+    {"path": "exports/alphanumeric-grids.csv", "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"},
+    {"path": "experiments/records/grid-stem-uncertainty/results.json", "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"}
+  ]
+}
