@@ -79,6 +79,8 @@ The current published records contain eight separate reviewed-text layers. Seven
 
 For the seven punctuation-only changes, any calculation using exactly the same rune-only stream receives the same symbols in the same order. This includes whole-page rune frequencies and rune-only n-grams. It does not cover word lengths, punctuation measurements, or a cipher whose key resets at a delimiter. For LP1-10, swapping two runes preserves their combined prime sum but can change local sums and ordered sequences.
 
+The archived-versus-reviewed sensitivity audit measures the current layers under the published joined-page word-length rule. All seven LP2 edits leave the 2,896-token rune sequence, length histogram and whole-stream IoC unchanged; LP1-10 changes six ordered-bigram type counts while preserving its token lengths. That observed null effect is specific to these edits and this tokenizer. A punctuation-sensitive key clock or a newly corrected rune still requires a separate test.
+
 A correction is not a whole-page certification
 
 A reviewed layer preserves the documented correction alongside the archive. It does not claim that every rune, dot, color and line on that page has been independently checked. Conversely, no separate layer can mean that no correction was published; it does not establish that nobody inspected the page. The next step toward comprehensive review is to record the region and features examined, including unchanged and uncertain readings.
@@ -266,6 +268,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/lp2-35.html
 - LP2-37
   https://jelliottdev.github.io/reference/lp2-37.html
+- archived-versus-reviewed sensitivity audit
+  https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
 - complete 75-page inventory
   https://jelliottdev.github.io/exports/transcription-coverage.json
 - standard-library script
