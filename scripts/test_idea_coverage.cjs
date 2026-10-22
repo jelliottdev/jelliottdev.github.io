@@ -94,8 +94,8 @@ const methodArticle=fs.readFileSync(require('node:path').join(root,'articles/sol
 for(const id of linked){
  const memberships=families.filter(f=>f.related.includes(id)).length;
  assert.equal(methodArticle.split(`href="#/experiments/${id}"`).length-1,memberships,`method links: ${id}`);
- assert.equal(methodArticle.split(`<li><p><a href="#/experiments/${id}">`).length-1,1,`full method description: ${id}`);
- if(memberships>1)assert(methodArticle.includes(`full description under`),`cross-reference: ${id}`);
+ assert.equal(methodArticle.split(`<li><a href="#/experiments/${id}">`).length-1,memberships,
+  `each related record appears once per family: ${id}`);
 }
 for(const r of experiments.filter(r=>r.status==='published'))assert(linked.has(r.id),'Assign a method family to published experiment: '+r.id);
 
@@ -166,7 +166,7 @@ ui.reportedAttemptsUnavailable=true;
 assert(ui.reportedAttemptView('data matrix').includes('could not be loaded'));
 console.log('PASS: family-only matches expose guides, distinguish absent links from negative results, and survive index-load failures');
 
-const detail={esc:ui.esc, records:experiments, families, familyData, head:()=>'', footer:()=>''};
+const detail={esc:ui.esc, records:experiments, families, familyData, head:()=>'', footer:()=>'',URLSearchParams,location:{hash:'#/experiments'}};
 vm.createContext(detail);
 vm.runInContext(fs.readFileSync(require('node:path').join(root,'experiments.js'),'utf8'),detail);
 vm.runInContext('experimentRecords=records; methodFamilyRecords=families; methodRecordKinds=familyData.record_kinds; methodRecordKindById=familyData.record_kind_by_id;',detail);
@@ -182,8 +182,8 @@ for(const record of experiments.filter(r=>r.status==='published')){
   assert(!html.includes(`section=family-${f.id}\"`),record.id);
  const article=detail.experimentArticle(record);
  const kind=familyData.record_kinds[familyData.record_kind_by_id[record.id]];
- assert(article.includes(`<strong>${kind.label}</strong>`));
- assert(article.includes('section=record-types'));
+ assert(kind?.label,record.id);
+ assert(article.includes(detail.esc(record.question)),record.id);
  assert(article.includes('data-anchor="experiment-methods"'));
  assert(article.indexOf('id="experiment-scope"')<article.indexOf('id="experiment-methods"'));
  assert(article.indexOf('id="experiment-methods"')<article.indexOf('id="experiment-reproduce"'));
@@ -192,8 +192,8 @@ assert.equal(detail.experimentMethodGuides({id:'unmapped-example'}),'');
 assert.equal(detail.experimentRecordType({id:'unmapped-example'}),'');
 vm.runInContext(fs.readFileSync(require('node:path').join(root,'assistant-ui.js'),'utf8'),detail);
 const control=experiments.find(r=>r.id==='seed-crib-controls');
-assert(detail.experimentSearchResult(control).includes('<strong>Control</strong>'));
-assert(detail.experimentSearchResult(control).includes('<dt>Check performed</dt>'));
+assert(detail.experimentSearchResult(control).includes('Control ·'));
+assert(detail.experimentSearchResult(control).includes('<dt>Method</dt>'));
 const tree=experiments.find(r=>r.id==='dead-tree-alignment');
 assert(!detail.experimentBrowse(experiments).split('<h3>Measurements, controls and source checks</h3>')[0].includes('dead-tree-alignment'));
 assert(detail.experimentBrowse(experiments).split('<h3>Measurements, controls and source checks</h3>')[1].includes('dead-tree-alignment'));

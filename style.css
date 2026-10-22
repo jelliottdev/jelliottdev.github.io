@@ -297,18 +297,27 @@ main h2[id],main h3[id]{scroll-margin-top:calc(var(--header) + 18px)}
 .experiment-archive{margin:32px 0;border:1px solid #bcc7cd;background:#fafaf8}
 .experiment-archive>summary{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 16px;min-height:62px;padding:14px 18px;cursor:pointer;list-style:none}
 .experiment-archive>summary::-webkit-details-marker{display:none}
-.experiment-archive>summary::after{content:"+";font:26px/1 Georgia,serif;color:var(--blue);order:3;margin-left:auto}
-.experiment-archive[open]>summary::after{content:"−"}
 .experiment-archive>summary>span:first-child{font:21px/1.35 Georgia,serif;color:var(--blue)}
 .experiment-archive>summary>span:nth-child(2){font-size:13px}
 .experiment-archive-body{padding:0 18px 20px;border-top:1px solid var(--line);background:white}
-.experiment-archive-body>p:first-child{margin:16px 0;line-height:1.6}
-.experiment-archive .experiment-browse-section{margin-top:26px}
-.experiment-archive .experiment-browse-section>h2{font-size:22px}
+.experiment-archive .experiment-browse-section{border-top:1px solid var(--line)}
+.experiment-archive .experiment-browse-section>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:12px 0;cursor:pointer;list-style:none}
+.experiment-archive .experiment-browse-section>summary::-webkit-details-marker{display:none}
+.experiment-archive .experiment-browse-section>summary h3{font:600 17px/1.45 Georgia,serif;margin:0 auto 0 0}
+.experiment-archive .experiment-browse-section>summary .small{white-space:nowrap}
+.experiment-archive .experiment-browse-section .experiment-browser{border-top:0;padding-left:16px}
+.experiment-archive .experiment-browse-section>p{margin:0 0 10px 16px}
+.experiment-archive .experiment-browse-filter{margin:16px 0 14px}
+.experiment-archive .experiment-browse-caveat{margin:18px 0 0}
 .experiment-review{margin:16px 0;font-size:13px;color:var(--muted)}
 .experiment-review>summary{color:var(--blue)}
-.experiment-next-links{margin:24px 0;line-height:1.9}
 @media(max-width:480px){.experiment-archive>summary{padding:14px}.experiment-archive>summary>span:nth-child(2){flex-basis:100%;order:4}.experiment-archive-body{padding:0 14px 18px}}
+
+.reference-deep-dive{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:2rem 0}
+.reference-deep-dive>summary{cursor:pointer;min-height:44px;padding:.7rem 0;font-weight:600;color:var(--blue)}
+.reference-deep-dive[open]>summary{border-bottom:1px solid var(--line)}
+.reference-deep-dive>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.reference-deep-dive>*:not(summary){margin-left:0}
 
 /* Experiment records share the wiki section navigation and mobile disclosure. */
 #experiment-family{scroll-margin-top:calc(var(--header) + 18px)}
@@ -327,8 +336,6 @@ main dt[id^="family-"]{scroll-margin-top:calc(var(--header) + 18px)}
 .method-group{margin:24px 0 0}
 .method-group>h2{font-size:23px;margin:0;padding:0 0 8px;border-bottom:1px solid var(--line)}
 .method-group>details>summary{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;color:var(--blue);cursor:pointer;font-size:14px}
-.method-group>details>summary::before,.method-family>details>summary::before{content:"▸";display:inline-block;width:16px;color:var(--blue)}
-.method-group>details[open]>summary::before,.method-family>details[open]>summary::before{content:"▾"}
 .method-family-list{margin:4px 0 26px;border-top:1px solid var(--line)}
 .method-family{padding:16px 0;border-bottom:1px solid var(--line)}
 .method-family h3{font:600 18px/1.4 Georgia,serif;margin:0 0 5px}
@@ -503,8 +510,6 @@ body{font-family:"Liberpedia Runic",Arial,Helvetica,sans-serif}
  .wiki-section{border-top:1px solid var(--line)}
  .wiki-section:last-of-type{border-bottom:1px solid var(--line)}
  .wiki-section>summary{min-height:52px;padding:10px 4px;display:flex;align-items:center;gap:11px}
- .wiki-section>summary::before{content:"⌄";display:inline-block;flex:none;width:20px;color:var(--muted);font-size:20px;line-height:1;transform:rotate(-90deg);transition:transform .15s ease}
- .wiki-section[open]>summary::before{transform:none}
  .wiki-section>summary h2{font:400 22px/1.28 Georgia,serif;border:0;padding:0;flex:1}
  .wiki-section>summary:hover h2{color:var(--blue)}
  .wiki-section>summary:focus-visible{outline:3px solid #437fb8;outline-offset:2px}
@@ -513,4 +518,18 @@ body{font-family:"Liberpedia Runic",Arial,Helvetica,sans-serif}
  .wiki-section[open]{padding-bottom:14px}
  .wiki-article>.small:first-child{font-size:13px;line-height:1.45}
 }
-@media(prefers-reduced-motion:reduce){.topbar,.wiki-section>summary::before{transition:none}}
+/* A single vector chevron for every disclosure. The browser's marker and
+   font-dependent arrow characters otherwise vary between platforms. */
+details>summary{position:relative;list-style:none;padding-right:30px}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"";position:absolute;right:9px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;border-radius:1px;transform:translateY(-70%) rotate(45deg);opacity:.75}
+details[open]>summary::after{transform:translateY(-25%) rotate(225deg)}
+.wiki-section>summary{padding-right:32px}
+.experiment-archive>summary{padding-right:42px;background:#f8f9f8}
+.experiment-archive>summary>span:first-child{color:var(--ink)}
+.experiment-archive>summary:hover>span:first-child,.experiment-archive>summary:focus-visible>span:first-child{color:var(--blue)}
+.experiment-archive .experiment-browse-section>summary{padding-right:30px}
+.experiment-archive .experiment-browse-section>summary .small{padding-right:8px}
+.idea-pages>summary>span{position:absolute;right:35px;top:50%;float:none;margin:0;transform:translateY(-50%)}
+@media(max-width:480px){.experiment-archive>summary{padding-right:42px}}
+@media(prefers-reduced-motion:reduce){.topbar{transition:none}}

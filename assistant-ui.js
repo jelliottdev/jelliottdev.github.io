@@ -50,9 +50,8 @@ function renderIdeaChecker(endpoint,query){
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
   const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
   main.innerHTML=head('Have we tried it?','Check an idea against published tests')+`<article class="reading-width idea-checker">
-      <p>Describe what you would do to a page. You’ll see completed tests with their findings, plus earlier proposals that still need a full replay.</p>
     <form id="experiment-form">
-      <label for="experiment-query">Technique or idea</label>
+      <label for="experiment-query">What would you try?</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>
       <details class="idea-pages" ${chosen.length?'open':''}><summary>Specify pages <span class="muted">(optional)</span></summary>
         <div class="idea-page-fields"><div><label for="idea-page-one">Page</label><select id="idea-page-one">${options(chosen[0])}</select></div>
@@ -66,12 +65,9 @@ function renderIdeaChecker(endpoint,query){
     <section id="experiment-results" aria-label="Matching research records"></section>
     <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="reported-attempts" aria-label="Earlier reported approaches"></section>
-    <p class="small muted experiment-next-links"><a href="#/wiki/solving-methods">Explore solving methods</a> · <a href="#/wiki/reported-attempts">Earlier reported approaches</a> · <a href="#/wiki/research-coverage">Research coverage</a></p>
-    <details class="experiment-guide"><summary>Coverage and how to interpret a match</summary>
-      <p>This checks bounded solving and extraction tests by technique. A page number alone is not a match. Related measurements, controls and source checks appear separately; they are not evidence that a decoding rule was tried. Inspect each record’s scope before treating it as the same test.</p>
-      <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index, not that an idea is new or promising. Coverage notes and earlier reported approaches are separate from completed research records and are not sent to the AI as experiment evidence. <a href="#/wiki/scoped-constraints">Check which narrow models are actually ruled out</a>.</p>
-      <p>Answers may be cached for up to a day and reused for the same question and evidence. Reopening a result does not automatically request a new answer. Sources remain available when AI is busy.</p>
-      <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
+    <details class="experiment-guide"><summary>What does a match mean?</summary>
+      <p>A match points to related work. Check the record’s pages, method, bounds, and exclusions before treating it as the same test. No match means this index has no matching record; it does not mean the idea is new.</p>
+      <p>Browse <a href="#/wiki/solving-methods">method guides</a>, <a href="#/wiki/reported-attempts">earlier reported approaches</a>, or the <a href="#/wiki/research-coverage">coverage overview</a> for work beyond completed experiments.</p>
     </details>${footer()}</article>`;
   const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
   const filterArchive=(save=false)=>{
@@ -91,6 +87,7 @@ function renderIdeaChecker(endpoint,query){
         if(!family.hidden){visible++;sectionVisible++;}
       }
       section.hidden=sectionVisible===0;
+      if(query&&sectionVisible) section.open=true;
     }
     $('#experiment-browse-status').textContent=query?(visible?`${visible} matching ${visible===1?'family':'families'}. Open a family to inspect its records.`:'No published record matches these terms. Try a shorter method name or page ID.'):'';
   };
@@ -148,7 +145,7 @@ function renderIdeaChecker(endpoint,query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');$('#reported-attempts').innerHTML=reportedAttemptView(searchNow?idea:'');const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=searchNow&&idea?ideaCoverageView(idea):'';$('#reported-attempts').innerHTML=searchNow&&idea?reportedAttemptView(idea):'';const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
     const selected=items=>experimentGroups(items.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]));
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>No tests have been added to this index. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);

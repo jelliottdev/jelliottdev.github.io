@@ -85,6 +85,10 @@ function wikiPage(id='') {
  ${doc.body.innerHTML}${a.pages?.length||backlinks.length?`<details class="article-related"><summary>Related pages and guides</summary>${a.pages?.length?`<section><h2>Manuscript pages discussed</h2><p>${a.pages.map(id=>`<a href="#/page/${id}">${id.toUpperCase()}</a>`).join(' · ')}</p></section>`:''}${backlinks.length?`<section><h2>Guides linking here</h2><ul>${backlinks.map(b=>`<li><a href="#/wiki/${b.id}">${esc(b.title)}</a></li>`).join('')}</ul></section>`:''}</details>`:''}<details class="article-tools"><summary>Page tools</summary><p><a href="#/wiki">All guides</a> · <a href="reference/articles/${id}.html">Standalone page</a> · <a href="reference/articles/${id}.txt" download>Download text</a></p></details>${footer()}</article>
  <aside class="contents"><strong>On this page</strong>${contentsHTML}</aside></div>`;
 }
+window.matchMedia('(max-width:760px)').addEventListener('change',event=>{
+ const sections=[...document.querySelectorAll('.wiki-article .wiki-section')];
+ sections.forEach((section,index)=>{section.open=!event.matches||index===0});
+});
 function bindChoiceExplorer(){
  const figure=document.getElementById('choice-explorer');
  if(!figure)return;

@@ -21,7 +21,7 @@ async function checkNavigationRace(oldRequestFails){
   db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},main,renderId:0,URLSearchParams,
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
-  window:{scrollTo(){}},
+  window:{scrollTo(){},matchMedia:()=>({addEventListener(){}})},
   document:{body:{classList:{toggle(){},remove(){}}},addEventListener(){},
    querySelectorAll(){return []},getElementById(){return null}},
   fetch:url=>new Promise((resolve,reject)=>pending.set(url,{resolve,reject})),
@@ -82,6 +82,7 @@ async function checkNavigationRace(oldRequestFails){
 async function main(){
  let finish,calls=0;
  const sandbox={db:{articles:[{id:'example',source:'readings/example.html'}]},
+  window:{matchMedia:()=>({addEventListener(){}})},
   document:{addEventListener(){}},fetch:async url=>{
    calls++;assert.equal(url,'articles/readings/example.html');
    return new Promise(resolve=>{finish=resolve});

@@ -31,9 +31,16 @@ const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
   assert.equal(await page.locator('.article-tools').evaluate(el=>el.open),false);
   if(process.env.OUTLINE_SCREENSHOT)await page.screenshot({path:process.env.OUTLINE_SCREENSHOT,fullPage:false});
   await page.setViewportSize({width:1440,height:900});
-  await page.reload();
-  await page.waitForSelector('.wiki-section');
   assert(await page.locator('.wiki-section').evaluateAll(all=>all.every(el=>el.open)));
+  await page.setViewportSize({width:390,height:844});
+  assert(await sections.first().evaluate(el=>el.open));
+  assert.equal(await sections.nth(1).evaluate(el=>el.open),false);
+  await page.goto(base+'#/wiki/first-experiment');
+  await page.waitForSelector('.reference-deep-dive',{state:'attached'});
+  assert.equal(await page.locator('.reference-deep-dive').evaluate(el=>el.open),false);
+  await page.goto(base+'#/wiki/first-experiment?section=search-controls');
+  await page.waitForSelector('#search-controls');
+  assert(await page.locator('.reference-deep-dive').evaluate(el=>el.open));
   console.log('PASS: compact mobile article sections, scroll header, and deep links.');
  }finally{await browser.close()}
 })().catch(error=>{console.error(error);process.exitCode=1});
