@@ -16,6 +16,38 @@ For example, indices 0–28 can be represented with five bits each, leaving thre
 Major variants
 Variants include fixed-width packing, base-29 integers, dictionary coding, run-length representations and particular compression formats. A raw stream and a file container may need different decoder settings. Arbitrary custom dictionaries can introduce as much freedom as a codebook.
 
+The same symbols produce different bytes
+
+Take the invented symbol indices 0, 1, 2, 3, 4, 5, 6, 7. Five-bit packing writes each index in a field of exactly five bits, concatenates the fields in order and groups the resulting 40 bits into five bytes.
+
+	Stage	Representation
+	Eight five-bit fields	00000 00001 00010 00011 00100 00101 00110 00111
+	Same bits grouped as bytes	00000000 01000100 00110010 00010100 11000111
+	Those bytes in hexadecimal	00 44 32 14 c7
+
+Alternatively, treating the same eight indices as base-29 digits gives the integer 638,069,404. Its shortest unsigned byte representation, most significant byte first, is 26 08 2a 9c. That is a different four-byte input. Neither conversion has compressed anything; each has applied a different representation rule.
+
+The shortest integer representation also loses the original count of leading zero digits. To recover this exact eight-symbol sequence, retain its length or another explicit framing rule. Five-bit packing has its own boundary problem when the total bit count is not divisible by eight: specify padding, partial-byte handling and the original symbol count. See radix changes and byte encodings.
+
+Readable output can come from an incomplete stream
+
+A second, independent toy example compresses the ASCII text A complete toy message. with zlib. It does not use the packed bytes above. The script then decodes the complete stream, a copy with its last byte removed, and a copy with five extra bytes appended.
+
+	Input	Returned text	End of stream reached?	Bytes after the stream
+	Complete fixture	The complete message	Yes	None
+	Final byte removed	The complete message	No	None reported
+	Append EXTRA	The complete message	Yes	EXTRA
+
+All three return the same readable text in this fixture. Only the first consumes exactly one complete stream with no trailing data. A test that checks only for readable output would miss both differences. This demonstrates decoder behavior on a known sample; it does not estimate how often arbitrary manuscript candidates would be accepted.
+
+Python's zlib documentation distinguishes eof, unused_data after a stream, and unconsumed_tail left by an output limit. Keep those separate. A concatenated-stream format may legitimately use trailing data, but requires a declared rule to process it.
+
+Reproduce the examples
+
+Run python scripts/compression_example.py. The script uses Python's standard library, checks the packing round trip and all three decoder cases, and records the compressed input bytes and zlib version. Download the script · Download the report.
+
+The decoder call limits this small fixture to 4,096 output bytes. For a real search, set a total output budget across all calls and classify a limit hit separately from a malformed stream. Python's initial buffer-size setting is not a total decompression limit.
+
 What a test must specify
 Fix the symbol-to-number mapping, packing, alignment, endianness, padding, format, decoder version and dictionary. Bound the number of combinations. Set an output-size limit when testing decompression so a malformed candidate cannot exhaust memory.
 
@@ -28,6 +60,14 @@ No compressed-manuscript decoding experiment is linked yet. Rune entropy and byt
 All method families · File integrity · Codebooks
 
 Sources, related references, and files
+- radix changes and byte encodings
+  https://jelliottdev.github.io/reference/articles/method-representations.html
+- zlib documentation
+  https://docs.python.org/3/library/zlib.html
+- Download the script
+  https://jelliottdev.github.io/scripts/compression_example.py
+- Download the report
+  https://jelliottdev.github.io/exports/compression-example.json
 - Rune entropy
   https://jelliottdev.github.io/reference/articles/rune-entropy.html
 - byte encoding

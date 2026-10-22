@@ -1,0 +1,55 @@
+{
+  "scope": "Independent invented examples; no manuscript inputs or format search.",
+  "zlib_runtime": "1.3.1",
+  "packing": {
+    "symbols": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "five_bit_fields": [
+      "00000",
+      "00001",
+      "00010",
+      "00011",
+      "00100",
+      "00101",
+      "00110",
+      "00111"
+    ],
+    "packed_hex": "00 44 32 14 c7",
+    "base29_value": 638069404,
+    "base29_minimal_bytes_hex": "26 08 2a 9c"
+  },
+  "decompression_cases": [
+    {
+      "name": "Complete stream",
+      "input_hex": "789c735448cecf2dc8492d495528c9af54c84d2d2e4e4c4fd5030063ba086a",
+      "output": "A complete toy message.",
+      "eof": true,
+      "unused_data_hex": "",
+      "unconsumed_tail_hex": ""
+    },
+    {
+      "name": "Final byte removed",
+      "input_hex": "789c735448cecf2dc8492d495528c9af54c84d2d2e4e4c4fd5030063ba08",
+      "output": "A complete toy message.",
+      "eof": false,
+      "unused_data_hex": "",
+      "unconsumed_tail_hex": ""
+    },
+    {
+      "name": "Five extra bytes",
+      "input_hex": "789c735448cecf2dc8492d495528c9af54c84d2d2e4e4c4fd5030063ba086a4558545241",
+      "output": "A complete toy message.",
+      "eof": true,
+      "unused_data_hex": "4558545241",
+      "unconsumed_tail_hex": ""
+    }
+  ]
+}
