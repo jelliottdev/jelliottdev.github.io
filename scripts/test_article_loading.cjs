@@ -22,7 +22,7 @@ async function checkNavigationRace(oldRequestFails){
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
   window:{scrollTo(){}},
-  document:{body:{classList:{toggle(){}}},addEventListener(){},
+  document:{body:{classList:{toggle(){},remove(){}}},addEventListener(){},
    querySelectorAll(){return []},getElementById(){return null}},
   fetch:url=>new Promise((resolve,reject)=>pending.set(url,{resolve,reject})),
  };
