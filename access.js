@@ -1,6 +1,21 @@
-let readerMode='raw',readerSize=Number(localStorage.getItem('liberpedia-reader-size'))||20,readerView=localStorage.getItem('liberpedia-reader-view')||null;
+let readerMode=localStorage.getItem('liberpedia-reader-mode')||'raw',readerSize=Number(localStorage.getItem('liberpedia-reader-size'))||20,readerView=localStorage.getItem('liberpedia-reader-view')||null;
 let readerPositions={image:null,text:null,compare:null},readerPositionPage=null;
 let readerScrollController=null;
+const readerPositionKey=id=>`liberpedia-reader-positions:${id}`;
+function saveReaderPositions(){
+ if(!readerPositionPage)return;
+ try{sessionStorage.setItem(readerPositionKey(readerPositionPage),JSON.stringify(readerPositions))}catch{}
+}
+function restoreReaderPosition(id){
+ if(readerPositionPage!==id||!location.hash.startsWith(`#/reader/${id}`))return;
+ const offset=readerPositions[readerView];
+ if(!Number.isFinite(offset))return;
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  const workspace=document.querySelector('.reader-workspace');
+  if(!workspace||readerPositionPage!==id)return;
+  window.scrollTo({top:Math.max(0,workspace.getBoundingClientRect().top+window.scrollY+offset),behavior:'instant'});
+ }));
+}
 function refreshReaderSupplementary(){
  const id=location.hash.match(/^#\/reader\/([^?]+)/)?.[1],p=id&&currentPage?.id===id?currentPage:null;
  if(!p)return;
@@ -30,12 +45,18 @@ async function readerPage(id,version){
  }
  document.body.classList.remove('reader-search-open');searchToggle.setAttribute('aria-expanded','false');
  const i=db.pages.findIndex(x=>x.id===id),prev=db.pages[i-1],next=db.pages[i+1];
- if(readerPositionPage!==id){readerPositions={image:null,text:null,compare:null};readerPositionPage=id}
+ if(readerPositionPage!==id){
+  readerPositions={image:null,text:null,compare:null};readerPositionPage=id;
+  try{
+   const saved=JSON.parse(sessionStorage.getItem(readerPositionKey(id))||'{}');
+   for(const view of ['image','text','compare'])if(Number.isFinite(saved[view]))readerPositions[view]=saved[view];
+  }catch{}
+ }
  const requestedView=new URLSearchParams(location.hash.split('?')[1]||'').get('view');
  if(['image','text','compare'].includes(requestedView))readerView=requestedView;
  if(!readerView)readerView=main.clientWidth>=760?'compare':'image';
  main.innerHTML=`<div class="manuscript-reader">
- <header class="reader-heading"><h1>Manuscript reader</h1><a href="${link(p)}">Page record ↗</a></header>
+ <header class="reader-heading"><h1>${label(p)}</h1><a href="${link(p)}">Page record ↗</a></header>
  <div class="reader-toolbar">
  <nav class="reader-pagination" aria-label="Manuscript pages">
  ${prev?`<a href="#/reader/${prev.id}" aria-label="Previous page">←</a>`:'<span aria-disabled="true" aria-label="First page">←</span>'}
@@ -63,7 +84,7 @@ async function readerPage(id,version){
  </section></div>
  <footer class="reader-resources">${id==='lp1-10'?'<a href="exports/sources/cicada-2014-sixth-onion/10-page.jpg" download="lp1-10-page.jpg">Download page-only JPEG</a><a href="images/lp1-10.jpg" download="lp1-10-carrier.jpg">Download four-page carrier</a>':p.release==='LP2'?`<a href="images/${id}.jpg" download="${id}-wiki.jpg">Download wiki JPEG</a><a href="exports/sources/cicada-2014-seventh-onion/${p.release_index}.jpg" download="${id}-2014-archive.jpg">Download archived JPEG</a><a href="#/wiki/2014-seventh-onion">Compare versions</a>`:`<a href="images/${id}.jpg" download="${id}.jpg">Download original JPEG</a>`}<a href="#/downloads/${id}">All page files & checksums</a><span id="reader-payload-link"></span><span>Page ${i+1} of ${db.pages.length} · <a href="#/numbering">Numbering guide</a></span></footer></div>`;
  const select=$('#reader-mode');if([...select.options].some(o=>o.value===readerMode))select.value=readerMode;else {select.selectedIndex=0;readerMode=select.value;}
- const draw=()=>{readerMode=select.value;const vals={visible:p.visible_text?.text,raw:p.raw,latin:p.lines.map(l=>l.latin).join('\n'),reviewed:p.reviewed_text,literal:p.reading?.literal,context:p.reading?.reading};$('#reader-text').textContent=vals[readerMode]||'No text is stored for this version. The original image is the reference.';$('#reader-text').className=['raw','reviewed'].includes(readerMode)?'reader-runes':'';$('#reader-text').style.fontSize=readerSize+'px';$('#reader-text-note').textContent=readerMode==='visible'?p.visible_text.basis:readerMode==='context'?`Contextual English for the entire section: ${p.reading.section_pages.join(', ')}. This may extend beyond the displayed image.`:readerMode==='literal'?'Known decoded text, preserving literal Latin conventions.':readerMode==='reviewed'?'Reviewed derivative. The archived source remains available separately.':readerMode==='latin'?'Transliteration labels, not automatically plaintext. Standalone archive separators are omitted in this view.':'Archived transcription; includes editorial separators and line markers.';};select.onchange=draw;draw();$('#reader-size').oninput=e=>{readerSize=Number(e.target.value);localStorage.setItem('liberpedia-reader-size',String(readerSize));$('#reader-size-value').textContent=readerSize+'px';draw()};
+ const draw=()=>{readerMode=select.value;const vals={visible:p.visible_text?.text,raw:p.raw,latin:p.lines.map(l=>l.latin).join('\n'),reviewed:p.reviewed_text,literal:p.reading?.literal,context:p.reading?.reading};$('#reader-text').textContent=vals[readerMode]||'No text is stored for this version. The original image is the reference.';$('#reader-text').className=['raw','reviewed'].includes(readerMode)?'reader-runes':'';$('#reader-text').style.fontSize=readerSize+'px';$('#reader-text-note').textContent=readerMode==='visible'?p.visible_text.basis:readerMode==='context'?`Contextual English for the entire section: ${p.reading.section_pages.join(', ')}. This may extend beyond the displayed image.`:readerMode==='literal'?'Known decoded text, preserving literal Latin conventions.':readerMode==='reviewed'?'Reviewed derivative. The archived source remains available separately.':readerMode==='latin'?'Transliteration labels, not automatically plaintext. Standalone archive separators are omitted in this view.':'Archived transcription; includes editorial separators and line markers.';};select.onchange=()=>{localStorage.setItem('liberpedia-reader-mode',select.value);draw()};draw();$('#reader-size').oninput=e=>{readerSize=Number(e.target.value);localStorage.setItem('liberpedia-reader-size',String(readerSize));$('#reader-size-value').textContent=readerSize+'px';draw()};
  const workspace=$('.reader-workspace');
  const canCompare=()=>Boolean(document.querySelector('.manuscript-reader')?.clientWidth>=760);
  const setView=view=>{readerView=view;workspace.dataset.view=view;document.querySelectorAll('[data-reader-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.readerView===view));};
@@ -73,17 +94,18 @@ async function readerPage(id,version){
  window.addEventListener('scroll',()=>{
   if(!workspace.isConnected||window.scrollY===0)return;
   readerPositions[readerView]=window.scrollY-(workspace.getBoundingClientRect().top+window.scrollY);
+  saveReaderPositions();
  },{passive:true,signal:readerScrollController.signal});
  refreshReaderSupplementary();
  document.querySelectorAll('[data-reader-view]').forEach(b=>b.onclick=()=>{
   const next=b.dataset.readerView;if(next==='compare'&&!canCompare())return;
   const origin=workspace.getBoundingClientRect().top+window.scrollY;
-  if(window.scrollY>0)readerPositions[readerView]=window.scrollY-origin;
+  if(window.scrollY>0){readerPositions[readerView]=window.scrollY-origin;saveReaderPositions()}
   setView(next);localStorage.setItem('liberpedia-reader-view',next);
   const url=new URL(location.href);url.hash=`/reader/${id}?view=${next}`;history.replaceState(null,'',url);
   requestAnimationFrame(()=>window.scrollTo({top:Math.max(0,origin+(readerPositions[next]??0)),behavior:'instant'}));
  });
- const resizeObserver=new ResizeObserver(()=>{if(!workspace.isConnected){resizeObserver.disconnect();return}if(readerView==='compare'&&!canCompare())setView('image')});
+ const resizeObserver=new ResizeObserver(()=>{if(!workspace.isConnected){resizeObserver.disconnect();return}if(readerView==='compare'&&!canCompare())document.querySelector('[data-reader-view="image"]')?.click()});
  resizeObserver.observe(document.querySelector('.manuscript-reader'));
  $('#reader-page').onchange=e=>location.hash='/reader/'+e.target.value;
  $('#reader-zoom').onclick=$('#reader-sheet').onclick=()=>openImage();
@@ -93,6 +115,7 @@ async function readerPage(id,version){
  image.onload=stopLoading;
  image.onerror=()=>{stopLoading();sheet.hidden=true;zoomButton.disabled=true;imageError.hidden=false};
  if(image.complete){if(!image.naturalWidth)image.onerror()}else imageTimer=setTimeout(()=>{if(image.isConnected&&!image.complete)loading.hidden=false},350);
+ setTimeout(()=>restoreReaderPosition(id),0);
 }
 function downloadTypeMatches(file,type){
  if(type==='experiments')return file.role==='Experiment ZIP';
@@ -107,5 +130,3 @@ async function downloadsPage(pageId,version){if(!db.catalog){const response=awai
  let verifyVersion=0;$('#verify-file').onchange=async e=>{const version=++verifyVersion,file=e.target.files[0];if(!file)return;$('#verify-result').textContent='Calculating SHA-256…';try{const bytes=await file.arrayBuffer();const hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');if(version!==verifyVersion)return;const matches=db.catalog.files.filter(f=>f.sha256===hash&&f.bytes===file.size);$('#verify-result').textContent=matches.length?'Verified exact match: '+matches.map(f=>f.path).join(', '):'No exact match in this catalog. The file may be renamed and changed, from another edition, or incomplete; compare its source before using it.';}catch{if(version===verifyVersion)$('#verify-result').textContent='Browser verification is unavailable. Download SHA256SUMS.txt and verify with a local checksum tool.'}};
 }
 document.addEventListener('keydown',e=>{const readerId=location.hash.match(/^#\/reader\/(lp[12]-\d{2})(?:[?]|$)/)?.[1];if(!readerId||!db?.pages||$('#image-dialog').open||e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||e.target.closest('input,select,textarea,button,[contenteditable]'))return;const i=db.pages.findIndex(p=>p.id===readerId);if(i<0)return;const next=e.key==='ArrowRight'?db.pages[i+1]:e.key==='ArrowLeft'?db.pages[i-1]:null;if(next){e.preventDefault();location.hash='/reader/'+next.id}});
-
-matchMedia('(max-width:900px)').addEventListener('change',e=>{if(e.matches&&readerView==='compare')document.querySelector('[data-reader-view="image"]')?.click()});

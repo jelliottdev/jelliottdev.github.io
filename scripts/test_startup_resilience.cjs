@@ -32,7 +32,7 @@ const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
    if(item.notice){
     await page.goto(base+'#/'+item.notice);
     await page.waitForSelector('.data-notice');
-    assert((await page.locator('.data-notice').innerText()).includes('temporarily unavailable'),`${item.asset}: omission disclosed`);
+    assert((await page.locator('.data-notice').innerText()).includes('could not be loaded'),`${item.asset}: omission disclosed`);
    }
    await page.goto(base+'#/'+item.healthy);
    await page.waitForFunction(()=>!document.querySelector('#main .loading'));
