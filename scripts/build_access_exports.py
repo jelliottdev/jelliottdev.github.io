@@ -184,6 +184,7 @@ for record in read('data/evidence/artwork-sources.json')['records']:
 register('exports/emirp-chain-audit.json','Emirp chain audit')
 register('exports/grid-binary-audit.json','Grid binary audit')
 register('exports/jpeg-byte-audit.json','JPEG byte audit')
+register('exports/jpeg-byte-audit-lp1.json','First-release JPEG byte audit')
 register('exports/gap-file-sizes.json','Gap file-size audit')
 register('exports/branch-margin-alignment.json','Image window comparison')
 register('exports/figures/branch-alignment-overlay.png','Analysis figure')

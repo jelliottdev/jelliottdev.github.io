@@ -1,4 +1,4 @@
-"""Count original LP2 file bytes and inspect baseline JPEG frame headers.
+"""Count archived Liber Primus file bytes and inspect baseline JPEG frame headers.
 
 Python standard library only. Does not decode pixels or extract hidden data.
 The narrow marker parser fails on unexpected framing rather than guessing.
@@ -11,6 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPORT = "exports/jpeg-byte-audit.json"
+LP1_REPORT = "exports/jpeg-byte-audit-lp1.json"
 
 
 def header(data):
@@ -41,15 +42,17 @@ def header(data):
     raise ValueError("No start-of-scan header")
 
 
-def report():
+def report(release="lp2"):
+    if release not in ("lp1", "lp2"):
+        raise ValueError("release must be lp1 or lp2")
     files = []
-    for number in range(58):
-        path = f"images/lp2-{number:02}.jpg"
+    for number in range(17 if release == "lp1" else 58):
+        path = f"images/{release}-{number:02}.jpg"
         data = (ROOT / path).read_bytes()
         frame, scan_start = header(data)
         counts = Counter(data)
         maximum = max(counts.values())
-        files.append({"page": f"lp2-{number:02}", "path": path,
+        files.append({"page": f"{release}-{number:02}", "path": path,
                       "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data),
                       "frame": frame, "first_scan_data_offset": scan_start,
                       "modal_bytes_hex": [f"{v:02X}" for v in range(256) if counts[v] == maximum],
@@ -57,20 +60,22 @@ def report():
                       "zeros_before_first_scan": data[:scan_start].count(0),
                       "byte_counts_00_through_ff": [counts[v] for v in range(256)]})
     return {"schema": "liberpedia-jpeg-byte-audit-v1",
-            "scope": "All 58 archived LP2 JPEG files, complete encoded-file bytes, not decoded pixels or rune indices.",
-            "limits": "No randomness test, encoder attribution, hidden-message extraction or LP1 audit.",
+            "scope": f"All {len(files)} archived {release.upper()} JPEG files, complete encoded-file bytes, not decoded pixels or rune indices.",
+            "limits": "No randomness test, encoder attribution or hidden-message extraction. Release identifiers are zero-based and may differ from historical one-based references.",
             "files": files}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--release", choices=("lp1", "lp2"), default="lp2")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    result = report()
+    result = report(args.release)
     if args.check:
-        assert result == json.loads((ROOT / REPORT).read_text(encoding="utf-8"))
-        print("PASS: all 58 byte histograms, hashes and baseline frame headers")
+        expected = LP1_REPORT if args.release == "lp1" else REPORT
+        assert result == json.loads((ROOT / expected).read_text(encoding="utf-8"))
+        print(f"PASS: all {len(result['files'])} {args.release.upper()} byte histograms, hashes and baseline frame headers")
     if args.output:
         with args.output.open("x", encoding="utf-8", newline="\n") as handle:
             json.dump(result, handle, indent=2)

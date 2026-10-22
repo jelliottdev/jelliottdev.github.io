@@ -183,12 +183,12 @@
         "sha256": "71d0dd97e1e57fa6a8c5f044243ba447c53935343c93936cc4f9fa89d9fb4ff3"
       },
       "reported_idea": "Enumerate 64 settings of six F positions under two ciphertext-autokey interruption rules and compare periodic IoC, especially a reported period-13 peak.",
-      "coverage": "Two published LP2-54–55 records test specific skip and reset variants. They do not verify every original plot or the reported 64-configuration periodic-IoC comparison.",
+      "coverage": "Two published, independently checked records enumerate all 64 masks of the six fixed F positions, periods 2–30, for explicit ciphertext-autokey reset and skip rules. Both find an unmasked period-13 peak that does not exceed their matched search controls. These are new implementations; the source scripts and plots were not supplied.",
       "related_records": [
         "lp2-54-55-autokey-skip",
         "lp2-54-55-autokey-reset"
       ],
-      "replay_needed": "Recover the original code/graphs or transcribe both exact recurrences, fix the F coordinate list and IoC denominator, replay all 64 masks, and compare the selected maximum with position-matched interrupter controls.",
+      "replay_needed": "Recover the reported source code and plots to determine its exact recurrence, period range, IoC denominator and position conventions. Compare those original outputs directly with the published reset and skip traces; do not attribute our controlled p-values to the historical post.",
       "status": "partial"
     },
     {
@@ -428,10 +428,13 @@
         "public_url": "https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved"
       },
       "reported_idea": "Classify JPEG byte-value histograms into null-heavy and more even-looking sets; the report names LP2-00, 04, 24 and 26 as the latter and asks whether encoding mode explains the grouping.",
-      "coverage": "The archive pins JPEGs and audits metadata and file sizes, but has not reproduced the original per-byte histogram classification on the exact cited source files.",
+      "coverage": "The archived-file audit now counts all 256 byte values for all 58 LP2 and 17 LP1 JPEGs. Its LP2 four-page nonzero-mode set matches the report (00, 04, 24, 26); LP1-00 and LP1-02 likewise match its one-based Page 1 and Page 3 labels. JPEG frame components show the simple grayscale-versus-colour explanation does not fit these files. The exact 2023 source revision and missing histogram screenshots remain unverified.",
       "related_records": [],
-      "replay_needed": "Pin hashes of the cited JPEG versions, compute all 256 byte-value counts per file, specify a quantitative grouping statistic and JPEG encoding metadata, then compare solved and unsolved page sets without manual histogram labels.",
-      "status": "not-replayed"
+      "replay_needed": "Recover or pin the cited repository revision and original screenshots to compare byte-for-byte inputs and subjective “null-star” categories. Any proposed encoded message needs a fixed extraction rule and matched controls; the histogram grouping alone is not one.",
+      "status": "partial",
+      "related_guides": [
+        "jpeg-byte-distribution"
+      ]
     },
     {
       "id": "lp2-54-header-autokey-crib",
@@ -1010,6 +1013,33 @@
       "related_guides": [
         "prime-sums"
       ]
+    },
+    {
+      "id": "poster-coordinate-signpost-search",
+      "title": "Transform earlier poster coordinates to search for the signpost",
+      "phrases": [
+        "signpost coordinates",
+        "poster location inversion",
+        "swap latitude longitude",
+        "invert poster coordinates"
+      ],
+      "family": "geometry",
+      "pages": [],
+      "source": {
+        "title": "Mixed solver discussion on word stitching and signpost locations",
+        "author": "Zaveon Carlio and participants",
+        "reported": "2026-10-08",
+        "attachment_id": "35713cca-a62e-4180-9393-5bc183c70362",
+        "sha256": "d224f84f997324b2af592eb546ba1ea6e480a70d246b45b0231ef34d03b82bcd"
+      },
+      "reported_idea": "Apply two proposed coordinate transforms—swap latitude and longitude, or invert coordinate signs—to known Cicada poster locations, then inspect transformed places for the source of a signpost photograph. The shared text describes a manual map search but contains image placeholders instead of the input coordinates or mapped results.",
+      "coverage": "The signpost imagery is catalogued separately. No archived result verifies a transformed poster coordinate as the photograph location, and the supplied text does not give the coordinate list required to repeat its map search.",
+      "related_records": [],
+      "related_guides": [
+        "branches"
+      ],
+      "replay_needed": "Recover the exact poster-location list, coordinate format, transform order and reported map results. Reject invalid latitude/longitude after swapping; define a geographic matching radius and independently identifiable signpost features before searching. Retain every transformed point, including misses, and compare with untransformed and matched random locations.",
+      "status": "not-replayed"
     }
   ],
   "screening_queue": [
@@ -1018,13 +1048,6 @@
       "sha256": "5044a16de1fa6652048f101a2e921c27ce4b3fcef22e0c97773abc88ee408156",
       "label": "Bible-book coordinate suggestion",
       "next_check": "Book/coordinate rule and cited passage need extraction.",
-      "triage_lane": "extract-new"
-    },
-    {
-      "attachment_id": "35713cca-a62e-4180-9393-5bc183c70362",
-      "sha256": "d224f84f997324b2af592eb546ba1ea6e480a70d246b45b0231ef34d03b82bcd",
-      "label": "Signpost coordinate reflections",
-      "next_check": "The per-word cipher search is recorded; extract the poster-coordinate swaps and sign inversions as a distinct historical-puzzle test.",
       "triage_lane": "extract-new"
     },
     {

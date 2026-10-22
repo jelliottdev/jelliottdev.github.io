@@ -25,6 +25,12 @@ LP2-24 is the one-component member of the four-page group. LP2-00, 04 and 26 hav
 
 The JFIF 1.02 specification defines one component as Y and three components as Y, Cb and Cr. A decoder can present the latter as RGB pixels. Component count, decoder output mode and the visible amount of colour are different descriptions: a three-component image can still look nearly monochrome.
 
+The first-release comparison
+
+The historical report also lists sixteen solved-page files, numbering them from 1. Our archive labels the first-release images LP1-00 through LP1-16, starting at zero. In that naming, LP1-00 and LP1-02 have 28 as their most frequent byte; the other fifteen have 00. Thus the two nonzero-mode files agree with the reported “Page 1” title and “Page 3” Intus grouping after the one-based to zero-based conversion. The report did not classify the seventeenth archived first-release file separately, so this is an archive-wide extension, not an exact replay of its sixteen-row list.
+
+Every one of the seventeen archived LP1 JPEGs has three components in its baseline frame header. Their zero-byte shares range from about 3.32% to 18.79%; a 00 mode is not a literal majority of file bytes. The report marked some of its zero-mode LP1 pages as visually more irregular. A modal-byte check does not reproduce those subjective subcategories, and the source screenshots are absent from the supplied transcript.
+
 Where are the zero bytes?
 
 The report locates the end of the first start-of-scan header and counts zero bytes before that offset. In every file, more than 92.6% of its zero bytes occur after that point. The zeros are therefore not confined to the initial metadata and table headers.
@@ -33,15 +39,15 @@ This offset split does not decode the compressed scan, isolate every later marke
 
 Reproduce the measurements
 
-Run python scripts/audit_jpeg_bytes.py --check from the repository. For a standalone reproduction, extract the reference-data bundle and original-images bundle into the same directory first. The script needs only Python 3 and makes no network requests.
+Run python scripts/audit_jpeg_bytes.py --check for LP2, then python scripts/audit_jpeg_bytes.py --release lp1 --check for LP1. For a standalone reproduction, extract the reference-data bundle and original-images bundle into the same directory first. The script needs only Python 3 and makes no network requests.
 
-The JSON report contains all 256 counts for each file, byte length, SHA-256 hash, frame dimensions, component count and first scan-data offset. Counts are ordered from 00 through FF. Use --output my-jpeg-byte-audit.json to save a fresh report; existing outputs are protected from overwrite.
+The LP2 report and LP1 report contain all 256 counts for each file, byte length, SHA-256 hash, frame dimensions, component count and first scan-data offset. Counts are ordered from 00 through FF. Use --output my-jpeg-byte-audit.json to save a fresh report; existing outputs are protected from overwrite.
 
-The marker reader is intentionally scoped to these baseline JPEG headers. It rejects unsupported framing instead of interpreting arbitrary files as successful measurements. Its component counts and dimensions were independently cross-checked against Pillow for all 58 originals; that cross-check does not require Pillow to run the downloadable audit.
+The marker reader is intentionally scoped to these baseline JPEG headers. It rejects unsupported framing instead of interpreting arbitrary files as successful measurements. Its component counts and dimensions were independently cross-checked against Pillow for all 75 archived originals; that cross-check does not require Pillow to run the downloadable audit.
 
 What this establishes—and what remains open
 
-This audit establishes the modal-byte grouping and disproves the simple grayscale explanation. It does not establish a hidden message, author intention, random generation, a date encoded by page numbers, or an exhaustive absence of hidden data. It also does not cover LP1, whose numbering and source-file mapping need a separate specification.
+This audit establishes the modal-byte grouping in both releases and disproves the simple grayscale explanation for the archived LP2 files. It does not establish a hidden message, author intention, random generation, a date encoded by page numbers, or an exhaustive absence of hidden data. The original report named a particular external image repository; its exact 2023 revision and histogram screenshots have not been recovered, so agreement of these archived files does not establish byte-for-byte identity with every historical input.
 
 A follow-up experiment should freeze the file set and representation, identify the proposed encoding mechanism, and declare the controls before searching for significance. Keep re-encoded derivatives separate from original files and record the encoder and settings. If investigating steganography, use a specified extraction method and validation criterion; a histogram alone does not extract a payload.
 
@@ -64,8 +70,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/downloads/original-images.zip
 - script
   https://jelliottdev.github.io/scripts/audit_jpeg_bytes.py
-- JSON report
+- LP2 report
   https://jelliottdev.github.io/exports/jpeg-byte-audit.json
+- LP1 report
+  https://jelliottdev.github.io/exports/jpeg-byte-audit-lp1.json
 - line gaps and file sizes
   https://jelliottdev.github.io/reference/articles/line-gaps.html
 - decoded image-region measurements
