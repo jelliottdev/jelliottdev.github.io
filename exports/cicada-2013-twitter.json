@@ -34,7 +34,8 @@
   "outguess_payload": {
     "archived_bytes": 1443,
     "sha256": "a7ff511db6bd352be0f41f1f512df127fa06b9e7f598bf072cd1b083be3b40fc",
-    "fresh_retest_receipt": "exports/cicada-2013-twitter-outguess.json"
+    "fresh_retest_receipt": "exports/cicada-2013-twitter-outguess.json",
+    "signature_receipt": "exports/cicada-2013-twitter-signature.json"
   },
   "whitespace": {
     "rule": "Each nonempty space/tab-only payload row is read left to right; space=0, tab=1; consecutive groups of eight bits form ASCII bytes.",
@@ -52,5 +53,5 @@
       "3301"
     ]
   },
-  "limits": "This replays preserved archived bytes and the hidden whitespace text. It does not authenticate the PGP signature, recreate the live 2013 Twitter feed, or contact the historical onion service."
+  "limits": "This replays preserved archived bytes and the hidden whitespace text. Signature verification is separately recorded; the replay does not recreate the live 2013 Twitter feed or contact the historical onion service."
 }

@@ -211,7 +211,7 @@ for path in ['exports/cicada-2013-liber-al.json','scripts/replay_2013_liber_al.p
 for path in ['exports/cicada-2013-opening.json','scripts/replay_2013_opening.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
  files[-1].update(guide='2013-opening',aliases=['2013 opening','232.jpg','OutGuess book riddle','2013 signed payload'])
-for path in ['exports/cicada-2013-twitter.json','exports/cicada-2013-twitter-outguess.json','exports/figures/cicada-2013-twitter-chain.svg','scripts/replay_2013_twitter.py','scripts/test_replay_2013_twitter.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013-twitter').iterdir())]:
+for path in ['exports/cicada-2013-twitter.json','exports/cicada-2013-twitter-outguess.json','exports/cicada-2013-twitter-signature.json','exports/figures/cicada-2013-twitter-chain.svg','scripts/replay_2013_twitter.py','scripts/test_replay_2013_twitter.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/cicada-2013-twitter').iterdir())]:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical puzzle reconstruction')
  files[-1].update(guide='2013-twitter-gematria',aliases=['2013 Twitter','761.mp3','Gematria Primus origin','twitter.bin','gematria.jpg'])
 for path in ['exports/cicada-2012-blake.json','scripts/replay_2012_blake.py'] + [p.relative_to(root).as_posix() for p in sorted((root/'exports/sources/blake-2012').iterdir())]:

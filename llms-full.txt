@@ -6233,6 +6233,8 @@ Each link below opens a worked step with preserved inputs and a downloadable rep
 
 	2013 Twitter to Gematria	988 offset records, audio XOR and OutGuess payload	Sort the hex offsets before reassembly; the XOR uses only the audio prefix.
 
+	2014 opening JPEG	Original image, signed hidden message and Emerson coordinates	Its book code precedes the compasses collage.
+
 	2014 Emerson	The historical book-cipher control	Use the declared paragraph, sentence, word and letter rules.
 
 
@@ -6257,7 +6259,7 @@ The archived Instar Emergence audio connects to material discussed in the later 
 
 2014: the route into Liber Primus
 
-The archived opening uses an image payload and a book code for Emerson’s Self-Reliance. Our Emerson guide and reproduction record expose the exact source and all lookups. A stage-organized contemporary repository preserves later work on RSA, matrices, Vigenère, transposition and another book-code step. Its historical “unsolved” labels describe that archive’s state, not an automatic current verdict.
+The archived opening JPEG uses a hidden signed message and a book code for Emerson’s Self-Reliance. Our Emerson guide and reproduction record expose the exact source and all lookups. A stage-organized contemporary repository preserves later work on RSA, matrices, Vigenère, transposition and another book-code step. Its historical “unsolved” labels describe that archive’s state, not an automatic current verdict.
 
 For the manuscript itself, use the release and numbering guide, known readings, and original-page reader. The later-message guide continues beyond the 2014 releases.
 
@@ -6286,6 +6288,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#liber-al-replay
 - 2013 Twitter to Gematria; Twitter-to-Gematria replay
   https://jelliottdev.github.io/reference/articles/2013-twitter-gematria.html
+- 2014 opening JPEG; archived opening JPEG
+  https://jelliottdev.github.io/reference/articles/opening-2014.html
 - 2014 Emerson; reproduction record
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
 - contemporary solver account
@@ -7728,7 +7732,7 @@ The JPEG produced by the XOR. Its visible table gives the Gematria Primus alphab
 
 3. Extract the concealed signed text
 
-A fresh outguess -r gematria.jpg extracted.asc run recovered 1,443 bytes. They match the archive’s gematria.jpg.asc exactly. The run reported seed 17; the retest receipt records the executable, input and output hashes. OutGuess is a separate layer from the audio XOR. Our byte check does not verify the PGP signature attached to the extracted text.
+A fresh outguess -r gematria.jpg extracted.asc run recovered 1,443 bytes. They match the archive’s gematria.jpg.asc exactly. The run reported seed 17; the retest receipt records the executable, input and output hashes. OutGuess is a separate layer from the audio XOR. A separate GPG check of those same signed bytes succeeded against the preserved public key, fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. The signature receipt records the key, payload and GPG hashes. This authenticates the payload against that key; the key is not independently certified to a real-world identity.
 
 Four nonempty rows of the payload contain only spaces and tabs. Reading a space as 0 and a tab as 1, then grouping every eight bits as an ASCII byte, yields:
 
@@ -7742,9 +7746,9 @@ The four rows contain 240, 200, 80 and 32 bits respectively. The address is a hi
 
 Reproduce and inspect the limits
 
-Download the reference-data bundle, extract it, and run python scripts/replay_2013_twitter.py --check. It verifies the five source files against both SHA-256 and their pinned Git blob hashes, checks row coverage, reassembles the byte stream, repeats the XOR and decodes the whitespace message. Run python scripts/test_replay_2013_twitter.py for an independent byte-by-byte assembly and reverse-XOR check. If you have OutGuess, add --outguess path/to/outguess to the first command to re-extract and compare the hidden payload.
+Download the reference-data bundle, extract it, and run python scripts/replay_2013_twitter.py --check. It verifies the five source files against both SHA-256 and their pinned Git blob hashes, checks row coverage, reassembles the byte stream, repeats the XOR and decodes the whitespace message. Run python scripts/test_replay_2013_twitter.py for an independent byte-by-byte assembly and reverse-XOR check. If you have OutGuess, add --outguess path/to/outguess to re-extract the hidden payload. To verify its signature too, add --gpg path/to/gpg; the script imports the saved key into a temporary isolated keyring and checks the published signature receipt.
 
-Replay script · Independent checker · Machine-readable result. The archive, rather than a captured live 2013 feed, is the input to these checks. The result shows how this copy of the Gematria table was produced and how its hidden message was read; it does not establish how the feed was populated in real time, authenticate the signed message, or imply a key for the unsolved Liber Primus pages.
+Replay script · Independent checker · Machine-readable result. The archive, rather than a captured live 2013 feed, is the input to these checks. The result shows how this copy of the Gematria table was produced and how its hidden message was read and verified; it does not establish how the feed was populated in real time or imply a key for the unsolved Liber Primus pages.
 
 Sources, related references, and files
 - archived account of the Twitter stage
@@ -7771,6 +7775,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/gematria.jpg.asc
 - retest receipt
   https://jelliottdev.github.io/exports/cicada-2013-twitter-outguess.json
+- preserved public key
+  https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- signature receipt
+  https://jelliottdev.github.io/exports/cicada-2013-twitter-signature.json
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Replay script

@@ -11,6 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 HERE = ROOT / 'exports/sources/cicada-2013-twitter'
 REPORT = ROOT / 'exports/cicada-2013-twitter.json'
 FIGURE = ROOT / 'exports/figures/cicada-2013-twitter-chain.svg'
+SIGNATURE_REPORT = ROOT / 'exports/cicada-2013-twitter-signature.json'
+PUBLIC_KEY = ROOT / 'exports/steganography/cicada-public-key.asc'
+FINGERPRINT = '6D854CD7933322A601C3286D181F01E57A35090F'
 
 
 def sha256(raw):
@@ -113,10 +116,11 @@ def report():
                 'matches_archived_gematria_jpeg': True, 'jpeg_dimensions': jpeg_size(jpeg)},
         'outguess_payload': {'archived_bytes': len(assets['gematria.jpg.asc']),
                              'sha256': sha256(assets['gematria.jpg.asc']),
-                             'fresh_retest_receipt': 'exports/cicada-2013-twitter-outguess.json'},
+                             'fresh_retest_receipt': 'exports/cicada-2013-twitter-outguess.json',
+                             'signature_receipt': 'exports/cicada-2013-twitter-signature.json'},
         'whitespace': {'rule': 'Each nonempty space/tab-only payload row is read left to right; space=0, tab=1; consecutive groups of eight bits form ASCII bytes.',
                        'rows': len(lengths), 'bits_per_row': lengths, 'decoded_lines': message},
-        'limits': 'This replays preserved archived bytes and the hidden whitespace text. It does not authenticate the PGP signature, recreate the live 2013 Twitter feed, or contact the historical onion service.'
+        'limits': 'This replays preserved archived bytes and the hidden whitespace text. Signature verification is separately recorded; the replay does not recreate the live 2013 Twitter feed or contact the historical onion service.'
     }
 
 
@@ -157,11 +161,48 @@ def check_outguess(executable, assets):
         print(f'PASS: fresh OutGuess output matches {len(assets["gematria.jpg.asc"])} archived bytes; executable SHA-256 {sha256(Path(executable).read_bytes())}')
 
 
+def verify_signature(executable, signed_bytes):
+    if not executable.is_file():
+        raise ValueError('GPG executable not found')
+    public_key = PUBLIC_KEY.read_bytes()
+    if sha256(public_key) != '1e1992b73916c356ffda19c3c1cbdfb206e6318910b0f502aa1e6e49a1fa41c7':
+        raise ValueError('Preserved public key hash changed')
+    with tempfile.TemporaryDirectory(prefix='liberpedia-2013-twitter-gpg-') as directory:
+        home = Path(directory) / 'keyring'
+        home.mkdir()
+        payload = Path(directory) / 'gematria.jpg.asc'
+        payload.write_bytes(signed_bytes)
+        prefix = [str(executable.resolve()), '--no-options', '--homedir', str(home), '--batch',
+                  '--no-tty', '--no-auto-key-retrieve']
+        imported = subprocess.run(prefix + ['--import', str(PUBLIC_KEY)], capture_output=True,
+                                  text=True, errors='replace', timeout=30)
+        if imported.returncode:
+            raise RuntimeError('Could not import the preserved public key')
+        checked = subprocess.run(prefix + ['--status-fd', '1', '--verify', str(payload)],
+                                 capture_output=True, text=True, errors='replace', timeout=30)
+    valid = checked.returncode == 0 and f'[GNUPG:] VALIDSIG {FINGERPRINT}' in checked.stdout
+    if not valid:
+        raise RuntimeError('The payload signature did not verify with the preserved key')
+    return {
+        'schema': 'liberpedia-2013-twitter-signature-v1',
+        'payload_path': 'exports/sources/cicada-2013-twitter/gematria.jpg.asc',
+        'payload_sha256': sha256(signed_bytes),
+        'public_key_path': 'exports/steganography/cicada-public-key.asc',
+        'public_key_sha256': sha256(public_key),
+        'gpg_executable_sha256': sha256(executable.read_bytes()),
+        'valid_signature': True,
+        'fingerprint': FINGERPRINT,
+        'key_trust': 'not independently certified',
+        'scope': 'Verifies the archived payload, which the separate OutGuess receipt matched byte for byte. It does not establish who controlled the key or reconstruct the live feed.'
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--write', action='store_true', help='Regenerate report and SVG')
     parser.add_argument('--check', action='store_true', help='Verify report and SVG byte for byte')
     parser.add_argument('--outguess', type=Path, help='Optionally rerun extraction with this executable')
+    parser.add_argument('--gpg', type=Path, help='Optionally verify the archived signed payload in an isolated keyring')
     args = parser.parse_args()
     result = report()
     output = (json.dumps(result, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
@@ -178,6 +219,14 @@ def main():
     if args.outguess:
         assets, _ = verify_sources()
         check_outguess(args.outguess, assets)
+    if args.gpg:
+        assets, _ = verify_sources()
+        receipt = (json.dumps(verify_signature(args.gpg, assets['gematria.jpg.asc']), indent=2) + '\n').encode('utf-8')
+        if args.write:
+            SIGNATURE_REPORT.write_bytes(receipt)
+        elif args.check:
+            assert SIGNATURE_REPORT.read_bytes() == receipt
+        print(f'PASS: payload signature verifies with {FINGERPRINT}')
 
 
 if __name__ == '__main__':
