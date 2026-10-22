@@ -28,6 +28,9 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
       const displayedRows = await page.locator('.route-trace tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent.trim())));
       assert.deepEqual(displayedRows, expectedRows);
       assert.equal(await page.locator('.route-demo-table tbody tr').count(), 4);
+      assert(await page.evaluate(() => document.querySelector('#experiment-scope').compareDocumentPosition(document.querySelector('.route-demo')) & Node.DOCUMENT_POSITION_FOLLOWING));
+      const exactScope = page.locator('.experiment-article details').filter({has: page.getByText('Exclusions and exact method', {exact: true})}).first();
+      assert.equal(await exactScope.getAttribute('open'), null);
       assert.match(await page.locator('.route-demo-reading').innerText(), /2 → 8 → 27 → 20/);
       await page.getByRole('button', {name: 'Rows first'}).click();
       await page.getByRole('button', {name: 'Alternate direction'}).click();
@@ -91,6 +94,20 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
     assert.equal(visibleScope.includes('bdc1810e59cb1152'), false);
     assert.match(await outguess.locator('.experiment-figure figcaption').first().innerText(), /Bar lengths count images/);
     await outguess.close();
-    console.log('PASS: experiment layout at 320, 390 and 1280px; route and width visuals match saved results.');
+    for (const width of [320, 390, 1280]) {
+      const page = await browser.newPage({viewport: {width, height: 844}});
+      await page.goto(base + '#/experiments/parallel-language-blocks');
+      await page.waitForSelector('.language-block-figure');
+      assert.equal(await page.locator('.language-block-figure tbody tr').count(), 8);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px language figure overflow`);
+      await page.getByRole('button', {name: 'GP grouping'}).click();
+      assert.match(await page.locator('.language-block-figure tbody tr').first().innerText(), /0\.12385/);
+      assert.equal(await page.locator('.language-block-figure button[aria-pressed="true"]').innerText(), 'GP grouping');
+      await page.getByRole('button', {name: 'Letters', exact: true}).click();
+      await page.evaluate(() => { document.activeElement.blur(); scrollTo(0, 0); });
+      await page.screenshot({path: path.join(output, `language-blocks-${width}.png`), fullPage: true});
+      await page.close();
+    }
+    console.log('PASS: experiment layout at 320, 390 and 1280px; route, width, and language visuals match saved results.');
   } finally { await browser.close(); }
 })().catch(error => {console.error(error); process.exit(1)});

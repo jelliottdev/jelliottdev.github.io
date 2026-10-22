@@ -18,7 +18,7 @@ async function checkNavigationRace(oldRequestFails){
  const pending=new Map();
  const main={innerHTML:'',focus(){},querySelector(){return {textContent:this.innerHTML}}};
  const sandbox={
-  db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},main,renderId:0,URLSearchParams,
+  db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},optionalLoads:{},main,renderId:0,URLSearchParams,
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
   window:{scrollTo(){},matchMedia:()=>({addEventListener(){}})},
@@ -36,8 +36,10 @@ async function checkNavigationRace(oldRequestFails){
  vm.runInContext(app.slice(start,end),sandbox);
  vm.runInContext('wikiPage=id=>db.articles.find(a=>a.id===id).html',sandbox);
  const older=vm.runInContext('route()',sandbox);
+ await new Promise(resolve=>setImmediate(resolve));
  sandbox.location.hash='#/wiki/newer';
  const newer=vm.runInContext('route()',sandbox);
+ await new Promise(resolve=>setImmediate(resolve));
  pending.get('articles/newer.html').resolve({ok:true,text:async()=> 'Newer guide'});
  await newer;
  assert.equal(main.innerHTML,'Newer guide');

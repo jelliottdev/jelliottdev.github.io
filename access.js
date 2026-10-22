@@ -1,4 +1,17 @@
-let readerMode='raw',readerSize=20,readerView=null;
+let readerMode='raw',readerSize=Number(localStorage.getItem('liberpedia-reader-size'))||20,readerView=localStorage.getItem('liberpedia-reader-view')||null;
+let readerPositions={image:null,text:null,compare:null},readerPositionPage=null;
+let readerScrollController=null;
+function refreshReaderSupplementary(){
+ const id=location.hash.match(/^#\/reader\/([^?]+)/)?.[1],p=id&&currentPage?.id===id?currentPage:null;
+ if(!p)return;
+ const guide=p.reading&&db.articles.find(a=>a.id==='reading-'+p.reading.section);
+ const links=document.getElementById('reader-reading-links');
+ if(links&&guide)links.innerHTML=`<a href="#/wiki/${esc(guide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(guide.id)}">Read the complete section</a><a href="#/wiki/${esc(guide.id)}?section=trace">Inspect the decoding trace</a>`;
+ const payload=document.getElementById('reader-payload-link');
+ if(payload&&db.payloads.records.some(r=>r.page===id))payload.innerHTML=`<a href="${link(p)}?section=embedded">Signed OutGuess payload</a>`;
+ const notice=partialDataNotice(['payloads']);
+ if(notice&&!document.querySelector('.manuscript-reader .data-notice'))document.querySelector('.manuscript-reader')?.insertAdjacentHTML('afterbegin',notice);
+}
 const fileSize=n=>n>=1048576?`${(n/1048576).toFixed(1)} MB`:n>=1024?`${(n/1024).toFixed(1)} KB`:`${n} bytes`;
 async function readerPage(id,version){
  let p=cache.get(id);if(!p){const response=await fetch(`data/pages/${id}.json`,{cache:"no-cache"});if(!response.ok)throw Error('The reader could not load this page.');p=await response.json();cache.set(id,p)}if(version!==renderId)return;currentPage=p;
@@ -17,8 +30,10 @@ async function readerPage(id,version){
  }
  document.body.classList.remove('reader-search-open');searchToggle.setAttribute('aria-expanded','false');
  const i=db.pages.findIndex(x=>x.id===id),prev=db.pages[i-1],next=db.pages[i+1];
- const readingGuide=p.reading&&db.articles.find(a=>a.id==='reading-'+p.reading.section);
- if(!readerView)readerView=matchMedia('(max-width:900px)').matches?'image':'compare';
+ if(readerPositionPage!==id){readerPositions={image:null,text:null,compare:null};readerPositionPage=id}
+ const requestedView=new URLSearchParams(location.hash.split('?')[1]||'').get('view');
+ if(['image','text','compare'].includes(requestedView))readerView=requestedView;
+ if(!readerView)readerView=main.clientWidth>=760?'compare':'image';
  main.innerHTML=`<div class="manuscript-reader">
  <header class="reader-heading"><h1>Manuscript reader</h1><a href="${link(p)}">Page record ↗</a></header>
  <div class="reader-toolbar">
@@ -42,18 +57,34 @@ async function readerPage(id,version){
  <div class="reader-version"><label for="reader-mode">Text version</label><select id="reader-mode">${p.visible_text?'<option value="visible">Visible Latin text</option>':'<option value="raw">Archived runes</option><option value="latin">Latin rune labels</option>'}${p.reviewed_text?'<option value="reviewed">Reviewed runes</option>':''}${p.reading?'<option value="literal">Literal known reading</option><option value="context">Contextual whole-section reading</option>':''}</select></div>
  <div class="reader-type-size"><label for="reader-size">Text size</label><input id="reader-size" type="range" min="16" max="32" value="${readerSize}"><output id="reader-size-value">${readerSize}px</output></div>
  <p id="reader-text-note" class="small muted"></p>
- ${readingGuide?`<p class="reader-text-links reader-reading-links"><a href="#/wiki/${esc(readingGuide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(readingGuide.id)}">Read the complete section</a><a href="#/wiki/${esc(readingGuide.id)}?section=trace">Inspect the decoding trace</a></p>`:''}
+ <p id="reader-reading-links" class="reader-text-links reader-reading-links"></p>
  <pre id="reader-text"></pre>
  <p class="reader-text-links"><a href="${link(p)}?section=transcription">Transcription notes</a> · <a href="${link(p)}?section=page-sources">Sources</a></p>
  </section></div>
- <footer class="reader-resources">${id==='lp1-10'?'<a href="exports/sources/cicada-2014-sixth-onion/10-page.jpg" download="lp1-10-page.jpg">Download page-only JPEG</a><a href="images/lp1-10.jpg" download="lp1-10-carrier.jpg">Download four-page carrier</a>':p.release==='LP2'?`<a href="images/${id}.jpg" download="${id}-wiki.jpg">Download wiki JPEG</a><a href="exports/sources/cicada-2014-seventh-onion/${p.release_index}.jpg" download="${id}-2014-archive.jpg">Download archived JPEG</a><a href="#/wiki/2014-seventh-onion">Compare versions</a>`:`<a href="images/${id}.jpg" download="${id}.jpg">Download original JPEG</a>`}<a href="#/downloads/${id}">All page files & checksums</a>${db.payloads.records.some(r=>r.page===id)?`<a href="${link(p)}?section=embedded">Signed OutGuess payload</a>`:''}<span>Page ${i+1} of ${db.pages.length} · <a href="#/numbering">Numbering guide</a></span></footer></div>`;
+ <footer class="reader-resources">${id==='lp1-10'?'<a href="exports/sources/cicada-2014-sixth-onion/10-page.jpg" download="lp1-10-page.jpg">Download page-only JPEG</a><a href="images/lp1-10.jpg" download="lp1-10-carrier.jpg">Download four-page carrier</a>':p.release==='LP2'?`<a href="images/${id}.jpg" download="${id}-wiki.jpg">Download wiki JPEG</a><a href="exports/sources/cicada-2014-seventh-onion/${p.release_index}.jpg" download="${id}-2014-archive.jpg">Download archived JPEG</a><a href="#/wiki/2014-seventh-onion">Compare versions</a>`:`<a href="images/${id}.jpg" download="${id}.jpg">Download original JPEG</a>`}<a href="#/downloads/${id}">All page files & checksums</a><span id="reader-payload-link"></span><span>Page ${i+1} of ${db.pages.length} · <a href="#/numbering">Numbering guide</a></span></footer></div>`;
  const select=$('#reader-mode');if([...select.options].some(o=>o.value===readerMode))select.value=readerMode;else {select.selectedIndex=0;readerMode=select.value;}
- const draw=()=>{readerMode=select.value;const vals={visible:p.visible_text?.text,raw:p.raw,latin:p.lines.map(l=>l.latin).join('\n'),reviewed:p.reviewed_text,literal:p.reading?.literal,context:p.reading?.reading};$('#reader-text').textContent=vals[readerMode]||'No text is stored for this version. The original image is the reference.';$('#reader-text').className=['raw','reviewed'].includes(readerMode)?'reader-runes':'';$('#reader-text').style.fontSize=readerSize+'px';$('#reader-text-note').textContent=readerMode==='visible'?p.visible_text.basis:readerMode==='context'?`Contextual English for the entire section: ${p.reading.section_pages.join(', ')}. This may extend beyond the displayed image.`:readerMode==='literal'?'Known decoded text, preserving literal Latin conventions.':readerMode==='reviewed'?'Reviewed derivative. The archived source remains available separately.':readerMode==='latin'?'Transliteration labels, not automatically plaintext. Standalone archive separators are omitted in this view.':'Archived transcription; includes editorial separators and line markers.';};select.onchange=draw;draw();$('#reader-size').oninput=e=>{readerSize=Number(e.target.value);$('#reader-size-value').textContent=readerSize+'px';draw()};
+ const draw=()=>{readerMode=select.value;const vals={visible:p.visible_text?.text,raw:p.raw,latin:p.lines.map(l=>l.latin).join('\n'),reviewed:p.reviewed_text,literal:p.reading?.literal,context:p.reading?.reading};$('#reader-text').textContent=vals[readerMode]||'No text is stored for this version. The original image is the reference.';$('#reader-text').className=['raw','reviewed'].includes(readerMode)?'reader-runes':'';$('#reader-text').style.fontSize=readerSize+'px';$('#reader-text-note').textContent=readerMode==='visible'?p.visible_text.basis:readerMode==='context'?`Contextual English for the entire section: ${p.reading.section_pages.join(', ')}. This may extend beyond the displayed image.`:readerMode==='literal'?'Known decoded text, preserving literal Latin conventions.':readerMode==='reviewed'?'Reviewed derivative. The archived source remains available separately.':readerMode==='latin'?'Transliteration labels, not automatically plaintext. Standalone archive separators are omitted in this view.':'Archived transcription; includes editorial separators and line markers.';};select.onchange=draw;draw();$('#reader-size').oninput=e=>{readerSize=Number(e.target.value);localStorage.setItem('liberpedia-reader-size',String(readerSize));$('#reader-size-value').textContent=readerSize+'px';draw()};
  const workspace=$('.reader-workspace');
+ const canCompare=()=>Boolean(document.querySelector('.manuscript-reader')?.clientWidth>=760);
  const setView=view=>{readerView=view;workspace.dataset.view=view;document.querySelectorAll('[data-reader-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.readerView===view));};
- if(matchMedia('(max-width:900px)').matches&&readerView==='compare')readerView='image';
+ if(readerView==='compare'&&!canCompare())readerView='image';
  setView(readerView);
- document.querySelectorAll('[data-reader-view]').forEach(b=>b.onclick=()=>{setView(b.dataset.readerView);window.scrollTo(0,0)});
+ readerScrollController?.abort();readerScrollController=new AbortController();
+ window.addEventListener('scroll',()=>{
+  if(!workspace.isConnected||window.scrollY===0)return;
+  readerPositions[readerView]=window.scrollY-(workspace.getBoundingClientRect().top+window.scrollY);
+ },{passive:true,signal:readerScrollController.signal});
+ refreshReaderSupplementary();
+ document.querySelectorAll('[data-reader-view]').forEach(b=>b.onclick=()=>{
+  const next=b.dataset.readerView;if(next==='compare'&&!canCompare())return;
+  const origin=workspace.getBoundingClientRect().top+window.scrollY;
+  if(window.scrollY>0)readerPositions[readerView]=window.scrollY-origin;
+  setView(next);localStorage.setItem('liberpedia-reader-view',next);
+  const url=new URL(location.href);url.hash=`/reader/${id}?view=${next}`;history.replaceState(null,'',url);
+  requestAnimationFrame(()=>window.scrollTo({top:Math.max(0,origin+(readerPositions[next]??0)),behavior:'instant'}));
+ });
+ const resizeObserver=new ResizeObserver(()=>{if(!workspace.isConnected){resizeObserver.disconnect();return}if(readerView==='compare'&&!canCompare())setView('image')});
+ resizeObserver.observe(document.querySelector('.manuscript-reader'));
  $('#reader-page').onchange=e=>location.hash='/reader/'+e.target.value;
  $('#reader-zoom').onclick=$('#reader-sheet').onclick=()=>openImage();
  const image=$('#reader-sheet img'),loading=$('.reader-image-loading'),imageError=$('.reader-image-error'),sheet=$('#reader-sheet'),zoomButton=$('#reader-zoom');

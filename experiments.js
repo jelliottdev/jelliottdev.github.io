@@ -36,6 +36,7 @@ async function experimentsPage(id, version, query='') {
     if (!record) throw Error('That experiment has no published record.');
     main.innerHTML = experimentArticle(record);
     bindRouteIllustration();
+    bindLanguageBlockFigure();
     return;
   }
   const endpoint=typeof assistantConfig.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
@@ -159,6 +160,29 @@ const widthSelectionComparison=[
   [32,"17834297/57182910",5],
   [64,"79242913/108463068",2044]
 ];
+// Median, minimum and maximum TV distance across the eight aligned blocks in
+// parallel-language-blocks/results.json. All eight languages use the same styling.
+const languageBlockSummary={
+  letters:[['English',.09233,.07102,.10345],['Finnish',.40709,.37258,.43160],['French',.18360,.17310,.20795],['German',.17495,.16957,.19606],['Italian',.23612,.22739,.24674],['Portuguese',.21583,.20072,.22998],['Spanish',.22712,.20906,.24017],['Welsh',.17915,.14159,.19403]],
+  folded:[['English',.09233,.07126,.10345],['Finnish',.40709,.37292,.43160],['French',.18360,.17310,.20795],['German',.17495,.16957,.19606],['Italian',.23612,.22739,.24674],['Portuguese',.21583,.20072,.22998],['Spanish',.22712,.20906,.24017],['Welsh',.17915,.14159,.19403]],
+  'gp-length':[['English',.12385,.09719,.14182],['Finnish',.39778,.36207,.41617],['French',.17898,.16829,.20280],['German',.17025,.16597,.19015],['Italian',.23215,.22472,.24111],['Portuguese',.20845,.19049,.21772],['Spanish',.21520,.19720,.22909],['Welsh',.17739,.15599,.18665]]
+};
+function languageBlockRows(mode){
+  return languageBlockSummary[mode].map(([language,median,minimum,maximum])=>`<tr><th scope="row">${esc(language)}</th><td><span class="language-block-value">${median.toFixed(5)}</span><span class="language-block-track" aria-hidden="true"><span style="width:${(median/.45*100).toFixed(1)}%"></span></span></td><td>${minimum.toFixed(5)}–${maximum.toFixed(5)}</td></tr>`).join('');
+}
+function languageBlockFigure(){
+  return `<figure class="experiment-figure language-block-figure"><figcaption><strong>Eight languages across eight aligned blocks.</strong> Each row shows the median word-length distance to the pooled LP2 text and the range across blocks. Lower means a closer distribution under this measure; it does not identify the plaintext language.</figcaption><div class="language-block-modes" role="group" aria-label="Word-length representation"><button type="button" data-language-mode="letters" aria-pressed="true">Letters</button><button type="button" data-language-mode="folded" aria-pressed="false">Accent-folded</button><button type="button" data-language-mode="gp-length" aria-pressed="false">GP grouping</button></div><div class="table-wrap"><table><thead><tr><th scope="col">Language</th><th scope="col">Median</th><th scope="col">Block range</th></tr></thead><tbody class="language-block-rows">${languageBlockRows('letters')}</tbody></table></div><p>All 1,012 evaluation sentences are used once per language. Blocks may share source articles, so they are not independent trials. <a href="experiments/records/parallel-language-blocks/results.json" download>Download all block scores</a>.</p></figure>`;
+}
+function bindLanguageBlockFigure(){
+  const figure=main.querySelector('.language-block-figure');
+  if(!figure)return;
+  figure.addEventListener('click',event=>{
+    const button=event.target.closest('button[data-language-mode]');
+    if(!button||!figure.contains(button))return;
+    figure.querySelectorAll('button[data-language-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+    figure.querySelector('.language-block-rows').innerHTML=languageBlockRows(button.dataset.languageMode);
+  });
+}
 function experimentVisual(r,v){
   if(r.id==='lp1-width-selection'&&v.path.endsWith('/width-comparison.svg')){
     const rows=widthSelectionComparison.map(([width,fraction,tail])=>{
@@ -195,11 +219,10 @@ function experimentVisual(r,v){
   return `<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`;
 }
 function experimentArticle(r){
-  const solving=['method','replay'].includes(r.record_type?.id);
   const pageLinks=experimentScopeLinks(r);
   const targets=r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks;
-  const fields=[['Targets',targets],['Tested bounds',esc(r.scope.parameters)],['Not covered',esc(r.scope.exclusions)]];
-  const exactFields=[['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)]];
+  const fields=[['Targets',targets],['Tested bounds',esc(r.scope.parameters)]];
+  const exactFields=[['Not covered',esc(r.scope.exclusions)],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)]];
   const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
@@ -213,9 +236,10 @@ function experimentArticle(r){
     <p class="experiment-mobile-jump"><a href="#/experiments/${esc(r.id)}?section=experiment-reproduce" data-anchor="experiment-reproduce">Jump to files and steps ↓</a></p>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
       <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
-      ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}
     </section>
-    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2>${solving?'':'<p class="small">This record does not establish that an LP2 decoding method was tried.</p>'}<dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><details class="experiment-extra"><summary>Exact input and procedure</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
+    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
+      ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
+      <details class="experiment-extra"><summary>Exclusions and exact method</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
     ${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download this experiment (ZIP)</a> <span class="small muted">Scripts, inputs, results and a start file.</span></p>
