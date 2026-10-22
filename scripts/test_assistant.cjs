@@ -8,6 +8,11 @@ assert.equal(Search.select([page,experiment],'Vigenere on every row of LP2 page 
 assert.equal(Search.select([page,experiment],'has anyone tested page 31').length,0);
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[0].id,'test');
 assert.equal(Search.select([page,experiment],'reverse prime sequence on LP2-31')[1].id,'lp2-31-0');
+const diagnostic={...experiment,id:'lag-six-measurement',recordType:'measurement',title:'Word-internal lag-six affine relation',
+ text:JSON.stringify({scope:{pages:['lp2-15'],procedure:'Count c prime = 24 minus 2c at lag six within words'},finding:'77 observed pairs',limitations:'No cipher mechanism established'}),
+ phrases:['lag-six affine relation','24 minus 2c']};
+assert.equal(Search.select([page,experiment,diagnostic],'Does c prime = 24 minus 2c at lag six within words?')[0].id,
+ 'lag-six-measurement','Direct diagnostic evidence must reach the AI even when no solve-method record matches');
 const largeFirst={...experiment,id:'a',text:experiment.text.padEnd(6000,' ')};
 const largeSecond={...experiment,id:'b',text:experiment.text.padEnd(5000,' ')};
 const bounded=Search.select([largeFirst,largeSecond],'reverse prime sequence');

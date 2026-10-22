@@ -45,7 +45,11 @@
     }).filter(r=>r.score>0).sort((a,b)=>b.score-a.score||a.document.id.localeCompare(b.document.id));
   }
   function select(documents,query,pages=[]) {
-    const ranked=experiments(documents,query,pages);
+    // Include measurement and control records as evidence of what was measured.
+    // Their record type remains explicit so inference cannot call them solve attempts.
+    const all=rankedRecords(documents,query,pages);
+    const ranked=all.filter(r=>r.score>=Math.max(.5,(all[0]?.score||0)*.62) &&
+      (!r.document.recordType||['method','replay','measurement','control'].includes(r.document.recordType)));
     // A manuscript page match is never evidence that a technique was tested.
     if(!ranked.length)return [];
     const selected=[ranked[0].document];

@@ -6847,6 +6847,135 @@
       }
     },
     {
+      "id": "grid-alternative-layouts",
+      "title": "LP2-49–51: directional prime paths under alternate grid layouts",
+      "status": "published",
+      "question": "Does the reported missing-prime set survive a 16 × 16 reshape or four fixed 8 × 8 quadrants?",
+      "summary": "Reshaping the same ordered 256 cells into 16 × 16 restores all three previously missing primes; fixed 8 × 8 quadrant barriers also restore them.",
+      "tags": [
+        "alphanumeric grid",
+        "L256",
+        "16x16",
+        "8x8 quadrants",
+        "grid layout",
+        "prime paths",
+        "missing primes",
+        "1033",
+        "2213",
+        "3301",
+        "shuffle control"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "representation": "First characters of the same 256 case-preserved two-character tokens in manuscript order, arranged as 32 × 8 or reshaped row-major as 16 × 16.",
+        "procedure": "Enumerate four-cell straight paths in eight directions; reject paths containing 4; keep decimal primes. Compare source 32 × 8, reshaped 16 × 16 and 16 × 16 confined to four 8 × 8 quadrants, with 3,000 global digit shuffles.",
+        "parameters": "No wrap or turns; leading zeroes allowed; same 49-value prime universe. Global shuffle seed 330108 preserves digit totals.",
+        "exclusions": "Suffix letters, five-dot geometry, alternate paths or bases, decryption, and authorial intent."
+      },
+      "outcome": "not-supported",
+      "finding": "The exact three-value absence is specific to the 32 × 8 layout: 16 × 16 contains all 49 possible prime values, including two directed hits each for 1033, 2213 and 3301; quadrant barriers leave those three present.",
+      "limitations": "The layouts and named targets were selected after prior exploration. Global digit shuffles give descriptive reference ranges, not an authorial-intent probability or a cipher test.",
+      "next_steps": "Specify a layout from independent page evidence before treating a missing value as a clue; test suffix-letter routes and artwork constraints separately.",
+      "family": {
+        "id": "grid-directional-searches",
+        "title": "Directional searches in the alphanumeric grid",
+        "question": "Which values occur or are missing under specified grid layouts and path rules?",
+        "baseline": "grid-prime-paths"
+      },
+      "variant": {
+        "label": "16 × 16 reshape and four fixed 8 × 8 blocks",
+        "changes": [
+          {
+            "field": "representation",
+            "before": "First characters of case-preserved two-character tokens, stacked as 32 rows by 8 columns in manuscript order.",
+            "after": "First characters of the same 256 case-preserved two-character tokens in manuscript order, arranged as 32 × 8 or reshaped row-major as 16 × 16.",
+            "reason": "Compare the same ordered cells under explicitly fixed layouts and a matched digit-shuffle control."
+          },
+          {
+            "field": "procedure",
+            "before": "Enumerate four-cell straight paths in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+            "after": "Enumerate four-cell straight paths in eight directions; reject paths containing 4; keep decimal primes. Compare source 32 × 8, reshaped 16 × 16 and 16 × 16 confined to four 8 × 8 quadrants, with 3,000 global digit shuffles.",
+            "reason": "Compare the same ordered cells under explicitly fixed layouts and a matched digit-shuffle control."
+          },
+          {
+            "field": "parameters",
+            "before": "1,364 directed paths; no wrapping; leading zeroes allowed; page boundaries crossed; no turns or cell deletion.",
+            "after": "No wrap or turns; leading zeroes allowed; same 49-value prime universe. Global shuffle seed 330108 preserves digit totals.",
+            "reason": "Compare the same ordered cells under explicitly fixed layouts and a matched digit-shuffle control."
+          },
+          {
+            "field": "exclusions",
+            "before": "Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.",
+            "after": "Suffix letters, five-dot geometry, alternate paths or bases, decryption, and authorial intent.",
+            "reason": "Compare the same ordered cells under explicitly fixed layouts and a matched digit-shuffle control."
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Independent endpoint-pair recount of observed paths; control script deterministic",
+        "retested_on": "2026-10-22",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/grid-alternative-layouts/run.py --check",
+        "environment": "Python 3.12 standard library. Independent observed-count checker: python experiments/records/grid-alternative-layouts/check.py",
+        "script": "experiments/records/grid-alternative-layouts/run.py",
+        "script_sha256": "0d00b8dd3f8434707abcc0d14a4e59eb85d2defa72f6b82b2312c31b99d30cd7",
+        "inputs": [
+          {
+            "path": "exports/alphanumeric-grids.json",
+            "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+          },
+          {
+            "path": "experiments/records/grid-prime-paths/results.json",
+            "sha256": "72680f450ebb614628ebf88f6512eb1b2d79ab17d54bfd38f33ba52b257557a5"
+          },
+          {
+            "path": "experiments/records/grid-alternative-layouts/check.py",
+            "sha256": "79f5ac483918485bbe0e6ae9c3ac95b92409befa963ce0823ad71766c9bad3f9"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/grid-alternative-layouts/results.json",
+            "sha256": "23a15806bdab23f16ce67c140c0ff5253fc244fdf84b82daa74f71cb7d8a6732"
+          },
+          {
+            "path": "experiments/records/grid-alternative-layouts/layouts.svg",
+            "sha256": "4f4f4bf18d8ceda88f8cf2d6b7a5317c3ad2814ac543237648f84a761b869ea6"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Original 256-cell word-search proposal",
+          "url": "https://github.com/o3rynn/cicada-faw"
+        },
+        {
+          "label": "Baseline 32 × 8 recount",
+          "url": "https://jelliottdev.github.io/#/experiments/grid-prime-paths"
+        }
+      ],
+      "related": [
+        "grid-prime-paths",
+        "grid-prime-path-null",
+        "grid-prime-paths-page-boundaries"
+      ],
+      "article": "# Does the 256-cell grid layout change the missing primes?\n\nYes. In the manuscript’s **32 × 8** arrangement, the four-cell search misses 1033, 2213 and 3301. Reshape the *same ordered cells* into **16 × 16**, and all three appear twice. Restrict those 16 × 16 paths to their own **8 × 8 quadrant**, and the three still appear. The original missing set therefore depends on the grid layout.\n\n![Observed number of missing values for each layout, with central ranges from shuffled digits.](experiments/records/grid-alternative-layouts/layouts.svg)\n\n## Fixed search rule\n\nTake the first digit of each of the 256 two-character tokens on LP2-49–51. Read four adjacent cells in any of eight straight directions, without wrapping or turns. Reject a path containing 4; allow leading zeroes; retain the resulting decimal number only if it is prime. There are **49** possible four-digit spellings from 0–3 that pass this test. The [original-layout recount](#/experiments/grid-prime-paths) defines the baseline.\n\nThe 16 × 16 test changes only where row breaks fall. Its quadrant version also forbids paths crossing an 8 × 8 block boundary. No cells are reordered within the underlying 256-token sequence.\n\n| Layout | Directed paths | Prime occurrences | Distinct primes | Missing values |\n| --- | ---: | ---: | ---: | --- |\n| Original 32 × 8 | 1,364 | 191 | 46 | 1033, 2213, 3301 |\n| Reshaped 16 × 16 | 1,508 | 206 | 49 | None |\n| Four fixed 8 × 8 blocks | 1,040 | 148 | 45 | 2003, 2111, 3023, 3203 |\n\nThe three named values each have **two** directed hits in the 16 × 16 layout. In the quadrant search, 1033 and 3301 have two each and 2213 has one. Opposite reading directions can share cells, so these are occurrences, not necessarily independent locations.\n\n## Control and limit\n\nWe shuffled the 256 first digits **3,000** times, preserving their overall frequencies, and repeated each fixed layout. Missing-value counts in the observed grids fall within the central 95% ranges of these shuffles: 0–4 for 32 × 8, 0–3 for 16 × 16, and 0–7 for the quadrant layout. The figure shows those ranges, not a probability that the manuscript was made by shuffling.\n\nThese layouts and the names 1033, 2213 and 3301 were considered after the original pattern was noticed. The controls cannot turn their post-hoc selection into a prospective test. This experiment does **not** examine suffix letters, the five-dot artwork, alternate paths, or an LP2 decoding rule. It shows that an absence claimed for one geometry is not stable under two simple, explicitly stated alternatives.\n\n## Reproduce\n\nFrom the repository root, with Python 3.12 and no extra packages:\n\n```text\npython experiments/records/grid-alternative-layouts/run.py --check\npython experiments/records/grid-alternative-layouts/check.py\n```\n\nThe first command rebuilds the table, controls and figure. The independent checker enumerates endpoint pairs to verify the observed counts. [Results and shuffle histogram](experiments/records/grid-alternative-layouts/results.json) give the exact values. The [source account](https://github.com/o3rynn/cicada-faw) motivated checking these layouts; the statistics and controls here are our scoped reproduction.\n",
+      "article_path": "experiments/records/grid-alternative-layouts/article.md",
+      "script_sha256": "0d00b8dd3f8434707abcc0d14a4e59eb85d2defa72f6b82b2312c31b99d30cd7",
+      "record_type": {
+        "id": "measurement",
+        "label": "Manuscript measurement",
+        "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+      }
+    },
+    {
       "id": "grid-barcode-fixed-render",
       "title": "LP2-49–51: fixed bit-grid barcode scan",
       "status": "published",

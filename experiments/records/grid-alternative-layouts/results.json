@@ -1,0 +1,137 @@
+{
+  "schema": "liberpedia-grid-alternative-layouts-v1",
+  "input_sha256": {
+    "exports/alphanumeric-grids.json": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21",
+    "experiments/records/grid-prime-paths/results.json": "72680f450ebb614628ebf88f6512eb1b2d79ab17d54bfd38f33ba52b257557a5"
+  },
+  "scope": "Same 256 tokens in archived row-major order from LP2-49–51. Only the first digit of each token is used.",
+  "rule": "Read four adjacent cells in each of eight straight directions. Reject a path containing 4. Interpret its four digits as a decimal integer, allowing leading zeroes, and retain decimal primes.",
+  "layouts": {
+    "source_32x8": "Original 32 rows by 8 columns, page rows concatenated; paths may cross page boundaries.",
+    "reshaped_16x16": "Same 256 tokens reshaped row-major into 16 rows by 16 columns; paths may cross former page boundaries.",
+    "four_8x8_quadrants": "Same 16 by 16 shape, but every path must stay entirely within one of four fixed 8 by 8 quadrants."
+  },
+  "prime_universe_size": 49,
+  "named_targets": [
+    1033,
+    2213,
+    3301
+  ],
+  "observed": {
+    "source_32x8": {
+      "directed_paths": 1364,
+      "eligible_paths": 1058,
+      "prime_occurrences": 191,
+      "distinct_prime_values": 46,
+      "missing_prime_values": [
+        1033,
+        2213,
+        3301
+      ],
+      "target_occurrences": {
+        "1033": 0,
+        "2213": 0,
+        "3301": 0
+      }
+    },
+    "reshaped_16x16": {
+      "directed_paths": 1508,
+      "eligible_paths": 1124,
+      "prime_occurrences": 206,
+      "distinct_prime_values": 49,
+      "missing_prime_values": [],
+      "target_occurrences": {
+        "1033": 2,
+        "2213": 2,
+        "3301": 2
+      }
+    },
+    "four_8x8_quadrants": {
+      "directed_paths": 1040,
+      "eligible_paths": 812,
+      "prime_occurrences": 148,
+      "distinct_prime_values": 45,
+      "missing_prime_values": [
+        2003,
+        2111,
+        3023,
+        3203
+      ],
+      "target_occurrences": {
+        "1033": 2,
+        "2213": 1,
+        "3301": 2
+      }
+    }
+  },
+  "control": {
+    "model": "Uniformly shuffle all 256 first digits, preserving the 0–4 frequency table; rerun every fixed layout and path rule.",
+    "trials": 3000,
+    "seed": 330108,
+    "layouts": {
+      "source_32x8": {
+        "missing_mean": 1.222667,
+        "missing_central_95": [
+          0,
+          4
+        ],
+        "missing_at_least_observed": 419,
+        "all_three_named_targets_absent": 1,
+        "missing_histogram": {
+          "0": 1000,
+          "1": 966,
+          "2": 615,
+          "3": 282,
+          "4": 83,
+          "5": 38,
+          "6": 11,
+          "7": 2,
+          "8": 3
+        }
+      },
+      "reshaped_16x16": {
+        "missing_mean": 0.872667,
+        "missing_central_95": [
+          0,
+          3
+        ],
+        "missing_at_least_observed": 3000,
+        "all_three_named_targets_absent": 1,
+        "missing_histogram": {
+          "0": 1395,
+          "1": 934,
+          "2": 430,
+          "3": 170,
+          "4": 47,
+          "5": 20,
+          "6": 3,
+          "8": 1
+        }
+      },
+      "four_8x8_quadrants": {
+        "missing_mean": 2.932333,
+        "missing_central_95": [
+          0,
+          7
+        ],
+        "missing_at_least_observed": 1004,
+        "all_three_named_targets_absent": 13,
+        "missing_histogram": {
+          "0": 210,
+          "1": 484,
+          "2": 643,
+          "3": 659,
+          "4": 457,
+          "5": 270,
+          "6": 150,
+          "7": 71,
+          "8": 38,
+          "9": 12,
+          "10": 3,
+          "11": 3
+        }
+      }
+    }
+  },
+  "limits": "The target names and alternate layouts were considered after earlier patterns were known. These descriptive controls do not give a prospective probability for those names or test a cipher, suffix letters, page artwork, or every possible layout."
+}

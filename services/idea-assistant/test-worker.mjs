@@ -114,9 +114,15 @@ for(const [query,expected] of [
  assert((Array.isArray(expected)?expected:[expected]).includes(first));
 }
 assert.equal(realCalls,4);
-for(const query of ['dead tree on LP2-55','trigrams on LP2-31','different language than English']){
+for(const query of ['dead tree on LP2-55']){
  assert.equal((await (await realHandler(request(query),realEnv)).json()).reason,'no-matching-records',query);
 }
+for(const [query,expected] of [['trigrams on LP2-31','lp2-trigram-repeats'],
+ ['different language than English','parallel-languages'],
+ ['lag six within words c prime = 24 minus 2c mod 29','word-internal-affine-lags']]){
+ const response=await (await realHandler(request(query),realEnv)).json();
+ assert.equal(response.sources[0].id,expected,query);
+}
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
-assert.equal(realCalls,4);
+assert.equal(realCalls,7);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');

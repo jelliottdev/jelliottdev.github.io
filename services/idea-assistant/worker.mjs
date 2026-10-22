@@ -96,7 +96,7 @@ export function createHandler(loadRecords = records) {
       if (!selected.length) return reply({answer:null, sources:[], reason:'no-matching-records'});
       const context = JSON.stringify(selected);
       // Exact normalized query + exact evidence + prompt version prevent stale reuse.
-      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v5-plain-math',MODEL,query,pages,selected])));
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v6-all-record-types',MODEL,query,pages,selected])));
       const key=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
       const cacheRequest=new Request(new URL('/answer-cache/'+key,request.url));
       const edge=globalThis.caches?.default;
