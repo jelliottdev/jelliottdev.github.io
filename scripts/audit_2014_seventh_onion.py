@@ -20,7 +20,11 @@ SOURCE = ROOT / "exports/sources/cicada-2014-seventh-onion"
 REPORT = ROOT / "exports/cicada-2014-seventh-onion.json"
 CSV = ROOT / "exports/cicada-2014-seventh-onion-pages.csv"
 REVISION = "ade9a02889ef8acbc8cde8edbfd0a785c369f4c3"
-ARCHIVE_FILES = {"README.md", "ky2khlqdf7qdznac.onion.html"} | {f"{i}.jpg" for i in range(58)}
+ARCHIVE_FILES = {"README.md", "ky2khlqdf7qdznac.onion.html"} | {f"{i}.jpg" for i in range(58)} | {
+    "0-55.jpg.runes.txt", "0-55.jpg.runes-possibilities.txt",
+    "56.jpg.runes.txt", "56.jpg.runes-possibilities.txt",
+    "57.jpg.runes.txt", "57.jpg.runes-possibilities.txt",
+}
 JFIF = b"\xff\xe0\x00\x10JFIF\x00"
 
 

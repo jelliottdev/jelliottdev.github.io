@@ -1,0 +1,80 @@
+LP2 transcription variants in the seventh-onion archive
+
+Compare all 58 ordered rune streams and the surrounding text; locate five alphanumeric grid-cell disagreements by page, row and column.
+
+The saved seventh-onion page dump also contains a combined rune transcription for LP2-00–55 and separate text files for LP2-56 and LP2-57. We compared them with Liberpedia's current page text without changing either source. This matters whenever an experiment counts positions, uses word edges, or converts the letter-and-number grids: two researchers can choose the same page image yet feed different text into their scripts.
+
+What matches, and what does not
+
+	Comparison	Result	Meaning
+	Ordered runes	58 of 58 pages match	After removing non-rune characters, the same runes appear in the same order in both text sets.
+	Complete page text	32 of 58 match	Edge newlines aside, 26 pages differ in punctuation, separators, number/grid content, or other non-rune text.
+	Alphanumeric grid cells	5 of 256 differ	The disagreements are at fixed rows and columns on LP2-49–51. No cipher interpretation or visual correction is assumed.
+
+[Image: Bar chart of changed non-rune text boundaries across pages LP2-00 to LP2-57. Twenty-six pages have changes; small markers on LP2-49 to LP2-51 identify grid-cell disagreements.]
+The bars count changed text gaps between successive runes; a single gap can include a whole printed number grid. The dots above LP2-49–51 flag the five cell disagreements listed below. Scroll sideways on a narrow screen. Download chart (SVG).
+
+Rune agreement is valuable, but it does not settle where words begin or how a printed I, lowercase l, or digit should be copied. The 58-page comparison table shows which pages differ. The full report records each changed gap between consecutive runes, including its position and both source strings. This is a comparison of two transcriptions; it is not an exhaustive list of contested marks on the images.
+
+Five grid cells to review against the images
+
+	Page	Grid cell	Seventh-onion text	Wiki text
+	LP2-49	Row 6, column 6	1L	1l
+	LP2-49	Row 7, column 3	0L	0l
+	LP2-50	Row 11, column 6	0l	0I
+	LP2-50	Row 12, column 5	2s	2S
+	LP2-51	Row 8, column 7	3i	3I
+
+Grid rows start with the first grid row on each page, excluding runic rows. The five-cell CSV is ready for a targeted visual review. The grid guide counts 256 entries and 161 distinct tokens using the wiki text; interestingly, both text sets produce those same aggregate counts despite the five different entries. A matching aggregate statistic cannot settle an individual glyph.
+
+Why the non-rune changes matter
+
+Some differences are small: on LP2-08 one archive separator is a period where the wiki text has a hyphen, and on LP2-56 a hyphen becomes a semicolon. Others are formatting around a number panel or at a page ending. A word-edge or punctuation-aware test can change even though its rune-only frequency count remains identical. If a method strips all separators, say so; if it uses them, cite which transcription and hash supplied them. The transcription-checking guide explains how to turn a disputed mark into a reviewable claim against a particular JPEG.
+
+Preserved inputs and reproduction
+
+Download the source LP2-00–55 combined text, LP2-56 text, and LP2-57 text. Their exact archived bytes and upstream paths are pinned in the source manifest. The associated 0–55 possibilities output is also preserved, but its generated letter strings are not established plaintext or a solution.
+
+For an offline replay, download reference-data.zip and original-images.zip, extracting both into the same folder. Run python scripts/audit_seventh_onion_transcriptions.py --check from that folder. The script verifies the complete source manifest, splits the combined text into 56 pages, compares all 58 ordered rune streams and non-rune gaps, and checks the five grid cells. It does not decide which text version matches each ambiguous image mark. Use the paired image downloads for that separate task.
+
+Sources, related references, and files
+- saved seventh-onion page dump
+  https://jelliottdev.github.io/reference/articles/2014-seventh-onion.html
+- Bar chart of changed non-rune text boundaries across pages LP2-00 to LP2-57. Twenty-six pages have changes; small markers on LP2-49 to LP2-51 identify grid-cell disagreements.; Download chart (SVG)
+  https://jelliottdev.github.io/exports/figures/seventh-onion-transcription-variants.svg
+- 58-page comparison table
+  https://jelliottdev.github.io/exports/seventh-onion-transcription-pages.csv
+- full report
+  https://jelliottdev.github.io/exports/seventh-onion-transcription-variants.json
+- LP2-49
+  https://jelliottdev.github.io/#/reader/lp2-49
+- LP2-50
+  https://jelliottdev.github.io/#/reader/lp2-50
+- LP2-51
+  https://jelliottdev.github.io/#/reader/lp2-51
+- five-cell CSV
+  https://jelliottdev.github.io/exports/seventh-onion-grid-variants.csv
+- grid guide
+  https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
+- transcription-checking guide
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- LP2-00–55 combined text
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt
+- LP2-56 text
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/56.jpg.runes.txt
+- LP2-57 text
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/57.jpg.runes.txt
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/manifest.json
+- 0–55 possibilities output
+  https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes-possibilities.txt
+- reference-data.zip
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- original-images.zip
+  https://jelliottdev.github.io/downloads/original-images.zip
+- script
+  https://jelliottdev.github.io/scripts/audit_seventh_onion_transcriptions.py
+- paired image downloads
+  https://jelliottdev.github.io/reference/articles/2014-seventh-onion.html#download
+
+Article: https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html

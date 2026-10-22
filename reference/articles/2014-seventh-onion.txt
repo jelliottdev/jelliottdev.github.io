@@ -23,6 +23,8 @@ Every archived filename is hosted at exports/sources/cicada-2014-seventh-onion/{
 
 The 58-row CSV gives both sizes, SHA-256 hashes, relationship class and pixel-comparison result for each page. The JSON report adds the audit limits. The site's download catalog lets you verify either version by checksum. The archived commentary is preserved separately from the captured HTML and JPEGs; its claims about decoding and extracted files are not established by this image audit.
 
+The same archive also preserves rune text. Its transcription comparison checks all 58 pages against the wiki text, including word separators and five disputed alphanumeric grid cells. Image bytes and transcription bytes are different evidence layers.
+
 Reproduce the comparison
 
 Download reference-data.zip and original-images.zip and extract both into the same folder. With Python and Pillow installed, run python scripts/audit_2014_seventh_onion.py --check. The script verifies every archived file against the pinned manifest, checks that the saved HTML lists 58 pages in order, checks each wiki page hash against its structured record, and recomputes the comparison table. The chart script redraws the figure from the report. The source repository revision is linked for provenance; the working copies are hosted here.
@@ -54,6 +56,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/downloads/lp2-41
 - archived commentary
   https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/README.md
+- transcription comparison
+  https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html
 - reference-data.zip
   https://jelliottdev.github.io/downloads/reference-data.zip
 - original-images.zip
