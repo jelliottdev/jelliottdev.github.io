@@ -6757,7 +6757,14 @@ Outside this test: No unsolved-page decoding, unknown-position search, language 
 Running keys from external texts
 Convert a specified external text into a stream of key symbols.
 
-No experiment linked yet. The guide documents the approach; it is not a result.
+Related records (1)
+Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
+
+Emerson as an additive LP2 running key
+Record type: Bounded solving test. Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.
+Question tested: Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?
+Outside this test: Other source texts or editions, a GP segmentation of source English, reverse arithmetic, source wrapping, passage restarts, word/page-dependent key clocks, other LP2 pages or positions, non-English scoring, and any claim that running keys in general are excluded.
+
 
 
 Keystream interruptions and reset rules
@@ -7507,6 +7514,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - Running keys from external texts
   https://jelliottdev.github.io/reference/articles/method-running-key.html
+- Emerson as an additive LP2 running key
+  https://jelliottdev.github.io/#/experiments/emerson-running-key
 - Keystream interruptions and reset rules
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Can a correct key fail under the wrong alignment rule?
@@ -26038,7 +26047,7 @@ Use an encoder with a known source passage as a positive control and unrelated t
 
 Documented experiments
 
-No completed experiment is linked to this family in the current catalog. That describes Liberpedia’s coverage, not whether the method has been tried elsewhere or whether it is promising.
+The Emerson running-key test searches every offset of one preserved source under a fixed A–Z-to-residue mapping and subtractive modulo-29 rule. It uses three LP2 page openings, a held-out continuation, eight fully searched shuffled-source controls and a planted LP1 recovery. The planted offset is recovered, but the LP2 scores do not support this exact variant. Other texts, rune conversions and key clocks remain open.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
@@ -26049,6 +26058,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
 - adaptive-choice accounting
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- Emerson running-key test
+  https://jelliottdev.github.io/#/experiments/emerson-running-key
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -28232,7 +28243,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 64 published reproducible records: 13 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 5 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 23 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 65 published reproducible records: 14 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 5 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 22 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -28274,7 +28285,7 @@ Current gaps with the greatest downstream effect
 
 	Page-boundary and separator decisions	Rune-only agreement between two text sources does not settle word joining, punctuation or key-clock resets. A test may use these marks even when its rune frequency is unchanged.	Make a page-by-page contestable-location register, then rerun one fixed word-edge or reset experiment with one change at a time.
 
-	Unexercised solving families	Twenty-three method families have no linked completed record. The largest useful candidates include running keys, homophonic/fractionated mappings and moving alphabets. Null removal now has one narrow doublet measurement, but no plaintext-recovery test; an index page alone is not evidence a method has been tried.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
+	Unexercised solving families	Twenty-two method families have no linked completed record. Useful candidates include homophonic/fractionated mappings and moving alphabets. Running keys now have one narrow Emerson test, while null removal has one doublet measurement; neither covers its whole family. An index page alone is not evidence a method has been tried.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
 
 	Search-pattern controls	The new prime-path shuffle test makes one retrospective pattern less compelling: three or more values are absent in about 15% of either control set. Other attractive patterns still need controls matched to the actual search procedure.	For each proposed pattern, freeze the selection rule and full search budget before comparing the same statistic with appropriate controls; preserve every candidate, not only the best-looking one.
 
@@ -28288,7 +28299,7 @@ These are proposed series, not completed results. Each should have a baseline an
 
 	Transcription sensitivity	The baseline audit now compares the eight stored reviewed layers. Next, specify a punctuation-driven key clock or newly reviewed ambiguous mark and recompute its result.	Archive baseline; one change at a time; report which conclusions move. Do not combine uncertain edits into one preferred text.
 
-	Running keys and cited works	Freeze a candidate source text and edition, alignment, rune mapping, clock and passage before scoring a chosen LP2 section.	Known LP1 reading; offset searches; unrelated texts of matched length; held-out passage. A thematic resemblance alone is not a key.
+	Running keys and cited works	The Emerson baseline fixes one preserved text, A–Z shift mapping, complete offset search and three page openings. Its planted control recovers; LP2 openings do not distinguish this source from eight fully searched shuffles.	Other editions or source texts, alternate rune conversion and interruption clocks need separately bounded variants with a known-reading control and untouched continuation. A thematic resemblance alone is not a key.
 
 	LP2-49–51 table use	Compare explicit row, column, page and 256-cell traversal rules against the preserved case-sensitive table.	Separate base-60 decoding from a claimed route; record all tested orders, byte assumptions and stopping rules. Existing prime-path tests cover narrower routes.
 
@@ -28365,6 +28376,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
 - Running keys and cited works
   https://jelliottdev.github.io/reference/articles/method-running-key.html
+- Emerson baseline
+  https://jelliottdev.github.io/#/experiments/emerson-running-key
 - LP2-49–51 table use
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 - prime-path tests
@@ -34161,6 +34174,150 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "historical",
     "label": "Historical reproduction",
     "description": "Replays a documented historical step with specified source material and conventions."
+  }
+}
+
+---
+
+{
+  "id": "emerson-running-key",
+  "title": "Emerson as an additive LP2 running key",
+  "status": "published",
+  "question": "Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?",
+  "summary": "The planted LP1 control is recovered at its exact offset. Best Emerson openings on LP2-00, 31 and 54 score near full-search shuffled-source maxima, and their continuations remain much lower than the known-reading control.",
+  "tags": [
+    "running key",
+    "Emerson",
+    "Self-Reliance",
+    "additive cipher",
+    "source text",
+    "offset search",
+    "held-out continuation",
+    "LP2",
+    "search space"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-06",
+      "lp2-00",
+      "lp2-31",
+      "lp2-54"
+    ],
+    "representation": "Preserved 50-paragraph Emerson PDF derivative normalized to 43,516 ASCII A–Z letters; A=0 through Z=25; first 192 archived rune indices of each target page; canonical GP Latin labels for scoring.",
+    "procedure": "For every no-wrap source offset, subtract source-letter values modulo 29 from each target's first 192 rune indices. Select the maximum English quadgram score on the first 96 runes and assess the next 96 at the same offset. Repeat the complete search on eight seeded letter shuffles. Plant a known LP1-06 reading with the same key at offset 3301 and search it blindly.",
+    "parameters": "LP2-00, 31 and 54; 43,325 zero-based offsets per search; 96 selection plus 96 holdout runes; eight full-source shuffles with seeds 330100–330107; one fixed source, arithmetic direction, model and representation.",
+    "exclusions": "Other source texts or editions, a GP segmentation of source English, reverse arithmetic, source wrapping, passage restarts, word/page-dependent key clocks, other LP2 pages or positions, non-English scoring, and any claim that running keys in general are excluded."
+  },
+  "outcome": "not-supported",
+  "finding": "The synthetic LP1-06 plant is ranked first and recovers exactly at offset 3301. For the three LP2 pages, Emerson's selected-window scores are within the range of eight full-search shuffled-source maxima, with low held-out scores relative to the plant. LP2-54's holdout exceeds the eight shuffled holdouts but its selected window does not, and the finite controls do not support a general significance claim.",
+  "limitations": "The archived paragraph extract is a derivative of a historically linked PDF, not an authenticated creator key edition. The English quadgram scorer can reject meaningful text in other languages or representations. Eight shuffles give a comparison, not a calibrated tail probability. This tests only first-page rune windows under one fixed mapping and direction.",
+  "next_steps": "Keep the top-five windows for inspection; any follow-up should specify a different source conversion or alignment before testing, preserve the complete search budget, and repeat known-reading recovery plus full-search controls and holdout evaluation.",
+  "family": {
+    "id": "emerson-running-key",
+    "title": "Pinned-source running-key tests",
+    "question": "Does a specified source text and key clock predict a held-out LP2 continuation?",
+    "baseline": "emerson-running-key"
+  },
+  "variant": {
+    "label": "Baseline: complete Emerson offset search, three pages and shuffled-source controls",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — full deterministic rerun, independent counted-quadgram search replay and figure check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/emerson-running-key/run.py --check",
+    "environment": "Python 3 standard library; no network, AI or extra packages. Run from repository root or extracted experiment ZIP.",
+    "script": "experiments/records/emerson-running-key/run.py",
+    "script_sha256": "54a105b7bcb1ab6bf5780c1a8278848652cc134f3290faad75177927fc0a8fb0",
+    "inputs": [
+      {
+        "path": "experiments/records/emerson-running-key/plan.json",
+        "sha256": "3cfb2f6128c93bcaca3464f44012bd9b5ad85f2cbf5dfb6e91ddae9c6a2982d1"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/check.py",
+        "sha256": "8b7cf434f97f7339a87dae935c90d6f71786948c75abc973c4aca5e7dcc4ca39"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/plot.py",
+        "sha256": "e248b9609da68496bfd9017736d022907a956db22a62e46aaa013211c3426aaf"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "exports/sources/emerson-paragraphs.json",
+        "sha256": "f7cbcaac8a9e75e58122b6b526e4da740bf4f94a746ceb3315c6c1b07305eba6"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/emerson-running-key/results.json",
+        "sha256": "9173e84753d3920c7cc1eec460a2d3d9b1ba7557afb02f08d95f580d12e85d1d"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/search-scores.svg",
+        "sha256": "a97b2f137762b1ab9cb7ed315d1a47251883435837a0abac3123c68cc9f7b588"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Preserved Emerson source and historical book-cipher reproduction",
+      "url": "https://jelliottdev.github.io/#/wiki/emerson-self-reliance"
+    },
+    {
+      "label": "Running-key method and search-space conventions",
+      "url": "https://jelliottdev.github.io/#/wiki/method-running-key"
+    },
+    {
+      "label": "English quadgram scorer limitations",
+      "url": "https://jelliottdev.github.io/#/experiments/english-scorer-controls"
+    }
+  ],
+  "related": [
+    "emerson-book-cipher-control",
+    "english-scorer-controls",
+    "search-maximum-controls"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/emerson-running-key/search-scores.svg",
+      "caption": "Emerson search maxima and held-out continuations against eight equally searched shuffled-source streams, with an exact planted known-reading control."
+    }
+  ],
+  "article": "# Does the preserved Emerson text work as an LP2 running key?\n\nUnder **one fully specified additive rule**, the tested LP2 pages do not show a convincing Emerson-key opening or continuation. We searched every **43,325 contiguous offsets** of the archived *Self-Reliance* extract for each of LP2-00, LP2-31 and LP2-54. The best 96-rune openings score near maxima from eight complete searches using shuffled versions of the same source letters. Their next 96 runes remain far below a planted known-reading control. This does not exclude other running-key rules, source editions, alphabets or page positions.\n\n![Opening and held-out continuation scores for Emerson and shuffled-source searches](experiments/records/emerson-running-key/search-scores.svg)\n\n## Why this source and what rule was frozen\n\nEmerson's *Self-Reliance* is a documented source for a **2014 book-coordinate cipher**, reproduced separately in the [historical control](#/experiments/emerson-book-cipher-control). That history makes it a concrete candidate to test; a coordinate cipher does not establish a running key for LP2. We used the site's preserved **50-paragraph PDF derivative**, not an authenticated creator edition. Its original file, extraction convention and SHA-256 are described in the [Emerson source guide](#/wiki/emerson-self-reliance).\n\nJoin the 50 stored paragraphs with spaces, uppercase, and retain ASCII A–Z. The result has **43,516 letters**. Map A to 0 through Z to 25. For each LP2 page, take its first 192 archived alphabet runes in order, including headings. At each offset, subtract successive source-letter values from rune indices modulo 29; the source does not wrap, and punctuation advances neither stream. This is deliberately a Latin-letter-to-rune numeric key, not a claim that Emerson's prose was written in Gematria Primus.\n\nScore the first **96 decoded runes** after concatenating their canonical Latin labels. The score is the mean base-10 log probability of overlapping four-letter groups under the pinned [English quadgram model](#/experiments/english-scorer-controls); unseen groups receive count 0.01. Select the highest first-window score, breaking ties toward the lowest source offset. Only then score the **next 96 runes** at that same offset. Search eight deterministic full-stream letter shuffles with exactly the same offset budget and selection rule. Those controls preserve the source's letter counts while breaking its order. The [plan](experiments/records/emerson-running-key/plan.json) fixes these choices and hashes every input.\n\n## Complete search maxima\n\nHigher scores are more English-like under this exact scorer. The shuffle ranges below contain the **best selected candidate from each complete shuffled-source search**, not scores of arbitrary unselected offsets.\n\n| Target | Best Emerson offset | First 96 | Eight shuffle maxima | Next 96 at chosen offset | Shuffle continuations |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| LP2-00 | 19,692 | −6.364 | −6.372 to −6.143 | −7.575 | −7.807 to −7.054 |\n| LP2-31 | 1,162 | −6.353 | −6.444 to −6.218 | −7.368 | −7.875 to −7.306 |\n| LP2-54 | 21,646 | −6.462 | −6.536 to −6.255 | −6.817 | −7.754 to −6.997 |\n\nThe LP2-54 continuation scores higher than all eight shuffled-source continuations. That observation is retained, not dismissed: there are only eight controls, its first window was not stronger than their maxima, and its continuation score is still far below the known-reading plant. These values are **descriptive**, not a calibrated p-value or an English-language decision threshold. The [full result](experiments/records/emerson-running-key/results.json) preserves the top five offsets and both decoded windows for every search, so a reader can inspect the candidate text rather than rely on one number.\n\n## Did the search have a fair chance to find a real key?\n\nAs a positive control, take the first 192 **decoded** rune indices of LP1-06, add the same Emerson key beginning at zero-based offset **3,301**, and search the resulting synthetic ciphertext without telling the search its offset. The complete 43,325-offset search ranks **3,301 first**, recovers the known indices exactly there, and scores **−4.096** on the first 96 and **−3.883** on the next 96. This proves the pipeline can recover a planted instance of the specified rule at this length. It does not establish its power for every possible plaintext or source text.\n\nThe scorer itself has documented language limits: it can reject meaningful Welsh, for example, while accepting some non-English text. Canonical rune labels also differ from ordinary English spelling. A low score therefore cannot exclude a non-English plaintext or every English representation. The result only weakens this **single Emerson / A–Z shifts / subtractive modulo-29 / page-opening** variant. A proposal with a different source conversion, offset reset, interrupted clock, or selected passage is a different search and must count those choices.\n\n## Reproduce\n\nWith Python 3 standard library, from the repository root or extracted [experiment ZIP](downloads/experiments/emerson-running-key.zip):\n\n```text\npython experiments/records/emerson-running-key/run.py --check\npython experiments/records/emerson-running-key/check.py\npython experiments/records/emerson-running-key/plot.py --check\n```\n\nThe producer checks all source hashes and replays every complete offset search. The independent checker reconstructs the source, shuffles, rune streams and planted ciphertext; it scores by counted quadgrams rather than the producer's sliding sum, and verifies every maximum, top-five list and holdout. The plotter checks the published figure. No API, model download or network call is needed.\n",
+  "article_path": "experiments/records/emerson-running-key/article.md",
+  "script_sha256": "54a105b7bcb1ab6bf5780c1a8278848652cc134f3290faad75177927fc0a8fb0",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
   }
 }
 

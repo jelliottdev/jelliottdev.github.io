@@ -1,0 +1,133 @@
+{
+  "id": "emerson-running-key",
+  "title": "Emerson as an additive LP2 running key",
+  "status": "published",
+  "question": "Does the preserved Self-Reliance text, mapped A=0 through Z=25 and subtracted modulo 29 at any contiguous offset, produce strong 96-rune LP2 openings and held-out continuations on three fixed pages?",
+  "summary": "The planted LP1 control is recovered at its exact offset. Best Emerson openings on LP2-00, 31 and 54 score near full-search shuffled-source maxima, and their continuations remain much lower than the known-reading control.",
+  "tags": [
+    "running key",
+    "Emerson",
+    "Self-Reliance",
+    "additive cipher",
+    "source text",
+    "offset search",
+    "held-out continuation",
+    "LP2",
+    "search space"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-06",
+      "lp2-00",
+      "lp2-31",
+      "lp2-54"
+    ],
+    "representation": "Preserved 50-paragraph Emerson PDF derivative normalized to 43,516 ASCII A–Z letters; A=0 through Z=25; first 192 archived rune indices of each target page; canonical GP Latin labels for scoring.",
+    "procedure": "For every no-wrap source offset, subtract source-letter values modulo 29 from each target's first 192 rune indices. Select the maximum English quadgram score on the first 96 runes and assess the next 96 at the same offset. Repeat the complete search on eight seeded letter shuffles. Plant a known LP1-06 reading with the same key at offset 3301 and search it blindly.",
+    "parameters": "LP2-00, 31 and 54; 43,325 zero-based offsets per search; 96 selection plus 96 holdout runes; eight full-source shuffles with seeds 330100–330107; one fixed source, arithmetic direction, model and representation.",
+    "exclusions": "Other source texts or editions, a GP segmentation of source English, reverse arithmetic, source wrapping, passage restarts, word/page-dependent key clocks, other LP2 pages or positions, non-English scoring, and any claim that running keys in general are excluded."
+  },
+  "outcome": "not-supported",
+  "finding": "The synthetic LP1-06 plant is ranked first and recovers exactly at offset 3301. For the three LP2 pages, Emerson's selected-window scores are within the range of eight full-search shuffled-source maxima, with low held-out scores relative to the plant. LP2-54's holdout exceeds the eight shuffled holdouts but its selected window does not, and the finite controls do not support a general significance claim.",
+  "limitations": "The archived paragraph extract is a derivative of a historically linked PDF, not an authenticated creator key edition. The English quadgram scorer can reject meaningful text in other languages or representations. Eight shuffles give a comparison, not a calibrated tail probability. This tests only first-page rune windows under one fixed mapping and direction.",
+  "next_steps": "Keep the top-five windows for inspection; any follow-up should specify a different source conversion or alignment before testing, preserve the complete search budget, and repeat known-reading recovery plus full-search controls and holdout evaluation.",
+  "family": {
+    "id": "emerson-running-key",
+    "title": "Pinned-source running-key tests",
+    "question": "Does a specified source text and key clock predict a held-out LP2 continuation?",
+    "baseline": "emerson-running-key"
+  },
+  "variant": {
+    "label": "Baseline: complete Emerson offset search, three pages and shuffled-source controls",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — full deterministic rerun, independent counted-quadgram search replay and figure check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/emerson-running-key/run.py --check",
+    "environment": "Python 3 standard library; no network, AI or extra packages. Run from repository root or extracted experiment ZIP.",
+    "script": "experiments/records/emerson-running-key/run.py",
+    "script_sha256": "54a105b7bcb1ab6bf5780c1a8278848652cc134f3290faad75177927fc0a8fb0",
+    "inputs": [
+      {
+        "path": "experiments/records/emerson-running-key/plan.json",
+        "sha256": "3cfb2f6128c93bcaca3464f44012bd9b5ad85f2cbf5dfb6e91ddae9c6a2982d1"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/check.py",
+        "sha256": "8b7cf434f97f7339a87dae935c90d6f71786948c75abc973c4aca5e7dcc4ca39"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/plot.py",
+        "sha256": "e248b9609da68496bfd9017736d022907a956db22a62e46aaa013211c3426aaf"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "exports/sources/emerson-paragraphs.json",
+        "sha256": "f7cbcaac8a9e75e58122b6b526e4da740bf4f94a746ceb3315c6c1b07305eba6"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/emerson-running-key/results.json",
+        "sha256": "9173e84753d3920c7cc1eec460a2d3d9b1ba7557afb02f08d95f580d12e85d1d"
+      },
+      {
+        "path": "experiments/records/emerson-running-key/search-scores.svg",
+        "sha256": "a97b2f137762b1ab9cb7ed315d1a47251883435837a0abac3123c68cc9f7b588"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Preserved Emerson source and historical book-cipher reproduction",
+      "url": "https://jelliottdev.github.io/#/wiki/emerson-self-reliance"
+    },
+    {
+      "label": "Running-key method and search-space conventions",
+      "url": "https://jelliottdev.github.io/#/wiki/method-running-key"
+    },
+    {
+      "label": "English quadgram scorer limitations",
+      "url": "https://jelliottdev.github.io/#/experiments/english-scorer-controls"
+    }
+  ],
+  "related": [
+    "emerson-book-cipher-control",
+    "english-scorer-controls",
+    "search-maximum-controls"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/emerson-running-key/search-scores.svg",
+      "caption": "Emerson search maxima and held-out continuations against eight equally searched shuffled-source streams, with an exact planted known-reading control."
+    }
+  ]
+}

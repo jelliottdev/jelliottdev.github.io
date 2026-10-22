@@ -1,0 +1,47 @@
+{
+  "schema": "liberpedia-running-key-emerson-plan-v1",
+  "question": "Under one fixed additive 29-residue running-key rule, does any contiguous offset of the archived Emerson text produce LP2 openings that score above matched full-search controls and carry into a held-out continuation?",
+  "source_rule": "Join all 50 stored Emerson paragraph texts with one space, uppercase, retain ASCII A-Z only, map A=0 through Z=25; one source letter supplies one rune shift; no wrap.",
+  "cipher_rule": "Plaintext rune index = ciphertext rune index minus source shift modulo 29. Keep source advancing at every alphabet rune, ignore punctuation. Start each target page at its first rune.",
+  "targets": [
+    "lp2-00",
+    "lp2-31",
+    "lp2-54"
+  ],
+  "selection_runes": 96,
+  "holdout_runes": 96,
+  "source_offsets": "Every zero-based contiguous offset with at least 192 source letters remaining.",
+  "controls": "Eight deterministic full-stream letter shuffles, seeds 330100–330107, searched with the identical offset and scoring procedure; one planted additive ciphertext from the first 192 decoded indices of LP1-06 at Emerson offset 3301.",
+  "score": "Average English quadgram base-10 log likelihood of concatenated canonical GP Latin labels; unseen grams count 0.01, model in pinned file. Select highest score on first 96 decoded runes, tie break at lowest offset; evaluate next 96 only after selection.",
+  "decision": "Report all full-search maxima and holdouts descriptively; no generic running-key exclusion or p-value from eight shuffles.",
+  "inputs": [
+    {
+      "path": "data/index.json",
+      "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+    },
+    {
+      "path": "exports/sources/emerson-paragraphs.json",
+      "sha256": "f7cbcaac8a9e75e58122b6b526e4da740bf4f94a746ceb3315c6c1b07305eba6"
+    },
+    {
+      "path": "data/evidence/known-readings.json",
+      "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+    },
+    {
+      "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+    },
+    {
+      "path": "text/lp2-00.txt",
+      "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+    },
+    {
+      "path": "text/lp2-31.txt",
+      "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+    },
+    {
+      "path": "text/lp2-54.txt",
+      "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+    }
+  ]
+}
