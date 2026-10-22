@@ -1,34 +1,44 @@
  'use strict';
-let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false, methodFamilyRecords, methodFamilyUnavailable=false, reportedAttemptRecords, reportedAttemptsUnavailable=false;
+let experimentRecords, experimentRecordsPromise, assistantConfig, assistantConfigPromise, experimentRequest, ideaCoverageRecords=[], ideaCoverageUnavailable=false, methodFamilyRecords=[], methodFamilyUnavailable=false, reportedAttemptRecords=[], reportedAttemptsUnavailable=false;
+let experimentSupportStarted=false;
+let ideaCoveragePending=true,methodFamilyPending=true,reportedAttemptsPending=true;
 let methodRecordKinds={}, methodRecordKindById={};
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
+const assistantEndpoint=()=>typeof assistantConfig?.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
+function refreshExperimentSupportUI(){
+ const slot=document.getElementById('experiment-method-guides');
+ const id=location.hash.match(/^#\/experiments\/([^?]+)/)?.[1];
+ if(slot&&id){
+  const record=experimentRecords?.find(item=>item.id===id);
+  if(record){const guides=experimentMethodGuides(record);slot.innerHTML=guides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${guides}</details>`:'';}
+ }
+ if(typeof refreshIdeaSupport==='function')refreshIdeaSupport();
+}
+function startExperimentSupport(){
+ if(experimentSupportStarted)return;
+ experimentSupportStarted=true;
+ const read=async path=>{
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),5000);
+  try{const response=await fetch(path,{signal:controller.signal});if(!response.ok)throw Error('Index unavailable');return await response.json()}
+  finally{clearTimeout(timer)}
+ };
+ const load=async(path,key,whole=false)=>{const data=await read(path);if(!Array.isArray(data[key]))throw Error('Invalid index');return whole?data:data[key];};
+ load('data/idea-coverage.json','records').then(records=>{ideaCoverageRecords=records}).catch(()=>{ideaCoverageUnavailable=true}).finally(()=>{ideaCoveragePending=false;refreshExperimentSupportUI()});
+ load('data/method-families.json','families',true).then(data=>{methodFamilyRecords=data.families;methodRecordKinds=data.record_kinds||{};methodRecordKindById=data.record_kind_by_id||{}}).catch(()=>{methodFamilyUnavailable=true}).finally(()=>{methodFamilyPending=false;refreshExperimentSupportUI()});
+ load('data/reported-attempts.json','entries').then(records=>{reportedAttemptRecords=records}).catch(()=>{reportedAttemptsUnavailable=true}).finally(()=>{reportedAttemptsPending=false;refreshExperimentSupportUI()});
+ assistantConfigPromise=read('data/assistant.json').catch(()=>({})).then(config=>{assistantConfig=config;refreshExperimentSupportUI()});
+}
 async function experimentsPage(id, version, query='') {
   stopExperimentAI();
   if (!experimentRecords) {
-    const response = await fetch('data/experiments.json');
-    if (!response.ok) throw Error('The experiment index could not be loaded. Please retry.');
-    const data = await response.json();
-    if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
-    experimentRecords = data.records;
-  }
-  if (!ideaCoverageRecords || !methodFamilyRecords || !reportedAttemptRecords) {
-    const load=async(path,key,whole=false)=>{const response=await fetch(path);if(!response.ok)throw Error('Index unavailable');const data=await response.json();if(!Array.isArray(data[key]))throw Error('Invalid index');return whole?data:data[key];};
-    const [notes,families,reports]=await Promise.allSettled([
-      load('data/idea-coverage.json','records'),load('data/method-families.json','families',true),
-      load('data/reported-attempts.json','entries')
-    ]);
-    ideaCoverageUnavailable=notes.status!=='fulfilled';
-    ideaCoverageRecords=ideaCoverageUnavailable?[]:notes.value;
-    methodFamilyUnavailable=families.status!=='fulfilled';
-    methodFamilyRecords=methodFamilyUnavailable?[]:families.value.families;
-    methodRecordKinds=methodFamilyUnavailable?{}:families.value.record_kinds||{};
-    methodRecordKindById=methodFamilyUnavailable?{}:families.value.record_kind_by_id||{};
-    reportedAttemptsUnavailable=reports.status!=='fulfilled';
-    reportedAttemptRecords=reportedAttemptsUnavailable?[]:reports.value;
-  }
-  if (!assistantConfig) {
-    try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}
+    experimentRecordsPromise??=fetch('data/experiments.json').then(async response=>{
+      if (!response.ok) throw Error('The experiment index could not be loaded. Please retry.');
+      const data=await response.json();
+      if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
+      return data.records;
+    }).catch(error=>{experimentRecordsPromise=null;throw error});
+    experimentRecords=await experimentRecordsPromise;
   }
   if (version !== renderId) return;
   if (id) {
@@ -37,10 +47,11 @@ async function experimentsPage(id, version, query='') {
     main.innerHTML = experimentArticle(record);
     bindRouteIllustration();
     bindLanguageBlockFigure();
+    startExperimentSupport();
     return;
   }
-  const endpoint=typeof assistantConfig.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
-  renderIdeaChecker(endpoint,query);
+  renderIdeaChecker(query);
+  startExperimentSupport();
 }
 
 // Group related records without merging their findings or scopes.
@@ -228,7 +239,7 @@ function experimentArticle(r){
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
   const methodGuides=experimentMethodGuides(r);
-  const sections=[['experiment-finding','Result'],['experiment-scope','Scope'],...(methodGuides?[['experiment-methods','Methods']]:[]),['experiment-reproduce','Reproduce'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
+  const sections=[['experiment-finding','Result'],['experiment-scope','Scope'],['experiment-reproduce','Reproduce'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   return head(r.title,`${esc(r.record_type?.label||'Research record')} · ${esc(outcomes[r.outcome])}`,'Research records')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.question)}</p>
@@ -240,7 +251,7 @@ function experimentArticle(r){
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}${r.id==='parallel-language-blocks'?languageBlockFigure():''}
       <details class="experiment-extra"><summary>Exclusions and exact method</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>
-    ${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}
+    <div id="experiment-method-guides">${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}</div>
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download this experiment (ZIP)</a> <span class="small muted">Scripts, inputs, results and a start file.</span></p>
       <p>Run from the extracted folder:</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>

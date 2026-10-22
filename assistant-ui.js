@@ -1,6 +1,7 @@
 'use strict';
 const ideaAnswers=new Map();
 let supportingIndex;
+let refreshIdeaSupport=()=>{};
 function rememberIdea(key,data){if(ideaAnswers.size>=20)ideaAnswers.delete(ideaAnswers.keys().next().value);ideaAnswers.set(key,{data,until:Date.now()+3600000});}
 async function loadSupportingIndex(){
   if(!supportingIndex)supportingIndex=fetch('data/assistant-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).catch(()=>{supportingIndex=null;return {documents:[]};});
@@ -27,13 +28,15 @@ function ideaCoverageView(query=''){
   const families=query?IdeaCoverage.families(methodFamilyRecords||[],query):[];
   const familyHTML=families.length?`<h2>Related method families</h2><p class="small muted">These guides describe approaches. They are not evidence that your specific proposal has been tested.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a></p><p>${esc(f.description)}</p><p class="small muted">${f.related.length?`${f.related.length} narrower research ${f.related.length===1?'record is':'records are'} linked in the family map.`:'No research record is currently linked to this family.'} <a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Inspect family coverage</a></p></li>`).join('')}</ul>`:'';
   const failures=(methodFamilyUnavailable?'<p class="small muted">The method-family index could not be loaded. This is not evidence of missing research.</p>':'')+(ideaCoverageUnavailable?'<p class="small muted">Coverage notes could not be loaded. Experiment results remain available.</p>':'');
+  const pending=query&&(methodFamilyPending||ideaCoveragePending)?'<p class="small muted" role="status">Checking method families and coverage notes…</p>':'';
   const records=query?IdeaCoverage.match(ideaCoverageRecords||[],query):(ideaCoverageRecords||[]);
-  if(!records.length)return familyHTML+failures;
+  if(!records.length)return familyHTML+failures+pending;
   const body=`<p class="small muted">Editorial coverage notes, not experiment findings. “Needs a defined rule” identifies missing bounds; “Partially covered” links narrower tests. Proposed extensions have not been run.</p>${records.map(ideaCoverageNote).join('')}`;
-  return familyHTML+failures+(query?`<h2>Coverage of this idea</h2>${body}`:`<details class="experiment-guide"><summary>Common ideas and gaps in coverage</summary>${body}</details>`);
+  return familyHTML+failures+pending+(query?`<h2>Coverage of this idea</h2>${body}`:`<details class="experiment-guide"><summary>Common ideas and gaps in coverage</summary>${body}</details>`);
 }
 
 function reportedAttemptView(query=''){
+  if(query&&reportedAttemptsPending)return '<p class="small muted" role="status">Checking earlier reported approaches…</p>';
   if(reportedAttemptsUnavailable)return '<p class="small muted">The prior-work index could not be loaded. <a href="#/wiki/reported-attempts">Open the saved register</a>.</p>';
   if(!query)return '<p class="small muted">Looking for earlier proposals that have not been fully retested? <a href="#/wiki/reported-attempts">Browse the reported-attempt register</a>.</p>';
   const hits=IdeaCoverage.match(reportedAttemptRecords||[],query);
@@ -45,7 +48,7 @@ function reportedAttemptView(query=''){
       <p>${esc(r.reported_idea)}</p><details><summary>Coverage and replay requirement</summary><p>${esc(r.coverage)}</p><p><strong>To reproduce:</strong> ${esc(r.replay_needed)}</p></details></article>`).join('');
 }
 
-function renderIdeaChecker(endpoint,query){
+function renderIdeaChecker(query){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
   const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
@@ -59,7 +62,7 @@ function renderIdeaChecker(endpoint,query){
         <p class="small muted">Page numbers start at zero in each release. Related techniques tested on other pages can still appear.</p>
       </details>
       <div class="idea-actions"><button id="idea-submit" type="submit">Check idea</button><button id="idea-cancel" type="button" hidden>Stop waiting</button><span id="idea-status" class="small muted" role="status"></span></div>
-      ${endpoint?'<p class="idea-privacy small muted">Questions are processed by Cloudflare. Don’t include private information.</p>':''}
+      <p id="idea-privacy" class="idea-privacy small muted" ${assistantEndpoint()?'':'hidden'}>Questions are processed by Cloudflare. Don’t include private information.</p>
     </form>
     <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="experiment-results" aria-label="Matching research records"></section>
@@ -70,6 +73,14 @@ function renderIdeaChecker(endpoint,query){
       <p>Browse <a href="#/wiki/solving-methods">method guides</a>, <a href="#/wiki/reported-attempts">earlier reported approaches</a>, or the <a href="#/wiki/research-coverage">coverage overview</a> for work beyond completed experiments.</p>
     </details>${footer()}</article>`;
   const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
+  let shownIdea='',pendingConfigRequest=0;
+  refreshIdeaSupport=()=>{
+    if(!input.isConnected)return;
+    $('#idea-privacy').hidden=!assistantEndpoint();
+    if(!shownIdea||input.value.trim()!==shownIdea)return;
+    $('#idea-coverage').innerHTML=ideaCoverageView(shownIdea);
+    $('#reported-attempts').innerHTML=reportedAttemptView(shownIdea);
+  };
   const filterArchive=(save=false)=>{
     const browse=$('#experiment-browse-query');if(!browse)return;
     const query=browse.value.trim();
@@ -98,7 +109,7 @@ function renderIdeaChecker(endpoint,query){
   const cacheKey=()=>JSON.stringify([input.value.trim().replace(/\s+/g,' '),pages(),
     AssistantSearch.experiments(experimentDocuments,input.value.trim(),pages()).slice(0,2).map(r=>r.document)]);
   const busy=value=>{submit.disabled=value;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));};
-  const reset=()=>{stopExperimentAI();busy(false);status.textContent='';answer.replaceChildren();};
+  const reset=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);status.textContent='';answer.replaceChildren();};
   function sourceExcerpt(s){
     if(s.kind==='experiment'){
       let r;try{r=JSON.parse(s.text);}catch{return '<p>Open the record to inspect its scope.</p>';}
@@ -129,7 +140,7 @@ function renderIdeaChecker(endpoint,query){
     const timeout=setTimeout(()=>controller.abort(),25000);
     try {
       const [response,index]=await Promise.all([
-        fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:idea,pages:pages()}),signal:controller.signal}),
+        fetch(assistantEndpoint(),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:idea,pages:pages()}),signal:controller.signal}),
         loadSupportingIndex()
       ]);
       const data=await response.json();if(experimentRequest!==controller)return;
@@ -145,22 +156,30 @@ function renderIdeaChecker(endpoint,query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=searchNow&&idea?ideaCoverageView(idea):'';$('#reported-attempts').innerHTML=searchNow&&idea?reportedAttemptView(idea):'';const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    reset();const idea=input.value.trim();shownIdea=searchNow?idea:'';refreshIdeaSupport();const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
     const selected=items=>experimentGroups(items.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]));
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>No tests have been added to this index. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
     else results.innerHTML=`<h2>${matches.length?`${matches.length} related solving ${matches.length===1?'test':'tests'}`:'No matching bounded solving test'}</h2><p class="small muted">${matches.length?'Compare the exact method and exclusions before treating a record as the same test.':'This index does not cover all previous research. A related measurement or source check below is not a decoding attempt.'}</p>${selected(matches)}${supporting.length?`<h2>Related measurements and source checks</h2><p class="small muted">These may help assess the idea, but do not establish that its decoding rule was tested.</p>${selected(supporting)}`:''}`;
-    if(matches.length&&endpoint){
+    if(matches.length&&assistantEndpoint()){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});
       else if(requestAI)compare(idea);
       else status.textContent='Press Check idea to compare the documented scope.';
+    } else if(matches.length&&requestAI&&!assistantConfig){
+      const token=++pendingConfigRequest;
+      status.textContent='Preparing the comparison…';
+      assistantConfigPromise.then(()=>{
+        if(token!==pendingConfigRequest||!input.isConnected||input.value.trim()!==idea)return;
+        if(assistantEndpoint())compare(idea);
+        else status.textContent='Index checked. AI comparison is unavailable; the matching records are ready.';
+      });
     } else if(searchNow&&idea)status.textContent='Index checked. No AI request was needed.';
   }
-  input.addEventListener('input',reset);
-  for(const id of ['#idea-page-one','#idea-page-two'])$(id).addEventListener('change',reset);
+  input.addEventListener('input',()=>{shownIdea='';reset()});
+  for(const id of ['#idea-page-one','#idea-page-two'])$(id).addEventListener('change',()=>{shownIdea='';reset()});
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();if(!submit.disabled)$('#experiment-form').requestSubmit();}});
-  cancel.onclick=()=>{stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
+  cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
   $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});if(pages().length)p.set('pages',pages().join(','));history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
   draw(Boolean(query));
   if(!query&&params.get('browse')){
