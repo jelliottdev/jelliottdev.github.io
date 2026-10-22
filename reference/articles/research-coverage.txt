@@ -2,7 +2,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 63 published reproducible records: 13 bounded solving or extraction tests, 1 proposed-method replay, 34 manuscript measurements, 7 controls, 5 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 24 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 64 published reproducible records: 13 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 5 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 23 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -44,7 +44,7 @@ Current gaps with the greatest downstream effect
 
 	Page-boundary and separator decisions	Rune-only agreement between two text sources does not settle word joining, punctuation or key-clock resets. A test may use these marks even when its rune frequency is unchanged.	Make a page-by-page contestable-location register, then rerun one fixed word-edge or reset experiment with one change at a time.
 
-	Unexercised solving families	Twenty-four method families have no linked completed record. The largest useful candidates include running keys, homophonic/fractionated mappings, null removal and moving alphabets; an index page alone is not evidence they have been tried.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
+	Unexercised solving families	Twenty-three method families have no linked completed record. The largest useful candidates include running keys, homophonic/fractionated mappings and moving alphabets. Null removal now has one narrow doublet measurement, but no plaintext-recovery test; an index page alone is not evidence a method has been tried.	Choose one small, fixed parameter set per family, require a solved-page recovery control, and state what remains outside the bound.
 
 	Search-pattern controls	The new prime-path shuffle test makes one retrospective pattern less compelling: three or more values are absent in about 15% of either control set. Other attractive patterns still need controls matched to the actual search procedure.	For each proposed pattern, freeze the selection rule and full search budget before comparing the same statistic with appropriate controls; preserve every candidate, not only the best-looking one.
 
@@ -64,7 +64,7 @@ These are proposed series, not completed results. Each should have a baseline an
 
 	LP2-54–55 interruptions	Specify whether selected F runes split a stream, advance a clock, reset state or are skipped, then compare IoC and decoded controls.	Preserve the current skip and reset variants; add matched random interrupter positions and other segment rules.
 
-	Nulls and doublet removal	Predeclare a small deletion or insertion rule and measure doublet reduction across LP2-00–55.	Known readings, preserved word boundaries, matched random deletion and count of searched rules. Uniform additive keys answer a different question.
+	Nulls and doublet removal	The 29-type sweep closes the fixed one-rune deletion variant for the raw doublet count. Next, predeclare a bounded position rule and test it within a specified decoding pipeline.	Known readings, preserved word boundaries, matched random deletion and count of searched rules. Uniform additive keys answer a different question.
 
 	Moving alphabets	Fix a 29-rune disk, stepping rule and initial setting; test a single section before changing any rule.	Known-reading recovery, nearby settings, random ciphertext and held-out lines. A plausible sentence found after manual adjustments is exploratory.
 
@@ -147,6 +147,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - Nulls and doublet removal
   https://jelliottdev.github.io/reference/articles/method-nulls.html
+- 29-type sweep
+  https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
 - Uniform additive keys
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
 - Moving alphabets
