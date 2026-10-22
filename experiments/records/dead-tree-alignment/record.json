@@ -1,0 +1,96 @@
+{
+  "id": "dead-tree-alignment",
+  "title": "LP2-55 tree: reflected photograph alignment",
+  "status": "published",
+  "question": "Under one frozen crop, grayscale response and scale/translation search, does the horizontally reflected Commons tree photograph fit LP2-55 better than its original orientation?",
+  "summary": "The reflected source aligns more strongly with LP2-55 than the unreflected source, including the lower region checked after an upper-region fit. This is exploratory source-image evidence, not an exact editing recipe.",
+  "tags": [
+    "LP2-55",
+    "tree",
+    "DeadTree.jpg",
+    "Wikimedia Commons",
+    "horizontal reflection",
+    "mirror",
+    "image alignment",
+    "source photograph"
+  ],
+  "family": {
+    "id": "dead-tree-source",
+    "title": "Shared dead-tree artwork source",
+    "question": "How do the photographed tree and its manuscript/message treatments correspond?",
+    "baseline": "dead-tree-alignment"
+  },
+  "variant": {
+    "label": "One Commons source and LP2-55; reflected versus unreflected, scale plus translation",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-55"
+    ],
+    "artifacts": [
+      "exports/sources/commons/DeadTree.jpg"
+    ],
+    "representation": "Original 1894x2606 Commons JPEG and archived 2400x3600 LP2-55 JPEG; declared grayscale crop responses.",
+    "procedure": "Search 23 scales and all in-crop integer translations for two orientations. Compare full-region normalized correlation, then fit the upper 60% and score the lower 40% at that same transform.",
+    "parameters": "Source crop [100,500,1750,1950]; manuscript crop [550,1300,1850,2550]; clipped darkness levels 170/130 and 250/45; Gaussian sigma 7; scales 0.370–0.700 step 0.015; no rotation or shear.",
+    "exclusions": "Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images."
+  },
+  "outcome": "supported",
+  "finding": "Under the declared search, reflection improves whole-region correlation from 0.377 to 0.623; fitting upper branches yields lower-region correlations 0.456 reflected versus −0.095 original.",
+  "limitations": "Image, crop and response parameters were chosen after visual inspection. The lower-region check is within the same selected images and is not a blind independent holdout. It does not establish the author’s exact compositing steps or the probability of a coincidental match among other photographs.",
+  "next_steps": "Freeze an alignment rule for LP2-32 and the 2016 message; compare other tree photographs with the same selection process; inspect unmatched branch regions and tonal transformations.",
+  "reproduction": {
+    "command": "python experiments/records/dead-tree-alignment/run.py --check",
+    "environment": "Python 3 with NumPy and OpenCV; recorded with OpenCV 5.0.0. The experiment ZIP includes the Commons source JPEG but omits images/lp2-55.jpg; extract original-images.zip alongside it or download that original page. No network or AI is used by the checker.",
+    "script": "experiments/records/dead-tree-alignment/run.py",
+    "script_sha256": "997c2092bf11abfcacf9aad98dd4a593d2a2cf6b556fd71619d3430286893cfc",
+    "inputs": [
+      {
+        "path": "exports/sources/commons/DeadTree.jpg",
+        "sha256": "608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "experiments/records/dead-tree-alignment/plan.txt",
+        "sha256": "ace8a70a85cb5c5270bf385818d6d02d0d5a350b8d09ef736595f1c8452a4506"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/dead-tree-alignment.json",
+        "sha256": "2a57e33b4b2067928570364f7264d61c0d0755fdb29b8d6198ed4d76d29df658"
+      },
+      {
+        "path": "exports/figures/dead-tree-alignment.png",
+        "sha256": "5faee74e2942c96c03ba06f3aa69ad92059bf54ba34f28c6633439fced4a21b0"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; scripted alignment and score replay; original-image source checksum cross-checked with Wikimedia Commons; independent photographic review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Wikimedia Commons original file and attribution",
+      "url": "https://commons.wikimedia.org/wiki/File:DeadTree.jpg"
+    },
+    {
+      "label": "Archived LP2-55 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-55.jpg"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/dead-tree-alignment.png",
+      "caption": "Mirrored photograph after the upper-region fit, LP2-55 grayscale tree response and a 50% overlay. Derived from R. Neil Marshman / Brookie, CC BY-SA 3.0; not an unmodified source or reconstructed authoring layer."
+    }
+  ]
+}

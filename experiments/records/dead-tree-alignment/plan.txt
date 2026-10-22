@@ -1,0 +1,10 @@
+Question: Does a fixed-scale, translated, horizontally reflected crop of the credited Wikimedia tree photograph correspond to the pale tree in LP2-55 more closely than the original orientation?
+
+Source: Commons File:DeadTree.jpg, R. Neil Marshman / Brookie, original 1894x2606 JPEG, SHA-256 608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29. Attribution and CC BY-SA 3.0: https://commons.wikimedia.org/wiki/File:DeadTree.jpg . Archived file revision: https://commons.wikimedia.org/w/index.php?title=File:DeadTree.jpg&oldid=1198132170 .
+Target: original LP2-55 2400x3600 JPEG, SHA-256 a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba.
+
+Declared crop, [left,top,right,bottom), native pixels:
+  source [100,500,1750,1950]; target [550,1300,1850,2550].
+Both grayscale. Source response clip((170-L)/130,0,1); target response clip((250-L)/45,0,1). Resize source response with OpenCV default linear interpolation; blur both with Gaussian sigma 7. Compare original orientation and one horizontal reflection; no rotation or shear. Scales: 0.370, 0.385, ..., 0.700 (23 values). Search every integer translation for which the whole resized source crop fits within the target crop. For each scale/translation maximize OpenCV TM_CCOEFF_NORMED either over the full source crop or its upper 60%. For the upper-fit variant, record Pearson correlation on the lower 40% at the selected transform, with no refit. The latter is a within-image check, not an untouched experimental holdout.
+
+Disclosure: The choice of photograph, cropping windows, response clipping, blur and scale range followed visual inspection. Comparing the two orientations and lower-region score is exploratory. No null distribution or probability of chance matching is claimed. It tests geometric correspondence, not the exact authoring tool or processing sequence. A simple affine alignment cannot explain all missing/added branches and tonal choices.

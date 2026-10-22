@@ -6760,13 +6760,18 @@ Outside this test: Other keys, other platforms, independent OutGuess implementat
 Image transforms and overlays
 Measure features under declared processing and alignment choices.
 
-Related records (1)
+Related records (2)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can image-only detection find every rune row?
 Record type: Input audit. Checks extraction or input coverage against a declared reference; it does not establish a decryption.
 Question tested: Does a fixed image-only horizontal-projection detector recover every individually annotated rune row across eight selected page layouts?
 Outside this test: No rune recognition, actual omitted archive line finding, classifier accuracy claim, whole-book certification, random-sample inference or threshold tuning.
+
+LP2-55 tree: reflected photograph alignment
+Record type: Input audit. Checks extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Under one frozen crop, grayscale response and scale/translation search, does the horizontally reflected Commons tree photograph fit LP2-55 better than its original orientation?
+Outside this test: Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images.
 
 
 
@@ -7219,6 +7224,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - Can image-only detection find every rune row?
   https://jelliottdev.github.io/#/experiments/image-row-coverage
+- LP2-55 tree: reflected photograph alignment
+  https://jelliottdev.github.io/#/experiments/dead-tree-alignment
 - Geometric constructions and navigation
   https://jelliottdev.github.io/reference/articles/method-geometry.html
 - LP2-33 and LP2-39: shared three-circle radii at native scale
@@ -12219,6 +12226,9 @@ Line spacing and file sizes
 
 The line-gap audit corrects a reported file-size comparison and explains why baseline spacing, blank ink-to-ink gaps and JPEG byte counts must be measured separately.
 
+
+For a worked source-image comparison using explicit crops, reflection, scale, translation and a lower-region check, see the LP2-55 tree alignment. Its correlation values describe that processing rule; they do not certify the original editing sequence.
+
 Sources, related references, and files
 - Pillow JPEG documentation
   https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#jpeg
@@ -12248,6 +12258,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/checksums.html
 - line-gap audit
   https://jelliottdev.github.io/reference/articles/line-gaps.html
+- LP2-55 tree alignment
+  https://jelliottdev.github.io/#/experiments/dead-tree-alignment
 
 Article: https://jelliottdev.github.io/reference/articles/image-regions.html
 
@@ -12961,7 +12973,7 @@ Use this directory when the question is “Where did that picture come from?” 
 
 	Detached wing, LP2-27	The original wing and its internal lines can be inspected. No external photograph or illustration is verified as its source here.	Wing-and-tree study; original sheet.
 
-	Tree, LP2-32, LP2-55 and the 2016 message	R. Neil Marshman’s DeadTree.jpg on Wikimedia Commons; reflected and processed in the manuscript. The exact processing recipe remains unreproduced.	Photograph and attribution; shared-tree comparison.
+	Tree, LP2-32, LP2-55 and the 2016 message	R. Neil Marshman’s DeadTree.jpg on Wikimedia Commons; reflected and processed in the manuscript. The LP2-55 alignment favors the reflected orientation under its stated crop and response; the exact processing recipe remains unreproduced.	Photograph and attribution; shared-tree comparison.
 
 	Branches, spiral borders and paired plants	Locations and visual comparisons are documented. A common source file, drawing tool or production process has not been established.	Branches and trees; spiral borders.
 
@@ -13002,7 +13014,7 @@ Start with the location before following a proposed influence. The earlier puzzl
 
 The reader links open original manuscript images. The complete-reading and comparison guides explain the decoding and outside sources. For the corresponding passage in a particular edition, follow the source cited by that guide rather than assuming that page numbers or paragraph counts transfer between editions.
 
-The Earls Barton tree comparison identifies a dated photograph and connects its reflected branch arrangement with the tree treatments on LP2-32, LP2-55 and the 2016 message. The exact image transformation remains unreproduced; the photograph does not establish a location for the puzzle authors.
+The Earls Barton tree comparison identifies a dated photograph and connects its reflected branch arrangement with the tree treatments on LP2-32, LP2-55 and the 2016 message. A bounded alignment measures the reflected LP2-55 comparison. The exact image transformation remains unreproduced; the photograph does not establish a location for the puzzle authors.
 
 Texts and literary parallels
 
@@ -13123,6 +13135,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/wing-and-tree.html
 - original sheet; LP2-27: manuscript sheet containing the detached wing
   https://jelliottdev.github.io/#/reader/lp2-27
+- LP2-55 alignment; bounded alignment
+  https://jelliottdev.github.io/#/experiments/dead-tree-alignment
 - Photograph and attribution; Earls Barton tree comparison
   https://jelliottdev.github.io/reference/articles/branches.html#dead-tree-source
 - shared-tree comparison
@@ -18352,7 +18366,7 @@ LP2-55 detail, rectangle [650, 1400, 1100, 1100]. Complete sheet · Original man
 
 Comparison: horizontal reflection brings the broad branch arrangement into correspondence. In the photograph the low, nearly horizontal limb extends left; in LP2-55 it extends right. The main fork above it and the taller upward branches also exchange sides. These are more specific comparison points than the shared subject of a leafless tree.
 
-The photograph retains ground, distant vegetation, bark texture and fine twigs. LP2-55 isolates a pale outline with much less detail. The photograph is the source comparison for the shared tree, including the processed version on LP2-32 and the 2016 message. No pixel alignment, tracing reconstruction or exact filter sequence is reported here.
+The photograph retains ground, distant vegetation, bark texture and fine twigs. LP2-55 isolates a pale outline with much less detail. The photograph is the source comparison for the shared tree, including the processed version on LP2-32 and the 2016 message. A bounded alignment experiment now compares the credited Commons original with LP2-55 in both orientations. The reflected crop fits more closely under its declared grayscale, scale and translation rule; it does not reconstruct the tracing or exact filter sequence.
 
 How to test the source comparison
 
@@ -18370,7 +18384,7 @@ The tree in the 2016 message belongs with the tree images on LP2-32 and LP2-55. 
 [Image: The original 2016 message, with the tree faintly visible behind the text.]
 The original 2016 message JPEG. Download original. Compare the tree with the manuscript details and Wikimedia source above.
 
-The source photograph, horizontal reflection and subsequent processing are separate parts of the explanation. The exact crop, scale, tonal adjustments and filtering sequence have not been reconstructed here. A reproducible reconstruction should preserve each intermediate image and its settings, showing how the branch junctions remain in correspondence as their appearance changes.
+The source photograph, horizontal reflection and subsequent processing are separate parts of the explanation. The LP2-55 alignment gives a measured crop and scale for one comparison, but the author’s exact crop, tonal adjustments and filtering sequence have not been reconstructed. A reproducible reconstruction should preserve each intermediate image and its settings, showing how the branch junctions remain in correspondence as their appearance changes.
 
 The LP2-32 grid experiment addresses a different connection: its selected sums equal the 2016 JPEG dimensions and extracted payload length. That arithmetic does not identify the image-processing recipe.
 
@@ -18514,6 +18528,8 @@ Sources, related references, and files
   https://creativecommons.org/licenses/by-sa/3.0/
 - processed version on LP2-32
   https://jelliottdev.github.io/reference/articles/wing-and-tree.html#soft-edges
+- bounded alignment experiment; LP2-55 alignment
+  https://jelliottdev.github.io/#/experiments/dead-tree-alignment
 - search bounds
   https://jelliottdev.github.io/reference/articles/search-space.html
 - the archived Commons revision
@@ -26295,7 +26311,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The experiment archive is a set of reproducible, bounded tests. It is not a census of every attempt made by every solver. As of 21 October 2026, it contains 53 published records and a separate map of 54 method families. Twenty-four of those families have no linked completed record. A family without a record means not documented here, not “never tried”; a linked record covers only its named inputs and variants.
+The experiment archive is a set of reproducible, bounded tests. It is not a census of every attempt made by every solver. As of 21 October 2026, it contains 54 published records and a separate map of 54 method families. Twenty-four of those families have no linked completed record. A family without a record means not documented here, not “never tried”; a linked record covers only its named inputs and variants.
 
 Use Have we tried it? to check a specific proposal against exact scopes. Use the method-family map when you are still defining a method. This page tracks the work needed to make both tools a reliable account of what is known and what has been tested.
 
@@ -26324,7 +26340,7 @@ We already have page records, transcription checks, rune-value arithmetic, an il
 
 The most valuable reconciliation is at page boundaries and ambiguous marks. A change to a separator, rune, or line break can change word lengths, cribs, counts and key alignment. Build a contestable-locations register with the original crop, alternate readings, and downstream tests affected. Keep archived transcription, photographic observation, and proposed correction in separate fields. The current checking guide explains the distinction, but the register is not yet exhaustive.
 
-Historical source chains need the same treatment. For each 2012–2014 book code, keep the edition or exact text, the coordinate convention, and a replay that yields the archived output. For artwork, distinguish a visually similar source from a verified pixel or compositing relationship. For extracted files and later messages, identify the carrier, extraction command, original bytes, and authentication status. These are facts and provenance tasks before they are decryption experiments. Start with book ciphers, the cover, hidden files, and later messages.
+Historical source chains need the same treatment. For each 2012–2014 book code, keep the edition or exact text, the coordinate convention, and a replay that yields the archived output. For artwork, distinguish a visually similar source from a verified pixel or compositing relationship. The tree alignment measures one reflected source comparison on LP2-55; the LP2-32 and 2016 treatments remain to be fit separately. For extracted files and later messages, identify the carrier, extraction command, original bytes, and authentication status. These are facts and provenance tasks before they are decryption experiments. Start with book ciphers, the cover, hidden files, and later messages.
 
 
 The next experiment series
@@ -26384,6 +26400,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/visual-index.html
 - earlier puzzle history
   https://jelliottdev.github.io/reference/articles/2012-opening.html
+- tree alignment
+  https://jelliottdev.github.io/#/experiments/dead-tree-alignment
 - book ciphers
   https://jelliottdev.github.io/reference/articles/book-ciphers.html
 - the cover
@@ -27886,6 +27904,113 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "manuscript",
     "label": "Manuscript analysis",
     "description": "Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions."
+  }
+}
+
+---
+
+{
+  "id": "dead-tree-alignment",
+  "title": "LP2-55 tree: reflected photograph alignment",
+  "status": "published",
+  "question": "Under one frozen crop, grayscale response and scale/translation search, does the horizontally reflected Commons tree photograph fit LP2-55 better than its original orientation?",
+  "summary": "The reflected source aligns more strongly with LP2-55 than the unreflected source, including the lower region checked after an upper-region fit. This is exploratory source-image evidence, not an exact editing recipe.",
+  "tags": [
+    "LP2-55",
+    "tree",
+    "DeadTree.jpg",
+    "Wikimedia Commons",
+    "horizontal reflection",
+    "mirror",
+    "image alignment",
+    "source photograph"
+  ],
+  "family": {
+    "id": "dead-tree-source",
+    "title": "Shared dead-tree artwork source",
+    "question": "How do the photographed tree and its manuscript/message treatments correspond?",
+    "baseline": "dead-tree-alignment"
+  },
+  "variant": {
+    "label": "One Commons source and LP2-55; reflected versus unreflected, scale plus translation",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-55"
+    ],
+    "artifacts": [
+      "exports/sources/commons/DeadTree.jpg"
+    ],
+    "representation": "Original 1894x2606 Commons JPEG and archived 2400x3600 LP2-55 JPEG; declared grayscale crop responses.",
+    "procedure": "Search 23 scales and all in-crop integer translations for two orientations. Compare full-region normalized correlation, then fit the upper 60% and score the lower 40% at that same transform.",
+    "parameters": "Source crop [100,500,1750,1950]; manuscript crop [550,1300,1850,2550]; clipped darkness levels 170/130 and 250/45; Gaussian sigma 7; scales 0.370–0.700 step 0.015; no rotation or shear.",
+    "exclusions": "Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images."
+  },
+  "outcome": "supported",
+  "finding": "Under the declared search, reflection improves whole-region correlation from 0.377 to 0.623; fitting upper branches yields lower-region correlations 0.456 reflected versus −0.095 original.",
+  "limitations": "Image, crop and response parameters were chosen after visual inspection. The lower-region check is within the same selected images and is not a blind independent holdout. It does not establish the author’s exact compositing steps or the probability of a coincidental match among other photographs.",
+  "next_steps": "Freeze an alignment rule for LP2-32 and the 2016 message; compare other tree photographs with the same selection process; inspect unmatched branch regions and tonal transformations.",
+  "reproduction": {
+    "command": "python experiments/records/dead-tree-alignment/run.py --check",
+    "environment": "Python 3 with NumPy and OpenCV; recorded with OpenCV 5.0.0. The experiment ZIP includes the Commons source JPEG but omits images/lp2-55.jpg; extract original-images.zip alongside it or download that original page. No network or AI is used by the checker.",
+    "script": "experiments/records/dead-tree-alignment/run.py",
+    "script_sha256": "997c2092bf11abfcacf9aad98dd4a593d2a2cf6b556fd71619d3430286893cfc",
+    "inputs": [
+      {
+        "path": "exports/sources/commons/DeadTree.jpg",
+        "sha256": "608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "experiments/records/dead-tree-alignment/plan.txt",
+        "sha256": "ace8a70a85cb5c5270bf385818d6d02d0d5a350b8d09ef736595f1c8452a4506"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "exports/dead-tree-alignment.json",
+        "sha256": "2a57e33b4b2067928570364f7264d61c0d0755fdb29b8d6198ed4d76d29df658"
+      },
+      {
+        "path": "exports/figures/dead-tree-alignment.png",
+        "sha256": "5faee74e2942c96c03ba06f3aa69ad92059bf54ba34f28c6633439fced4a21b0"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; scripted alignment and score replay; original-image source checksum cross-checked with Wikimedia Commons; independent photographic review pending",
+    "retested_on": "2026-10-21",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "sources": [
+    {
+      "label": "Wikimedia Commons original file and attribution",
+      "url": "https://commons.wikimedia.org/wiki/File:DeadTree.jpg"
+    },
+    {
+      "label": "Archived LP2-55 JPEG",
+      "url": "https://jelliottdev.github.io/images/lp2-55.jpg"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "exports/figures/dead-tree-alignment.png",
+      "caption": "Mirrored photograph after the upper-region fit, LP2-55 grayscale tree response and a 50% overlay. Derived from R. Neil Marshman / Brookie, CC BY-SA 3.0; not an unmodified source or reconstructed authoring layer."
+    }
+  ],
+  "article": "## The comparison\n\nThe pale tree on [LP2-55](#/reader/lp2-55) resembles the photograph [DeadTree.jpg](https://commons.wikimedia.org/wiki/File:DeadTree.jpg), credited to R. Neil Marshman / Brookie. This test asks a narrower, checkable question: when the source photograph is scaled and translated over the manuscript tree, does a horizontal reflection fit better than its original orientation? It does **not** seek a decryption rule or recover the original image-editing steps.\n\nThe published [Commons original](exports/sources/commons/DeadTree.jpg) is 1,894 × 2,606 pixels. Its local SHA-256 is `608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29`; its SHA-1 matches the checksum on the [Commons file record](https://commons.wikimedia.org/wiki/File:DeadTree.jpg). The LP2-55 JPEG is the archived 2,400 × 3,600-pixel page. The script rejects either image if its bytes change.\n\n![Mirrored source, pale manuscript tree and their half-opacity overlay](exports/figures/dead-tree-alignment.png)\n\nThe figure shows the selected mirrored fit at left, the LP2-55 tree region in the middle and a 50% overlay at right. Both source and manuscript are converted to grayscale response maps, enlarged for inspection; this is **not** an unmodified image or a reconstruction of the author’s layer. The source is R. Neil Marshman / Brookie, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), horizontally reflected, cropped, resized, threshold-mapped and blurred here. [Open the original photograph](exports/sources/commons/DeadTree.jpg) · [Open the unmodified manuscript page](images/lp2-55.jpg).\n\n## Frozen comparison rule\n\nThe source crop is `[100, 500, 1750, 1950]`; the LP2-55 crop is `[550, 1300, 1850, 2550]`, with right and bottom edges excluded. In each grayscale crop, values darker than the chosen brightness level become a stronger tree response. The source uses `clip((170−L)/130,0,1)` and the manuscript `clip((250−L)/45,0,1)`. Gaussian blur with sigma 7 tolerates differences in stroke width and some missing twigs. Those values were chosen after inspecting the images, so the following scores are descriptive rather than a blind significance test.\n\nFor each orientation, the script checks 23 scales from 0.370 through 0.700 in increments of 0.015, plus every integer translation that keeps the whole template inside the manuscript crop. The fit score is normalized cross-correlation. In a second run, only the upper 60% of the source template chooses the transform; the lower 40% is scored at that fixed transform. This lower-region check tests whether the upper-branch fit extends further down the same image. It is not a wholly independent holdout because the photograph, crops and processing were selected after viewing both images.\n\n| Orientation | Best whole-crop correlation | Upper 60% fit | Lower 40% at that fit |\n| --- | ---: | ---: | ---: |\n| Original | 0.377 | 0.564 | −0.095 |\n| Horizontal reflection | **0.623** | **0.813** | **0.456** |\n\nThe reflected upper fit uses scale 0.550 and translation `(230,94)` relative to the LP2-55 crop. Its major forks, central branch structure and rightward lower limb overlap in the visualization. The unreflected comparison does not carry its upper fit into the lower region. [Download every scale, coordinate and score](exports/dead-tree-alignment.json).\n\n## What this establishes and what remains open\n\nThe two declared alignments favor a horizontally reflected source photograph, including the lower region that did not choose the fit. This supports a specific image-source relationship more strongly than a general resemblance between bare trees. The test does not calculate a chance probability against a collection of other tree photographs. It does not establish the exact crop, layer opacity, drawing/filter steps or software used to make LP2-55. Fine branches and the lower trunk differ visibly in the overlay.\n\nThe [branches guide](#/wiki/branches?section=shared-tree) compares the related treatments on LP2-32 and in the 2016 message. Those carriers are **not** fit by this script; each would need its own frozen crop and control comparison. Nothing in this image alignment implies a rune operation.\n\n## Reproduce\n\nDownload the [experiment bundle](downloads/experiments/dead-tree-alignment.zip) and extract it preserving folders. It contains the [Commons original](exports/sources/commons/DeadTree.jpg). Download the [LP2-55 original](images/lp2-55.jpg) separately or extract the original-images ZIP into the same folder. Install Python 3, NumPy and OpenCV (`opencv-python`); the recorded run used OpenCV 5.0.0. Verify the files using the bundled `START-HERE` instructions, then run:\n\n```text\npython experiments/records/dead-tree-alignment/run.py --check\n```\n\nTo regenerate a report and figure under other settings, edit a **copy** of the script and save separate outputs. Report altered crops, thresholds, blur, scale range and orientation choices. The exact source file, [plan](experiments/records/dead-tree-alignment/plan.txt), [script](experiments/records/dead-tree-alignment/run.py), [results](exports/dead-tree-alignment.json) and [visualization](exports/figures/dead-tree-alignment.png) are linked here for inspection.\n",
+  "article_path": "experiments/records/dead-tree-alignment/article.md",
+  "script_sha256": "997c2092bf11abfcacf9aad98dd4a593d2a2cf6b556fd71619d3430286893cfc",
+  "record_type": {
+    "id": "audit",
+    "label": "Input audit",
+    "description": "Checks extraction or input coverage against a declared reference; it does not establish a decryption."
   }
 }
 

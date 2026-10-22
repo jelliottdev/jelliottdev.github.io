@@ -366,6 +366,109 @@
     &quot;label&quot;: &quot;Manuscript analysis&quot;,
     &quot;description&quot;: &quot;Tests or measures declared manuscript inputs; read the scope for pages, transformations and exclusions.&quot;
   }
+}</pre></article><article id="dead-tree-alignment"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;dead-tree-alignment&quot;,
+  &quot;title&quot;: &quot;LP2-55 tree: reflected photograph alignment&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Under one frozen crop, grayscale response and scale/translation search, does the horizontally reflected Commons tree photograph fit LP2-55 better than its original orientation?&quot;,
+  &quot;summary&quot;: &quot;The reflected source aligns more strongly with LP2-55 than the unreflected source, including the lower region checked after an upper-region fit. This is exploratory source-image evidence, not an exact editing recipe.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-55&quot;,
+    &quot;tree&quot;,
+    &quot;DeadTree.jpg&quot;,
+    &quot;Wikimedia Commons&quot;,
+    &quot;horizontal reflection&quot;,
+    &quot;mirror&quot;,
+    &quot;image alignment&quot;,
+    &quot;source photograph&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;dead-tree-source&quot;,
+    &quot;title&quot;: &quot;Shared dead-tree artwork source&quot;,
+    &quot;question&quot;: &quot;How do the photographed tree and its manuscript/message treatments correspond?&quot;,
+    &quot;baseline&quot;: &quot;dead-tree-alignment&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;One Commons source and LP2-55; reflected versus unreflected, scale plus translation&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;exports/sources/commons/DeadTree.jpg&quot;
+    ],
+    &quot;representation&quot;: &quot;Original 1894x2606 Commons JPEG and archived 2400x3600 LP2-55 JPEG; declared grayscale crop responses.&quot;,
+    &quot;procedure&quot;: &quot;Search 23 scales and all in-crop integer translations for two orientations. Compare full-region normalized correlation, then fit the upper 60% and score the lower 40% at that same transform.&quot;,
+    &quot;parameters&quot;: &quot;Source crop [100,500,1750,1950]; manuscript crop [550,1300,1850,2550]; clipped darkness levels 170/130 and 250/45; Gaussian sigma 7; scales 0.370–0.700 step 0.015; no rotation or shear.&quot;,
+    &quot;exclusions&quot;: &quot;Other source photographs, other crops, rotations, warps, tonal recipes, LP2-32, the 2016 message, any rune/decryption operation, and a chance probability over candidate images.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;Under the declared search, reflection improves whole-region correlation from 0.377 to 0.623; fitting upper branches yields lower-region correlations 0.456 reflected versus −0.095 original.&quot;,
+  &quot;limitations&quot;: &quot;Image, crop and response parameters were chosen after visual inspection. The lower-region check is within the same selected images and is not a blind independent holdout. It does not establish the author’s exact compositing steps or the probability of a coincidental match among other photographs.&quot;,
+  &quot;next_steps&quot;: &quot;Freeze an alignment rule for LP2-32 and the 2016 message; compare other tree photographs with the same selection process; inspect unmatched branch regions and tonal transformations.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dead-tree-alignment/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 with NumPy and OpenCV; recorded with OpenCV 5.0.0. The experiment ZIP includes the Commons source JPEG but omits images/lp2-55.jpg; extract original-images.zip alongside it or download that original page. No network or AI is used by the checker.&quot;,
+    &quot;script&quot;: &quot;experiments/records/dead-tree-alignment/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;997c2092bf11abfcacf9aad98dd4a593d2a2cf6b556fd71619d3430286893cfc&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/sources/commons/DeadTree.jpg&quot;,
+        &quot;sha256&quot;: &quot;608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-55.jpg&quot;,
+        &quot;sha256&quot;: &quot;a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dead-tree-alignment/plan.txt&quot;,
+        &quot;sha256&quot;: &quot;ace8a70a85cb5c5270bf385818d6d02d0d5a350b8d09ef736595f1c8452a4506&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;exports/dead-tree-alignment.json&quot;,
+        &quot;sha256&quot;: &quot;2a57e33b4b2067928570364f7264d61c0d0755fdb29b8d6198ed4d76d29df658&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/figures/dead-tree-alignment.png&quot;,
+        &quot;sha256&quot;: &quot;5faee74e2942c96c03ba06f3aa69ad92059bf54ba34f28c6633439fced4a21b0&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; scripted alignment and score replay; original-image source checksum cross-checked with Wikimedia Commons; independent photographic review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-21&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Wikimedia Commons original file and attribution&quot;,
+      &quot;url&quot;: &quot;https://commons.wikimedia.org/wiki/File:DeadTree.jpg&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived LP2-55 JPEG&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/images/lp2-55.jpg&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;exports/figures/dead-tree-alignment.png&quot;,
+      &quot;caption&quot;: &quot;Mirrored photograph after the upper-region fit, LP2-55 grayscale tree response and a 50% overlay. Derived from R. Neil Marshman / Brookie, CC BY-SA 3.0; not an unmodified source or reconstructed authoring layer.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## The comparison\n\nThe pale tree on [LP2-55](#/reader/lp2-55) resembles the photograph [DeadTree.jpg](https://commons.wikimedia.org/wiki/File:DeadTree.jpg), credited to R. Neil Marshman / Brookie. This test asks a narrower, checkable question: when the source photograph is scaled and translated over the manuscript tree, does a horizontal reflection fit better than its original orientation? It does **not** seek a decryption rule or recover the original image-editing steps.\n\nThe published [Commons original](exports/sources/commons/DeadTree.jpg) is 1,894 × 2,606 pixels. Its local SHA-256 is `608288991f92b8ab901a9fbb39937f93ebdfeb5fd84edeecfa637d5262ff7b29`; its SHA-1 matches the checksum on the [Commons file record](https://commons.wikimedia.org/wiki/File:DeadTree.jpg). The LP2-55 JPEG is the archived 2,400 × 3,600-pixel page. The script rejects either image if its bytes change.\n\n![Mirrored source, pale manuscript tree and their half-opacity overlay](exports/figures/dead-tree-alignment.png)\n\nThe figure shows the selected mirrored fit at left, the LP2-55 tree region in the middle and a 50% overlay at right. Both source and manuscript are converted to grayscale response maps, enlarged for inspection; this is **not** an unmodified image or a reconstruction of the author’s layer. The source is R. Neil Marshman / Brookie, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), horizontally reflected, cropped, resized, threshold-mapped and blurred here. [Open the original photograph](exports/sources/commons/DeadTree.jpg) · [Open the unmodified manuscript page](images/lp2-55.jpg).\n\n## Frozen comparison rule\n\nThe source crop is `[100, 500, 1750, 1950]`; the LP2-55 crop is `[550, 1300, 1850, 2550]`, with right and bottom edges excluded. In each grayscale crop, values darker than the chosen brightness level become a stronger tree response. The source uses `clip((170−L)/130,0,1)` and the manuscript `clip((250−L)/45,0,1)`. Gaussian blur with sigma 7 tolerates differences in stroke width and some missing twigs. Those values were chosen after inspecting the images, so the following scores are descriptive rather than a blind significance test.\n\nFor each orientation, the script checks 23 scales from 0.370 through 0.700 in increments of 0.015, plus every integer translation that keeps the whole template inside the manuscript crop. The fit score is normalized cross-correlation. In a second run, only the upper 60% of the source template chooses the transform; the lower 40% is scored at that fixed transform. This lower-region check tests whether the upper-branch fit extends further down the same image. It is not a wholly independent holdout because the photograph, crops and processing were selected after viewing both images.\n\n| Orientation | Best whole-crop correlation | Upper 60% fit | Lower 40% at that fit |\n| --- | ---: | ---: | ---: |\n| Original | 0.377 | 0.564 | −0.095 |\n| Horizontal reflection | **0.623** | **0.813** | **0.456** |\n\nThe reflected upper fit uses scale 0.550 and translation `(230,94)` relative to the LP2-55 crop. Its major forks, central branch structure and rightward lower limb overlap in the visualization. The unreflected comparison does not carry its upper fit into the lower region. [Download every scale, coordinate and score](exports/dead-tree-alignment.json).\n\n## What this establishes and what remains open\n\nThe two declared alignments favor a horizontally reflected source photograph, including the lower region that did not choose the fit. This supports a specific image-source relationship more strongly than a general resemblance between bare trees. The test does not calculate a chance probability against a collection of other tree photographs. It does not establish the exact crop, layer opacity, drawing/filter steps or software used to make LP2-55. Fine branches and the lower trunk differ visibly in the overlay.\n\nThe [branches guide](#/wiki/branches?section=shared-tree) compares the related treatments on LP2-32 and in the 2016 message. Those carriers are **not** fit by this script; each would need its own frozen crop and control comparison. Nothing in this image alignment implies a rune operation.\n\n## Reproduce\n\nDownload the [experiment bundle](downloads/experiments/dead-tree-alignment.zip) and extract it preserving folders. It contains the [Commons original](exports/sources/commons/DeadTree.jpg). Download the [LP2-55 original](images/lp2-55.jpg) separately or extract the original-images ZIP into the same folder. Install Python 3, NumPy and OpenCV (`opencv-python`); the recorded run used OpenCV 5.0.0. Verify the files using the bundled `START-HERE` instructions, then run:\n\n```text\npython experiments/records/dead-tree-alignment/run.py --check\n```\n\nTo regenerate a report and figure under other settings, edit a **copy** of the script and save separate outputs. Report altered crops, thresholds, blur, scale range and orientation choices. The exact source file, [plan](experiments/records/dead-tree-alignment/plan.txt), [script](experiments/records/dead-tree-alignment/run.py), [results](exports/dead-tree-alignment.json) and [visualization](exports/figures/dead-tree-alignment.png) are linked here for inspection.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dead-tree-alignment/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;997c2092bf11abfcacf9aad98dd4a593d2a2cf6b556fd71619d3430286893cfc&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Input audit&quot;,
+    &quot;description&quot;: &quot;Checks extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
 }</pre></article><article id="decoder-skip-controls"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;decoder-skip-controls&quot;,
   &quot;title&quot;: &quot;Can a correct key fail under the wrong alignment rule?&quot;,
