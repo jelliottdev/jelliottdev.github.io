@@ -11,7 +11,7 @@
   }
   function experimentDocs(records) {
     return records.filter(r=>r.status==='published').map(r=>({
-      id:r.id, title:r.title, kind:'experiment', href:`#/experiments/${r.id}`,
+      id:r.id, title:r.title, kind:'experiment', recordType:r.record_type?.id||'method', href:`#/experiments/${r.id}`,
       text:JSON.stringify({record_type:r.record_type,question:r.question,family:r.family,variant:r.variant,scope:r.scope,outcome:r.outcome,finding:r.finding,limitations:r.limitations}),
       // Retrieval can use prose, but evidence always preserves the complete scope.
       keywords:[r.summary,...(r.tags||[]),r.article||''].join(' '),
@@ -63,7 +63,7 @@
     }
     return selected;
   }
-  function experiments(documents,query,pages=[]) {
+  function rankedRecords(documents,query,pages=[]) {
     const technique=techniqueQuery(query);
     if(!tokens(technique).length)return [];
     // Rank the technique without page numbers. Page overlap is secondary.
@@ -73,6 +73,19 @@
       return {...r,pageOverlap:explicit.some(p=>scope.includes(p))};
     }).sort((a,b)=>b.score-a.score||Number(b.pageOverlap)-Number(a.pageOverlap));
   }
-  const api={tokens,pageIds,experimentDocs,search,select,experiments,techniqueQuery};
+  function classify(documents,query,pages=[]) {
+    const ranked=rankedRecords(documents,query,pages);
+    const tests=ranked.filter(r=>!r.document.recordType||['method','replay'].includes(r.document.recordType));
+    const supporting=ranked.filter(r=>r.document.recordType&&!['method','replay'].includes(r.document.recordType));
+    // A strong diagnostic/source match should not trigger a weak, incidental method hit.
+    return {tests:supporting.length&&tests.length&&supporting[0].score>=tests[0].score*1.5?[]:tests,supporting};
+  }
+  function experiments(documents,query,pages=[]) {
+    return classify(documents,query,pages).tests;
+  }
+  function supporting(documents,query,pages=[]) {
+    return classify(documents,query,pages).supporting;
+  }
+  const api={tokens,pageIds,experimentDocs,search,select,experiments,supporting,classify,techniqueQuery};
   if(typeof module!=='undefined')module.exports=api;else root.AssistantSearch=api;
 })(globalThis);

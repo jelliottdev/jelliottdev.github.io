@@ -52,4 +52,4 @@ Official documentation checked 19 October 2026:
 
 Puter requires visitor sign-in and uses visitor allowances/billing. Pollinations generation now requires keys. Neither meets the requested friction-free visitor experience as directly as a hosted binding on the free plan.
 
-Record-type labels and definitions travel inside each complete experiment excerpt. The prompt distinguishes controls, audits, formal alphabet analyses, replays and manuscript analyses. These labels describe evidence roles, not confidence. Prompt version `research-v3-record-types` invalidates earlier answer caches; exact evidence changes also invalidate them.
+Record-type labels and definitions travel inside each complete research excerpt. The checker sends only bounded solving tests and explicitly marked method replays to inference. Measurements, controls and source audits remain searchable as separate supporting records, without implying that their methods decode LP2. Prompt version `research-v4-solving-tests` invalidates earlier answer caches; exact evidence changes also invalidate them.

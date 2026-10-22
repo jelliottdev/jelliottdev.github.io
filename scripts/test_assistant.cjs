@@ -162,30 +162,31 @@ assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
 console.log('PASS: method and exclusions remain visible; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
 for(const query of ['Have we tried checking if its a different language than English?',
  'another language','could it be German','different languages on LP2-31']){
- assert.equal(Search.experiments(liveDocs,query)[0].document.id,'parallel-languages',query);
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,'parallel-languages',query);
+ assert.equal(Search.experiments(liveDocs,query).length,0,query);
 }
 const tagged={...experiment,phrases:['reverse prime']};
 const repeated={...tagged,phrases:['reverse prime','reverse prime']};
 assert.equal(Search.search([tagged],'reverse prime')[0].score,Search.search([repeated],'reverse prime')[0].score);
 assert.equal(Search.experiments([tagged],'prime reverse')[0].score,
  Search.experiments([experiment],'prime reverse')[0].score,'Reordered words are not an exact phrase match');
-console.log('PASS: natural-language comparison queries reach the language experiment; phrase boosts do not stack or ignore order.');
+console.log('PASS: natural-language comparison queries reach the language measurement without becoming solve tests; phrase boosts do not stack or ignore order.');
 
 for(const query of ["English scorer", "scorer calibration", "quadgrams shuffled controls"]){
- assert.equal(Search.experiments(liveDocs,query)[0].document.id,"english-scorer-controls",query);
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,"english-scorer-controls",query);
 }
 console.log("PASS: scorer calibration queries retrieve scorer controls, distinct from language identification.");
 
 for(const query of ['Project Runeberg','historical corpus word lengths','Have we compared word lengths with books?']){
- assert.equal(Search.experiments(liveDocs,query)[0].document.id,'corpus-prefix-census',query);
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,'corpus-prefix-census',query);
 }
-assert.equal(Search.experiments(liveDocs,'different language than English')[0].document.id,'parallel-languages');
+assert.equal(Search.supporting(liveDocs,'different language than English')[0].document.id,'parallel-languages');
 console.log('PASS: historical corpus questions reach the complete census while language identification retains its own baseline.');
 
 for(const query of ['known plaintext seed search','crib withheld text','seed dictionary bounds']){
- assert.equal(Search.experiments(liveDocs,query)[0].document.id,'seed-crib-controls',query);
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,'seed-crib-controls',query);
 }
 for(const query of ['image-only row detection','whole line omission']){
- assert.equal(Search.experiments(liveDocs,query)[0].document.id,'image-row-coverage',query);
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,'image-row-coverage',query);
 }
 console.log('PASS: known-crib seed controls and image-row coverage have distinct experiment destinations.');

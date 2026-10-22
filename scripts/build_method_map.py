@@ -16,7 +16,7 @@ guides={r['id'] for r in read('articles/index.json')}
 assert len({f['id'] for f in families})==len(families)
 parts=['''<p>Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.</p>
 <p><strong>A family page is not a completed experiment.</strong> Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.</p>''']
-parts.append('<p><a href="#/wiki/solving-methods?section=record-types">What the record types mean</a>: distinguish manuscript analyses, controls, audits and reproductions.</p>')
+parts.append('<p><a href="#/wiki/solving-methods?section=record-types">What the record types mean</a>: distinguish bounded solving tests from measurements, controls, audits and reproductions.</p>')
 linked=set()
 for group in dict.fromkeys(f['group'] for f in families):
     anchor=group.lower().replace(',','').replace(' ','-')

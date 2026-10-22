@@ -9,17 +9,17 @@ const env={SITE_ORIGIN:origin,IDEA_LIMIT:{limit:async()=>({success:true})},AI:{r
 const request=(query='reverse',pages=[],headers={})=>new Request('https://fixture.workers.dev/ask',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...headers},body:JSON.stringify({query,pages})});
 const handle=createHandler(async()=>docs);
 // Complete evidence carries editorial type, but the type is not a new experiment.
-const typed={...record,record_type:{id:'control',label:'Control',description:'Synthetic recovery control; no unsolved-page decoding.'}};
+const typed={...record,record_type:{id:'method',label:'Bounded solving test',description:'A specified rule on unsolved material.'}};
 const typedDocs=Search.experimentDocs([typed]);
 assert.deepEqual(JSON.parse(typedDocs[0].text).record_type,typed.record_type);
 const typedHandler=createHandler(async()=>typedDocs);
 let captured;
 await typedHandler(request(),{...env,AI:{run:async(model,options)=>{
  captured=options.messages;
- return {choices:[{message:{content:'This is a synthetic control [1].'}}]};
+ return {choices:[{message:{content:'This is a bounded test [1].'}}]};
 }}});
-assert(captured[0].content.includes('Use each record_type'));
-assert(captured[0].content.includes('If record_type is absent'));
+assert(captured[0].content.includes('bounded solving tests'));
+assert(captured[0].content.includes('source audit'));
 const supplied=JSON.parse(captured[1].content).records;
 assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
 assert.equal((await (await createHandler(async()=>[])(request(),env)).json()).reason,'no-matching-records');
@@ -106,16 +106,17 @@ for(const [query,expected] of [
  ['Fibonacci on LP2-31','lp2-fibonacci-openings'],
  ['reverse words on LP2-31','lp2-word-reversal'],
  ['reverse word order on LP2-31','lp2-word-order-reversal'],
- ['trigrams on LP2-31','lp2-trigram-repeats'],
  ['OutGuess on LP2-31',['outguess-default-key','outguess-guard-sweep']],
- ['Have we tried checking if its a different language than English?','parallel-languages'],
 ]){
  const response=await realHandler(request(query),realEnv);
  assert.equal(response.status,200);
  const first=(await response.json()).sources[0].id;
  assert((Array.isArray(expected)?expected:[expected]).includes(first));
 }
-assert.equal(realCalls,6);
+assert.equal(realCalls,4);
+for(const query of ['dead tree on LP2-55','trigrams on LP2-31','different language than English']){
+ assert.equal((await (await realHandler(request(query),realEnv)).json()).reason,'no-matching-records',query);
+}
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
-assert.equal(realCalls,6);
+assert.equal(realCalls,4);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');

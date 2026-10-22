@@ -47,16 +47,12 @@ function experimentGroups(records, render){
   }).join('');
 }
 function experimentBrowse(records){
-  const families=new Map();
-  for(const record of records){
-    const key=record.family?.id||record.id;
-    if(!families.has(key))families.set(key,[]);
-    families.get(key).push(record);
-  }
   const title=group=>group[0].family?.title||group[0].title;
   const pending=records.filter(r=>r.review?.human_review==='pending').length;
-  return `<h2 id="browse-experiments">Browse published experiments</h2><p class="small muted">Open a family to choose a specific test. Each record has its own scope, findings, files and reproduction instructions.</p><p class="small muted">Published means the result is documented, not that a proposed decryption is endorsed. “Supported” refers only to the record’s exact question; controls and source audits do not validate a cipher on unsolved pages. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p>
-    <div class="experiment-browser">${[...families.values()].sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
+  const primary=records.filter(r=>['method','replay'].includes(r.record_type?.id));
+  const supporting=records.filter(r=>!['method','replay'].includes(r.record_type?.id));
+  const groups=items=>{const families=new Map();for(const record of items){const key=record.family?.id||record.id;if(!families.has(key))families.set(key,[]);families.get(key).push(record);}return [...families.values()];};
+  const cards=items=>`<div class="experiment-browser">${groups(items).sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
       const family=group[0].family;
       const members=[...group].sort((a,b)=>Number(b.id===family?.baseline)-Number(a.id===family?.baseline)||a.title.localeCompare(b.title));
       return `<details class="experiment-browse-family"><summary><span>${esc(title(group))}</span><span class="small muted">${members.length} ${members.length===1?'record':'records'}</span></summary>
@@ -66,12 +62,13 @@ function experimentBrowse(records){
           ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
           <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
     }).join('')}</div>`;
+  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">These are reproducible records with different purposes. A bounded solving test applies a specified decoding, extraction or payload check. A measurement or source audit can inform a proposed method, but is not itself an LP2 solve attempt.</p><p class="small muted">“Supported” refers only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><h3>Solving and extraction tests</h3><p class="small muted">Includes bounded tests and clearly marked replays of proposed methods.</p>${cards(primary)}<h3>Measurements, controls and source checks</h3><p class="small muted">Useful evidence and reproducible checks; these do not independently validate a decryption.</p>${cards(supporting)}`;
 }
 function experimentFamily(r){
   if(!r.family)return '';
   const f=r.family,members=experimentRecords.filter(x=>x.family?.id===f.id);
   members.sort((a,b)=>Number(b.id===f.baseline)-Number(a.id===f.baseline)||a.id.localeCompare(b.id));
-  if(members.length===1)return `<section><h2>Experiment family</h2><p><strong>${esc(f.title)}</strong></p><p>${esc(f.question)}</p><p class="small muted">This record is the baseline. No completed variants have been published yet.</p></section>`;
+  if(members.length===1)return `<section><h2>Record family</h2><p><strong>${esc(f.title)}</strong></p><p>${esc(f.question)}</p><p class="small muted">This record is the baseline. No completed variants have been published yet.</p></section>`;
   const names={pages:'Pages',artifacts:'Source artifacts',representation:'Input representation',procedure:'Procedure',parameters:'Parameter bounds',exclusions:'Exclusions'};
   const value=v=>esc(Array.isArray(v)?v.join(', '):v);
   return `<section aria-label="Experiment family comparison"><h2>${esc(f.title)}</h2><p>${esc(f.question)}</p>${members.map(x=>`<article class="family-member"><h3><a href="#/experiments/${x.id}" ${x.id===r.id?'aria-current="page"':''}>${esc(x.variant.label)}</a></h3><p>${esc(x.summary)}</p>${x.id===f.baseline?'<p class="small muted">Baseline for the comparisons below.</p>':`<p><strong>Changed:</strong> ${[...new Set(x.variant.changes.map(c=>c.reason))].map(esc).join(' ')}</p><details><summary>Compare exact scope with baseline</summary>${x.variant.changes.map(c=>`<h4>${esc(names[c.field]||c.field)}</h4><dl><dt>Baseline</dt><dd>${value(c.before)}</dd><dt>This variant</dt><dd>${value(c.after)}</dd></dl>`).join('')}</details>`}</article>`).join('')}<p class="small muted">Each record retains its own scope and findings. A match to this family does not mean every variant of an idea has been tested.</p></section>`;
@@ -89,7 +86,7 @@ function experimentMethodGuides(r){
   if(methodFamilyUnavailable)return '<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>The method index could not be loaded. You can still read this experiment and browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></section>';
   const families=(methodFamilyRecords||[]).filter(f=>f.related.includes(r.id));
   if(!families.length)return '';
-  return `<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>This experiment relates to the approaches below. Its result covers only the scope stated above; the guides explain broader variants and assumptions.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> — ${esc(f.description)}</p><p class="small"><a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Compare this family’s documented tests</a></p></li>`).join('')}</ul></section>`;
+  return `<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>This record relates to the approaches below. Its result covers only the scope stated above; the guides explain broader variants and assumptions.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a> — ${esc(f.description)}</p><p class="small"><a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Compare this family’s documented records</a></p></li>`).join('')}</ul></section>`;
 }
 function experimentDownloads(r){
   const root=`experiments/records/${r.id}/`;
@@ -101,6 +98,7 @@ function experimentDownloads(r){
   return `<ul class="experiment-downloads">${links.map(f=>`<li><a href="${esc(f.path)}" download><strong>${esc(f.label)}</strong><span>${esc(f.path.split('/').pop())}</span></a></li>`).join('')}</ul>`;
 }
 function experimentArticle(r){
+  const solving=['method','replay'].includes(r.record_type?.id);
   const pageLinks=experimentScopeLinks(r);
   const fields=[['Targets',r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)],['Parameter bounds',esc(r.scope.parameters)],['Excluded',esc(r.scope.exclusions)]];
   const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
@@ -110,8 +108,8 @@ function experimentArticle(r){
   const methodGuides=experimentMethodGuides(r);
   const sections=[['experiment-finding','Finding'],['experiment-scope','Scope & bounds'],...(methodGuides?[['experiment-methods','Method guides']]:[]),['experiment-reproduce','Files & reproduction'],...(r.family?[['experiment-family','Related variants']]:[]),['experiment-remaining','Remaining work'],['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
-  return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Experiments')+`<article class="reading-width experiment-article">
-    <p><a href="#/experiments">← Have we tried it?</a></p>
+  return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Research records')+`<article class="reading-width experiment-article">
+    <p><a href="#/experiments">← Research archive</a></p>
     <p class="lede">${esc(r.question)}</p>
     ${experimentRecordType(r)}
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
@@ -121,10 +119,10 @@ function experimentArticle(r){
       <p class="small muted"><strong>Review status:</strong> ${esc(r.review.kind||'Computational')} check recorded; human review ${esc(r.review.human_review||'not recorded')}. ${esc(r.review.reviewer)}</p>
       ${(r.visuals||[]).map(v=>`<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`).join('')}
     </section>
-    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test. <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
+    <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2><p>${solving?'Compare these inputs, operations and bounds with your idea. A different key range, boundary rule or success criterion may require a separate test.':'This record checks a measurement, control or source question. Its scope does not establish that an LP2 decoding method was tried.'} <a href="#/wiki/search-space">How to interpret search space and bounds</a>.</p><dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></section>
     ${methodGuides}
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
-      <p>Download <a href="downloads/experiments/${esc(r.id)}.zip" download>this experiment’s files (ZIP)</a> and extract them with their folders intact. The archive includes scripts, input data, recorded results, and a <code>START-HERE</code> file with verification instructions.${needsImages?' Original image inputs are separate: also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''}</p>
+      <p>Download <a href="downloads/experiments/${esc(r.id)}.zip" download>this record’s files (ZIP)</a> and extract them with their folders intact. The archive includes scripts, input data, recorded results, and a <code>START-HERE</code> file with verification instructions.${needsImages?' Original image inputs are separate: also extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''}</p>
       <p>Install the prerequisites listed below, then run the command from the extracted folder. See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> remains available for working across experiments.</p>
       <p>${esc(r.reproduction.environment)}</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>
       <h3>Individual files</h3><p class="small muted">Use these to inspect the method or results. The run script also needs the inputs listed below.</p>

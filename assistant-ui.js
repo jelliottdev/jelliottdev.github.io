@@ -8,10 +8,11 @@ async function loadSupportingIndex(){
 }
 function experimentSearchResult(r, requestedPages=[]){
   const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
+  const solving=['method','replay'].includes(r.record_type?.id);
   return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
     ${experimentRecordType(r)}
     <p>${esc(r.summary)}</p>
-    <dl class="idea-result-scope"><dt>Method tested</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Excluded</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
+    <dl class="idea-result-scope"><dt>${solving?'Method tested':'Check performed'}</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Excluded</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
     ${missing.length?`<p class="scope-mismatch">Not in this record’s page scope: ${missing.map(id=>esc(id.toUpperCase())).join(', ')}.</p>`:''}
     <details class="idea-match-details"><summary>Pages, inputs and limitations</summary><dl class="idea-result-scope"><dt>Targets</dt><dd>${experimentScopeLinks(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Finding</dt><dd>${esc(r.finding)}</dd><dt>Limits</dt><dd>${esc(r.limitations)}</dd></dl></details>
     <p class="small muted">${esc(r.review.reviewer)} · ${esc(outcomes[r.outcome]||r.outcome)} · Retested ${esc(r.review.retested_on)}</p></article>`;
@@ -21,12 +22,12 @@ function ideaCoverageNote(record){
   return `<details class="experiment-browse-family"><summary>${esc(record.title)} <span class="small muted">${esc(record.status)}</span></summary>
     <p><a href="#/wiki/${esc(record.guide)}">Read the method guide</a></p><p>${esc(record.coverage)}</p><p><strong>To make a testable version:</strong> ${esc(record.needed)}</p>
     <p><strong>Proposed extension — not run:</strong> ${esc(record.next_test)}</p>
-    <p class="small muted">Related tests have narrower scopes; these links do not establish that your proposal was tested.</p>
+    <p class="small muted">Related records have narrower scopes; these links do not establish that your proposal was tested.</p>
     <ul>${related.map(r=>`<li><a href="#/experiments/${r.id}">${esc(r.title)}</a></li>`).join('')}</ul></details>`;
 }
 function ideaCoverageView(query=''){
   const families=query?IdeaCoverage.families(methodFamilyRecords||[],query):[];
-  const familyHTML=families.length?`<h2>Related method families</h2><p class="small muted">These guides describe approaches. They are not evidence that your specific proposal has been tested.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a></p><p>${esc(f.description)}</p><p class="small muted">${f.related.length?`${f.related.length} narrower experiment ${f.related.length===1?'record is':'records are'} linked in the family map.`:'No experiment is currently linked to this family.'} <a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Inspect family coverage</a></p></li>`).join('')}</ul>`:'';
+  const familyHTML=families.length?`<h2>Related method families</h2><p class="small muted">These guides describe approaches. They are not evidence that your specific proposal has been tested.</p><ul>${families.map(f=>`<li><p><a href="#/wiki/${esc(f.guide)}">${esc(f.title)}</a></p><p>${esc(f.description)}</p><p class="small muted">${f.related.length?`${f.related.length} narrower research ${f.related.length===1?'record is':'records are'} linked in the family map.`:'No research record is currently linked to this family.'} <a href="#/wiki/solving-methods?section=family-${esc(f.id)}">Inspect family coverage</a></p></li>`).join('')}</ul>`:'';
   const failures=(methodFamilyUnavailable?'<p class="small muted">The method-family index could not be loaded. This is not evidence of missing research.</p>':'')+(ideaCoverageUnavailable?'<p class="small muted">Coverage notes could not be loaded. Experiment results remain available.</p>':'');
   const records=query?IdeaCoverage.match(ideaCoverageRecords||[],query):(ideaCoverageRecords||[]);
   if(!records.length)return familyHTML+failures;
@@ -53,9 +54,9 @@ function renderIdeaChecker(endpoint,query){
     </form>
     <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="idea-coverage" aria-label="Idea coverage"></section>
-    <section id="experiment-results" aria-label="Matching experiments"></section>
+    <section id="experiment-results" aria-label="Matching research records"></section>
     <details class="experiment-guide"><summary>Coverage and how to interpret a match</summary>
-      <p>This checks published experiment records by technique. A page number alone is not a match. Related work can use different inputs or bounds; inspect the scope before treating it as the same test.</p>
+      <p>This checks bounded solving and extraction tests by technique. A page number alone is not a match. Related measurements, controls and source checks appear separately; they are not evidence that a decoding rule was tried. Inspect each record’s scope before treating it as the same test.</p>
       <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index, not that an idea is new or promising. Coverage notes separately identify broader proposals and missing bounds; they are not sent to the AI as experiment evidence. <a href="#/wiki/scoped-constraints">Check which narrow models are actually ruled out</a>.</p>
       <p>Answers may be cached for up to a day and reused for the same question and evidence. Reopening a result does not automatically request a new answer. Sources remain available when AI is busy.</p>
       <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
@@ -114,11 +115,11 @@ function renderIdeaChecker(endpoint,query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');const matches=searchNow?AssistantSearch.experiments(documents(),idea,pages()):[];
+    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    const selected=items=>experimentGroups(items.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]));
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
-    else if(!matches.length)results.innerHTML='<h2>No matching documented technique</h2><p>Try the operation, cipher, key, or transformation rather than only a page number. This index does not cover all previous research.</p>';
-    else results.innerHTML=`<h2>${matches.length} related ${matches.length===1?'record':'records'}</h2><p class="small muted">Compare the method and exclusions before treating a record as the same test.</p>${experimentGroups(matches.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]))}`;
+    else results.innerHTML=`<h2>${matches.length?`${matches.length} related solving ${matches.length===1?'test':'tests'}`:'No matching bounded solving test'}</h2><p class="small muted">${matches.length?'Compare the exact method and exclusions before treating a record as the same test.':'This index does not cover all previous research. A related measurement or source check below is not a decoding attempt.'}</p>${selected(matches)}${supporting.length?`<h2>Related measurements and source checks</h2><p class="small muted">These may help assess the idea, but do not establish that its decoding rule was tested.</p>${selected(supporting)}`:''}`;
     if(matches.length&&endpoint){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});

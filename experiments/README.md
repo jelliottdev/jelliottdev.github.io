@@ -103,7 +103,7 @@ Three different fields organize the work:
 | --- | --- | --- |
 | `record.json` → `family` and `variant` | Group a baseline and follow-ups addressing the same bounded research question. | One row-sum experiment and a variant changing its boundary policy. |
 | `data/method-families.json` → `families[].related` | Link records to broad method guides. Membership is non-exclusive. | A route-plus-key test can link to both route and key families. |
-| `data/method-families.json` → `record_kind_by_id` | Describe the role of the evidence. This is not an outcome or confidence rating. | A synthetic decoder check is a control, not a manuscript analysis. |
+| `data/method-families.json` → `record_kind_by_id` | Describe the role of the evidence. This is not an outcome or confidence rating. | A tree-source alignment is a source audit, not a bounded solving test; a synthetic decoder check is a control. |
 
 When the retested record is ready to publish:
 
