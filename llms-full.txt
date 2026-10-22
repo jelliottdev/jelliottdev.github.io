@@ -7342,7 +7342,7 @@ Outside this test: Other pages, periods outside 2-20, regional variants, correct
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-Related records (10)
+Related records (11)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 LP2-00–55: repeated trigrams against page shuffles
@@ -7364,6 +7364,11 @@ LP2-00–55: distances between doublet events
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Do the specified event extraction and lags reproduce the reported lag-one mean and lag-three +4 rate?
 Outside this test: Other transcriptions, collapsed runs, word-only extraction, page-reset comparisons, other lags, permutation tail probabilities and cipher searches.
+
+Doublet events: global versus within-page shuffle controls
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
+Question tested: Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?
+Outside this test: Original unpublished event list and code, other transcriptions, unseen page subsets, all unreported model searches, cipher inference and confirmatory significance claims.
 
 LP2-00–55: equal rune pairs at lags one through five
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
@@ -7428,7 +7433,7 @@ Outside this test: Noninjective, nonlinear and position-dependent rules; rune-in
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-Related records (8)
+Related records (9)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 How does trying more keys change the best score?
@@ -7460,6 +7465,11 @@ LP1: the 464-word table and column balance
 Record type: Manuscript measurement. Measures a stated feature or statistical comparison; it does not test a complete decoding rule.
 Question tested: Does the stated ordered 464-word object have unusually low variance among 16 column means under unrestricted permutations of its fixed word lengths?
 Outside this test: Other widths, section orders, constrained shuffles, prose corpus comparisons, sentence removal, section cancellation, grille extraction, carrier matching, original-search multiplicity, authorial intent and decryption.
+
+Doublet events: global versus within-page shuffle controls
+Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
+Question tested: Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?
+Outside this test: Original unpublished event list and code, other transcriptions, unseen page subsets, all unreported model searches, cipher inference and confirmatory significance claims.
 
 Möbius zero-mask rule against a solved LP2 page
 Record type: Control. Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.
@@ -7765,6 +7775,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/doublet-boundaries
 - LP2-00–55: distances between doublet events
   https://jelliottdev.github.io/#/experiments/doublet-event-lags
+- Doublet events: global versus within-page shuffle controls
+  https://jelliottdev.github.io/#/experiments/doublet-event-shuffle
 - LP2-00–55: equal rune pairs at lags one through five
   https://jelliottdev.github.io/#/experiments/doublet-lag-profile
 - LP2-00–55: placement of the 86 doublets
@@ -28388,7 +28400,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 72 published reproducible records: 15 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 9 controls, 8 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 73 published reproducible records: 15 bounded solving or extraction tests, 2 proposed-method replay, 35 manuscript measurements, 10 controls, 8 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -29002,7 +29014,7 @@ OBSCURA table candidate words · heck and participants. All sixteen fixed candid
 
 LP2-39 dot mirror and spacing discussion · |vi and participants. The first two LP2-39 black dots are reproduced as exact horizontal RGB pixel mirrors within declared 32×33 rectangles; dimensions, thresholds and the distinction between edge and center spacing are documented. The same thread’s CicadaOS and binary-spacing proposals are separate. Read the checked scope. Source SHA-256: a43d49a4568e17141c94c09fd827c16bd1f8405e3382ff22eeca14320a42560d
 
-Consecutive doublet index-distance report · LBen and participants. The 86-event LP2-00–55 doublet sequence is extracted and independently checked. The reported lag-one 8.81 and lag-three +4 12.9% do not reproduce under the archived text and stated counting rule: the replay obtains 8.6353 and 10/83 (12.05%). It computes a fixed-multiset +4 expectation, but does not reproduce the source's 10,000-permutation tail probabilities or establish a cipher. Read the checked scope. Source SHA-256: 3e61084a945f0e6f746d5d2ac4b60a3a9cdb1c8243f6301af76aaba3d8f062f5
+Consecutive doublet index-distance report · LBen and participants. The 86-event LP2-00–55 sequence is independently recounted: the reported lag-one 8.81 and lag-three +4 12.9% become 8.6353 and 10/83 (12.05%) under the archived text. A companion replays 20,000 seeded global and page-conditioned shuffles per null, plus selection controls. Its tails are new calculations, not an exact reproduction of the source's 10,000-permutation p-values or proof of a cipher. Read the checked scope. Source SHA-256: 3e61084a945f0e6f746d5d2ac4b60a3a9cdb1c8243f6301af76aaba3d8f062f5
 
 
 Source files still to screen
@@ -29246,7 +29258,7 @@ Sources, related references, and files
 - Read the checked scope
   https://jelliottdev.github.io/reference/articles/dots.html
 - Read the checked scope
-  https://jelliottdev.github.io/#/experiments/doublet-event-lags
+  https://jelliottdev.github.io/#/experiments/doublet-event-shuffle
 - Download the structured intake
   https://jelliottdev.github.io/data/reported-attempts.json
 
@@ -33540,6 +33552,191 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "measurement",
     "label": "Manuscript measurement",
     "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}
+
+---
+
+{
+  "id": "doublet-event-shuffle",
+  "title": "Doublet events: global versus within-page shuffle controls",
+  "status": "published",
+  "question": "Do the reported doublet-event distances survive controls that preserve the page-specific event inventory and account for selecting an attractive bin?",
+  "summary": "The lag-one distance sum is rare under a global event shuffle but ordinary when each page keeps its event symbols. The selected lag-three +4 bin is rare narrowly; choosing the strongest bin across lags gives a much weaker comparison.",
+  "tags": [
+    "doublets",
+    "event lags",
+    "permutation",
+    "shuffle",
+    "page conditioning",
+    "multiple testing",
+    "+4",
+    "5 12 14",
+    "null model"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "One zero-based GP index per overlapping within-page doublet, headings included; remove non-runes and concatenate events in page order.",
+    "procedure": "Compare three source-specified statistics on the 86-event sequence with 20,000 seeded global shuffles and 20,000 within-page shuffles; also score the largest directed bin and largest three circular bins across lags 1–3.",
+    "parameters": "Seed 33012026; 20,000 draws per control; one-sided greater-or-equal tails; lags 1–3; 29 directed and 15 circular bins; page event multisets held fixed in the conditioned control.",
+    "exclusions": "Original unpublished event list and code, other transcriptions, unseen page subsets, all unreported model searches, cipher inference and confirmatory significance claims."
+  },
+  "outcome": "inconclusive",
+  "finding": "For the observed lag-one sum 734, 31/20,000 global shuffles and 3,910/20,000 within-page shuffles meet or exceed it. The observed +4 count 10 has 13 and 23 narrow exceedances, but allowing selection of any directed bin at lags 1–3 gives 1,123 and 3,510 exceedances.",
+  "limitations": "The reported statistics and bins were selected after looking at data. These two randomizations are conditional reference models, not models of every plausible encryption process; source p-values cannot be exactly recovered without its inputs and implementation.",
+  "next_steps": "Obtain the source event list and permutation implementation to locate counting differences; require any proposed +4 mechanism to predict a held-out page or a different untouched statistic.",
+  "family": {
+    "id": "doublet-event-statistics",
+    "title": "Statistics of extracted doublet events",
+    "question": "Which distance patterns survive specified extraction and comparison rules?",
+    "baseline": "doublet-event-lags"
+  },
+  "variant": {
+    "label": "Same event ledger with global and within-page permutation controls",
+    "changes": [
+      {
+        "field": "procedure",
+        "before": "Compare events at lags 1, 2 and 3; record all forward mod-29 differences and minimum circular distances.",
+        "after": "Compare three source-specified statistics on the 86-event sequence with 20,000 seeded global shuffles and 20,000 within-page shuffles; also score the largest directed bin and largest three circular bins across lags 1–3.",
+        "reason": "The original recount stopped before a null comparison."
+      },
+      {
+        "field": "parameters",
+        "before": "86 events; 85, 84 and 83 comparisons; cross-page comparisons retained; no end wrap; 29 directed bins per lag.",
+        "after": "Seed 33012026; 20,000 draws per control; one-sided greater-or-equal tails; lags 1–3; 29 directed and 15 circular bins; page event multisets held fixed in the conditioned control.",
+        "reason": "Pin both shuffle models, seed, draw count and selection checks."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other transcriptions, collapsed runs, word-only extraction, page-reset comparisons, other lags, permutation tail probabilities and cipher searches.",
+        "after": "Original unpublished event list and code, other transcriptions, unseen page subsets, all unreported model searches, cipher inference and confirmatory significance claims.",
+        "reason": "The companion now includes permutation tails, but still excludes an unrestricted model search."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent observed-statistic and summary check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/doublet-event-shuffle/run.py --check",
+    "environment": "Python 3.12 standard library; independent fixed-data check with check.py",
+    "script": "experiments/records/doublet-event-shuffle/run.py",
+    "script_sha256": "5db878421b0792591c69a7fc57d6403f1a8ed755d176fcff2bda6502fb646f7e",
+    "inputs": [
+      {
+        "path": "experiments/records/doublet-event-lags/results.json",
+        "sha256": "60ef5f5a4dfcb763683e1456053753407cd0b4adcd42b3a738157b7de7c0ea42"
+      },
+      {
+        "path": "experiments/records/doublet-event-shuffle/plan.json",
+        "sha256": "17d84a55b6fad04aa70f21b0a1a3c8293edebc096bb2f654024d1eb27ec0a950"
+      },
+      {
+        "path": "experiments/records/doublet-event-shuffle/check.py",
+        "sha256": "ccc42cb5c48bfe8831df82ba1bedd763aaa4af7abda0a8644a6e4c914aaa1655"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/doublet-event-shuffle/results.json",
+        "sha256": "2988f62608954c3fb31779e09926e0c8e5d89d4a0bbc5491290952cc0076e8a5"
+      },
+      {
+        "path": "experiments/records/doublet-event-shuffle/shuffle-controls.svg",
+        "sha256": "bff3c401a1ea750e3cf31e16e202ec93e2fdda2e05be0312eb1d7c417366c66a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/doublet-event-shuffle/shuffle-controls.svg",
+      "caption": "Lag-one circular-distance sum under global and within-page event shuffles."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned 86-event recount and source report summary",
+      "url": "https://jelliottdev.github.io/#/experiments/doublet-event-lags"
+    },
+    {
+      "label": "Manuscript doublet guide",
+      "url": "https://jelliottdev.github.io/#/wiki/doublets"
+    },
+    {
+      "label": "Reported-attempt source register",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts"
+    }
+  ],
+  "related": [
+    "doublet-event-lags"
+  ],
+  "article": "# Do the reported doublet-event patterns survive better controls?\n\nAn earlier report extracted repeated adjacent runes from unsolved LP2 and described large GP distances between consecutive doublet symbols, concentrations at distances 5, 12 and 14, and a forward +4 difference at event lag three. The [event recount](#/experiments/doublet-event-lags) pins the 86-symbol sequence and finds a lag-one mean of 734/85 ≈ 8.635, rather than the reported 8.81. This companion record checks the reported patterns against two different shuffle controls. Neither control simulates a cipher; both ask what ordering could arise while holding specified aspects of the observed event inventory fixed.\n\n![Two histograms compare the observed lag-one distance sum of 734 with global and within-page event shuffles.](experiments/records/doublet-event-shuffle/shuffle-controls.svg)\n\n## Inputs and fixed statistics\n\nThe input is the exact [86-event ledger](experiments/records/doublet-event-lags/results.json) from LP2-00–55. Each event represents one adjacent equal-rune pair. For runes with indices *a* and *b*, the forward difference is `(*b* − *a*) mod 29` and the minimum circular distance is `min(d, 29 − d)`. Event lag counts places in this extracted list, not places in the manuscript. Event comparisons may cross a page boundary; doublets themselves were found only within pages.\n\nThe three source-specified measurements are the lag-one circular-distance sum **734** over 85 pairs, **31** lag-one distances in bins 5, 12 or 14, and **10** forward +4 matches among 83 lag-three pairs. We compare them with 20,000 seeded shuffles of the 86-event multiset. In a second control, each page retains its own event symbols and event count, but their order within that page is shuffled. The latter tests whether the apparent signal is largely due to different pages containing different sets of doublet runes.\n\n| Source-specified statistic | Observed | Global shuffle: draws ≥ observed | Within-page shuffle: draws ≥ observed |\n| --- | ---: | ---: | ---: |\n| Lag-one circular-distance sum | 734 | 31 / 20,000 | 3,910 / 20,000 |\n| Lag-one distances 5, 12 or 14 | 31 | 5 / 20,000 | 879 / 20,000 |\n| Lag-three forward +4 | 10 | 13 / 20,000 | 23 / 20,000 |\n\nThe middle 95% of the global-shuffle lag-one sum is **545–694**; for within-page shuffles it is **648–767**. The observed 734 falls inside the latter interval. Therefore the broad “doublet events are farther apart” observation depends strongly on whether page-specific rune inventories are preserved. The +4 count stays unusual under these two narrow controls, but it was noticed after inspecting the data.\n\n## Selection matters\n\nThe source report singled out lag three and +4, as well as a set of three circular-distance bins. For a more realistic post-selection check, each shuffle can choose its own largest directed-difference bin from **all 29 bins at lags one through three**, and its own largest three-bin circular-distance total over those lags. The observed maxima are 10 and 31, respectively.\n\n| After allowing that choice | Global shuffle: draws ≥ observed | Within-page shuffle: draws ≥ observed |\n| --- | ---: | ---: |\n| Largest directed bin at any of lags 1–3 | 1,123 / 20,000 | 3,510 / 20,000 |\n| Largest three circular-distance bins at any of lags 1–3 | 4,434 / 20,000 | 9,653 / 20,000 |\n\nThis correction covers **only** those stated choices. It cannot account for all distances, statistics, transcriptions, page subsets or ideas someone may have considered before reporting a pattern. Thus the narrow +4 result should be treated as a lead for a prediction on untouched data, not as a cipher finding. The original report's permutation p-values cannot be reproduced exactly without its event list, implementation and randomization policy; these are new seeded calculations on the archived transcription.\n\n## Reproduce\n\nRun `python experiments/records/doublet-event-shuffle/run.py --check` to regenerate all 40,000 shuffles and verify every saved count. `check.py` independently recounts the three observed statistics from the pinned event ledger and checks the published Monte Carlo denominators. The [plan](experiments/records/doublet-event-shuffle/plan.json), [complete results](experiments/records/doublet-event-shuffle/results.json) and figure script are included in the experiment download. Tail estimates use `(count + 1) / (20,000 + 1)`; a small Monte Carlo fraction is not a probability that any proposed decryption is true.\n",
+  "article_path": "experiments/records/doublet-event-shuffle/article.md",
+  "script_sha256": "5db878421b0792591c69a7fc57d6403f1a8ed755d176fcff2bda6502fb646f7e",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
   }
 }
 

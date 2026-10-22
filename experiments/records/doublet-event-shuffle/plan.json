@@ -1,0 +1,28 @@
+{
+  "question": "How do the reported doublet-event distance patterns behave under global and page-conditioned event shuffles?",
+  "source_record": "doublet-event-lags",
+  "source_scope": "86 overlapping doublet events extracted within LP2-00â€“55; comparisons of extracted events may cross page boundaries",
+  "seed": 33012026,
+  "draws_per_null": 20000,
+  "nulls": [
+    "global: shuffle the fixed 86-symbol event multiset",
+    "within-page: shuffle event order separately inside each page, preserving each page's event multiset and page order"
+  ],
+  "reported_statistics": [
+    "lag-one mean minimum circular GP distance",
+    "lag-one circular distances in the reported bins 5, 12 and 14",
+    "lag-three forward +4 difference modulo 29"
+  ],
+  "selection_controls": [
+    "largest mean circular distance across event lags 1â€“3",
+    "largest count in any forward-difference bin at event lags 1â€“3",
+    "largest sum of any three circular-distance bins at event lags 1â€“3"
+  ],
+  "tail": "greater than or equal to observed; Monte Carlo estimate (tail count + 1) / (draws + 1)",
+  "inputs": [
+    {
+      "path": "experiments/records/doublet-event-lags/results.json",
+      "sha256": "60ef5f5a4dfcb763683e1456053753407cd0b4adcd42b3a738157b7de7c0ea42"
+    }
+  ]
+}
