@@ -60,9 +60,9 @@ The first command regenerates and compares every source position, route, output 
 
 [Download all routes and source traces](experiments/records/lp2-row-column-routes/results.json). To save another report, run the main script with `--output my-routes.json`; it refuses an existing filename. The plot script reads the saved result and draws one trace without searching again.
 
-## Retest and review
+## Verification
 
-Codex reran the complete enumeration and verified all 880 candidates with the independent ordering implementation on 20 October 2026. No route rule, layout choice, opening vector or matching criterion changed after the first run. The checker and diagram were added afterward for verification and explanation. Human review remains pending.
+On 20 October 2026, a complete rerun reproduced all 880 saved candidates. A separate ordering-key implementation checked every route against its source positions. The route rules, layout convention, opening vectors and matching criterion stayed fixed after the first run. The checker and diagram were added afterward to make the result easier to verify.
 
 ## Related work and next variants
 

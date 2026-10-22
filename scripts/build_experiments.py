@@ -71,6 +71,10 @@ def build(root=ROOT):
         scope = d.get('scope', {})
         require(isinstance(scope.get('pages'), list)
                 and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
+        if 'pages_note' in d:
+            text(d['pages_note'], f'{identifier}.pages_note')
+        if 'bounds_note' in d:
+            text(d['bounds_note'], f'{identifier}.bounds_note')
         artifacts = scope.get('artifacts', [])
         require(isinstance(artifacts, list) and all(isinstance(x, str) for x in artifacts),
                 'Scope artifacts must be a list of local input paths')

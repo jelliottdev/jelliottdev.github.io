@@ -23,6 +23,13 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
       await page.waitForSelector('.experiment-article');
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px overflow`);
       assert(await page.getByRole('link', {name: 'Download this experiment (ZIP)'}).isVisible());
+      assert.equal(await page.locator('.experiment-command pre').innerText(), 'python experiments/records/lp2-row-column-routes/run.py --check');
+      assert(await page.getByRole('button', {name: 'Copy command'}).isVisible());
+      if (width === 390) {
+        await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], {origin: new URL(base).origin});
+        await page.getByRole('button', {name: 'Copy command'}).click();
+        assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'python experiments/records/lp2-row-column-routes/run.py --check');
+      }
       assert.equal(await page.locator('body').innerText().then(text => text.includes('Human review pending')), false);
       assert.equal(await page.locator('.route-trace img').count(), 0);
       const displayedRows = await page.locator('.route-trace tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent.trim())));

@@ -33,9 +33,14 @@ const output=process.env.SCREENSHOT_DIR||path.resolve('..','..','outputs','exper
   await page.goto(base+'#/experiments/lp2-15-mobius-panel');
   await page.waitForFunction(()=>!document.querySelector('.loading'));
   assert.equal(await page.getByText('Human review is pending').count(),0);
-  assert.equal(await page.locator('.experiment-review').getAttribute('open'),null);
+  assert.equal(await page.locator('.experiment-review').count(),0);
   await page.setViewportSize({width:390,height:860});
   await page.screenshot({path:path.join(output,'record-390.png')});
+  await page.goto(base+'#/experiments/lp2-row-column-routes');
+  await page.waitForSelector('.experiment-article');
+  await page.screenshot({path:path.join(output,'routes-390.png'),fullPage:true});
+  await page.setViewportSize({width:1440,height:900});
+  await page.screenshot({path:path.join(output,'routes-1440.png'),fullPage:true});
   assert.deepEqual(errors,[]);
   await browser.close();
   console.log('PASS: archive disclosure, direct browse link, mobile widths, no horizontal overflow, and review-detail hierarchy.');

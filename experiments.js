@@ -132,9 +132,9 @@ function routeIllustration(){
   const rows=routeExcerpt.map((values,row)=>`<tr><th scope="row">${row+1}</th>${values.map((value,col)=>`<td data-route-cell="${row}-${col}"><span class="route-demo-step"></span><strong class="route-demo-index">${value}</strong></td>`).join('')}</tr>`).join('');
   return `<div class="route-demo" aria-label="Illustration of row and column routes on a cropped LP2-31 excerpt">
     <h3>How the route changes</h3>
-    <p class="route-demo-note">Illustration only: the first four rune positions on each of LP2-31’s first four source lines. The complete test uses all 269 positions, including unequal line lengths.</p>
+    <p class="route-demo-note">Four lines from LP2-31 show how the reading order changes. The test used all 269 runes on that page, including shorter lines.</p>
     <div class="route-demo-controls"><div role="group" aria-label="Reading order"><button type="button" data-route-axis="row" aria-pressed="false">Rows first</button><button type="button" data-route-axis="column" aria-pressed="true">Columns first</button></div><div role="group" aria-label="Direction within each row or column"><button type="button" data-route-pattern="straight" aria-pressed="true">Same direction</button><button type="button" data-route-pattern="alternating" aria-pressed="false">Alternate direction</button></div></div>
-    <div class="route-demo-table"><table><caption>LP2-31 rune indices; the numbered marker shows output order</caption><thead><tr><th scope="col">Line</th><th scope="col">Rune 1</th><th scope="col">Rune 2</th><th scope="col">Rune 3</th><th scope="col">Rune 4</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="route-demo-table"><table aria-label="LP2-31 rune indices; number signs mark the selected output order"><thead><tr><th scope="col">Line</th><th scope="col">Rune 1</th><th scope="col">Rune 2</th><th scope="col">Rune 3</th><th scope="col">Rune 4</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="route-demo-reading" aria-live="polite"></p>
   </div>`;
 }
@@ -150,7 +150,7 @@ function bindRouteIllustration(){
       cell.querySelector('.route-demo-step').textContent=`#${i+1}`;
       cell.setAttribute('aria-label',`Source line ${row+1}, rune ${col+1}: index ${routeExcerpt[row][col]}, output step ${i+1}`);
     });
-    demo.querySelector('.route-demo-reading').textContent=`First eight indices: ${order.slice(0,8).map(([row,col])=>routeExcerpt[row][col]).join(' → ')}.`;
+    demo.querySelector('.route-demo-reading').textContent=`First eight rune indices: ${order.slice(0,8).map(([row,col])=>routeExcerpt[row][col]).join(' → ')}.`;
   };
   demo.addEventListener('click',event=>{
     const button=event.target.closest('button[data-route-axis],button[data-route-pattern]');
@@ -231,8 +231,8 @@ function experimentVisual(r,v){
 }
 function experimentArticle(r){
   const pageLinks=experimentScopeLinks(r);
-  const targets=r.scope.pages.length>8?`<details><summary>${r.scope.pages.length} manuscript pages — show exact list</summary><p>${pageLinks}</p></details>`:pageLinks;
-  const fields=[['Targets',targets],['Tested bounds',esc(r.scope.parameters)]];
+  const targets=r.scope.pages.length>8?`<details><summary>${esc(r.pages_note||`${r.scope.pages.length} manuscript pages — show exact list`)}</summary><p>${pageLinks}</p></details>`:pageLinks;
+  const fields=[['Targets',targets],['Tested bounds',esc(r.bounds_note||r.scope.parameters)]];
   const exactFields=[['Not covered',esc(r.scope.exclusions)],['Input representation',esc(r.scope.representation)],['Procedure',esc(r.scope.procedure)]];
   const fileList=files=>`<ul class="source-list">${files.map(f=>`<li><a href="${esc(f.path)}" download>${esc(f.path)}</a><br><code>SHA-256: ${esc(f.sha256)}</code></li>`).join('')}</ul>`;
   const needsImages=r.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path));
@@ -254,7 +254,7 @@ function experimentArticle(r){
     <div id="experiment-method-guides">${methodGuides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${methodGuides}</details>`:''}</div>
     <section aria-labelledby="experiment-reproduce"><h2 id="experiment-reproduce">Reproduce &amp; download</h2>
       <p><a class="experiment-bundle-link" href="downloads/experiments/${esc(r.id)}.zip" download>Download this experiment (ZIP)</a> <span class="small muted">Scripts, inputs, results and a start file.</span></p>
-      <p>Run from the extracted folder:</p><pre class="reading-text">${esc(r.reproduction.command)}</pre>
+      <div class="copyable-block experiment-command"><div class="experiment-command-heading"><p>Run from the extracted folder:</p><span role="status"></span><button type="button" data-copy-block>Copy command</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment command">${esc(r.reproduction.command)}</pre></div>
       <details class="experiment-extra"><summary>Setup and individual files</summary><p>${esc(r.reproduction.environment)}${needsImages?' Original image inputs are separate: extract <a href="downloads/original-images.zip" download>original-images.zip</a> into the same folder.':''} See the <a href="#/wiki/running-scripts">script setup guide</a> for help. The <a href="downloads/reference-data.zip" download>full reference-data bundle</a> is available for work across experiments.</p>${experimentDownloads(r)}<details><summary>All files &amp; SHA-256 checksums</summary><p class="hash">Script SHA-256: ${esc(r.script_sha256)}</p><h3>Inputs</h3>${fileList(r.reproduction.inputs)}<h3>Outputs</h3>${fileList(r.reproduction.outputs)}</details></details>
     </section>
     <details class="experiment-extra"><summary>Related tests and next steps</summary>
