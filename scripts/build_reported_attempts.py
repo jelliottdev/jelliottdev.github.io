@@ -70,7 +70,7 @@ def build():
         parts.append('</details></section>')
     if reconciled:
         parts.append('<h2 id="reconciled">Source notes with a reproduced scope</h2>'
-                     '<p>These supplied notes point to work already checked here. The link covers only the precise claim described, not every suggestion in its source thread.</p><ul>')
+                     '<p>These supplied notes point to work already checked here. The link covers only the precise claim described, not every suggestion in its source thread. A file may also appear in the screening queue when it contains other claims.</p><ul>')
         for item in reconciled:
             assert ('experiment' in item) != ('guide' in item)
             if 'experiment' in item:
@@ -85,8 +85,8 @@ def build():
     if queue:
         parts.append('<h2 id="screening-queue">Source files still to screen</h2>'
                      '<p>These files have only had an initial scan. A single discussion can contain several distinct claims; '
-                     'the label below does not certify complete coverage. Files move out of this queue only when their '
-                     'specific claims are separated into replay entries or precisely matched to existing work.</p>')
+                     'the label below does not certify complete coverage. A file stays here while any distinct claim '
+                     'still needs extraction, even if another claim from it has been checked.</p>')
         lanes = [
             ('compare-existing', 'Compare with existing coverage'),
             ('extract-new', 'Extract a testable method or source claim'),

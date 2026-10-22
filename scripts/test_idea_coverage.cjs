@@ -41,7 +41,12 @@ const reported=read('data/reported-attempts.json').entries;
 const reconciled=read('data/reported-attempts.json').reconciled_sources;
 assert.equal(new Set(reported.map(r=>r.id)).size,reported.length);
 assert.equal(new Set(reconciled.map(r=>r.attachment_id)).size,reconciled.length);
-assert(reconciled.every(r=>!reported.some(e=>e.source.attachment_id===r.attachment_id)));
+const sourceHashes=new Map();
+for(const source of [...reported.map(r=>r.source),...reconciled]){
+  const prior=sourceHashes.get(source.attachment_id);
+  if(prior)assert.equal(prior,source.sha256,source.attachment_id);
+  sourceHashes.set(source.attachment_id,source.sha256);
+}
 assert.equal(Search.experimentDocs(reported).length,0,'Prior-work reports must never become completed experiment evidence');
 assert.equal(Coverage.match(reported,'LP2-31').length,0,'A page mention alone must not imply a reported technique');
 for(const [query,id] of [
@@ -50,7 +55,12 @@ for(const [query,id] of [
  ['Could QuagMirrors be the key?','quagmirrors-mobius-autokey'],
  ['Use an eight rune autokey header crib','lp2-54-header-autokey-crib'],
  ['Try crab canon branches','spirals-branches-2883-alignment'],
- ['Is the nearest prime palindrome meaningful?','lp2-15-prime-distance-palindromes']
+ ['Is the nearest prime palindrome meaningful?','lp2-15-prime-distance-palindromes'],
+ ['Try worddata CSV for magic square','magic-square-dictionary-crib-search'],
+ ['Use Obscura word key','obscura-word-specific-mapping'],
+ ['CicadaOS 560.13 cuneiform','cuneiform-cicadaos-560-files'],
+ ['Thick thin spaces as binary','lp2-spacing-as-bits'],
+ ['Möbius page 15 numbers','lp2-15-mobius-square-transform']
 ])assert.equal(Coverage.match(reported,query)[0]?.id,id,query);
 console.log('PASS: 12 coverage families, related published records, phrase boundaries and separation from AI evidence');
 
