@@ -201,6 +201,9 @@ for path in ['exports/carrier-928.json','exports/figures/carrier-928.svg','scrip
 for path in ['exports/section-contributions.json','exports/figures/section-contributions.svg','scripts/audit_section_contributions.py','scripts/plot_section_contributions.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Word length audit')
  files[-1].update(guide='word-lengths',aliases=['section contributions','column cancellation','464 words'])
+for path in ['data/source-snapshots/lp-rune-counts-2026-10-22.csv','exports/section-rune-counts.json','exports/figures/section-rune-splits.svg','scripts/audit_section_rune_counts.py','scripts/check_section_rune_counts.py','scripts/plot_section_splits.py']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Section count source and audit')
+ files[-1].update(guide='section-rune-counts',aliases=['section rune counts','without F counts','2883','1433','section boundaries'])
 for path in ['exports/464-pointer.json','scripts/audit_464_pointer.py']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Historical arithmetic audit')
  files[-1].update(guide='prime-sums',aliases=['464 words','STUDY HERE','331 133 pointer','71963','26893'])

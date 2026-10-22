@@ -1,0 +1,51 @@
+<p>Several proposed relationships between Liber Primus sections depend on their rune counts. A public <a href="https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit">section-count spreadsheet</a> lists 23 named pieces, both with and without the F rune (ᚠ). We saved its <a href="data/source-snapshots/lp-rune-counts-2026-10-22.csv" download>CSV as retrieved on 22 October 2026</a> and recalculated every row from the archived transcription. <strong>All 23 rows and six reported equalities match</strong> under the section boundaries below. These are arithmetic observations, not decoded text.</p>
+
+<h2 id="boundaries">Why page ranges alone give different answers</h2>
+<p>The spreadsheet divides three pages at their printed section breaks. The text transcription marks each break with <code>&amp;</code>. On LP1-16, the first 82 runes are <em>Instruction</em> and the last seven are its short closing title, called KT2 in the spreadsheet. LP2-33 begins with a 91-rune three-dot piece associated with Wing and Tree; its remaining 123 runes begin the Cuneiform section. LP2-39 ends that section after 119 runes, with a separate 121-rune three-dot piece following it. The nine-rune heading before the number panel on LP2-15 is also counted separately from Möbius.</p>
+<figure class="evidence-figure"><img src="exports/figures/section-rune-splits.svg" width="420" height="210" loading="lazy" alt="Three proportional bars show LP1-16 split after 82 of 89 runes, LP2-33 after 91 of 214, and LP2-39 after 119 of 240."><figcaption>Breaks at the transcribed section markers. Bar widths show each piece's share of that page's runes; they are not cipher shifts. <a href="exports/figures/section-rune-splits.svg" download>Download SVG</a> · <a href="scripts/plot_section_splits.py" download>Figure script</a>.</figcaption></figure>
+<p>This explains an apparent conflict with whole-page inventories: <a href="#/wiki/grille-carrier?section=carrier-928">LP2-33–39 contain 1,680 runes</a>, but the spreadsheet's <em>Cuneiform</em> piece is 1,468. The remaining 212 are the 91-rune piece at the start of LP2-33 and the 121-rune piece at the end of LP2-39. Both totals can be correct because they count different spans.</p>
+
+<h2 id="equalities">The six stated relationships</h2>
+<p>“Without F” means delete every ᚠ from the chosen span; it does not remove all headings or all first runes. The equations use the spreadsheet's section pieces, not whichever whole pages happen to be nearby.</p>
+<div class="table-wrap"><table><thead><tr><th>Value</th><th>One side</th><th>Other side</th></tr></thead><tbody>
+<tr><td>2,883</td><td>Spirals 1,145 + Branches 1,729 + pre-Möbius heading 9</td><td>Spiral Branches without F: 3,008 − 125</td></tr>
+<tr><td>1,894</td><td>Koan 1, Loss of Divinity, Koan 2 and Instruction without F: 753 + 747 + 314 + 80</td><td>Möbius after its nine-rune heading: 1,894</td></tr>
+<tr><td>1,433</td><td>Koan 2 and Spirals without F: 314 + 1,119</td><td>Cuneiform without F: 1,468 − 35; also Wing and Tree with F: 1,433</td></tr>
+<tr><td>1,814</td><td>Koan 1, Loss of Divinity and Koan 2 without F: 753 + 747 + 314</td><td>Sign Post and Spirals without F: 695 + 1,119</td></tr>
+<tr><td>695</td><td>Koan 1 with F minus KT1: 778 − 83</td><td>Sign Post without F: 729 − 34</td></tr>
+<tr><td>91</td><td>Warning without F minus Parable without F: 183 − 92</td><td>Wing and Tree three-dot piece with F: 91</td></tr>
+</tbody></table></div>
+<p>The last comparison mixes two F-omitted counts with a total that retains F. Its numeric result is correct; omitting that distinction would make the recipe difficult to repeat. The 1,433 relationship has three expressions of the same value, not a sum of Cuneiform and Wing and Tree.</p>
+
+<h2 id="inventory">Complete section inventory</h2>
+<p>The table follows the saved spreadsheet's order. The two short titles on LP1-05 and LP1-16 are separate pieces; a source spelling such as “Spiral Brances” is preserved in the downloadable CSV and JSON, while the labels below use normal spelling. The final total spans all rune-bearing pages in both releases.</p>
+<div class="table-wrap"><table><thead><tr><th>Piece</th><th>Runes</th><th>F runes</th><th>Without F</th></tr></thead><tbody>
+<tr><td>Warning</td><td>184</td><td>1</td><td>183</td></tr>
+<tr><td>Welcome</td><td>515</td><td>25</td><td>490</td></tr>
+<tr><td>Some Wisdom</td><td>74</td><td>1</td><td>73</td></tr>
+<tr><td>KT1</td><td>83</td><td>4</td><td>79</td></tr>
+<tr><td>Koan 1</td><td>778</td><td>25</td><td>753</td></tr>
+<tr><td>Loss of Divinity</td><td>755</td><td>8</td><td>747</td></tr>
+<tr><td>Koan 2</td><td>319</td><td>5</td><td>314</td></tr>
+<tr><td>Instruction</td><td>82</td><td>2</td><td>80</td></tr>
+<tr><td>KT2</td><td>7</td><td>0</td><td>7</td></tr>
+<tr><td>Sign Post</td><td>729</td><td>34</td><td>695</td></tr>
+<tr><td>Spirals</td><td>1,145</td><td>26</td><td>1,119</td></tr>
+<tr><td>Branches</td><td>1,729</td><td>66</td><td>1,663</td></tr>
+<tr><td>Pre-Möbius heading</td><td>9</td><td>1</td><td>8</td></tr>
+<tr><td>Möbius</td><td>1,894</td><td>71</td><td>1,823</td></tr>
+<tr><td>Mayfly</td><td>1,021</td><td>37</td><td>984</td></tr>
+<tr><td>Wing and Tree</td><td>1,433</td><td>52</td><td>1,381</td></tr>
+<tr><td>Wing and Tree three dots</td><td>91</td><td>3</td><td>88</td></tr>
+<tr><td>Cuneiform</td><td>1,468</td><td>35</td><td>1,433</td></tr>
+<tr><td>Cuneiform three dots</td><td>121</td><td>2</td><td>119</td></tr>
+<tr><td>Spiral Branches</td><td>3,008</td><td>125</td><td>2,883</td></tr>
+<tr><td>LP2-54–55</td><td>308</td><td>6</td><td>302</td></tr>
+<tr><td>An End</td><td>85</td><td>5</td><td>80</td></tr>
+<tr><td>Parable</td><td>95</td><td>3</td><td>92</td></tr>
+<tr><th>Total</th><th>15,933</th><th>537</th><th>15,396</th></tr>
+</tbody></table></div>
+
+<h2 id="reproduce">Check the source and arithmetic</h2>
+<p>Run <code>python scripts/audit_section_rune_counts.py --check</code> from the repository or from the extracted <a href="downloads/reference-data.zip" download>reference-data bundle</a>. The <a href="scripts/audit_section_rune_counts.py" download>Python script</a> counts stored runes, splits only at explicit <code>&amp;</code> markers, checks all 23 published CSV rows, verifies that every rune-bearing page is covered exactly once, and recalculates the six equations. <a href="exports/section-rune-counts.json" download>Download its complete JSON</a> for source hashes, page pieces and every operand. Run <code>python scripts/check_section_rune_counts.py</code> for an independent Unicode-block recount, then <code>python scripts/plot_section_splits.py --check</code> to verify the figure.</p>
+<p>These equalities were identified after exploring section combinations and choices to omit F. Their existence is reproducible, but there is no stated count of combinations searched, selected-beforehand prediction, or operation that turns the paired runes into plaintext. The separate <a href="#/wiki/reported-attempts?section=spirals-branches-2883-alignment">2,883-rune stream-alignment proposal</a> still needs a fixed symbol-level test and matched controls. Equal lengths make such a test possible; they do not establish a key.</p>
