@@ -6,6 +6,8 @@ In a feedback cipher, decoding one position changes the state used at later posi
 
 Plaintext and ciphertext feedback are different
 
+A state can also contain a changing alphabet rather than previous numeric values. See moving disks, rotors and evolving alphabets for a worked permutation example and stepping rules.
+
 Consider two subtraction rules on rune indices modulo 29. Both start with a one-symbol seed of 3. After decoding a symbol, the first rule stores the ciphertext just read; the second stores the plaintext just produced. These invented values demonstrate the difference and are not a manuscript reading.
 
 	Position	Ciphertext	Ciphertext-feedback state before step	Output	Plaintext-feedback state before step	Output
@@ -41,6 +43,8 @@ Choose the rule on one segment and apply it unchanged to a continuation. Any see
 For proposals combining or changing operations, see switching rules and adaptive decoding.
 
 Sources, related references, and files
+- moving disks, rotors and evolving alphabets
+  https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - repeating-key cipher
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - LP2-54–55 case study

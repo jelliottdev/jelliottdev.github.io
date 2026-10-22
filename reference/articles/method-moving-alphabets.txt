@@ -1,0 +1,68 @@
+Moving disks, rotors and evolving alphabets
+
+Specify a changing substitution, trace its state, and distinguish fixed stepping from solver-selected alphabet changes.
+
+A moving-alphabet proposal changes the substitution table as decoding proceeds. Its state can be an offset, several rotor positions, or the order of symbols in a permuted alphabet. A complete method specifies both the substitution at the current state and the rule that advances that state.
+
+Different kinds of movement
+
+	Variant	What changes?	Required specification
+	Relative alphabet displacement	One alphabet moves relative to another.	Both alphabet orders, offset direction and when to move.
+	Rotating permutation	An input passes through a fixed permutation viewed at a changing offset.	Forward and inverse mappings, offset arithmetic and stepping schedule.
+	Several coupled stages	Several mappings and states act in sequence.	Stage order, composition direction and coupled stepping rules.
+	Evolving alphabet order	The permutation itself is rearranged after a symbol.	Exact rearrangement, its trigger and whether it uses plaintext or ciphertext.
+
+Names such as a cipher disk or rotor identify a broad mechanism, not a runnable algorithm. Adapting a system to 29 runes requires an explicit alphabet and treatment of every symbol. The example below is an invented mathematical model, not an implementation of a particular historical machine.
+
+One permutation at five offsets
+
+Use the five-symbol alphabet 0–4 and the permutation f = [2, 4, 1, 0, 3], meaning that f[0] = 2, f[1] = 4, and so on. Define the transformation at offset r by y = (f[(x + r) mod 5] − r) mod 5. Start at r = 0, transform the input, then increase r by one modulo 5.
+
+	Position	Offset r before step	Input x	Permutation lookup	Output y
+	0	0	0	f[0] = 2	2
+	1	1	0	f[1] = 4	3
+	2	2	0	f[2] = 1	4
+	3	3	0	f[3] = 0	2
+	4	4	0	f[4] = 3	4
+
+The repeated input does not always have the same output because the offset changes. The inverse permutation is f_inv = [3, 2, 0, 4, 1]. At the same offset, recover x with x = (f_inv[(y + r) mod 5] − r) mod 5. The decoder must reproduce the encoder's stepping timing; stepping before the first symbol would start a different sequence.
+
+For this position-only schedule, the offset repeats after five steps. An input-dependent update need not follow that schedule. “Move by the decoded value” would introduce plaintext feedback and require the decoder to update state only after recovering the value. See feedback rules.
+
+Trace the changing state
+
+Record the source position, input, state before the step, output and state afterward. For several stages, show each intermediate value and the order in which the stages act. A row or page boundary must either preserve state or trigger a specified reset. Punctuation, headings and skipped runes also need a stepping rule.
+
+A round trip should recover the entire input. For a small alphabet, check every input at every state, not just one readable example. For a changing permutation, also verify that every update still leaves a valid permutation if one-to-one mapping is part of the model.
+
+Separate settings from rules
+
+With fixed wiring and a fixed update schedule, one 29-position stage has 29 initial offsets. For r such stages, permitting every initial-position combination gives 29^r settings. Searching a permutation of r distinct stage identities adds up to r! orders if all orders are allowed. These counts do not include choosing the wirings, stepping rules, resets or input representation.
+
+An unrestricted initial permutation on 29 symbols has 29! possibilities. A deterministic update rule can derive later permutations from that initial state. In contrast, independently choosing a fresh permutation at each of n positions allows (29!)^n settings before any constraints. These are radically different claims even though both may be described as a “changing alphabet.”
+
+Publish the actual finite choice set. A failed search over offsets of one wiring does not rule out all moving-alphabet ciphers. If alphabet updates are selected after inspecting the desired next word, include that selection in the method and search accounting. See adaptive choices and composition order.
+
+Documented experiments
+
+No dedicated moving-alphabet experiment is linked yet. Existing repeating-key and feedback tests concern their own rules; they do not establish that a proposed disk, rotor or evolving permutation was tested.
+
+All method families · Fixed substitutions · Repeating-key ciphers · Documenting a test
+
+Sources, related references, and files
+- feedback rules
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
+- adaptive choices
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- composition order
+  https://jelliottdev.github.io/reference/articles/method-composition.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Fixed substitutions
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- Repeating-key ciphers
+  https://jelliottdev.github.io/reference/articles/vigenere.html
+- Documenting a test
+  https://jelliottdev.github.io/reference/articles/reproducibility.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
