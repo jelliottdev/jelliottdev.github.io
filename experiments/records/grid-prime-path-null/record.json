@@ -1,0 +1,131 @@
+{
+  "id": "grid-prime-path-null",
+  "title": "LP2-49–51: missing-prime shuffle controls",
+  "status": "published",
+  "question": "Is the count of three absent decimal-prime values unusual under two fixed first-digit shuffle controls?",
+  "summary": "Three absent values occurred in 761/5,000 global and 763/5,000 within-row shuffled grids. The missing-count pattern is not rare under these two controls.",
+  "tags": [
+    "alphanumeric grid",
+    "L256",
+    "191 primes",
+    "missing primes",
+    "3301",
+    "null model",
+    "shuffle control",
+    "selection bias",
+    "prime paths"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.json"
+    ],
+    "representation": "First characters of 256 case-preserved grid tokens in the original 32x8 page-row order.",
+    "procedure": "Apply the fixed 1,364 directed four-cell path and decimal-prime rule to the observed grid and to 5,000 global plus 5,000 within-row digit shuffles.",
+    "parameters": "Seed 33012026; preserve global first-digit counts or each row composition; four predeclared statistics; 49-value prime universe; plus-one empirical tails.",
+    "exclusions": "No alternative path rule, suffix reading, text decryption, test of the specific three named omissions, correction for prior pattern search, or claim about authorship."
+  },
+  "outcome": "not-supported",
+  "finding": "The claim that three missing values alone is unusual is not supported under either declared shuffle model: >=3 omissions occurred in 15.24% and 15.28% of the plus-one empirical comparisons.",
+  "limitations": "Exploratory control planned after observing the three absent values. Conditional shuffles do not model all plausible construction processes; a different predeclared statistic could behave differently. Human review pending.",
+  "next_steps": "Test independently predicted features with a held-out or preregistered rule; keep any layout, path-length or null-model change as a linked variant.",
+  "family": {
+    "id": "grid-directional-searches",
+    "title": "Directional searches in the alphanumeric grid",
+    "question": "Which values occur or are missing under specified grid layouts and path rules?",
+    "baseline": "grid-prime-paths"
+  },
+  "variant": {
+    "label": "Same 32x8 path rule; global and within-row first-digit shuffle controls",
+    "changes": [
+      {
+        "field": "representation",
+        "before": "First characters of case-preserved two-character tokens, stacked as 32 rows by 8 columns in manuscript order.",
+        "after": "First characters of 256 case-preserved grid tokens in the original 32x8 page-row order.",
+        "reason": "The controls vary first-digit spatial arrangement while holding the same observed token source and geometry."
+      },
+      {
+        "field": "procedure",
+        "before": "Enumerate four-cell straight paths in all eight directions; reject any containing 4; test decimal primality, then record suffix strings and base 4 values.",
+        "after": "Apply the fixed 1,364 directed four-cell path and decimal-prime rule to the observed grid and to 5,000 global plus 5,000 within-row digit shuffles.",
+        "reason": "Compare the fixed path statistic with two shuffled-grid reference distributions."
+      },
+      {
+        "field": "parameters",
+        "before": "1,364 directed paths; no wrapping; leading zeroes allowed; page boundaries crossed; no turns or cell deletion.",
+        "after": "Seed 33012026; preserve global first-digit counts or each row composition; four predeclared statistics; 49-value prime universe; plus-one empirical tails.",
+        "reason": "Declare permutation units, replicate count, seed and statistics for reproducibility."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other layouts, path lengths, page-isolated scans, removal of 4 cells, null-model simulation, decipherment and authorial intent.",
+        "after": "No alternative path rule, suffix reading, text decryption, test of the specific three named omissions, correction for prior pattern search, or claim about authorship.",
+        "reason": "Keep post-hoc names and unsolved-page decoding outside the count-based control claim."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; independent endpoint enumeration and sieve for observed and sampled controls; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-prime-path-null/run.py --check",
+    "environment": "Python 3.12 standard library, offline. Independent check.py and deterministic plot.py are included.",
+    "script": "experiments/records/grid-prime-path-null/run.py",
+    "script_sha256": "8fa798df618ea50bec5a60f3722ae5af7962900d967cf07d7fffd3afb9221ac9",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-prime-path-null/plan.json",
+        "sha256": "c67ed996ceb603650d59ecf022d9f6f943fe3da68bd46a706ab6155a9b80816c"
+      },
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      },
+      {
+        "path": "experiments/records/grid-prime-path-null/check.py",
+        "sha256": "e0bc885fb4d87bb3171f9521484f6a334b30df38fea8fcc951f1645f3d1c6d30"
+      },
+      {
+        "path": "experiments/records/grid-prime-path-null/plot.py",
+        "sha256": "abebe05e1ab10fc1c8855e3b30a5dfc03d57f12e3c5a326f165c4bbd26ee6697"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-prime-path-null/results.json",
+        "sha256": "1848465c1358b9e1212e65c70cbdc52f23c26d0edc07e49e473e9650fd3ae3d1"
+      },
+      {
+        "path": "experiments/records/grid-prime-path-null/missing-primes.svg",
+        "sha256": "9f17176c497e7296b99a1f63f41a40b45666d2099b1e6e47e97b73029b1fe5ac"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid layout and transcription limits",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "Reproduced directional prime-path baseline",
+      "url": "https://jelliottdev.github.io/#/experiments/grid-prime-paths"
+    }
+  ],
+  "related": [
+    "grid-prime-paths",
+    "grid-prime-paths-page-boundaries"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-prime-path-null/missing-primes.svg",
+      "caption": "Missing-prime counts in 5,000 global and 5,000 within-row shuffles; three is the observed count."
+    }
+  ]
+}

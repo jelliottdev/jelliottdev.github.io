@@ -1,0 +1,21 @@
+{
+  "id": "grid-prime-path-null",
+  "question": "How does the observed four-cell decimal-prime coverage compare with shuffled first-digit grids under the fixed published path rule?",
+  "input": "exports/alphanumeric-grids.json; 32 rows by 8 columns, page order 49, 50, 51; first character only.",
+  "baseline": "The published 1,364 directed four-cell straight paths; reject paths containing 4; leading zeroes allowed; test decimal primality in the 49-value universe.",
+  "controls": [
+    "Uniformly shuffle all 256 first digits, preserving global digit counts.",
+    "Independently shuffle the eight first digits within each of 32 original rows, preserving each row's digit counts."
+  ],
+  "replicates_per_control": 5000,
+  "seed": 33012026,
+  "predeclared_statistics": [
+    "Number of eligible directed paths",
+    "Number of prime-path occurrences",
+    "Number of distinct prime values present among the fixed 49",
+    "Number of prime values absent among the fixed 49"
+  ],
+  "comparison": "For each statistic retain the full 5,000-count histogram and empirical tails relative to the observed grid, using the (count+1)/(replicates+1) convention.",
+  "selection_limit": "The specific three absent values were noticed before this control was planned. Their exact joint absence can be described but must not receive a confirmatory p-value from this run.",
+  "exclusions": "No alternative path length, grid layout, suffix interpretation, word score, authorial-intent estimate or plaintext test. The controls are conditional on the observed first-digit counts."
+}

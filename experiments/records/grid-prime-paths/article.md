@@ -37,6 +37,6 @@ The independent checker reads the original archived page records, reconstructs t
 
 Changing to a 16×16 layout, prohibiting page crossings, requiring four nonzero-leading decimal digits, searching longer paths, or requiring both bases to be prime changes the test. Keep such experiments in this family with their changed rules and results visible.
 
-A statistical extension must define what is randomized and what statistic is assessed. Shuffling entire tokens preserves different relationships from shuffling only their first characters. Testing these three specific omissions after noticing them also differs from a test specified in advance. The present result supplies no p-value and does not claim that other representations were exhaustively excluded.
+A linked [shuffle-control experiment](#/experiments/grid-prime-path-null) now fixes the path rule and compares the *number* of absent prime values with global and within-row first-digit shuffles. Three or more values were absent in about 15% of each control set. This does not assign a confirmatory probability to the particular three names selected after observation. Shuffling entire tokens would preserve different relationships from shuffling only first characters, and this baseline still does not claim that other representations were exhaustively excluded.
 
 Read [search space and bounds](#/wiki/search-space) and [null models and selection](#/wiki/null-models) before turning this reproduced pattern into a claim about intention.
