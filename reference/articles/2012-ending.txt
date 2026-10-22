@@ -1,0 +1,58 @@
+2012: the Valēte closing message
+
+Inspect the final Reddit JPEG, reproduce its OutGuess extraction and verify the signed message.
+
+The last selected Mabinogion title was posted on 6 February 2012 at 18:02:15 UTC. It ends partway through a sentence. Five hours and 25 minutes later, the same account published “Valēte!”, linking a JPEG that states the search had found the people it sought. The surviving Reddit record supplies the post time, 23:27:05 UTC, and the image URL. We preserve a small source-record snapshot of those fields. It is not a screenshot of the original post. This gives the long Reddit title stream a dated endpoint without explaining why it continued after the phone-number book code.
+
+
+[Image: Black 2012 Valēte JPEG with white closing message and numeric postscript]
+The 503 × 509 JPEG linked by the original post. Download these exact bytes; SHA-256: 6c8a8e3096208718d75a59d62ac5f66428e73b64e8bb3bdf689ff5dddee84ce4.
+
+
+What the image says
+
+The visible message says the organizers had found the individuals they sought and that their month-long journey had ended “for now.” It thanks participants, says there will be other opportunities and ends with a postscript containing 131 digits across three displayed lines. The audit record preserves those digits exactly. Their presence is an observation, not a demonstrated solution to another puzzle.
+
+
+What is in the JPEG
+
+OutGuess retrieved 1,398 bytes from this saved JPEG, reporting seed 130. The extracted payload contains the closing wording and postscript in a clear-signed OpenPGP message. In a fresh run, the retrieved bytes matched the saved payload byte for byte. GPG verified its signature against the preserved 3301 public key, fingerprint 6D854CD7933322A601C3286D181F01E57A35090F. Verification establishes consistency with that key; the key is not independently certified to a real-world person or organization.
+
+
+Reproduce the checks
+
+
+Download the JPEG, payload and public key, or extract the reference-data bundle.
+
+Run python scripts/replay_2012_valete.py to check the three saved hashes and the postscript length. This default check does not execute OutGuess or GPG.
+
+For a fresh extraction and signature check, run python scripts/replay_2012_valete.py --outguess /path/to/outguess --gpg /path/to/gpg --output valete-check.json. The script uses a temporary isolated GPG keyring and compares fresh payload bytes with the saved payload. Download the script.
+
+
+The published run report records the image and payload hashes, the OutGuess executable hash, the successful fresh byte comparison and GPG’s verified fingerprint. It does not claim a meaning for the postscript or a reason for the preceding 109 unused story lines. To retrace the full public route to this stage, start with the opening JPEG and continue through the 2012 history guide.
+
+Sources, related references, and files
+- “Valēte!”
+  https://www.reddit.com/r/a2e7j6ic78h0j/comments/pdtbj/val%C4%93te/
+- small source-record snapshot
+  https://jelliottdev.github.io/exports/sources/cicada-2012-ending/reddit-post-record.json
+- long Reddit title stream
+  https://jelliottdev.github.io/reference/articles/historical-book-codes.html#unused-posts
+- Black 2012 Valēte JPEG with white closing message and numeric postscript; Download these exact bytes; JPEG
+  https://jelliottdev.github.io/exports/sources/cicada-2012-ending/valete.jpg
+- audit record; run report
+  https://jelliottdev.github.io/exports/cicada-2012-valete.json
+- extracted payload; payload
+  https://jelliottdev.github.io/exports/sources/cicada-2012-ending/valete.asc
+- preserved 3301 public key; public key
+  https://jelliottdev.github.io/exports/steganography/cicada-public-key.asc
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Download the script
+  https://jelliottdev.github.io/scripts/replay_2012_valete.py
+- opening JPEG
+  https://jelliottdev.github.io/reference/articles/2012-opening.html
+- 2012 history guide
+  https://jelliottdev.github.io/reference/articles/cicada-history.html#2012
+
+Article: https://jelliottdev.github.io/reference/articles/2012-ending.html
