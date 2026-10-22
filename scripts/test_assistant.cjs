@@ -43,7 +43,7 @@ console.log('PASS: no page-only experiment matches, scope separation, page ID pa
 
 // Published experiment prose must preserve literal reproduction syntax.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const experimentContext={esc:text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))};
+const experimentContext={esc:text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),URLSearchParams,location:{hash:'#/experiments'}};
 vm.createContext(experimentContext);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../experiments.js'),'utf8'),experimentContext);
 const literal=experimentContext.renderExperimentMarkdown('Use `**pattern**` beside **emphasis** and `<script>`.');
@@ -114,7 +114,7 @@ for(const record of published)assert.equal(browse.split(`href="#/experiments/${r
 assert(!browse.includes('<details class="experiment-browse-family" open'),'Browse families start collapsed');
 assert(browse.indexOf('href="#/experiments/lp2-prime-minus-one-openings"')<browse.indexOf('href="#/experiments/lp2-fibonacci-openings"'),'Baseline precedes its variants');
 assert(!browse.includes('Retested '),'Full review metadata belongs to the record rather than every browse entry');
-assert(browse.includes(`Human review is pending for all ${published.length} records.`));
+assert(!browse.includes('Human review is pending'),'Archive browsing keeps internal review metadata out of the opening view');
 assert(browse.includes('Control · Supported within scope'));
 assert(!experimentContext.experimentBrowse([{id:'safe',title:'<img src=x>',summary:'<script>unsafe</script>'}]).includes('<script>'));
 console.log('PASS: family browsing retains one direct link per record, baseline order and escaped content.');
@@ -153,8 +153,8 @@ console.log('PASS: published records lead with findings; result downloads and re
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../assistant-ui.js'),'utf8'),experimentContext);
 const totient=published.find(r=>r.id==='lp2-totient-openings');
 const scopedResult=experimentContext.experimentSearchResult(totient,['lp2-31','lp2-56']);
-assert(scopedResult.indexOf(experimentContext.esc(totient.scope.procedure))<scopedResult.indexOf('<details'));
-assert(scopedResult.indexOf(experimentContext.esc(totient.scope.exclusions))<scopedResult.indexOf('<details'));
+assert(scopedResult.indexOf('<details')<scopedResult.indexOf(experimentContext.esc(totient.scope.procedure)));
+assert(scopedResult.indexOf('<details')<scopedResult.indexOf(experimentContext.esc(totient.scope.exclusions)));
 assert(scopedResult.includes('Not in this record’s page scope: LP2-56.'));
 assert(!scopedResult.includes('Not in this record’s page scope: LP2-31'));
 assert(!experimentContext.experimentSearchResult(totient,['lp2-31']).includes('scope-mismatch'));
@@ -164,7 +164,7 @@ assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'
 assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice(0,2).map(r=>r.document.id)),
  new Set(['outguess-default-key','outguess-guard-sweep']),'Generic OutGuess retrieval should expose both baseline and guarded-build records');
 assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
-console.log('PASS: method and exclusions remain visible; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
+console.log('PASS: method and exclusions remain available in details; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
 for(const query of ['Have we tried checking if its a different language than English?',
  'another language','could it be German','different languages on LP2-31']){
  assert.equal(Search.supporting(liveDocs,query)[0].document.id,'parallel-languages',query);
