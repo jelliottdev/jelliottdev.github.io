@@ -81,6 +81,14 @@
       "sha256": "a43d49a4568e17141c94c09fd827c16bd1f8405e3382ff22eeca14320a42560d",
       "covered_scope": "The first two LP2-39 black dots are reproduced as exact horizontal RGB pixel mirrors within declared 32×33 rectangles; dimensions, thresholds and the distinction between edge and center spacing are documented. The same thread’s CicadaOS and binary-spacing proposals are separate.",
       "guide": "dots"
+    },
+    {
+      "title": "Consecutive doublet index-distance report",
+      "author": "LBen and participants",
+      "attachment_id": "f49d5f9b-2b1f-425c-9500-3ae985480130",
+      "sha256": "3e61084a945f0e6f746d5d2ac4b60a3a9cdb1c8243f6301af76aaba3d8f062f5",
+      "covered_scope": "The 86-event LP2-00–55 doublet sequence is extracted and independently checked. The reported lag-one 8.81 and lag-three +4 12.9% do not reproduce under the archived text and stated counting rule: the replay obtains 8.6353 and 10/83 (12.05%). It computes a fixed-multiset +4 expectation, but does not reproduce the source's 10,000-permutation tail probabilities or establish a cipher.",
+      "experiment": "doublet-event-lags"
     }
   ],
   "entries": [
@@ -384,13 +392,14 @@
         "sha256": "501387dc6965d37e03df02b8a8d4f9bfcf4b2fb26bd41768a7caf5f7d6cc52fc"
       },
       "reported_idea": "Assign each rune prime p the value μ(φ(p)), preserve zero-category positions across a candidate decoding, and use word-list search plus thematic word selection to propose a reading of LP2-00.",
-      "coverage": "The archive documents totient shifts and word-sum candidates but has not reproduced this zero-mask constraint or the claimed first-page reading.",
+      "coverage": "A bounded control now checks the stated one-way zero constraint on the known LP2-56 prime-minus-one reading: 28 of 85 ciphertext-zero runes become plaintext nonzero. The proposed LP2-00 sentence and its dictionary filtering have not been replayed.",
       "related_records": [
         "lp2-totient-openings",
-        "search-maximum-controls"
+        "search-maximum-controls",
+        "mobius-zero-mask-known-page"
       ],
-      "replay_needed": "Verify the mask against every known ciphertext/plaintext pair, pin the dictionary and rune spelling rules, count all candidate words per position, then test the proposed sentence on untouched rows and matched random masks.",
-      "status": "related-only"
+      "replay_needed": "Check other known pairs separately, pin the original dictionary/code and rune spelling rules, count all candidate words per LP2-00 position, then test the proposed sentence on untouched rows and matched random masks.",
+      "status": "partial"
     },
     {
       "id": "jpeg-hex-distribution",
@@ -828,6 +837,82 @@
       "related_records": [],
       "replay_needed": "List the selected printed cells, distinguish arithmetic Möbius μ(n) from any other Möbius usage, publish each input/output value and traversal order, then state a specific rune operation and control before interpreting any pattern.",
       "status": "not-replayed"
+    },
+    {
+      "id": "rune-stream-as-executable-bytes",
+      "title": "Rune indices or word sums packed as bytes",
+      "phrases": [
+        "rune indices as bytes",
+        "gem sums executable",
+        "execute the runes",
+        "GP values binary stream"
+      ],
+      "family": "bitwise",
+      "pages": [],
+      "source": {
+        "title": "Rune-to-byte discussion",
+        "author": "Mae and Uncus Maximus",
+        "reported": "2025-05-03",
+        "attachment_id": "9c66f80f-13cb-48ed-97bf-35d80f450fed",
+        "sha256": "9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728"
+      },
+      "reported_idea": "Encode rune indices, prime values or per-word GP sums as integers, pack them into bytes and inspect the output as a file or possible program. The pasted discussion proposes variants but does not report that any resulting file was produced or executed.",
+      "coverage": "The grid direct-byte test concerns printed LP2-49–51 base-60 values, not a whole rune stream or word sums. No pinned packing width, bit order or artifact from this suggestion is in the archive.",
+      "related_records": [
+        "grid-direct-bytes"
+      ],
+      "replay_needed": "Fix the exact page range and whether inputs are indices, primes or word sums; declare word boundaries, integer width, byte order, padding and expected file signatures before generating all variants. Treat file recognition as a bounded data test, not evidence that arbitrary bytes should be executed.",
+      "status": "related-only"
+    },
+    {
+      "id": "dots-overlaid-on-rune-paragraph",
+      "title": "Five-dot pattern overlaid on a rune paragraph",
+      "phrases": [
+        "five dots over text",
+        "dots overlay first paragraph",
+        "rotate dots on runes",
+        "dots constellation overlay"
+      ],
+      "family": "geometry",
+      "pages": [],
+      "source": {
+        "title": "Five-dot overlay and symbolic-alphabet discussion",
+        "author": "tyte, ThirdLateralEye and participants",
+        "reported": "2024-11-02",
+        "attachment_id": "ad8cc121-47ca-4c93-87eb-9c85f985d0ff",
+        "sha256": "ca06293235ae92bbe62d84c3a7209f934378ba35ed1eb7bac3d6244e25034463"
+      },
+      "reported_idea": "Place a five-dot drawing over a manuscript paragraph, perhaps after rotation, and read selected rune positions. A participant reports that an overlay seemed close in size but did not quite work; the thread later compares the marks with constellations and a historical symbolic alphabet.",
+      "coverage": "The dot guide records the locations and relationships of the manuscript marks, but the pasted source substitutes 'Image' placeholders for the particular overlay and does not give selected rune coordinates or an output string.",
+      "related_records": [],
+      "replay_needed": "Recover the original overlay and identify both source page and target paragraph. Pin image scale, rotation, registration points and rune-selection tolerance; publish selected positions and compare with other rotations and matched five-point patterns.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "metafysica-dwh-page-sweep",
+      "title": "Partial website sweep against LP2-56's hash",
+      "phrases": [
+        "metafysica DWH",
+        "hash alarm website",
+        "metafysica hash sweep",
+        "deep web hash browser addon"
+      ],
+      "family": "hashes",
+      "pages": [
+        "lp2-56"
+      ],
+      "source": {
+        "title": "Metafysica website discussion",
+        "author": "Donger, Mae and participants",
+        "reported": "2025-05-04",
+        "attachment_id": "9c66f80f-13cb-48ed-97bf-35d80f450fed",
+        "sha256": "9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728"
+      },
+      "reported_idea": "Check pages of metafysica.nl against the 128-hex-character LP2-56 hash. One participant says they visited about half the pages with a hash-alarm browser add-on active; no URL list, bytes, hash convention or complete result table is supplied.",
+      "coverage": "A partial visit report cannot establish which pages were tested or exclude the site. Liberpedia's other hash experiments test their own pinned corpora, not this website snapshot.",
+      "related_records": [],
+      "replay_needed": "Pin a date-stamped URL manifest and exact response bytes; specify SHA-512 versus any alternate algorithm and whether to hash raw responses, rendered text or normalized content. Save every URL, byte hash and comparison, including redirects and inaccessible pages.",
+      "status": "not-replayed"
     }
   ],
   "screening_queue": [
@@ -876,15 +961,8 @@
     {
       "attachment_id": "9c66f80f-13cb-48ed-97bf-35d80f450fed",
       "sha256": "9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728",
-      "label": "Rune values as bytes and Mayfly image",
-      "next_check": "Separate a byte-decoding rule from the proposed artwork source.",
-      "triage_lane": "extract-new"
-    },
-    {
-      "attachment_id": "ad8cc121-47ca-4c93-87eb-9c85f985d0ff",
-      "sha256": "ca06293235ae92bbe62d84c3a7209f934378ba35ed1eb7bac3d6244e25034463",
-      "label": "Five-dot image and symbolic alphabet",
-      "next_check": "Identify the exact reference and positional overlay before testing.",
+      "label": "Mayfly image provenance",
+      "next_check": "The rune-byte suggestion and partial hash sweep are recorded; verify the claimed source of the Mayfly image separately.",
       "triage_lane": "extract-new"
     },
     {
@@ -935,13 +1013,6 @@
       "label": "Mixed solver discussion",
       "next_check": "Screen the full thread for a specified transform or source lead.",
       "triage_lane": "context-check"
-    },
-    {
-      "attachment_id": "f49d5f9b-2b1f-425c-9500-3ae985480130",
-      "sha256": "3e61084a945f0e6f746d5d2ac4b60a3a9cdb1c8243f6301af76aaba3d8f062f5",
-      "label": "Music and counterpoint discussion",
-      "next_check": "Extract a concrete musical comparison if one is stated.",
-      "triage_lane": "extract-new"
     },
     {
       "attachment_id": "fb8502fe-819f-4048-ad12-a1d73a32a438",

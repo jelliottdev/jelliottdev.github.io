@@ -14308,6 +14308,105 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="mobius-zero-mask-known-page"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;mobius-zero-mask-known-page&quot;,
+  &quot;title&quot;: &quot;Möbius zero-mask rule against a solved LP2 page&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the reported Möbius-of-totient zero-preservation rule hold under the published LP2-56 decoding?&quot;,
+  &quot;summary&quot;: &quot;On 85 LP2-56 runes, the known one-step subtraction changes zero to nonzero at 28 positions. The proposed one-way invariant therefore does not generalize to known Liber Primus decoding.&quot;,
+  &quot;tags&quot;: [
+    &quot;Mobius&quot;,
+    &quot;Möbius&quot;,
+    &quot;totient&quot;,
+    &quot;zero mask&quot;,
+    &quot;LP2-00&quot;,
+    &quot;LP2-56&quot;,
+    &quot;known plaintext&quot;,
+    &quot;control&quot;,
+    &quot;squarefree&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-56&quot;
+    ],
+    &quot;representation&quot;: &quot;All 85 GP runes in the archived page, with φ(p)=p−1 and μ(φ(p)) evaluated on each GP prime; plaintext index is cipher index minus one modulo 29.&quot;,
+    &quot;procedure&quot;: &quot;Count one-way and reverse zero-mask violations under the published shift; enumerate all 29 constant shifts as a calculation comparison and independently check zero by square divisors.&quot;,
+    &quot;parameters&quot;: &quot;29 GP symbols; 85 page runes; shifts 0–28; reported necessary direction is ciphertext μ=0 implies plaintext μ=0.&quot;,
+    &quot;exclusions&quot;: &quot;The proposed LP2-00 candidate sentence, its semantic ranking and word list, other cipher families, proof against a page-specific rule, and significance of a post-selected phrase.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The published LP2-56 shift has 28 zero-to-nonzero violations, 22 reverse changes and 50 total mask mismatches among 85 runes.&quot;,
+  &quot;limitations&quot;: &quot;A counterexample to a universal decoding invariant is not a refutation of a separately specified LP2-00-only mechanism. The report’s LP2-00 word-selection step remains unreplayed.&quot;,
+  &quot;next_steps&quot;: &quot;Pin the original LP2-00 code, dictionary and exact proposed plaintext, then compare the whole candidate count and an untouched continuation against controls.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent square-divisor and rune-stream check; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/mobius-zero-mask-known-page/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; independent check with check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/mobius-zero-mask-known-page/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;568f4144e0eda550395da382228dde38ffc057ba3e9de81ac331b4baf5cd59a7&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-56.json&quot;,
+        &quot;sha256&quot;: &quot;be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/plan.json&quot;,
+        &quot;sha256&quot;: &quot;104f3805dac12b13813e72c4be115ede01a77de2006013c1e99549f28f73f9f6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/check.py&quot;,
+        &quot;sha256&quot;: &quot;af4a47afbc54a9c36f80d4374155688a46e0dd10c0251a2b2b806b70d4fd3c36&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/results.json&quot;,
+        &quot;sha256&quot;: &quot;33bcf70d7b6b4612479180350c648ba832b96e8b6a5272492c4ee7203a173342&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/mismatches.svg&quot;,
+        &quot;sha256&quot;: &quot;206b75eecb77427d12731c27c9b24d50bd6d101d85880499e245f58f949923ad&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/mismatches.svg&quot;,
+      &quot;caption&quot;: &quot;Zero-state mismatches for each fixed shift on LP2-56; published shift 1 highlighted.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;LP2-56 manuscript page and established prime-minus-one reading&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-56&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Gematria Primus alphabet&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/alphabet&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Reported method and source hash&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;article&quot;: &quot;# Does a Möbius-of-totient zero survive a known LP2 decoding?\n\nA reported LP2-00 reading proposes a necessary rule: if the ciphertext rune has Möbius value zero after applying Euler&#x27;s totient to its Gematria Primus prime, the plaintext rune at that position must also have zero. That is a checkable statement, separate from the proposed sentence. This control applies the same rule to **LP2-56**, whose [published reading](#/page/lp2-56) uses a uniform one-step subtraction in the 29-rune alphabet. It does not test the author&#x27;s selected LP2-00 words or claim that LP2-00 uses the same cipher.\n\nFor a GP prime value *p*, Euler&#x27;s totient is φ(*p*) = *p* − 1. The Möbius value μ(*p* − 1) is zero exactly when *p* − 1 contains a squared prime factor. A ciphertext zero therefore has a simple, independently checkable definition. For example, J has GP prime 37; φ(37) = 36 and μ(36) = 0. LP2-56&#x27;s known shift maps its rune index 11 (J) to index 10 (I), whose prime is 31; μ(30) = −1. That is a counterexample to the stated one-way zero rule at rune position 1 (counting from zero).\n\n![Möbius zero-mask mismatch counts under all 29 fixed shifts on LP2-56. The published one-step shift is highlighted.](experiments/records/mobius-zero-mask-known-page/mismatches.svg)\n\n## Fixed input and result\n\nThe script reads the [archived LP2-56 transcription](#/reader/lp2-56) and the stored GP alphabet. It keeps all 85 rune symbols in manuscript order, discards non-rune punctuation and the printed hexadecimal hash, and computes μ(*p* − 1) for each symbol. The decoded index is `(cipher index − 1) mod 29`. We count zero-to-nonzero failures separately from nonzero-to-zero changes; only the first direction is required to refute the reported one-way condition.\n\n| Check on the published shift | Positions |\n| --- | ---: |\n| Ciphertext zero → plaintext nonzero | **28 / 85** |\n| Ciphertext nonzero → plaintext zero | 22 / 85 |\n| Either zero-state changes | 50 / 85 |\n\nThe first one-way failures, at zero-based positions 1, 3 and 7, are J→I, S→X and L→M. The saved result lists every position and the 29-rune Möbius table. As a comparison, the script applies every fixed shift 0–28 to the same input. The identity shift has zero mismatches by construction; that is a positive calculation check, not evidence for a cipher. The published shift is highlighted in the figure.\n\n## What this closes\n\nThe zero-preservation rule is **not an invariant of known Liber Primus decoding**. It fails on a solved page even in the one-way form stated in the report. That does not logically disprove a special rule for LP2-00, and a chosen candidate phrase can still satisfy a zero mask accidentally. To assess LP2-00, a future test needs the exact proposed rune-by-rune plaintext, a fixed spelling/segmentation policy, the full count of admissible alternatives, and an untouched continuation or independent control. The source report&#x27;s semantic filtering and unattached code files do not establish those bounds.\n\nRun `python experiments/records/mobius-zero-mask-known-page/run.py --check` to reproduce every shift and mismatch position. `check.py` independently identifies zero values by searching for squared divisors; it confirms 28 one-way failures. The [plan](experiments/records/mobius-zero-mask-known-page/plan.json) pins both inputs by SHA-256, and [results.json](experiments/records/mobius-zero-mask-known-page/results.json) provides the complete comparison. The report being evaluated is catalogued under [reported attempts](#/wiki/reported-attempts), with its source-text hash and replay limits.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/mobius-zero-mask-known-page/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;568f4144e0eda550395da382228dde38ffc057ba3e9de81ac331b4baf5cd59a7&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  }
 }</pre></article><article id="n-rune-gaps"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;n-rune-gaps&quot;,
   &quot;title&quot;: &quot;LP2-00–02: N-rune distances and prime-value labels&quot;,

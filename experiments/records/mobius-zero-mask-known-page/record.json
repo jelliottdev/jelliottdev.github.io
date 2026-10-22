@@ -1,0 +1,92 @@
+{
+  "id": "mobius-zero-mask-known-page",
+  "title": "Möbius zero-mask rule against a solved LP2 page",
+  "status": "published",
+  "question": "Does the reported Möbius-of-totient zero-preservation rule hold under the published LP2-56 decoding?",
+  "summary": "On 85 LP2-56 runes, the known one-step subtraction changes zero to nonzero at 28 positions. The proposed one-way invariant therefore does not generalize to known Liber Primus decoding.",
+  "tags": [
+    "Mobius",
+    "Möbius",
+    "totient",
+    "zero mask",
+    "LP2-00",
+    "LP2-56",
+    "known plaintext",
+    "control",
+    "squarefree"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-56"
+    ],
+    "representation": "All 85 GP runes in the archived page, with φ(p)=p−1 and μ(φ(p)) evaluated on each GP prime; plaintext index is cipher index minus one modulo 29.",
+    "procedure": "Count one-way and reverse zero-mask violations under the published shift; enumerate all 29 constant shifts as a calculation comparison and independently check zero by square divisors.",
+    "parameters": "29 GP symbols; 85 page runes; shifts 0–28; reported necessary direction is ciphertext μ=0 implies plaintext μ=0.",
+    "exclusions": "The proposed LP2-00 candidate sentence, its semantic ranking and word list, other cipher families, proof against a page-specific rule, and significance of a post-selected phrase."
+  },
+  "outcome": "not-supported",
+  "finding": "The published LP2-56 shift has 28 zero-to-nonzero violations, 22 reverse changes and 50 total mask mismatches among 85 runes.",
+  "limitations": "A counterexample to a universal decoding invariant is not a refutation of a separately specified LP2-00-only mechanism. The report’s LP2-00 word-selection step remains unreplayed.",
+  "next_steps": "Pin the original LP2-00 code, dictionary and exact proposed plaintext, then compare the whole candidate count and an untouched continuation against controls.",
+  "review": {
+    "reviewer": "Codex; independent square-divisor and rune-stream check; human review pending",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/mobius-zero-mask-known-page/run.py --check",
+    "environment": "Python 3.12 standard library; independent check with check.py",
+    "script": "experiments/records/mobius-zero-mask-known-page/run.py",
+    "script_sha256": "568f4144e0eda550395da382228dde38ffc057ba3e9de81ac331b4baf5cd59a7",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/pages/lp2-56.json",
+        "sha256": "be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979"
+      },
+      {
+        "path": "experiments/records/mobius-zero-mask-known-page/plan.json",
+        "sha256": "104f3805dac12b13813e72c4be115ede01a77de2006013c1e99549f28f73f9f6"
+      },
+      {
+        "path": "experiments/records/mobius-zero-mask-known-page/check.py",
+        "sha256": "af4a47afbc54a9c36f80d4374155688a46e0dd10c0251a2b2b806b70d4fd3c36"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/mobius-zero-mask-known-page/results.json",
+        "sha256": "33bcf70d7b6b4612479180350c648ba832b96e8b6a5272492c4ee7203a173342"
+      },
+      {
+        "path": "experiments/records/mobius-zero-mask-known-page/mismatches.svg",
+        "sha256": "206b75eecb77427d12731c27c9b24d50bd6d101d85880499e245f58f949923ad"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/mobius-zero-mask-known-page/mismatches.svg",
+      "caption": "Zero-state mismatches for each fixed shift on LP2-56; published shift 1 highlighted."
+    }
+  ],
+  "sources": [
+    {
+      "label": "LP2-56 manuscript page and established prime-minus-one reading",
+      "url": "https://jelliottdev.github.io/#/page/lp2-56"
+    },
+    {
+      "label": "Gematria Primus alphabet",
+      "url": "https://jelliottdev.github.io/#/alphabet"
+    },
+    {
+      "label": "Reported method and source hash",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts"
+    }
+  ],
+  "related": []
+}
