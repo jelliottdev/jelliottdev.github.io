@@ -4,6 +4,8 @@ Trace seeds, state updates and interruptions before testing a feedback decoding 
 
 In a feedback cipher, decoding one position changes the state used at later positions. The state may contain previous ciphertext, recovered plaintext or several earlier values. This is a family of rules, not a single algorithm: “autokey” is not enough information to reproduce a proposed reading.
 
+One proposed previous-ciphertext running sum would make a repeated output rune correspond exactly to plaintext EA, provided its key is never zero. The equation and proof state that condition precisely; the solved-text control checks the required EA frequency and its spelling assumptions. Neither result identifies the manuscript's cipher.
+
 Plaintext and ciphertext feedback are different
 
 A state can also contain a changing alphabet rather than previous numeric values. See moving disks, rotors and evolving alphabets for a worked permutation example and stepping rules.
@@ -43,6 +45,10 @@ Choose the rule on one segment and apply it unchanged to a continuation. Any see
 For proposals combining or changing operations, see switching rules and adaptive decoding.
 
 Sources, related references, and files
+- equation and proof
+  https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
+- solved-text control
+  https://jelliottdev.github.io/#/experiments/ea-frequency-control
 - moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
 - repeating-key cipher

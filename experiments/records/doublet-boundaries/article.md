@@ -25,6 +25,8 @@ This answers a deliberately limited question. The other LP2 pages have no separa
 
 The [full doublet guide](#/wiki/doublets) explains the 86-event count and provides source coordinates. The [transcription guide](#/wiki/transcription-checking?section=coverage) lists which pages have reviewed layers. The [short-lag profile](#/experiments/doublet-lag-profile) keeps the filtered within-page rule and compares equality at rune distances one through five. These analyses answer different questions.
 
+The [EA frequency control](#/experiments/ea-frequency-control) asks a separate question: whether the 86 observed repeat positions are numerically plausible as plaintext EA under one exact running-sum equation. It uses decoded GP indices from solved pages rather than assigning English digraphs by eye.
+
 ## Reproduce and inspect
 
 Extract the experiment ZIP without flattening folders. Python 3.12 and its standard library suffice:

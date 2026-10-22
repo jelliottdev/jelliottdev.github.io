@@ -95,7 +95,9 @@ Applied to the archived within-page count, this model requires 86 EA events at t
 
 The assumptions matter. Allowing a zero key permits a repeat with any plaintext. Changing to a composite modulus also requires care: modulo 28, a nonzero key can lack an inverse. For the analogous offset-27 rule, key 2 and plaintext 13 give 2(13 − 27) ≡ 0 mod 28, despite 13 not being 27. An extra position-dependent output mapping, skipped positions or internal resets needs a separate analysis.
 
-The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun. No English EA-frequency comparison is included.
+The downloadable doublet report checks all 23,548 combinations of previous state, plaintext and nonzero key modulo 29. The independent checker uses modular inverses and verifies both counterexamples. This is an elementary algebraic argument with a complete finite check, not a claim that the external formal-proof archive was rerun.
+
+The EA frequency control now uses actual decoded GP indices from solved pages rather than guessing rune boundaries from ordinary English letters. Solved LP1 has 20 EA runes at 2,782 within-page transition positions (0.719%); the unsolved doublet rate is 86/12,901 (0.667%). These close rates meet a necessary frequency plausibility check, but do not validate this equation or a key schedule. That record also shows how erasing word boundaries creates eleven false EA labels and examines the difference IoC under a separate conditional model.
 
 Reproduce the counts
 
@@ -173,6 +175,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
 - uniform-additive-key experiment
   https://jelliottdev.github.io/#/experiments/uniform-additive-doublets
+- EA frequency control
+  https://jelliottdev.github.io/#/experiments/ea-frequency-control
 - reference-data bundle
   https://jelliottdev.github.io/downloads/reference-data.zip
 - Counting and chart script

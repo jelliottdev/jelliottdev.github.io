@@ -10,6 +10,8 @@ For every plaintext rune, independently choose a key uniformly from 0 through 28
 
 The prediction concerns fresh, independent uniform symbols. A shuffle that preserves the manuscript's observed rune counts asks a different question. So does a generator that forbids repeats, uses nonuniform keys, reuses key values dependently, or changes its output according to the plaintext.
 
+The [EA running-sum control](#/experiments/ea-frequency-control) examines an especially different equation: nonzero multiplicative keys and an EA offset make repeats depend on plaintext EA frequency. Its required EA count should not be tested with this record's independent-uniform-additive-key tail.
+
 The [short-lag profile](#/experiments/doublet-lag-profile) uses that different, fixed-count page-shuffle reference. It shows the deficit at adjacent positions but not at rune distances two through five. Its bands must not be read as the exact uniform-key probability computed here.
 
 ## Why overlapping pairs still give a binomial law here
