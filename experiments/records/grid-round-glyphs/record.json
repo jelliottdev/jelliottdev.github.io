@@ -1,0 +1,56 @@
+{
+  "id": "grid-round-glyphs",
+  "title": "LP2-49–51: zero and capital O register",
+  "status": "published",
+  "question": "Which grid cells are written with digit zero or capital O, and how can their printed shapes be reviewed against the original images?",
+  "summary": "The wiki transcription has 65 zeroes and seven capital O characters across 70 of 256 cells. Three coordinate-labeled source-pixel contact sheets expose all 72 round marks for review; a manual pass found no definite conflict with those readings.",
+  "tags": ["LP2-49", "LP2-50", "LP2-51", "alphanumeric grid", "zero", "capital O", "transcription", "source audit", "base 60", "ambiguous glyph"],
+  "scope": {
+    "pages": ["lp2-49", "lp2-50", "lp2-51"],
+    "artifacts": ["exports/alphanumeric-grids.csv", "images/lp2-49.jpg", "images/lp2-50.jpg", "images/lp2-51.jpg"],
+    "representation": "The current 256-token wiki grid, checked against original 2400 by 3600 page JPEGs at all cells transcribed with 0 or O.",
+    "procedure": "Census every 0/O character, record its coordinate and one-character alternative, and assemble unscaled source-pixel crops with coordinate labels for a manual visual review. Independently replay the census from structured page records.",
+    "parameters": "256 grid cells; 70 cells selected by transcription; 72 round marks, comprising 65 zeroes and seven capital Os; three original page images.",
+    "exclusions": "Characters transcribed as neither 0 nor O, other lookalike classes, exhaustive blind image recognition, authorial cipher meaning, and all non-base-60 byte interpretations."
+  },
+  "outcome": "supported",
+  "finding": "The coordinate census and independent parser agree on 70 selected cells and 72 marks. Seven O entries occur at fixed listed coordinates; a manual contact-sheet review found no definite printed-shape conflict with the current readings. Under the conditional base-60 byte rule, replacing any of 60 leading zeroes by O would exceed one byte.",
+  "limitations": "The contact sheets are manually calibrated crops and were reviewed by one agent, not independently certified by a human. The selection starts from transcription and can miss a round glyph assigned another symbol. The byte argument is conditional on the representation, not proof of the printed mark. PIL/Pillow rendering version can affect exact contact-sheet bytes.",
+  "next_steps": "Invite image-level review of the coordinate register, then carry any corrected 0/O cell as an explicit variant through dependent grid experiments. Audit other character classes separately.",
+  "family": {"id": "grid-round-glyphs", "title": "Grid round-glyph input audit", "question": "Which visually similar round grid characters may alter downstream numeric interpretations?", "baseline": "grid-round-glyphs"},
+  "variant": {"label": "Baseline: all transcribed 0/O grid cells", "changes": []},
+  "review": {"reviewer": "Codex — manual contact-sheet inspection and independent page-record arithmetic replay", "retested_on": "2026-10-22", "kind": "computational and visual", "human_review": "pending"},
+  "reproduction": {
+    "command": "python experiments/records/grid-round-glyphs/run.py --check && python experiments/records/grid-round-glyphs/check.py",
+    "environment": "Python 3 plus Pillow. Run from repository root or extracted experiment ZIP with the named original JPEGs; no network or AI calls. Exact PNG byte checks use the recorded Pillow version.",
+    "script": "experiments/records/grid-round-glyphs/run.py",
+    "script_sha256": "b61e8a939b8638e79e538bc83efdf3a82b42e7223f9e0231efc033c0e520178b",
+    "inputs": [
+      {"path": "experiments/records/grid-round-glyphs/plan.json", "sha256": "f3fff4d02c17adc72974b8d4b07e1f120c2fc43cf1eb37322874998acd86c411"},
+      {"path": "experiments/records/grid-round-glyphs/check.py", "sha256": "52df8e95cb0d645c8ddbd947e2092c6bc9056aac4a592c95d2bfe93c4c3d6b41"},
+      {"path": "exports/alphanumeric-grids.csv", "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"},
+      {"path": "data/pages/lp2-49.json", "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"},
+      {"path": "data/pages/lp2-50.json", "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"},
+      {"path": "data/pages/lp2-51.json", "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"},
+      {"path": "images/lp2-49.jpg", "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"},
+      {"path": "images/lp2-50.jpg", "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"},
+      {"path": "images/lp2-51.jpg", "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"}
+    ],
+    "outputs": [
+      {"path": "experiments/records/grid-round-glyphs/results.json", "sha256": "d6fd3527197bcc50738d3229c34476e24943a73f5eef5e2fbbd887883306a66c"},
+      {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-49.png", "sha256": "6fa4a47d1ffd217bf72775def3bb06fa3124df576b75d17de80b1b92eba54142"},
+      {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-50.png", "sha256": "b2224cf7ef9491d53e762a46cd9fae0ed9cd2dd0884d91503d632dde036eca4f"},
+      {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-51.png", "sha256": "a507c1d739f4dd6ad5e16aff312a8991fc5c1c3fa3dbe173d1daa1cf456a29af"}
+    ]
+  },
+  "sources": [
+    {"label": "Grid transcription and original images", "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"},
+    {"label": "Preserved seventh-onion text comparison", "url": "https://jelliottdev.github.io/#/wiki/seventh-onion-transcriptions"}
+  ],
+  "related": ["grid-stem-uncertainty", "grid-direct-bytes", "transcription-correction-sensitivity"],
+  "visuals": [
+    {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-49.png", "caption": "All 17 LP2-49 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."},
+    {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-50.png", "caption": "All 30 LP2-50 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."},
+    {"path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-51.png", "caption": "All 23 LP2-51 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."}
+  ]
+}

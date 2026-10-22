@@ -7417,7 +7417,7 @@ Outside this test: Other widths, section orders, constrained shuffles, prose cor
 Source verification and transcription audits
 Verify the input and the scope of its authenticity or transcription evidence.
 
-Related records (5)
+Related records (6)
 Compare these questions and exclusions with your proposal. A linked result does not cover every variant of this family.
 
 Can image-only detection find every rune row?
@@ -7444,6 +7444,11 @@ LP2-49–51: ten visually ambiguous grid stems
 Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
 Question tested: Which grid cells contain an I/l-shaped bare stem, and how do those unresolved case readings affect conditional base-60 byte measurements?
 Outside this test: Other potential glyph ambiguities including 0/O; choosing a definitive I or l; changing the numeral base or S/s cell; grid traversals, candidate plaintext, and any claim of an intended byte encoding.
+
+LP2-49–51: zero and capital O register
+Record type: Source or input audit. Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.
+Question tested: Which grid cells are written with digit zero or capital O, and how can their printed shapes be reviewed against the original images?
+Outside this test: Characters transcribed as neither 0 nor O, other lookalike classes, exhaustive blind image recognition, authorial cipher meaning, and all non-base-60 byte interpretations.
 
 
 
@@ -7727,6 +7732,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/cross-source-word-boundaries
 - LP2-49–51: ten visually ambiguous grid stems
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
+- LP2-49–51: zero and capital O register
+  https://jelliottdev.github.io/#/experiments/grid-round-glyphs
 - Rune frequencies and distribution diagnostics
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - Have we tried it?
@@ -21392,7 +21399,7 @@ What can be counted directly
 
 Together, the grids contain (10 + 13 + 9) × 8 = 256 entries. Each entry contains two characters. The count 256 is therefore a count of entries, not runes, bytes, or distinct values. Calling these bytes would require an explicit decoding rule and a check of its outputs. The statistics below use the wiki transcription; five cells differ in the separate seventh-onion text.
 
-There is a second input issue beyond the five text disagreements: ten grid cells contain a visually bare I/l stem. Six are written the same way in both preserved transcriptions but are still not resolved by the letter shape. Under the stated base-60 byte rule, allowing only those ten choices moves the distinct-token count between 160 and 163. Use the coordinate register before treating an exact token, byte or bit pattern as image-verified.
+There is a second input issue beyond the five text disagreements: ten grid cells contain a visually bare I/l stem. Six are written the same way in both preserved transcriptions but are still not resolved by the letter shape. Under the stated base-60 byte rule, allowing only those ten choices moves the distinct-token count between 160 and 163. The separate 0/O register locates 72 round marks for image review. Use these coordinate registers before treating an exact token, byte or bit pattern as image-verified.
 
 Repeated entries and distinct tokens
 
@@ -21434,7 +21441,7 @@ Preserve the spelling of each entry
 
 The first grid row on LP2-49 is 3N 3p 2l 36 1b 3v 26 33. Uppercase and lowercase letters both matter to the record: 0X and 0x, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.
 
-Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; a plain vertical stem may still be unresolved between I and l. These five are not a census of every potentially ambiguous cell. See the transcription guide for the distinction between an image and its text representation.
+Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; the ten-stem and round-glyph registers give broader coordinate-level reviews. A plain vertical stem may still be unresolved between I and l. See the transcription guide for the distinction between an image and its text representation.
 
 What an encoding proposal needs to specify
 
@@ -21547,7 +21554,7 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
-This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers the additional I/l locations, including cells where the texts agree; other glyph classes remain open.
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers additional I/l locations, and the round-glyph register covers transcribed 0/O cells; other glyph classes remain open.
 
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
@@ -21636,8 +21643,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
 - five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
-- ten grid cells contain a visually bare I/l stem; ten-stem register
+- ten grid cells contain a visually bare I/l stem; ten-stem; ten-stem register
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
+- 0/O register; round-glyph; round-glyph register
+  https://jelliottdev.github.io/#/experiments/grid-round-glyphs
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
 - page image
@@ -28296,7 +28305,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 68 published reproducible records: 15 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 7 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 69 published reproducible records: 15 bounded solving or extraction tests, 1 proposed-method replay, 35 manuscript measurements, 7 controls, 8 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 21 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -28334,7 +28343,7 @@ Current gaps with the greatest downstream effect
 
 	Gap	Why it matters	Next bounded piece of work
 
-	Unresolved image glyphs	Five archived-versus-wiki grid cells alter 20 bits in a declared byte rendering and 16 prime-path suffix strings. The ten-stem register shows that source agreement does not settle every I/l shape: under one byte rule, their alternatives move the distinct-token count from 161 to a range of 160–163.	Carry coordinate-level alternatives through any dependent grid test. Audit other confusable glyphs, especially 0/O, against the preserved images before treating the full 256-cell transcription as image-verified.
+	Unresolved image glyphs	Five archived-versus-wiki grid cells alter 20 bits in a declared byte rendering and 16 prime-path suffix strings. The ten-stem register shows that source agreement does not settle every I/l shape: under one byte rule, their alternatives move the distinct-token count from 161 to a range of 160–163. The round-glyph register now exposes 72 transcribed 0/O marks for image review.	Carry coordinate-level alternatives through dependent grid tests. Obtain independent visual review and continue the census of other lookalike characters before treating the full 256-cell transcription as image-verified.
 
 	Page-boundary and separator decisions	Rune-only agreement between two text sources does not settle word joining, punctuation or key-clock resets. A test may use these marks even when its rune frequency is unchanged.	Make a page-by-page contestable-location register, then rerun one fixed word-edge or reset experiment with one change at a time.
 
@@ -28423,6 +28432,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
 - ten-stem register
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
+- round-glyph register
+  https://jelliottdev.github.io/#/experiments/grid-round-glyphs
 - Search-pattern controls
   https://jelliottdev.github.io/#/experiments/grid-prime-path-null
 - Transcription sensitivity
@@ -35474,6 +35485,164 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
     "id": "measurement",
     "label": "Manuscript measurement",
     "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}
+
+---
+
+{
+  "id": "grid-round-glyphs",
+  "title": "LP2-49–51: zero and capital O register",
+  "status": "published",
+  "question": "Which grid cells are written with digit zero or capital O, and how can their printed shapes be reviewed against the original images?",
+  "summary": "The wiki transcription has 65 zeroes and seven capital O characters across 70 of 256 cells. Three coordinate-labeled source-pixel contact sheets expose all 72 round marks for review; a manual pass found no definite conflict with those readings.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "alphanumeric grid",
+    "zero",
+    "capital O",
+    "transcription",
+    "source audit",
+    "base 60",
+    "ambiguous glyph"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.csv",
+      "images/lp2-49.jpg",
+      "images/lp2-50.jpg",
+      "images/lp2-51.jpg"
+    ],
+    "representation": "The current 256-token wiki grid, checked against original 2400 by 3600 page JPEGs at all cells transcribed with 0 or O.",
+    "procedure": "Census every 0/O character, record its coordinate and one-character alternative, and assemble unscaled source-pixel crops with coordinate labels for a manual visual review. Independently replay the census from structured page records.",
+    "parameters": "256 grid cells; 70 cells selected by transcription; 72 round marks, comprising 65 zeroes and seven capital Os; three original page images.",
+    "exclusions": "Characters transcribed as neither 0 nor O, other lookalike classes, exhaustive blind image recognition, authorial cipher meaning, and all non-base-60 byte interpretations."
+  },
+  "outcome": "supported",
+  "finding": "The coordinate census and independent parser agree on 70 selected cells and 72 marks. Seven O entries occur at fixed listed coordinates; a manual contact-sheet review found no definite printed-shape conflict with the current readings. Under the conditional base-60 byte rule, replacing any of 60 leading zeroes by O would exceed one byte.",
+  "limitations": "The contact sheets are manually calibrated crops and were reviewed by one agent, not independently certified by a human. The selection starts from transcription and can miss a round glyph assigned another symbol. The byte argument is conditional on the representation, not proof of the printed mark. PIL/Pillow rendering version can affect exact contact-sheet bytes.",
+  "next_steps": "Invite image-level review of the coordinate register, then carry any corrected 0/O cell as an explicit variant through dependent grid experiments. Audit other character classes separately.",
+  "family": {
+    "id": "grid-round-glyphs",
+    "title": "Grid round-glyph input audit",
+    "question": "Which visually similar round grid characters may alter downstream numeric interpretations?",
+    "baseline": "grid-round-glyphs"
+  },
+  "variant": {
+    "label": "Baseline: all transcribed 0/O grid cells",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex — manual contact-sheet inspection and independent page-record arithmetic replay",
+    "retested_on": "2026-10-22",
+    "kind": "computational and visual",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-round-glyphs/run.py --check && python experiments/records/grid-round-glyphs/check.py",
+    "environment": "Python 3 plus Pillow. Run from repository root or extracted experiment ZIP with the named original JPEGs; no network or AI calls. Exact PNG byte checks use the recorded Pillow version.",
+    "script": "experiments/records/grid-round-glyphs/run.py",
+    "script_sha256": "b61e8a939b8638e79e538bc83efdf3a82b42e7223f9e0231efc033c0e520178b",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-round-glyphs/plan.json",
+        "sha256": "f3fff4d02c17adc72974b8d4b07e1f120c2fc43cf1eb37322874998acd86c411"
+      },
+      {
+        "path": "experiments/records/grid-round-glyphs/check.py",
+        "sha256": "52df8e95cb0d645c8ddbd947e2092c6bc9056aac4a592c95d2bfe93c4c3d6b41"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-round-glyphs/results.json",
+        "sha256": "d6fd3527197bcc50738d3229c34476e24943a73f5eef5e2fbbd887883306a66c"
+      },
+      {
+        "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-49.png",
+        "sha256": "6fa4a47d1ffd217bf72775def3bb06fa3124df576b75d17de80b1b92eba54142"
+      },
+      {
+        "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-50.png",
+        "sha256": "b2224cf7ef9491d53e762a46cd9fae0ed9cd2dd0884d91503d632dde036eca4f"
+      },
+      {
+        "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-51.png",
+        "sha256": "a507c1d739f4dd6ad5e16aff312a8991fc5c1c3fa3dbe173d1daa1cf456a29af"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Grid transcription and original images",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "Preserved seventh-onion text comparison",
+      "url": "https://jelliottdev.github.io/#/wiki/seventh-onion-transcriptions"
+    }
+  ],
+  "related": [
+    "grid-stem-uncertainty",
+    "grid-direct-bytes",
+    "transcription-correction-sensitivity"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-49.png",
+      "caption": "All 17 LP2-49 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."
+    },
+    {
+      "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-50.png",
+      "caption": "All 30 LP2-50 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."
+    },
+    {
+      "path": "experiments/records/grid-round-glyphs/round-glyphs-lp2-51.png",
+      "caption": "All 23 LP2-51 cells transcribed with 0 or O, shown at source-pixel scale with coordinate labels."
+    }
+  ],
+  "article": "# The zero and capital O characters in the LP2 grids\n\n**The current transcription has 65 digit zeroes and seven capital `O` characters in 70 grid cells.** Two cells contain `00`, so there are 72 round marks in total. The coordinate register below covers every cell written with either character in the 256-entry wiki grid. The source-pixel contact sheets make it practical to inspect the whole set, including cells where the two archived text sources agree.\n\nThis is an input audit for [LP2-49–51](#/wiki/alphanumeric-grids), not a decoding result. A numeral conversion, bit image, checksum, or path can change if even one of these two shapes is copied incorrectly.\n\n## Inspect the printed forms\n\nEach panel below arranges **unscaled pixel crops** from a pinned original 2400 × 3600 JPEG. The small label gives page, grid row and column; adjacent characters may appear to the left or right of the target cell. Open a panel at full size or consult the complete [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images. These are navigation aids for a human review, not OCR output.\n\n![Seventeen LP2-49 grid cells with a zero or capital O, labeled by grid row and column.](experiments/records/grid-round-glyphs/round-glyphs-lp2-49.png)\n\n![Thirty LP2-50 grid cells with a zero or capital O, labeled by grid row and column.](experiments/records/grid-round-glyphs/round-glyphs-lp2-50.png)\n\n![Twenty-three LP2-51 grid cells with a zero or capital O, labeled by grid row and column.](experiments/records/grid-round-glyphs/round-glyphs-lp2-51.png)\n\nIn this manual pass, the seven entries transcribed with `O` have the broader, rounder form, while the numerous zeroes are narrower. The strongest nearby comparisons are LP2-50 row 2 (`1O` beside `0u`) and LP2-51 row 6 (`2O` beside `00`). I did not identify a definite conflict with the stored `0`/`O` readings. This is **not** independent human certification of all 72 shapes: the coordinates were selected from the transcription, and other characters mistaken for neither `0` nor `O` would be missed. The [JSON coordinate register](experiments/records/grid-round-glyphs/results.json) gives every original crop rectangle for further review.\n\n| Page | Grid row, column | Transcribed capital-O entry |\n| --- | --- | --- |\n| LP2-49 | 6, 2 | `1O` |\n| LP2-49 | 10, 6 | `2O` |\n| LP2-50 | 2, 6 | `1O` |\n| LP2-50 | 13, 5 | `2O` |\n| LP2-51 | 4, 8 | `1O` |\n| LP2-51 | 6, 5 | `2O` |\n| LP2-51 | 8, 1 | `2O` |\n\nThe separate seventh-onion and wiki transcriptions differ at [five grid cells](#/wiki/seventh-onion-transcriptions?section=grid), but none is a `0`/`O` difference. Their agreement is useful for locating a mark; it is not a second photographic observation.\n\n## What the byte assumption adds—and does not add\n\nUnder the [conditional base-60 rule](#/wiki/alphanumeric-grids?section=unique-base), `0` has digit value 0 and `O` has value 24. Sixty of the zeroes are the **first** character of a pair. Replacing one of those with `O` gives a value of at least `24 × 60 = 1,440`, outside a byte. Five zeroes occur as the **second** character: swapping four of them to `O` still fits a byte, while `40 → 4O` would become 264. All seven printed `O` characters occur second, and swapping any of those to `0` remains byte-valued.\n\nThis arithmetic constrains readings **only if** every pair is meant to be one unsigned byte with that digit order. It must not be used as independent proof of the printed letter or the intended encoding. The [direct-byte experiment](#/experiments/grid-direct-bytes) kept the current `0`/`O` readings fixed; its negative result therefore does not cover all conceivable round-glyph changes.\n\n## Reproduce the register\n\nFrom the repository root, or with the experiment ZIP and the named image files extracted alongside it:\n\n```text\npython experiments/records/grid-round-glyphs/run.py --check\npython experiments/records/grid-round-glyphs/check.py\n```\n\nThe first script verifies source SHA-256 hashes, produces the same three contact sheets, and records the 70 source coordinates and conditional byte alternatives. It needs Python 3 and Pillow; it makes no network or AI calls. The second script independently rebuilds the entire 256-entry grid from the structured page records and checks every coordinate, token and alternate value. Neither script identifies printed glyphs automatically. The [plan](experiments/records/grid-round-glyphs/plan.json) states the inclusion rule and limitations.\n",
+  "article_path": "experiments/records/grid-round-glyphs/article.md",
+  "script_sha256": "b61e8a939b8638e79e538bc83efdf3a82b42e7223f9e0231efc033c0e520178b",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
   }
 }
 

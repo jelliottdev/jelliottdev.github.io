@@ -29,7 +29,7 @@ What can be counted directly
 
 Together, the grids contain (10 + 13 + 9) × 8 = 256 entries. Each entry contains two characters. The count 256 is therefore a count of entries, not runes, bytes, or distinct values. Calling these bytes would require an explicit decoding rule and a check of its outputs. The statistics below use the wiki transcription; five cells differ in the separate seventh-onion text.
 
-There is a second input issue beyond the five text disagreements: ten grid cells contain a visually bare I/l stem. Six are written the same way in both preserved transcriptions but are still not resolved by the letter shape. Under the stated base-60 byte rule, allowing only those ten choices moves the distinct-token count between 160 and 163. Use the coordinate register before treating an exact token, byte or bit pattern as image-verified.
+There is a second input issue beyond the five text disagreements: ten grid cells contain a visually bare I/l stem. Six are written the same way in both preserved transcriptions but are still not resolved by the letter shape. Under the stated base-60 byte rule, allowing only those ten choices moves the distinct-token count between 160 and 163. The separate 0/O register locates 72 round marks for image review. Use these coordinate registers before treating an exact token, byte or bit pattern as image-verified.
 
 Repeated entries and distinct tokens
 
@@ -71,7 +71,7 @@ Preserve the spelling of each entry
 
 The first grid row on LP2-49 is 3N 3p 2l 36 1b 3v 26 33. Uppercase and lowercase letters both matter to the record: 0X and 0x, for example, appear as separate entries in its third row. Keep leading zeroes, too. Converting the entries to ordinary integers or uppercasing them would change the data before a hypothesis has been tested.
 
-Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; a plain vertical stem may still be unresolved between I and l. These five are not a census of every potentially ambiguous cell. See the transcription guide for the distinction between an image and its text representation.
+Some glyphs are easy to confuse, especially zero and uppercase O, or lowercase l and uppercase I. The stored transcription is a source you can reproduce, not a substitute for checking an ambiguous glyph against the page image. A proposed correction should identify its page, row, column, and image evidence. The five-cell comparison and source-pixel grabs identify specific disagreements; the ten-stem and round-glyph registers give broader coordinate-level reviews. A plain vertical stem may still be unresolved between I and l. See the transcription guide for the distinction between an image and its text representation.
 
 What an encoding proposal needs to specify
 
@@ -184,7 +184,7 @@ Encode each value in exactly eight bits, with the most significant bit first. Ke
 [Image: 64 columns by 32 rows of bits from the declared base-60 alphabet, eight bits per token, preserving manuscript row order]
 A declared rendering of all 256 entries. The white outer margin and labels are presentation only. This is not a successful barcode decode. Download the SVG.
 
-This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers the additional I/l locations, including cells where the texts agree; other glyph classes remain open.
+This SVG uses the wiki transcription. Replacing only the five documented archive-versus-wiki cells changes 20 of its 2,048 bits and the resulting byte-stream SHA-256. It does not change the grid dimensions or the conditional base-60 bound. The source-sensitivity report gives both byte-stream hashes, every changed value and the effect on published prime-path suffixes; its script recomputes them. The ten-stem register covers additional I/l locations, and the round-glyph register covers transcribed 0/O cells; other glyph classes remain open.
 
 This produces 256 × 8 = 2,048 data bits. Converting each value to its shortest binary spelling instead, with zero represented as “0”, produces only 1,816 bits. Concatenation then loses the eight-bit token boundaries. That shorter representation is divisible by eight too, so checking only whether the total length is a multiple of eight would not catch the changed convention.
 
@@ -273,8 +273,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/branches.html#around-grids
 - five cells differ in the separate seventh-onion text; five-cell comparison and source-pixel grabs
   https://jelliottdev.github.io/reference/articles/seventh-onion-transcriptions.html#grid
-- ten grid cells contain a visually bare I/l stem; ten-stem register
+- ten grid cells contain a visually bare I/l stem; ten-stem; ten-stem register
   https://jelliottdev.github.io/#/experiments/grid-stem-uncertainty
+- 0/O register; round-glyph; round-glyph register
+  https://jelliottdev.github.io/#/experiments/grid-round-glyphs
 - JSON export; structured JSON export; complete grid export
   https://jelliottdev.github.io/exports/alphanumeric-grids.json
 - page image
