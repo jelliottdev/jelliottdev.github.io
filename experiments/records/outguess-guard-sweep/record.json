@@ -98,8 +98,8 @@
       "lp2-57"
     ],
     "representation": "Original archived JPEG bytes with fixed SHA-256 hashes: 75 manuscript images plus opening-2014 and 1033. No recompression or image transformations.",
-    "procedure": "Use the recorded clean guarded build on the same 77 original JPEGs with the same key and timeout. Run ten controls first and stop on a control failure. Compare saved payload bytes, return codes and normalized diagnostics against the original baseline.",
-    "parameters": "77 images; literal Default key; 20 seconds per invocation; upstream commit 24810e14327c2bbeedeaadd3e24491f2a4425c02; clean guarded Windows binary SHA-256 bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
+    "procedure": "Use the recorded clean guarded build on the same 77 original JPEGs with the same key and timeout. Run ten controls first and stop on a control failure. Compare saved payload bytes, return codes and normalized diagnostics against the original baseline. Pinned upstream commit: 24810e14327c2bbeedeaadd3e24491f2a4425c02; clean guarded Windows executable SHA-256: bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
+    "parameters": "77 original JPEGs; literal Default key; one clean guarded Windows build; 20 seconds per invocation.",
     "exclusions": "Other keys, other platforms, independent OutGuess implementations, other steganographic methods, transformed images, payload authentication, and a stack trace of the original executable."
   },
   "outcome": "inconclusive",
@@ -118,13 +118,13 @@
       {
         "field": "procedure",
         "before": "One OutGuess retrieval per image with literal key Default key. Retain all output bytes and stderr/return codes; compare ten expected payload hashes. Repeat complete run for reproducibility.",
-        "after": "Use the recorded clean guarded build on the same 77 original JPEGs with the same key and timeout. Run ten controls first and stop on a control failure. Compare saved payload bytes, return codes and normalized diagnostics against the original baseline.",
+        "after": "Use the recorded clean guarded build on the same 77 original JPEGs with the same key and timeout. Run ten controls first and stop on a control failure. Compare saved payload bytes, return codes and normalized diagnostics against the original baseline. Pinned upstream commit: 24810e14327c2bbeedeaadd3e24491f2a4425c02; clean guarded Windows executable SHA-256: bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
         "reason": "Isolate the documented guarded-build comparison while retaining the original image and key scope."
       },
       {
         "field": "parameters",
         "before": "77 images; one key; 20 seconds per invocation; pinned upstream commit 24810e14327c2bbeedeaadd3e24491f2a4425c02, Windows port binary SHA-256 b342b8b85d678d3b2ed26efab70fba2b3956725670be7149b89646868f0ebade.",
-        "after": "77 images; literal Default key; 20 seconds per invocation; upstream commit 24810e14327c2bbeedeaadd3e24491f2a4425c02; clean guarded Windows binary SHA-256 bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
+        "after": "77 original JPEGs; literal Default key; one clean guarded Windows build; 20 seconds per invocation.",
         "reason": "Isolate the documented guarded-build comparison while retaining the original image and key scope."
       },
       {
@@ -1143,7 +1143,7 @@
   "visuals": [
     {
       "path": "experiments/records/outguess-guard-sweep/results/comparison.svg",
-      "caption": "All 77 output byte streams are unchanged. The 41 abnormal exits become explicit iterator-guard rejections; this improves diagnostics without establishing absence of hidden data."
+      "caption": "Exit categories for 77 original JPEGs. Bar lengths count images, not verified hidden messages."
     }
   ]
 }

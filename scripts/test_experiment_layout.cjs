@@ -71,6 +71,26 @@ const expectedRows = route.source_ordinals.slice(0, 6).map((ordinal, i) => {
       await page.screenshot({path: path.join(output, `${id}-390.png`), fullPage: true});
       await page.close();
     }
-    console.log('PASS: experiment layout at 320, 390 and 1280px; route controls and native traces match saved results.');
+    for (const width of [320, 390, 1280]) {
+      const page = await browser.newPage({viewport: {width, height: 844}});
+      await page.goto(base + '#/experiments/lp1-width-selection');
+      await page.waitForSelector('.width-selection-figure');
+      assert.equal(await page.locator('.width-selection-figure tbody tr').count(), 6);
+      assert.equal(await page.locator('.width-selection-figure img').count(), 0);
+      assert.equal((await page.locator('.experiment-limit').innerText()).toLowerCase().includes('human review pending'), false);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}px width-selection overflow`);
+      assert.equal(await page.locator('.width-selection-detail').getAttribute('open'), null);
+      await page.screenshot({path: path.join(output, `width-selection-${width}.png`), fullPage: true});
+      await page.close();
+    }
+    const outguess = await browser.newPage({viewport: {width: 390, height: 844}});
+    await outguess.goto(base + '#/experiments/outguess-guard-sweep');
+    await outguess.waitForSelector('#experiment-scope');
+    const visibleScope = await outguess.locator('#experiment-scope').locator('xpath=..').innerText();
+    assert.match(visibleScope, /77 original JPEGs; literal Default key/);
+    assert.equal(visibleScope.includes('bdc1810e59cb1152'), false);
+    assert.match(await outguess.locator('.experiment-figure figcaption').first().innerText(), /Bar lengths count images/);
+    await outguess.close();
+    console.log('PASS: experiment layout at 320, 390 and 1280px; route and width visuals match saved results.');
   } finally { await browser.close(); }
 })().catch(error => {console.error(error); process.exit(1)});

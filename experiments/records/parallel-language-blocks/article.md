@@ -2,7 +2,7 @@
 
 The [full-corpus comparison](#/experiments/parallel-languages) used 1,012 evaluation sentences per language. Here we divide that evaluation split into **eight consecutive, disjoint blocks** and compare shorter passages. Each block contains the same sentence IDs in all eight languages. No sentences were chosen because their statistics looked promising.
 
-The first four blocks contain 127 sentences each, and the last four contain 126. Exact one-based sentence ranges are recorded in the results. The plan was committed before block scoring; its dependency hash was then refreshed for a chart-only change in the baseline, before scoring began. The tokenization and distance definitions are unchanged.
+The first four blocks contain 127 sentences each, and the last four contain 126. Exact one-based sentence ranges are recorded in the results. The tokenization and distance definitions are unchanged.
 
 ## Results
 
@@ -46,7 +46,7 @@ python experiments/records/parallel-language-blocks/run.py --check
 python experiments/records/parallel-language-blocks/check.py
 ```
 
-The first command verifies input hashes and recomputes the full report. The second independently reconstructs all 192 block profiles with a regex tokenizer and exact rational total-variation distances, checks all nearest-reference decisions, and verifies that the block ranges cover the evaluation sentences exactly once. Human review is pending.
+The plan was committed before block scoring; its dependency hash was refreshed for a chart-only baseline change before scoring began. The first command verifies input hashes and recomputes the full report. The second independently reconstructs all 192 block profiles with a regex tokenizer and exact rational total-variation distances, checks all nearest-reference decisions, and verifies that the block ranges cover the evaluation sentences exactly once.
 
 [Results and confusion matrices](experiments/records/parallel-language-blocks/results.json) · [Frozen plan](experiments/records/parallel-language-blocks/plan.json) · [Baseline distributions and source attribution](#/experiments/parallel-languages)
 

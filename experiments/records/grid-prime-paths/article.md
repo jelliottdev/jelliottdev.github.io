@@ -2,7 +2,7 @@
 
 This record checks a specific observation about the alphanumeric grids on LP2-49–51. It reproduces **191 occurrences of 46 distinct decimal primes**, with **1033, 2213 and 3301 absent** from a 49-value candidate set. “Supported” refers only to that scoped recount. It does not establish deliberate construction, statistical significance or a hidden message.
 
-The [illustrated grid guide](#/wiki/alphanumeric-grids) identifies the original pages and their token conventions. The [prime-path guide](#/wiki/grid-prime-paths) explains the reconstruction and comparison with the published occurrence CSV. This experiment packages the inputs, complete output and two independent implementations for reuse.
+The [grid guide](#/wiki/alphanumeric-grids) shows the source pages and token conventions. The [prime-path guide](#/wiki/grid-prime-paths) explains the path rule and comparison with the published occurrence CSV. The files below preserve every hit and two independent implementations.
 
 ## Fixed search rules
 
@@ -22,7 +22,7 @@ The JSON contains every retained path, its tokens, original page coordinates, di
 
 ## Reproduce
 
-Extract this experiment’s ZIP with its directory structure intact. Python 3.12 and the standard library are sufficient; no installation, network call, AI service or key is needed.
+Extract this experiment’s ZIP with its directory structure intact. Python 3.12 and its standard library are sufficient.
 
 ```text
 python experiments/records/grid-prime-paths/run.py --check

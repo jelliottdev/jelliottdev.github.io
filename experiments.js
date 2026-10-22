@@ -149,7 +149,29 @@ function bindRouteIllustration(){
   });
   update();
 }
+// Exact observed_R fractions and fixed_width_tails from lp1-width-selection/results.json.
+// Each fixed-width estimate includes its tie count and the plus-one correction over 49,999 shuffles.
+const widthSelectionComparison=[
+  [2,"4167/245948",6006],
+  [4,"18057/122974",3429],
+  [8,"148623/430409",3317],
+  [16,"77321/307435",54],
+  [32,"17834297/57182910",5],
+  [64,"79242913/108463068",2044]
+];
 function experimentVisual(r,v){
+  if(r.id==='lp1-width-selection'&&v.path.endsWith('/width-comparison.svg')){
+    const rows=widthSelectionComparison.map(([width,fraction,tail])=>{
+      const [numerator,denominator]=fraction.split('/').map(Number);
+      const score=numerator/denominator;
+      const estimate=(tail+1)/50000;
+      return `<tr><th scope="row">${width}${width===2?' <span class="width-selection-note">lowest R</span>':''}${width===32?' <span class="width-selection-note">smallest fixed tail</span>':''}</th><td><span class="width-selection-score">${score.toFixed(5)}</span><span class="width-selection-track" aria-hidden="true"><span class="width-selection-fill" style="width:${(score*100).toFixed(2)}%"></span></span></td><td>${estimate.toFixed(5)}</td></tr>`;
+    }).join('');
+    return `<figure class="experiment-figure width-selection-figure"><figcaption><strong>Six widths, two rankings.</strong> The frozen rule selects the smallest normalized imbalance R: width 2. Width 32 has the smallest unadjusted fixed-width tail; that was not the selection rule.</figcaption><div class="table-wrap"><table><caption>Observed R and diagnostic fixed-width tails for every tested width</caption><thead><tr><th scope="col">Width</th><th scope="col">Observed R</th><th scope="col">Fixed tail</th></tr></thead><tbody>${rows}</tbody></table></div><p>The matched six-width search gives a selected tail of <strong>0.12072</strong> (6,035 of 49,999 shuffled controls at or below the observed minimum, plus one). The six fixed-width tails are diagnostic; they are not adjusted or independent.</p><a href="${esc(v.path)}" download>Download the archived SVG</a></figure>`;
+  }
+  if(r.id==='lp1-width-selection'&&v.path.endsWith('/selected-null.svg')){
+    return `<details class="experiment-extra width-selection-detail"><summary>Inspect the matched null distribution</summary><figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" loading="lazy"><figcaption>${esc(v.caption)} <a href="${esc(v.path)}" download>Download SVG</a></figcaption></figure></details>`;
+  }
   if(r.id==='lp2-row-column-routes'&&v.path.endsWith('/source-trace.svg')){
     const rows=[[1,1,1,2],[2,2,1,8],[3,3,1,27],[4,4,1,20],[5,5,1,17],[6,6,1,19]];
     return `${routeIllustration()}<details class="experiment-extra route-trace-disclosure"><summary>See the exact full-page trace</summary><figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>LP2-31 · column-first route</strong><span>Down each ordinal column, then move right</span></div><table><thead><tr><th scope="col">Output step</th><th scope="col">Source line · rune</th><th scope="col">Rune index</th></tr></thead><tbody>${rows.map(([step,line,rune,index])=>`<tr><th scope="row">${step}</th><td>${line} · ${rune}</td><td>${index}</td></tr>`).join('')}</tbody></table><p>First six of 269 source positions. The complete route uses each position once.</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure></details>`;
@@ -190,7 +212,7 @@ function experimentArticle(r){
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
     <p class="experiment-mobile-jump"><a href="#/experiments/${esc(r.id)}?section=experiment-reproduce" data-anchor="experiment-reproduce">Jump to files and steps ↓</a></p>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Result</h2><p class="experiment-finding">${esc(r.finding)}</p>
-      <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/\s*Human review pending\./g,''))}</p>
+      <p class="experiment-limit"><strong>Limit:</strong> ${esc(r.limitations.replace(/;\s*human review pending\./gi,'.').replace(/\s*human review pending\./gi,'').trim())}</p>
       ${(r.visuals||[]).map(v=>experimentVisual(r,v)).join('')}
     </section>
     <section aria-labelledby="experiment-scope"><h2 id="experiment-scope">Scope</h2>${solving?'':'<p class="small">This record does not establish that an LP2 decoding method was tried.</p>'}<dl class="experiment-scope">${fields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl><details class="experiment-extra"><summary>Exact input and procedure</summary><dl class="experiment-scope">${exactFields.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></details><p class="small"><a href="#/wiki/search-space">How to read search bounds</a></p></section>

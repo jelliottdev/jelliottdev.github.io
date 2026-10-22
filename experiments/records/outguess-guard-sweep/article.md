@@ -18,6 +18,8 @@ The scope and runner were committed as `40890c5` before execution. The earlier 1
 
 The recorded executable was compiled afresh from upstream commit `24810e14327c2bbeedeaadd3e24491f2a4425c02`, with the documented Windows portability changes and explicit guard patches. All 54 C files were compiled; object files from the original build were not reused. The build specification records compiler identity, source hashes and commands.
 
+The clean guarded Windows executable has SHA-256 `bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273`.
+
 The clean executable differs in hash from the archived pilot executable, although it reproduced all 13 pilot results exactly. The full comparison below uses the clean executable. This does not establish bit-for-bit reproducible compilation across toolchains.
 
 ## Results
