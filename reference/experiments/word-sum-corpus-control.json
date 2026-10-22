@@ -1,0 +1,187 @@
+{
+  "id": "word-sum-corpus-control",
+  "title": "LP1 square: dictionary candidate space for the selected phrase",
+  "status": "published",
+  "question": "How many words in a pinned crib corpus fit the four reported GP totals and rune lengths before a meaningful phrase is selected?",
+  "summary": "A 138,466-row pinned corpus has 38, 15, 10 and 38 candidates for the four fixed slots, yielding 216,600 ordered combinations before grammar or meaning is considered.",
+  "tags": [
+    "magic square",
+    "word sums",
+    "dictionary",
+    "PROVE WORTHIER FIND TRUTHS",
+    "131",
+    "151",
+    "809",
+    "candidate space",
+    "GP",
+    "cribbing"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-05",
+      "lp1-16"
+    ],
+    "artifacts": [
+      "experiments/records/word-sum-corpus-control/source/SOURCE-MANIFEST.json"
+    ],
+    "representation": "Sixteen preserved CSV files from the pinned 1_grams-full directory, one word per row, original rune strings and GP totals; the source J glyph ᛂ is assigned the same 37 value as manuscript ᛄ.",
+    "procedure": "Hash-check all inputs, verify each row GP sum from its rune symbols, count all corpus words at totals 131, 151 and 809 and at the four fixed target lengths, then multiply ordered slot counts and draw complete-count-derived histograms.",
+    "parameters": "138,466 unique rows across 16 files; targets 131/5, 151/7, 151/4, 131/5; additional 809 census; no frequency weighting; figure displays sums 80–220 while result stores all totals.",
+    "exclusions": "The historical worddata.csv attachment, alternative rune segmentations, semantic or grammatical scoring, dictionary expansion, a phrase-generation search, any LP2 key operation and statistical inference about author intent."
+  },
+  "outcome": "supported",
+  "finding": "The four fixed slots admit 38, 15, 10 and 38 corpus entries; their ordered product is 216,600, or 210,900 if the two GP-131 words must differ. Every printed corpus GP total verifies after the disclosed J-glyph mapping.",
+  "limitations": "This surviving GPL corpus is not established as the exact historical worddata.csv. Ordered products count many nonsentences and do not estimate chance discovery. Vocabulary and stored rune segmentation are corpus-specific; no unsolved-page decoding was tested. Human review pending.",
+  "next_steps": "Identify the historical CSV or record its absence, then predeclare phrase-generation, grammar scoring and matched controls. Test any selected words as cipher keys only with a fixed transform and held-out target.",
+  "family": {
+    "id": "word-sum-corpus-control",
+    "title": "Word-sum candidate-space controls",
+    "question": "How many alternate words or phrases can satisfy fixed rune-sum targets under a declared corpus and representation?",
+    "baseline": "word-sum-corpus-control"
+  },
+  "variant": {
+    "label": "Pinned 1_grams-full corpus and fixed four-slot phrase",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Codex; full-row GP verification and separate census checker; no independent human review",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/word-sum-corpus-control/run.py --check && python experiments/records/word-sum-corpus-control/check.py",
+    "environment": "Python 3.9+ standard library; all GPL-3.0 corpus CSVs are included in the standalone ZIP. No network or AI is used during replay.",
+    "script": "experiments/records/word-sum-corpus-control/run.py",
+    "script_sha256": "bda7b0be2fc664f1a4bb0d0abc042d1cb0bf28b030c24cf7b4ab6c9bc2bd66ee",
+    "inputs": [
+      {
+        "path": "experiments/records/word-sum-corpus-control/plan.json",
+        "sha256": "355f8894f45f0e80759f018faa95bbb4b51c1dd1e7bf36ee2f47187547088c45"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/check.py",
+        "sha256": "ff3218310d2ba2ec8e66baf8292c72b80560a1a76b4419185e8a950801fa20e2"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/SOURCE-MANIFEST.json",
+        "sha256": "63e5a9d06fe752c1ad6ecdae170601f4a3f4334e4216182c494060cb889b77ec"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/LICENSE",
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_01.csv",
+        "sha256": "c04dfb8b42c5e276e7cdc1e7eec3204c2fb5f6462bef2ceacd0d3385e50ee3d4"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_02.csv",
+        "sha256": "0d879bd7f44f7399981b0390f02f215292914a06358ea7e51ca06590709b1ab8"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_03.csv",
+        "sha256": "6c4cf0d9fec68b41010ada74ac8096af97733a5396b44351ff456f552a6a6644"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_04.csv",
+        "sha256": "6a8e306e337c930f7e9f8e95b37d97f3e873429ab910dce4178fffc1f932a133"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_05.csv",
+        "sha256": "e6fe87c9f00ad361d7a75ff6a013915126668aadd5440f1a1233e5d098f47720"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_06.csv",
+        "sha256": "3e5d219c7ca73e6cf0d473a33bc13a838770069c5e06c86b0a581aa27e58288f"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_07.csv",
+        "sha256": "1f06126a0e2aca3eded467f370e5c7db3f8ca0a7d5f06806d8d1f57c4fb0633b"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_08.csv",
+        "sha256": "bdd1b49f579cb1f4cdb5b2c78646d828e60518c16a057077552ddd8861cc25b9"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_09.csv",
+        "sha256": "f29f9bbea1d48eacb0371508daa2fa1924b53e347effc0554e3d3d4e49b60f2b"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_10.csv",
+        "sha256": "343caa1ef18ee2f8436aed91efaf6557aee951ea785815bc12c0fb2238707838"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_11.csv",
+        "sha256": "6d9a01c6c6897d8c87ba19b1e6252c9d2478e038d0ca34044e36802ba01a265b"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_12.csv",
+        "sha256": "c67043030c1308b377d19c5cc420e46e19f3f0f832553dda87096b3aec18a974"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_13.csv",
+        "sha256": "36d657c80247c926219c09936cea5b7e2d466496081e740a0e6eb4671d86941b"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_14.csv",
+        "sha256": "af0f7cb6a05922c20f706f0059a50fae35de9cf6cfc6eb90b6c53fd32ba12b85"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_2a1.csv",
+        "sha256": "6eb3243ea80a42d01ded0decfca64655326ba9cd464689fcd04c8f75375ff702"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/source/raw1grams_3a1.csv",
+        "sha256": "d3217489c527e61974127aca7f1b198138b9de7ca767e86cbcefa23fe37043a0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/word-sum-corpus-control/results.json",
+        "sha256": "c850f4609eeebe2302781bf30629c14413b9ea960348495e0a07b9d5f31ac224"
+      },
+      {
+        "path": "experiments/records/word-sum-corpus-control/candidate-space.svg",
+        "sha256": "648a31e66852b37bee294bf0675f3f0a9a64e1de8ce311a032e982fc51ecc105"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Liber Primus Crib Assist 1_grams-full directory",
+      "url": "https://github.com/mortlach/Liber-Primus-Crib-Assist/tree/9c10cafce02e512840cc9e173127930594a56281/data/1_grams-full"
+    },
+    {
+      "label": "Original LP1-05 image",
+      "url": "https://jelliottdev.github.io/images/lp1-05.jpg"
+    },
+    {
+      "label": "Original LP1-16 image",
+      "url": "https://jelliottdev.github.io/images/lp1-16.jpg"
+    }
+  ],
+  "related": [
+    "mixed-square-word-sums",
+    "selected-phrase-word-sums",
+    "magic-square-freedom"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/word-sum-corpus-control/candidate-space.svg",
+      "caption": "Candidate-count histograms for 4-, 5- and 7-rune words; the marked sums are the reported phrase targets. The full histograms are in results.json."
+    }
+  ],
+  "article": "# How many words fit the selected magic-square totals?\n\nThe proposed phrase **PROVE WORTHIER FIND TRUTHS** fits the LP1 square values 131, 151, 151, 131. That arithmetic is already [checked word by word](#/experiments/selected-phrase-word-sums). It leaves a different question: how many *other* words would also fit those values if a solver searched a large list and chose a pleasing phrase afterward?\n\nThis control counts candidates in a [preserved revision of the Liber Primus Crib Assist word list](https://github.com/mortlach/Liber-Primus-Crib-Assist/tree/9c10cafce02e512840cc9e173127930594a56281/data/1_grams-full). The supplied discussion linked an older `data/1_grams` path and mentioned a separate `worddata.csv`. Those exact historical bytes are unavailable in the supplied transcript. This is therefore a **pinned-corpus control**, not a reconstruction of every historical search or its dictionary.\n\n## What the census found\n\nThe sixteen preserved CSVs contain **138,466 distinct word rows**. Every stored GP total agrees with summing its stored rune values after accounting for one source-font difference: the corpus writes J as `ᛂ`, while this site's manuscript alphabet writes J as `ᛄ`; both carry value 37. The source glyph occurs in 2,217 rows. That mapping is declared in the plan, not silently normalized.\n\n| Phrase slot | Target GP total | Stored rune length | Matching corpus words |\n| --- | ---: | ---: | ---: |\n| PROVE | 131 | 5 | 38 |\n| WORTHIER | 151 | 7 | 15 |\n| FIND | 151 | 4 | 10 |\n| TRUTHS | 131 | 5 | 38 |\n\nAll four proposed words occur in the preserved corpus. At the four fixed totals **and** rune lengths, there are **38 × 15 × 10 × 38 = 216,600 ordered word combinations**. If the first and fourth words must differ, there are **210,900**. These are combinations of dictionary entries, not 216,600 grammatical sentences. They have not been scored for meaning, syntax or relation to the manuscript.\n\nIf rune length is discarded, 105 corpus words have GP 131 and 133 have GP 151, giving 195,021,225 ordered combinations for the same four total slots. This illustrates why a claim must state its length constraint before a phrase is chosen. The corpus has only one row with GP 809, **DETECTABILITY** at 13 runes. The proposed **MYRMELEONTIDAE** is absent from this corpus; absence from a bounded word list is not evidence against that separately verified arithmetic assignment.\n\n![Three histograms of corpus word counts by GP sum for four-, five-, and seven-rune words, highlighting the selected 131 and 151 totals.](experiments/records/word-sum-corpus-control/candidate-space.svg)\n\nThe graph shows GP totals 80–220 so the selected values remain legible. The downloadable result keeps the complete count distribution for every rune length and observed total. Neither the displayed interval nor the source frequency column is used to select candidate words.\n\n## What was counted\n\nThe [plan](experiments/records/word-sum-corpus-control/plan.json) fixes the four word slots, totals and rune lengths. Each distinct CSV row counts once, including rows in the `2a1` and `3a1` files. The script checks the SHA-256 of all sixteen CSVs, the source manifest, its GPL-3.0 license and the manuscript alphabet before reading them. It validates every row's printed GP sum against the stored rune sequence. The opaque source count and flag columns are retained in the output but are not interpreted as independent evidence about language or author intent.\n\nThe ordered product lets any word fitting one slot combine with any word fitting the others. It does not test whether a coherent four-word sentence is common. Conversely, finding many alternatives does not prove the proposed phrase accidental. A sentence-level test would need a predeclared grammar or language score, the original vocabulary and all candidate phrases retained, plus matched square-value controls.\n\n## Reproduce\n\nFrom the repository root or the standalone experiment ZIP, run:\n\n```sh\npython experiments/records/word-sum-corpus-control/run.py --check\npython experiments/records/word-sum-corpus-control/check.py\n```\n\nThe runner checks the saved JSON and SVG byte for byte. The separate checker reads the preserved CSVs afresh, verifies each stored GP value and recomputes the target counts and products without importing the runner. Both use Python's standard library and require no network or AI model. The CSVs are redistributed unchanged with their source revision, per-file hashes, attribution and GPL-3.0 text in the experiment bundle.\n\n## Limits and next test\n\nThis corpus is a surviving version of the linked tool's word data, not proven identical to the forum attachment called `worddata.csv`. It ends at 14 stored runes and its vocabulary is neither all English nor an unbiased sample of possible keys. The result measures **candidate freedom under one explicit list**. It does not reconstruct how the phrase was selected, apply a word to LP2, or judge any unsolved reading.\n\nThe next defensible variant is to recover the historical CSV or document that it is lost, then fix a phrase-generation and scoring procedure before seeing its winners. A separate cipher test must specify which selected word maps to which target, exactly how the word acts as a key, and what held-out output would count as success.\n",
+  "article_path": "experiments/records/word-sum-corpus-control/article.md",
+  "script_sha256": "bda7b0be2fc664f1a4bb0d0abc042d1cb0bf28b030c24cf7b4ab6c9bc2bd66ee",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}
