@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 import runpy
 runpy.run_path(str(ROOT / 'scripts/build_method_map.py'))
 runpy.run_path(str(ROOT / 'scripts/build_research_coverage.py'))
+runpy.run_path(str(ROOT / 'scripts/build_transcription_decisions.py'))
 
 def linked_reference_text(text):
     """Keep reference text intact while making its explicit HTTP(S) URLs usable."""

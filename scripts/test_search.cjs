@@ -345,7 +345,7 @@ assert.equal(search.search(db,"page breaks")[0].href,"#/wiki/transcription-check
 assert.equal(search.search(db,"split words")[0].href,"#/wiki/transcription-checking?section=page-joins","split words");
 assert.equal(search.search(db,"cross-page words")[0].href,"#/wiki/transcription-checking?section=page-joins","cross-page words");
 assert.equal(search.search(db,"32 of 55")[0].href,"#/wiki/transcription-checking?section=page-joins","32 of 55");
-assert.equal(search.search(db,"disputed runes")[0].href,"#/wiki/transcription-checking?section=coverage","disputed runes");
-assert.equal(search.search(db,"contested readings")[0].href,"#/wiki/transcription-checking?section=coverage","contested readings");
-assert.equal(search.search(db,"word separators")[0].href,"#/wiki/transcription-checking?section=coverage","word separators");
+assert.equal(search.search(db,"disputed runes")[0].href,"#/wiki/transcription-decisions?section=reviewed","disputed runes");
+assert.equal(search.search(db,"contested readings")[0].href,"#/wiki/transcription-decisions?section=reviewed","contested readings");
+assert.equal(search.search(db,"word separators")[0].href,"#/wiki/transcription-decisions?section=reviewed","word separators");
 console.log('PASS: historical replay questions and disputed-boundary queries reach the relevant sections.');

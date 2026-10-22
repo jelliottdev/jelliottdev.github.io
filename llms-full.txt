@@ -22217,10 +22217,12 @@ Rerun affected controls and experiments on both versions. Report which counts, a
 
 A substituted rune can change frequency counts and prime sums. An inserted or deleted rune can also shift all later key positions in a continuous cipher. A delimiter-only correction may leave whole-page IoC unchanged while changing word lengths or a word-reset cipher. The effect depends on the experiment's declared input rules.
 
-This guide and tool provide a comparison workflow, not a claim that every page has been manually reverified. Consult the individual page's archived and reviewed views for existing visual-review records. Related: file integrity · image coordinates · documenting an experiment.
+This guide and tool provide a comparison workflow, not a claim that every page has been manually reverified. Consult the location register and individual page's archived and reviewed views for existing visual-review records. Related: file integrity · image coordinates · documenting an experiment.
 
 
 Which pages have a reviewed text layer?
+
+For exact stored character offsets, neighboring text and original-image links, use the reviewed-edit register.
 
 The current published records contain eight separate reviewed-text layers. Seven change only non-rune characters; one changes the rune sequence. The other 67 records do not contain a separate reviewed layer. These are counts of published data layers, not counts of pages certified as correct or incorrect.
 
@@ -22408,12 +22410,16 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
 - word lengths
   https://jelliottdev.github.io/reference/articles/word-lengths.html
+- location register
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html
 - file integrity
   https://jelliottdev.github.io/reference/articles/checksums.html
 - image coordinates
   https://jelliottdev.github.io/reference/articles/image-regions.html
 - documenting an experiment
   https://jelliottdev.github.io/reference/articles/reproducibility.html
+- reviewed-edit register
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#reviewed
 - LP1-10
   https://jelliottdev.github.io/reference/lp1-10.html
 - LP2-05
@@ -22560,6 +22566,371 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-source-audits.html
 
 Article: https://jelliottdev.github.io/reference/articles/transcription-checking.html
+
+
+---
+
+Disputed runes and word breaks: location register
+
+Find the exact positions of published reviewed-text edits and inspect rune-to-rune LP2 page edges without treating them as confirmed word joins.
+
+This register puts the published transcription edits and possible LP2 page joins in one place. It records what is in the site’s data, not every rune or mark that might be disputed. Use each location to inspect the original JPEG before deciding which reading an experiment should use.
+
+Recorded reviewed-layer edits
+
+Eight pages have separate reviewed-text layers. They contain eleven recorded edits: one rune-order change and ten changes to non-rune notation. An exact text offset helps find a mark; it is not an image-coordinate measurement or a fresh visual verification. The page record preserves the correction note and the original-image hash. See how the archived and reviewed layers differ.
+
+
+
+LP1-10 · 1 edit
+
+LP2-05 · 1 edit
+
+LP2-07 · 1 edit
+
+LP2-11 · 1 edit
+
+LP2-15 · 1 edit
+
+LP2-35 · 1 edit
+
+LP2-37 · 4 edits
+
+LP2-38 · 1 edit
+
+
+LP1-10
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ᛖᛁ → ᛁᛖ
+Archived rune positions 116–117 (zero-based); Archived character offset 148 (zero-based), text line 6, column 21 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᛒᛖᚳᚪᚢᛋᛖ-ᚹᛖ-ᛒᛖᛚ⟦ᛖᛁ⟧ᚢᛖ-ᚦᛖ-/
+ᚠᚩᛚᛚᚩᚹ
+The native-image review reads BELIEUE (contextual English: BELIEVE); the archived transcription swaps I/E at zero-based rune positions 116–117. The known reading below uses the reviewed correction.
+
+LP2-05
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → -
+Archived character offset 147 (zero-based), text line 6, column 1 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᚦᛄᚣᛄᛚᛟᛖᛚ-ᚣ;-/
+⟦cursor⟧ᛈᛡ-ᛖᚹᛟ-ᛇᚾᚪ-ᚻᛞᛇ
+Documented visual punctuation correction.
+
+LP2-07
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → .
+Archived character offset 258 (zero-based), text line 10, column 1 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᚹᛖᚾᛡᚣᛄᛗ-ᛖᚳᚪ./
+⟦cursor⟧ᛞᚩ-ᛟᛏᚦᚫ.ᚳᚹᛄ-ᛉᛠ
+Documented visual punctuation correction.
+
+LP2-11
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → -
+Archived character offset 324 (zero-based), text line 12, column 1 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᛝᚻ-ᚣᚱᛗ-ᛟᚾᛚ;-/
+⟦cursor⟧ᛈᚹᛞᚱᛄ-ᚪᛝᛞ-ᛁᚦᛏᚷ
+Documented visual punctuation correction.
+
+LP2-15
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → .
+Archived character offset 0 (zero-based), text line 1, column 1 (one-based). This is a position in the stored text, not a measured image rectangle.
+⟦cursor⟧ᚠᚢᛚᛗ-ᚪᛠᚣᛟᚪ./
+3
+Documented visual punctuation correction.
+
+LP2-35
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → '
+Archived character offset 102 (zero-based), text line 4, column 15 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᚦᛚᚫ-ᚳᛋᚪᚩᚷᚹᛚ.ᛈᛖ⟦cursor⟧ᛏ-ᛄᛉᛝᛚ-ᛏᛉᚩᚣᛝ/
+Documented visual punctuation correction.
+
+LP2-37
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: - → ∅
+Archived character offset 1 (zero-based), text line 1, column 2 (one-based). This is a position in the stored text, not a measured image rectangle.
+2⟦-⟧ᚾᚣᛖᛉ-ᚾᚢᛉᛁ-ᛝᛏᛈᚹ
+Remove editorial delimiter from visual-mark profile; preserve numeral and rune gap.
+
+Change 2: . → ∅
+Archived character offset 118 (zero-based), text line 4, column 31 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᚦᚳᚦᚾᛗᚩᛖ-ᚣᛇᚾ-ᚠᛒ⟦.⟧/
+3-ᛞᚢᛈ-ᚹᚾᛖᚪ-ᚱ
+Remove editorial delimiter from visual-mark profile; preserve numeral and rune gap.
+
+Change 3: - → ∅
+Archived character offset 122 (zero-based), text line 5, column 2 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᛗᚩᛖ-ᚣᛇᚾ-ᚠᛒ./
+3⟦-⟧ᛞᚢᛈ-ᚹᚾᛖᚪ-ᚱᛚᛁᚹ-
+Remove editorial delimiter from visual-mark profile; preserve numeral and rune gap.
+
+Change 4: - → ∅
+Archived character offset 257 (zero-based), text line 10, column 2 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᛖ-ᚱᚷᛗᚣ-ᚪᚷᚹ./
+4⟦-⟧ᛝᛄᛋᛄᛗᚱᛗ-ᚾᛒᛋᛗᛉᛞ
+Remove editorial delimiter from visual-mark profile; preserve numeral and rune gap.
+
+LP2-38
+Open original-image reader · Download original JPEG · Structured page record.
+
+Change 1: ∅ → .
+Archived character offset 245 (zero-based), text line 10, column 1 (one-based). This is a position in the stored text, not a measured image rectangle.
+ᛏᚷ-ᛚᛒᛝᚢᛏ-ᚻᚳ./
+⟦cursor⟧ᚫᛞᛟᚫᛟᛗ-ᛟᚫᚪᚻᚱᛗᚢ
+Documented visual punctuation correction.
+
+Possible joins across LP2 page breaks
+At 32 of the 55 adjacent boundaries from LP2-00 through LP2-55, a rune is the last retained character on one page and a rune is the first on the next in the archived text. That observation does not say a word crosses the boundary. The images have not been checked for this inventory, and punctuation or section structure may change the interpretation. The complete 55-boundary inventory also contains the other 23 edges.
+For a word-edge experiment, inspect both original images, record the treatment of the join, and rerun the calculation under both interpretations if uncertain.
+
+Show all 32 rune-to-rune page edges
+	Boundary	Archived edge	Interpretation
+
+	LP2-00 → LP2-01	ᚹ | ᚪ	Word join undetermined; image review not performed
+
+	LP2-01 → LP2-02	ᛁ | ᛟ	Word join undetermined; image review not performed
+
+	LP2-03 → LP2-04	ᚻ | ᛚ	Word join undetermined; image review not performed
+
+	LP2-04 → LP2-05	ᚢ | ᚱ	Word join undetermined; image review not performed
+
+	LP2-05 → LP2-06	ᛏ | ᛉ	Word join undetermined; image review not performed
+
+	LP2-06 → LP2-07	ᛋ | ᚻ	Word join undetermined; image review not performed
+
+	LP2-08 → LP2-09	ᛇ | ᚣ	Word join undetermined; image review not performed
+
+	LP2-09 → LP2-10	ᚦ | ᚳ	Word join undetermined; image review not performed
+
+	LP2-16 → LP2-17	ᚷ | ᛚ	Word join undetermined; image review not performed
+
+	LP2-18 → LP2-19	ᚷ | ᚾ	Word join undetermined; image review not performed
+
+	LP2-19 → LP2-20	ᛇ | ᛈ	Word join undetermined; image review not performed
+
+	LP2-21 → LP2-22	ᚩ | ᛝ	Word join undetermined; image review not performed
+
+	LP2-23 → LP2-24	ᚦ | ᛞ	Word join undetermined; image review not performed
+
+	LP2-24 → LP2-25	ᛁ | ᚻ	Word join undetermined; image review not performed
+
+	LP2-25 → LP2-26	ᚢ | ᛡ	Word join undetermined; image review not performed
+
+	LP2-27 → LP2-28	ᚠ | ᛈ	Word join undetermined; image review not performed
+
+	LP2-29 → LP2-30	ᛗ | ᛞ	Word join undetermined; image review not performed
+
+	LP2-31 → LP2-32	ᚩ | ᛚ	Word join undetermined; image review not performed
+
+	LP2-33 → LP2-34	ᛒ | ᛗ	Word join undetermined; image review not performed
+
+	LP2-35 → LP2-36	ᛇ | ᚣ	Word join undetermined; image review not performed
+
+	LP2-40 → LP2-41	ᛡ | ᛠ	Word join undetermined; image review not performed
+
+	LP2-41 → LP2-42	ᛄ | ᛞ	Word join undetermined; image review not performed
+
+	LP2-42 → LP2-43	ᚫ | ᚻ	Word join undetermined; image review not performed
+
+	LP2-43 → LP2-44	ᛏ | ᛠ	Word join undetermined; image review not performed
+
+	LP2-44 → LP2-45	ᛋ | ᚳ	Word join undetermined; image review not performed
+
+	LP2-45 → LP2-46	ᛝ | ᚻ	Word join undetermined; image review not performed
+
+	LP2-46 → LP2-47	ᚫ | ᛠ	Word join undetermined; image review not performed
+
+	LP2-47 → LP2-48	ᚫ | ᚻ	Word join undetermined; image review not performed
+
+	LP2-48 → LP2-49	ᚠ | ᛡ	Word join undetermined; image review not performed
+
+	LP2-51 → LP2-52	ᚠ | ᛈ	Word join undetermined; image review not performed
+
+	LP2-52 → LP2-53	ᚻ | ᛇ	Word join undetermined; image review not performed
+
+	LP2-54 → LP2-55	ᚣ | ᛝ	Word join undetermined; image review not performed
+
+
+
+Download this location register (JSON) · Download the register checker · Read the boundary counting rule.
+
+To verify the saved positions against the bundled source records, extract reference data and run python scripts/build_transcription_decisions.py --check from the extracted folder. The check reads files only; it does not review the images.
+
+Sources, related references, and files
+- how the archived and reviewed layers differ
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#layers
+- LP1-10
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp1-10
+- LP2-05
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-05
+- LP2-07
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-07
+- LP2-11
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-11
+- LP2-15
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-15
+- LP2-35
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-35
+- LP2-37
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-37
+- LP2-38
+  https://jelliottdev.github.io/reference/articles/transcription-decisions.html#review-lp2-38
+- Open original-image reader
+  https://jelliottdev.github.io/#/reader/lp1-10
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp1-10.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp1-10.json
+- Open original-image reader; LP2-05
+  https://jelliottdev.github.io/#/reader/lp2-05
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-05.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-05.json
+- Open original-image reader; LP2-07
+  https://jelliottdev.github.io/#/reader/lp2-07
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-07.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-07.json
+- Open original-image reader
+  https://jelliottdev.github.io/#/reader/lp2-11
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-11.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-11.json
+- Open original-image reader
+  https://jelliottdev.github.io/#/reader/lp2-15
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-15.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-15.json
+- Open original-image reader; LP2-35
+  https://jelliottdev.github.io/#/reader/lp2-35
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-35.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-35.json
+- Open original-image reader
+  https://jelliottdev.github.io/#/reader/lp2-37
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-37.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-37.json
+- Open original-image reader
+  https://jelliottdev.github.io/#/reader/lp2-38
+- Download original JPEG
+  https://jelliottdev.github.io/images/lp2-38.jpg
+- Structured page record
+  https://jelliottdev.github.io/data/pages/lp2-38.json
+- 55-boundary inventory
+  https://jelliottdev.github.io/exports/page-boundaries.json
+- LP2-00
+  https://jelliottdev.github.io/#/reader/lp2-00
+- LP2-01
+  https://jelliottdev.github.io/#/reader/lp2-01
+- LP2-02
+  https://jelliottdev.github.io/#/reader/lp2-02
+- LP2-03
+  https://jelliottdev.github.io/#/reader/lp2-03
+- LP2-04
+  https://jelliottdev.github.io/#/reader/lp2-04
+- LP2-06
+  https://jelliottdev.github.io/#/reader/lp2-06
+- LP2-08
+  https://jelliottdev.github.io/#/reader/lp2-08
+- LP2-09
+  https://jelliottdev.github.io/#/reader/lp2-09
+- LP2-10
+  https://jelliottdev.github.io/#/reader/lp2-10
+- LP2-16
+  https://jelliottdev.github.io/#/reader/lp2-16
+- LP2-17
+  https://jelliottdev.github.io/#/reader/lp2-17
+- LP2-18
+  https://jelliottdev.github.io/#/reader/lp2-18
+- LP2-19
+  https://jelliottdev.github.io/#/reader/lp2-19
+- LP2-20
+  https://jelliottdev.github.io/#/reader/lp2-20
+- LP2-21
+  https://jelliottdev.github.io/#/reader/lp2-21
+- LP2-22
+  https://jelliottdev.github.io/#/reader/lp2-22
+- LP2-23
+  https://jelliottdev.github.io/#/reader/lp2-23
+- LP2-24
+  https://jelliottdev.github.io/#/reader/lp2-24
+- LP2-25
+  https://jelliottdev.github.io/#/reader/lp2-25
+- LP2-26
+  https://jelliottdev.github.io/#/reader/lp2-26
+- LP2-27
+  https://jelliottdev.github.io/#/reader/lp2-27
+- LP2-28
+  https://jelliottdev.github.io/#/reader/lp2-28
+- LP2-29
+  https://jelliottdev.github.io/#/reader/lp2-29
+- LP2-30
+  https://jelliottdev.github.io/#/reader/lp2-30
+- LP2-31
+  https://jelliottdev.github.io/#/reader/lp2-31
+- LP2-32
+  https://jelliottdev.github.io/#/reader/lp2-32
+- LP2-33
+  https://jelliottdev.github.io/#/reader/lp2-33
+- LP2-34
+  https://jelliottdev.github.io/#/reader/lp2-34
+- LP2-36
+  https://jelliottdev.github.io/#/reader/lp2-36
+- LP2-40
+  https://jelliottdev.github.io/#/reader/lp2-40
+- LP2-41
+  https://jelliottdev.github.io/#/reader/lp2-41
+- LP2-42
+  https://jelliottdev.github.io/#/reader/lp2-42
+- LP2-43
+  https://jelliottdev.github.io/#/reader/lp2-43
+- LP2-44
+  https://jelliottdev.github.io/#/reader/lp2-44
+- LP2-45
+  https://jelliottdev.github.io/#/reader/lp2-45
+- LP2-46
+  https://jelliottdev.github.io/#/reader/lp2-46
+- LP2-47
+  https://jelliottdev.github.io/#/reader/lp2-47
+- LP2-48
+  https://jelliottdev.github.io/#/reader/lp2-48
+- LP2-49
+  https://jelliottdev.github.io/#/reader/lp2-49
+- LP2-51
+  https://jelliottdev.github.io/#/reader/lp2-51
+- LP2-52
+  https://jelliottdev.github.io/#/reader/lp2-52
+- LP2-53
+  https://jelliottdev.github.io/#/reader/lp2-53
+- LP2-54
+  https://jelliottdev.github.io/#/reader/lp2-54
+- LP2-55
+  https://jelliottdev.github.io/#/reader/lp2-55
+- Download this location register (JSON)
+  https://jelliottdev.github.io/exports/transcription-decisions.json
+- Download the register checker
+  https://jelliottdev.github.io/scripts/build_transcription_decisions.py
+- Read the boundary counting rule
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#page-joins
+- reference data
+  https://jelliottdev.github.io/downloads/reference-data.zip
+
+Article: https://jelliottdev.github.io/reference/articles/transcription-decisions.html
 
 
 ---

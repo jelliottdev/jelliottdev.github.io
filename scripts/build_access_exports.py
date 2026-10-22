@@ -260,6 +260,10 @@ files[-1].update(guide='transcription-checking',aliases=['page joins','word brea
 register('scripts/page_boundary_inventory.py','Reproduction script')
 register('exports/transcription-coverage.json','Transcription layer inventory')
 files[-1].update(title='Transcription layers: all 75 page records',guide='transcription-checking',aliases=['review coverage','reviewed transcription'])
+register('exports/transcription-decisions.json','Transcription layer inventory')
+files[-1].update(title='Published edit positions and LP2 boundary candidates',guide='transcription-decisions',aliases=['disputed runes','word separators'])
+register('scripts/build_transcription_decisions.py','Reproduction script')
+files[-1].update(title='Build transcription decision register',guide='transcription-decisions')
 
 for scan in read('data/evidence/britannica-widsom.json')['records']:
  register(scan['local_file'],'Historical printed spelling evidence')
