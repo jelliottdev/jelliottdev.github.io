@@ -10,6 +10,13 @@ register = json.loads((ROOT / 'data/reported-attempts.json').read_text(encoding=
 entries = register['entries']
 reconciled = register.get('reconciled_sources', [])
 queue = register.get('screening_queue', [])
+screening = json.loads((ROOT / 'data/source-screening.json').read_text(encoding='utf-8'))
+assert screening['schema'] == 'liberpedia-source-screening-v1'
+screened_by_id = {row['attachment_id']: row for row in screening['sources']}
+assert len(screened_by_id) == len(screening['sources'])
+assert set(screened_by_id) <= {row['attachment_id'] for row in queue}
+assert all(row['disposition'] in {'followup', 'closed'} for row in screening['sources'])
+assert all((ROOT / row['audit_note']).is_file() for row in screening['sources'])
 assert register['schema'] == 'liberpedia-reported-attempts-v1'
 assert len(entries) == len({entry['id'] for entry in entries})
 families = {row['id'] for row in json.loads((ROOT / 'data/method-families.json').read_text(encoding='utf-8'))['families']}
@@ -32,6 +39,9 @@ for phrase in (f'{len(all_sources)} distinct supplied source files',
                f'accounts for {memberships - len(all_sources)} repeated memberships',
                f'{linked_entries} link to related public material',
                f'{len(entries) - linked_entries} have no public URL recorded',
+               f'{len(screening["sources"])} screened source files',
+               f'{sum(row["disposition"] == "followup" for row in screening["sources"])} with specific follow-ups',
+               f'{len(queue) - len(screening["sources"])} files not yet screened',
                f'Entry status (one per proposal):',
                f'Total: {len(entries)}'):
     assert phrase in article, phrase

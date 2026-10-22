@@ -2,11 +2,11 @@
 
 Suppose a rune is replaced by its Gematria Primus prime value: F becomes 2, U becomes 3, and so on through the 29-value alphabet ending at 109. Could one fixed quadratic formula rearrange that entire alphabet without producing any values outside it?
 
-We tested `f(x) = ax² + bx + c (mod m)` for **every integer modulus m greater than 109**, requiring all 29 output values to be distinct members of the same prime alphabet. The result is identity only: under these assumptions, each prime must map back to itself.
+We tested `f(x) = ax² + bx + c (mod m)` for **every integer modulus m greater than 109**. A modulus sets the wraparound size: values that differ by a multiple of m count as the same output. We required the formula to send all 29 primes to **29 distinct primes from that same alphabet**. The result is identity only: under these assumptions, each prime must map back to itself.
 
 This is a replication of the quadratic claim in the supplied research archive. The earlier scripts and reported result were inspected before the plan was written. It is not a new discovery or a blind test. A fresh enumerator and a separately implemented checker agree; human review remains pending.
 
-This extends the [full-alphabet affine experiment](#/experiments/literal-prime-affine) by allowing a quadratic term. It does not extend the result to every arithmetic cipher. In particular, a changing key added to plaintext has a different equation and is outside this test.
+This extends the [full-alphabet affine experiment](#/experiments/literal-prime-affine) by allowing an x² term. It does not rule out every arithmetic cipher. A changing key, a formula applied only to a page's observed runes, or an operation on rune **indices** rather than prime values asks a different question.
 
 ## Why an infinite range can be checked
 

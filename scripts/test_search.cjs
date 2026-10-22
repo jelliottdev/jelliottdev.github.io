@@ -242,6 +242,13 @@ panel.listeners.click({target:{closest:()=>({getAttribute:()=> '#/wiki/reading-s
 assert.equal(sandbox.location.hash,'#/wiki/reading-second-koan');
 console.log('PASS: blur/composition before tap, cancelled gestures, and keyboard activation');
 
+// Source suggestions are ordinary external links, not hash routes inside the wiki.
+let externalPrevented=false;
+panel.listeners.click({target:{closest:()=>({getAttribute:()=> 'https://example.com/source'})},preventDefault(){externalPrevented=true}});
+assert.equal(externalPrevented,false,'Allow the browser to follow an external source link');
+assert.equal(sandbox.location.hash,'#/wiki/reading-second-koan','Do not turn a source URL into a wiki hash');
+console.log('PASS: external source suggestions retain native navigation');
+
 assert(!search.search(db,'five dots').some(h=>h.page?.id==='lp2-33'));
 assert(!search.search(db,'three dots').some(h=>h.page?.id==='lp2-07'));
 

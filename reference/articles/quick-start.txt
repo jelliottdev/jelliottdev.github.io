@@ -2,7 +2,7 @@ Start solving: a practical introduction
 
 Find the right pages, reproduce known results, and turn an idea into a test someone else can repeat.
 
-Liber Primus combines visible artwork, rune text, numbers, and hidden file content. Learn how these layers differ before treating them as one cipher. A title image can have no runic paragraph and still carry a signed OutGuess message.
+Liber Primus combines pictures, rune text, printed numbers, and data hidden inside image files. Start by asking which layer a claim concerns. A title page can have no runic paragraph yet still carry a message extracted from its image file with OutGuess, a steganography tool. Decoding visible runes and extracting hidden bytes are separate checks.
 
 1. Know the collection
 The first release contains 17 images, including two title pages. The second release contains 58. In the archived source snapshot, LP1 has known readings and LP2 has readings for 56 and 57; LP2 pages 00–55 remain unsolved. This is dated documented knowledge, not live proof that nobody has solved anything else.
@@ -70,7 +70,8 @@ For the ideas behind the decoded passages, follow the philosophy reading route, 
 Before choosing a large test, read search space and bounds: count the choices, decide what would count as success, and distinguish a completed search from an interrupted one.
 
 4. Make an idea testable
-Choose a page, a region, a transformation, and a success criterion. “Try primes” is too broad. “Subtract consecutive prime-minus-one values modulo 29 from LP2-31, starting at the first rune, advancing the prime sequence only for runes, continuing across punctuation without resetting, and skipping no runes” specifies a candidate transformation. You still need an exact acceptance rule before calling it a hypothesis test. It does not establish that this is the correct method.
+Choose a page, a region, a transformation, and a rule for judging the output. “Try primes” leaves all four undecided. A narrower proposal is: start at the first rune of LP2-31, subtract consecutive prime-minus-one values modulo 29, advance the prime sequence only on runes, and continue through punctuation without resetting or skipping runes. This tells someone what to calculate; it still does not say what result would count as a match.
+State that criterion before inspecting the output. For example, you could require an exact, specified 12-rune opening, then report every configuration tested and every match. This would test that opening under those rules, not establish that the method is correct for the page.
 Check Have we tried it? for the technique and scope. Browse the published experiment families or describe a technique to find related records. Open the individual record and compare its inputs, boundary rules, parameters and exclusions with your proposal. An empty result means no published match here, not that an idea is new. Follow the reproducibility guide.
 
 Follow one completed experiment

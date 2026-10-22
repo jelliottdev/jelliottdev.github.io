@@ -20,6 +20,7 @@ async function readerPage(id,version){
  <div class="reader-workspace">
  <section class="manuscript-image" aria-label="Original manuscript image">
  <div class="reader-pane-bar"><span>${id==='lp1-10'?'Archived four-page carrier':p.release==='LP2'?'Wiki page JPEG':'Original JPEG'}</span><button id="reader-zoom">Enlarge ↗</button></div>
+ <p class="reader-image-loading" role="status" hidden>Loading page image…</p>
  <button class="manuscript-sheet" id="reader-sheet" aria-label="Enlarge original manuscript"><img src="images/${id}.jpg" alt="Original ${label(p)}" width="${p.image_dimensions?.[0]||2400}" height="${p.image_dimensions?.[1]||3600}"></button>
  <p class="reader-image-error" hidden>Image unavailable. <a href="images/${id}.jpg">Open the original file</a> or reload this page.</p>
  </section>
@@ -41,7 +42,12 @@ async function readerPage(id,version){
  document.querySelectorAll('[data-reader-view]').forEach(b=>b.onclick=()=>{setView(b.dataset.readerView);window.scrollTo(0,0)});
  $('#reader-page').onchange=e=>location.hash='/reader/'+e.target.value;
  $('#reader-zoom').onclick=$('#reader-sheet').onclick=()=>openImage();
- $('#reader-sheet img').onerror=()=>{$('.reader-image-error').hidden=false;};
+ const image=$('#reader-sheet img'),loading=$('.reader-image-loading'),imageError=$('.reader-image-error'),sheet=$('#reader-sheet'),zoomButton=$('#reader-zoom');
+ let imageTimer;
+ const stopLoading=()=>{clearTimeout(imageTimer);loading.hidden=true};
+ image.onload=stopLoading;
+ image.onerror=()=>{stopLoading();sheet.hidden=true;zoomButton.disabled=true;imageError.hidden=false};
+ if(image.complete){if(!image.naturalWidth)image.onerror()}else imageTimer=setTimeout(()=>{if(image.isConnected&&!image.complete)loading.hidden=false},350);
 }
 function downloadTypeMatches(file,type){
  if(type==='experiments')return file.role==='Experiment ZIP';
@@ -55,6 +61,6 @@ async function downloadsPage(pageId,version){if(!db.catalog){const response=awai
  const draw=()=>{const q=$('#download-query').value,release=$('#download-release').value,type=$('#download-type').value;const files=db.catalog.files.filter(f=>f.role!=='ZIP bundle'&&downloadTypeMatches(f,type)&&(!release||f.release===release||(f.releases||[]).includes(release))&&matches(`${f.path} ${f.role} ${f.page||''} ${(f.pages||[]).join(' ')} ${f.title||''} ${(f.aliases||[]).join(' ')}`,q));$('#download-count').textContent=`${files.length} ${files.length===1?'file':'files'}`;$('#download-results').innerHTML=files.length?`<div class="table-wrap"><table class="download-table"><thead><tr><th>File</th><th>Version</th><th>Size</th><th>Checksum</th></tr></thead><tbody>${files.map(f=>`<tr><td><a href="${f.path}" download>${esc(f.path.split('/').pop())}</a>${f.title?`<small>${esc(f.title)}</small>`:''}${f.guide?`<small><a href="#/wiki/${esc(f.guide)}">About these files</a></small>`:''}${f.experiment?`<small><a href="#/experiments/${esc(f.experiment)}">Experiment scope and results</a></small>`:''}${f.original_images_required?`<small>Also needs the separate <a href="downloads/original-images.zip" download>original-images ZIP</a>.</small>`:''}${f.releases?.length?`<small>Includes ${f.releases.map(esc).join(' and ')}</small>`:''}${f.page?`<small><a href="#/page/${f.page}">${f.page.toUpperCase()} record</a></small>`:''}</td><td>${esc(f.role)}</td><td>${fileSize(f.bytes)}</td><td><details><summary>SHA-256</summary><code class="hash">${f.sha256}</code></details></td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">No matching files. Clear the search or reset the filters.</p>';};$('#download-query').oninput=draw;$('#download-release').onchange=draw;$('#download-type').onchange=draw;draw();
  let verifyVersion=0;$('#verify-file').onchange=async e=>{const version=++verifyVersion,file=e.target.files[0];if(!file)return;$('#verify-result').textContent='Calculating SHA-256…';try{const bytes=await file.arrayBuffer();const hash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');if(version!==verifyVersion)return;const matches=db.catalog.files.filter(f=>f.sha256===hash&&f.bytes===file.size);$('#verify-result').textContent=matches.length?'Verified exact match: '+matches.map(f=>f.path).join(', '):'No exact match in this catalog. The file may be renamed and changed, from another edition, or incomplete; compare its source before using it.';}catch{if(version===verifyVersion)$('#verify-result').textContent='Browser verification is unavailable. Download SHA256SUMS.txt and verify with a local checksum tool.'}};
 }
-document.addEventListener('keydown',e=>{if(!location.hash.startsWith('#/reader/')||$('#image-dialog').open||e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||e.target.closest('input,select,textarea,button,[contenteditable]'))return;const i=db.pages.findIndex(p=>p.id===currentPage?.id);const next=e.key==='ArrowRight'?db.pages[i+1]:e.key==='ArrowLeft'?db.pages[i-1]:null;if(next){e.preventDefault();location.hash='/reader/'+next.id}});
+document.addEventListener('keydown',e=>{const readerId=location.hash.match(/^#\/reader\/(lp[12]-\d{2})(?:[?]|$)/)?.[1];if(!readerId||!db?.pages||$('#image-dialog').open||e.ctrlKey||e.altKey||e.metaKey||e.shiftKey||e.target.closest('input,select,textarea,button,[contenteditable]'))return;const i=db.pages.findIndex(p=>p.id===readerId);if(i<0)return;const next=e.key==='ArrowRight'?db.pages[i+1]:e.key==='ArrowLeft'?db.pages[i-1]:null;if(next){e.preventDefault();location.hash='/reader/'+next.id}});
 
 matchMedia('(max-width:900px)').addEventListener('change',e=>{if(e.matches&&readerView==='compare')document.querySelector('[data-reader-view="image"]')?.click()});

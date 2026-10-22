@@ -1,6 +1,8 @@
 # Does EA occur often enough in solved text?
 
-The proposed rule `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`, with every `Kᵢ` nonzero, makes a ciphertext doublet equivalent to a plaintext EA rune at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it. A first check is whether its required EA frequency is plausible in text already decoded into Gematria Primus runes.
+A proposed running-sum explanation for the rare repeated runes makes a testable prediction: wherever its rule applies, two equal neighboring ciphertext runes would mark an EA rune in the hidden plaintext. This record asks whether EA occurs about as often in known readings as those repeats occur in unsolved LP2. Matching rates would satisfy one necessary condition; it would not recover plaintext or establish the cipher.
+
+The proposed equation is `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`. Here `C` is the ciphertext rune index, `P` the plaintext index, EA has index 28, and each key value `Kᵢ` must be nonzero. Under those conditions, a ciphertext doublet is equivalent to plaintext EA at that transition. This is an **exact property of the proposed equation**, not evidence that Liber Primus uses it.
 
 The site's solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.
 
@@ -12,7 +14,9 @@ The site's solved LP1 controls contain **20 EA runes in 2,782 within-page transi
 | Solved LP2-56–57: decoded GP EA | 0 | 178 | 0% |
 | Unsolved LP2-00–55: equal neighboring ciphertext runes | 86 | 12,901 | 0.667% |
 
-If those within-page positions were independent draws with one fixed EA probability, a 95% **Wilson score interval** for 20/2,782 would be **0.466–1.108%**. Applying the same calculation to 86/12,901 gives **0.540–0.822%**. For either count, set `p = events / positions` and `z = 1.9599639845`; the two endpoints are `[p + z²/(2n) ± z√(p(1−p)/n + z²/(4n²))] / [1 + z²/n]`, with `n = positions`. The intervals overlap, but that does not establish equal rates or a cipher: adjacent rune positions in prose are dependent, and the LP1 and LP2 sources are not samples randomly drawn from one common process. The page-resampling range below addresses a different source of variation. It also remains descriptive, not a probability distribution for unknown plaintext.
+As a scale for sampling variation, a 95% **Wilson score interval** for 20/2,782 is **0.466–1.108%** if those positions were independent draws with one fixed EA probability. The observed unsolved rate, 0.667%, lies inside that interval. The same calculation for 86/12,901 gives **0.540–0.822%**. These intervals overlap, but do not establish equal rates or a cipher: adjacent rune positions in prose are dependent, and the LP1 and LP2 sources are not random samples from one common process.
+
+To reproduce the endpoints for either count, set `p = events / positions`, `n = positions`, and `z = 1.9599639845`. The endpoints are `[p + z²/(2n) ± z√(p(1−p)/n + z²/(4n²))] / [1 + z²/n]`. The page-resampling range below addresses a different source of variation. It also remains descriptive, not a probability distribution for unknown plaintext.
 
 The two solved LP2 pages are short; their zero EA count is not a robust estimate for the much longer unsolved portion. The LP1 pages also differ in section and method from that portion. Resampling the 15 solved LP1 pages 10,000 times gives a descriptive range of roughly **54–132 EA positions** when each draw's rate is scaled to 12,901 positions. This shows how the small control set changes with page mix. It is **not** a predictive interval for unknown LP2 plaintext: the pages are section fragments, not independent random samples from a known common language process.
 

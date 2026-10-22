@@ -1,0 +1,21 @@
+{
+  "question": "Does the reported LP2-only 59-Fehu coordinate rule reproduce the three sums at the reported start, and how many starts match under that fixed rule?",
+  "source": "Supplied discussion, twocool, 2026-06-25, attachment edacef84-a430-43d4-8540-47a01a00ecef, lines 365-435; source SHA-256 da5eda73ef7664e6761e37e81f4a4f3618c30f2d899555f66c9839579da8991e",
+  "corpus": "LP2-00 through LP2-57 in page order, rune characters only, no LP1; page breaks and punctuation do not advance the rune index",
+  "fehu": "Number U+16A0 F runes from one in the concatenated LP2 stream; manuscript rune positions are zero-based",
+  "window": 59,
+  "start_step": 29,
+  "axis_order": ["X", "Y", "X"],
+  "origins": [0, 0, 2],
+  "coordinate_rule": "For each Fehu in a window, offset = its rune index minus the first Fehu's rune index in the chosen origin window; X = offset mod 29, Y = floor(offset / 29) mod 29; convert each coordinate 0..28 to its Gematria Primus prime and sum",
+  "targets": [3001, 2819, 2579],
+  "reported_start": 182,
+  "reported_streams": [
+    "F TH R L C X Y D EA G I R P B D EA O NG D N OE V E J E OE EO F H G H OE O AE M W EO NG D EO O R P P E X D IA M Y IA I R C I E H S OE",
+    "TH TH TH O O R C H H I J EO P P X S B E E M M NG D A AE Y Y IA IA IA F F TH O O R C G W H H H N N I I I J S T T T L NG NG OE AE Y IA",
+    "F X TH X E V L C TH P S R G NG IA J F G AE J F V O I M TH X EA T W A S X B W F NG G E TH W L C AE Y IA I A G X NG I P I TH AE V EA V"
+  ],
+  "reported_label_note": "The source writes V where this archive's GP index 1 label is U; both represent the same rune index in this reported coordinate list.",
+  "enumeration": "Every possible start with all three complete 59-Fehu windows, no tolerance, no changed axes, origins, widths or target order",
+  "interpretation_limit": "The parameters and target values were chosen during prior exploration. Exact matching and uniqueness under this one frozen rule do not provide an unconditional chance probability or decipherment."
+}

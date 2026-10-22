@@ -68,7 +68,7 @@ function experimentBrowse(records){
           ${family?`<p class="small muted">${esc(record.variant?.label||'')}</p>`:''}
           <p>${esc(record.summary)}</p></li>`).join('')}</ul></details>`;
     }).join('')}</div>`;
-  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">These are reproducible records with different purposes. A bounded solving test applies a specified decoding, extraction or payload check. A measurement or source audit can inform a proposed method, but is not itself an LP2 solve attempt.</p><p class="small muted">“Supported” refers only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><div class="experiment-browse-filter"><label for="experiment-browse-query">Find a published record</label><input id="experiment-browse-query" type="search" placeholder="Method, title, or page ID (e.g. LP2-15)" autocomplete="off"><p id="experiment-browse-status" class="small muted" role="status"></p></div><div class="experiment-browse-section"><h3>Solving methods and linked evidence</h3><p class="small muted">Bounded tests, proposed-method replays and their supporting records stay together. Each record states its own purpose.</p>${cards(primary)}</div><div class="experiment-browse-section"><h3>Measurements, controls and source checks</h3><p class="small muted">Useful evidence and reproducible checks; these do not independently validate a decryption.</p>${cards(supporting)}</div>`;
+  return `<h2 id="browse-experiments">Browse the research</h2><p class="small muted">Search for a technique or page, then open a record to see what was tested and what remains open. Solving tests check a specific decoding or extraction rule; measurements and source checks provide supporting evidence.</p><div class="experiment-browse-filter"><label for="experiment-browse-query">Find a published record</label><input id="experiment-browse-query" type="search" placeholder="Method, title, or page ID (e.g. LP2-15)" autocomplete="off"><p id="experiment-browse-status" class="small muted" role="status"></p></div><p class="small muted experiment-browse-caveat">“Supported” applies only to a record’s exact question. ${pending===records.length&&pending?`Human review is pending for all ${pending} records.`:`Human review is pending for ${pending} of ${records.length} records.`} <a href="#/wiki/first-experiment?section=outcomes">How to read the outcomes</a>.</p><div class="experiment-browse-section"><h3>Solving methods and linked evidence</h3><p class="small muted">Related variants and supporting records stay together.</p>${cards(primary)}</div><div class="experiment-browse-section"><h3>Measurements, controls and source checks</h3><p class="small muted">These inform the research; they do not independently decode an unsolved page.</p>${cards(supporting)}</div>`;
 }
 function experimentFamily(r){
   if(!r.family)return '';
@@ -148,7 +148,8 @@ function renderExperimentMarkdown(markdown,files=[]){
     /^#\/(?:wiki\/[a-z0-9-]+|page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+)(?:\?[a-zA-Z0-9_%=&.-]+)?$/.test(href)||
     (files.includes(href)&&/^[a-zA-Z0-9_./-]+$/.test(href)&&!href.startsWith('/')&&!href.split('/').includes('..'));
 
-  let inCode=false,code=[],paragraph=[],html=[],listType='';
+  let inCode=false,code=[],paragraph=[],html=[],listType='',codeNumber=0;
+  const codeBlock=lines=>{const number=++codeNumber;return `<div class="copyable-block unwrapped"><div class="block-tools"><span role="status"></span><button type="button" data-wrap-block aria-pressed="false" aria-label="Wrap lines in experiment text block ${number}">Wrap lines</button><button type="button" data-copy-block aria-label="Copy experiment text block ${number}">Copy</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment text block ${number}">${esc(lines.join('\n'))}</pre></div>`;};
   const inline=text=>String(text).split(/(`[^`]+`|\[[^\]\n]+\]\([^)]+\))/g).map(part=>{
     if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
     const link=part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
@@ -161,12 +162,12 @@ function renderExperimentMarkdown(markdown,files=[]){
   const cells=line=>line.trim().replace(/^\||\|$/g,'').split('|').map(cell=>cell.trim());
   for(let i=0;i<lines.length;i++){
     const line=lines[i];
-    if(line.startsWith('```')){flush();closeList();if(inCode){html.push('<pre class="reading-text">'+esc(code.join('\n'))+'</pre>');code=[];}inCode=!inCode;continue;}
+    if(line.startsWith('```')){flush();closeList();if(inCode){html.push(codeBlock(code));code=[];}inCode=!inCode;continue;}
     if(inCode){code.push(line);continue;}
     if(!line.trim()){flush();closeList();continue;}
     const figure=line.match(/^!\[([^\]]+)\]\(([^)]+)\)$/);
     if(figure&&files.includes(figure[2])&&safeLink(figure[2])&&/\.(?:svg|png|jpg|webp)$/.test(figure[2])){
-      flush();closeList();html.push(`<figure class="experiment-figure"><img src="${esc(figure[2])}" alt="${esc(figure[1])}" style="width:100%;height:auto" loading="lazy"><figcaption>${esc(figure[1])}</figcaption></figure>`);continue;
+      flush();closeList();html.push(`<figure class="experiment-figure"><a class="experiment-figure-image" href="${esc(figure[2])}" target="_blank" rel="noopener"><img src="${esc(figure[2])}" alt="${esc(figure[1])}" loading="lazy"></a><figcaption>${esc(figure[1])} <a href="${esc(figure[2])}" target="_blank" rel="noopener">Open full-size figure ↗</a></figcaption></figure>`);continue;
     }
     if(line.includes('|')&&i+1<lines.length&&/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i+1])){
       flush();closeList();const headers=cells(line),raw=[line,lines[i+1]];
@@ -177,8 +178,8 @@ function renderExperimentMarkdown(markdown,files=[]){
         valid=valid&&values.length===headers.length;
         rows.push('<tr>'+headers.map((_,column)=>'<td>'+inline(values[column]||'')+'</td>').join('')+'</tr>');
       }
-      if(!valid){html.push('<p class="small muted">Table shown as text because its column counts differ.</p><pre class="reading-text" tabindex="0">'+esc(raw.join('\n'))+'</pre>');continue;}
-      html.push('<div class="table-wrap" role="region" aria-label="Experiment data table" tabindex="0"><table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
+      if(!valid){html.push('<p class="small muted">Table shown as text because its column counts differ.</p>'+codeBlock(raw));continue;}
+      html.push('<p class="table-scroll-hint">Scroll table sideways for all columns →</p><div class="table-wrap" role="region" aria-label="Scrollable experiment data table" tabindex="0"><table><thead><tr>'+headers.map(value=>'<th scope="col">'+inline(value)+'</th>').join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>');
       continue;
     }
     const item=line.match(/^(?:([-*])|\d+\.) (.+)$/);
@@ -187,5 +188,5 @@ function renderExperimentMarkdown(markdown,files=[]){
     const heading=line.match(/^(#{1,6}) (.+)$/);
     if(heading){flush();const level=Math.min(4,heading[1].length+1);html.push(`<h${level}>${esc(heading[2])}</h${level}>`);}else paragraph.push(line);
   }
-  flush();closeList();if(code.length)html.push('<pre class="reading-text">'+esc(code.join('\n'))+'</pre>');return html.join('');
+  flush();closeList();if(code.length)html.push(codeBlock(code));return html.join('');
 }

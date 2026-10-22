@@ -2,6 +2,8 @@
 
 **Computationally checked; human review pending.** Codex reran the script and reviewed the separate position-pair oracle on 20 October 2026. This is a bounded statistical result, not a decipherment or a human-reviewed conclusion.
 
+Put every 13th rune of LP2-31 in the same column and ask whether equal runes meet within those columns more often than they would after shuffling the page. Period 13 gives the largest score among the tested periods 2–20, but **213 of 999 shuffled pages reached at least that high a best-period score**. The experiment does not support singling out period 13 at its declared 0.05 threshold. The question, counting rule and other limits follow below.
+
 ## Question
 
 Does LP2-31 have an unusually large within-column coincidence score at any period from 2 through 20, relative to random reorderings of the same rune multiset?

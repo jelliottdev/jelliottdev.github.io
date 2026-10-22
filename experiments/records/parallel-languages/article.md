@@ -1,6 +1,6 @@
 ## What this comparison tells us
 
-**English is closest by word lengths among these eight languages.** The ordering of other close candidates changes when a fixed GP-style grouping is applied to all eight. This is a comparison of statistical shapes under stated assumptions. It does not identify the plaintext or decipher a word.
+**English has the closest word-length distribution among the eight reference languages tested.** This comparison is useful only if the manuscript's separators correspond to plaintext word boundaries and the encryption preserves one counted unit per rune. Those conditions are unverified for unsolved LP2. The ordering of other close candidates changes when a fixed GP-style grouping is applied to all eight. A nearest distribution is not a plaintext identification or a decoded word.
 
 The experiment uses translations of the **same 997 development sentences and 1,012 evaluation sentences** from FLORES-200. The languages were fixed before scoring: English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. They give a manageable Latin-script comparison without adding a transliteration model for other scripts. They are not a shortlist inferred from the manuscript, and the ranking is not a search across all languages.
 

@@ -1,8 +1,8 @@
-## Why test a whole search?
+## Question and result
 
-A candidate can look better simply because we tried more keys. Comparing that winner with one randomly chosen wrong key ignores the selection that produced it. This experiment repeats an entire declared search on null ciphertexts, retaining its best score each time.
+A candidate can look convincing simply because we tried many keys and kept the best output. Comparing that winner with one randomly chosen wrong key would ignore the selection step. Here, each control repeats the **whole declared search** and keeps its best score, just as the real search would.
 
-The best null scores rise as the nested dictionary grows from one to 256 keys, but none crosses the fixed −5.5 acceptance threshold in this grid. Searches of positive ciphertext also fail that threshold when the true key is absent. Appending the true key makes every positive control recover exactly and pass. These outcomes describe this finite search; they are not a guarantee against false positives in larger or different searches.
+The best control scores rise as the nested dictionary grows from one to 256 keys, but none crosses the fixed −5.5 acceptance threshold in this grid. Searches of encrypted known text also fail that threshold when the true key is absent. Appending the true key makes every such control recover exactly and pass. This shows that the scorer can recognize the known answer **when this search includes it**; it does not establish a false-positive rate for larger or different searches.
 
 ## Three conditions, kept separate
 

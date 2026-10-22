@@ -29,13 +29,15 @@ A simple subtraction decoder is plaintext[i] = (ciphertext[i] − sequence[i + o
 
 If the sequence depends on previous plaintext or ciphertext, include that state explicitly and consult feedback methods. Changing the rule whenever the output stops forming words creates additional choices, not a continuation of the original fixed test.
 
+For a small invented example, take ciphertext indices 10, 20 | 5, where the bar marks a word break. Subtracting prime-minus-one shifts 1, 2, 4 without resetting gives 9, 18 | 1 modulo 29. Resetting the sequence at the word break instead uses 1, 2 | 1 and gives 9, 18 | 4. Both rules agree on the first word and disagree immediately afterward. A short matching opening therefore cannot settle the reset rule.
+
 Count distinct outputs as well as settings
 
 Trying 29 offsets and two signs gives 58 configurations per input under those rules. Some may produce identical outputs. Only residues modulo 29 affect this decoder, so a repeating residue stream can make additional offsets redundant. Similarly, subtracting primes instead of primes minus one changes every output by a constant −1 when alignment is identical. If all constant output shifts are already searched, those variants cover the same set of outputs.
 
 Documented tests and what remains open
 
-The prime-minus-one, ordinary-prime, Fibonacci and consecutive-totient records test declared opening hypotheses with fixed alignment rules. The polynomial-stream record has its own degree and coefficient bounds. Their scope sections determine which proposals they actually cover; a failure to match the selected openings does not exclude a sequence against every possible plaintext.
+The prime-minus-one, ordinary-prime, Fibonacci and consecutive-totient records test declared opening hypotheses with fixed alignment rules. The direct-polynomial record asks a different question: can a polynomial directly generate the observed rune values? Its finite-difference obstruction covers its stated degree range without enumerating coefficient values. A polynomial used as a key mixed with unknown plaintext is outside that result. Read each record’s scope before carrying a negative finding to another variant.
 
 For an extension, freeze the full rule and success criterion, retain all candidates, and test an untouched continuation. Compare the best selected score with the same search on controls, rather than comparing one selected candidate with an ordinary random sample. See null models and all method families.
 
@@ -58,7 +60,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-fibonacci-openings
 - consecutive-totient
   https://jelliottdev.github.io/#/experiments/lp2-totient-openings
-- polynomial-stream record
+- direct-polynomial record
   https://jelliottdev.github.io/#/experiments/direct-polynomial-streams
 - null models
   https://jelliottdev.github.io/reference/articles/null-models.html

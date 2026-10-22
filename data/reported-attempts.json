@@ -965,18 +965,21 @@
     },
     {
       "id": "solved-text-section-title-cribs",
-      "title": "WITHIN and ALL THINGS as section-title cribs",
+      "title": "Solved-text wording as proposed section-title cribs",
       "phrases": [
         "within section crib",
         "all things section title",
         "dju bei ae",
         "of all thngs",
-        "divinity within red header"
+        "divinity within red header",
+        "deep within lp2-15",
+        "a procedure lp2-33"
       ],
       "family": "cribs",
       "pages": [
         "lp2-00",
-        "lp2-15"
+        "lp2-15",
+        "lp2-33"
       ],
       "source": {
         "title": "Its words are the map, their meaning is the road",
@@ -985,13 +988,13 @@
         "attachment_id": "c1c1edd9-ecef-4085-b2d5-dd5c41b93856",
         "sha256": "1c1def0a225ec0d052f35421f368f81fc5607ddd9515f830cc4a93dd45683042"
       },
-      "reported_idea": "Use repeated wording in solved passages (WITHIN, DIVINITY, ALL THINGS and INTUS) to nominate unsolved section headings or red-header cribs. A later suggestion matches the GP sum of DJU BEI AE to OF ALL THNGS at 389 and proposes a thematic reading. The source mixes these candidate cribs with already established solved-text references.",
-      "coverage": "The stored GP alphabet gives 389 for D+J+U+B+E+I+AE and for O+F+A+L+L+TH+NG+S. Adding the I of ordinary THINGS changes that sum; the 389 claim relies on the rune spelling THNGS. No fixed cipher mapping or untouched continuation was supplied for these section-title guesses. Existing word-sum and crib controls address only narrower questions.",
+      "reported_idea": "Use repeated wording in solved passages (WITHIN, DIVINITY, ALL THINGS and INTUS) to nominate unsolved section headings or red-header cribs. The thread also suggests DEEP WITHIN for the four-plus-five LP2-15 heading and A PROCEDURE for the LP2-33 Cuneiform opening. A separate suggestion matches the GP sum of DJU BEI AE to OF ALL THNGS at 389.",
+      "coverage": "The stored GP alphabet gives 389 for D+J+U+B+E+I+AE and for O+F+A+L+L+TH+NG+S; ordinary THINGS adds an I. DEEP WITHIN is length-compatible with the LP2-15 heading under literal GP encoding, but length alone is not decryption. The literal LP2-33 opening is two plus eight runes, whereas A PROCEDURE encodes as one plus nine under the ordinary GP spelling, so that proposed placement needs an additional boundary or spelling rule. No one transformation or untouched continuation has been supplied for these guesses.",
       "related_records": [
         "word-sum-corpus-control",
         "seed-crib-controls"
       ],
-      "replay_needed": "Identify the exact manuscript heading/runes for each proposed crib; pin the GP segmentation and whether the I is omitted; select the crib list and transformation before examining output. Count all equal-sum alternatives and require a single rule to predict untouched text or another page.",
+      "replay_needed": "Identify the exact manuscript heading/runes for each proposed crib; pin GP segmentation, the THNGS spelling, and any boundary change needed for A PROCEDURE. Select the crib list and transformation before examining output. Count equal-sum alternatives and require one rule to predict untouched text or another page.",
       "status": "related-only"
     },
     {
@@ -1177,6 +1180,44 @@
       "coverage": "Liberpedia's hash tests cover pinned candidate files and other target classes. They cannot confirm or reject a checksum of a complete reading that has not yet been recovered.",
       "related_records": [],
       "replay_needed": "When a complete reading is proposed, archive its exact byte sequence and encoding, fix whether headings, spaces, line breaks and all LP sections are included, and calculate the stated digest algorithm before applying any normalization alternatives. Record every attempted serialization and compare against the printed hex string.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "lp2-fehu-coordinate-triad",
+      "title": "59-Fehu coordinate windows and three 2016-message sums",
+      "phrases": ["59 Fehu windows", "F182 F240", "3001 2819 2579", "Fehu coordinate triad", "29 wide F grid"],
+      "family": "sums",
+      "pages": ["lp2-00", "lp2-57"],
+      "source": {
+        "title": "Epiphany and historical-message wording",
+        "author": "twocool",
+        "reported": "2026-06-25",
+        "attachment_id": "edacef84-a430-43d4-8540-47a01a00ecef",
+        "sha256": "da5eda73ef7664e6761e37e81f4a4f3618c30f2d899555f66c9839579da8991e"
+      },
+      "reported_idea": "Number F runes in LP2 only. For three overlapping 59-Fehu windows starting 29 Fehus apart, map distance from a specified origin to X or Y on a 29-column grid, convert coordinate indices to GP prime values, and sum. The reported F182 start gives 3001, 2819 and 2579, linked in the discussion to adjusted 2016-message values.",
+      "coverage": "The bounded replay checks the complete supplied coordinate streams and all 350 eligible starts. F182 is the one exact ordered match under this fixed rule. This does not test how many window lengths, axis orders, origin resets or message segmentations were explored before the rule was chosen, nor does it produce plaintext.",
+      "related_records": ["fehu-coordinate-triad"],
+      "replay_needed": "Independently establish the message-value targets from original signed bytes, reconstruct the explored rule family and compare its best match with selection-aware controls. Require a frozen operation to predict a held-out key or reading; conditional uniqueness alone does not supply one.",
+      "status": "partial"
+    },
+    {
+      "id": "gnunet-known-carrier-roots-report",
+      "title": "Reported GNUnet roots for 86 preserved carriers",
+      "phrases": ["GNUnet 0.10.1", "GNUNET_ROOTS.tsv", "GNUnet CHK", "AN END GNUnet hash"],
+      "family": "hashes",
+      "pages": ["lp2-56"],
+      "source": {
+        "title": "LP2-56 hash-target hypotheses",
+        "author": "catlover883",
+        "reported": "2026-10-10",
+        "attachment_id": "bc2d6c57-8156-439e-8dd4-1aa3592a4999",
+        "sha256": "005193327d2a0d922b8c62be34a480dfcfdc75e8fb10cb56a229f89152468e5f"
+      },
+      "reported_idea": "A participant reports computing GNUnet 0.10.1 CHK root pairs for 75 preserved Liber Primus JPEGs and 11 archived onion-page responses. None reportedly matched the LP2-56 AN END string. The participant says two tree implementations agreed and the original offline publisher agreed on three files spanning the tree depths encountered.",
+      "coverage": "This is a third-party report, not a Liberpedia replay. The pasted discussion names GNUNET_ROOTS.tsv and GNUNET_REFERENCE_OUTPUTS.txt, but does not include their bytes. Testing the 86 known files would not test whether an unknown page was hosted on GNUnet or retrievable by an address.",
+      "related_records": [],
+      "replay_needed": "Obtain the missing TSV and reference outputs or rebuild a pinned 86-file byte manifest; pin the GNUnet 0.10.1 binary, exact offline settings, root representation and AN END target. Recompute every pair and validate several tree depths against the original publisher. Treat any address-retrieval hypothesis as a separate test with a specified query.",
       "status": "not-replayed"
     },
     {

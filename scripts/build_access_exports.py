@@ -169,6 +169,9 @@ for filename, details in figure_details.items():
  files[-1].update(details)
 register('data/idea-coverage.json','Idea coverage notes')
 register('data/reported-attempts.json','Source-specific reported-attempt intake')
+register('data/source-screening.json','Supplied-source screening register')
+for note in sorted((root / 'research/source-intake').glob('*.md')):
+ register('research/source-intake/'+note.name,'Supplied-source screening note')
 register('data/method-families.json','Idea coverage notes')
 register('data/evidence/scoped-constraints.json','Scoped cipher constraints')
 files[-1].update(title='Scoped constraints and surviving variants (JSON)',guide='scoped-constraints',aliases=['ruled out','exclusions','invariants','negative results','proof scope'])

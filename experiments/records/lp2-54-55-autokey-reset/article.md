@@ -1,8 +1,8 @@
 ## What is being tested?
 
-A reported periodic-IoC peak on LP2-54–55 motivates this test. We ask whether a precise ciphertext-autokey model, with selected F runes acting as interruptions, produces an unusually high score after searching all permitted masks and periods.
+A reported periodic-IoC peak on LP2-54–55 motivates this test. The index of coincidence (IoC) measures how often symbols match within groups of positions. We ask whether a specified ciphertext-feedback rule, with some F runes treated as interruptions, makes that score unusually high after searching every permitted interruption pattern and period.
 
-This is a new bounded implementation. The source discussion names scripts and plots, but their complete files were not supplied. We cannot claim to reproduce their exact processing or graphs.
+The answer under the declared comparison is **no**: 543 of 999 shuffled inputs produced a maximum at least as high as the manuscript's. This is a new bounded implementation. The source discussion names scripts and plots, but their complete files were not supplied, so we cannot claim to reproduce their exact processing or graphs.
 
 ## Ciphertext feedback, step by step
 

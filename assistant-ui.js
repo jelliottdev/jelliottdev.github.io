@@ -75,9 +75,15 @@ function renderIdeaChecker(endpoint,query){
       <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
     </details>${footer()}</article>`;
   const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
-  results.addEventListener('input',event=>{
-    if(event.target.id!=='experiment-browse-query')return;
-    const query=event.target.value.trim();
+  const filterArchive=(save=false)=>{
+    const browse=$('#experiment-browse-query');if(!browse)return;
+    const query=browse.value.trim();
+    if(save){
+      const state=new URLSearchParams(location.hash.split('?')[1]||'');
+      if(query){state.set('browse',query);state.set('section','browse-experiments')}
+      else{state.delete('browse');state.delete('section')}
+      history.replaceState(null,'',`#/experiments${state.size?'?'+state:''}`);
+    }
     let visible=0;
     for(const section of results.querySelectorAll('.experiment-browse-section')){
       let sectionVisible=0;
@@ -88,7 +94,8 @@ function renderIdeaChecker(endpoint,query){
       section.hidden=sectionVisible===0;
     }
     $('#experiment-browse-status').textContent=query?(visible?`${visible} matching ${visible===1?'family':'families'}. Open a family to inspect its records.`:'No published record matches these terms. Try a shorter method name or page ID.'):'';
-  });
+  };
+  results.addEventListener('input',event=>{if(event.target.id==='experiment-browse-query')filterArchive(true)});
   const pages=()=>[...new Set([$('#idea-page-one').value,$('#idea-page-two').value].filter(Boolean))].sort();
   const experimentDocuments=AssistantSearch.experimentDocs(experimentRecords);
   const documents=()=>experimentDocuments;
@@ -160,4 +167,8 @@ function renderIdeaChecker(endpoint,query){
   cancel.onclick=()=>{stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
   $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});if(pages().length)p.set('pages',pages().join(','));history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
   draw(Boolean(query));
+  if(!query&&params.get('browse')){
+    const browse=$('#experiment-browse-query');
+    if(browse){browse.value=params.get('browse');filterArchive()}
+  }
 }

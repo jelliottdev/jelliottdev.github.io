@@ -2,7 +2,7 @@ The first Cicada image: JPEG bytes, the duck and OutGuess
 
 Reproduce the opening ASCII shift and hidden payload, inspect the original images, and follow the clue into the subreddit.
 
-The opening Cicada image contains two different leads. One is readable text appended to the JPEG file; the other is an OutGuess payload embedded in the image data. Following the first lead explains how solvers found the tool needed for the second.
+The opening Cicada image contains two different leads. The first is text placed after the JPEG's normal ending bytes. A file viewer can find it even though an image viewer does not display it. The second is a message hidden within the JPEG data and extracted with OutGuess. The first lead points solvers toward the tool for the second, so the two checks belong in that order.
 
 [Image: Opening 3301 image: white text on black inviting readers to find a hidden message]
 Archived opening JPEG, 509 × 503 pixels. Download original bytes. A screenshot preserves its appearance but need not preserve either hidden lead.
@@ -37,7 +37,7 @@ outguess -r final.jpg extracted.txt
 
 Our fresh run of the existing clean guarded OutGuess build returned successfully and extracted 535 bytes, byte-for-byte equal to the separately archived payload. Its diagnostic reported seed 228 and length 535. The receipt records the executable hash and output hash; the guarded-build record documents that build’s provenance and limitations.
 
-The message points to the subreddit a2e7j6ic78h0j and supplies 76 line-and-character coordinates. Download the fresh extracted bytes or the archived text. Matching these bytes confirms this extraction; it does not solve the later book code.
+The message points to the subreddit a2e7j6ic78h0j and supplies 76 line-and-character coordinates. A coordinate tells the reader where to take a character from a separate ordered text; it is not itself a decoded letter. Download the fresh extracted bytes or the archived text. Matching these bytes confirms this extraction; it does not solve the later book code.
 
 5. The next stage needs an ordered text
 

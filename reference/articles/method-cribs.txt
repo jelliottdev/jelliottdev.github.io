@@ -50,26 +50,31 @@ How to evaluate a result
 
 Use withheld text to test a key derived from a crib. Compare incompatible cribs and matched search controls. The existing nine-opening sweeps test those particular beginnings, not every possible plaintext under their cipher families.
 
+The matrix example shows why a second matching block may add no information when it repeats the first constraint, and why a unique fitted key still needs independent validation.
+
 Documented experiments
 
-These records cover particular variants, not this entire family.
-Does matching the opening text identify a seed?
-LP2-39: twenty proposed red-header cribs
+These records ask different crib questions. None covers every possible word, position or key rule.
+
+Known-crib seed controls ask whether a short opening identifies a planted generator and seed, then check the remaining text.
+LP2-39 red-header cribs test twenty proposed words under a fixed affine substitution; a fit to one three-rune header is not a page reading.
+Crib-difference stream search derives three-rune key fragments from seventeen eligible header cribs and searches for them in other page streams. Its within-page shuffles test the match count, not whether any hit is plaintext.
 
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
-
-
-The matrix example shows why a second matching block may add no information when it repeats the first constraint, and why a unique fitted key still needs independent validation.
 
 Sources, related references, and files
 - repeating-key decoding
   https://jelliottdev.github.io/reference/articles/vigenere.html
 - unrestricted keys
   https://jelliottdev.github.io/reference/articles/one-time-pad.html
-- Does matching the opening text identify a seed?
+- matrix example
+  https://jelliottdev.github.io/reference/articles/method-blocks.html#cribs
+- Known-crib seed controls
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
-- LP2-39: twenty proposed red-header cribs
+- LP2-39 red-header cribs
   https://jelliottdev.github.io/#/experiments/lp2-39-header-cribs
+- Crib-difference stream search
+  https://jelliottdev.github.io/#/experiments/crib-difference-stream-search
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -78,7 +83,5 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/reproducibility.html
 - Have we tried it?
   https://jelliottdev.github.io/#/experiments
-- matrix example
-  https://jelliottdev.github.io/reference/articles/method-blocks.html#cribs
 
 Article: https://jelliottdev.github.io/reference/articles/method-cribs.html
