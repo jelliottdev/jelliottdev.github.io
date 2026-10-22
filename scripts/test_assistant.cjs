@@ -159,6 +159,11 @@ assert(scopedResult.includes('Not in this record’s page scope: LP2-56.'));
 assert(!scopedResult.includes('Not in this record’s page scope: LP2-31'));
 assert(!experimentContext.experimentSearchResult(totient,['lp2-31']).includes('scope-mismatch'));
 const liveDocs=Search.experimentDocs(published);
+const lagClaim='The lag-6 relation inside words: c′ = 24 − 2c (mod 29). Two runes six positions apart satisfy this more often than chance, 80 against 45.7 expected; zero across word gaps and linked to doublets.';
+const lagMatches=Search.classify(liveDocs,lagClaim);
+assert.equal(lagMatches.tests.length,0,'A measurement must not be presented as a solving test');
+assert.deepEqual(lagMatches.supporting.map(hit=>hit.document.id),['word-internal-affine-lags'],
+ 'A precise relation must not retrieve unrelated geometry or generic doublet tests');
 assert.equal(Search.experiments(liveDocs,'totient of rune values on LP2-31')[0].document.id,totient.id);
 assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'lp2-fibonacci-openings');
 assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice(0,2).map(r=>r.document.id)),

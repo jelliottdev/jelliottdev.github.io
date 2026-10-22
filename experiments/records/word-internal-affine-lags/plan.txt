@@ -1,0 +1,8 @@
+Question: Is c' = 24 - 2c (mod 29) unusually frequent at lag six within visible LP2 words?
+Inputs: the archived LP2-00–55 rune transcriptions and the 29-rune order in data/index.json.
+Boundary rule: hyphen and full stop end a word; slash and newline are layout marks. Do not cross pages.
+Primary count: all pairs of runes six positions apart inside a word.
+Reference: independently shuffle rune order within each word 2,000 times, keeping each word's rune multiset and length.
+Selection check: enumerate all 29 x 29 affine maps at lag six; on each shuffle retain the maximum count among the 841 maps.
+Additional checks: tabulate the same formula at lags one through twelve, pairs crossing word gaps, and page-level contributions.
+Interpretation limit: the reported formula and lag are exploratory. The selection check does not adjust for choosing lag, page range, segmentation, or an algebraic family after looking at data. A statistical excess is not evidence of a particular encryption algorithm.

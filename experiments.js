@@ -47,6 +47,7 @@ async function experimentsPage(id, version, query='') {
     main.innerHTML = experimentArticle(record);
     bindRouteIllustration();
     bindLanguageBlockFigure();
+    bindAffineLagFigure();
     startExperimentSupport();
     return;
   }
@@ -195,6 +196,10 @@ function bindLanguageBlockFigure(){
   });
 }
 function experimentVisual(r,v){
+  if(r.id==='word-internal-affine-lags'&&v.path.endsWith('/comparison.svg')){
+    const choices=Array.from({length:29},(_,n)=>`<option value="${n}">${n}</option>`).join('');
+    return `<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Explore the 841 lag-six maps</strong><br>Choose coefficients for c′ = ac + b (mod 29). Counts use the same 1,267 word-internal pairs.</figcaption><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><p class="small muted">The shuffle range shown for the highlighted formula does not transfer to every selected map. The downloadable result holds all 841 observed counts and word-shuffle expectations.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
+  }
   if(r.id==='lp1-width-selection'&&v.path.endsWith('/width-comparison.svg')){
     const rows=widthSelectionComparison.map(([width,fraction,tail])=>{
       const [numerator,denominator]=fraction.split('/').map(Number);
@@ -228,6 +233,27 @@ function experimentVisual(r,v){
     return `<figure class="experiment-figure route-trace"><div class="route-trace-head"><strong>${comparison.title}</strong><span>Original source rune positions, counted from zero</span></div><table><thead><tr><th scope="col">Output</th><th scope="col">Split lines</th><th scope="col">Join lines</th></tr></thead><tbody>${comparison.rows.map(([output,split,joined])=>`<tr><th scope="row">${output}</th><td>${split}</td><td>${joined}</td></tr>`).join('')}</tbody></table><p>${comparison.note}</p><figcaption><a href="${esc(v.path)}" download>Download the archived SVG</a></figcaption></figure>`;
   }
   return `<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`;
+}
+async function bindAffineLagFigure(){
+  const figure=main.querySelector('.affine-lag-figure');
+  if(!figure)return;
+  const a=figure.querySelector('[data-affine-a]'),b=figure.querySelector('[data-affine-b]');
+  a.value='27';b.value='24';
+  try{
+    const response=await fetch(figure.dataset.results);
+    if(!response.ok)throw Error();
+    const data=await response.json();
+    if(!figure.isConnected)return;
+    const counts=data.affine_family.counts_by_a_b, expected=data.affine_family.word_shuffle_expected_by_a_b;
+    if(counts.length!==29||expected.length!==29)throw Error();
+    const all=counts.flat();
+    const update=()=>{
+      const multiplier=Number(a.value),offset=Number(b.value),observed=counts[multiplier][offset],mean=expected[multiplier][offset];
+      const rank=1+all.filter(value=>value>observed).length;
+      figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${observed} matches</strong> <span>of 1,267 pairs</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${Math.min(100,observed/80*100).toFixed(1)}%"></span></div><p>Word-shuffle expectation: <strong>${mean.toFixed(1)}</strong> · Rank among 841 maps: <strong>${rank}</strong>${rank===1?' (highest)':''}.</p>`;
+    };
+    a.addEventListener('change',update);b.addEventListener('change',update);update();
+  }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
 }
 function experimentArticle(r){
   const pageLinks=experimentScopeLinks(r);

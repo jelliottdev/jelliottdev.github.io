@@ -75,8 +75,12 @@
   }
   function classify(documents,query,pages=[]) {
     const ranked=rankedRecords(documents,query,pages);
-    const tests=ranked.filter(r=>!r.document.recordType||['method','replay'].includes(r.document.recordType));
-    const supporting=ranked.filter(r=>r.document.recordType&&!['method','replay'].includes(r.document.recordType));
+    // Retrieval is a lead, not proof of an identical experiment. Keep only
+    // the strongest few; a shared generic word must not make a long list.
+    const strongest=ranked[0]?.score||0;
+    const candidates=ranked.filter(r=>r.score>=Math.max(.5,strongest*.62)).slice(0,8);
+    const tests=candidates.filter(r=>!r.document.recordType||['method','replay'].includes(r.document.recordType));
+    const supporting=candidates.filter(r=>r.document.recordType&&!['method','replay'].includes(r.document.recordType));
     // A strong diagnostic/source match should not trigger a weak, incidental method hit.
     return {tests:supporting.length&&tests.length&&supporting[0].score>=tests[0].score*1.5?[]:tests,supporting};
   }
