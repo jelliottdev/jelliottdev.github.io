@@ -37,6 +37,15 @@ assert.equal(Coverage.match(notes,'LP2-31').length,0);
 assert.equal(Coverage.match(notes,'1301').length,0,'301 must be a whole token');
 assert.equal(Coverage.match(notes,'').length,0);
 assert.equal(Search.experimentDocs(notes).length,0,'Coverage notes must never become completed experiment evidence');
+const reported=read('data/reported-attempts.json').entries;
+assert.equal(new Set(reported.map(r=>r.id)).size,reported.length);
+assert.equal(Search.experimentDocs(reported).length,0,'Prior-work reports must never become completed experiment evidence');
+assert.equal(Coverage.match(reported,'LP2-31').length,0,'A page mention alone must not imply a reported technique');
+for(const [query,id] of [
+ ['Was there a data matrix in the grid?','grid-data-matrix-report'],
+ ['Try six F interrupters on pages 54-55','lanfear-six-f-interrupters'],
+ ['Could QuagMirrors be the key?','quagmirrors-mobius-autokey']
+])assert.equal(Coverage.match(reported,query)[0]?.id,id,query);
 console.log('PASS: 12 coverage families, related published records, phrase boundaries and separation from AI evidence');
 
 const guides=new Set(read('articles/index.json').map(r=>r.id));
@@ -117,7 +126,7 @@ assert.equal(Coverage.families(families,'LP2-31').length,0);
 assert.equal(Coverage.families(families,'hashish seedlings').length,0,'Aliases must match whole words, not substrings');
 assert.equal(Search.experimentDocs(families).length,0);
 const vm=require('node:vm');
-const ui={IdeaCoverage:Coverage,methodFamilyRecords:families,methodFamilyUnavailable:false,ideaCoverageRecords:notes,ideaCoverageUnavailable:false,experimentRecords:experiments,esc:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')};
+const ui={IdeaCoverage:Coverage,methodFamilyRecords:families,methodFamilyUnavailable:false,ideaCoverageRecords:notes,ideaCoverageUnavailable:false,reportedAttemptRecords:reported,reportedAttemptsUnavailable:false,experimentRecords:experiments,esc:s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')};
 vm.createContext(ui);vm.runInContext(fs.readFileSync(require('node:path').join(root,'assistant-ui.js'),'utf8'),ui);
 const emptyFamily=ui.ideaCoverageView('homophonic');
 assert(emptyFamily.includes('#/wiki/method-homophonic'));
@@ -127,6 +136,11 @@ const existingFamily=ui.ideaCoverageView('running key');
 assert(existingFamily.includes('family-running-key'));
 ui.methodFamilyUnavailable=true;
 assert(ui.ideaCoverageView('unmatched').includes('could not be loaded'));
+assert(ui.reportedAttemptView('data matrix').includes('#/wiki/reported-attempts?section=grid-data-matrix-report'));
+assert(!ui.reportedAttemptView('LP2-31').includes('Earlier reported approaches'));
+assert(ui.reportedAttemptView('').includes('Browse the reported-attempt register'));
+ui.reportedAttemptsUnavailable=true;
+assert(ui.reportedAttemptView('data matrix').includes('could not be loaded'));
 console.log('PASS: family-only matches expose guides, distinguish absent links from negative results, and survive index-load failures');
 
 const detail={esc:ui.esc, records:experiments, families, familyData, head:()=>'', footer:()=>''};

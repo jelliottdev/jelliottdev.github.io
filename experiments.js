@@ -1,5 +1,5 @@
  'use strict';
-let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false, methodFamilyRecords, methodFamilyUnavailable=false;
+let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false, methodFamilyRecords, methodFamilyUnavailable=false, reportedAttemptRecords, reportedAttemptsUnavailable=false;
 let methodRecordKinds={}, methodRecordKindById={};
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
@@ -12,10 +12,11 @@ async function experimentsPage(id, version, query='') {
     if (!Array.isArray(data.records)) throw Error('The experiment index has an invalid format.');
     experimentRecords = data.records;
   }
-  if (!ideaCoverageRecords || !methodFamilyRecords) {
+  if (!ideaCoverageRecords || !methodFamilyRecords || !reportedAttemptRecords) {
     const load=async(path,key,whole=false)=>{const response=await fetch(path);if(!response.ok)throw Error('Index unavailable');const data=await response.json();if(!Array.isArray(data[key]))throw Error('Invalid index');return whole?data:data[key];};
-    const [notes,families]=await Promise.allSettled([
-      load('data/idea-coverage.json','records'),load('data/method-families.json','families',true)
+    const [notes,families,reports]=await Promise.allSettled([
+      load('data/idea-coverage.json','records'),load('data/method-families.json','families',true),
+      load('data/reported-attempts.json','entries')
     ]);
     ideaCoverageUnavailable=notes.status!=='fulfilled';
     ideaCoverageRecords=ideaCoverageUnavailable?[]:notes.value;
@@ -23,6 +24,8 @@ async function experimentsPage(id, version, query='') {
     methodFamilyRecords=methodFamilyUnavailable?[]:families.value.families;
     methodRecordKinds=methodFamilyUnavailable?{}:families.value.record_kinds||{};
     methodRecordKindById=methodFamilyUnavailable?{}:families.value.record_kind_by_id||{};
+    reportedAttemptsUnavailable=reports.status!=='fulfilled';
+    reportedAttemptRecords=reportedAttemptsUnavailable?[]:reports.value;
   }
   if (!assistantConfig) {
     try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}

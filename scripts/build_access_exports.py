@@ -168,6 +168,7 @@ for filename, details in figure_details.items():
  register('exports/figures/'+filename,'Analysis figure')
  files[-1].update(details)
 register('data/idea-coverage.json','Idea coverage notes')
+register('data/reported-attempts.json','Source-specific reported-attempt intake')
 register('data/method-families.json','Idea coverage notes')
 register('data/evidence/scoped-constraints.json','Scoped cipher constraints')
 files[-1].update(title='Scoped constraints and surviving variants (JSON)',guide='scoped-constraints',aliases=['ruled out','exclusions','invariants','negative results','proof scope'])

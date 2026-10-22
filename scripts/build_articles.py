@@ -13,6 +13,7 @@ import runpy
 runpy.run_path(str(ROOT / 'scripts/build_method_map.py'))
 runpy.run_path(str(ROOT / 'scripts/build_research_coverage.py'))
 runpy.run_path(str(ROOT / 'scripts/build_transcription_decisions.py'))
+runpy.run_path(str(ROOT / 'scripts/build_reported_attempts.py'))['build']()
 
 def linked_reference_text(text):
     """Keep reference text intact while making its explicit HTTP(S) URLs usable."""

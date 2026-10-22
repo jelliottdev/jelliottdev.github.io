@@ -35,12 +35,24 @@ function ideaCoverageView(query=''){
   return familyHTML+failures+(query?`<h2>Coverage of this idea</h2>${body}`:`<details class="experiment-guide"><summary>Common ideas and gaps in coverage</summary>${body}</details>`);
 }
 
+function reportedAttemptView(query=''){
+  if(reportedAttemptsUnavailable)return '<p class="small muted">The prior-work index could not be loaded. <a href="#/wiki/reported-attempts">Open the saved register</a>.</p>';
+  if(!query)return '<p class="small muted">Looking for earlier proposals that have not been fully retested? <a href="#/wiki/reported-attempts">Browse the reported-attempt register</a>.</p>';
+  const hits=IdeaCoverage.match(reportedAttemptRecords||[],query);
+  if(!hits.length)return '';
+  const labels={'not-replayed':'Not replayed','related-only':'Related work only','partial':'Partly replayed'};
+  return '<h2>Earlier reported approaches</h2><p class="small muted">These source notes are not completed experiments or evidence used by the AI comparison. Open a report to see what an exact replay still needs.</p>'+
+    hits.map(r=>`<article class="experiment-result"><h3><a href="#/wiki/reported-attempts?section=${esc(r.id)}">${esc(r.title)}</a></h3>
+      <p class="small muted">${esc(labels[r.status]||r.status)} · ${esc(r.source.author)} · ${esc(r.source.reported)}</p>
+      <p>${esc(r.reported_idea)}</p><details><summary>Coverage and replay requirement</summary><p>${esc(r.coverage)}</p><p><strong>To reproduce:</strong> ${esc(r.replay_needed)}</p></details></article>`).join('');
+}
+
 function renderIdeaChecker(endpoint,query){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
   const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
   const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
   main.innerHTML=head('Have we tried it?','Check a technique against documented experiments')+`<article class="reading-width idea-checker">
-    <p>Describe the technique, inputs, and bounds you want to test. Still choosing an approach? <a href="#/wiki/solving-methods">Browse solving-method families</a>. For what the archive covers and what comes next, see <a href="#/wiki/research-coverage">research coverage</a>.</p>
+      <p>Describe the technique, inputs, and bounds you want to test. Still choosing an approach? <a href="#/wiki/solving-methods">Browse solving-method families</a>. You can also <a href="#/wiki/reported-attempts">browse earlier reported approaches</a>. For what the archive covers and what comes next, see <a href="#/wiki/research-coverage">research coverage</a>.</p>
     <form id="experiment-form">
       <label for="experiment-query">Technique or idea</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>
@@ -55,9 +67,10 @@ function renderIdeaChecker(endpoint,query){
     <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="experiment-results" aria-label="Matching research records"></section>
+    <section id="reported-attempts" aria-label="Earlier reported approaches"></section>
     <details class="experiment-guide"><summary>Coverage and how to interpret a match</summary>
       <p>This checks bounded solving and extraction tests by technique. A page number alone is not a match. Related measurements, controls and source checks appear separately; they are not evidence that a decoding rule was tried. Inspect each record’s scope before treating it as the same test.</p>
-      <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index, not that an idea is new or promising. Coverage notes separately identify broader proposals and missing bounds; they are not sent to the AI as experiment evidence. <a href="#/wiki/scoped-constraints">Check which narrow models are actually ruled out</a>.</p>
+      <p>The AI compares retrieved records; it does not run your idea or prove that all previous research has been searched. Manuscript excerpts can clarify context but never establish that an experiment happened. No match means no matching record in this index, not that an idea is new or promising. Coverage notes and earlier reported approaches are separate from completed research records and are not sent to the AI as experiment evidence. <a href="#/wiki/scoped-constraints">Check which narrow models are actually ruled out</a>.</p>
       <p>Answers may be cached for up to a day and reused for the same question and evidence. Reopening a result does not automatically request a new answer. Sources remain available when AI is busy.</p>
       <p><a href="https://github.com/jelliottdev/jelliottdev.github.io/blob/main/experiments/README.md">Record format and contribution guide</a> · <a href="data/experiments.json" download>Download experiment index</a></p>
     </details>${footer()}</article>`;
@@ -115,7 +128,7 @@ function renderIdeaChecker(endpoint,query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    reset();const idea=input.value.trim();$('#idea-coverage').innerHTML=ideaCoverageView(searchNow?idea:'');$('#reported-attempts').innerHTML=reportedAttemptView(searchNow?idea:'');const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
     const selected=items=>experimentGroups(items.slice(0,12).map(m=>experimentRecords.find(r=>r.id===m.document.id)),r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])]));
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>The registry is ready for new scripts and retested results. Earlier experiments have not been imported. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
