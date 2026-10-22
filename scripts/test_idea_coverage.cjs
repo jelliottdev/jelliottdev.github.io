@@ -98,10 +98,10 @@ ui.methodFamilyUnavailable=true;
 assert(ui.ideaCoverageView('unmatched').includes('could not be loaded'));
 console.log('PASS: family-only matches expose guides, distinguish absent links from negative results, and survive index-load failures');
 
-const detail={esc:ui.esc, records:experiments, families, head:()=>'', footer:()=>''};
+const detail={esc:ui.esc, records:experiments, families, familyData, head:()=>'', footer:()=>''};
 vm.createContext(detail);
 vm.runInContext(fs.readFileSync(require('node:path').join(root,'experiments.js'),'utf8'),detail);
-vm.runInContext('experimentRecords=records; methodFamilyRecords=families;',detail);
+vm.runInContext('experimentRecords=records; methodFamilyRecords=families; methodRecordKinds=familyData.record_kinds; methodRecordKindById=familyData.record_kind_by_id;',detail);
 for(const record of experiments.filter(r=>r.status==='published')){
  const html=detail.experimentMethodGuides(record);
  const expected=families.filter(f=>f.related.includes(record.id));
@@ -113,11 +113,20 @@ for(const record of experiments.filter(r=>r.status==='published')){
  for(const f of families.filter(f=>!f.related.includes(record.id)))
   assert(!html.includes(`section=family-${f.id}\"`),record.id);
  const article=detail.experimentArticle(record);
+ const kind=familyData.record_kinds[familyData.record_kind_by_id[record.id]];
+ assert(article.includes(`<strong>${kind.label}</strong>`));
+ assert(article.includes('section=record-types'));
  assert(article.includes('data-anchor="experiment-methods"'));
  assert(article.indexOf('id="experiment-scope"')<article.indexOf('id="experiment-methods"'));
  assert(article.indexOf('id="experiment-methods"')<article.indexOf('id="experiment-reproduce"'));
 }
 assert.equal(detail.experimentMethodGuides({id:'unmapped-example'}),'');
+assert.equal(detail.experimentRecordType({id:'unmapped-example'}),'');
+vm.runInContext(fs.readFileSync(require('node:path').join(root,'assistant-ui.js'),'utf8'),detail);
+const control=experiments.find(r=>r.id==='seed-crib-controls');
+assert(detail.experimentSearchResult(control).includes('<strong>Control</strong>'));
+vm.runInContext('methodRecordKinds={};',detail);
+assert.equal(detail.experimentRecordType(control),'');
 vm.runInContext('methodFamilyUnavailable=true;',detail);
 assert(detail.experimentMethodGuides(experiments[0]).includes('could not be loaded'));
 assert(!detail.experimentMethodGuides(experiments[0]).includes('No experiment'));

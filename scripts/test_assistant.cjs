@@ -112,9 +112,10 @@ assert(!browse.includes('Retested '),'Full review metadata belongs to the record
 assert(!experimentContext.experimentBrowse([{id:'safe',title:'<img src=x>',summary:'<script>unsafe</script>'}]).includes('<script>'));
 console.log('PASS: family browsing retains one direct link per record, baseline order and escaped content.');
 experimentContext.published=published;
+experimentContext.methodData=JSON.parse(fs.readFileSync(path.join(__dirname,'../data/method-families.json'),'utf8'));
 experimentContext.head=()=>'';
 experimentContext.footer=()=>'';
-vm.runInContext('experimentRecords=published',experimentContext);
+vm.runInContext('experimentRecords=published; methodFamilyRecords=methodData.families; methodRecordKinds=methodData.record_kinds; methodRecordKindById=methodData.record_kind_by_id;',experimentContext);
 const auditSource=fs.readFileSync(path.join(__dirname,'check_article_links.py'),'utf8');
 const auditSectionBlock=auditSource.match(/EXPERIMENT_SECTIONS = \{([\s\S]*?)\}/);
 assert(auditSectionBlock,'Link audit must declare its checked experiment section IDs');

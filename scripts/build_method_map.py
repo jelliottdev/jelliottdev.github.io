@@ -16,7 +16,7 @@ guides={r['id'] for r in read('articles/index.json')}
 assert len({f['id'] for f in families})==len(families)
 parts=['''<p>Start with the kind of operation an idea proposes, then narrow it to a specific rule and test. This map includes decoding methods, ways to search for keys, and diagnostic checks. They overlap: a proposal can combine a route, a numerical key and a reset rule. Combining families adds choices that must be counted.</p>
 <p><strong>A family page is not a completed experiment.</strong> Open its guide to understand the method, or expand its linked records to compare the exact questions tested. The records cover only their stated inputs, variants and bounds. No linked record means a gap in this map, not an untouched or promising approach.</p>''']
-parts.append('<details><summary>What the record types mean</summary><dl>'+''.join(f'<dt>{html.escape(kind["label"])}</dt><dd>{html.escape(kind["description"])}</dd>' for kind in record_kinds.values())+'</dl><p>These describe the role of a record, not its outcome or confidence. A control linked to a method is not a test of that method on every unsolved page.</p></details>')
+parts.append('<p><a href="#/wiki/solving-methods?section=record-types">What the record types mean</a>: distinguish manuscript analyses, controls, audits and reproductions.</p>')
 linked=set()
 for group in dict.fromkeys(f['group'] for f in families):
     anchor=group.lower().replace(',','').replace(' ','-')
@@ -37,6 +37,7 @@ for group in dict.fromkeys(f['group'] for f in families):
             parts.append('<p class="small muted">No experiment linked yet. The guide documents the approach; it is not a result.</p>')
         parts.append('</dd>')
     parts.append('</dl>')
+parts.append('<h2 id="record-types">What the record types mean</h2><dl>'+''.join(f'<dt>{html.escape(kind["label"])}</dt><dd>{html.escape(kind["description"])}</dd>' for kind in record_kinds.values())+'</dl><p>These describe the role of a record, not its outcome or confidence. A control linked to a method is not a test of that method on every unsolved page.</p>')
 parts.append('''<h2 id="narrowing">From a family to a test</h2><p>For example, “try spirals” names a route family. A test must also fix the pages, grid dimensions, padding, starting cell, directions, any added substitution and the criterion for success. Changing one of these choices creates a variant; changing several may create a new experiment family.</p><p>Use <a href="#/experiments">Have we tried it?</a> to inspect published scope. Related methods can be useful even when the exact variant is not covered. <a href="data/method-families.json" download>Download the family map</a>.</p>''')
 (ROOT/'articles/solving-methods.html').write_text('\n'.join(parts)+'\n',encoding='utf-8',newline='\n')
 print(f'Built {len(families)} families linking {len(linked)} distinct experiment records; associations are not exhaustive coverage claims.')

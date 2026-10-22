@@ -1,5 +1,6 @@
  'use strict';
 let experimentRecords, assistantConfig, experimentRequest, ideaCoverageRecords, ideaCoverageUnavailable=false, methodFamilyRecords, methodFamilyUnavailable=false;
+let methodRecordKinds={}, methodRecordKindById={};
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 async function experimentsPage(id, version, query='') {
@@ -12,14 +13,16 @@ async function experimentsPage(id, version, query='') {
     experimentRecords = data.records;
   }
   if (!ideaCoverageRecords || !methodFamilyRecords) {
-    const load=async(path,key)=>{const response=await fetch(path);if(!response.ok)throw Error('Index unavailable');const data=await response.json();if(!Array.isArray(data[key]))throw Error('Invalid index');return data[key];};
+    const load=async(path,key,whole=false)=>{const response=await fetch(path);if(!response.ok)throw Error('Index unavailable');const data=await response.json();if(!Array.isArray(data[key]))throw Error('Invalid index');return whole?data:data[key];};
     const [notes,families]=await Promise.allSettled([
-      load('data/idea-coverage.json','records'),load('data/method-families.json','families')
+      load('data/idea-coverage.json','records'),load('data/method-families.json','families',true)
     ]);
     ideaCoverageUnavailable=notes.status!=='fulfilled';
     ideaCoverageRecords=ideaCoverageUnavailable?[]:notes.value;
     methodFamilyUnavailable=families.status!=='fulfilled';
-    methodFamilyRecords=methodFamilyUnavailable?[]:families.value;
+    methodFamilyRecords=methodFamilyUnavailable?[]:families.value.families;
+    methodRecordKinds=methodFamilyUnavailable?{}:families.value.record_kinds||{};
+    methodRecordKindById=methodFamilyUnavailable?{}:families.value.record_kind_by_id||{};
   }
   if (!assistantConfig) {
     try {const response=await fetch('data/assistant.json');assistantConfig=response.ok?await response.json():{};}catch{assistantConfig={};}
@@ -75,6 +78,11 @@ function experimentFamily(r){
 function experimentScopeLinks(r){
   return [...r.scope.pages.map(id=>`<a href="#/page/${id}">${esc(id.toUpperCase())}</a>`),...(r.scope.artifacts||[]).map(path=>`<a href="${esc(path)}">${esc(path.split('/').pop())}</a>`)].join(', ');
 }
+function experimentRecordType(r){
+  const kind=methodRecordKinds[methodRecordKindById[r.id]];
+  if(!kind?.label)return '';
+  return `<p class="small muted"><strong>${esc(kind.label)}</strong> · <a href="#/wiki/solving-methods?section=record-types">About record types</a></p>`;
+}
 function experimentMethodGuides(r){
   if(methodFamilyUnavailable)return '<section aria-labelledby="experiment-methods"><h2 id="experiment-methods">Method guides</h2><p>The method index could not be loaded. You can still read this experiment and browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></section>';
   const families=(methodFamilyRecords||[]).filter(f=>f.related.includes(r.id));
@@ -103,6 +111,7 @@ function experimentArticle(r){
   return head(r.title,`${esc(outcomes[r.outcome])} · Retested ${esc(r.review.retested_on)}`,'Experiments')+`<article class="reading-width experiment-article">
     <p><a href="#/experiments">← Have we tried it?</a></p>
     <p class="lede">${esc(r.question)}</p>
+    ${experimentRecordType(r)}
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
     <details class="mobile-article-contents"><summary>On this page</summary><nav aria-label="Experiment sections">${sectionLinks}</nav></details>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">Finding</h2><p>${esc(r.finding)}</p>
