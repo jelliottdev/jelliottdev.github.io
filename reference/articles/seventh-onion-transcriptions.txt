@@ -63,6 +63,8 @@ Why the non-rune changes matter
 
 Some differences are small: on LP2-08 one archive separator is a period where the wiki text has a hyphen, and on LP2-56 a hyphen becomes a semicolon. Others are formatting around a number panel or at a page ending. A word-edge or punctuation-aware test can change even though its rune-only frequency count remains identical. If a method strips all separators, say so; if it uses them, cite which transcription and hash supplied them. The transcription-checking guide explains how to turn a disputed mark into a reviewable claim against a particular JPEG.
 
+The joined-page word-boundary sensitivity audit checks the 33 non-rune gap differences on LP2-00–55 one at a time. None changes a rune-token start, token length, or the published 2,896-token histogram under that guide's declared parser. This exact null result does not carry over to a cipher that treats periods, hyphens, quotes, digits or grid cells differently.
+
 Preserved inputs and reproduction
 
 Download the source LP2-00–55 combined text, LP2-56 text, and LP2-57 text. Their exact archived bytes and upstream paths are pinned in the source manifest. The associated 0–55 possibilities output is also preserved, but its generated letter strings are not established plaintext or a solution.
@@ -108,6 +110,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/alphanumeric-grids.html
 - transcription-checking guide
   https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- joined-page word-boundary sensitivity audit
+  https://jelliottdev.github.io/#/experiments/cross-source-word-boundaries
 - LP2-00–55 combined text
   https://jelliottdev.github.io/exports/sources/cicada-2014-seventh-onion/0-55.jpg.runes.txt
 - LP2-56 text
