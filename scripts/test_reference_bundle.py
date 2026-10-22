@@ -57,6 +57,8 @@ def main():
             ["scripts/reproduce_cover_chain.py"],
             ["scripts/reproduce_cover_rsa.py"],
             ["scripts/reproduce_emerson.py"],
+            ["scripts/replay_2013_twitter.py", "--check"],
+            ["scripts/test_replay_2013_twitter.py"],
             ["scripts/inspect_visual_records.py"],
             ["scripts/test_visual_report.py"],
             ["scripts/test_measure_region.py"],

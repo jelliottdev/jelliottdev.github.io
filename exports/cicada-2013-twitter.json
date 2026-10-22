@@ -1,0 +1,56 @@
+{
+  "schema": "liberpedia-2013-twitter-replay-v1",
+  "source_revision": "ade9a02889ef8acbc8cde8edbfd0a785c369f4c3",
+  "manifest_sha256": "6a535ecbe83509ee253f7c233600f4f7efaf95ef74c3285b3161f12bfd79d12a",
+  "inputs_sha256": {
+    "full.txt": "e822d186a72153f29c6c995ab307d2a27b9f990e4e9d59d4f658302b774edbe4",
+    "twitter.bin": "defa117644978755c9d6e5cf9ed3dc4179dc63e5b6da877f1212ca2d24ce3776",
+    "761.mp3": "83008217439110c3b824898af73b99cb2cf0657dda88cb363c3aa34a4ec0a460",
+    "gematria.jpg": "d4736b09cfac03097efcb5c2f48ffc71f46700835fc09f7549283956580eb35d",
+    "gematria.jpg.asc": "a7ff511db6bd352be0f41f1f512df127fa06b9e7f598bf072cd1b083be3b40fc"
+  },
+  "tweet_dump": {
+    "rows": 988,
+    "lowest_offset": 0,
+    "highest_offset": 64155,
+    "last_row_bytes": 12,
+    "contiguous_bytes": 64167,
+    "gaps": 0,
+    "overlaps": 0,
+    "reconstructed_matches_archived_twitter_bin": true
+  },
+  "xor": {
+    "operation": "twitter.bin[i] XOR 761.mp3[i], for i=0..64166",
+    "audio_bytes": 4010732,
+    "bytes_used": 64167,
+    "output_bytes": 64167,
+    "output_sha256": "d4736b09cfac03097efcb5c2f48ffc71f46700835fc09f7549283956580eb35d",
+    "matches_archived_gematria_jpeg": true,
+    "jpeg_dimensions": [
+      598,
+      842
+    ]
+  },
+  "outguess_payload": {
+    "archived_bytes": 1443,
+    "sha256": "a7ff511db6bd352be0f41f1f512df127fa06b9e7f598bf072cd1b083be3b40fc",
+    "fresh_retest_receipt": "exports/cicada-2013-twitter-outguess.json"
+  },
+  "whitespace": {
+    "rule": "Each nonempty space/tab-only payload row is read left to right; space=0, tab=1; consecutive groups of eight bits form ASCII bytes.",
+    "rows": 4,
+    "bits_per_row": [
+      240,
+      200,
+      80,
+      32
+    ],
+    "decoded_lines": [
+      "Come to emiwp4muu2ktwknf.onion",
+      "We shall await you there.",
+      "Good luck.",
+      "3301"
+    ]
+  },
+  "limits": "This replays preserved archived bytes and the hidden whitespace text. It does not authenticate the PGP signature, recreate the live 2013 Twitter feed, or contact the historical onion service."
+}

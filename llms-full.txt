@@ -6223,6 +6223,8 @@ Each link below opens a worked step with preserved inputs and a downloadable rep
 
 	2013 Liber AL	44 lookups and two literal digits	Use numbered verses; remove spaces but retain punctuation.
 
+	2013 Twitter to Gematria	988 offset records, audio XOR and OutGuess payload	Sort the hex offsets before reassembly; the XOR uses only the audio prefix.
+
 	2014 Emerson	The historical book-cipher control	Use the declared paragraph, sentence, word and letter rules.
 
 
@@ -6239,7 +6241,7 @@ For the details most likely to prevent a successful replay, start with post orde
 
 The next opening image carried a book riddle and coordinates pointing to Liber AL vel Legis. The chapter-and-verse counting guide explains the published rules and their current replay status. The reported output led to a disk image.
 
-The disk-image inventory records audio, data files and a boot filesystem. The Twitter reconstruction account follows offset-tagged hexadecimal data and XOR operations to later artifacts, including Gematria Primus. These are multi-file transformations: simply knowing “XOR was used” leaves the operands, offsets and byte lengths unspecified.
+The disk-image inventory records audio, data files and a boot filesystem. Our Twitter-to-Gematria replay sorts 988 offset-tagged hex records into a 64,167-byte stream, XORs it with the same number of bytes from 761.mp3, and checks the resulting JPEG and hidden payload against the pinned archive. The archival account provides the source trail; our replay does not reconstruct the live 2013 feed.
 
 The archived Instar Emergence audio connects to material discussed in the later manuscript. Our prime-sum guide documents the parable metadata connection. That cross-year link is distinct from claiming the audio decrypts an unsolved page.
 
@@ -6253,7 +6255,7 @@ How this history will be documented
 
 This is a route into the historical material, not yet a complete replay of every stage. Each detailed walkthrough needs the original artifact, the clue that motivated the next operation, its exact transformation and output, and a statement of what was freshly checked. Preserve branches and failed or unavailable historical services instead of drawing a falsely seamless chain.
 
-The first JPEG’s byte-level trail and the subreddit’s ordered post inventory now have downloadable replays. The Liber AL coordinates also have a complete archived-text replay. Blake’s second-chance code now has a complete text-file replay and an illustrated line-layout comparison; fine punctuation in the historical image remains uncertified. The later multi-file stages remain to be reproduced. Historical phone numbers and onion addresses belong in records as outputs; reproducing an old lookup does not require contacting whoever might control them today.
+The first JPEG’s byte-level trail and the subreddit’s ordered post inventory have downloadable replays. The Liber AL coordinates have a complete archived-text replay. Blake’s second-chance code has a complete text-file replay and an illustrated line-layout comparison; fine punctuation in the historical image remains uncertified. The 2013 Twitter-to-Gematria byte chain has also been replayed, while other later multi-file stages remain. Historical phone numbers and onion addresses belong in records as outputs; reproducing an old lookup does not require contacting whoever might control them today.
 
 Sources, related references, and files
 - Start with the first image: an illustrated, reproducible walkthrough; 2012 opening JPEG
@@ -6268,6 +6270,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#blake-replay
 - 2013 Liber AL
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#liber-al-replay
+- 2013 Twitter to Gematria; Twitter-to-Gematria replay
+  https://jelliottdev.github.io/reference/articles/2013-twitter-gematria.html
 - 2014 Emerson; reproduction record
   https://jelliottdev.github.io/#/experiments/emerson-book-cipher-control
 - contemporary solver account
@@ -6284,7 +6288,7 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/historical-book-codes.html#liber-al
 - disk-image inventory
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/002-3301/README.md
-- Twitter reconstruction account
+- archival account
   https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/003-twitter/README.md
 - prime-sum guide
   https://jelliottdev.github.io/reference/articles/prime-sums.html
@@ -7537,6 +7541,92 @@ Sources, related references, and files
   https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2012
 
 Article: https://jelliottdev.github.io/reference/articles/2012-opening.html
+
+
+---
+
+2013: from Twitter offsets to Gematria Primus
+
+Reassemble 988 offset-tagged records, XOR the audio bytes, and extract the signed whitespace message.
+
+The 2013 puzzle reached Gematria Primus through a byte reconstruction, not through a rune cipher. An archived account of the Twitter stage preserves offset-tagged hex strings, the assembled byte stream, its JPEG result and the extracted hidden message. We rebuilt each transformation from those preserved files. This verifies the archived byte path; it does not reconstruct the entire live Twitter feed.
+
+[Image: Six-stage reconstruction from 988 offset-tagged records through the XOR with 761.mp3, the Gematria JPEG, OutGuess and a whitespace-encoded message.]
+The checked route. Each arrow is a transformation reproduced locally against a separately preserved output. Download diagram.
+
+
+1. Put the offset records in byte order
+
+The archived full.txt has 988 records of the form offset: hexadecimal bytes. The offset is hexadecimal too. The dump runs in descending order, so its first line is not the beginning of the file. Sort numerically by offset, decode each hex string and place its bytes at that offset. The rows cover offsets 0 through 64,166 with no gaps or overlaps. Their 64,167-byte concatenation matches the archived twitter.bin byte for byte.
+
+This matters because joining lines in their printed order, treating offsets as decimal, or padding an apparent gap would change every later result. The replay report records the row count, offset coverage and source hashes; the source manifest pins the upstream Git revision and exact files.
+
+
+2. XOR the stream with the start of the audio file
+
+The archived disk-image inventory includes 761.mp3. For byte position i from 0 through 64,166, compute twitter.bin[i] XOR 761.mp3[i]. Only the first 64,167 bytes of the 4,010,732-byte MP3 are used. The output exactly matches the archive’s 64,167-byte gematria.jpg; its SHA-256 is d4736b09cfac03097efcb5c2f48ffc71f46700835fc09f7549283956580eb35d. A JPEG header check gives 598 × 842 pixels.
+
+Download 761.mp3 · Download the exact reconstructed JPEG. These files are preserved as bytes, not recompressed for display.
+
+[Image: The archived black-and-white Gematria Primus sheet, showing 29 runes with their letters and prime values and a cicada illustration below.]
+The JPEG produced by the XOR. Its visible table gives the Gematria Primus alphabet: rune forms, letters and prime values. The next message is embedded in the JPEG data; it is not readable from this visible table.
+
+
+3. Extract the concealed signed text
+
+A fresh outguess -r gematria.jpg extracted.asc run recovered 1,443 bytes. They match the archive’s gematria.jpg.asc exactly. The run reported seed 17; the retest receipt records the executable, input and output hashes. OutGuess is a separate layer from the audio XOR. Our byte check does not verify the PGP signature attached to the extracted text.
+
+Four nonempty rows of the payload contain only spaces and tabs. Reading a space as 0 and a tab as 1, then grouping every eight bits as an ASCII byte, yields:
+
+Come to emiwp4muu2ktwknf.onion
+We shall await you there.
+Good luck.
+3301
+
+The four rows contain 240, 200, 80 and 32 bits respectively. The address is a historical output of this reconstruction, not a link to a service we contacted.
+
+
+Reproduce and inspect the limits
+
+Download the reference-data bundle, extract it, and run python scripts/replay_2013_twitter.py --check. It verifies the five source files against both SHA-256 and their pinned Git blob hashes, checks row coverage, reassembles the byte stream, repeats the XOR and decodes the whitespace message. Run python scripts/test_replay_2013_twitter.py for an independent byte-by-byte assembly and reverse-XOR check. If you have OutGuess, add --outguess path/to/outguess to the first command to re-extract and compare the hidden payload.
+
+Replay script · Independent checker · Machine-readable result. The archive, rather than a captured live 2013 feed, is the input to these checks. The result shows how this copy of the Gematria table was produced and how its hidden message was read; it does not establish how the feed was populated in real time, authenticate the signed message, or imply a key for the unsolved Liber Primus pages.
+
+Sources, related references, and files
+- archived account of the Twitter stage
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/003-twitter/README.md
+- Six-stage reconstruction from 988 offset-tagged records through the XOR with 761.mp3, the Gematria JPEG, OutGuess and a whitespace-encoded message.; Download diagram
+  https://jelliottdev.github.io/exports/figures/cicada-2013-twitter-chain.svg
+- full.txt
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/full.txt
+- twitter.bin
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/twitter.bin
+- replay report; Machine-readable result
+  https://jelliottdev.github.io/exports/cicada-2013-twitter.json
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/manifest.json
+- archived disk-image inventory
+  https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/002-3301/README.md
+- Download 761.mp3
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/761.mp3
+- Download the exact reconstructed JPEG; The archived black-and-white Gematria Primus sheet, showing 29 runes with their letters and prime values and a cicada illustration below.
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/gematria.jpg
+- Gematria Primus alphabet
+  https://jelliottdev.github.io/#/alphabet
+- gematria.jpg.asc
+  https://jelliottdev.github.io/exports/sources/cicada-2013-twitter/gematria.jpg.asc
+- retest receipt
+  https://jelliottdev.github.io/exports/cicada-2013-twitter-outguess.json
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- Replay script
+  https://jelliottdev.github.io/scripts/replay_2013_twitter.py
+- Independent checker
+  https://jelliottdev.github.io/scripts/test_replay_2013_twitter.py
+- Liber Primus pages
+  https://jelliottdev.github.io/#/reader/lp2-00
+
+Article: https://jelliottdev.github.io/reference/articles/2013-twitter-gematria.html
 
 
 ---
