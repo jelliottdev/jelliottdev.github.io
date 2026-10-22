@@ -1,0 +1,61 @@
+{
+  "schema": "liberpedia-2014-response-replay-v1",
+  "source_revision": "10733feb487bb8beb9966d534727ee5897aa54fc",
+  "source_manifest_sha256": "81d0557f42009af374bb951fcad7a0bdb0b4da46c3aebb406ba1b8683e5795ac",
+  "source_files": {
+    "README.md": {
+      "bytes": 1250,
+      "sha256": "d835106939230b6865987ab0e52a9208bab61cbddc61e2c440ef5510a74de2ba"
+    },
+    "index.html": {
+      "bytes": 541,
+      "sha256": "01d06243b1f019d254c3dd8dea61ba14866d081e8e8883e176f4222f4b97509a"
+    },
+    "index.html.2": {
+      "bytes": 3641310,
+      "sha256": "0b642c3e25a9d19626e1f218797b96012b1f3865bf644980e690d8b1df0b4a81"
+    }
+  },
+  "initial_response": {
+    "marker": "<!--Patience is a virtue-->",
+    "hex_decoded_bytes": 256,
+    "prefix_of_complete_response": false
+  },
+  "complete_response": {
+    "marker": "<!--761-->",
+    "hex_decoded_bytes": 1820649,
+    "operation": "XOR each decoded byte with 0xFF, split at fixed byte offsets, then reverse the third segment"
+  },
+  "images": [
+    {
+      "page": "lp1-00",
+      "offset_in_inverted_stream": 0,
+      "bytes": 168876,
+      "reverse_segment": false,
+      "sha256": "184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7",
+      "matches_hosted_original": true
+    },
+    {
+      "page": "lp1-01",
+      "offset_in_inverted_stream": 168876,
+      "bytes": 1476614,
+      "reverse_segment": false,
+      "sha256": "71f4bd03c692ede630091272597d2b18702184ed32fdd1977ef0ba7306632b46",
+      "matches_hosted_original": true
+    },
+    {
+      "page": "lp1-02",
+      "offset_in_inverted_stream": 1645490,
+      "bytes": 175159,
+      "reverse_segment": true,
+      "sha256": "0297572bbc2d234f84df634c6f0474011ff5df66c2ce987c3bb7aa0c635799b4",
+      "matches_hosted_original": true
+    }
+  ],
+  "next_step": "The existing cover-chain replay extracts signed hex streams from these three JPEGs, XORs them and reorders a 5-by-14 ciphertext matrix.",
+  "limits": [
+    "These are archived response captures, not a live request to the historical service.",
+    "The short initial capture is not a byte prefix of the complete response; this replay does not infer the server's update schedule.",
+    "Matching JPEG bytes does not itself verify their embedded signatures or solve the later transposition; those checks are documented separately."
+  ]
+}

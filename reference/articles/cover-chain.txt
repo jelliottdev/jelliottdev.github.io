@@ -1,8 +1,27 @@
-The cover payload chain
+The LP1 three-image chain: response, XOR and columns
 
-The cover, warning, and chapter title combine into a signed message and a transposition.
+Recover the first three manuscript JPEGs from the archived response, then combine their signed payloads and reorder the resulting ciphertext.
 
 Looking for the cover with compasses? See the illustrated cover and its Blake artwork. It is separate from the title pages discussed here.
+
+Before the three images: the preserved server response
+
+The compasses-cover RSA replay produces a historical address. A pinned archive preserves one short response capture and a later complete capture from that stage. The second begins with <!--761-->, followed by hexadecimal data. These are hosted source files, not current responses from the old address.
+
+Decode the complete response’s hex, XOR every resulting byte with 0xFF, and split the 1,820,649-byte result into segments of 168,876, 1,476,614, and 175,159 bytes. Reverse the byte order of the third segment. The three outputs match the original JPEGs for LP1-00, LP1-01, and LP1-02 byte for byte. Splitting first or omitting the third reversal fails that exact comparison.
+
+	Source range after inversion	Further step	Output
+
+	0–168,875	None	LP1-00 JPEG
+
+	168,876–1,645,489	None	LP1-01 JPEG
+
+	1,645,490–1,820,648	Reverse all segment bytes	LP1-02 JPEG
+
+
+Run python scripts/replay_2014_onion_response.py --check after extracting the reference-data bundle. Add --extract-dir recovered-pages to save the three checked JPEGs without overwriting existing files. The script, replay report and source manifest pin every input and output hash. The archive’s original notes are preserved too.
+
+The 541-byte first capture contains only 256 decoded hex bytes and is not a prefix of the complete response. The archive describes a changing response, but these two files alone do not establish its exact update schedule. The replay begins from the saved complete capture and makes no request to the historical service.
 
 
 Three inputs
@@ -63,24 +82,40 @@ Pinned historical walkthrough. Recipes reproduce published controls; they are no
 Sources, related references, and files
 - the illustrated cover and its Blake artwork
   https://jelliottdev.github.io/reference/articles/illustrated-cover.html
-- LP1-00, Liber Primus; LP1-00: title
+- compasses-cover RSA replay
+  https://jelliottdev.github.io/reference/articles/cover-rsa.html
+- one short response capture
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage03/index.html
+- later complete capture
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage03/index.html.2
+- LP1-00; LP1-00, Liber Primus; LP1-00: title
   https://jelliottdev.github.io/reference/lp1-00.html
-- LP1-01, the warning; LP1-01: warning
+- LP1-01; LP1-01, the warning; LP1-01: warning
   https://jelliottdev.github.io/reference/lp1-01.html
-- LP1-02, Chapter 1 — Intus; LP1-02: chapter title
+- LP1-02; LP1-02, Chapter 1 — Intus; LP1-02: chapter title
   https://jelliottdev.github.io/reference/lp1-02.html
+- LP1-00 JPEG; LP1-00: title
+  https://jelliottdev.github.io/images/lp1-00.jpg
+- LP1-01 JPEG; LP1-01: warning
+  https://jelliottdev.github.io/images/lp1-01.jpg
+- LP1-02 JPEG; LP1-02: chapter title
+  https://jelliottdev.github.io/images/lp1-02.jpg
+- reference-data bundle
+  https://jelliottdev.github.io/downloads/reference-data.zip
+- script
+  https://jelliottdev.github.io/scripts/replay_2014_onion_response.py
+- replay report
+  https://jelliottdev.github.io/exports/cicada-2014-response.json
+- source manifest
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage03/manifest.json
+- original notes
+  https://jelliottdev.github.io/exports/sources/cicada-2014-stage03/README.md
 - OutGuess payloads
   https://jelliottdev.github.io/reference/articles/outguess.html
 - verify
   https://jelliottdev.github.io/reference/articles/pgp-signatures.html
 - Visible headings and the two title pages
   https://jelliottdev.github.io/reference/articles/title-pages.html
-- LP1-00: title
-  https://jelliottdev.github.io/images/lp1-00.jpg
-- LP1-01: warning
-  https://jelliottdev.github.io/images/lp1-01.jpg
-- LP1-02: chapter title
-  https://jelliottdev.github.io/images/lp1-02.jpg
 - small image embedded in LP1-03
   https://jelliottdev.github.io/reference/articles/lp1-03-embedded-image.html
 - What XOR means, with a worked byte example
