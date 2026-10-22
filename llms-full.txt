@@ -24369,6 +24369,40 @@ Possible subfamilies include binary feature coding, Morse-like durations, Braill
 
 A keyboard-layout proposal also needs a complete mapping: identify the physical or logical layout, how runes are assigned to keys, and which movement or substitution produces output. “QWERTY” alone supplies neither a rune-to-key assignment nor a rule for keys at an edge. If the same mapping applies independently to each rune, compare it with fixed substitution; if positions or prior keys change the rule, record that additional state.
 
+Grouping comes before decoding
+
+Consider the invented binary feature stream 1 0 1 1 0 0. It could represent dark and pale marks after a measurement rule has been fixed. Interpreting the bits as unsigned numbers, most significant bit first, gives different values under different groupings:
+
+	Rule	Groups	Values
+	Pairs	10 | 11 | 00	2, 3, 0
+	Triples	101 | 100	5, 4
+	Reverse the whole stream, then triples	001 | 101	1, 5
+	Exchange 0 and 1, then triples	010 | 011	2, 3
+
+None of these values is a letter until a symbol table has also been chosen. Reading a numeric value as a Latin alphabet position adds another convention, including whether counting starts at zero or one. A named encoding should use its declared table; a custom table belongs in the report in full.
+
+If every internal gap may independently become a boundary, six marks allow 2⁵ = 32 partitions before any symbol table is applied. Most may be invalid under a particular encoding, but silently dropping invalid groups changes the procedure. Record invalid groups and the policy for incomplete final groups rather than joining or splitting them whenever a word seems close.
+
+A feature is not yet a bit
+
+Start with source coordinates and measurements: for example, the brightness of a dot crop, the width of a gap or the length of a stroke. Then state the classification rule. A pale dot, an absent dot and a mark that cannot be measured reliably are different observations. Assigning all three the value zero discards that distinction.
+
+A threshold selected after inspecting decoded text is a searched parameter. With m distinct measured brightness values and a rule “one if brightness is greater than t,” moving t can produce at most m + 1 different classifications, including the two constant classifications. Equal measurements change class together. Testing a thousand thresholds need not mean testing a thousand distinct bit streams, but trying different crops or brightness measures introduces additional choices.
+
+Keep an uncertainty flag alongside each measurement. For u independently ambiguous bits, allowing either value produces up to 2^u assignments. A photograph may give correlated uncertainties, so this is a count of allowed settings, not a probability model. Use image evidence to narrow uncertainty before using language output to choose it.
+
+Use one declared orientation rule
+
+Specify whether a mark is read in page order, along a drawn path, within repeated cells or around a central point. Mirroring the entire image, reversing the sequence of cells and mirroring each cell are different operations. If each cell may independently rotate or reflect, those local choices need to be counted as well.
+
+For a square cell, permitting four quarter-turn rotations with or without reflection gives eight transformation settings. Symmetric cells can make some settings identical. A rule choosing one transformation for the whole inscription has at most eight settings; allowing each of n cells to choose independently has up to 8^n. A readable result obtained by choosing orientations cell by cell needs evidence for that selection rule.
+
+Test the claimed relationship
+
+If the proposal claims that the order of dark and pale marks carries information, a count-preserving shuffle can test order while retaining the number of each kind. If it claims that marks form spatial cells, shuffling only the already decoded letters does not test the cell construction. Choose controls that preserve the features taken as given while disrupting the proposed relationship.
+
+Run the same grouping, orientation, threshold and table search on controls. Keep the entire decoded sequence, not just the best word. Source measurements and interpretation should remain separate downloads so another person can test a different rule without inheriting the first reading. See null models, geometric constructions and source audits.
+
 What a test must specify
 
 Define measured features, grouping, orientation, ordering, thresholds, symbol table and invalid-group handling. Keep original image measurements separate from their interpretation. State how missing or ambiguous marks are represented.
@@ -24386,6 +24420,12 @@ All solving-method families · Search space and bounds · Documenting a test · 
 Sources, related references, and files
 - fixed substitution
   https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- geometric constructions
+  https://jelliottdev.github.io/reference/articles/method-geometry.html
+- source audits
+  https://jelliottdev.github.io/reference/articles/method-source-audits.html
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
