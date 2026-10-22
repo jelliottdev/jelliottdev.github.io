@@ -23859,6 +23859,60 @@ Major variants
 
 Variants include continuous additive keys, passage restarts, page-dependent offsets, alternating sources and text-derived numerical streams. Referenced philosophical works can motivate candidates, but thematic similarity does not validate their decoding output.
 
+Three different uses of a text
+
+	Method	How the source is used	What fixes the alignment?
+
+	Running key	A source passage supplies successive shifts or other key values.	Passage, starting offset and advancement rules.
+
+	Repeating key	A short sequence cycles when it reaches its end.	Key length, starting phase and resets.
+
+	Book coordinates	Each coordinate selects a location in a reference text.	Edition and counting rules for each coordinate component.
+
+
+A historical book-code reproduction demonstrates its coordinate convention. It does not establish that an unsolved passage uses the same book as a running key. Likewise, a quotation or literary reference can suggest a source to test without selecting its offset or normalization.
+
+A source window becomes a key
+
+Take the invented source indices [9, 4, 1, 7, 2, 8]. Starting at zero-based offset 1, a four-symbol window gives key [4, 1, 7, 2]. Add it to plaintext indices modulo 29:
+
+	Position	Plaintext	Source key	Ciphertext
+
+	0	3	4	7
+	1	0	1	1
+	2	5	7	12
+	3	6	2	8
+
+
+Subtracting that window recovers [3, 0, 5, 6]. If the next key symbol is needed, it is the next source value, 8; cycling back to 4 would instead apply a repeating-key rule. A source that ends needs an explicit stop, restart or extension policy.
+
+Count passages before choosing one
+
+For a source of M converted symbols and an n-symbol target, there are max(0, M − n + 1) contiguous windows of length n without wrapping. The six-symbol source above has three four-symbol windows. For several fixed sources, sum their window counts; identical passages can produce duplicate keys, so retain both configuration counts and distinct key counts.
+
+Source conversion precedes this count. Counting Latin characters in one source and rune symbols in another changes the meaning of an offset. Editions, footnotes, headings, spelling normalization and multi-letter rune segmentation can all change the stream. Save the converted source and a trace back to the original locations.
+
+Allowing independent passage choices for every word or page changes the search substantially. If each of w words may choose any of m windows, there are m^(w) assignments before other parameters. Choosing different sources or boundaries whenever output stops looking plausible belongs in the adaptive-choice accounting.
+
+Reusing the same aligned key has a consequence
+
+Under additive encoding, C₁ = P₁ + K and C₂ = P₂ + K imply C₁ − C₂ = P₁ − P₂ mod 29. The key cancels only where it is the same and aligned. This exposes a relation between plaintexts; it does not reveal either plaintext by itself. Different offsets or interruption rules invalidate that direct comparison.
+
+Check the arithmetic
+
+source = [9, 4, 1, 7, 2, 8]
+plain = [3, 0, 5, 6]
+key = source[1:1 + len(plain)]
+cipher = [(p + k) % 29 for p, k in zip(plain, key)]
+assert cipher == [7, 1, 12, 8]
+assert [(c - k) % 29 for c, k in zip(cipher, key)] == plain
+other_plain = [8, 0, 2, 1]
+other_cipher = [(p + k) % 29 for p, k in zip(other_plain, key)]
+assert [(a - b) % 29 for a, b in zip(cipher, other_cipher)] == [
+    (a - b) % 29 for a, b in zip(plain, other_plain)]
+
+This invented example checks the stated window and key-reuse relation. It does not test a candidate book against the manuscript.
+
 What a test must specify
 
 Freeze source files and hashes, normalization, rune segmentation, starting offsets, key direction and restart rules. State whether headings, punctuation and footnotes contribute symbols. Bound both the book list and the offsets.
@@ -23874,6 +23928,12 @@ No completed experiment is linked to this family in the current catalog. That de
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- book-code reproduction
+  https://jelliottdev.github.io/reference/articles/book-ciphers.html
+- literary reference
+  https://jelliottdev.github.io/reference/articles/works-and-influences.html
+- adaptive-choice accounting
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
