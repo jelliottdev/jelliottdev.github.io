@@ -24047,6 +24047,31 @@ Major variants
 
 Variants include first and last runes, initials after transliteration, fixed interior positions and extraction driven by a separate number sequence. These can differ when one rune represents several Latin letters.
 
+Follow one rule across every unit
+
+Use three invented units: [2, 8, 4], [1, 7] and [6, 0, 5]. These are symbol indices, not a manuscript reading.
+
+	Declared extraction	Output	Choices involved
+	First symbol of every unit	2, 1, 6	One fixed rule
+	Last symbol of every unit	4, 7, 5	A second fixed rule
+	First, last, first	2, 7, 6	A specified alternating rule
+	Choose first or last separately for each unit	Eight candidate outputs	2³ endpoint settings
+	Choose any symbol separately from each unit	Eighteen candidate outputs	3 × 2 × 3 position settings
+
+An alternating rule fixed in advance is one candidate. Discovering the same pattern while trying endpoint combinations belongs to the larger search. With n units, independent first-or-last choices give 2^n settings; arbitrary positions give the product of the unit lengths. Repeated symbols can make different settings produce identical outputs.
+
+Count source symbols before transliterating
+
+Suppose a unit contains two source symbols transliterated as TH and A. Its first source symbol is the whole TH symbol; its first Latin character is only T. Selecting after transliteration can therefore split a symbol that selecting before transliteration keeps intact. Record both the selected source position and its displayed transliteration. See transcription checking.
+
+Short units also need a rule. Selecting the third symbol from a two-symbol unit is undefined unless the method specifies a policy such as skipping, wrapping or rejecting that candidate. These policies produce different outputs and different search spaces. Likewise, a word continued across a printed line or page boundary is not automatically two separate words.
+
+Choose controls for the claim being made
+
+If the claim is that the extracted symbols form an unusually coherent sequence, shuffling the extracted symbols tests order while preserving their counts. If the claim is that word beginnings are special, shuffling the already extracted output cannot test that claim: the endpoints have already been selected. A comparison could instead sample one position from each unchanged unit, with the sampling rule declared in advance. That asks a different question and has its own assumptions.
+
+When a search tries first symbols, last symbols, multiple unit definitions, reversals and several languages, each control must receive that same search before its best score is compared with the observed best score. Report the full extraction, including unconvincing continuations, rather than only a short matching word. See null models and automatic search and candidate scoring.
+
 What a test must specify
 
 Define units and their boundaries, source layer, heading treatment, indexing origin and behavior for short units. Specify whether positions count runes, transliteration characters or bytes. Fix any alternating or repeating selection pattern before viewing the output.
@@ -24062,6 +24087,12 @@ No completed experiment is linked to this family in the current catalog. That de
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- transcription checking
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html
+- null models
+  https://jelliottdev.github.io/reference/articles/null-models.html
+- automatic search and candidate scoring
+  https://jelliottdev.github.io/reference/articles/method-automatic-search.html
 - All solving-method families
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Search space and bounds
@@ -24532,6 +24563,36 @@ These count parameter settings under the stated assumptions. Identical objects o
 Major variants
 Variants include reordering pages within a section, reordering intact sections, reversal, cyclic rotation and adjacency constraints motivated by artwork or text. Rotation may be equivalent under one score but distinct under a cipher with a fixed starting state.
 
+Move the pages or reverse their contents?
+
+Consider three invented pages: A contains 0 1 2, B contains 3 4, and C contains 5 6. Their labels identify source pages throughout the search. A candidate's first page need not be source page A.
+
+	Operation	Resulting stream	What changed?
+	Original A, B, C	0 1 2 | 3 4 | 5 6	Reference order
+	Order C, A, B	5 6 | 0 1 2 | 3 4	Whole pages move; their contents retain their order
+	Reverse page order	5 6 | 3 4 | 0 1 2	C, B, A, with each page intact
+	Reverse the complete stream	6 5 | 4 3 | 2 1 0	Both page order and every page's contents reverse
+
+The bars show page boundaries; they are not additional symbols. Rotating a page image, reading its lines backwards and reversing its entire rune stream are also different operations. A proposal needs to specify which it means.
+
+Can the score even distinguish the orders?
+
+Reordering intact pages preserves every single-symbol count, so whole-stream IoC and single-symbol entropy cannot choose an order. A sum of independent per-page scores cannot choose one either: its terms are merely added in a different order.
+
+Adjacent-pair counts change only at the joins. In the original example, the joins are 2 → 3 and 4 → 5. In C, A, B they are 6 → 0 and 2 → 3. Every pair inside A, B and C remains unchanged. A whole-stream bigram score can respond to those joins, but most of its evidence is identical across candidates.
+
+More generally, for k nonempty intact pieces containing N symbols, exactly k − 1 of the N − 1 adjacent pairs cross piece boundaries. Between any two orders, the sum of absolute changes in the pair-count table is at most 2(k − 1). This follows because at most k − 1 old joins are removed and that many new joins are added. The bound assumes unchanged contents and no inserted separators, wrapping or decoding step. Reversing pieces can change their internal pairs too.
+
+Reflowing the stream into columns, applying a continuous keystream, or scoring longer sequences may make ordering matter much more. State that mechanism explicitly. Otherwise a large search may be optimizing a statistic that is exactly constant, or one that depends on only a few boundary pairs.
+
+Ordering and cipher state
+
+If a decoder restarts with the same fixed key and state on each page, moving a page does not change that page's decoded contents. If state instead continues across pages, moving an earlier page can change the key positions applied to later pages. Unequal page lengths make this especially important. See key alignment and feedback rules.
+
+Choosing new split points is a separate search from ordering fixed pieces. For an N-symbol stream divided into exactly k nonempty contiguous pieces, there are C(N − 1, k − 1) boundary selections. For each selection there are k! orders, or k! × 2^k settings if each piece can also be reversed. These multiply to count settings, not necessarily distinct outputs. For example, choosing three pieces from seven symbols gives 15 splits and 90 split/order settings before reversals.
+
+Do not treat an uncertain printed page join as permission to try arbitrary boundaries without counting them. Preserve the original transcription and record candidate changes separately; the page-join inventory describes the source evidence.
+
 What a test must specify
 Define the movable objects and their original order, allowed permutations, reversals, reset rules and optimization criterion. Keep page identities separate from their positions in a candidate. Say whether ordering constraints came from independent evidence or were chosen after a desirable result appeared.
 
@@ -24546,6 +24607,16 @@ Section-preserving shuffles: preserves section-specific word lengths in the cont
 All method families · Transposition · Page joins · Selection effects
 
 Sources, related references, and files
+- IoC
+  https://jelliottdev.github.io/reference/articles/index-of-coincidence.html
+- single-symbol entropy
+  https://jelliottdev.github.io/reference/articles/rune-entropy.html
+- key alignment
+  https://jelliottdev.github.io/reference/articles/key-alignment.html
+- feedback rules
+  https://jelliottdev.github.io/reference/articles/method-feedback.html
+- page-join inventory; Page joins
+  https://jelliottdev.github.io/reference/articles/transcription-checking.html#page-joins
 - All 24 orders of four intact LP1 sections
   https://jelliottdev.github.io/#/experiments/lp1-section-order
 - Six layout widths
@@ -24556,8 +24627,6 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/solving-methods.html
 - Transposition
   https://jelliottdev.github.io/reference/articles/transposition.html
-- Page joins
-  https://jelliottdev.github.io/reference/articles/transcription-checking.html#page-joins
 - Selection effects
   https://jelliottdev.github.io/reference/articles/null-models.html
 
