@@ -81,7 +81,10 @@ for(const [query,id] of [
  ['entropy','distributions'],
  ['IoC','distributions'],
  ['block cipher','blocks'],
- ['beam search','automatic-search']
+ ['beam search','automatic-search'],
+ ['Try a SAT solver','constraints'],
+ ['Use Z3 on page 31','constraints'],
+ ['Try constraint solving','constraints']
 ])assert.equal(Coverage.families(families,query)[0]?.id,id,query);
 assert.equal(Coverage.families(families,'LP2-31').length,0);
 assert.equal(Search.experimentDocs(families).length,0);

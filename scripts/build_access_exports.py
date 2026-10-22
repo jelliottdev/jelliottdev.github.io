@@ -215,6 +215,9 @@ for path in ['exports/reading-fixed-points.json','exports/reading-fixed-point-ex
 for path in ['scripts/switching_choices_example.py','exports/switching-choices-example.json','exports/figures/switching-choices-example.svg']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Analysis figure' if path.endswith('.svg') else 'Mathematical illustration')
  files[-1].update(guide='method-adaptive-rules',aliases=['switching rules','sign choices','distinct outputs'])
+for path in ['scripts/constraint_example.py','exports/constraint-example.json']:
+ register(path,'Reproduction script' if path.startswith('scripts/') else 'Mathematical illustration')
+ files[-1].update(guide='method-constraints',aliases=['constraint solving','SAT solver','SMT solver'])
 for path in ['scripts/route_order_example.py','exports/route-order-example.json','exports/figures/route-order-example.svg']:
  register(path,'Reproduction script' if path.startswith('scripts/') else 'Analysis figure' if path.endswith('.svg') else 'Mathematical illustration')
  files[-1].update(guide='method-routes',aliases=['route cipher','row order','column order'])

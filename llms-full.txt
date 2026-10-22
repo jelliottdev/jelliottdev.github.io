@@ -6832,6 +6832,12 @@ Treat generated readings as proposals requiring independent, reproducible checks
 No experiment linked yet. The guide documents the approach; it is not a result.
 
 
+Constraint solving, SAT and SMT
+Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search.
+
+No experiment linked yet. The guide documents the approach; it is not a result.
+
+
 
 Diagnosis and validation
 
@@ -7161,6 +7167,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/works-and-influences.html
 - AI-assisted candidate interpretation
   https://jelliottdev.github.io/reference/articles/method-ai-readings.html
+- Constraint solving, SAT and SMT
+  https://jelliottdev.github.io/reference/articles/method-constraints.html
 - Period and key-length diagnostics
   https://jelliottdev.github.io/reference/articles/periodic-ioc.html
 - LP2-31: periodic IoC for periods 2-20
@@ -23575,6 +23583,8 @@ Fix the alphabet order, direction of the map, treatment of non-rune marks, text 
 
 How to evaluate a result
 
+The constraint-solving example shows how a repeated input can reject an incompatible crib, and why a compatible short crib can leave several complete keys.
+
 Use synthetic encodings with known keys to test recovery. Check preserved equality patterns before language scoring. Evaluate full candidates and untouched text, rather than selecting isolated plausible words.
 
 Documented experiments
@@ -23585,6 +23595,8 @@ LP2-00–55: fixed alphabet transforms against the warning opening
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- constraint-solving example
+  https://jelliottdev.github.io/reference/articles/method-constraints.html#example
 - LP2-00–55: fixed alphabet transforms against the warning opening
   https://jelliottdev.github.io/#/experiments/lp2-alphabet-warning-prefix
 - All solving-method families
@@ -24207,6 +24219,8 @@ Automatic search is a way to explore a model, not a cipher family by itself. Exh
 
 Major variants
 
+Constraint solving, SAT and SMT offer another way to search an explicit model. Finding an assignment, proving the encoded conditions inconsistent and failing to finish are different outcomes; none can be interpreted without the model's assumptions.
+
 Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.
 
 Exhaustive over what?
@@ -24262,6 +24276,8 @@ Would an English scorer accept other languages?
 All solving-method families · Search space and bounds · Documenting a test · Have we tried it?
 
 Sources, related references, and files
+- Constraint solving, SAT and SMT
+  https://jelliottdev.github.io/reference/articles/method-constraints.html
 - complete-search control experiment; Full experiment, all nine sections and reproduction files; How does trying more keys change the best score?
   https://jelliottdev.github.io/#/experiments/search-maximum-controls
 - Recorded complete-search maxima for the first three of nine source sections, comparing null inputs, positive controls with the true key absent and positive controls with it included across five key budgets.; Download figure
@@ -25417,6 +25433,93 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/search-space.html
 
 Article: https://jelliottdev.github.io/reference/articles/method-representations.html
+
+
+---
+
+Constraint solving, SAT and SMT
+
+Encode a bounded cipher model, distinguish satisfying assignments from confirmed readings, and check contradictions and uniqueness.
+
+Constraint solving expresses a proposed decoding rule as variables, allowed values and conditions that must all hold. The solver then searches for assignments satisfying those conditions. It can help reject incompatible cribs or recover keys inside a specified model. It does not supply the missing cipher specification.
+
+Write the model before asking for a solution
+
+For a fixed substitution on 29 symbols, define a variable f[x] for each input index. Require each value to lie between 0 and 28. If the mapping is a permutation, require all 29 values to be different. A proposed plaintext index p[i] at ciphertext position c[i] adds the condition f[c[i]] = p[i].
+
+Dropping the all-different condition permits several ciphertext symbols to map to the same plaintext symbol. Giving each position its own mapping permits still more freedom. These are different models; a solution to one does not establish a solution to the original permutation model. See fixed substitutions, many-to-one substitutions and adaptive rules.
+
+One crib, six keys, one contradiction
+
+This invented five-symbol example is small enough to enumerate without a solver library. The ciphertext is 0, 1, 0. We test all 5! = 120 permutations of the alphabet 0–4.
+
+	Conditions added	Remaining full keys	Interpretation
+	None	120	Every alphabet permutation is allowed.
+	First output must be 2	24	Fixing f[0] leaves four values to assign.
+	Second output must be 3	6	Three unused input symbols can still map to the remaining values in 3! ways.
+	Third output must be 2	6	This repeats the first condition and adds no information.
+	Instead, third output must be 4	0	The same input 0 cannot map to both 2 and 4 under a fixed mapping.
+
+All six keys in the compatible case produce the same output on this short ciphertext. A unique output on the observed symbols is therefore not a unique complete key. Conversely, the contradictory crib excludes only that crib under the fixed-mapping assumptions. It does not exclude a position-dependent cipher.
+
+Download the enumeration script. Run python scripts/constraint_example.py from the repository root to reproduce the counts and save the complete surviving mappings. This demonstration is not an unsolved-page experiment.
+
+Read the solver's answer at the right scope
+
+	Outcome	What it establishes	What remains to check
+	Satisfiable	At least one assignment satisfies the encoded conditions.	Replay it through an independent decoder; inspect the full output and untested continuation.
+	Unsatisfiable	The asserted conditions cannot all hold, if they were encoded correctly and the solver's result is sound.	State every domain, crib and restriction. The result applies only to their conjunction.
+	Unknown, timeout or interrupted	No conclusive answer was obtained.	Record the reason, limits and any partial candidates; do not report exclusion.
+
+SAT tools work with Boolean conditions; SMT tools also support specified mathematical theories. The official Z3 introduction explains its role in logical modeling, and its basic commands guide documents satisfiable, unsatisfiable and unknown outcomes. The example here uses exhaustive Python enumeration instead.
+
+Check alternatives, not just the first answer
+
+Finding one key does not show that it is unique. To ask for another, forbid that exact key assignment and solve again under unchanged conditions. A second satisfying assignment disproves uniqueness; an inconclusive run does not prove it. Decide whether uniqueness concerns the entire key, its action on observed symbols, or the decoded text. Unused alphabet entries and auxiliary variables can differ without changing the reading.
+
+If a contradiction depends on a guessed word, the word is one of the assumptions. If a model was constructed to force a whole sentence, reproducing that sentence is also expected. Test additional material that was not used to construct the conditions. See cribs and candidate readings and unrestricted keys.
+
+What a test must preserve
+
+Publish the exact input, variable domains, equations, mapping direction, boundary rules and crib positions. Distinguish hard requirements from scoring preferences. Retain solver version, options, limits, returned status and assignment. Check the encoding against known positive and contradictory examples before applying it to the manuscript.
+
+A practical workflow is to solve a small case by enumeration, compare it with the solver model, and independently replay every reported candidate. For larger negative claims, retain any available proof artifact or independently checkable certificate and describe how it was checked. A log saying “no solution” alone does not expose the assumptions or verify the model.
+
+Documented experiments
+
+No SAT/SMT manuscript experiment is linked to this family yet. Mathematical bounds elsewhere in the wiki are not automatically solver runs. This page describes an approach and a toy enumeration, not a completed search over LP.
+
+All method families · Automatic search · Search space and bounds · Cipher invariants
+
+Sources, related references, and files
+- fixed substitutions
+  https://jelliottdev.github.io/reference/articles/method-fixed-substitution.html
+- many-to-one substitutions
+  https://jelliottdev.github.io/reference/articles/method-homophonic.html
+- adaptive rules
+  https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
+- Download the enumeration script
+  https://jelliottdev.github.io/scripts/constraint_example.py
+- the complete surviving mappings
+  https://jelliottdev.github.io/exports/constraint-example.json
+- official Z3 introduction
+  https://microsoft.github.io/z3guide/docs/logic/intro/
+- basic commands guide
+  https://microsoft.github.io/z3guide/docs/logic/basiccommands/
+- cribs and candidate readings
+  https://jelliottdev.github.io/reference/articles/method-cribs.html
+- unrestricted keys
+  https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- All method families
+  https://jelliottdev.github.io/reference/articles/solving-methods.html
+- Automatic search
+  https://jelliottdev.github.io/reference/articles/method-automatic-search.html
+- Search space and bounds
+  https://jelliottdev.github.io/reference/articles/search-space.html
+- Cipher invariants
+  https://jelliottdev.github.io/reference/articles/cipher-invariants.html
+
+Article: https://jelliottdev.github.io/reference/articles/method-constraints.html
 
 
 ---

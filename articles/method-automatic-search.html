@@ -1,5 +1,6 @@
 <p>Automatic search is a way to explore a model, not a cipher family by itself. Exhaustive enumeration can cover a finite domain; hill climbing, simulated annealing, genetic algorithms and beam searches usually visit only part of the available space.</p>
 <h2 id="variants">Major variants</h2>
+<p><a href="#/wiki/method-constraints">Constraint solving, SAT and SMT</a> offer another way to search an explicit model. Finding an assignment, proving the encoded conditions inconsistent and failing to finish are different outcomes; none can be interpreted without the model's assumptions.</p>
 <p>Variants change the candidate representation, moves, score, restarts, random seeds, stopping rules and pruning. A higher score can indicate better language or a weakness in the scoring function.</p>
 <h2 id="coverage">Exhaustive over what?</h2>
 <p>An exhaustive search visits every candidate in a declared finite set. Searching every seed from 0 to 255 is exhaustive over those 256 seeds for the chosen generator, alignment and decoding rule. It is not exhaustive over all seeds, generators or ciphers. A heuristic search can explore a much larger model without covering every candidate; report its stopping rule and what it actually evaluated.</p>
