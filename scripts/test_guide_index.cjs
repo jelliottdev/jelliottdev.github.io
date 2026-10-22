@@ -38,7 +38,7 @@ console.log('PASS: normalized aliases have consistent section and page destinati
 const esc = value => String(value).replace(/[&<>"']/g, ch =>
   ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
 const context = {db:{articles,guideCategories:JSON.parse(fs.readFileSync(path.join(root, 'data/guide-categories.json'), 'utf8'))}, esc, head:()=>'', footer:()=>'',
-  document:{addEventListener:()=>{}}};
+  document:{addEventListener:()=>{}},window:{matchMedia:()=>({addEventListener:()=>{}})}};
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(root, 'wiki.js'), 'utf8'), context);
 const html = context.wikiPage();
