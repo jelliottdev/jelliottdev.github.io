@@ -1,6 +1,40 @@
 {
   "schema": "liberpedia-reported-attempts-v1",
   "description": "Source-bound proposals and analyses awaiting exact replay. None of these entries is a completed Liberpedia experiment. Supplied transcript hashes identify the source notes but the full transcripts are not redistributed here.",
+  "reconciled_sources": [
+    {
+      "title": "Liber Primus Word Lengths",
+      "author": "Mae",
+      "attachment_id": "8a0d51d6-608e-4dcc-8a5a-3e936a9d42fd",
+      "sha256": "abffaf53a7defd8fa50139cac05ff4d068cd9e8b78f2892af6112c77bbfc3ef5",
+      "covered_scope": "The historical 2,902-token comparison and its pinned Project Runeberg corpus have a full census and independent checks. This does not cover every word-boundary hypothesis in the thread.",
+      "experiment": "corpus-prefix-census"
+    },
+    {
+      "title": "Observation on rune frequency",
+      "author": "TheScareworkBoo and participants",
+      "attachment_id": "b62805a1-49f5-45d2-a720-95e1036c0e2a",
+      "sha256": "7a15b936aac6efbc260c648242e7dc699cdda14357a176351f79097742b04b1d",
+      "covered_scope": "The doublet guide recounts the three 4–2–1 groups and clarifies that the 3, 5, 8 numbers are intervening alphabet entries, not start-to-start distances. No cipher operation follows from those counts.",
+      "guide": "doublets"
+    },
+    {
+      "title": "possible hint/s",
+      "author": "OH and participants",
+      "attachment_id": "f3c5bba1-afbf-4067-b9db-aaa314eae467",
+      "sha256": "9f86aac1ec4cb4d9fe6539b0097874b11342d176020f565ab379335906d87967",
+      "covered_scope": "The fixed LP2-32 grid arrangement reproduces 563, 569 and 1,136 against the 2016 image dimensions and extracted byte length. Later alignments and candidate plaintexts in the thread are separate proposals.",
+      "experiment": "lp2-32-message-grid"
+    },
+    {
+      "title": "LP2-39 red-header word suggestions",
+      "author": "tz18 and participants",
+      "attachment_id": "6656e02d-54c5-4f61-b003-6b0b3e5c6e49",
+      "sha256": "60cc04ac65bd4770fb0a21d2c22130e23eff09484fb931cb521c1ce625ea08a0",
+      "covered_scope": "The twenty suggested words, including LAW and BEING, were all checked against the three red runes under a specified affine substitution. Other cipher classes and proposed section themes remain untested by that record.",
+      "experiment": "lp2-39-header-cribs"
+    }
+  ],
   "entries": [
     {
       "id": "grid-data-matrix-report",
@@ -156,6 +190,58 @@
       "coverage": "The archive pins JPEGs and audits metadata and file sizes, but has not reproduced the original per-byte histogram classification on the exact cited source files.",
       "related_records": [],
       "replay_needed": "Pin hashes of the cited JPEG versions, compute all 256 byte-value counts per file, specify a quantitative grouping statistic and JPEG encoding metadata, then compare solved and unsolved page sets without manual histogram labels.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "lp2-54-header-autokey-crib",
+      "title": "LP2-54–55 header crib under ciphertext and plaintext autokey",
+      "phrases": ["54 55 header crib", "eight rune autokey header", "ciphertext autokey header", "plaintext autokey header"],
+      "family": "feedback",
+      "pages": ["lp2-54", "lp2-55"],
+      "source": {"title": "LP2-54–55 autokey and header-crib discussion", "author": "igloo party and participants", "reported": "2025-01-12", "attachment_id": "999ba3fa-5a28-4dfd-a811-95f80428c1fb", "sha256": "10cdadc1f184ad6b2f5c9859fbc65d73a044205574fecaaa117e6d9be2d11e76"},
+      "reported_idea": "Use the red one-rune plus eight-rune header as a constrained crib, enumerate candidate words with exactly eight GP runes, and test explicit ciphertext-feedback versus plaintext-feedback recurrences. The discussion corrects a confusion between those two clocks; it does not provide a completed candidate census.",
+      "coverage": "Published LP2-54–55 experiments assess two F-interruption rules by periodic IoC. They do not enumerate header words or test either autokey recurrence against a held-out continuation.",
+      "related_records": ["lp2-54-55-autokey-skip", "lp2-54-55-autokey-reset"],
+      "replay_needed": "Pin the header transcription and word list, define GP transliteration and both recurrences including the initial state, enumerate all length-compatible candidates and keys, then score full-text continuations against a fixed control set. Report the complete candidate count, not just readable snippets.",
+      "status": "related-only"
+    },
+    {
+      "id": "spirals-branches-2883-alignment",
+      "title": "2,883-rune Spirals–Branches stream alignment",
+      "phrases": ["2883 rune alignment", "spirals branches subtraction", "crab canon branches", "retrograde spirals branches"],
+      "family": "alignment",
+      "pages": ["lp2-03", "lp2-04", "lp2-05", "lp2-06", "lp2-07", "lp2-40", "lp2-41", "lp2-42", "lp2-43", "lp2-44", "lp2-45", "lp2-46", "lp2-47", "lp2-48", "lp2-49", "lp2-50", "lp2-51", "lp2-52", "lp2-53"],
+      "source": {"title": "Spirals and Branches equal-length stream discussion", "author": "heck, Joel, and Vatoshi Vergamoto", "reported": "2026-09-14", "attachment_id": "6c21cab3-ffa1-4b2a-b662-c9b5ca27b541", "sha256": "c2894a59e281734e598f30076caf2a80f350f6c750eb7fc486d887c0382ea76e"},
+      "reported_idea": "Align the reported 2,883-rune Spirals-plus-Spiral-Branches stream with an equally long constructed stream; variants include forward pairing, reversal of Branches, an Atbash transform on its second half, and modular subtraction. A posted plain-rune transcription and proposed variants appear in the thread, but no complete scored sweep is preserved there.",
+      "coverage": "The wiki describes the section boundary and count. No published experiment pins both full streams and compares these specific alignment and operation variants.",
+      "related_records": [],
+      "replay_needed": "Fix the exact page ranges, inclusion of red runes and F interrupters, and two 2,883-symbol arrays. Hash both arrays and enumerate each alignment and operation once. Save full outputs and compare the best score with rotations, reversals and shuffled streams under the same selection rule.",
+      "status": "not-replayed"
+    },
+    {
+      "id": "lp2-15-prime-distance-palindromes",
+      "title": "LP2-15 word sums, nearest-prime distances and reverse-add palindromes",
+      "phrases": ["nearest prime palindrome", "prime distance palindrome", "reverse add page 15", "lp2 15 reverse add"],
+      "family": "sums",
+      "pages": ["lp2-15", "lp2-16"],
+      "source": {"title": "Magic-square observations and word-sum follow-up", "author": "lolo and participants", "reported": "2025-07-25", "attachment_id": "ee97b1b3-529d-4413-b6fd-72ffd5cc3c41", "sha256": "8972147d268ee1910444a63caf71421ceac5c727fd3a36b6dfdd81454c6baf7c"},
+      "reported_idea": "Map each word's GP sum to its distance from a nearest prime, concatenate those distances under selected zero separators, and add the resulting decimal number to its digit reversal. The thread reports several palindromes and later corrects an earlier 46-digit claim to 53 digits.",
+      "coverage": "The selected 53-digit decimal equality is now reproduced, with a no-carry explanation and a fixed-digit shuffle control. The archive also checks row sums and the LP2-15 number square. None of these records derives the reported word-level nearest-prime sequence from the manuscript.",
+      "related_records": ["prime-distance-reverse-add", "lp2-row-prime-sums"],
+      "replay_needed": "Freeze the page transcription, word segmentation, nearest-prime tie rule, leading-zero handling and exact grouping before calculation. Derive every digit from the runes, enumerate all eligible sections and zero groupings, then compare the full selection process with matched controls.",
+      "status": "partial"
+    },
+    {
+      "id": "lp1-star-background-layering",
+      "title": "First-release star marks and artwork layering",
+      "phrases": ["star artifacts first release", "stars in binary", "star background layering", "lp1 starburst"],
+      "family": "image-processing",
+      "pages": ["lp1-13"],
+      "source": {"title": "Star-mark visibility and image-layer discussion", "author": "acabadabra, tz18, and participants", "reported": "2024-05-15", "attachment_id": "8877ae51-927d-4d02-8061-9f3658891205", "sha256": "d49e8efe2323c540e44d3709f567c3ced4e386de27adbb7490ef6ebcb468c33d"},
+      "reported_idea": "Examine faint star-shaped marks in the LP1 background and whether later text or illustration layers truncate them; the discussion contrasts deliberate markers with production artifacts and mentions grayscale printing as a visibility aid.",
+      "coverage": "The visual index hosts original page images but does not map these marks, test the claimed occlusions, or identify a source artwork or software operation.",
+      "related_records": [],
+      "replay_needed": "Identify all affected original JPEGs and mark coordinates at native resolution. Compare unmodified pixels, fixed contrast views and layer-boundary crops; record counterexamples on the same pages. Distinguish observable occlusion from an inferred editing chronology.",
       "status": "not-replayed"
     }
   ]

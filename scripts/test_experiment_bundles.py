@@ -60,14 +60,14 @@ def main():
                     else:
                         data = (target / name).read_bytes()
                         assert hashlib.sha256(data).hexdigest() == dependency["sha256"], (experiment_id, name)
-            if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-fibonacci-openings", "lp2-totient-openings", "lp2-trigram-repeats"):
+            if experiment_id in ("lp2-word-order-reversal", "lp2-prime-openings", "lp2-fibonacci-openings", "lp2-totient-openings", "lp2-trigram-repeats", "prime-distance-reverse-add"):
                 for script, args in (("run.py", ["--check"]), ("check.py", [])):
                     result = subprocess.run(
                         [sys.executable, str(target / f"experiments/records/{experiment_id}/{script}"), *args],
                         cwd=target, capture_output=True, text=True, encoding="utf-8", timeout=60)
                     assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
         print(f"PASS: all {len(records)} experiment bundles preserve declared files and hashes; "
-              "segment-order, ordinary-prime, Fibonacci, totient and trigram runners/checkers pass in isolated extractions.")
+              "segment-order, ordinary-prime, Fibonacci, totient, trigram and reverse-add runners/checkers pass in isolated extractions.")
 
 
 if __name__ == "__main__":

@@ -17891,6 +17891,112 @@
       }
     },
     {
+      "id": "prime-distance-reverse-add",
+      "title": "LP2-15 reported reverse-add palindrome: arithmetic and control",
+      "status": "published",
+      "question": "Does the reported 53-digit reverse-add example hold, and how often do its own digits give palindromes after shuffling?",
+      "summary": "The reported 53-digit sum is a palindrome because every mirrored digit pair adds without carrying. The same operation gave a palindrome in 50,442 of 100,000 fixed shuffles of its digit multiset; this does not test the manuscript-to-digits derivation or cipher intent.",
+      "tags": [
+        "LP2-15",
+        "nearest prime",
+        "word sums",
+        "reverse and add",
+        "palindrome",
+        "carry",
+        "control",
+        "reported attempt"
+      ],
+      "family": {
+        "id": "prime-distance-reverse-add",
+        "title": "Prime-distance reverse-add claims",
+        "question": "Which numerical claims about reported word-sum distance strings survive exact arithmetic and matched controls?",
+        "baseline": "prime-distance-reverse-add"
+      },
+      "variant": {
+        "label": "Reported 53-digit example and fixed-multiset shuffle",
+        "changes": []
+      },
+      "scope": {
+        "pages": [
+          "lp2-15"
+        ],
+        "artifacts": [
+          "experiments/records/prime-distance-reverse-add/plan.json"
+        ],
+        "representation": "The exact 53-character decimal string reported for an LP2-15 word-sum-distance construction, including its leading zero; no rune or word transcription is used in this arithmetic-only replay.",
+        "procedure": "Add the string to its full character reversal as integers, verify all 53 paired decimal columns and carries, then shuffle the fixed digit multiset 100,000 times with seed 3301 and apply the same operation to each.",
+        "parameters": "One selected 53-character example; 100,000 conditional random permutations; Python random.Random seed 3301; leading zero allowed in shuffled strings.",
+        "exclusions": "Derivation of GP word sums and nearest-prime distances, alternative zero groupings, a complete search-adjusted p-value, plaintext recovery, and evidence of authorial intent."
+      },
+      "outcome": "supported",
+      "finding": "The quoted sum is correct and palindromic. All 53 mirrored digit-pair sums are at most seven, so no carrying occurs and symmetry is guaranteed. Of 100,000 fixed-digit shuffles, 50,442 produce palindromes under the same integer operation; all 50,442 also satisfy the no-carry condition with a nonzero outer pair.",
+      "limitations": "The original decimal string and zero grouping were selected before this audit. The source-to-digits derivation has not been replayed, and the conditional shuffle is not a p-value over all available pages, segmentations and arithmetic choices. Computational review only; human review pending.",
+      "next_steps": "Replay the word-level GP sums from pinned page text under explicit word boundaries, nearest-prime ties and zero handling. Enumerate every eligible section and grouping, then apply the full selection procedure to matched controls.",
+      "reproduction": {
+        "command": "python experiments/records/prime-distance-reverse-add/run.py --check && python experiments/records/prime-distance-reverse-add/check.py && python experiments/records/prime-distance-reverse-add/plot.py",
+        "environment": "Python 3 standard library; no network or AI service. Run from the repository root or extracted bundle root.",
+        "script": "experiments/records/prime-distance-reverse-add/run.py",
+        "script_sha256": "983ef2b33b1d09bc437fefa33332726a8b7e9574e97e4be9cf7bad358600cde5",
+        "inputs": [
+          {
+            "path": "experiments/records/prime-distance-reverse-add/plan.json",
+            "sha256": "96563b3762f7146b7ccb9019dd34fc775e693a9798fbd2c48bc79c4c0760cf68"
+          },
+          {
+            "path": "experiments/records/prime-distance-reverse-add/check.py",
+            "sha256": "4498cf73986266d80c9e5387cf61683345a17486c13f45bde73909c8877a2267"
+          },
+          {
+            "path": "experiments/records/prime-distance-reverse-add/plot.py",
+            "sha256": "68532485eb26664e92eb325909d421302599e610000c704b4cbf0b193da51982"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/prime-distance-reverse-add/results.json",
+            "sha256": "041c335b2bf247c7558202b88528b418fbdc7aec15eb0da9c42df7a8cca7c180"
+          },
+          {
+            "path": "experiments/records/prime-distance-reverse-add/paired-sums.svg",
+            "sha256": "64b97042ca3d730bae8b0f3eaf8506332fb2c4adea9c233a2d5026e478da7275"
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Codex — independent column-arithmetic check and fixed-seed computational replay; human review pending",
+        "retested_on": "2026-10-22",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "sources": [
+        {
+          "label": "Source-specific reported-attempt intake",
+          "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes"
+        },
+        {
+          "label": "LP2-15 original image and transcription",
+          "url": "https://jelliottdev.github.io/#/page/lp2-15"
+        }
+      ],
+      "related": [
+        "lp2-row-prime-sums"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/prime-distance-reverse-add/paired-sums.svg",
+          "caption": "Every paired digit sum in the reported decimal string remains below the carry threshold of ten."
+        }
+      ],
+      "article": "# Why the reported 53-digit reverse-add result is a palindrome\n\n## The precise claim\n\nA [prior LP2-15 discussion](#/wiki/reported-attempts?section=lp2-15-prime-distance-palindromes) reports distances from word-level GP sums to nearby primes. After concatenating a selected sequence of those distances, the author added the 53-character decimal string to its reversal and obtained a 53-digit palindrome. The thread corrected an earlier 46-digit claim to 53 digits.\n\nThis experiment checks **that arithmetic and one conditional baseline**. It does not reconstruct the word-to-distance sequence from the manuscript, certify the zero-based grouping, or test a decipherment rule. The exact source excerpt is identified in the [structured intake](data/reported-attempts.json) by SHA-256. The decimal string and claimed sum are copied into `plan.json`, so the arithmetic replay needs no external account or chat export.\n\n## Input and result\n\n```text\n  02311171210211215142515300303126131002122052400021111\n+ 11112000425022120013162130300351524151211201217111320\n= 13423171635233335155677430603477655153333253617132431\n```\n\nThe addition is correct and the result reads identically in either direction. The first operand's leading zero is retained when constructing the reversal; as an integer it has no value, but dropping it before reversing would define a different operation.\n\nThe more informative fact is that **every paired digit sum is at most 7**. No column carries. If a decimal string has digits `d[0] ... d[n−1]`, adding it to its reversal pairs `d[i]` with `d[n−1−i]`. These pair sums are necessarily mirror-symmetric. Whenever all are below ten, and the outer pair is nonzero, the decimal result must be a palindrome. The reported example meets both conditions. Its palindromicity follows from this elementary rule; it does not require a cipher mechanism.\n\n![Fifty-three source-derived paired sums mirror around the center and all remain below the decimal carry line of ten.](experiments/records/prime-distance-reverse-add/paired-sums.svg)\n\n## A matched-digit control\n\nThe plan fixes 100,000 pseudorandom shuffles of the **same 53 characters**, with Python's `random.Random(3301)` and no restrictions on a leading zero in the shuffled string. Each shuffled string is reversed and added as an integer exactly as above. **50,442 of 100,000** shuffles yield palindromes. In this run, exactly the same 50,442 satisfy the no-carry condition with a nonzero outer pair.\n\nThis is a conditional, descriptive control: it preserves the selected digit multiset but not any GP word order. It is not a p-value for the full search that produced the string. That search could choose pages, word boundaries, nearest-prime ties, zero separators, and which examples to present. A null model for the whole idea must include those choices. Randomly shuffling uniform decimal digits would be a different and less relevant comparison, because the reported distances concentrate at small digits (11 zeroes, 18 ones, 11 twos).\n\n## Reproduce\n\nExtract the [experiment bundle](downloads/experiments/prime-distance-reverse-add.zip) with folders intact, then run from its root:\n\n```text\npython experiments/records/prime-distance-reverse-add/run.py --check\npython experiments/records/prime-distance-reverse-add/check.py\npython experiments/records/prime-distance-reverse-add/plot.py\n```\n\nThe first command recomputes the arithmetic and all 100,000 fixed shuffles. The independent checker verifies the 53 column sums, their symmetry, the no-carry proof condition, and the saved control's internal consistency. The plotter regenerates the SVG from `results.json`. All use the Python standard library. `plan.json` specifies the original digits, seed, trial count and post-selection scope; `results.json` preserves the full paired-sum list and control counts.\n\n## What remains open\n\nThe decimal result is reproducible, but the **source-to-digits derivation** is not yet. An end-to-end replay must pin the LP2-15/16 transcription, GP alphabet, word and section boundaries, nearest-prime tie rule, and treatment of zeros and leading zeros. It should enumerate every eligible section and grouping before selecting a notable output, then apply the identical search to matched controls. A rare result under that complete search would be more informative than a rare-looking decimal string chosen after several transformations.\n\nThis computational audit was run and checked by Codex on 2026-10-22. Human review of the source grouping and the mathematical interpretation is pending.\n",
+      "article_path": "experiments/records/prime-distance-reverse-add/article.md",
+      "script_sha256": "983ef2b33b1d09bc437fefa33332726a8b7e9574e97e4be9cf7bad358600cde5",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
       "id": "search-maximum-controls",
       "title": "How does trying more keys change the best score?",
       "status": "published",

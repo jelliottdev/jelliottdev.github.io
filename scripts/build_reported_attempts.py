@@ -16,6 +16,7 @@ def e(value):
 def build():
     register = json.loads(DATA.read_text(encoding='utf-8'))
     entries = register['entries']
+    reconciled = register.get('reconciled_sources', [])
     assert register['schema'] == 'liberpedia-reported-attempts-v1'
     assert len(entries) == len({item['id'] for item in entries})
     published = {record['id'] for record in json.loads((ROOT / 'data/experiments.json').read_text(encoding='utf-8'))['records']}
@@ -58,6 +59,20 @@ def build():
             parts.append(f'<p><a href="{e(source["public_url"])}">Related public material</a> '
                          '(current URL; exact version not yet pinned).</p>')
         parts.append('</details></section>')
+    if reconciled:
+        parts.append('<h2 id="reconciled">Source notes with a reproduced scope</h2>'
+                     '<p>These supplied notes point to work already checked here. The link covers only the precise claim described, not every suggestion in its source thread.</p><ul>')
+        for item in reconciled:
+            assert ('experiment' in item) != ('guide' in item)
+            if 'experiment' in item:
+                assert item['experiment'] in published
+                link = f'#/experiments/{e(item["experiment"])}'
+            else:
+                link = f'#/wiki/{e(item["guide"])}'
+            parts.append(f'<li><strong>{e(item["title"])}</strong> · {e(item["author"])}. '
+                         f'{e(item["covered_scope"])} <a href="{link}">Read the checked scope</a>. '
+                         f'<span class="small muted">Source SHA-256: <code>{e(item["sha256"])}</code></span></li>')
+        parts.append('</ul>')
     parts.append('<p>The register is an intake, not a census of all historical solver work. '
                  'Its entries should be promoted to completed experiments only after their inputs, exact rule, '
                  'controls and outputs have been saved and independently checked. '

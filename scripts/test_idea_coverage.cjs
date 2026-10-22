@@ -38,13 +38,19 @@ assert.equal(Coverage.match(notes,'1301').length,0,'301 must be a whole token');
 assert.equal(Coverage.match(notes,'').length,0);
 assert.equal(Search.experimentDocs(notes).length,0,'Coverage notes must never become completed experiment evidence');
 const reported=read('data/reported-attempts.json').entries;
+const reconciled=read('data/reported-attempts.json').reconciled_sources;
 assert.equal(new Set(reported.map(r=>r.id)).size,reported.length);
+assert.equal(new Set(reconciled.map(r=>r.attachment_id)).size,reconciled.length);
+assert(reconciled.every(r=>!reported.some(e=>e.source.attachment_id===r.attachment_id)));
 assert.equal(Search.experimentDocs(reported).length,0,'Prior-work reports must never become completed experiment evidence');
 assert.equal(Coverage.match(reported,'LP2-31').length,0,'A page mention alone must not imply a reported technique');
 for(const [query,id] of [
  ['Was there a data matrix in the grid?','grid-data-matrix-report'],
  ['Try six F interrupters on pages 54-55','lanfear-six-f-interrupters'],
- ['Could QuagMirrors be the key?','quagmirrors-mobius-autokey']
+ ['Could QuagMirrors be the key?','quagmirrors-mobius-autokey'],
+ ['Use an eight rune autokey header crib','lp2-54-header-autokey-crib'],
+ ['Try crab canon branches','spirals-branches-2883-alignment'],
+ ['Is the nearest prime palindrome meaningful?','lp2-15-prime-distance-palindromes']
 ])assert.equal(Coverage.match(reported,query)[0]?.id,id,query);
 console.log('PASS: 12 coverage families, related published records, phrase boundaries and separation from AI evidence');
 
