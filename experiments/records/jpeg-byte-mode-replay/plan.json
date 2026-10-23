@@ -1,0 +1,8 @@
+{
+  "scope": "All 58 archived LP2 JPEG files and all 17 archived LP1 JPEG files",
+  "unit": "complete stored JPEG byte, not decoded pixel or hexadecimal nibble",
+  "class_rule": "For each file, count each byte value 00 through FF. A file is in the reported nonzero-mode class if its most frequent byte is not 00. Ties are reported explicitly.",
+  "encoding_check": "Read the baseline JPEG SOF0 component count directly from the marker stream. One component and three components are separate header categories; neither is inferred from visual appearance.",
+  "zero_location_check": "Count zero bytes before and after the first SOS header. This does not distinguish entropy bytes from any later marker bytes.",
+  "interpretation_limit": "No randomness test, steganographic extraction, date code, source encoder attribution or author-intent claim."
+}

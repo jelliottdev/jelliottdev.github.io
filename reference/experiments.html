@@ -1,4 +1,99 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Experiments — Liberpedia</title><body><a href="../index.html#/experiments">Have we tried it?</a><main><h1>Experiment records</h1><article id="block-boundary-doublets"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Experiments — Liberpedia</title><body><a href="../index.html#/experiments">Have we tried it?</a><main><h1>Experiment records</h1><article id="alberti-branch-arithmetic"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;alberti-branch-arithmetic&quot;,
+  &quot;title&quot;: &quot;Alberti branch proposal: LP2-39 row and modulo-31 arithmetic&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the source&#x27;s identified LP2-39 row, 4–5–4 shift sums and claimed modulo-31 matches reproduce as written?&quot;,
+  &quot;summary&quot;: &quot;The 19-rune row and four signed short-group sums reproduce. Standard modulo 31 turns the right totals −33 and −39 into 29 and 23, rather than the claimed positive 2 and 8; the proposed disk reading remains untested.&quot;,
+  &quot;tags&quot;: [
+    &quot;Alberti disk&quot;,
+    &quot;moving alphabet&quot;,
+    &quot;LP2-39&quot;,
+    &quot;rule branches&quot;,
+    &quot;4-5-4&quot;,
+    &quot;modulo 31&quot;,
+    &quot;plant shifts&quot;,
+    &quot;source audit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-39&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/alberti-branch-arithmetic/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Archived LP2-39 UTF-8 rune transcription and the source&#x27;s two explicit 13-number plant arrays, short overlay and posted final arrays, copied into a fixed plan. Source transcript identified by SHA-256, not republished.&quot;,
+    &quot;procedure&quot;: &quot;Recount the source-identified row&#x27;s rune groups; calculate the two four-element overlaid short sums and all posted 4–5–4 final-array sums; reduce the signed values using standard nonnegative modulo-31 residues. Repeat short sums at all 13 cyclic starts for each plant array as a sensitivity diagnostic.&quot;,
+    &quot;parameters&quot;: &quot;One LP2-39 row; two posted 13-number arrays; one posted four-number overlay; fixed groups 4, 5, 4; 13 starting positions for each array; modulus 31. No fitted key, symbol mapping or selected plaintext.&quot;,
+    &quot;exclusions&quot;: &quot;Complete Alberti disk alphabets, rule-state transitions, branch inheritance, letter assembly, word-selection search, full-page reading, or a chance probability for the source&#x27;s selected interpretation. The separate method files and diagrams referred to in the discussion are not available as pinned inputs here.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;The identified row has 19 runes in groups of 3, 4, 6, 5 and 1. Left raw short sums −13 and −17 and right raw short sums −33 and −39 reproduce. The right pair reduces modulo 31 to 29 and 23, not the source&#x27;s +2 and +8; obtaining the positive pair requires an additional direction reversal. The proposed deciphering rule cannot be checked from these arithmetic inputs.&quot;,
+  &quot;limitations&quot;: &quot;The transcript states the arrays but does not supply a complete fixed disk configuration and transition table. Its group and target choices were made during an evolving exploration, so the 13-rotation check is sensitivity analysis, not a statistical null. It cannot validate or refute the purported LP2-39 plaintext.&quot;,
+  &quot;next_steps&quot;: &quot;Obtain one pinned version of the disk alphabets, four rule transitions and branch/letter-selection rules. Then save every unedited branch output for the row, compare the whole search with known-reading and matched control rows, and reserve an untouched continuation.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/alberti-branch-arithmetic/run.py --check &amp;&amp; python experiments/records/alberti-branch-arithmetic/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; no network service or external package.&quot;,
+    &quot;script&quot;: &quot;experiments/records/alberti-branch-arithmetic/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;6edf88ddf014205db65222300d48b5a75a1052bc24935fd2e9c192d548b25aab&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/alberti-branch-arithmetic/plan.json&quot;,
+        &quot;sha256&quot;: &quot;99dffe07d404007fd9a89c36e202d114296a26337011df2baaf7f059be520153&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/alberti-branch-arithmetic/check.py&quot;,
+        &quot;sha256&quot;: &quot;616586297c15401a4d6bf94e63f14c43387e498e230fe2ca70529fe8f27747c9&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/alberti-branch-arithmetic/results.json&quot;,
+        &quot;sha256&quot;: &quot;ef0b56d11761f4ad8909de0699bd4fa5c1da5bdc3d8f24061d7bbd01f3b164b3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/alberti-branch-arithmetic/summary.svg&quot;,
+        &quot;sha256&quot;: &quot;6d061ef102b8e2c79f84ae0f1c27ace1f1d9adacf9887eb737bb07c502c523d1&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent row and arithmetic checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/alberti-branch-arithmetic/summary.svg&quot;,
+      &quot;caption&quot;: &quot;The posted signed sums reproduce; the right pair&#x27;s conventional modulo-31 residues differ in sign from the source&#x27;s stated pair.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Reported Alberti-disk approach and source identification&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=alberti-disk-branches&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Original LP2-39 image and transcription&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-39&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-39-header-cribs&quot;
+  ],
+  &quot;article&quot;: &quot;# What does the reported Alberti branch arithmetic establish?\n\nThe [Alberti-disk proposal](#/wiki/reported-attempts?section=alberti-disk-branches) combines movable alphabets, four rule transitions, a repeating shift sequence and branches at punctuation. Its LP2-39 reading would require **all** of those pieces. The supplied discussion refers to separate method files and diagrams, but the text available for this audit does not fix the complete disk alphabets and transition rules. We therefore tested two narrower claims that can be checked directly: the identified LP2-39 row and the later 4–5–4 shift arithmetic. **This is not a replay of the proposed decryption.**\n\n![Four cards show the source row&#x27;s 19 runes, the reproducing left and right raw shift totals, and the right totals&#x27; different modulo-31 residues.](experiments/records/alberti-branch-arithmetic/summary.svg)\n\n## What matches\n\nThe specified second-section row of [LP2-39](#/page/lp2-39) is present in the archived transcription. It has **19 runes** in five pieces of **3, 4, 6, 5 and 1**, separated by one full stop and three hyphens. The discussion represents these boundaries with other marks in its display; the rune groups are the same. The marks can define *candidate* branch points, but their presence does not tell us what disk state to inherit or which branches to read.\n\nThe source also supplies thirteen signed numbers for each of two plant readings, a four-number overlay `−5, −6, −3, −11`, and final arrays split into groups of 4, 5 and 4. All four **raw short-group sums** reproduce:\n\n| Sequence | First four plus overlay | Last four plus overlay | Posted raw totals |\n| --- | ---: | ---: | --- |\n| Left | −13 | −17 | −13, −17 |\n| Right | −33 | −39 | −33, −39 |\n\nThe posted final arrays also total **−13, −15, −17** on the left and **−33, −15, −39** on the right. The middle-group −15 is therefore an arithmetic property of those supplied arrays. It does not independently verify that the plant was counted correctly, that the grouping was fixed before the matching words were selected, or that these shifts decode a page.\n\n## The modulo sign matters\n\nThe source next writes the right short totals as `−33 ≡ +2` and `−39 ≡ +8` modulo 31. Under ordinary modulo arithmetic, they are **−2 ≡ 29** and **−8 ≡ 23**. The stated positive **2** and **8** are the *opposite* residues. A mirror operation might deliberately reverse direction, but that would be an additional sign-conversion rule; it does not follow from reduction modulo 31 alone. The source&#x27;s disk alphabets and direction convention are needed to check that separate step.\n\nAs an alignment-sensitivity check, the script also rotates each fixed thirteen-number plant sequence through all **13** starting positions, keeping the same 4–5–4 grouping and overlay. The left ordered raw target `−13, −17` occurs at its posted start only. None of the right rotations gives the posted **positive** residue pair `2, 8` under ordinary modulo 31. These 13 rotations are a limited diagnostic, **not** a random null or a probability of the whole proposal: the source explored other disk sizes, mirror models, shifts, branches and readings.\n\n## What remains untested\n\nThe candidate words on LP2-39 are assembled across output branches after disk changes. The text we have does not provide a complete frozen machine-readable transition table, both disk alphabets for every variant, the branch inheritance rule, or a rule for selecting and assembling final letters. We cannot infer those missing rules from an appealing output. In particular, this audit neither confirms nor excludes an Alberti-style cipher, and it does not attach a probability to the reported names or words.\n\nTo test the reading, pin one version of the source model, execute **every branch** of this row, save all unedited output and word-selection decisions, and run the same search on solved-page and matched control inputs. The [plan](experiments/records/alberti-branch-arithmetic/plan.json) and [results](experiments/records/alberti-branch-arithmetic/results.json) preserve exactly the narrower checks done here.\n\nFrom the repository or extracted experiment bundle, run:\n\n```text\npython experiments/records/alberti-branch-arithmetic/run.py --check\npython experiments/records/alberti-branch-arithmetic/check.py\n```\n\nBoth scripts use the Python standard library. The checker independently recounts the row, recalculates the posted arrays and residues, and repeats all 26 rotated short-group calculations without importing the producer.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/alberti-branch-arithmetic/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;6edf88ddf014205db65222300d48b5a75a1052bc24935fd2e9c192d548b25aab&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="block-boundary-doublets"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;block-boundary-doublets&quot;,
   &quot;title&quot;: &quot;LP2 doublets at proposed block boundaries&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -10035,6 +10130,773 @@
     &quot;id&quot;: &quot;audit&quot;,
     &quot;label&quot;: &quot;Source or input audit&quot;,
     &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="jpeg-byte-mode-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;jpeg-byte-mode-replay&quot;,
+  &quot;title&quot;: &quot;JPEG byte histograms: the four-page split&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Does the reported four-page JPEG byte-frequency class reproduce, and does it correspond to grayscale encoding?&quot;,
+  &quot;summary&quot;: &quot;The LP2 four-page modal-byte split reproduces. Both classes include one- and three-component JPEGs, so the simple grayscale explanation does not fit the archived files.&quot;,
+  &quot;tags&quot;: [
+    &quot;JPEG&quot;,
+    &quot;byte histogram&quot;,
+    &quot;LP2-00&quot;,
+    &quot;LP2-04&quot;,
+    &quot;LP2-24&quot;,
+    &quot;LP2-26&quot;,
+    &quot;grayscale&quot;,
+    &quot;file provenance&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;exports/jpeg-byte-audit.json&quot;,
+      &quot;exports/jpeg-byte-audit-lp1.json&quot;
+    ],
+    &quot;representation&quot;: &quot;All 58 archived LP2 and 17 archived LP1 original JPEG files; full encoded-file bytes, not pixels or rune values.&quot;,
+    &quot;procedure&quot;: &quot;Count all 256 possible byte values in each file; read baseline JPEG frame component counts; locate zero bytes relative to the first scan header.&quot;,
+    &quot;parameters&quot;: &quot;A file&#x27;s class is determined only by its modal whole-byte value; ties are reported explicitly; no threshold or page exclusion.&quot;,
+    &quot;exclusions&quot;: &quot;Historical repository revision matching, screenshots, randomness testing, steganographic extraction, visual artifact interpretation and inferred author intent.&quot;
+  },
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;finding&quot;: &quot;LP2-00, 04, 24 and 26 have modal byte 44; the other 54 LP2 files have modal byte 00. Both classes include one- and three-component JPEGs. LP1-00 and 02 have modal byte 28; the other 15 LP1 files have modal byte 00.&quot;,
+  &quot;limitations&quot;: &quot;The test uses current archived JPEGs; the source&#x27;s exact October 2023 repository revision and missing histogram screenshots are unavailable. File-byte mode does not establish randomness, a payload, a date code or an encoding cause.&quot;,
+  &quot;next_steps&quot;: &quot;For a causal encoding claim, freeze a decoder or re-encoding procedure and controls before testing it on all archived page files.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent byte recount against archived originals&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/jpeg-byte-mode-replay/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library. Requires the original-images bundle extracted beside the experiment files.&quot;,
+    &quot;script&quot;: &quot;experiments/records/jpeg-byte-mode-replay/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;5b1b1d70fafdc740b3001a2129d200b90f0a5957f5593cf722d1845e5c07eb43&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-byte-mode-replay/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6005d359be7bbc684fa1dd947b7fa0c1705fa8b2332e0e889c35f6c02ca5cb28&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/jpeg-byte-audit-lp1.json&quot;,
+        &quot;sha256&quot;: &quot;2c18eff832185f34a742d1fe469a2bf3a3ba1516e6dfe65fd64cd582af99835e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/jpeg-byte-audit.json&quot;,
+        &quot;sha256&quot;: &quot;17721474daff32de65ad2225b0248e9e81b7a913b020aacf992cfa4e9d50c8eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-00.jpg&quot;,
+        &quot;sha256&quot;: &quot;184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-01.jpg&quot;,
+        &quot;sha256&quot;: &quot;71f4bd03c692ede630091272597d2b18702184ed32fdd1977ef0ba7306632b46&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-02.jpg&quot;,
+        &quot;sha256&quot;: &quot;0297572bbc2d234f84df634c6f0474011ff5df66c2ce987c3bb7aa0c635799b4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-03.jpg&quot;,
+        &quot;sha256&quot;: &quot;b8b142f9b7854ec4f240e076cad03a98a2e3e9cf7c20f1da4fcde1ed25e3be3f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-04.jpg&quot;,
+        &quot;sha256&quot;: &quot;745c6a46f67de1e5a2a9ac76175c323af82c2432e3b7483a8dc6244f8de9478f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-05.jpg&quot;,
+        &quot;sha256&quot;: &quot;2db94921ae5216d8a589890495fa5432446cd3227c45fbeb4934cbb0525112f7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-06.jpg&quot;,
+        &quot;sha256&quot;: &quot;913e26462e51942f49ca3ce2e94ef56c5fb65110814442dccc02b0d88af2c5ca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-07.jpg&quot;,
+        &quot;sha256&quot;: &quot;b50c1536ea1f30847e7875835991d52951bafb599fb1ab04eb78c5c6e6c2b468&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-08.jpg&quot;,
+        &quot;sha256&quot;: &quot;f0edba1084df9983353c11544bbf711f94ed7649edbf94b426c9b78549b64557&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-09.jpg&quot;,
+        &quot;sha256&quot;: &quot;975cda73bbf829b2775f25beb609d34fa429728b2f2a4ce863c129b10b005089&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-10.jpg&quot;,
+        &quot;sha256&quot;: &quot;12ebfe421c129f2ef78d527c1630e358963da8d8dfdf9620eb977980d7967376&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-11.jpg&quot;,
+        &quot;sha256&quot;: &quot;7bd11a2c9f5b512e33c9db170756e3b34cc1e29eb405373eb94957383a61be7d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-12.jpg&quot;,
+        &quot;sha256&quot;: &quot;a5b58076e169f3f59c8a394dbef37da18226c9c4fff703df3be8dc95cf16291c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-13.jpg&quot;,
+        &quot;sha256&quot;: &quot;bef0fc4867c2363c835eb4f08029a1eba35c925e2f72659d7353cf8a91089e56&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-14.jpg&quot;,
+        &quot;sha256&quot;: &quot;de2bebe1d06421d94f3dd2b2b5f838ee4cdb5f51b07b14e880e0108f7b79c14e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-15.jpg&quot;,
+        &quot;sha256&quot;: &quot;f163903bec1236f1c89c96343d0bd1dee610b697c3ba82514651f04c5fbee4b9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp1-16.jpg&quot;,
+        &quot;sha256&quot;: &quot;984668c680c6089b91587ef6d9eb2a1df1d2b7ee8ab3837655d3933f2adcbfbe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-00.jpg&quot;,
+        &quot;sha256&quot;: &quot;197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-01.jpg&quot;,
+        &quot;sha256&quot;: &quot;f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-02.jpg&quot;,
+        &quot;sha256&quot;: &quot;74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-03.jpg&quot;,
+        &quot;sha256&quot;: &quot;1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-04.jpg&quot;,
+        &quot;sha256&quot;: &quot;72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-05.jpg&quot;,
+        &quot;sha256&quot;: &quot;bcef0a3b80532b25a013052ec4394ab47ab69ce675b5b3db59cbad044e7adabd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-06.jpg&quot;,
+        &quot;sha256&quot;: &quot;4c7dce370242c67a7b785828d75547c042717b221d9d565d7dd097834c7b25d7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-07.jpg&quot;,
+        &quot;sha256&quot;: &quot;91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-08.jpg&quot;,
+        &quot;sha256&quot;: &quot;6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-09.jpg&quot;,
+        &quot;sha256&quot;: &quot;b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-10.jpg&quot;,
+        &quot;sha256&quot;: &quot;1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-11.jpg&quot;,
+        &quot;sha256&quot;: &quot;26f0cb307a23dcb2adf03a70fb9c6da89746258a90fd9be5383b2757ab4aad30&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-12.jpg&quot;,
+        &quot;sha256&quot;: &quot;6961f3f8eedba5b802fee9b40ad91fa604cd4e4394f9ba72853141ad71b19b21&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-13.jpg&quot;,
+        &quot;sha256&quot;: &quot;3481daeed3ab2bea6effbe36eec22f74955bce87ca4b4ae8674be1d3f84ea08d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-14.jpg&quot;,
+        &quot;sha256&quot;: &quot;861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-15.jpg&quot;,
+        &quot;sha256&quot;: &quot;5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-16.jpg&quot;,
+        &quot;sha256&quot;: &quot;39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-17.jpg&quot;,
+        &quot;sha256&quot;: &quot;f123b66eefa1b4409750c5ea3879bfe64728c6aa1e1398cb8fbd0fa8b1cf1f50&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-18.jpg&quot;,
+        &quot;sha256&quot;: &quot;90fa414c464e86435bdb22f051f9670e886e3dd1c0b6d8954be94b86188da94b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-19.jpg&quot;,
+        &quot;sha256&quot;: &quot;b57ec6b12cb9a505eec6a77c64ddf63bf30a1bfb44dd5cdca35d900feed1b651&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-20.jpg&quot;,
+        &quot;sha256&quot;: &quot;1ceef52570621785a021febff39003538f810179e5767ef5279a59c0c05c9985&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-21.jpg&quot;,
+        &quot;sha256&quot;: &quot;c453ad16212b335a065069e9f755791b909225ed250b579eab205655e7a80c10&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-22.jpg&quot;,
+        &quot;sha256&quot;: &quot;e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-23.jpg&quot;,
+        &quot;sha256&quot;: &quot;d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-24.jpg&quot;,
+        &quot;sha256&quot;: &quot;62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-25.jpg&quot;,
+        &quot;sha256&quot;: &quot;a7d6e597debff4f7c5b3516e1b02ca2e4fa5b37d972f567264ed2ec845013cff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-26.jpg&quot;,
+        &quot;sha256&quot;: &quot;ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-27.jpg&quot;,
+        &quot;sha256&quot;: &quot;c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-28.jpg&quot;,
+        &quot;sha256&quot;: &quot;318bb587f4dcab11b4db7ba3b8bb13b7913ca79bb409e1c987595503a22e0522&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-29.jpg&quot;,
+        &quot;sha256&quot;: &quot;6f769f266865ddb30b0cb34e82c664a87ba409f674dc52ad3af7c85be443fb5c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-30.jpg&quot;,
+        &quot;sha256&quot;: &quot;701b66d1fe98f730dadc5d7d8e1bc3b9a8e20547c1ffb423011f436037dba8b0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-31.jpg&quot;,
+        &quot;sha256&quot;: &quot;0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-32.jpg&quot;,
+        &quot;sha256&quot;: &quot;c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-33.jpg&quot;,
+        &quot;sha256&quot;: &quot;13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-34.jpg&quot;,
+        &quot;sha256&quot;: &quot;6f1b4c04b64ee54c689478bd3986bb6ab8a3b81f48780562094e9f248e4e87f8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-35.jpg&quot;,
+        &quot;sha256&quot;: &quot;d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-36.jpg&quot;,
+        &quot;sha256&quot;: &quot;3b54a31a9e796e2c01b4e80d46e1092dee2e1142a7c61873e282078e2c776cb9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-37.jpg&quot;,
+        &quot;sha256&quot;: &quot;cee96d7e71b7de4d4e57237faacefad791229c153202e8224e4bedda45fb8f43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-38.jpg&quot;,
+        &quot;sha256&quot;: &quot;aec1898f599f57265d6422f3082a481db94a27f62230affbadee595d05077f8c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-39.jpg&quot;,
+        &quot;sha256&quot;: &quot;d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-40.jpg&quot;,
+        &quot;sha256&quot;: &quot;3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-41.jpg&quot;,
+        &quot;sha256&quot;: &quot;134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-42.jpg&quot;,
+        &quot;sha256&quot;: &quot;e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-43.jpg&quot;,
+        &quot;sha256&quot;: &quot;dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-44.jpg&quot;,
+        &quot;sha256&quot;: &quot;463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-45.jpg&quot;,
+        &quot;sha256&quot;: &quot;898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-46.jpg&quot;,
+        &quot;sha256&quot;: &quot;05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-47.jpg&quot;,
+        &quot;sha256&quot;: &quot;08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-48.jpg&quot;,
+        &quot;sha256&quot;: &quot;341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-49.jpg&quot;,
+        &quot;sha256&quot;: &quot;aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-50.jpg&quot;,
+        &quot;sha256&quot;: &quot;bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-51.jpg&quot;,
+        &quot;sha256&quot;: &quot;2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-52.jpg&quot;,
+        &quot;sha256&quot;: &quot;d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-53.jpg&quot;,
+        &quot;sha256&quot;: &quot;4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-54.jpg&quot;,
+        &quot;sha256&quot;: &quot;dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-55.jpg&quot;,
+        &quot;sha256&quot;: &quot;a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-56.jpg&quot;,
+        &quot;sha256&quot;: &quot;a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-57.jpg&quot;,
+        &quot;sha256&quot;: &quot;1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-byte-mode-replay/results.json&quot;,
+        &quot;sha256&quot;: &quot;39014646cf3e2f78f2efec89af6b67bea502a283043b433c58126497003bf7fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-byte-mode-replay/modes.svg&quot;,
+        &quot;sha256&quot;: &quot;166dee5a35c8232189e7ecc503c404fb99ac1cb85eb2f7f2769b3af092295ddb&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/jpeg-byte-mode-replay/modes.svg&quot;,
+      &quot;caption&quot;: &quot;The modal-byte split crosses JPEG frame component counts; a one-component file occurs in the 44-mode group.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Historical source&#x27;s cited image repository&quot;,
+      &quot;url&quot;: &quot;https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived JPEG byte audit and explanation&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/jpeg-byte-distribution&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;jpeg-modal-reencode-control&quot;
+  ],
+  &quot;article&quot;: &quot;# JPEG byte histograms: the four-page split\n\n**Finding:** The reported LP2 split is present in the archived JPEGs. Of 58 files, **54 have `00` as their most frequent byte**. The four exceptions—LP2-00, 04, 24 and 26—have `44` as their mode. Both groups contain one-component and three-component JPEGs, so component count does not explain the split. Nothing in this measurement extracts a hidden message or shows that any file is random.\n\n![LP2 modal bytes crossed with JPEG component counts, with a shorter LP1 comparison.](experiments/records/jpeg-byte-mode-replay/modes.svg)\n\nThe test counts the **stored file bytes**, including headers and compressed data. It does not count visible pixel values or the individual digits in a hexadecimal display. The source called the common group “null” and the exceptions “random”; here those terms are replaced with the exact byte modes. Even on the page with the most zeros, `00` is only 20.1% of the file, not a majority. Byte `44` is hexadecimal for decimal 68 (ASCII `D`), consistent with the source’s display label.\n\n| LP2 most frequent byte | One-component JPEG | Three-component JPEG |\n| --- | ---: | ---: |\n| `00` | 22 | 32 |\n| `44` | 1 | 3 |\n\nThe same fixed rule gives 15 `00`-mode files and two `28`-mode files in the 17 archived LP1 images. Those exceptions are LP1-00 and LP1-02, corresponding to the source’s one-based “Page 1” and “Page 3.” This extends its sixteen-page list to the full local archive; it does not recreate the missing historical histogram screenshots. In all 75 archived files, at least 92.6% of the zero bytes occur **after the first scan header**. This locates the bytes within the stored JPEG stream but does not isolate every later marker or explain how its encoder produced them.\n\nThe [fixed re-encoding control](#/experiments/jpeg-modal-reencode-control) tests whether the byte class survives different JPEG settings. The four page numbers alone do not specify a date, a cipher or a payload. For a fuller explanation of the byte-versus-pixel distinction, see the [JPEG distribution guide](#/wiki/jpeg-byte-distribution).\n\n## Reproduce\n\nDownload the [original images](#/downloads) alongside this experiment, then run `python experiments/records/jpeg-byte-mode-replay/run.py --check` from the repository root. The script checks all 75 image hashes and re-counts their byte modes and JPEG frame components using Python&#x27;s standard library. [The plan](experiments/records/jpeg-byte-mode-replay/plan.json) fixes the rule; [the results](experiments/records/jpeg-byte-mode-replay/results.json) list every page&#x27;s checksum, byte length, mode, zero count and component count. The historical [source file repository](https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved) is not pinned to its October 2023 revision, so equality with that exact historical input remains unverified.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/jpeg-byte-mode-replay/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5b1b1d70fafdc740b3001a2129d200b90f0a5957f5593cf722d1845e5c07eb43&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
+}</pre></article><article id="jpeg-modal-reencode-control"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;jpeg-modal-reencode-control&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Are the JPEG byte classes stable?&quot;,
+  &quot;question&quot;: &quot;Does the four-page nonzero modal-byte set persist after a fixed JPEG re-encode of the same LP2 page images?&quot;,
+  &quot;summary&quot;: &quot;The original four-page set changes substantially when the 58 images are re-encoded at fixed JPEG settings. A file-byte mode is not invariant to representation.&quot;,
+  &quot;tags&quot;: [
+    &quot;JPEG&quot;,
+    &quot;file bytes&quot;,
+    &quot;hex histogram&quot;,
+    &quot;encoding control&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;,
+      &quot;lp2-56&quot;,
+      &quot;lp2-57&quot;
+    ],
+    &quot;representation&quot;: &quot;Complete encoded JPEG bytes of archived originals and in-memory Pillow re-encodes; no rune or pixel histogram.&quot;,
+    &quot;procedure&quot;: &quot;Count the modal byte of each original; decode and re-encode each page at three fixed JPEG qualities with subsampling disabled; recount and compare membership.&quot;,
+    &quot;parameters&quot;: &quot;58 archived LP2 pages; Pillow 11.3.0; qualities 75, 85, 95; subsampling=0; no resize.&quot;,
+    &quot;exclusions&quot;: &quot;Other encoders and quality settings, isolated scan data, original-file production, payload extraction and claims of randomness.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The originals have four nonzero-mode files (00, 04, 24, 26). Re-encoding yields 23, 23 and 5 nonzero-mode files at qualities 75, 85 and 95 respectively; none of the original four remain at quality 95.&quot;,
+  &quot;limitations&quot;: &quot;Changing the JPEG encoder also changes file bytes and can slightly change decoded pixels. This control establishes sensitivity, not the cause or meaning of the original four-page class.&quot;,
+  &quot;next_steps&quot;: &quot;Test a specific byte-extraction hypothesis on hashed originals with controls; do not infer a message from histogram class alone.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Deterministic computational replay against hashed originals&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/jpeg-modal-reencode-control/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 and Pillow 11.3.0. In-memory JPEG encoder results are version-sensitive.&quot;,
+    &quot;script&quot;: &quot;experiments/records/jpeg-modal-reencode-control/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ff21e54613305993e37b4ba33649ed47a4e8bb4c8c657280e63862e68b8e9bbb&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-modal-reencode-control/plan.json&quot;,
+        &quot;sha256&quot;: &quot;dd23723862b1a58d3f45d7d3b321724b913c4f42edb17c4226d3046ef9e93986&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-00.jpg&quot;,
+        &quot;sha256&quot;: &quot;197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-01.jpg&quot;,
+        &quot;sha256&quot;: &quot;f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-02.jpg&quot;,
+        &quot;sha256&quot;: &quot;74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-03.jpg&quot;,
+        &quot;sha256&quot;: &quot;1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-04.jpg&quot;,
+        &quot;sha256&quot;: &quot;72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-05.jpg&quot;,
+        &quot;sha256&quot;: &quot;bcef0a3b80532b25a013052ec4394ab47ab69ce675b5b3db59cbad044e7adabd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-06.jpg&quot;,
+        &quot;sha256&quot;: &quot;4c7dce370242c67a7b785828d75547c042717b221d9d565d7dd097834c7b25d7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-07.jpg&quot;,
+        &quot;sha256&quot;: &quot;91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-08.jpg&quot;,
+        &quot;sha256&quot;: &quot;6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-09.jpg&quot;,
+        &quot;sha256&quot;: &quot;b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-10.jpg&quot;,
+        &quot;sha256&quot;: &quot;1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-11.jpg&quot;,
+        &quot;sha256&quot;: &quot;26f0cb307a23dcb2adf03a70fb9c6da89746258a90fd9be5383b2757ab4aad30&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-12.jpg&quot;,
+        &quot;sha256&quot;: &quot;6961f3f8eedba5b802fee9b40ad91fa604cd4e4394f9ba72853141ad71b19b21&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-13.jpg&quot;,
+        &quot;sha256&quot;: &quot;3481daeed3ab2bea6effbe36eec22f74955bce87ca4b4ae8674be1d3f84ea08d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-14.jpg&quot;,
+        &quot;sha256&quot;: &quot;861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-15.jpg&quot;,
+        &quot;sha256&quot;: &quot;5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-16.jpg&quot;,
+        &quot;sha256&quot;: &quot;39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-17.jpg&quot;,
+        &quot;sha256&quot;: &quot;f123b66eefa1b4409750c5ea3879bfe64728c6aa1e1398cb8fbd0fa8b1cf1f50&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-18.jpg&quot;,
+        &quot;sha256&quot;: &quot;90fa414c464e86435bdb22f051f9670e886e3dd1c0b6d8954be94b86188da94b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-19.jpg&quot;,
+        &quot;sha256&quot;: &quot;b57ec6b12cb9a505eec6a77c64ddf63bf30a1bfb44dd5cdca35d900feed1b651&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-20.jpg&quot;,
+        &quot;sha256&quot;: &quot;1ceef52570621785a021febff39003538f810179e5767ef5279a59c0c05c9985&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-21.jpg&quot;,
+        &quot;sha256&quot;: &quot;c453ad16212b335a065069e9f755791b909225ed250b579eab205655e7a80c10&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-22.jpg&quot;,
+        &quot;sha256&quot;: &quot;e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-23.jpg&quot;,
+        &quot;sha256&quot;: &quot;d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-24.jpg&quot;,
+        &quot;sha256&quot;: &quot;62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-25.jpg&quot;,
+        &quot;sha256&quot;: &quot;a7d6e597debff4f7c5b3516e1b02ca2e4fa5b37d972f567264ed2ec845013cff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-26.jpg&quot;,
+        &quot;sha256&quot;: &quot;ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-27.jpg&quot;,
+        &quot;sha256&quot;: &quot;c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-28.jpg&quot;,
+        &quot;sha256&quot;: &quot;318bb587f4dcab11b4db7ba3b8bb13b7913ca79bb409e1c987595503a22e0522&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-29.jpg&quot;,
+        &quot;sha256&quot;: &quot;6f769f266865ddb30b0cb34e82c664a87ba409f674dc52ad3af7c85be443fb5c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-30.jpg&quot;,
+        &quot;sha256&quot;: &quot;701b66d1fe98f730dadc5d7d8e1bc3b9a8e20547c1ffb423011f436037dba8b0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-31.jpg&quot;,
+        &quot;sha256&quot;: &quot;0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-32.jpg&quot;,
+        &quot;sha256&quot;: &quot;c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-33.jpg&quot;,
+        &quot;sha256&quot;: &quot;13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-34.jpg&quot;,
+        &quot;sha256&quot;: &quot;6f1b4c04b64ee54c689478bd3986bb6ab8a3b81f48780562094e9f248e4e87f8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-35.jpg&quot;,
+        &quot;sha256&quot;: &quot;d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-36.jpg&quot;,
+        &quot;sha256&quot;: &quot;3b54a31a9e796e2c01b4e80d46e1092dee2e1142a7c61873e282078e2c776cb9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-37.jpg&quot;,
+        &quot;sha256&quot;: &quot;cee96d7e71b7de4d4e57237faacefad791229c153202e8224e4bedda45fb8f43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-38.jpg&quot;,
+        &quot;sha256&quot;: &quot;aec1898f599f57265d6422f3082a481db94a27f62230affbadee595d05077f8c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-39.jpg&quot;,
+        &quot;sha256&quot;: &quot;d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-40.jpg&quot;,
+        &quot;sha256&quot;: &quot;3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-41.jpg&quot;,
+        &quot;sha256&quot;: &quot;134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-42.jpg&quot;,
+        &quot;sha256&quot;: &quot;e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-43.jpg&quot;,
+        &quot;sha256&quot;: &quot;dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-44.jpg&quot;,
+        &quot;sha256&quot;: &quot;463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-45.jpg&quot;,
+        &quot;sha256&quot;: &quot;898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-46.jpg&quot;,
+        &quot;sha256&quot;: &quot;05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-47.jpg&quot;,
+        &quot;sha256&quot;: &quot;08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-48.jpg&quot;,
+        &quot;sha256&quot;: &quot;341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-49.jpg&quot;,
+        &quot;sha256&quot;: &quot;aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-50.jpg&quot;,
+        &quot;sha256&quot;: &quot;bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-51.jpg&quot;,
+        &quot;sha256&quot;: &quot;2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-52.jpg&quot;,
+        &quot;sha256&quot;: &quot;d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-53.jpg&quot;,
+        &quot;sha256&quot;: &quot;4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-54.jpg&quot;,
+        &quot;sha256&quot;: &quot;dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-55.jpg&quot;,
+        &quot;sha256&quot;: &quot;a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-56.jpg&quot;,
+        &quot;sha256&quot;: &quot;a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;images/lp2-57.jpg&quot;,
+        &quot;sha256&quot;: &quot;1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-modal-reencode-control/results.json&quot;,
+        &quot;sha256&quot;: &quot;f85e3a867f443a8f4c0b2b357244fc0ac22ba804a2f7ed43e99f2f04aa4b2dbb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/jpeg-modal-reencode-control/mode-control.svg&quot;,
+        &quot;sha256&quot;: &quot;a8024531fdbd963f45e869e8756da7451438283833363e38750161e1623825ab&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/jpeg-modal-reencode-control/mode-control.svg&quot;,
+      &quot;caption&quot;: &quot;The count of LP2 files with a nonzero most-frequent byte changes under fixed JPEG re-encodes.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Reported 2023 JPEG histogram claim and its source context&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=jpeg-hex-distribution&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Original 58-file archive used in the report (current branch, historical revision unpinned)&quot;,
+      &quot;url&quot;: &quot;https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;jpeg-byte-mode-replay&quot;
+  ],
+  &quot;reader_note&quot;: &quot;The four-page byte-histogram class changes after re-encoding the same images.&quot;,
+  &quot;reader_limit&quot;: &quot;The encoding control cannot identify the original encoder or test a hidden-message extraction.&quot;,
+  &quot;scope_summary&quot;: &quot;58 LP2 JPEGs · three fixed re-encodes per page.&quot;,
+  &quot;article&quot;: &quot;# JPEG byte classes after re-encoding\n\n**Finding:** The four LP2 files singled out in the 2023 byte-histogram report have a nonzero most-frequent byte in our archived originals. That four-page grouping **does not survive a fixed JPEG re-encode**. The same decoded page images yield 23 nonzero-mode files at quality 75, 23 at quality 85, and five at quality 95. A file-byte mode is therefore sensitive to JPEG encoding choices; the grouping alone cannot identify a manuscript layer or hidden message.\n\n![Bar chart comparing the number of nonzero-modal-byte LP2 files in originals and three fixed re-encodes.](experiments/records/jpeg-modal-reencode-control/mode-control.svg)\n\n| File set | Nonzero-mode pages | Original four still nonzero-mode |\n| --- | ---: | ---: |\n| Archived originals | 4 of 58 | 4 of 4 |\n| Re-encode at quality 75 | 23 of 58 | 1 of 4 |\n| Re-encode at quality 85 | 23 of 58 | 1 of 4 |\n| Re-encode at quality 95 | 5 of 58 | 0 of 4 |\n\nThe original four are **LP2-00, 04, 24 and 26**. At qualities 75 and 85, only LP2-24 retains a nonzero mode. At quality 95, none does. Re-encoding introduces many different nonzero-mode pages at 75 and 85; it does not simply turn every page into a `00`-mode file.\n\n## What was compared\n\nFor each of the 58 archived LP2 JPEGs, the script counts all 256 possible *complete-file byte values* and records the unique most frequent one. It then decodes that original and saves it in memory as a new JPEG at each of three specified quality settings, with chroma subsampling disabled and no resizing. The re-encoded files are **derivatives**, never replacements for the original manuscript images. The [existing byte audit](#/wiki/jpeg-byte-distribution) gives the full original histograms and frame-header checks; this test asks whether their four-page class is stable under a change of JPEG representation.\n\nThis is a bounded sensitivity control, **not a randomness test**. The quality settings are illustrative and were not sampled from a model of how Cicada made the original files. Re-encoding can change compressed bytes and decoded pixels, so this result neither explains the original file-production process nor rules out steganography. A proposed extraction must specify its target bytes, algorithm and expected output separately.\n\n## Reproduce\n\nRun `python experiments/records/jpeg-modal-reencode-control/run.py --check` from the repository root with **Pillow 11.3.0**. The [saved report](experiments/records/jpeg-modal-reencode-control/results.json) lists the SHA-256, byte length and mode of every original and all 174 temporary re-encodes. The [plan](experiments/records/jpeg-modal-reencode-control/plan.json) fixes the measurement and settings. The source claim and its 58-page table are summarized in [Reported attempts](#/wiki/reported-attempts?section=jpeg-hex-distribution); the historically linked [image archive](https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved) identifies its earlier image collection, whose 2023 revision has not been pinned.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/jpeg-modal-reencode-control/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ff21e54613305993e37b4ba33649ed47a4e8bb4c8c657280e63862e68b8e9bbb&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
   }
 }</pre></article><article id="known-reading-languages"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;known-reading-languages&quot;,
@@ -20806,6 +21668,123 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="night-thoughts-729-line-audit"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;night-thoughts-729-line-audit&quot;,
+  &quot;title&quot;: &quot;Night Thoughts: six proposed line-729 pointers in a pinned edition&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the six quoted Night Thoughts passages fall on verse line 729 in one identifiable, reproducible edition?&quot;,
+  &quot;summary&quot;: &quot;The proposed LP2-00–02 rune count is 729. All six quoted passages are found in the pinned 1853 edition, but five are at verse line 729 and the Night IX passage is at line 731. The linked Google scan is a distinct, unverified source.&quot;,
+  &quot;tags&quot;: [
+    &quot;Night Thoughts&quot;,
+    &quot;Edward Young&quot;,
+    &quot;William Blake&quot;,
+    &quot;book cipher&quot;,
+    &quot;line 729&quot;,
+    &quot;LP2-00&quot;,
+    &quot;LP2-01&quot;,
+    &quot;LP2-02&quot;,
+    &quot;source edition&quot;,
+    &quot;bibliographic audit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/night-thoughts-729-line-audit/plan.json&quot;,
+      &quot;experiments/records/night-thoughts-729-line-audit/source/pg33156-1853.txt&quot;
+    ],
+    &quot;representation&quot;: &quot;Original three page transcriptions plus a pinned UTF-8 plaintext of Project Gutenberg ebook 33156, a transcription of an 1853 Gilfillan-edited Night Thoughts, with only CRLF normalized to LF. The upstream and normalized SHA-256 hashes and the supplied discussion&#x27;s six quotations and Google Books link are identified separately in the plan.&quot;,
+    &quot;procedure&quot;: &quot;Count alphabet runes across the three pages. Search each quoted phrase within its named Night after only case and punctuation normalization. Infer the printed verse line from adjacent right-margin number markers, requiring neighboring anchors to agree; retain exact line, file position and marker evidence.&quot;,
+    &quot;parameters&quot;: &quot;One public-domain 1853 comparison edition; Nights IV–IX; six posted quotations; target verse line 729; no alternate line or book selected after output.&quot;,
+    &quot;exclusions&quot;: &quot;The linked Google Books scan&#x27;s unverified edition and page labels; Blake&#x27;s 1797 illustrated object; any GP-key construction, six-line concatenation cipher, RSA step, or LP2 decryption.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;LP2-00–02 contain 262, 266 and 201 runes, totaling 729. In the pinned 1853 text, five of the six source-quoted passages are verse line 729. Night IX&#x27;s quoted &#x27;And deep reception&#x27; passage is line 731, two lines after the numbered 728 marker, so a six-of-six line-729 claim does not reproduce in this edition.&quot;,
+  &quot;limitations&quot;: &quot;The source links a different Google Books volume whose exact scan/edition was not pinned in this test. Variant wording and line numbering may change there. The six lines were chosen after looking at the book, and no target-page cipher operation is supplied; this audit cannot establish a key or calculate a discovery probability.&quot;,
+  &quot;next_steps&quot;: &quot;Identify and hash the source-linked scan, verify its title page and six exact line/page coordinates, and preserve every extracted line. Define a complete text-to-rune operation, target span and held-out check before testing a Night Thoughts key.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/night-thoughts-729-line-audit/run.py --check &amp;&amp; python experiments/records/night-thoughts-729-line-audit/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; source text is included for offline replay, with its Project Gutenberg license.&quot;,
+    &quot;script&quot;: &quot;experiments/records/night-thoughts-729-line-audit/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;3ac0c3a6a5fb5d512829a1c4618051e2d8516b99b4d298664e8321d742cb89fe&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/plan.json&quot;,
+        &quot;sha256&quot;: &quot;cebc6e4a3594ee504384d6259a6637dd6f05aececd37ccfa0812ae47d009fd01&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/check.py&quot;,
+        &quot;sha256&quot;: &quot;a07d19bc80565f072df5b11a41652319ecc9c91c405a92728359cd6d43f5d328&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/source/pg33156-1853.txt&quot;,
+        &quot;sha256&quot;: &quot;031c2357a17d6eb8a460e9625a126acca67d1ce254b0ed96179037430b5c438b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/results.json&quot;,
+        &quot;sha256&quot;: &quot;374e097d8eb68d883023cdcd7ddbde82688530d59b093518297b3d070c762e27&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/line-729.svg&quot;,
+        &quot;sha256&quot;: &quot;83269977ab8ffd5adc392e50da4b9f74539d304a0fcc69ffe6eaf10472b442c2&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent numbered-line and rune-count checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/line-729.svg&quot;,
+      &quot;caption&quot;: &quot;Night IV–IX positions of the source&#x27;s six reported passages in one pinned 1853 comparison edition.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Reported Night Thoughts pointer and supplied discussion identity&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/reported-attempts?section=night-thoughts-729-book-pointer&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Project Gutenberg ebook 33156, identified 1853 comparison text&quot;,
+      &quot;url&quot;: &quot;https://www.gutenberg.org/ebooks/33156&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Google Books volume linked in the reported discussion; edition not verified here&quot;,
+      &quot;url&quot;: &quot;https://books.google.com/books?id=GsVHv1gACYAC&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;emerson-book-cipher-control&quot;,
+    &quot;cross-section-index-inversion&quot;
+  ],
+  &quot;article&quot;: &quot;# Do the six proposed *Night Thoughts* lines point to 729?\n\nA [reported book-pointer idea](#/wiki/reported-attempts?section=night-thoughts-729-book-pointer) starts with the **729 runes** on LP2-00–02, then gathers what it calls line 729 from Nights IV–IX of Edward Young’s *Night Thoughts*. The discussion supplies six short quotations and a [Google Books volume](https://books.google.com/books?id=GsVHv1gACYAC), but does not verify the scan’s edition or give a cipher rule for using the collected lines.\n\nHere we checked the **six quoted locations**, using one pinned comparison text: the [1853 edition edited by George Gilfillan](https://www.gutenberg.org/ebooks/33156), transcribed as Project Gutenberg ebook 33156. It is a later text, **not a claimed replay of the linked Google scan** or Blake’s 1797 illustrated volume. We retained its full UTF-8 text and license in the downloadable experiment, normalizing only CRLF line endings to LF, so its printed line-number markers can be checked offline.\n\n![Night IV through IX compared with the reported line 729; five entries show 729, while Night IX shows 731 in the pinned 1853 edition.](experiments/records/night-thoughts-729-line-audit/line-729.svg)\n\n## What the lookup shows\n\nThe archived page transcriptions contain **262 + 266 + 201 = 729** alphabet runes across [LP2-00](#/page/lp2-00), [LP2-01](#/page/lp2-01) and [LP2-02](#/page/lp2-02), counting headings and excluding every non-rune. That establishes the proposed *pointer value*, not a link to any book.\n\nThe six quoted passages are all identifiable in the pinned edition. Its right-margin verse numbers, checked against adjacent numbered lines, place **five** of them at line 729. The Night IX phrase, “And deep reception, in th’ intender’d heart,” is at **line 731**: the edition numbers “With gain, and joy, she bribes thee to be wise” as 728, followed by two intervening lines before the quoted phrase. The source’s wording also differs slightly from this edition in places, such as “series end” versus “series ends.”\n\n| Night | Short identifying words | Line in the pinned 1853 text |\n| --- | --- | ---: |\n| IV | “Hold her sacred still” | 729 |\n| V | “thunder scarce obtains your ear” | 729 |\n| VI | “in man the series ends” | 729 |\n| VII | “blind Passion! drive us on” | 729 |\n| VIII | “the Muse, to win thine ear” | 729 |\n| IX | “deep reception … intender’d heart” | **731** |\n\nThis **5-of-6 result is edition-specific**. The Google Books scan linked in the discussion might use different text or numbering; we could not verify its title page and all six page locations from a pinned copy. The source also lists printed pages 82, 110, 150, 182, 230 and 276 for the six selections. Their sum is 1030, but this audit does not certify those page labels in that scan. No probability of a literary connection follows from five positional matches in a book whose six passages were selected after inspection.\n\n## What a cipher test would still require\n\nCombining six lines in chapter order is a text selection, not a decryption. A test needs one identified edition; the exact extracted six lines, including the Night IX discrepancy; a normalization and rune conversion; a rule for applying the text to a stated manuscript span; and a success criterion assessed on an untouched continuation. Any search across alternative Nights, editions, page counts, RSA parameters or word arrangements must include those choices in its control search.\n\nThe [plan](experiments/records/night-thoughts-729-line-audit/plan.json) fixes the six source quotations, comparison edition and location procedure. The [result](experiments/records/night-thoughts-729-line-audit/results.json) preserves each exact line, file coordinate and neighboring numbered markers. From a checkout or extracted bundle, run:\n\n```text\npython experiments/records/night-thoughts-729-line-audit/run.py --check\npython experiments/records/night-thoughts-729-line-audit/check.py\n```\n\nBoth use only Python’s standard library. The independent checker uses separately read line and marker coordinates and confirms the three page-rune counts; it does not import the producer.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/night-thoughts-729-line-audit/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;3ac0c3a6a5fb5d512829a1c4618051e2d8516b99b4d298664e8321d742cb89fe&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
 }</pre></article><article id="outguess-default-key"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;outguess-default-key&quot;,
   &quot;title&quot;: &quot;Original JPEGs: default-key OutGuess sweep&quot;,
@@ -25278,6 +26257,744 @@
     &quot;id&quot;: &quot;control&quot;,
     &quot;label&quot;: &quot;Control&quot;,
     &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  }
+}</pre></article><article id="section-1433-pairing"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;section-1433-pairing&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;The three 1,433-rune section streams&quot;,
+  &quot;question&quot;: &quot;Do three reported 1,433-rune streams produce a distinctive printed-order pairwise arithmetic output?&quot;,
+  &quot;summary&quot;: &quot;The best of twelve fixed arithmetic readings has IoC 0.034813. In 465 of 999 shifted controls, the same twelve-way selection scores at least as high.&quot;,
+  &quot;tags&quot;: [
+    &quot;1433&quot;,
+    &quot;equal-length sections&quot;,
+    &quot;Koan 2&quot;,
+    &quot;Spirals&quot;,
+    &quot;Cuneiform&quot;,
+    &quot;Wing and Tree&quot;,
+    &quot;pairwise subtraction&quot;,
+    &quot;index of coincidence&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-14&quot;,
+      &quot;lp1-15&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;
+    ],
+    &quot;representation&quot;: &quot;Koan 2 plus Spirals without F, Cuneiform without F, and Wing and Tree retaining F; explicit &amp; section boundaries.&quot;,
+    &quot;procedure&quot;: &quot;Rebuild three 1,433-rune streams; test each pair under add/subtract modulo 29, forward/reverse second stream; choose highest whole-output IoC; repeat full 12-way selection for 999 seeded independent nonzero circular-shift trials.&quot;,
+    &quot;parameters&quot;: &quot;Three pairings, four operations each, 1,433 positions, seed 14333301, 999 control trials; ties count as at least observed.&quot;,
+    &quot;exclusions&quot;: &quot;Other section combinations, F choices, routes, key offsets, language scores and discovery-wide selection adjustment.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The printed-order best is reverse-subtraction for Koan 2 + Spirals against Cuneiform, IoC 0.03481289. 465 of 999 selected-shift controls tie or exceed the observed score; their median best score is 0.034799.&quot;,
+  &quot;limitations&quot;: &quot;This conditional control does not estimate the probability of discovering the 1,433 equality or test all possible ciphers. Independent pair shifts are a reference construction, not a manuscript-generation model.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a new operation and independent plaintext success rule before trying further alignments.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;section-equal-length-arithmetic&quot;,
+    &quot;title&quot;: &quot;Equal-length section arithmetic&quot;,
+    &quot;question&quot;: &quot;Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?&quot;,
+    &quot;baseline&quot;: &quot;section-1894-pairing&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;1,433-rune three-stream pairing&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;pages&quot;,
+        &quot;before&quot;: [
+          &quot;lp1-06&quot;,
+          &quot;lp1-07&quot;,
+          &quot;lp1-08&quot;,
+          &quot;lp1-09&quot;,
+          &quot;lp1-10&quot;,
+          &quot;lp1-11&quot;,
+          &quot;lp1-12&quot;,
+          &quot;lp1-13&quot;,
+          &quot;lp1-14&quot;,
+          &quot;lp1-15&quot;,
+          &quot;lp1-16&quot;,
+          &quot;lp2-15&quot;,
+          &quot;lp2-16&quot;,
+          &quot;lp2-17&quot;,
+          &quot;lp2-18&quot;,
+          &quot;lp2-19&quot;,
+          &quot;lp2-20&quot;,
+          &quot;lp2-21&quot;,
+          &quot;lp2-22&quot;
+        ],
+        &quot;after&quot;: [
+          &quot;lp1-14&quot;,
+          &quot;lp1-15&quot;,
+          &quot;lp2-03&quot;,
+          &quot;lp2-04&quot;,
+          &quot;lp2-05&quot;,
+          &quot;lp2-06&quot;,
+          &quot;lp2-07&quot;,
+          &quot;lp2-27&quot;,
+          &quot;lp2-28&quot;,
+          &quot;lp2-29&quot;,
+          &quot;lp2-30&quot;,
+          &quot;lp2-31&quot;,
+          &quot;lp2-32&quot;,
+          &quot;lp2-33&quot;,
+          &quot;lp2-34&quot;,
+          &quot;lp2-35&quot;,
+          &quot;lp2-36&quot;,
+          &quot;lp2-37&quot;,
+          &quot;lp2-38&quot;,
+          &quot;lp2-39&quot;
+        ],
+        &quot;reason&quot;: &quot;The reported 1,433 equality uses different named sections.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.&quot;,
+        &quot;after&quot;: &quot;Koan 2 plus Spirals without F, Cuneiform without F, and Wing and Tree retaining F; explicit &amp; section boundaries.&quot;,
+        &quot;reason&quot;: &quot;Three streams with specified F choices and section boundaries replace the two 1,894 streams.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.&quot;,
+        &quot;after&quot;: &quot;Rebuild three 1,433-rune streams; test each pair under add/subtract modulo 29, forward/reverse second stream; choose highest whole-output IoC; repeat full 12-way selection for 999 seeded independent nonzero circular-shift trials.&quot;,
+        &quot;reason&quot;: &quot;All three pairings are evaluated and selected across twelve outputs.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.&quot;,
+        &quot;after&quot;: &quot;Three pairings, four operations each, 1,433 positions, seed 14333301, 999 control trials; ties count as at least observed.&quot;,
+        &quot;reason&quot;: &quot;Three pairings and 999 seeded controls replace one pairing and exhaustive shifts.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment.&quot;,
+        &quot;after&quot;: &quot;Other section combinations, F choices, routes, key offsets, language scores and discovery-wide selection adjustment.&quot;,
+        &quot;reason&quot;: &quot;The three-stream variant has its own untested transformation limits.&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent section extraction and all 999 selected-shift recounts&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/section-1433-pairing/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; independent check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/section-1433-pairing/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;cb85b69b45dfcfb97ae533b47bc94d2ab84e1be67b6dd488b01902900f20098d&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1433-pairing/plan.json&quot;,
+        &quot;sha256&quot;: &quot;917ed113691cda650578d81960c5297d20cc204bc8548e7df98d403033d1b565&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1433-pairing/check.py&quot;,
+        &quot;sha256&quot;: &quot;8eaff8cb7f905d1e920ed93b58dd961d15af6439520c9b4b12039ac5155ec90c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/source-snapshots/lp-rune-counts-2026-10-22.csv&quot;,
+        &quot;sha256&quot;: &quot;e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-14.txt&quot;,
+        &quot;sha256&quot;: &quot;b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-15.txt&quot;,
+        &quot;sha256&quot;: &quot;aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1433-pairing/results.json&quot;,
+        &quot;sha256&quot;: &quot;18dc3ba5535ad3c76942f23a889284a3301d022a83a3089a904776b56e09c6f6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1433-pairing/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;87d718204f3877a2f06ac7373a9fb9a706d483dcf1adc9d1c07b82cd50d7e8d6&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/section-1433-pairing/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The printed-order best lies near the median of shifted controls after the same twelve-way choice.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Published section-count spreadsheet&quot;,
+      &quot;url&quot;: &quot;https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived transcription and checked section boundaries&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/section-rune-counts&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;section-1894-pairing&quot;
+  ],
+  &quot;reader_note&quot;: &quot;The three streams really contain 1,433 runes apiece, but the tested arithmetic alignment does not stand out.&quot;,
+  &quot;reader_limit&quot;: &quot;The comparison is conditional on the already-chosen sections, F rules, operations and score.&quot;,
+  &quot;scope_summary&quot;: &quot;Three 1,433-rune streams · twelve operations · 999 controls.&quot;,
+  &quot;article&quot;: &quot;# Do the three 1,433-rune sections align?\n\n**Result:** No distinctive printed-order arithmetic reading appears in this bounded test. The best of **12 fixed outputs** has an index of coincidence of **0.034813**. When the same 12-way choice is repeated after independent circular shifts, **465 of 999** trials score at least as high. The reported equal lengths are real; they do not, by themselves, choose an alignment or arithmetic operation.\n\n![The observed best score nearly coincides with the median of selected shifted controls.](experiments/records/section-1433-pairing/comparison.svg)\n\nThe [section-count source](#/wiki/section-rune-counts) identifies three streams of 1,433 runes. We rebuilt each directly from the archived page text, using its explicit section breaks:\n\n| Stream | Construction | F rune |\n| --- | --- | --- |\n| Koan 2 + Spirals | LP1-14–15, then LP2-03–07 | Omit all 31 |\n| Cuneiform | Second piece of LP2-33 through first piece of LP2-39 | Omit all 35 |\n| Wing and Tree | LP2-27–32 | Retain all 52 |\n\nFor each of the **three pairings**, the test adds or subtracts corresponding zero-based rune indices modulo 29, with the second stream either forward or reversed. It measures the equal-rune-pair rate over the complete output (index of coincidence, or IoC). This yields four operations per pairing, 12 outputs in all; the largest score is the test statistic.\n\n| Printed-order pairing | Best of four IoC |\n| --- | ---: |\n| Koan 2 + Spirals / Cuneiform | **0.034813** |\n| Koan 2 + Spirals / Wing and Tree | 0.034618 |\n| Cuneiform / Wing and Tree | 0.034524 |\n\nThe observed winner is reverse-subtraction of Cuneiform against Koan 2 + Spirals. The median **best-of-12** control score is **0.034799**, nearly the same. Each control trial draws a nonzero circular shift independently for each pair and **repeats the entire 12-output choice**. The saved report includes the 12 printed-order scores and all 999 selected control scores; an independent script recounts them.\n\nThis comparison is deliberately narrow. Its controls condition on the three previously noticed equal-length streams, the F-removal decisions, this operation family and IoC as the success measure. **466/1,000** is the add-one tail fraction for this conditional setup, *not* the chance of discovering the equality or a probability that the manuscript has no related cipher. Other transformations or a specific plaintext prediction would require a separately fixed test.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/section-1433-pairing/run.py --check`, then `python experiments/records/section-1433-pairing/check.py`. Both use the Python standard library. The [plan](experiments/records/section-1433-pairing/plan.json) declares all 12 candidates and the control rule; [results](experiments/records/section-1433-pairing/results.json) save the input hashes and scores. The related [1,894-rune pairing](#/experiments/section-1894-pairing) uses the same arithmetic family on a separate reported equality.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/section-1433-pairing/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;cb85b69b45dfcfb97ae533b47bc94d2ab84e1be67b6dd488b01902900f20098d&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
+}</pre></article><article id="section-1814-pairing"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;section-1814-pairing&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;The 1,814-rune section pairing&quot;,
+  &quot;question&quot;: &quot;Does four-way pairwise arithmetic give an unusual printed alignment for the two reported 1,814-rune streams?&quot;,
+  &quot;summary&quot;: &quot;The printed-order best-of-four IoC is 0.034859; 107 of 1,813 nonzero shifts score at least as high under the same selection.&quot;,
+  &quot;tags&quot;: [
+    &quot;1814&quot;,
+    &quot;equal-length sections&quot;,
+    &quot;Koan&quot;,
+    &quot;Sign Post&quot;,
+    &quot;Spirals&quot;,
+    &quot;F omission&quot;,
+    &quot;pairwise arithmetic&quot;,
+    &quot;index of coincidence&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-06&quot;,
+      &quot;lp1-07&quot;,
+      &quot;lp1-08&quot;,
+      &quot;lp1-09&quot;,
+      &quot;lp1-10&quot;,
+      &quot;lp1-11&quot;,
+      &quot;lp1-12&quot;,
+      &quot;lp1-13&quot;,
+      &quot;lp1-14&quot;,
+      &quot;lp1-15&quot;,
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;
+    ],
+    &quot;representation&quot;: &quot;A is Koan 1, Loss of Divinity and Koan 2 in printed rune order. B is Sign Post and Spirals in printed rune order. Every F is omitted from both complete-page streams.&quot;,
+    &quot;procedure&quot;: &quot;Pair the two 1,814-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.&quot;,
+    &quot;parameters&quot;: &quot;Four operations; zero-based GP indices; 1,814 positions; 1,813 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.&quot;,
+    &quot;exclusions&quot;: &quot;Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment.&quot;
+  },
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;finding&quot;: &quot;The printed reverse-add output scores 114,642 ordered equal-rune pairs (IoC 0.034859), above the shifted median best-of-four score of 113,934; 107 of 1,813 nonzero shifts tie or exceed it.&quot;,
+  &quot;limitations&quot;: &quot;The conditional shift control fixes the published equality and tests only four operations and whole-stream IoC. It does not adjust for the search that noticed the equality or establish readable plaintext.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a complete decoding rule and an untouched page or passage to predict; repeat the complete choice procedure on controls.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;section-equal-length-arithmetic&quot;,
+    &quot;title&quot;: &quot;Equal-length section arithmetic&quot;,
+    &quot;question&quot;: &quot;Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?&quot;,
+    &quot;baseline&quot;: &quot;section-1894-pairing&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;1,814-rune two-stream pairing&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;pages&quot;,
+        &quot;before&quot;: [
+          &quot;lp1-06&quot;,
+          &quot;lp1-07&quot;,
+          &quot;lp1-08&quot;,
+          &quot;lp1-09&quot;,
+          &quot;lp1-10&quot;,
+          &quot;lp1-11&quot;,
+          &quot;lp1-12&quot;,
+          &quot;lp1-13&quot;,
+          &quot;lp1-14&quot;,
+          &quot;lp1-15&quot;,
+          &quot;lp1-16&quot;,
+          &quot;lp2-15&quot;,
+          &quot;lp2-16&quot;,
+          &quot;lp2-17&quot;,
+          &quot;lp2-18&quot;,
+          &quot;lp2-19&quot;,
+          &quot;lp2-20&quot;,
+          &quot;lp2-21&quot;,
+          &quot;lp2-22&quot;
+        ],
+        &quot;after&quot;: [
+          &quot;lp1-06&quot;,
+          &quot;lp1-07&quot;,
+          &quot;lp1-08&quot;,
+          &quot;lp1-09&quot;,
+          &quot;lp1-10&quot;,
+          &quot;lp1-11&quot;,
+          &quot;lp1-12&quot;,
+          &quot;lp1-13&quot;,
+          &quot;lp1-14&quot;,
+          &quot;lp1-15&quot;,
+          &quot;lp2-00&quot;,
+          &quot;lp2-01&quot;,
+          &quot;lp2-02&quot;,
+          &quot;lp2-03&quot;,
+          &quot;lp2-04&quot;,
+          &quot;lp2-05&quot;,
+          &quot;lp2-06&quot;,
+          &quot;lp2-07&quot;
+        ],
+        &quot;reason&quot;: &quot;The reported equality uses Koan 1, Loss of Divinity, Koan 2, Sign Post and Spirals.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.&quot;,
+        &quot;after&quot;: &quot;A is Koan 1, Loss of Divinity and Koan 2 in printed rune order. B is Sign Post and Spirals in printed rune order. Every F is omitted from both complete-page streams.&quot;,
+        &quot;reason&quot;: &quot;Both streams omit F, unlike the 1,894-rune comparison, and contain different sections.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.&quot;,
+        &quot;after&quot;: &quot;Pair the two 1,814-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.&quot;,
+        &quot;reason&quot;: &quot;Apply the baseline operations to the two new, shorter streams.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.&quot;,
+        &quot;after&quot;: &quot;Four operations; zero-based GP indices; 1,814 positions; 1,813 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.&quot;,
+        &quot;reason&quot;: &quot;The new equality has 1,814 positions and therefore 1,813 nonzero shifts.&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent section extraction and selected-shift recomputation&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/section-1814-pairing/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; independent check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/section-1814-pairing/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ec10fd38d47a1c14293de56586d4d5e8efd27eb46377bc366018609cad2974e2&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1814-pairing/plan.json&quot;,
+        &quot;sha256&quot;: &quot;ae9461444d6b2de0f09a3cb4063f318a55975d7286d4b959623479dfc7e26961&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1814-pairing/check.py&quot;,
+        &quot;sha256&quot;: &quot;55c78e0364393ae162bbeba024cc1f31d31982a0cfd53cd3faeaebaf7550cd8e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/source-snapshots/lp-rune-counts-2026-10-22.csv&quot;,
+        &quot;sha256&quot;: &quot;e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-06.txt&quot;,
+        &quot;sha256&quot;: &quot;9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-07.txt&quot;,
+        &quot;sha256&quot;: &quot;df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-08.txt&quot;,
+        &quot;sha256&quot;: &quot;a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-09.txt&quot;,
+        &quot;sha256&quot;: &quot;2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-10.txt&quot;,
+        &quot;sha256&quot;: &quot;7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-11.txt&quot;,
+        &quot;sha256&quot;: &quot;1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-12.txt&quot;,
+        &quot;sha256&quot;: &quot;7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-13.txt&quot;,
+        &quot;sha256&quot;: &quot;141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-14.txt&quot;,
+        &quot;sha256&quot;: &quot;b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-15.txt&quot;,
+        &quot;sha256&quot;: &quot;aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1814-pairing/results.json&quot;,
+        &quot;sha256&quot;: &quot;32d4891c377237c53eb7b6c398e6206a066d9ce6fc852645a471c792c3e2c149&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1814-pairing/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;a02371d70bbf9fa260f80ded6f4973af52d37c82bc3e3cd72ff030050948f5f0&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/section-1814-pairing/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The observed score is above the shifted median, but 107 nonzero shifts score at least as high.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Published section-count spreadsheet&quot;,
+      &quot;url&quot;: &quot;https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Liberpedia section-count audit&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/section-rune-counts&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;section-1894-pairing&quot;
+  ],
+  &quot;article&quot;: &quot;# The 1,814-rune section pairing\n\n**Result.** The printed-order pairing scores above the median of the shift controls, but it is not isolated: **107 of 1,813 nonzero circular shifts** score at least as high after the same four-way choice. That is a conditional rank of **108/1,814 (5.95%)** when the printed alignment is included. It does not yield a reading or establish a key.\n\n![The printed pairing scores above the shift median but is matched or exceeded by 107 shifted pairings.](experiments/records/section-1814-pairing/comparison.svg)\n\nThis is a variant of the [1,894-rune pairing](#/experiments/section-1894-pairing). Only the input streams change. The published section counts give **753 + 747 + 314 = 1,814** runes for Koan 1, Loss of Divinity and Koan 2 after removing every F. Sign Post and Spirals give **695 + 1,119 = 1,814** under the same omission. We reconstructed those streams in printed order from LP1-06–15 and LP2-00–07; the first stream uses the *runes*, not the known English reading.\n\nAt each position, we add or subtract the two zero-based rune indices modulo 29. We also try the same operations with the second stream reversed. The complete output is scored by its index of coincidence (IoC), and the highest of the four scores is kept. The best printed-order variant is **reverse, add**: 114,642 ordered equal-rune pairs, or IoC **0.034859**. The median best-of-four score among shifted controls is **113,934**.\n\nThe control circularly shifts the second stream through *every* other alignment, applying all four operations and selecting the best each time. It accounts for choosing among those four operations **at this fixed pair of sections**. It does not account for choosing this equality from the source sheet, trying other section combinations or judging candidate plaintext after inspection. The modest upper-tail position is therefore a reason to specify a predictive decoding rule, not evidence that the pairing solves an LP2 page.\n\nRun `python experiments/records/section-1814-pairing/run.py --check` and `python experiments/records/section-1814-pairing/check.py` from the repository root. The [plan](experiments/records/section-1814-pairing/plan.json) freezes the four operations and control; the [result file](experiments/records/section-1814-pairing/results.json) includes all 1,814 shift scores. The independent checker rebuilds the streams and selected scores from the archived transcriptions.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/section-1814-pairing/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ec10fd38d47a1c14293de56586d4d5e8efd27eb46377bc366018609cad2974e2&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
+}</pre></article><article id="section-1894-pairing"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;section-1894-pairing&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;The 1,894-rune section pairing&quot;,
+  &quot;question&quot;: &quot;Do four fixed pairwise arithmetic operations yield an unusual alignment for the two reported 1,894-rune streams?&quot;,
+  &quot;summary&quot;: &quot;The best printed-order IoC is 0.034549. Of 1,893 nonzero circular shifts, 1,410 score at least as high after the same four-way selection.&quot;,
+  &quot;tags&quot;: [
+    &quot;1894&quot;,
+    &quot;equal-length sections&quot;,
+    &quot;Koan&quot;,
+    &quot;Mobius&quot;,
+    &quot;F omission&quot;,
+    &quot;pairwise subtraction&quot;,
+    &quot;index of coincidence&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp1-06&quot;,
+      &quot;lp1-07&quot;,
+      &quot;lp1-08&quot;,
+      &quot;lp1-09&quot;,
+      &quot;lp1-10&quot;,
+      &quot;lp1-11&quot;,
+      &quot;lp1-12&quot;,
+      &quot;lp1-13&quot;,
+      &quot;lp1-14&quot;,
+      &quot;lp1-15&quot;,
+      &quot;lp1-16&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;
+    ],
+    &quot;representation&quot;: &quot;A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.&quot;,
+    &quot;procedure&quot;: &quot;Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.&quot;,
+    &quot;parameters&quot;: &quot;Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.&quot;,
+    &quot;exclusions&quot;: &quot;Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The best printed-order output scores 123,870 ordered equal-rune pairs (IoC 0.034549), below the median best-of-four shifted score of 124,096. 1,410 of 1,893 nonzero shifted controls tie or exceed it.&quot;,
+  &quot;limitations&quot;: &quot;This conditional control fixes the reported sections and tests one small operation set and whole-stream IoC; it cannot assess all possible cipher combinations or correct for finding the equality after a broad search.&quot;,
+  &quot;next_steps&quot;: &quot;Specify another operation and complete-text success criterion before inspecting its output; compare the same selection procedure against appropriate controls.&quot;,
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;section-equal-length-arithmetic&quot;,
+    &quot;title&quot;: &quot;Equal-length section arithmetic&quot;,
+    &quot;question&quot;: &quot;Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?&quot;,
+    &quot;baseline&quot;: &quot;section-1894-pairing&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;1,894-rune two-stream pairing&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent section extraction and selected-shift recomputation&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/section-1894-pairing/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library; independent check.py&quot;,
+    &quot;script&quot;: &quot;experiments/records/section-1894-pairing/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;9102af6a265c08f93d9a60e5f6cd14fda76e2564375887854e6517675d8251c8&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1894-pairing/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6f99bc17d2b5d807d004989fb59b11644d5fc6c1fac7f3bc4c0f26478153799d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1894-pairing/check.py&quot;,
+        &quot;sha256&quot;: &quot;e6231efdb22e979da1faf2c805b201112c67992cc107e34c3e04b24f75269968&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/source-snapshots/lp-rune-counts-2026-10-22.csv&quot;,
+        &quot;sha256&quot;: &quot;e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-06.txt&quot;,
+        &quot;sha256&quot;: &quot;9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-07.txt&quot;,
+        &quot;sha256&quot;: &quot;df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-08.txt&quot;,
+        &quot;sha256&quot;: &quot;a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-09.txt&quot;,
+        &quot;sha256&quot;: &quot;2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-10.txt&quot;,
+        &quot;sha256&quot;: &quot;7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-11.txt&quot;,
+        &quot;sha256&quot;: &quot;1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-12.txt&quot;,
+        &quot;sha256&quot;: &quot;7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-13.txt&quot;,
+        &quot;sha256&quot;: &quot;141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-14.txt&quot;,
+        &quot;sha256&quot;: &quot;b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-15.txt&quot;,
+        &quot;sha256&quot;: &quot;aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp1-16.txt&quot;,
+        &quot;sha256&quot;: &quot;3ba86b3cacff98e3c94e3075c8c0b93bb1c53d9bed5fe96ad58cf3b08cc11082&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1894-pairing/results.json&quot;,
+        &quot;sha256&quot;: &quot;f39d00839fc55f2670f32c83719080f40f861a482ca81301fc6760d58d5163c9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/section-1894-pairing/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;093cf0b0993d591ea3013f495155c42b9eed25478d4e335cbaab1f110b376eaf&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/section-1894-pairing/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The printed-order score lies inside the exhaustive circular-shift range.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Published section-count spreadsheet&quot;,
+      &quot;url&quot;: &quot;https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Liberpedia section-count audit&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/section-rune-counts&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;spiral-branches-paired-subtraction&quot;
+  ],
+  &quot;article&quot;: &quot;# Does the 1,894-rune count give a useful alignment?\n\n**Result.** No unusual alignment appears under four fixed arithmetic readings. The best printed-order output has an index of coincidence of **0.034549**. Of the 1,893 nonzero circular shifts used as controls, **1,410 score at least as high** after the same four-way choice. This tests a proposed use of the equal length, not whether the section-count equality itself is correct.\n\n![The observed pairing lies within the range of shifted pairings; 1,410 of 1,893 shifts score at least as high.](experiments/records/section-1894-pairing/comparison.svg)\n\nThe published [section-count sheet](#/wiki/section-rune-counts) gives **1,894** runes on each side: Koan 1, Loss of Divinity, Koan 2 and Instruction after removing every F; and the Möbius section after its nine-rune heading with F retained. The first stream uses solved LP1 page *runes*, not the English reading. We rebuilt both streams directly from the archived page transcriptions, retaining their printed order and the explicit section breaks on LP1-16 and LP2-15.\n\nFor each aligned pair of rune indices `A` and `B`, the test forms `(B + A) mod 29` or `(B − A) mod 29`, with `B` either forward or reversed. Each complete output receives a whole-stream equal-rune-pair score, reported as index of coincidence (IoC); the **highest of the four** is the chosen score. We repeat that whole selection for every circular shift of `B`, so the control includes the choice among the four operations.\n\n| Printed-order operation | Equal-rune pairs | IoC |\n| --- | ---: | ---: |\n| Add | 123,206 | 0.034364 |\n| Subtract | 123,468 | 0.034437 |\n| Reverse, add | **123,870** | **0.034549** |\n| Reverse, subtract | 123,266 | 0.034381 |\n\nThe observed best score is **below the median shifted best score** of 124,096. Its rank is ordinary under this narrow comparison; the count match alone does not choose an operation or recover readable text. The [full result](experiments/records/section-1894-pairing/results.json) saves all 1,894 best-of-four scores, and the [plan](experiments/records/section-1894-pairing/plan.json) fixes the operations and exclusions.\n\nRun `python experiments/records/section-1894-pairing/run.py --check` and `python experiments/records/section-1894-pairing/check.py` from the repository root. The second program independently rebuilds the section streams and checks the observed variants and selected shifts. This control conditions on a previously noticed equality and one score. It does not cover every section pairing, every cipher operation, or a full language-based reading test.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/section-1894-pairing/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;9102af6a265c08f93d9a60e5f6cd14fda76e2564375887854e6517675d8251c8&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
 }</pre></article><article id="sectionwise-rune-profile"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;sectionwise-rune-profile&quot;,

@@ -1,0 +1,281 @@
+{
+  "id": "section-1433-pairing",
+  "status": "published",
+  "title": "The three 1,433-rune section streams",
+  "question": "Do three reported 1,433-rune streams produce a distinctive printed-order pairwise arithmetic output?",
+  "summary": "The best of twelve fixed arithmetic readings has IoC 0.034813. In 465 of 999 shifted controls, the same twelve-way selection scores at least as high.",
+  "tags": [
+    "1433",
+    "equal-length sections",
+    "Koan 2",
+    "Spirals",
+    "Cuneiform",
+    "Wing and Tree",
+    "pairwise subtraction",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-14",
+      "lp1-15",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39"
+    ],
+    "representation": "Koan 2 plus Spirals without F, Cuneiform without F, and Wing and Tree retaining F; explicit & section boundaries.",
+    "procedure": "Rebuild three 1,433-rune streams; test each pair under add/subtract modulo 29, forward/reverse second stream; choose highest whole-output IoC; repeat full 12-way selection for 999 seeded independent nonzero circular-shift trials.",
+    "parameters": "Three pairings, four operations each, 1,433 positions, seed 14333301, 999 control trials; ties count as at least observed.",
+    "exclusions": "Other section combinations, F choices, routes, key offsets, language scores and discovery-wide selection adjustment."
+  },
+  "outcome": "not-supported",
+  "finding": "The printed-order best is reverse-subtraction for Koan 2 + Spirals against Cuneiform, IoC 0.03481289. 465 of 999 selected-shift controls tie or exceed the observed score; their median best score is 0.034799.",
+  "limitations": "This conditional control does not estimate the probability of discovering the 1,433 equality or test all possible ciphers. Independent pair shifts are a reference construction, not a manuscript-generation model.",
+  "next_steps": "Specify a new operation and independent plaintext success rule before trying further alignments.",
+  "family": {
+    "id": "section-equal-length-arithmetic",
+    "title": "Equal-length section arithmetic",
+    "question": "Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?",
+    "baseline": "section-1894-pairing"
+  },
+  "variant": {
+    "label": "1,433-rune three-stream pairing",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-10",
+          "lp1-11",
+          "lp1-12",
+          "lp1-13",
+          "lp1-14",
+          "lp1-15",
+          "lp1-16",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22"
+        ],
+        "after": [
+          "lp1-14",
+          "lp1-15",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39"
+        ],
+        "reason": "The reported 1,433 equality uses different named sections."
+      },
+      {
+        "field": "representation",
+        "before": "A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.",
+        "after": "Koan 2 plus Spirals without F, Cuneiform without F, and Wing and Tree retaining F; explicit & section boundaries.",
+        "reason": "Three streams with specified F choices and section boundaries replace the two 1,894 streams."
+      },
+      {
+        "field": "procedure",
+        "before": "Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.",
+        "after": "Rebuild three 1,433-rune streams; test each pair under add/subtract modulo 29, forward/reverse second stream; choose highest whole-output IoC; repeat full 12-way selection for 999 seeded independent nonzero circular-shift trials.",
+        "reason": "All three pairings are evaluated and selected across twelve outputs."
+      },
+      {
+        "field": "parameters",
+        "before": "Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.",
+        "after": "Three pairings, four operations each, 1,433 positions, seed 14333301, 999 control trials; ties count as at least observed.",
+        "reason": "Three pairings and 999 seeded controls replace one pairing and exhaustive shifts."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment.",
+        "after": "Other section combinations, F choices, routes, key offsets, language scores and discovery-wide selection adjustment.",
+        "reason": "The three-stream variant has its own untested transformation limits."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent section extraction and all 999 selected-shift recounts",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/section-1433-pairing/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py",
+    "script": "experiments/records/section-1433-pairing/run.py",
+    "script_sha256": "cb85b69b45dfcfb97ae533b47bc94d2ab84e1be67b6dd488b01902900f20098d",
+    "inputs": [
+      {
+        "path": "experiments/records/section-1433-pairing/plan.json",
+        "sha256": "917ed113691cda650578d81960c5297d20cc204bc8548e7df98d403033d1b565"
+      },
+      {
+        "path": "experiments/records/section-1433-pairing/check.py",
+        "sha256": "8eaff8cb7f905d1e920ed93b58dd961d15af6439520c9b4b12039ac5155ec90c"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/source-snapshots/lp-rune-counts-2026-10-22.csv",
+        "sha256": "e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/section-1433-pairing/results.json",
+        "sha256": "18dc3ba5535ad3c76942f23a889284a3301d022a83a3089a904776b56e09c6f6"
+      },
+      {
+        "path": "experiments/records/section-1433-pairing/comparison.svg",
+        "sha256": "87d718204f3877a2f06ac7373a9fb9a706d483dcf1adc9d1c07b82cd50d7e8d6"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/section-1433-pairing/comparison.svg",
+      "caption": "The printed-order best lies near the median of shifted controls after the same twelve-way choice."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published section-count spreadsheet",
+      "url": "https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit"
+    },
+    {
+      "label": "Archived transcription and checked section boundaries",
+      "url": "https://jelliottdev.github.io/#/wiki/section-rune-counts"
+    }
+  ],
+  "related": [
+    "section-1894-pairing"
+  ],
+  "reader_note": "The three streams really contain 1,433 runes apiece, but the tested arithmetic alignment does not stand out.",
+  "reader_limit": "The comparison is conditional on the already-chosen sections, F rules, operations and score.",
+  "scope_summary": "Three 1,433-rune streams · twelve operations · 999 controls.",
+  "article": "# Do the three 1,433-rune sections align?\n\n**Result:** No distinctive printed-order arithmetic reading appears in this bounded test. The best of **12 fixed outputs** has an index of coincidence of **0.034813**. When the same 12-way choice is repeated after independent circular shifts, **465 of 999** trials score at least as high. The reported equal lengths are real; they do not, by themselves, choose an alignment or arithmetic operation.\n\n![The observed best score nearly coincides with the median of selected shifted controls.](experiments/records/section-1433-pairing/comparison.svg)\n\nThe [section-count source](#/wiki/section-rune-counts) identifies three streams of 1,433 runes. We rebuilt each directly from the archived page text, using its explicit section breaks:\n\n| Stream | Construction | F rune |\n| --- | --- | --- |\n| Koan 2 + Spirals | LP1-14–15, then LP2-03–07 | Omit all 31 |\n| Cuneiform | Second piece of LP2-33 through first piece of LP2-39 | Omit all 35 |\n| Wing and Tree | LP2-27–32 | Retain all 52 |\n\nFor each of the **three pairings**, the test adds or subtracts corresponding zero-based rune indices modulo 29, with the second stream either forward or reversed. It measures the equal-rune-pair rate over the complete output (index of coincidence, or IoC). This yields four operations per pairing, 12 outputs in all; the largest score is the test statistic.\n\n| Printed-order pairing | Best of four IoC |\n| --- | ---: |\n| Koan 2 + Spirals / Cuneiform | **0.034813** |\n| Koan 2 + Spirals / Wing and Tree | 0.034618 |\n| Cuneiform / Wing and Tree | 0.034524 |\n\nThe observed winner is reverse-subtraction of Cuneiform against Koan 2 + Spirals. The median **best-of-12** control score is **0.034799**, nearly the same. Each control trial draws a nonzero circular shift independently for each pair and **repeats the entire 12-output choice**. The saved report includes the 12 printed-order scores and all 999 selected control scores; an independent script recounts them.\n\nThis comparison is deliberately narrow. Its controls condition on the three previously noticed equal-length streams, the F-removal decisions, this operation family and IoC as the success measure. **466/1,000** is the add-one tail fraction for this conditional setup, *not* the chance of discovering the equality or a probability that the manuscript has no related cipher. Other transformations or a specific plaintext prediction would require a separately fixed test.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/section-1433-pairing/run.py --check`, then `python experiments/records/section-1433-pairing/check.py`. Both use the Python standard library. The [plan](experiments/records/section-1433-pairing/plan.json) declares all 12 candidates and the control rule; [results](experiments/records/section-1433-pairing/results.json) save the input hashes and scores. The related [1,894-rune pairing](#/experiments/section-1894-pairing) uses the same arithmetic family on a separate reported equality.\n",
+  "article_path": "experiments/records/section-1433-pairing/article.md",
+  "script_sha256": "cb85b69b45dfcfb97ae533b47bc94d2ab84e1be67b6dd488b01902900f20098d",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

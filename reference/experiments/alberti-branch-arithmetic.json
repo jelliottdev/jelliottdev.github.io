@@ -1,0 +1,96 @@
+{
+  "id": "alberti-branch-arithmetic",
+  "title": "Alberti branch proposal: LP2-39 row and modulo-31 arithmetic",
+  "status": "published",
+  "question": "Do the source's identified LP2-39 row, 4–5–4 shift sums and claimed modulo-31 matches reproduce as written?",
+  "summary": "The 19-rune row and four signed short-group sums reproduce. Standard modulo 31 turns the right totals −33 and −39 into 29 and 23, rather than the claimed positive 2 and 8; the proposed disk reading remains untested.",
+  "tags": [
+    "Alberti disk",
+    "moving alphabet",
+    "LP2-39",
+    "rule branches",
+    "4-5-4",
+    "modulo 31",
+    "plant shifts",
+    "source audit"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-39"
+    ],
+    "artifacts": [
+      "experiments/records/alberti-branch-arithmetic/plan.json"
+    ],
+    "representation": "Archived LP2-39 UTF-8 rune transcription and the source's two explicit 13-number plant arrays, short overlay and posted final arrays, copied into a fixed plan. Source transcript identified by SHA-256, not republished.",
+    "procedure": "Recount the source-identified row's rune groups; calculate the two four-element overlaid short sums and all posted 4–5–4 final-array sums; reduce the signed values using standard nonnegative modulo-31 residues. Repeat short sums at all 13 cyclic starts for each plant array as a sensitivity diagnostic.",
+    "parameters": "One LP2-39 row; two posted 13-number arrays; one posted four-number overlay; fixed groups 4, 5, 4; 13 starting positions for each array; modulus 31. No fitted key, symbol mapping or selected plaintext.",
+    "exclusions": "Complete Alberti disk alphabets, rule-state transitions, branch inheritance, letter assembly, word-selection search, full-page reading, or a chance probability for the source's selected interpretation. The separate method files and diagrams referred to in the discussion are not available as pinned inputs here."
+  },
+  "outcome": "inconclusive",
+  "finding": "The identified row has 19 runes in groups of 3, 4, 6, 5 and 1. Left raw short sums −13 and −17 and right raw short sums −33 and −39 reproduce. The right pair reduces modulo 31 to 29 and 23, not the source's +2 and +8; obtaining the positive pair requires an additional direction reversal. The proposed deciphering rule cannot be checked from these arithmetic inputs.",
+  "limitations": "The transcript states the arrays but does not supply a complete fixed disk configuration and transition table. Its group and target choices were made during an evolving exploration, so the 13-rotation check is sensitivity analysis, not a statistical null. It cannot validate or refute the purported LP2-39 plaintext.",
+  "next_steps": "Obtain one pinned version of the disk alphabets, four rule transitions and branch/letter-selection rules. Then save every unedited branch output for the row, compare the whole search with known-reading and matched control rows, and reserve an untouched continuation.",
+  "reproduction": {
+    "command": "python experiments/records/alberti-branch-arithmetic/run.py --check && python experiments/records/alberti-branch-arithmetic/check.py",
+    "environment": "Python 3.12 standard library; no network service or external package.",
+    "script": "experiments/records/alberti-branch-arithmetic/run.py",
+    "script_sha256": "6edf88ddf014205db65222300d48b5a75a1052bc24935fd2e9c192d548b25aab",
+    "inputs": [
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "experiments/records/alberti-branch-arithmetic/plan.json",
+        "sha256": "99dffe07d404007fd9a89c36e202d114296a26337011df2baaf7f059be520153"
+      },
+      {
+        "path": "experiments/records/alberti-branch-arithmetic/check.py",
+        "sha256": "616586297c15401a4d6bf94e63f14c43387e498e230fe2ca70529fe8f27747c9"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/alberti-branch-arithmetic/results.json",
+        "sha256": "ef0b56d11761f4ad8909de0699bd4fa5c1da5bdc3d8f24061d7bbd01f3b164b3"
+      },
+      {
+        "path": "experiments/records/alberti-branch-arithmetic/summary.svg",
+        "sha256": "6d061ef102b8e2c79f84ae0f1c27ace1f1d9adacf9887eb737bb07c502c523d1"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent row and arithmetic checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/alberti-branch-arithmetic/summary.svg",
+      "caption": "The posted signed sums reproduce; the right pair's conventional modulo-31 residues differ in sign from the source's stated pair."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Reported Alberti-disk approach and source identification",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=alberti-disk-branches"
+    },
+    {
+      "label": "Original LP2-39 image and transcription",
+      "url": "https://jelliottdev.github.io/#/page/lp2-39"
+    }
+  ],
+  "related": [
+    "lp2-39-header-cribs"
+  ],
+  "article": "# What does the reported Alberti branch arithmetic establish?\n\nThe [Alberti-disk proposal](#/wiki/reported-attempts?section=alberti-disk-branches) combines movable alphabets, four rule transitions, a repeating shift sequence and branches at punctuation. Its LP2-39 reading would require **all** of those pieces. The supplied discussion refers to separate method files and diagrams, but the text available for this audit does not fix the complete disk alphabets and transition rules. We therefore tested two narrower claims that can be checked directly: the identified LP2-39 row and the later 4–5–4 shift arithmetic. **This is not a replay of the proposed decryption.**\n\n![Four cards show the source row's 19 runes, the reproducing left and right raw shift totals, and the right totals' different modulo-31 residues.](experiments/records/alberti-branch-arithmetic/summary.svg)\n\n## What matches\n\nThe specified second-section row of [LP2-39](#/page/lp2-39) is present in the archived transcription. It has **19 runes** in five pieces of **3, 4, 6, 5 and 1**, separated by one full stop and three hyphens. The discussion represents these boundaries with other marks in its display; the rune groups are the same. The marks can define *candidate* branch points, but their presence does not tell us what disk state to inherit or which branches to read.\n\nThe source also supplies thirteen signed numbers for each of two plant readings, a four-number overlay `−5, −6, −3, −11`, and final arrays split into groups of 4, 5 and 4. All four **raw short-group sums** reproduce:\n\n| Sequence | First four plus overlay | Last four plus overlay | Posted raw totals |\n| --- | ---: | ---: | --- |\n| Left | −13 | −17 | −13, −17 |\n| Right | −33 | −39 | −33, −39 |\n\nThe posted final arrays also total **−13, −15, −17** on the left and **−33, −15, −39** on the right. The middle-group −15 is therefore an arithmetic property of those supplied arrays. It does not independently verify that the plant was counted correctly, that the grouping was fixed before the matching words were selected, or that these shifts decode a page.\n\n## The modulo sign matters\n\nThe source next writes the right short totals as `−33 ≡ +2` and `−39 ≡ +8` modulo 31. Under ordinary modulo arithmetic, they are **−2 ≡ 29** and **−8 ≡ 23**. The stated positive **2** and **8** are the *opposite* residues. A mirror operation might deliberately reverse direction, but that would be an additional sign-conversion rule; it does not follow from reduction modulo 31 alone. The source's disk alphabets and direction convention are needed to check that separate step.\n\nAs an alignment-sensitivity check, the script also rotates each fixed thirteen-number plant sequence through all **13** starting positions, keeping the same 4–5–4 grouping and overlay. The left ordered raw target `−13, −17` occurs at its posted start only. None of the right rotations gives the posted **positive** residue pair `2, 8` under ordinary modulo 31. These 13 rotations are a limited diagnostic, **not** a random null or a probability of the whole proposal: the source explored other disk sizes, mirror models, shifts, branches and readings.\n\n## What remains untested\n\nThe candidate words on LP2-39 are assembled across output branches after disk changes. The text we have does not provide a complete frozen machine-readable transition table, both disk alphabets for every variant, the branch inheritance rule, or a rule for selecting and assembling final letters. We cannot infer those missing rules from an appealing output. In particular, this audit neither confirms nor excludes an Alberti-style cipher, and it does not attach a probability to the reported names or words.\n\nTo test the reading, pin one version of the source model, execute **every branch** of this row, save all unedited output and word-selection decisions, and run the same search on solved-page and matched control inputs. The [plan](experiments/records/alberti-branch-arithmetic/plan.json) and [results](experiments/records/alberti-branch-arithmetic/results.json) preserve exactly the narrower checks done here.\n\nFrom the repository or extracted experiment bundle, run:\n\n```text\npython experiments/records/alberti-branch-arithmetic/run.py --check\npython experiments/records/alberti-branch-arithmetic/check.py\n```\n\nBoth scripts use the Python standard library. The checker independently recounts the row, recalculates the posted arrays and residues, and repeats all 26 rotated short-group calculations without importing the producer.\n",
+  "article_path": "experiments/records/alberti-branch-arithmetic/article.md",
+  "script_sha256": "6edf88ddf014205db65222300d48b5a75a1052bc24935fd2e9c192d548b25aab",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

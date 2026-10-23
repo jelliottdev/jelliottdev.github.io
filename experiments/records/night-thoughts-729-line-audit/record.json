@@ -1,0 +1,110 @@
+{
+  "id": "night-thoughts-729-line-audit",
+  "title": "Night Thoughts: six proposed line-729 pointers in a pinned edition",
+  "status": "published",
+  "question": "Do the six quoted Night Thoughts passages fall on verse line 729 in one identifiable, reproducible edition?",
+  "summary": "The proposed LP2-00–02 rune count is 729. All six quoted passages are found in the pinned 1853 edition, but five are at verse line 729 and the Night IX passage is at line 731. The linked Google scan is a distinct, unverified source.",
+  "tags": [
+    "Night Thoughts",
+    "Edward Young",
+    "William Blake",
+    "book cipher",
+    "line 729",
+    "LP2-00",
+    "LP2-01",
+    "LP2-02",
+    "source edition",
+    "bibliographic audit"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "artifacts": [
+      "experiments/records/night-thoughts-729-line-audit/plan.json",
+      "experiments/records/night-thoughts-729-line-audit/source/pg33156-1853.txt"
+    ],
+    "representation": "Original three page transcriptions plus a pinned UTF-8 plaintext of Project Gutenberg ebook 33156, a transcription of an 1853 Gilfillan-edited Night Thoughts, with only CRLF normalized to LF. The upstream and normalized SHA-256 hashes and the supplied discussion's six quotations and Google Books link are identified separately in the plan.",
+    "procedure": "Count alphabet runes across the three pages. Search each quoted phrase within its named Night after only case and punctuation normalization. Infer the printed verse line from adjacent right-margin number markers, requiring neighboring anchors to agree; retain exact line, file position and marker evidence.",
+    "parameters": "One public-domain 1853 comparison edition; Nights IV–IX; six posted quotations; target verse line 729; no alternate line or book selected after output.",
+    "exclusions": "The linked Google Books scan's unverified edition and page labels; Blake's 1797 illustrated object; any GP-key construction, six-line concatenation cipher, RSA step, or LP2 decryption."
+  },
+  "outcome": "inconclusive",
+  "finding": "LP2-00–02 contain 262, 266 and 201 runes, totaling 729. In the pinned 1853 text, five of the six source-quoted passages are verse line 729. Night IX's quoted 'And deep reception' passage is line 731, two lines after the numbered 728 marker, so a six-of-six line-729 claim does not reproduce in this edition.",
+  "limitations": "The source links a different Google Books volume whose exact scan/edition was not pinned in this test. Variant wording and line numbering may change there. The six lines were chosen after looking at the book, and no target-page cipher operation is supplied; this audit cannot establish a key or calculate a discovery probability.",
+  "next_steps": "Identify and hash the source-linked scan, verify its title page and six exact line/page coordinates, and preserve every extracted line. Define a complete text-to-rune operation, target span and held-out check before testing a Night Thoughts key.",
+  "reproduction": {
+    "command": "python experiments/records/night-thoughts-729-line-audit/run.py --check && python experiments/records/night-thoughts-729-line-audit/check.py",
+    "environment": "Python 3.12 standard library; source text is included for offline replay, with its Project Gutenberg license.",
+    "script": "experiments/records/night-thoughts-729-line-audit/run.py",
+    "script_sha256": "3ac0c3a6a5fb5d512829a1c4618051e2d8516b99b4d298664e8321d742cb89fe",
+    "inputs": [
+      {
+        "path": "experiments/records/night-thoughts-729-line-audit/plan.json",
+        "sha256": "cebc6e4a3594ee504384d6259a6637dd6f05aececd37ccfa0812ae47d009fd01"
+      },
+      {
+        "path": "experiments/records/night-thoughts-729-line-audit/check.py",
+        "sha256": "a07d19bc80565f072df5b11a41652319ecc9c91c405a92728359cd6d43f5d328"
+      },
+      {
+        "path": "experiments/records/night-thoughts-729-line-audit/source/pg33156-1853.txt",
+        "sha256": "031c2357a17d6eb8a460e9625a126acca67d1ce254b0ed96179037430b5c438b"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/night-thoughts-729-line-audit/results.json",
+        "sha256": "374e097d8eb68d883023cdcd7ddbde82688530d59b093518297b3d070c762e27"
+      },
+      {
+        "path": "experiments/records/night-thoughts-729-line-audit/line-729.svg",
+        "sha256": "83269977ab8ffd5adc392e50da4b9f74539d304a0fcc69ffe6eaf10472b442c2"
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent numbered-line and rune-count checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/night-thoughts-729-line-audit/line-729.svg",
+      "caption": "Night IV–IX positions of the source's six reported passages in one pinned 1853 comparison edition."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Reported Night Thoughts pointer and supplied discussion identity",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=night-thoughts-729-book-pointer"
+    },
+    {
+      "label": "Project Gutenberg ebook 33156, identified 1853 comparison text",
+      "url": "https://www.gutenberg.org/ebooks/33156"
+    },
+    {
+      "label": "Google Books volume linked in the reported discussion; edition not verified here",
+      "url": "https://books.google.com/books?id=GsVHv1gACYAC"
+    }
+  ],
+  "related": [
+    "emerson-book-cipher-control",
+    "cross-section-index-inversion"
+  ]
+}

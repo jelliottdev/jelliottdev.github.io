@@ -1,0 +1,395 @@
+{
+  "id": "jpeg-byte-mode-replay",
+  "title": "JPEG byte histograms: the four-page split",
+  "status": "published",
+  "question": "Does the reported four-page JPEG byte-frequency class reproduce, and does it correspond to grayscale encoding?",
+  "summary": "The LP2 four-page modal-byte split reproduces. Both classes include one- and three-component JPEGs, so the simple grayscale explanation does not fit the archived files.",
+  "tags": [
+    "JPEG",
+    "byte histogram",
+    "LP2-00",
+    "LP2-04",
+    "LP2-24",
+    "LP2-26",
+    "grayscale",
+    "file provenance"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/jpeg-byte-audit.json",
+      "exports/jpeg-byte-audit-lp1.json"
+    ],
+    "representation": "All 58 archived LP2 and 17 archived LP1 original JPEG files; full encoded-file bytes, not pixels or rune values.",
+    "procedure": "Count all 256 possible byte values in each file; read baseline JPEG frame component counts; locate zero bytes relative to the first scan header.",
+    "parameters": "A file's class is determined only by its modal whole-byte value; ties are reported explicitly; no threshold or page exclusion.",
+    "exclusions": "Historical repository revision matching, screenshots, randomness testing, steganographic extraction, visual artifact interpretation and inferred author intent."
+  },
+  "outcome": "supported",
+  "finding": "LP2-00, 04, 24 and 26 have modal byte 44; the other 54 LP2 files have modal byte 00. Both classes include one- and three-component JPEGs. LP1-00 and 02 have modal byte 28; the other 15 LP1 files have modal byte 00.",
+  "limitations": "The test uses current archived JPEGs; the source's exact October 2023 repository revision and missing histogram screenshots are unavailable. File-byte mode does not establish randomness, a payload, a date code or an encoding cause.",
+  "next_steps": "For a causal encoding claim, freeze a decoder or re-encoding procedure and controls before testing it on all archived page files.",
+  "review": {
+    "reviewer": "Independent byte recount against archived originals",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/jpeg-byte-mode-replay/run.py --check",
+    "environment": "Python 3 standard library. Requires the original-images bundle extracted beside the experiment files.",
+    "script": "experiments/records/jpeg-byte-mode-replay/run.py",
+    "script_sha256": "5b1b1d70fafdc740b3001a2129d200b90f0a5957f5593cf722d1845e5c07eb43",
+    "inputs": [
+      {
+        "path": "experiments/records/jpeg-byte-mode-replay/plan.json",
+        "sha256": "6005d359be7bbc684fa1dd947b7fa0c1705fa8b2332e0e889c35f6c02ca5cb28"
+      },
+      {
+        "path": "exports/jpeg-byte-audit-lp1.json",
+        "sha256": "2c18eff832185f34a742d1fe469a2bf3a3ba1516e6dfe65fd64cd582af99835e"
+      },
+      {
+        "path": "exports/jpeg-byte-audit.json",
+        "sha256": "17721474daff32de65ad2225b0248e9e81b7a913b020aacf992cfa4e9d50c8eb"
+      },
+      {
+        "path": "images/lp1-00.jpg",
+        "sha256": "184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7"
+      },
+      {
+        "path": "images/lp1-01.jpg",
+        "sha256": "71f4bd03c692ede630091272597d2b18702184ed32fdd1977ef0ba7306632b46"
+      },
+      {
+        "path": "images/lp1-02.jpg",
+        "sha256": "0297572bbc2d234f84df634c6f0474011ff5df66c2ce987c3bb7aa0c635799b4"
+      },
+      {
+        "path": "images/lp1-03.jpg",
+        "sha256": "b8b142f9b7854ec4f240e076cad03a98a2e3e9cf7c20f1da4fcde1ed25e3be3f"
+      },
+      {
+        "path": "images/lp1-04.jpg",
+        "sha256": "745c6a46f67de1e5a2a9ac76175c323af82c2432e3b7483a8dc6244f8de9478f"
+      },
+      {
+        "path": "images/lp1-05.jpg",
+        "sha256": "2db94921ae5216d8a589890495fa5432446cd3227c45fbeb4934cbb0525112f7"
+      },
+      {
+        "path": "images/lp1-06.jpg",
+        "sha256": "913e26462e51942f49ca3ce2e94ef56c5fb65110814442dccc02b0d88af2c5ca"
+      },
+      {
+        "path": "images/lp1-07.jpg",
+        "sha256": "b50c1536ea1f30847e7875835991d52951bafb599fb1ab04eb78c5c6e6c2b468"
+      },
+      {
+        "path": "images/lp1-08.jpg",
+        "sha256": "f0edba1084df9983353c11544bbf711f94ed7649edbf94b426c9b78549b64557"
+      },
+      {
+        "path": "images/lp1-09.jpg",
+        "sha256": "975cda73bbf829b2775f25beb609d34fa429728b2f2a4ce863c129b10b005089"
+      },
+      {
+        "path": "images/lp1-10.jpg",
+        "sha256": "12ebfe421c129f2ef78d527c1630e358963da8d8dfdf9620eb977980d7967376"
+      },
+      {
+        "path": "images/lp1-11.jpg",
+        "sha256": "7bd11a2c9f5b512e33c9db170756e3b34cc1e29eb405373eb94957383a61be7d"
+      },
+      {
+        "path": "images/lp1-12.jpg",
+        "sha256": "a5b58076e169f3f59c8a394dbef37da18226c9c4fff703df3be8dc95cf16291c"
+      },
+      {
+        "path": "images/lp1-13.jpg",
+        "sha256": "bef0fc4867c2363c835eb4f08029a1eba35c925e2f72659d7353cf8a91089e56"
+      },
+      {
+        "path": "images/lp1-14.jpg",
+        "sha256": "de2bebe1d06421d94f3dd2b2b5f838ee4cdb5f51b07b14e880e0108f7b79c14e"
+      },
+      {
+        "path": "images/lp1-15.jpg",
+        "sha256": "f163903bec1236f1c89c96343d0bd1dee610b697c3ba82514651f04c5fbee4b9"
+      },
+      {
+        "path": "images/lp1-16.jpg",
+        "sha256": "984668c680c6089b91587ef6d9eb2a1df1d2b7ee8ab3837655d3933f2adcbfbe"
+      },
+      {
+        "path": "images/lp2-00.jpg",
+        "sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e"
+      },
+      {
+        "path": "images/lp2-01.jpg",
+        "sha256": "f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f"
+      },
+      {
+        "path": "images/lp2-02.jpg",
+        "sha256": "74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34"
+      },
+      {
+        "path": "images/lp2-03.jpg",
+        "sha256": "1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117"
+      },
+      {
+        "path": "images/lp2-04.jpg",
+        "sha256": "72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6"
+      },
+      {
+        "path": "images/lp2-05.jpg",
+        "sha256": "bcef0a3b80532b25a013052ec4394ab47ab69ce675b5b3db59cbad044e7adabd"
+      },
+      {
+        "path": "images/lp2-06.jpg",
+        "sha256": "4c7dce370242c67a7b785828d75547c042717b221d9d565d7dd097834c7b25d7"
+      },
+      {
+        "path": "images/lp2-07.jpg",
+        "sha256": "91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c"
+      },
+      {
+        "path": "images/lp2-08.jpg",
+        "sha256": "6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00"
+      },
+      {
+        "path": "images/lp2-09.jpg",
+        "sha256": "b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d"
+      },
+      {
+        "path": "images/lp2-10.jpg",
+        "sha256": "1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239"
+      },
+      {
+        "path": "images/lp2-11.jpg",
+        "sha256": "26f0cb307a23dcb2adf03a70fb9c6da89746258a90fd9be5383b2757ab4aad30"
+      },
+      {
+        "path": "images/lp2-12.jpg",
+        "sha256": "6961f3f8eedba5b802fee9b40ad91fa604cd4e4394f9ba72853141ad71b19b21"
+      },
+      {
+        "path": "images/lp2-13.jpg",
+        "sha256": "3481daeed3ab2bea6effbe36eec22f74955bce87ca4b4ae8674be1d3f84ea08d"
+      },
+      {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"
+      },
+      {
+        "path": "images/lp2-15.jpg",
+        "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5"
+      },
+      {
+        "path": "images/lp2-16.jpg",
+        "sha256": "39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d"
+      },
+      {
+        "path": "images/lp2-17.jpg",
+        "sha256": "f123b66eefa1b4409750c5ea3879bfe64728c6aa1e1398cb8fbd0fa8b1cf1f50"
+      },
+      {
+        "path": "images/lp2-18.jpg",
+        "sha256": "90fa414c464e86435bdb22f051f9670e886e3dd1c0b6d8954be94b86188da94b"
+      },
+      {
+        "path": "images/lp2-19.jpg",
+        "sha256": "b57ec6b12cb9a505eec6a77c64ddf63bf30a1bfb44dd5cdca35d900feed1b651"
+      },
+      {
+        "path": "images/lp2-20.jpg",
+        "sha256": "1ceef52570621785a021febff39003538f810179e5767ef5279a59c0c05c9985"
+      },
+      {
+        "path": "images/lp2-21.jpg",
+        "sha256": "c453ad16212b335a065069e9f755791b909225ed250b579eab205655e7a80c10"
+      },
+      {
+        "path": "images/lp2-22.jpg",
+        "sha256": "e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7"
+      },
+      {
+        "path": "images/lp2-23.jpg",
+        "sha256": "d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee"
+      },
+      {
+        "path": "images/lp2-24.jpg",
+        "sha256": "62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80"
+      },
+      {
+        "path": "images/lp2-25.jpg",
+        "sha256": "a7d6e597debff4f7c5b3516e1b02ca2e4fa5b37d972f567264ed2ec845013cff"
+      },
+      {
+        "path": "images/lp2-26.jpg",
+        "sha256": "ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7"
+      },
+      {
+        "path": "images/lp2-27.jpg",
+        "sha256": "c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e"
+      },
+      {
+        "path": "images/lp2-28.jpg",
+        "sha256": "318bb587f4dcab11b4db7ba3b8bb13b7913ca79bb409e1c987595503a22e0522"
+      },
+      {
+        "path": "images/lp2-29.jpg",
+        "sha256": "6f769f266865ddb30b0cb34e82c664a87ba409f674dc52ad3af7c85be443fb5c"
+      },
+      {
+        "path": "images/lp2-30.jpg",
+        "sha256": "701b66d1fe98f730dadc5d7d8e1bc3b9a8e20547c1ffb423011f436037dba8b0"
+      },
+      {
+        "path": "images/lp2-31.jpg",
+        "sha256": "0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a"
+      },
+      {
+        "path": "images/lp2-32.jpg",
+        "sha256": "c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72"
+      },
+      {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d"
+      },
+      {
+        "path": "images/lp2-34.jpg",
+        "sha256": "6f1b4c04b64ee54c689478bd3986bb6ab8a3b81f48780562094e9f248e4e87f8"
+      },
+      {
+        "path": "images/lp2-35.jpg",
+        "sha256": "d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa"
+      },
+      {
+        "path": "images/lp2-36.jpg",
+        "sha256": "3b54a31a9e796e2c01b4e80d46e1092dee2e1142a7c61873e282078e2c776cb9"
+      },
+      {
+        "path": "images/lp2-37.jpg",
+        "sha256": "cee96d7e71b7de4d4e57237faacefad791229c153202e8224e4bedda45fb8f43"
+      },
+      {
+        "path": "images/lp2-38.jpg",
+        "sha256": "aec1898f599f57265d6422f3082a481db94a27f62230affbadee595d05077f8c"
+      },
+      {
+        "path": "images/lp2-39.jpg",
+        "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00"
+      },
+      {
+        "path": "images/lp2-40.jpg",
+        "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69"
+      },
+      {
+        "path": "images/lp2-41.jpg",
+        "sha256": "134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2"
+      },
+      {
+        "path": "images/lp2-42.jpg",
+        "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6"
+      },
+      {
+        "path": "images/lp2-43.jpg",
+        "sha256": "dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415"
+      },
+      {
+        "path": "images/lp2-44.jpg",
+        "sha256": "463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208"
+      },
+      {
+        "path": "images/lp2-45.jpg",
+        "sha256": "898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9"
+      },
+      {
+        "path": "images/lp2-46.jpg",
+        "sha256": "05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301"
+      },
+      {
+        "path": "images/lp2-47.jpg",
+        "sha256": "08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8"
+      },
+      {
+        "path": "images/lp2-48.jpg",
+        "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea"
+      },
+      {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      },
+      {
+        "path": "images/lp2-52.jpg",
+        "sha256": "d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3"
+      },
+      {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+      },
+      {
+        "path": "images/lp2-54.jpg",
+        "sha256": "dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "images/lp2-56.jpg",
+        "sha256": "a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc"
+      },
+      {
+        "path": "images/lp2-57.jpg",
+        "sha256": "1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/jpeg-byte-mode-replay/results.json",
+        "sha256": "39014646cf3e2f78f2efec89af6b67bea502a283043b433c58126497003bf7fc"
+      },
+      {
+        "path": "experiments/records/jpeg-byte-mode-replay/modes.svg",
+        "sha256": "166dee5a35c8232189e7ecc503c404fb99ac1cb85eb2f7f2769b3af092295ddb"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/jpeg-byte-mode-replay/modes.svg",
+      "caption": "The modal-byte split crosses JPEG frame component counts; a one-component file occurs in the 44-mode group."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Historical source's cited image repository",
+      "url": "https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved"
+    },
+    {
+      "label": "Archived JPEG byte audit and explanation",
+      "url": "https://jelliottdev.github.io/#/wiki/jpeg-byte-distribution"
+    }
+  ],
+  "related": [
+    "jpeg-modal-reencode-control"
+  ],
+  "article": "# JPEG byte histograms: the four-page split\n\n**Finding:** The reported LP2 split is present in the archived JPEGs. Of 58 files, **54 have `00` as their most frequent byte**. The four exceptions—LP2-00, 04, 24 and 26—have `44` as their mode. Both groups contain one-component and three-component JPEGs, so component count does not explain the split. Nothing in this measurement extracts a hidden message or shows that any file is random.\n\n![LP2 modal bytes crossed with JPEG component counts, with a shorter LP1 comparison.](experiments/records/jpeg-byte-mode-replay/modes.svg)\n\nThe test counts the **stored file bytes**, including headers and compressed data. It does not count visible pixel values or the individual digits in a hexadecimal display. The source called the common group “null” and the exceptions “random”; here those terms are replaced with the exact byte modes. Even on the page with the most zeros, `00` is only 20.1% of the file, not a majority. Byte `44` is hexadecimal for decimal 68 (ASCII `D`), consistent with the source’s display label.\n\n| LP2 most frequent byte | One-component JPEG | Three-component JPEG |\n| --- | ---: | ---: |\n| `00` | 22 | 32 |\n| `44` | 1 | 3 |\n\nThe same fixed rule gives 15 `00`-mode files and two `28`-mode files in the 17 archived LP1 images. Those exceptions are LP1-00 and LP1-02, corresponding to the source’s one-based “Page 1” and “Page 3.” This extends its sixteen-page list to the full local archive; it does not recreate the missing historical histogram screenshots. In all 75 archived files, at least 92.6% of the zero bytes occur **after the first scan header**. This locates the bytes within the stored JPEG stream but does not isolate every later marker or explain how its encoder produced them.\n\nThe [fixed re-encoding control](#/experiments/jpeg-modal-reencode-control) tests whether the byte class survives different JPEG settings. The four page numbers alone do not specify a date, a cipher or a payload. For a fuller explanation of the byte-versus-pixel distinction, see the [JPEG distribution guide](#/wiki/jpeg-byte-distribution).\n\n## Reproduce\n\nDownload the [original images](#/downloads) alongside this experiment, then run `python experiments/records/jpeg-byte-mode-replay/run.py --check` from the repository root. The script checks all 75 image hashes and re-counts their byte modes and JPEG frame components using Python's standard library. [The plan](experiments/records/jpeg-byte-mode-replay/plan.json) fixes the rule; [the results](experiments/records/jpeg-byte-mode-replay/results.json) list every page's checksum, byte length, mode, zero count and component count. The historical [source file repository](https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved) is not pinned to its October 2023 revision, so equality with that exact historical input remains unverified.\n",
+  "article_path": "experiments/records/jpeg-byte-mode-replay/article.md",
+  "script_sha256": "5b1b1d70fafdc740b3001a2129d200b90f0a5957f5593cf722d1845e5c07eb43",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

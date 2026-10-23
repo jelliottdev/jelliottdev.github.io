@@ -1,0 +1,36 @@
+{
+  "schema": "night-thoughts-729-line-audit-v1",
+  "question": "Do the six quoted 729-line passages occupy line 729 of Nights IV–IX in one pinned, explicitly later edition?",
+  "source_report": {
+    "attachment_id": "60920975-4a35-4224-bf58-595dc706b578",
+    "sha256": "6507348ad2a403ac66aa04cb439633c7103e6530ef907c89a3b1401ca11097ce",
+    "posted_book_link": "https://books.google.com/books?id=GsVHv1gACYAC",
+    "note": "The discussion quotes six passages and names Nights IV–IX, but its Google Books scan has not been identified as the 1853 Gilfillan edition tested here."
+  },
+  "inputs": [
+    {"path": "experiments/records/night-thoughts-729-line-audit/source/pg33156-1853.txt", "sha256": "031c2357a17d6eb8a460e9625a126acca67d1ce254b0ed96179037430b5c438b"},
+    {"path": "text/lp2-00.txt", "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"},
+    {"path": "text/lp2-01.txt", "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"},
+    {"path": "text/lp2-02.txt", "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"}
+  ],
+  "comparison_edition": {
+    "title": "Young's Night Thoughts, edited by George Gilfillan",
+    "printed_year": 1853,
+    "transcription": "Project Gutenberg ebook 33156, UTF-8 plain text",
+    "url": "https://www.gutenberg.org/ebooks/33156",
+    "downloaded_sha256": "7a1cb1aa1148126313e6f4803d9ea9dc7cd741f5c459586b18954e6a98200271",
+    "local_normalization": "CRLF converted to LF; all other source bytes retained, including the Project Gutenberg license",
+    "limitation": "A later edited text, not the Google Books copy supplied in the discussion and not Blake's 1797 illustrated volume."
+  },
+  "reported_pointer": 729,
+  "targets": [
+    {"night": "FOURTH", "reported_quote": "All sacred reason, hold her sacred still", "locator": "all sacred reason hold her sacred still"},
+    {"night": "FIFTH", "reported_quote": "And with its thunder scarce obtains your ear", "locator": "and with its thunder scarce obtains your ear"},
+    {"night": "SIXTH", "reported_quote": "Eternal; or in man the series end", "locator": "eternal or in man the series"},
+    {"night": "SEVENTH", "reported_quote": "Sense, take rein; blind passion, drive us on", "locator": "blind passion drive us on"},
+    {"night": "EIGHTH", "reported_quote": "Unhallow'd ground; the muse to win thine ear", "locator": "unhallow d ground the muse to win thine ear"},
+    {"night": "NINTH", "reported_quote": "And deep reception in th' intender'd heart", "locator": "and deep reception in th intender d heart"}
+  ],
+  "rule": "Locate each quote only within its named Night after lowercasing and extracting A–Z word tokens. Recover the edition's printed verse-line number using adjacent right-margin numerical markers and physical verse-line distance, requiring the previous and next anchors to agree. Preserve the exact extracted line, Gutenberg file line, and anchor evidence. Count alphabet runes in LP2-00–02 with every non-rune excluded.",
+  "exclusions": "No line or character extraction from the unverified Google Books scan; no attempt to turn six lines into a GP key; no word-selection, reordering, RSA, or decryption claim."
+}

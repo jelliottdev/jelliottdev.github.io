@@ -1,0 +1,189 @@
+{
+  "id": "section-1894-pairing",
+  "status": "published",
+  "title": "The 1,894-rune section pairing",
+  "question": "Do four fixed pairwise arithmetic operations yield an unusual alignment for the two reported 1,894-rune streams?",
+  "summary": "The best printed-order IoC is 0.034549. Of 1,893 nonzero circular shifts, 1,410 score at least as high after the same four-way selection.",
+  "tags": [
+    "1894",
+    "equal-length sections",
+    "Koan",
+    "Mobius",
+    "F omission",
+    "pairwise subtraction",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-14",
+      "lp1-15",
+      "lp1-16",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22"
+    ],
+    "representation": "A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.",
+    "procedure": "Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.",
+    "parameters": "Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.",
+    "exclusions": "Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment."
+  },
+  "outcome": "not-supported",
+  "finding": "The best printed-order output scores 123,870 ordered equal-rune pairs (IoC 0.034549), below the median best-of-four shifted score of 124,096. 1,410 of 1,893 nonzero shifted controls tie or exceed it.",
+  "limitations": "This conditional control fixes the reported sections and tests one small operation set and whole-stream IoC; it cannot assess all possible cipher combinations or correct for finding the equality after a broad search.",
+  "next_steps": "Specify another operation and complete-text success criterion before inspecting its output; compare the same selection procedure against appropriate controls.",
+  "family": {
+    "id": "section-equal-length-arithmetic",
+    "title": "Equal-length section arithmetic",
+    "question": "Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?",
+    "baseline": "section-1894-pairing"
+  },
+  "variant": {"label": "1,894-rune two-stream pairing", "changes": []},
+  "review": {
+    "reviewer": "Independent section extraction and selected-shift recomputation",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/section-1894-pairing/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py",
+    "script": "experiments/records/section-1894-pairing/run.py",
+    "script_sha256": "9102af6a265c08f93d9a60e5f6cd14fda76e2564375887854e6517675d8251c8",
+    "inputs": [
+      {
+        "path": "experiments/records/section-1894-pairing/plan.json",
+        "sha256": "6f99bc17d2b5d807d004989fb59b11644d5fc6c1fac7f3bc4c0f26478153799d"
+      },
+      {
+        "path": "experiments/records/section-1894-pairing/check.py",
+        "sha256": "e6231efdb22e979da1faf2c805b201112c67992cc107e34c3e04b24f75269968"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/source-snapshots/lp-rune-counts-2026-10-22.csv",
+        "sha256": "e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-10.txt",
+        "sha256": "7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b"
+      },
+      {
+        "path": "text/lp1-11.txt",
+        "sha256": "1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805"
+      },
+      {
+        "path": "text/lp1-12.txt",
+        "sha256": "7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd"
+      },
+      {
+        "path": "text/lp1-13.txt",
+        "sha256": "141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "text/lp1-16.txt",
+        "sha256": "3ba86b3cacff98e3c94e3075c8c0b93bb1c53d9bed5fe96ad58cf3b08cc11082"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/section-1894-pairing/results.json",
+        "sha256": "f39d00839fc55f2670f32c83719080f40f861a482ca81301fc6760d58d5163c9"
+      },
+      {
+        "path": "experiments/records/section-1894-pairing/comparison.svg",
+        "sha256": "093cf0b0993d591ea3013f495155c42b9eed25478d4e335cbaab1f110b376eaf"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/section-1894-pairing/comparison.svg",
+      "caption": "The printed-order score lies inside the exhaustive circular-shift range."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published section-count spreadsheet",
+      "url": "https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit"
+    },
+    {
+      "label": "Liberpedia section-count audit",
+      "url": "https://jelliottdev.github.io/#/wiki/section-rune-counts"
+    }
+  ],
+  "related": [
+    "spiral-branches-paired-subtraction"
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "id": "section-1814-pairing",
+  "status": "published",
+  "title": "The 1,814-rune section pairing",
+  "question": "Does four-way pairwise arithmetic give an unusual printed alignment for the two reported 1,814-rune streams?",
+  "summary": "The printed-order best-of-four IoC is 0.034859; 107 of 1,813 nonzero shifts score at least as high under the same selection.",
+  "tags": [
+    "1814",
+    "equal-length sections",
+    "Koan",
+    "Sign Post",
+    "Spirals",
+    "F omission",
+    "pairwise arithmetic",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-14",
+      "lp1-15",
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07"
+    ],
+    "representation": "A is Koan 1, Loss of Divinity and Koan 2 in printed rune order. B is Sign Post and Spirals in printed rune order. Every F is omitted from both complete-page streams.",
+    "procedure": "Pair the two 1,814-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.",
+    "parameters": "Four operations; zero-based GP indices; 1,814 positions; 1,813 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.",
+    "exclusions": "Other section combinations, F-removal rules, operations, offsets across unequal streams, n-gram/language scores and discovery-wide selection adjustment."
+  },
+  "outcome": "inconclusive",
+  "finding": "The printed reverse-add output scores 114,642 ordered equal-rune pairs (IoC 0.034859), above the shifted median best-of-four score of 113,934; 107 of 1,813 nonzero shifts tie or exceed it.",
+  "limitations": "The conditional shift control fixes the published equality and tests only four operations and whole-stream IoC. It does not adjust for the search that noticed the equality or establish readable plaintext.",
+  "next_steps": "Specify a complete decoding rule and an untouched page or passage to predict; repeat the complete choice procedure on controls.",
+  "family": {
+    "id": "section-equal-length-arithmetic",
+    "title": "Equal-length section arithmetic",
+    "question": "Do reported equal-length sections yield unusual fixed pairwise arithmetic outputs?",
+    "baseline": "section-1894-pairing"
+  },
+  "variant": {
+    "label": "1,814-rune two-stream pairing",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-10",
+          "lp1-11",
+          "lp1-12",
+          "lp1-13",
+          "lp1-14",
+          "lp1-15",
+          "lp1-16",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22"
+        ],
+        "after": [
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-10",
+          "lp1-11",
+          "lp1-12",
+          "lp1-13",
+          "lp1-14",
+          "lp1-15",
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07"
+        ],
+        "reason": "The reported equality uses Koan 1, Loss of Divinity, Koan 2, Sign Post and Spirals."
+      },
+      {
+        "field": "representation",
+        "before": "A is the Koan 1, Loss of Divinity, Koan 2 and Instruction rune sequence with every F removed. B is Mobius after its nine-rune heading, retaining F. Explicit ampersand section boundaries are respected.",
+        "after": "A is Koan 1, Loss of Divinity and Koan 2 in printed rune order. B is Sign Post and Spirals in printed rune order. Every F is omitted from both complete-page streams.",
+        "reason": "Both streams omit F, unlike the 1,894-rune comparison, and contain different sections."
+      },
+      {
+        "field": "procedure",
+        "before": "Pair the two 1,894-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.",
+        "after": "Pair the two 1,814-rune streams in printed order. Apply B+A or B-A modulo 29, with B forward or reversed. Score the complete output by whole-stream IoC and select the best. Repeat this choice for all nonzero circular shifts of B.",
+        "reason": "Apply the baseline operations to the two new, shorter streams."
+      },
+      {
+        "field": "parameters",
+        "before": "Four operations; zero-based GP indices; 1,894 positions; 1,893 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.",
+        "after": "Four operations; zero-based GP indices; 1,814 positions; 1,813 exhaustive nonzero circular-shift controls; ties count as meeting the observed best score.",
+        "reason": "The new equality has 1,814 positions and therefore 1,813 nonzero shifts."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Independent section extraction and selected-shift recomputation",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/section-1814-pairing/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py",
+    "script": "experiments/records/section-1814-pairing/run.py",
+    "script_sha256": "ec10fd38d47a1c14293de56586d4d5e8efd27eb46377bc366018609cad2974e2",
+    "inputs": [
+      {
+        "path": "experiments/records/section-1814-pairing/plan.json",
+        "sha256": "ae9461444d6b2de0f09a3cb4063f318a55975d7286d4b959623479dfc7e26961"
+      },
+      {
+        "path": "experiments/records/section-1814-pairing/check.py",
+        "sha256": "55c78e0364393ae162bbeba024cc1f31d31982a0cfd53cd3faeaebaf7550cd8e"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/source-snapshots/lp-rune-counts-2026-10-22.csv",
+        "sha256": "e553a3d6234c80cedc678f531b0f3033e46531c75354228af6216d8b6f3070bd"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-10.txt",
+        "sha256": "7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b"
+      },
+      {
+        "path": "text/lp1-11.txt",
+        "sha256": "1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805"
+      },
+      {
+        "path": "text/lp1-12.txt",
+        "sha256": "7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd"
+      },
+      {
+        "path": "text/lp1-13.txt",
+        "sha256": "141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/section-1814-pairing/results.json",
+        "sha256": "32d4891c377237c53eb7b6c398e6206a066d9ce6fc852645a471c792c3e2c149"
+      },
+      {
+        "path": "experiments/records/section-1814-pairing/comparison.svg",
+        "sha256": "a02371d70bbf9fa260f80ded6f4973af52d37c82bc3e3cd72ff030050948f5f0"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/section-1814-pairing/comparison.svg",
+      "caption": "The observed score is above the shifted median, but 107 nonzero shifts score at least as high."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published section-count spreadsheet",
+      "url": "https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit"
+    },
+    {
+      "label": "Liberpedia section-count audit",
+      "url": "https://jelliottdev.github.io/#/wiki/section-rune-counts"
+    }
+  ],
+  "related": [
+    "section-1894-pairing"
+  ]
+}

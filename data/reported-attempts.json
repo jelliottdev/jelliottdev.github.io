@@ -213,10 +213,10 @@
         "sha256": "c0b94dc44b95bc2febb144e00bd488bffc5a77102cf86022068bb1acad1edd3b"
       },
       "reported_idea": "Apply cover-derived disk correspondences and four rotation rules, a reported 5-6-3-11 sequence, and dot-triggered branches to LP2-39 rows. The transcript refers to separate method and test PDFs not present in the supplied text.",
-      "coverage": "No dedicated moving-alphabet experiment reproduces this exact rule set. General disk and compass guides do not validate the reported branched readings.",
-      "related_records": [],
-      "replay_needed": "Obtain the two referenced PDFs and diagram, freeze both disk alphabets and each state transition before reading output, enumerate every branch rather than selected words, and require known-reading and shuffled controls.",
-      "status": "not-replayed"
+      "coverage": "A bounded source audit reproduces the cited LP2-39 row and signed shift totals. Ordinary modulo 31 yields right-hand residues 29 and 23, while the post gives positive 2 and 8; reversing direction would be an additional rule. The full disk alphabets, transitions and branch selection are still unavailable, so the proposed reading has not been replayed.",
+      "related_records": ["alberti-branch-arithmetic"],
+      "replay_needed": "Freeze both disk alphabets, each state transition and branch-selection rule before testing a complete row against known-reading and shuffled controls. The arithmetic audit is not a disk decryption.",
+      "status": "partial"
     },
     {
       "id": "quagmirrors-mobius-autokey",
@@ -435,8 +435,8 @@
         "public_url": "https://github.com/rtkd/iddqd/tree/master/liber-primus__images--unsolved"
       },
       "reported_idea": "Classify JPEG byte-value histograms into null-heavy and more even-looking sets; the report names LP2-00, 04, 24 and 26 as the latter and asks whether encoding mode explains the grouping.",
-      "coverage": "The archived-file audit now counts all 256 byte values for all 58 LP2 and 17 LP1 JPEGs. Its LP2 four-page nonzero-mode set matches the report (00, 04, 24, 26); LP1-00 and LP1-02 likewise match its one-based Page 1 and Page 3 labels. JPEG frame components show the simple grayscale-versus-colour explanation does not fit these files. The exact 2023 source revision and missing histogram screenshots remain unverified.",
-      "related_records": [],
+      "coverage": "The archived-file audit counts all 256 byte values for all 58 LP2 and 17 LP1 JPEGs and reproduces the reported four-page LP2 split. A separate fixed-quality re-encode control changes the modal-byte classes, so the original split is not stable under those JPEG encodings. Component count does not explain the original split. The exact 2023 source revision and missing histogram screenshots remain unverified.",
+      "related_records": ["jpeg-byte-mode-replay", "jpeg-modal-reencode-control"],
       "replay_needed": "Recover or pin the cited repository revision and original screenshots to compare byte-for-byte inputs and subjective “null-star” categories. Any proposed encoded message needs a fixed extraction rule and matched controls; the histogram grouping alone is not one.",
       "status": "partial",
       "related_guides": [
@@ -602,12 +602,13 @@
         "sha256": "6507348ad2a403ac66aa04cb439633c7103e6530ef907c89a3b1401ca11097ce"
       },
       "reported_idea": "Use the 729 runes in LP2-00–02 as a pointer into Edward Young’s Night Thoughts, possibly in an illustrated Blake edition. The discussion points to a line 729 in one Night and explores matching imagery and wording.",
-      "coverage": "The Night Thoughts source guide verifies the 729-rune count and distinguishes the 1797 illustrated edition from a later text; it has not established the proposed line lookup or a cipher use. The supplied discussion includes image placeholders and no fixed extraction coordinates.",
+      "coverage": "A source audit reproduces the 729-rune count and locates all six quoted passages in a pinned 1853 Gilfillan text. Five are verse line 729 there; the Night IX quotation is line 731. This is an edition-specific comparison, not verification of the different linked Google Books scan or a cipher use.",
       "related_records": [
-        "totient-map-route"
+        "totient-map-route",
+        "night-thoughts-729-line-audit"
       ],
-      "replay_needed": "Pin a scan and transcription of the exact edition; define Night, line and character numbering, including headers and wrapped lines; specify a finite pointer list before reading outputs; test it on the named passage and comparison texts.",
-      "status": "related-only",
+      "replay_needed": "Pin the Google Books scan or other intended edition, then verify all six line coordinates in that source. Any cipher claim needs a fixed line extraction, text normalization, target span and complete-output control.",
+      "status": "partial",
       "related_guides": [
         "night-thoughts"
       ]
@@ -1086,11 +1087,14 @@
         "public_url": "https://docs.google.com/spreadsheets/d/1iLqpw2RTuapEE_p9WFhTpcwz7PdKJDCysseLbX2ucps/edit"
       },
       "reported_idea": "Count selected LP sections with F (ᚠ) removed and compare sums of section lengths. The corrected post reports equalities at 2,883, 1,894, 1,433, 1,814, 695 and 91; one 1,433 equality uses Wing Tree, F-omitted Cuneiform, and F-omitted Koan 2 plus Spirals. These are length observations proposed as possible cross-section alignment hints, not a specified decryption.",
-      "coverage": "The public count-sheet CSV is pinned and all 23 section rows and six stated count equalities have been recalculated from archived rune text. A separate bounded experiment now pairs the two 2,883-rune streams under five modular-subtraction variants, with alignment-aware controls. The other count equalities and possible operations remain untested as cipher claims.",
+      "coverage": "The public count-sheet CSV is pinned and all 23 section rows and six stated count equalities have been recalculated from archived rune text. Bounded tests now cover the 2,883-rune subtraction proposal and three related arithmetic pairings at 1,894, 1,433 and 1,814 runes, each with alignment-aware controls. Other equalities and operations remain untested as cipher claims.",
       "related_records": [
-        "spiral-branches-paired-subtraction"
+        "spiral-branches-paired-subtraction",
+        "section-1894-pairing",
+        "section-1433-pairing",
+        "section-1814-pairing"
       ],
-      "replay_needed": "For the other equal-length pairings, specify the two streams, F handling, direction, operation and success score before reading output. The published 2,883 subtraction result does not cover those variants or establish a decryption rule.",
+      "replay_needed": "For remaining equalities or operations, specify streams, F handling, direction and success score before reading output. None of these bounded comparisons establishes a decryption rule.",
       "status": "partial",
       "related_guides": [
         "section-rune-counts"
