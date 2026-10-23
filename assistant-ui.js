@@ -18,7 +18,8 @@ function experimentSearchResult(r, requestedPages=[]){
   const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
   return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
     <p class="small muted">${esc(r.record_type?.label||'Research record')} · ${esc(experimentTargetSummary(r))}</p>
-    <p>${esc(r.finding)}</p>
+    <p>${esc(r.reader_finding||r.finding)}</p>
+    ${r.reader_limit?`<p class="small muted"><strong>Limit:</strong> ${esc(r.reader_limit)}</p>`:''}
     ${missing.length?`<p class="scope-mismatch">Not in this record’s page scope: ${missing.map(id=>esc(id.toUpperCase())).join(', ')}.</p>`:''}
     <p class="experiment-result-action"><a href="#/experiments/${r.id}">Read findings, method and files</a></p></article>`;
 }
@@ -54,7 +55,7 @@ function reportedAttemptView(query=''){
       <p>${esc(r.reported_idea)}</p><details><summary>Coverage and replay requirement</summary><p>${esc(r.coverage)}</p><p><strong>To reproduce:</strong> ${esc(r.replay_needed)}</p></details></article>`).join('');
 }
 
-function renderIdeaChecker(query){
+function renderIdeaChecker(query,version){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
   const legacyPages=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)&&!AssistantSearch.pageIds(query).includes(id));
   if(query&&legacyPages.length)query+=' on '+legacyPages.map(id=>id.toUpperCase()).join(' and ');
@@ -63,7 +64,7 @@ function renderIdeaChecker(query){
     <form id="experiment-form">
       <label for="experiment-query">What would you try?</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>
-      <div class="idea-actions"><button id="idea-submit" type="submit">Check idea</button><button id="idea-cancel" type="button" hidden>Stop waiting</button><span id="idea-status" class="small muted" role="status"></span></div>
+      <div class="idea-actions"><button id="idea-submit" type="submit" disabled>Check idea</button><button id="idea-retry" type="button" hidden>Retry loading records</button><button id="idea-cancel" type="button" hidden>Stop waiting</button><span id="idea-status" class="small muted" role="status"></span></div>
       <p id="idea-privacy" class="idea-privacy small muted" ${assistantEndpoint()?'':'hidden'}>Questions are processed by Cloudflare. Don’t include private information.</p>
     </form>
     <section id="experiment-results" aria-label="Matching research records"></section>
@@ -71,22 +72,23 @@ function renderIdeaChecker(query){
     <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="reported-attempts" aria-label="Earlier reported approaches"></section>
     ${footer()}</article>`;
-  const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
-  let shownIdea='',pendingConfigRequest=0;
+  const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel'),retry=$('#idea-retry');
+  let shownIdea='',pendingConfigRequest=0,recordsReady=Array.isArray(experimentRecords),loadingRecords=false;
+  const current=()=>input.isConnected&&(version===undefined||version===renderId);
   refreshIdeaSupport=()=>{
-    if(!input.isConnected)return;
+    if(!current())return;
     $('#idea-privacy').hidden=!assistantEndpoint();
     if(!shownIdea||input.value.trim()!==shownIdea)return;
     $('#idea-coverage').innerHTML=ideaCoverageView(shownIdea);
     $('#reported-attempts').innerHTML=reportedAttemptView(shownIdea);
   };
   const pages=()=>AssistantSearch.pageIds(input.value.trim());
-  const experimentDocuments=AssistantSearch.experimentDocs(experimentRecords);
+  let experimentDocuments=recordsReady?AssistantSearch.experimentDocs(experimentRecords):[];
   const documents=()=>experimentDocuments;
   const cacheKey=()=>JSON.stringify([input.value.trim().replace(/\s+/g,' '),pages(),
     AssistantSearch.select(experimentDocuments,input.value.trim(),pages()).slice(0,2).map(r=>r.id)]);
-  const busy=value=>{submit.disabled=value;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));};
-  const reset=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);status.textContent='';answer.replaceChildren();};
+  const busy=value=>{submit.disabled=value||!recordsReady;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));};
+  const reset=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);status.textContent=recordsReady?'':loadingRecords?'Loading research records. You can write your idea now.':'Research records unavailable. Retry loading to check your idea.';answer.replaceChildren();};
   function sourceExcerpt(s){
     if(s.kind==='experiment'){
       let r;try{r=JSON.parse(s.text);}catch{return '<p>Open the record to inspect its scope.</p>';}
@@ -134,7 +136,7 @@ function renderIdeaChecker(query){
     } finally {clearTimeout(timeout);if(experimentRequest===controller){experimentRequest=null;busy(false);}}
   }
   function draw(searchNow,requestAI=false){
-    reset();const idea=input.value.trim();shownIdea=searchNow?idea:'';refreshIdeaSupport();const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    reset();if(!recordsReady)return;const idea=input.value.trim();shownIdea=searchNow?idea:'';refreshIdeaSupport();const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
     const canCompare=Boolean(searchNow&&idea&&AssistantSearch.select(documents(),idea,pages()).length);
     const selected=items=>items.slice(0,3).map(m=>experimentRecords.find(r=>r.id===m.document.id)).filter(Boolean)
       .map(r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])])).join('');
@@ -150,7 +152,7 @@ function renderIdeaChecker(query){
       const token=++pendingConfigRequest;
       status.textContent='Preparing the comparison…';
       assistantConfigPromise.then(()=>{
-        if(token!==pendingConfigRequest||!input.isConnected||input.value.trim()!==idea)return;
+        if(token!==pendingConfigRequest||!current()||input.value.trim()!==idea)return;
         if(assistantEndpoint())compare(idea);
         else status.textContent='Index checked. AI comparison is unavailable; the matching records are ready.';
       });
@@ -161,6 +163,29 @@ function renderIdeaChecker(query){
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();if(!submit.disabled)$('#experiment-form').requestSubmit();}});
   cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
   $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
-  draw(Boolean(query));
+  async function loadRecords(){
+    if(loadingRecords||!current())return;
+    loadingRecords=true;retry.disabled=true;busy(false);
+    status.textContent='Loading research records. You can write your idea now.';
+    results.setAttribute('aria-busy','true');
+    try{
+      const records=await ensureExperimentRecords();
+      if(!current())return;
+      recordsReady=true;experimentDocuments=AssistantSearch.experimentDocs(records);
+      const retryFocused=document.activeElement===retry;
+      retry.hidden=true;
+      draw(Boolean(input.value.trim()));
+      if(retryFocused)input.focus({preventScroll:true});
+    }catch{
+      if(!current())return;
+      retry.hidden=false;
+      status.textContent='Research records unavailable. Your idea is kept; retry loading to check it.';
+    }finally{
+      if(current()){loadingRecords=false;retry.disabled=false;results.setAttribute('aria-busy','false');busy(false);}
+    }
+  }
+  retry.onclick=loadRecords;
+  if(recordsReady)draw(Boolean(query));
+  else loadRecords();
 
 }

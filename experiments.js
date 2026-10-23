@@ -49,9 +49,10 @@ async function ensureExperimentRecords() {
 }
 async function experimentsPage(id, version, query='') {
   stopExperimentAI();
-  await ensureExperimentRecords();
   if (version !== renderId) return;
   if (id) {
+    await ensureExperimentRecords();
+    if (version !== renderId) return;
     const record = experimentRecords.find(r => r.id === id);
     if (!record) throw Error('That experiment has no published record.');
     main.innerHTML = experimentArticle(record);
@@ -62,7 +63,7 @@ async function experimentsPage(id, version, query='') {
     startExperimentSupport();
     return;
   }
-  renderIdeaChecker(query);
+  renderIdeaChecker(query,version);
   startExperimentSupport();
 }
 async function ensureResearchRecords(){

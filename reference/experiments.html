@@ -13383,6 +13383,186 @@
       ]
     }
   ]
+}</pre></article><article id="dukotah-g02-signature-corpus"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;finding&quot;: &quot;A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings.&quot;,
+  &quot;id&quot;: &quot;dukotah-g02-signature-corpus&quot;,
+  &quot;limitations&quot;: &quot;The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. Signature validity is relative to the specified public key and does not itself prove historical authorship or cover all messages. This is not a Liber Primus decryption test.&quot;,
+  &quot;next_steps&quot;: &quot;Preserve additional original signed files with their exact bytes and provenance, then rerun the same verification and compare normalized bodies and packet timestamps.&quot;,
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;question&quot;: &quot;Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?&quot;,
+  &quot;reader_question&quot;: &quot;Which archived messages have a valid Cicada signature?&quot;,
+  &quot;related&quot;: [
+    &quot;pgp-packet-keys&quot;
+  ],
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dukotah-g02-signature-corpus/check.py --replay&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library and GnuPG 2.5.21 for complete offline replay; --check does not require GnuPG.&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/plan-frozen.json&quot;,
+        &quot;sha256&quot;: &quot;a00408a8f764a3bd5ea27f7045cfa68227ab25ca15f87742cb9352e5c47357c3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/plan.json&quot;,
+        &quot;sha256&quot;: &quot;36cdec6d3097acbcfa03d19b2df18626331bd4e86af977f9e32670a11a60338d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/materialize-receipt.json&quot;,
+        &quot;sha256&quot;: &quot;ba67ff61d70219dc7a90fd11d0ba86cd9b9716ad6be109a905e3754cde36a0d6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json&quot;,
+        &quot;sha256&quot;: &quot;9e07605ffefd2e1b256c0127ebc16780755b0d26b466f3c27c68bc1f2e3cf959&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip&quot;,
+        &quot;sha256&quot;: &quot;8ada99a4dfa71aab8111eca8d45cef1acc5539e8875fa0a71527b7d4a8d73548&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py&quot;,
+        &quot;sha256&quot;: &quot;757a2f8e597826b950cf5bc49b84d1ae5a6604b3ad72c1325fc1b50d5e7e7872&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/source-archived-table.json&quot;,
+        &quot;sha256&quot;: &quot;42cddc5dcd3b8f5a306c873463fef80a7359b29c567ddb3d054f956f49f498ca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/source-PREREG.md&quot;,
+        &quot;sha256&quot;: &quot;44b5b119302e824b949d59c5e2f17321c278e67d1e7d6cc67ab9d1825c2de855&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/LICENSE.source&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/check.py&quot;,
+        &quot;sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/plot.py&quot;,
+        &quot;sha256&quot;: &quot;2d7602c2471365299653153b38992a43cfd2795d802beebe566f1eba72324c9e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;402515ac3d19e5f3d1228915b29e0626f30a465aaa49b153cbc083df9bc80f09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/article.md&quot;,
+        &quot;sha256&quot;: &quot;e50a5a7b3534aefb953b2b0407159181c6281c66fa4c6101743a3030afc3aecf&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/fresh-table.json&quot;,
+        &quot;sha256&quot;: &quot;a304e7af1cce0854cff83920d36a42ece96c30977cabe1c9605c99ad15d9b01e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/independent-check.json&quot;,
+        &quot;sha256&quot;: &quot;b04bf15f150d980160b9e02a5da24753f1899c74218f2f064dbe30a394ce2070&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/results.json&quot;,
+        &quot;sha256&quot;: &quot;b3033db8e832484b4285543fc29cfc922a9b70b4c4a2929a77815afa2cb8b8c5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg&quot;,
+        &quot;sha256&quot;: &quot;a3f834dd5d9733c801e221df8efa019d1119823902b3016bb089bcbe25783e0f&quot;
+      }
+    ],
+    &quot;script&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;
+  },
+  &quot;review&quot;: {
+    &quot;human_review&quot;: &quot;pending&quot;,
+    &quot;kind&quot;: &quot;pinned-source signature replay&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Source program plus independent isolated-keyring verification&quot;
+  },
+  &quot;scope&quot;: {
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/dukotah-g02-signature-corpus/source-archived-table.json&quot;,
+      &quot;experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip&quot;
+    ],
+    &quot;exclusions&quot;: &quot;Files outside this pinned revision, unarchived signed messages, authorship beyond the public key, and any LP2 decryption hypothesis.&quot;,
+    &quot;pages&quot;: [],
+    &quot;parameters&quot;: &quot;135 committed .asc paths, 2 source-scratch exclusions, 133 cases; canonical key fingerprint 6D854CD7933322A601C3286D181F01E57A35090F; source controls C1-C4.&quot;,
+    &quot;procedure&quot;: &quot;Run the pinned source verifier in an isolated corpus and GnuPG home; independently verify every path with another isolated keyring; compare the saved table and source archive by path, raw SHA, signature verdict and packet time.&quot;,
+    &quot;representation&quot;: &quot;Every .asc Git blob at pinned revision f08b20b, excluding the source verifier&#x27;s own two work/ control files; exact raw bytes reconstructed from 89 content-addressed blobs at 133 paths.&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned G-02 source program&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived G-02 signature table&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Frozen source rules and controls&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/PREREG.md&quot;
+    }
+  ],
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;summary&quot;: &quot;All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.&quot;,
+  &quot;tags&quot;: [
+    &quot;Cicada 3301&quot;,
+    &quot;PGP&quot;,
+    &quot;signature verification&quot;,
+    &quot;provenance&quot;,
+    &quot;source replay&quot;
+  ],
+  &quot;title&quot;: &quot;Which archived Cicada signatures verify?&quot;,
+  &quot;visuals&quot;: [
+    {
+      &quot;caption&quot;: &quot;The archived table and pinned Git corpus share 123 paths. Every shared path has the same signature result and packet time.&quot;,
+      &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg&quot;
+    }
+  ],
+  &quot;reader_finding&quot;: &quot;Of 133 archived files, 114 verify under the specified Cicada public key. One copy has a bad signature; the rest are key files or have no recognized signature block. A separate check agrees on every file. The older published table used a larger corpus, but its 123 shared files have matching verification results.&quot;,
+  &quot;reader_limit&quot;: &quot;This checks the preserved file copies and a particular public key. It does not prove who owned the key, recover missing historical files, or decrypt Liber Primus.&quot;,
+  &quot;article&quot;: &quot;## Finding\n\nIn the pinned public corpus, **114 of 133** source-visible `.asc` files verify against the isolated Cicada public key. Eleven are key files, seven have no recognized signature block, and one produces a bad signature. A second verifier, using its own isolated keyring, agrees on every file. The source program&#x27;s four checks also pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit.\n\nThe source&#x27;s older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same signature result and packet time; each difference in its raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source&#x27;s working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical verification outcomes and signature times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one failing pinned copy is `ky_2013-01-opening-book-code.asc`. GnuPG reports **BADSIG** for these bytes, and this corpus has no passing copy with the same normalized body. That describes this copy; it does not establish who authored the message or whether a different authentic copy exists elsewhere.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects, ran the pinned source script, then verified every file again through a separate GnuPG keyring. The key&#x27;s full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Pinned file result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 114 | GnuPG validates the signature under the specified key. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No recognized signature | 7 | No signature block recognized by this source scan. |\n| Bad signature | 1 | This exact file&#x27;s signed body does not verify. |\n\nThe archive reports 55 distinct normalized signed bodies and 54 verified packet timestamps in both snapshots. These are corpus properties, not extra solved manuscript pages. In particular, a valid signature authenticates a message relative to the key; proving the key&#x27;s real-world owner is a separate historical question.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file&#x27;s length and SHA-256 before GnuPG runs.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently checks all signatures in another temporary keyring. The quicker `--check` mode verifies the saved bytes, controls and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;cryptographic-artifacts&quot;,
+      &quot;title&quot;: &quot;Public-key messages and cryptographic artifacts&quot;,
+      &quot;aliases&quot;: [
+        &quot;RSA&quot;,
+        &quot;public key&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;provenance&quot;,
+      &quot;title&quot;: &quot;Source verification and transcription audits&quot;,
+      &quot;aliases&quot;: [
+        &quot;signature&quot;,
+        &quot;provenance&quot;,
+        &quot;transcription&quot;,
+        &quot;source audit&quot;,
+        &quot;input verification&quot;,
+        &quot;wrong file&quot;,
+        &quot;missing rows&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="dukotah-g3-pointer-framings"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;dukotah-g3-pointer-framings&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -78108,6 +78288,218 @@
       ]
     }
   ]
+}</pre></article><article id="wulfic-keyword-ramp"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-keyword-ramp&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;A keyword that shifts with each rune&quot;,
+  &quot;question&quot;: &quot;Do the archived page keywords plus any of nine fixed position steps produce a supported reading on the ten named pages?&quot;,
+  &quot;reader_question&quot;: &quot;Could a page keyword change its shift at every rune?&quot;,
+  &quot;summary&quot;: &quot;The strongest source word score was 86; 10 of 199 complete shuffled searches scored at least as high. A full known-reading plant recovered exactly and ranked first.&quot;,
+  &quot;finding&quot;: &quot;The pinned source branch tested 90 settings on LP2-04–13. Best score 86 came from LP2-11 at step −2. All 90 decoded-output digests and 199 full-search shuffled maxima are recorded. A 209-rune known-reading plant recovered exactly with the intended step and scored 380.&quot;,
+  &quot;limitations&quot;: &quot;The source English-substring score is a rough screen, and 199 within-page shuffles are not a cipher model. This result covers only ten page-specific keywords, nine source steps, page-local rune clocks and the source score. No alternate keys, resets, layers, languages or complete decryptor are excluded.&quot;,
+  &quot;next_steps&quot;: &quot;A proposed different keyword or step schedule needs a rule fixed before examining its output, complete known-reading recovery, and an untouched passage check.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;keyword&quot;,
+    &quot;progressive key&quot;,
+    &quot;Vigenere&quot;,
+    &quot;position clock&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-keyword-ramp/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Exact committed Wulfic rune streams for old pages21–30, rune-for-rune aligned to current LP2-04–13.&quot;,
+    &quot;procedure&quot;: &quot;Apply each source-assigned GP29 keyword with all nine called progressive steps; score with the source English-substring function. Check one full known-reading plant and 199 shared page shuffles of the entire 90-case grid.&quot;,
+    &quot;parameters&quot;: &quot;10 pages × 9 source steps = 90 candidate outputs; 199 complete shared page-shuffle searches, seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;Other branches of advanced_cipher_solver.py, pages without assigned keywords, other step values or scoring models.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;bounded source-function replay with a full-message power gate&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Exact pinned source functions, independent all-case arithmetic and source-score checker, source/site rune parity&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-keyword-ramp/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check &amp;&amp; python experiments/records/wulfic-keyword-ramp/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT &amp;&amp; python experiments/records/wulfic-keyword-ramp/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library plus exact public Wulfic Git checkout at bf89d3d13aad2b8f2c95ab195cf1b092f250775c; upstream unlicensed source read by verified Git blob and not bundled.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-keyword-ramp/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;310ec0d89898f0ee601ffdcb0859107ad05a78ac6d9ff99b5166bd68ec4b25b2&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/plan.json&quot;,
+        &quot;sha256&quot;: &quot;3cc445e104e685655acfe4575038b2c14aeda1b2385f2551403cdcb4c4c6c594&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/plan.py&quot;,
+        &quot;sha256&quot;: &quot;4fc7d01568620e2f7649bccec269778e8852602b4c76b34761838dc6f1dd6955&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/run.py&quot;,
+        &quot;sha256&quot;: &quot;eb136cdd2d911ecc22ebb5a241ca8d4ce6b600f85bd906584dc251bce0bc839e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/check.py&quot;,
+        &quot;sha256&quot;: &quot;310ec0d89898f0ee601ffdcb0859107ad05a78ac6d9ff99b5166bd68ec4b25b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/plot.py&quot;,
+        &quot;sha256&quot;: &quot;1d19d49b4b57916e1eb66e0a0cd9f3f2ef2621e0512d2f7372151c74be931f36&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/article.md&quot;,
+        &quot;sha256&quot;: &quot;d0c3bbcec454791a16425931ca9f1cdf489c36f72a41c27f83d4d1fd8ad64cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/evidence/known-readings.json&quot;,
+        &quot;sha256&quot;: &quot;384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/results.json&quot;,
+        &quot;sha256&quot;: &quot;032ed9ca0a974d8ee3e49d99ed5d39f8964de27afb41a895d88be418a646aa57&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;b9a30742b6a15fc5386eb6003ed92069df5ce31aeffe062f044041ced9780558&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-keyword-ramp/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The strongest source score compared with 199 whole-grid shuffled searches and the known-reading recovery gate.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned advanced cipher source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned legacy-source caveat&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wholepage-progressive-caesar&quot;,
+    &quot;wulfic-autokey-seed-families&quot;,
+    &quot;wulfic-prime-keyword-stream-families&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;The nine tested step sizes produced no established reading on LP2-04–13. The best word score was matched or beaten by 10 of 199 complete shuffled searches. The same search recovered a 209-rune known message when it used the tested key rule.&quot;,
+  &quot;reader_limit&quot;: &quot;Only the ten assigned keywords and nine fixed step sizes were tested. Other keywords, changing step schedules, resets and languages remain open.&quot;,
+  &quot;article&quot;: &quot;# A keyword that shifts with each rune\n\nThe archived [advanced cipher program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py) assigns one keyword to each of ten pages, then changes that keyword&#x27;s shift at every rune. We replayed **all nine steps on each page**. No output establishes a reading. The strongest source word score was **86** on LP2-11; **10 of 199** complete shuffled searches scored at least as high.\n\n![The strongest manuscript source word score is 86, compared with 61 at the middle and 95 at the highest of 199 complete shuffled searches. A known-reading plant recovered exactly and scored 380.](experiments/records/wulfic-keyword-ramp/comparison.svg)\n\nThe rule is simple: take the keyword&#x27;s rune value at position *i*, add *i* times a fixed step, and subtract that total from ciphertext modulo 29. Each page restarts at position zero. The source&#x27;s steps are **1, 2, 3, 5, 7, 11, 13, −1, and −2**. For example, with CABAL and step 7, the key begins `5, 2, 2, 16, 19, 11…`. This is a repeating keyword plus a steady position ramp, not a plain progressive Caesar shift.\n\nWe checked the source scoring path before the manuscript sweep. Encrypting the complete, established **209-rune first-koan reading** with CABAL and step 7, then testing all nine steps, recovers every rune only at step 7. That true candidate ranks first under the source score, at **380**. It demonstrates power for this clean example, not for every possible reading or language. The source score counts selected English substrings in a run-together GP transliteration; it is a rough screen and can reward accidental fragments.\n\nThe ten pinned source rune files numbered **21–30** match the site&#x27;s **LP2-04–13** arrays rune for rune. Each of the 199 seeded controls shuffles each page once, retains its original keyword, tests all nine steps, and saves the highest score across the entire ten-page search. The shuffles keep each page&#x27;s rune frequencies but destroy its order; they are a selection reference, not a cipher model. The source script&#x27;s other autokey, running-key, F-skip and LFSR branches are separate questions, many already tested in bounded records. These nine steps do not exhaust other keywords, step schedules, boundary resets, or layered methods.\n\nThe [plan](experiments/records/wulfic-keyword-ramp/plan.json) fixes the exact branches, pages, known-reading control, and shuffle procedure. The [results](experiments/records/wulfic-keyword-ramp/results.json) give all 90 candidate scores and decoded-output hashes plus 199 full-search control maxima. From the full checkout or experiment bundle, with an exact checkout of the public Wulfic revision supplied separately:\n\n```text\npython experiments/records/wulfic-keyword-ramp/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-keyword-ramp/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT\npython experiments/records/wulfic-keyword-ramp/plot.py --check\n```\n\nThe original source has no license in that checkout, so the bundle does not copy its script. The runner executes its exact key and score functions from a SHA-256-checked Git blob. The independent checker rebuilds the arithmetic, all outputs, the known-reading plant and all shuffled maxima without importing those functions.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-keyword-ramp/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;310ec0d89898f0ee601ffdcb0859107ad05a78ac6d9ff99b5166bd68ec4b25b2&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;polyalphabetic&quot;,
+      &quot;title&quot;: &quot;Repeating-key and polyalphabetic ciphers&quot;,
+      &quot;aliases&quot;: [
+        &quot;Vigenere&quot;,
+        &quot;Beaufort&quot;,
+        &quot;repeating key&quot;,
+        &quot;polyalphabetic&quot;,
+        &quot;repeating key cipher&quot;,
+        &quot;substitution&quot;,
+        &quot;polyalphabetic substitution&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;number-streams&quot;,
+      &quot;title&quot;: &quot;Arithmetic keystreams&quot;,
+      &quot;aliases&quot;: [
+        &quot;prime shifts&quot;,
+        &quot;Fibonacci&quot;,
+        &quot;totient sequence&quot;,
+        &quot;arithmetic keystream&quot;,
+        &quot;numerical sequence&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;automatic-search&quot;,
+      &quot;title&quot;: &quot;Automatic search and language scoring&quot;,
+      &quot;aliases&quot;: [
+        &quot;hill climbing&quot;,
+        &quot;simulated annealing&quot;,
+        &quot;genetic algorithm&quot;,
+        &quot;brute force&quot;,
+        &quot;automatic search&quot;,
+        &quot;beam search&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="wulfic-lag-reuse-models"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-lag-reuse-models&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -81007,6 +81399,240 @@
         &quot;reset&quot;,
         &quot;pause key&quot;,
         &quot;skip key&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="wulfic-p21-rearrangement-routes"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-p21-rearrangement-routes&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Keyword decryption and rearrangement&quot;,
+  &quot;question&quot;: &quot;What changes under the exact 45 keyword-then-rearrangement routes in the archived P21–30 program, and does its best word score stand out from complete shuffled searches?&quot;,
+  &quot;reader_question&quot;: &quot;Could rearranging these keyword-decoded pages reveal a reading?&quot;,
+  &quot;summary&quot;: &quot;The top source word score, 111, was met or beaten by 85 of 199 complete shuffled searches. Most routes cannot change the metric used to judge them: complete permutations preserve coincidence, word-order changes preserve word score, and the source scores character routes without spaces.&quot;,
+  &quot;finding&quot;: &quot;The exact source runs 45 routes on each of ten matched LP2-04–13 pages. All 390 full-length routes preserve the decoded-page rune histogram and normalized IoC; all 50 whole-word-order trials preserve the original dictionary score. All 380 character-level outputs score zero under the source unspaced whole-word dictionary check, while a full-message reverse-route plant scores 1,266 with spaces and zero through that unspaced path. Best target score is 111; 85/199 shuffled full searches meet or exceed it.&quot;,
+  &quot;limitations&quot;: &quot;The archived keywords are proposals. The 60 shortened position extractions do not preserve full-page frequency, although they too score zero as unspaced strings here. The source scoring path cannot fairly judge a multiword reading after character-level rearrangement; zero scores are not evidence against those routes. The 199 shared page shuffles are a retrospective descriptive reference, not a cipher model. Other keywords, routes, segmentations and languages are open.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a route with an invertible construction and preserve or recover word boundaries before using dictionary score as a reading test. Check an untouched passage after choosing the key and route.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;transposition&quot;,
+    &quot;prime positions&quot;,
+    &quot;Fibonacci positions&quot;,
+    &quot;word order&quot;,
+    &quot;scoring limitation&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-p21-rearrangement-routes/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Exact committed Wulfic source rune files for old pages21–30 aligned with current LP2-04–13, its fixed page keyword vectors and its committed 370,079-entry wordlist.&quot;,
+    &quot;procedure&quot;: &quot;Execute all 45 called source route outputs for each page, preserving branch-specific spacing and the source dictionary scorer. Check frequency and word-order invariants, complete reverse-route planted recovery, and 199 seeded whole-grid within-page shuffle searches.&quot;,
+    &quot;parameters&quot;: &quot;450 source rows; 390 full-length route rows, 60 shortened extract rows; 199 complete shared-corpus shuffles seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;A separate source file transposition_solver.py is covered elsewhere. This replay does not test uncalled source helpers, arbitrary keyword or route invention, alternate transcriptions, a better language scorer or cross-page routes.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact-source bounded replay and scorer-power audit&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Unchanged source execution; independent reconstruction of all 450 rows, 199 shuffled full-search maxima and planted full-message route; exact source/site rune parity&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-p21-rearrangement-routes/run.py --source-root PATH_TO_PINNED_CHECKOUT --check &amp;&amp; python experiments/records/wulfic-p21-rearrangement-routes/check.py --source-root PATH_TO_PINNED_CHECKOUT &amp;&amp; python experiments/records/wulfic-p21-rearrangement-routes/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; exact public Wulfic Git checkout at bf89d3d13aad2b8f2c95ab195cf1b092f250775c. Its script and unlicensed wordlist are SHA-256 verified at execution and not redistributed.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;ec4d3aa868e82337506ac7f5068360bbb4a1820be061dba8e3896c3a8a6d4246&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/plan.json&quot;,
+        &quot;sha256&quot;: &quot;65de734381b67b367c1b8ee58aa2d7cfe09aca4780bac50b33e3d967a0975409&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/plan.py&quot;,
+        &quot;sha256&quot;: &quot;9724812950763648f5e1325295de069d60f6c49da305810b6293ffc2c9ab152b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/run.py&quot;,
+        &quot;sha256&quot;: &quot;181c2a233fd77a2be8ae6463434d9e6f9383de203f9bcffba97fb5a405a4be59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/check.py&quot;,
+        &quot;sha256&quot;: &quot;ec4d3aa868e82337506ac7f5068360bbb4a1820be061dba8e3896c3a8a6d4246&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/plot.py&quot;,
+        &quot;sha256&quot;: &quot;96b7a2559b771f6d865ddc0809692a6b706124ccb2338d41df40f2e36e77d5e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;a8ebb07cac01e017ce199f0850a0d4505d05558019c43ef798a44e5c7f0e8e54&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/article.md&quot;,
+        &quot;sha256&quot;: &quot;d03c1e0b091709b8a76d6706f6cc8e57e31c37aa11c2601c00147c34a974f1d5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/results.json&quot;,
+        &quot;sha256&quot;: &quot;4033a24d4994b0dd6da631f7051104788cab72c9f67d05f3a725a56943d9f9fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/source-log.txt&quot;,
+        &quot;sha256&quot;: &quot;1fbb43a5c08a834f6f0196a0b116b680bb4e45ee844948791eec7b9cae3608b1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/route-summary.svg&quot;,
+        &quot;sha256&quot;: &quot;8a3b0ca961214f2286a8e4b7d399f46ebed2f7d54cd1f68f822b9c3dd3b745f2&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/route-summary.svg&quot;,
+      &quot;caption&quot;: &quot;The same recovered 261-rune control scores 1,266 with word spaces and zero without them. A zero score therefore cannot reject these character routes.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned P21–30 rearrangement source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_rearrange.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned legacy-method caveat&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-keyed-transposition-cohort&quot;,
+    &quot;lp2-row-column-routes&quot;,
+    &quot;wulfic-p21-running-key-layers&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;This replay found a problem with the old program’s test, rather than a reading. It removes spaces before scoring character rearrangements, so even a correctly recovered multiword message gets zero points. The best manuscript score was also matched or beaten in 85 of 199 shuffled searches.&quot;,
+  &quot;reader_limit&quot;: &quot;These results do not rule out rearrangement. They cover the program’s 45 routes and proposed keywords on LP2-04–13; a better scorer would need to recover complete planted messages first.&quot;,
+  &quot;article&quot;: &quot;# Keyword decryption, then rearrange the runes\n\nAn archived program applies one proposed keyword to each of old pages 21–30 (current **LP2-04–13**), then tries **45 rearrangements per page**. These include prime and Fibonacci position extracts, column routes, reversals, sorting, and whole-word changes. This record replays that specific program; the [other keyword-and-route record](#/experiments/wulfic-keyed-transposition-cohort) tests a different source file.\n\n**Finding:** The strongest source dictionary score on the manuscript is **111**, from reversing the rune order *inside each visible word* on LP2-10. Complete searches on **85 of 199** seeded shuffled versions of the same ten pages reached or exceeded 111. This score does not distinguish that output from the declared shuffle comparison, and no candidate is a validated reading.\n\n![A correctly recovered constructed message scores 1,266 with spaces and zero when the scorer removes word boundaries.](route-summary.svg)\n\nThe program&#x27;s score also cannot rank most of its own routes meaningfully:\n\n- **390 complete rune rearrangements** leave the page&#x27;s rune counts and normalized coincidence unchanged. Rearrangement can change order, but it cannot by itself improve that frequency statistic.\n- **50 whole-word ordering trials** merely rearrange the same decoded words. Their dictionary score is exactly the original score each time.\n- **380 character-level outputs** are passed to the source word scorer as one unspaced string. All have word score zero on these ten pages, including the 60 shorter prime/Fibonacci extractions. Those shorter extracts do **not** share the full-page frequency invariant.\n\nFor a source-defined positive control, we built a complete **261-rune** wordlist message with the original LP2-04 visible word lengths, reversed it, and encrypted it under that page&#x27;s assigned keyword. The reverse route recovers every rune exactly. With spaces, the source wordlist gives the message a score of **1,266**; the same recovered runes passed through that route&#x27;s unspaced scoring path get **zero**. Thus a zero score on a character route cannot exclude a multiword plaintext. This engineered message is intentionally easy for the wordlist and is a scoring control, not a manuscript reading.\n\nThe old source labels and page mapping were checked against the current rune transcriptions. The original, unchanged script was run with its committed page and wordlist files staged under its legacy relative paths. The [results](results.json) retain all **450** source route rows and each of the **199** complete shuffled-search maxima. The 199 shuffles are a descriptive, retrospective selection comparison, not a cipher model or a probability that the manuscript is random.\n\nThe keyword choices remain proposals. No arbitrary keywords, different word boundaries, alternate source translations or unlisted routes are covered. This replay exposes what the archived program measured; it does not settle whether any rearrangement of LP2 is useful.\n\n## Reproduce\n\nThe [plan](plan.json) pins the source revision, each input Git blob, the page mapping, route set and shuffle rule. The upstream program and 3.8 MB wordlist are not redistributed here; obtain the pinned [source revision](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_rearrange.py) as a sibling `source-archives/Wulfic-Cicada3301-Liber_Primus` checkout or pass `--source-root` to the runner. The independent checker uses the same pinned Git blobs and reconstructs all 45 routes without calling the source route functions.\n\n```sh\npython experiments/records/wulfic-p21-rearrangement-routes/run.py --source-root PATH_TO_PINNED_CHECKOUT --check\npython experiments/records/wulfic-p21-rearrangement-routes/check.py --source-root PATH_TO_PINNED_CHECKOUT\npython experiments/records/wulfic-p21-rearrangement-routes/plot.py --check\n```\n\nThe [unaltered source output](source-log.txt) is included as a short execution receipt.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-p21-rearrangement-routes/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ec4d3aa868e82337506ac7f5068360bbb4a1820be061dba8e3896c3a8a6d4246&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;transposition&quot;,
+      &quot;title&quot;: &quot;Transposition and permutations&quot;,
+      &quot;aliases&quot;: [
+        &quot;reverse&quot;,
+        &quot;columns&quot;,
+        &quot;permutation&quot;,
+        &quot;read backwards&quot;,
+        &quot;transposition&quot;,
+        &quot;anagram&quot;,
+        &quot;anagrams&quot;,
+        &quot;rearrange letters&quot;,
+        &quot;rearrange runes&quot;,
+        &quot;column permutation&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;routes&quot;,
+      &quot;title&quot;: &quot;Grid layouts, spirals and route ciphers&quot;,
+      &quot;aliases&quot;: [
+        &quot;spiral&quot;,
+        &quot;route cipher&quot;,
+        &quot;boustrophedon&quot;,
+        &quot;zigzag&quot;,
+        &quot;zig zag&quot;,
+        &quot;snake pattern&quot;,
+        &quot;spirals&quot;,
+        &quot;route ciphers&quot;,
+        &quot;snake order&quot;,
+        &quot;alternating rows&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;automatic-search&quot;,
+      &quot;title&quot;: &quot;Automatic search and language scoring&quot;,
+      &quot;aliases&quot;: [
+        &quot;hill climbing&quot;,
+        &quot;simulated annealing&quot;,
+        &quot;genetic algorithm&quot;,
+        &quot;brute force&quot;,
+        &quot;automatic search&quot;,
+        &quot;beam search&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;invariants&quot;,
+      &quot;title&quot;: &quot;Invariants and bounded exclusions&quot;,
+      &quot;aliases&quot;: [
+        &quot;proof&quot;,
+        &quot;exclusion&quot;,
+        &quot;invariant&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
       ]
     }
   ]

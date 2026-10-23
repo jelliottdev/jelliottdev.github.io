@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 282,
+    "records": 285,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -3222,6 +3222,72 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-fixed-numeric-keys.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-fixed-numeric-keys/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-fixed-numeric-keys.zip"
+    },
+    {
+      "id": "dukotah-g02-signature-corpus",
+      "title": "Which archived Cicada signatures verify?",
+      "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
+      "summary": "All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.",
+      "tags": [
+        "Cicada 3301",
+        "PGP",
+        "signature verification",
+        "provenance",
+        "source replay"
+      ],
+      "finding": "Of 133 archived files, 114 verify under the specified Cicada public key. One copy has a bad signature; the rest are key files or have no recognized signature block. A separate check agrees on every file. The older published table used a larger corpus, but its 123 shared files have matching verification results.",
+      "record_type": {
+        "id": "audit",
+        "label": "Source or input audit",
+        "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+      },
+      "method_topics": [
+        {
+          "id": "cryptographic-artifacts",
+          "title": "Public-key messages and cryptographic artifacts",
+          "aliases": [
+            "RSA",
+            "public key"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        },
+        {
+          "id": "provenance",
+          "title": "Source verification and transcription audits",
+          "aliases": [
+            "signature",
+            "provenance",
+            "transcription",
+            "source audit",
+            "input verification",
+            "wrong file",
+            "missing rows"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-g02-signature-corpus/source-archived-table.json",
+        "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-g02-signature-corpus",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-g02-signature-corpus.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-g02-signature-corpus/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-g02-signature-corpus.zip"
     },
     {
       "id": "dukotah-g3-pointer-framings",
@@ -21738,6 +21804,98 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-keyword-quagmire-models.zip"
     },
     {
+      "id": "wulfic-keyword-ramp",
+      "title": "A keyword that shifts with each rune",
+      "question": "Do the archived page keywords plus any of nine fixed position steps produce a supported reading on the ten named pages?",
+      "summary": "The strongest source word score was 86; 10 of 199 complete shuffled searches scored at least as high. A full known-reading plant recovered exactly and ranked first.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "keyword",
+        "progressive key",
+        "Vigenere",
+        "position clock"
+      ],
+      "finding": "The nine tested step sizes produced no established reading on LP2-04–13. The best word score was matched or beaten by 10 of 199 complete shuffled searches. The same search recovered a 209-rune known message when it used the tested key rule.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "number-streams",
+          "title": "Arithmetic keystreams",
+          "aliases": [
+            "prime shifts",
+            "Fibonacci",
+            "totient sequence",
+            "arithmetic keystream",
+            "numerical sequence"
+          ]
+        },
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-keyword-ramp/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-keyword-ramp",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-keyword-ramp.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-keyword-ramp/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-keyword-ramp.zip"
+    },
+    {
       "id": "wulfic-lag-reuse-models",
       "title": "Distant key reuse and ciphertext autokeys",
       "question": "Do fixed shifted or reflected key-reuse laws, or LP2 ciphertext used as its own key, produce a calibrated whole-lag or reused-stretch signal?",
@@ -22715,6 +22873,116 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p21-literal-f-masks.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p21-literal-f-masks/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p21-literal-f-masks.zip"
+    },
+    {
+      "id": "wulfic-p21-rearrangement-routes",
+      "title": "Keyword decryption and rearrangement",
+      "question": "What changes under the exact 45 keyword-then-rearrangement routes in the archived P21–30 program, and does its best word score stand out from complete shuffled searches?",
+      "summary": "The top source word score, 111, was met or beaten by 85 of 199 complete shuffled searches. Most routes cannot change the metric used to judge them: complete permutations preserve coincidence, word-order changes preserve word score, and the source scores character routes without spaces.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "transposition",
+        "prime positions",
+        "Fibonacci positions",
+        "word order",
+        "scoring limitation"
+      ],
+      "finding": "This replay found a problem with the old program’s test, rather than a reading. It removes spaces before scoring character rearrangements, so even a correctly recovered multiword message gets zero points. The best manuscript score was also matched or beaten in 85 of 199 shuffled searches.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "transposition",
+          "title": "Transposition and permutations",
+          "aliases": [
+            "reverse",
+            "columns",
+            "permutation",
+            "read backwards",
+            "transposition",
+            "anagram",
+            "anagrams",
+            "rearrange letters",
+            "rearrange runes",
+            "column permutation"
+          ]
+        },
+        {
+          "id": "routes",
+          "title": "Grid layouts, spirals and route ciphers",
+          "aliases": [
+            "spiral",
+            "route cipher",
+            "boustrophedon",
+            "zigzag",
+            "zig zag",
+            "snake pattern",
+            "spirals",
+            "route ciphers",
+            "snake order",
+            "alternating rows"
+          ]
+        },
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "invariants",
+          "title": "Invariants and bounded exclusions",
+          "aliases": [
+            "proof",
+            "exclusion",
+            "invariant"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-p21-rearrangement-routes/plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-p21-rearrangement-routes",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p21-rearrangement-routes.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p21-rearrangement-routes/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p21-rearrangement-routes.zip"
     },
     {
       "id": "wulfic-p21-running-key-layers",

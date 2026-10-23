@@ -1,0 +1,181 @@
+{
+  "finding": "A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings.",
+  "id": "dukotah-g02-signature-corpus",
+  "limitations": "The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. Signature validity is relative to the specified public key and does not itself prove historical authorship or cover all messages. This is not a Liber Primus decryption test.",
+  "next_steps": "Preserve additional original signed files with their exact bytes and provenance, then rerun the same verification and compare normalized bodies and packet timestamps.",
+  "outcome": "supported",
+  "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
+  "reader_question": "Which archived messages have a valid Cicada signature?",
+  "related": [
+    "pgp-packet-keys"
+  ],
+  "reproduction": {
+    "command": "python experiments/records/dukotah-g02-signature-corpus/check.py --replay",
+    "environment": "Python 3 standard library and GnuPG 2.5.21 for complete offline replay; --check does not require GnuPG.",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/plan-frozen.json",
+        "sha256": "a00408a8f764a3bd5ea27f7045cfa68227ab25ca15f87742cb9352e5c47357c3"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/plan.json",
+        "sha256": "36cdec6d3097acbcfa03d19b2df18626331bd4e86af977f9e32670a11a60338d"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/materialize-receipt.json",
+        "sha256": "ba67ff61d70219dc7a90fd11d0ba86cd9b9716ad6be109a905e3754cde36a0d6"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json",
+        "sha256": "9e07605ffefd2e1b256c0127ebc16780755b0d26b466f3c27c68bc1f2e3cf959"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip",
+        "sha256": "8ada99a4dfa71aab8111eca8d45cef1acc5539e8875fa0a71527b7d4a8d73548"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py",
+        "sha256": "757a2f8e597826b950cf5bc49b84d1ae5a6604b3ad72c1325fc1b50d5e7e7872"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/source-archived-table.json",
+        "sha256": "42cddc5dcd3b8f5a306c873463fef80a7359b29c567ddb3d054f956f49f498ca"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/source-PREREG.md",
+        "sha256": "44b5b119302e824b949d59c5e2f17321c278e67d1e7d6cc67ab9d1825c2de855"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/check.py",
+        "sha256": "72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/plot.py",
+        "sha256": "2d7602c2471365299653153b38992a43cfd2795d802beebe566f1eba72324c9e"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/make_record.py",
+        "sha256": "402515ac3d19e5f3d1228915b29e0626f30a465aaa49b153cbc083df9bc80f09"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/article.md",
+        "sha256": "e50a5a7b3534aefb953b2b0407159181c6281c66fa4c6101743a3030afc3aecf"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/fresh-table.json",
+        "sha256": "a304e7af1cce0854cff83920d36a42ece96c30977cabe1c9605c99ad15d9b01e"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/independent-check.json",
+        "sha256": "b04bf15f150d980160b9e02a5da24753f1899c74218f2f064dbe30a394ce2070"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/results.json",
+        "sha256": "b3033db8e832484b4285543fc29cfc922a9b70b4c4a2929a77815afa2cb8b8c5"
+      },
+      {
+        "path": "experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg",
+        "sha256": "a3f834dd5d9733c801e221df8efa019d1119823902b3016bb089bcbe25783e0f"
+      }
+    ],
+    "script": "experiments/records/dukotah-g02-signature-corpus/check.py",
+    "script_sha256": "72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe"
+  },
+  "review": {
+    "human_review": "pending",
+    "kind": "pinned-source signature replay",
+    "retested_on": "2026-10-23",
+    "reviewer": "Source program plus independent isolated-keyring verification"
+  },
+  "scope": {
+    "artifacts": [
+      "experiments/records/dukotah-g02-signature-corpus/source-archived-table.json",
+      "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip"
+    ],
+    "exclusions": "Files outside this pinned revision, unarchived signed messages, authorship beyond the public key, and any LP2 decryption hypothesis.",
+    "pages": [],
+    "parameters": "135 committed .asc paths, 2 source-scratch exclusions, 133 cases; canonical key fingerprint 6D854CD7933322A601C3286D181F01E57A35090F; source controls C1-C4.",
+    "procedure": "Run the pinned source verifier in an isolated corpus and GnuPG home; independently verify every path with another isolated keyring; compare the saved table and source archive by path, raw SHA, signature verdict and packet time.",
+    "representation": "Every .asc Git blob at pinned revision f08b20b, excluding the source verifier's own two work/ control files; exact raw bytes reconstructed from 89 content-addressed blobs at 133 paths."
+  },
+  "sources": [
+    {
+      "label": "Pinned G-02 source program",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py"
+    },
+    {
+      "label": "Archived G-02 signature table",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json"
+    },
+    {
+      "label": "Frozen source rules and controls",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance/PREREG.md"
+    }
+  ],
+  "status": "published",
+  "summary": "All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.",
+  "tags": [
+    "Cicada 3301",
+    "PGP",
+    "signature verification",
+    "provenance",
+    "source replay"
+  ],
+  "title": "Which archived Cicada signatures verify?",
+  "visuals": [
+    {
+      "caption": "The archived table and pinned Git corpus share 123 paths. Every shared path has the same signature result and packet time.",
+      "path": "experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg"
+    }
+  ],
+  "reader_finding": "Of 133 archived files, 114 verify under the specified Cicada public key. One copy has a bad signature; the rest are key files or have no recognized signature block. A separate check agrees on every file. The older published table used a larger corpus, but its 123 shared files have matching verification results.",
+  "reader_limit": "This checks the preserved file copies and a particular public key. It does not prove who owned the key, recover missing historical files, or decrypt Liber Primus.",
+  "article": "## Finding\n\nIn the pinned public corpus, **114 of 133** source-visible `.asc` files verify against the isolated Cicada public key. Eleven are key files, seven have no recognized signature block, and one produces a bad signature. A second verifier, using its own isolated keyring, agrees on every file. The source program's four checks also pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit.\n\nThe source's older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same signature result and packet time; each difference in its raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source's working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical verification outcomes and signature times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one failing pinned copy is `ky_2013-01-opening-book-code.asc`. GnuPG reports **BADSIG** for these bytes, and this corpus has no passing copy with the same normalized body. That describes this copy; it does not establish who authored the message or whether a different authentic copy exists elsewhere.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects, ran the pinned source script, then verified every file again through a separate GnuPG keyring. The key's full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Pinned file result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 114 | GnuPG validates the signature under the specified key. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No recognized signature | 7 | No signature block recognized by this source scan. |\n| Bad signature | 1 | This exact file's signed body does not verify. |\n\nThe archive reports 55 distinct normalized signed bodies and 54 verified packet timestamps in both snapshots. These are corpus properties, not extra solved manuscript pages. In particular, a valid signature authenticates a message relative to the key; proving the key's real-world owner is a separate historical question.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file's length and SHA-256 before GnuPG runs.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently checks all signatures in another temporary keyring. The quicker `--check` mode verifies the saved bytes, controls and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n",
+  "article_path": "experiments/records/dukotah-g02-signature-corpus/article.md",
+  "script_sha256": "72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  },
+  "method_topics": [
+    {
+      "id": "cryptographic-artifacts",
+      "title": "Public-key messages and cryptographic artifacts",
+      "aliases": [
+        "RSA",
+        "public key"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    },
+    {
+      "id": "provenance",
+      "title": "Source verification and transcription audits",
+      "aliases": [
+        "signature",
+        "provenance",
+        "transcription",
+        "source audit",
+        "input verification",
+        "wrong file",
+        "missing rows"
+      ]
+    }
+  ]
+}

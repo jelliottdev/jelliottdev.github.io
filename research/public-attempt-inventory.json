@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "9efe23012758170580705334db092abc2d12b17d1bfe3ffa9e71f6df83be2c07",
-    "record_count": 282
+    "sha256": "27bc38f86bd4e1659faf8af9e307c166a9c993ae482a3017aefd2ab8e04e0de3",
+    "record_count": 285
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,16 +26,16 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 28,
-    "unreconciled": 99,
-    "source_entries_reviewed": 69,
-    "source_entries_pending_review": 103,
+    "candidate_overlap": 29,
+    "unreconciled": 97,
+    "source_entries_reviewed": 71,
+    "source_entries_pending_review": 101,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 99,
+    "pending_review_without_candidate_match": 97,
     "execution_replay_states": {
-      "complete-executed-grid": 22,
+      "complete-executed-grid": 23,
       "replayed-with-invalid-gate": 6,
-      "partial-execution": 11
+      "partial-execution": 12
     },
     "verified_coverage": 0
   },
@@ -1444,9 +1444,46 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "dukotah-g02-signature-corpus",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json",
+                "liber-primus/analysis/round18/L8-provenance/PREREG.md",
+                "liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-g02-signature-corpus",
+            "covered_subclaim": "The pinned Git revision has 135 .asc paths, two excluded source-control files, and 133 source-visible files. All 133 were rerun with the source verifier and checked with a separate isolated GnuPG keyring: 114 PASS, 11 KEY, 7 NO-SIG, 1 FAIL. The four source controls pass."
+          }
+        ],
+        "unresolved_parts": [
+          "The archived 228-path table came from a different working-tree snapshot. Only 123 paths are shared with the pinned Git corpus; 105 archived-only paths are not present in the pinned input set and were not freshly verified.",
+          "All 123 shared paths have the same verdict and signature time. Their raw hashes differ by exact LF versus CRLF line endings, not by conflicting signature decisions.",
+          "Signature status is relative to the specified public key; historical authorship and completeness of all claimed Cicada messages are not established."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "dukotah-g02-signature-corpus"
+        ],
+        "scope": "All 133 source-visible .asc paths at pinned Git revision f08b20b, reconstructed byte-for-byte from 89 archived blobs; not the older 228-path working-tree snapshot.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "H-01",
@@ -2707,9 +2744,32 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-g02-signature-corpus",
+            "covered_subclaim": "The linked Round 18 replay independently checks the 133 source-visible pinned .asc files and reconciles 123 shared paths with the older table. It measures validity for those exact bytes, not every community-canonical message or the separate Round 19 C3 rerun."
+          }
+        ],
+        "unresolved_parts": [
+          "The Round 19 C3 verifier and its 228-path working-tree input snapshot were not freshly rerun; 105 archived-only paths have no bytes in this pinned Git corpus.",
+          "Eleven pinned paths are public-key files, and this check does not prove a corpus-wide unique signing key or the historical authenticity of every purported Cicada message.",
+          "Unsigned, foreign-key, and bad-signature file verdicts are byte-specific findings; none alone proves a message is historically fake."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-g02-signature-corpus"
+        ],
+        "scope": "Round 18 pinned 133-path corpus replay and 123 shared-path comparison only; the distinct Round 19 C3 source method and older 228-path snapshot remain unreplayed.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "L1-F6-CORRECTION",

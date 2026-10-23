@@ -1,0 +1,69 @@
+/* Production checker lifecycle with deferred records; no browser/model requests. */
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const root=path.join(__dirname,'..'),Search=require('../assistant-search.js');
+const record={id:'prime-example',status:'published',title:'Prime stream test',question:'Does a prime stream recover text?',
+ summary:'Prime stream opening test',tags:['prime stream'],scope:{pages:['lp2-15'],representation:'runes',procedure:'fixed subtraction',parameters:'one key',exclusions:'other keys'},
+ finding:'Technical finding for exact evidence',reader_finding:'Plain result for readers',limitations:'Technical limits for exact evidence',reader_limit:'Other keys remain open.',
+ outcome:'not-supported',record_type:{id:'method',label:'Solving test'},related:[],method_topics:[]};
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+function harness(query=''){
+ let elements=new Map(),html='',registryCalls=0,apiCalls=0;const pending=[];
+ const context={URLSearchParams,AbortController,setTimeout,clearTimeout,renderId:1,
+  location:{hash:'#/experiments'},history:{replaceState(){}},db:{pages:[{id:'lp2-15'}]},
+  head:()=>'',footer:()=>'',esc:String,AssistantSearch:Search,AssistantMarkdown:require('../assistant-markdown.js'),IdeaCoverage:require('../idea-coverage.js'),
+  document:{activeElement:null},$:id=>elements.get(id),
+  fetch:(url,options)=>{
+   if(options?.method==='POST'){apiCalls++;return Promise.resolve({ok:false,status:503,json:async()=>({})})}
+   assert.equal(url,'data/experiments.json','Only the unchanged complete evidence registry loads during readiness');
+   registryCalls++;return new Promise((resolve,reject)=>pending.push({resolve,reject}));
+  }};
+ context.main={set innerHTML(value){
+  for(const el of elements.values())el.isConnected=false;elements=new Map();html=value;
+  for(const [,id] of value.matchAll(/id="([^"]+)"/g)){
+   const el={isConnected:true,value:'',innerHTML:'',textContent:'',hidden:false,disabled:false,listeners:{},attributes:{},
+    addEventListener(type,fn){this.listeners[type]=fn},setAttribute(name,value){this.attributes[name]=value},replaceChildren(){this.innerHTML=''},
+    focus(){context.document.activeElement=this}};elements.set('#'+id,el);
+  }
+  const input=elements.get('#experiment-query');if(input)input.value=value.match(/<textarea[^>]*>([^<]*)<\/textarea>/)?.[1]||'';
+ },get innerHTML(){return html}};
+ vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),context);
+ vm.runInContext(fs.readFileSync(path.join(root,'assistant-ui.js'),'utf8'),context);
+ vm.runInContext("startExperimentSupport=()=>{};assistantConfig={endpoint:'https://mock.example/ask'};methodFamilyPending=false;ideaCoveragePending=false;reportedAttemptsPending=false;",context);
+ const $=id=>elements.get('#'+id),okay=records=>({ok:true,json:async()=>({records})});
+ return {context,$,pending,okay,get registryCalls(){return registryCalls},get apiCalls(){return apiCalls},query};
+}
+(async()=>{
+ const h=harness();await h.context.experimentsPage('',1);
+ assert(h.$('experiment-query'),'Editable shell exists while registry is unresolved');
+ const input=h.$('experiment-query');input.value='prime stream LP2-15';input.focus();input.listeners.input();
+ assert(h.$('idea-submit').disabled);assert(h.$('idea-status').textContent.includes('Loading research records'));
+ assert(!h.$('experiment-results').innerHTML.includes('No matching'),'Pending data is never an empty archive');
+ h.$('experiment-form').onsubmit({preventDefault(){}});assert.equal(h.apiCalls,0,'Forced submit cannot send an early API request');
+ const shared=h.context.ensureExperimentRecords();assert.equal(h.registryCalls,1,'Other consumers share the same registry fetch');
+ h.pending[0].resolve(h.okay([record]));await shared;await flush();
+ assert.equal(h.$('experiment-query'),input,'Completion never replaces the input');assert.equal(input.value,'prime stream LP2-15');
+ assert.equal(h.context.document.activeElement,input);assert(!h.$('idea-submit').disabled);assert.equal(h.apiCalls,0,'Readiness does not request AI');
+ assert(h.$('experiment-results').innerHTML.includes(record.reader_finding));assert(h.$('experiment-results').innerHTML.includes(record.reader_limit));
+ assert(!h.$('experiment-results').innerHTML.includes(record.finding),'Visible cards prefer reader text');
+ assert(h.$('experiment-results').innerHTML.includes('<strong>Limit:</strong>'));
+ assert(!h.context.experimentSearchResult({...record,reader_limit:undefined}).includes(record.limitations),'Cards do not expand long technical limitations when no curated limit exists');
+ const exact=JSON.parse(Search.experimentDocs([record])[0].text);assert.equal(exact.finding,record.finding);assert.equal(exact.limitations,record.limitations,'Model evidence remains exact');
+ const retry=harness('prime stream');await retry.context.experimentsPage('',1,retry.query);
+ retry.pending[0].reject(new Error('Offline'));await flush();
+ assert(!retry.$('idea-retry').hidden);assert(retry.$('idea-submit').disabled);assert.equal(retry.$('experiment-query').value,'prime stream');
+ const retryButton=retry.$('idea-retry');retryButton.focus();const first=retryButton.onclick(),second=retryButton.onclick();
+ assert.equal(retry.registryCalls,2,'Repeated retry activation shares one load');
+ assert(!retryButton.hidden&&retryButton.disabled,'Retry stays visible while awaiting its request');
+ retry.pending[1].resolve(retry.okay([record]));await Promise.all([first,second]);
+ assert.equal(retry.context.document.activeElement,retry.$('experiment-query'),'Retry recovery leaves no focus on a hidden button');
+ assert.equal(retry.apiCalls,0,'Deep-link query and successful retry only show local matches');
+ for(const fails of [false,true]){
+  const stale=harness('prime stream');await stale.context.experimentsPage('',1,stale.query);
+  const old=stale.$('experiment-query');stale.context.renderId=2;stale.context.main.innerHTML='<h1>New route</h1>';
+  if(fails)stale.pending[0].reject(new Error('Late failure'));else stale.pending[0].resolve(stale.okay([record]));await flush();
+  assert.equal(stale.context.main.innerHTML,'<h1>New route</h1>');assert(!old.isConnected);assert.equal(stale.apiCalls,0);
+ }
+ const empty=harness();await empty.context.experimentsPage('',1);assert.equal(empty.$('experiment-results').innerHTML,'');
+ empty.pending[0].resolve(empty.okay([]));await flush();assert(empty.$('experiment-results').innerHTML.includes('No experiment records published yet'),'A confirmed empty registry is distinct from loading');
+ console.log('PASS: immediate editable checker, shared deferred load, loading/empty/error/retry, preserved input/focus, stale success/error, plain cards with exact model evidence and zero automatic AI requests.');
+})().catch(error=>{console.error(error);process.exitCode=1});

@@ -11,9 +11,9 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 69,
+    "source_entries_reviewed": 71,
     "reproduced_subclaim": 3,
-    "partial": 38,
+    "partial": 40,
     "unsupported_source_verdict": 18,
     "blocked_exact_replay": 3,
     "source_proposal_only": 2,
@@ -23,8 +23,8 @@
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 22,
-      "partial-execution": 11,
+      "complete-executed-grid": 23,
+      "partial-execution": 12,
       "replayed-with-invalid-gate": 6
     }
   },
@@ -1927,6 +1927,66 @@
           "round19-decoder-repair-controls"
         ],
         "scope": "All 2,100 source G-FIX jobs and 300 groups executed. Non-score fields and gate decisions agree exactly; score differences fail the frozen bit-exact condition.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "G-02",
+      "source_claim": "Build a PGP verification table for every claimed Cicada .asc message against the canonical signing key, including signature timestamps.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-g02-signature-corpus",
+          "covered_subclaim": "The pinned Git revision has 135 .asc paths, two excluded source-control files, and 133 source-visible files. All 133 were rerun with the source verifier and checked with a separate isolated GnuPG keyring: 114 PASS, 11 KEY, 7 NO-SIG, 1 FAIL. The four source controls pass."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py",
+        "liber-primus/analysis/round18/L8-provenance/PREREG.md",
+        "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json"
+      ],
+      "unresolved_parts": [
+        "The archived 228-path table came from a different working-tree snapshot. Only 123 paths are shared with the pinned Git corpus; 105 archived-only paths are not present in the pinned input set and were not freshly verified.",
+        "All 123 shared paths have the same verdict and signature time. Their raw hashes differ by exact LF versus CRLF line endings, not by conflicting signature decisions.",
+        "Signature status is relative to the specified public key; historical authorship and completeness of all claimed Cicada messages are not established."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "dukotah-g02-signature-corpus"
+        ],
+        "scope": "All 133 source-visible .asc paths at pinned Git revision f08b20b, reconstructed byte-for-byte from 89 archived blobs; not the older 228-path working-tree snapshot.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "CORPUS-G-02",
+      "source_claim": "Every message treated as canon verifies against the canonical key, and the corpus contains exactly one signing key.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-g02-signature-corpus",
+          "covered_subclaim": "The linked Round 18 replay independently checks the 133 source-visible pinned .asc files and reconciles 123 shared paths with the older table. It measures validity for those exact bytes, not every community-canonical message or the separate Round 19 C3 rerun."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/C3/PGP-VERIFICATION-TABLE.json",
+        "liber-primus/analysis/round19/C3/verify_all_signatures_rerun.py",
+        "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json"
+      ],
+      "unresolved_parts": [
+        "The Round 19 C3 verifier and its 228-path working-tree input snapshot were not freshly rerun; 105 archived-only paths have no bytes in this pinned Git corpus.",
+        "Eleven pinned paths are public-key files, and this check does not prove a corpus-wide unique signing key or the historical authenticity of every purported Cicada message.",
+        "Unsigned, foreign-key, and bad-signature file verdicts are byte-specific findings; none alone proves a message is historically fake."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-g02-signature-corpus"
+        ],
+        "scope": "Round 18 pinned 133-path corpus replay and 123 shared-path comparison only; the distinct Round 19 C3 source method and older 228-path snapshot remain unreplayed.",
         "wider_method_excluded": false
       }
     }

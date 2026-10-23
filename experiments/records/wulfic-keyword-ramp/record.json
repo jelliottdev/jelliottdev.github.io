@@ -1,0 +1,156 @@
+{
+  "id": "wulfic-keyword-ramp",
+  "status": "published",
+  "title": "A keyword that shifts with each rune",
+  "question": "Do the archived page keywords plus any of nine fixed position steps produce a supported reading on the ten named pages?",
+  "reader_question": "Could a page keyword change its shift at every rune?",
+  "summary": "The strongest source word score was 86; 10 of 199 complete shuffled searches scored at least as high. A full known-reading plant recovered exactly and ranked first.",
+  "finding": "The pinned source branch tested 90 settings on LP2-04–13. Best score 86 came from LP2-11 at step −2. All 90 decoded-output digests and 199 full-search shuffled maxima are recorded. A 209-rune known-reading plant recovered exactly with the intended step and scored 380.",
+  "limitations": "The source English-substring score is a rough screen, and 199 within-page shuffles are not a cipher model. This result covers only ten page-specific keywords, nine source steps, page-local rune clocks and the source score. No alternate keys, resets, layers, languages or complete decryptor are excluded.",
+  "next_steps": "A proposed different keyword or step schedule needs a rule fixed before examining its output, complete known-reading recovery, and an untouched passage check.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "keyword",
+    "progressive key",
+    "Vigenere",
+    "position clock"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-keyword-ramp/plan.json"
+    ],
+    "representation": "Exact committed Wulfic rune streams for old pages21–30, rune-for-rune aligned to current LP2-04–13.",
+    "procedure": "Apply each source-assigned GP29 keyword with all nine called progressive steps; score with the source English-substring function. Check one full known-reading plant and 199 shared page shuffles of the entire 90-case grid.",
+    "parameters": "10 pages × 9 source steps = 90 candidate outputs; 199 complete shared page-shuffle searches, seed 20261023.",
+    "exclusions": "Other branches of advanced_cipher_solver.py, pages without assigned keywords, other step values or scoring models."
+  },
+  "review": {
+    "kind": "bounded source-function replay with a full-message power gate",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact pinned source functions, independent all-case arithmetic and source-score checker, source/site rune parity",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-keyword-ramp/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check && python experiments/records/wulfic-keyword-ramp/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT && python experiments/records/wulfic-keyword-ramp/plot.py --check",
+    "environment": "Python 3 standard library plus exact public Wulfic Git checkout at bf89d3d13aad2b8f2c95ab195cf1b092f250775c; upstream unlicensed source read by verified Git blob and not bundled.",
+    "script": "experiments/records/wulfic-keyword-ramp/check.py",
+    "script_sha256": "310ec0d89898f0ee601ffdcb0859107ad05a78ac6d9ff99b5166bd68ec4b25b2",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/plan.json",
+        "sha256": "3cc445e104e685655acfe4575038b2c14aeda1b2385f2551403cdcb4c4c6c594"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/plan.py",
+        "sha256": "4fc7d01568620e2f7649bccec269778e8852602b4c76b34761838dc6f1dd6955"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/run.py",
+        "sha256": "eb136cdd2d911ecc22ebb5a241ca8d4ce6b600f85bd906584dc251bce0bc839e"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/check.py",
+        "sha256": "310ec0d89898f0ee601ffdcb0859107ad05a78ac6d9ff99b5166bd68ec4b25b2"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/plot.py",
+        "sha256": "1d19d49b4b57916e1eb66e0a0cd9f3f2ef2621e0512d2f7372151c74be931f36"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/article.md",
+        "sha256": "d0c3bbcec454791a16425931ca9f1cdf489c36f72a41c27f83d4d1fd8ad64cf6"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/results.json",
+        "sha256": "032ed9ca0a974d8ee3e49d99ed5d39f8964de27afb41a895d88be418a646aa57"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-ramp/comparison.svg",
+        "sha256": "b9a30742b6a15fc5386eb6003ed92069df5ce31aeffe062f044041ced9780558"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-keyword-ramp/comparison.svg",
+      "caption": "The strongest source score compared with 199 whole-grid shuffled searches and the known-reading recovery gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned advanced cipher source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py"
+    },
+    {
+      "label": "Pinned legacy-source caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wholepage-progressive-caesar",
+    "wulfic-autokey-seed-families",
+    "wulfic-prime-keyword-stream-families"
+  ],
+  "reader_finding": "The nine tested step sizes produced no established reading on LP2-04–13. The best word score was matched or beaten by 10 of 199 complete shuffled searches. The same search recovered a 209-rune known message when it used the tested key rule.",
+  "reader_limit": "Only the ten assigned keywords and nine fixed step sizes were tested. Other keywords, changing step schedules, resets and languages remain open."
+}
