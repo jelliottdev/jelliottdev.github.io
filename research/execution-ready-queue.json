@@ -12,9 +12,9 @@
     "ready_unclaimed_source_programs": 0,
     "completed_draft_partial": 0,
     "claimed_by_other_agent": 0,
-    "covered_or_partial": 19,
+    "covered_or_partial": 23,
     "umbrella_verdict_or_audit": 7,
-    "blocked_or_audit_needed": 38,
+    "blocked_or_audit_needed": 34,
     "source_entries_in_disposition_total": 64,
     "completed_draft_full": 0
   },
@@ -194,7 +194,7 @@
     {
       "source_id": "R12-C2",
       "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "downloaded keytexts from fetch.sh; no source sweep defined",
+      "runnable_method": "Source fetch.sh declares 33 downloads but no sweep or saved execution result; a future test requires a newly specified rule and inputs.",
       "reproduce_command": "bash liber-primus/analysis/round12/C2/fetch.sh  # then no sweep exists yet",
       "source_evidence": [
         {
@@ -234,16 +234,16 @@
       "reproduce_command": "cd liber-primus/analysis/round12/frontB && python3 run_final.py",
       "source_evidence": [
         {
-          "path": "liber-primus/analysis/round19/T2/RESULTS.md",
-          "sha256": "70fd4bc08c8d9c301f4d36aebc1d1b96e694fb73123f7d7b61d9f362b25097e8"
+          "path": "liber-primus/analysis/round12/frontB/RESULTS.md",
+          "sha256": "6ef42abf9267f2610e0a1cdc90302a72d9d28add619b50a5a3ced631c9ac29ca"
         },
         {
-          "path": "liber-primus/analysis/round19/T2/out_probe.json",
-          "sha256": "6d1323ebc2d39eb5f12405ec4354b42b050c6bca704c63c76ede5930d84e88fd"
+          "path": "liber-primus/analysis/round12/frontB/run_final.py",
+          "sha256": "c9e4a6dc3e4e5cf177202d4cb62ebfd7e733b91e64e95a04a65dcc18ab280024"
         },
         {
-          "path": "liber-primus/analysis/round19/T2/out_indel_score.json",
-          "sha256": "be445d40480b088833bdd815573a13d2a328b42c17812692b73c68704199e9db"
+          "path": "liber-primus/analysis/round12/frontB/results.json",
+          "sha256": "bc2434cfe9df006be2fb42bb440e66a7fea27c6682dbbd9e14e7db7677597261"
         }
       ],
       "ledger_status": "negative",
@@ -731,8 +731,8 @@
     },
     {
       "source_id": "R18-L2-A-LOCUS",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/kjv.txt",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 a_locus.py --reps 200",
       "source_evidence": [
         {
@@ -745,12 +745,15 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "r18-filter-locus-replay"
+      ]
     },
     {
       "source_id": "R18-L2-B-DRIFT",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/kjv.txt",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b_drawcount.py",
       "source_evidence": [
         {
@@ -763,12 +766,15 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "r18-keyskip-drift-power"
+      ]
     },
     {
       "source_id": "R18-L2-BEAM-LENGTH-POWER",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/kjv.txt",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Exact source execution and independent checks completed after recovery of the hash-matched KJV input. The record retains model, corpus and control limits; no actual LP2 mechanism or key is identified.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 fastbeam.py && PYTHONUTF8=1 python3 b_drawcount.py",
       "source_evidence": [
         {
@@ -785,7 +791,10 @@
         }
       ],
       "ledger_status": "eliminated",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "r18-keyskip-drift-power"
+      ]
     },
     {
       "source_id": "R18-L2-DRIFT-LADDER",
@@ -825,8 +834,8 @@
     },
     {
       "source_id": "R18-L2-INFO-BUDGET",
-      "disposition": "blocked-or-input-audit-needed",
-      "runnable_method": "liber-primus/data/kjv.txt",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Exact source C computation replayed after recovering the KJV input. Source entropy/determinacy inference is audited as incompatible model accounting, not an LP2 uniqueness result.",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 c_budget.py",
       "source_evidence": [
         {
@@ -839,7 +848,11 @@
         }
       ],
       "ledger_status": "eliminated",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "rejection-channel-information",
+        "r18-entropy-budget-replay"
+      ]
     },
     {
       "source_id": "B-13-MARSAGLIA",
@@ -1260,5 +1273,5 @@
     }
   ],
   "reconciled_on": "2026-10-23",
-  "reconciliation_note": "Removed two stale agent claims after verifying their published fixed-opening follow-ups. These are partial matches, not replays or closure of the original language-scoring campaigns."
+  "reconciliation_note": "Removed two stale agent claims after verifying their published fixed-opening follow-ups. These are partial matches, not replays or closure of the original language-scoring campaigns. Exact R18 A and B source runs are now linked; B-DRIFT and BEAM-LENGTH are two source ledger entries sharing one grouped experiment, not two independently counted test methods."
 }

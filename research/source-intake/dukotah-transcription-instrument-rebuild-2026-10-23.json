@@ -1,0 +1,82 @@
+{
+  "schema": "liberpedia-transcription-instrument-rebuild-audit-v1",
+  "publication_status": "draft",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "state": "frozen-before-execution",
+  "isolation_root": "../source-cache/dukotah-instrument-rebuild-2026-10-23/liber-primus",
+  "input_policy": "Copy pinned segment2.py and templates.py into an isolated directory. Copy the 56 hosted LP2 JPEGs only after checking each against the source capsule's SHA-256, byte count and archive-published SHA-1. Do not copy or modify canonical text, hosted images, or any source checkout output.",
+  "pinned_source_inputs": {
+    "analysis/geometry/segment2.py": "47697b4c027c5417d0cdb4a5ee99930298e3a9636f8d7825243cc34c00ed26cc",
+    "analysis/retranscribe/templates.py": "e10bdffcef06c5545c45a372bd51c0e857c2918e227f8b9e7d73fc3be81c17cf",
+    "analysis/retranscribe/templates_report.json": "3b1f1b82fca96d5677dedfc382cfe9561d7b2035379736bd6c91af6618da29df",
+    "analysis/retranscribe/diff_report.json": "e3aad9a2646a4d4e52fe820114c8996514ea414d85e35b05b9feb5e709db7774",
+    "analysis/retranscribe/read_lines.json": "aff75a8c0393a11e399dcc65bac69ce9f33fe0f42790bcdc8e990c731b81e51e"
+  },
+  "source_capsule_manifest_sha256": "d14d852ebed803bd41ef986caf30044366645eedfdbe4d808f86098a2dba9546",
+  "source_control_targets": {
+    "template_distinct_bitmaps": 1067,
+    "template_shape_classes": 226,
+    "template_covered_full_height_glyphs": 13140,
+    "template_distance_threshold": 0.1,
+    "subsequent_read_lines": 646,
+    "subsequent_canon_lines": 604,
+    "subsequent_count_exact_lines": 232
+  },
+  "preexecution_benchmark": {
+    "page_00_load_seconds": 0.141,
+    "page_00_line_bands_seconds": 0.004,
+    "page_00_component_labels_seconds": 0.013,
+    "template_1067_by_17408_single_dot_seconds": 0.06,
+    "template_25_dot_projection_seconds": 1.5,
+    "comment": "Microbenchmarks of constituent operations on this host, not a runtime guarantee; full segmentation includes crop serialization and template clustering."
+  },
+  "control_interpretation": "segment2.py and templates.py do not read canonical text; their shape clustering is label-free. Later read.py/diff.py use the canon to name classes and evaluate agreement, so that later percentage is not a wholly independent transcription. Matching output dimensions/counts is a reproducibility check, not proof that individual rune identities or image-glyph judgments are correct.",
+  "execution": {
+    "outcome": "geometry_aggregate_counts_reproduced_template_class_count_mismatch",
+    "environment": {
+      "python": "3.12.10",
+      "numpy": "2.5.4",
+      "scipy": "1.17.1",
+      "pillow": "11.3.0",
+      "blas_threads_primary": 4
+    },
+    "isolated_input_copy": {
+      "lp2_jpeg_count": 56,
+      "total_jpeg_bytes": 34654341,
+      "verification": "Each hosted JPEG matched the capsule SHA-256, byte count and archive-published SHA-1 before copying to the isolated data/relikd/p0..p55.jpg names."
+    },
+    "segment2": {
+      "command": "python analysis/geometry/segment2.py",
+      "elapsed_seconds": 7.446,
+      "exit_code": 0,
+      "line_bands": 646,
+      "glyph_groups": 18461,
+      "full_height_glyphs": 13140,
+      "glyphs2_npz_bytes": 8249850,
+      "glyphs2_npz_sha256": "1c80f85daee541368c8f17ef05242a6e5c58ad7c2aef5a085edf237f61f52d2a",
+      "source_comparison": "All three aggregate counts match pinned source geometry/shape reports. All 646 page IDs and band indices align with the archived read_lines.json. The original source NPZ digest was unavailable; byte and array identity are not established."
+    },
+    "templates": {
+      "command": "python analysis/retranscribe/templates.py",
+      "elapsed_seconds": 5.657,
+      "exit_code": 0,
+      "distinct_exact_bitmaps": 1067,
+      "covered_full_height_glyphs": 13140,
+      "shape_classes_regenerated": 229,
+      "shape_classes_archived": 226,
+      "classes_covering_at_least_100_glyphs_regenerated": 33,
+      "classes_covering_at_least_100_glyphs_archived": 32,
+      "threshold": 0.1,
+      "templates_npz_bytes": 273845,
+      "templates_npz_sha256": "55fa8fb0079753ea6d6818712261b46d290810e733e22c4f8333a8de50df2763",
+      "templates_report_sha256": "b6468ce308395d90221283217fc0d83082148721341ebdfee2a8016728ce22c2",
+      "source_comparison": "Distinct bitmap and covered-glyph counts match the archived report, but shape-class counts do not. The original source NPZ digest was unavailable."
+    },
+    "diagnostics": [
+      "An isolated copy rerun with OPENBLAS_NUM_THREADS=1 produced the same 229 classes and byte-identical templates.npz (11.386 seconds).",
+      "A separate diagnostic copy using stable argsort for template-size ordering also produced the same 229 classes and byte-identical templates.npz (5.8 seconds). This does not establish the mismatch cause."
+    ],
+    "downstream_gate": "The source template-class count did not reproduce, and source read.py retains only classes covering at least 100 glyphs. Therefore the source OCR/read-line count and canon-comparison gates have not been reproduced; do not treat source transcription-dependent experiments as unblocked. Full read.py and diff.py were not run after this failed gate.",
+    "independence_limit": "The two executed scripts are label-free with respect to canonical transcription. They reproduce geometry dimensions, not rune identities. Later diff.py compares with canon and is not an independent validation of every glyph."
+  }
+}

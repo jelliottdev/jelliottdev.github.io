@@ -1,0 +1,99 @@
+{
+  "id": "leo-cipher-model-fingerprints",
+  "status": "published",
+  "title": "Can a simple cipher imitate LP2's rare repeated runes?",
+  "question": "Which of 23 source-specified synthetic encryptions of a fixed solved passage resemble LP2 in adjacent repeats, coincidence and rune balance?",
+  "reader_question": "Does a matching repeat rate reveal the cipher?",
+  "summary": "All 23 source model rows reproduce. One chain matches LP2's rare adjacent repeats, but that count equals the frequency of one rune in the chosen solved plaintext by construction.",
+  "finding": "The source chain has 20 equal adjacent pairs among 2,978 versus LP2's 86 among 12,955. For c_i=c_(i-1)+p_i+1 mod 29, a repeat occurs exactly when p_i=28 (EA); the chosen solved sample has 20 such positions. The chain's +1 offset is closest of 29 in a declared post-observation check, without implying that LP2 uses it.",
+  "limitations": "One fixed solved plaintext and one instance of each random-key generator; summary statistics do not recover plaintext or identify a cipher. The 29-offset comparison was motivated by the observed source result. The source scales the target chi-square for display in a way that does not preserve its null reference.",
+  "next_steps": "A specific chain proposal needs a complete generator, key and boundary rule frozen before testing an unseen page, plus a plaintext recovery and whole-search control.",
+  "outcome": "inconclusive",
+  "tags": [
+    "cipher models",
+    "doublets",
+    "frequency",
+    "chain cipher",
+    "source replay",
+    "selection effects"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-cipher-model-fingerprints/plan.json"
+    ],
+    "representation": "Nine relikd unsolved sections with 12,956 rune indices, 2,979 solved plaintext rune indices, and the first 60,000 GP rune indices of a pinned War and Peace baseline.",
+    "procedure": "Reconstruct all 23 source-specified synthetic generators and compare their adjacent-pair rate, normalized IoC, chi-square and lag-two pair rate with the archived source table. Separately count all 29 additive-chain offsets and verify the equality identity.",
+    "parameters": "GP29, source random.Random(3301), 23 named source models, 29 post-observation additive offsets b=0..28.",
+    "exclusions": "Other plaintext samples, key grids, cipher boundaries, complete plaintext recovery, source model selection probabilities and broad cipher-family exclusion."
+  },
+  "review": {
+    "reviewer": "Independent source-run and arithmetic checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-cipher-model-fingerprints/run.py --source-root LEO --check && python experiments/records/leo-cipher-model-fingerprints/check.py --source-root LEO && python experiments/records/leo-cipher-model-fingerprints/plot.py --check",
+    "environment": "Python 3.9+ standard library. LEO is the pinned source checkout with its relikd data dependency installed; every consumed source file is SHA-256 checked.",
+    "script": "experiments/records/leo-cipher-model-fingerprints/run.py",
+    "script_sha256": "ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/plan.json",
+        "sha256": "724f751870b3c43bd126d6baf905f3856e305294f546bde8b2f8a6a2b175334a"
+      },
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/run.py",
+        "sha256": "ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e"
+      },
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/check.py",
+        "sha256": "960c061e2c7687d5be835e4f092900ca8815b573b2374a37abf76b02f10912a9"
+      },
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/plot.py",
+        "sha256": "ac85a452f913a93572a8a6afd22bca8fec73781ea60b59497a9f396c552b27f0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/results.json",
+        "sha256": "7cb13907445fa240f70884177d5f572a2d4013a97ba530c8e8548838981f3b20"
+      },
+      {
+        "path": "experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg",
+        "sha256": "f2e355c7da363d94b8c59affbd1df60de70ce153a16938f2ededd277a650fde7"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned source generator and archived receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/fingerprint.py"
+    },
+    {
+      "label": "Pinned relikd source data",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "lp2-filter-fingerprint-models",
+    "linear-ciphertext-feedback",
+    "uniform-additive-doublets"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg",
+      "caption": "A source chain almost matches LP2's adjacent-repeat rate because that count equals the selected plaintext rune's frequency."
+    }
+  ],
+  "article": "# Can a simple cipher imitate LP2's rare repeated runes?\n\nA [published comparison](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/fingerprint.py) encrypts the same 2,979 runes of known Liber Primus text in 23 specified ways, then compares each output with the still-unread LP2 text. The measurements are repeated adjacent runes, overall rune balance, and matches two positions apart. We reproduced **all 23 rows** of its archived table from pinned inputs.\n\n## Finding\n\n![LP2's adjacent-repeat rate is 0.664%; the source's chain simulation is 0.672%. The match comes from the frequency of one plaintext rune.](experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg)\n\nLP2 has **86 identical adjacent pairs in 12,955 opportunities** (0.664%). One source simulation, `cipher = previous cipher + plaintext + 1` modulo 29, has **20 in 2,978** (0.672%). Its overall rune balance is also near uniform. These are real matches to the selected summaries, but they **do not identify LP2's encryption**.\n\nThe repeat-rate match has a simple explanation. Under that chain rule, a new cipher rune equals the previous one exactly when the plaintext rune is **EA**, index 28. EA occurs **20 times** after the first position in the chosen known reading. We verified that identity both algebraically and by generating and reversing the stream. The observation is therefore determined by this plaintext sample's rune frequency; the chain has not predicted a readable LP2 passage.\n\nAs an explicitly **post-observation** check, we held the same chain rule and plaintext fixed while trying all 29 additive constants. The source's `+1` is the closest of the 29 to LP2's observed repeat rate. That rank describes this particular chosen sample and one statistic; it is not a probability that the source cipher is correct. The [complete model and offset table](experiments/records/leo-cipher-model-fingerprints/results.json) preserves every value.\n\n## What the comparison covers\n\nThe 23 rows include fixed-period keys, prime and Fibonacci streams, plaintext and ciphertext feedback, two running-key examples, affine substitution, random output, and several F-pass-through variants. The source generated **one** instance of each random-key model on the same 2,979-rune known reading. It compared those with 12,956 unread runes. This is a useful fingerprint demonstration, not a search over every key, every plaintext or every boundary rule.\n\nOne displayed source number needs care: it multiplies LP2's uniformity χ² by `2,979 / 12,956`, turning the actual **26.36** into **6.06** for its table. A chi-square statistic does not retain its original reference distribution after that scaling. We reproduce the printed value to audit the source, but do not use it to rank cipher models. The source's final “running key English with F-interrupts” row passes F unchanged while continuing to index the key by absolute position; it does not pause the key clock.\n\n## Reproduce\n\nUse [Leo's pinned source](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/tree/a32bdc0e06ea58532fbaf4329acae4a0b1020513) with its separately pinned [relikd input](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4) installed as that source expects. The scripts check the source, dataset, archived receipt and baseline file hashes. From the Liberpedia repository root, substitute the Leo checkout path for `LEO`:\n\n```text\npython experiments/records/leo-cipher-model-fingerprints/run.py --source-root LEO --check\npython experiments/records/leo-cipher-model-fingerprints/check.py --source-root LEO\npython experiments/records/leo-cipher-model-fingerprints/plot.py --check\n```\n\nThe runner reconstructs the 23 outputs independently of the source implementation and compares all displayed rows with the saved receipt. The checker freshly runs the source script, compares its 23 rows again, tests the chain inverse, and independently verifies all 29 repeat-count identities. This record does not copy the source code or its third-party input texts.\n",
+  "article_path": "experiments/records/leo-cipher-model-fingerprints/article.md",
+  "script_sha256": "ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}

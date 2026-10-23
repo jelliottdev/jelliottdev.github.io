@@ -172,8 +172,16 @@ register('data/reported-attempts.json','Source-specific reported-attempt intake'
 register('data/source-screening.json','Supplied-source screening register')
 for note in sorted((root / 'research/source-intake').glob('*.md')):
  register('research/source-intake/'+note.name,'Supplied-source screening note')
-for audit in sorted((root / 'research/source-intake').glob('*.json')):
- register('research/source-intake/'+audit.name,'Supplied-source audit data')
+# Publication is explicit: live rebuild receipts and proposed queue dispositions
+# must not enter public downloads merely because they share this directory.
+public_source_audits = {
+ 'cc-matrix-counts.json', 'emmanuel-p20-a39e7de.json',
+ 'failed-attempts-complete-output-audit.json',
+ 'lp1-seven-word-825-audit.json', 'lp1-word-count-audit.json',
+ 'dukotah-image-input-recovery-2026-10-23.json',
+}
+for filename in sorted(public_source_audits):
+ register('research/source-intake/'+filename,'Supplied-source audit data')
 for crop in sorted((root / 'research/source-intake').glob('*.png')):
  register('research/source-intake/'+crop.name,'Source-image inspection crop')
 register('data/method-families.json','Idea coverage notes')

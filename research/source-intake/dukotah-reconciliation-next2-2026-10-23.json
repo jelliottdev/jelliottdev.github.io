@@ -1,0 +1,79 @@
+{
+  "schema": "liberpedia-source-reconciliation-proposals-v1",
+  "source_inventory": "research/public-attempt-inventory.json",
+  "pinned_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "reviewed_on": "2026-10-23",
+  "selection": "Next five finite or specifically evidenced unreconciled entries after B-21, B-16, R12-A1, R12-C2 and R12-frontB; excludes R18/R21 entries assigned to other reviewers and the two umbrella verdicts.",
+  "policy": "Reviewed source status is separate from exact execution replay and from whole-method coverage. The source's verdict words are not adopted without the stated control and inputs.",
+  "proposals": [
+    {
+      "source_id": "R17-P2-CENSUS-CORRECTION",
+      "proposed_state": "source-category correction; published sweep not replayed",
+      "source_rule": "The earlier L5 census treated seedless random.org output as unrecoverable. Round16/P2 describes a dated public archive and a bounded search over retrieved RANDOM.ORG and NIST Beacon data; the existence of a public record is distinct from a short PRNG seed.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round17/P2_beacons/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L5-seed32/CENSUS.md"
+      ],
+      "record_links": [],
+      "related_but_not_overlap": [
+        {"record_id": "public-prng-seed-sweep", "reason": "Seeded generator search; it does not search preserved public random bytes or validate the source's 153-file and Beacon corpora."}
+      ],
+      "unresolved_exact_work": "The pinned checkout lacks round16/P2_beacons/data and round17/P2_beacons/data. To replay the numerical negative, pin the exact 153 daily files and Beacon record sequence with published checksums, the source's pad assembly and 96 sweep configurations, plus planted controls. The narrower logical correction that a public entropy archive can exist does not itself validate the search or exclude all seedless pads.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "A-01",
+      "proposed_state": "reported Round19/T2 completion; image replay blocked",
+      "source_rule": "T2 reports 604/604 mapped lines, 13,121 adjudicated rune slots and 0.9973 canon agreement after forced alignment of source image ink to canon token order; this is a later completion of the earlier incomplete Round9 template read.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/out_a01.json",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/out_probe.json"
+      ],
+      "record_links": [],
+      "unresolved_exact_work": "The pinned T2 receipts can be counted, but its image/template rerun needs untracked analysis/retranscribe/templates.npz and source page images. Also separate the original label-free Round9 clustering claim from T2's canon-forced token alignment: agreement in the latter is not an independent transcription in the same sense.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "A-02",
+      "proposed_state": "450 located discrepancies, individual reading unresolved",
+      "source_rule": "The label-free clustering source preserves 450 O/A/AE-family disagreements by page/line/position but explicitly leaves borderline individual rune calls to a human reading of crisp originals.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/independent-read/FINDINGS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/independent-read/oae_mismatch.json"
+      ],
+      "record_links": [],
+      "unresolved_exact_work": "The mismatch JSON exists at the pinned source revision, but no 450-case independently judged image ledger or byte-exact crop set is present. A frequency/IoC sensitivity calculation or a related transcription article cannot adjudicate those exact glyph identities. Preserve each coordinate and uncertainty until image-side reading is available.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "A-03",
+      "proposed_state": "source arithmetic runnable; image-bound verdict unsupported",
+      "source_rule": "Round16/A-03 reads preserved R9 classifier/alignment outputs and reports seven equal-rune pairs in 999 count-exact comparisons on both image and canon, 26 excess image pairs overall, and a proposed K≤26 merge bound versus 93 needed to reach its autokey floor.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03/PREREG.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03/a03_hapl_bound.py",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03/results.json"
+      ],
+      "record_links": [],
+      "related_but_not_overlap": [
+        {"record_id": "haplography-diagonal-bound", "reason": "Different Round20/N2 nonzero-difference invariant under inserted duplicates; it does not replay A-03's image classifier, surplus or claimed K bound."}
+      ],
+      "unresolved_exact_work": "All immediate numeric inputs read by a03_hapl_bound.py (read4.json, diff3_report.json, doublet_final.log and canon rune text) appear in the pinned checkout, so a source-arithmetic replay is feasible. Audit the original gate before endorsing the verdict: reported 99.4146% agreement misses its own 99.5% threshold; the 'planted' K control adds counts algebraically instead of inserting glyphs into the image; and 26 observed excess pairs is not by itself a confidence upper bound on hidden merges. Keep any replay as a source-gate audit, not a validated global autokey negative.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "A-05",
+      "proposed_state": "reported 19-line adjudication; image replay blocked",
+      "source_rule": "Round19/T2 preserves 19 separator-shortlist rows marked resolved. Its narrative and sep19_proof.py distinguish 10 old counts that match a nearby canon line from nine that do not. That is a post-hoc diagnosis of the old instrument, separate from the source's claim that the new image reading agrees with canon in count and position.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/out_sep19.json",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2/out_separators.json"
+      ],
+      "record_links": [],
+      "unresolved_exact_work": "The 19-row receipt can be recounted, but all 19 rows in out_sep19.json carry klass=alignment and a line-slip verdict; the reported 10/9 split is produced by a separate nearby-count heuristic in sep19_proof.py, not by those row labels. The image-side separator interpretation still needs the missing T2 template/model and exact page images or independently read crops. No Liberpedia record currently reproduces this source-specific adjudication; do not count general transcription coverage as an exact replay.",
+      "coverage_verified": false
+    }
+  ]
+}

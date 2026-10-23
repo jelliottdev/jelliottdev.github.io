@@ -1,0 +1,78 @@
+{
+  "schema": "liberpedia-source-reconciliation-proposals-v1",
+  "source_inventory": "research/public-attempt-inventory.json",
+  "pinned_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "reviewed_on": "2026-10-23",
+  "selection": "First five finite or specifically executable unreconciled entries after the two umbrella verdicts, excluding R18 entries owned by another reviewer.",
+  "policy": "A thematic overlap is not an exact source replay. These are proposed dispositions only; no shared inventory counts or publication status were changed.",
+  "proposals": [
+    {
+      "source_id": "B-21",
+      "proposed_state": "partially-covered; source grid still unreconciled",
+      "source_rule": "Round-8 seed_sweep/sweep.c lists ten generator/reduction variants, timestamp seeds for most, and full 32-bit sweeps for the MSVC and MT modulo-29 variants; L5-seed32/CENSUS.md explicitly rejects treating that as all seeded PRNG pads.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+        "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/seed_sweep"
+      ],
+      "related_records": [
+        {"id": "public-prng-seed-sweep", "relationship": "different later seven-generator source grid; not a replay of Round-8 ten-variant full32/timestamp search"},
+        {"id": "typed-seed-random-opening-cribs", "relationship": "new fixed-opening test of source typed seeds, not the Round-8 English-score sweep"}
+      ],
+      "unresolved_exact_work": "Pin the Round-8 sweep executable, 10 generator definitions, source seed ranges, actual completed output receipts, scoring/positive-control gate and any checkpoint files; audit whether full32 claims really completed for the two named variants. Report each bounded row separately from the false umbrella 'seeded PRNGs eliminated' statement.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "B-16",
+      "proposed_state": "source-specific control gate not yet independently replayed",
+      "source_rule": "The source noticed that a key-skip beam decoder had been validated for key desynchronization whereas Campaign X/XI used in-place output rewrite. Round12/D1_redteam/rewrite_gate.py then tests four source keytexts at two offsets, using a skip positive arm and a rewrite arm under the same decoder.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/D1_redteam/rewrite_gate.py",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/D1_redteam/RESULTS.md"
+      ],
+      "related_records": [
+        {"id": "rejection-channel-information", "relationship": "derives visible-symbol and key-draw laws for skip versus rewrite; it does not run D1's four-text decoder/scorer gate"}
+      ],
+      "unresolved_exact_work": "The pinned source refers to untracked local data/keys/*.txt and a source quadgram model. Identify byte-exact keytexts/model or state the resulting replay blocker; if recovered, reproduce both skip and rewrite arms and check plaintext match plus scores. D1's four-text control cannot certify all possible running keys.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "R12-A1",
+      "proposed_state": "blocked exact replay; archived source result only",
+      "source_rule": "The A1 program uses five recovered CicadaOS/audio binaries and later DATA/560.13, byte-to-rune reductions forward/reverse, two signs, selected offsets and a key-skip beam scorer. Its saved result is not equivalent to a generic historical-key test.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/A1/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/A1/sweep.py",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/A1/sweep_560_13.py"
+      ],
+      "related_records": [
+        {"id": "historical-prime-and-ps-keys", "relationship": "different source inputs and decoding rule; no exact A1 overlap established"}
+      ],
+      "unresolved_exact_work": "The pinned checkout has the A1 scripts/results but no analysis/round12/A1/pads directory. Acquire and hash every exact binary, including the 118,818,811-byte 560.13 object whose SHA-256 is recorded in A1 RESULTS; pin the scorer/model and controls, then replay the source's full head and page grid. Until then do not promote the source's broad negative as independently reproduced.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "R12-C2",
+      "proposed_state": "not executed in source; proposal only",
+      "source_rule": "round12/C2/fetch.sh names 33 download commands (23 Project Gutenberg, 10 other URL sources) but provides no sweep or saved candidate-score result. The inventory description's '29 texts' does not match the executable fetch list.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C2/fetch.sh"
+      ],
+      "related_records": [],
+      "unresolved_exact_work": "Choose and pin a final subset of the 33 named texts, exact retrieved bytes, normalization/encoding, decoder settings and a positive-control/scoring gate. No source execution or failed experiment exists to reproduce; label any future run as a new bounded test.",
+      "coverage_verified": false
+    },
+    {
+      "source_id": "R12-frontB",
+      "proposed_state": "instrument failed control; exact image replay currently blocked",
+      "source_rule": "The forced segmentation of LP2 pages 45–54 reached only 12.923% agreement on solved-page controls and 3.6% on 250 target glyph comparisons. The source itself calls that forced arm inconclusive; its separate R9 raw-band method reports 98.0% agreement on naturally count-exact lines.",
+      "source_evidence": [
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/frontB/RESULTS.md",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/frontB/run_final.py",
+        "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/frontB/results.json"
+      ],
+      "related_records": [],
+      "unresolved_exact_work": "The pinned checkout lacks analysis/retranscribe/templates.npz and data/relikd/p45.jpg (and its companion target images), so run_final.py is not yet replayable. A future record must preserve the failed forced-arm positive gate and separately verify the reported R9 count-exact result; no manuscript negative can come from the failed forced arm. The current execution-ready queue incorrectly points this source ID to round19/T2 receipts rather than frontB files; correct that evidence mapping when updating the shared queue.",
+      "coverage_verified": false
+    }
+  ]
+}

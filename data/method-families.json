@@ -164,7 +164,8 @@
         "feedback-opening-census",
         "block-lookahead-feedback",
         "public-multihistory-feedback",
-        "crib-inferred-feedback-table"
+        "crib-inferred-feedback-table",
+        "leo-cipher-model-fingerprints"
       ],
       "description": "Use earlier plaintext or ciphertext to update later decoding state."
     },
@@ -211,7 +212,8 @@
         "cypherpunk-manifesto-running-key",
         "solved-reading-running-key",
         "wulfic-native-key-streams",
-        "leo-shared-key-differences"
+        "leo-shared-key-differences",
+        "wulfic-position-alphabet-long-keys"
       ],
       "description": "Convert a specified external text into a stream of key symbols."
     },
@@ -237,7 +239,8 @@
         "public-nskips-crossover",
         "f-interrupter-gap-direct-read",
         "historical-prime-and-ps-keys",
-        "rejection-channel-information"
+        "rejection-channel-information",
+        "r18-keyskip-drift-power"
       ],
       "description": "Specify when key or feedback state pauses, advances or restarts."
     },
@@ -258,7 +261,8 @@
         "section-1433-pairing",
         "section-1814-pairing",
         "lp2-page-pair-alignment",
-        "wulfic-number-key-streams"
+        "wulfic-number-key-streams",
+        "r18-keyskip-drift-power"
       ],
       "description": "Search starting positions and a bounded set of alignment changes."
     },
@@ -848,7 +852,9 @@
         "lp2-filter-fingerprint-models",
         "lp2-53-red-equality-invariants",
         "doublet-sentence-residues",
-        "wulfic-local-codebook-invariants"
+        "wulfic-local-codebook-invariants",
+        "r18-filter-locus-replay",
+        "leo-cipher-model-fingerprints"
       ],
       "description": "Test structural constraints without automatically converting them into a cipher identification."
     },
@@ -905,7 +911,13 @@
         "solved-text-selection-source-gate",
         "public-nskips-crossover",
         "rejection-channel-information",
-        "leo-transform-periodic-profile"
+        "leo-transform-periodic-profile",
+        "r18-filter-locus-replay",
+        "r18-keyskip-drift-power",
+        "leo-cipher-model-fingerprints",
+        "r18-entropy-budget-replay",
+        "wulfic-position-alphabet-long-keys",
+        "wulfic-position-alphabet-flatness-bound"
       ],
       "description": "Repeat the whole selection procedure on controls, not just the final attractive candidate."
     },
@@ -1070,7 +1082,8 @@
       ],
       "related": [
         "seed-crib-controls",
-        "rejection-channel-information"
+        "rejection-channel-information",
+        "r18-entropy-budget-replay"
       ],
       "description": "Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim."
     },
@@ -1117,7 +1130,9 @@
         "sectionwise-rune-profile",
         "jpeg-byte-mode-replay",
         "lp2-page-pair-alignment",
-        "lp2-53-red-equality-invariants"
+        "lp2-53-red-equality-invariants",
+        "r18-filter-locus-replay",
+        "wulfic-position-alphabet-flatness-bound"
       ],
       "description": "Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own."
     },
@@ -1140,7 +1155,8 @@
       "related": [
         "periodic-affine-crib-capacity",
         "monoalphabetic-crib-capacity",
-        "public-p20-static-boundary"
+        "public-p20-static-boundary",
+        "r18-entropy-budget-replay"
       ],
       "description": "Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search."
     },
@@ -1160,7 +1176,9 @@
         "changing alphabet"
       ],
       "related": [
-        "wholepage-progressive-caesar"
+        "wholepage-progressive-caesar",
+        "wulfic-position-alphabet-long-keys",
+        "wulfic-position-alphabet-flatness-bound"
       ],
       "description": "Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping."
     },
@@ -1445,6 +1463,12 @@
     "leo-shared-key-differences": "measurement",
     "leo-chain-sequence-keys": "replay",
     "wulfic-grid-periodic-byte-invariant": "replay",
-    "leo-chain-key-alignment": "replay"
+    "leo-chain-key-alignment": "replay",
+    "r18-filter-locus-replay": "replay",
+    "r18-keyskip-drift-power": "control",
+    "leo-cipher-model-fingerprints": "control",
+    "r18-entropy-budget-replay": "audit",
+    "wulfic-position-alphabet-long-keys": "replay",
+    "wulfic-position-alphabet-flatness-bound": "replay"
   }
 }

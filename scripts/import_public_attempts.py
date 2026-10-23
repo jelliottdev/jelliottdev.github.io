@@ -116,6 +116,11 @@ def build(root, ledger_bytes):
                    'candidate_overlap': overlap_count,
                    'unreconciled': sum(row['reconciliation_state'] == 'unreconciled' for row in rows),
                    'source_entries_reviewed': reviewed_count,
+                   'source_entries_pending_review': len(rows) - reviewed_count,
+                   'pending_review_with_candidate_match': sum(
+                       'reviewed_subclaims' not in row and bool(row['candidate_records']) for row in rows),
+                   'pending_review_without_candidate_match': sum(
+                       'reviewed_subclaims' not in row and not row['candidate_records'] for row in rows),
                    'execution_replay_states': dict(Counter(row['execution_replay']['state']
                        for row in rows if row.get('execution_replay'))),
                    'verified_coverage': sum(row['coverage_verified'] for row in rows)},

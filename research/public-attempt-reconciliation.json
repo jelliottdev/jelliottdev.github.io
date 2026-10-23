@@ -9,18 +9,21 @@
     "inventory": "research/public-attempt-inventory.json",
     "inventory_note": "Regenerated from this reconciliation and the pinned ledger; not an independent evidence source."
   },
-  "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
+  "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 38,
+    "source_entries_reviewed": 44,
     "reproduced_subclaim": 1,
-    "partial": 21,
-    "unsupported_source_verdict": 16,
-    "source_entries_with_published_record_link": 27,
+    "partial": 23,
+    "unsupported_source_verdict": 17,
+    "blocked_exact_replay": 1,
+    "source_proposal_only": 1,
+    "failed_source_gate": 1,
+    "source_entries_with_published_record_link": 29,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 9,
+      "complete-executed-grid": 13,
       "replayed-with-invalid-gate": 3,
       "partial-execution": 2
     }
@@ -966,17 +969,21 @@
     },
     {
       "source_id": "R18-L2-INFO-BUDGET",
-      "source_claim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed.",
+      "source_claim": "Each accepted position certifies that the rejection sampler did not have to re-roll there, so 12,956 acceptance events are unspent constraints on the joint (plaintext, keystream). If the constraint system is anywhere near determined, a constraint-propagation / SAT / belief-propagation solver over the joint variables with an English plaintext prior should be built.",
       "status": "partial",
       "record_links": [
         {
           "record_id": "rejection-channel-information",
           "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed."
+        },
+        {
+          "record_id": "r18-entropy-budget-replay",
+          "covered_subclaim": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins."
         }
       ],
-      "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed.",
+      "covered_subclaim": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins.",
       "unresolved_parts": [
-        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        "KJV cross-entropy is not measured LP2 plaintext entropy. Source seed-budget arithmetic does not establish a unique plaintext; a consistent joint model must include all random inputs."
       ],
       "source_evidence": [
         "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
@@ -985,21 +992,33 @@
         "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
         "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-entropy-budget-replay"
+        ],
+        "scope": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R18-L2-B-DRIFT",
-      "source_claim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay.",
+      "source_claim": "Rejection consumes keystream draws, so the keystream index is not the rune index. Quantify the drift, and determine which measured results in this repository depend on the alignment they assumed.",
       "status": "partial",
       "record_links": [
         {
           "record_id": "rejection-channel-information",
           "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay."
+        },
+        {
+          "record_id": "r18-keyskip-drift-power",
+          "covered_subclaim": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks."
         }
       ],
-      "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay.",
+      "covered_subclaim": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks.",
       "unresolved_parts": [
-        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        "Synthetic English/source-key recovery does not establish that LP2 uses this filter or that a real correct key is known."
       ],
       "source_evidence": [
         "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
@@ -1008,21 +1027,33 @@
         "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
         "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-keyskip-drift-power"
+        ],
+        "scope": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R18-L2-A-LOCUS",
-      "source_claim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay.",
+      "source_claim": "The anti-repeat rule is enforced on the CIPHERTEXT, not on the keystream and not on the plaintext. Seven loci were formalised and simulated: no filter (M0), ciphertext key-skip (M1, the repo's pinned model), ciphertext value-rewrite with the key staying aligned (M2), ciphertext deterministic nudge (M2n), keystream-filtered at generation (M3), plaintext-filtered before encipherment (M4), hard ciphertext rule (M5).",
       "status": "partial",
       "record_links": [
         {
           "record_id": "rejection-channel-information",
           "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay."
+        },
+        {
+          "record_id": "r18-filter-locus-replay",
+          "covered_subclaim": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power."
         }
       ],
-      "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay.",
+      "covered_subclaim": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power.",
       "unresolved_parts": [
-        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        "No held-out classifier-power estimate or proof of actual LP2 filter locus; other key and plaintext models remain untested."
       ],
       "source_evidence": [
         "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
@@ -1031,7 +1062,148 @@
         "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
         "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
       ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-filter-locus-replay"
+        ],
+        "scope": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "B-21",
+      "source_claim": "Seeded-PRNG pads are eliminated ('do not re-run').",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-prng-seed-sweep",
+          "covered_subclaim": "A later bounded source grid tests seven generator implementations, including families the B-21 census named as missing, against 1,877 fixed seeds and a 120-rune LP2 opening. It does not replay the Round-8 ten-variant seed_sweep or its claimed full32 runs."
+        }
+      ],
+      "related_but_not_overlap": [
+        {
+          "record_id": "typed-seed-random-opening-cribs",
+          "reason": "Related typed-seed source family, but a new fixed-opening crib criterion, not B-21's Round-8 English-score grid."
+        }
+      ],
+      "covered_subclaim": "Some named generator gaps identified by B-21 have since had bounded source-style tests; the categorical 'seeded PRNGs eliminated' verdict is not verified.",
+      "unresolved_parts": [
+        "Pin and independently replay the original Round-8 ten generator/reduction definitions, actual seed ranges, two reported full32 completions, control/scorer gate and receipts.",
+        "The source's own L5-seed32 census says ten variants are a choice, not a census; missing generator families, wider seeds and key offsets remain outside those searches."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+        "liber-primus/analysis/seed_sweep/run_full32.sh"
+      ],
       "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "B-16",
+      "source_claim": "Every keytext null is unsound because the beam decoder was validated against key skip, while Campaign X/XI pin an output-value rewrite.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "related_but_not_overlap": [
+        {
+          "record_id": "rejection-channel-information",
+          "reason": "Analytic skip/rewrite visible-law and draw-count comparison; it does not execute the source's four-keytext decoder/scorer control gate."
+        }
+      ],
+      "unresolved_parts": [
+        "The pinned Round12 D1 source reports a skip positive arm and rewrite arm on four keytexts at two offsets. Its broad conclusion about every keytext null exceeds that fixed control even if the fixed test reproduces.",
+        "Recover the exact four source keytext bytes and scoring model (not committed at the source paths), then independently replay both arms, score and plaintext-match checks before marking the source gate executed here."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/D1_redteam/rewrite_gate.py",
+        "liber-primus/analysis/round12/D1_redteam/RESULTS.md",
+        "liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R12-A1",
+      "source_claim": "CicadaOS binaries and 761.mp3 supply a mod-29 key stream under the source's skip-aware decoder.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "related_but_not_overlap": [
+        {
+          "record_id": "historical-prime-and-ps-keys",
+          "reason": "Different historical source inputs and decode rule; no exact A1 binary-pad overlap."
+        }
+      ],
+      "unresolved_parts": [
+        "The pinned checkout retains A1 source scripts and saved results, but its analysis/round12/A1/pads directory is absent; the executable cannot replay the same bytes.",
+        "Acquire and pin all source binary pads, including the 118,818,811-byte 560.13 object with the source's recorded SHA-256, and pin the source scorer/controls before claiming the reported head/page grid is reproduced."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/A1/RESULTS.md",
+        "liber-primus/analysis/round12/A1/sweep.py",
+        "liber-primus/analysis/round12/A1/sweep_560_13.py",
+        "liber-primus/analysis/round12/A1/results.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R12-C2",
+      "source_claim": "A fresh esoteric/philosophical corpus contains the running key.",
+      "status": "source-proposal-only",
+      "record_links": [],
+      "unresolved_parts": [
+        "The sole pinned executable is a downloader, not a decrypting or scoring experiment; there is no saved sweep result to reproduce.",
+        "fetch.sh names 33 download commands (23 Project Gutenberg and 10 other URLs), while the inventory paraphrases 29 texts. A new test must pin the final corpus subset, exact bytes, transliteration, offsets, decoder and control gate before results."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/C2/fetch.sh"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R12-frontB",
+      "source_claim": "The dense LP2 pages 45–54 contain canon transcription errors that reopen earlier exclusions.",
+      "status": "failed-source-gate",
+      "record_links": [],
+      "unresolved_parts": [
+        "The source's forced-segmentation arm reports only 12.923% agreement on solved control glyphs and labels that arm inconclusive; its 3.6% target-page agreement cannot support a negative or a proposed corrected rune.",
+        "The source separately reports 98.0% for R9 raw-band decoding on naturally count-exact lines. Independently replaying either image method requires the missing analysis/retranscribe/templates.npz and data/relikd/p45.jpg through p54.jpg and control images.",
+        "The execution-ready queue had linked this entry to unrelated round19/T2 receipts; its evidence mapping must point to round12/frontB."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/frontB/RESULTS.md",
+        "liber-primus/analysis/round12/frontB/run_final.py",
+        "liber-primus/analysis/round12/frontB/results.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R18-L2-BEAM-LENGTH-POWER",
+      "record_links": [
+        {
+          "record_id": "r18-keyskip-drift-power",
+          "covered_subclaim": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L2-filter-leak/PREREG.md",
+        "liber-primus/analysis/round18/L2-filter-leak/RESULTS.md",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json"
+      ],
+      "source_claim": "Every plant-and-recover control in this repository was run at <= 400 runes, yet round13/B-04 Stage D adjudicates on 12,956-rune decodes and reads a score decay as evidence that survivors were lucky. If the width-limited beam cannot hold the true path at full book length, that reading is a null from an unvalidated instrument.",
+      "status": "partial",
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid.",
+      "unresolved_parts": [
+        "No observed LP2 key or held-out natural-language corpus test."
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-keyskip-drift-power"
+        ],
+        "scope": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid.",
+        "wider_method_excluded": false
+      }
     }
   ],
   "next_batch": [

@@ -1,0 +1,111 @@
+{
+  "id": "r18-keyskip-drift-power",
+  "status": "published",
+  "title": "Can a correct key survive skipped draws?",
+  "question": "Under the pinned key-skip simulation, can a skip-aware decoder recover a planted correct key as the text grows to full LP2 length?",
+  "reader_question": "Could key skipping make a correct key look wrong?",
+  "summary": "In a source-backed plant-and-recover test, rigid alignment fails quickly while the skip-aware beam retains a planted correct key through 12,956 runes. This checks decoder power under a synthetic model, not a real LP2 key.",
+  "finding": "At 400 runes, rigid detection succeeds in 1/200 plants and the beam in 200/200. At 12,956 runes, all three beam plants pass the fixed score and 90% recovery gates; mean rune recovery is 99.97%. The full-length wrong-key control scores -7.30 below the -5.5 reading threshold. All non-timing source fields replay exactly after F0 parity passes 24 cases.",
+  "limitations": "The source uses one KJV-derived synthetic plaintext, a known SHA-256-counter key, and a filter probability fitted to LP2 repeat scarcity. This verifies the decoder under that plant, not the presence of that filter or key in LP2; its score bar is not calibrated as a family-wide search threshold.",
+  "next_steps": "Any LP2 claim needs a fixed candidate key and filter rule that predicts unseen manuscript text under held-out controls.",
+  "outcome": "supported",
+  "tags": [
+    "key skipping",
+    "beam decoding",
+    "source replay",
+    "planted control",
+    "search power",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/r18-keyskip-drift-power/plan.json"
+    ],
+    "representation": "12,956-rune synthetic GP29 ciphertext built from the pinned KJV source text and SHA-256-counter key; LP2 contributes only the previously measured repeat-rate calibration.",
+    "procedure": "Replay source F0 reference-versus-fast-beam gate, B1 200 drift samples, B2 six lengths × 200 planted windows, B3 six lengths × three planted keys plus one wrong-key full-length control; compare all non-timing source fields.",
+    "parameters": "Source revision f08b20b; suppression 0.8129; beam width 400; maximum three skipped draws per step; reading score gate -5.5 and minimum planted rune recovery 90%.",
+    "exclusions": "Real LP2 key search, other language/key/filter families, independent held-out classifier power, source B.4 ladder and later R18 subattacks."
+  },
+  "review": {
+    "reviewer": "F0 parity gate, exact source-field replay and independent drift/bound arithmetic check",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound planted-control replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/r18-keyskip-drift-power/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check && python experiments/records/r18-keyskip-drift-power/check.py && python experiments/records/r18-keyskip-drift-power/plot.py --check",
+    "environment": "Python 3.9+ and NumPy, pinned Dukotah checkout at f08b20b and exact KJV source bytes. Runner stages all hashed dependencies in a temporary tree.",
+    "script": "experiments/records/r18-keyskip-drift-power/run.py",
+    "script_sha256": "753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3",
+    "inputs": [
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/plan.json",
+        "sha256": "6453c4779202e5c2d4b4e80489882b69512bfa87d70291b20b48c26ee1f7206c"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-output-raw.txt",
+        "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-results.json",
+        "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-gate.json",
+        "sha256": "89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/replayed-output-raw.txt",
+        "sha256": "f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/replayed-results.json",
+        "sha256": "f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/results.json",
+        "sha256": "08986fc38bd6c30a46c87d055cf9587eed10e06109b932e0df886a0d9891eb7b"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/run.py",
+        "sha256": "753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/check.py",
+        "sha256": "c82fd62524864f231feb95c8387658248a9476293141b4be48caf1c51fbea8fd"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/plot.py",
+        "sha256": "d9be5ee94c406335f498dd67da1e751328578073a60618aa64de4c8d1e79d8c7"
+      },
+      {
+        "path": "exports/sources/gutenberg-10-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/drift-power.svg",
+        "sha256": "c39bf176ad2354299b7b4dc9bd749c6f92432d29b1701af8abb34c53587351aa"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 18 key-skip B source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak"
+    }
+  ],
+  "related": [
+    "r18-filter-locus-replay",
+    "rejection-channel-information",
+    "public-nskips-crossover"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/r18-keyskip-drift-power/drift-power.svg",
+      "caption": "Detection of a planted correct key by rigid alignment versus a skip-aware beam; full-length recovery below."
+    }
+  ]
+}

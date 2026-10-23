@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "d7a3ac8803f2f22bb6b514652b74a177af57a78e55316d240284ce43430f938a",
-    "record_count": 216
+    "sha256": "d1e19fecab9ca6b3ea709127dce05cfec663f734aafe37bc786409de26f6136a",
+    "record_count": 222
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,10 +27,13 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 23,
-    "unreconciled": 129,
-    "source_entries_reviewed": 38,
+    "unreconciled": 123,
+    "source_entries_reviewed": 44,
+    "source_entries_pending_review": 128,
+    "pending_review_with_candidate_match": 5,
+    "pending_review_without_candidate_match": 123,
     "execution_replay_states": {
-      "complete-executed-grid": 9,
+      "complete-executed-grid": 13,
       "partial-execution": 2,
       "replayed-with-invalid-gate": 3
     },
@@ -314,9 +317,23 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "public-prng-seed-sweep",
+            "covered_subclaim": "A later bounded source grid tests seven generator implementations, including families the B-21 census named as missing, against 1,877 fixed seeds and a 120-rune LP2 opening. It does not replay the Round-8 ten-variant seed_sweep or its claimed full32 runs."
+          }
+        ],
+        "unresolved_parts": [
+          "Pin and independently replay the original Round-8 ten generator/reduction definitions, actual seed ranges, two reported full32 completions, control/scorer gate and receipts.",
+          "The source's own L5-seed32 census says ten variants are a choice, not a census; missing generator families, wider seeds and key offsets remain outside those searches."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-16",
@@ -331,9 +348,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "unsupported-source-verdict",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The pinned Round12 D1 source reports a skip positive arm and rewrite arm on four keytexts at two offsets. Its broad conclusion about every keytext null exceeds that fixed control even if the fixed test reproduces.",
+          "Recover the exact four source keytext bytes and scoring model (not committed at the source paths), then independently replay both arms, score and plaintext-match checks before marking the source gate executed here."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R12-A1",
@@ -350,9 +376,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "blocked-exact-replay",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The pinned checkout retains A1 source scripts and saved results, but its analysis/round12/A1/pads directory is absent; the executable cannot replay the same bytes.",
+          "Acquire and pin all source binary pads, including the 118,818,811-byte 560.13 object with the source's recorded SHA-256, and pin the source scorer/controls before claiming the reported head/page grid is reproduced."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R12-C1",
@@ -416,9 +451,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "source-proposal-only",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The sole pinned executable is a downloader, not a decrypting or scoring experiment; there is no saved sweep result to reproduce.",
+          "fetch.sh names 33 download commands (23 Project Gutenberg and 10 other URLs), while the inventory paraphrases 29 texts. A new test must pin the final corpus subset, exact bytes, transliteration, offsets, decoder and control gate before results."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R12-D2",
@@ -483,9 +527,19 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "failed-source-gate",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The source's forced-segmentation arm reports only 12.923% agreement on solved control glyphs and labels that arm inconclusive; its 3.6% target-page agreement cannot support a negative or a proposed corrected rune.",
+          "The source separately reports 98.0% for R9 raw-band decoding on naturally count-exact lines. Independently replaying either image method requires the missing analysis/retranscribe/templates.npz and data/relikd/p45.jpg through p54.jpg and control images.",
+          "The execution-ready queue had linked this entry to unrelated round19/T2 receipts; its evidence mapping must point to round12/frontB."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R17-PUBLIC-PAD",
@@ -1763,13 +1817,25 @@
           {
             "record_id": "rejection-channel-information",
             "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay."
+          },
+          {
+            "record_id": "r18-filter-locus-replay",
+            "covered_subclaim": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power."
           }
         ],
         "unresolved_parts": [
-          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+          "No held-out classifier-power estimate or proof of actual LP2 filter locus; other key and plaintext models remain untested."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-filter-locus-replay"
+        ],
+        "scope": "Exact pinned R18 A seven-model 200-replicate source run, including source calibration, five-statistic classifier, all non-timing output fields, independent 27-stat manuscript recount, and source receipt/F0-independent source-code hashes. The simulation result is conditional on those seven specified models and in-sample power.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1792,13 +1858,25 @@
           {
             "record_id": "rejection-channel-information",
             "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay."
+          },
+          {
+            "record_id": "r18-keyskip-drift-power",
+            "covered_subclaim": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks."
           }
         ],
         "unresolved_parts": [
-          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+          "Synthetic English/source-key recovery does not establish that LP2 uses this filter or that a real correct key is known."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-keyskip-drift-power"
+        ],
+        "scope": "Original R18 B.1–B.3 planted key-skip draw-count and beam-length source grid, including F0 parity gate, full non-timing output replay, and independent analytic checks.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1814,9 +1892,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r18-keyskip-drift-power",
+            "covered_subclaim": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid."
+          }
+        ],
+        "unresolved_parts": [
+          "No observed LP2 key or held-out natural-language corpus test."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-keyskip-drift-power"
+        ],
+        "scope": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R18-L2-DRIFT-LADDER",
@@ -1870,13 +1969,25 @@
           {
             "record_id": "rejection-channel-information",
             "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed."
+          },
+          {
+            "record_id": "r18-entropy-budget-replay",
+            "covered_subclaim": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins."
           }
         ],
         "unresolved_parts": [
-          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+          "KJV cross-entropy is not measured LP2 plaintext entropy. Source seed-budget arithmetic does not establish a unique plaintext; a consistent joint model must include all random inputs."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-entropy-budget-replay"
+        ],
+        "scope": "Full original R18 C corpus-dependent calculation reproduced, including six KJV Markov cross-entropies, two 1000-stream filter simulations and five key-budget rows; source determinacy inference is invalid because small-seed rows reuse an iid-pad output law and omit random coins.",
+        "wider_method_excluded": false
       }
     },
     {

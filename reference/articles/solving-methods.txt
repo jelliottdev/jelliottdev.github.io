@@ -141,7 +141,7 @@ Do number sequences fit the rune-difference chain? · Method replay
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-12 related records
+13 related records
 Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
 Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
@@ -165,6 +165,8 @@ Block-start lookahead feedback: zero-key completion · Method replay
 Two-to-six-rune feedback and autokey screen · Method replay
 
 What a crib fixes in a feedback table · Bounded solving test
+
+Can a simple cipher imitate LP2's rare repeated runes? · Control
 
 
 
@@ -203,7 +205,7 @@ Python 2.7 priority seeds against fixed LP2 openings · Bounded solving test
 Running keys from external texts
 Convert a specified external text into a stream of key symbols.
 
-6 related records
+7 related records
 Emerson as an additive LP2 running key · Bounded solving test
 
 LP2 as a running key for shorter Cicada texts · Method replay
@@ -216,12 +218,14 @@ Prime, solved-text and grid streams as LP2 keys · Method replay
 
 Do LP2 sections share a running key? · Manuscript measurement
 
+Long byte keys as position alphabets on LP2 · Method replay
+
 
 
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-11 related records
+12 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 I/M rune proximity to F interruptions · Manuscript measurement
@@ -244,12 +248,14 @@ Earlier puzzle numbers as LP2 rune keys · Method replay
 
 What a collision filter reveals under a random key · Control
 
+Can a correct key survive skipped draws? · Control
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-7 related records
+8 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 LP2: pair the 2,883-rune sections by subtraction · Bounded solving test
@@ -263,6 +269,8 @@ The 1,814-rune section pairing · Manuscript measurement
 One LP2 page as another page’s key · Manuscript measurement
 
 Mathematical digit streams as LP2 keys · Method replay
+
+Can a correct key survive skipped draws? · Control
 
 
 
@@ -289,18 +297,24 @@ LP2-54–55: skip selected F runes in ciphertext feedback · Manuscript measurem
 Unrestricted additive keys and one-time-pad hypotheses
 Distinguish a freely fitted full-length key from an independently obtained key and a probabilistic secrecy claim.
 
-2 related records
+3 related records
 Does matching the opening text identify a seed? · Control
 
 What a collision filter reveals under a random key · Control
+
+What can an entropy budget tell us? · Source or input audit
 
 
 
 Moving disks, rotors and evolving alphabets
 Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping.
 
-1 related record
+3 related records
 Progressive Caesar shifts on complete LP2 pages · Bounded solving test
+
+Long byte keys as position alphabets on LP2 · Method replay
+
+Random-alphabet flatness bound on LP2 · Method replay
 
 
 
@@ -781,12 +795,14 @@ Treat generated readings as proposals requiring independent, reproducible checks
 Constraint solving, SAT and SMT
 Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search.
 
-3 related records
+4 related records
 How many periodic affine keys can fit a twelve-rune opening? · Control
 
 Simple substitution and page-opening cribs · Control
 
 A bounded test of the P20 boundary model · Source or input audit
+
+What can an entropy budget tell us? · Source or input audit
 
 
 
@@ -818,7 +834,7 @@ Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-24 related records
+26 related records
 LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
 LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
@@ -867,6 +883,10 @@ Do doublets favor positions within sentences? · Manuscript measurement
 
 Fixed local codebooks and repeat preservation · Method replay
 
+Where could a repeat filter act? · Method replay
+
+Can a simple cipher imitate LP2's rare repeated runes? · Control
+
 
 
 Invariants and bounded exclusions
@@ -898,7 +918,7 @@ Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-17 related records
+23 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -933,6 +953,18 @@ What a collision filter reveals under a random key · Control
 
 Do transformed LP2 runes show a reliable period? · Manuscript measurement
 
+Where could a repeat filter act? · Method replay
+
+Can a correct key survive skipped draws? · Control
+
+Can a simple cipher imitate LP2's rare repeated runes? · Control
+
+What can an entropy budget tell us? · Source or input audit
+
+Long byte keys as position alphabets on LP2 · Method replay
+
+Random-alphabet flatness bound on LP2 · Method replay
+
 
 
 Source verification and transcription audits
@@ -960,7 +992,7 @@ A bounded test of the P20 boundary model · Source or input audit
 Rune frequencies and distribution diagnostics
 Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.
 
-5 related records
+7 related records
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
 LP2 sections: rune collisions and adjacent repeats · Manuscript measurement
@@ -970,6 +1002,10 @@ JPEG byte histograms: the four-page split · Manuscript measurement
 One LP2 page as another page’s key · Manuscript measurement
 
 Equality structure of the LP2-53 red passage · Manuscript measurement
+
+Where could a repeat filter act? · Method replay
+
+Random-alphabet flatness bound on LP2 · Method replay
 
 
 
@@ -1126,6 +1162,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/public-multihistory-feedback
 - What a crib fixes in a feedback table
   https://jelliottdev.github.io/#/experiments/crib-inferred-feedback-table
+- Can a simple cipher imitate LP2's rare repeated runes?
+  https://jelliottdev.github.io/#/experiments/leo-cipher-model-fingerprints
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
@@ -1166,6 +1204,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/solved-reading-running-key
 - Do LP2 sections share a running key?
   https://jelliottdev.github.io/#/experiments/leo-shared-key-differences
+- Long byte keys as position alphabets on LP2
+  https://jelliottdev.github.io/#/experiments/wulfic-position-alphabet-long-keys
 - Keystream interruptions and reset rules
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Can a correct key fail under the wrong alignment rule?
@@ -1180,6 +1220,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/f-interrupter-gap-direct-read
 - What a collision filter reveals under a random key
   https://jelliottdev.github.io/#/experiments/rejection-channel-information
+- Can a correct key survive skipped draws?
+  https://jelliottdev.github.io/#/experiments/r18-keyskip-drift-power
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction
@@ -1202,8 +1244,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Unrestricted additive keys and one-time-pad hypotheses
   https://jelliottdev.github.io/reference/articles/one-time-pad.html
+- What can an entropy budget tell us?
+  https://jelliottdev.github.io/#/experiments/r18-entropy-budget-replay
 - Moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
+- Random-alphabet flatness bound on LP2
+  https://jelliottdev.github.io/#/experiments/wulfic-position-alphabet-flatness-bound
 - Transposition and permutations
   https://jelliottdev.github.io/reference/articles/transposition.html
 - LP2-00–55: simple row and column reading routes
@@ -1516,6 +1562,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-filter-fingerprint-models
 - Equality structure of the LP2-53 red passage
   https://jelliottdev.github.io/#/experiments/lp2-53-red-equality-invariants
+- Where could a repeat filter act?
+  https://jelliottdev.github.io/#/experiments/r18-filter-locus-replay
 - Invariants and bounded exclusions
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - Literal prime alphabet: affine permutations for every modulus above 109

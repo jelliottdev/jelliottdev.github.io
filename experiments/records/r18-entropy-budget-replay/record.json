@@ -1,0 +1,162 @@
+{
+  "id": "r18-entropy-budget-replay",
+  "status": "published",
+  "title": "What can an entropy budget tell us?",
+  "question": "Do the published Round 18 corpus cross-entropy and output-entropy values justify labeling short-seed key hypotheses determined?",
+  "reader_question": "Do the missing repeats give enough information to solve LP2?",
+  "summary": "The pinned corpus and entropy calculation reproduces exactly, but its small-seed determinacy labels reuse an output-entropy law from a different key model and omit possible filter randomness. A negative arithmetic difference does not prove unique plaintext.",
+  "finding": "The source measures 2.568 bits/rune as the best of six KJV held-out Markov test scores and 62,617 ciphertext bits under its fitted uniform-pad Markov law. In its 256-bit-seed row, the source input proxy is only 33,525 bits while it reuses that 62,617-bit output law: a 29,091-bit conditional mismatch unless the model adds uncounted randomness or a different output distribution. The five source budget rows and all source fields reproduce exactly.",
+  "limitations": "The English cross-entropy is one KJV segment and the best order is chosen on the same test set; it is not measured LP2 plaintext entropy. The source’s exact uniform-key conditional-channel theorem is already covered separately. This audit does not show LP2 has any particular key, language, filter, or decryption.",
+  "next_steps": "For a proposed seeded cipher, define all random inputs and estimate the output law under that same model; validate plaintext prediction on held-out manuscript evidence rather than an entropy difference.",
+  "outcome": "not-supported",
+  "tags": [
+    "entropy",
+    "source replay",
+    "model consistency",
+    "key entropy",
+    "plaintext information",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/r18-entropy-budget-replay/plan.json"
+    ],
+    "representation": "Source’s joined 12,956 LP2 rune events for fitted repeat rate; exact recovered KJV text converted to GP29, 400,000 train and 200,000 test runes.",
+    "procedure": "Replay full source C calculation in temporary checkout; independently verify Markov output-entropy, corpus-score selection, conditional repeat law, five arithmetic budget rows, sensitivity rows, and the low-seed model-entropy mismatch.",
+    "parameters": "GP29; fitted suppression 0.8129; KJV Markov orders 0–5; 1,000 Monte Carlo arms per plaintext; hypothetical full-pad and 40/256/64/32-bit seed key budgets.",
+    "exclusions": "Re-estimating actual LP2 plaintext entropy, other corpora or ciphers, empirical unique decryption, and any proof that no finite-key model can solve LP2."
+  },
+  "review": {
+    "reviewer": "Source-output field replay and independent entropy/model-consistency arithmetic",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound statistical inference audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/r18-entropy-budget-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check && python experiments/records/r18-entropy-budget-replay/check.py && python experiments/records/r18-entropy-budget-replay/plot.py --check",
+    "environment": "Python 3.9+ and NumPy, pinned Dukotah checkout at f08b20b with exact KJV source bytes. Runner stages all hashed dependencies in a temporary tree.",
+    "script": "experiments/records/r18-entropy-budget-replay/run.py",
+    "script_sha256": "51a76d7a1709a401f3a0a5f1dee2adad12050bff335567702e253107b4826cf4",
+    "inputs": [
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/plan.json",
+        "sha256": "0561393aa53f5e1b1d3a590350a59206a913b9c5ac13b13bd51e92be9945b1b5"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/source-output-raw.txt",
+        "sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/source-results.json",
+        "sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/replayed-output-raw.txt",
+        "sha256": "827242a9d224b2513b8f9e199a59d1a4ef69a21f51808f68e0d8e252dc3fa234"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/replayed-results.json",
+        "sha256": "827242a9d224b2513b8f9e199a59d1a4ef69a21f51808f68e0d8e252dc3fa234"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/results.json",
+        "sha256": "caec99ace3cc9b71ceb029edfafc9f688ae43cab133005f44b64621595a7d7cf"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/run.py",
+        "sha256": "51a76d7a1709a401f3a0a5f1dee2adad12050bff335567702e253107b4826cf4"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/check.py",
+        "sha256": "09a340605ee8b6b23e526882f87306113a20f3eaeff5c91bcbd8a0483846a411"
+      },
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/plot.py",
+        "sha256": "218e83bf955153076ba972d39dcae2e41f842aef6c21c42a69308341ec66eee1"
+      },
+      {
+        "path": "exports/sources/gutenberg-10-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r18-entropy-budget-replay/budget-models.svg",
+        "sha256": "0759e54e0d30f8ea2c5db003cbc9652b0ce3e8ee85cec572f5e2fabf42e4c135"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 18 C information-budget source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak"
+    }
+  ],
+  "related": [
+    "rejection-channel-information"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/r18-entropy-budget-replay/budget-models.svg",
+      "caption": "The source’s output-entropy estimate is reused after changing its assumed key model; the small-seed row requires a new output law or counted random choices."
+    }
+  ]
+}

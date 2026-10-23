@@ -1,0 +1,119 @@
+{
+  "id": "r18-keyskip-drift-power",
+  "status": "published",
+  "title": "Can a correct key survive skipped draws?",
+  "question": "Under the pinned key-skip simulation, can a skip-aware decoder recover a planted correct key as the text grows to full LP2 length?",
+  "reader_question": "Could key skipping make a correct key look wrong?",
+  "summary": "In a source-backed plant-and-recover test, rigid alignment fails quickly while the skip-aware beam retains a planted correct key through 12,956 runes. This checks decoder power under a synthetic model, not a real LP2 key.",
+  "finding": "At 400 runes, rigid detection succeeds in 1/200 plants and the beam in 200/200. At 12,956 runes, all three beam plants pass the fixed score and 90% recovery gates; mean rune recovery is 99.97%. The full-length wrong-key control scores -7.30 below the -5.5 reading threshold. All non-timing source fields replay exactly after F0 parity passes 24 cases.",
+  "limitations": "The source uses one KJV-derived synthetic plaintext, a known SHA-256-counter key, and a filter probability fitted to LP2 repeat scarcity. This verifies the decoder under that plant, not the presence of that filter or key in LP2; its score bar is not calibrated as a family-wide search threshold.",
+  "next_steps": "Any LP2 claim needs a fixed candidate key and filter rule that predicts unseen manuscript text under held-out controls.",
+  "outcome": "supported",
+  "tags": [
+    "key skipping",
+    "beam decoding",
+    "source replay",
+    "planted control",
+    "search power",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/r18-keyskip-drift-power/plan.json"
+    ],
+    "representation": "12,956-rune synthetic GP29 ciphertext built from the pinned KJV source text and SHA-256-counter key; LP2 contributes only the previously measured repeat-rate calibration.",
+    "procedure": "Replay source F0 reference-versus-fast-beam gate, B1 200 drift samples, B2 six lengths × 200 planted windows, B3 six lengths × three planted keys plus one wrong-key full-length control; compare all non-timing source fields.",
+    "parameters": "Source revision f08b20b; suppression 0.8129; beam width 400; maximum three skipped draws per step; reading score gate -5.5 and minimum planted rune recovery 90%.",
+    "exclusions": "Real LP2 key search, other language/key/filter families, independent held-out classifier power, source B.4 ladder and later R18 subattacks."
+  },
+  "review": {
+    "reviewer": "F0 parity gate, exact source-field replay and independent drift/bound arithmetic check",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound planted-control replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/r18-keyskip-drift-power/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check && python experiments/records/r18-keyskip-drift-power/check.py && python experiments/records/r18-keyskip-drift-power/plot.py --check",
+    "environment": "Python 3.9+ and NumPy, pinned Dukotah checkout at f08b20b and exact KJV source bytes. Runner stages all hashed dependencies in a temporary tree.",
+    "script": "experiments/records/r18-keyskip-drift-power/run.py",
+    "script_sha256": "753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3",
+    "inputs": [
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/plan.json",
+        "sha256": "6453c4779202e5c2d4b4e80489882b69512bfa87d70291b20b48c26ee1f7206c"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-output-raw.txt",
+        "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-results.json",
+        "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/source-gate.json",
+        "sha256": "89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/replayed-output-raw.txt",
+        "sha256": "f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/replayed-results.json",
+        "sha256": "f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/results.json",
+        "sha256": "08986fc38bd6c30a46c87d055cf9587eed10e06109b932e0df886a0d9891eb7b"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/run.py",
+        "sha256": "753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/check.py",
+        "sha256": "c82fd62524864f231feb95c8387658248a9476293141b4be48caf1c51fbea8fd"
+      },
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/plot.py",
+        "sha256": "d9be5ee94c406335f498dd67da1e751328578073a60618aa64de4c8d1e79d8c7"
+      },
+      {
+        "path": "exports/sources/gutenberg-10-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r18-keyskip-drift-power/drift-power.svg",
+        "sha256": "c39bf176ad2354299b7b4dc9bd749c6f92432d29b1701af8abb34c53587351aa"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 18 key-skip B source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak"
+    }
+  ],
+  "related": [
+    "r18-filter-locus-replay",
+    "rejection-channel-information",
+    "public-nskips-crossover"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/r18-keyskip-drift-power/drift-power.svg",
+      "caption": "Detection of a planted correct key by rigid alignment versus a skip-aware beam; full-length recovery below."
+    }
+  ],
+  "article": "# Can a correct key survive skipped draws?\n\nIn a proposed key-skip cipher, a key value is consumed without producing a rune when it would create an adjacent repeat. A correct key then drifts out of alignment with the visible text. The pinned [Round 18 test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) planted a known key and plaintext to ask whether its skip-aware decoder could recover them as the text grows to LP2 length.\n\n## Finding\n\n![Rigid key alignment detects 70 percent of 25-rune plants but only 0.5 percent of 400-rune plants. The skip-aware beam detects all 200 plants at every tested short length and recovers over 99.9 percent of plaintext runes in three full-length plants.](experiments/records/r18-keyskip-drift-power/drift-power.svg)\n\nWith the **correct planted key**, rigid decoding crosses the source's reading threshold in just **1 of 200** tests at 400 runes. The skip-aware beam crosses it in **all 200**. At **12,956 runes**, its three planted tests recover a mean **99.97%** of plaintext rune positions; all three satisfy the source's predeclared score and 90% recovery gates. A different SHA-256-counter key scores **−7.30**, below the **−5.5** reading threshold. This shows the beam can retain a known correct key at this length *under the specified simulated filter*.\n\nThe source also simulates how far the key index drifts. Its 200 full-length plants consume a mean **374.47** extra draws; the fitted geometric calculation predicts **373.61** over 12,955 transitions. That agrees with the source simulation and the separate [draw-count probability check](#/experiments/rejection-channel-information). It is a model calculation, not a measurement of an LP2 key stream.\n\n## What was tested\n\nThe source encodes one exact King James Bible text as Gematria Primus runes, encrypts it with a seeded SHA-256-counter key, and conditionally skips draws when a candidate output repeats the previous rune. The skip probability **0.8129** was chosen from LP2's low repeat rate. A preliminary **F0 gate** checks the faster beam against the source's reference decoder on **24** seeded cases: scores agree to better than 10⁻⁹ and every plaintext path matches. Only then does the full run measure 200 drift samples, 200 planted windows at each of six lengths, and three planted full-length decodes at each of another six lengths. The source's original grid is preserved in the [complete output](experiments/records/r18-keyskip-drift-power/source-results.json).\n\nThis is a **power test for the synthetic model**. It does not show that LP2 used key skipping, identify its key, or turn a low-scoring real-page search into a proof that all possible keys fail. The planted plaintext comes from one known English corpus, and the beam's quadgram score rewards that corpus's writing. The source's own score threshold is not a family-wide error rate for an arbitrary later search.\n\n## Reproduce\n\nThe ZIP includes the exact [KJV input](exports/sources/gutenberg-10-kjv.txt), preserved from [Project Gutenberg](https://www.gutenberg.org/files/10/10-0.txt). The runner verifies its hash; the source-code checkout and NumPy are still required.\n\nThe [replay plan](experiments/records/r18-keyskip-drift-power/plan.json) pins revision `f08b20b`, the exact source files, the recovered KJV input hash, F0 gate receipt, and B output hash. It was frozen before our replay, after inspecting the published source, so it is a source replay specification rather than a fresh preregistration. With that source checkout at `SOURCE` and its exact `kjv.txt` available:\n\n```text\npython experiments/records/r18-keyskip-drift-power/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check\npython experiments/records/r18-keyskip-drift-power/check.py\npython experiments/records/r18-keyskip-drift-power/plot.py --check\n```\n\nThe runner verifies every input hash, stages the source in a temporary directory, runs F0 and B, then compares **every non-timing field** with the archived output. It does not change the source checkout's tracked result files. The separate checker recalculates the drift and window-survival formulas and verifies the declared length, beam, threshold and control gates.\n",
+  "article_path": "experiments/records/r18-keyskip-drift-power/article.md",
+  "script_sha256": "753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}

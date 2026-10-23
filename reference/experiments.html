@@ -21018,6 +21018,104 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="leo-cipher-model-fingerprints"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;leo-cipher-model-fingerprints&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can a simple cipher imitate LP2&#x27;s rare repeated runes?&quot;,
+  &quot;question&quot;: &quot;Which of 23 source-specified synthetic encryptions of a fixed solved passage resemble LP2 in adjacent repeats, coincidence and rune balance?&quot;,
+  &quot;reader_question&quot;: &quot;Does a matching repeat rate reveal the cipher?&quot;,
+  &quot;summary&quot;: &quot;All 23 source model rows reproduce. One chain matches LP2&#x27;s rare adjacent repeats, but that count equals the frequency of one rune in the chosen solved plaintext by construction.&quot;,
+  &quot;finding&quot;: &quot;The source chain has 20 equal adjacent pairs among 2,978 versus LP2&#x27;s 86 among 12,955. For c_i=c_(i-1)+p_i+1 mod 29, a repeat occurs exactly when p_i=28 (EA); the chosen solved sample has 20 such positions. The chain&#x27;s +1 offset is closest of 29 in a declared post-observation check, without implying that LP2 uses it.&quot;,
+  &quot;limitations&quot;: &quot;One fixed solved plaintext and one instance of each random-key generator; summary statistics do not recover plaintext or identify a cipher. The 29-offset comparison was motivated by the observed source result. The source scales the target chi-square for display in a way that does not preserve its null reference.&quot;,
+  &quot;next_steps&quot;: &quot;A specific chain proposal needs a complete generator, key and boundary rule frozen before testing an unseen page, plus a plaintext recovery and whole-search control.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;cipher models&quot;,
+    &quot;doublets&quot;,
+    &quot;frequency&quot;,
+    &quot;chain cipher&quot;,
+    &quot;source replay&quot;,
+    &quot;selection effects&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/leo-cipher-model-fingerprints/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Nine relikd unsolved sections with 12,956 rune indices, 2,979 solved plaintext rune indices, and the first 60,000 GP rune indices of a pinned War and Peace baseline.&quot;,
+    &quot;procedure&quot;: &quot;Reconstruct all 23 source-specified synthetic generators and compare their adjacent-pair rate, normalized IoC, chi-square and lag-two pair rate with the archived source table. Separately count all 29 additive-chain offsets and verify the equality identity.&quot;,
+    &quot;parameters&quot;: &quot;GP29, source random.Random(3301), 23 named source models, 29 post-observation additive offsets b=0..28.&quot;,
+    &quot;exclusions&quot;: &quot;Other plaintext samples, key grids, cipher boundaries, complete plaintext recovery, source model selection probabilities and broad cipher-family exclusion.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent source-run and arithmetic checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;computational source replay&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/leo-cipher-model-fingerprints/run.py --source-root LEO --check &amp;&amp; python experiments/records/leo-cipher-model-fingerprints/check.py --source-root LEO &amp;&amp; python experiments/records/leo-cipher-model-fingerprints/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ standard library. LEO is the pinned source checkout with its relikd data dependency installed; every consumed source file is SHA-256 checked.&quot;,
+    &quot;script&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/plan.json&quot;,
+        &quot;sha256&quot;: &quot;724f751870b3c43bd126d6baf905f3856e305294f546bde8b2f8a6a2b175334a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/run.py&quot;,
+        &quot;sha256&quot;: &quot;ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/check.py&quot;,
+        &quot;sha256&quot;: &quot;960c061e2c7687d5be835e4f092900ca8815b573b2374a37abf76b02f10912a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/plot.py&quot;,
+        &quot;sha256&quot;: &quot;ac85a452f913a93572a8a6afd22bca8fec73781ea60b59497a9f396c552b27f0&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/results.json&quot;,
+        &quot;sha256&quot;: &quot;7cb13907445fa240f70884177d5f572a2d4013a97ba530c8e8548838981f3b20&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg&quot;,
+        &quot;sha256&quot;: &quot;f2e355c7da363d94b8c59affbd1df60de70ce153a16938f2ededd277a650fde7&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned source generator and archived receipt&quot;,
+      &quot;url&quot;: &quot;https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/fingerprint.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned relikd source data&quot;,
+      &quot;url&quot;: &quot;https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-filter-fingerprint-models&quot;,
+    &quot;linear-ciphertext-feedback&quot;,
+    &quot;uniform-additive-doublets&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg&quot;,
+      &quot;caption&quot;: &quot;A source chain almost matches LP2&#x27;s adjacent-repeat rate because that count equals the selected plaintext rune&#x27;s frequency.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Can a simple cipher imitate LP2&#x27;s rare repeated runes?\n\nA [published comparison](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/fingerprint.py) encrypts the same 2,979 runes of known Liber Primus text in 23 specified ways, then compares each output with the still-unread LP2 text. The measurements are repeated adjacent runes, overall rune balance, and matches two positions apart. We reproduced **all 23 rows** of its archived table from pinned inputs.\n\n## Finding\n\n![LP2&#x27;s adjacent-repeat rate is 0.664%; the source&#x27;s chain simulation is 0.672%. The match comes from the frequency of one plaintext rune.](experiments/records/leo-cipher-model-fingerprints/repeat-rate.svg)\n\nLP2 has **86 identical adjacent pairs in 12,955 opportunities** (0.664%). One source simulation, `cipher = previous cipher + plaintext + 1` modulo 29, has **20 in 2,978** (0.672%). Its overall rune balance is also near uniform. These are real matches to the selected summaries, but they **do not identify LP2&#x27;s encryption**.\n\nThe repeat-rate match has a simple explanation. Under that chain rule, a new cipher rune equals the previous one exactly when the plaintext rune is **EA**, index 28. EA occurs **20 times** after the first position in the chosen known reading. We verified that identity both algebraically and by generating and reversing the stream. The observation is therefore determined by this plaintext sample&#x27;s rune frequency; the chain has not predicted a readable LP2 passage.\n\nAs an explicitly **post-observation** check, we held the same chain rule and plaintext fixed while trying all 29 additive constants. The source&#x27;s `+1` is the closest of the 29 to LP2&#x27;s observed repeat rate. That rank describes this particular chosen sample and one statistic; it is not a probability that the source cipher is correct. The [complete model and offset table](experiments/records/leo-cipher-model-fingerprints/results.json) preserves every value.\n\n## What the comparison covers\n\nThe 23 rows include fixed-period keys, prime and Fibonacci streams, plaintext and ciphertext feedback, two running-key examples, affine substitution, random output, and several F-pass-through variants. The source generated **one** instance of each random-key model on the same 2,979-rune known reading. It compared those with 12,956 unread runes. This is a useful fingerprint demonstration, not a search over every key, every plaintext or every boundary rule.\n\nOne displayed source number needs care: it multiplies LP2&#x27;s uniformity χ² by `2,979 / 12,956`, turning the actual **26.36** into **6.06** for its table. A chi-square statistic does not retain its original reference distribution after that scaling. We reproduce the printed value to audit the source, but do not use it to rank cipher models. The source&#x27;s final “running key English with F-interrupts” row passes F unchanged while continuing to index the key by absolute position; it does not pause the key clock.\n\n## Reproduce\n\nUse [Leo&#x27;s pinned source](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/tree/a32bdc0e06ea58532fbaf4329acae4a0b1020513) with its separately pinned [relikd input](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4) installed as that source expects. The scripts check the source, dataset, archived receipt and baseline file hashes. From the Liberpedia repository root, substitute the Leo checkout path for `LEO`:\n\n```text\npython experiments/records/leo-cipher-model-fingerprints/run.py --source-root LEO --check\npython experiments/records/leo-cipher-model-fingerprints/check.py --source-root LEO\npython experiments/records/leo-cipher-model-fingerprints/plot.py --check\n```\n\nThe runner reconstructs the 23 outputs independently of the source implementation and compares all displayed rows with the saved receipt. The checker freshly runs the source script, compares its 23 rows again, tests the chain inverse, and independently verifies all 29 repeat-count identities. This record does not copy the source code or its third-party input texts.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/leo-cipher-model-fingerprints/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ccec765b4a99cd78519cb8733f740065734632903709f0737f510508f001078e&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  }
 }</pre></article><article id="leo-shared-key-differences"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;leo-shared-key-differences&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -47187,6 +47285,691 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="r18-entropy-budget-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;r18-entropy-budget-replay&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;What can an entropy budget tell us?&quot;,
+  &quot;question&quot;: &quot;Do the published Round 18 corpus cross-entropy and output-entropy values justify labeling short-seed key hypotheses determined?&quot;,
+  &quot;reader_question&quot;: &quot;Do the missing repeats give enough information to solve LP2?&quot;,
+  &quot;summary&quot;: &quot;The pinned corpus and entropy calculation reproduces exactly, but its small-seed determinacy labels reuse an output-entropy law from a different key model and omit possible filter randomness. A negative arithmetic difference does not prove unique plaintext.&quot;,
+  &quot;finding&quot;: &quot;The source measures 2.568 bits/rune as the best of six KJV held-out Markov test scores and 62,617 ciphertext bits under its fitted uniform-pad Markov law. In its 256-bit-seed row, the source input proxy is only 33,525 bits while it reuses that 62,617-bit output law: a 29,091-bit conditional mismatch unless the model adds uncounted randomness or a different output distribution. The five source budget rows and all source fields reproduce exactly.&quot;,
+  &quot;limitations&quot;: &quot;The English cross-entropy is one KJV segment and the best order is chosen on the same test set; it is not measured LP2 plaintext entropy. The source’s exact uniform-key conditional-channel theorem is already covered separately. This audit does not show LP2 has any particular key, language, filter, or decryption.&quot;,
+  &quot;next_steps&quot;: &quot;For a proposed seeded cipher, define all random inputs and estimate the output law under that same model; validate plaintext prediction on held-out manuscript evidence rather than an entropy difference.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;entropy&quot;,
+    &quot;source replay&quot;,
+    &quot;model consistency&quot;,
+    &quot;key entropy&quot;,
+    &quot;plaintext information&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/r18-entropy-budget-replay/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Source’s joined 12,956 LP2 rune events for fitted repeat rate; exact recovered KJV text converted to GP29, 400,000 train and 200,000 test runes.&quot;,
+    &quot;procedure&quot;: &quot;Replay full source C calculation in temporary checkout; independently verify Markov output-entropy, corpus-score selection, conditional repeat law, five arithmetic budget rows, sensitivity rows, and the low-seed model-entropy mismatch.&quot;,
+    &quot;parameters&quot;: &quot;GP29; fitted suppression 0.8129; KJV Markov orders 0–5; 1,000 Monte Carlo arms per plaintext; hypothetical full-pad and 40/256/64/32-bit seed key budgets.&quot;,
+    &quot;exclusions&quot;: &quot;Re-estimating actual LP2 plaintext entropy, other corpora or ciphers, empirical unique decryption, and any proof that no finite-key model can solve LP2.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Source-output field replay and independent entropy/model-consistency arithmetic&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-bound statistical inference audit&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/r18-entropy-budget-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check &amp;&amp; python experiments/records/r18-entropy-budget-replay/check.py &amp;&amp; python experiments/records/r18-entropy-budget-replay/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ and NumPy, pinned Dukotah checkout at f08b20b with exact KJV source bytes. Runner stages all hashed dependencies in a temporary tree.&quot;,
+    &quot;script&quot;: &quot;experiments/records/r18-entropy-budget-replay/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;51a76d7a1709a401f3a0a5f1dee2adad12050bff335567702e253107b4826cf4&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/plan.json&quot;,
+        &quot;sha256&quot;: &quot;0561393aa53f5e1b1d3a590350a59206a913b9c5ac13b13bd51e92be9945b1b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/source-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/source-results.json&quot;,
+        &quot;sha256&quot;: &quot;b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/replayed-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;827242a9d224b2513b8f9e199a59d1a4ef69a21f51808f68e0d8e252dc3fa234&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/replayed-results.json&quot;,
+        &quot;sha256&quot;: &quot;827242a9d224b2513b8f9e199a59d1a4ef69a21f51808f68e0d8e252dc3fa234&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/results.json&quot;,
+        &quot;sha256&quot;: &quot;caec99ace3cc9b71ceb029edfafc9f688ae43cab133005f44b64621595a7d7cf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/run.py&quot;,
+        &quot;sha256&quot;: &quot;51a76d7a1709a401f3a0a5f1dee2adad12050bff335567702e253107b4826cf4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/check.py&quot;,
+        &quot;sha256&quot;: &quot;09a340605ee8b6b23e526882f87306113a20f3eaeff5c91bcbd8a0483846a411&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/plot.py&quot;,
+        &quot;sha256&quot;: &quot;218e83bf955153076ba972d39dcae2e41f842aef6c21c42a69308341ec66eee1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/sources/gutenberg-10-kjv.txt&quot;,
+        &quot;sha256&quot;: &quot;0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/budget-models.svg&quot;,
+        &quot;sha256&quot;: &quot;0759e54e0d30f8ea2c5db003cbc9652b0ce3e8ee85cec572f5e2fabf42e4c135&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Round 18 C information-budget source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;rejection-channel-information&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/r18-entropy-budget-replay/budget-models.svg&quot;,
+      &quot;caption&quot;: &quot;The source’s output-entropy estimate is reused after changing its assumed key model; the small-seed row requires a new output law or counted random choices.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# What can an entropy budget tell us?\n\nA [published Round 18 calculation](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) counts bits in a proposed key-skip cipher and labels some key models “determined.” We replayed every number with the recovered exact source text. The arithmetic reproduces; the determinacy labels do **not** follow from it.\n\n## Finding\n\n![The source estimates 62.6 thousand ciphertext bits under a full random-pad model. The same output estimate is then reused for a 256-bit seeded key, whose English-plus-key input proxy is only 33.5 thousand bits. A deterministic model cannot have more output entropy than counted input entropy.](experiments/records/r18-entropy-budget-replay/budget-models.svg)\n\nThe source estimates **62,617 bits** of output entropy from a 29-rune filtered Markov model fitted to LP2&#x27;s repeat rate. It separately measures **2.568 bits per rune** as the lowest test-set cross-entropy among six short Markov models of one King James Bible encoding, then scales that value to **33,269 bits** for a manuscript-length English proxy.\n\nFor a full independent random pad, its estimated input sum is about **98,025 bits**. Replacing the pad with a **256-bit seed** reduces that sum to about **33,525 bits**, but the source keeps the same **62,617-bit output estimate** and calls the negative difference “determined.” Those numbers cannot all describe one deterministic seeded-key model: output entropy cannot exceed the entropy of its inputs. A random rejection coin could supply additional randomness, but it must be counted explicitly, and the output law must be recalculated for that model. The source&#x27;s 40-, 64-, and 32-bit seed rows have the same issue.\n\nEven within one consistent model, an entropy difference is **not an if-and-only-if test for a unique plaintext**. The expression `H(P) + H(K) − H(C)` equals remaining *joint* uncertainty only with the requisite independence and deterministic-channel assumptions; positive joint uncertainty can coexist with a uniquely known plaintext, while a negative value signals incompatible assumptions. It does not certify a readable LP2 decryption.\n\n## What the corpus measurement covers\n\nThe source encodes a fixed KJV text in Gematria Primus runes, trains Markov orders **0–5** on the first **400,000** runes, and scores the next **200,000**. Order **3** has the lowest measured cross-entropy on that test segment. Selecting the best order on the same test segment is a model-selection step, and one Bible segment is not a measured distribution for unknown LP2 plaintext. The source also simulates **1,000** constant-text and **1,000** English-text filters; their low adjacent-repeat rates are a control for the specified model, not a way to infer LP2&#x27;s text.\n\nThe source&#x27;s **323-bit** “filter information injection” is the reduction in *ciphertext entropy* under its fitted Markov law. It is not 323 bits about plaintext. The separate [exact conditional-channel result](#/experiments/rejection-channel-information) proves that, with independent uniform key draws and the stated filter, the visible next-rune law is identical for every plaintext rune. That proof has narrower assumptions than a claim about every possible LP2 cipher.\n\n## Reproduce\n\nThe ZIP includes the exact [KJV input](exports/sources/gutenberg-10-kjv.txt), preserved from [Project Gutenberg](https://www.gutenberg.org/files/10/10-0.txt). The runner verifies its hash; the source-code checkout and NumPy are still required.\n\nThe [replay plan](experiments/records/r18-entropy-budget-replay/plan.json) pins revision `f08b20b`, every imported source file, the recovered KJV bytes, and the original output hash. It was frozen before our run after we inspected the published source. With that checkout at `SOURCE`:\n\n```text\npython experiments/records/r18-entropy-budget-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check\npython experiments/records/r18-entropy-budget-replay/check.py\npython experiments/records/r18-entropy-budget-replay/plot.py --check\n```\n\nThe runner uses a temporary source tree and leaves the original checkout untouched. The [complete source output](experiments/records/r18-entropy-budget-replay/source-results.json) and [replay](experiments/records/r18-entropy-budget-replay/replayed-results.json) match in every field. The independent checker recomputes the entropy formulas and flags the model mismatch; it does not turn the KJV proxy into a claim about LP2&#x27;s language or key.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/r18-entropy-budget-replay/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;51a76d7a1709a401f3a0a5f1dee2adad12050bff335567702e253107b4826cf4&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="r18-filter-locus-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;r18-filter-locus-replay&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Where could a repeat filter act?&quot;,
+  &quot;question&quot;: &quot;Does the pinned seven-model source comparison distinguish filtering the ciphertext, keystream or plaintext from LP2 rune structure?&quot;,
+  &quot;reader_question&quot;: &quot;Could a filter explain LP2’s scarce repeated runes?&quot;,
+  &quot;summary&quot;: &quot;The exact seven-model, 200-replicate source run reproduces. Two output-stage rules remain hard to distinguish; several narrowly specified alternatives miss the manuscript measurements.&quot;,
+  &quot;finding&quot;: &quot;The manuscript has 86 adjacent repeats among 12,955 pairs (0.664%). Simulated key skipping and random output rewriting give 0.633% and 0.668%. The source classifier has only 17.5% in-sample power to separate those two at its 5% false-positive threshold. A fixed +1 nudge matches repeats but produces a much larger modular-difference peak (16.5 versus 2.64 standardized units).&quot;,
+  &quot;limitations&quot;: &quot;The source tunes suppression to the observed repeat rate and fits/evaluates its classifier on the same 200 simulations per model. This conditional comparison does not identify the manuscript encryptor or rule out other filters, keys, plaintexts or reset conventions.&quot;,
+  &quot;next_steps&quot;: &quot;A mechanism claim needs an independently specified key or transition rule that predicts held-out runes or another unseen feature.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;doublets&quot;,
+    &quot;filter locus&quot;,
+    &quot;source replay&quot;,
+    &quot;simulation&quot;,
+    &quot;keystream&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/r18-filter-locus-replay/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Joined canonical 29-rune LP2-00–55 stream (12,956 runes) and the source’s exact KJV-derived GP29 plaintext.&quot;,
+    &quot;procedure&quot;: &quot;Replay all seven pinned source models at 200 simulations each; compare every non-timing field with the preserved source JSON. Independently recount manuscript statistics and analytic draw-count formula.&quot;,
+    &quot;parameters&quot;: &quot;Source revision f08b20b; 200 seeded simulations/model; source-calibrated suppression; five fixed primary statistics; source 5% false-positive classifier threshold.&quot;,
+    &quot;exclusions&quot;: &quot;Other corpora, nonuniform or dependent keys, other filter rules, alternative segment boundaries, held-out classifier evaluation, and actual decryption.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Exact source replay plus independent manuscript-statistic recount&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-bound simulation replay&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/r18-filter-locus-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check &amp;&amp; python experiments/records/r18-filter-locus-replay/check.py &amp;&amp; python experiments/records/r18-filter-locus-replay/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ and NumPy; exact pinned Dukotah source checkout plus a KJV file with the frozen SHA-256. Runner stages inputs in a temporary tree.&quot;,
+    &quot;script&quot;: &quot;experiments/records/r18-filter-locus-replay/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;00990f8e47941503654263384c87d6afeb0966f44a944f92cd1f1e45c287c311&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/plan.json&quot;,
+        &quot;sha256&quot;: &quot;0c5bd9e250b6fe6ffe0e74c6742c8396eb5b09ba0aa9667ca24bb0069d7e175e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/source-dependencies.json&quot;,
+        &quot;sha256&quot;: &quot;7da91cf48972b00ac10a34550e958cf3f10ef9f260b7a649da97d73303c9105b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/source-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;3e738e9ff784389d611cd921295e4bd3b7c2a06960d7b0063951385a8e0f063a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/replayed-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;257a4b378df73b097890cdad02facadc2f9f12f0cb379d1fe095dcfd0168576e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/results.json&quot;,
+        &quot;sha256&quot;: &quot;7e807f200eac263ea09153edd4200e3e4f3a219f85be62d1bbb69f0194db70cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/run.py&quot;,
+        &quot;sha256&quot;: &quot;00990f8e47941503654263384c87d6afeb0966f44a944f92cd1f1e45c287c311&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/check.py&quot;,
+        &quot;sha256&quot;: &quot;67c87b995a4be24ed9c12490b5c83d282a5d604e935e7f6c093ef79e412b9af5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/plot.py&quot;,
+        &quot;sha256&quot;: &quot;0babc2fc48c9ab56620df324bd63043f755eb07b4ea19435bb0c251e7e80356a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-50.txt&quot;,
+        &quot;sha256&quot;: &quot;bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/source-results.json&quot;,
+        &quot;sha256&quot;: &quot;d6019b377563b334f5645ba3d80d3e8972a03d73626818289b97e06015c02cc1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/replayed-results.json&quot;,
+        &quot;sha256&quot;: &quot;4ee98d9d95f7ab596716ef0d878d7e25b5afd95116d8dde453c5b5ce40b73670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/sources/gutenberg-10-kjv.txt&quot;,
+        &quot;sha256&quot;: &quot;0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/filter-loci.svg&quot;,
+        &quot;sha256&quot;: &quot;64b3dc54c556ec6e1aced4715567d8f28dfcadf41579cec1f3a643fc79c247cc&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Round 18 filter-locus source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;rejection-channel-information&quot;,
+    &quot;doublet-boundaries&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/r18-filter-locus-replay/filter-loci.svg&quot;,
+      &quot;caption&quot;: &quot;Seven pinned source model means against the observed adjacent-repeat rate.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Where could a repeat filter act?\n\nLP2-00–55 contains **86 equal adjacent rune pairs among 12,955**. One [published seven-model comparison](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) asks whether that scarcity looks like a filter on the output, the key, or the input text. We reproduced its complete 200-replicate simulation and saved every result field.\n\n## Finding\n\n![The observed repeat rate is 0.664 percent. Key skip and output rewrite are near it; fixed nudge also matches repeats but fails another statistic. No filter, key filter and text filter are around 3.5 percent; hard ban produces zero.](experiments/records/r18-filter-locus-replay/filter-loci.svg)\n\nTwo **output-stage** models reproduce the observed repeat rate within this setup: discard a key draw and retry (**0.633%** simulated), or overwrite a repeated output with a fresh random rune (**0.668%**). The manuscript has **0.664%**. The source&#x27;s classifier has only **17.5% in-sample power** to distinguish the rewrite model from key skipping at its stated 5% false-positive threshold. That is weak separation, not evidence that either mechanism was used.\n\nA third output rule—always nudging a repeated rune by one—also matches the repeat count (**0.659%**). But it makes one modular rune-to-rune difference far too common: its mean largest standardized deviation is **16.5**, versus **2.64** in the manuscript. The unfiltered, key-filtered, and plaintext-filtered source models leave roughly **3.5%** adjacent repeats. A hard output ban leaves **zero**. Those are mismatches for these precisely defined models, not exclusions of every possible filter or cipher.\n\n## What this test actually compares\n\nEach model encrypts the same Gematria Primus encoding of a pinned King James Bible text using simulated uniform 29-value key draws. Where the model has a suppression parameter, the source tunes it to the manuscript&#x27;s repeat rate before measuring 200 seeded streams of 12,956 runes. Five preselected measurements then include adjacent repeats, other short-distance repeats, alternation, and the distribution of modular differences. The complete [source output](experiments/records/r18-filter-locus-replay/source-results.json) and our [replayed output](experiments/records/r18-filter-locus-replay/replayed-results.json) match in **every field except elapsed time**. These linked copies encode the source&#x27;s infinite hard-ban deviation as `null`; the exact [source bytes](experiments/records/r18-filter-locus-replay/source-output-raw.txt) are preserved separately.\n\nThe source fits each classifier&#x27;s means, spreads, and threshold on those same simulated streams used to report power. Its **17.5%** and **100%** figures are therefore *in-sample discrimination within this seven-model comparison*, not held-out performance. The manuscript&#x27;s repeat rate is also used to tune some models; matching that same rate cannot validate a model. Our separate [probability-law check](#/experiments/rejection-channel-information) shows why idealized key-skip and fresh-random-output rules can have the same visible ciphertext distribution. This simulation does not identify which, if either, produced LP2.\n\n## Reproduce\n\nThe ZIP includes the exact [KJV input](exports/sources/gutenberg-10-kjv.txt), preserved from [Project Gutenberg](https://www.gutenberg.org/files/10/10-0.txt). The runner verifies its hash; the source-code checkout and NumPy are still required.\n\nThe [frozen plan](experiments/records/r18-filter-locus-replay/plan.json) pins source revision `f08b20b`, exact code and input hashes, the 200-replicate command, and the preserved result hash. Use a checkout of that revision and the exact `kjv.txt` named in the plan. With the source repository at `SOURCE`:\n\n```text\npython experiments/records/r18-filter-locus-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check\npython experiments/records/r18-filter-locus-replay/check.py\npython experiments/records/r18-filter-locus-replay/plot.py --check\n```\n\nThe runner verifies SHA-256 inputs, stages only the required source files in a temporary directory, and runs the source there, leaving its tracked result file untouched. NumPy is needed for the source simulation. The independent checker uses the repository&#x27;s LP2 transcription to recount the **27 manuscript measurements** and the conditional draw-count arithmetic; it does **not** independently re-estimate the source classifier&#x27;s power.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/r18-filter-locus-replay/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;00990f8e47941503654263384c87d6afeb0966f44a944f92cd1f1e45c287c311&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="r18-keyskip-drift-power"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;r18-keyskip-drift-power&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can a correct key survive skipped draws?&quot;,
+  &quot;question&quot;: &quot;Under the pinned key-skip simulation, can a skip-aware decoder recover a planted correct key as the text grows to full LP2 length?&quot;,
+  &quot;reader_question&quot;: &quot;Could key skipping make a correct key look wrong?&quot;,
+  &quot;summary&quot;: &quot;In a source-backed plant-and-recover test, rigid alignment fails quickly while the skip-aware beam retains a planted correct key through 12,956 runes. This checks decoder power under a synthetic model, not a real LP2 key.&quot;,
+  &quot;finding&quot;: &quot;At 400 runes, rigid detection succeeds in 1/200 plants and the beam in 200/200. At 12,956 runes, all three beam plants pass the fixed score and 90% recovery gates; mean rune recovery is 99.97%. The full-length wrong-key control scores -7.30 below the -5.5 reading threshold. All non-timing source fields replay exactly after F0 parity passes 24 cases.&quot;,
+  &quot;limitations&quot;: &quot;The source uses one KJV-derived synthetic plaintext, a known SHA-256-counter key, and a filter probability fitted to LP2 repeat scarcity. This verifies the decoder under that plant, not the presence of that filter or key in LP2; its score bar is not calibrated as a family-wide search threshold.&quot;,
+  &quot;next_steps&quot;: &quot;Any LP2 claim needs a fixed candidate key and filter rule that predicts unseen manuscript text under held-out controls.&quot;,
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;tags&quot;: [
+    &quot;key skipping&quot;,
+    &quot;beam decoding&quot;,
+    &quot;source replay&quot;,
+    &quot;planted control&quot;,
+    &quot;search power&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/r18-keyskip-drift-power/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;12,956-rune synthetic GP29 ciphertext built from the pinned KJV source text and SHA-256-counter key; LP2 contributes only the previously measured repeat-rate calibration.&quot;,
+    &quot;procedure&quot;: &quot;Replay source F0 reference-versus-fast-beam gate, B1 200 drift samples, B2 six lengths × 200 planted windows, B3 six lengths × three planted keys plus one wrong-key full-length control; compare all non-timing source fields.&quot;,
+    &quot;parameters&quot;: &quot;Source revision f08b20b; suppression 0.8129; beam width 400; maximum three skipped draws per step; reading score gate -5.5 and minimum planted rune recovery 90%.&quot;,
+    &quot;exclusions&quot;: &quot;Real LP2 key search, other language/key/filter families, independent held-out classifier power, source B.4 ladder and later R18 subattacks.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;F0 parity gate, exact source-field replay and independent drift/bound arithmetic check&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-bound planted-control replay&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/r18-keyskip-drift-power/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check &amp;&amp; python experiments/records/r18-keyskip-drift-power/check.py &amp;&amp; python experiments/records/r18-keyskip-drift-power/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ and NumPy, pinned Dukotah checkout at f08b20b and exact KJV source bytes. Runner stages all hashed dependencies in a temporary tree.&quot;,
+    &quot;script&quot;: &quot;experiments/records/r18-keyskip-drift-power/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6453c4779202e5c2d4b4e80489882b69512bfa87d70291b20b48c26ee1f7206c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/source-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/source-results.json&quot;,
+        &quot;sha256&quot;: &quot;9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/source-gate.json&quot;,
+        &quot;sha256&quot;: &quot;89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/replayed-output-raw.txt&quot;,
+        &quot;sha256&quot;: &quot;f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/replayed-results.json&quot;,
+        &quot;sha256&quot;: &quot;f4a358c1775a7d29a2f3daf11d6321880c7a527f658e27e79484835b0e0ea232&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/results.json&quot;,
+        &quot;sha256&quot;: &quot;08986fc38bd6c30a46c87d055cf9587eed10e06109b932e0df886a0d9891eb7b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/run.py&quot;,
+        &quot;sha256&quot;: &quot;753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/check.py&quot;,
+        &quot;sha256&quot;: &quot;c82fd62524864f231feb95c8387658248a9476293141b4be48caf1c51fbea8fd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/plot.py&quot;,
+        &quot;sha256&quot;: &quot;d9be5ee94c406335f498dd67da1e751328578073a60618aa64de4c8d1e79d8c7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/sources/gutenberg-10-kjv.txt&quot;,
+        &quot;sha256&quot;: &quot;0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/drift-power.svg&quot;,
+        &quot;sha256&quot;: &quot;c39bf176ad2354299b7b4dc9bd749c6f92432d29b1701af8abb34c53587351aa&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Round 18 key-skip B source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;r18-filter-locus-replay&quot;,
+    &quot;rejection-channel-information&quot;,
+    &quot;public-nskips-crossover&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/r18-keyskip-drift-power/drift-power.svg&quot;,
+      &quot;caption&quot;: &quot;Detection of a planted correct key by rigid alignment versus a skip-aware beam; full-length recovery below.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Can a correct key survive skipped draws?\n\nIn a proposed key-skip cipher, a key value is consumed without producing a rune when it would create an adjacent repeat. A correct key then drifts out of alignment with the visible text. The pinned [Round 18 test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) planted a known key and plaintext to ask whether its skip-aware decoder could recover them as the text grows to LP2 length.\n\n## Finding\n\n![Rigid key alignment detects 70 percent of 25-rune plants but only 0.5 percent of 400-rune plants. The skip-aware beam detects all 200 plants at every tested short length and recovers over 99.9 percent of plaintext runes in three full-length plants.](experiments/records/r18-keyskip-drift-power/drift-power.svg)\n\nWith the **correct planted key**, rigid decoding crosses the source&#x27;s reading threshold in just **1 of 200** tests at 400 runes. The skip-aware beam crosses it in **all 200**. At **12,956 runes**, its three planted tests recover a mean **99.97%** of plaintext rune positions; all three satisfy the source&#x27;s predeclared score and 90% recovery gates. A different SHA-256-counter key scores **−7.30**, below the **−5.5** reading threshold. This shows the beam can retain a known correct key at this length *under the specified simulated filter*.\n\nThe source also simulates how far the key index drifts. Its 200 full-length plants consume a mean **374.47** extra draws; the fitted geometric calculation predicts **373.61** over 12,955 transitions. That agrees with the source simulation and the separate [draw-count probability check](#/experiments/rejection-channel-information). It is a model calculation, not a measurement of an LP2 key stream.\n\n## What was tested\n\nThe source encodes one exact King James Bible text as Gematria Primus runes, encrypts it with a seeded SHA-256-counter key, and conditionally skips draws when a candidate output repeats the previous rune. The skip probability **0.8129** was chosen from LP2&#x27;s low repeat rate. A preliminary **F0 gate** checks the faster beam against the source&#x27;s reference decoder on **24** seeded cases: scores agree to better than 10⁻⁹ and every plaintext path matches. Only then does the full run measure 200 drift samples, 200 planted windows at each of six lengths, and three planted full-length decodes at each of another six lengths. The source&#x27;s original grid is preserved in the [complete output](experiments/records/r18-keyskip-drift-power/source-results.json).\n\nThis is a **power test for the synthetic model**. It does not show that LP2 used key skipping, identify its key, or turn a low-scoring real-page search into a proof that all possible keys fail. The planted plaintext comes from one known English corpus, and the beam&#x27;s quadgram score rewards that corpus&#x27;s writing. The source&#x27;s own score threshold is not a family-wide error rate for an arbitrary later search.\n\n## Reproduce\n\nThe ZIP includes the exact [KJV input](exports/sources/gutenberg-10-kjv.txt), preserved from [Project Gutenberg](https://www.gutenberg.org/files/10/10-0.txt). The runner verifies its hash; the source-code checkout and NumPy are still required.\n\nThe [replay plan](experiments/records/r18-keyskip-drift-power/plan.json) pins revision `f08b20b`, the exact source files, the recovered KJV input hash, F0 gate receipt, and B output hash. It was frozen before our replay, after inspecting the published source, so it is a source replay specification rather than a fresh preregistration. With that source checkout at `SOURCE` and its exact `kjv.txt` available:\n\n```text\npython experiments/records/r18-keyskip-drift-power/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --check\npython experiments/records/r18-keyskip-drift-power/check.py\npython experiments/records/r18-keyskip-drift-power/plot.py --check\n```\n\nThe runner verifies every input hash, stages the source in a temporary directory, runs F0 and B, then compares **every non-timing field** with the archived output. It does not change the source checkout&#x27;s tracked result files. The separate checker recalculates the drift and window-survival formulas and verifies the declared length, beam, threshold and control gates.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/r18-keyskip-drift-power/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;753b3b5fcefe6e21bfdffdb5b97f644cd422628cd7affccd221999690cb0c2d3&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  }
 }</pre></article><article id="r26-derived-generators-opening-cribs"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;r26-derived-generators-opening-cribs&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -61263,6 +62046,347 @@
   &quot;article&quot;: &quot;# Does rune equality reveal a repeating alphabet?\n\nIf an encryption alphabet repeats every **L** runes, the same alphabet acts on positions `i` and `i+L`. A one-to-one alphabet preserves whether those two plaintext runes are equal. Wulfic&#x27;s Stage AE uses that invariant to check **every possible lag from 11 to 12,945** in the joined unsolved LP2 text. This is a way to test a whole family of periodic substitutions without guessing the alphabets themselves.\n\n**Result:** the source&#x27;s controlled rule excludes **10,030 of 12,935 periods**, including 1033, 1729 and 3301. It leaves **2,905 periods open**. No period has the excess equality required for a positive detection. An open period is not evidence that it is the key length.\n\n![Observed LP2 rune equality versus the lowest planted periodic-alphabet rate at periods 1033, 1729 and 3301](experiments/records/wulfic-periodic-alphabet-lags/comparison.svg)\n\n| Repeating period | LP2 equal rune pairs | LP2 rate | Lowest planted-control rate | Source verdict |\n| --- | ---: | ---: | ---: | --- |\n| 1033 | 422 / 11,923 | 3.54% | 5.65% | Excluded |\n| 1729 | 407 / 11,227 | 3.63% | 5.20% | Excluded |\n| 3301 | 326 / 9,655 | 3.38% | 5.69% | Excluded |\n\nThe figure shows *rates* for three named periods. The actual decision uses a binomial tail, not a simple line at 5%. The [complete source table](experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_lags.tsv) has the pair count, equality count, rates and verdict for every tested lag.\n\n## What the comparison means\n\nThe source assumes a periodic key selecting a fixed, **bijective** rune alphabet at each residue position. At the correct period, equal ciphertext pairs then occur exactly where plaintext pairs are equal, before any other processing. The model allows the observed anti-doublet tendency by redrawing 81% of adjacent repeat collisions in its simulated streams. Its lower-bound test asks whether the observed equality count is unusually small if the plaintext&#x27;s agreement probability is at least 5%.\n\nThe source generated 20 flat-rune null streams and 100 periodic-alphabet positive controls: ten each from Emerson prose and solved LP1 at periods 1033, 1729, 3301, 6000 and 9000. None of the 20 null streams triggered its positive rule. **All 100 positive controls passed and none was excluded** at its planted period. The full source run reported valid. This establishes that its chosen controls can distinguish these planted cases; it does not prove that every natural-language text or every periodic cipher has the same agreement rate.\n\nThe exclusion count is conditional on the source&#x27;s English/LP1 control sources, 5% minimum-agreement assumption, binomial model and archived transcription. Lag pairs share rune positions, so the binomial tail is a model-based score rather than an exact independent-trial probability. The per-lag exclusion threshold is not a correction for selecting among all 12,935 periods. A changing alphabet, non-bijective mapping, running state, word reset or additional transformation may break the equality invariant. These cases remain outside the test.\n\n## Reproduce\n\nThe two bundled tables were regenerated from the unmodified [pinned Stage AE program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ae.py) at commit `bf89d3d`; both match that revision&#x27;s output byte-for-byte. From the extracted Liberpedia repository, Python&#x27;s standard library verifies the bundle and independently recounts all 12,935 lag agreements from the 56 page text files:\n\n```text\npython experiments/records/wulfic-periodic-alphabet-lags/run.py --check\npython experiments/records/wulfic-periodic-alphabet-lags/check.py\npython experiments/records/wulfic-periodic-alphabet-lags/plot.py --check\n```\n\nThe independent checker builds a bitset for each rune, counts matches at every lag, verifies the three named lower-tail probabilities, and checks a planted periodic alphabet that must preserve equality. The [plan](experiments/records/wulfic-periodic-alphabet-lags/plan.json) pins all manuscript inputs and source revision. The optional `replay_source.py` reruns the original program from a matching checkout; it requires that repository and its NumPy dependency. Wulfic&#x27;s Stages AC and AD explore related lagged-key ideas, but their pinned `--quick` runs fail in a shared control-array shape operation before LP2 scoring. This record does not present their historical outputs as reproduced.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/wulfic-periodic-alphabet-lags/article.md&quot;,
   &quot;script_sha256&quot;: &quot;1462d5de86294c1d519cb38f6b3f2aac51af17619e5cede4fa57f6c4e6056279&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-position-alphabet-flatness-bound"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-position-alphabet-flatness-bound&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Random-alphabet flatness bound on LP2&quot;,
+  &quot;question&quot;: &quot;How many independent substitution alphabets per key class are needed before LP2&#x27;s rune frequencies cease to contradict that model?&quot;,
+  &quot;reader_question&quot;: &quot;Can LP2&#x27;s flat rune counts rule out small sets of random alphabets?&quot;,
+  &quot;summary&quot;: &quot;Exact Stage T replay reproduces a conditional lower-tail bound: at the source threshold, up to 168 effective key classes are excluded for one alphabet set, or up to 174 when each selected section gets a fresh set.&quot;,
+  &quot;finding&quot;: &quot;All declared source control gates pass. The 12,956-rune pooled statistic is 26.36; the eight-section statistic is 194.14 across 12,947 runes. Under the independent-random-permutation model, effective class counts through 168 pooled or 174 sectioned meet the source&#x27;s 0.0001 exclusion rule. No plaintext or key is identified.&quot;,
+  &quot;limitations&quot;: &quot;These are source-calibrated model bounds, not cryptographic impossibility results. The independent random-permutation assumption, solved-LP1 frequency calibration, and source section choices matter. Latin-square/additive ciphers, correlated alphabets and layers are outside scope. The reported 153/133 sensitivity is post-run, not the original decision rule.&quot;,
+  &quot;next_steps&quot;: &quot;A proposed short-key alphabet system should specify whether its alphabets are independent random permutations. Different structured tabulae require direct decryption tests or appropriate controls.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;alphabet substitution&quot;,
+    &quot;frequency analysis&quot;,
+    &quot;search bounds&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;Canonical 29-rune indices from LP2-00–55, pooled or grouped by the source&#x27;s marked sections 7–9 and 11–15. The sectioned rule omits the nine-rune section 10.&quot;,
+    &quot;procedure&quot;: &quot;Run pinned Stage T&#x27;s full synthetic gates and Monte Carlo reference; independently reconstruct manuscript rune counts and chi-square values from Liberpedia page records, check the pooled analytic boundary, and verify source decisions.&quot;,
+    &quot;parameters&quot;: &quot;200 synthetic controls each at V=29,256,1024; source alpha 0.0001; eight selected sections; 2,000,000 seeded chi-square reference draws for the sectioned model; 20 named key-class schemes.&quot;,
+    &quot;exclusions&quot;: &quot;Vigenere/Latin-square or other structured alphabets, alternate plaintext distributions, different segmentation, transposition, additional layers and any key recovery.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage T replay with independent site-corpus statistics&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;All 45 pinned source rows reproduced byte-for-byte; separate site page parser reproduces rune counts and chi-square values and independently checks the pooled boundary&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-position-alphabet-flatness-bound/run.py --check &amp;&amp; python experiments/records/wulfic-position-alphabet-flatness-bound/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Bundled checks need Python 3 standard library. Optional full pinned-source Monte Carlo replay needs NumPy and an external source checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;c117fd3e5d342bb5867dea2804826bf073fe2d4904b24c600bbd75de09e22cbb&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/plan.json&quot;,
+        &quot;sha256&quot;: &quot;6c0e7b0afb98eca08bbcc66c9302f29074cd0a3fd0d6d3428c05156729214de9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/check.py&quot;,
+        &quot;sha256&quot;: &quot;b610f192a4560a50dd8838512bd30f60ac8ca6352124902c80e8a8afb637d39f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/plot.py&quot;,
+        &quot;sha256&quot;: &quot;b507c8e8d958ccb80a24f133920021fc0dea2541e4064ea977c475f0e9de4f0f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;43c25c3e4b258c85a978c507a8003d7cf2c6401eab3912d0f233a17d4e0910ad&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;7477ee70945dd37f2f2613c6e477448aef9c55777037e759f9231965c3bf5ac7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv&quot;,
+        &quot;sha256&quot;: &quot;1b9af76a3f0ca075b7b129591cc8c37994ca480c148fac5601652883952bfb7e&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/results.json&quot;,
+        &quot;sha256&quot;: &quot;1fc23c961957d74c8d1a1b94e99720fe1b80fe5188f11e15f45b918607172f1d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;b990eedcbcee60ae96c4b60498d7a61cd01a741d62c641ab7b8ad53465b3415c&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Largest excluded effective class count for each of the source&#x27;s two independent-random-alphabet models; no decryption is implied.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage T source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_t.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned source flatness derivation&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/flatness.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned source results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_t_results.tsv&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-position-alphabet-long-keys&quot;,
+    &quot;wulfic-native-key-streams&quot;,
+    &quot;doublet-placement&quot;
+  ],
+  &quot;article&quot;: &quot;# How many independent key alphabets would LP2 need?\n\nIf each key value selects its own **unrelated, randomly chosen rune alphabet**, repeatedly using only a few key values should leave a measurable bias in the ciphertext. Wulfic&#x27;s Stage T asks how many effectively distinct key values that model needs before LP2&#x27;s nearly even rune counts cease to be surprising. “Effective” accounts for uneven key frequencies: 29 equally used values give 29 effective classes; a key dominated by a few values has fewer.\n\n**Finding:** under the source&#x27;s declared 1-in-10,000 lower-tail rule, the model is excluded through **168 effective key classes** if one set of alphabets serves the joined LP2 text. If each of eight marked sections gets a fresh set, the source&#x27;s bound is **174**. Larger class counts are **not excluded**, which is not evidence that they decrypt anything. This is a bound on one kind of random substitution scheme, not an identified cipher or a reading.\n\n![Two conditional effective-class bounds, 168 and 174](experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg)\n\nThe joined test uses all **12,956 runes** on LP2-00–55. The sectioned test uses **12,947**: source sections 7–9 and 11–15, omitting a nine-rune section at the start of LP2-15 as its rule specifies. These are [marked sections of the pinned transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt), not necessarily whole pages. The independent checker reconstructed them from Liberpedia&#x27;s page text and reproduced the source&#x27;s pooled chi-square **26.36** and eight-section sum **194.14**.\n\n## What was tested\n\nThe model gives each key value a separate random permutation of the 29-rune alphabet. A fixed value always uses its assigned permutation. The test measures the overall rune counts, without selecting a key phase or fitting plaintext words. The [source program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_t.py) calibrated the model using the rune distribution of solved LP1 text. Before inspecting the manuscript statistic, its declared gates passed on **200 generated ciphers** each at 29, 256 and 1,024 classes. At 1,024 classes, **0 of 200** controls were falsely excluded at the strict threshold.\n\nThe source also evaluated **20 specified key-class schemes**. Fifteen fell below the conditional bound, including prime values reduced modulo 29 and the source&#x27;s byte streams reduced modulo 29. Five raw-byte classings, with roughly 236–255 effective classes, were not excluded. That says only that this frequency test lacks the power to reject them. It does not validate those byte files as puzzle keys. See the [complete source table](experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv) for each classing and its effective count.\n\nThe source reports a stricter **153/133** pair after scaling the observations by a factor learned from an additive control. This was a **post-run sensitivity check**, not the declared rule that produced 168/174. An additive or Vigenère-style *Latin-square* alphabet can look flat even with few key classes; Stage T does not reject that family. It also does not cover correlated or deliberately balanced substitution alphabets, transposition, or additional layers.\n\n## Reproduce\n\nFrom the Liberpedia repository root, these standard-library checks verify the source table hash, the control decisions, independent LP2 rune counts and statistics, the analytic pooled boundary, and the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-flatness-bound/run.py --check\npython experiments/records/wulfic-position-alphabet-flatness-bound/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-flatness-bound/plan.json) pins the source revision and rules. For a complete Monte Carlo replay, including the **2,000,000-draw** sectioned reference, run the optional wrapper with a matching external checkout and NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-flatness-bound/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nIt runs the unchanged source program into a temporary file. Its **45 output rows match the pinned published results byte-for-byte**. The independent bundled check verifies the manuscript statistics and pooled analytic boundary; the sectioned Monte Carlo bound is verified by that full source replay.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-position-alphabet-flatness-bound/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;c117fd3e5d342bb5867dea2804826bf073fe2d4904b24c600bbd75de09e22cbb&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-position-alphabet-long-keys"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-position-alphabet-long-keys&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Long byte keys as position alphabets on LP2&quot;,
+  &quot;question&quot;: &quot;Do five specified source byte streams serve as synchronized substitution-alphabet labels for LP2?&quot;,
+  &quot;reader_question&quot;: &quot;Could these byte streams select the alphabet at each rune?&quot;,
+  &quot;summary&quot;: &quot;Exact Stage W replay finds no hit among 50 long-byte-key/section settings; 12 are excluded by powered controls and 38 remain untestable under the source rule.&quot;,
+  &quot;finding&quot;: &quot;The source&#x27;s negative-control gate passes. No LP2 setting reaches its +30-nat threshold; all five positive controls detect 12 settings, while 38 lack that power. The best LP2 score is 0.84 nats, below threshold.&quot;,
+  &quot;limitations&quot;: &quot;The model requires the named byte key to remain in step with each tested rune stream, with a fixed one-to-one substitution for every byte value. Short settings without detected positive controls are untestable; key skips, other phase rules and layered transformations remain open.&quot;,
+  &quot;next_steps&quot;: &quot;Any different key or resynchronization rule needs its own declared alignment and same-length positive and flat-negative controls before drawing a negative conclusion.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;byte key&quot;,
+    &quot;position alphabet&quot;,
+    &quot;control power&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_s_dependency.tsv&quot;,
+      &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv&quot;,
+      &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;Canonical GP29 rune streams for each unsolved marked section 7–15 and the joined LP2-00–55 stream; five byte keys from the source hint file, its reversal and three source byte files. The three files&#x27; puzzle-payload provenance was not independently verified.&quot;,
+    &quot;procedure&quot;: &quot;Replay the pinned Stage S LP2 dependency for these same 50 cells, then run unchanged Stage W source with its aligned controls; independently verify all control counts, phase bounds, source-score agreement and verdict rules.&quot;,
+    &quot;parameters&quot;: &quot;Five key classings × ten section alignments; all source key phases; five same-length positives and five flat negatives per cell, plus one shuffled-key LP2 null per key; anti-doublet keep 0.19; source score threshold +30 nats.&quot;,
+    &quot;exclusions&quot;: &quot;Other source Stage S classings, alternate byte encodings, offsets beyond source phases, key skips/restarts, changing alphabets, other plaintext distributions and composed ciphers.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage W replay with independent control/verdict check&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Both Stage W tables reproduced byte-for-byte against pinned published source; all 50 Stage S dependency rows agree with pinned full table; 505 controls and 50 decisions independently checked&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-position-alphabet-long-keys/run.py --check &amp;&amp; python experiments/records/wulfic-position-alphabet-long-keys/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Bundled checks use Python 3 standard library. Optional full pinned-source replay requires NumPy and an external source checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/plan.json&quot;,
+        &quot;sha256&quot;: &quot;29cb5847d0b3f1358fb085b22a230813287700d01d04a9cc5474d001328dd449&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/check.py&quot;,
+        &quot;sha256&quot;: &quot;ec4e85a32afa2d601b1c80eadcb8be103ee63fca52fd9080539a52502775ff0d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/plot.py&quot;,
+        &quot;sha256&quot;: &quot;60f74002cf3f1f8d94ee985f8f058ff1ed170812bb76557dd229d75da4aa5c81&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;87f1755e1460ba9ab925791fe08ed128169d949a75821f878b0a15a485d73159&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;ca707263972907ff71cc89a69aaa2eec1872d8023b32ec899034ec6872ef6a13&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_s_dependency.tsv&quot;,
+        &quot;sha256&quot;: &quot;dd09f42689cdd19103d3cf5c9f5c987cbe59bb3a8cf29daf9af407317e85e1c4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv&quot;,
+        &quot;sha256&quot;: &quot;18b844bd2beba500bbc97da2f7cab1e3e770badb1e1718fb6412c26da7c8943a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv&quot;,
+        &quot;sha256&quot;: &quot;ddfe7b4bcd39e20372c81c12fa2a560ae524d09c8ebfa93320870d5fafbb1aec&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/results.json&quot;,
+        &quot;sha256&quot;: &quot;a70e348d609acabf06e210a768542652ff8bbf686a8483f2a1cf243925f14514&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;4822c306fc5976d7dcee5bbf7fb3ea0b788948026cf46cb610087cf22ab1a67d&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Powered exclusions out of ten alignments per byte key. File 17/21/43 are source file names, not LP2 page numbers; unresolved settings lacked positive-control power.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Wulfic Stage W at pinned revision&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Stage S score dependency&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned published Stage W results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-native-key-streams&quot;,
+    &quot;wulfic-number-key-streams&quot;
+  ],
+  &quot;article&quot;: &quot;# Could earlier Cicada bytes select LP2&#x27;s substitution alphabet?\n\nOne proposed way to use another file as a key is to let **each byte select a hidden rune alphabet**. The same byte selects the same alphabet whenever it returns. Wulfic&#x27;s Stage W tests that model without guessing the alphabets: it asks whether runes under a repeated byte label show the repetitions expected of text. It checks five specified byte streams at every source phase, once for each of nine marked sections and once across the joined text of **LP2-00–55**.\n\n**Finding:** the source&#x27;s control gate passes. None of its **50 key/alignment settings** reaches the +30-nat detection threshold. **Twelve** have enough positive-control power to exclude this exact model; **38** are untestable, so their low LP2 scores do not count as exclusions. The best LP2 score is **+0.84**, using source byte file `page_17.bin` against the section covering **LP2-23–26**; that setting is untestable. No reading is produced.\n\n![Stage W decisions for five key sources, ten alignments per source](experiments/records/wulfic-position-alphabet-long-keys/comparison.svg)\n\nThe figure&#x27;s “Page 17/21/43” labels name [byte files in the source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/outguess), **not** manuscript pages LP2-17/21/43. Their origin as puzzle payloads has not been independently verified here. The marked sections follow the [`$` boundaries in the source transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt). We checked its rune sequence against Liberpedia&#x27;s page text: all **56** LP2 pages match rune for rune. Relevant boundaries are: section 11, the last 150 runes of LP2-15 through LP2-22; section 12, LP2-23–26; and section 15, LP2-40–55. Section 10 contains only the first nine runes of LP2-15, so these sections are not always whole-page ranges.\n\n| Source byte stream | Excluded alignments | Untestable |\n| --- | --- | ---: |\n| Wisdom hint | Joined LP2-00–55; LP2-40–55 | 8 |\n| Wisdom hint, reversed | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_17.bin` | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_21.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n| Source file `page_43.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n\nThese are **five source keys under one method**, evaluated at ten alignments. They are not fifty unrelated solving ideas. The [complete candidate table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv) gives every score, phase and verdict.\n\n## Why the controls matter\n\nThe score uses rune repetitions within each byte-selected class. It averages a likelihood ratio over **all possible starting phases** of the named byte key; the best individual phase is shown separately in the table, but it is **not** the decision score. The source regards a mean score of at least **+30 nats** as a hit.\n\nFor each key and alignment, Stage W makes five synthetic messages encrypted by that exact kind of byte-selected alphabet and five flat negative messages made with an unrelated additive key. It also scores one LP2 stream against each shuffled key. If any flat negative or shuffled-key null reaches +30, the whole run is void. The highest such negative here is **+0.64**. A specific key/alignment is called excluded only if **all five** same-length positives reach +30 while LP2 does not. This is why the many short sections remain untestable, even though their LP2 scores are low. The [control table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv) shows all **505** controls.\n\nThe earlier Stage S used the same LP2 score but its original negative-control design made that run void. We regenerated just the **50 Stage S LP2 scores** that Stage W requires. Each row matches the corresponding row in the pinned source&#x27;s full 200-row Stage S table, and all 50 agree with the Stage W candidates. This numerical dependency does **not** revive Stage S&#x27;s invalid conclusion; Stage W&#x27;s own corrected controls decide what can be said here.\n\nThe result applies to these raw byte streams, their source-defined phase search and a key that stays in step. Skips, resets, another key source, a changing alphabet or an additional cipher layer are outside the tested model.\n\n## Reproduce\n\nFrom the Liberpedia repository root, Python&#x27;s standard library checks the three bundled tables, recalculates all source verdicts and verifies the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/run.py --check\npython experiments/records/wulfic-position-alphabet-long-keys/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-long-keys/plan.json) pins the source revision, byte-file hashes, all settings and the decision rules. The two Stage W tables were regenerated with the unmodified [pinned Stage W program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py) and match its published source files **byte-for-byte**. The Stage S subset was regenerated with the [pinned score function](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py). To repeat the full calculation from a matching external checkout with NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThat wrapper verifies the pinned inputs, regenerates the Stage S dependency and the two Stage W tables in a temporary directory, then compares them byte-for-byte with the bundled files. The source code remains in its original repository.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;replay&quot;,
     &quot;label&quot;: &quot;Method replay&quot;,

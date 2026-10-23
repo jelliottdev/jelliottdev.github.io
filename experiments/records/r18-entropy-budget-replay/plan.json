@@ -1,0 +1,29 @@
+{
+  "schema": "r18-entropy-budget-source-replay-plan-v1",
+  "frozen_on": "2026-10-23",
+  "plan_character": "Exact source replay planned after reading published source, not independent preregistration",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_input_sha256": {
+    "analysis/round18/L2-filter-leak/c_budget.py": "b159911369928865ddf628e5880bd11e6f22f0ee90cc97a32664395b51bf8d0e",
+    "analysis/round18/L2-filter-leak/fastbeam.py": "2f61c708bdcb1bfcfeb8ecd6f10d2918648bdb3ed3ba2a770d3a02b6c31251e2",
+    "analysis/round18/L2-filter-leak/filter_models.py": "940d44b8eeea4f4f98002681a89a71997597dfecd3c487aa34fd64df7ec7b761",
+    "analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "analysis/round11/lib_numchannel.py": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5",
+    "analysis/run_stats.py": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+    "data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "src/lp/autokey.py": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125",
+    "src/lp/ciphers.py": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+    "src/lp/corpus.py": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+    "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "src/lp/solve.py": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3",
+    "src/lp/stats.py": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+  },
+  "external_kjv_sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+  "original_result_sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5",
+  "source_command": "python c_budget.py",
+  "coverage": "All source calculations: 12,956-rune ciphertext Markov entropy under fitted repeat rate; KJV GP29 order0\u20135 400,000/200,000 sequential train/test cross-entropy; 1,000 seeded 200-rune constant and English plaintext filter simulations; five source budget rows and four sensitivity rows.",
+  "comparison": "Exact source output field equality; assess entropy-budget inference separately without changing source outputs.",
+  "interpretation_gate": "Source H(C) from iid uniform-key model cannot be silently carried into low-entropy deterministic-key rows; H(P)+H(K)-H(C) is not an iff uniqueness test."
+}

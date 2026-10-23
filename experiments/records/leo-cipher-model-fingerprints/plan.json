@@ -1,0 +1,26 @@
+{
+  "schema": "liberpedia-frozen-plan-v1",
+  "source": "Leo-Y-Zhang/LiberPrimusAnalysis",
+  "revision": "a32bdc0e06ea58532fbaf4329acae4a0b1020513",
+  "question": "Which of the source's 23 specified synthetic generators reproduce the observed LP2 summary statistics when applied to the same 2979-rune solved plaintext?",
+  "source_script_sha256": "c6d2f570e2c72e9541dfd64626039beee8519815cd7126a2d4dfd7f7c56afc04",
+  "source_lp_sha256": "b516c817679e035a96e1a4014d16ab2b13e8d8dcbdfe98caf20a51568bd070f5",
+  "source_dataset_sha256": "5a564c8b1b89c3e09884fc4a6c83faa58cc533cee000430e9bca835f6bb63114",
+  "source_receipt_sha256": "adb8f2bba67a3e61953f03f6196fdbd3e795c048531c202f5f9e569f0766ec7c",
+  "baseline_rune_stream_sha256": "9fc2afd7e1f64bdf19416ada024e0fe6742ec36ed39ca5829e4e99ad531a3edb",
+  "baseline_rune_words_sha256": "d555e99c598fed61b215994b1e032046aa227559fef1361103b267fae6fef577",
+  "source_random_seed": 3301,
+  "model_count": 23,
+  "statistics": ["adjacent_equal_rate", "normalized_ioc", "chi_square_uniform", "lag_two_equal_rate"],
+  "extension_declared_before_scoring": {
+    "name": "29-offset calibration of the source's c_i=c_(i-1)+p_i+1 row",
+    "scope": "Use the same solved plaintext and compare all additive constants b=0..28 in c_i=c_(i-1)+p_i+b mod29. This follows up the source's selected b=1 after observing its near match, so it is descriptive, not a preregistered significance test.",
+    "identity": "For i>0, c_i=c_(i-1) exactly when p_i=-b mod29. The count is therefore the plaintext frequency of rune -b after the first position.",
+    "comparison": "Absolute difference between each synthetic adjacent-equal rate and the observed LP2 adjacent-equal rate; report the complete 29-row ledger and rank of b=1."
+  },
+  "exclusions": [
+    "No attempt to recover LP2 plaintext from any generator.",
+    "No general rejection of Vigenere, autokey, running keys, or chain ciphers from one plaintext sample.",
+    "The source's chi-square target is scaled by the sample-length ratio; do not interpret that scaled value as a chi-square significance comparison."
+  ]
+}

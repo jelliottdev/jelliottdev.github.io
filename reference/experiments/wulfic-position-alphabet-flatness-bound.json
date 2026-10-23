@@ -1,0 +1,167 @@
+{
+  "id": "wulfic-position-alphabet-flatness-bound",
+  "status": "published",
+  "title": "Random-alphabet flatness bound on LP2",
+  "question": "How many independent substitution alphabets per key class are needed before LP2's rune frequencies cease to contradict that model?",
+  "reader_question": "Can LP2's flat rune counts rule out small sets of random alphabets?",
+  "summary": "Exact Stage T replay reproduces a conditional lower-tail bound: at the source threshold, up to 168 effective key classes are excluded for one alphabet set, or up to 174 when each selected section gets a fresh set.",
+  "finding": "All declared source control gates pass. The 12,956-rune pooled statistic is 26.36; the eight-section statistic is 194.14 across 12,947 runes. Under the independent-random-permutation model, effective class counts through 168 pooled or 174 sectioned meet the source's 0.0001 exclusion rule. No plaintext or key is identified.",
+  "limitations": "These are source-calibrated model bounds, not cryptographic impossibility results. The independent random-permutation assumption, solved-LP1 frequency calibration, and source section choices matter. Latin-square/additive ciphers, correlated alphabets and layers are outside scope. The reported 153/133 sensitivity is post-run, not the original decision rule.",
+  "next_steps": "A proposed short-key alphabet system should specify whether its alphabets are independent random permutations. Different structured tabulae require direct decryption tests or appropriate controls.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "alphabet substitution",
+    "frequency analysis",
+    "search bounds"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv"
+    ],
+    "representation": "Canonical 29-rune indices from LP2-00–55, pooled or grouped by the source's marked sections 7–9 and 11–15. The sectioned rule omits the nine-rune section 10.",
+    "procedure": "Run pinned Stage T's full synthetic gates and Monte Carlo reference; independently reconstruct manuscript rune counts and chi-square values from Liberpedia page records, check the pooled analytic boundary, and verify source decisions.",
+    "parameters": "200 synthetic controls each at V=29,256,1024; source alpha 0.0001; eight selected sections; 2,000,000 seeded chi-square reference draws for the sectioned model; 20 named key-class schemes.",
+    "exclusions": "Vigenere/Latin-square or other structured alphabets, alternate plaintext distributions, different segmentation, transposition, additional layers and any key recovery."
+  },
+  "review": {
+    "kind": "exact public-source Stage T replay with independent site-corpus statistics",
+    "retested_on": "2026-10-23",
+    "reviewer": "All 45 pinned source rows reproduced byte-for-byte; separate site page parser reproduces rune counts and chi-square values and independently checks the pooled boundary",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-position-alphabet-flatness-bound/run.py --check && python experiments/records/wulfic-position-alphabet-flatness-bound/plot.py --check",
+    "environment": "Bundled checks need Python 3 standard library. Optional full pinned-source Monte Carlo replay needs NumPy and an external source checkout.",
+    "script": "experiments/records/wulfic-position-alphabet-flatness-bound/run.py",
+    "script_sha256": "c117fd3e5d342bb5867dea2804826bf073fe2d4904b24c600bbd75de09e22cbb",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/plan.json",
+        "sha256": "6c0e7b0afb98eca08bbcc66c9302f29074cd0a3fd0d6d3428c05156729214de9"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/check.py",
+        "sha256": "b610f192a4560a50dd8838512bd30f60ac8ca6352124902c80e8a8afb637d39f"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/plot.py",
+        "sha256": "b507c8e8d958ccb80a24f133920021fc0dea2541e4064ea977c475f0e9de4f0f"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/replay_source.py",
+        "sha256": "43c25c3e4b258c85a978c507a8003d7cf2c6401eab3912d0f233a17d4e0910ad"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/make_record.py",
+        "sha256": "7477ee70945dd37f2f2613c6e477448aef9c55777037e759f9231965c3bf5ac7"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv",
+        "sha256": "1b9af76a3f0ca075b7b129591cc8c37994ca480c148fac5601652883952bfb7e"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/results.json",
+        "sha256": "1fc23c961957d74c8d1a1b94e99720fe1b80fe5188f11e15f45b918607172f1d"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg",
+        "sha256": "b990eedcbcee60ae96c4b60498d7a61cd01a741d62c641ab7b8ad53465b3415c"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg",
+      "caption": "Largest excluded effective class count for each of the source's two independent-random-alphabet models; no decryption is implied."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic Stage T source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_t.py"
+    },
+    {
+      "label": "Pinned source flatness derivation",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/flatness.py"
+    },
+    {
+      "label": "Pinned source results",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_t_results.tsv"
+    }
+  ],
+  "related": [
+    "wulfic-position-alphabet-long-keys",
+    "wulfic-native-key-streams",
+    "doublet-placement"
+  ],
+  "article": "# How many independent key alphabets would LP2 need?\n\nIf each key value selects its own **unrelated, randomly chosen rune alphabet**, repeatedly using only a few key values should leave a measurable bias in the ciphertext. Wulfic's Stage T asks how many effectively distinct key values that model needs before LP2's nearly even rune counts cease to be surprising. “Effective” accounts for uneven key frequencies: 29 equally used values give 29 effective classes; a key dominated by a few values has fewer.\n\n**Finding:** under the source's declared 1-in-10,000 lower-tail rule, the model is excluded through **168 effective key classes** if one set of alphabets serves the joined LP2 text. If each of eight marked sections gets a fresh set, the source's bound is **174**. Larger class counts are **not excluded**, which is not evidence that they decrypt anything. This is a bound on one kind of random substitution scheme, not an identified cipher or a reading.\n\n![Two conditional effective-class bounds, 168 and 174](experiments/records/wulfic-position-alphabet-flatness-bound/comparison.svg)\n\nThe joined test uses all **12,956 runes** on LP2-00–55. The sectioned test uses **12,947**: source sections 7–9 and 11–15, omitting a nine-rune section at the start of LP2-15 as its rule specifies. These are [marked sections of the pinned transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt), not necessarily whole pages. The independent checker reconstructed them from Liberpedia's page text and reproduced the source's pooled chi-square **26.36** and eight-section sum **194.14**.\n\n## What was tested\n\nThe model gives each key value a separate random permutation of the 29-rune alphabet. A fixed value always uses its assigned permutation. The test measures the overall rune counts, without selecting a key phase or fitting plaintext words. The [source program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_t.py) calibrated the model using the rune distribution of solved LP1 text. Before inspecting the manuscript statistic, its declared gates passed on **200 generated ciphers** each at 29, 256 and 1,024 classes. At 1,024 classes, **0 of 200** controls were falsely excluded at the strict threshold.\n\nThe source also evaluated **20 specified key-class schemes**. Fifteen fell below the conditional bound, including prime values reduced modulo 29 and the source's byte streams reduced modulo 29. Five raw-byte classings, with roughly 236–255 effective classes, were not excluded. That says only that this frequency test lacks the power to reject them. It does not validate those byte files as puzzle keys. See the [complete source table](experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv) for each classing and its effective count.\n\nThe source reports a stricter **153/133** pair after scaling the observations by a factor learned from an additive control. This was a **post-run sensitivity check**, not the declared rule that produced 168/174. An additive or Vigenère-style *Latin-square* alphabet can look flat even with few key classes; Stage T does not reject that family. It also does not cover correlated or deliberately balanced substitution alphabets, transposition, or additional layers.\n\n## Reproduce\n\nFrom the Liberpedia repository root, these standard-library checks verify the source table hash, the control decisions, independent LP2 rune counts and statistics, the analytic pooled boundary, and the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-flatness-bound/run.py --check\npython experiments/records/wulfic-position-alphabet-flatness-bound/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-flatness-bound/plan.json) pins the source revision and rules. For a complete Monte Carlo replay, including the **2,000,000-draw** sectioned reference, run the optional wrapper with a matching external checkout and NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-flatness-bound/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nIt runs the unchanged source program into a temporary file. Its **45 output rows match the pinned published results byte-for-byte**. The independent bundled check verifies the manuscript statistics and pooled analytic boundary; the sectioned Monte Carlo bound is verified by that full source replay.\n",
+  "article_path": "experiments/records/wulfic-position-alphabet-flatness-bound/article.md",
+  "script_sha256": "c117fd3e5d342bb5867dea2804826bf073fe2d4904b24c600bbd75de09e22cbb",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

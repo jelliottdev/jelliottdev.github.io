@@ -1,0 +1,40 @@
+{
+  "schema": "liberpedia-wulfic-stage-w-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "stage_s_sha256": "6ea9b7383b289b4f07f687d5346fe016ee49c4bb30169cf67a8b311e2b2c4e91",
+    "stage_w_sha256": "5df84192f29e141a1e310854a9de009151ab3b5efec39cc28fc23defe504b064",
+    "alphabet_scorer_sha256": "64917029b624639bd84b7f3ee0a448254b80fdf25678c939f7961e68b269ff0b",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47",
+    "byte_key_sources": {
+      "wisdom_hint.txt": "7e5ec097728197f5c0dba0729980565658fba486965809ffa25e3910a31c385a",
+      "page_17.bin": "cbf1ccddc6c4bb2fd96d449e0667eb5be6c2a542de4e0f43e7ca188df7f289b1",
+      "page_21.bin": "21e26fbcfd0f8cc5706ca4228245854703efa143173b793066ab3a2577f40db3",
+      "page_43.bin": "0a318b3e9e195fdea9e941b7b458ae9cddef5147eec646b6da231b7d6615fe43"
+    }
+  },
+  "scope": {
+    "model": "Each named raw byte value selects an unknown fixed GP29 alphabet. The key remains synchronized; source phase-averaged Dirichlet-multinomial score is label-free.",
+    "source_dependency": "Exactly the 50 Stage S LP2 key/alignment rows required by Stage W were regenerated with pinned Stage S _decode. Stage S original broad run was void; these rows are only a numerical dependency, not a valid Stage S conclusion.",
+    "grid": "Five raw-byte key classings from wisdom hint forward/reverse and page_17/page_21/page_43 payloads. Ten alignments: each section 7 through 15 and joined 7-15. All source phases per key.",
+    "controls": "Five same-length random-alphabet positives and five flat additive negatives per key/alignment (500), plus one shuffled-key LP2 null per key (5); anti-doublet keep=0.19.",
+    "decision": "VOID if any flat negative or null mean score >=30. A setting is testable only if all five positives score >=30; PASS if its LP2 score >=30, otherwise EXCLUDED if testable, else untestable.",
+    "exclusions": "Other Stage S classings, key skips/resets, different letter mappings, layers, alternate transcriptions and control sources."
+  },
+  "inputs": [
+    {
+      "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_s_dependency.tsv",
+      "sha256": "dd09f42689cdd19103d3cf5c9f5c987cbe59bb3a8cf29daf9af407317e85e1c4"
+    },
+    {
+      "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv",
+      "sha256": "18b844bd2beba500bbc97da2f7cab1e3e770badb1e1718fb6412c26da7c8943a"
+    },
+    {
+      "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv",
+      "sha256": "ddfe7b4bcd39e20372c81c12fa2a560ae524d09c8ebfa93320870d5fafbb1aec"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "id": "wulfic-position-alphabet-long-keys",
+  "status": "published",
+  "title": "Long byte keys as position alphabets on LP2",
+  "question": "Do five specified source byte streams serve as synchronized substitution-alphabet labels for LP2?",
+  "reader_question": "Could these byte streams select the alphabet at each rune?",
+  "summary": "Exact Stage W replay finds no hit among 50 long-byte-key/section settings; 12 are excluded by powered controls and 38 remain untestable under the source rule.",
+  "finding": "The source's negative-control gate passes. No LP2 setting reaches its +30-nat threshold; all five positive controls detect 12 settings, while 38 lack that power. The best LP2 score is 0.84 nats, below threshold.",
+  "limitations": "The model requires the named byte key to remain in step with each tested rune stream, with a fixed one-to-one substitution for every byte value. Short settings without detected positive controls are untestable; key skips, other phase rules and layered transformations remain open.",
+  "next_steps": "Any different key or resynchronization rule needs its own declared alignment and same-length positive and flat-negative controls before drawing a negative conclusion.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "byte key",
+    "position alphabet",
+    "control power"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-position-alphabet-long-keys/source-stage_s_dependency.tsv",
+      "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv",
+      "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv"
+    ],
+    "representation": "Canonical GP29 rune streams for each unsolved marked section 7–15 and the joined LP2-00–55 stream; five byte keys from the source hint file, its reversal and three source byte files. The three files' puzzle-payload provenance was not independently verified.",
+    "procedure": "Replay the pinned Stage S LP2 dependency for these same 50 cells, then run unchanged Stage W source with its aligned controls; independently verify all control counts, phase bounds, source-score agreement and verdict rules.",
+    "parameters": "Five key classings × ten section alignments; all source key phases; five same-length positives and five flat negatives per cell, plus one shuffled-key LP2 null per key; anti-doublet keep 0.19; source score threshold +30 nats.",
+    "exclusions": "Other source Stage S classings, alternate byte encodings, offsets beyond source phases, key skips/restarts, changing alphabets, other plaintext distributions and composed ciphers."
+  },
+  "review": {
+    "kind": "exact public-source Stage W replay with independent control/verdict check",
+    "retested_on": "2026-10-23",
+    "reviewer": "Both Stage W tables reproduced byte-for-byte against pinned published source; all 50 Stage S dependency rows agree with pinned full table; 505 controls and 50 decisions independently checked",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-position-alphabet-long-keys/run.py --check && python experiments/records/wulfic-position-alphabet-long-keys/plot.py --check",
+    "environment": "Bundled checks use Python 3 standard library. Optional full pinned-source replay requires NumPy and an external source checkout.",
+    "script": "experiments/records/wulfic-position-alphabet-long-keys/run.py",
+    "script_sha256": "993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/plan.json",
+        "sha256": "29cb5847d0b3f1358fb085b22a230813287700d01d04a9cc5474d001328dd449"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/check.py",
+        "sha256": "ec4e85a32afa2d601b1c80eadcb8be103ee63fca52fd9080539a52502775ff0d"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/plot.py",
+        "sha256": "60f74002cf3f1f8d94ee985f8f058ff1ed170812bb76557dd229d75da4aa5c81"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/replay_source.py",
+        "sha256": "87f1755e1460ba9ab925791fe08ed128169d949a75821f878b0a15a485d73159"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/make_record.py",
+        "sha256": "ca707263972907ff71cc89a69aaa2eec1872d8023b32ec899034ec6872ef6a13"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_s_dependency.tsv",
+        "sha256": "dd09f42689cdd19103d3cf5c9f5c987cbe59bb3a8cf29daf9af407317e85e1c4"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv",
+        "sha256": "18b844bd2beba500bbc97da2f7cab1e3e770badb1e1718fb6412c26da7c8943a"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv",
+        "sha256": "ddfe7b4bcd39e20372c81c12fa2a560ae524d09c8ebfa93320870d5fafbb1aec"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/results.json",
+        "sha256": "a70e348d609acabf06e210a768542652ff8bbf686a8483f2a1cf243925f14514"
+      },
+      {
+        "path": "experiments/records/wulfic-position-alphabet-long-keys/comparison.svg",
+        "sha256": "4822c306fc5976d7dcee5bbf7fb3ea0b788948026cf46cb610087cf22ab1a67d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-position-alphabet-long-keys/comparison.svg",
+      "caption": "Powered exclusions out of ten alignments per byte key. File 17/21/43 are source file names, not LP2 page numbers; unresolved settings lacked positive-control power."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wulfic Stage W at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py"
+    },
+    {
+      "label": "Pinned Stage S score dependency",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py"
+    },
+    {
+      "label": "Pinned published Stage W results",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+    }
+  ],
+  "related": [
+    "wulfic-native-key-streams",
+    "wulfic-number-key-streams"
+  ],
+  "article": "# Could earlier Cicada bytes select LP2's substitution alphabet?\n\nOne proposed way to use another file as a key is to let **each byte select a hidden rune alphabet**. The same byte selects the same alphabet whenever it returns. Wulfic's Stage W tests that model without guessing the alphabets: it asks whether runes under a repeated byte label show the repetitions expected of text. It checks five specified byte streams at every source phase, once for each of nine marked sections and once across the joined text of **LP2-00–55**.\n\n**Finding:** the source's control gate passes. None of its **50 key/alignment settings** reaches the +30-nat detection threshold. **Twelve** have enough positive-control power to exclude this exact model; **38** are untestable, so their low LP2 scores do not count as exclusions. The best LP2 score is **+0.84**, using source byte file `page_17.bin` against the section covering **LP2-23–26**; that setting is untestable. No reading is produced.\n\n![Stage W decisions for five key sources, ten alignments per source](experiments/records/wulfic-position-alphabet-long-keys/comparison.svg)\n\nThe figure's “Page 17/21/43” labels name [byte files in the source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/outguess), **not** manuscript pages LP2-17/21/43. Their origin as puzzle payloads has not been independently verified here. The marked sections follow the [`$` boundaries in the source transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt). We checked its rune sequence against Liberpedia's page text: all **56** LP2 pages match rune for rune. Relevant boundaries are: section 11, the last 150 runes of LP2-15 through LP2-22; section 12, LP2-23–26; and section 15, LP2-40–55. Section 10 contains only the first nine runes of LP2-15, so these sections are not always whole-page ranges.\n\n| Source byte stream | Excluded alignments | Untestable |\n| --- | --- | ---: |\n| Wisdom hint | Joined LP2-00–55; LP2-40–55 | 8 |\n| Wisdom hint, reversed | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_17.bin` | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_21.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n| Source file `page_43.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n\nThese are **five source keys under one method**, evaluated at ten alignments. They are not fifty unrelated solving ideas. The [complete candidate table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv) gives every score, phase and verdict.\n\n## Why the controls matter\n\nThe score uses rune repetitions within each byte-selected class. It averages a likelihood ratio over **all possible starting phases** of the named byte key; the best individual phase is shown separately in the table, but it is **not** the decision score. The source regards a mean score of at least **+30 nats** as a hit.\n\nFor each key and alignment, Stage W makes five synthetic messages encrypted by that exact kind of byte-selected alphabet and five flat negative messages made with an unrelated additive key. It also scores one LP2 stream against each shuffled key. If any flat negative or shuffled-key null reaches +30, the whole run is void. The highest such negative here is **+0.64**. A specific key/alignment is called excluded only if **all five** same-length positives reach +30 while LP2 does not. This is why the many short sections remain untestable, even though their LP2 scores are low. The [control table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv) shows all **505** controls.\n\nThe earlier Stage S used the same LP2 score but its original negative-control design made that run void. We regenerated just the **50 Stage S LP2 scores** that Stage W requires. Each row matches the corresponding row in the pinned source's full 200-row Stage S table, and all 50 agree with the Stage W candidates. This numerical dependency does **not** revive Stage S's invalid conclusion; Stage W's own corrected controls decide what can be said here.\n\nThe result applies to these raw byte streams, their source-defined phase search and a key that stays in step. Skips, resets, another key source, a changing alphabet or an additional cipher layer are outside the tested model.\n\n## Reproduce\n\nFrom the Liberpedia repository root, Python's standard library checks the three bundled tables, recalculates all source verdicts and verifies the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/run.py --check\npython experiments/records/wulfic-position-alphabet-long-keys/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-long-keys/plan.json) pins the source revision, byte-file hashes, all settings and the decision rules. The two Stage W tables were regenerated with the unmodified [pinned Stage W program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py) and match its published source files **byte-for-byte**. The Stage S subset was regenerated with the [pinned score function](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py). To repeat the full calculation from a matching external checkout with NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThat wrapper verifies the pinned inputs, regenerates the Stage S dependency and the two Stage W tables in a temporary directory, then compares them byte-for-byte with the bundled files. The source code remains in its original repository.\n",
+  "article_path": "experiments/records/wulfic-position-alphabet-long-keys/article.md",
+  "script_sha256": "993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

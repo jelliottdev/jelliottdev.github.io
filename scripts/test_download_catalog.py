@@ -18,6 +18,14 @@ class DownloadScopeTests(unittest.TestCase):
     def test_current_metadata_matches_source_records(self):
         self.assertEqual(verify_scopes(ROOT, self.records), [])
 
+    def test_unfinished_intake_is_not_a_public_download(self):
+        for item in self.records:
+            if item['role'] != 'Supplied-source audit data':
+                continue
+            audit = json.loads((ROOT / item['path']).read_text(encoding='utf-8'))
+            self.assertNotIn(audit.get('publication_status'), ('draft', 'internal'))
+            self.assertNotIn('reconciliation-proposals', audit.get('schema', ''))
+
     def test_missing_page_is_detected(self):
         self.record('exports/rune-ioc.csv')['pages'].pop()
         self.assertTrue(any('page scope' in error for error in verify_scopes(ROOT, self.records)))

@@ -1,0 +1,22 @@
+{
+  "schema": "liberpedia-wulfic-stage-t-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "source_script": "tools/run_stage_t.py",
+    "source_script_sha256": "a390194325bd8bc969200f37da86cfb341037042c3bad457fcfcde478e18477d",
+    "flatness_module_sha256": "b404d3c76c930c171adfac1c40631a027a725cb82453fbb639a081417b676c79",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47"
+  },
+  "rule": "Position i uses an unknown independently random GP29 permutation indexed by key class k_i. The test uses marginal rune frequencies, so it does not require guessing the permutations or key phase.",
+  "corpus": "Canonical LP2-00–55 runes. Pooled statistic uses 12,956 runes; sectioned statistic uses source segments 7–9 and 11–15 (12,947 runes), omitting nine-rune segment 10 by the source's declared rule.",
+  "solved_plaintext_coincidence": 0.06223566835765247,
+  "control_gate": "Before LP2: 200 synthetic ciphers each at V=29,256,1024; mean chi-square within 15% of the model prediction. At true V=1024, zero of 200 hard false exclusions at P<=0.0001 and <=10% at P<=0.05. A uniform-additive-key structural control is reported separately.",
+  "decision": "For effective key classes V, exclude that specified independent-random-permutation model when the lower-tail P of the observed chi-square is <=0.0001. Pooled model uses one random tabula; sectioned model draws a fresh tabula for each of eight selected sections, evaluated against 2,000,000 seeded chi-square draws.",
+  "post_run_diagnostic": "The source additionally scales observed statistics by the additive-control mean/28=0.939 after seeing the source results. This is a sensitivity calculation, not the declared gate or preregistered exclusion rule.",
+  "limitations": "The bound is conditional on independent random substitution alphabets drawn by key class and the solved LP1 plaintext coincidence used for calibration. It does not test Vigenere/Latin-square tabulae, arbitrary correlated alphabets, transposition, or cipher layers.",
+  "inputs": [
+    {"path": "experiments/records/wulfic-position-alphabet-flatness-bound/source-stage_t_results.tsv", "sha256": "1b9af76a3f0ca075b7b129591cc8c37994ca480c148fac5601652883952bfb7e"}
+  ]
+}
