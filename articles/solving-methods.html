@@ -16,7 +16,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-polyalphabetic"><h3><a href="#/wiki/vigenere">Repeating-key and polyalphabetic ciphers</a></h3><p>Change the substitution according to position in a repeated key.</p>
-<details><summary>27 related records</summary><ul>
+<details><summary>29 related records</summary><ul>
 <li><a href="#/experiments/lp2-known-vigenere-keys">LP2-00–55: two known Vigenère keys and nine openings</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/alberti-branch-arithmetic">Alberti branch proposal: LP2-39 row and modulo-31 arithmetic</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/public-wordlist-vigenere">Public 43-key Vigenère sweep</a> <span class="small muted">· Method replay</span></li>
@@ -44,6 +44,8 @@
 <li><a href="#/experiments/wulfic-periodic-word-crib-votes">Can word cribs predict a periodic key?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-p21-literal-f-masks">Pausing the key at selected F runes</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/dukotah-reading-direction-cipher-grid">Reading directions followed by simple ciphers</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/dukotah-word-boundary-key-clocks">Word boundaries as key clocks</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/wulfic-separator-clock-alberti">A rotating alphabet with a separator clock</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-fractionation"><h3><a href="#/wiki/method-fractionation">Fractionation and coordinate alphabets</a></h3><p>Split symbols into coordinates, rearrange the components, then regroup.</p>
@@ -65,7 +67,7 @@
 </div></details></section>
 <section class="method-group"><h2 id="keys-sequences-and-state">Keys, sequences and state</h2><details><summary>10 method families</summary><div class="method-family-list">
 <section class="method-family" id="family-number-streams"><h3><a href="#/wiki/method-arithmetic-streams">Arithmetic keystreams</a></h3><p>Generate shifts from a declared numerical sequence.</p>
-<details><summary>17 related records</summary><ul>
+<details><summary>18 related records</summary><ul>
 <li><a href="#/experiments/lp2-prime-minus-one-openings">LP2-00–55: prime-minus-one shifts and known openings</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/lp2-prime-openings">LP2-00–55: ordinary primes instead of primes minus one</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/lp2-fibonacci-openings">LP2-00–55: Fibonacci shifts and repeated phases</a> <span class="small muted">· Bounded solving test</span></li>
@@ -83,10 +85,11 @@
 <li><a href="#/experiments/wulfic-keyword-prime-layer-grid">Keywords paired with prime-derived streams</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-systematic-stream-source">Prime streams and a short feedback key</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/dukotah-reading-direction-cipher-grid">Reading directions followed by simple ciphers</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/gp-prime-plaintext-feedback">GP prime values as a plaintext autokey</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-feedback"><h3><a href="#/wiki/method-feedback">Autokey and ciphertext feedback</a></h3><p>Use earlier plaintext or ciphertext to update later decoding state.</p>
-<details><summary>18 related records</summary><ul>
+<details><summary>20 related records</summary><ul>
 <li><a href="#/experiments/doublet-context">Ciphertext symbols and differences around LP2 doublets</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/ea-difference-independence">Nonzero difference uniformity and order under EA-stalling keys</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/ea-frequency-control">Solved GP EA frequency versus unsolved LP2 doublets</a> <span class="small muted">· Control</span></li>
@@ -105,6 +108,8 @@
 <li><a href="#/experiments/wulfic-early-keyspace-diagnostics">Four early keyspace checks on LP2</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-lfsr-singleton-constraints">Can single-rune words pin down an LFSR key?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-autokey-seed-families">Short seeds for autokey ciphers</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/gp-prime-plaintext-feedback">GP prime values as a plaintext autokey</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/dukotah-word-boundary-key-clocks">Word boundaries as key clocks</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-seeded"><h3><a href="#/wiki/method-seeded-generators">Seeded generators and generated keystreams</a></h3><p>Generate a stream from a bounded seed space with explicit output conversion and alignment.</p>
@@ -148,7 +153,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-interruptions"><h3><a href="#/wiki/interruptions">Keystream interruptions and reset rules</a></h3><p>Specify when key or feedback state pauses, advances or restarts.</p>
-<details><summary>16 related records</summary><ul>
+<details><summary>18 related records</summary><ul>
 <li><a href="#/experiments/decoder-skip-controls">Can a correct key fail under the wrong alignment rule?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/im-near-f-markers">I/M rune proximity to F interruptions</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/f-delete-lag13">Delete F runes, then test lag-13 repeats</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -165,6 +170,8 @@
 <li><a href="#/experiments/r18-skip-channel-power">Can inferred key skips distinguish a correct key?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-doublet-leak-h-o">What separates LP2’s surviving doublets?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-p21-literal-f-masks">Pausing the key at selected F runes</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/dukotah-word-boundary-key-clocks">Word boundaries as key clocks</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/wulfic-separator-clock-alberti">A rotating alphabet with a separator clock</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-alignment"><h3><a href="#/wiki/key-alignment">Offsets and key alignment</a></h3><p>Search starting positions and a bounded set of alignment changes.</p>
@@ -201,13 +208,14 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-moving-alphabets"><h3><a href="#/wiki/method-moving-alphabets">Moving disks, rotors and evolving alphabets</a></h3><p>Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping.</p>
-<details><summary>6 related records</summary><ul>
+<details><summary>7 related records</summary><ul>
 <li><a href="#/experiments/wholepage-progressive-caesar">Progressive Caesar shifts on complete LP2 pages</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/wulfic-position-alphabet-long-keys">Long byte keys as position alphabets on LP2</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-position-alphabet-flatness-bound">Random-alphabet flatness bound on LP2</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-keyword-quagmire-models">Named keyword Quagmire alphabets on LP2</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-quagmire-random-alphabets">Random Quagmire alphabet families on LP2</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-early-keyspace-diagnostics">Four early keyspace checks on LP2</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/wulfic-separator-clock-alberti">A rotating alphabet with a separator clock</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 </div></details></section>
@@ -270,9 +278,10 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-book-codes"><h3><a href="#/wiki/book-ciphers">Book ciphers and coordinate lookups</a></h3><p>Select symbols from a specified source text using explicit coordinate and counting rules.</p>
-<details><summary>2 related records</summary><ul>
+<details><summary>3 related records</summary><ul>
 <li><a href="#/experiments/emerson-book-cipher-control">Emerson book cipher: historical control reproduction</a> <span class="small muted">· Historical reproduction</span></li>
 <li><a href="#/experiments/night-thoughts-729-line-audit">Night Thoughts: six proposed line-729 pointers in a pinned edition</a> <span class="small muted">· Source or input audit</span></li>
+<li><a href="#/experiments/dukotah-grid-token-roles">Grid bytes as ciphertext or rune pointers</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-page-order"><h3><a href="#/wiki/method-page-order">Page and section ordering</a></h3><p>Reorder whole pages or sections while accounting for the arrangements searched.</p>
@@ -301,7 +310,7 @@
 </div></details></section>
 <section class="method-group"><h2 id="numbers-and-representations">Numbers and representations</h2><details><summary>8 method families</summary><div class="method-family-list">
 <section class="method-family" id="family-sums"><h3><a href="#/wiki/prime-sums">Gematria and rune-sum mappings</a></h3><p>Map runes or groups to numerical totals and count competing matches.</p>
-<details><summary>12 related records</summary><ul>
+<details><summary>14 related records</summary><ul>
 <li><a href="#/experiments/mixed-square-word-sums">LP1-05: candidate word sums and rune segmentation</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/selected-phrase-word-sums">Selected phrase and MYRMELEONTIDAE: five word-sum candidates</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/lp2-row-prime-sums">LP2-00–55: prime row sums against shuffled pages</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -314,10 +323,12 @@
 <li><a href="#/experiments/study-here-bidirectional-pointer">LP1: the 331 / 133 STUDY HERE pointer</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/obscura-sum-collision-control">OBSCURA word-sum matches in LP2</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/lp2-23-red-sum-claim">LP2-23: does the red opening sum to 691?</a> <span class="small muted">· Source or input audit</span></li>
+<li><a href="#/experiments/gp-prime-plaintext-feedback">GP prime values as a plaintext autokey</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/dukotah-word-boundary-key-clocks">Word boundaries as key clocks</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-prime-indices"><h3><a href="#/wiki/prime-indices">Prime indexing and value transforms</a></h3><p>Distinguish rune indices, prime values and prime indices before composing operations.</p>
-<details><summary>7 related records</summary><ul>
+<details><summary>8 related records</summary><ul>
 <li><a href="#/experiments/position-divisor-labels">LP2-00–55: fixed divisor labels of rune positions</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/prime-fibonacci-position-extraction">Runes at prime and Fibonacci positions</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/wulfic-number-key-streams">Mathematical digit streams as LP2 keys</a> <span class="small muted">· Method replay</span></li>
@@ -325,6 +336,7 @@
 <li><a href="#/experiments/wulfic-page24-prime-columnar">Prime positions and column readings on LP2-07</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-systematic-stream-source">Prime streams and a short feedback key</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-p20-prime-position-routes">Prime-position route search on LP2-03</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/lp2-15-prime-gap-cycle">LP2-15 prime gaps: does the modulo-28 tail repeat?</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-expressions"><h3><a href="#/wiki/method-expressions">Bounded arithmetic expressions</a></h3><p>Declare a finite grammar of operations rather than searching unlimited expressions.</p>
@@ -334,7 +346,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-radix"><h3><a href="#/wiki/method-representations">Radix changes and byte encodings</a></h3><p>Specify how symbols become digits, integers and bytes.</p>
-<details><summary>14 related records</summary><ul>
+<details><summary>15 related records</summary><ul>
 <li><a href="#/experiments/grid-direct-bytes">LP2-49–51: direct text and file-header screen</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/grid-barcode-fixed-render">LP2-49–51: fixed bit-grid barcode scan</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/grid-radix-reconciliation">LP2-49–51: does 59 observed symbols mean base 59?</a> <span class="small muted">· Source or input audit</span></li>
@@ -349,16 +361,18 @@
 <li><a href="#/experiments/wulfic-grid-rsa-modulus-screen">Raw grid bytes and RSA-modulus readings</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/dukotah-grid-cell-adjudication">Which bytes are printed in the base-60 grid?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/dukotah-payload-varint-matrix">Do LP2 grid bytes track doublet gaps? Source varint matrix</a> <span class="small muted">· Manuscript measurement</span></li>
+<li><a href="#/experiments/dukotah-grid-token-roles">Grid bytes as ciphertext or rune pointers</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-bitwise"><h3><a href="#/wiki/xor">Bitwise combinations and XOR</a></h3><p>Operate on explicitly encoded bits or bytes, with alignment and key rules.</p>
-<details><summary>2 related records</summary><ul>
+<details><summary>3 related records</summary><ul>
 <li><a href="#/experiments/wulfic-grid-long-byte-sources">Archived byte streams against the LP2 number grid</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/dukotah-h03-onion-cookie-xor">Do the onion cookies reveal text by XOR?</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/dukotah-grid-token-roles">Grid bytes as ciphertext or rune pointers</a> <span class="small muted">· Method replay</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-squares"><h3><a href="#/wiki/magic-squares">Magic squares and numerical grids</a></h3><p>Separate reconstructing a grid from using it as a decoding key.</p>
-<details><summary>15 related records</summary><ul>
+<details><summary>16 related records</summary><ul>
 <li><a href="#/experiments/magic-square-freedom">Magic squares: does one fixed entry determine the rest?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/grid-prime-paths">LP2-49–51: directional prime-path reconstruction</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/grid-prime-paths-page-boundaries">LP2-49–51: prime paths confined to each page</a> <span class="small muted">· Manuscript measurement</span></li>
@@ -374,10 +388,11 @@
 <li><a href="#/experiments/wulfic-grid-native-keys">Cicada-derived keys against the LP2 grid</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-grid-periodic-byte-invariant">Repeating-byte-alphabet invariant on the LP2 grid</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/wulfic-square-title-vocabulary">LP2-15 square-derived title keys</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/lp2-15-prime-gap-cycle">LP2-15 prime gaps: does the modulo-28 tail repeat?</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-differences"><h3><a href="#/wiki/method-differences">Differential and cumulative decoding</a></h3><p>Transform changes between values with declared direction, lag, modulus and initial conditions.</p>
-<details><summary>7 related records</summary><ul>
+<details><summary>8 related records</summary><ul>
 <li><a href="#/experiments/crib-difference-stream-search">LP2-39: do crib-difference triplets recur elsewhere?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/lp2-page-pair-alignment">One LP2 page as another page’s key</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/wulfic-stage-af-unit-shifts">Unit shifts in a restarted LP2 key</a> <span class="small muted">· Method replay</span></li>
@@ -385,6 +400,7 @@
 <li><a href="#/experiments/leo-shared-key-differences">Do LP2 sections share a running key?</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/leo-chain-sequence-keys">Number-sequence keys in direct and chain views</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/leo-chain-key-alignment">Do number sequences fit the rune-difference chain?</a> <span class="small muted">· Method replay</span></li>
+<li><a href="#/experiments/lp2-15-prime-gap-cycle">LP2-15 prime gaps: does the modulo-28 tail repeat?</a> <span class="small muted">· Manuscript measurement</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-error-correction"><h3><a href="#/wiki/method-error-correction">Error detection, parity and correction</a></h3><p>Test a defined redundancy code and its correction limits under explicit symbol, block and error rules.</p>

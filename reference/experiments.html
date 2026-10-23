@@ -10628,6 +10628,440 @@
       ]
     }
   ]
+}</pre></article><article id="dukotah-grid-token-roles"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;dukotah-grid-token-roles&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Grid bytes as ciphertext or rune pointers&quot;,
+  &quot;question&quot;: &quot;Do two pinned interpretations of the LP2-49–51 grid reveal text under the archived and image-audited byte readings?&quot;,
+  &quot;reader_question&quot;: &quot;Could the grid bytes themselves be encrypted, or point to runes elsewhere in the book?&quot;,
+  &quot;summary&quot;: &quot;The archived byte-cipher and rune-pointer searches reproduce. Neither their original 256-byte list nor two later image-audited readings passes the source’s fixed ASCII or English-score screen.&quot;,
+  &quot;finding&quot;: &quot;Across three declared byte readings, 4,245 byte-cipher outputs yielded no candidate over 85% printable ASCII; the best was 46.2%. Twelve rune-index outputs scored at best −7.183, below the source’s −5 English bar. Full planted byte and three index controls recovered known text; the fourth index rule lacks a full known-reading plant.&quot;,
+  &quot;limitations&quot;: &quot;The source’s page-local pointer rule references rune-only segments 49/50/51, not a verified physical neighbourhood of the printed grid. That segment 49 cannot express one rune of the known-reading control. Thresholds and fixed byte readings do not cover other encodings, offsets, transcriptions or books.&quot;,
+  &quot;next_steps&quot;: &quot;A token-role claim should fix the exact cell reading, pointer range or cipher key construction, and demonstrate a complete known-text positive before testing a held-out output.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;number grid&quot;,
+    &quot;base 60&quot;,
+    &quot;byte ciphertext&quot;,
+    &quot;XOR&quot;,
+    &quot;book cipher&quot;,
+    &quot;rune indices&quot;,
+    &quot;source replay&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/dukotah-grid-token-roles/source-archived-256.bin&quot;,
+      &quot;experiments/records/dukotah-grid-token-roles/source-canon-256.bin&quot;,
+      &quot;experiments/records/dukotah-grid-token-roles/source-resolved-256.bin&quot;,
+      &quot;experiments/records/dukotah-grid-token-roles/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Three 256-byte readings in printed grid order: archived P49/P50/P51 arrays (80+104+72); six-cell image-adjudicated canon; all-eleven-cell resolved. Pointer methods use 57 rune-bearing source segments, omitting rune-free LP2-50, whose rune sequences match site pages.&quot;,
+    &quot;procedure&quot;: &quot;Execute pinned source programs on their original bytes, then independently replay all fixed ciphertext and index operators on each of three byte witnesses. Check exact source saved outputs and constructed known-text positives.&quot;,
+    &quot;parameters&quot;: &quot;Five byte targets × (256 single-byte XOR + 18 keyword XOR + 8 additive stream signs + one as-is) = 1,415 outputs per byte witness; four exact pointer readings per witness. Three witnesses give 4,245 + 12 outputs.&quot;,
+    &quot;exclusions&quot;: &quot;No offsets into other books, arbitrary byte reordering except source reverse join, padding, compression, unknown grid readings, other ASCII keys or additional index functions. Source nibble-split comment is unexecuted and excluded.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact pinned-source replay with corrected-byte sensitivity and independent reconstruction&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Unmodified programs matched archived outputs; independent code checked all fixed outputs, source/site rune mapping, cell changes and planted positives.&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dukotah-grid-token-roles/run.py --check &amp;&amp; python experiments/records/dukotah-grid-token-roles/check.py &amp;&amp; python experiments/records/dukotah-grid-token-roles/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library. Pinned source dependencies and three byte witnesses are bundled.&quot;,
+    &quot;script&quot;: &quot;experiments/records/dukotah-grid-token-roles/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;a941d50e92f9eda2ac974d3937a2720ac15fc553782f333bdf2847769fbada7c&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/plan.json&quot;,
+        &quot;sha256&quot;: &quot;b0020763d07ce5ed61e3ad8038669a86b44789eada84cd480699e7070c336de8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/check.py&quot;,
+        &quot;sha256&quot;: &quot;2a2ecc90e7261b0f2fe1d536556a24db7d56eb3c4cc27da9f7cf26ecbd2de327&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/plot.py&quot;,
+        &quot;sha256&quot;: &quot;246b24b33eda05bfa726f4200e855f4d2238c343e29505778fc55d65c6c00dc6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source-archived-256.bin&quot;,
+        &quot;sha256&quot;: &quot;0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source-canon-256.bin&quot;,
+        &quot;sha256&quot;: &quot;4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source-resolved-256.bin&quot;,
+        &quot;sha256&quot;: &quot;3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/a2_tokenpad.py&quot;,
+        &quot;sha256&quot;: &quot;ece101a84c8c4a71b50cd585bf1f40e1394b3974550c5b4c549e2ed2d084b38b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_ciphertext.py&quot;,
+        &quot;sha256&quot;: &quot;ff3284dd1b12b576519b113661438d92d13602404886b18656001ad5833d182d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_ciphertext_results.json&quot;,
+        &quot;sha256&quot;: &quot;92109eb8e18d6c8a626bc36ff523230d7ba5b758a378c563da6a6fc452d5c896&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_index.py&quot;,
+        &quot;sha256&quot;: &quot;8b1ab40ceb93fbd23350dde11720f6b457b8210f0795a1d5629ccc6361ec1f65&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_index_results.json&quot;,
+        &quot;sha256&quot;: &quot;fc4827909666b084c0c50856babb17d575401256539029047d0f57dab70aa132&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/analysis/run_stats.py&quot;,
+        &quot;sha256&quot;: &quot;77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/data/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/data/krisyotam_runes.txt&quot;,
+        &quot;sha256&quot;: &quot;5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/LICENSE&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/src/lp/ciphers.py&quot;,
+        &quot;sha256&quot;: &quot;3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/src/lp/corpus.py&quot;,
+        &quot;sha256&quot;: &quot;d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/src/lp/gematria.py&quot;,
+        &quot;sha256&quot;: &quot;7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/src/lp/score.py&quot;,
+        &quot;sha256&quot;: &quot;65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/source/src/lp/stats.py&quot;,
+        &quot;sha256&quot;: &quot;cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-56.json&quot;,
+        &quot;sha256&quot;: &quot;be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-57.json&quot;,
+        &quot;sha256&quot;: &quot;7280faf3a70763706946653487885f44743731fb526ab87ffd8ab265e84aef00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-56.csv&quot;,
+        &quot;sha256&quot;: &quot;5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/results.json&quot;,
+        &quot;sha256&quot;: &quot;250a80229303424b9318565b16746ba7dee0abd94a9b9771b5553c075a1d5fa7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;9133a59675f776379afc9cff649feb07541121427ee4404bf61ffb8d01f62c6f&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/dukotah-grid-token-roles/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Three byte readings remain below both archived screens: 85% printable ASCII for byte ciphertext and −5 English quadgram score for rune pointers.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned token-as-ciphertext source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/token_as_ciphertext.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned token-as-index source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/token_as_index.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;dukotah-grid-cell-adjudication&quot;,
+    &quot;grid-direct-bytes&quot;,
+    &quot;grid-page-order-permutations&quot;
+  ],
+  &quot;article&quot;: &quot;# Could the grid bytes be ciphertext or reading pointers?\n\nAn archived Campaign VII search tried two roles for the 256 base-60-decoded bytes from the grid on LP2-49–51: **encrypted bytes** to decode as text, or **positions** that select runes from the manuscript. We repeated its fixed operators on the archived byte list and on two later image-audited readings of disputed cells. None passed the source&#x27;s stated screen in any of the three readings.\n\n![Three grid-byte readings show best printable fractions under 47 percent and best rune-index scores below the source English-score bar.](experiments/records/dukotah-grid-token-roles/comparison.svg)\n\n| Byte reading | Cells changed from archive | Best printable byte fraction | Best rune-index English score |\n| --- | ---: | ---: | ---: |\n| Archived hard-coded list | 0 | 45.2% | −7.339 |\n| Six image-checked cells | 6 | 46.2% | −7.329 |\n| All eleven adjudicated cells | 9 | 46.2% | −7.183 |\n\nThe byte-as-ciphertext source flagged a candidate only above **85% printable ASCII**. Its rune-index source set a **−5.0** English quadgram bar. Higher scores are more English-like under that particular model. The strongest new index score, −7.183, remains below it. These are search outcomes under fixed readings and rules; neither percentage nor quadgram score is proof about every possible payload encoding.\n\n## Two roles, one declared byte sequence\n\nFor the ciphertext role, the source tested each token section (80, 104 and 72 bytes), their 256-byte join, and the reverse join. Each target received all **256 single-byte XOR keys**, 18 named repeating ASCII keyword XOR keys, prime, prime-minus-one, totient and Fibonacci additive streams in both signs modulo 256, and a direct read. That is **1,415 outputs per byte reading**. No output in any reading crossed the printable flag. Because none was flagged, the source&#x27;s second-stage English test was never reached. The source commentary also mentions a nibble split, but its executable search does not perform one; it is outside this result.\n\nFor the pointer role, the source makes just four complete 256-rune readings: each byte as an absolute index into the joined rune corpus; each byte as a cumulative step; each byte as a position modulo a corresponding rune-bearing page; or each byte modulo 29 as a GP rune. These are **four interpretations per reading**, not 256 independent experiments. The source&#x27;s page-local rule uses source rune segments 49, 50 and 51, which map to site pages LP2-49, LP2-51 and LP2-52. Those are not a demonstrated physical neighbourhood for the printed grid.\n\nThe archived program used a hard-coded list. A later [cell adjudication](#/experiments/dukotah-grid-cell-adjudication) found different printed values at six positions. Its subsequent 256-byte resolution differs at those six and three more. We preserve the archived list to reproduce its result, then change **only those bytes** for the sensitivity checks. Other plausible grid readings or routes remain untested here.\n\n## Checks and limits\n\nThe two unmodified archived programs reproduce their saved results when placed beside their pinned dependencies in a temporary folder. A separate checker reconstructs every one of the **4,245 byte outputs** and **12 index readings** without importing those programs, verifies all three byte hashes and checks that the source rune stream matches the site transcription.\n\nConstructed byte examples recover a complete 256-character English passage under one-byte XOR and the source prime stream. Constructed pointer examples recover the complete 85-rune documented `AN END` reading under absolute indexing, cumulative gaps and direct GP bytes; the score exceeds the source&#x27;s bar. The page-local source segment 49 lacks one rune present in that reading, so that particular full positive cannot be represented by its exact lookup rule; a legal constructed page-local sequence is checked for exact recovery instead. These controls show that the implementations work on planted inputs. They do not establish that this payload carries English, or calibrate the chance of a high score after trying other conversions.\n\nThe result does not test unknown page transcriptions, arbitrary offsets, compressed streams, altered byte order beyond the declared reverse join, other books, or keys derived from later puzzle stages. It also does not make the grid a confirmed ciphertext: the index proposals are readings of bytes as pointers, without a separate decryption of LP2&#x27;s runes.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/dukotah-grid-token-roles/plan.json) identifies the source revision, byte witnesses and exact screens. [Results](experiments/records/dukotah-grid-token-roles/results.json) contain all maxima, four index scores per witness, controls and changed-cell positions. Run from a Liberpedia checkout:\n\n```text\npython experiments/records/dukotah-grid-token-roles/run.py --check\npython experiments/records/dukotah-grid-token-roles/check.py\npython experiments/records/dukotah-grid-token-roles/plot.py --check\n```\n\nThe replay uses the pinned [ciphertext-role program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/token_as_ciphertext.py) and [index-role program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/token_as_index.py). Their original saved outputs predate this test. The two corrected-byte sensitivity runs and independent controls are added here.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dukotah-grid-token-roles/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;a941d50e92f9eda2ac974d3937a2720ac15fc553782f333bdf2847769fbada7c&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;book-codes&quot;,
+      &quot;aliases&quot;: [
+        &quot;book code&quot;,
+        &quot;coordinate lookup&quot;,
+        &quot;book cipher&quot;,
+        &quot;book ciphers&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;radix&quot;,
+      &quot;aliases&quot;: [
+        &quot;binary&quot;,
+        &quot;base 60&quot;,
+        &quot;hexadecimal&quot;,
+        &quot;base conversion&quot;,
+        &quot;byte order&quot;,
+        &quot;little endian&quot;,
+        &quot;big endian&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;bitwise&quot;,
+      &quot;aliases&quot;: [
+        &quot;xor&quot;,
+        &quot;bitwise&quot;,
+        &quot;exclusive or&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="dukotah-h03-onion-cookie-xor"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;dukotah-h03-onion-cookie-xor&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -13223,6 +13657,482 @@
         &quot;input verification&quot;,
         &quot;wrong file&quot;,
         &quot;missing rows&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="dukotah-word-boundary-key-clocks"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;dukotah-word-boundary-key-clocks&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Word boundaries as key clocks&quot;,
+  &quot;question&quot;: &quot;Do archived separator and word-prime key schedules recover a complete unsolved LP2 page?&quot;,
+  &quot;reader_question&quot;: &quot;Could spaces or punctuation tell the cipher when to advance or restart its key?&quot;,
+  &quot;summary&quot;: &quot;Three pinned source branches reproduced across 55 rune-bearing unsolved pages. The best combined manuscript score was matched or exceeded by 44 of 49 whole-search shuffled controls; an archived known-page opening matches 56 of 85 runes, not the full reading.&quot;,
+  &quot;finding&quot;: &quot;The 2,420 bounded manuscript outputs reproduce the archived winners. Branch maxima were −6.904, −7.008 and −6.897 under the source quadgram score; none reached its −5 threshold. The known-page FH3 candidate diverges at rune 57. All seven synthetic plants recovered the full Parable reading.&quot;,
+  &quot;limitations&quot;: &quot;The original known-page candidate fails full recovery, weakening the source threshold as a natural-text control. Synthetic plants check implementation only. Whole-search pagewise rune shuffles measure this selected-score reference, not a cipher model. Other keys, clock rules and language models remain outside scope.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a key-clock rule before examining target output, recover a complete documented passage, and test an untouched page with whole-selection controls.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;word boundaries&quot;,
+    &quot;interrupters&quot;,
+    &quot;key schedule&quot;,
+    &quot;Gematria Primus&quot;,
+    &quot;prime sums&quot;,
+    &quot;source replay&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/dukotah-word-boundary-key-clocks/plan.json&quot;,
+      &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/false_holes.py&quot;,
+      &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/wordsum_selfkey.py&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source krisyotam rune transcription split at % into 57 rune-bearing segments. The LP2-50 rune-free text layer is omitted; source segments 0–49 map to LP2-00–49 and 50–54 to LP2-51–55. Rune sequences match each site page. Any non-rune ends a W-branch word.&quot;,
+    &quot;procedure&quot;: &quot;Replay source FH1 separator advances, FH3 punctuation resets and W1–W5 word-prime self-keys; compare all source winners; check a complete known reading and seven planted positives; rerun each entire branch on 49 pagewise rune shuffles.&quot;,
+    &quot;parameters&quot;: &quot;55 unsolved rune-bearing pages; FH1 3 separator sets × 4 streams; FH3 4 resets × 3 streams; W1–W5 × 2 signs × 2 Atbash states. 2,420 page/settings outputs; 49 complete-grid shuffles seeded 3301.&quot;,
+    &quot;exclusions&quot;: &quot;FH2 is covered by whole-page affine tests and source-parity only; FH4 is not an executed cipher test. No other seed, key, punctuation semantics, cross-page clock, language scorer or image-derived reading.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact pinned-source replay with independent complete-grid checker and new selection controls&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Source outputs, every bounded setting, all null maxima and the 85-rune known-page comparison were checked independently.&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dukotah-word-boundary-key-clocks/run.py --check &amp;&amp; python experiments/records/dukotah-word-boundary-key-clocks/check.py &amp;&amp; python experiments/records/dukotah-word-boundary-key-clocks/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library. Pinned source scripts, corpus and quadgram counts are bundled under source/.&quot;,
+    &quot;script&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;50a4a155489186c6ba333418cd61e4805b6fb2433acfc2cebc6f104547772cb9&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/plan.json&quot;,
+        &quot;sha256&quot;: &quot;cbb46b3b0af2200f0066a3609484d19767f98f089ca15028c04e6c03c1ea2c8e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/check.py&quot;,
+        &quot;sha256&quot;: &quot;87c538c0235d56d52f9ede3c4384cfcc1de50b6da170fc76cd868860f49ed3be&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/plot.py&quot;,
+        &quot;sha256&quot;: &quot;9e00f698ae12cabcff5081248695c39ca1687ce5822f060e9c8701571db2a84d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/false_holes.py&quot;,
+        &quot;sha256&quot;: &quot;a988ecf3f21f4ddc1b335f5df2a4c7c878a6d16ae34037621639328d442b2b48&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/false_holes_results.json&quot;,
+        &quot;sha256&quot;: &quot;194fe2dbcc7784fe5264e884ff121d6c1d01d8a300ad612c13c6449e5deb6d29&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/wordsum_selfkey.py&quot;,
+        &quot;sha256&quot;: &quot;d25ace00b47e394369ac12a0346bd8242d58f4d943abae1e6cd99a0317b880a5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/wordsum_selfkey_results.json&quot;,
+        &quot;sha256&quot;: &quot;8b27550b19f290ffcfc0a8fd992b4a5a701a0334a5ce8a7c344bebad07b2f260&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/data/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/data/krisyotam_runes.txt&quot;,
+        &quot;sha256&quot;: &quot;5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/LICENSE&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/ciphers.py&quot;,
+        &quot;sha256&quot;: &quot;3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/gematria.py&quot;,
+        &quot;sha256&quot;: &quot;7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/score.py&quot;,
+        &quot;sha256&quot;: &quot;65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-56.json&quot;,
+        &quot;sha256&quot;: &quot;be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-57.json&quot;,
+        &quot;sha256&quot;: &quot;7280faf3a70763706946653487885f44743731fb526ab87ffd8ab265e84aef00&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/lp2-56.csv&quot;,
+        &quot;sha256&quot;: &quot;5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/results.json&quot;,
+        &quot;sha256&quot;: &quot;08a948e33f03780f1adc90024a3835028bf491dac1317a4c4551499cc683b66e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;7f195248204599071d72e0d20d43e31f60346fe58327e536c3cc4bdd6425d0e7&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;For each source branch, how many complete shuffled searches scored at least as high as the manuscript best; the known-page candidate matches only 56 of 85 runes.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Campaign VII false-holes source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/false_holes.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Campaign VII word-sum source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/wordsum_selfkey.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned false-holes source results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/false_holes_results.json&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned word-sum source results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/wordsum_selfkey_results.json&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wholepage-affine-gp29&quot;,
+    &quot;grouped-key-advance-openings&quot;,
+    &quot;cumulative-autokey-literal&quot;,
+    &quot;gp-prime-plaintext-feedback&quot;,
+    &quot;wulfic-separator-clock-alberti&quot;
+  ],
+  &quot;article&quot;: &quot;# Word boundaries as key clocks\n\nThese three archived search branches ask whether the visible separators and words control a shifting key. We replayed the exact source rules on all 55 rune-bearing unsolved LP2 pages, then compared each branch&#x27;s best score with **49 shuffled searches that repeated the entire branch**. None of the manuscript bests crossed the source&#x27;s fixed −5 English quadgram threshold. The highest score from any branch, −6.897, was matched or exceeded by 44 of the 49 shuffled *combined* searches.\n\n![Three short bars show the number of shuffled searches that reached or exceeded each manuscript score. A note shows that the archived known-page candidate matches 56 of 85 runes, then diverges.](experiments/records/dukotah-word-boundary-key-clocks/comparison.svg)\n\n| Source branch | What moves the key | Best unsolved score | Shuffled searches at least as high |\n| --- | --- | ---: | ---: |\n| FH1 · separator clock | A chosen `-`, `.`, or `/` advances the stream without printing a rune | −6.904, LP2-14 | 23/49 |\n| FH3 · punctuation reset | A selected word, clause, line, or segment mark restarts the stream | −7.008, LP2-51 | 43/49 |\n| W1–W5 · word sums | GP-prime values of the previous word, or the previous rune, supply the next key value | −6.897, LP2-49 | 37/49 |\n\n**The known-reading check changes how to read this result.** The archived FH3 report highlights an `AN END WITHIN THE DEEP WEB...` opening on source page 55 (LP2-56). We compared its *entire* 85-rune output with the documented reading. The first 56 positions match; rune 57 differs, and the full text is **not** recovered. That candidate scores −5.282, below the source&#x27;s own −5 threshold. A plausible opening is therefore not a passed known-page control. Seven synthetic examples did recover the complete known Parable reading when encrypted with these exact rules; they check the implementation, but they cannot show that the original ciphertext uses any of them.\n\n## What was searched\n\nFH1 used the source&#x27;s three separator sets and four subtractive streams: primes, primes minus one, totients, and the repeating `DIVINITY` key. FH3 used four reset marks and three streams. The five word-sum variants used the 29-value Gematria Primus prime map. W1 uses the previous *ciphertext* word&#x27;s prime sum, W2 the previous *decoded* word&#x27;s sum, W3 the cumulative ciphertext-word sums, W4 the totient of the previous ciphertext-word sum, and W5 the previous ciphertext rune&#x27;s prime value. Every W variant included both signs and both Atbash states, with a zero initial key. In the source parser, **any non-rune ends a word**.\n\nThat is 660 FH1 outputs, 660 FH3 outputs, and 1,100 word-sum outputs across the 55 unsolved source segments. The source omits the rune-free LP2-50 transcription segment. We checked the rune sequence of every other source segment against its site page. Source FH2 is a first-rune shift subset of the separately tested [whole-page affine family](#/experiments/wholepage-affine-gp29), so its archived winner is checked for source parity but not counted again here. FH4&#x27;s proposed file relocation was not an executed cipher search.\n\nThe score is the archived mean English quadgram log score on the GP transliteration; a higher number means more English-like **under that model**, not a readable solution. The shuffled comparison preserves each page&#x27;s rune inventory and every punctuation position. It repeats the full choice of stream, separator or word rule, sign, Atbash setting, and page before retaining the maximum. It measures selection effects under that shuffle, not the probability of a cipher model.\n\n## What remains open\n\nThese results do not exclude a different initial state, a key from earlier pages, other separator meanings, a different language model, or a model that predicts the original punctuation. A new proposal can improve on this replay by fixing its key-clock rule before looking at the target page and recovering a complete known passage plus an untouched LP2 passage. The original 56-rune prefix should not be treated as a complete positive control.\n\n## Reproduce and inspect\n\nThe [experiment plan](experiments/records/dukotah-word-boundary-key-clocks/plan.json) fixes the source revision, grid, controls, and exclusions. [Results](experiments/records/dukotah-word-boundary-key-clocks/results.json) contain every shuffle maximum and the exact source winners. The [replay](experiments/records/dukotah-word-boundary-key-clocks/run.py) checks the pinned programs and saved results; the [independent checker](experiments/records/dukotah-word-boundary-key-clocks/check.py) reconstructs all manuscript settings and shuffle maxima without importing those programs. Run:\n\n```text\npython experiments/records/dukotah-word-boundary-key-clocks/run.py --check\npython experiments/records/dukotah-word-boundary-key-clocks/check.py\npython experiments/records/dukotah-word-boundary-key-clocks/plot.py --check\n```\n\nThe source scripts and their archived outputs are preserved under `source/` at commit `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`. The 49 full-grid shuffle controls and the full-reading comparison are **our added tests**, not results claimed by the archive. See the pinned [false-holes source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/false_holes.py) and [word-sum source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/wordsum_selfkey.py).\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dukotah-word-boundary-key-clocks/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;50a4a155489186c6ba333418cd61e4805b6fb2433acfc2cebc6f104547772cb9&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;polyalphabetic&quot;,
+      &quot;aliases&quot;: [
+        &quot;Vigenere&quot;,
+        &quot;Beaufort&quot;,
+        &quot;repeating key&quot;,
+        &quot;polyalphabetic&quot;,
+        &quot;repeating key cipher&quot;,
+        &quot;substitution&quot;,
+        &quot;polyalphabetic substitution&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;feedback&quot;,
+      &quot;aliases&quot;: [
+        &quot;autokey&quot;,
+        &quot;feedback&quot;,
+        &quot;ciphertext feedback&quot;,
+        &quot;plaintext autokey&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;interruptions&quot;,
+      &quot;aliases&quot;: [
+        &quot;interrupters&quot;,
+        &quot;reset&quot;,
+        &quot;pause key&quot;,
+        &quot;skip key&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;sums&quot;,
+      &quot;aliases&quot;: [
+        &quot;gematria&quot;,
+        &quot;word sums&quot;,
+        &quot;rune sums&quot;,
+        &quot;prime sums&quot;
       ]
     }
   ]
@@ -17772,6 +18682,658 @@
         &quot;odd and even&quot;,
         &quot;odd even&quot;,
         &quot;separate streams&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="gp-prime-plaintext-feedback"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;gp-prime-plaintext-feedback&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;GP prime values as a plaintext autokey&quot;,
+  &quot;question&quot;: &quot;Do page-local plaintext-rune GP prime values, used one step back or as a running sum, yield unusually English-like complete LP2 pages?&quot;,
+  &quot;reader_question&quot;: &quot;What happens if each decoded rune&#x27;s prime value supplies the next key?&quot;,
+  &quot;summary&quot;: &quot;Neither of two fixed plaintext-prime feedback rules stood out in a whole-page LP2 search: 144 of 199 matched shuffled searches scored at least as high as the best observed candidate.&quot;,
+  &quot;finding&quot;: &quot;Across 6,380 complete-page candidates, the best score was −6.835 on LP2-32. In 144 of 199 page-shuffled full-grid controls, at least one candidate scored as high. All 116 arithmetic inversions and 12 full-length model-selection plants passed.&quot;,
+  &quot;limitations&quot;: &quot;These two equations were defined for this bounded test, not supplied by the original proposal. The test does not define or test &#x27;shedding,&#x27; word resets, skipped runes, across-page state, other languages or arbitrary gematria recurrences. A shuffled corpus is a conditional control, not a cipher model.&quot;,
+  &quot;next_steps&quot;: &quot;A further numerical-autokey claim should specify its exact recurrence, initial state, reset points and literal state-discard rule before outputs are inspected, then test a full continuation against matched controls.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;gematria&quot;,
+    &quot;prime values&quot;,
+    &quot;plaintext autokey&quot;,
+    &quot;cumulative feedback&quot;,
+    &quot;GP29&quot;,
+    &quot;English quadgrams&quot;
+  ],
+  &quot;related&quot;: [
+    &quot;cumulative-autokey-literal&quot;,
+    &quot;public-multihistory-feedback&quot;,
+    &quot;wulfic-autokey-seed-families&quot;,
+    &quot;feedback-opening-census&quot;,
+    &quot;crib-inferred-feedback-table&quot;,
+    &quot;solved-reading-running-key&quot;,
+    &quot;dukotah-word-boundary-key-clocks&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/gp-prime-plaintext-feedback/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;12,956 GP29 rune indices across the 55 nonempty LP2-00–55 pages, ignoring punctuation and artwork; prime values from the canonical 29-rune alphabet.&quot;,
+    &quot;procedure&quot;: &quot;Decode every whole page by either previous-plaintext-prime feedback or cumulative plaintext-prime-sum feedback; rank complete GP-to-Latin outputs under the pinned English quadgram model. Repeat the entire selection on 199 independently seeded within-page-shuffled corpora.&quot;,
+    &quot;parameters&quot;: &quot;2 equations × 29 scalar seeds × 2 arithmetic signs × 55 pages = 6,380 observed candidates; 199 complete-grid shuffles, seeds 33017200–33017398. Page-local starts, one key advance per rune.&quot;,
+    &quot;exclusions&quot;: &quot;Previous ciphertext-prime feedback (separate source W5), word-level prime sums, skips, word or line resets, cross-page state, additional key layers, other alphabets/languages, parable-specific reductions beyond the exhaustive seed residues and any unspecified iterative &#x27;shedding&#x27; operation.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent standard-library decoder and counted-quadgram replay against separate page JSON, 199 shuffle digests and three complete null grids&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/gp-prime-plaintext-feedback/run.py --check &amp;&amp; python experiments/records/gp-prime-plaintext-feedback/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 with NumPy and Numba for the complete producer; independent checker uses Python 3 standard library. Offline from the repository root or complete experiment bundle.&quot;,
+    &quot;script&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;3613deb6811e6450c7ffdfe3440ba3b6c64ad2a4a8513f660bca7bcd441cfe7e&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/plan.json&quot;,
+        &quot;sha256&quot;: &quot;e467a362e020ca7d357779d29c6c8b9d1e96260bfe25ea51caad8a8840127c26&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/make_plan.py&quot;,
+        &quot;sha256&quot;: &quot;75c45b14a2a46cc27b69491bcf66c5f1a0f7fd46aa81f24bcffe5d1cc0b82a6b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/check.py&quot;,
+        &quot;sha256&quot;: &quot;41e83b4ed1d4bf2c5678450704dbcb3d27be187c5c2f3ba13dcf1239fca41018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/plot.py&quot;,
+        &quot;sha256&quot;: &quot;ebfb041a8dd9e8ade15c224e48c37e7097b1b7da02700e51fa6f06857514ad22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;84480cc43a0a3d3365285f9c9e7c1d552863eab23dc68ffdff57acf24381bff7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/readings/warning.csv&quot;,
+        &quot;sha256&quot;: &quot;ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/english-scorer-controls/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
+        &quot;sha256&quot;: &quot;b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-01.txt&quot;,
+        &quot;sha256&quot;: &quot;a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-02.txt&quot;,
+        &quot;sha256&quot;: &quot;7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-03.txt&quot;,
+        &quot;sha256&quot;: &quot;6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-38.txt&quot;,
+        &quot;sha256&quot;: &quot;824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-39.txt&quot;,
+        &quot;sha256&quot;: &quot;15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-40.txt&quot;,
+        &quot;sha256&quot;: &quot;fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-41.txt&quot;,
+        &quot;sha256&quot;: &quot;e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-42.txt&quot;,
+        &quot;sha256&quot;: &quot;74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-43.txt&quot;,
+        &quot;sha256&quot;: &quot;08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-45.txt&quot;,
+        &quot;sha256&quot;: &quot;63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-46.txt&quot;,
+        &quot;sha256&quot;: &quot;81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-47.txt&quot;,
+        &quot;sha256&quot;: &quot;d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-48.txt&quot;,
+        &quot;sha256&quot;: &quot;a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-49.txt&quot;,
+        &quot;sha256&quot;: &quot;64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-51.txt&quot;,
+        &quot;sha256&quot;: &quot;313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-52.txt&quot;,
+        &quot;sha256&quot;: &quot;d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-53.txt&quot;,
+        &quot;sha256&quot;: &quot;f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-54.txt&quot;,
+        &quot;sha256&quot;: &quot;1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-55.txt&quot;,
+        &quot;sha256&quot;: &quot;c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/results.json&quot;,
+        &quot;sha256&quot;: &quot;5fa02edbea1b6b845138aafa91e0077db1b65a0d146bd37949417757f3d9d72e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/cases.csv&quot;,
+        &quot;sha256&quot;: &quot;a8061b79e071682a008b3397f85f2038174edb692a59671aa5f23fc036858a63&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/feedback-overview.svg&quot;,
+        &quot;sha256&quot;: &quot;283ee2e9bf1d9558760ce033da31c40a8f12339c52a352c10cdc2f836edcde80&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Gematria Primus alphabet and prime values&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/alphabet&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Manuscript page index&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/manuscript&quot;
+    },
+    {
+      &quot;label&quot;: &quot;English scorer controls&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/experiments/english-scorer-controls&quot;
+    }
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/feedback-overview.svg&quot;,
+      &quot;caption&quot;: &quot;Both fixed plaintext-prime rules were searched; 144 of 199 matched full-grid shuffles scored at least as high as the LP2 winner.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## Finding\n\nWe tested two precise ways for a newly recovered rune&#x27;s [Gematria Primus prime value](#/alphabet) to set the next key. Neither stood out in a complete-page search. The best of **6,380** LP2 candidates was on LP2-32, but **144 of 199** matched shuffled-page searches found an English score at least as high. The leading output begins `NGDIAIATTHEWABAETEEAHT...`; this isolated fragment is not a reading.\n\n![Two prime-valued feedback rules and their full-search comparison.](experiments/records/gp-prime-plaintext-feedback/feedback-overview.svg)\n\nThe same search recovered all **12 planted full-length messages** made from the archived Warning reading. An independent checker reproduced all 6,380 decoded outputs and scores, checked every shuffled input, and reran three complete null grids. These controls show the bounded test works; they do not prove that every possible autokey would be found.\n\n## The two rules\n\nLet `C[i]` be a ciphertext rune index, `P[i]` its decoded index, and `g(x)` the GP prime value at index `x`, reduced modulo 29. We tried every initial value `s = 0…28` and both signs `e = −1,+1`:\n\n| Rule | Decoding |\n| --- | --- |\n| Previous plaintext rune | `P[0] = C[0] − e·s`; then `P[i] = C[i] − e·g(P[i−1])` |\n| Running plaintext prime sum | Start `S[0] = s`; then `P[i] = C[i] − e·S[i]` and `S[i+1] = S[i] + g(P[i])` |\n\nAll arithmetic is modulo 29. Each complete LP2 page starts afresh. Punctuation does not advance the key. We did not delete text, skip runes, reset at words, carry state across pages, or iterate whole-text passes. Those would be different rules; the proposal&#x27;s imagery of “shedding” does not define one of them.\n\nWe defined these two rules to explore numerical autokey. The original proposal did not specify either equation. Each parable number has the same effect as one of the 29 starting values already tested; this test gives none of them a special role. Other records cover [index-valued feedback](#/experiments/feedback-opening-census), [known readings used as a fixed key](#/experiments/solved-reading-running-key), and [partial feedback-table fits](#/experiments/crib-inferred-feedback-table). The [word-boundary replay](#/experiments/dukotah-word-boundary-key-clocks) tests previous-ciphertext prime values and word-level sums. Those are different update rules.\n\n## What the comparison means\n\nWe scored the full decoded page for four-letter English patterns, after writing each rune in its standard Latin form. The exact score is average quadgram log likelihood. Each of 199 controls shuffles rune order independently within every page, then repeats **the whole search** over both rules, signs, seeds and pages. This is a conditional check of whether the selected best score is unusual given page lengths and rune counts; a shuffle is not a cipher model. The observed best score was **−6.835**; the shuffled-search median was **−6.760** (larger scores are better). Results and every candidate are available in [results.json](experiments/records/gp-prime-plaintext-feedback/results.json) and [cases.csv](experiments/records/gp-prime-plaintext-feedback/cases.csv).\n\nThe test uses the site&#x27;s 55 nonempty LP2-00–55 transcriptions and one pinned English score model. Another alphabet mapping, language, primer construction, key layer, or stopping rule remains outside this record. No candidate here establishes an LP2 reading or an encryption mechanism.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/gp-prime-plaintext-feedback/plan.json) records the equations, inputs, seed range, score and shuffled-control schedule. From the repository root, run `python experiments/records/gp-prime-plaintext-feedback/run.py --check` and `python experiments/records/gp-prime-plaintext-feedback/check.py`. The first uses NumPy and Numba; the independent checker uses only the Python standard library. The saved outputs are also in the experiment ZIP.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/gp-prime-plaintext-feedback/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;3613deb6811e6450c7ffdfe3440ba3b6c64ad2a4a8513f660bca7bcd441cfe7e&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;method&quot;,
+    &quot;label&quot;: &quot;Bounded solving test&quot;,
+    &quot;description&quot;: &quot;Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;number-streams&quot;,
+      &quot;aliases&quot;: [
+        &quot;prime shifts&quot;,
+        &quot;Fibonacci&quot;,
+        &quot;totient sequence&quot;,
+        &quot;arithmetic keystream&quot;,
+        &quot;numerical sequence&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;feedback&quot;,
+      &quot;aliases&quot;: [
+        &quot;autokey&quot;,
+        &quot;feedback&quot;,
+        &quot;ciphertext feedback&quot;,
+        &quot;plaintext autokey&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;sums&quot;,
+      &quot;aliases&quot;: [
+        &quot;gematria&quot;,
+        &quot;word sums&quot;,
+        &quot;rune sums&quot;,
+        &quot;prime sums&quot;
       ]
     }
   ]
@@ -28764,6 +30326,140 @@
       &quot;aliases&quot;: [
         &quot;magic square&quot;,
         &quot;number square&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="lp2-15-prime-gap-cycle"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;lp2-15-prime-gap-cycle&quot;,
+  &quot;title&quot;: &quot;LP2-15 prime gaps: does the modulo-28 tail repeat?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the supplied LP2-15 Fibonacci-indexed prime gaps repeat the final modulo-28 tail 8,20,10,6 under the same fixed generator?&quot;,
+  &quot;summary&quot;: &quot;The supplied 16 primes and 15 gaps are arithmetically correct. The four-residue tail occurs once; the next generated gap is 4 modulo 28, rather than the predicted 8.&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-15&quot;,
+    &quot;prime gaps&quot;,
+    &quot;Fibonacci&quot;,
+    &quot;modulo 28&quot;,
+    &quot;number panel&quot;,
+    &quot;reported attempt&quot;,
+    &quot;arithmetic measurement&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-15&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;exports/fibonacci-prime-panel.json&quot;
+    ],
+    &quot;representation&quot;: &quot;The user-supplied derived 4×4 prime matrix in source.json, checked against the established LP2-15 panel construction; not the printed panel values themselves.&quot;,
+    &quot;procedure&quot;: &quot;Verify the 16 Fibonacci-indexed primes and 15 shown gaps, count exact four-number tail occurrences, then extend the same generator by eight distinct Fibonacci prime indices and compare a fixed period-four prediction.&quot;,
+    &quot;parameters&quot;: &quot;Ascending spiral sequence; forward consecutive differences; modulus 28; exact tail 8,20,10,6; next eight indices 1597 through 46368; no phase or path search. Modulus 29 shown only as a declared comparison.&quot;,
+    &quot;exclusions&quot;: &quot;No alternate spiral path, reverse gaps, modulus optimization, rune mapping, key schedule, or manuscript ciphertext test.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;The shown 8,20,10,6 tail occurs exactly once at gap positions 12–15. The first continuation is 5660 mod 28 = 4, not 8; none of eight new residues matches the fixed period-four prediction at its position.&quot;,
+  &quot;limitations&quot;: &quot;This rejects only the period-four continuation of the supplied arithmetic tail under the established Fibonacci prime-index generator. Modulus 28 is unexplained and no decoding rule was supplied; other panel-derived operations are outside this test.&quot;,
+  &quot;next_steps&quot;: &quot;A different numerical or rune-key proposal needs a fixed traversal, modulus rationale, residue mapping, target text and held-out prediction before testing.&quot;,
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Codex; independent sieve and source-matrix checker; human review pending&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/lp2-15-prime-gap-cycle/run.py --check; python experiments/records/lp2-15-prime-gap-cycle/check.py; python experiments/records/lp2-15-prime-gap-cycle/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; original screenshots are identified by hash, not bundled&quot;,
+    &quot;script&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;2bf9f965824c93171224ad20321d3a754c229eb5a57c7a8ad82749b3545f4413&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/fibonacci-prime-panel.json&quot;,
+        &quot;sha256&quot;: &quot;b79d136815eafba8c9a099613eec09ffd6face5a08f8781fd35a4f809e880d5a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/plan.json&quot;,
+        &quot;sha256&quot;: &quot;d38156e92ae5eee4cc2c3ce8c5c8a6511fe9ab0df31816fcdbd1160f2f3d64d7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/source.json&quot;,
+        &quot;sha256&quot;: &quot;e82aee2b23eafee18ba15232b50eff9c52194cdafd33110b9ba688a2de721a97&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/check.py&quot;,
+        &quot;sha256&quot;: &quot;92d1da682f5596c60ba87dede05eb194b5187bc46f62efcd9e94637b654312de&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/plot.py&quot;,
+        &quot;sha256&quot;: &quot;d119b77ff088fccbe40721807550f2341d9da68034cfce851e0eb7fd092f8281&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/results.json&quot;,
+        &quot;sha256&quot;: &quot;18d0ec27dab4b9a7025064a64f521b018b0e756e11050bd0bc83d8c3b99ac348&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/gap-cycle.svg&quot;,
+        &quot;sha256&quot;: &quot;16fec2fd7fc1db28cdbdaa9cd0548f3957781b6f5900903756a9fd381d34cb4b&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/gap-cycle.svg&quot;,
+      &quot;caption&quot;: &quot;The shown four-residue tail, its fixed period-four prediction, and the first four residues generated by the same Fibonacci prime rule.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Original LP2-15 page and panel&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/page/lp2-15&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Fibonacci-indexed prime construction&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/lp2-15-panel?section=construction&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-panel-prime-openings&quot;,
+    &quot;lp2-15-totient-gap-audit&quot;
+  ],
+  &quot;article&quot;: &quot;# Does the LP2-15 prime-gap tail repeat?\n\nA supplied proposal finds **8, 20, 10, 6** at the end of the LP2-15 spiral prime gaps after reduction modulo 28. The numbers are correct. The pattern appears **once** in the fifteen shown gaps. Extending the same [Fibonacci-indexed prime construction](#/wiki/lp2-15-panel?section=construction) gives **4**, not the predicted **8**, for the next gap.\n\n![The shown tail, its period-four prediction, and the different next four residues.](experiments/records/lp2-15-prime-gap-cycle/gap-cycle.svg)\n\nThe source&#x27;s 4×4 array is a **derived prime array**, not the decimal values printed on LP2-15. Following its spiral gives `2, 3, 5, 7, 13, 23, 43, 79, 149, 263, 463, 829, 1481, 2593, 4507, 7817`. All fifteen reported consecutive differences and modulo-28 residues check out. The last four residues occupy gap positions **12–15** and occur nowhere else as an exact consecutive four-number run in the shown data.\n\nBefore extending the sequence, we fixed the proposal&#x27;s most direct cycle reading: repeat the final four residues for the **next eight** gaps, without rotating or searching phases. The next Fibonacci prime index after 987 is 1597; its prime is 13477. Thus the first new gap is `13477 − 7817 = 5660`, and **5660 mod 28 = 4**.\n\n| Continuation | Next eight residues mod 28 |\n| --- | --- |\n| If the four-number tail repeats | 8, 20, 10, 6, 8, 20, 10, 6 |\n| Same Fibonacci prime-index generator | **4, 2, 20, 2, 24, 26, 26, 26** |\n\nNone of the eight positions matches the fixed cycle. This is a check of **one arithmetic recurrence claim**, not a test of rune decryption or an exclusion of other panel paths. The proposal does not explain why to use modulus **28**; the Gematria Primus alphabet has **29** runes. Changing modulus or mapping residues to runes would require a separately stated rule. For a declared comparison, these eight gaps modulo 29 are `5, 4, 7, 12, 25, 10, 22, 22`; no plaintext is inferred from them.\n\n## Reproduce\n\nFrom the checkout or [experiment ZIP](downloads/experiments/lp2-15-prime-gap-cycle.zip), run from the root of the extracted bundle:\n\n```text\npython experiments/records/lp2-15-prime-gap-cycle/run.py --check\npython experiments/records/lp2-15-prime-gap-cycle/check.py\npython experiments/records/lp2-15-prime-gap-cycle/plot.py --check\n```\n\nThe [frozen plan](experiments/records/lp2-15-prime-gap-cycle/plan.json) fixes the tail, eight-step continuation and no-phase-search criterion. The [source-number transcription](experiments/records/lp2-15-prime-gap-cycle/source.json) preserves the full array, gaps and residues with the three supplied screenshots identified by SHA-256; the screenshots themselves are not republished. The [results](experiments/records/lp2-15-prime-gap-cycle/results.json) retain all 24 primes and 23 gaps. The producer checks the source array against the archived [LP2-15 construction ledger](exports/fibonacci-prime-panel.json); the independent checker rebuilds the primes with a sieve.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/lp2-15-prime-gap-cycle/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;2bf9f965824c93171224ad20321d3a754c229eb5a57c7a8ad82749b3545f4413&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;prime-indices&quot;,
+      &quot;aliases&quot;: [
+        &quot;nth prime&quot;,
+        &quot;prime ordinal&quot;,
+        &quot;prime indexing&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;squares&quot;,
+      &quot;aliases&quot;: [
+        &quot;magic square&quot;,
+        &quot;number square&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;differences&quot;,
+      &quot;aliases&quot;: [
+        &quot;finite differences&quot;,
+        &quot;differential decoding&quot;,
+        &quot;cumulative sum&quot;,
+        &quot;differencing&quot;,
+        &quot;cumulative sums&quot;
       ]
     }
   ]
@@ -74923,6 +76619,180 @@
         &quot;entropy&quot;,
         &quot;IoC&quot;,
         &quot;index of coincidence&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;moving-alphabets&quot;,
+      &quot;aliases&quot;: [
+        &quot;rotor&quot;,
+        &quot;rotors&quot;,
+        &quot;cipher disk&quot;,
+        &quot;cipher disc&quot;,
+        &quot;moving alphabet&quot;,
+        &quot;evolving alphabet&quot;,
+        &quot;rotating alphabet&quot;,
+        &quot;changing alphabet&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="wulfic-separator-clock-alberti"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-separator-clock-alberti&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;A rotating alphabet with a separator clock&quot;,
+  &quot;question&quot;: &quot;Does the archived two-clock progressive alphabet reach its own frequency gate on its named LP2 targets?&quot;,
+  &quot;reader_question&quot;: &quot;Could the word separators tell a rotating alphabet when to turn?&quot;,
+  &quot;summary&quot;: &quot;No source-selected LP2 page reaches the archived program&#x27;s 1.4 IoC gate under either its literal parser or a declared corrected-rune variant.&quot;,
+  &quot;finding&quot;: &quot;Across eleven actual LP2 targets, all 1,682 distinct effective schedules per page yield zero outputs above the source&#x27;s normalized-IoC 1.4 gate with either parser. The highest LP2 values are 1.164 (literal parser) and 1.159 (canonical correction). The source&#x27;s twelfth named page is solved LP1-15; its literal parser yields two gated outputs but its corrected parser yields none. Eight known-reading plants recover and pass the gate; none of 49 whole-search page-shuffle controls passes either.&quot;,
+  &quot;limitations&quot;: &quot;The source parser omits canonical ᛄ; corrected parsing is a new bounded variant rather than unchanged historical execution. Its old page 15 is solved LP1-15 and excluded from the unsolved-page maximum. The 49 shuffles provide no calibrated probability with zero gated maxima. A constant starting phase cannot alter IoC; nonzero-phase readings were not separately scored. No plaintext language, extra layer or general changing-alphabet family is ruled out.&quot;,
+  &quot;next_steps&quot;: &quot;A new separator-clock proposal should state its glyph parser and page identities, and predict a readable held-out passage before tuning further shifts.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;Alberti&quot;,
+    &quot;progressive shift&quot;,
+    &quot;separator clock&quot;,
+    &quot;input correction&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-11&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-separator-clock-alberti/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned old Wulfic page files with exact source parser and a separate canonical-GP rune correction. Old page15 is solved LP1-15 control only.&quot;,
+    &quot;procedure&quot;: &quot;Enumerate all source directions, two shifts and three modes, deduplicate 5,046 named settings to 1,682 effective outputs, score source normalized IoC and above-gate bigrams/trigrams on each of eleven LP2 targets. Repeat complete search on 49 pagewise shuffled controls for each parser.&quot;,
+    &quot;parameters&quot;: &quot;11 LP2 pages plus one solved LP1 source target; 2 parsers; 29 rune shifts × 29 separator shifts × 2 directions × 3 modes; 49 complete-search shuffles; seed 330123.&quot;,
+    &quot;exclusions&quot;: &quot;Other source pages, nonzero-phase readings (the IoC gate is invariant to constant phase), new separator rules, key switching, other alphabets, extra encryption layers and general Alberti disk mechanisms.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;source-defined finite grid and declared corrected-parser sensitivity&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;24 source/adapter parity cases, eight recovered known-reading plants, independent reconstruction of 24 observed page and 98 whole-search control results&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-separator-clock-alberti/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 and NumPy; full source-parity gate also requires the pinned Wulfic checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;5ca014e5e1b68f92ee6f6e0322a2fcda9c79df2c85c57f73ee6764af6d888aa8&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/plan.json&quot;,
+        &quot;sha256&quot;: &quot;97d596606e08e0a6ce61a96c4db4c9e4ab142a45bdbd4136493b8e3b000870c4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/snapshot_inputs.py&quot;,
+        &quot;sha256&quot;: &quot;cd0fd67526119954d101af23faaa37dccbc0d8ec98b09518315de187727b6649&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/core.py&quot;,
+        &quot;sha256&quot;: &quot;7a7599d5336f8d85e4d13ebc7b896a244933540d0a421c41c90c7228d6a5d42e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/gate.py&quot;,
+        &quot;sha256&quot;: &quot;e988b8938084ae308c1bee74c872c4d25be105eb39edd61810585081f98de7a2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/run.py&quot;,
+        &quot;sha256&quot;: &quot;51801725d7be8a1f4ec21f2daa49f980230c2d53141af65d2200111b812d8dc5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/check.py&quot;,
+        &quot;sha256&quot;: &quot;5ca014e5e1b68f92ee6f6e0322a2fcda9c79df2c85c57f73ee6764af6d888aa8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/plot.py&quot;,
+        &quot;sha256&quot;: &quot;da251b8c99669fc20aa89e69cca8282f1a6adf78ba91f1c4e627470315fe588f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;414f6bb8b9286a759c9e4f4b21686e82542cc6c118a7dfe5679c013cd5a1c461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/article.md&quot;,
+        &quot;sha256&quot;: &quot;922d8c1ece28d630b20a72d4578c95b821f18bf8fbbf8d6b9a482d1d1a702f53&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;ec51598b9a622c31b1277957e5b78dfc9e3b53c9c7128236560787c7fb496024&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/gate_results.json&quot;,
+        &quot;sha256&quot;: &quot;64bbdfe032fe2f18e813001023acbf4b10211b294052e766744fd20955ebf561&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/results.json&quot;,
+        &quot;sha256&quot;: &quot;fd5a9b7fba60ab516880a887de084830b40e592a500c37d445b72b4e7a292411&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;55913371e394eb42f4f006f9af8681a7da18f38fa9d1ad276aa72fca2bf2cb8d&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Every LP2 page&#x27;s best two-clock collision score remains below the archived source&#x27;s 1.4 hit threshold.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic two-clock solver&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned legacy input warning&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wholepage-progressive-caesar&quot;,
+    &quot;alberti-branch-arithmetic&quot;,
+    &quot;wulfic-lfsr-singleton-constraints&quot;
+  ],
+  &quot;article&quot;: &quot;# An alphabet that turns at runes and separators\n\nAn archived solver tried a changing alphabet with two clocks: one shift after each rune and another after a word or other visible separator. **None of its eleven LP2 targets passes its own frequency gate**, whether we preserve its literal rune parser or correct a glyph omission. This is a bounded result for the source&#x27;s specified shifts and target pages; it is not a test of every Alberti disk or changing alphabet.\n\n![Each LP2 page&#x27;s highest collision score under the two-clock grid remains below the source&#x27;s 1.4 hit gate.](experiments/records/wulfic-separator-clock-alberti/comparison.svg)\n\nThe chart shows the largest **normalized index of coincidence** (a measure of repeated rune values) after trying every source clock setting on each page. The source calls a result a hit only above **1.4**. Its best LP2 value is **1.164** with the original parser and **1.159** when the missing rune is restored. There are **zero gated outputs** on either representation. The source also listed old page 15, which is actually solved **LP1-15**; its literal parser produced two gate-passing settings there. That solved page is displayed in the [result table](experiments/records/wulfic-separator-clock-alberti/results.json) but excluded from the LP2 comparison.\n\n## What was tested\n\nAt position `i`, the alphabet has turned by `letter_shift × i + separator_shift × separators_before_i` modulo 29. The source tries every shift from **0 to 28**, both directions and three decode modes. That is **5,046 named settings** per page, but they collapse to **1,682 distinct outputs**: opposite directions and arithmetic signs often describe the same transformation. We retained the source&#x27;s page list, zero starting phase, separator rule, IoC gate, and bigram/trigram ranking above that gate. The selected old source page ordinals map to the LP2 pages labeled in the chart.\n\nThe original program lists `ᛂ` where the archived manuscript uses `ᛄ`. As a result, its literal parser drops **5–13 runes** from each named LP2 page. We show that exact parser and a separately declared canonical-GP correction. The correction is a *new input variant*, not a reconstruction of a historical run. A second source issue is path placement: the archived script changes into `tools/` and then looks for a `pages/` directory there. Our replay reads the exact pinned Git page files instead. These old files match the site&#x27;s archived rune sequence before applying the source parser.\n\n## How strong is the result?\n\nBefore testing LP2, we used four archived known readings to make **eight planted messages**, one under each parser per reading. A chosen two-clock schedule recovered all eight exactly, and all eight cleared the source&#x27;s 1.4 gate. We also compared 24 cases directly with the pinned source decoder. The independent checker reconstructed every observed page and all **49 complete-search shuffled controls**. None of those shuffled controls cleared the gate either. That control has too few positive hits to assign a useful tail probability to the LP2 zero; it does show that merely searching many clocks does not force a hit under this threshold.\n\nThe outcome is limited to the eleven source-selected LP2 pages, these two parsers, the page-local two-clock rule, and the source&#x27;s gate. Adding a constant starting phase only renames the output symbols, so it cannot change IoC or make this gate pass. Other separator meanings, alphabets, plaintext languages, and extra cipher layers remain open. A readable passage or an independently predicted held-out page would be needed to support a new clock rule.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/wulfic-separator-clock-alberti/plan.json), [source-page snapshot](experiments/records/wulfic-separator-clock-alberti/inputs.json), [gate receipt](experiments/records/wulfic-separator-clock-alberti/gate_results.json), and [results](experiments/records/wulfic-separator-clock-alberti/results.json) carry the exact bytes and case counts. In the extracted experiment folder, `python check.py` independently repeats the page and control censuses; `python plot.py` regenerates the chart. To repeat source parity, use `python gate.py --source-root ABSOLUTE_PATH_TO_PINNED_WULFIC_CLONE`. To repeat all computations after the gate, run `python run.py --check`. To regenerate the input snapshot, run `python snapshot_inputs.py --source-root ABSOLUTE_PATH_TO_PINNED_WULFIC_CLONE --liberpedia-root ABSOLUTE_PATH_TO_LIBERPEDIA_CHECKOUT`.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-separator-clock-alberti/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5ca014e5e1b68f92ee6f6e0322a2fcda9c79df2c85c57f73ee6764af6d888aa8&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;polyalphabetic&quot;,
+      &quot;aliases&quot;: [
+        &quot;Vigenere&quot;,
+        &quot;Beaufort&quot;,
+        &quot;repeating key&quot;,
+        &quot;polyalphabetic&quot;,
+        &quot;repeating key cipher&quot;,
+        &quot;substitution&quot;,
+        &quot;polyalphabetic substitution&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;interruptions&quot;,
+      &quot;aliases&quot;: [
+        &quot;interrupters&quot;,
+        &quot;reset&quot;,
+        &quot;pause key&quot;,
+        &quot;skip key&quot;
       ]
     },
     {

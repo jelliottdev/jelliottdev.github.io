@@ -1,0 +1,18 @@
+{
+  "status": "frozen-before-extension",
+  "source": "user-supplied 2026-10-23 screenshots 16970, 16972, 16974",
+  "source_sha256": [
+    "9571e41acbe9173ad4bbe117505781a674bfbb6a09cf102c94cebf8572c9e7d0",
+    "91c9eaa287431f14fb4cc5dff6b8f1249f88c191916b35d73084d76b7158db1a",
+    "b82e5f016ff3d0850ae5bbf72d1e5465d1e63ed904d539167fb05edbdde9c206"
+  ],
+  "printed_sequence": [2, 3, 5, 7, 13, 23, 43, 79, 149, 263, 463, 829, 1481, 2593, 4507, 7817],
+  "generator": "Take distinct Fibonacci values 0,1,2,3,5,... as zero-based prime indices p[F]; subtract consecutive prime values in ascending index order.",
+  "modulus": 28,
+  "claimed_cycle": [8, 20, 10, 6],
+  "observed_window_rule": "Count each contiguous exact four-residue occurrence in the fifteen displayed differences; no rotations or reordered hits.",
+  "prediction_rule": "The displayed last four residues, positions 12-15 one-based, seed a period-four prediction for the next eight differences: 8,20,10,6,8,20,10,6. No phase search.",
+  "extension": "Append the next eight distinct Fibonacci prime indices after 987: 1597,2584,4181,6765,10946,17711,28657,46368. Calculate eight new differences and residues modulo 28.",
+  "comparison": "Optionally display the same gaps modulo 29 as a predeclared alphabet contrast; no modulus search or scoring.",
+  "excluded": "No alternative spiral, reverse order, skipped Fibonacci duplicates, gap definition, residue-to-rune map, or ciphertext decoder."
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "liberpedia-grid-token-roles-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "frozen_before": "corrected-byte sensitivity scores; the archived source outputs were available before this plan",
+  "input_files": [
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/a2_tokenpad.py",
+      "sha256": "ece101a84c8c4a71b50cd585bf1f40e1394b3974550c5b4c549e2ed2d084b38b"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_ciphertext.py",
+      "sha256": "ff3284dd1b12b576519b113661438d92d13602404886b18656001ad5833d182d"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_ciphertext_results.json",
+      "sha256": "92109eb8e18d6c8a626bc36ff523230d7ba5b758a378c563da6a6fc452d5c896"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_index.py",
+      "sha256": "8b1ab40ceb93fbd23350dde11720f6b457b8210f0795a1d5629ccc6361ec1f65"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/campaign7/token_as_index_results.json",
+      "sha256": "fc4827909666b084c0c50856babb17d575401256539029047d0f57dab70aa132"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/analysis/run_stats.py",
+      "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/src/lp/corpus.py",
+      "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source/src/lp/stats.py",
+      "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source-archived-256.bin",
+      "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source-canon-256.bin",
+      "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+    },
+    {
+      "path": "experiments/records/dukotah-grid-token-roles/source-resolved-256.bin",
+      "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+    },
+    {
+      "path": "exports/readings/lp2-56.csv",
+      "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+    }
+  ],
+  "byte_witnesses": {
+    "archived": "literal P49+P50+P51 arrays in pinned a2_tokenpad.py, lengths 80+104+72",
+    "canon": "published six-cell adjudication canon_256.bin, differing from archived at indices 25,175,182,199,215,237",
+    "resolved": "published all-eleven adjudication payload_resolved.bin, differing from archived at those six plus 45,50,246"
+  },
+  "scope": {
+    "source_ciphertext": "For each 256-byte witness, source targets P49, P50, P51, joined, joined reversed; all 256 single-byte XOR keys, 18 fixed keyword XOR keys, four exact stream families (consecutive primes, prime-minus-one, totient, Fibonacci) in ± mod256, and as-is. 1,415 outputs/witness. Flag only printable ratio >0.85, then source English quadgram score on dot-projected nonprintables.",
+    "source_index": "For each witness, the source’s four exact interpretations: absolute rune-corpus positions, cumulative gaps mod corpus length, per-source-rune-page indices 49/50/51, and byte mod29 as GP runes. Four outputs/witness, source English quadgram score and break bar >−5.0.",
+    "corpus": "Use pinned krisyotam rune-only segments. Source rune-page 49/50/51 are not printed grid pages; the page-local index interpretation is source-indexed, not physical neighbour evidence.",
+    "total_outputs": {
+      "ciphertext": 4245,
+      "index": 12
+    }
+  },
+  "parity": "Reproduce archived result JSON exactly on archived bytes; source scripts are relocated beside pinned run_stats and lp modules in a temporary copy because recovered corpus scripts lack their original imports. Preserve archived files untouched.",
+  "positive_controls": [
+    "Byte XOR: encode 256-byte ordinary English under a fixed one-byte XOR and require exact whole output, ratio1.0 and source quadgram above −5.5.",
+    "Byte additive: encode the same 256-byte English under one source prime stream and require exact whole output, ratio1.0 and score above −5.5.",
+    "Index: construct token indices selecting the complete LP2-56 known rune reading from the first 256 rune-corpus positions; require exact complete recovered GP sequence and score above −5.0.",
+    "Index self-GP: encode complete LP2-56 known rune sequence as byte values 0..28; require exact score above −5.0.",
+    "Page-local and cumulative index branch controls require exact rune recovery on constructed legal tokens; distinguish them from source score gate if no natural known-page plaintext can be represented."
+  ],
+  "limits": "A source-specific test of three declared byte witnesses and fixed functions. It does not test unknown grid readings, arbitrary offsets, masks, padding, compression, other texts or key schedules. The index branch is a reading proposal over the rune corpus, not an LP2 decryption. Source thresholds are heuristic; synthetic controls test implementation, not all candidate plaintexts."
+}

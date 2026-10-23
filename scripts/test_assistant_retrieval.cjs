@@ -15,12 +15,12 @@ const docs=Search.experimentDocs(records),withPages=[...pages,...docs];
 const ids=(items)=>items.map(item=>item.id);
 const visible=(query,targets=[])=>Search.classify(withPages,query,targets).tests.map(hit=>hit.document.id);
 const selected=ids(Search.select(withPages,long));
-assert.equal(selected[0],'cumulative-autokey-literal');
+assert.equal(selected[0],'gp-prime-plaintext-feedback','The specific plaintext-prime test should lead, without claiming to settle the vague shedding idea');
 assert.deepEqual(visible(long),selected,'Visible test cards and Worker evidence must agree');
-assert.equal(Search.select(withPages,short)[0].id,'public-multihistory-feedback');
+assert.equal(Search.select(withPages,short)[0].id,'gp-prime-plaintext-feedback','The prime-valued plaintext rule is closer than generic history feedback');
 for(const [query,targets] of [[long+' on LP2-31',[]],[long,['lp2-31']]]){
  const found=Search.select(withPages,query,targets);
- assert.equal(found[0].id,'cumulative-autokey-literal');
+ assert.equal(found[0].id,'gp-prime-plaintext-feedback');
  assert.deepEqual(visible(query,targets),found.filter(doc=>doc.kind==='experiment').map(doc=>doc.id));
  assert(found.some(doc=>doc.kind==='page'&&doc.page==='lp2-31'),
    'Requested page context must follow the full method evidence');
@@ -38,7 +38,7 @@ for(const query of [
 const malformed=Search.experimentDocs(records.map(record=>({...record,method_topics:{id:'feedback',aliases:['autokey']}})));
 assert.deepEqual(ids(Search.select(malformed,long)),ids(Search.select(lexicalDocs,long)),
   'A nonarray topic container cannot crash or create an accidental method match');
-const oversized=docs.map(doc=>doc.id==='cumulative-autokey-literal'?{...doc,text:doc.text+'x'.repeat(9001)}:doc);
+const oversized=docs.map(doc=>doc.id==='gp-prime-plaintext-feedback'?{...doc,text:doc.text+'x'.repeat(9001)}:doc);
 assert.deepEqual(Search.select(oversized,long),[],
   'An oversized rescued winner must refuse inference instead of substituting a weaker result');
 assert.equal(Search.classify(oversized,long).tests.length,0);

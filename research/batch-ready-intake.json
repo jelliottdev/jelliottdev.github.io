@@ -695,7 +695,9 @@
         "multiplicative-ciphertext-autokey",
         "public-circumference-substitutions",
         "r26-derived-generators-opening-cribs",
-        "wulfic-autokey-seed-families"
+        "wulfic-autokey-seed-families",
+        "gp-prime-plaintext-feedback",
+        "dukotah-word-boundary-key-clocks"
       ],
       "related_context": [
         {
@@ -737,7 +739,17 @@
         "held_out_prediction"
       ],
       "retrieval_followup": "Check the current Have we tried it lookup with this supplied query. Feedback/autokey and known-reading-key records should be considered before audio spectra or unrelated F-gap mappings; reproduce any omission before changing ranking.",
-      "intake_decision": "One grouped proposal with related existing tests; queued for formalization, not marked untried in all forms, run, supported or disproven."
+      "intake_decision": "One grouped proposal with related existing tests; queued for formalization, not marked untried in all forms, run, supported or disproven.",
+      "tested_variants": [
+        {
+          "record": "gp-prime-plaintext-feedback",
+          "coverage": "Two page-reset plaintext GP-prime feedback recurrences; all scalar seeds and both signs. Neither shedding nor arbitrary recursion specified or closed."
+        },
+        {
+          "record": "dukotah-word-boundary-key-clocks",
+          "coverage": "Pinned separator/reset schedules and five word/previous-ciphertext prime-value rules; other states and resets remain outside scope."
+        }
+      ]
     },
     {
       "id": "lp2-15-prime-spiral-gaps-mod28",
@@ -745,8 +757,8 @@
       "source_locator": "Three supplied screenshots: 16970, 16972 and 16974.",
       "shared_engine": "lp2-15-grid-derived-gap-and-residue-rules",
       "priority": 1,
-      "state": "queued-arithmetic-observation-needs-cycle-and-decoding-rule",
-      "has_been_run": false,
+      "state": "bounded-arithmetic-check-complete",
+      "has_been_run": true,
       "title": "LP2-15 prime-spiral gaps modulo 28",
       "input": "The supplied 4x4 prime array, related to the known LP2-15 square construction; distinguish this derived array from the printed manuscript cells.",
       "matrix": [
@@ -847,7 +859,8 @@
       "existing_records": [
         "lp2-panel-prime-openings",
         "lp2-15-totient-gap-audit",
-        "wulfic-square-title-vocabulary"
+        "wulfic-square-title-vocabulary",
+        "lp2-15-prime-gap-cycle"
       ],
       "related_context": [
         {
@@ -860,7 +873,12 @@
         "Do not count the 15 differences as separate ideas or label a short tail a demonstrated periodic cycle."
       ],
       "intake_decision": "One grouped queued proposal. Preserve the exact supplied data and check overlap before extending existing work or creating a new experiment.",
-      "modulus_review": "No rationale for modulus 28 was supplied. GP29 has 29 symbols indexed 0 through 28; index range alone does not justify reduction modulo 28. Modulus 28 can arise for exponents in the nonzero multiplicative group modulo 29, but no such exponent rule was proposed here. Do not invent that motivation or treat a selected residue pattern as cipher evidence."
+      "modulus_review": "No rationale for modulus 28 was supplied. GP29 has 29 symbols indexed 0 through 28; index range alone does not justify reduction modulo 28. Modulus 28 can arise for exponents in the nonzero multiplicative group modulo 29, but no such exponent rule was proposed here. Do not invent that motivation or treat a selected residue pattern as cipher evidence.",
+      "completed_check": {
+        "record": "lp2-15-prime-gap-cycle",
+        "finding": "All supplied arithmetic matches; exact fixed period-four continuation fails at the first new gap (4 instead of 8), with 0/8 matching continuation positions.",
+        "limits": "Only this fixed arithmetic continuation; no rune decoder supplied or tested."
+      }
     }
   ],
   "updated": "2026-10-23"

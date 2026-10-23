@@ -2,28 +2,28 @@ Autokey and ciphertext feedback
 
 Trace seeds, state updates and interruptions before testing a feedback decoding rule.
 
-In a feedback cipher, decoding one position changes the state used at later positions. The state may contain previous ciphertext, recovered plaintext or several earlier values. This is a family of rules, not a single algorithm: “autokey” is not enough information to reproduce a proposed reading.
+A feedback cipher uses something already seen to choose the next key value. That “something” might be an earlier ciphertext rune, a rune you just decoded, or a running sum. These rules can produce different readings from the same input. “Autokey” alone does not tell us which rule to use.
 
-One proposed previous-ciphertext running sum would make a repeated output rune correspond exactly to plaintext EA, provided its key is never zero. The equation and proof state that condition precisely; the solved-text control checks the required EA frequency and its spelling assumptions. Neither result identifies the manuscript's cipher.
+What the key remembers
 
-Plaintext and ciphertext feedback are different
-
-A state can also contain a changing alphabet rather than previous numeric values. See moving disks, rotors and evolving alphabets for a worked permutation example and stepping rules.
-
-Consider two subtraction rules on rune indices modulo 29. Both start with a one-symbol seed of 3. After decoding a symbol, the first rule stores the ciphertext just read; the second stores the plaintext just produced. These invented values demonstrate the difference and are not a manuscript reading.
-
-	Position	Ciphertext	Ciphertext-feedback state before step	Output	Plaintext-feedback state before step	Output
-
-	0	10	3	7	3	7
-
-	1	20	10	10	7	13
-
-	2	5	20	14	13	21
+Here is one invented example using the site's 29-rune alphabet. The ciphertext is I–L–C, with indices 10, 20, 5. Begin with key O, index 3. At each step subtract the current key modulo 29. The first output is 10 − 3 = 7, or W, in every rule.
 
 
-At position 2, the calculations wrap: 5 − 20 ≡ 14 (mod 29) and 5 − 13 ≡ 21 (mod 29). The first output agrees because the seeds agree. Later outputs diverge because the update rules differ.
+Previous ciphertext
+Use the last input as the next key. The next outputs are 20 − 10 = 10 (I) and 5 − 20 ≡ 14 (X). Reading: W–I–X.
 
-With a longer seed of length L, one possible plaintext-autokey rule uses the seed for the first L positions, then uses plaintext from L positions earlier. A ciphertext version uses earlier ciphertext instead. That is different from repeating the seed forever, as in a repeating-key cipher. State length, lag and update timing belong in the specification.
+Previous plaintext
+Use the last decoded rune instead. The next outputs are 20 − 7 = 13 (P) and 5 − 13 ≡ 21 (NG). Reading: W–P–NG.
+
+Running plaintext prime sum
+After W, add its GP prime value, 19, to the key: 3 + 19 = 22. The next output is 20 − 22 ≡ 27 (IA). Add IA's prime value, 107, so the key becomes 22 + 107 ≡ 13; the last output is 5 − 13 ≡ 21 (NG). Reading: W–IA–NG.
+
+
+These are demonstrations, not manuscript readings. The third rule uses prime values, whereas the first two use rune indices. A longer seed, a different sign, or a reset at a word break changes the rule. A fixed known-text running key does not depend on newly recovered plaintext and is a separate idea.
+
+The feedback opening test found none of nine fixed 12-rune openings under its scalar-seed rules. The prime-valued plaintext test tried two prime-value update rules, including the running-sum example above, on complete LP2 pages; 144 of 199 matched shuffled searches scored at least as high as its best output. The seed-family test covers other explicit plaintext and ciphertext rules. Each finding applies to its written equation and bounds.
+
+A changing alphabet is another way to store state. See moving disks, rotors and evolving alphabets for a worked example.
 
 An interruption needs a complete state rule
 
@@ -35,30 +35,39 @@ Define a finite search
 
 An unrestricted L-rune seed has 29^L possibilities. A word list gives a smaller, explicitly different search. For m fixed candidate interruptions, independently selecting or rejecting each gives 2^m subsets. Searching seed length, feedback source, lag, sign and interruption policies adds further choices. Count the combinations actually tried and deduplicate identical outputs.
 
+A particular ciphertext running-sum proposal predicts that repeated output runes correspond to plaintext EA when its key is nonzero. The equation and proof state that condition; the solved-text control checks the required EA frequency. This tests that proposal, not every feedback cipher.
+
 Check the state trace, then the reading
 
 Save the source position, input, state before decoding, output and state afterward. For an intended reversible cipher, verify that the corresponding encoder recovers the full input. A round trip checks the implementation; it does not prove that the cipher was used in Liber Primus.
 
 Choose the rule on one segment and apply it unchanged to a continuation. Any seed, reset or correction added after inspecting that continuation becomes another fitted choice. Compare the complete search with controls, including its selection of the best-looking output. See null models, differential decoding and all method families.
 
-
 For proposals combining or changing operations, see switching rules and adaptive decoding.
 
 Sources, related references, and files
-- equation and proof
-  https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
-- solved-text control
-  https://jelliottdev.github.io/#/experiments/ea-frequency-control
+- 29-rune alphabet
+  https://jelliottdev.github.io/#/alphabet
+- running key
+  https://jelliottdev.github.io/reference/articles/method-running-key.html
+- feedback opening test
+  https://jelliottdev.github.io/#/experiments/feedback-opening-census
+- prime-valued plaintext test
+  https://jelliottdev.github.io/#/experiments/gp-prime-plaintext-feedback
+- seed-family test
+  https://jelliottdev.github.io/#/experiments/wulfic-autokey-seed-families
 - moving disks, rotors and evolving alphabets
   https://jelliottdev.github.io/reference/articles/method-moving-alphabets.html
-- repeating-key cipher
-  https://jelliottdev.github.io/reference/articles/vigenere.html
 - LP2-54–55 case study
   https://jelliottdev.github.io/reference/articles/lp2-54-55-feedback.html
 - reset
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
 - skip
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
+- equation and proof
+  https://jelliottdev.github.io/reference/articles/doublets.html#ea-constraint
+- solved-text control
+  https://jelliottdev.github.io/#/experiments/ea-frequency-control
 - null models
   https://jelliottdev.github.io/reference/articles/null-models.html
 - differential decoding

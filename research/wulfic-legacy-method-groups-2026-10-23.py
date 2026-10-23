@@ -68,6 +68,10 @@ META = {
 }
 
 ITEM_OVERRIDES = {
+    'lfsr_alberti_solver.py': ('partial', ['wulfic-separator-clock-alberti'],
+        'Two-clock rotating-alphabet branch replayed with literal/corrected rune parsers and known-reading plants; solved LP1-15 excluded from LP2 maxima. Other LFSR branches remain outside this record.'),
+    'solve_p43_p00.py': ('blocked_input', [],
+        'Pinned page_00/runes.txt is empty, so its repeating-key P00 branches divide by zero; do not silently substitute another transcription. See recorded P00 input dependency note.'),
     'p21_30_second_layer.py': ('replayed_source_bounded', ['wulfic-p21-literal-f-masks'],
         'Complete literal-F mask bounds and fixed no-mask second-layer screens replayed on LP2-04..13, preserving source parser behavior. No page passes the singleton gate; 19 whole-search shuffles also fail. Other keys and pause semantics remain open.'),
     'stream_cipher_attack.py': ('replayed_source_bounded', ['wulfic-systematic-stream-source'],

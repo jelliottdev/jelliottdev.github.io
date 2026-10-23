@@ -1,0 +1,131 @@
+{
+  "id": "wulfic-separator-clock-alberti",
+  "status": "published",
+  "title": "A rotating alphabet with a separator clock",
+  "question": "Does the archived two-clock progressive alphabet reach its own frequency gate on its named LP2 targets?",
+  "reader_question": "Could the word separators tell a rotating alphabet when to turn?",
+  "summary": "No source-selected LP2 page reaches the archived program's 1.4 IoC gate under either its literal parser or a declared corrected-rune variant.",
+  "finding": "Across eleven actual LP2 targets, all 1,682 distinct effective schedules per page yield zero outputs above the source's normalized-IoC 1.4 gate with either parser. The highest LP2 values are 1.164 (literal parser) and 1.159 (canonical correction). The source's twelfth named page is solved LP1-15; its literal parser yields two gated outputs but its corrected parser yields none. Eight known-reading plants recover and pass the gate; none of 49 whole-search page-shuffle controls passes either.",
+  "limitations": "The source parser omits canonical ᛄ; corrected parsing is a new bounded variant rather than unchanged historical execution. Its old page 15 is solved LP1-15 and excluded from the unsolved-page maximum. The 49 shuffles provide no calibrated probability with zero gated maxima. A constant starting phase cannot alter IoC; nonzero-phase readings were not separately scored. No plaintext language, extra layer or general changing-alphabet family is ruled out.",
+  "next_steps": "A new separator-clock proposal should state its glyph parser and page identities, and predict a readable held-out passage before tuning further shifts.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "Alberti",
+    "progressive shift",
+    "separator clock",
+    "input correction"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-11",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-10",
+      "lp2-12",
+      "lp2-13",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-separator-clock-alberti/plan.json"
+    ],
+    "representation": "Pinned old Wulfic page files with exact source parser and a separate canonical-GP rune correction. Old page15 is solved LP1-15 control only.",
+    "procedure": "Enumerate all source directions, two shifts and three modes, deduplicate 5,046 named settings to 1,682 effective outputs, score source normalized IoC and above-gate bigrams/trigrams on each of eleven LP2 targets. Repeat complete search on 49 pagewise shuffled controls for each parser.",
+    "parameters": "11 LP2 pages plus one solved LP1 source target; 2 parsers; 29 rune shifts × 29 separator shifts × 2 directions × 3 modes; 49 complete-search shuffles; seed 330123.",
+    "exclusions": "Other source pages, nonzero-phase readings (the IoC gate is invariant to constant phase), new separator rules, key switching, other alphabets, extra encryption layers and general Alberti disk mechanisms."
+  },
+  "review": {
+    "kind": "source-defined finite grid and declared corrected-parser sensitivity",
+    "retested_on": "2026-10-23",
+    "reviewer": "24 source/adapter parity cases, eight recovered known-reading plants, independent reconstruction of 24 observed page and 98 whole-search control results",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-separator-clock-alberti/check.py",
+    "environment": "Python 3 and NumPy; full source-parity gate also requires the pinned Wulfic checkout.",
+    "script": "experiments/records/wulfic-separator-clock-alberti/check.py",
+    "script_sha256": "5ca014e5e1b68f92ee6f6e0322a2fcda9c79df2c85c57f73ee6764af6d888aa8",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/plan.json",
+        "sha256": "97d596606e08e0a6ce61a96c4db4c9e4ab142a45bdbd4136493b8e3b000870c4"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/snapshot_inputs.py",
+        "sha256": "cd0fd67526119954d101af23faaa37dccbc0d8ec98b09518315de187727b6649"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/core.py",
+        "sha256": "7a7599d5336f8d85e4d13ebc7b896a244933540d0a421c41c90c7228d6a5d42e"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/gate.py",
+        "sha256": "e988b8938084ae308c1bee74c872c4d25be105eb39edd61810585081f98de7a2"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/run.py",
+        "sha256": "51801725d7be8a1f4ec21f2daa49f980230c2d53141af65d2200111b812d8dc5"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/check.py",
+        "sha256": "5ca014e5e1b68f92ee6f6e0322a2fcda9c79df2c85c57f73ee6764af6d888aa8"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/plot.py",
+        "sha256": "da251b8c99669fc20aa89e69cca8282f1a6adf78ba91f1c4e627470315fe588f"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/make_record.py",
+        "sha256": "414f6bb8b9286a759c9e4f4b21686e82542cc6c118a7dfe5679c013cd5a1c461"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/article.md",
+        "sha256": "922d8c1ece28d630b20a72d4578c95b821f18bf8fbbf8d6b9a482d1d1a702f53"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/inputs.json",
+        "sha256": "ec51598b9a622c31b1277957e5b78dfc9e3b53c9c7128236560787c7fb496024"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/gate_results.json",
+        "sha256": "64bbdfe032fe2f18e813001023acbf4b10211b294052e766744fd20955ebf561"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/results.json",
+        "sha256": "fd5a9b7fba60ab516880a887de084830b40e592a500c37d445b72b4e7a292411"
+      },
+      {
+        "path": "experiments/records/wulfic-separator-clock-alberti/comparison.svg",
+        "sha256": "55913371e394eb42f4f006f9af8681a7da18f38fa9d1ad276aa72fca2bf2cb8d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-separator-clock-alberti/comparison.svg",
+      "caption": "Every LP2 page's best two-clock collision score remains below the archived source's 1.4 hit threshold."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic two-clock solver",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py"
+    },
+    {
+      "label": "Pinned legacy input warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wholepage-progressive-caesar",
+    "alberti-branch-arithmetic",
+    "wulfic-lfsr-singleton-constraints"
+  ]
+}

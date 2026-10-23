@@ -1,0 +1,96 @@
+{
+  "schema": "liberpedia-word-boundary-key-clocks-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_inputs": [
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/false_holes.py",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/false_holes.py",
+      "sha256": "a988ecf3f21f4ddc1b335f5df2a4c7c878a6d16ae34037621639328d442b2b48",
+      "bytes": 7899
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/false_holes_results.json",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/false_holes_results.json",
+      "sha256": "194fe2dbcc7784fe5264e884ff121d6c1d01d8a300ad612c13c6449e5deb6d29",
+      "bytes": 1717
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/wordsum_selfkey.py",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/wordsum_selfkey.py",
+      "sha256": "d25ace00b47e394369ac12a0346bd8242d58f4d943abae1e6cd99a0317b880a5",
+      "bytes": 4849
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/analysis/campaign7/wordsum_selfkey_results.json",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/wordsum_selfkey_results.json",
+      "sha256": "8b27550b19f290ffcfc0a8fd992b4a5a701a0334a5ce8a7c344bebad07b2f260",
+      "bytes": 474
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/data/krisyotam_runes.txt",
+      "upstream_path": "liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+      "bytes": 43739
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/data/english_quadgrams.txt",
+      "upstream_path": "liber-primus/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+      "bytes": 608938
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/gematria.py",
+      "upstream_path": "liber-primus/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+      "bytes": 4283
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/ciphers.py",
+      "upstream_path": "liber-primus/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+      "bytes": 4785
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/src/lp/score.py",
+      "upstream_path": "liber-primus/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+      "bytes": 2229
+    },
+    {
+      "path": "experiments/records/dukotah-word-boundary-key-clocks/source/LICENSE",
+      "upstream_path": "LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59",
+      "bytes": 1839
+    }
+  ],
+  "question": "Do source-specified word/separator key schedules yield a complete English-like LP2 page?",
+  "methods": {
+    "FH1": "Three separator sets (-, -., -./) advance without output; prime, prime-minus-one, totient and DIVINITY page-local subtractive streams. Original program includes 57 source pages, report unsolved subset separately.",
+    "FH3": "Four reset delimiter sets: word -, clause ., line /, segment &$; DIVINITY, prime or prime-minus-one stream restart at each selected boundary; source builds 300 stream values and cycles at position300.",
+    "W1": "Word j subtracts/adds previous ciphertext-word GP-prime sum mod29; k0=0.",
+    "W2": "Word j subtracts/adds previous decoded-word GP-prime sum mod29; k0=0.",
+    "W3": "Word j subtracts/adds cumulative preceding ciphertext-word prime sums mod29; k0=0.",
+    "W4": "Word j subtracts/adds Euler totient of previous ciphertext-word GP-prime sum mod29; k0=0.",
+    "W5": "Per-rune source control k_i=GP-prime(c_{i-1}) mod29, previous c index seed0. All W variants test both signs and both Atbash states."
+  },
+  "overlap": "FH2 first-rune shifts are subset of published full-page affine keys; reproduce archived FH2 summary for source parity only, not count as a distinct search. FH4 never ran. Published grouped-key-advance-openings uses fixed rune group lengths, not visible punctuation; published cumulative-autokey-literal has rune-level cumulative feedback, not these GP-prime word sums.",
+  "scope": "55 source unsolved rune-bearing segments from krisyotam (LP2-00..49,51..55); source known tail LP2-56/57 retained only for source parity/controls. Pages split at %, words in source W script at every non-rune, not only hyphen. Headings included.",
+  "grid_counts": {
+    "FH1_unsolved": 660,
+    "FH3_unsolved": 660,
+    "wordsum_unsolved": 1100,
+    "total_unsolved": 2420
+  },
+  "source_score_threshold": -5.0,
+  "positive_controls": [
+    "The archived FH3 AN END opening is checked against the entire known reading, not accepted because of its short preview; if incomplete, the original negative is labelled underpowered.",
+    "For FH1 and FH3, plant a transformed LP2-57 Parable text under a fixed source key schedule with punctuation preserved and require exact complete recovery and score above -5.",
+    "For each W1..W5, plant GP29 ciphertext from the LP2-57 Parable with source word boundaries, seed0, sign−, no Atbash; require exact complete recovery and score above -5."
+  ],
+  "null_control": {
+    "replicates": 49,
+    "seed": 3301,
+    "rng": "Python 3.12 random.Random; shuffle all rune positions within each source page, preserve every separator position and source page boundary; repeat complete FH1/FH3/W grids and retain branch-wise and global maxima."
+  },
+  "limits": "Exact listed schedules, page-local seed0 and source quadgram model only. A failed known-page gate weakens source threshold interpretation, even when a synthetic plant passes. The added whole-search shuffle is not the original source experiment or a cipher model."
+}

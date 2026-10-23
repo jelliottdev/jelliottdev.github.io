@@ -1,0 +1,57 @@
+{
+  "schema": "wulfic-separator-clock-alberti-plan-v1",
+  "status": "frozen-before-manuscript-scoring",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "path": "tools/legacy/lfsr_alberti_solver.py",
+    "git_blob": "c26f72160c3dbf0da10df1c60c72f5df39a38141",
+    "sha256": "4bdabdcf326b90a9f89f4165414e9eaa5dd653a934a1bcd2a484e786f6dac815",
+    "branch": "brute_force_alberti"
+  },
+  "source_page_ordinals": [
+    28,
+    15,
+    20,
+    21,
+    22,
+    27,
+    29,
+    30,
+    40,
+    41,
+    42,
+    43
+  ],
+  "manuscript_selection": "All source pages are replayed; old page15 maps to solved LP1-15 and is excluded from the unsolved-page global maximum. All other source ordinals map to LP2 by subtracting 17.",
+  "parsers": [
+    "literal-source-RUNES-alphabet (drops canonical J glyph)",
+    "canonical-GP29-runes (declared input correction)"
+  ],
+  "source_grid": {
+    "directions": [
+      "clockwise",
+      "counterclockwise"
+    ],
+    "letter_shift": "all residues 0..28",
+    "separator_shift": "all residues 0..28",
+    "modes": [
+      "sub",
+      "add",
+      "beaufort"
+    ],
+    "named_settings_per_page": 5046,
+    "unique_effective_decodes_per_page": 1682,
+    "source_hit_gate": "normalized IoC > 1.4",
+    "source_score": "normalized IoC + 0.01*source bigram score + 0.05*source trigram hits, evaluated only above gate",
+    "separator_rule": "source extract_runes retains a set of rune counts after each visible separator; several separators at the same position count once, and separators after the last rune do not change output"
+  },
+  "controls": {
+    "positive": "Before real scoring, encipher the first 250 GP indices of each of the four named archived readings welcome, first-koan, loss-of-divinity, and second-koan under letter shift 7, separator shift 5, source sub direction; place into a predeclared 250-rune layout and require exact recovery and source IoC gate passage for both parsers.",
+    "oracle": "Compare source alberti_decrypt against the algebraically collapsed two-feature recurrence on source page 28 for representative and seeded settings before full scan.",
+    "null": "49 independent seeded (330123) within-page rune-order shuffles per parser, retaining the original separator positions and repeating the complete source grid across all eleven unsolved source pages; save the single best source score per whole search. This is a selection-aware descriptive control, not an encryption model."
+  },
+  "interpretation": "No result identifies a plaintext or excludes all progressive ciphers. Source's literal rune parser and mixed solved/unsolved target list must be disclosed. The corrected parser is a new bounded adaptation, not an exact historical replay.",
+  "inputs_sha256": "ec51598b9a622c31b1277957e5b78dfc9e3b53c9c7128236560787c7fb496024",
+  "known_readings_sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+}
