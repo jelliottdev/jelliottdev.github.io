@@ -2,6 +2,27 @@
 
 The registry contains bounded, reproducible experiments. Earlier work is not automatically a published experiment. Write a clear script, retest it, and review its precise claims before publishing.
 
+## Run a family as a batch
+
+Use a shared engine when proposals change parameters of the same operation. Keep one published account for the common question and attach stable, machine-readable cases. The first engine covers scalar-primed plaintext and ciphertext feedback; its [manifest and engine guide](engines/README.md) defines the exact supported operations.
+
+```text
+python scripts/run_experiment_suite.py experiments/suites/feedback-opening-census/manifest.json --check
+python experiments/suites/feedback-opening-census/check.py
+```
+
+For a new batch, copy the manifest, choose a new suite ID, declare all inputs and parameter values, and run the central command with `--output-dir`. Reuse the engine's controls. An altered recurrence needs a versioned engine and independent check; changing the success criterion also changes what the batch can establish. Statistical searches must apply the same selection procedure to their controls.
+
+The record's optional `batch` field names its suite ID, hashed manifest input, hashed case output, case count and scope note. The builder checks those attachments. `data/experiment-index.json` exposes the manifest and case URLs for other tools. The site presents the finding in the existing experiment format. Count published accounts, historical proposals and parameter configurations separately.
+
+After the calculation and independent checks pass, update declared hashes in one command:
+
+```text
+python scripts/refresh_experiment_hashes.py your-record-id --write
+```
+
+Without `--write`, this command only reports drift. It does not execute the experiment, certify its interpretation or change review status. Build the site once after the batch is ready, and publish one combined commit.
+
 ## Add an idea
 
 1. Run `python scripts/new_experiment.py your-short-id` to create a draft.
@@ -11,7 +32,7 @@ The registry contains bounded, reproducible experiments. Earlier work is not aut
 5. Retest from the repository root with the stated command. Compare the output to the stored result. Document thresholds and controls; stochastic tests need a null model, trial count, seed, and uncertainty.
 6. Retest and review the precise claims, populate the actual reviewer and retest date, and change `status` to `published`. Computational review must identify the agent and explicitly state that human review is pending; never present it as independent human review. A pending label has no assigned reviewer or scheduled deadline. It changes only after a named person independently checks the original sources, stated scope, calculations and interpretation, with their name, date and findings recorded. Publication means the documented result is available, not that its interpretation is endorsed.
 
-The current registry has 93 published records, all with `review.human_review: "pending"` (checked 2026-10-22). The `review.reviewer` field names the computational checker, usually Codex; it is not a human-review assignment. To mark a record complete, an independent person must document what they checked in `review.human_findings`, add their name in `review.human_reviewer` and the date in `review.human_reviewed_on`, then set `review.human_review` to `"complete"`. The builder rejects a complete label without those fields. If a finding changes, update the result and repeat its computational retest before publishing the reviewed revision.
+The `review.reviewer` field identifies the computational checker. To mark human review complete, an independent person must document what they checked in `review.human_findings`, add their name in `review.human_reviewer` and the date in `review.human_reviewed_on`, then set `review.human_review` to `"complete"`. The builder rejects a complete label without those fields. If a finding changes, update the result and repeat its computational retest before publishing the reviewed revision.
 7. Assign the published record's type and method links as described under **Connect a published record to the method map** below. Do not add draft IDs to that map.
 8. Run `python scripts/build_experiments.py`, `python scripts/build_articles.py`, `python scripts/build_assistant.py`, then `python scripts/build_access_exports.py`. Review the generated site before committing. The article build refreshes the method map after the experiment registry changes.
 

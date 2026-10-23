@@ -791,8 +791,8 @@ for name,roles in [('original-images',{'Historical later-message image','Origina
    z.writestr(info,contents)
    info=zipfile.ZipInfo(named_manifest,(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED
    z.writestr(info,contents)
- with zipfile.ZipFile(root/path) as z:
-  for f in selected:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']
+  with zipfile.ZipFile(root/path) as z:
+   for f in selected:assert hashlib.sha256(z.read(f['path'])).hexdigest()==f['sha256']
  register(path,'ZIP bundle');files[-1]['members']=len(selected)
 experiment_bundle_count=0
 for experiment in read('data/experiments.json')['records']:

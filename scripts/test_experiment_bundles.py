@@ -66,6 +66,12 @@ def main():
                         [sys.executable, str(target / f"experiments/records/{experiment_id}/{script}"), *args],
                         cwd=target, capture_output=True, text=True, encoding="utf-8", timeout=60)
                     assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
+            if experiment_id == "feedback-opening-census":
+                for script, args in ((f"experiments/records/{experiment_id}/run.py", ["--check"]),
+                                     (f"experiments/suites/{experiment_id}/check.py", [])):
+                    result = subprocess.run([sys.executable, str(target / script), *args], cwd=target,
+                                            capture_output=True, text=True, encoding="utf-8", timeout=60)
+                    assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
         print(f"PASS: all {len(records)} experiment bundles preserve declared files and hashes; "
               "selected numeric, trigram, reverse-add and corpus-control runners/checkers pass in isolated extractions.")
 

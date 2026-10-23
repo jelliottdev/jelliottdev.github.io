@@ -1,0 +1,104 @@
+{
+  "id": "payload-doublet-gaps",
+  "status": "published",
+  "title": "Do LP2 grid bytes track doublet gaps?",
+  "question": "Do fixed-width or varint readings of the LP2-49–51 payload correlate with distances between adjacent equal-rune events in LP2?",
+  "summary": "Seven declared readings of the pinned 256-byte payload show no strong rank alignment with 85 doublet gaps or the related 86-value sequence.",
+  "finding": "Among 14 fixed comparisons, the largest absolute Spearman rank correlation is 0.119, below the published 0.5 effect-size gate. For the primary 85-gap target, 83 of 84 nonzero circular alignments have an equal or larger best-of-seven correlation than the unshifted comparison.",
+  "limitations": "Only seven direct readings, byte-zero alignment and two gap definitions are tested. Circular rotations are dependent descriptive controls, not a cipher null. Other byte transcriptions, transforms, offsets, selections and gap definitions remain open.",
+  "next_steps": "A revised gap-encoding claim should fix its exact byte source, decoding, offset and target sequence before searching, then repeat the complete selection procedure on controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "byte grid",
+    "doublets",
+    "gap sequence",
+    "varint",
+    "rank correlation"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+      "experiments/records/doublet-placement/results.json"
+    ],
+    "representation": "Pinned 256-byte source grid and 86 within-page equal-rune-pair starts on archived LP2-00–55, concatenated in page order for gap distances.",
+    "procedure": "Decode seven fixed integer/varint readings at byte zero. Compare first available values with 85 inter-event distances and with the first one-based event coordinate plus those distances using tie-aware Spearman correlation. Audit all 84 nonzero rotations of the 85-gap target with the best-of-seven statistic.",
+    "parameters": "Seven byte readings; two targets; 14 comparisons; 85 gap distances; 84 alignment controls; published effect-size gate |rho| >= 0.5.",
+    "exclusions": "Other payload transcriptions, starting offsets, byte permutations, transforms, noncontiguous selections, distinct event definitions, and inference of a cipher mechanism."
+  },
+  "review": {
+    "reviewer": "Independent pairwise midrank check and planted varint round trip",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/payload-doublet-gaps/run.py --check && python experiments/records/payload-doublet-gaps/check.py",
+    "environment": "Python 3 standard library; experiment bundle and reference-data bundle extracted together.",
+    "script": "experiments/records/payload-doublet-gaps/run.py",
+    "script_sha256": "c1f41ad49befd3a64d03b8847234eb848a672981563b1dbbc31629f18b7f71a6",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/doublet-placement/results.json",
+        "sha256": "4cd6468f8fb9a0ae0bd4063087248ecac333e1fae6c14a8c9262a38b3154c1af"
+      },
+      {
+        "path": "experiments/records/payload-doublet-gaps/plan.json",
+        "sha256": "00fdd09f6a013b6595ef0ed4ee094bd1b0414503e907a713dff6a7930ab3dfe4"
+      },
+      {
+        "path": "experiments/records/payload-doublet-gaps/check.py",
+        "sha256": "e8ad07e5101b462e5d199b2963b3d971029dde2955d242e8ef09d6f726e5eea6"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/payload-doublet-gaps/results.json",
+        "sha256": "5c72adc289b16daeae9898791a22bbeca8ad7137dbaa28cbf350570935cca2c2"
+      },
+      {
+        "path": "experiments/records/payload-doublet-gaps/gap-correlation.svg",
+        "sha256": "6ccc50c68f2d9392302ade69f758a2e0d203beb5d9e523708f28593df0ef9aeb"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/payload-doublet-gaps/gap-correlation.svg",
+      "caption": "All seven fixed byte readings have weak absolute rank correlation with the 85-gap sequence; none approaches the published 0.5 effect-size gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published fixed-width E-02B test",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP/zerofp_tests.py"
+    },
+    {
+      "label": "Published varint E-02v extension",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+    },
+    {
+      "label": "Pinned byte source",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/pp49_51/canon_256.bin"
+    }
+  ],
+  "related": [
+    "doublet-placement",
+    "grid-page-order-permutations",
+    "grid-direct-bytes"
+  ],
+  "reader_note": "Seven literal byte readings fail the declared doublet-gap correlation gate.",
+  "reader_limit": "Only fixed byte-zero readings and two event-gap definitions are tested.",
+  "scope_summary": "LP2-49–51 grid · LP2-00–55 doublets · 14 fixed comparisons."
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "question": "Do literal integer readings of the LP2-49–51 256-byte payload follow the observed gaps between equal-rune pairs?",
+  "input": "Pinned canon_256.bin and independently archived within-page LP2-00–55 doublet coordinates.",
+  "fixed_readings": ["uint8", "uint16 little-endian", "uint16 big-endian", "LEB128 forward", "LEB128 reverse", "MSB-first base-128 forward", "MSB-first base-128 reverse"],
+  "target_variants": ["85 distances between 86 event starts", "86 values with first one-based event coordinate prepended"],
+  "comparison": "Tie-aware Spearman rank correlation; align from the beginning and truncate to the shorter sequence. Report all 14 readings, with no search for a favorable offset.",
+  "controls": "Round-trip encode all 85 true gaps as each supported varint format and confirm exact recovery. Rotate the observed gap sequence through all nonzero circular shifts and recompute the maximum absolute correlation over all fixed readings; this is a descriptive alignment control, not a random cipher model.",
+  "claim_threshold": "Published 2026 round-16 test: |rho| > 0.5 and nominal p < 1e-6 for the three fixed-width readings. Published round-28 varint extension: |rho| >= 0.5 and permutation p < 1e-4 for the four varint readings. No p-value is assigned by this replay because no effect reaches the first threshold.",
+  "limits": "The analysis is retrospective; source payload transcription and doublet segmentation are not independently certified by this test. Other encodings, offsets, transformations, gap definitions or payload variants remain open."
+}

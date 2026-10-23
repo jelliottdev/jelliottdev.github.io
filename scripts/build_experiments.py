@@ -54,6 +54,46 @@ def validate_plan_provenance(root, identifier, reproduction):
                     'Saved report plan SHA-256 mismatch: ' + results_path)
 
 
+def validate_batch(root, record):
+    """Validate a lazy case attachment without inflating the experiment count."""
+    batch = record.get('batch')
+    if batch is None:
+        return
+    require(isinstance(batch, dict), 'Batch metadata must be an object')
+    for key in ('suite_id', 'manifest_path', 'cases_path', 'scope_note'):
+        text(batch.get(key), 'batch.' + key)
+    inputs = {item['path'] for item in record['reproduction']['inputs']}
+    outputs = {item['path'] for item in record['reproduction']['outputs']}
+    require(batch['manifest_path'] in inputs, 'Suite manifest must be a declared hashed input')
+    require(batch['cases_path'] in outputs, 'Suite cases must be a declared hashed output')
+    manifest = json.loads(local(root, batch['manifest_path']).read_bytes())
+    attachment = json.loads(local(root, batch['cases_path']).read_bytes())
+    require(manifest.get('suite_id') == attachment.get('suite_id') == batch['suite_id'],
+            'Suite IDs must match record, manifest and case attachment')
+    require(attachment.get('schema') == 'liberpedia-feedback-opening-cases-v1',
+            'Unregistered case schema')
+    cases = attachment.get('cases')
+    require(isinstance(cases, list) and cases and type(batch.get('case_count')) is int
+            and len(cases) == batch['case_count'], 'Suite case count mismatch')
+    ids = [case.get('id') for case in cases]
+    require(all(isinstance(identifier, str) and re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', identifier)
+                for identifier in ids) and len(set(ids)) == len(ids), 'Invalid or duplicate suite case ID')
+    crib_length = max((len(crib.get('indices', [])) for crib in manifest.get('cribs', [])), default=12)
+    for case in cases:
+        require(case.get('mode') in ('ciphertext', 'plaintext')
+                and case.get('boundary') in ('continuous', 'word-reset'), 'Invalid feedback rule')
+        require(type(case.get('lag')) is int and 1 <= case['lag']
+                and type(case.get('primer')) is int and 0 <= case['primer'] < 29,
+                'Invalid feedback parameters')
+        require(type(case.get('comparison_count')) is int and case['comparison_count'] >= 0,
+                'Invalid case comparison count')
+        require(isinstance(case.get('opening_matches'), list)
+                and type(case.get('max_prefix_length')) is int and 0 <= case['max_prefix_length'] <= crib_length,
+                'Invalid case finding')
+        require(isinstance(case.get('decode_sha256'), str)
+                and re.fullmatch(r'[0-9a-f]{64}', case['decode_sha256']), 'Invalid decoded-output hash')
+
+
 def build(root=ROOT):
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
@@ -115,6 +155,7 @@ def build(root=ROOT):
                 require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                         'SHA-256 mismatch: ' + str(file.get('path')))
         validate_plan_provenance(root, identifier, reproduction)
+        validate_batch(root, d)
         require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),
                 'Scope artifacts must be declared hashed inputs')
         for visual in d.get('visuals', []):
@@ -214,11 +255,22 @@ def build(root=ROOT):
             'article_url': base + record['article_path'],
             'bundle_url': base + 'downloads/experiments/' + identifier + '.zip',
         })
+        if record.get('batch'):
+            batch = record['batch']
+            discovery[-1]['batch'] = {
+                'suite_id': batch['suite_id'], 'case_count': batch['case_count'],
+                'cases_url': base + batch['cases_path'],
+                'manifest_url': base + batch['manifest_path'],
+                'scope_note': batch['scope_note'],
+            }
     (root / 'data/experiment-index.json').write_text(json.dumps({
         'schema': 'liberpedia-experiment-discovery-v1',
         'usage': 'Discovery only. Fetch record_url and compare the complete scope, findings, '
                  'limitations and review before claiming an idea was tested. No match means '
                  'no matching documented record here, not proof that an idea is new.',
+        'counts': {'records': len(records),
+                   'batch_suites': sum(bool(record.get('batch')) for record in records),
+                   'batch_configurations': sum(record.get('batch', {}).get('case_count', 0) for record in records)},
         'records': discovery,
     }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     body = '<h1>Experiment records</h1>'
