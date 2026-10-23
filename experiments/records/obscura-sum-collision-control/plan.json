@@ -1,0 +1,10 @@
+{
+  "schema": "liberpedia-obscura-sum-collision-plan-v1",
+  "source": "OBSCURA word-specific mapping discussion, 2026-09-30, source SHA-256 0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7",
+  "question": "How selective are GP-sum matches to the sixteen published OBSCURA candidate words before any cipher operation is chosen?",
+  "targets": "The thirteen distinct GP prime totals of the sixteen fixed candidate words, as preserved in mixed-square-word-sums/results.json.",
+  "input": "LP2-00–55 page text. Hyphen and period separate visible words; line breaks and slashes are layout marks and do not split a word. Ignore all non-rune characters in totals.",
+  "control": "For each of 2,000 seeded trials, shuffle GP prime values within each page while keeping that page's total rune inventory and every visible word length. Count words whose sum equals any of the thirteen fixed targets.",
+  "decision": "Report observed target-sum collisions and the control distribution; do not convert a collision into a proposed plaintext or claim it identifies a cipher key.",
+  "excluded": "The original discussion gives no exact word-specific transformation. This test does not choose an operation, language model, candidate key assignment, held-out decryption target or complete cipher."
+}

@@ -6,7 +6,7 @@ This intake draws on 48 distinct supplied source files. It contains 48 source-sp
 
 The supplied text files are identified by SHA-256 and attribution; their full contents are not republished here. Of the 48 source-specific entries, 7 link to related public material and 41 have no public URL recorded. Even a related public link may not expose the exact supplied post. A hash verifies a copy someone already holds; it cannot retrieve a private transcript or independently establish the attribution. These entries are source leads, not a complete public history of prior attempts. A public link, when present, may change and has not yet been pinned to a revision. Start with Have we tried it? for completed records, or the method map for a broader family.
 
-Entry status (one per proposal): Not replayed: 12 · Related work only: 8 · Partly replayed: 28 · Total: 48
+Entry status (one per proposal): Not replayed: 11 · Related work only: 6 · Partly replayed: 31 · Total: 48
 
 Find an attempt
 
@@ -24,7 +24,7 @@ Cover rotations and a compass-based substitution · Related work only
 
 Word-search routes and missing primes in the 256-cell grid · Partly replayed
 
-Large line gaps, punctuation and JPEG size · Related work only
+Large line gaps, punctuation and JPEG size · Partly replayed
 
 Proposed mechanisms for scarce adjacent doublets · Partly replayed
 
@@ -48,11 +48,11 @@ Totients before the LP2-15 prime-gap construction · Partly replayed
 
 Reverse and table-canon readings of Cicada music · Not replayed
 
-Acoustic watermark search in Cicada tracks · Not replayed
+Acoustic watermark search in Cicada tracks · Related work only
 
 Dictionary-wide word fitting to LP1 magic-square totals · Partly replayed
 
-Use OBSCURA-table GP matches as word-specific keys · Related work only
+Use OBSCURA-table GP matches as word-specific keys · Partly replayed
 
 Manual rune-by-rune transcription recheck · Related work only
 
@@ -62,7 +62,7 @@ Thick and thin LP2 spaces as a binary channel · Partly replayed
 
 Möbius transform of LP2-15 panel numbers · Partly replayed
 
-Rune indices or word sums packed as bytes · Related work only
+Rune indices or word sums packed as bytes · Partly replayed
 
 Five-dot pattern overlaid on a rune paragraph · Not replayed
 
@@ -207,12 +207,12 @@ Related public material (current URL; exact version not yet pinned).
 
 
 Large line gaps, punctuation and JPEG size
-Related work only · Source verification and transcription audits
+Partly replayed · Source verification and transcription audits
 Reported approach. Measure unusually large gaps between rune rows, associate them with punctuation or number panels, and compare JPEG sizes. The report gives 109 versus 73 pixels for a typical gap and a different parable-page measurement.
-Current archive coverage. The wiki has page-region observations and a JPEG-size audit, but no full source-pinned replay of the report's exact gap-coordinate census or its claimed punctuation association.
-Replay requirement. Pin the exact JPEG versions, define row bounding boxes and gap statistic for every page, verify the reported 109/73 values and exceptional page, then compare the punctuation association without selecting pages after inspection.
+Current archive coverage. A source-pinned file-size replay checks every one of the report's 31 printed JPEG labels and corrects its group difference from about 74 KiB to about 40 KiB. Pixel replays confirm selected 109–110 and 129-pixel gaps against 73–75-pixel controls. In five source-guided pages, six apostrophe, quote or digit lines each have a 108–110-pixel following gap while 28 unmarked crop lines have 73–75-pixel gaps. The full-page census and causal explanation remain open.
+Replay requirement. Extend the frozen gap and mark statistic to every reported page and a predeclared comparison set; the current five-page association was source-guided and cannot establish cause.
 
-Related records with narrower scopes: image row coverage.
+Related records with narrower scopes: image row coverage, large gap file size replay, large gap pixel replay, large gap mark alignment.
 
 Source identification
 An analysis of the Big Gaps found in the Liber Primus · CurtbroG · 2023-10-12. Supplied transcript SHA-256: 440c801db2ccaa8653fbd9ba648a1606f38980e3e43a333f89b9e01fee6920af.
@@ -377,10 +377,12 @@ No public URL is recorded for this source. The supplied transcript hash is not a
 
 
 Acoustic watermark search in Cicada tracks
-Not replayed · Audio and frequency encodings
+Related work only · Audio and frequency encodings
 Reported approach. Look for a deliberately embedded acoustic watermark in the published music. The discussion raises this as a question rather than giving a detector, payload or reported extraction.
-Current archive coverage. No watermark-specific detector result is recorded. Existing file-steganography and audio-method guides cover other mechanisms and cannot be used as evidence for this proposal.
-Replay requirement. Choose specific original files and hashes, state the watermark family and detector parameters, record a detection threshold before inspection, and compare positives and false positives on matched non-Cicada audio.
+Current archive coverage. A narrowband spectral record measures persistent lines in the archived Instar audio. It is a characterization of that signal, not a watermark detector or payload extraction. No watermark-specific detector result is recorded.
+Replay requirement. Choose a specific watermark family, original files and hashes, and a detector threshold before inspection; compare positives and false positives on matched non-Cicada audio.
+
+Related records with narrower scopes: instar narrowband lines.
 
 Source identification
 Music structure, reversal and watermark discussion · Nostalgico and participants · 2026-05-16. Supplied transcript SHA-256: 558462fe6d4ac9a9ce127b4cdf444bd6072845a99fab51db473253f6f699b3b5.
@@ -403,12 +405,12 @@ Related public material (repository revision 9c10cafce02e512840cc9e173127930594a
 
 
 Use OBSCURA-table GP matches as word-specific keys
-Related work only · Codebooks and mixed letter-word systems · LP1-05
+Partly replayed · Codebooks and mixed letter-word systems · LP1-05
 Reported approach. For an encrypted word with the same Gematria Primus sum as a value in the LP1-05 table, use a candidate table word to decrypt that word only. A participant reports trying matching words and several operations without a saved positive result.
-Current archive coverage. The fixed sixteen OBSCURA-table word sums are checked, but matching an additive total is many-to-one. The thread does not define the transform, word boundaries or all operations tried; no current record tests this word-specific mapping.
-Replay requirement. Fix one LP2 target and transcription, one rune-sum matching policy, the permitted table-word candidates and exact transform; log every output, including failures, then compare with matched random word keys of equal length and value.
+Current archive coverage. The fixed sixteen OBSCURA-table word sums are checked. A new collision control finds 104 matches to their thirteen distinct totals among 2,928 visible LP2 words; page-wise shuffles average 95.2. This measures the sum-only selection step, not a word-specific decryption.
+Replay requirement. Fix one LP2 target, a deterministic tie-break among equal-sum candidates and an exact word-specific transform; log all outputs and compare with equally flexible matched word keys and held-out text.
 
-Related records with narrower scopes: mixed square word sums.
+Related records with narrower scopes: mixed square word sums, obscura sum collision control.
 
 Source identification
 OBSCURA table and matching-GP words · Zaveon Carlio, heck and participants · 2026-09-30. Supplied transcript SHA-256: 0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7.
@@ -471,12 +473,12 @@ No public URL is recorded for this source. The supplied transcript hash is not a
 
 
 Rune indices or word sums packed as bytes
-Related work only · Bitwise combinations and XOR
+Partly replayed · Bitwise combinations and XOR
 Reported approach. Encode rune indices, prime values or per-word GP sums as integers, pack them into bytes and inspect the output as a file or possible program. The pasted discussion proposes variants but does not report that any resulting file was produced or executed.
-Current archive coverage. The grid direct-byte test concerns printed LP2-49–51 base-60 values, not a whole rune stream or word sums. No pinned packing width, bit order or artifact from this suggestion is in the archive.
-Replay requirement. Fix the exact page range and whether inputs are indices, primes or word sums; declare word boundaries, integer width, byte order, padding and expected file signatures before generating all variants. Treat file recognition as a bounded data test, not evidence that arbitrary bytes should be executed.
+Current archive coverage. A direct-byte baseline now screens every nonempty LP2-00–55 page and the joined rune stream under three fixed GP-index or prime-value encodings. None of 168 streams is wholly printable or begins with one of six specified file signatures. The source discussion did not specify a unique encoding and per-word sums are not covered.
+Replay requirement. For any proposed continuation, fix the exact page range, whether inputs are indices, primes or word sums, word boundaries, integer width, byte order, padding and expected file signatures before generating variants. The direct baseline does not address transformed payloads or a format-specific parser, and generated bytes must not be treated as executable evidence.
 
-Related records with narrower scopes: grid direct bytes.
+Related records with narrower scopes: grid direct bytes, rune direct byte packing.
 
 Source identification
 Rune-to-byte discussion · Mae and Uncus Maximus · 2025-05-03. Supplied transcript SHA-256: 9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728.
@@ -1015,6 +1017,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-source-audits.html
 - image row coverage
   https://jelliottdev.github.io/#/experiments/image-row-coverage
+- large gap file size replay
+  https://jelliottdev.github.io/#/experiments/large-gap-file-size-replay
+- large gap pixel replay
+  https://jelliottdev.github.io/#/experiments/large-gap-pixel-replay
+- large gap mark alignment
+  https://jelliottdev.github.io/#/experiments/large-gap-mark-alignment
 - Autokey and ciphertext feedback
   https://jelliottdev.github.io/reference/articles/method-feedback.html
 - uniform additive doublets
@@ -1079,6 +1087,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-15-totient-gap-audit
 - Audio and frequency encodings
   https://jelliottdev.github.io/reference/articles/audio-frequency.html
+- instar narrowband lines
+  https://jelliottdev.github.io/#/experiments/instar-narrowband-lines
 - selected phrase word sums; Read the checked scope
   https://jelliottdev.github.io/#/experiments/selected-phrase-word-sums
 - mixed square word sums; Read the checked scope
@@ -1089,6 +1099,8 @@ Sources, related references, and files
   https://github.com/mortlach/Liber-Primus-Crib-Assist/tree/9c10cafce02e512840cc9e173127930594a56281/data/1_grams-full
 - Codebooks and mixed letter-word systems
   https://jelliottdev.github.io/reference/articles/method-codebooks.html
+- obscura sum collision control
+  https://jelliottdev.github.io/#/experiments/obscura-sum-collision-control
 - transcription correction sensitivity
   https://jelliottdev.github.io/#/experiments/transcription-correction-sensitivity
 - cross source word boundaries
@@ -1101,6 +1113,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-15-mobius-panel
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
+- rune direct byte packing
+  https://jelliottdev.github.io/#/experiments/rune-direct-byte-packing
 - Hash targets and candidate retrieval
   https://jelliottdev.github.io/reference/articles/hashes-and-addresses.html
 - Switching rules and adaptive decoding

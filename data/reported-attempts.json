@@ -320,12 +320,15 @@
         "sha256": "440c801db2ccaa8653fbd9ba648a1606f38980e3e43a333f89b9e01fee6920af"
       },
       "reported_idea": "Measure unusually large gaps between rune rows, associate them with punctuation or number panels, and compare JPEG sizes. The report gives 109 versus 73 pixels for a typical gap and a different parable-page measurement.",
-      "coverage": "The wiki has page-region observations and a JPEG-size audit, but no full source-pinned replay of the report's exact gap-coordinate census or its claimed punctuation association.",
+      "coverage": "A source-pinned file-size replay checks every one of the report's 31 printed JPEG labels and corrects its group difference from about 74 KiB to about 40 KiB. Pixel replays confirm selected 109–110 and 129-pixel gaps against 73–75-pixel controls. In five source-guided pages, six apostrophe, quote or digit lines each have a 108–110-pixel following gap while 28 unmarked crop lines have 73–75-pixel gaps. The full-page census and causal explanation remain open.",
       "related_records": [
-        "image-row-coverage"
+        "image-row-coverage",
+        "large-gap-file-size-replay",
+        "large-gap-pixel-replay",
+        "large-gap-mark-alignment"
       ],
-      "replay_needed": "Pin the exact JPEG versions, define row bounding boxes and gap statistic for every page, verify the reported 109/73 values and exceptional page, then compare the punctuation association without selecting pages after inspection.",
-      "status": "related-only"
+      "replay_needed": "Extend the frozen gap and mark statistic to every reported page and a predeclared comparison set; the current five-page association was source-guided and cannot establish cause.",
+      "status": "partial"
     },
     {
       "id": "doublet-mechanism-list",
@@ -681,10 +684,10 @@
         "sha256": "558462fe6d4ac9a9ce127b4cdf444bd6072845a99fab51db473253f6f699b3b5"
       },
       "reported_idea": "Look for a deliberately embedded acoustic watermark in the published music. The discussion raises this as a question rather than giving a detector, payload or reported extraction.",
-      "coverage": "No watermark-specific detector result is recorded. Existing file-steganography and audio-method guides cover other mechanisms and cannot be used as evidence for this proposal.",
-      "related_records": [],
-      "replay_needed": "Choose specific original files and hashes, state the watermark family and detector parameters, record a detection threshold before inspection, and compare positives and false positives on matched non-Cicada audio.",
-      "status": "not-replayed"
+      "coverage": "A narrowband spectral record measures persistent lines in the archived Instar audio. It is a characterization of that signal, not a watermark detector or payload extraction. No watermark-specific detector result is recorded.",
+      "related_records": ["instar-narrowband-lines"],
+      "replay_needed": "Choose a specific watermark family, original files and hashes, and a detector threshold before inspection; compare positives and false positives on matched non-Cicada audio.",
+      "status": "related-only"
     },
     {
       "id": "magic-square-dictionary-crib-search",
@@ -744,12 +747,13 @@
         "sha256": "0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7"
       },
       "reported_idea": "For an encrypted word with the same Gematria Primus sum as a value in the LP1-05 table, use a candidate table word to decrypt that word only. A participant reports trying matching words and several operations without a saved positive result.",
-      "coverage": "The fixed sixteen OBSCURA-table word sums are checked, but matching an additive total is many-to-one. The thread does not define the transform, word boundaries or all operations tried; no current record tests this word-specific mapping.",
+      "coverage": "The fixed sixteen OBSCURA-table word sums are checked. A new collision control finds 104 matches to their thirteen distinct totals among 2,928 visible LP2 words; page-wise shuffles average 95.2. This measures the sum-only selection step, not a word-specific decryption.",
       "related_records": [
-        "mixed-square-word-sums"
+        "mixed-square-word-sums",
+        "obscura-sum-collision-control"
       ],
-      "replay_needed": "Fix one LP2 target and transcription, one rune-sum matching policy, the permitted table-word candidates and exact transform; log every output, including failures, then compare with matched random word keys of equal length and value.",
-      "status": "related-only"
+      "replay_needed": "Fix one LP2 target, a deterministic tie-break among equal-sum candidates and an exact word-specific transform; log all outputs and compare with equally flexible matched word keys and held-out text.",
+      "status": "partial"
     },
     {
       "id": "manual-rune-transcription-recheck",
@@ -889,12 +893,13 @@
         "sha256": "9af451a767d37ea6df94778fcfaa58d0c699cb858d36db99c7b5a84077b59728"
       },
       "reported_idea": "Encode rune indices, prime values or per-word GP sums as integers, pack them into bytes and inspect the output as a file or possible program. The pasted discussion proposes variants but does not report that any resulting file was produced or executed.",
-      "coverage": "The grid direct-byte test concerns printed LP2-49–51 base-60 values, not a whole rune stream or word sums. No pinned packing width, bit order or artifact from this suggestion is in the archive.",
+      "coverage": "A direct-byte baseline now screens every nonempty LP2-00–55 page and the joined rune stream under three fixed GP-index or prime-value encodings. None of 168 streams is wholly printable or begins with one of six specified file signatures. The source discussion did not specify a unique encoding and per-word sums are not covered.",
       "related_records": [
-        "grid-direct-bytes"
+        "grid-direct-bytes",
+        "rune-direct-byte-packing"
       ],
-      "replay_needed": "Fix the exact page range and whether inputs are indices, primes or word sums; declare word boundaries, integer width, byte order, padding and expected file signatures before generating all variants. Treat file recognition as a bounded data test, not evidence that arbitrary bytes should be executed.",
-      "status": "related-only"
+      "replay_needed": "For any proposed continuation, fix the exact page range, whether inputs are indices, primes or word sums, word boundaries, integer width, byte order, padding and expected file signatures before generating variants. The direct baseline does not address transformed payloads or a format-specific parser, and generated bytes must not be treated as executable evidence.",
+      "status": "partial"
     },
     {
       "id": "dots-overlaid-on-rune-paragraph",

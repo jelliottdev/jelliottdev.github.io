@@ -1,0 +1,87 @@
+{
+  "id": "instar-narrowband-lines",
+  "status": "published",
+  "title": "Instar's high-frequency line and low hum",
+  "question": "Do the reported ~15 kHz and ~60 Hz features appear in the archived Instar recording under a fixed spectrum measurement?",
+  "summary": "A 15,645.89 Hz line is 39.72 dB above its nearby spectrum and remains prominent in all eight 20-second windows; a separate 59.22 Hz peak is also present.",
+  "finding": "The pinned Instar MP3 has a persistent high-frequency line at 15,645.89 Hz (+39.72 dB) and a low-band peak at 59.22 Hz (+14.89 dB) under the declared spectral measurement. Neither identifies a watermark, device, location or cipher.",
+  "limitations": "Only two archived tracks and two frequency bands were measured. Interconnectedness is a comparison recording, not an empty-carrier control. The source did not specify a watermark detector or payload. Decoder and FFT library versions can affect last-place decimal values.",
+  "next_steps": "For a watermark claim, fix an embedding family, detector and threshold in advance and compare matched audio. The reported time-localized ~500 Hz gaps require their own predeclared intervals and statistic.",
+  "outcome": "supported",
+  "tags": [
+    "music",
+    "Instar Emergence",
+    "761.mp3",
+    "spectrum",
+    "15 kHz",
+    "60 Hz",
+    "audio"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/sources/cicada-2013-twitter/761.mp3",
+      "exports/audio/interconnectedness.mp3"
+    ],
+    "representation": "Two preserved MP3 carriers decoded to 44.1 kHz stereo float samples; channels averaged.",
+    "procedure": "Full-track Hann Welch PSD, 65,536-sample windows, 50% overlap; select largest bin in 50–70 Hz and 14–17 kHz; compare to local median; check fixed peak in nonoverlapping 20-second windows.",
+    "parameters": "Bands 50–70 Hz and 14–17 kHz, local margins 20 and 300 Hz respectively; exclude ±3 Hz around peak; window prominence counts use a 10 dB descriptive cut, not a watermark decision threshold.",
+    "exclusions": "Watermark extraction, device attribution, recording geography, 500 Hz gap events and LP decryption."
+  },
+  "review": {
+    "reviewer": "Pinned-audio computational replay",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/instar-narrowband-lines/run.py --check && python experiments/records/instar-narrowband-lines/check.py",
+    "environment": "Python 3; NumPy 2.5.4, SciPy 1.17.1, soundfile 0.14.0; two original MP3s from reference-data bundle.",
+    "script": "experiments/records/instar-narrowband-lines/run.py",
+    "script_sha256": "f7ad3976ba9d8c7725b7c9259f8465cbc4fbd784c89a2215d3cabab8ab344ba7",
+    "inputs": [
+      {
+        "path": "exports/sources/cicada-2013-twitter/761.mp3",
+        "sha256": "83008217439110c3b824898af73b99cb2cf0657dda88cb363c3aa34a4ec0a460"
+      },
+      {
+        "path": "exports/audio/interconnectedness.mp3",
+        "sha256": "1ce3839b4a62462d9009c4469acc189b523e1bdcf338cb49cda1cd7bb4efffc6"
+      },
+      {
+        "path": "experiments/records/instar-narrowband-lines/check.py",
+        "sha256": "5a89a2114b75596ee3eb18eb848ef67ca6518f61446c6e4528b1187859038b10"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/instar-narrowband-lines/results.json",
+        "sha256": "38146d82b9a29cce86deab3419fa756c105b52b154a6dcc2ba8699e7c50c7721"
+      },
+      {
+        "path": "experiments/records/instar-narrowband-lines/lines.svg",
+        "sha256": "b9b3e0e52db8ff46673a8e78e91ad4fb0b38b7b2d0875ce8fef2e8eedbbaac5e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/instar-narrowband-lines/lines.svg",
+      "caption": "The persistent line in Instar stands out much more than the broad-band peak selected from Interconnectedness."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned 2013 archive containing 761.mp3",
+      "url": "https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/002-3301"
+    },
+    {
+      "label": "Signed 2014 audio carrier and provenance",
+      "url": "https://jelliottdev.github.io/#/wiki/2014-fifth-onion"
+    }
+  ],
+  "related": [],
+  "reader_note": "A persistent line near 15.65 kHz is measurable in the archived Instar audio.",
+  "reader_limit": "A frequency line is not a decoded watermark or evidence of the recording hardware.",
+  "scope_summary": "Two archived Cicada MP3s · 50–70 Hz and 14–17 kHz."
+}

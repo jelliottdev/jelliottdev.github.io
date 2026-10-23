@@ -1,0 +1,111 @@
+{
+  "id": "grid-openpgp-literal",
+  "status": "published",
+  "title": "LP2 grid as an OpenPGP literal packet?",
+  "question": "Does the LP2-49–51 base-60 grid form one complete OpenPGP literal-data packet at byte zero under fixed rectangular readings and disputed I/L stems?",
+  "summary": "The printed-order stream starts with the literal-data tag CB, but no complete literal-data packet appears among 16,384 fixed grid readings.",
+  "finding": "Of 16,384 fixed readings, 4,096 begin with CB but fail complete-packet framing because bytes remain after the encoded length; 12,288 do not begin with the literal-data tag. No reading is one complete tag-11 packet.",
+  "limitations": "Only one untransformed new-format OpenPGP tag-11 packet occupying all 256 bytes at offset zero is tested. This does not reject embedded packets, multi-packet messages, other routes, other glyph choices, encryption or transformed bytes.",
+  "next_steps": "A further OpenPGP proposal must state its packet offset, byte transformation and whether multiple packets are permitted, then supply a complete parse with independently checked controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "base 60",
+    "OpenPGP",
+    "literal data",
+    "byte encoding"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.csv",
+      "experiments/records/grid-direct-bytes/plan.json",
+      "experiments/records/grid-stem-uncertainty/results.json"
+    ],
+    "representation": "256 printed grid tokens as bytes under the declared base-60 digit order; ten disputed I/L cells have two allowed readings.",
+    "procedure": "Enumerate 16 row/column routes and 1,024 stem masks; check complete RFC 4880 new-format tag-11 packet framing at offset zero with definite and partial lengths and literal body fields.",
+    "parameters": "16,384 byte streams; each 256 bytes. Valid tag11 header CB; packet must consume entire stream. Two planted packet controls including partial-length encoding.",
+    "exclusions": "Other OpenPGP packet tags, streams of multiple packets, nonzero offsets, transformed data, 16×16 layout, other base/digit orders and unregistered glyph readings."
+  },
+  "review": {
+    "reviewer": "Deterministic byte parser with planted packets",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-openpgp-literal/run.py --check && python experiments/records/grid-openpgp-literal/check.py",
+    "environment": "Python 3 standard library; input grid and stem-results files from the reference-data bundle.",
+    "script": "experiments/records/grid-openpgp-literal/run.py",
+    "script_sha256": "f17be222237da4536e060eacc42c8e893127ce71bd183e44bf1b04cb06c1ac00",
+    "inputs": [
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "experiments/records/grid-direct-bytes/plan.json",
+        "sha256": "0a550a216f50e22f24659fa8518a4fa7fc19e51ab99a00d45c722371206be6c4"
+      },
+      {
+        "path": "experiments/records/grid-stem-uncertainty/results.json",
+        "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"
+      },
+      {
+        "path": "experiments/records/grid-openpgp-literal/check.py",
+        "sha256": "322a09a3036fff047b5ff9b37254f96e693f3119ce3d1a8f434999f3151b8d87"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-openpgp-literal/results.json",
+        "sha256": "77c418d1adc535407d2f3ff7c49b07fdc19b5d7621de44601c58c31f474a7517"
+      },
+      {
+        "path": "experiments/records/grid-openpgp-literal/packet-screen.svg",
+        "sha256": "80f85b5154fad350dd7269f075fa299d93f4fb7a9c79aa6303b3f1d79b6ec553"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/grid-openpgp-literal/packet-screen.svg",
+      "caption": "The 4,096 tag starts fail packet framing; no complete literal-data packet is present."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Public source OpenPGP grid-payload test",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round30/B2-rsa-gpg"
+    },
+    {
+      "label": "RFC 4880 OpenPGP packet lengths and literal data",
+      "url": "https://www.rfc-editor.org/rfc/rfc4880.html#section-4.2"
+    },
+    {
+      "label": "Grid transcription and byte rule",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "grid-stem-uncertainty"
+  ],
+  "reader_note": "The first byte can resemble an OpenPGP tag; complete packet framing fails.",
+  "reader_limit": "This excludes only one complete untransformed literal-data packet at byte zero.",
+  "scope_summary": "LP2-49–51 · 16,384 direct byte readings.",
+  "article": "# Does the 256-byte grid form an OpenPGP literal packet?\n\nThe first grid byte in printed row order is `CB`. In OpenPGP, that byte can begin a **literal-data packet**. It is a suggestive one-byte match, but the complete packet has to parse. Across **16,384 fixed grid readings**, none is a complete literal-data packet.\n\n![Of 16,384 byte readings, 4,096 begin with the literal-data tag but fail the complete-packet test; 12,288 do not begin with that tag](experiments/records/grid-openpgp-literal/packet-screen.svg)\n\nThe 4,096 readings with `CB` at the start all leave bytes after the packet length says the packet ends. The other 12,288 do not start with a literal-data tag. This reproduces a narrow structural check motivated by the public repository's OpenPGP test; it does not mean the grid cannot encode some other kind of data.\n\n## What was counted\n\nThe 256 cells printed across LP2-49–51 were converted under the [specified conditional base-60 digit order](#/wiki/alphanumeric-grids). We used the same 16 complete row/column routes and 1,024 readings of ten disputed `I`/`L` stem cells as the direct-byte experiment. This experiment adds a different recognizer: a complete OpenPGP **new-format tag-11 literal-data packet at byte zero**. It checks definite and partial lengths, complete consumption of all 256 bytes, the literal format byte (`b`, `t`, or `u`), the filename-length field, and the timestamp's presence.\n\nThe script tests two constructed positive controls: a normal complete packet and a valid packet whose first 128 body bytes use partial-length encoding. A truncated partial packet is rejected. These controls matter because the baseline grid starts with `CB E7`; `E7` denotes a 128-byte partial segment, which cannot be interpreted correctly by looking at only the first two bytes.\n\n| Outcome | Readings |\n| --- | ---: |\n| Does not start with literal-data tag | 12,288 |\n| Starts with tag, then fails complete packet framing | 4,096 |\n| Complete literal-data packet | **0** |\n\n## Boundary of the finding\n\nThis test reads untransformed bytes at offset zero and requires **one packet occupying the entire 256-byte stream**. It does not test hidden packets at later offsets, added prefixes, different base/character readings, a sequence of multiple OpenPGP packets, encryption, or other data formats. A one-byte OpenPGP resemblance cannot establish a payload; a negative complete-packet result is not a verdict on every possible transform.\n\n## Reproduce\n\nExtract the experiment and reference-data ZIP files into one folder, then run:\n\n```sh\npython experiments/records/grid-openpgp-literal/run.py --check\npython experiments/records/grid-openpgp-literal/check.py\n```\n\nThe first script uses only Python's standard library, verifies the hashed grid and stem input files, reruns all 16,384 reads, and checks the saved [result table](experiments/records/grid-openpgp-literal/results.json). The independent check audits how many bytes the `CB` starts actually consume: they end at offsets 94 or 217, leaving the rest of the 256-byte stream. For the general text and file-header screen on the same readings, see the [direct-byte experiment](#/experiments/grid-direct-bytes).\n",
+  "article_path": "experiments/records/grid-openpgp-literal/article.md",
+  "script_sha256": "f17be222237da4536e060eacc42c8e893127ce71bd183e44bf1b04cb06c1ac00",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

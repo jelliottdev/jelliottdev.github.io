@@ -1,0 +1,181 @@
+{
+  "id": "large-gap-mark-alignment",
+  "status": "published",
+  "title": "Marked lines and the gaps below them",
+  "question": "In fixed source-guided LP2 image regions, do apostrophes, quotation marks and digits occur on the lines immediately above unusually wide gaps?",
+  "summary": "Six marked lines on five selected pages are followed by 108–110-pixel gaps; 28 unmarked lines in the same regions and one control have 73–75-pixel gaps. LP2-35 needs its reviewed apostrophe correction to register the observed mark.",
+  "tags": [
+    "line gaps",
+    "punctuation",
+    "quotation marks",
+    "apostrophe",
+    "numerals",
+    "transcription",
+    "image measurement",
+    "LP2",
+    "reported attempt"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-07",
+      "lp2-10",
+      "lp2-35",
+      "lp2-42",
+      "lp2-14"
+    ],
+    "representation": "Aligned rows from original 2400×3600 JPEG crops and the archived raw/reviewed text fields in their structured page records.",
+    "procedure": "Predeclare six source-guided image rectangles; count fully blank horizontal rows between printed lines at three thresholds; align each gap with the raw and reviewed text line above; compare punctuation/digit marks with the following gap.",
+    "parameters": "Six pages, 34 measured interline gaps, ASCII apostrophe/double-quote/digit markers, wide-gap descriptive cutoff 100 pixels, grayscale cutoffs 100/160/200, five dark pixels per row, merge across at most 14 blank rows.",
+    "exclusions": "Whole-book mark/gap association, independent sampling, causality, original author screenshot coordinates, typesetting mechanism and binary decryption."
+  },
+  "outcome": "supported",
+  "finding": "The six marked lines all have 108–110 blank pixels below; 28 unmarked measured lines have 73–75. Raw text detects only five marked wide gaps because its LP2-35 line 4 omits the apostrophe that the image and reviewed text contain.",
+  "limitations": "Pages and lines were selected from an existing hypothesis, so perfect local alignment is not a population-level test or an independent significance estimate. The upright LP2-35 mark is visually adjudicated in the site's reviewed layer; the original report's image coordinates are unavailable.",
+  "next_steps": "Freeze bounding boxes for every text line on all source-labeled and comparison pages, review glyphs independently, then test marker/gap alignment without selecting pages or crop limits from the result.",
+  "review": {
+    "reviewer": "Fixed original-image projection, independent flat-pixel checker and visual inspection of LP2-35 mark",
+    "retested_on": "2026-10-22",
+    "kind": "image-and-text-measurement",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/large-gap-mark-alignment/run.py --check",
+    "environment": "Python 3.12 and Pillow 11.3.0; original-images.zip and structured page records extracted at repository root. Also run check.py and plot.py --check.",
+    "script": "experiments/records/large-gap-mark-alignment/run.py",
+    "script_sha256": "a34c4320d1da4099a6b4142e38203e6f410f3ec4ef8bc51e90f940b67adb4a06",
+    "inputs": [
+      {
+        "path": "experiments/records/large-gap-mark-alignment/plan.json",
+        "sha256": "fb8fcc17b544e65bf4d771ac9435f9ee9a10660be19cd0852637ceeee25f0879"
+      },
+      {
+        "path": "experiments/records/large-gap-mark-alignment/check.py",
+        "sha256": "354700262151cdd938c490c2848f2d9b76fb4d0e430d61c98dd4e7b4e990ad1f"
+      },
+      {
+        "path": "experiments/records/large-gap-mark-alignment/plot.py",
+        "sha256": "2b753c34e17650190f89d531b5fe6e1281c049526f1e9b58b001c2dbb8d5e793"
+      },
+      {
+        "path": "images/lp2-04.jpg",
+        "sha256": "72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6"
+      },
+      {
+        "path": "images/lp2-07.jpg",
+        "sha256": "91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c"
+      },
+      {
+        "path": "images/lp2-10.jpg",
+        "sha256": "1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239"
+      },
+      {
+        "path": "images/lp2-35.jpg",
+        "sha256": "d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa"
+      },
+      {
+        "path": "images/lp2-42.jpg",
+        "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6"
+      },
+      {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/large-gap-mark-alignment/results.json",
+        "sha256": "1e41aa6383d165295e886bd7dc4d7847c13c5c4fb549f6802f71579d123e45f1"
+      },
+      {
+        "path": "experiments/records/large-gap-mark-alignment/mark-gap-alignment.svg",
+        "sha256": "8626dcb460d737f50213c44d9585139706a38f32f77d00aa0080ce6c09dc142f"
+      },
+      {
+        "path": "experiments/records/large-gap-mark-alignment/lp2-35-apostrophe.png",
+        "sha256": "5176b551cb648dc1ebd6a4c0ea5984a38afd0b8901f6d517a4bc4c1943bf3cb6"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/large-gap-mark-alignment/mark-gap-alignment.svg",
+      "caption": "All six selected punctuation/number lines align with the following wide space; this is a source-guided sample."
+    },
+    {
+      "path": "experiments/records/large-gap-mark-alignment/lp2-35-apostrophe.png",
+      "caption": "Original LP2-35 line-four crop; the archived raw text omits this upright mark while the reviewed layer records an apostrophe."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Source-hashed big-gap report",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=large-line-gaps"
+    },
+    {
+      "label": "LP2-35 transcription decision",
+      "url": "https://jelliottdev.github.io/#/wiki/transcription-decisions?section=review-lp2-35"
+    }
+  ],
+  "related": [
+    "large-gap-pixel-replay",
+    "large-gap-file-size-replay",
+    "transcription-correction-sensitivity"
+  ],
+  "article": "# Do marked lines sit above the large gaps?\n\nOne report links unusually tall spaces between LP2 rune lines to an apostrophe, quotation mark or numeral on the line **above**. That is more specific than saying the marked pages have unusual spacing somewhere. We aligned text rows with measured image rows on five pages named by the report and one comparison page. The regions were fixed in the [plan](experiments/records/large-gap-mark-alignment/plan.json); this is a selected, local check rather than a whole-book survey.\n\n![Six source-guided marked lines are each followed by a 108–110 pixel gap; 28 unmarked lines in the measured regions have 73–75 pixel gaps.](experiments/records/large-gap-mark-alignment/mark-gap-alignment.svg)\n\nThe six marked lines in the reviewed page text are LP2-04 line 8 (apostrophe), LP2-07 line 1 (quotation mark), LP2-10 line 8 (the numeral 7), LP2-35 line 4 (apostrophe), and LP2-42 lines 3 and 6 (quotation marks). Each has a **108–110-pixel** blank interval directly below it. The other **28** measured gaps on those pages and the LP2-14 comparison are **73–75 pixels**. The same row boxes and widths reproduce at three grayscale thresholds: 100, 160 and 200. [Results](experiments/records/large-gap-mark-alignment/results.json) give every line and gap coordinate.\n\nLP2-35 shows why the text version matters. Its original image has a small upright punctuation mark on line 4, and the stored **reviewed** text records an apostrophe there. The archived **raw** text omits it. A literal search of the raw text would therefore find five of the six marked wide-gap lines and classify LP2-35 as an unexplained wide gap. The correction is already documented in the [transcription decisions](#/wiki/transcription-decisions?section=review-lp2-35); this experiment measures its effect on a concrete image/text alignment.\n\n![Original LP2-35 line-four crop showing the narrow upright punctuation mark among the runes.](experiments/records/large-gap-mark-alignment/lp2-35-apostrophe.png)\n\nThis alignment is strong **within the six selected regions**, but it does not establish why the extra space appears. The pages and marker lines came from a report proposing the association; they were not sampled blindly. Letter shapes, font fallback or manual layout could produce the same observation without encoding a message. The 129-pixel parable exception and number-panel spacing are outside this test, as are punctuation marks elsewhere in the book.\n\nReproduce from the repository root with `python experiments/records/large-gap-mark-alignment/run.py --check`, `python experiments/records/large-gap-mark-alignment/check.py`, and `python experiments/records/large-gap-mark-alignment/plot.py --check`. The checker independently reads the archived and reviewed page records and reduces flat grayscale pixel rows.\n",
+  "article_path": "experiments/records/large-gap-mark-alignment/article.md",
+  "script_sha256": "a34c4320d1da4099a6b4142e38203e6f410f3ec4ef8bc51e90f940b67adb4a06",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

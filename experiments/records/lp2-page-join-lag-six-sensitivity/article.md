@@ -1,0 +1,13 @@
+# Does joining words across pages change the lag-six result?
+
+Some LP2 page breaks end and begin with runes. A [boundary inventory](#/wiki/transcription-checking?section=page-joins) finds **32 such edges among 55 breaks** on LP2-00–55, but a rune on each side does not prove that the same word continues. The supplied transcription discussion also notes how hard-coded texts can affect downstream experiments. We tested both simple interpretations using the same archived text and word rule as the published [six-rune pattern](#/experiments/word-internal-affine-lags).
+
+![Separating every page gives 77 formula matches; joining rune-to-rune page edges gives 80.](experiments/records/lp2-page-join-lag-six-sensitivity/page-break-comparison.svg)
+
+Under **split pages**, every page break forces a word boundary. This yields **2,928 word tokens**, **1,267** within-word pairs six runes apart and **77** matches to `c′ = 24 − 2c (mod 29)`. Under **join pages**, the page texts are concatenated before words are split at hyphens or periods. This merges exactly **32** edge tokens, yielding **2,896 tokens**, **1,290** lag-six pairs and **80** matches. The respective observed proportions are **6.08%** and **6.20%**. Both variants contain **12,956 runes** and **63 within-word adjacent doublets**. That 63 counts a narrower set than whole-stream doublet totals elsewhere on the site.
+
+The [results](experiments/records/lp2-page-join-lag-six-sensitivity/results.json) list all 55 page boundaries, whether each has rune endpoints, and exactly how many lag-six opportunities and matches its join adds. The **three extra matches** arise among **23 extra pairs**. Thus the reported lag-six count depends slightly on the page-break convention; this convention alone does not erase the observation. The previous word-shuffle significance comparison was **not** rerun under the join-all variant, so this record does not transfer its numerical reference to the new parser.
+
+Neither extreme is asserted as the manuscript's intended word division. A section ending, omitted punctuation or a disputed mark could override what the archived edge characters suggest. Image review must decide individual boundaries before a word-edge test treats them as established joins. This experiment shows the numerical range under two declared, reproducible rules, not a new solution.
+
+Run `python experiments/records/lp2-page-join-lag-six-sensitivity/run.py --check`, `python experiments/records/lp2-page-join-lag-six-sensitivity/check.py`, and `python experiments/records/lp2-page-join-lag-six-sensitivity/plot.py --check` from the repository root. The independent checker reads the separate structured page records and reconstructs both variants with a streaming parser.

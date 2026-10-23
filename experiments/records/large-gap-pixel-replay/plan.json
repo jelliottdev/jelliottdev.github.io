@@ -1,0 +1,13 @@
+{
+  "source": {"title": "An analysis of the Big Gaps found in the Liber Primus", "author": "CurtbroG", "reported": "2023-10-12", "attachment_sha256": "440c801db2ccaa8653fbd9ba648a1606f38980e3e43a333f89b9e01fee6920af"},
+  "sampling": "Two pages from the source's 16-page big-gap list, its named LP2-57 parable exception, and one page from its 15-page comparison list. The four pages were fixed before measuring and are not a random or exhaustive sample.",
+  "regions": [
+    {"page": "lp2-04", "role": "reported big-gap page", "xyxy": [600, 400, 1800, 3100], "expected_lines": 12},
+    {"page": "lp2-35", "role": "reported big-gap page", "xyxy": [580, 630, 1810, 2800], "expected_lines": 12},
+    {"page": "lp2-57", "role": "reported parable exception", "xyxy": [880, 900, 1840, 1900], "expected_lines": 5},
+    {"page": "lp2-14", "role": "reported regular-gap comparison", "xyxy": [600, 650, 1810, 1940], "expected_lines": 7}
+  ],
+  "segmentation": "On each original 2400x3600 JPEG, a horizontal pixel row is active when at least five pixels inside the fixed x-range have grayscale value below the threshold. Merge active rows across at most 14 wholly inactive rows. Report each inclusive ink-row interval and the count of blank rows between adjacent intervals.",
+  "thresholds": [100, 160, 200],
+  "exclusions": "Original source screenshots do not preserve exact coordinates. The selected image regions and count rule are ours; this is a check of observed gap sizes, not a reconstruction of the author's Canva selections or a whole-book punctuation census."
+}

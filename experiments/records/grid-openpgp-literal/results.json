@@ -1,0 +1,115 @@
+{
+  "schema": "liberpedia-grid-openpgp-literal-v1",
+  "cases": 16384,
+  "input_sha256": {
+    "exports/alphanumeric-grids.csv": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5",
+    "experiments/records/grid-direct-bytes/plan.json": "0a550a216f50e22f24659fa8518a4fa7fc19e51ab99a00d45c722371206be6c4",
+    "experiments/records/grid-stem-uncertainty/results.json": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"
+  },
+  "stage_counts": {
+    "not-literal-header": 12288,
+    "trailing-bytes": 4096
+  },
+  "routes": [
+    {
+      "route": "rows-000",
+      "stage_counts": {
+        "trailing-bytes": 1024
+      }
+    },
+    {
+      "route": "rows-001",
+      "stage_counts": {
+        "trailing-bytes": 1024
+      }
+    },
+    {
+      "route": "rows-010",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "rows-011",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "rows-100",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "rows-101",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "rows-110",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "rows-111",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-000",
+      "stage_counts": {
+        "trailing-bytes": 1024
+      }
+    },
+    {
+      "route": "columns-001",
+      "stage_counts": {
+        "trailing-bytes": 1024
+      }
+    },
+    {
+      "route": "columns-010",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-011",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-100",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-101",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-110",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    },
+    {
+      "route": "columns-111",
+      "stage_counts": {
+        "not-literal-header": 1024
+      }
+    }
+  ],
+  "positive_controls": [
+    "complete definite-length packet",
+    "complete 128-byte partial-length packet"
+  ]
+}

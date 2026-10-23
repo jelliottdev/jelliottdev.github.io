@@ -1,0 +1,104 @@
+{
+  "id": "large-gap-pixel-replay",
+  "status": "published",
+  "title": "Measured large gaps between rune lines",
+  "question": "Do fixed original-image measurements reproduce the reported 109-pixel large gap, ordinary 73-pixel gaps, and 129-pixel parable exception?",
+  "summary": "Four frozen image regions reproduce the scale of the claim: LP2-04 has a 109-pixel gap, LP2-35 a 110-pixel gap, LP2-57 a 129-pixel gap, and the LP2-14 comparison has only 73–75-pixel gaps.",
+  "tags": [
+    "line gaps",
+    "image geometry",
+    "LP2",
+    "reported attempt",
+    "paratext",
+    "typography",
+    "pixel measurement"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-35",
+      "lp2-57",
+      "lp2-14"
+    ],
+    "representation": "Fixed rectangles in four hashed 2400×3600 source JPEGs, measured as wholly blank horizontal pixel rows between runic ink-row bands.",
+    "procedure": "Declare source-labeled pages and rectangular rune regions, threshold grayscale rows, merge within-line ink bands, count every intervening blank-row run, and repeat at three darkness thresholds. Verify with an independent flat-pixel projection.",
+    "parameters": "Rectangles in plan.json; five dark pixels to activate a row; at most 14 blank rows joined within a printed line; grayscale cutoffs 100, 160 and 200.",
+    "exclusions": "Full 16-page source classification, original Canva crop coordinates, punctuation causation, source typesetting software, bitstream or decipherment."
+  },
+  "outcome": "supported",
+  "finding": "At all three thresholds, LP2-04 has one 109-pixel gap and ten 73–75-pixel gaps; LP2-35 one 110-pixel gap and ten 73–75-pixel gaps; LP2-57 one 129-pixel gap and three 73–74-pixel gaps; and LP2-14 six 73–75-pixel gaps.",
+  "limitations": "The four image regions are source-guided selections, not a random or whole-book census. The original post's screenshot coordinates are unavailable, so exact agreement with its measurement method cannot be established. Different page layouts prevent a causal conclusion from the spacing alone.",
+  "next_steps": "Annotate rune-row bounding boxes across all reported big-gap and comparison pages before measuring the punctuation association; preserve exact page and row coordinates and compare within consistent layouts.",
+  "review": {
+    "reviewer": "Fixed-region replay and independent flat-pixel projection; source images visually checked",
+    "retested_on": "2026-10-22",
+    "kind": "image-measurement",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/large-gap-pixel-replay/run.py --check",
+    "environment": "Python 3.12 and Pillow 11.3.0; original-images.zip extracted at the repository root. Also run check.py and plot.py --check.",
+    "script": "experiments/records/large-gap-pixel-replay/run.py",
+    "script_sha256": "145c3484a6bc593caef405a62920451dcb47deebf88201622ebfb20a7bcf959e",
+    "inputs": [
+      {
+        "path": "experiments/records/large-gap-pixel-replay/plan.json",
+        "sha256": "5e754ebeb2ce16977b6699825caa023e32bb8f0ec4c9c27c6582323b4ef68f79"
+      },
+      {
+        "path": "experiments/records/large-gap-pixel-replay/check.py",
+        "sha256": "80f92df8b0d77562955cbb2c8f46b8177977aeccf839096659a9eb5b77a8afe9"
+      },
+      {
+        "path": "experiments/records/large-gap-pixel-replay/plot.py",
+        "sha256": "890c98cabe0d6f2fd45c6c1011cbf1accddac84971840185facc5de663dc41cb"
+      },
+      {
+        "path": "images/lp2-04.jpg",
+        "sha256": "72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6"
+      },
+      {
+        "path": "images/lp2-35.jpg",
+        "sha256": "d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa"
+      },
+      {
+        "path": "images/lp2-57.jpg",
+        "sha256": "1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b"
+      },
+      {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/large-gap-pixel-replay/results.json",
+        "sha256": "a31bb0f8b28ce2b9f66395942b700670e593f0587cd4cb060c96c7f52b36deef"
+      },
+      {
+        "path": "experiments/records/large-gap-pixel-replay/gap-measurements.svg",
+        "sha256": "0969b6ed4d9f68b5d79a574a179d7b435e74d8e20fad6b14f4b9224874006b53"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/large-gap-pixel-replay/gap-measurements.svg",
+      "caption": "Each point is a measured clear gap between adjacent ink-row bands in one fixed original-image crop; red marks exceed 100 pixels."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Source-hashed big-gap report",
+      "url": "https://jelliottdev.github.io/#/wiki/reported-attempts?section=large-line-gaps"
+    },
+    {
+      "label": "Original LP2-57 image",
+      "url": "https://jelliottdev.github.io/#/reader/lp2-57"
+    }
+  ],
+  "related": [
+    "large-gap-file-size-replay",
+    "lp2-spacing-gap-audit"
+  ]
+}

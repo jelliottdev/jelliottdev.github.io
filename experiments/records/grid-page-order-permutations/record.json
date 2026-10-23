@@ -1,0 +1,110 @@
+{
+  "id": "grid-page-order-permutations",
+  "status": "published",
+  "title": "LP2 grid as a page-order table?",
+  "question": "Does the LP2-49–51 256-byte grid contain a contiguous 56- or 57-byte permutation of page indices under its published source bytes or fixed grid readings?",
+  "summary": "Neither the source 256-byte stream nor 16,384 fixed grid readings contain a contiguous 0–55 or 0–56 page permutation; the longest eligible run is only five bytes.",
+  "finding": "The pinned source stream has no permutation in its 201 56-byte or 200 57-byte windows. Across 16,384 grid routes and stem readings, zero of 6,569,984 windows pass the necessary value-range condition. The maximum eligible run is three bytes for 0–55 and five for 0–56.",
+  "limitations": "This checks direct, contiguous unsigned-byte page indices only. It does not exclude a transformed, encrypted or noncontiguous table, different page range, or unread glyph variants beyond the ten registered stems.",
+  "next_steps": "Any revised page-route claim should specify its transformation, page set and readout before testing, then show a complete route and an independent control.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "page order",
+    "permutation",
+    "base 60",
+    "metadata",
+    "grid"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+      "exports/alphanumeric-grids.csv",
+      "experiments/records/grid-direct-bytes/plan.json",
+      "experiments/records/grid-stem-uncertainty/results.json"
+    ],
+    "representation": "The source repository’s pinned 256-byte canonical payload plus Liberpedia’s conditional base-60 grid bytes under 16 rectangular routes and 1,024 ten-stem readings.",
+    "procedure": "Exhaustively scan each 56-byte window for an exact permutation of 0–55 and each 57-byte window for 0–56. Count candidate windows with every byte in range and the longest uninterrupted in-range run.",
+    "parameters": "201 and 200 windows per 256-byte stream; 16,384 local streams; 6,569,984 windows total. Two planted positive windows at byte offset 100.",
+    "exclusions": "Noncontiguous selections, transformed or encrypted values, other page-index sets, more glyph alternatives, alternative bases, and page-order validation beyond a direct table."
+  },
+  "review": {
+    "reviewer": "Exhaustive scan and independent run-length check",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-page-order-permutations/run.py --check && python experiments/records/grid-page-order-permutations/check.py",
+    "environment": "Python 3 standard library; accompanying reference-data bundle and pinned 256-byte source included with experiment.",
+    "script": "experiments/records/grid-page-order-permutations/run.py",
+    "script_sha256": "41c03727b2e19e59895add3551db04b5a7a35ab17608d1dc6a484ab5b4ea6048",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "experiments/records/grid-direct-bytes/plan.json",
+        "sha256": "0a550a216f50e22f24659fa8518a4fa7fc19e51ab99a00d45c722371206be6c4"
+      },
+      {
+        "path": "experiments/records/grid-stem-uncertainty/results.json",
+        "sha256": "68beef189f3154e65c5dc78208efa14139dc2d1c76248c6dca90c5cb73732a0d"
+      },
+      {
+        "path": "experiments/records/grid-page-order-permutations/check.py",
+        "sha256": "91f7f375514650484584c628ab1080eff16bd09ea11b408e9b7ad2e3dd67df91"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-page-order-permutations/results.json",
+        "sha256": "363fcdcacee27eadcebecdee76543b82e3dca65e6c9a530142d891e84f05a417"
+      },
+      {
+        "path": "experiments/records/grid-page-order-permutations/page-order.svg",
+        "sha256": "5eabcb901eaa72c11789431859aaffdd7a851ad83a154fc17f2fa9f08aa95355"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/grid-page-order-permutations/page-order.svg",
+      "caption": "The longest run of eligible byte values is far shorter than a literal 56/57-page permutation needs."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published E-02A page-permutation test",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP/PREREG.md"
+    },
+    {
+      "label": "Pinned source canon_256.bin",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/pp49_51/canon_256.bin"
+    },
+    {
+      "label": "Grid transcription and base-60 reading",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "grid-stem-uncertainty",
+    "grid-openpgp-literal"
+  ],
+  "reader_note": "No contiguous 56/57-page index permutation occurs in 6.57 million direct windows.",
+  "reader_limit": "Only literal contiguous page-index bytes under specified readings are excluded.",
+  "scope_summary": "LP2-49–51 · 16,384 direct streams · 6,569,984 windows."
+}

@@ -175,7 +175,7 @@ const liveDocs=Search.experimentDocs(published);
 const lagClaim='The lag-6 relation inside words: c′ = 24 − 2c (mod 29). Two runes six positions apart satisfy this more often than chance, 80 against 45.7 expected; zero across word gaps and linked to doublets.';
 const lagMatches=Search.classify(liveDocs,lagClaim);
 assert.equal(lagMatches.tests.length,0,'A measurement must not be presented as a solving test');
-assert.deepEqual(lagMatches.supporting.map(hit=>hit.document.id),['word-internal-affine-lags','word-internal-affine-all-lags'],
+assert.deepEqual(lagMatches.supporting.map(hit=>hit.document.id),['word-internal-affine-lags','word-internal-affine-all-lags','lp2-page-join-lag-six-sensitivity'],
  'A precise relation should retrieve its measurement and wider-selection follow-up without unrelated tests');
 assert.equal(Search.supporting(liveDocs,'Have we tried a block size of 7 for avoiding doublets?')[0].document.id,
  'block-boundary-doublets');

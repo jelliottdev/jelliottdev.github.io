@@ -1,0 +1,385 @@
+{
+  "id": "rail-fence-visible-words",
+  "status": "published",
+  "title": "Rail-fence readings of visible LP2 words",
+  "question": "Do conventional two- through ten-rail fence decodings improve English word matches at the printed LP2 word alignment?",
+  "summary": "The best rail count matches 70 fixed-dictionary words; 195 of 199 page-rotated, best-of-nine controls match at least 70.",
+  "reader_question": "Does writing each page into a rail-fence zigzag reveal English words?",
+  "tags": [
+    "rail fence",
+    "transposition",
+    "source replay",
+    "word boundaries",
+    "LP2",
+    "English dictionary"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "LP2-00–55 GP rune indices; each visible hyphen-delimited segment is a fixed word slot, preserving page boundaries. The English lexicon is a pinned, filtered public word list.",
+    "procedure": "For each page, apply the standard rail-fence inverse with rail counts 2–10; transliterate the resulting runes in the original word slots and count exact English-list hits. Compare the printed-order best of nine with 199 seeded controls that independently rotate each page by a nonzero offset before repeating the identical nine-way selection. Verify the inverse on LP1-03 and check manuscript counts through a separate permutation implementation.",
+    "parameters": "56 LP2 pages; 12,956 runes; 2,776 visible word slots; 369,652 dictionary entries; 2–10 rails; 199 controls, random.Random(3301); ties count against the proposed alignment.",
+    "exclusions": "Other rail counts, grouping pages, changed word boundaries, keyed or other transpositions, preceding substitution layers, other languages and alternate lexicons. Original source counts are not claimed as reproduced because its dictionary and input paths are unavailable."
+  },
+  "outcome": "not-supported",
+  "finding": "The best printed-alignment score is 70 words for rails 2, 4 and 9, compared with a control median of 78. There are 195 of 199 control maxima at least as large as 70; a one-sided plus-one tail is 196/200.",
+  "limitations": "The score uses exact dictionary membership, not sentence coherence. The dictionary includes obscure words and the page-rotation null is an alignment comparison, not a cipher generator. This result cannot exclude a layered or differently segmented rail cipher.",
+  "next_steps": "Require a fixed rail count or extra layer and a complete predicted passage before searching further; calibrate the entire modified selection procedure on equally structured controls.",
+  "review": {
+    "reviewer": "Independent index-permutation and observed-score recomputation in check.py",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/rail-fence-visible-words/run.py --check",
+    "environment": "Python 3.12 standard library; no network required; independent check.py",
+    "script": "experiments/records/rail-fence-visible-words/run.py",
+    "script_sha256": "5f7bed7c3ffacb3c5e616cc8b9c90ccb9b5b26805f6b10f0062a5a8ecfd15263",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "text/lp2-03.txt",
+        "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      },
+      {
+        "path": "text/lp2-38.txt",
+        "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+      },
+      {
+        "path": "text/lp2-39.txt",
+        "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+      },
+      {
+        "path": "text/lp2-40.txt",
+        "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+      },
+      {
+        "path": "text/lp2-41.txt",
+        "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+      },
+      {
+        "path": "text/lp2-42.txt",
+        "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+      },
+      {
+        "path": "text/lp2-43.txt",
+        "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+      },
+      {
+        "path": "text/lp2-44.txt",
+        "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+      },
+      {
+        "path": "text/lp2-45.txt",
+        "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+      },
+      {
+        "path": "text/lp2-46.txt",
+        "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+      },
+      {
+        "path": "text/lp2-47.txt",
+        "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+      },
+      {
+        "path": "text/lp2-48.txt",
+        "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+      },
+      {
+        "path": "text/lp2-49.txt",
+        "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+      },
+      {
+        "path": "text/lp2-50.txt",
+        "sha256": "bc8bb699ef6917a166c319a813e73398503847c60eabf0e2d2c9fd2caa4d3970"
+      },
+      {
+        "path": "text/lp2-51.txt",
+        "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+      },
+      {
+        "path": "text/lp2-52.txt",
+        "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/lexicon.txt",
+        "sha256": "3c1e332f325d81b6b1b0ad502acda1f91b9ede1133bd0d71a199bdcaa1a12fcc"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/SOURCE.txt",
+        "sha256": "8f725d643b99e248c7635d258aa2b7bcbd148cdf6056e5c386f86838c5ddde5a"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/SOURCE-LICENSE.md",
+        "sha256": "b5065838cbac452dfc855ba6e6e031481ad2c68406f70d21ead9321374653e6c"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/check.py",
+        "sha256": "b9a04a343e7ba5b97c438e6bdaf11d8cfc3f58127c86637a34372e11798c3d38"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/plot.py",
+        "sha256": "6e713669d65b5ecaa917d6c69779cc0e143ddc24fe55b78d9f5df41495d77f64"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/rail-fence-visible-words/results.json",
+        "sha256": "95132ba94a986100a88496650ce73767cea3f03eeae59a63be60dde38fb66486"
+      },
+      {
+        "path": "experiments/records/rail-fence-visible-words/comparison.svg",
+        "sha256": "9f2e838774cb5a7460b3c69f8bb9998118ba6aa274797d815b206e0595116c8e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/rail-fence-visible-words/comparison.svg",
+      "caption": "The best of nine rail readings matches fewer fixed-list words than the median best-of-nine alignment control."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published rail-fence test and source scope",
+      "url": "https://github.com/TheronEagle/liber-primus-research/blob/a6c5d13f7591030367daace993c887af20a5e0ab/experiments/2026-09-24/rail_fence_test.py"
+    },
+    {
+      "label": "Pinned English word list and license",
+      "url": "https://github.com/dwyl/english-words/tree/20f5cc9b3f0ccc8ce45d814c532b7c2031bba31c"
+    }
+  ],
+  "related": [],
+  "article": "## Finding\n\n**A straightforward rail-fence reading does not stand out in this bounded test.** Across LP2-00–55, the best of nine rail counts matched **70** words in a fixed English list. The same nine-way search on page-rotated controls had a median of **78** matches; **195 of 199** controls matched at least 70. The unchanged rune order matched 57. These are dictionary matches, not a translation.\n\n![The best rail-fence word count is below the median of the alignment controls.](experiments/records/rail-fence-visible-words/comparison.svg)\n\n## The proposal and the actual test\n\n[TheronEagle's public rail-fence script](https://github.com/TheronEagle/liber-primus-research/blob/a6c5d13f7591030367daace993c887af20a5e0ab/experiments/2026-09-24/rail_fence_test.py) decrypts each page using two through ten rails and scores the resulting letters as words in a dictionary. Its saved result names two rails as the highest scorer. The repository points to an absolute local path for its word list and another for its transcription; neither file is part of that repository. Its numeric result therefore cannot be exactly replayed from its published checkout.\n\nHere the input is Liberpedia's pinned LP2-00–55 rune text: **12,956 runes** arranged into **2,776 visible word slots**. As in the source code, a hyphen ends a slot; line-break marks and punctuation do not. The [fixed 369,652-word list](experiments/records/rail-fence-visible-words/lexicon.txt) is derived from the [Unlicense English-words repository](https://github.com/dwyl/english-words/blob/20f5cc9b3f0ccc8ce45d814c532b7c2031bba31c/words_alpha.txt), with the exact transform and source hash in [SOURCE.txt](experiments/records/rail-fence-visible-words/SOURCE.txt). A decoded slot counts only when its exact GP Latin transliteration is in that list. The denominator includes short slots that cannot score, so the counts should be compared only under this same scoring rule.\n\n| Reading | Matched slots |\n| --- | ---: |\n| Printed order, no rail transform | 57 |\n| Two, four, or nine rails | 70 each |\n| Median of 199 control maxima | 78 |\n\nEach control rotates the rune stream of *each page* by a seeded, nonzero offset, keeps its visible word lengths, tests all nine rail counts, and retains the best score. The page's rune inventory and contiguous ciphertext order remain intact; the rotation changes the alignment with word slots. This comparison asks whether the printed alignment of the proposed rail reading is better than the same method applied at other alignments. It is not a model of how Cicada composed the manuscript. The saved control maximum scores range from **67 to 90**. The complete nine-rail counts and all 199 control maxima are in [results.json](experiments/records/rail-fence-visible-words/results.json).\n\n## What this does and does not exclude\n\nThe decoder was checked two ways: the main script encrypts an actual solved-page rune sequence and recovers it at each rail count, while the separate checker recomputes all manuscript outputs through a different index permutation. This rules out a broken rail inverse as the explanation for the ordinary score.\n\nThe test covers **only** conventional page-by-page rail-fence decryption with two through ten rails, this word segmentation, this GP transliteration and this fixed dictionary. It says nothing about keyed columns, a rail count outside the range, combining pages, moving word boundaries, a preceding substitution layer, or a non-English plaintext. In particular, the source repository's wider statement that all transpositions are ruled out does not follow from these nine cases.\n\nTo reproduce offline, use the experiment ZIP and run `python experiments/records/rail-fence-visible-words/run.py --check`, followed by `python experiments/records/rail-fence-visible-words/check.py`. Both need Python 3 and the archived source files; no network call is made during the run.\n",
+  "article_path": "experiments/records/rail-fence-visible-words/article.md",
+  "script_sha256": "5f7bed7c3ffacb3c5e616cc8b9c90ccb9b5b26805f6b10f0062a5a8ecfd15263",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "instar-narrowband-lines",
+  "status": "published",
+  "title": "Instar's high-frequency line and low hum",
+  "question": "Do the reported ~15 kHz and ~60 Hz features appear in the archived Instar recording under a fixed spectrum measurement?",
+  "summary": "A 15,645.89 Hz line is 39.72 dB above its nearby spectrum and remains prominent in all eight 20-second windows; a separate 59.22 Hz peak is also present.",
+  "finding": "The pinned Instar MP3 has a persistent high-frequency line at 15,645.89 Hz (+39.72 dB) and a low-band peak at 59.22 Hz (+14.89 dB) under the declared spectral measurement. Neither identifies a watermark, device, location or cipher.",
+  "limitations": "Only two archived tracks and two frequency bands were measured. Interconnectedness is a comparison recording, not an empty-carrier control. The source did not specify a watermark detector or payload. Decoder and FFT library versions can affect last-place decimal values.",
+  "next_steps": "For a watermark claim, fix an embedding family, detector and threshold in advance and compare matched audio. The reported time-localized ~500 Hz gaps require their own predeclared intervals and statistic.",
+  "outcome": "supported",
+  "tags": [
+    "music",
+    "Instar Emergence",
+    "761.mp3",
+    "spectrum",
+    "15 kHz",
+    "60 Hz",
+    "audio"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/sources/cicada-2013-twitter/761.mp3",
+      "exports/audio/interconnectedness.mp3"
+    ],
+    "representation": "Two preserved MP3 carriers decoded to 44.1 kHz stereo float samples; channels averaged.",
+    "procedure": "Full-track Hann Welch PSD, 65,536-sample windows, 50% overlap; select largest bin in 50–70 Hz and 14–17 kHz; compare to local median; check fixed peak in nonoverlapping 20-second windows.",
+    "parameters": "Bands 50–70 Hz and 14–17 kHz, local margins 20 and 300 Hz respectively; exclude ±3 Hz around peak; window prominence counts use a 10 dB descriptive cut, not a watermark decision threshold.",
+    "exclusions": "Watermark extraction, device attribution, recording geography, 500 Hz gap events and LP decryption."
+  },
+  "review": {
+    "reviewer": "Pinned-audio computational replay",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/instar-narrowband-lines/run.py --check && python experiments/records/instar-narrowband-lines/check.py",
+    "environment": "Python 3; NumPy 2.5.4, SciPy 1.17.1, soundfile 0.14.0; two original MP3s from reference-data bundle.",
+    "script": "experiments/records/instar-narrowband-lines/run.py",
+    "script_sha256": "f7ad3976ba9d8c7725b7c9259f8465cbc4fbd784c89a2215d3cabab8ab344ba7",
+    "inputs": [
+      {
+        "path": "exports/sources/cicada-2013-twitter/761.mp3",
+        "sha256": "83008217439110c3b824898af73b99cb2cf0657dda88cb363c3aa34a4ec0a460"
+      },
+      {
+        "path": "exports/audio/interconnectedness.mp3",
+        "sha256": "1ce3839b4a62462d9009c4469acc189b523e1bdcf338cb49cda1cd7bb4efffc6"
+      },
+      {
+        "path": "experiments/records/instar-narrowband-lines/check.py",
+        "sha256": "5a89a2114b75596ee3eb18eb848ef67ca6518f61446c6e4528b1187859038b10"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/instar-narrowband-lines/results.json",
+        "sha256": "38146d82b9a29cce86deab3419fa756c105b52b154a6dcc2ba8699e7c50c7721"
+      },
+      {
+        "path": "experiments/records/instar-narrowband-lines/lines.svg",
+        "sha256": "b9b3e0e52db8ff46673a8e78e91ad4fb0b38b7b2d0875ce8fef2e8eedbbaac5e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/instar-narrowband-lines/lines.svg",
+      "caption": "The persistent line in Instar stands out much more than the broad-band peak selected from Interconnectedness."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned 2013 archive containing 761.mp3",
+      "url": "https://github.com/neuroretransmit/cicada/tree/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/002-3301"
+    },
+    {
+      "label": "Signed 2014 audio carrier and provenance",
+      "url": "https://jelliottdev.github.io/#/wiki/2014-fifth-onion"
+    }
+  ],
+  "related": [],
+  "reader_note": "A persistent line near 15.65 kHz is measurable in the archived Instar audio.",
+  "reader_limit": "A frequency line is not a decoded watermark or evidence of the recording hardware.",
+  "scope_summary": "Two archived Cicada MP3s · 50–70 Hz and 14–17 kHz.",
+  "article": "# Instar's high-frequency line and low hum\n\nThe archived *Instar Emergence* has a narrow line at **15,645.89 Hz**. It rises **39.72 dB above the nearby median** in a fixed full-track spectrum and remains prominent in all eight nonoverlapping 20-second windows. A separate low-frequency peak appears at **59.22 Hz**, 14.89 dB above its nearby median. These measurements make the reported spectral features inspectable; they do not identify a recording device, geographic location, encoded message, or watermark.\n\n![Two pinned Cicada tracks compared in the 14–17 kHz band](experiments/records/instar-narrowband-lines/lines.svg)\n\n## What was tested\n\nA discussion of the music described an approximately 15 kHz “CRT hum” and 60 Hz hum in *Instar*. We checked the exact archived `761.mp3` and used the separately preserved *Interconnectedness* recording as a comparison. Both files are pinned by SHA-256 in the downloaded record. The *Interconnectedness* carrier already has a documented OpenPuff branch, so it is a comparison of frequency spectra, **not** a clean “no-hidden-content” control.\n\nWe averaged the stereo channels, measured a Hann-windowed Welch spectrum over the complete 44.1 kHz track, and selected the largest bin in two bands fixed from the report: 50–70 Hz and 14–17 kHz. The FFT segment length is 65,536 samples with 50% overlap. Each peak is compared with the median of a local band, excluding 3 Hz around that peak. The same peak frequencies were checked in consecutive 20-second windows.\n\n| Track | Peak in 14–17 kHz | Above nearby spectrum | 20-second windows above 10 dB |\n| --- | ---: | ---: | ---: |\n| The Instar Emergence | 15,645.89 Hz | +39.72 dB | 8 of 8 |\n| Interconnectedness | 14,497.23 Hz | +8.93 dB | 3 of 13 |\n\nThe low band also has prominent peaks in both tracks, though at different frequencies: Instar at 59.22 Hz and Interconnectedness at 69.98 Hz under this rule. “Near 60 Hz” is a useful description of the first measured peak. It is **not** proof of North American mains pickup: instruments, processing and MP3 artifacts are not excluded by a spectral peak alone.\n\n## What this leaves open\n\nThe source did not specify a watermark algorithm, payload or detector. A narrow spectral line is a property of the sound file, not an extraction of hidden data. The proposed ~500 Hz time-localized gaps were not tested here; they need a fixed event interval and a defined gap statistic. A later watermark test should pin a detector and decision threshold, then measure false positives on matched audio.\n\n## Reproduce\n\nDownload this experiment ZIP and the reference-data bundle, extract both into one folder and run:\n\n```sh\npython -m pip install numpy scipy soundfile\npython experiments/records/instar-narrowband-lines/run.py --check\npython experiments/records/instar-narrowband-lines/check.py\n```\n\nThe first script checks the two MP3 hashes, recomputes the Welch measurements and checks the figure. The independent check uses a single FFT per 20-second window, without Welch, and confirms both Instar peaks persist. The saved [results](experiments/records/instar-narrowband-lines/results.json) include every window score. Decoding may vary in last-place floating-point digits across library versions; the archived output was produced with the versions stated in the record.\n",
+  "article_path": "experiments/records/instar-narrowband-lines/article.md",
+  "script_sha256": "f7ad3976ba9d8c7725b7c9259f8465cbc4fbd784c89a2215d3cabab8ab344ba7",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

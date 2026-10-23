@@ -1,0 +1,108 @@
+{
+  "id": "lp2-00-02-lag35-selection",
+  "status": "published",
+  "title": "The LP2 opening section’s lag-35 peak",
+  "question": "Does the strongest equality-at-lag peak in LP2-00–02 remain unusual after choosing among lags 1–242?",
+  "reader_question": "Is the 35-rune repetition gap on the opening pages a real periodic clue?",
+  "summary": "Lag 35 has 42/694 equal pairs and z=3.759, but 82 of 999 step-shuffled controls reach at least that high a maximum after the same 242-lag scan.",
+  "tags": [
+    "lag 35",
+    "periodicity",
+    "coincidence",
+    "LP2-00",
+    "LP2-01",
+    "LP2-02",
+    "search bounds",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02"
+    ],
+    "representation": "The 729 GP rune indices in printed LP2-00–02 order; punctuation and separators are omitted.",
+    "procedure": "Count equal symbols at each lag 1–242 and standardize against 1/29. Shuffle the observed modular adjacent-difference inventory 999 times; reconstruct each sequence from the first original rune, rerun the complete lag scan, and compare its selected maximum with the manuscript selected maximum. Also record the predetermined-lag-35 tail and a planted period-35 positive check.",
+    "parameters": "729 runes; 242 tested lags; 999 random.Random(3301) step permutations; ties count as meeting the observed statistic; planted period 35 with 55% independent replacements.",
+    "exclusions": "Other sections, lags 243+, different transcription, language scores, alternate coincidence definitions, pre/post-transform layers, and broad selection outside this one section."
+  },
+  "outcome": "not-supported",
+  "finding": "The highest score is at lag 35: 42/694 equal pairs, z=3.759. Eighty-two of 999 complete-scan control maxima meet or exceed it (plus-one proportion 83/1000); lags 70, 105 and 140 show no comparable recurrence.",
+  "limitations": "Lag 35 was noticed in the source after scanning many lags; a fixed-lag tail would be misleading. Step-shuffling preserves the exact adjacent-difference inventory but is not an encryption model. This conditional scan correction does not cover other data choices or weak periodic signals.",
+  "next_steps": "State an independent rule predicting a period and expected harmonics before testing another section; then apply the whole rule to controls and an appropriately weak planted signal.",
+  "review": {
+    "reviewer": "Independent observed counts and ten control-stream reconstructions in check.py",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-00-02-lag35-selection/run.py --check",
+    "environment": "Python 3.12 standard library, offline; independent check.py",
+    "script": "experiments/records/lp2-00-02-lag35-selection/run.py",
+    "script_sha256": "7e0fb9d4052fcaa1d080908c246573adb8ef5378c0a87881a04db92a4b6308dd",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-01.txt",
+        "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+      },
+      {
+        "path": "text/lp2-02.txt",
+        "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+      },
+      {
+        "path": "experiments/records/lp2-00-02-lag35-selection/check.py",
+        "sha256": "48a7305bce019895ef64e28aec8d75013e574389a5fb7c69dd2159bef1c297e6"
+      },
+      {
+        "path": "experiments/records/lp2-00-02-lag35-selection/plot.py",
+        "sha256": "ba5976df4e8de1ecf94d71a00db162027def46d4b6207956f140e1cb260c8174"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-00-02-lag35-selection/results.json",
+        "sha256": "64146f8bc695ea5e46a00292e097c2a8fb62225fadc901cb12e4a691d6408e88"
+      },
+      {
+        "path": "experiments/records/lp2-00-02-lag35-selection/selection.svg",
+        "sha256": "a389d0204f45767990828cd9246124922df4de0eacd88085d672da199923bc5b"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-00-02-lag35-selection/selection.svg",
+      "caption": "The strongest manuscript lag is within the distribution of strongest lags in the matched controls."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Published lag and parity test",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py"
+    },
+    {
+      "label": "Published original lag results",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/lag_and_parity.txt"
+    }
+  ],
+  "related": [
+    "doublet-lag-profile"
+  ],
+  "article": "## Finding\n\n**The lag-35 peak is real in the transcription, but it is not unusual once the search over 242 lags is counted.** On LP2-00–02, 42 of 694 rune pairs separated by 35 positions are equal, a standardized score of **3.759** against a uniform 29-rune reference. It is the largest score among lags 1–242. Yet **82 of 999** step-shuffled controls have a peak at least this large after undergoing the *same* 242-lag search (one-sided plus-one proportion **83/1,000**).\n\n![The lag-35 score is in the upper, but ordinary, part of the best-of-242 control distribution.](experiments/records/lp2-00-02-lag35-selection/selection.svg)\n\n## Why the search matters\n\n[A public analysis](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py) reported lag 35 as the highest coincidence score in the 729-rune opening section and observed no repeated peaks at 70, 105 or 140. That arithmetic reproduces here. If **35 had been specified before looking**, none of our 999 controls would reach its score at that fixed lag. But 35 was selected as the strongest among 242 candidates; the comparison must select the strongest lag in every control as well.\n\n| Lag | Equal pairs | Standardized score |\n| ---: | ---: | ---: |\n| 35 | 42 / 694 | 3.759 |\n| 70 | 22 / 659 | −0.155 |\n| 105 | 26 / 624 | 0.983 |\n| 140 | 22 / 589 | 0.382 |\n\nThe controls keep the exact inventory of all **728 modular differences between adjacent runes**—including four zero steps, the section's adjacent doublets. Each trial shuffles those differences, reconstructs a 729-rune stream from the original first rune, scans lags 1–242, and retains its largest score. The strongest control scores range from **2.007 to 5.318**; their median is **2.950**. This is a conditional reference for the observed step composition, not a simulation of the manuscript's encryption. The [results](experiments/records/lp2-00-02-lag35-selection/results.json) include all 242 observed lag counts and all 999 maxima.\n\n## What the test can say\n\nThere is no convincing **period-35 recurrence by this coincidence statistic**. A genuine repeating key could leave a peak at 35 or a harmonic, but a weak or interrupted one might not. The absence of harmonics here is descriptive; it does not rule out every interrupted, changing or compound key. The control scan only corrects for choosing among these 242 lags in this section. It does not adjust for choosing the section itself, alternative transcriptions, scoring rules, or many other ideas tried elsewhere.\n\nAs a basic power check, the script plants a 35-periodic 29-symbol sequence with 55% of positions independently replaced. Its strongest scanned lag is 35, with z **29.139**. This is deliberately easy to detect; it verifies the code can recognize a substantial planted recurrence and does not establish power for subtle ones.\n\nReproduce offline with `python experiments/records/lp2-00-02-lag35-selection/run.py --check`, then run `python experiments/records/lp2-00-02-lag35-selection/check.py`. The independent checker recounts the manuscript peak and rebuilds the first ten controls through a separate pair-count calculation. Both scripts use Python's standard library and the archived transcription.\n",
+  "article_path": "experiments/records/lp2-00-02-lag35-selection/article.md",
+  "script_sha256": "7e0fb9d4052fcaa1d080908c246573adb8ef5378c0a87881a04db92a4b6308dd",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

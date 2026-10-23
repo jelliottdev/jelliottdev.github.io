@@ -1,0 +1,9 @@
+{
+  "source_context": "The supplied transcription recheck discussion proposes manual image-to-text review and notes that LP2-00–02 were privately checked. Separately, the public boundary inventory identifies 32 rune-to-rune edges among LP2-00–55's 55 page breaks, without deciding if those are words. This test bounds the effect of that unresolved parsing choice on a published word-internal affine observation.",
+  "source_attachment_sha256": "0f462e3d89e4c4bfb081f8fdf64c2957ee5479e9450ecedc9e0c05d46854b9c7",
+  "input_pages": "text/lp2-00.txt through text/lp2-55.txt in numerical order, archived raw layer only",
+  "token_rule": "Split on hyphen and period; slash and newline are layout markers and do not split words. Keep only the 29 stored runes; carry punctuation only as delimiters. The two variants differ only in whether a page break forces a split.",
+  "variants": ["split at every page break", "concatenate page texts before splitting"],
+  "outcomes": ["rune count", "token count", "lag-six opportunities", "lag-six matches to c' = 24 - 2c modulo 29", "within-word adjacent equal-rune pairs"],
+  "exclusions": "No image adjudication of intended word joins; no new frequency null model, cipher identification, or correction of the archived transcription."
+}
