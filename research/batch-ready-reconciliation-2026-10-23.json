@@ -1,0 +1,264 @@
+{
+  "schema": "liberpedia-batch-ready-20-reconciliation-v1",
+  "snapshot": "2026-10-23",
+  "status_note": "Internal scope audit of 20 older intake proposals against published records, pinned Dukotah reconciliation and executable source. Related records do not close broader methods.",
+  "source": "research/batch-ready-intake.json",
+  "counts": {
+    "proposals": 20,
+    "source_G1_partially_replayed": 1,
+    "original_B04_campaign_unreplayed": 1,
+    "source_B05_executed_grid_covered": 1,
+    "source_R26_gate_invalid": 1,
+    "source_binary_or_dated_stream_inputs_blocked": 2,
+    "other_bounded_rules_or_arithmetic_covered": 11,
+    "other_undefined_rules": 3
+  },
+  "entries": [
+    {
+      "id": "ozon-additive-feedback",
+      "disposition": "bounded-literal-covered",
+      "evidence_record_ids": [
+        "linear-ciphertext-feedback",
+        "feedback-opening-census"
+      ],
+      "covered_exact_scope": "Literal additive ciphertext recurrence and doublet invariant covered; primer 0–28 fixed-opening census covers both feedback modes on 55 nonempty pages.",
+      "untested_or_undefined_remainder": "Original extra key layer/encryption primer not defined; full cipher hypothesis remains open.",
+      "readiness": "No exact runnable extension until key layer specified."
+    },
+    {
+      "id": "ozon-beaufort-feedback",
+      "disposition": "bounded-literal-covered",
+      "evidence_record_ids": [
+        "linear-ciphertext-feedback",
+        "feedback-opening-census"
+      ],
+      "covered_exact_scope": "Literal Beaufort doublet condition and finite primer/opening feedback search covered.",
+      "untested_or_undefined_remainder": "Additional key layer and historically intended primer not specified.",
+      "readiness": "No exact runnable extension until key layer specified."
+    },
+    {
+      "id": "ozon-multiplicative-feedback",
+      "disposition": "bounded-literal-covered",
+      "evidence_record_ids": [
+        "multiplicative-ciphertext-autokey"
+      ],
+      "covered_exact_scope": "Uninterrupted multiplicative ciphertext-autokey recurrence tested; 450 observed zero-to-nonzero edges contradict that literal recurrence.",
+      "untested_or_undefined_remainder": "Source's skip-zero behavior needs a deterministic clock and output-location rule; not covered by uninterrupted test.",
+      "readiness": "No exact runnable extension until zero-skip semantics fixed."
+    },
+    {
+      "id": "ozon-delete-second-doublet",
+      "disposition": "bounded-rule-covered",
+      "evidence_record_ids": [
+        "doublet-collision-edits"
+      ],
+      "covered_exact_scope": "Actual delete-second edit, length/repeat effects, and reverse ambiguity controls measured.",
+      "untested_or_undefined_remainder": "No preceding cipher stage or deleted-location recovery supplied.",
+      "readiness": "No exact runnable extension without a recovery rule."
+    },
+    {
+      "id": "ozon-insert-filler-between-doublets",
+      "disposition": "bounded-rules-covered-broad-open",
+      "evidence_record_ids": [
+        "doublet-collision-edits"
+      ],
+      "covered_exact_scope": "Fixed-F and nonmatching-filler insertion constructions plus reverse ambiguity measured.",
+      "untested_or_undefined_remainder": "Arbitrary fillers/counts and unambiguous decoder not specified.",
+      "readiness": "No exact runnable extension; variants should not be counted as separate ideas."
+    },
+    {
+      "id": "ozon-block-reset-feedback",
+      "disposition": "one-literal-rule-covered",
+      "evidence_record_ids": [
+        "block-lookahead-feedback",
+        "block-boundary-doublets"
+      ],
+      "covered_exact_scope": "Source-inspired future-plaintext lookahead completed with zero key, terminal zero, b=5/7, plants and known openings; boundary concentration separately checked.",
+      "untested_or_undefined_remainder": "Historical k[i] and restart rule not completely supplied; zero-key result does not close keyed versions.",
+      "readiness": "No source-exact further run until complete recurrence supplied."
+    },
+    {
+      "id": "lanfear-f-copy-and-reset",
+      "disposition": "source-rule-covered",
+      "evidence_record_ids": [
+        "lp2-54-55-autokey-reset"
+      ],
+      "covered_exact_scope": "Full selected-F mask and period scan on LP2-54/55 with source reset operation and max-stat control.",
+      "untested_or_undefined_remainder": "Original historic graph/IoC denominator receipt may differ; model rule itself covered.",
+      "readiness": "Optional historic-output parity audit, not a new solve test."
+    },
+    {
+      "id": "lanfear-f-skip-previous-two",
+      "disposition": "source-rule-covered",
+      "evidence_record_ids": [
+        "lp2-54-55-autokey-skip"
+      ],
+      "covered_exact_scope": "Full selected-F mask and period scan on LP2-54/55 with source skip-clock operation and max-stat control.",
+      "untested_or_undefined_remainder": "Historical script/graph unavailable for byte-level parity; bounded rule covered.",
+      "readiness": "Optional historic-output parity audit."
+    },
+    {
+      "id": "lp2-54-eight-rune-header-crib",
+      "disposition": "bounded-source-rule-covered",
+      "evidence_record_ids": [
+        "lp2-54-header-feedback",
+        "lp2-54-header-dictionary"
+      ],
+      "covered_exact_scope": "All 29 primers and both feedback recurrences yield complete LP2-54 output; six A/I/O openings and corpus check are documented.",
+      "untested_or_undefined_remainder": "Source's full candidate list and proposed C/K/D functions absent; no held-out reading.",
+      "readiness": "Only explicit new C/K/D equations/list would make further source test."
+    },
+    {
+      "id": "dc0y-grid-directional-constant-search",
+      "disposition": "bounded-source-claim-covered",
+      "evidence_record_ids": [
+        "grid-prime-paths",
+        "grid-prime-path-null",
+        "grid-alternative-layouts"
+      ],
+      "covered_exact_scope": "Straight four-cell, eight-direction 32x8 route inventory and named omission counts reproduced; shuffles and alternate 16x16/quadrant layouts checked.",
+      "untested_or_undefined_remainder": "Other claimed hits depend on source's parser/word list not pinned here.",
+      "readiness": "Parser-specific claims need exact parser/list receipt; existing absence claim is covered."
+    },
+    {
+      "id": "dc0y-grid-four-quadrant-dot-route",
+      "disposition": "undefined-route",
+      "evidence_record_ids": [
+        "grid-alternative-layouts"
+      ],
+      "covered_exact_scope": "Quadrant-only straight-path sensitivity was tested but no five-dot directed route was reconstructed.",
+      "untested_or_undefined_remainder": "Five coordinates, quadrant flips, cell selection, reading order and acceptance criterion absent.",
+      "readiness": "Not executable from present rule."
+    },
+    {
+      "id": "89ron-729-index-inversion",
+      "disposition": "arithmetic-reproduced-full-output-undefined",
+      "evidence_record_ids": [
+        "cross-section-index-inversion"
+      ],
+      "covered_exact_scope": "729 count and source first-word/example were audited; source uses noncanonical index at 107, 34 F inputs divide by zero, many outputs out of range before discretionary wrap.",
+      "untested_or_undefined_remainder": "F handling, line origin, neighbor wrap and output adjudication not specified; no unique full reading.",
+      "readiness": "Cannot fairly score source-intended full output until these rules fixed."
+    },
+    {
+      "id": "dukotah-r22-turtle-spatial",
+      "disposition": "G1-replayed-G3-open",
+      "evidence_record_ids": [
+        "lp2-turtle-spatial-replay"
+      ],
+      "covered_exact_scope": "All 72 G1 turtle paths, 14,400 first-stage shuffles, six initial screens and planted shapes independently replayed; source figure flag accepts none.",
+      "untested_or_undefined_remainder": "G3 base32/onion/coordinate pointer framing and source's 2000-sample tail refinement are not independently replayed.",
+      "readiness": "Runnable finite G3 detector from pinned g3_coord_decode.py and same three number streams; distinct grouped source remainder."
+    },
+    {
+      "id": "dukotah-b04-short-cryptographic-seeds",
+      "disposition": "fixed-crib-extension-only",
+      "evidence_record_ids": [
+        "b04-source-seeds-opening-cribs"
+      ],
+      "covered_exact_scope": "All 1,385,600 source setting/55-page-start fixed-12-rune comparisons tested; this is a different predicate from the source English-score sweep.",
+      "untested_or_undefined_remainder": "Original 6,224,300 source decodes, model score/null and top-150 escalation not independently replayed; English-first gate has weak/zero power for some alternate registers.",
+      "readiness": "Potential exact source replay after model/corpus dependency and runtime gate; one campaign, not millions of ideas."
+    },
+    {
+      "id": "dukotah-b05-grid-payload-as-prf-seed",
+      "disposition": "executed-source-grid-covered",
+      "evidence_record_ids": [
+        "grid-payload-prf-source-grid",
+        "grid-payload-prf-contested-masks",
+        "grid-payload-prf-opening-cribs"
+      ],
+      "covered_exact_scope": "All 70,680 executed source screens, 180 rigid corners, five full-stream continuations and 64 contested-mask variant sources replayed; opening-crib extension separate.",
+      "untested_or_undefined_remainder": "Other encodings/generators/key alignments/languages outside source grid; shuffle max is not global selection probability.",
+      "readiness": "No remaining exact-source executable B05 unit in this 20-item intake."
+    },
+    {
+      "id": "dukotah-r26-semantic-seed-zoo",
+      "disposition": "source-gate-audited-invalid",
+      "evidence_record_ids": [
+        "semantic-seed-screen-gate-audit"
+      ],
+      "covered_exact_scope": "Exact 4,274 screening rows and best score reproduced; positive 120/120 planted key is rejected by impossible +5 gate.",
+      "untested_or_undefined_remainder": "Original nine-register/three-corpus model files missing; corrected gate and hitfn20 adjudication unrun. R26-A generator opening-crib record is a different source lane.",
+      "readiness": "Blocked on source model inputs and corrected, calibrated promotion rule; do not count as failed seed test."
+    },
+    {
+      "id": "dukotah-r28-author-pad-dense-offset",
+      "disposition": "source-input-blocked",
+      "evidence_record_ids": [],
+      "covered_exact_scope": "Pinned ledger/source code defines 24,080 planned cells, but no independent actual two-binary source-grid replay record.",
+      "untested_or_undefined_remainder": "Two exact source-pinned binaries and hashes, stage-B adjudication, and planted keyskip2 controls need verification; source stride grid is sparse.",
+      "readiness": "Input-recovery/audit unit before any source replay; no arbitrary substitute binaries."
+    },
+    {
+      "id": "dukotah-r17-public-random-pad",
+      "disposition": "source-input-and-scale-blocked",
+      "evidence_record_ids": [],
+      "covered_exact_scope": "No independent replay of four dated public-pad lanes or their 8.38-billion effective offset census.",
+      "untested_or_undefined_remainder": "Exact dated byte streams, checksum provenance, runtime, and a prefilter retaining only 5/8 planted offsets.",
+      "readiness": "Source-byte recovery and filter-power audit precede costly lane replay; no negative closure from original filter."
+    },
+    {
+      "id": "manuscript-gematria-autokey-emergence",
+      "disposition": "broad-theme-undefined-with-bounded-models",
+      "evidence_record_ids": [
+        "gp-prime-plaintext-feedback",
+        "dukotah-word-boundary-key-clocks",
+        "public-multihistory-feedback",
+        "cumulative-autokey-literal"
+      ],
+      "covered_exact_scope": "Concrete page-reset GP-prime plaintext feedback and W1–W5 word-boundary prime clocks now tested, alongside older cumulative/multihistory variants.",
+      "untested_or_undefined_remainder": "User's 'shedding' and circumference/emergence theme does not define state equation, source-order, deletion semantics or validation target.",
+      "readiness": "No unique new experiment until a concrete recurrence; do not inflate known generic autokey family into novel queue."
+    },
+    {
+      "id": "lp2-15-prime-spiral-gaps-mod28",
+      "disposition": "specific-arithmetic-check-complete",
+      "evidence_record_ids": [
+        "lp2-15-prime-gap-cycle"
+      ],
+      "covered_exact_scope": "Published record verifies source 16 Fibonacci-indexed primes/15 gaps; fixed 8,20,10,6 tail occurs once and eight new terms break period-four continuation.",
+      "untested_or_undefined_remainder": "A further rune mapping or a different claimed cycle would need an exact rule and holdout criterion.",
+      "readiness": "No remaining arithmetic check for this stated cycle."
+    }
+  ],
+  "deduplicated_next_units": [
+    {
+      "unit": "R22 G3 pointer framings",
+      "source_ids": [
+        "R22-B-TURTLE-SPATIAL-RENDER"
+      ],
+      "ready": "yes, pending source input parity",
+      "why_distinct": "Pinned g3_coord_decode.py tests sparse base32/onion/coordinate outputs; existing turtle record covers G1 geometry only.",
+      "prerequisites": "Reuse pinned three number streams and G1 input checks; freeze exact G3 detectors and source comparator."
+    },
+    {
+      "unit": "B04 original English-score campaign",
+      "source_ids": [
+        "B-04"
+      ],
+      "ready": "dependency/runtime audit first",
+      "why_distinct": "Published B04 record is fixed opening crib extension, not the 6,224,300 source language-scored decodes.",
+      "prerequisites": "Verify model/corpus bytes, source-stage counts, planted gate sensitivity and top-150 continuation; preserve conditional English scope."
+    },
+    {
+      "unit": "R28 author-pad source binaries",
+      "source_ids": [
+        "R28-L1-CICADAOS-PADS-DENSE-PAIR"
+      ],
+      "ready": "blocked on exact binary recovery",
+      "why_distinct": "Source-defined pad offsets not covered by other seed records.",
+      "prerequisites": "Recover both hashed binaries, then controls/24,080-cell grid."
+    },
+    {
+      "unit": "R17 dated public-pad lanes",
+      "source_ids": [
+        "R17-PUBLIC-PAD"
+      ],
+      "ready": "blocked on dated source bytes and scale",
+      "why_distinct": "Four-lane source scan not reproduced by existing crib/control records.",
+      "prerequisites": "Exact checksum-matched bytes, filter power audit (source 5/8 plants), runtime gate."
+    }
+  ],
+  "counting_note": "One proposal may have many configurations; each configuration is not a separate idea. B05 exact executed grid is complete within source bounds; R26 screen execution is not a valid negative because its gate rejects a correct plant."
+}

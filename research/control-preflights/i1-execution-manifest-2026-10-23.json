@@ -1,0 +1,282 @@
+{
+  "schema": "dukotah-i1-i3-p3-hitfn-execution-manifest-v1",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "shared_control_receipt": "research/control-preflights/i1-2026-10-23.json",
+  "complete_source_ids": [
+    "I1-03",
+    "I1-06",
+    "I1-09",
+    "R19-I3-NULLS",
+    "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+    "R20-HITFN-RECOVERY-GATE"
+  ],
+  "deduplication_note": "Rows/configurations overlap across source reports; counts are named execution rows, not distinct ideas or independent hypotheses. Do not sum I1 source case counts across IDs.",
+  "critical_blocker": {
+    "path": "liber-primus/analysis/round19/I2/models/panel.npz",
+    "git_tree_present": false,
+    "checkout_present": false,
+    "consequence": "I2-dependent panel calibration and full P3/HITFN source guard cannot be byte-exactly replayed from pinned files without model reconstruction."
+  },
+  "entries": [
+    {
+      "source_id": "I1-03",
+      "case_count": {
+        "source_wrong_key_rows": 34000,
+        "named_mode_null_settings": 26,
+        "nulls": "synthetic and real; row count includes 20k deep, 8k deep2, 6k curve"
+      },
+      "receipt_state": "source rows complete; only fresh 36-case decoder parity and one planted message rerun independently",
+      "control_prerequisites": [
+        "I1 G-EQ parity",
+        "fixed synthetic wrong-key generation",
+        "real LP2 240-rune segment selector"
+      ],
+      "remaining_computation": "Independent all-row wrong-key rescore only if source values must be challenged; otherwise aggregate source receipts without rerun.",
+      "cost_estimate": "Source measured 2235+660.1+368.2 = 3263.3 elapsed seconds (~54.4 min) for these 34k rows on source host.",
+      "result_artifacts": {
+        "liber-primus/analysis/round19/I1/out_fp_deep.json": {
+          "sha256": "9610234eaa4d555386833bc6927413c5ec0241ca0985eeeaf270251e25629286",
+          "bytes": 2830649
+        },
+        "liber-primus/analysis/round19/I1/out_fp_deep2.json": {
+          "sha256": "099b87fb551bc615a91fe2cbd79edb4197fedc27381a27ae6df097b8e5314e3d",
+          "bytes": 1140807
+        },
+        "liber-primus/analysis/round19/I1/out_fp_curve.json": {
+          "sha256": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c",
+          "bytes": 858244
+        },
+        "liber-primus/analysis/round19/I1/out_fp_tail.json": {
+          "sha256": "5a68a0ab865a8ff62cd334f1c9346d0457f938bf42d580667ff9f1c8e7199c84",
+          "bytes": 14315
+        },
+        "liber-primus/analysis/round19/I1/run_fp.py": {
+          "sha256": "f515f834600761213e348be8e45e2dbbbcb123f0a34d6526410c44e4f6880433",
+          "bytes": 5454
+        }
+      }
+    },
+    {
+      "source_id": "I1-06",
+      "case_count": {
+        "unpenalized_curve_rows": 1000,
+        "note": "lambda=0 has 2 nulls x 500 trials inside the 6k curve; its planted failures are subsets of G-FIX settings"
+      },
+      "receipt_state": "source rows complete; synthetic plant independently rerun",
+      "control_prerequisites": [
+        "same I1 parity and plant; no new source grid"
+      ],
+      "remaining_computation": "No new sweep for descriptive score-vs-recovery counterexample.",
+      "cost_estimate": "Reuse existing curve and fixed plant; no additional decode grid.",
+      "result_artifacts": {
+        "liber-primus/analysis/round19/I1/out_fp_curve.json": {
+          "sha256": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c",
+          "bytes": 858244
+        },
+        "liber-primus/analysis/round19/I1/out_fix.json": {
+          "sha256": "12c4e0f3a152bf2619aa3fa83a0d401a76365a5f3e8a3144d181375affe07c6b",
+          "bytes": 838731
+        },
+        "liber-primus/analysis/round19/I1/driftbeam.py": {
+          "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+          "bytes": 15354
+        }
+      }
+    },
+    {
+      "source_id": "I1-09",
+      "case_count": {
+        "parity_cases": 36,
+        "G_FIX_rows": 2100,
+        "G_FIX2_rows": 840,
+        "G_BASE_rows": 336,
+        "G_BOUND_rows": 168,
+        "G_BOOK_rows": 8
+      },
+      "receipt_state": "source control grids complete; 36 parity cases + one plant freshly rerun",
+      "control_prerequisites": [
+        "I1 source decoder and older skipdecode/fastbeam independent paths; planted keyskip1/keyskip2"
+      ],
+      "remaining_computation": "Do not add the five named grids as independent ideas; same decoder policy and repeated settings. I3 null-dependent recommendation awaits separate calibration assessment.",
+      "cost_estimate": "Fresh parity+plant 5 s here; source G-FIX whole-grid time not recorded in output.",
+      "result_artifacts": {
+        "liber-primus/analysis/round19/I1/out_eq.json": {
+          "sha256": "94fd7ffc98e071ce8f0a8296755af672bec70eac7d6f4789ff190dfaa2c75cb6",
+          "bytes": 274
+        },
+        "liber-primus/analysis/round19/I1/out_fix.json": {
+          "sha256": "12c4e0f3a152bf2619aa3fa83a0d401a76365a5f3e8a3144d181375affe07c6b",
+          "bytes": 838731
+        },
+        "liber-primus/analysis/round19/I1/out_fix2.json": {
+          "sha256": "ab037b3abf6b8025edfdd496780ddf5bb81291cff346fc23127cfd180980be34",
+          "bytes": 334952
+        },
+        "liber-primus/analysis/round19/I1/out_base.json": {
+          "sha256": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+          "bytes": 131009
+        },
+        "liber-primus/analysis/round19/I1/out_book.json": {
+          "sha256": "7cba860b701f57faba2f5d8a484df875f325c09dc613d299e4d1c0662d41a31b",
+          "bytes": 2016
+        },
+        "liber-primus/analysis/round19/I1/out_bound.json": {
+          "sha256": "c003a628292af7ad38216d2ec3f39c0b5281061a03b85108814027f098d054d9",
+          "bytes": 68059
+        },
+        "liber-primus/analysis/round19/I1/run_gates.py": {
+          "sha256": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+          "bytes": 14525
+        }
+      }
+    },
+    {
+      "source_id": "R19-I3-NULLS",
+      "case_count": {
+        "source_reported_null_cells": 91,
+        "calib19_named_cell_keys": 116,
+        "source_reported_null_decodes_approx": 9600000,
+        "G_HONEST_stage_rows": 14
+      },
+      "receipt_state": "source calibration/result JSON complete in pinned tree; no independent null rerun",
+      "control_prerequisites": [
+        "I1 parity passed",
+        "I3 vecbeam equivalence",
+        "nine register models including I2 panel.npz",
+        "G-CAL exceedance on fresh seeds"
+      ],
+      "remaining_computation": "Before recalibrating panel cells, recover or regenerate exact I2 panel model; source RESULTS itself has G-CAL partial and G-PANEL failed. EN-only scalar cells can be audited separately.",
+      "cost_estimate": "Source RESULTS: about 9.6M null decodes; out_i1_drift_L120 alone M=15000 took 1459 s, pair M=60000 took 48 s, exact_ms8 M=60000 took 33 s. Full 1M-cell completions projected at ~3–200 core-hours each; do not launch indiscriminately.",
+      "result_artifacts": {
+        "liber-primus/analysis/round19/I3/RESULTS.md": {
+          "sha256": "e2d7c4d255a3bf584264f62c78bc305d4f8063fc33e27e53cadb27ac13c0d773",
+          "bytes": 59730
+        },
+        "liber-primus/analysis/round19/I3/calib19.json": {
+          "sha256": "a0fb505ba2aca939fb4044922990f37c23e51ea570f3642442d5413180447dd5",
+          "bytes": 2445981
+        },
+        "liber-primus/analysis/round19/I3/out_summary.json": {
+          "sha256": "86772bc4dcd791e8836abdac7e0f31e0b75e2fa98f2e0879d23990138c2ea643",
+          "bytes": 50329
+        },
+        "liber-primus/analysis/round19/I3/out_geq.json": {
+          "sha256": "5bef17ca0661a09ca3af2040a120bf194193c00cee6571de5fa2d1a8761e632d",
+          "bytes": 220
+        },
+        "liber-primus/analysis/round19/I3/out_ghonest.json": {
+          "sha256": "0f1bfd9301c96736511c8add2ce0a948ad94258a55113d63c1274de20538ddb4",
+          "bytes": 13714
+        },
+        "liber-primus/analysis/round19/I3/out_i1_drift_L120.json": {
+          "sha256": "0079bddfab06eb4e78c5df5f0d402c4f6455389afa3593545beeca927a5ae90c",
+          "bytes": 78436
+        },
+        "liber-primus/analysis/round19/I3/out_i1_pair_L120.json": {
+          "sha256": "590465741d2978f50647154fdb8b6bdef37e23fa318ee019d8419eda4c389743",
+          "bytes": 160478
+        },
+        "liber-primus/analysis/round19/I3/out_i1_exact_ms8_L120.json": {
+          "sha256": "7e6f60259b5cf581846bb8d0b850fec585fcf9e070cb363082ff33ec77a689c4",
+          "bytes": 160599
+        },
+        "liber-primus/analysis/round19/I3/out_i2panel_L120.json": {
+          "sha256": "49af6ccd1e1383a777c1f5ced0c49f7ac86fec92be73829505bb03fa58778bc4",
+          "bytes": 273603
+        },
+        "liber-primus/analysis/round19/I3/out_registers_L120.json": {
+          "sha256": "1e4e09fde3a1042a4eaf819b77b3779d9d71bb4e3a9eb05ef51eddce3200b7b2",
+          "bytes": 516840
+        }
+      }
+    },
+    {
+      "source_id": "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+      "case_count": {
+        "source_fresh_panel_null_M": 120000,
+        "plant_repetitions": 10,
+        "seed_prior_candidates": 433,
+        "tier_counts": {
+          "A": 54,
+          "B": 107,
+          "C": 260,
+          "D": 12
+        }
+      },
+      "receipt_state": "source P3 outputs complete; no independent panel/plant rerun",
+      "control_prerequisites": [
+        "I3 panel-max calibration with exact model",
+        "I1 drift mode",
+        "held-out correct-key plants"
+      ],
+      "remaining_computation": "Read-only prior ordering/check can proceed. Full P3 panel/plant replay waits on absent panel.npz; source says no LP2 target decodes.",
+      "cost_estimate": "Source 120k fresh panel null 24.7 s and 10-plant recovery 18.5 s, but model regeneration/parity is unmeasured.",
+      "result_artifacts": {
+        "liber-primus/analysis/round20/P3/RESULTS.md": {
+          "sha256": "845a2d42067c21a50a196f8c123ca10c227dd01cdc0a8040874c5adba1e3eb8a",
+          "bytes": 15331
+        },
+        "liber-primus/analysis/round20/P3/panelmax20.json": {
+          "sha256": "6ce5b99c1575332ca59b6b5a79324c93d23863601a9beb42f93c06351a7c5b7e",
+          "bytes": 5253
+        },
+        "liber-primus/analysis/round20/P3/seedprior20.json": {
+          "sha256": "139896bfe4e85d108c42cc61c767c2f7db421ba9741b6b3b40896d55ffd89052",
+          "bytes": 102927
+        },
+        "liber-primus/analysis/round20/P3/out_panelmax_gcal.json": {
+          "sha256": "ceb81cf541d62a006390812da2813a8e1b9e3c82fb8bc64f87dcf0c021f0f8a6",
+          "bytes": 3929
+        },
+        "liber-primus/analysis/round20/P3/out_plant_recovery.json": {
+          "sha256": "7ca9fe55fc17a3fb1b688d0375db5a65582b2172e7a7806ccda3ff12a5806d4e",
+          "bytes": 6866
+        },
+        "liber-primus/analysis/round20/P3/out_oe_shortfall.json": {
+          "sha256": "e138f0c2d2b7f9d7d040e40306e5e8e36f490bce24f79a1319b731ce982b247c",
+          "bytes": 4250
+        },
+        "liber-primus/analysis/round20/P3/out_derail_L400.json": {
+          "sha256": "fc3f45fba4770cf496bc3a6863decfc9e24a6714872d1d9231ecf22601fe8ede",
+          "bytes": 6033
+        }
+      }
+    },
+    {
+      "source_id": "R20-HITFN-RECOVERY-GATE",
+      "case_count": {
+        "source_guard_cases": 2,
+        "fake_rejected": true,
+        "real_accepted": true
+      },
+      "receipt_state": "source guard output present; no independent guard rerun",
+      "control_prerequisites": [
+        "I1 decoder",
+        "I2 panel model",
+        "P3 panel-max bar",
+        "fake and genuine planted messages",
+        "held-out self-consistency criterion"
+      ],
+      "remaining_computation": "A score-only predicate audit can be performed from JSON; full source guard replay blocked by exact I2 panel.npz unless regenerated. Even a passing self-consistency gate does not measure true recovery on LP2.",
+      "cost_estimate": "Two source guard cases; raw guard runtime absent from output. Model recovery/parity dominates.",
+      "result_artifacts": {
+        "liber-primus/analysis/round20/HITFN/RESULTS.md": {
+          "sha256": "e3854f4fbd73a628c5a4eb0bd13a895b400e2d57ae6e59d79dcccffec40f8123",
+          "bytes": 5689
+        },
+        "liber-primus/analysis/round20/HITFN/hitfn20.py": {
+          "sha256": "551d4b052e0a8310dd9203f8723cbca2fa1b3cf6f97f8b2791d8caf9e5be529b",
+          "bytes": 14912
+        },
+        "liber-primus/analysis/round20/HITFN/guard.py": {
+          "sha256": "ec5c36c73a4c269549d87bd5ee71e15db38e9f3a15992435ee19d351bd5b25eb",
+          "bytes": 8581
+        },
+        "liber-primus/analysis/round20/HITFN/out_guard.json": {
+          "sha256": "bb259d04239b979c6e6054f1510e289c0376ef267b33ac2f9726930e588a67e0",
+          "bytes": 1722
+        }
+      }
+    }
+  ]
+}

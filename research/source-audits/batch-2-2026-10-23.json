@@ -1,0 +1,2372 @@
+{
+  "schema": "liberpedia-source-batch2-evidence-v1",
+  "snapshot": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "review_note": "Internal audit of source claims and existing Liberpedia scopes. Source-reported runs and controls are not marked independently reproduced. `not-in-pinned-tree` applies only to exact requested Git path; use candidates and git ls-tree before claiming an input is missing.",
+  "count": 37,
+  "rows": [
+    {
+      "source_id": "B-01",
+      "source_hypothesis": "The full 32-bit sweep is 2/10 complete. `results_full32.txt` holds only gen=3 (MSVC) and gen=5 (MT19937); gen=0 (glibc — first in `run_full32.sh`'s priority order and the highest-prior generator) is absent, and no `DONE` line. PICKUP-HERE still describes it as \"still running\".",
+      "source_claimed_status": "partially-run",
+      "source_command": "",
+      "called_branches": "Old `sweep` full-32-bit rigid seed grid, gens 0,3,5,7,9,1,4,6,8,2; results file has full lines for nine, not two; gen0 and DONE absent.",
+      "positive_gate_status": "No planted recovery or calibrated language gate in result receipt; old fixed -12.5 English cutoff has documented weak power.",
+      "inputs_availability": "Source script/results are Git blobs; no external bytes needed for counting. Exact gen0 executable/runtime needs check.",
+      "existing_coverage": "public-prng-seed-sweep covers 1,877 fixed seeds and seven streams, not this 2^32 rigid campaign.",
+      "unresolved": "One missing gen0 source row; nine rows have source receipts but not independent replay. A different decoder/gate would be a new campaign.",
+      "next_action": "Recount nine pinned lines and gate limitations; only rerun gen0 if original binary/build controls pass.",
+      "cohort": "prng-full32",
+      "evidence": [
+        {
+          "requested": "PICKUP-HERE.md",
+          "status": "ambiguous",
+          "candidates": [
+            {
+              "path": "PICKUP-HERE.md",
+              "git_object": "b8f851e675a2f3435fc93cba044f6585a455c700",
+              "bytes": 51823,
+              "kind": "blob",
+              "sha256": "4fa98df4663faa2897d211b3faba8c676db9f42d521e8da6b78524047774be0c",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b8f851e675a2f3435fc93cba044f6585a455c700.txt"
+            },
+            {
+              "path": "liber-primus/PICKUP-HERE.md",
+              "git_object": "88dd2a632572235677650152fa536dd5a284cb2a",
+              "bytes": 38972,
+              "kind": "blob",
+              "sha256": "018c94fe419dd25f37bbaada00810302fae75699c3dc2f274f8eae527a175971",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\88dd2a632572235677650152fa536dd5a284cb2a.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/seed_sweep/results_full32.txt",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/seed_sweep/results_full32.txt",
+              "git_object": "d2917d7ac3066951062496142ef3ec30a5816aa1",
+              "bytes": 963,
+              "kind": "blob",
+              "sha256": "b4888850903a1727e5f80d244455ff7f43e90f6af32d39e478f9b32a6af931ef",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d2917d7ac3066951062496142ef3ec30a5816aa1.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/seed_sweep/run_full32.sh",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/seed_sweep/run_full32.sh",
+              "git_object": "6b99a6dd1b411bd7becaf25338713b3676f8b7c7",
+              "bytes": 381,
+              "kind": "blob"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-02-C2-CORRECTION",
+      "source_hypothesis": "PROPOSED CORRECTION to a status field, not a new experiment. round18/L6-offset-marsaglia/ledger.json sets B-02 status = `negative`. B-02's own hypothesis text is an AXIS ('keystream offset != 0'), and an axis is not made negative by a dense sweep of 220 mined configs plus 508/3,024 units of a fresh grid.",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Audit ledger status against L6 offset grid and C2 coverage tables; no new cipher transform.",
+      "positive_gate_status": "Source L6 reports 40/40 planted target recovery but dense prefilter retained 65% at keep1000, 52.5% at depth40/12; source negative conditional.",
+      "inputs_availability": "L6/C2 reports and JSON in Git; no pad bytes needed to correct ledger semantics.",
+      "existing_coverage": "r18-drift-ladder-replay tests a distinct bounded drift correction; not the whole offset axis.",
+      "unresolved": "An axis cannot be closed by tested subsets. Source B-02 `negative` status overstates finite grids.",
+      "next_action": "Issue source-status correction with exact denominators; no solve record.",
+      "cohort": "status-gate-audits",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/ledger.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/ledger.json",
+              "git_object": "a96b002622ed78e5c0a5149b2c875d3c8039b484",
+              "bytes": 15368,
+              "kind": "blob",
+              "sha256": "aeb82ba135725d42ee37f4f7351b5c16546ea6f496cad5a9750995ada6e7927c",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\a96b002622ed78e5c0a5149b2c875d3c8039b484.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+              "git_object": "ed14bf10cddc3aec5356f96621930c76173e1737",
+              "bytes": 32261,
+              "kind": "blob",
+              "sha256": "6e00dde9902bceae6e0910c798f90bf6c23a246757be7bf01eb1a8a3e63d5225",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\ed14bf10cddc3aec5356f96621930c76173e1737.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+              "git_object": "cf2054f7281591864d49b13031a58834d1ad6d02",
+              "bytes": 8057,
+              "kind": "blob",
+              "sha256": "20cfa616cf3f807d9b0fc1bdbbd9a7732213cf63bca88f85a4bccad26ad485dd",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\cf2054f7281591864d49b13031a58834d1ad6d02.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+              "git_object": "2ae267c1e83197b495b5dfb2e10ce7521bd881b1",
+              "bytes": 130319,
+              "kind": "blob",
+              "sha256": "854a9e65b8ebcbb09e222253364de5170dd15e8189f795837301094c9aead26b",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\2ae267c1e83197b495b5dfb2e10ce7521bd881b1.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-07",
+      "source_hypothesis": "A correctly-targeted, locally-held archive for the AN END page",
+      "source_claimed_status": "never-run",
+      "source_command": "",
+      "called_branches": "Proposal to search a correctly targeted locally held AN END archive; no file-level query or extraction script is supplied in this row.",
+      "positive_gate_status": "No positive or null gate stated.",
+      "inputs_availability": "PICKUP-HERE is ambiguous (two Git paths). Identify the exact archive object and checksum via tree, not cache absence.",
+      "existing_coverage": "outguess-default-key/outguess-guard-sweep test JPEG stego; no verified overlap with a named AN END archive.",
+      "unresolved": "Exact archive and search predicate unspecified.",
+      "next_action": "Recover exact artifact and define finite query before execution.",
+      "cohort": "missing-target-input",
+      "evidence": [
+        {
+          "requested": "PICKUP-HERE.md",
+          "status": "ambiguous",
+          "candidates": [
+            {
+              "path": "PICKUP-HERE.md",
+              "git_object": "b8f851e675a2f3435fc93cba044f6585a455c700",
+              "bytes": 51823,
+              "kind": "blob",
+              "sha256": "4fa98df4663faa2897d211b3faba8c676db9f42d521e8da6b78524047774be0c",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b8f851e675a2f3435fc93cba044f6585a455c700.txt"
+            },
+            {
+              "path": "liber-primus/PICKUP-HERE.md",
+              "git_object": "88dd2a632572235677650152fa536dd5a284cb2a",
+              "bytes": 38972,
+              "kind": "blob",
+              "sha256": "018c94fe419dd25f37bbaada00810302fae75699c3dc2f274f8eae527a175971",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\88dd2a632572235677650152fa536dd5a284cb2a.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-10",
+      "source_hypothesis": "OutGuess 0.2 Linux control — \"closed pending\" a run never made",
+      "source_claimed_status": "superseded",
+      "source_command": "",
+      "called_branches": "STEGO-VERDICT flags OutGuess 0.2 Linux comparison/control as pending; source result is a note, not a completed run.",
+      "positive_gate_status": "Historical source control pending by its own wording.",
+      "inputs_availability": "STEGO-VERDICT Git blob available; binary build and original 77-image inputs must be pinned.",
+      "existing_coverage": "outguess-guard-sweep is clean guarded-build byte comparison on 77 images; version 0.2 Linux parity is not established by that.",
+      "unresolved": "Exact old binary/version/environment and control parity remain.",
+      "next_action": "Audit binary availability, then compare same images and known payload controls; do not relabel guard sweep.",
+      "cohort": "stego-tool-parity",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/stego/STEGO-VERDICT.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/stego/STEGO-VERDICT.md",
+              "git_object": "c99e8f08ec6d4fc6b3737cd066c6a6485e22b6f8",
+              "bytes": 5909,
+              "kind": "blob",
+              "sha256": "b96c747264cf1eb192b5155f1d5d3abf91aaa9a90d8421e16c1903ae5565824d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c99e8f08ec6d4fc6b3737cd066c6a6485e22b6f8.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-13-MARSAGLIA",
+      "source_hypothesis": "The LP2 keystream is a window of the Marsaglia Random Number CDROM (1995) - 634,124,288 bytes of published physical randomness with published SHA-256s. round17/SYNTHESIS.md named it the single live, reachable, unswept public-pad item and \"the cheapest live item in this branch\"; lane P2 found it, recorded its identifier and a verified HTTP 206, and left it unswept.",
+      "source_claimed_status": "partially-run",
+      "source_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && bash scripts/fetch_marsaglia.sh && python3 scripts/verify_marsaglia.py && python3 scripts/control_marsaglia.py && python3 scripts/sweep_marsaglia.py",
+      "called_branches": "Later L6 actually called sharded dense_scan/beam on 1,539,996,304 offsets across 77 of 756 pad-space units, six byte builders, two orders/signs; older 'unswept' claim stale.",
+      "positive_gate_status": "Source reports 16/16 on-real-pad positive controls; English/mode-conditioned prefilter still limits other registers.",
+      "inputs_availability": "Results/control JSON and code in Git; data/MANIFEST.json absent from pinned tree, so exact 63 pad files/ISO must be recovered by hash, not assumed missing everywhere.",
+      "existing_coverage": "No published independent Marsaglia source-lane replay; public-pad fixed-crib records use different inputs.",
+      "unresolved": "Source run covers ~8.73% of 17,639,963,712 finite pad-space offsets, not all 63 pads/full ISO and not a universal pad exclusion.",
+      "next_action": "Recover checksum-matched pad bytes; replay covered units/control and checkpoint accounting before any remaining sweep.",
+      "cohort": "public-pad-marsaglia",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia",
+          "status": "directory",
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+              "git_object": "f20afed811be415d2f9bc751352e071aaeb67d18",
+              "bytes": 21331,
+              "kind": "blob",
+              "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\f20afed811be415d2f9bc751352e071aaeb67d18.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+              "git_object": "a930811458aa686e0f2f827f716e37cb5d77d299",
+              "bytes": 28911,
+              "kind": "blob",
+              "sha256": "ae766bd54dd1ee65e59db5f81e4f91288f295ac0712e7eece5cfdf1c33dcace5",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\a930811458aa686e0f2f827f716e37cb5d77d299.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/data/MANIFEST.json",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/out/control_marsaglia.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/control_marsaglia.json",
+              "git_object": "bebaf7f17beb129bf781bbf3ce6c3b1f16e70621",
+              "bytes": 7577,
+              "kind": "blob",
+              "sha256": "6746c9caa0f8b6d68dddc5e0a8865efa86ef839dd8948558f7a156377ae85e3d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\bebaf7f17beb129bf781bbf3ce6c3b1f16e70621.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+              "git_object": "d32e3e27470f6ec3214a27057251a8bc72470937",
+              "bytes": 13342,
+              "kind": "blob",
+              "sha256": "8e83fd95c6855e9b11b3f79caf53ddf8f564885146c6e8c59a7c99892872ff81",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d32e3e27470f6ec3214a27057251a8bc72470937.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-17",
+      "source_hypothesis": "Multiple-comparisons tally frozen at 5 across Rounds 8–9",
+      "source_claimed_status": "open",
+      "source_command": "",
+      "called_branches": "Meta-audit of five declared multiple-comparison trials in research/LEDGER; no decryptor called.",
+      "positive_gate_status": "No planted cipher gate; audit requires source trial ledger completeness.",
+      "inputs_availability": "LEDGER Git blob available.",
+      "existing_coverage": "search-maximum-controls and many records do local max correction, not this exact cross-round tally.",
+      "unresolved": "Five may be stale if later rounds added; historical scope must stay dated.",
+      "next_action": "Reconcile trials/selection family as an internal source-audit, not solve experiment.",
+      "cohort": "status-gate-audits",
+      "evidence": [
+        {
+          "requested": "research/LEDGER.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/LEDGER.md",
+              "git_object": "f7378b721236fbbdc652f64e2a6f3a2e36203e24",
+              "bytes": 32649,
+              "kind": "blob",
+              "sha256": "05be718be5b9ea60a6d33f7c95c04cc77f66de6fc54433f884ad052f307f598d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\f7378b721236fbbdc652f64e2a6f3a2e36203e24.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "B-20",
+      "source_hypothesis": "Round 9 DIRECTION: 400-rune reads, ≤64 starts → \"do not revive\"",
+      "source_claimed_status": "open",
+      "source_command": "",
+      "called_branches": "DEAD_ENDS records Round9 DIRECTION 400-rune, <=64-start read and its do-not-revive instruction.",
+      "positive_gate_status": "Source scope is a bounded historical screen; no new positive gate in entry.",
+      "inputs_availability": "DEAD_ENDS Git blob available; underlying Round9 run/output must be located for parity.",
+      "existing_coverage": "position-divisor-labels and grid/route records are related number directions, not the exact 64-start source run.",
+      "unresolved": "Do-not-revive applies only to its fixed 400-rune/64-start domain.",
+      "next_action": "Source receipt audit; no broad direction-family closure.",
+      "cohort": "status-gate-audits",
+      "evidence": [
+        {
+          "requested": "research/DEAD_ENDS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/DEAD_ENDS.md",
+              "git_object": "57ce24708af268dc3d63b22a2c79eb0b0eebe642",
+              "bytes": 37968,
+              "kind": "blob",
+              "sha256": "5b2d3a0b1e166ee847edd0c0baf5e88ba5b61d993ffb26cc2471ba702b1a8590",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\57ce24708af268dc3d63b22a2c79eb0b0eebe642.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "C-01",
+      "source_hypothesis": "SKELETON corpus extension. Round 8's word-length plaintext-identification is negative for 51 texts / 8.2M words, and says so explicitly: \"it eliminates a specific 8.2 M-word corpus, not 'any known text'… extending it to a full Gutenberg mirror is the obvious follow-up and `wordlen_search.py` is written for it\". Never extended.",
+      "source_claimed_status": "open",
+      "source_command": "",
+      "called_branches": "Round8 word-length plaintext ID over 51 texts/8.2M words; follow-up full Gutenberg mirror named but not called.",
+      "positive_gate_status": "Original finite corpus scan had its own controls; extension requires same matcher control.",
+      "inputs_availability": "ROUND-8-RESULTS and code noted; full Gutenberg mirror bytes/version not pinned here.",
+      "existing_coverage": "layout-count-streams and leo-word-pattern-dictionary are not the same 51-text/plaintext-length identity test.",
+      "unresolved": "Full Gutenberg extension remains unrun and open-ended unless mirror/version fixed.",
+      "next_action": "Pin exact candidate corpus and wordlen_search parser; one batched corpus extension if source inputs recovered.",
+      "cohort": "corpus-wordlength",
+      "evidence": [
+        {
+          "requested": "PICKUP-HERE.md",
+          "status": "ambiguous",
+          "candidates": [
+            {
+              "path": "PICKUP-HERE.md",
+              "git_object": "b8f851e675a2f3435fc93cba044f6585a455c700",
+              "bytes": 51823,
+              "kind": "blob",
+              "sha256": "4fa98df4663faa2897d211b3faba8c676db9f42d521e8da6b78524047774be0c",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b8f851e675a2f3435fc93cba044f6585a455c700.txt"
+            },
+            {
+              "path": "liber-primus/PICKUP-HERE.md",
+              "git_object": "88dd2a632572235677650152fa536dd5a284cb2a",
+              "bytes": 38972,
+              "kind": "blob",
+              "sha256": "018c94fe419dd25f37bbaada00810302fae75699c3dc2f274f8eae527a175971",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\88dd2a632572235677650152fa536dd5a284cb2a.txt"
+            }
+          ]
+        },
+        {
+          "requested": "research/DEAD_ENDS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/DEAD_ENDS.md",
+              "git_object": "57ce24708af268dc3d63b22a2c79eb0b0eebe642",
+              "bytes": 37968,
+              "kind": "blob",
+              "sha256": "5b2d3a0b1e166ee847edd0c0baf5e88ba5b61d993ffb26cc2471ba702b1a8590",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\57ce24708af268dc3d63b22a2c79eb0b0eebe642.txt"
+            }
+          ]
+        },
+        {
+          "requested": "research/ROUND-8-RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/ROUND-8-RESULTS.md",
+              "git_object": "abd8774e9b5ce865304aba35db2ce0884a619a16",
+              "bytes": 21879,
+              "kind": "blob",
+              "sha256": "06e2aecf99b26e11875b437d6324cd81b022ea6e16930ad9a2e48271dc7d2d38",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\abd8774e9b5ce865304aba35db2ce0884a619a16.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "F-02",
+      "source_hypothesis": "The 2016-01-01 signed message is the only signed methodological hint 3301 ever gave. Round 9 attacked \"their numbers are the direction\" (2,670 readings, negative) and both closing lines of Round 9 and DEAD_ENDS state that its other two clauses — \"its words are the map\" and \"their meaning is the road\" — remain uninterpreted. No lane has ever treated them as a first-class object.",
+      "source_claimed_status": "open",
+      "source_command": "",
+      "called_branches": "Round9 executed 2,670 numeric-direction readings; words-as-map and meaning-as-road are narrative clauses without specified operators.",
+      "positive_gate_status": "Numeric branch source negative conditional on its read set; no gate for other clauses.",
+      "inputs_availability": "Signed 2016 message available in site/reference; DEAD_ENDS and ROUND-9-RESULTS pinned.",
+      "existing_coverage": "position-divisor-labels and other numeric tests overlap the direction theme, not unspecified map/meaning transforms.",
+      "unresolved": "Two clauses are not executable recipes.",
+      "next_action": "Record source's precise completed direction scope; request equations only for new tests.",
+      "cohort": "undefined-hints",
+      "evidence": [
+        {
+          "requested": "research/DEAD_ENDS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/DEAD_ENDS.md",
+              "git_object": "57ce24708af268dc3d63b22a2c79eb0b0eebe642",
+              "bytes": 37968,
+              "kind": "blob",
+              "sha256": "5b2d3a0b1e166ee847edd0c0baf5e88ba5b61d993ffb26cc2471ba702b1a8590",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\57ce24708af268dc3d63b22a2c79eb0b0eebe642.txt"
+            }
+          ]
+        },
+        {
+          "requested": "research/ROUND-9-RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "research/ROUND-9-RESULTS.md",
+              "git_object": "7e2a2566cc6b15c6455e9785fc2986364865e13d",
+              "bytes": 6867,
+              "kind": "blob",
+              "sha256": "3dffc954515be3ad75b301d2cbf1b7eb79911e5ed5d2fb3265b9fd516a694b46",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\7e2a2566cc6b15c6455e9785fc2986364865e13d.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "G-09",
+      "source_hypothesis": "corpus/GAPS.md G-09: post times, commit times, file mtimes and PGP signature timestamps exist scattered across sources but no timeline dataset has ever been assembled, and the signature timestamps are recorded in prose only. L8 extension: those timestamps are also a PRIOR over RNG seeds. Round 8 enumerated every unix second of 2011-2015 UNIFORMLY for 10 generators, but seeds are not uniform — a signature time or key-creation time is exactly the kind of number a person types into srand().",
+      "source_claimed_status": "measured",
+      "source_command": "python3 liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+      "called_branches": "L8 build_seed_candidates.py enumerates signature/post/commit timestamps into TIMESTAMP-SEED-CANDIDATES.json; this is a candidate prior list, not a PRNG decode.",
+      "positive_gate_status": "Source provenance inputs can be checksum checked; no cipher-recovery gate in timeline itself.",
+      "inputs_availability": "MESSAGES.json, candidate JSON, builder Git blobs; source timestamp claims may have mixed verification tiers.",
+      "existing_coverage": "typed-seed-random-opening-cribs and py27-prior-front-opening-cribs test distinct finite seed sets, not automatically these exact timestamps.",
+      "unresolved": "Need exact timestamp provenance and overlap/dedup with existing seeds; no full chronology proof from candidate file.",
+      "next_action": "Join verified timestamp candidates to one shared PRNG keygrid only after source/overlap check.",
+      "cohort": "prng-seed-priors",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+              "git_object": "c561995e2d9390a30fe1e6b1ef3a69e40c710e5d",
+              "bytes": 49420,
+              "kind": "blob",
+              "sha256": "44480694edc299ffcb682b41516bdf3cd55f7e1e1b3d969944191caae197f4a1",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c561995e2d9390a30fe1e6b1ef3a69e40c710e5d.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/TIMESTAMP-SEED-CANDIDATES.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/TIMESTAMP-SEED-CANDIDATES.json",
+              "git_object": "49d32c4b5edb4355d97ce8025279e9e0bb63825f",
+              "bytes": 456247,
+              "kind": "blob",
+              "sha256": "7673303a2b469223973f0aaba63e202ac10a83632020dcf9f71d797c5baa0443",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\49d32c4b5edb4355d97ce8025279e9e0bb63825f.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+              "git_object": "2379b0eaff00c90e39cf646748551afb8ea26996",
+              "bytes": 10191,
+              "kind": "blob",
+              "sha256": "7494bd2876ea0fce47c2a79cbcba1fd2ebb7759d3a82b5a35fc1ef667c4578b4",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\2379b0eaff00c90e39cf646748551afb8ea26996.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "H-01",
+      "source_hypothesis": "Per-onion HTTP/server-status anomalies: ports 5240/5241/5242/5243, mock uptime \"1 days 0 hours 33 minutes 14 seconds\" → 1033, leaked host `li676-224.members.linode.com` / 106.186.123.224, and `<head>`/`</head>` malformation varying per onion (\"theorized to bind the onions together\"). Listed as item 6 and as \"still genuinely open\"; never resolved as a channel. Raw HTML is held locally.",
+      "source_claimed_status": "never-run",
+      "source_command": "",
+      "called_branches": "OSINT note lists onion HTTP ports/status, uptime->1033, leaked host and malformed head tags; no channel extractor called.",
+      "positive_gate_status": "No planted/control rule or fixed expected payload.",
+      "inputs_availability": "OSINT note Git blob. Raw HTML described as held locally but not present in this entry's cached evidence; search Git tree/archive receipts.",
+      "existing_coverage": "site 2012–2014 history may mention artifacts, but no bounded HTTP anomaly-channel record.",
+      "unresolved": "Need authentic raw HTML bytes, URL/date versions, feature extraction and null/control; uptime arithmetic alone not a channel.",
+      "next_action": "Recover page versions; document facts separately before finite extraction experiment.",
+      "cohort": "missing-target-input",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+              "git_object": "82c406cac6f0a84b42a5d01e0328b6eeadb44a0e",
+              "bytes": 9933,
+              "kind": "blob",
+              "sha256": "a40b833bdcf95c3d15c145f3d04ee46c1869b4a957e0b21b9ee7be5c8bad3ba8",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\82c406cac6f0a84b42a5d01e0328b6eeadb44a0e.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "I-02",
+      "source_hypothesis": "A separate 2013/2014 winner forum — closer to the LP than the timeline-eliminated 2012 forum, and the only insider space that could have received a privately-delivered pad. Campaign XIX flags it as an open thread; nobody looked. Adjacent: the un-corroborated 2013-winner claimant \"Nox Populi\" (reachable, DEF CON 26 speaker) was rated \"worth a low-priority contact\" and never contacted; the 2026-07-27 Wanner outreach shows no logged response.",
+      "source_claimed_status": "partially-run",
+      "source_command": "",
+      "called_branches": "Witness/forum OSINT note proposes 2013/2014 insider forum and private pad; no source search executed in this entry.",
+      "positive_gate_status": "No cipher or validation gate; provenance access question.",
+      "inputs_availability": "CAMPAIGN-XIX-WITNESSES Git blob; forum archive/status not identified in cached entry.",
+      "existing_coverage": "No published experimental overlap; historical context only.",
+      "unresolved": "Private forum/pad availability unproved; do not treat absence as evidence.",
+      "next_action": "Source-led OSINT retrieval if public archive exists; no speculative cipher test.",
+      "cohort": "missing-target-input",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/attribution/CAMPAIGN-XIX-WITNESSES.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/attribution/CAMPAIGN-XIX-WITNESSES.md",
+              "git_object": "fe7f0e508de630c3515db6b5a2745cdeb8559fef",
+              "bytes": 11848,
+              "kind": "blob",
+              "sha256": "20521d29f03d23c592d94e51fef9c65291d6f17643c69c5f3ee55c931fd0bce6",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\fe7f0e508de630c3515db6b5a2745cdeb8559fef.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "I1-01",
+      "source_hypothesis": "driftbeam.beam_decode(mode='keyskip1', max_free=0) is bit-identical to campaign18_skip.skipdecode.beam_decode",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source test_driftbeam compares driftbeam keyskip1 max_free0 to skipdecode over 24+12 cases; out_eq reports zero path mismatch and max score delta ~1e-14.",
+      "positive_gate_status": "Source equivalence gates G-EQ/G-EQ2 pass; independent local parity not yet replayed.",
+      "inputs_availability": "Test script and out_eq Git blobs via prefix-adjusted paths, both cached by resolved object.",
+      "existing_coverage": "r18-keyskip-drift-power and r18-drift-ladder-replay verify related planted behavior, not all 36 source equivalence cases.",
+      "unresolved": "Source parity receipt can be replayed without LP2 search.",
+      "next_action": "Share one decoder-gate batch with I1-07/I1-04 before future expensive scans.",
+      "cohort": "decoder-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round19/I1/out_eq.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_eq.json",
+              "git_object": "98a95c35935b77f5b082198eaca4e19d23c72f9b",
+              "bytes": 274,
+              "kind": "blob",
+              "sha256": "94fd7ffc98e071ce8f0a8296755af672bec70eac7d6f4789ff190dfaa2c75cb6",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\98a95c35935b77f5b082198eaca4e19d23c72f9b.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/test_driftbeam.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/test_driftbeam.py",
+              "git_object": "022bf9b47c2aa28e3c8d9368e65562ee0282b007",
+              "bytes": 6539,
+              "kind": "blob",
+              "sha256": "df5421cc920b75ee9d7f96dcc81ec143cf6391e0ad0e4a812893258c5e245aa9",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\022bf9b47c2aa28e3c8d9368e65562ee0282b007.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "I1-04",
+      "source_hypothesis": "Extreme-value parameters of the wrong-key null, per decoder mode, for threshold recalibration",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "analyse_fp fits wrong-key block-max tails per decoder mode; out_fp_tail gives mode-specific mu/beta, observed maxima and extrapolated bars.",
+      "positive_gate_status": "Source reports fitted null; goodness/held-out extrapolation gate must be separately checked, not inferred from fitted table.",
+      "inputs_availability": "analyse_fp.py/out_fp_tail.json Git blobs via adjusted paths; source benchmark/null data may be dependency.",
+      "existing_coverage": "rune-matched-scorer-calibration and search-maximum-controls examine different scorer/null domains.",
+      "unresolved": "1e6/1e9 extrapolations remain model assumptions; not empirical false-positive counts.",
+      "next_action": "Recompute fits from pinned null arrays and show model sensitivity; no solve negative.",
+      "cohort": "decoder-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round19/I1/analyse_fp.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/analyse_fp.py",
+              "git_object": "b747afb0090a669f897be4f2517cc42f4a0c3702",
+              "bytes": 3893,
+              "kind": "blob",
+              "sha256": "92377deb779fd38a5c88f898011655fafff86666d094ccc79ddba259b86aed67",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b747afb0090a669f897be4f2517cc42f4a0c3702.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/out_fp_tail.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_tail.json",
+              "git_object": "130b6398c38b819446917fd883c82a0eedcf7cfc",
+              "bytes": 14315,
+              "kind": "blob",
+              "sha256": "5a68a0ab865a8ff62cd334f1c9346d0457f938bf42d580667ff9f1c8e7199c84",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\130b6398c38b819446917fd883c82a0eedcf7cfc.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "I1-07",
+      "source_hypothesis": "keyskip2 (exact for skip_by_two) is NOT a drop-in replacement: it breaks the baseline construction at -6.631/37.9%",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "out_base compares keyskip2/pair and source baseline skip_by_two plants; source says pair breaks its baseline case (-6.631/37.9%).",
+      "positive_gate_status": "Source planted baseline failure is itself the gate finding; not a general pair-decoder failure.",
+      "inputs_availability": "out_base JSON cached; underlying source generator/test script recoverable from Git.",
+      "existing_coverage": "decoder-skip-controls and r18-keyskip-drift-power test distinct constructions, not this exact baseline row.",
+      "unresolved": "Need exact plant parameters and source path before parity replay.",
+      "next_action": "Fold into one decoder-gate batch with I1-01, not a standalone solve record.",
+      "cohort": "decoder-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round19/I1/out_base.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_base.json",
+              "git_object": "48401d74c00eece39b0034ec5c2642ed2d97217f",
+              "bytes": 131009,
+              "kind": "blob",
+              "sha256": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\48401d74c00eece39b0034ec5c2642ed2d97217f.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "I2-MULTI-REGISTER-ADJUDICATOR",
+      "source_hypothesis": "round18/L7-A measured that the repository's adjudicator (lp.score.Quadgram.score_norm against a fixed -5.5 English band) discards the CORRECT key for Latin, Old English, German, Welsh and abbreviated English even though the beam recovers 100 % of the runes, and that doctrine R3's four language-agnostic statistics had 0/15 compliance.  I2 asserts that a nine-register rune-space language-model panel plus those four statistics, behind one adjudicate() call and one SWEEPROW schema, restores power >= 0.90 for every register without raising the false-positive rate at matched trial count.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source builds nine rune-index interpolated trigram models; scores 24 plants per register at lengths120/240/400, wrong-key null, speed/smoke; `out_gates` reports min power 22/24=0.9167.",
+      "positive_gate_status": "Source G-POWER passed reported >=0.90 per-register panel score; recovery itself can be lower (worst example 0.8), so score power != full key proof.",
+      "inputs_availability": "All six JSON receipts cached; model corpora and model files listed by hash in out_build but must be checked for exact bytes.",
+      "existing_coverage": "english-scorer-controls, parallel-languages and rune-matched-scorer-calibration cover simpler/different control designs, not nine-model source pipeline.",
+      "unresolved": "No independent source rebuild/control parity; model/corpus bytes may be absent despite receipts.",
+      "next_action": "Recover listed hashed corpora/models; batched scorer-gate replay with L7-A and R20-P1.",
+      "cohort": "language-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round19/I2/out_build.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_build.json",
+              "git_object": "e8436c40a241e36c705419898e4295fcf3c6df1d",
+              "bytes": 22234,
+              "kind": "blob",
+              "sha256": "934eb5a6ed00b9a1b4633ae144878c46e53759c8a61c7ec03290fbbb27591c34",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\e8436c40a241e36c705419898e4295fcf3c6df1d.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I2/out_gates.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_gates.json",
+              "git_object": "44b472b1fbc1fd7ac3f4c8558d299343d0d92bd8",
+              "bytes": 53444,
+              "kind": "blob",
+              "sha256": "65bd6a98fa5c76ca6931d8470a746602264efc1d22921153a70ac24ab68811e0",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\44b472b1fbc1fd7ac3f4c8558d299343d0d92bd8.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I2/out_null.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_null.json",
+              "git_object": "2b1c76d21da617ccfee48489c3f440c723749b81",
+              "bytes": 40849,
+              "kind": "blob",
+              "sha256": "5bdc2aed7467ed12412ec0fc716af80b0df58a3ccc99ec39f172ead7e92be419",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\2b1c76d21da617ccfee48489c3f440c723749b81.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I2/out_power.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_power.json",
+              "git_object": "2b09d88f50e513780332e2b5c69468b46b8c4496",
+              "bytes": 370405,
+              "kind": "blob",
+              "sha256": "0871bbd373d0fdf5bb9d3c400d71977609246fa99b7ec06ed2cf01ac6401bc85",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\2b09d88f50e513780332e2b5c69468b46b8c4496.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I2/out_smoke.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_smoke.json",
+              "git_object": "851fc3bdaf3ef556e7469ccfe425cc5d1d0e7b70",
+              "bytes": 2197,
+              "kind": "blob",
+              "sha256": "435de2c55db0f002b5fb7004c99713b7a87502c35e9b3a9f44ef1fa2563e90d1",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\851fc3bdaf3ef556e7469ccfe425cc5d1d0e7b70.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I2/out_speed.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I2/out_speed.json",
+              "git_object": "3d5606239f1a52db8a6c7eff72620fe1adf932b6",
+              "bytes": 4261,
+              "kind": "blob",
+              "sha256": "b861845185add6992665e8ddc0018286a23593364d971c5d90d9f2a8f2e467e1",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\3d5606239f1a52db8a6c7eff72620fe1adf932b6.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "L1-PRIOR-PROPAGATION",
+      "source_hypothesis": "AUDIT / prior-propagation (Round 20 Lane C-prop, doctrine R6): propagate to the source-of-record the three L1-prior corrections no Round-19 lane had write scope for. (i) F6/F7 counts: 'ibotpeaches/messages/' holds 56 PASSing files / 54 distinct signed messages running to 2017-04-04, NOT 46/2012-2014; armor headers 53 x 'GnuPG v1.4.11 (GNU/Linux)', 2 x 'GnuPG v1', 1 x 'CicadaPG v.3301' -- the toolchain changed TWICE, not once. (ii) The distro bracket 'Ubuntu 11.04-12.04' is LOOSER than published: GnuPG 1.4.11 shipped across >=6 OS generations incl. Ubuntu 12.10 (two independent lanes: R19/R1 render side + R19/C3 corpus side). (iii) G2's Perl prior should be re-sourced OFF the distro inference ONTO the signed, dated Crypt::RSA fact (2012-01-15 + 2014-01-06 PASSing messages, Data::Dumper of a live Crypt::RSA::Key::Public object, Version 1.99 / Scheme Crypt::RSA::ES::OAEP armor).",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Round20 C-prop audit corrects message count/header and weak distro prior; links a signed Crypt::RSA Perl fact. No LP2 decode.",
+      "positive_gate_status": "Evidence provenance correction, not a positive cipher gate.",
+      "inputs_availability": "Four RESULTS Git blobs available; original 56 signed messages and keys needed for direct verification.",
+      "existing_coverage": "round19-rsa-key-provenance covers different RSA key packet question; does not verify signed-message census.",
+      "unresolved": "Need original armor packet bytes for independent 56/54 and 53/2/1 count; timestamp chronology not proven by prose.",
+      "next_action": "Update historical source facts only after packet-level check; no solve experiment.",
+      "cohort": "provenance-audits",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+              "git_object": "a0d053c38be9162e36141e6f04d9a1f9569e7c4d",
+              "bytes": 36101,
+              "kind": "blob",
+              "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\a0d053c38be9162e36141e6f04d9a1f9569e7c4d.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/RESULTS.md",
+              "git_object": "488472e7bea24b90ee15dbb6f3c19bc7cc579c7e",
+              "bytes": 64610,
+              "kind": "blob",
+              "sha256": "ab1040a03e4736982243ea0df42501200e839a22f31e116c7cbcd0685c5737e4",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\488472e7bea24b90ee15dbb6f3c19bc7cc579c7e.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/R1/RESULTS.md",
+              "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75",
+              "bytes": 54457,
+              "kind": "blob",
+              "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6ee84bea77098b8230e2da0030f9228358e23c75.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round20/C/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/C/RESULTS.md",
+              "git_object": "0197ad3ad933f4687ee9dab004af38c571686c60",
+              "bytes": 9887,
+              "kind": "blob",
+              "sha256": "a6ccadabce0b63f5ad856e74bb7cc33c04a37ac0a2f325d1e75f497719a7093a",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\0197ad3ad933f4687ee9dab004af38c571686c60.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "L7-A-SCORER-ENGLISH-ONLY",
+      "source_hypothesis": "Every adjudication in this repository is decided by lp.score.Quadgram.score_norm, a quadgram model trained on four modern-orthography English books, against a fixed English band (>= -5.5). If the LP2 plaintext is not modern or archaic English, the CORRECT key is scored as noise and every published negative is conditional in a way no ledger entry states.",
+      "source_claimed_status": "negative",
+      "source_command": "",
+      "called_branches": "Source red-team tests old fixed English quadgram against other languages; no runnable command/evidence path attached to this row, though L7 RESULTS is in neighboring source evidence.",
+      "positive_gate_status": "Source reports correct-key rejection across Latin/OE/German/Welsh/abbreviated English; old negative conditional.",
+      "inputs_availability": "Exact L7 corpus/model controls in Git must be located; row has no cache objects, not proof of missing.",
+      "existing_coverage": "english-scorer-controls and known-reading-languages independently establish bounded language sensitivity, not source's exact nine-register 24-plant panel.",
+      "unresolved": "Do not generalize all source negatives to all languages; quantify which original gates had power.",
+      "next_action": "Reconcile with I2 and R20 P1 in one scorer/control audit.",
+      "cohort": "language-instrument",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+          "git_object": "ed14bf10cddc3aec5356f96621930c76173e1737",
+          "sha256": "6e00dde9902bceae6e0910c798f90bf6c23a246757be7bf01eb1a8a3e63d5225",
+          "bytes": 32261,
+          "note": "cross-referenced cached object; source row itself attached no blob"
+        }
+      ]
+    },
+    {
+      "source_id": "L7-C-G3-FLOOR-EXTENDED",
+      "source_hypothesis": "The G3 doublet-deficit floor - min_d Pdp(d) > 0.664% for real plaintexts, therefore the key must be output-aware - is measured on four MODERN ENGLISH corpora only, and is English-conditional in the same way the scorer is.",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Source says independent-key doublet floor estimated from four modern English corpora; this is a conditional plaintext model.",
+      "positive_gate_status": "Gate cannot exclude unknown plaintext distributions; exact four-corpus files unavailable in existing D2 replay.",
+      "inputs_availability": "No evidence objects in this batch row; inspect source Git corpus path before declaring absent.",
+      "existing_coverage": "source-independent-key-floor-audit explicitly finds broad independent-key exclusion unsupported; source's corpus floor not independently rebuilt.",
+      "unresolved": "Need all source corpora and fifth preregistered corpus, if any, plus exact sampling method.",
+      "next_action": "Input dependency audit and matched-corpus replay if bytes found; not new generic doublet test.",
+      "cohort": "language-instrument",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+          "git_object": "ed14bf10cddc3aec5356f96621930c76173e1737",
+          "sha256": "6e00dde9902bceae6e0910c798f90bf6c23a246757be7bf01eb1a8a3e63d5225",
+          "bytes": 32261,
+          "note": "cross-referenced cached object; source row itself attached no blob"
+        }
+      ]
+    },
+    {
+      "source_id": "P-9",
+      "source_hypothesis": "PARKED item: the 30 catalogued bands with n <= 16 glyphs are 'the only real candidates' for hidden content.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source C3 re-read 109 ornament bands; source note says 30 <=16-glyph bands are not uniquely the only candidates.",
+      "positive_gate_status": "Source G-A2 pooled 53.95% failed inherited 90% despite LP2-face subset 95.56%; do not assert full artwork decoding from that subset alone.",
+      "inputs_availability": "bands.json cached; malformed `RESULTS.md#anchor` is a link fragment, not missing file: RESULTS.md cached elsewhere.",
+      "existing_coverage": "dukotah-ornament-fresh-reader-gate tests a fresh229 instrument and fails 90% direct solved LP2 reading; different reader.",
+      "unresolved": "Historical 226-band reader/NPZ source exact replay remains pending; field-definition error can be audited from band inventory.",
+      "next_action": "Source fact correction/inventory audit; no new LP2 solve method.",
+      "cohort": "artwork-evidence",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/C3/RESULTS.md#21-p-9-is-refuted-and-by-a-field-definition-error",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/l3/bands.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/l3/bands.json",
+              "git_object": "f28ad396a776a52e31afa02eb941903ce548a5c3",
+              "bytes": 291250,
+              "kind": "blob",
+              "sha256": "90ceff57d9089de38e421ee7ad47656d37b987be0e93d325b07013be3ca5785e",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\f28ad396a776a52e31afa02eb941903ce548a5c3.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R19-C2-MARSAGLIA-COST",
+      "source_hypothesis": "Round 17 called the Marsaglia CDROM 'the cheapest live item in this branch' without ever costing it. How big is its offset space and what does finishing it cost?",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "out_marsaglia_space computes 63 pads x six builders x two byte orders x two signs; 17,639,963,712 pad-space offsets, 1,539,996,304 completed (8.73%).",
+      "positive_gate_status": "Cost arithmetic only; not a positive key gate. L6 controls 16/16 on real-pad family.",
+      "inputs_availability": "Both JSON receipts cached; exact ISO/pads absent from pinned text cache but needed only for full replay.",
+      "existing_coverage": "No public source-cost record; B-13 is same campaign, not second pad hypothesis.",
+      "unresolved": "Remaining ~91.27% source pad space plus whole ISO; 21.33 CPU-hours pads-only source estimate conditional on hardware.",
+      "next_action": "Merge with B-13 campaign accounting; no separate solve record for cost estimate.",
+      "cohort": "public-pad-marsaglia",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+              "git_object": "d32e3e27470f6ec3214a27057251a8bc72470937",
+              "bytes": 13342,
+              "kind": "blob",
+              "sha256": "8e83fd95c6855e9b11b3f79caf53ddf8f564885146c6e8c59a7c99892872ff81",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d32e3e27470f6ec3214a27057251a8bc72470937.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_marsaglia_space.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_marsaglia_space.json",
+              "git_object": "4630754b1278ac5f03d2923d0ea9ef91d18edf9c",
+              "bytes": 1399,
+              "kind": "blob",
+              "sha256": "5cd13a5ed3e919cb89ca205ec04fa45570c3da07202922b624704a6e5db0c0ea",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\4630754b1278ac5f03d2923d0ea9ef91d18edf9c.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R19-G1",
+      "source_hypothesis": "bash $RANDOM and the glibc random()/rand()/*rand48 family -- ranked 4 (x2) and 1 (x3) by round18/L1-toolchain/RESULTS.md section 6.2 on physical-artifact evidence -- can be reproduced byte-exactly and enumerated as a bounded keystream space for LP2.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source validates 19 bash/glibc/coreutils/etc generators against real/reference binaries, eight seeds x2000 draws; measures bash orbit, then stops before manuscript scoring except plant.",
+      "positive_gate_status": "Source reports 19/19 generator gate PASS, ILP32 bash model reference is typed C not real 32-bit binary.",
+      "inputs_availability": "PREREG/READY/RESULTS, generators, references and validation Git objects available; era binary/toolchain receipt requires independent setup.",
+      "existing_coverage": "public-prng-seed-sweep has seven source-defined streams/1,877 seeds, not source G1 19-model Phase2.",
+      "unresolved": "No independent 19/19 parity; Phase2 actual complete seed/orbit sweep never called in G1.",
+      "next_action": "Batch generator parity with R19-G3 and B01 before any complete search; separate source construction from decode.",
+      "cohort": "prng-full32",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/G1/PREREG.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/PREREG.md",
+              "git_object": "e24f26e20441a84fd9c28cf33c77058255f0ba31",
+              "bytes": 18032,
+              "kind": "blob",
+              "sha256": "d7be3814cd7c7e9ff29cf7d3d17f2d62028283e79118d285e53a782f58ead8b0",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\e24f26e20441a84fd9c28cf33c77058255f0ba31.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/READY.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/READY.md",
+              "git_object": "82966491d8bcf5f733d1940d7404aacf46fb83f9",
+              "bytes": 11842,
+              "kind": "blob",
+              "sha256": "22aad06a66de7e2222b25fff43b94018a64d3d4bdfdfce0335e02d83f0ac3e7f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\82966491d8bcf5f733d1940d7404aacf46fb83f9.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/RESULTS.md",
+              "git_object": "c5a2cc3d5ca9a4eda161b2294ec8afd5b9824cad",
+              "bytes": 21265,
+              "kind": "blob",
+              "sha256": "04bb1397781ff86710f536e84652939531f3f730023cef264548391ccf3b70f5",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c5a2cc3d5ca9a4eda161b2294ec8afd5b9824cad.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/fetch_bash_src.sh",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/fetch_bash_src.sh",
+              "git_object": "0b530bad0afa77e332f91313a8c4afb37a65ccb4",
+              "bytes": 1637,
+              "kind": "blob"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/gen_bash.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/gen_bash.py",
+              "git_object": "c55b89f75a88b8728a1e0e9769e08cf568b483b7",
+              "bytes": 9379,
+              "kind": "blob",
+              "sha256": "fef0c358b42383d335e511e33816cde10a9267d6f856d7a4ac3987bff999a55d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c55b89f75a88b8728a1e0e9769e08cf568b483b7.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/gen_coreutils.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/gen_coreutils.py",
+              "git_object": "a940e1a2a3e32981e99d196de77524c476b1e624",
+              "bytes": 8422,
+              "kind": "blob",
+              "sha256": "477da958a13c31d4ebe18ebdbe88618bed1f1f4bf815039cf266fed0defd14b6",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\a940e1a2a3e32981e99d196de77524c476b1e624.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/gen_glibc.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/gen_glibc.py",
+              "git_object": "b22515b7a472a39bc19e1648dc883d153333177f",
+              "bytes": 7102,
+              "kind": "blob",
+              "sha256": "06e2c53aef4d259819e78d9d169d3a57b438892c443f99d2e9b115ddc584ea1e",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b22515b7a472a39bc19e1648dc883d153333177f.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/keystream.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/keystream.py",
+              "git_object": "df7a8158ddb5889ba90ee5ebc984c5898cfb3cd7",
+              "bytes": 6633,
+              "kind": "blob",
+              "sha256": "fdb95a91de1ca90c8b5ff6683cf9c2ee6aff60fe9bfb332e6849d5203c0913f1",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\df7a8158ddb5889ba90ee5ebc984c5898cfb3cd7.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/orbit.c",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/orbit.c",
+              "git_object": "bd4a3d9cb03ae7d65253567a972e65a582b79ce1",
+              "bytes": 4814,
+              "kind": "blob"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/orbit_measured.txt",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/orbit_measured.txt",
+              "git_object": "95b63b183660ea1323abc1a507db5ecb4e9d829a",
+              "bytes": 1247,
+              "kind": "blob",
+              "sha256": "5da3e0dc94f2eec9a6128749d5243ac72f5fb7f49eb33d0dba23153ca6f9ede6",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\95b63b183660ea1323abc1a507db5ecb4e9d829a.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/pilot.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/pilot.json",
+              "git_object": "b972e822d9e168f7179e6ab50e6d1c26929a2740",
+              "bytes": 2751,
+              "kind": "blob",
+              "sha256": "ee9bf84c204debb6d608026f77095c4c29127e976aed9c4fdd57e609156480a2",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b972e822d9e168f7179e6ab50e6d1c26929a2740.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/plant.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/plant.json",
+              "git_object": "94a41311e9b56f6495c51adbffb004cd101e343d",
+              "bytes": 1411,
+              "kind": "blob",
+              "sha256": "a7dd0085a52bdcec84880f622f210c7fb1e13ee5e7fffe4a9fef122f552f7d48",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\94a41311e9b56f6495c51adbffb004cd101e343d.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/plant.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/plant.py",
+              "git_object": "5aa471cf13a7a70399078ebafd0051a466c311af",
+              "bytes": 6729,
+              "kind": "blob",
+              "sha256": "d5821d36b0019dc68e8e3acdb6eb82f7cb12a790c1beefb875aa990a312851aa",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\5aa471cf13a7a70399078ebafd0051a466c311af.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/reduce29.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/reduce29.py",
+              "git_object": "280a0053f179d257e1c3a5e136054b13f46b8e11",
+              "bytes": 4303,
+              "kind": "blob",
+              "sha256": "53647506b363c57fd35efe0a02b186249dd8f53c2757e30827d4ea1fad667f21",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\280a0053f179d257e1c3a5e136054b13f46b8e11.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/ref_bash.c",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/ref_bash.c",
+              "git_object": "9b5437c49b65a0fcd981fcfe2009a6db530733ae",
+              "bytes": 7614,
+              "kind": "blob"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/ref_glibc.c",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/ref_glibc.c",
+              "git_object": "5d7778b98295b3fe0badebd982503d508beec666",
+              "bytes": 3081,
+              "kind": "blob"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G1/validation.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G1/validation.json",
+              "git_object": "6ad3d8388681bf4c67f38a50afad81f97593bded",
+              "bytes": 35479,
+              "kind": "blob",
+              "sha256": "636b4fad6450f7fb5a323cecd65f7a5a376468c430a43d12964fe28edd5566bf",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6ad3d8388681bf4c67f38a50afad81f97593bded.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R19-G3",
+      "source_hypothesis": "The LP2 keystream was produced by a short Python 2.7 script on the author's Ubuntu 11.04-12.04 box: random.seed(<a Cicada-flavoured string literal>) followed by an era-idiomatic reduction to a rune index, applied under the pinned soft anti-repeat filter. Python 2's str-seeding path is (unsigned long)hash(s) -> <=2 init_by_array words, which no prior sweep in this repository has ever exercised.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source validates Py2.7 str-seed hash/init_by_array on real CPython2.7 amd64/i386 across 2,165 dictionary words; stops at Phase2 scorer boundary except pilot.",
+      "positive_gate_status": "Source reports element-for-element generator validation; pilot is plumbing only, not negative LP2 search.",
+      "inputs_availability": "gen_py27/validate/validation Git blobs; pilot.jsonl not in pinned tree but parser/code present.",
+      "existing_coverage": "py27-reducer-sweep-source-audit and py27-prior-front-opening-cribs cover generator/parsing and four settings over 45,975 priority words as new crib test, not original English score grid.",
+      "unresolved": "Original Phase2 language-scored 2,165-word source campaign unproven; later R21 variants distinct.",
+      "next_action": "Reuse validated generator; first audit source Phase2 was ever run, then finite scorer/control replay if needed.",
+      "cohort": "prng-seed-priors",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/G3/PREREG.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/PREREG.md",
+              "git_object": "63a7822aa119e3a47f83d916633855142115197c",
+              "bytes": 17310,
+              "kind": "blob",
+              "sha256": "dc6bb8d14567bf0557dac5300c7d41791ae4f263a88bf07db4bf3d9bae3657c5",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\63a7822aa119e3a47f83d916633855142115197c.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/READY.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/READY.md",
+              "git_object": "c338bda2e1ed51e0298197e9ab3c16fc4b522198",
+              "bytes": 9649,
+              "kind": "blob",
+              "sha256": "cbe9e783c5479f99ff962cfc99b8f2955eea024b02df3edb05c0a0283c211aad",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c338bda2e1ed51e0298197e9ab3c16fc4b522198.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/RESULTS.md",
+              "git_object": "74365f4945af1393a0923939f526e9ba0524a6a6",
+              "bytes": 28859,
+              "kind": "blob",
+              "sha256": "0a1b3ef289b274571b7a2134eb236e3732d45630f838a4703c92cc8169334809",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\74365f4945af1393a0923939f526e9ba0524a6a6.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/gen_py27.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/gen_py27.py",
+              "git_object": "3812149095fab6b6027603d107633f9bfd081ac0",
+              "bytes": 20312,
+              "kind": "blob",
+              "sha256": "01217361c1d873046bb8d85a2030d18c046f49365a172313e84f30f198a1190d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\3812149095fab6b6027603d107633f9bfd081ac0.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/pilot.jsonl",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/pilot.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/pilot.py",
+              "git_object": "3716c74c79acd6827551be1b5d4db13e75e68f6b",
+              "bytes": 3959,
+              "kind": "blob",
+              "sha256": "bfaf5bd7744ea901e2c8b968582f685a526040ff1d7251bf12cb14b4670677c9",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\3716c74c79acd6827551be1b5d4db13e75e68f6b.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/validate_py27.py",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/validate_py27.py",
+              "git_object": "5802952dbff41bad390b5632777db75d18a92ec4",
+              "bytes": 22994,
+              "kind": "blob",
+              "sha256": "2059bdeb96dfca594db2dde026be084df19671a6e45a0559d656a804eb0c47cd",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\5802952dbff41bad390b5632777db75d18a92ec4.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G3/validation.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G3/validation.json",
+              "git_object": "48ed8fee9c738b8773394b504447ca2b001881aa",
+              "bytes": 11360,
+              "kind": "blob",
+              "sha256": "763ab7c9cb2f5128a3cbcbb19a060c58776d41e660216b50350b3d2a6ab69f54",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\48ed8fee9c738b8773394b504447ca2b001881aa.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R19-R1-A",
+      "source_hypothesis": "Permissiveness frontier of a drift-tolerant beam (I1's premise)",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Round19 R1 audits beam permissiveness frontier rather than proposing new cipher; no direct evidence objects in this row.",
+      "positive_gate_status": "Requires planted correct-key and wrong-key frontier; source RESULTS exists as L1 evidence.",
+      "inputs_availability": "R1 RESULTS Git blob cached under L1 source entry; no file absence implied.",
+      "existing_coverage": "decoder-skip-controls, r18-keyskip-drift-power overlap mechanics but not all source R1 frontier rows.",
+      "unresolved": "Independent source frontier/recovery replay unconfirmed.",
+      "next_action": "Group with I1 decoder-instrument gates.",
+      "cohort": "decoder-instrument",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "bytes": 54457,
+          "note": "cross-referenced cached object; source row itself attached no blob"
+        }
+      ]
+    },
+    {
+      "source_id": "R19-R1-D",
+      "source_hypothesis": "Round 19's own arithmetic: enumeration cost, the prefilter dilemma, S2's reach, and Phase 3's premise",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Round19 R1 audits enumeration cost, prefilter dilemma, S2 reach and Phase3 premise; no manuscript method of its own.",
+      "positive_gate_status": "Logic/cost audit; no full-source positive gate attached to row.",
+      "inputs_availability": "R1 RESULTS Git blob available via L1 entry.",
+      "existing_coverage": "R18 drift/power records and seed-source audits each cover narrow mechanics, not source campaign arithmetic.",
+      "unresolved": "Need exact denominators and premises; do not count as new failed key search.",
+      "next_action": "Reconcile cost with B01/R25/R20 P1, correct source ledger.",
+      "cohort": "status-gate-audits",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/R1/RESULTS.md",
+          "git_object": "6ee84bea77098b8230e2da0030f9228358e23c75",
+          "sha256": "516106f2a8e98e99e35575b9b4b1969942de3a9a454d4b836059090f8f8c390b",
+          "bytes": 54457,
+          "note": "cross-referenced cached object; source row itself attached no blob"
+        }
+      ]
+    },
+    {
+      "source_id": "R20-P1-SIEVE-INFEASIBLE",
+      "source_hypothesis": "A cheap, skip-aware, MULTI-REGISTER prefilter (sieve) can screen a PRNG keyspace at >=100x reduction while retaining >=0.90 of true keys per register, making the enumerable 2012-Linux generator families affordable to sweep. Load-bearing precondition for all of Round 20's Phase S.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source dual-stage multi-register prefilter measured on real Marsaglia plants: 15/register (12 drift), all nine registers, 24–32-rune head, >=100x reduction.",
+      "positive_gate_status": "Source GATE NOT MET; hard registers Welch/half-vowel best simultaneous 0.667, <0.90; RAND survival 0, LP1_REAL 0.933–1.0.",
+      "inputs_availability": "PREREG/RESULTS/survival JSON cached by adjusted paths; exact Marsaglia pads/corpora needed for replay.",
+      "existing_coverage": "english-scorer-controls documents language sensitivity; no exact P1 sieve survival replay.",
+      "unresolved": "Does not prove multi-register search impossible at other lengths/filters; Phase S gate specifically failed.",
+      "next_action": "Batch language scorer/prefilter control replay after exact model/pad inputs.",
+      "cohort": "language-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round20/P1/PREREG.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P1/PREREG.md",
+              "git_object": "d640779b9776988ca1fe62fc1f46f5771dccc873",
+              "bytes": 6495,
+              "kind": "blob",
+              "sha256": "8046e7c34c341ea5e611aa633fe93b94006c5bf7f648b8cbeb5fe304fb3f5733",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d640779b9776988ca1fe62fc1f46f5771dccc873.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/P1/RESULTS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P1/RESULTS.md",
+              "git_object": "cd0422f311bd5574cef5b6d71a9ea48a77b08e1f",
+              "bytes": 11627,
+              "kind": "blob",
+              "sha256": "a0288769ce9eb4ffc81327b11d0356b2b037630ffe9b67771fe7039e13ba3a58",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\cd0422f311bd5574cef5b6d71a9ea48a77b08e1f.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/P1/survival_surface.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P1/survival_surface.json",
+              "git_object": "a7eabaaa0784ad2492e966f181bd18865c48b10b",
+              "bytes": 7850,
+              "kind": "blob",
+              "sha256": "45abfdb5678563fe7a6e5923d10aefaf78eec9059c09c2542e493c5d02a9e298",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\a7eabaaa0784ad2492e966f181bd18865c48b10b.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "bytes": 27038,
+              "kind": "blob",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\070b4b6c8eabd0ec37b3814ed51322574d75dea5.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R20-R-REDTEAM",
+      "source_hypothesis": "Standing red-team lane (doctrine R6). Target: Round 20's own claims -- does P1 manufacture survival, is Phase S a silent re-run, does the sieve interact with the panel-max null, and can a row be certified on score alone?",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Source tests structured wrong-key survival, screened-survivor panel null, Phase-S re-run scope, hit decision gate.",
+      "positive_gate_status": "Source reports FOUND-ERROR: screened FP 0.025/decode vs nominal 1e-8; no recovery field/hitfn in old row schema. Other two subchecks NO-ERROR.",
+      "inputs_availability": "PREREG/RESULTS/interaction and structured-null JSON cached by adjusted path.",
+      "existing_coverage": "semantic-seed-screen-gate-audit and english-scorer-controls diagnose different gates; no full source red-team reproduction.",
+      "unresolved": "Invalidates score-only certification in source pipelines; not an LP2 cipher result.",
+      "next_action": "Recompute counters from source rows; classify affected source negatives as conditional.",
+      "cohort": "status-gate-audits",
+      "evidence": [
+        {
+          "requested": "analysis/round20/R/PREREG.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/R/PREREG.md",
+              "git_object": "1f7bdfc67fd448513bf081af336c57215f085230",
+              "bytes": 7451,
+              "kind": "blob",
+              "sha256": "6ec40faf16ab102c571e0f6589d3d83291645c9d9c2c55cc81a8512db9791d4d",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\1f7bdfc67fd448513bf081af336c57215f085230.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/R/RESULTS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/R/RESULTS.md",
+              "git_object": "6db971ac9c398386faa676fe296a7f17ab6a7a4a",
+              "bytes": 12600,
+              "kind": "blob",
+              "sha256": "0d8691ba5b041a701126d69e02846e1335aa56aa73f93ef1e1324a44d2fc7fad",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6db971ac9c398386faa676fe296a7f17ab6a7a4a.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/R/interaction_b.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/R/interaction_b.json",
+              "git_object": "42e7b3940a583f01c8090ea91de2d0c51d5c46fc",
+              "bytes": 166,
+              "kind": "blob",
+              "sha256": "637cc6eba5f6e6d4fc5fe5c15434f987111597e0062340e41a5fe794709abb11",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\42e7b3940a583f01c8090ea91de2d0c51d5c46fc.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/R/structured_null.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/R/structured_null.json",
+              "git_object": "aa420cb97443323b526f299f98771f96a42999aa",
+              "bytes": 478,
+              "kind": "blob",
+              "sha256": "51fde9cf28c32a5347d33251c8df0f439e9a7baca08841dc681d8f90b3d22ec0",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\aa420cb97443323b526f299f98771f96a42999aa.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "bytes": 27038,
+              "kind": "blob",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\070b4b6c8eabd0ec37b3814ed51322574d75dea5.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R20-SRESCOPE-B04-SURVIVORS",
+      "source_hypothesis": "Re-adjudicating the stored B-04 English-argmax survivors through the repaired, recovery-gated instrument recovers a key the original English-only sweep discarded. No new key space.",
+      "source_claimed_status": "negative",
+      "source_command": "",
+      "called_branches": "Source re-adjudicates 250 stored B04 argmax survivors under exact/drift, nine-register panel, strict recovery gate; 487 actual adjudications.",
+      "positive_gate_status": "Source plant rank1/recovery1/hit; source also finds real-mode held-out proxy catches only 15/45 false high scorers. Zero survivor null clearances is subset-only.",
+      "inputs_availability": "PREREG/RESULTS/three out_* JSON cached; source B04 survivor rows/model corpora needed for full replay.",
+      "existing_coverage": "b04-source-seeds-opening-cribs covers all fixed openings, not this scored survivor re-adjudication.",
+      "unresolved": "Not a new 6.2m keyspace; source proxy flaw limits unattended hit claims.",
+      "next_action": "One B04 calibration/survivor replay cohort with original B04, preserve strict-vs-proxy distinction.",
+      "cohort": "language-instrument",
+      "evidence": [
+        {
+          "requested": "analysis/round20/S-RESCOPE/PREREG.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-RESCOPE/PREREG.md",
+              "git_object": "699b303c87455b28a2819a1fd83c6373eab8a66e",
+              "bytes": 4775,
+              "kind": "blob",
+              "sha256": "f3ce08a3653992751d069bd68a84b2ee6f51510815ef6d15bfca9ba2beab3275",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\699b303c87455b28a2819a1fd83c6373eab8a66e.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-RESCOPE/RESULTS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-RESCOPE/RESULTS.md",
+              "git_object": "d1acb9be6be5474bb336f9cdc21a17f97ad7628f",
+              "bytes": 7699,
+              "kind": "blob",
+              "sha256": "7a1d0acab24b807c3eddde2deac5715c85aa09997ab9baee24ca1109ddd45af5",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d1acb9be6be5474bb336f9cdc21a17f97ad7628f.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-RESCOPE/out_heldout_proxy_audit.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-RESCOPE/out_heldout_proxy_audit.json",
+              "git_object": "70208a7beeee6a9d04f9bb3140cd0bf34f5007a0",
+              "bytes": 1116,
+              "kind": "blob",
+              "sha256": "4b4667145d71e59dad5bc2ecd897d26544765ef4b9e7325c3ac79e784257bc99",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\70208a7beeee6a9d04f9bb3140cd0bf34f5007a0.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-RESCOPE/out_poscontrol.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-RESCOPE/out_poscontrol.json",
+              "git_object": "fe05bb5e52c4e9c3ae9e1e1d8f07cf0eaa446d2c",
+              "bytes": 617,
+              "kind": "blob",
+              "sha256": "5aee30da5dc597bf39c1658c953a37ec7aa32485e9d329edb38059b45dae8d20",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\fe05bb5e52c4e9c3ae9e1e1d8f07cf0eaa446d2c.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-RESCOPE/out_rescope.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-RESCOPE/out_rescope.json",
+              "git_object": "135e2da10166f034c866da807049ceeca7d3e44e",
+              "bytes": 3578,
+              "kind": "blob",
+              "sha256": "c6ed186d674c7caee84eedf25115a5026ce174911d2a88e5ccc8bd912130cf8f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\135e2da10166f034c866da807049ceeca7d3e44e.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "bytes": 27038,
+              "kind": "blob",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\070b4b6c8eabd0ec37b3814ed51322574d75dea5.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R22-R-REDTEAM",
+      "source_hypothesis": "Standing red-team audit (doctrine R6) of Round-22 lanes A/B/C/D: refute, don't confirm. Target = the repository's own current Round-22 claims. Reports FOUND-ERROR or NO-ERROR-FOUND, never 'confirmed'.",
+      "source_claimed_status": "audit",
+      "source_command": "Read RESULTS.md; recomputed statistics are inline (Poisson/binomial P>=6, per-candidate sigma, hit-count recomputation from B's g3_results.json / ledger rows).",
+      "called_branches": "Source reviews Round22 A/B/C/D statistics, recomputes some Poisson/binomial tails and source disclosure overlap.",
+      "positive_gate_status": "Source reports NO-ERROR-FOUND with one G3/N2 coordinate overlap; not independent confirmation of all source lanes.",
+      "inputs_availability": "RESULTS and ledger JSON Git blobs cached.",
+      "existing_coverage": "lp2-turtle-spatial-replay tests only lane B G1 construction, not whole Round22 redteam.",
+      "unresolved": "Source audit label must remain source-only for untested A/C/D.",
+      "next_action": "Internal scope reconciliation, ideally paired with G3 pointer audit; not another solve record.",
+      "cohort": "status-gate-audits",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round22/R-redteam/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round22/R-redteam/RESULTS.md",
+              "git_object": "bdefb25ddb7d7ea98d2ceff32b7458050c3283f4",
+              "bytes": 11709,
+              "kind": "blob",
+              "sha256": "34d191f42974a3487aafe77990e7e010d011f63e7687d20d106b08b17c448ff2",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\bdefb25ddb7d7ea98d2ceff32b7458050c3283f4.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round22/R-redteam/ledger.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round22/R-redteam/ledger.json",
+              "git_object": "b9fc989d60795bc99eb663dc8ec8140542228d62",
+              "bytes": 6291,
+              "kind": "blob",
+              "sha256": "d67983d8425e3a575fdec3ff388002474d61cfbbb68dfaaef97b045450f801bd",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b9fc989d60795bc99eb663dc8ec8140542228d62.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R25-COMPUTE-TAIL-CHUNK1",
+      "source_hypothesis": "The true LP2 key is a Python-2.7 random.seed(int)->MT19937 init_by_array([w]) keystream (reducer random29) somewhere in the 2^32 seed space outside the ~246k top-prior slice already swept by S-G3/C2. Owner-elected compute grind of the one runnable, untouched branch (PICKUP-HERE: PRNG/seed tail) at an honestly low prior. Chunk 1 of a resumable, checkpointed campaign.",
+      "source_claimed_status": "partially-run",
+      "source_command": "",
+      "called_branches": "Source checkpoints Py2.7 MT init_by_array([w]) random29 pair decoder on seed interval [3,000,000,3,506,593), sign-1 offset0, 120/240 rune gate.",
+      "positive_gate_status": "Source plant seed777 full recovery and hit; chunk 506,593 screened, zero hits; >99.98% 2^32 remains unswept.",
+      "inputs_availability": "Runner/progress/RESULTS JSON cached adjusted paths; actual checkpoint state should be checked before any resume.",
+      "existing_coverage": "py27-prior-front-opening-cribs tests different 45,975 words/four configs/opening cribs, not this exact integer tail interval.",
+      "unresolved": "No general PRNG exclusion or complete full32 pair-mode result.",
+      "next_action": "Independent row-count/digest replay if cost justified; then resume disjoint chunks only with valid gate.",
+      "cohort": "prng-full32",
+      "evidence": [
+        {
+          "requested": "analysis/round25/compute-tail/RESULTS-chunk1.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/RESULTS-chunk1.md",
+              "git_object": "6a3f006a14cbd873181e6a8ca211fea9165d8a35",
+              "bytes": 5351,
+              "kind": "blob",
+              "sha256": "7f7844e8f865f58caf195a65a81484d808f18e7c87329d279388d67c718119c7",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6a3f006a14cbd873181e6a8ca211fea9165d8a35.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/RESULTS-parked.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/RESULTS-parked.md",
+              "git_object": "e88c873480b26e5f0d638db0b35aba753e791e0f",
+              "bytes": 2702,
+              "kind": "blob",
+              "sha256": "f33c3619a154e209fb0a1fb544f875b9236334efc1254a08a3548de6d56d9906",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\e88c873480b26e5f0d638db0b35aba753e791e0f.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/chunk1_stdout.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/chunk1_stdout.json",
+              "git_object": "c2ce78946ee1b60dc5a8fb013377e676714c8776",
+              "bytes": 1108,
+              "kind": "blob",
+              "sha256": "b779fdcb88246d223e91e4067ad37cd61fd461c5987470de9b8353f2609cd7a6",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c2ce78946ee1b60dc5a8fb013377e676714c8776.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/ledger.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/ledger.json",
+              "git_object": "6494864fec7c02645cb87d57d1950067d93ad3d7",
+              "bytes": 5887,
+              "kind": "blob",
+              "sha256": "97150775fd8e31ce7b6b5a032c76a45559986c9fa64e81c668a161b636f19a7a",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6494864fec7c02645cb87d57d1950067d93ad3d7.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/parallel_grind.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/parallel_grind.py",
+              "git_object": "71476c88f7c74d850c3bdae6bbcf800456e0d3fd",
+              "bytes": 17913,
+              "kind": "blob",
+              "sha256": "0933607346d1b94846783617b1ff5b41ce69ddf1f02880160d881177f556a1d9",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\71476c88f7c74d850c3bdae6bbcf800456e0d3fd.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress.json",
+              "git_object": "fe311a3dc7bffae5594eac2ed605b98936d8a6df",
+              "bytes": 1502,
+              "kind": "blob",
+              "sha256": "c134d20fe3f3e565a97b6d8e30df27765efbd2d9f5ced94867370b354ded39cc",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\fe311a3dc7bffae5594eac2ed605b98936d8a6df.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w0.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w0.json",
+              "git_object": "017dc98993815a1b62b8f07bec9c7dae26b831c8",
+              "bytes": 236,
+              "kind": "blob",
+              "sha256": "fc8e232be17bc0e9f1ad041b8866f283cbf56d94aefd073589df07c43c81cb1a",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\017dc98993815a1b62b8f07bec9c7dae26b831c8.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w1.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w1.json",
+              "git_object": "6d7fbe2af26371981729ffad20c8cc99ec767dd6",
+              "bytes": 243,
+              "kind": "blob",
+              "sha256": "c39dffe6446dfdd12f177f0096fe5b5d4ea16386382045c6c21af90b9816f94e",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\6d7fbe2af26371981729ffad20c8cc99ec767dd6.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w2.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w2.json",
+              "git_object": "c465a3867244497535be08d839ffea7e26a981e8",
+              "bytes": 246,
+              "kind": "blob",
+              "sha256": "3a6d4bdc38da8c09da8b82decfd99d1f84b069486ca82a7d9a617710b6d50458",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c465a3867244497535be08d839ffea7e26a981e8.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w3.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w3.json",
+              "git_object": "c0f5fbc5651063b7cf46736d35d07a433eada9c3",
+              "bytes": 246,
+              "kind": "blob",
+              "sha256": "f93fc25986f7e3373ddd59e9bf08cf04492a229397456f1a92b11a470a052afa",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c0f5fbc5651063b7cf46736d35d07a433eada9c3.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w4.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w4.json",
+              "git_object": "e320157941eb26aceaa77c996f19616d0972fe77",
+              "bytes": 247,
+              "kind": "blob",
+              "sha256": "93ea1c82c47e03fadc9dcce9ffaec61335494c9f2267af038dbc85decd203b42",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\e320157941eb26aceaa77c996f19616d0972fe77.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/progress_w5.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/progress_w5.json",
+              "git_object": "1b8f2684ff7712a3ba225141bf32a2ca5a05ba65",
+              "bytes": 246,
+              "kind": "blob",
+              "sha256": "85c432dd802593eebfb8a40ab8ed4a4a3d6ad25be8948a6cbba3b92c2d46d24c",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\1b8f2684ff7712a3ba225141bf32a2ca5a05ba65.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round25/compute-tail/runner.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round25/compute-tail/runner.py",
+              "git_object": "c939ed3c97e3d8ff6dcef65a9811ff1e68952712",
+              "bytes": 12715,
+              "kind": "blob",
+              "sha256": "de09d20407c11441fc75f09d7a2e4c18e17dad33605c63f9f88b1f40ebf5adf9",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\c939ed3c97e3d8ff6dcef65a9811ff1e68952712.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
+      "source_hypothesis": "LP2 0-54's pad comes from a 32-bit-seeded generator the census left open: PHP mt_rand (canonical MT_RAND_MT19937 AND the pre-7.1 MT_RAND_PHP broken twist, x mod/badscaling reductions -- CENSUS section C's highest-prior open generator, P-4 blocker now gone), glibc random()%29 gen=0 (the R19-G3-CORRECTION open row, upgraded from the rigid decoder to the validated beam), and the R27-S3 cells (grb5_mod/grb5_rej/shuffle29 x offsets {1,3,5,7,13}, labelled completeness rituals) -- under the exact/pair relations, full 2^32 per cell.",
+      "source_claimed_status": "never-run",
+      "source_command": "analysis/round28/L4/BUILD.md (build + launch recipe), QUEUE.md (order, bars, ETAs, DO-NOT-FIRE hold), grind28.c, gen28.py, make_gates.py, receipts/, smoke/; chainer: analysis/round28/chain_after_s2.sh + chain.log + chainer.pid.",
+      "called_branches": "Source BUILD/QUEUE plans PHP mt_rand variants, glibc random()%29 and grb5 reduction x selected offsets; STATUS says orphaned premature run, not valid completion.",
+      "positive_gate_status": "No validated completed LP2 grid in this source row; gates receipts not in pinned tree at requested generic path.",
+      "inputs_availability": "Actual `liber-primus/analysis/round28/L4/{BUILD,QUEUE,PREREG}.md` exist in sparse source checkout; batch requested bare basename paths falsely miss. Some expected run receipts absent.",
+      "existing_coverage": "public-prng-seed-sweep's 1,877 seeds and B01 old rigid rows do not cover planned exact/pair full2^32 cells.",
+      "unresolved": "Huge low-prior queue; missing validated receipt/runtime and exact seed-domain accounting. Do not call 'unrun' solely from cache miss.",
+      "next_action": "Fix path receipts, audit planned cells/cost/gates; group with R19-G1/B01, defer expensive sweep.",
+      "cohort": "prng-full32",
+      "evidence": [
+        {
+          "requested": "BUILD.md",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "PREREG.md",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "QUEUE.md",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "RESULTS.md",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "analysis/round28/L4/BUILD.md",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/L4/BUILD.md",
+              "git_object": "e3e2dfdbdff2da9180659bc932ba11a30fd36c50",
+              "bytes": 4190,
+              "kind": "blob",
+              "sha256": "02299541ced963d91b692ae89b47780301ee174ecba5c5dcb7f62cc2b8e4544e",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\e3e2dfdbdff2da9180659bc932ba11a30fd36c50.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round28/chain_after_s2.sh",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/chain_after_s2.sh",
+              "git_object": "eff7d90570bbf65855c277648f60af9c65edc1e4",
+              "bytes": 5554,
+              "kind": "blob"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round28/sweep_plan_r28.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/sweep_plan_r28.json",
+              "git_object": "96f2f7e1d031952ccec71565b7821f46530abc68",
+              "bytes": 13627,
+              "kind": "blob",
+              "sha256": "426dcb69be875b16734ad37f0bbe3580ee90e7c229b7866d34e12e9f0b678213",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\96f2f7e1d031952ccec71565b7821f46530abc68.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round28/L3/progress28.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/L3/progress28.json",
+              "git_object": "03a0fbad8c29de91b2b639f40b25b695938a8d04",
+              "bytes": 31984,
+              "kind": "blob",
+              "sha256": "a5056436cce8ff1aafacec09ad87631f8ff7e1c44f76024bd85d8f3662d94a18",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\03a0fbad8c29de91b2b639f40b25b695938a8d04.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round28/L4/run/ORPHANED-PREMATURE-RUN.txt",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/L4/run/ORPHANED-PREMATURE-RUN.txt",
+              "git_object": "3ce66ed850955a417b38d7f3fd0550a3918a0461",
+              "bytes": 656,
+              "kind": "blob",
+              "sha256": "8bad7ede5e17c8052aaa4ad054c67846b7187a7d6b585eafd4e800b80052e668",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\3ce66ed850955a417b38d7f3fd0550a3918a0461.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round28/L4/run/STATUS.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round28/L4/run/STATUS.json",
+              "git_object": "7c118f733c814cb7a1053eb62123a2eac87dd748",
+              "bytes": 2107,
+              "kind": "blob",
+              "sha256": "adf4dca44d580cd92198ebcc984c2f585ac6051a831b345d5ae1660261085cc9",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\7c118f733c814cb7a1053eb62123a2eac87dd748.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/handoff/PARKED-SWEEPS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/handoff/PARKED-SWEEPS.md",
+              "git_object": "4d3b2fa893b4c2f16024d06753d3a87bf6897483",
+              "bytes": 6875,
+              "kind": "blob",
+              "sha256": "4db2ed75d4593177eb702fd5eaa907fa3faf6671e20315d6e3a5e34d55323e03",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\4d3b2fa893b4c2f16024d06753d3a87bf6897483.txt"
+            }
+          ]
+        },
+        {
+          "requested": "queued_cells.json",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "receipts/gates_receipts.json",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        }
+      ]
+    },
+    {
+      "source_id": "R30-C1-ART-ATTRIBUTION",
+      "source_hypothesis": "An individual illustrator/artist can be attributed to the Liber Primus artwork.",
+      "source_claimed_status": "negative",
+      "source_command": "",
+      "called_branches": "Pinned directory contains only catalogue.json: a descriptive art inventory and unsupported no-individual-hand verdict; no image-comparison code or attribution test.",
+      "positive_gate_status": "None. Catalogue links external web claims but performs no source-image identity or artist-attribution control.",
+      "inputs_availability": "Directory exists in Git; individual files must be enumerated before an evidential claim.",
+      "existing_coverage": "Site visual-index records motifs; not provenance attribution.",
+      "unresolved": "Individual source-image provenance and artist attribution are not established by this catalogue; its categorical claims about composition, software and cryptographic role require separate primary-source/byte checks.",
+      "next_action": "Treat as unverified historical/art-source claims, inspect actual images and original cited sources before updating visual-index facts; no cipher solve record.",
+      "cohort": "artwork-evidence",
+      "evidence": [
+        {
+          "requested": "analysis/round30/C1-art-attribution",
+          "status": "directory",
+          "candidates": []
+        }
+      ],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round30/C1-art-attribution/catalogue.json",
+          "git_object": "72b06e59a44fa48afc478b0c636b5193137126ec",
+          "sha256": "f6df7564f96b3d54b2b556141a1b1139c3f6560ad0cf343bef20399ebdbafc3d",
+          "bytes": 2744,
+          "note": "cross-referenced cached object; source row itself attached no blob"
+        }
+      ]
+    },
+    {
+      "source_id": "RESTATE-B-04",
+      "source_hypothesis": "B-04's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Meta-claim that B04 negative overstates original instrument's power; no new LP2 keystream grid.",
+      "positive_gate_status": "No independent gate here; L7/I2/R20 receipts document language and screen fragility.",
+      "inputs_availability": "No evidence objects attached; use B04 and R20 source objects, not missing=blocked.",
+      "existing_coverage": "b04-source-seeds-opening-cribs is valid bounded fixed-crib result; does not license source English negative.",
+      "unresolved": "Need precise source-scope wording tied to tested registers and stage controls.",
+      "next_action": "Editorial source verdict correction after B04/P1 calibration audit.",
+      "cohort": "status-gate-audits",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round13/B04/RESULTS.md",
+          "git_object": "1cd513a495d8b99e1d993235dbcd72fb207a8812",
+          "sha256": "3e1e6c007d1cb24c0f3149c7dc879bf3457c54117cadee6abbf53b73853c89f1",
+          "bytes": 4696,
+          "note": "recovered directly from pinned Git tree, absent from batch cache"
+        }
+      ]
+    },
+    {
+      "source_id": "RESTATE-R16-PRNG",
+      "source_hypothesis": "R16-PRNG's recorded coverage claims more than its evidence supports, and the unstated conditions under which its negative holds can be measured and written down.",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Meta-claim that R16 PRNG negative overstates bounds; no new generator called by this row.",
+      "positive_gate_status": "No positive gate attached; must inspect R16 actual seed/reducer/settings.",
+      "inputs_availability": "No evidence objects attached, so exact source paths must be located from ledger/git.",
+      "existing_coverage": "public-prng-seed-sweep and typed-seed-random-opening-cribs overlap finite settings but not blanket R16 closure.",
+      "unresolved": "Source R16 scope not independently mapped here.",
+      "next_action": "Source ledger/record scope table, no new standalone solve test.",
+      "cohort": "status-gate-audits",
+      "evidence": [],
+      "cross_entry_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/prng/PREREG.md",
+          "git_object": "3f05c24197fa89848bb146b9b480889655e8fd5a",
+          "sha256": "f14a565a7bb7c08c49ab6c0b3f7cc16459ebaae2000692f3ddec64a20b08a88c",
+          "bytes": 5545,
+          "note": "located in pinned Git tree; not part of batch cache"
+        },
+        {
+          "path": "liber-primus/analysis/round16/prng/RESULTS.md",
+          "git_object": "648741940869317e63595b5f1f55b8c014182335",
+          "sha256": "2bf78f62badb7714b5462e62d6fc3811a19126731f8b2901ff6989b506fe66a6",
+          "bytes": 5512,
+          "note": "located in pinned Git tree; not part of batch cache"
+        },
+        {
+          "path": "liber-primus/analysis/round16/prng/prng_sweep.py",
+          "git_object": "3aa949170c3771715b04207634ad3da8da248313",
+          "sha256": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283",
+          "bytes": 29557,
+          "note": "located in pinned Git tree; not part of batch cache"
+        }
+      ]
+    },
+    {
+      "source_id": "T1-02",
+      "source_hypothesis": "FOUND-ERROR in every height-filtered component segmentation in this repo: the rune Y is drawn as TWO components and collapses to U",
+      "source_claimed_status": "audit",
+      "source_command": "",
+      "called_branches": "Source d9_ycomp.py tests component segmentation where Y splits into two and can be read U.",
+      "positive_gate_status": "Source-glyph positive control requires manually verified Y/U image crops; `RESULTS.md#22` is a fragment URL, not absent document.",
+      "inputs_availability": "d9_ycomp.py/t1_reader.py Git blobs cached via prefix path; source result section file exists elsewhere.",
+      "existing_coverage": "image-row-coverage tests row detector, not this per-glyph Y segmentation; cross-source-word-boundaries compares textual witnesses.",
+      "unresolved": "Could affect purported transcription accuracy; no input correction without image adjudication.",
+      "next_action": "Inspect source/site image Y examples and separate model error from canon error.",
+      "cohort": "transcription-controls",
+      "evidence": [
+        {
+          "requested": "analysis/round19/T1/RESULTS.md#22",
+          "status": "not-in-pinned-tree",
+          "candidates": []
+        },
+        {
+          "requested": "analysis/round19/T1/d9_ycomp.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/d9_ycomp.py",
+              "git_object": "499b645cae4170deda4b264afa048ceb837a5850",
+              "bytes": 1752,
+              "kind": "blob",
+              "sha256": "7f524f9b925378379427480988f2291388160f69217c2a40e89ef9c910400c0f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\499b645cae4170deda4b264afa048ceb837a5850.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/t1_reader.py",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/t1_reader.py",
+              "git_object": "d4be5537e1cc3ffe81ffa16d16e705173d7c71b2",
+              "bytes": 10069,
+              "kind": "blob",
+              "sha256": "a0eb8747e3f749abcdf41bf3d4c9a8462dc3efce7c1b885c61a2e6fed8db81a0",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\d4be5537e1cc3ffe81ffa16d16e705173d7c71b2.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "T1-05",
+      "source_hypothesis": "The LP2 transcription reads at 99.6346% corpus-wide; T3's IoC and delta-spectrum channels do not move",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source out_corpus_lp2/density/segcheck computes claimed 99.6346% transcriber agreement and IoC/delta stability.",
+      "positive_gate_status": "Source agreement is reader-versus-canon, not independent proof canon 99.6346% correct; instrument may err.",
+      "inputs_availability": "Three JSON receipts cached via adjusted paths; templates/image pixels need exact recovery for replay.",
+      "existing_coverage": "transcription-correction-sensitivity covers seven stored corrections only; a03-haplography-source-gate and fresh-reader gate test different readers.",
+      "unresolved": "Do not treat model disagreement as corpus error probability or broad sweep validation.",
+      "next_action": "Recompute source metrics and verified crop adjudications with T1-02/T3.",
+      "cohort": "transcription-controls",
+      "evidence": [
+        {
+          "requested": "analysis/round19/T1/out_corpus_lp2.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_corpus_lp2.json",
+              "git_object": "b5d9960631a716b7a7d95fdc5362f2ad9e6b7c6a",
+              "bytes": 14382,
+              "kind": "blob",
+              "sha256": "d3f12082aec1ba57da507d4860bb9b45dd2958b318995abddee6132516cb8ffb",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\b5d9960631a716b7a7d95fdc5362f2ad9e6b7c6a.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/out_density.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_density.json",
+              "git_object": "176786f4481668c45a89e0411893574108c19da7",
+              "bytes": 7901,
+              "kind": "blob",
+              "sha256": "82f9ecbe0f83017a3d7359ac66fd7992186a81a4c931610119463e3fbeaae194",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\176786f4481668c45a89e0411893574108c19da7.txt"
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/out_segcheck.json",
+          "status": "prefix-adjusted",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_segcheck.json",
+              "git_object": "25583250fd8046eb5a64fd8b63481110f1fb70ab",
+              "bytes": 11199,
+              "kind": "blob",
+              "sha256": "57aac913e810b533be517f22c0a695b4dca110f4dda7eb19c754493a2f7de9f0",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\25583250fd8046eb5a64fd8b63481110f1fb70ab.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source_id": "T3-S2-DECODE-FRAGILITY",
+      "source_hypothesis": "The repo's ~10^10 sweep negatives are properties of a DECODE of this exact ciphertext, not of a summary statistic, so they inherit a different and steeper transcription-sensitivity curve than the doublet rate does.",
+      "source_claimed_status": "measured",
+      "source_command": "",
+      "called_branches": "Source perturbs LP2 text at targeted O/A/AE and simulated error positions then runs full beam decode to compare score/recovery against structural-statistic sensitivity.",
+      "positive_gate_status": "Source PC-3 baseline 13/13 stats, F0 path 20 cases; output claims 450 flips raise doublets 86->103 yet decode margin narrow. This is source-reported, not independently replayed.",
+      "inputs_availability": "T3 RESULTS and perturbation JSON Git blobs; original LP2 images/transcription available locally.",
+      "existing_coverage": "transcription-correction-sensitivity only checks seven actual stored corrections and IoC; not 450-flip decode fragility.",
+      "unresolved": "Simulation cannot assign actual 450 errors; source inference `zero` from model agreement needs independent image review.",
+      "next_action": "Group T1 and T3 in transcription robustness audit, with exact perturbation maps.",
+      "cohort": "transcription-controls",
+      "evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/T3/RESULTS.md",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/RESULTS.md",
+              "git_object": "96b9eddc571b55ce4e8164eb6f8283cdc88fc539",
+              "bytes": 32383,
+              "kind": "blob",
+              "sha256": "b3358e1ad9f5b7eeffe1d515205fea7d241400fb9169a76fb4a2d637b4643006",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\96b9eddc571b55ce4e8164eb6f8283cdc88fc539.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_decode_L120_LP1.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_decode_L120_LP1.json",
+              "git_object": "3421b538f1f7c079388c8413ad9500af6224b0f9",
+              "bytes": 21492,
+              "kind": "blob",
+              "sha256": "6c9e90496ebb098514f98d84908519aa2b1faad0069b2e7f2adb91161ea0bf7e",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\3421b538f1f7c079388c8413ad9500af6224b0f9.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+              "git_object": "f52d8a45122e66878dcbe62efaec211453c7c7f1",
+              "bytes": 10038,
+              "kind": "blob",
+              "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\f52d8a45122e66878dcbe62efaec211453c7c7f1.txt"
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_decode_L400_LP1.json",
+          "status": "exact",
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_decode_L400_LP1.json",
+              "git_object": "94270dedbec05e052a0d8cfc8ac18b41f0a73820",
+              "bytes": 19852,
+              "kind": "blob",
+              "sha256": "c264dc773be8a20d7cfdeb540e37e01868f19029f3532cc98e05369bbed0732f",
+              "cache": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-batch-cache\\94270dedbec05e052a0d8cfc8ac18b41f0a73820.txt"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cohorts": [
+    {
+      "id": "prng-full32",
+      "source_ids": [
+        "B-01",
+        "R19-G1",
+        "R25-COMPUTE-TAIL-CHUNK1",
+        "R28-L4-UNSWEPT-GENERATORS-QUEUE"
+      ],
+      "recommended_shared_work": "One generator/decoder parity and seed-domain ledger; separate old rigid full32, pair-mode chunk, source G1 construction and unexecuted L4."
+    },
+    {
+      "id": "public-pad-marsaglia",
+      "source_ids": [
+        "B-13-MARSAGLIA",
+        "R19-C2-MARSAGLIA-COST"
+      ],
+      "recommended_shared_work": "One exact byte/provenance/checkpoint audit; 1.54b done is 8.73% of source pad-space."
+    },
+    {
+      "id": "language-instrument",
+      "source_ids": [
+        "I2-MULTI-REGISTER-ADJUDICATOR",
+        "L7-A-SCORER-ENGLISH-ONLY",
+        "L7-C-G3-FLOOR-EXTENDED",
+        "R20-P1-SIEVE-INFEASIBLE",
+        "R20-SRESCOPE-B04-SURVIVORS"
+      ],
+      "recommended_shared_work": "Rebuild/check model corpora once, then replay nine-register gate, P1 prefilter and B04 survivor conditionality together."
+    },
+    {
+      "id": "decoder-instrument",
+      "source_ids": [
+        "I1-01",
+        "I1-04",
+        "I1-07",
+        "R19-R1-A"
+      ],
+      "recommended_shared_work": "One source-equivalence/plant/null calibration suite for I1 and R1; no new LP2 search."
+    },
+    {
+      "id": "transcription-controls",
+      "source_ids": [
+        "T1-02",
+        "T1-05",
+        "T3-S2-DECODE-FRAGILITY"
+      ],
+      "recommended_shared_work": "One image-crop/model-versus-canon audit then source perturbation sensitivity; do not equate disagreement with errors."
+    }
+  ],
+  "priority_next": [
+    {
+      "unit": "Resolve source status contradictions first",
+      "source_ids": [
+        "B-01",
+        "B-13-MARSAGLIA",
+        "B-02-C2-CORRECTION"
+      ],
+      "reason": "B01 has nine not two completed old rows; B13 later scored 1.54b offsets; B02 axis mislabeled negative. Cheap exact-byte receipt corrections."
+    },
+    {
+      "unit": "Source language/decoder control batch",
+      "source_ids": [
+        "I1-01",
+        "I1-04",
+        "I1-07",
+        "I2-MULTI-REGISTER-ADJUDICATOR",
+        "R20-P1-SIEVE-INFEASIBLE",
+        "R20-SRESCOPE-B04-SURVIVORS"
+      ],
+      "reason": "Shared models and decoder; control power determines whether later massive negatives mean anything."
+    },
+    {
+      "unit": "Transcription robustness",
+      "source_ids": [
+        "T1-02",
+        "T1-05",
+        "T3-S2-DECODE-FRAGILITY"
+      ],
+      "reason": "Shared original pixels and exact perturbation maps; distinguish source reader errors from actual transcription errors."
+    }
+  ],
+  "counting_note": "37 ledger rows, fewer distinct operators. No source-level verdict is promoted to independent reproduction by this audit."
+}

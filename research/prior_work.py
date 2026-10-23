@@ -58,6 +58,33 @@ def lookup(source_id=None, source_path=None, terms='', limit=12):
                 'scope_note': dependency['effect'],
                 'usage': 'Recorded input check, not a fresh probe. Recheck if source or recovered files change.',
             })
+    execution_gates = []
+    source_audits = []
+    audit_path = ROOT / 'research/source-audit-register.json'
+    if audit_path.exists():
+        register = read(audit_path)
+        if register.get('schema') == 'internal-source-audit-register-v1':
+            source_audits = [row for row in register['entries']
+                             if row['source_id'] in candidate_ids]
+    resolved_ids = {identifier.casefold() for identifier in candidate_ids}
+    if source_id:
+        resolved_ids.add(source_id.strip().casefold())
+    for note in sorted((ROOT / 'research').glob('*-execution-gate-*.json')):
+        gate = read(note)
+        if gate.get('schema') != 'internal-source-execution-gate-v1':
+            continue
+        paths = set(gate.get('source_paths', []))
+        paths.update(item['path'] for item in gate.get('control_evidence', []))
+        matches_id = gate.get('source_id', '').casefold() in resolved_ids
+        matches_path = bool(source_path and any(
+            ledger_path(path) == ledger_path(source_path) for path in paths))
+        if matches_id or matches_path:
+            execution_gates.append({
+                'note': note.relative_to(ROOT).as_posix(),
+                'evidence': gate,
+                'usage': 'Recorded source-gate check, not a fresh probe or cipher exclusion. '
+                         'Recheck if source, inputs or control rule changes.',
+            })
     linked = set()
     if entry:
         linked.update(x['record_id'] for x in entry.get('candidate_records', []))
@@ -93,7 +120,9 @@ def lookup(source_id=None, source_path=None, terms='', limit=12):
             'source_candidates': [{'source_id': r['source_id'], 'source_lane': r.get('source_lane'),
                                    'reconciliation_state': r.get('reconciliation_state')}
                                   for r in candidates] if len(candidates) > 1 else [],
-            'source_entry': entry, 'input_dependencies': input_dependencies, 'matches': hits[:limit]}
+            'source_entry': entry, 'input_dependencies': input_dependencies,
+            'execution_gates': execution_gates, 'source_audits': source_audits,
+            'matches': hits[:limit]}
 
 
 if __name__ == '__main__':

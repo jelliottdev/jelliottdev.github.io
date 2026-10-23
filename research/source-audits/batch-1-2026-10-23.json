@@ -1,0 +1,2958 @@
+{
+  "schema": "dukotah-batch1-source-audit-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "scope_note": "This is source triage, not independent replay of source verdicts. Missing cache entries are not proof of Git absence. Path matches are candidate overlaps only.",
+  "entry_count": 37,
+  "entries": [
+    {
+      "source_id": "VERDICT-OTP-CLASS",
+      "source_claimed_status": "open",
+      "command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
+      "executed_method_branches": "Round 10b anti-repeat/OTP steelman and Round 12 D3 finite derived-key branch",
+      "source_positive_gate_status": "D3 source runs a derived-key feasibility demonstration; it does not test an external true pad",
+      "required_input_availability": "D3 code/results cached; actual unknown pad unavailable",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round10b/B4-otp-steelman/b4_results.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round10b/B4-otp-steelman/b4_results.json",
+              "git_object": "d7d44152292ae0bffda9be51e428b07c2583bbe4",
+              "sha256": "622c5d563c97feec721400a003510a224e01e182b111f1936ec6903734cfabb6",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round12/D3/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round12/D3/RESULTS.md",
+              "git_object": "fec6d836352d03385c25227dd6528f9832c1747e",
+              "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+              "git_object": "5ced27d40de30a133e861c0d22d7c7e68239d233",
+              "sha256": "a3107806e86e9eb28671360175c27e6aa14b28c453a04c9916bea9c8e288e8fd",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [
+        "public-kdf-seed-stretch",
+        "source-independent-key-floor-audit"
+      ],
+      "overlap_caution": "Path match only; inspect the linked record scope before treating as exact replay.",
+      "unresolved_scope": "True-external-pad versus short-seed-derived is not identifiable from ciphertext statistics alone",
+      "best_next_action": "Keep bifurcated verdict; link existing KDF and information-floor audits, no new negative",
+      "cohort": "mechanism-claims",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "VERDICT-UNSOLVABLE-BY-DESIGN",
+      "source_claimed_status": "superseded",
+      "command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
+      "executed_method_branches": "Round 12 D3 derived-key counterexample to an absolute unsolvable claim",
+      "source_positive_gate_status": "Source itself marks absolute verdict superseded",
+      "required_input_availability": "D3 code/results cached; no genuine LP2 key or plaintext",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round12/D3/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round12/D3/RESULTS.md",
+              "git_object": "fec6d836352d03385c25227dd6528f9832c1747e",
+              "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+              "git_object": "5ced27d40de30a133e861c0d22d7c7e68239d233",
+              "sha256": "a3107806e86e9eb28671360175c27e6aa14b28c453a04c9916bea9c8e288e8fd",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [
+        "public-kdf-seed-stretch"
+      ],
+      "overlap_caution": "Path match only; inspect the linked record scope before treating as exact replay.",
+      "unresolved_scope": "No information-theoretic proof for the real mechanism",
+      "best_next_action": "Mark source correction only; do not treat derived-key examples as LP2 solve",
+      "cohort": "mechanism-claims",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-06",
+      "source_claimed_status": "never-run",
+      "command": "",
+      "executed_method_branches": "Signed/archival key-pointer proposal only; no executed decryptor",
+      "source_positive_gate_status": "No positive gate defined in source pointer",
+      "required_input_availability": "Both root and LP PICKUP-HERE exact blobs cached, but neither supplies a fixed text/key rule here",
+      "source_evidence": [
+        {
+          "requested": "PICKUP-HERE.md",
+          "resolution": "ambiguous",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "PICKUP-HERE.md",
+              "git_object": "b8f851e675a2f3435fc93cba044f6585a455c700",
+              "sha256": "4fa98df4663faa2897d211b3faba8c676db9f42d521e8da6b78524047774be0c",
+              "cached": true
+            },
+            {
+              "path": "liber-primus/PICKUP-HERE.md",
+              "git_object": "88dd2a632572235677650152fa536dd5a284cb2a",
+              "sha256": "018c94fe419dd25f37bbaada00810302fae75699c3dc2f274f8eae527a175971",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Specific document, byte selection, and key derivation absent",
+      "best_next_action": "Park until signed pointer and deterministic conversion to key are specified",
+      "cohort": "external-input-proposals",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-09",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "OSINT sweep inventories old onion HTML, images and writeups; no ciphertext scoring",
+      "source_positive_gate_status": "No cryptanalytic positive gate",
+      "required_input_availability": "OSINT report cached; external raw onion/archive bytes not pinned by this entry",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/OSINT-SWEEP-2026-07-27.md",
+              "git_object": "82c406cac6f0a84b42a5d01e0328b6eeadb44a0e",
+              "sha256": "a40b833bdcf95c3d15c145f3d04ee46c1869b4a957e0b21b9ee7be5c8bad3ba8",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Which preserved external artifact becomes which key remains open",
+      "best_next_action": "Source-led external artifact inventory; only then freeze a finite key rule",
+      "cohort": "external-input-proposals",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-13",
+      "source_claimed_status": "partially-run",
+      "command": "",
+      "executed_method_branches": "Independent label-free glyph clustering/O-A-AE deep dive",
+      "source_positive_gate_status": "Source reports label-free family separation; that does not adjudicate each disputed glyph by itself",
+      "required_input_availability": "FINDINGS cached; raw images now hosted, output/code must be separately checked",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/independent-read/FINDINGS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/independent-read/FINDINGS.md",
+              "git_object": "69d0678f402c3693e149b567daaf83c1553c5efb",
+              "sha256": "710ae5390702843cce29a045a3fdda9776ba95670a2c300b2ac8039666d4b42d",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Per-glyph independent adjudication remains distinct from canon-trained classifier agreement",
+      "best_next_action": "Crosswalk exact positions against published transcription checks before any new image audit",
+      "cohort": "transcription-audits",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-15",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "Round 6 SIEVE-W and TRANSITION-STRUCTURE ledger; trigram arm described inconclusive",
+      "source_positive_gate_status": "Source ledger does not validate a flat closure for trigram arm",
+      "required_input_availability": "Research ledger cached; per-test source scripts/data need separate inventory",
+      "source_evidence": [
+        {
+          "requested": "research/LEDGER.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "research/LEDGER.md",
+              "git_object": "f7378b721236fbbdc652f64e2a6f3a2e36203e24",
+              "sha256": "05be718be5b9ea60a6d33f7c95c04cc77f66de6fc54433f884ad052f307f598d",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "What precise trigram domain and null were run remains to be reconciled",
+      "best_next_action": "Correct source status/coverage wording before any grouped trigram replay",
+      "cohort": "statistical-claim-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-19",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "Round 9 word-length anomaly and lower-bound comparison",
+      "source_positive_gate_status": "Source validates solved PARABLE word-length encoder; lower-bound conclusion is narrower than point-estimate claim",
+      "required_input_availability": "Round-9 report cached; corpus/encoder input hashes still to pin",
+      "source_evidence": [
+        {
+          "requested": "research/ROUND-9-RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "research/ROUND-9-RESULTS.md",
+              "git_object": "7e2a2566cc6b15c6455e9785fc2986364865e13d",
+              "sha256": "3dffc954515be3ad75b301d2cbf1b7eb79911e5ed5d2fb3265b9fd516a694b46",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Lower-bound uncertainty must stay in any closure statement",
+      "best_next_action": "Crosswalk published word-length record and preserve interval, then decide if exact source rerun adds anything",
+      "cohort": "statistical-claim-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "B-24",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "Round 2 AN END 85-rune specificity anchor",
+      "source_positive_gate_status": "Source ledger calls anchor underpowered; no power-qualified negative",
+      "required_input_availability": "Ledger cached; exact Round-2 data/script not evidenced in this batch",
+      "source_evidence": [
+        {
+          "requested": "research/LEDGER.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "research/LEDGER.md",
+              "git_object": "f7378b721236fbbdc652f64e2a6f3a2e36203e24",
+              "sha256": "05be718be5b9ea60a6d33f7c95c04cc77f66de6fc54433f884ad052f307f598d",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Specificity under the original null not established",
+      "best_next_action": "Carry as unresolved source experiment; recover original test before extension",
+      "cohort": "statistical-claim-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "CORPUS-G-02",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 18/19 PGP corpus verification and duplicate-message reconciliation",
+      "source_positive_gate_status": "Source reports isolated-keyring signed and tampered controls",
+      "required_input_availability": "Verification tables and rerun script cached; verify_rerun.log not in pinned tree; signed .asc corpus/key bytes require hash inventory",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.md",
+              "git_object": "d0b651cc4544948911425418ebd67041ff339060",
+              "sha256": "744785b3984725d260087ae78dce99e3191df3ee7f4ca370a9412e3877ddf516",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/RESULTS.md",
+              "git_object": "1373bad8f97cae2148e2076200e273013ae93556",
+              "sha256": "b37455a990db3d1183a1688e52e170854a66697e97279a453f3d8f6c5c4bcbb6",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/PGP-VERIFICATION-TABLE.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/PGP-VERIFICATION-TABLE.json",
+              "git_object": "71572811a5536998cf53273f2bf3b29b6a265d84",
+              "sha256": "ce4838763fc2a237ee68b3ddacd62254b4a2a8a754ed167c697b632189706d35",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/l8/crosscheck.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/l8/crosscheck.json",
+              "git_object": "f2924d4ff1b33bce52fff455f65bac3b18eb36a9",
+              "sha256": "6e3538b25292402aad056e8e20b5fe57d351d5e2b986b30828d447d0d1033609",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/verify_all_signatures_rerun.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/verify_all_signatures_rerun.py",
+              "git_object": "44a5a3d6a200ab29ce7abdf0e227155ce21aefc1",
+              "sha256": "d3ee73e16a8e86e456902114c9bf63ef7608bfaf3e8e82c3822db224fd661530",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/verify_rerun.log",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Claim every community-canonical message must be scoped to the source corpus",
+      "best_next_action": "Grouped G-02 provenance replay after pinning all .asc/key input bytes",
+      "cohort": "pgp-provenance",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "G-02",
+      "source_claimed_status": "measured",
+      "command": "wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py\" && python3 liber-primus/analysis/round18/L8-provenance/build_table_md.py",
+      "executed_method_branches": "54 distinct signed-body inventory; GnuPG verification plus Markdown table builder",
+      "source_positive_gate_status": "Source reports positive and tampered-signature controls",
+      "required_input_availability": "MESSAGES, tables, scripts cached; referenced .asc files and key must be enumerated",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+              "git_object": "c561995e2d9390a30fe1e6b1ef3a69e40c710e5d",
+              "sha256": "44480694edc299ffcb682b41516bdf3cd55f7e1e1b3d969944191caae197f4a1",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json",
+              "git_object": "28f5277c3037c4595e37e9496f8df84728ff15a6",
+              "sha256": "42cddc5dcd3b8f5a306c873463fef80a7359b29c567ddb3d054f956f49f498ca",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.md",
+              "git_object": "d0b651cc4544948911425418ebd67041ff339060",
+              "sha256": "744785b3984725d260087ae78dce99e3191df3ee7f4ca370a9412e3877ddf516",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/PREREG.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/PREREG.md",
+              "git_object": "5c30a6191eec8ce1f5137fc708e838e0a11de512",
+              "sha256": "44b5b119302e824b949d59c5e2f17321c278e67d1e7d6cc67ab9d1825c2de855",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/build_table_md.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/build_table_md.py",
+              "git_object": "a354bf12eb983c30c9c9c909424a0e25aa911c58",
+              "sha256": "34f3f578ae4281cb3429bf31a795c377f64efd29a253faa5d47b3fe90154c657",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py",
+              "git_object": "d3896bebd5657f0f5f8422b43737cc40c3979d3e",
+              "sha256": "757a2f8e597826b950cf5bc49b84d1ae5a6604b3ad72c1325fc1b50d5e7e7872",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Source corpus completeness versus all public messages not shown",
+      "best_next_action": "Same grouped PGP provenance replay as CORPUS-G-02",
+      "cohort": "pgp-provenance",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "G4-TEX-RNG",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "Four TeX RNG families and nine named reductions; 10,000-decode timing pilot only",
+      "source_positive_gate_status": "Source reports 4/4 TeX byte parity over 15,808 elements; V5 initial plant failed, amended V5a passed",
+      "required_input_availability": "READY/RESULTS/control receipts cached; generator source gen_tex.py must be checked in pinned tree; TeX binaries/version for byte parity",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/G4/READY.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G4/READY.md",
+              "git_object": "4f7d087dd7937a77a790406c4868fd16edd7db75",
+              "sha256": "df3ae363c727e8ed90cb90dfb52334d0d257b2f956a42341cc84a7f5183118d5",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G4/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G4/RESULTS.md",
+              "git_object": "ea12d87a158a15e80b43346272319392a8336c2f",
+              "sha256": "d5d3eb27970b15bc239342504137c701b8c08f5a81fd41ef7c3d090a37fb2b55",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G4/bench_master.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G4/bench_master.json",
+              "git_object": "d4b0968d5354a93e1fa3e29fce0c7d484a88e794",
+              "sha256": "19bacfda988b2fdee0b8d1ee1c0a17f84527b19abfd69303781372f8de359da3",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G4/control_results.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G4/control_results.json",
+              "git_object": "2aa62bb3d87241a0e0d564cc069979926a183530",
+              "sha256": "dd56997e61f4b01865447dccad32707b655c93d7929446ab7b0ffeee6f6d011f",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G4/validation.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G4/validation.json",
+              "git_object": "bd3041d538ea50fedbab6fe7577eb447145fc892",
+              "sha256": "bb523c254aece0c39025405aba5265d09f211fe407000ec9fda52d4222cbd109",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "No interpreted LP2 search; enormous seed/phase spaces remain",
+      "best_next_action": "Group generator-parity audit first, then separate budgeted search only with passing scorer gate",
+      "cohort": "tex-prng",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "I-01",
+      "source_claimed_status": "measured",
+      "command": "bash liber-primus/analysis/round18/L8-provenance/fetch_baserate.sh && wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/compare_keys.py\"",
+      "executed_method_branches": "Round 18 OpenPGP self-signature field comparison for mruzuki/cicadeur and 7A35090F",
+      "source_positive_gate_status": "Source verdict INDECISIVE: common fields are factory defaults",
+      "required_input_availability": "KEY-COMPARISON and compare_keys script cached; exact public key packet bytes/base-rate files need inventory",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/KEY-COMPARISON.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/KEY-COMPARISON.json",
+              "git_object": "44e85cfeff79d8c069d315df28ec54e93c0e2ae4",
+              "sha256": "cded1b7b17314967c8d9e13bf23d6f592fb4b7cada92600f11dff141eb8b2799",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/RESULTS.md",
+              "git_object": "1373bad8f97cae2148e2076200e273013ae93556",
+              "sha256": "b37455a990db3d1183a1688e52e170854a66697e97279a453f3d8f6c5c4bcbb6",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/compare_keys.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/compare_keys.py",
+              "git_object": "d677368705ef0b24b17cbaeb701750b8f3d48965",
+              "sha256": "1aac9ef56c1b4672067650844d058cbd7118181aa0891f12a9f312bac44f1a84",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L8-provenance/fetch_baserate.sh",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L8-provenance/fetch_baserate.sh",
+              "git_object": "65f7577c4771a10265267067dfe2f463e6acbba4",
+              "sha256": null,
+              "cached": false
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/RESULTS.md#8-i-01--mruzuki--cicadeur",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Same-toolchain identity cannot follow from shared defaults",
+      "best_next_action": "Provenance audit only; no attribution inference",
+      "cohort": "pgp-provenance",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "I-04",
+      "source_claimed_status": "partially-run",
+      "command": "",
+      "executed_method_branches": "Court docket freshness/attribution OSINT, no decoder",
+      "source_positive_gate_status": "No source positive decryption gate",
+      "required_input_availability": "Freshness report cached; court docket primary documents not pinned here",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/FRESHNESS-2026-07-29.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/FRESHNESS-2026-07-29.md",
+              "git_object": "0c859299a05645fdb0c2cf4fe022c79a006d44c7",
+              "sha256": "b1c0efe742183883a95432be6df5207a223d9c32ecae00c6b1c02b5bd131e144",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Attribution claims require primary docket source and dates",
+      "best_next_action": "Park as source-check task outside LP2 experiment counts",
+      "cohort": "external-input-proposals",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "I1-03",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 19 wrong-key false-positive curves for permissive drift beam",
+      "source_positive_gate_status": "Source G-FP passes lambda>=8 but fails <=6; 2000 wrong keys per listed arm",
+      "required_input_availability": "FP output JSONs cached by adjusted prefixes; driftbeam/code and pinned corpora require inventory",
+      "source_evidence": [
+        {
+          "requested": "analysis/round19/I1/out_fp_curve.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_fp_curve.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_curve.json",
+              "git_object": "e36967c84e6ad6ab62c57e18ca8951b2d8b35bb0",
+              "sha256": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/out_fp_deep.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_fp_deep.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_deep.json",
+              "git_object": "aa2bcb61be21e5e45359337f62f244e51ed19706",
+              "sha256": null,
+              "cached": false
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/out_fp_deep2.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_fp_deep2.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_deep2.json",
+              "git_object": "6c1d4e3442884b1860b1c5420a0bfdf7c47f2677",
+              "sha256": null,
+              "cached": false
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/out_fp_tail.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_fp_tail.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_tail.json",
+              "git_object": "130b6398c38b819446917fd883c82a0eedcf7cfc",
+              "sha256": "5a68a0ab865a8ff62cd334f1c9346d0457f938bf42d580667ff9f1c8e7199c84",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Old -5.5 floor not valid for permissive modes",
+      "best_next_action": "Grouped I1 instrument replay with I1-06/09; do not call source score a solve",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "I1-06",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 19 unpenalized lambda=0 beam and planted recovery",
+      "source_positive_gate_status": "Source reports apparent English score with poor recovery and wrong-key inflation",
+      "required_input_availability": "Base/FP outputs cached; decoder and exact plant corpus need input pin",
+      "source_evidence": [
+        {
+          "requested": "analysis/round19/I1/out_base.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_base.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_base.json",
+              "git_object": "48401d74c00eece39b0034ec5c2642ed2d97217f",
+              "sha256": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/out_fp_curve.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/out_fp_curve.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/out_fp_curve.json",
+              "git_object": "e36967c84e6ad6ab62c57e18ca8951b2d8b35bb0",
+              "sha256": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Score alone cannot certify recovery on unsolved text",
+      "best_next_action": "Grouped I1 instrument replay; recovery-aware control required",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "I1-09",
+      "source_claimed_status": "open",
+      "command": "",
+      "executed_method_branches": "Round 19 adaptive keyskip1 baseline versus penalized drift recommendation",
+      "source_positive_gate_status": "Source G-EQ/G-BASE/G-FIX pass; recommendation depends on I3 mode null calibration",
+      "required_input_availability": "I1 source/results cached; I3 dependency missing from batch cache is not proven Git absence",
+      "source_evidence": [
+        {
+          "requested": "analysis/round19/I1/RESULTS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/RESULTS.md",
+              "git_object": "55d7d619554ed36df7ab552607d7242171968555",
+              "sha256": "8a742f7d2a242f06d690a83b9c750d7dfa805a186722ccd3d77598d6714fb7a9",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/driftbeam.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/driftbeam.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/driftbeam.py",
+              "git_object": "4a18f7b790feb286b027a57a8015e652dfb722ea",
+              "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/I1/run_gates.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I1/run_gates.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/I1/run_gates.py",
+              "git_object": "fb15ca85d7bed45ba41b3ba49af92335574c6aa3",
+              "sha256": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [
+        "public-nskips-crossover",
+        "r26-derived-generators-opening-cribs",
+        "semantic-seed-screen-gate-audit"
+      ],
+      "overlap_caution": "Path match only; inspect the linked record scope before treating as exact replay.",
+      "unresolved_scope": "Recommendation is decoder policy, not LP2 negative",
+      "best_next_action": "Crosswalk public-nskips and R26 variants, then group remaining exact instrument gates",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "L1-F6-CORRECTION",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Crosscheck of GnuPG v1.4.11 signature-file denominator",
+      "source_positive_gate_status": "Source crosscheck output present; historical count needs independent file-level verification",
+      "required_input_availability": "crosscheck.json cached; log and fragment URL are not tree paths, inspect table/key files",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/C3/RESULTS.md#65-cross-check-against-l1s-gnupg-v1411-finding--found-error",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/l8/crosscheck.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C3/l8/crosscheck.json",
+              "git_object": "f2924d4ff1b33bce52fff455f65bac3b18eb36a9",
+              "sha256": "6e3538b25292402aad056e8e20b5fe57d351d5e2b986b30828d447d0d1033609",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C3/l8/crosscheck.log",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "56 passing files versus 54 distinct bodies must not be conflated",
+      "best_next_action": "Join grouped G-02 provenance replay",
+      "cohort": "pgp-provenance",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "L7-A-HANDOFF-NONCOMPLIANCE",
+      "source_claimed_status": "audit",
+      "command": "",
+      "executed_method_branches": "Audit of whether later sweeps persisted a language-agnostic statistic",
+      "source_positive_gate_status": "No code/gate evidence attached to this entry",
+      "required_input_availability": "Batch entry has no evidence paths; inspect Round10b B6 requirement and later sweep row schemas",
+      "source_evidence": [],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Compliance cannot be inferred from source assertion",
+      "best_next_action": "Crosswalk sweep schemas in one instrumentation audit, not decryptor test",
+      "cohort": "instrumentation-audits",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "L7-C-B17-TALLY",
+      "source_claimed_status": "audit",
+      "command": "",
+      "executed_method_branches": "Multiple-comparison ledger count across Rounds 8-9",
+      "source_positive_gate_status": "No independent tally gate attached",
+      "required_input_availability": "Batch entry has no evidence paths; research ledger cached elsewhere",
+      "source_evidence": [],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Claim of five may omit executed tests beyond ledger boundary",
+      "best_next_action": "Audit per-test ledger rows; keep count scoped to logged tests",
+      "cohort": "statistical-claim-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "L7-C-THRESHOLD-CALIBRATION",
+      "source_claimed_status": "negative",
+      "command": "",
+      "executed_method_branches": "benchmark/null.py threshold_for calibration premise",
+      "source_positive_gate_status": "No calibration vectors attached to entry",
+      "required_input_availability": "Batch entry has no evidence paths; benchmark/null.py existence must be Git-checked",
+      "source_evidence": [],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "One validated bar cannot be assumed across modes/registers/selection maxima",
+      "best_next_action": "Join I1/I3/P3 grouped null-instrument audit",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R19-C2-B02-ACCOUNTING",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 19 C2 offset-axis coverage census",
+      "source_positive_gate_status": "Source validate/benchmark gates pass; coverage census is source accounting, not full axis execution",
+      "required_input_availability": "C2 sweep and output cached; raw prior sweep receipts need enumeration",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round13/B04/sweep.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round13/B04/sweep.py",
+              "git_object": "823df6cc952141ae8bb53a44d2d94ec7f1d6d6bd",
+              "sha256": "e344ed8860cf24451e682fc4ea61f96acb9205ceeb0a93231800dab9a05b062a",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round13/B05/sweep_results.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round13/B05/sweep_results.json",
+              "git_object": "22e8e43f0f0b9f0f54cdd3cc9c64aaade6bcfc99",
+              "sha256": "1f781a1e64783a4c7d20bd910e9ba8c8ffc81dbb0010dfef674f47bb6f9c6655",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/RESULTS.md",
+              "git_object": "761912928971348000657962c27db3c84eeb79ac",
+              "sha256": "d13df77af7f5cb4d465a8af69e8c2cf14fa705b1320d9ba502e2e5d090543aaf",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_offset_coverage.json",
+              "git_object": "cf2054f7281591864d49b13031a58834d1ad6d02",
+              "sha256": "20cfa616cf3f807d9b0fc1bdbbd9a7732213cf63bca88f85a4bccad26ad485dd",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "research/ROUND-8-RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "research/ROUND-8-RESULTS.md",
+              "git_object": "abd8774e9b5ce865304aba35db2ce0884a619a16",
+              "sha256": "06e2aecf99b26e11875b437d6324cd81b022ea6e16930ad9a2e48271dc7d2d38",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "16 distinct offsets and 0.054% source figure do not close remaining offsets",
+      "best_next_action": "Group C2 accounting with prefilter register, verify denominators against row receipts",
+      "cohort": "sweep-accounting",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R19-C2-PREFILTER-REGISTER",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 19 C2 trigram prefilter power/union on LP1-like registers",
+      "source_positive_gate_status": "Source C2 controls reported passed but candidate-selection loss must be measured directly",
+      "required_input_availability": "prefilter script and outputs cached; nine register corpus bytes to pin",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/C2/PREREG.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/PREREG.md",
+              "git_object": "8bb011a2ab7fc6940433f4d535786c1196d916f2",
+              "sha256": "11c37a4a54b2edc8b9e321a43439fc3d31d77946e53fc06e2dd309eb8d6016f6",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/RESULTS.md",
+              "git_object": "761912928971348000657962c27db3c84eeb79ac",
+              "sha256": "d13df77af7f5cb4d465a8af69e8c2cf14fa705b1320d9ba502e2e5d090543aaf",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_prefilter_register_power.json",
+              "git_object": "2ae267c1e83197b495b5dfb2e10ce7521bd881b1",
+              "sha256": "854a9e65b8ebcbb09e222253364de5170dd15e8189f795837301094c9aead26b",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/out_prefilter_union.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/out_prefilter_union.json",
+              "git_object": "ed7462695efad353e4326361276dc616bf815885",
+              "sha256": "89a758c7176003ef6171f4bce50ac89ef8b8c704e556b1226ca0352f638c2b60",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/C2/scripts/prefilter_register_power.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/C2/scripts/prefilter_register_power.py",
+              "git_object": "ca32eec2ef7d07c55fdd7dc2adb6048c375ca2a9",
+              "sha256": "9a8debbc7593e69effd9416d17f42de94e77086088fcf44b549be380edc946c3",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Untested offsets filtered out are not equivalent to scored negatives",
+      "best_next_action": "Grouped C2 prefilter/power replay with accounting",
+      "cohort": "sweep-accounting",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R19-G2-CORRECTION",
+      "source_claimed_status": "audit",
+      "command": "",
+      "executed_method_branches": "Perl 5.14 rand/srand generator parity and unseeded 32-bit seed correction",
+      "source_positive_gate_status": "Source reports 186 generator validation checks and no LP2 scoring",
+      "required_input_availability": "G2 C/validation/results cached; actual Perl version reference vectors and compiled binary need audit",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+              "git_object": "1868586a623c81b748ea52595fe7a86c31a0631f",
+              "sha256": "14c0da13f3b02ce24e0326dd5d997ff5b01897d645b554140af974d60db939b8",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round10/L5-seed32/VALIDATION.txt",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round10/L5-seed32/VALIDATION.txt",
+              "git_object": "c566bf94d5d29933d1b30994ea3db8614c023d8b",
+              "sha256": "c28d22f1b9cce7d67548f987c12c2d6a93ec2d22c49db39aa05f9af6f993cea4",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round10/L5-seed32/results_newgens.txt",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round10/L5-seed32/results_newgens.txt",
+              "git_object": "e2ff79e5c8450dc3b924ffcfc84ac69a15339152",
+              "sha256": "d5ec08e3327c1f3f0ef62efaf45fa7171797bb9dc716f20be6748d9063d88ca2",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round10/L5-seed32/sweep32x.c",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round10/L5-seed32/sweep32x.c",
+              "git_object": "61db41f8d51f984c9fc00720995b6760891c2a20",
+              "sha256": null,
+              "cached": false
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+              "git_object": "a0d053c38be9162e36141e6f04d9a1f9569e7c4d",
+              "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/G2/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/G2/RESULTS.md",
+              "git_object": "d73a78a403ca7355527dd380083afaaf8df25a03",
+              "sha256": "dbe35c9532b0f1d13103bbcf32206bf3fd11ca5c100f729db0ef241229581503",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Enumerable 2^32 family remains unscored; wrong prior changes search space",
+      "best_next_action": "Group source generator parity; separate finite sweep only after scorer/compute gate",
+      "cohort": "source-generator-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R19-I3-NULLS",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 19 per-register/mode/panel-max null calibration: 91 cells and about 9.6 million source null decodes",
+      "source_positive_gate_status": "Source RESULTS: G-CAL partial 41/46, G-CAL-X pass 52/52, G-RECOVER partial, G-PANEL failed, G-HONEST pass 0/14 verdict flips; none independently replayed here",
+      "required_input_availability": "All 36 requested basename references resolve to committed Round19/I3 files or generic same-name candidates in pinned Git tree; cache omitted them, so use exact Git object paths. I2 model/corpus dependencies still need inventory",
+      "source_evidence": [
+        {
+          "requested": "INTERFACE.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/INTERFACE.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "PREREG.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "RESULTS.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "calib19.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/calib19.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "ghonest.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/ghonest.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "ledger.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round18/L1-toolchain/ledger.json",
+            "liber-primus/analysis/round18/L2-filter-leak/ledger.json",
+            "liber-primus/analysis/round18/L3-ornaments/ledger.json",
+            "liber-primus/analysis/round18/L4-forcing/ledger.json",
+            "liber-primus/analysis/round18/L5-payload/ledger.json",
+            "liber-primus/analysis/round18/L6-offset-marsaglia/ledger.json",
+            "liber-primus/analysis/round18/L7-redteam/ledger.json",
+            "liber-primus/analysis/round18/L8-provenance/ledger.json",
+            "liber-primus/analysis/round19/C1/ledger.json",
+            "liber-primus/analysis/round19/C2/ledger.json",
+            "liber-primus/analysis/round19/C3/ledger.json",
+            "liber-primus/analysis/round19/G1/ledger.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "nullcurve19.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/nullcurve19.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_geq.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_geq.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_ghonest.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_ghonest.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_i1_drift_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_i1_drift_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_i1_exact_ms8_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_i1_exact_ms8_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_i1_pair_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_i1_pair_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_i2panel_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_i2panel_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_i2panel_L31.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_i2panel_L31.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_modes.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_modes.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_pit_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_pit_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_plants.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_plants.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_plants_L31.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_plants_L31.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_plants_p12.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_plants_p12.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_power_L31.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_power_L31.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_r17_L25_bw120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_r17_L25_bw120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_r17_L31_bw120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_r17_L31_bw120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_r17_L400_bw120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_r17_L400_bw120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_r17_L40_bw120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_r17_L40_bw120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_registers_L120.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_registers_L120.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_registers_L120_shuffle.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_registers_L120_shuffle.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_registers_L240.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_registers_L240.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_registers_L31.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_registers_L31.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "out_summary.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_summary.json",
+            "liber-primus/analysis/round19/T1/out_summary.json",
+            "liber-primus/analysis/round19/T3/out_summary.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "plants.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/plants.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "registers.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/registers.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "run_calibration.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/run_calibration.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "run_i1i2.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/run_i1i2.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "summary.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/summary.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "test_i3.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/test_i3.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "vecbeam.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/vecbeam.py"
+          ],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "71 cells provisional under source M<1e6; panel effective-test estimators disagree 2.06–2.45x",
+      "best_next_action": "Recover exact I3 files from pinned Git objects and group I1/I3/P3 calibration gates; do not import -5.5 floor",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R19-R1-C",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Red-team audit of Round18 L1 toolchain prior",
+      "source_positive_gate_status": "No evidence/gate paths attached to entry",
+      "required_input_availability": "Source entry has no evidence paths; inspect R19 R1 Git tree",
+      "source_evidence": [],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Correction scope cannot be certified from title alone",
+      "best_next_action": "Resolve source object and result branch before deciding overlap",
+      "cohort": "source-generator-corrections",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R20-HITFN-RECOVERY-GATE",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Round 20 is_hit score/recovery/held-out predicate and hallucination guard",
+      "source_positive_gate_status": "Source reports planted fake rejected and real accepted; self-consistency of same deterministic decode is not independent plaintext recovery",
+      "required_input_availability": "hitfn20.py/out_guard/RESULTS cached; panelmax20 and driftbeam dependencies need pin",
+      "source_evidence": [
+        {
+          "requested": "analysis/round20/HITFN/PREREG.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/HITFN/PREREG.md",
+              "git_object": "6df157f2794b9bfe0fc7999583352dcaea1b5baa",
+              "sha256": "a763a7d6e2b904e26ea94d192575b63de697678650eaf21be19e8a19d2bd1857",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/HITFN/RESULTS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/HITFN/RESULTS.md",
+              "git_object": "cec9705c3ad9314476370f08b108dcb848d42d26",
+              "sha256": "e3854f4fbd73a628c5a4eb0bd13a895b400e2d57ae6e59d79dcccffec40f8123",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/HITFN/hitfn20.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round20/HITFN/hitfn20.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/HITFN/hitfn20.py",
+              "git_object": "7e6437b68a5daf08c9badb54af3f56b85b0a8228",
+              "sha256": "551d4b052e0a8310dd9203f8723cbca2fa1b3cf6f97f8b2791d8caf9e5be529b",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/HITFN/out_guard.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round20/HITFN/out_guard.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/HITFN/out_guard.json",
+              "git_object": "c74486544bd180a96f074310d8900a2d9fbd3c50",
+              "sha256": "bb259d04239b979c6e6054f1510e289c0376ef267b33ac2f9726930e588a67e0",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/SYNTHESIS.md",
+            "liber-primus/analysis/round11/SYNTHESIS.md",
+            "liber-primus/analysis/round16/SYNTHESIS.md",
+            "liber-primus/analysis/round17/SYNTHESIS.md",
+            "liber-primus/analysis/round18/SYNTHESIS.md",
+            "liber-primus/analysis/round20/SYNTHESIS.md",
+            "liber-primus/analysis/round21/SYNTHESIS.md",
+            "liber-primus/analysis/round22/SYNTHESIS.md",
+            "liber-primus/analysis/round23/SYNTHESIS.md",
+            "liber-primus/analysis/round24/SYNTHESIS.md",
+            "liber-primus/analysis/round25/SYNTHESIS.md",
+            "liber-primus/analysis/round26/SYNTHESIS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [
+        "semantic-seed-screen-gate-audit"
+      ],
+      "overlap_caution": "Path match only; inspect the linked record scope before treating as exact replay.",
+      "unresolved_scope": "Real LP2 candidates have no oracle recovery; source hit function should not be adopted uncritically",
+      "best_next_action": "Grouped decision-gate audit; crosswalk semantic-seed-screen gate record",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Panel-max null, 433 candidate seed prior, drift rebaseline",
+      "source_positive_gate_status": "Source P3a/b/c controls report pass; it scores no LP2 candidate",
+      "required_input_availability": "P3 results, panelmax/seedprior JSON cached; corpora/decoder dependencies to pin",
+      "source_evidence": [
+        {
+          "requested": "analysis/round20/P3/PREREG.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P3/PREREG.md",
+              "git_object": "7760f06c363794eb03cb419ea67723a4a173bd68",
+              "sha256": "cc5afa53804e2872900a768f4257a6383ed12ee55b87bd079671cca5907ba619",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/P3/RESULTS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P3/RESULTS.md",
+              "git_object": "9dd2a46f9ce2354b916442405671958f5ffa68a5",
+              "sha256": "845a2d42067c21a50a196f8c123ca10c227dd01cdc0a8040874c5adba1e3eb8a",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/P3/panelmax20.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round20/P3/panelmax20.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P3/panelmax20.json",
+              "git_object": "ebe20216bdbec95265b45a50a86828ec07f281c6",
+              "sha256": "6ce5b99c1575332ca59b6b5a79324c93d23863601a9beb42f93c06351a7c5b7e",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/P3/seedprior20.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round20/P3/seedprior20.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/P3/seedprior20.json",
+              "git_object": "63cb29b8557aada3d76a9efeb0ea7d8c05cb2aea",
+              "sha256": "139896bfe4e85d108c42cc61c767c2f7db421ba9741b6b3b40896d55ffd89052",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/SYNTHESIS.md",
+            "liber-primus/analysis/round11/SYNTHESIS.md",
+            "liber-primus/analysis/round16/SYNTHESIS.md",
+            "liber-primus/analysis/round17/SYNTHESIS.md",
+            "liber-primus/analysis/round18/SYNTHESIS.md",
+            "liber-primus/analysis/round20/SYNTHESIS.md",
+            "liber-primus/analysis/round21/SYNTHESIS.md",
+            "liber-primus/analysis/round22/SYNTHESIS.md",
+            "liber-primus/analysis/round23/SYNTHESIS.md",
+            "liber-primus/analysis/round24/SYNTHESIS.md",
+            "liber-primus/analysis/round25/SYNTHESIS.md",
+            "liber-primus/analysis/round26/SYNTHESIS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [
+        "py27-prior-front-opening-cribs",
+        "py27-reducer-sweep-source-audit"
+      ],
+      "overlap_caution": "Path match only; inspect the linked record scope before treating as exact replay.",
+      "unresolved_scope": "Generator families received 0% Phase-S enumeration in this round",
+      "best_next_action": "Grouped I3/P3 null-policy replay, no cipher-negative",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R20-SMARS-SCAFFOLDED",
+      "source_claimed_status": "never-run",
+      "command": "",
+      "executed_method_branches": "679 Marsaglia physical-pad units staged but Phase-S not fired",
+      "source_positive_gate_status": "Source says P-gate not released; zero LP2 decodes scored",
+      "required_input_availability": "SYNTHESIS and scaffold refs cached; 679 physical units not pinned by this entry",
+      "source_evidence": [
+        {
+          "requested": "analysis/round20/S-MARS/PREREG.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-MARS/PREREG.md",
+              "git_object": "5fc14f53081b6850b6478275cfeaf3d5a6735cc6",
+              "sha256": "b5fe055f4e6cac053645630eba03e86f5b15ef92a0a0d8fb1a17970a31b8642d",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-MARS/out/control.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round17/P1_blockchain/control.json",
+            "liber-primus/analysis/round20/S-MARS/out/control.json",
+            "liber-primus/analysis/round24/C2-skip-by-two/control.json",
+            "liber-primus/analysis/round26/A/control.json",
+            "liber-primus/analysis/round26/B/control.json",
+            "liber-primus/analysis/round26/C/control.json",
+            "liber-primus/analysis/round28/L1/control.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-MARS/out/control.json",
+              "git_object": "2797ca3d6a1ecbfb1762264f22ba3adbf577a660",
+              "sha256": "ea9aac83a551c4714b07dd7942cbd2bd86721c365465369b9d9409b08420e424",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/S-MARS/smars_sweep.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round20/S-MARS/smars_sweep.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/S-MARS/smars_sweep.py",
+              "git_object": "d748c04a818f9d30ad7a5bc544ed6c6fdfefdb06",
+              "sha256": "fa71c659faf475156d883fe398702b33d576c318307ebde049441c80a67a9374",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round20/SYNTHESIS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/SYNTHESIS.md",
+            "liber-primus/analysis/round11/SYNTHESIS.md",
+            "liber-primus/analysis/round16/SYNTHESIS.md",
+            "liber-primus/analysis/round17/SYNTHESIS.md",
+            "liber-primus/analysis/round18/SYNTHESIS.md",
+            "liber-primus/analysis/round20/SYNTHESIS.md",
+            "liber-primus/analysis/round21/SYNTHESIS.md",
+            "liber-primus/analysis/round22/SYNTHESIS.md",
+            "liber-primus/analysis/round23/SYNTHESIS.md",
+            "liber-primus/analysis/round24/SYNTHESIS.md",
+            "liber-primus/analysis/round25/SYNTHESIS.md",
+            "liber-primus/analysis/round26/SYNTHESIS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round20/SYNTHESIS.md",
+              "git_object": "070b4b6c8eabd0ec37b3814ed51322574d75dea5",
+              "sha256": "836df57692db9f2b071c0635e522764330c2430039b272497e491f0c99c16b7f",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "No null or negative for Marsaglia pad family",
+      "best_next_action": "Park until exact pad units and feasible whole-sweep gate; source state correction first",
+      "cohort": "external-pad-sweeps",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R21-L5-REDTEAM-SEAL",
+      "source_claimed_status": "audit",
+      "command": "",
+      "executed_method_branches": "Round21 four red-team checks of no-oracle seal and named ledger cells",
+      "source_positive_gate_status": "Source mandatory leaky-seal plant passes; subattack a finds no seal cell meets catch/false-reject gate",
+      "required_input_availability": "L5 scripts, ledger, output cached; tuning/fresh population generation dependencies to pin",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/PREREG.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/PREREG.md",
+              "git_object": "fdf26f698ab9817e5e8dd043fca55a25f08bcf9a",
+              "sha256": "8394c6fdd0d9d2063728fe0188e5fc1052ed4c60c5701ed2949d80023b10e4b8",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/RESULTS.md",
+              "git_object": "698fefa1807a84a03a364047096a99a072e6bad6",
+              "sha256": "af28e4c1a8792e8ce2b206f6c33a9e6723e106d94953efe2deaae1fea932995b",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/ledger.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/ledger.json",
+              "git_object": "d3cbc0bedefd8178df2c299178f9a2f386611d37",
+              "sha256": "f4730d30b452f8473f1fac009b9c48d799ba9f4661bf98e4bca6c7497fbfec49",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/out_redteam21.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/out_redteam21.json",
+              "git_object": "f48e6489366f53fca281d1363130ce60fc63c985",
+              "sha256": "026f0f2642d7b542a0b641b556d72f547fabe208a44e39dcc843fdb5092453a5",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/redteam21.py",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round21/L5-redteam-seal-and-notarerun/redteam21.py",
+              "git_object": "fa7a1a0a6fa170bdf20499ac0b7ce4f5ed224de0",
+              "sha256": "066b3d0f1f645b178ff1e059512139c17eac457421680499ef792a79a739d47e",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "No-error-found in other subattacks is not proof of full seal correctness",
+      "best_next_action": "Group decision-gate audit; do not treat earlier hallucination seal as reliable",
+      "cohort": "decoder-instrument",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R24-C8-DATE-INDEXED-PAD",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "PGP signature timestamp to NIST/date-pad join, plus 630 steelman probes",
+      "source_positive_gate_status": "Source right-date plant recovers; wrong-date/source controls low; primary per-LP2-page join absent",
+      "required_input_availability": "C8 scripts/results/timestamp list cached; external beacon/block data bytes to audit",
+      "source_evidence": [
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/PREREG.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/PREREG.md",
+              "git_object": "4ede71d6fd1583bc4444c4d511081de630995331",
+              "sha256": "142339fdb3e044718babe15f49b000844ad490f51547cc095a440090bb46b5fc",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/RESULTS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/RESULTS.md",
+              "git_object": "79e97c6be0f56a5534bcebaab76cdde760ed2206",
+              "sha256": "865b60cdc443505034d26ec458b45db7b174a2f44005b4e5955c7df92f3e8356",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/cache/timestamps.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round24/C8-date-indexed-pad/cache/timestamps.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/cache/timestamps.json",
+              "git_object": "050d58aa2d5d8206e445fbba621242445604ee2e",
+              "sha256": "f04200e8b4814674ad44917a1e9ab2700d946b60d5ae382a7160650285f0e206",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/results.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "corpus/H-branch-recovery/recovered/research_round-10-exclusion-power-corrected/research/experiments/r10-01-exclusion-power-corrected/results.json",
+            "corpus/H-branch-recovery/recovered/research_round-11-dqt-matrix-disambiguation/research/experiments/r11-01-dqt-matrix-disambiguation/results.json",
+            "corpus/H-branch-recovery/recovered/research_round-8-artifact-provenance/research/experiments/r8-01-icc-interior-parse/results.json",
+            "corpus/H-branch-recovery/recovered/research_round-8-artifact-provenance/research/experiments/r8-02-dqt-page-membership/results.json",
+            "corpus/H-branch-recovery/recovered/research_round-9-stylometry-exclusion/research/experiments/r9-01-burrows-delta-exclusion/results.json",
+            "liber-primus/analysis/recon/i11_smirnov/results.json",
+            "liber-primus/analysis/recon/i2_signal/results.json",
+            "liber-primus/analysis/recon/i9_inventory/results.json",
+            "liber-primus/analysis/round10/L2-map/results.json",
+            "liber-primus/analysis/round11/N1/results.json",
+            "liber-primus/analysis/round11/N2/results.json",
+            "liber-primus/analysis/round11/N3/results.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/results.json",
+              "git_object": "8ed6300b66e0320e3d32eb0ed8e77d3c8c1b418e",
+              "sha256": "1e4bcf32fb59f7871014660cb7a897b6e62f4eba254fe74a22c2d60e0fa3b7b6",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/run_c8.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round24/C8-date-indexed-pad/run_c8.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/run_c8.py",
+              "git_object": "cd9f50ee5af1c81be6f03fb97b27f2f3dee3f97b",
+              "sha256": "183ddee9fe8d1dadb4333a9fafa703eccc29e5ea91fa7808ccfadfe320c3da3c",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round24/C8-date-indexed-pad/step0_timestamps.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round24/C8-date-indexed-pad/step0_timestamps.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round24/C8-date-indexed-pad/step0_timestamps.py",
+              "git_object": "1e22ac89a3b51fe47730722674b0d92d7d73135b",
+              "sha256": "1fa14881a90d49ce78b5238225dffdcfb8e6e006ffdbe242e42decdee2d2cd05",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "No per-page PGP timestamp for unsolved runes; 630 probe null cannot close other date joins",
+      "best_next_action": "Record premise failure and optional exact 630-probe replay only after pinning remote pad bytes",
+      "cohort": "external-pad-sweeps",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R27-CPORT-MT32-FULLSWEEP",
+      "source_claimed_status": "partially-run",
+      "command": "cd analysis/round27/P1-engine && python3 export_data.py && gcc -O3 -march=native -fopenmp -std=gnu17 -ffp-contract=off -o grind27 grind27.c -lm && ./grind27 --self-test && ./grind27 --drill; bash ../P2-harness/run_all.sh (acceptance); setsid launch per MONITORING.md; status: ./grind27 --status --run-dir run. Red-team: analysis/round27/R-redteam/{audit1.py,audit2.py,miniplan.json}.",
+      "executed_method_branches": "Round27 S1 full 2^32 pair lane; S2 exact lane partial",
+      "source_positive_gate_status": "Source reports S1 complete; S2 status 1,895,728,884/2^32 and contradictory hit flag versus zero-hit tally",
+      "required_input_availability": "STATUS/HIT-CANDIDATE/top/PARKED cached; many basename-only engine/spec/oracle references resolve under Round27/P1-engine in pinned Git tree; compiled executable and ignored bulk candidates may still be missing",
+      "source_evidence": [
+        {
+          "requested": "MONITORING.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/MONITORING.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "ORACLE-348625413.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/ORACLE-348625413.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "ORACLE-35563892.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/ORACLE-35563892.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "ORACLE-86514964.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/ORACLE-86514964.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "P0-spec/SPEC.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/P0-spec/SPEC.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "P0-spec/vectors.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/P0-spec/vectors.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "P1-engine/BUILD.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/P1-engine/BUILD.md",
+            "liber-primus/analysis/round28/L4/BUILD.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "P1-engine/grind27.c",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/P1-engine/grind27.c"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "P2-harness/ENGINE-CONTRACT.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/P2-harness/ENGINE-CONTRACT.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "PREREG.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L1-template/PREREG.md",
+            "liber-primus/analysis/round10/L2-map/PREREG.md",
+            "liber-primus/analysis/round10/L3-road/PREREG.md",
+            "liber-primus/analysis/round10/L4-skeleton/PREREG.md",
+            "liber-primus/analysis/round10/L5-seed32/PREREG.md",
+            "liber-primus/analysis/round10/L6-archives/PREREG.md",
+            "liber-primus/analysis/round10/L7-sota/PREREG.md",
+            "liber-primus/analysis/round10/L8-pad-provenance/PREREG.md",
+            "liber-primus/analysis/round10/L9-randomness/PREREG.md",
+            "liber-primus/analysis/round10/RECON-A/PREREG.md",
+            "liber-primus/analysis/round10/RECON-B/PREREG.md",
+            "liber-primus/analysis/round10/RECON-C/PREREG.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "R-redteam/RESULTS.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "S1-CLOSEOUT.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/S1-CLOSEOUT.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "S1-batch-parity.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/S1-batch-parity.json"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "SYNTHESIS.md",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/SYNTHESIS.md",
+            "liber-primus/analysis/round11/SYNTHESIS.md",
+            "liber-primus/analysis/round16/SYNTHESIS.md",
+            "liber-primus/analysis/round17/SYNTHESIS.md",
+            "liber-primus/analysis/round18/SYNTHESIS.md",
+            "liber-primus/analysis/round20/SYNTHESIS.md",
+            "liber-primus/analysis/round21/SYNTHESIS.md",
+            "liber-primus/analysis/round22/SYNTHESIS.md",
+            "liber-primus/analysis/round23/SYNTHESIS.md",
+            "liber-primus/analysis/round24/SYNTHESIS.md",
+            "liber-primus/analysis/round25/SYNTHESIS.md",
+            "liber-primus/analysis/round26/SYNTHESIS.md"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "analysis/round27/P1-engine",
+          "resolution": "directory",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        },
+        {
+          "requested": "analysis/round27/R-redteam/{audit1.py,audit2.py,miniplan.json}.",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        },
+        {
+          "requested": "liber-primus/analysis/round27/P1-engine/run/HIT-CANDIDATE.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round27/P1-engine/run/HIT-CANDIDATE.json",
+              "git_object": "8c8cf713868303b07470675f8d919ab535ba49c8",
+              "sha256": "11c19fd91adef161908e491ca5c7c0c16d20060d5f97fccdae302cac7febe3ec",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round27/P1-engine/run/STATUS.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round27/P1-engine/run/STATUS.json",
+              "git_object": "3768d8353ca01f833ec1fec246e1af29112d908b",
+              "sha256": "e02b93913c1d201bc76e1fc13278323d1071deffb44853cd215740c855058b84",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round27/P1-engine/run/top_S2.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round27/P1-engine/run/top_S2.json",
+              "git_object": "7cb010744daa0823b25e1661296a4733e5025c11",
+              "sha256": "2a2f6565cebba76d45fd395a88ec985b490065e74a5378ead95021e10d95df03",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/handoff/PARKED-SWEEPS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/handoff/PARKED-SWEEPS.md",
+              "git_object": "4d3b2fa893b4c2f16024d06753d3a87bf6897483",
+              "sha256": "4db2ed75d4593177eb702fd5eaa907fa3faf6671e20315d6e3a5e34d55323e03",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "oracle_crosser.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/oracle_crosser.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "s1_batch_parity.py",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/s1_batch_parity.py"
+          ],
+          "candidates": []
+        },
+        {
+          "requested": "sweep_plan.json",
+          "resolution": "not-in-pinned-tree",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round27/sweep_plan.json"
+          ],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "S2 55.86% unrun and flagged seed 35563892 unresolved in source receipts",
+      "best_next_action": "Reconcile S2 contradictory receipts first; then consider resumable remaining sweep, no false full closure",
+      "cohort": "large-prng-sweeps",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R30-A3-PDF-FORENSICS",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Embedded ICC/Ghostscript version attribution audit",
+      "source_positive_gate_status": "Source measured status; concrete positive vector in A3 directory not listed as files here",
+      "required_input_availability": "Evidence is directory entry only; enumerate Git tree/contents and raw 58 JPEGs",
+      "source_evidence": [
+        {
+          "requested": "analysis/round30/A3-gs-pdf-forensics",
+          "resolution": "directory",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Version attribution conditional on render pipeline and profile provenance",
+      "best_next_action": "Artifact-forensics cohort with R30-E1 after exact inputs/gates",
+      "cohort": "artifact-forensics",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "R30-E1-RENDER-REOPEN",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Six contested pp49-51 base60 glyph re-read from 400dpi render",
+      "source_positive_gate_status": "Source measured status; per-glyph gate/results not listed as files here",
+      "required_input_availability": "Evidence is directory entry only; enumerate Git tree and exact JPEG/render bytes",
+      "source_evidence": [
+        {
+          "requested": "analysis/round30/E1-render-reopen",
+          "resolution": "directory",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [],
+          "candidates": []
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Whether six values change canon256 unresolved from batch metadata",
+      "best_next_action": "Artifact-forensics/transcription cohort after exact source result extraction",
+      "cohort": "artifact-forensics",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "RESTATE-R16-KDF",
+      "source_claimed_status": "audit",
+      "command": "",
+      "executed_method_branches": "Audit of R16 key-derivation coverage language",
+      "source_positive_gate_status": "No new source experiment/gate attached",
+      "required_input_availability": "Batch entry has no evidence paths; exact R16 source report and our KDF record available separately",
+      "source_evidence": [],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Original negative conditional on finite seed/derivation domain",
+      "best_next_action": "Correct claim scope against public-kdf-seed-stretch, no duplicate test",
+      "cohort": "mechanism-claims",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "T1-01",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Per-rune image reader on solved LP2 typeface and pooled LP1/LP2 controls",
+      "source_positive_gate_status": "Source LP2 solved gate 180/180 pass; pooled 1879/1976=95.09% fails 99% bar",
+      "required_input_availability": "T1 source outputs cached; exact images and training/templates need separate provenance pin",
+      "source_evidence": [
+        {
+          "requested": "analysis/round19/T1/RESULTS.md",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round10/L4-skeleton/RESULTS.md",
+            "liber-primus/analysis/round10b/B1-overlooked-artifact/RESULTS.md",
+            "liber-primus/analysis/round10b/B3-semantic-keys/RESULTS.md",
+            "liber-primus/analysis/round10b/B6-non-english-plaintext/RESULTS.md",
+            "liber-primus/analysis/round11/N1/RESULTS.md",
+            "liber-primus/analysis/round11/N2/RESULTS.md",
+            "liber-primus/analysis/round11/N3/RESULTS.md",
+            "liber-primus/analysis/round11/N4/RESULTS.md",
+            "liber-primus/analysis/round11/N5/RESULTS.md",
+            "liber-primus/analysis/round11/S1/RESULTS.md",
+            "liber-primus/analysis/round11/S2/RESULTS.md",
+            "liber-primus/analysis/round12/A1/RESULTS.md"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/RESULTS.md",
+              "git_object": "bd3292056c4244a0bacf5ef55bc8dcbbd6dedbde",
+              "sha256": "a06c0517233e4578228f23ca6ae27383d20f65b931645ef6c2a46a192420e32a",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/out_gread_lp1.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/T1/out_gread_lp1.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_gread_lp1.json",
+              "git_object": "9de99934b60c6a7ff31fe737cdbd0acf6eec7280",
+              "sha256": "b9ecba52e5c3bb23d8614520b58b038004bc81c078173205fb2ca981ad5b933f",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/out_gread_lp2.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/T1/out_gread_lp2.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_gread_lp2.json",
+              "git_object": "34149f1cdec9b14a9d45fd29f59249a1506ccb90",
+              "sha256": "cb9d6b99b0663133a49294b08e8a80a2f50285326f43dde9507a10d6595a802c",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Passing same-typeface controls does not prove independent correctness on unsolved glyphs",
+      "best_next_action": "Group T1/T1-04/T3 image measurement audit; crosswalk fresh template rebuild",
+      "cohort": "transcription-audits",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "T1-04",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "450 located O/A/AE disagreements compared to canon",
+      "source_positive_gate_status": "Source reports 450/450 agreement, but training/selection dependencies require audit",
+      "required_input_availability": "T1 adjudication/summary cached; exact glyph images/class templates and label derivation to pin",
+      "source_evidence": [
+        {
+          "requested": "analysis/round19/T1/adjudication.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round18/L5-payload/adjudication.json",
+            "liber-primus/analysis/round19/C1/adjudication.json",
+            "liber-primus/analysis/round19/T1/adjudication.json",
+            "liber-primus/analysis/round30/E1-render-reopen/adjudication.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/adjudication.json",
+              "git_object": "5e9c4fcbf60ad520a00c7a9e3bbef15961ea4da3",
+              "sha256": "1c6390d6ef8a8ae1a5b5e17b02bb247bf3940092be6f4a12396db6e63e4a919c",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/j2_adjudicate.py",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/T1/j2_adjudicate.py"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/j2_adjudicate.py",
+              "git_object": "ff19d8d278047636319e39a26447bcabfb5ce4a8",
+              "sha256": "68fbc590b3174cbe6dd463263ae7066a9ba146f79216500a7b8da34140a688be",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "analysis/round19/T1/out_summary.json",
+          "resolution": "prefix-adjusted",
+          "git_tree_exact": false,
+          "git_tree_suffix_candidates": [
+            "liber-primus/analysis/round19/I3/out_summary.json",
+            "liber-primus/analysis/round19/T1/out_summary.json",
+            "liber-primus/analysis/round19/T3/out_summary.json"
+          ],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T1/out_summary.json",
+              "git_object": "540d32ae06b5a4af1d8cfe5ed3c0d42ca6d00395",
+              "sha256": "b5a344426e053b7643c6f5953f6594592638e8c0b411724604bf11ef8f553025",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Agreement is not independent if templates/candidates inherit canon labels",
+      "best_next_action": "Group T1/T1-04/T3, mark source claim distinct from independent visual adjudication",
+      "cohort": "transcription-audits",
+      "execution_replay_this_batch": false
+    },
+    {
+      "source_id": "T3-PROPAGATION-MAP",
+      "source_claimed_status": "measured",
+      "command": "",
+      "executed_method_branches": "Sensitivity of doublets/IoC/decoder metrics to targeted, random and adversarial rune edits",
+      "source_positive_gate_status": "Source reports baseline SHA equivalence and perturbation controls; result depends on chosen error process",
+      "required_input_availability": "T3 outputs cached; pinned canonical rune stream and scripts/corpora to inventory",
+      "source_evidence": [
+        {
+          "requested": "liber-primus/analysis/round19/T3/RESULTS.md",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/RESULTS.md",
+              "git_object": "96b9eddc571b55ce4e8164eb6f8283cdc88fc539",
+              "sha256": "b3358e1ad9f5b7eeffe1d515205fea7d241400fb9169a76fb4a2d637b4643006",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/dependency_map.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/dependency_map.json",
+              "git_object": "e30be94485b66b5d2fbcbaeac0bc3ea8890554a6",
+              "sha256": "5ba2bbe6b412e146123eb11279a63959e6369b971c730a1aaf5a4986c256cfe2",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_baseline.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_baseline.json",
+              "git_object": "1fc4dbaf0634441294179398e0d1ef78c413c6e3",
+              "sha256": "e929b133f8f8793d1bf1354bbc7a555600f57dfa9a3102d5fac2e1415f3b1894",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_decode_L12956_KJV.json",
+              "git_object": "f52d8a45122e66878dcbe62efaec211453c7c7f1",
+              "sha256": "f3aeaeaec8cc7f681dc7361b9356c1b6ffcd8193f9f8aa2190e515b23e533fac",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_random.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_random.json",
+              "git_object": "0d8225a308a5e4c463a026a410cc256a450ff5f4",
+              "sha256": "cd2f5db527e497b3600e5f9c0abc2080ba2d8404062359fea4b680c5ac53fc1d",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_summary.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_summary.json",
+              "git_object": "ca8120f546127348b13393d9a26ad06954725c1c",
+              "sha256": "1cebe7a23953353dadb449f75bd6d5cf16d42d57fa687234e2885391d7842d86",
+              "cached": true
+            }
+          ]
+        },
+        {
+          "requested": "liber-primus/analysis/round19/T3/out_targeted.json",
+          "resolution": "exact",
+          "git_tree_exact": true,
+          "git_tree_suffix_candidates": [],
+          "candidates": [
+            {
+              "path": "liber-primus/analysis/round19/T3/out_targeted.json",
+              "git_object": "c17f48682c49f3d70bba9a2b485b5a67a9309857",
+              "sha256": "0e125ca9fe4117eabfe6e6860cc33953d766e83e9fa4a777ae7557b2f04e89a8",
+              "cached": true
+            }
+          ]
+        }
+      ],
+      "exact_record_overlap_candidates": [],
+      "overlap_caution": "No exact source-path match in record.json; related topic records may exist.",
+      "unresolved_scope": "Margins under 450 O/A/AE flips do not certify actual transcription",
+      "best_next_action": "Grouped transcription sensitivity audit; compare against existing doublet-context records",
+      "cohort": "transcription-audits",
+      "execution_replay_this_batch": false
+    }
+  ],
+  "cohorts": [
+    {
+      "cohort": "artifact-forensics",
+      "source_ids": [
+        "R30-A3-PDF-FORENSICS",
+        "R30-E1-RENDER-REOPEN"
+      ],
+      "proposal": "One source-image forensic/adjudication cohort after directory contents and exact original bytes are pinned."
+    },
+    {
+      "cohort": "decoder-instrument",
+      "source_ids": [
+        "I1-03",
+        "I1-06",
+        "I1-09",
+        "L7-C-THRESHOLD-CALIBRATION",
+        "R19-I3-NULLS",
+        "R20-HITFN-RECOVERY-GATE",
+        "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+        "R21-L5-REDTEAM-SEAL"
+      ],
+      "proposal": "Shared drift-beam and null/decision-gate audit; recover I3 source first and never use score-only hit criterion."
+    },
+    {
+      "cohort": "external-input-proposals",
+      "source_ids": [
+        "B-06",
+        "B-09",
+        "I-04"
+      ],
+      "proposal": "Source discovery/pinning work, not a cipher experiment before exact input and conversion rule."
+    },
+    {
+      "cohort": "external-pad-sweeps",
+      "source_ids": [
+        "R20-SMARS-SCAFFOLDED",
+        "R24-C8-DATE-INDEXED-PAD"
+      ],
+      "proposal": "Park absent join keys/pad units; do not convert scaffolded probes into negative sweeps."
+    },
+    {
+      "cohort": "instrumentation-audits",
+      "source_ids": [
+        "L7-A-HANDOFF-NONCOMPLIANCE"
+      ],
+      "proposal": "Check source row schemas and handoff compliance without LP2 target scoring."
+    },
+    {
+      "cohort": "large-prng-sweeps",
+      "source_ids": [
+        "R27-CPORT-MT32-FULLSWEEP"
+      ],
+      "proposal": "Resume only after S2 contradictory source receipts and engine inputs are reconciled."
+    },
+    {
+      "cohort": "mechanism-claims",
+      "source_ids": [
+        "VERDICT-OTP-CLASS",
+        "VERDICT-UNSOLVABLE-BY-DESIGN",
+        "RESTATE-R16-KDF"
+      ],
+      "proposal": "Use existing finite KDF/independence audits for scope; no empirical proof of absolute solvability class."
+    },
+    {
+      "cohort": "pgp-provenance",
+      "source_ids": [
+        "CORPUS-G-02",
+        "G-02",
+        "I-01",
+        "L1-F6-CORRECTION"
+      ],
+      "proposal": "One corpus/key/signature verification replay with signed and tampered controls, distinct-file and distinct-body counts."
+    },
+    {
+      "cohort": "source-generator-corrections",
+      "source_ids": [
+        "R19-G2-CORRECTION",
+        "R19-R1-C"
+      ],
+      "proposal": "Generator parity only until complete source-defined seed sweeps are feasible."
+    },
+    {
+      "cohort": "statistical-claim-corrections",
+      "source_ids": [
+        "B-15",
+        "B-19",
+        "B-24",
+        "L7-C-B17-TALLY"
+      ],
+      "proposal": "Scope corrections and recovery of original tests; no invented broader exclusions."
+    },
+    {
+      "cohort": "sweep-accounting",
+      "source_ids": [
+        "R19-C2-B02-ACCOUNTING",
+        "R19-C2-PREFILTER-REGISTER"
+      ],
+      "proposal": "One read-only accounting runner for offset receipts and prefilter power, with exact denominator and plant controls."
+    },
+    {
+      "cohort": "tex-prng",
+      "source_ids": [
+        "G4-TEX-RNG"
+      ],
+      "proposal": "Four-family byte-parity/control audit, then a separately budgeted search if calibrated and tractable."
+    },
+    {
+      "cohort": "transcription-audits",
+      "source_ids": [
+        "B-13",
+        "T1-01",
+        "T1-04",
+        "T3-PROPAGATION-MAP"
+      ],
+      "proposal": "One image-to-rune provenance/control audit for T1 and sensitivity analysis T3; distinguish canon-trained from held-out."
+    }
+  ]
+}

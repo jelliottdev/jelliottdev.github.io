@@ -114,7 +114,7 @@
       "source_locator": "Additive ciphertext autokey paragraph",
       "shared_engine": "feedback-recurrence",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "bounded-literal-covered",
       "input": "GP-29 plaintext/rune stream with an initial primer",
       "transform": "C[i]=(P[i]+C[i-1]) mod 29",
       "parameters": "primer and section reset must be declared for a real decode",
@@ -135,7 +135,20 @@
         "cribs",
         "page_ids"
       ],
-      "intake_decision": "Do not count another experiment for the algebraic identity; a new test needs a distinct, fixed key or boundary rule."
+      "intake_decision": "Do not count another experiment for the algebraic identity; a new test needs a distinct, fixed key or boundary rule.",
+      "queue_review": {
+        "id": "ozon-additive-feedback",
+        "disposition": "bounded-literal-covered",
+        "evidence_record_ids": [
+          "linear-ciphertext-feedback",
+          "feedback-opening-census"
+        ],
+        "covered_exact_scope": "Literal additive ciphertext recurrence and doublet invariant covered; primer 0–28 fixed-opening census covers both feedback modes on 55 nonempty pages.",
+        "untested_or_undefined_remainder": "Original extra key layer/encryption primer not defined; full cipher hypothesis remains open.",
+        "readiness": "No exact runnable extension until key layer specified.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "ozon-beaufort-feedback",
@@ -143,7 +156,7 @@
       "source_locator": "Beaufort ciphertext autokey paragraph and 2024-07-04 correction",
       "shared_engine": "feedback-recurrence",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "bounded-literal-covered",
       "input": "GP-29 plaintext and preceding ciphertext rune",
       "transform": "C[i]=(C[i-1]-P[i]) mod 29",
       "parameters": "primer and section reset unspecified",
@@ -153,7 +166,8 @@
         "additional key layer"
       ],
       "existing_records": [
-        "linear-ciphertext-feedback"
+        "linear-ciphertext-feedback",
+        "feedback-opening-census"
       ],
       "manifest_fields": [
         "operation",
@@ -162,7 +176,20 @@
         "page_ids",
         "cribs"
       ],
-      "intake_decision": "Already bounded as a distinct arithmetic sign, not evidence of a full decryptor."
+      "intake_decision": "Already bounded as a distinct arithmetic sign, not evidence of a full decryptor.",
+      "queue_review": {
+        "id": "ozon-beaufort-feedback",
+        "disposition": "bounded-literal-covered",
+        "evidence_record_ids": [
+          "linear-ciphertext-feedback",
+          "feedback-opening-census"
+        ],
+        "covered_exact_scope": "Literal Beaufort doublet condition and finite primer/opening feedback search covered.",
+        "untested_or_undefined_remainder": "Additional key layer and historically intended primer not specified.",
+        "readiness": "No exact runnable extension until key layer specified.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "ozon-multiplicative-feedback",
@@ -170,7 +197,7 @@
       "source_locator": "Multiplicative ciphertext autokey paragraph",
       "shared_engine": "feedback-recurrence",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "bounded-literal-covered",
       "input": "GP-29 plaintext and previous ciphertext rune",
       "transform": "C[i]=P[i] C[i-1] mod 29; source says skip zero because no inverse exists",
       "parameters": "scalar primer, zero-skip convention",
@@ -188,7 +215,19 @@
         "boundary",
         "page_ids"
       ],
-      "intake_decision": "Keep zero handling explicit; do not generalize the identity through noninvertible transitions."
+      "intake_decision": "Keep zero handling explicit; do not generalize the identity through noninvertible transitions.",
+      "queue_review": {
+        "id": "ozon-multiplicative-feedback",
+        "disposition": "bounded-literal-covered",
+        "evidence_record_ids": [
+          "multiplicative-ciphertext-autokey"
+        ],
+        "covered_exact_scope": "Uninterrupted multiplicative ciphertext-autokey recurrence tested; 450 observed zero-to-nonzero edges contradict that literal recurrence.",
+        "untested_or_undefined_remainder": "Source's skip-zero behavior needs a deterministic clock and output-location rule; not covered by uninterrupted test.",
+        "readiness": "No exact runnable extension until zero-skip semantics fixed.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "ozon-delete-second-doublet",
@@ -196,7 +235,7 @@
       "source_locator": "Removing characters: ABBC to ABC",
       "shared_engine": "collision-edit",
       "priority": 2,
-      "state": "ready-bounded-variant",
+      "state": "bounded-rule-covered",
       "input": "candidate ciphertext before an edit; 29-symbol alphabet",
       "transform": "delete the second symbol of each adjacent equal pair",
       "parameters": "fixed pass order and whether a repeated run loses one or all later symbols",
@@ -207,7 +246,8 @@
       ],
       "existing_records": [
         "single-rune-null-doublets",
-        "decoder-skip-controls"
+        "decoder-skip-controls",
+        "doublet-collision-edits"
       ],
       "manifest_fields": [
         "edit_rule",
@@ -216,7 +256,19 @@
         "planted_recovery",
         "output_length"
       ],
-      "intake_decision": "Possible finite structural control, but an LP2 decryption claim requires the omitted positions to be recoverable rather than chosen afterward."
+      "intake_decision": "Possible finite structural control, but an LP2 decryption claim requires the omitted positions to be recoverable rather than chosen afterward.",
+      "queue_review": {
+        "id": "ozon-delete-second-doublet",
+        "disposition": "bounded-rule-covered",
+        "evidence_record_ids": [
+          "doublet-collision-edits"
+        ],
+        "covered_exact_scope": "Actual delete-second edit, length/repeat effects, and reverse ambiguity controls measured.",
+        "untested_or_undefined_remainder": "No preceding cipher stage or deleted-location recovery supplied.",
+        "readiness": "No exact runnable extension without a recovery rule.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "ready-bounded-variant"
     },
     {
       "id": "ozon-insert-filler-between-doublets",
@@ -224,7 +276,7 @@
       "source_locator": "Splitting doublets: ABBC to ABDBC; later X/Q discussion",
       "shared_engine": "collision-edit",
       "priority": 2,
-      "state": "missing-parameters",
+      "state": "bounded-rules-covered-broad-open",
       "input": "candidate ciphertext before insertion",
       "transform": "insert one or more filler symbols between adjacent equal symbols",
       "parameters": "insertion glyph, repeat handling, and removal clock not fixed; D/X/Q are examples, not selected keys",
@@ -236,7 +288,8 @@
       ],
       "existing_records": [
         "doublet-context",
-        "decoder-skip-controls"
+        "decoder-skip-controls",
+        "doublet-collision-edits"
       ],
       "manifest_fields": [
         "filler_set",
@@ -245,7 +298,19 @@
         "planted_recovery",
         "page_ids"
       ],
-      "intake_decision": "Do not run an unrestricted filler search and count it as one historical test."
+      "intake_decision": "Do not run an unrestricted filler search and count it as one historical test.",
+      "queue_review": {
+        "id": "ozon-insert-filler-between-doublets",
+        "disposition": "bounded-rules-covered-broad-open",
+        "evidence_record_ids": [
+          "doublet-collision-edits"
+        ],
+        "covered_exact_scope": "Fixed-F and nonmatching-filler insertion constructions plus reverse ambiguity measured.",
+        "untested_or_undefined_remainder": "Arbitrary fillers/counts and unambiguous decoder not specified.",
+        "readiness": "No exact runnable extension; variants should not be counted as separate ideas.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "missing-parameters"
     },
     {
       "id": "ozon-block-reset-feedback",
@@ -253,7 +318,7 @@
       "source_locator": "2024-08-13 block-size discussion and reported synthetic size-five output",
       "shared_engine": "feedback-recurrence",
       "priority": 2,
-      "state": "ready-bounded-variant",
+      "state": "one-literal-rule-covered",
       "input": "one declared 29-rune plaintext control and LP2 section streams",
       "transform": "ciphertext feedback within blocks, with a different rule on positions i mod b=0; the thread gives an illustrative plaintext lookahead variant",
       "parameters": "b=5 reported synthetic demonstration; b=7 floated from magic-square context; offset, block-start expression and key k[i] must be frozen",
@@ -263,7 +328,8 @@
       ],
       "existing_records": [
         "block-boundary-doublets",
-        "feedback-opening-census"
+        "feedback-opening-census",
+        "block-lookahead-feedback"
       ],
       "manifest_fields": [
         "block_size",
@@ -273,7 +339,20 @@
         "positive_control",
         "edge_statistic"
       ],
-      "intake_decision": "Boundary-position test overlaps existing work; a new feedback decode needs the missing restart/key definition."
+      "intake_decision": "Boundary-position test overlaps existing work; a new feedback decode needs the missing restart/key definition.",
+      "queue_review": {
+        "id": "ozon-block-reset-feedback",
+        "disposition": "one-literal-rule-covered",
+        "evidence_record_ids": [
+          "block-lookahead-feedback",
+          "block-boundary-doublets"
+        ],
+        "covered_exact_scope": "Source-inspired future-plaintext lookahead completed with zero key, terminal zero, b=5/7, plants and known openings; boundary concentration separately checked.",
+        "untested_or_undefined_remainder": "Historical k[i] and restart rule not completely supplied; zero-key result does not close keyed versions.",
+        "readiness": "No source-exact further run until complete recurrence supplied.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "ready-bounded-variant"
     },
     {
       "id": "lanfear-f-copy-and-reset",
@@ -281,7 +360,7 @@
       "source_locator": "Original 2023-12-02 first interrupter rule and 64-setting clarification",
       "shared_engine": "interruption-feedback",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "source-rule-covered",
       "input": "LP2-54–55, six F positions",
       "transform": "copy selected F as plaintext and use it as new ciphertext-autokey primer",
       "parameters": "64 masks of six F positions; source code/plot absent from supplied excerpt",
@@ -300,7 +379,19 @@
         "period_range",
         "null_search"
       ],
-      "intake_decision": "Existing controlled variant is not an exact replay of unavailable historical source code."
+      "intake_decision": "Existing controlled variant is not an exact replay of unavailable historical source code.",
+      "queue_review": {
+        "id": "lanfear-f-copy-and-reset",
+        "disposition": "source-rule-covered",
+        "evidence_record_ids": [
+          "lp2-54-55-autokey-reset"
+        ],
+        "covered_exact_scope": "Full selected-F mask and period scan on LP2-54/55 with source reset operation and max-stat control.",
+        "untested_or_undefined_remainder": "Original historic graph/IoC denominator receipt may differ; model rule itself covered.",
+        "readiness": "Optional historic-output parity audit, not a new solve test.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "lanfear-f-skip-previous-two",
@@ -308,7 +399,7 @@
       "source_locator": "Original 2023-12-02 second rule and 2024-05-05 skip-clock correction",
       "shared_engine": "interruption-feedback",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "source-rule-covered",
       "input": "LP2-54–55, six F positions",
       "transform": "skip selected F in the ciphertext-feedback clock; the next rune uses the previous non-F ciphertext, then lag one resumes",
       "parameters": "64 masks, fixed F only; no independent new primer",
@@ -326,7 +417,19 @@
         "period_range",
         "null_search"
       ],
-      "intake_decision": "Count as a separate transition rule, not 64 independent ideas."
+      "intake_decision": "Count as a separate transition rule, not 64 independent ideas.",
+      "queue_review": {
+        "id": "lanfear-f-skip-previous-two",
+        "disposition": "source-rule-covered",
+        "evidence_record_ids": [
+          "lp2-54-55-autokey-skip"
+        ],
+        "covered_exact_scope": "Full selected-F mask and period scan on LP2-54/55 with source skip-clock operation and max-stat control.",
+        "untested_or_undefined_remainder": "Historical script/graph unavailable for byte-level parity; bounded rule covered.",
+        "readiness": "Optional historic-output parity audit.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "lp2-54-eight-rune-header-crib",
@@ -334,7 +437,7 @@
       "source_locator": "2025-01-12 8-rune-word proposal and 2025-01-16 CTA/PTA correction",
       "shared_engine": "feedback-recurrence",
       "priority": 3,
-      "state": "existing-overlap",
+      "state": "bounded-source-rule-covered",
       "input": "LP2-54 red one-plus-eight-rune header and a fixed dictionary",
       "transform": "test ciphertext feedback and plaintext feedback as different recurrences",
       "parameters": "all 29 scalar primers in existing baseline; A/I/O first-rune candidates; source does not freeze C/K/D function lists",
@@ -358,7 +461,20 @@
         "selection_budget",
         "held_out"
       ],
-      "intake_decision": "Current fixed rule/dictionary cases are tested; the open-ended combinatorial proposal is not a tested solution."
+      "intake_decision": "Current fixed rule/dictionary cases are tested; the open-ended combinatorial proposal is not a tested solution.",
+      "queue_review": {
+        "id": "lp2-54-eight-rune-header-crib",
+        "disposition": "bounded-source-rule-covered",
+        "evidence_record_ids": [
+          "lp2-54-header-feedback",
+          "lp2-54-header-dictionary"
+        ],
+        "covered_exact_scope": "All 29 primers and both feedback recurrences yield complete LP2-54 output; six A/I/O openings and corpus check are documented.",
+        "untested_or_undefined_remainder": "Source's full candidate list and proposed C/K/D functions absent; no held-out reading.",
+        "readiness": "Only explicit new C/K/D equations/list would make further source test.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "existing-overlap"
     },
     {
       "id": "dc0y-grid-directional-constant-search",
@@ -366,7 +482,7 @@
       "source_locator": "2025-10-18 find-a-word directions and missing 3301/1033/2213",
       "shared_engine": "grid-route",
       "priority": 2,
-      "state": "partial-overlap",
+      "state": "bounded-source-claim-covered",
       "input": "LP2-49–51 original 32 by 8 two-character-token table",
       "transform": "read straight cardinal and diagonal cell routes in either direction; concatenate exact symbols to find predeclared number strings",
       "parameters": "targets 3301, 1033, 2213 are named; digit/token boundary and emirp deduplication need freezing",
@@ -388,7 +504,21 @@
         "dedupe_rule",
         "null"
       ],
-      "intake_decision": "The existing four-cell prime-route records overlap; the complete historical find-a-word census still needs source-code inspection."
+      "intake_decision": "The existing four-cell prime-route records overlap; the complete historical find-a-word census still needs source-code inspection.",
+      "queue_review": {
+        "id": "dc0y-grid-directional-constant-search",
+        "disposition": "bounded-source-claim-covered",
+        "evidence_record_ids": [
+          "grid-prime-paths",
+          "grid-prime-path-null",
+          "grid-alternative-layouts"
+        ],
+        "covered_exact_scope": "Straight four-cell, eight-direction 32x8 route inventory and named omission counts reproduced; shuffles and alternate 16x16/quadrant layouts checked.",
+        "untested_or_undefined_remainder": "Other claimed hits depend on source's parser/word list not pinned here.",
+        "readiness": "Parser-specific claims need exact parser/list receipt; existing absence claim is covered.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "partial-overlap"
     },
     {
       "id": "dc0y-grid-four-quadrant-dot-route",
@@ -396,7 +526,7 @@
       "source_locator": "2025-10-18 four 8-by-8 quadrants and five-dot flip states",
       "shared_engine": "grid-route",
       "priority": 3,
-      "state": "missing-parameters",
+      "state": "undefined-route",
       "input": "same 32 by 8 grid, divided into four 8 by 8 quadrants",
       "transform": "reflect a five-dot motif and use it to select quadrant cells or corners",
       "parameters": "four quadrant registration is specified; motif coordinates, orientation, selected cell order, and readout are absent",
@@ -417,7 +547,19 @@
         "readout",
         "criterion"
       ],
-      "intake_decision": "A geometric family lead, not a completed or falsifiable historical cipher attempt."
+      "intake_decision": "A geometric family lead, not a completed or falsifiable historical cipher attempt.",
+      "queue_review": {
+        "id": "dc0y-grid-four-quadrant-dot-route",
+        "disposition": "undefined-route",
+        "evidence_record_ids": [
+          "grid-alternative-layouts"
+        ],
+        "covered_exact_scope": "Quadrant-only straight-path sensitivity was tested but no five-dot directed route was reconstructed.",
+        "untested_or_undefined_remainder": "Five coordinates, quadrant flips, cell selection, reading order and acceptance criterion absent.",
+        "readiness": "Not executable from present rule.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "missing-parameters"
     },
     {
       "id": "89ron-729-index-inversion",
@@ -425,7 +567,7 @@
       "source_locator": "2023-12-02 worked 729/index example and first-word alternatives",
       "shared_engine": "numeric-position-map",
       "priority": 2,
-      "state": "ready-bounded-variant",
+      "state": "arithmetic-reproduced-full-output-undefined",
       "input": "LP2-00–02 729-rune cross section; zero-based GP alphabet indices",
       "transform": "compute 729/index, reduce modulo 29, take integer-part index; fractional part above/below 0.5 selects a line-dependent neighboring index",
       "parameters": "source example uses 53→index15 and 729/15=48.6; F index zero is undefined; line numbering, wrap rule and 0.5 tie rule need explicit choices",
@@ -438,7 +580,8 @@
       ],
       "existing_records": [
         "totient-map-route",
-        "lp2-00-02-lag35-selection"
+        "lp2-00-02-lag35-selection",
+        "cross-section-index-inversion"
       ],
       "manifest_fields": [
         "page_range",
@@ -450,7 +593,19 @@
         "wrap_rule",
         "no_edit_output"
       ],
-      "intake_decision": "The arithmetic core is finite; the post's claimed reading requires subjective cleanup and should not be accepted as a raw decode."
+      "intake_decision": "The arithmetic core is finite; the post's claimed reading requires subjective cleanup and should not be accepted as a raw decode.",
+      "queue_review": {
+        "id": "89ron-729-index-inversion",
+        "disposition": "arithmetic-reproduced-full-output-undefined",
+        "evidence_record_ids": [
+          "cross-section-index-inversion"
+        ],
+        "covered_exact_scope": "729 count and source first-word/example were audited; source uses noncanonical index at 107, 34 F inputs divide by zero, many outputs out of range before discretionary wrap.",
+        "untested_or_undefined_remainder": "F handling, line origin, neighbor wrap and output adjudication not specified; no unique full reading.",
+        "readiness": "Cannot fairly score source-intended full output until these rules fixed.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "ready-bounded-variant"
     },
     {
       "id": "dukotah-r22-turtle-spatial",
@@ -462,7 +617,7 @@
       },
       "shared_engine": "numeric-position-map",
       "priority": 2,
-      "state": "ready-source-replay",
+      "state": "G1-replayed-G3-open",
       "input": "source's 12,956-rune LP2 stream and three prime/index/totient representations",
       "transform": "turtle turns and steps, then measure closure, symmetry, grid occupancy and pointer-format reads",
       "parameters": "3 streams × 6 turn moduli 4/6/8/12/29/360 × 2 turn interpretations × 2 step rules = 72 renders",
@@ -472,7 +627,8 @@
       ],
       "existing_records": [
         "lp2-row-column-routes",
-        "totient-map-route"
+        "totient-map-route",
+        "lp2-turtle-spatial-replay"
       ],
       "manifest_fields": [
         "source_stream",
@@ -486,7 +642,19 @@
         "family_threshold",
         "planted_shapes"
       ],
-      "intake_decision": "This is a genuinely distinct finite rendering experiment; a row/column route record is not its replay."
+      "intake_decision": "This is a genuinely distinct finite rendering experiment; a row/column route record is not its replay.",
+      "queue_review": {
+        "id": "dukotah-r22-turtle-spatial",
+        "disposition": "G1-replayed-G3-open",
+        "evidence_record_ids": [
+          "lp2-turtle-spatial-replay"
+        ],
+        "covered_exact_scope": "All 72 G1 turtle paths, 14,400 first-stage shuffles, six initial screens and planted shapes independently replayed; source figure flag accepts none.",
+        "untested_or_undefined_remainder": "G3 base32/onion/coordinate pointer framing and source's 2000-sample tail refinement are not independently replayed.",
+        "readiness": "Runnable finite G3 detector from pinned g3_coord_decode.py and same three number streams; distinct grouped source remainder.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "ready-source-replay"
     },
     {
       "id": "dukotah-b04-short-cryptographic-seeds",
@@ -498,7 +666,7 @@
       },
       "shared_engine": "source-derived-keystream-sweep",
       "priority": 2,
-      "state": "transform-specified-input-audit-required",
+      "state": "fixed-crib-extension-only",
       "input": "the source's 2,165-entry Cicada-themed seed dictionary and archived LP2 stream",
       "transform": "expand seeds with hash chains/counters, HMAC, AES-CTR, RC4 or ChaCha20; reduce to GP-29 and decode with the pinned soft key-skip filter",
       "parameters": "source reports 6,224,300 decodes across four stages; exact seed/offset/sign/direction grid lives in PREREG and scripts",
@@ -508,7 +676,8 @@
       ],
       "existing_records": [
         "seed-crib-controls",
-        "decoder-skip-controls"
+        "decoder-skip-controls",
+        "b04-source-seeds-opening-cribs"
       ],
       "manifest_fields": [
         "seed_manifest",
@@ -523,7 +692,19 @@
         "held_out_length",
         "null"
       ],
-      "intake_decision": "Do not call a failed English-only score a closure for Welsh, vowel-dropped English, or unsearched seeds."
+      "intake_decision": "Do not call a failed English-only score a closure for Welsh, vowel-dropped English, or unsearched seeds.",
+      "queue_review": {
+        "id": "dukotah-b04-short-cryptographic-seeds",
+        "disposition": "fixed-crib-extension-only",
+        "evidence_record_ids": [
+          "b04-source-seeds-opening-cribs"
+        ],
+        "covered_exact_scope": "All 1,385,600 source setting/55-page-start fixed-12-rune comparisons tested; this is a different predicate from the source English-score sweep.",
+        "untested_or_undefined_remainder": "Original 6,224,300 source decodes, model score/null and top-150 escalation not independently replayed; English-first gate has weak/zero power for some alternate registers.",
+        "readiness": "Potential exact source replay after model/corpus dependency and runtime gate; one campaign, not millions of ideas.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "transform-specified-input-audit-required"
     },
     {
       "id": "dukotah-b05-grid-payload-as-prf-seed",
@@ -535,7 +716,7 @@
       },
       "shared_engine": "source-derived-keystream-sweep",
       "priority": 1,
-      "state": "transform-specified-input-audit-required",
+      "state": "executed-source-grid-covered",
       "input": "the resolved 256-byte LP2-49–51 payload and six contested-cell variants",
       "transform": "treat payload representations as PRF seed, expand with hash/HMAC/AES/RC4/ChaCha families, reduce mod 29 or rejection-sample, then skip-aware decode",
       "parameters": "raw/reverse/bit-reverse/decimal-prefix representations; source reports 70,680 beam decodes",
@@ -546,7 +727,10 @@
       "existing_records": [
         "grid-direct-bytes",
         "grid-radix-reconciliation",
-        "seed-crib-controls"
+        "seed-crib-controls",
+        "grid-payload-prf-source-grid",
+        "grid-payload-prf-contested-masks",
+        "grid-payload-prf-opening-cribs"
       ],
       "manifest_fields": [
         "payload_hash",
@@ -560,7 +744,21 @@
         "held_out_length",
         "null"
       ],
-      "intake_decision": "Direct grid-byte decoding and payload-as-seed are different hypotheses; the former is not a replay of this source."
+      "intake_decision": "Direct grid-byte decoding and payload-as-seed are different hypotheses; the former is not a replay of this source.",
+      "queue_review": {
+        "id": "dukotah-b05-grid-payload-as-prf-seed",
+        "disposition": "executed-source-grid-covered",
+        "evidence_record_ids": [
+          "grid-payload-prf-source-grid",
+          "grid-payload-prf-contested-masks",
+          "grid-payload-prf-opening-cribs"
+        ],
+        "covered_exact_scope": "All 70,680 executed source screens, 180 rigid corners, five full-stream continuations and 64 contested-mask variant sources replayed; opening-crib extension separate.",
+        "untested_or_undefined_remainder": "Other encodings/generators/key alignments/languages outside source grid; shuffle max is not global selection probability.",
+        "readiness": "No remaining exact-source executable B05 unit in this 20-item intake.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "transform-specified-input-audit-required"
     },
     {
       "id": "dukotah-r26-semantic-seed-zoo",
@@ -572,7 +770,7 @@
       },
       "shared_engine": "source-derived-keystream-sweep",
       "priority": 1,
-      "state": "transform-specified-input-audit-required",
+      "state": "source-gate-audited-invalid",
       "input": "323 source-enumerated semantic values from Cicada constants, solved text, dates and primes, used as seeds",
       "transform": "7 source generators including Py2.7 random variants, Perl and prime/totient ladders × exact and pair-skip decoders",
       "parameters": "323 values × 7 generators × 2 decoders, offset zero: 4,274 reported rows",
@@ -582,7 +780,8 @@
       ],
       "existing_records": [
         "seed-crib-controls",
-        "cumulative-autokey-literal"
+        "cumulative-autokey-literal",
+        "semantic-seed-screen-gate-audit"
       ],
       "manifest_fields": [
         "seed_builder_revision",
@@ -596,7 +795,19 @@
         "held_out_rule",
         "positive_control"
       ],
-      "intake_decision": "Best first shared-engine slice because its source declares a complete, relatively small candidate set."
+      "intake_decision": "Best first shared-engine slice because its source declares a complete, relatively small candidate set.",
+      "queue_review": {
+        "id": "dukotah-r26-semantic-seed-zoo",
+        "disposition": "source-gate-audited-invalid",
+        "evidence_record_ids": [
+          "semantic-seed-screen-gate-audit"
+        ],
+        "covered_exact_scope": "Exact 4,274 screening rows and best score reproduced; positive 120/120 planted key is rejected by impossible +5 gate.",
+        "untested_or_undefined_remainder": "Original nine-register/three-corpus model files missing; corrected gate and hitfn20 adjudication unrun. R26-A generator opening-crib record is a different source lane.",
+        "readiness": "Blocked on source model inputs and corrected, calibrated promotion rule; do not count as failed seed test.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "transform-specified-input-audit-required"
     },
     {
       "id": "dukotah-r28-author-pad-dense-offset",
@@ -608,7 +819,7 @@
       },
       "shared_engine": "source-derived-keystream-sweep",
       "priority": 2,
-      "state": "transform-specified-input-audit-required",
+      "state": "source-input-blocked",
       "input": "two source-pinned CicadaOS binaries, approximately 4.0 MB and 118.8 MB",
       "transform": "literal byte-to-symbol pad reductions at dense selected offsets, in both directions and signs, under exact and pair-skip decoder relations",
       "parameters": "five reductions, two directions, two signs, two relations; 24,080 planned source rows",
@@ -632,7 +843,17 @@
         "held_out_rule",
         "control"
       ],
-      "intake_decision": "Offset grid covers a tiny subset of bytes; do not convert its negative into all-offset exclusion."
+      "intake_decision": "Offset grid covers a tiny subset of bytes; do not convert its negative into all-offset exclusion.",
+      "queue_review": {
+        "id": "dukotah-r28-author-pad-dense-offset",
+        "disposition": "source-input-blocked",
+        "evidence_record_ids": [],
+        "covered_exact_scope": "Pinned ledger/source code defines 24,080 planned cells, but no independent actual two-binary source-grid replay record.",
+        "untested_or_undefined_remainder": "Two exact source-pinned binaries and hashes, stage-B adjudication, and planted keyskip2 controls need verification; source stride grid is sparse.",
+        "readiness": "Input-recovery/audit unit before any source replay; no arbitrary substitute binaries.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "transform-specified-input-audit-required"
     },
     {
       "id": "dukotah-r17-public-random-pad",
@@ -644,7 +865,7 @@
       },
       "shared_engine": "source-derived-keystream-sweep",
       "priority": 3,
-      "state": "transform-specified-input-audit-required",
+      "state": "source-input-and-scale-blocked",
       "input": "dated public-pad sources: CicadaOS, blockchain, randomness beacons and number tables in the source's four lanes",
       "transform": "treat each source byte stream as a public keystream, scan finite offsets with the source's trigram prefilter then skip-aware beam",
       "parameters": "source reports 8.38 billion effective offsets; offsets and target sizes differ by lane",
@@ -666,7 +887,17 @@
         "null",
         "held_out_rule"
       ],
-      "intake_decision": "Published randomness can be tested as a finite source; this does not touch unknown private pads or unscanned archives."
+      "intake_decision": "Published randomness can be tested as a finite source; this does not touch unknown private pads or unscanned archives.",
+      "queue_review": {
+        "id": "dukotah-r17-public-random-pad",
+        "disposition": "source-input-and-scale-blocked",
+        "evidence_record_ids": [],
+        "covered_exact_scope": "No independent replay of four dated public-pad lanes or their 8.38-billion effective offset census.",
+        "untested_or_undefined_remainder": "Exact dated byte streams, checksum provenance, runtime, and a prefilter retaining only 5/8 planted offsets.",
+        "readiness": "Source-byte recovery and filter-power audit precede costly lane replay; no negative closure from original filter.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "transform-specified-input-audit-required"
     },
     {
       "id": "manuscript-gematria-autokey-emergence",
@@ -674,7 +905,7 @@
       "source_locator": "User message received 2026-10-23: numerical autokey / circumference shedding / instar emergence",
       "shared_engine": "feedback-and-manuscript-derived-key-rules",
       "priority": 1,
-      "state": "needs-exact-recurrence-and-scope",
+      "state": "broad-theme-undefined-with-bounded-models",
       "has_been_run": false,
       "title": "Manuscript-derived numerical autokey and iterative emergence",
       "input": "An explicitly selected manuscript text layer and target pages; possibly the known LP2-57 parable or its documented prime-value totals. Original audio metadata is contextual evidence, not a key schedule.",
@@ -749,7 +980,22 @@
           "record": "dukotah-word-boundary-key-clocks",
           "coverage": "Pinned separator/reset schedules and five word/previous-ciphertext prime-value rules; other states and resets remain outside scope."
         }
-      ]
+      ],
+      "queue_review": {
+        "id": "manuscript-gematria-autokey-emergence",
+        "disposition": "broad-theme-undefined-with-bounded-models",
+        "evidence_record_ids": [
+          "gp-prime-plaintext-feedback",
+          "dukotah-word-boundary-key-clocks",
+          "public-multihistory-feedback",
+          "cumulative-autokey-literal"
+        ],
+        "covered_exact_scope": "Concrete page-reset GP-prime plaintext feedback and W1–W5 word-boundary prime clocks now tested, alongside older cumulative/multihistory variants.",
+        "untested_or_undefined_remainder": "User's 'shedding' and circumference/emergence theme does not define state equation, source-order, deletion semantics or validation target.",
+        "readiness": "No unique new experiment until a concrete recurrence; do not inflate known generic autokey family into novel queue.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "needs-exact-recurrence-and-scope"
     },
     {
       "id": "lp2-15-prime-spiral-gaps-mod28",
@@ -757,7 +1003,7 @@
       "source_locator": "Three supplied screenshots: 16970, 16972 and 16974.",
       "shared_engine": "lp2-15-grid-derived-gap-and-residue-rules",
       "priority": 1,
-      "state": "bounded-arithmetic-check-complete",
+      "state": "specific-arithmetic-check-complete",
       "has_been_run": true,
       "title": "LP2-15 prime-spiral gaps modulo 28",
       "input": "The supplied 4x4 prime array, related to the known LP2-15 square construction; distinguish this derived array from the printed manuscript cells.",
@@ -878,8 +1124,21 @@
         "record": "lp2-15-prime-gap-cycle",
         "finding": "All supplied arithmetic matches; exact fixed period-four continuation fails at the first new gap (4 instead of 8), with 0/8 matching continuation positions.",
         "limits": "Only this fixed arithmetic continuation; no rune decoder supplied or tested."
-      }
+      },
+      "queue_review": {
+        "id": "lp2-15-prime-spiral-gaps-mod28",
+        "disposition": "specific-arithmetic-check-complete",
+        "evidence_record_ids": [
+          "lp2-15-prime-gap-cycle"
+        ],
+        "covered_exact_scope": "Published record verifies source 16 Fibonacci-indexed primes/15 gaps; fixed 8,20,10,6 tail occurs once and eight new terms break period-four continuation.",
+        "untested_or_undefined_remainder": "A further rune mapping or a different claimed cycle would need an exact rule and holdout criterion.",
+        "readiness": "No remaining arithmetic check for this stated cycle.",
+        "receipt": "research/batch-ready-reconciliation-2026-10-23.json"
+      },
+      "previous_intake_state": "bounded-arithmetic-check-complete"
     }
   ],
-  "updated": "2026-10-23"
+  "updated": "2026-10-23",
+  "scheduling_note": "Use queue_review for current readiness; original proposal fields preserve the supplied idea. Bounded coverage does not close unspecified extensions. Source-replay followups overlap the public-source ledger and must not be added to its count."
 }

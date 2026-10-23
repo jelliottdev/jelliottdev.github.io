@@ -75,6 +75,53 @@ class SourceLookupTests(unittest.TestCase):
         self.assertEqual(result['source_entry']['source_id'], self.entries[1]['source_id'])
         self.assertEqual(len(result['input_dependencies']), 1)
 
+    def gate(self, source_id, path):
+        self.write('fixture-execution-gate-2026-10-23.json', {
+            'schema': 'internal-source-execution-gate-v1',
+            'checked_on': '2026-10-23', 'revision': 'pinned',
+            'source_id': source_id, 'source_paths': [path],
+            'disposition': 'Known source gate cannot pass; no cipher exclusion.',
+        })
+
+    def test_source_gate_follows_unambiguous_ledger_shorthand(self):
+        self.gate(self.entries[1]['source_id'], 'pinned/second.py')
+        result = prior_work.lookup(source_id='r24-c2-ext')
+        self.assertEqual(len(result['execution_gates']), 1)
+        self.assertIn('not a fresh probe', result['execution_gates'][0]['usage'])
+
+    def test_source_path_gate_does_not_require_a_ledger_entry(self):
+        self.gate('other-repository-source', 'tools/source.py')
+        result = prior_work.lookup(source_path='tools/source.py')
+        self.assertEqual(result['source_lookup'], 'not-found')
+        self.assertIsNone(result['source_entry'])
+        self.assertEqual(len(result['execution_gates']), 1)
+
+    def test_irrelevant_source_gate_is_not_applied(self):
+        self.gate(self.entries[1]['source_id'], 'pinned/second.py')
+        self.assertEqual(prior_work.lookup(source_id=self.entries[0]['source_id'])['execution_gates'], [])
+
+    def test_gate_can_be_found_through_pinned_control_evidence(self):
+        self.write('fixture-execution-gate-2026-10-23.json', {
+            'schema': 'internal-source-execution-gate-v1',
+            'source_id': 'recorded-source',
+            'control_evidence': [{'path': 'pinned/control.py', 'sha256': 'receipt'}],
+            'disposition': 'Saved positive control failed.',
+        })
+        result = prior_work.lookup(source_path='liber-primus/pinned/control.py')
+        self.assertEqual(len(result['execution_gates']), 1)
+
+    def test_recorded_audit_is_visible_without_claiming_replay(self):
+        self.write('source-audit-register.json', {
+            'schema': 'internal-source-audit-register-v1',
+            'entries': [{'source_id': self.entries[1]['source_id'],
+                         'independently_replayed_by_audit': False,
+                         'next_action': 'Check source control before target run.'}],
+        })
+        result = prior_work.lookup(source_id='r24-c2-ext')
+        self.assertEqual(len(result['source_audits']), 1)
+        self.assertFalse(result['source_audits'][0]['independently_replayed_by_audit'])
+        self.assertEqual(prior_work.lookup(source_id='missing')['source_audits'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

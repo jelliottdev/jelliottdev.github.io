@@ -1,0 +1,102 @@
+{
+  "schema": "dukotah-i1-control-and-count-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids_supported": [
+    "I1-03",
+    "I1-06",
+    "I1-09",
+    "R19-I3-NULLS",
+    "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+    "R20-HITFN-RECOVERY-GATE"
+  ],
+  "scope": "I1 decoder parity and one synthetic plant; source-grid row accounting only. No real LP2 candidate was scored in this replay.",
+  "source_files_sha256": {
+    "liber-primus/analysis/round19/I1/driftbeam.py": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+    "liber-primus/analysis/round19/I1/constructions.py": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35",
+    "liber-primus/analysis/round19/I1/run_gates.py": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+    "liber-primus/analysis/round19/I1/run_fp.py": "f515f834600761213e348be8e45e2dbbbcb123f0a34d6526410c44e4f6880433",
+    "liber-primus/analysis/round19/I1/test_driftbeam.py": "df5421cc920b75ee9d7f96dcc81ec143cf6391e0ad0e4a812893258c5e245aa9",
+    "liber-primus/analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "liber-primus/analysis/round18/L2-filter-leak/fastbeam.py": "2f61c708bdcb1bfcfeb8ecd6f10d2918648bdb3ed3ba2a770d3a02b6c31251e2",
+    "liber-primus/analysis/round19/I1/out_fix.json": "12c4e0f3a152bf2619aa3fa83a0d401a76365a5f3e8a3144d181375affe07c6b",
+    "liber-primus/analysis/round19/I1/out_fp_deep.json": "9610234eaa4d555386833bc6927413c5ec0241ca0985eeeaf270251e25629286",
+    "liber-primus/analysis/round19/I1/out_fp_deep2.json": "099b87fb551bc615a91fe2cbd79edb4197fedc27381a27ae6df097b8e5314e3d",
+    "liber-primus/analysis/round19/I1/out_fp_curve.json": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c"
+  },
+  "fresh_control": {
+    "g_eq": {
+      "gate": "G-EQ",
+      "cases": 24,
+      "max_score_delta": 1.0658141036401503e-14,
+      "path_mismatches": 0,
+      "pass": true
+    },
+    "g_eq2": {
+      "gate": "G-EQ2",
+      "cases": 12,
+      "max_score_delta": 0.0,
+      "path_mismatches": 0,
+      "pass": true
+    },
+    "plant": {
+      "length": 240,
+      "source_rejections": 6,
+      "modes": {
+        "repo_exact": {
+          "score": -5.8754518187616664,
+          "rune_recovery": 0.4583333333333333,
+          "n_skips": 1
+        },
+        "repo_exact_ms8": {
+          "score": -5.8754518187616664,
+          "rune_recovery": 0.4583333333333333,
+          "n_skips": 1
+        },
+        "pair": {
+          "score": -4.5057352954760095,
+          "rune_recovery": 1.0,
+          "n_skips": 12
+        },
+        "drift": {
+          "score": -4.5057352954760095,
+          "rune_recovery": 1.0,
+          "n_skips": 12
+        }
+      }
+    }
+  },
+  "source_grid_accounting": {
+    "fix": {
+      "predicted_rows": 2100,
+      "stored_rows": 2100,
+      "gate_tagged_rows": 1400,
+      "modes": 10,
+      "lengths": [
+        240,
+        400
+      ],
+      "seeds_per_setting": 7
+    },
+    "wrong_key_deep": {
+      "settings": 10,
+      "per_setting": 2000,
+      "stored_rows": 20000
+    },
+    "wrong_key_deep2": {
+      "settings": 4,
+      "per_setting": 2000,
+      "stored_rows": 8000
+    },
+    "wrong_key_curve": {
+      "settings": 12,
+      "per_setting": 500,
+      "stored_rows": 6000
+    },
+    "wrong_key_total_rows": 34000
+  },
+  "limits": [
+    "Source G-FP rows and G-FIX rows were counted and checked for unique setting/trial IDs, not recomputed here.",
+    "The test suite exercises shared decoder logic; I3/P3 null thresholds and HITFN are not independently replayed by this receipt.",
+    "No unsolved LP2 plaintext recovery claim."
+  ]
+}
