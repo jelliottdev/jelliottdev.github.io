@@ -1,0 +1,16 @@
+{
+  "schema": "liberpedia-source-intake-v1",
+  "status": "unresolved-source-sibling",
+  "source": {
+    "repository": "https://github.com/d4v1-sudo/my_cicada_tools_cpp",
+    "revision": "6bba820aed72184837611a82c79c4587157080aa",
+    "method": "src/utils.cpp: run_mathematical_direction_search, current-word GP-prime-sum totient branch",
+    "sha256": "ba41bd91810796fbb6c87ee238c17cf54bc2baaa67af358332e4358fcc5a19d"
+  },
+  "exact_source_rule": "The source sums GP prime values of each visible ciphertext word, takes phi(sum) mod 29, subtracts that shift from its rune indices, and scores the complete page once. It writes a hit if source unigram fitness exceeds 0.85. This is input dependent; applying an opposite shift computed from a proposed plaintext is not in general its inverse.",
+  "source_boundary_issue": "The source get_words() tokenizes all non-rune separators, but its transformation increments current_word_idx only on SPECIAL_HYPHEN_IDX or SPECIAL_SPACE_IDX. At a period, newline or slash, the word-sum list and clock can differ. Preserve this exact behavior in any future source replay; do not silently repair it.",
+  "pretarget_fixture_gate": "Under the idealized same-word mapping on the known warning passage, 18 of 50 plaintext words have no ciphertext preimage among the 29 possible uniform word shifts. The first one-rune word already has no preimage; this first-word obstruction does not depend on later delimiter clock behavior. This exploratory gate is not a full source-replay result.",
+  "pretarget_fixture_reproduction": "python research/source-intake/d4v1_option29_word_gate.py; hashes of the archived alphabet, warning rune page and warning reading are pinned in the script",
+  "source_fitness_diagnostic": "The original 0.85 rule scores a complete page, not an individual word. A saved 1,000-trial uniform 262-rune diagnostic in experiments/records/d4v1-positional-totient-streams/source-control.json passes 1,000/1,000 at this length. That does not calibrate all source page lengths or any joint positional z gate.",
+  "next_work": "A source-exact candidate generator must handle input-dependent preimage existence and the actual separator clock, then demonstrate recovery of a complete known-reading plant before treating target absence as a negative. No alternate word rule or output-based inverse has been supplied."
+}

@@ -168,7 +168,7 @@ async function researchIndexPage(version,params=new URLSearchParams()) {
   const fields={q:$('#research-query'),type:$('#research-type'),method:$('#research-method'),outcome:$('#research-outcome'),sort:$('#research-sort')};
   const sync=()=>{
     article.dataset.researchState=ResearchIndex.href(result.state);
-    history.replaceState(null,'',article.dataset.researchState);
+    history.replaceState(history.state,'',article.dataset.researchState);
     $('#research-count').textContent=ResearchIndex.summary(result);
     $('#research-family-context').innerHTML=ResearchIndex.familyContext(result);$('#research-family-context').hidden=!result.state.family;
     $('#research-reset').hidden=(!result.state.family&&!Object.entries(fields).some(([key,field])=>field.value&&(key!=='sort'||field.value!=='title')));

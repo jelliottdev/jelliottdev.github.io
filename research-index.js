@@ -4,7 +4,9 @@
   const labels={method:'Solving tests',replay:'Method replays',measurement:'Measurements',control:'Controls',
     alphabet:'Alphabet analyses',audit:'Source audits',historical:'Historical reproductions'};
   const outcomes={supported:'Supported within scope','not-supported':'Not supported within scope',inconclusive:'Inconclusive'};
-  const pageSize=20,positions=new Map();
+  const pageSize=20,positions=new Map(),historyEntries=new Set();
+  const historyKey='__liberpediaResearchEntry',historyPrefix=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+  let historySequence=0;
   const collator=new Intl.Collator('en',{numeric:true,sensitivity:'base'});
   const topicLabels={feedback:'Feedback and autokey',seeded:'Seeded keys',radix:'Number bases',sums:'Gematria and sums',
     provenance:'Sources and transcription',repetition:'Repeats and doublets',polyalphabetic:'Polyalphabetic ciphers',
@@ -127,10 +129,33 @@
     return value.family?`Related test group: <strong>${esc(result.families.get(value.family))}</strong> · <a href="${esc(href({...value,family:'',page:1}))}">Clear group</a>`:'';
   }
   function remember(container,top){
-    const key=container.querySelector('.research-index')?.dataset?.researchState;
-    if(key&&Number.isFinite(top)){if(positions.size>=50)positions.delete(positions.keys().next().value);positions.set(key,top);}
+    const index=container.querySelector('.research-index'),key=index?.dataset?.researchState;
+    if(!key||!Number.isFinite(top))return;
+    const active=container.ownerDocument?.activeElement,link=active?.closest?.('.research-record h2 a');
+    const href=link&&index.contains?.(link)?link.getAttribute('href'):null;
+    if(positions.size>=50&&!positions.has(key))positions.delete(positions.keys().next().value);
+    positions.set(key,{top,focusHref:href&&/^#\/experiments\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(href)?href:null});
   }
-  function position(container){return positions.get(container.querySelector('.research-index')?.dataset?.researchState)??null;}
-  const api={labels,outcomes,pageSize,state,href,legacyHref,pageQuery,select,results,filters,summary,familyContext,remember,position};
+  function position(container){return positions.get(container.querySelector('.research-index')?.dataset?.researchState)?.top??null;}
+  function restoreHistoryFocus(container,history){
+    const index=container.querySelector('.research-index'),key=index?.dataset?.researchState;
+    if(!key||typeof history?.replaceState!=='function')return false;
+    const state=history.state;
+    if(state!==null&&state!==undefined&&(typeof state!=='object'||Array.isArray(state)))return false;
+    const token=state?.[historyKey];
+    if(typeof token==='string'&&historyEntries.has(token)){
+      const href=positions.get(key)?.focusHref;
+      const target=href?[...index.querySelectorAll('.research-record h2 a')].find(link=>link.getAttribute('href')===href):null;
+      if(!target?.isConnected)return false;
+      target.focus({preventScroll:true});return true;
+    }
+    // New fragment entries have no classic History state; Back/Forward restores it.
+    const fresh=historyPrefix+'-'+(++historySequence);
+    try{history.replaceState({...state,[historyKey]:fresh},'');}
+    catch{return false;}
+    if(historyEntries.size>=100)historyEntries.delete(historyEntries.values().next().value);
+    historyEntries.add(fresh);return false;
+  }
+  const api={labels,outcomes,pageSize,state,href,legacyHref,pageQuery,select,results,filters,summary,familyContext,remember,position,restoreHistoryFocus};
   if(typeof module!=='undefined')module.exports=api;else root.ResearchIndex=api;
 })(globalThis);

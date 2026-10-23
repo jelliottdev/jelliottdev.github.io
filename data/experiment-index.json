@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 290,
+    "records": 292,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -1252,6 +1252,104 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/cypherpunk-manifesto-running-key.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/cypherpunk-manifesto-running-key/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/cypherpunk-manifesto-running-key.zip"
+    },
+    {
+      "id": "d4v1-positional-totient-streams",
+      "title": "Positional totient shifts on complete LP2 pages",
+      "question": "Do any of the source-defined 100 positional totient shifts yield English-like complete LP2 pages?",
+      "summary": "A pinned public C++ proposal subtracts φ(position+offset) modulo 29. We screened offsets 0–99 on all 55 rune-bearing unsolved pages with a controlled English whole-page scorer.",
+      "tags": [
+        "LP2",
+        "totient",
+        "position-dependent shift",
+        "whole-page scoring",
+        "source replay"
+      ],
+      "finding": "None of the 100 position-based totient shifts produced English-like text on any of the 55 tested pages. The strongest result was no better than many shuffled searches. All nine deliberately encrypted controls were decoded correctly.",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "number-streams",
+          "title": "Arithmetic keystreams",
+          "aliases": [
+            "prime shifts",
+            "Fibonacci",
+            "totient sequence",
+            "arithmetic keystream",
+            "numerical sequence"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38",
+        "lp2-39",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48",
+        "lp2-49",
+        "lp2-51",
+        "lp2-52",
+        "lp2-53",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/d4v1-positional-totient-streams",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/d4v1-positional-totient-streams.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/d4v1-positional-totient-streams/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/d4v1-positional-totient-streams.zip"
     },
     {
       "id": "dead-tree-alignment",
@@ -17199,6 +17297,98 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/rejection-channel-information.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/rejection-channel-information/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/rejection-channel-information.zip"
+    },
+    {
+      "id": "relikd-rotated-key-source-gate",
+      "title": "A rotating-key search stopped at its first screen",
+      "question": "Does the explicitly repaired LiberPrayground rotated-column search find source-defined candidate keys in its nine LP2 sections?",
+      "summary": "The original script errors before its first section. With one explicit generator-argument repair, none of its 17,424 declared LP2 settings reaches the source's first repeat-frequency gate; a clean known-text plant does.",
+      "tags": [
+        "LP2",
+        "rotating key",
+        "source method",
+        "Vigenère",
+        "repaired source",
+        "control gate"
+      ],
+      "finding": "This rotating-key search produced no candidate readings. Every LP2 setting stopped at its initial repeat-frequency screen, so no keys were fitted. A deliberately encrypted known text was recovered correctly.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "periodicity",
+          "title": "Period and key-length diagnostics",
+          "aliases": [
+            "periodic IoC",
+            "key length",
+            "periodicity",
+            "key length detection"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [
+        "experiments/records/relikd-rotated-key-source-gate/control-plan.json",
+        "experiments/records/relikd-rotated-key-source-gate/target-plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/relikd-rotated-key-source-gate",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/relikd-rotated-key-source-gate.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/relikd-rotated-key-source-gate/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/relikd-rotated-key-source-gate.zip"
     },
     {
       "id": "relikd-trigram-shift-control",

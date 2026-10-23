@@ -1,0 +1,391 @@
+{
+  "id": "relikd-rotated-key-source-gate",
+  "status": "published",
+  "title": "A rotating-key search stopped at its first screen",
+  "question": "Does the explicitly repaired LiberPrayground rotated-column search find source-defined candidate keys in its nine LP2 sections?",
+  "reader_question": "Did this rotating-key search produce any candidate readings?",
+  "summary": "The original script errors before its first section. With one explicit generator-argument repair, none of its 17,424 declared LP2 settings reaches the source's first repeat-frequency gate; a clean known-text plant does.",
+  "finding": "Source helper parity passed all 1,936 schedule settings. One 970-rune planted known reading was recovered exactly and was the sole source report in its 1,936-setting grid. The nine LP2 source sections yielded zero IoC-gated settings across 17,424 cases; their highest normalized 29×IoC was 1.30 versus the source's strict 1.6–2.1 band. All 49 shared whole-grid shuffles also yielded zero gated settings.",
+  "limitations": "The pinned original program raises TypeError, so this is a clearly labeled repaired-source variant rather than an original executed failure. The source IoC band may miss other plaintext distributions or ciphertext layers, and zero reports from both target and shuffles supplies no statistical exclusion. Source 970-symbol truncation precedes punctuation removal, leaving 22 verified nonempty pages outside the actual search. The 970-rune clean plant is longer than every 308–796-rune target prefix, so matched-length power is not established. No other key schedule or interruption model was tested.",
+  "next_steps": "A new rotating-key proposal should specify its generator, plaintext expectations and clock, then demonstrate complete known-reading recovery and compare its full selection with matched controls before interpreting LP2 output.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "rotating key",
+    "source method",
+    "Vigenère",
+    "repaired source",
+    "control gate"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/relikd-rotated-key-source-gate/control-plan.json",
+      "experiments/records/relikd-rotated-key-source-gate/target-plan.json"
+    ],
+    "representation": "Nine exact committed LiberPrayground section files for LP2-00–55; site rune streams match in full. Actual searched prefixes include 26 complete pages and seven partial pages. Source punctuation and line handling determine the first-970-symbol prefix before removing non-runes; 22 other nonempty pages were only verified against source bytes.",
+    "procedure": "Repair one integer-to-generator call using the source's shift_pattern helper; retain the nine sections, k3–18, step1..k−1, all phases, strict source IoC and similarity gates. Verify a 970-rune known reading and 49 shared whole-grid within-section shuffles.",
+    "parameters": "1,936 key schedule settings per section; nine sections and 17,424 target settings; source IoC in (1.6,2.1), similarity <0.1; one complete known-text planted control and 49 complete-search shuffles.",
+    "exclusions": "No result from unmodified probability.py, no source-unreachable interrupt/affine branch, alternate plaintext distribution, other rotating or mirrored generators, altered key range or source-model repair."
+  },
+  "review": {
+    "kind": "explicitly repaired source method and control-gate replay",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source exception and schedule parity, exact source/site rune crosswalk, independent coordinate enumeration of all target and null cells",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/relikd-rotated-key-source-gate/source_parity.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND && python experiments/records/relikd-rotated-key-source-gate/source_control.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check && python experiments/records/relikd-rotated-key-source-gate/run.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --workers 4 --check && python experiments/records/relikd-rotated-key-source-gate/check.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --workers 4 && python experiments/records/relikd-rotated-key-source-gate/coverage.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check && python experiments/records/relikd-rotated-key-source-gate/plot.py --check",
+    "environment": "Python 3 standard library plus a separate Git checkout pinned at 719380ebee0523ad7f2fbf389c6f960d51bea5a4; Python -X utf8 handles upstream text input on Windows. Original unlicensed source is fetched as hash-checked Git objects and not bundled.",
+    "script": "experiments/records/relikd-rotated-key-source-gate/check.py",
+    "script_sha256": "0548df4cbfe9f485ab2b33ef61a4ab5bad89491a932374368837769205425dfa",
+    "inputs": [
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/control-plan.json",
+        "sha256": "afed41812613da7d1fb8a1d6d073290a4d0ad4ba5c606b02bd2abcf9a77d6dfe"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/target-plan.json",
+        "sha256": "437e08003095b0b203e4afa7ec0f845a0b5df4889197e787ff6e610fb24249ab"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/source_control.py",
+        "sha256": "01dfd6252a5636a6215c90ebbb04e786376e930511a7a2595b2f057247d05557"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/source_parity.py",
+        "sha256": "0f58dfdfb0ea687517dd58b00339fbb972d93ec3935918a1a5a7b61af6c54737"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/run.py",
+        "sha256": "1b86d242f0513552004dee3d14e1130bea8139d4d17ccaad0576d2d175eb0aac"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/check.py",
+        "sha256": "0548df4cbfe9f485ab2b33ef61a4ab5bad89491a932374368837769205425dfa"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/coverage.py",
+        "sha256": "2c7337f61c207e21997624f91f376973b9f4ad44360c4a72bd03c0ea09500d54"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/plot.py",
+        "sha256": "ef26957c685816330a08b58a26b6cd5b7be40afdfda8897d6c89f4b55bbbd1ca"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/article.md",
+        "sha256": "cfdd81ee7ea71049778f79acd936ffcdc5f096831f6c9564391a1920c270c58c"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/control-results.json",
+        "sha256": "1d895dccec7ee2ab632c06ea31a0b18a44aa136faf4ccbedbc04a5bc33894d8d"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/results.json",
+        "sha256": "9bb6210f034f84779a8294ad0ce61326e6c1bd3d8324b0add0a9fbf8b5f683ea"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/null-results.json",
+        "sha256": "d8e88131e399b28a94ecba71533f10b9cb90279862abb6b8553aa8e86a81418d"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/ioc-diagnostic.json",
+        "sha256": "f343df60c27b786ed03b72d06fdac9bb39ff7f4f10139917db02f146790e4e9e"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/prefix-coverage.json",
+        "sha256": "c6900d387b816b3aa318c6482a799b0cbb3cfb4258a1e94bae38921937735953"
+      },
+      {
+        "path": "experiments/records/relikd-rotated-key-source-gate/gate.svg",
+        "sha256": "6788c466c32d419f641917b510ca2f709330239bc511519b433f954d090e98bd"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/relikd-rotated-key-source-gate/gate.svg",
+      "caption": "The repaired source's first gate accepts a planted known text but none of the LP2 settings or 49 shuffled full searches."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned original pattern search (raises TypeError)",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/probability.py"
+    },
+    {
+      "label": "Pinned source schedule helper",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/KeySearch.py"
+    }
+  ],
+  "related": [
+    "rotating-folded-key-openings",
+    "relikd-trigram-shift-control"
+  ],
+  "reader_finding": "This rotating-key search produced no candidate readings. Every LP2 setting stopped at its initial repeat-frequency screen, so no keys were fitted. A deliberately encrypted known text was recovered correctly.",
+  "reader_limit": "The search covered 26 complete pages and parts of seven more. Its successful control was longer than every searched section; shorter texts and other rotating-key rules remain open."
+}

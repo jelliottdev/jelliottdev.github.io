@@ -1,0 +1,71 @@
+{
+  "schema": "scratch-relikd-pattern-repair-plan-v1",
+  "timing": "Fixed before control and LP2 outcome scans; original source bug and current source file content were known",
+  "source_url": "https://github.com/relikd/LiberPrayground",
+  "source_revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_blobs": {
+    "probability.py": "97ab4e9410b9dd02a7699d6d8e1832e8a246bb5c152ca634c5d2adfd430bffd9",
+    "LP/KeySearch.py": "654d22ee300b7dd21493cc13d043d636ee501484d8c2df93f1d84b01fbfd8232",
+    "LP/Probability.py": "aab78f3cf6730a368a9ce5e9935df877ee5a0326c171dfb759f050ee7b9aa3d7",
+    "LP/RuneText.py": "eeb01b05b20bdf95b74eac0f03fe0f1b1a26f962058061e4ea2fad9cf4a090e4",
+    "LP/Rune.py": "f2f36e8de4bed660181554d27e57b748404d81ca9619aedf97141f89c0522d52",
+    "LP/Alphabet.py": "81049ea7a9d68798e90cf7f9df10805ff2ee9bafaa0e3c54d1b5d1ed0e12c465",
+    "data/p-1gram.txt": "b2dfd9628b9babcef2ab2970cf39422302b48cd4d456ff68d2722a355e74eadf",
+    "pages/p0-2.txt": "c54b019ed29305e29c3fdafa792106e3249d27998f94473a2652e7c7bb787521",
+    "pages/p3-7.txt": "dad38fdac7a46e15ca19f38762225755bf3ddd553c83141e3bdfd9354f243486",
+    "pages/p8-14.txt": "c010b87c379263fffc0e75eb6a170ac1dd090cf56a579db9f64c4b866f6eccc5",
+    "pages/p15-22.txt": "cbb16452f0c09ea894aaf14015dc980f6a6e17ac6a653cbda9ab1226f0b027cc",
+    "pages/p23-26.txt": "43bc3a968d536ddd9642947437d20ec9be716e77ea488c80ee56c9e048d2a094",
+    "pages/p27-32.txt": "a3b2365a8172455f004ff1352f40298af6944d47106e5cf1f9418436861907ff",
+    "pages/p33-39.txt": "00c7defc87a99774ada0c3ec9c1d4eeb656f1f2c2eac3c5bb4e6ea517f0bbb25",
+    "pages/p40-53.txt": "282ce106e92eb69a11fdf38382670ebd3b73acf777e88be9e7142768edd5a73b",
+    "pages/p54-55.txt": "f4a2f9dde276a0ffa6c4f6e6319f37066e55a6e170722cc9b4f4b37d5b36aeba"
+  },
+  "source_failure": "probability.py passes integer kl_shift to GuessPattern.groups, which calls next(generator)/zip(generator, nums); original program raises TypeError on first section. Minimal repair: pass GuessPattern.shift_pattern(kl,kl_shift) as generator. Preserve every other grid, gate and input operation.",
+  "source_sections": [
+    "p0-2",
+    "p3-7",
+    "p8-14",
+    "p15-22",
+    "p23-26",
+    "p27-32",
+    "p33-39",
+    "p40-53",
+    "p54-55"
+  ],
+  "source_extraction": "Source RuneTextFile.index_no_newline, take first 970 symbols including punctuation/whitespace, then remove index29. This is before key operations. Exact source files agree with site rune streams in full, but source spacing is used for the 970-symbol cutoff.",
+  "generator": "For key length k in 3..18, step s in 1..k-1, source shift_pattern emits rows (i*s mod k..k-1, then 0..i*s mod k-1), every i; offsets 0..k-1 advance that iterator first. This generator assigns every ciphertext rune to a key column.",
+  "source_gate": "For each (k,s,offset), mean normalized 29xIoC over k groups strictly between 1.6 and 2.1. For passing models, infer per-column subtraction shift 0..28 minimizing source baseline-frequency squared distance; mean best distance strictly <0.1 triggers printed output.",
+  "control": {
+    "input": "concatenate known-reading rune_indices in source file order and use first 970 runes, no punctuation; source reading SHA will be pinned",
+    "plant_key": [
+      0,
+      3,
+      8,
+      12,
+      16,
+      20,
+      25
+    ],
+    "plant_generator": {
+      "length": 7,
+      "step": 2,
+      "offset": 0
+    },
+    "rule": "cipher_i = (plain_i + planted_key[generator_i]) mod29",
+    "requirements": [
+      "original exception reproduced",
+      "repaired source generator grouping and zipper exact on small fixtures",
+      "known text true model passes both source gates",
+      "inferred key recovers complete970-rune message exactly",
+      "true model survives whole declared-grid source selection; otherwise no target negative"
+    ]
+  },
+  "target_rule": "Only if control gate passes, evaluate all nine original source sections with exact k3..18, s1..k-1, offset0..k-1 and source IoC/similarity gates. Report every source-triggered output and source/site input parity. No arbitrary recovered English threshold beyond source.",
+  "null_rule": "If source gate passes, freeze a shared whole-grid within-section shuffle control count before LP2 run; do not select number after outcomes.",
+  "limits": "This is an explicitly repaired variant, not an executed original failure; no license file, so source Git checkout external. Gate performance on one 970-rune plant does not establish power for all ciphertexts/shorter sections.",
+  "known_readings": {
+    "path": "data/evidence/known-readings.json",
+    "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+  }
+}

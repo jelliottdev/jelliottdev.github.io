@@ -19,11 +19,15 @@ function restoreReaderPosition(id){
 function refreshReaderSupplementary(){
  const id=location.hash.match(/^#\/reader\/([^?]+)/)?.[1],p=id&&currentPage?.id===id?currentPage:null;
  if(!p)return;
+ const updateLinks=(element,html)=>{
+  const preview=document.createElement('div');preview.innerHTML=html;
+  if(element.innerHTML!==preview.innerHTML)element.innerHTML=html;
+ };
  const guide=p.reading&&db.articles.find(a=>a.id==='reading-'+p.reading.section);
  const links=document.getElementById('reader-reading-links');
- if(links&&guide)links.innerHTML=`<a href="#/wiki/${esc(guide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(guide.id)}">Read the complete section</a><a href="#/wiki/${esc(guide.id)}?section=trace">Inspect the decoding trace</a>`;
+ if(links&&guide)updateLinks(links,`<a href="#/wiki/${esc(guide.id)}?section=method">How this was decoded</a><a href="#/wiki/${esc(guide.id)}">Read the complete section</a><a href="#/wiki/${esc(guide.id)}?section=trace">Inspect the decoding trace</a>`);
  const payload=document.getElementById('reader-payload-link');
- if(payload&&db.payloads.records.some(r=>r.page===id))payload.innerHTML=`<a href="${link(p)}?section=embedded">Signed OutGuess payload</a>`;
+ if(payload&&db.payloads.records.some(r=>r.page===id))updateLinks(payload,`<a href="${link(p)}?section=embedded">Signed OutGuess payload</a>`);
  const notice=partialDataNotice(['payloads']);
  if(notice&&!document.querySelector('.manuscript-reader .data-notice'))document.querySelector('.manuscript-reader')?.insertAdjacentHTML('afterbegin',notice);
 }
