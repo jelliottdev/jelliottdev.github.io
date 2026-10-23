@@ -1,0 +1,314 @@
+{
+  "id": "wulfic-session17-period-detectors",
+  "status": "published",
+  "title": "Two checks for a repeating key length",
+  "question": "Do source Test8 known-text key inference and Test9 split-column/Kasiski checks identify a repeat period across their named LP2 pages?",
+  "reader_question": "Do these pages show a repeating key length?",
+  "summary": "The source known-text check produced no report over its 25% line. The split-column check flagged 29 of 34 pages, the same as the middle complete shuffled search.",
+  "finding": "Test8 examined 4,239 distinct page/text/offset lag grids (8,478 sign-equivalent source settings) on LP2-04–17, with a best 10/76=13.2% key-lag match and no strict >25% reports. Twelve of 49 shuffled whole searches equaled or exceeded that best. Test9 flagged 29/34 LP2-04–37 pages; 26/49 whole shuffles flagged as many, and 5/49 matched its selected maximum ratio 2.28. Both source detectors registered the planted period13.",
+  "limitations": "The source candidate text set and sampled offsets do not cover unknown plaintext. Test9 has a permissive 1.3× column/page line: it flagged 27/34 uniform planted-control pages. Its Kasiski prime factors have no source acceptance threshold. Forty-nine within-page shuffles preserve frequency, not an encryption model, and do not support a universal no-period claim.",
+  "next_steps": "A period claim should state a page region, alphabet, clock and predicted held-out reading before inspecting a peak; compare the complete page/period search with controls matched to that model.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "period",
+    "Kasiski",
+    "index of coincidence",
+    "known plaintext"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-session17-period-detectors/plan.json"
+    ],
+    "representation": "Exact committed Wulfic page21–54 rune files aligned to current LP2-04–37; eight source-literal candidate passages digraph encoded by the pinned rule.",
+    "procedure": "Replay source Test8 full candidate/offset/prime-period lag scan on 14 pages, Test9 split-column IoC and repeated-trigram divisor summaries on 34 pages, one period13 plant and 49 shared full-search page shuffles.",
+    "parameters": "Test8: 4,239 distinct page/text/offset lag grids, two equivalent key signs, prime periods through113 and strict >0.25; Test9: source prime periods through131, p≤page length/3, split mean IoC >1.3×base; 49 shared shuffles.",
+    "exclusions": "Test8 source fallback weak-output display and downstream word/phrase score after a passed gate, alternate candidate passages, nonprime periods, interrupted/restarted keys, and a decryptor claim."
+  },
+  "review": {
+    "kind": "bounded source period-detector replay with planted source-text period and full-scan nulls",
+    "retested_on": "2026-10-23",
+    "reviewer": "Unchanged source Test8/9 output parity, exact source/page hashes, independent modular pair and split-column pair enumerations, planted period and 49 shared searches",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-session17-period-detectors/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check && python experiments/records/wulfic-session17-period-detectors/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT && python experiments/records/wulfic-session17-period-detectors/replay_source.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check && python experiments/records/wulfic-session17-period-detectors/plot.py --check",
+    "environment": "Python 3 standard library plus separate Git checkout containing pinned Wulfic revision bf89d3d13aad2b8f2c95ab195cf1b092f250775c; original unlicensed source is verified by hash, not copied.",
+    "script": "experiments/records/wulfic-session17-period-detectors/check.py",
+    "script_sha256": "5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/plan.json",
+        "sha256": "552bfb8e2e34ea7b1918ff1cf6c3114e04b3a5ffafb972aecaa47d94723bea9d"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/plan.py",
+        "sha256": "04801fcc77b9a5647a9f90913b2efd33cd1df4722d64b66a2fec45a1401bf204"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/run.py",
+        "sha256": "e20c0df9eb67e389435680dcd1cdba659ebcd511bb6cfc853bb686765ff046b1"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/check.py",
+        "sha256": "5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/replay_source.py",
+        "sha256": "c75e1dfb95a05765197f105e843e53c647a7e05e0e7f567d3b4440386d8d57cc"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/plot.py",
+        "sha256": "d2842092461841b095113327b1ed411787dc4ded98c831bd9342dcc84a9ad458"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/article.md",
+        "sha256": "571037b2772e478bb24a024a7f6a5f3a39dbb7559e9984a2f1c407e55e5212f7"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/control-results.json",
+        "sha256": "32ad594424bf5d027eecf01c747be8347b249417f486f943cef5e7d4a6192ea2"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/results.json",
+        "sha256": "db8a998cce146c4d2d3df133bb8cf9c61fa3b1cb692de9a7e0a667dd0a0758ee"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/source-replay.json",
+        "sha256": "8f97ed076f2fcc565fa1d129e318dae396a5791a9d7508073f1bfdeb30e876b3"
+      },
+      {
+        "path": "experiments/records/wulfic-session17-period-detectors/comparison.svg",
+        "sha256": "4d9996e0af564745c1b6e5176a925fccf5cb0ec24c182062dd4cbb00fb235244"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-session17-period-detectors/comparison.svg",
+      "caption": "Best Test8 key-lag fraction and Test9 flagged page count versus the middle complete shuffled search."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned session17 source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session17_clean_solve.py"
+    },
+    {
+      "label": "Pinned legacy-source caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "lp2-31-periodic-ioc",
+    "wulfic-periodic-word-crib-votes"
+  ],
+  "reader_finding": "The known-text lag screen found no source-defined hit. The split-column screen flagged many pages, but it flagged about as many after shuffling; both could detect a clean planted period.",
+  "reader_limit": "Only source passages, sampled offsets, named pages and prime periods were checked. A flagged period is not a decipherment.",
+  "article": "# Do these pages reveal a repeating key length?\n\nTwo checks in Wulfic's archived [session 17 program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session17_clean_solve.py) look for a repeating key period. They **both detected a planted period of 13**, but neither gives convincing evidence for a period in the tested LP2 pages.\n\n![The known-plaintext lag check found no LP2 result above its report line. The split-column check flagged about as many LP2 pages as a typical complete shuffled search.](experiments/records/wulfic-session17-period-detectors/comparison.svg)\n\n**Check 8** tries eight fixed passages as possible plaintext on **LP2-04–17**. At each sampled alignment, it asks: “If this were the plaintext, would the implied key repeat after a prime number of runes?” The strongest LP2 match repeated at **10 of 76 positions**—**13.2%**, below the source's **greater than 25%** report rule. None of the **4,239 distinct passage/alignment searches** crossed that rule. Twelve of 49 complete shuffled searches reached at least the observed best fraction. The source calculates both subtraction and addition implied keys, but one is the negative of the other, so their equality-at-a-lag evidence is identical; these are **8,478 source settings, not 8,478 independent ideas**.\n\n**Check 9** needs no guessed plaintext. On **LP2-04–37**, it splits each page into columns according to candidate prime periods, then compares the columns' rune repetition with the whole page. Its stated line flagged **29 of 34 pages**. That looks broad until the same complete scan is repeated after shuffling every page: the middle of 49 shuffled searches also flags **29 pages**, and **26 of 49** flag at least as many. The largest single LP2 column-to-page ratio was **2.28**; **5 of 49** shuffled whole scans reached it. The source also lists factors of distances between repeated trigrams, but sets no acceptance threshold for those factors, so they are preserved as descriptive data, not treated as separate hits.\n\nThe planted control used the source's own P03 candidate text and a fixed 13-value repeating key. Check 8 ranked that exact period and text alignment first, with **248 of 248** lag pairs equal. Check 9 flagged period 13 on the planted page. Yet Check 9 also flagged **27 of 34** seeded uniform control pages, showing that its 1.3× page-baseline line is permissive in this grid. The plant tests whether these detectors can register a clean periodic construction; it does not calibrate every language, page length or interrupted cipher.\n\nThe [plan](experiments/records/wulfic-session17-period-detectors/plan.json) pins the exact source passages, offsets, prime periods, page mapping, thresholds and 49 shared full-search shuffles. [Results](experiments/records/wulfic-session17-period-detectors/results.json) retain all page/period values, the complete known-plaintext reports, Kasiski summaries and each shuffled maximum. The [control result](experiments/records/wulfic-session17-period-detectors/control-results.json) was written before checking LP2. The old source page numbers **21–54** map to the site's **LP2-04–37**; all 34 pinned rune streams match the site rune for rune.\n\nWe also ran the unchanged pinned source script with its exact page files in a temporary directory. Its Test 8 printed **no strong periodicity**, and its Test 9 marked exactly the same **29 pages**. The [source execution receipt](experiments/records/wulfic-session17-period-detectors/source-replay.json) hashes the complete stdout after normalizing line endings to LF. This matches the source's printed verdicts; our saved tables make its underlying measurements and full-search controls inspectable.\n\nThese are period *screens*, not decryption tests. Check 8's authored passages could differ from any intended text, and its sampled alignments can miss an untried alignment. Check 9's highest ratios often occur at long periods with short residue columns. The 49 shuffles preserve each page's rune counts but do not model an encryption algorithm; the fractions above are descriptive full-selection comparisons, not universal probabilities. Other periods, boundaries, transcriptions, layers and changing key clocks remain outside scope. A separate [LP2-31 test](#/experiments/lp2-31-periodic-ioc) used one page, periods 2–20 and a different pooled coincidence statistic.\n\nTo reproduce, supply a separate Git checkout containing the pinned Wulfic revision; its unlicensed source is not copied into the experiment bundle:\n\n```text\npython experiments/records/wulfic-session17-period-detectors/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-session17-period-detectors/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT\npython experiments/records/wulfic-session17-period-detectors/replay_source.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-session17-period-detectors/plot.py --check\n```\n\nThe runner verifies exact source and page bytes. Its independent checker counts matching modular differences at each lag directly and enumerates equal rune pairs within split columns, then repeats the complete planted and shuffled searches without importing the runner.\n",
+  "article_path": "experiments/records/wulfic-session17-period-detectors/article.md",
+  "script_sha256": "5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "periodicity",
+      "title": "Period and key-length diagnostics",
+      "aliases": [
+        "periodic IoC",
+        "key length",
+        "periodicity",
+        "key length detection"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}

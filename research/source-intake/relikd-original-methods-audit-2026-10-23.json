@@ -1,0 +1,40 @@
+{
+  "schema": "liberpedia-source-intake-audit-v1",
+  "repository": "https://github.com/relikd/LiberPrayground",
+  "revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "license": "No LICENSE, COPYING, NOTICE or package license file in the pinned Git tree; do not vendor source code or presume a redistribution license.",
+  "deduplication": {
+    "prior_work_lookup": ["LiberPrayground", "fixed-width ngram shift", "interrupt search", "shift_pattern"],
+    "existing_usage": "Several published records use this pinned repository's transcription, dictionary, or solved-text corpus as data, but no exact replay of the original fixed-width NGramShifter or probability.py patterned-key program was found.",
+    "nearby_distinct_records": ["leo-word-pattern-dictionary", "lp2-trigram-repeats", "wulfic-p20-prime-position-routes"]
+  },
+  "source_methods": [
+    {
+      "cohort": "fixed-width trigram shift heatmap",
+      "source": "LP/FailedAttempts.py",
+      "source_sha256": "654a96ea2331658ba74640a695fc62c1c7255a864dee1eb96808b766ab422a25",
+      "exact_rule": "For each of three starting offsets, partition the rune stream into nonoverlapping three-rune blocks; for each block, test all 29 uniform GP-index shifts and rank by the committed p-3gram frequency. The source prints ranked fragments independently per block, not a single continuous decryption.",
+      "required_inputs": [
+        {"path": "data/p-3gram.txt", "size": 126730, "sha256": "edd7a1740592effdac05ae4d23e38c48e0778b577b715736cdf605c61c95c89d", "available_in_git": true},
+        {"path": "_solved.txt", "size": 17630, "sha256": "ad183dcffc77e0d6eaca41c16b2653e3cfbc52e106dde4e798abad1bdf51eea6", "available_in_git": true},
+        {"path": "pages/p0-2.txt", "size": 2695, "sha256": "c54b019ed29305e29c3fdafa792106e3249d27998f94473a2652e7c7bb787521", "available_in_git": true}
+      ],
+      "pre_target_control": "A constructed shift-7 of the table's top trigram ranks the correct shift first (27,101 versus the runner-up 2,401); this is a mechanics check, not independent power. On 2,979 GP runes in the separately committed solved-text corpus, the true unshifted triplet uniquely ranks first for 483/993, 501/992 and 510/992 blocks at phases 0, 1 and 2. Source frequency table is trained on baseline-rune-words, not _solved.txt. This detector's local power is only about half the blocks, and it has no source-defined aggregate success criterion.",
+      "status": "finite diagnostic available; hold target scoring until a fixed whole-heatmap selection criterion and controls are frozen",
+      "scope_caution": "The source __main__ uses two toy inputs. Applying this rule to LP2 is a new bounded test, not a replay of a published LP2 negative result."
+    },
+    {
+      "cohort": "patterned key groups and interrupt/key heuristic",
+      "sources": [
+        {"path": "probability.py", "sha256": "97ab4e9410b9dd02a7699d6d8e1832e8a246bb5c152ca634c5d2adfd430bffd9"},
+        {"path": "LP/KeySearch.py", "sha256": "654d22ee300b7dd21493cc13d043d636ee501484d8c2df93f1d84b01fbfd8232"}
+      ],
+      "source_call": "probability.py calls pattern_solver on nine unsolved sections. It scans key lengths 3–18, step 1..keylen-1 and all keylen offsets, screening mean normalized column IoC between 1.6 and 2.1 before per-column shift fitting.",
+      "blocking_error": "GuessPattern.groups(data, kl, kl_shift, offset) receives kl_shift as an integer, but groups treats its third argument as an iterator and uses zip(generator, nums) (or next(generator) at nonzero offsets). The first call therefore raises TypeError before LP2 candidate output. This is an original-code execution failure, not evidence against the key family.",
+      "other_unreached_branch": "A continue after pattern_solver makes the interrupt-database Vigenere/Affine branch unreachable even if the call mismatch is fixed. It must not be counted as an executed source attempt.",
+      "input_status": "The pinned Git tree contains its page text and frequency/interrupt database files; local sparse-checkout absence is not upstream absence.",
+      "status": "requires an explicitly versioned repair plus known-reading recovery and source-score calibration before any manuscript screen"
+    }
+  ],
+  "recommended_next_unit": "If prioritized, group only the fixed-width trigram heatmap as one diagnostic with three phases and all 29 local shifts, plus a whole-search null and held-out solved-text power. Keep the patterned-key repair separate until its iterator, offsets and success gate are specified. Neither is a completed historical negative."
+}

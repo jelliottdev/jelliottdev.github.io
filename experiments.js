@@ -4,6 +4,7 @@ let experimentSupportStarted=false;
 let ideaCoveragePending=true,methodFamilyPending=true,reportedAttemptsPending=true;
 let methodRecordKinds={}, methodRecordKindById={};
 let researchRecords,researchRecordsPromise,checkerRecords,checkerRecordsPromise;
+const experimentRecordCache=new Map(),experimentRecordLoads=new Map();
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 const assistantEndpoint=()=>typeof assistantConfig?.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
@@ -11,7 +12,7 @@ function refreshExperimentSupportUI(){
  const slot=document.getElementById('experiment-method-guides');
  const id=location.hash.match(/^#\/experiments\/([^?]+)/)?.[1];
  if(slot&&id){
-  const record=experimentRecords?.find(item=>item.id===id);
+  const record=experimentRecordCache.get(id)||experimentRecords?.find(item=>item.id===id);
   if(record){
    const html=experimentMethodGuidesContent(record),preview=document.createElement('div');
    preview.innerHTML=html;
@@ -80,15 +81,42 @@ async function ensureCheckerRecords(){
  checkerRecords=await checkerRecordsPromise;
  return checkerRecords;
 }
+function validExperimentRecord(record,id){
+ if(record?.id!==id||!validCheckerPayload({schema:'liberpedia-checker-records-v1',registry_sha256:'0'.repeat(64),records:[record]}))return false;
+ const text=value=>typeof value==='string'&&value.trim().length>0;
+ const files=values=>Array.isArray(values)&&values.every(file=>file&&text(file.path)&&/^[a-f0-9]{64}$/.test(file.sha256||''));
+ return text(record.article_path)&&text(record.next_steps)&&record.reproduction&&
+  ['script','command','environment'].every(key=>text(record.reproduction[key]))&&
+  files(record.reproduction.inputs)&&files(record.reproduction.outputs)&&
+  Array.isArray(record.sources)&&record.sources.every(source=>text(source.label)&&text(source.url))&&
+  Array.isArray(record.related)&&record.related.every(value=>typeof value==='string'&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value))&&
+  (!record.visuals||Array.isArray(record.visuals)&&record.visuals.every(visual=>text(visual.path)&&text(visual.caption)));
+}
+async function ensureExperimentRecord(id){
+ if(typeof id!=='string'||!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id))throw Error('That experiment has no published record.');
+ const warm=experimentRecords?.find(record=>record.id===id)||experimentRecordCache.get(id);
+ if(warm)return warm;
+ if(experimentRecords)throw Error('That experiment has no published record.');
+ if(!experimentRecordLoads.has(id)){
+  const loading=fetch(`reference/experiments/${id}.json`).then(async response=>{
+   if(!response.ok)throw Error('That experiment record could not be loaded. Please retry.');
+   const record=await response.json();
+   if(!validExperimentRecord(record,id))throw Error('That experiment record has an invalid format. Please retry.');
+   experimentRecordCache.set(id,record);return record;
+  }).finally(()=>experimentRecordLoads.delete(id));
+  experimentRecordLoads.set(id,loading);
+ }
+ return experimentRecordLoads.get(id);
+}
 async function experimentsPage(id, version, query='') {
   stopExperimentAI();
   if (version !== renderId) return;
   if (id) {
-    await ensureExperimentRecords();
+    const record=await ensureExperimentRecord(id);
     if (version !== renderId) return;
-    const record = experimentRecords.find(r => r.id === id);
-    if (!record) throw Error('That experiment has no published record.');
-    main.innerHTML = experimentArticle(record);
+    const catalog=experimentRecords||researchRecords||checkerRecords;
+    main.innerHTML = experimentArticle(record,catalog);
+    bindExperimentRelated(record,version,catalog);
     bindRouteIllustration();
     bindLanguageBlockFigure();
     bindAffineLagFigure();
@@ -162,12 +190,59 @@ async function researchIndexPage(version,params=new URLSearchParams()) {
   });
   sync();
 }
-function experimentFamily(r){
-  if(!r.family)return '';
-  const f=r.family,members=experimentRecords.filter(x=>x.family?.id===f.id);
-  members.sort((a,b)=>Number(b.id===f.baseline)-Number(a.id===f.baseline)||a.id.localeCompare(b.id));
-  if(members.length===1)return '<p>No other completed variant in this family yet.</p>';
-  return `<section aria-label="Experiment family comparison"><h2>${esc(f.title)}</h2><p>${esc(f.question)}</p><ul class="experiment-related-list">${members.map(x=>`<li><a href="#/experiments/${x.id}" ${x.id===r.id?'aria-current="page"':''}>${esc(x.variant.label)}</a><p>${esc(x.finding)}</p></li>`).join('')}</ul></section>`;
+function experimentFamilyMembers(r,catalog){
+ if(!catalog)return '';
+ const members=catalog.filter(record=>record.family?.id===r.family.id);
+ if(!members.some(record=>record.id===r.id))members.push(r);
+ if(members.length===1)return '<p>No other completed variant in this group yet.</p>';
+ members.sort((a,b)=>Number(b.id===r.family.baseline)-Number(a.id===r.family.baseline)||a.id.localeCompare(b.id));
+ return `<ul class="experiment-related-list">${members.map(record=>`<li><a href="#/experiments/${record.id}" ${record.id===r.id?'aria-current="page"':''}>${esc(record.variant?.label||record.variant_label||record.title)}</a><p>${esc(record.reader_finding||record.finding)}</p></li>`).join('')}</ul>`;
+}
+function experimentFamily(r,catalog=experimentRecords){
+ if(!r.family)return '';
+ return `<section aria-label="Experiment family comparison"><h2>${esc(r.family.title)}</h2><p>${esc(r.family.question)}</p><div data-family-members>${experimentFamilyMembers(r,catalog)}</div></section>`;
+}
+function experimentOtherRelated(r,catalog){
+ if(!catalog)return '';
+ const siblings=new Set(catalog.filter(record=>r.family&&record.family?.id===r.family.id).map(record=>record.id));
+ const ids=r.related.filter(id=>!siblings.has(id));
+ return ids.length?`<h3>Other related experiments</h3><ul>${ids.map(id=>`<li><a href="#/experiments/${id}">${esc(catalog.find(record=>record.id===id)?.title||id)}</a></li>`).join('')}</ul>`:'';
+}
+function bindExperimentRelated(r,version,catalog){
+ const slot=main.querySelector('.experiment-related');
+ if(!slot||(!r.family&&!r.related.length)||catalog)return;
+ const family=slot.querySelector('[data-family-members]'),other=slot.querySelector('[data-related-records]'),status=slot.querySelector('[data-related-status]'),retry=slot.querySelector('[data-related-retry]');
+ const current=()=>version===renderId&&slot.isConnected&&slot.dataset.record===r.id;
+ let loading=false;
+ const replace=(target,html)=>{
+  if(!target)return;
+  const preview=document.createElement('div');preview.innerHTML=html;
+  if(target.innerHTML===preview.innerHTML)return;
+  const active=document.activeElement,hadFocus=target.contains(active),href=hadFocus?active.getAttribute?.('href'):null;
+  target.innerHTML=html;
+  if(hadFocus){
+   const replacement=href?[...target.querySelectorAll('a')].find(link=>link.getAttribute('href')===href):null;
+   if(!replacement)target.setAttribute('tabindex','-1');
+   (replacement||target).focus({preventScroll:true});
+  }
+ };
+ const load=async()=>{
+  if(loading||!current())return;
+  loading=true;retry.disabled=true;status.hidden=false;status.textContent='Loading related research…';
+  try{
+   const records=await ensureResearchRecords();
+   if(!current())return;
+   const retryFocused=document.activeElement===retry;
+   replace(family,r.family?experimentFamilyMembers(r,records):'');replace(other,experimentOtherRelated(r,records));
+   status.hidden=true;retry.hidden=true;
+   if(retryFocused)(family?.querySelector('a')||other.querySelector('a')||slot.querySelector('[data-related-index]')).focus({preventScroll:true});
+  }catch{
+   if(!current())return;
+   status.textContent='Related research could not be loaded. The finding and files remain available.';retry.hidden=false;
+  }finally{if(current()){loading=false;retry.disabled=false;}}
+ };
+ retry.onclick=load;
+ return load();
 }
 
 function experimentScopeLinks(r){
@@ -415,10 +490,8 @@ async function bindBlockBoundaryFigure(){
   });
 }
 
-function experimentArticle(r){
+function experimentArticle(r,catalog=experimentRecords){
   const needsImages=r.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path));
-  const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
-  const related=r.related.filter(id=>!familyIds.has(id));
   const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
@@ -439,9 +512,10 @@ function experimentArticle(r){
         <div class="copyable-block experiment-command"><div class="experiment-command-heading"><p>Run from the extracted folder:</p><span role="status"></span><button type="button" data-copy-block>Copy command</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment command">${esc(r.reproduction.command)}</pre></div>
         ${experimentDownloads(r)}<p class="small">Verify downloaded files against the <a href="downloads/SHA256SUMS.txt">checksums</a>, or get the <a href="downloads/reference-data.zip" download>complete reference bundle</a>.</p></details>
     </section>
-    <details class="experiment-extra"><summary>Related tests</summary>
-      ${r.family?`<div id="experiment-family">${experimentFamily(r)}</div>`:''}
-      ${related.length?`<h3>Other related experiments</h3><ul>${related.map(id=>`<li><a href="#/experiments/${id}">${esc(experimentRecords.find(x=>x.id===id)?.title||id)}</a></li>`).join('')}</ul>`:''}
+    <details class="experiment-extra experiment-related" data-record="${esc(r.id)}"><summary>Related tests</summary>
+      ${r.family?`<div id="experiment-family">${experimentFamily(r,catalog)}</div>`:''}
+      <div data-related-records>${experimentOtherRelated(r,catalog)}</div>
+      ${r.family||r.related.length?`<p class="small muted" data-related-status role="status"${catalog?' hidden':''}>Loading related research…</p><button type="button" data-related-retry hidden>Retry related research</button><p class="small"><a data-related-index href="#/research${r.family?'?family='+encodeURIComponent(r.family.id):''}">Browse related research in the index</a></p>`:''}
       <h3 id="experiment-remaining">What remains open</h3><p>${esc(r.next_steps)}</p>
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>

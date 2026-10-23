@@ -5,6 +5,7 @@ without any network access or Git checkout.  `--replay` requires GnuPG on PATH.
 """
 
 import argparse
+import base64
 import collections
 import hashlib
 import json
@@ -18,6 +19,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 LANE = "liber-primus/analysis/round18/L8-provenance"
 KEY = "corpus/A-primary-artifacts/pgp/keys/cicada-3301-pubkey.keyserver.ubuntu.com.asc"
+OPENING_BAD = "corpus/A-primary-artifacts/pgp/messages/ky_2013-01-opening-book-code.asc"
+OPENING_REPAIRED = "corpus/A-primary-artifacts/pgp/repaired/ky_2013-01-opening-book-code.repaired.asc"
+OPENING_COPY = "corpus/A-primary-artifacts/pgp/messages/2013-01-opening-book-code.asc"
+OPENING_JPEG = "source-2013-jpeg-extraction.asc"
 
 
 def j(name):
@@ -105,6 +110,106 @@ def independent_verdicts(tree, raw_by_path):
     return verdicts
 
 
+def signature_packet(raw):
+    block = raw.split(b"-----BEGIN PGP SIGNATURE-----", 1)[1].split(
+        b"-----END PGP SIGNATURE-----", 1)[0]
+    payload = b"".join(line for line in block.splitlines()
+                       if line and not line.startswith((b"=", b"Version:", b"Comment:")))
+    return base64.b64decode(payload, validate=True)
+
+
+def canonical_lines(raw):
+    """Compare intended text lines, not the malformed armor's parser result.
+
+    Only the passing copies are used to establish a valid signed body.  The bad
+    copy is compared byte-for-byte to the repaired one elsewhere below.
+    """
+    assert raw.count(b"Welcome again.") == 1
+    body = b"Welcome again." + raw.split(b"Welcome again.", 1)[1].split(
+        b"-----BEGIN PGP SIGNATURE-----", 1)[0]
+    return b"\r\n".join(line.rstrip(b" \t\r") for line in body.splitlines())
+
+
+def opening_details(raw_by_path, fresh):
+    bad, repaired, copy = (raw_by_path[p] for p in
+                           (OPENING_BAD, OPENING_REPAIRED, OPENING_COPY))
+    jpeg = (HERE / OPENING_JPEG).read_bytes()
+    assert bad.replace(b"Hash: SHA1\n", b"Hash: SHA1\n\n", 1) == repaired
+    assert copy == repaired + b"\n"
+    assert jpeg == repaired.replace(b"Or you shall have no peace.\n",
+                                    b"Or you shall have no peace. \n", 1) + b"\n"
+    variants = {"malformed": bad, "repaired": repaired,
+                "corpus_copy": copy, "jpeg_extraction": jpeg}
+    packets = {name: signature_packet(raw) for name, raw in variants.items()}
+    assert len(set(packets.values())) == 1
+    bodies = {name: canonical_lines(raw) for name, raw in variants.items()
+              if name != "malformed"}
+    assert len(set(bodies.values())) == 1
+    rows = {row["path"]: row for row in fresh["rows"]}
+    assert [rows[p]["verdict"] for p in (OPENING_BAD, OPENING_REPAIRED, OPENING_COPY)] == [
+        "FAIL", "PASS", "PASS"]
+    assert rows[OPENING_BAD]["body_sha256"] != rows[OPENING_REPAIRED]["body_sha256"]
+    assert rows[OPENING_REPAIRED]["body_sha256"] == rows[OPENING_COPY]["body_sha256"]
+    source_fingerprints = {row["body_sha256"] for row in fresh["rows"] if row["body_sha256"]}
+    pass_fingerprints = {row["body_sha256"] for row in fresh["rows"]
+                         if row["verdict"] == "PASS" and row["body_sha256"]}
+    assert len(source_fingerprints) == 55 and len(pass_fingerprints) == 54
+    return {
+        "schema": "liberpedia-g02-opening-crosscheck-v1",
+        "variants": {name: {"path": path, "bytes": len(variants[name]),
+                            "sha256": sha(variants[name])}
+                     for name, path in (("malformed", OPENING_BAD),
+                                        ("repaired", OPENING_REPAIRED),
+                                        ("corpus_copy", OPENING_COPY),
+                                        ("jpeg_extraction", OPENING_JPEG))},
+        "byte_relations": {
+            "repair_is_one_blank_line_after_hash": True,
+            "corpus_copy_is_repaired_plus_final_lf": True,
+            "jpeg_is_repaired_plus_one_trailing_space_and_final_lf": True,
+        },
+        "identical_signature_packet_bytes": len(next(iter(packets.values()))),
+        "identical_signature_packet_sha256": sha(next(iter(packets.values()))),
+        "passing_canonical_lines_bytes": len(next(iter(bodies.values()))),
+        "passing_canonical_lines_sha256": sha(next(iter(bodies.values()))),
+        "source_extractor_fingerprints_all": len(source_fingerprints),
+        "source_extractor_fingerprints_passing": len(pass_fingerprints),
+        "source_verdicts": {name: rows[path]["verdict"]
+                            for name, path in (("malformed", OPENING_BAD),
+                                               ("repaired", OPENING_REPAIRED),
+                                               ("corpus_copy", OPENING_COPY))},
+        "isolated_gpg_verdicts": {"malformed": "BADSIG", "repaired": "VALIDSIG",
+                                  "corpus_copy": "VALIDSIG", "jpeg_extraction": "VALIDSIG"},
+        "valid_signature_fingerprint": j("plan-frozen.json")["canonical_fingerprint"],
+    }
+
+
+def verify_opening_gpg(raw_by_path, receipt):
+    variants = {"malformed": raw_by_path[OPENING_BAD],
+                "repaired": raw_by_path[OPENING_REPAIRED],
+                "corpus_copy": raw_by_path[OPENING_COPY],
+                "jpeg_extraction": (HERE / OPENING_JPEG).read_bytes()}
+    with tempfile.TemporaryDirectory(prefix="g02-opening-") as t:
+        root = Path(t)
+        home = root / "gpg-home"
+        home.mkdir()
+        key = root / "key.asc"
+        key.write_bytes(raw_by_path[KEY])
+        assert gpg(home, ["--import", str(key)]).returncode == 0
+        observed = {}
+        for name, raw in variants.items():
+            path = root / f"{name}.asc"
+            path.write_bytes(raw)
+            result = gpg(home, ["--status-fd", "1", "--verify", str(path)])
+            if "[GNUPG:] BADSIG " in result.stdout:
+                observed[name] = "BADSIG"
+            else:
+                valid = re.search(r"\[GNUPG:\] VALIDSIG ([0-9A-F]+)", result.stdout)
+                assert result.returncode == 0 and valid, (name, result.stdout, result.stderr)
+                assert valid.group(1) == receipt["valid_signature_fingerprint"]
+                observed[name] = "VALIDSIG"
+        assert observed == receipt["isolated_gpg_verdicts"], observed
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true", help="Check packaged bytes and saved results")
@@ -118,6 +223,8 @@ def main():
     assert sha((HERE / "source-archived-table.json").read_bytes()) == plan["source_table"]["sha256"]
     raw_by_path = read_blobs()
     fresh, archived, results = j("fresh-table.json"), j("source-archived-table.json"), j("results.json")
+    opening = j("opening-crosscheck.json")
+    assert opening_details(raw_by_path, fresh) == opening
     check = table_comparison(raw_by_path, fresh, archived)
     evidence = results["independent_check"]
     for k, v in check.items():
@@ -157,6 +264,7 @@ def main():
                     assert row[field] == replay_rows[path][field], (path, field)
             independent = independent_verdicts(tree, raw_by_path)
             assert all(independent[p] == row["verdict"] for p, row in saved_rows.items())
+            verify_opening_gpg(raw_by_path, opening)
         print("PASS: offline source rerun and separate GnuPG keyring verified all 133 paths")
     else:
         print("PASS: 133 archived inputs, 123 shared-path reconciliations and saved control evidence")

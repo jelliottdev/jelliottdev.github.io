@@ -15,7 +15,7 @@ function element(context,initial=''){
  }};
 }
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
-async function checkLoads(navigate=false){
+async function checkLoads(navigate=false,individual=false){
  const pending=new Map(),record={id:'test-record'},other={id:'other-record'};
  const context={esc,AbortController,setTimeout,clearTimeout,
   location:{hash:'#/experiments/test-record'},document:{activeElement:null},
@@ -24,7 +24,7 @@ async function checkLoads(navigate=false){
  context.document.getElementById=id=>id==='experiment-method-guides'?slot:null;
  context.document.createElement=()=>element(context);
  vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),context);
- context.records=[record,other];vm.runInContext('experimentRecords=records;startExperimentSupport()',context);
+ context.records=[record,other];vm.runInContext(individual?'experimentRecordCache.set(records[0].id,records[0]);startExperimentSupport()':'experimentRecords=records;startExperimentSupport()',context);
  const finish=async(name,data)=>{pending.get('data/'+name+'.json')({ok:true,json:async()=>data});await flush()};
  if(navigate){context.location.hash='#/research';slot=null;}
  await finish('method-families',{families:[{id:'test',related:['test-record'],guide:'test-guide',
@@ -47,4 +47,4 @@ async function checkLoads(navigate=false){
  if(navigate)assert.equal(slot.innerHTML,'','An old record response cannot insert its guides into the new record');
  else assert(slot.innerHTML.includes('Visible guide'));
 }
-(async()=>{await checkLoads();await checkLoads(true);console.log('Experiment support state tests passed');})().catch(error=>{console.error(error);process.exitCode=1});
+(async()=>{await checkLoads();await checkLoads(true);await checkLoads(false,true);console.log('Experiment support state tests passed');})().catch(error=>{console.error(error);process.exitCode=1});

@@ -13384,7 +13384,7 @@
     }
   ]
 }</pre></article><article id="dukotah-g02-signature-corpus"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
-  &quot;finding&quot;: &quot;A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings.&quot;,
+  &quot;finding&quot;: &quot;A fresh pinned-corpus scan finds 114 valid signatures, 11 key files, 7 unsigned files and 1 bad signature. A separate GnuPG keyring agrees on every verdict. All 123 paths shared with the older 228-file table have the same verdict and signature time; their raw SHA differences are entirely LF-versus-CRLF line endings. The sole bad file is missing the OpenPGP header/body blank line; an exact one-line repair and the preserved 2013 JPEG extraction both verify with the identical signature packet.&quot;,
   &quot;id&quot;: &quot;dukotah-g02-signature-corpus&quot;,
   &quot;limitations&quot;: &quot;The pinned Git corpus contains 133 source-visible .asc files; the older table used 228 working-tree files, including 105 paths missing from this commit. Signature validity is relative to the specified public key and does not itself prove historical authorship or cover all messages. This is not a Liber Primus decryption test.&quot;,
   &quot;next_steps&quot;: &quot;Preserve additional original signed files with their exact bytes and provenance, then rerun the same verification and compare normalized bodies and packet timestamps.&quot;,
@@ -13436,7 +13436,7 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/check.py&quot;,
-        &quot;sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;
+        &quot;sha256&quot;: &quot;2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/plot.py&quot;,
@@ -13448,7 +13448,11 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/article.md&quot;,
-        &quot;sha256&quot;: &quot;e50a5a7b3534aefb953b2b0407159181c6281c66fa4c6101743a3030afc3aecf&quot;
+        &quot;sha256&quot;: &quot;367d1d54ed49a14c36e22fcda4a01abf70a70e7d1a3a5070c7f209872c1b173b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc&quot;,
+        &quot;sha256&quot;: &quot;0dc4218d36e5bdfc453d7955b3297e4efdc518b2d15fa2df65fbb0476618659a&quot;
       }
     ],
     &quot;outputs&quot;: [
@@ -13467,10 +13471,14 @@
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg&quot;,
         &quot;sha256&quot;: &quot;a3f834dd5d9733c801e221df8efa019d1119823902b3016bb089bcbe25783e0f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/opening-crosscheck.json&quot;,
+        &quot;sha256&quot;: &quot;4d995519134d7087e17a2e325198e53fbc6521626a9fb50b4a8907355b6126ca&quot;
       }
     ],
     &quot;script&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/check.py&quot;,
-    &quot;script_sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;
+    &quot;script_sha256&quot;: &quot;2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb&quot;
   },
   &quot;review&quot;: {
     &quot;human_review&quot;: &quot;pending&quot;,
@@ -13481,13 +13489,14 @@
   &quot;scope&quot;: {
     &quot;artifacts&quot;: [
       &quot;experiments/records/dukotah-g02-signature-corpus/source-archived-table.json&quot;,
-      &quot;experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip&quot;
+      &quot;experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip&quot;,
+      &quot;experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc&quot;
     ],
     &quot;exclusions&quot;: &quot;Files outside this pinned revision, unarchived signed messages, authorship beyond the public key, and any LP2 decryption hypothesis.&quot;,
     &quot;pages&quot;: [],
-    &quot;parameters&quot;: &quot;135 committed .asc paths, 2 source-scratch exclusions, 133 cases; canonical key fingerprint 6D854CD7933322A601C3286D181F01E57A35090F; source controls C1-C4.&quot;,
-    &quot;procedure&quot;: &quot;Run the pinned source verifier in an isolated corpus and GnuPG home; independently verify every path with another isolated keyring; compare the saved table and source archive by path, raw SHA, signature verdict and packet time.&quot;,
-    &quot;representation&quot;: &quot;Every .asc Git blob at pinned revision f08b20b, excluding the source verifier&#x27;s own two work/ control files; exact raw bytes reconstructed from 89 content-addressed blobs at 133 paths.&quot;
+    &quot;parameters&quot;: &quot;135 committed .asc paths, 2 source-scratch exclusions, 133 cases; canonical key fingerprint 6D854CD7933322A601C3286D181F01E57A35090F; source controls C1-C4. Supplemental 2013 opening comparison: four files, one exact header-line repair, and identical signature packets.&quot;,
+    &quot;procedure&quot;: &quot;Run the pinned source verifier in an isolated corpus and GnuPG home; independently verify every path with another isolated keyring; compare the saved table and source archive by path, raw SHA, signature verdict and packet time. A supplemental byte-level comparison checks malformed, repaired, other corpus copy and preserved JPEG extraction; isolated GnuPG verifies the latter three and reports BADSIG for the malformed one.&quot;,
+    &quot;representation&quot;: &quot;Every .asc Git blob at pinned revision f08b20b, excluding the source verifier&#x27;s own two work/ control files; exact raw bytes reconstructed from 89 content-addressed blobs at 133 paths. A 1,459-byte extraction from the separately preserved 2013 JPEG is a supplemental comparator, not a 134th source-scan case.&quot;
   },
   &quot;sources&quot;: [
     {
@@ -13504,7 +13513,7 @@
     }
   ],
   &quot;status&quot;: &quot;published&quot;,
-  &quot;summary&quot;: &quot;All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.&quot;,
+  &quot;summary&quot;: &quot;Of 133 pinned files, 114 verify. The lone bad copy is a malformed version of the signed 2013 opening message; its repaired and JPEG-extracted copies verify. The older source table covers a different corpus snapshot.&quot;,
   &quot;tags&quot;: [
     &quot;Cicada 3301&quot;,
     &quot;PGP&quot;,
@@ -13519,11 +13528,11 @@
       &quot;path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg&quot;
     }
   ],
-  &quot;reader_finding&quot;: &quot;Of 133 archived files, 114 verify under the specified Cicada public key. One copy has a bad signature; the rest are key files or have no recognized signature block. A separate check agrees on every file. The older published table used a larger corpus, but its 123 shared files have matching verification results.&quot;,
-  &quot;reader_limit&quot;: &quot;This checks the preserved file copies and a particular public key. It does not prove who owned the key, recover missing historical files, or decrypt Liber Primus.&quot;,
-  &quot;article&quot;: &quot;## Finding\n\nIn the pinned public corpus, **114 of 133** source-visible `.asc` files verify against the isolated Cicada public key. Eleven are key files, seven have no recognized signature block, and one produces a bad signature. A second verifier, using its own isolated keyring, agrees on every file. The source program&#x27;s four checks also pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit.\n\nThe source&#x27;s older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same signature result and packet time; each difference in its raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source&#x27;s working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical verification outcomes and signature times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one failing pinned copy is `ky_2013-01-opening-book-code.asc`. GnuPG reports **BADSIG** for these bytes, and this corpus has no passing copy with the same normalized body. That describes this copy; it does not establish who authored the message or whether a different authentic copy exists elsewhere.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects, ran the pinned source script, then verified every file again through a separate GnuPG keyring. The key&#x27;s full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Pinned file result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 114 | GnuPG validates the signature under the specified key. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No recognized signature | 7 | No signature block recognized by this source scan. |\n| Bad signature | 1 | This exact file&#x27;s signed body does not verify. |\n\nThe archive reports 55 distinct normalized signed bodies and 54 verified packet timestamps in both snapshots. These are corpus properties, not extra solved manuscript pages. In particular, a valid signature authenticates a message relative to the key; proving the key&#x27;s real-world owner is a separate historical question.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file&#x27;s length and SHA-256 before GnuPG runs.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently checks all signatures in another temporary keyring. The quicker `--check` mode verifies the saved bytes, controls and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n&quot;,
+  &quot;reader_finding&quot;: &quot;Of 133 archived files, 114 verify under the specified Cicada public key. The one bad file is missing a blank line in its signed-message header. Its repaired copy and the original JPEG extraction verify; the source scan counts remain unchanged.&quot;,
+  &quot;reader_limit&quot;: &quot;This checks preserved bytes against a specified public key. The bad copy cannot be treated as a validly parsed signed message until its header is repaired. The check does not prove who owned the key or cover all historical files.&quot;,
+  &quot;article&quot;: &quot;## Finding\n\nIn the pinned public corpus, **114 of 133** source-visible `.asc` files verify against the isolated Cicada public key. Eleven are key files, seven have no recognized signature block, and one produces a bad signature. A second verifier, using its own isolated keyring, agrees on every file. The source program&#x27;s four checks also pass: a known signature verifies, editing its text breaks it, a foreign key does not impersonate the Cicada key, and the packet timestamp survives the edit.\n\nThe source&#x27;s older table lists **228 files** because it was made from a different working-tree snapshot. The two snapshots share **123 paths**. Every shared path has the same signature result and packet time; each difference in its raw-file hash is explained exactly by LF line endings in the pinned Git blob versus CRLF in the source&#x27;s working copy. The pinned snapshot has 10 paths absent from that table, and the table has 105 paths absent from pinned Git.\n\n![Archived-only 105 paths, shared 123, pinned-only 10. The shared paths have identical verification outcomes and signature times.](experiments/records/dukotah-g02-signature-corpus/corpus-overlap.svg)\n\nThe one **BADSIG** is a malformed copy of the [2013 opening message](#/wiki/2013-opening): `ky_2013-01-opening-book-code.asc` is missing the blank line after `Hash: SHA1`. Inserting that one line produces the corpus&#x27;s repaired copy, which **verifies**. Another corpus copy and the [payload freshly extracted from the preserved 2013 JPEG](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) also verify under the same key. All four contain identical signature-packet bytes. The JPEG payload differs from the repaired copy only by one trailing space in the riddle and a final newline; the three passing copies have the same signed text after OpenPGP&#x27;s trailing-whitespace handling. The bad armor has no validly parsed signed body until its header separator is restored.\n\nThe source&#x27;s “no passing twin” label came from its body extractor: it split the malformed file at the first blank line, thereby dropping “Welcome again.” and assigning it a different fingerprint. The source&#x27;s **55 body fingerprints** include that artifact; **54** occur among verified files. We preserve the original bad bytes and source verdict rather than replacing them with the repaired version. A valid signature confirms the message relative to this public key, not the key holder&#x27;s real-world identity.\n\n## What the check covers\n\nThe source script scans all `.asc` files it finds in its repository, except its own `work/` control files. The pinned revision contains 135 `.asc` Git blobs; two are those excluded control files, leaving 133. We rebuilt those 133 exact path/byte pairs from Git objects, ran the pinned source script, then verified every file again through a separate GnuPG keyring. The key&#x27;s full fingerprint is `6D854CD7933322A601C3286D181F01E57A35090F`; the result is about signatures under that key, not a claim that every historical Cicada message has been collected.\n\n| Pinned file result | Files | Meaning |\n|---|---:|---|\n| Verified signature | 114 | GnuPG validates the signature under the specified key. |\n| Public-key file | 11 | Key material, not a signed message. |\n| No recognized signature | 7 | No signature block recognized by this source scan. |\n| Bad signature | 1 | This exact file&#x27;s signed body does not verify. |\n\nThe source extractor reports 55 body fingerprints and 54 verified packet timestamps in both snapshots. The malformed opening copy accounts for one fingerprint that is absent from all verified files. These are corpus properties, not extra solved manuscript pages.\n\n## Reproduce\n\nThe [source program](experiments/records/dukotah-g02-signature-corpus/source-verify_all_signatures.py), [frozen source table](experiments/records/dukotah-g02-signature-corpus/source-archived-table.json), [pinned case manifest](experiments/records/dukotah-g02-signature-corpus/plan-frozen.json), and [new result](experiments/records/dukotah-g02-signature-corpus/fresh-table.json) are included. The 133 original file paths are preserved offline in one [content-addressed archive](experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip) and [path map](experiments/records/dukotah-g02-signature-corpus/sources/path-aliases.json). Duplicate files, including the two 13.5 MB interconnectedness hex copies, occupy one blob each. Rebuilding checks each file&#x27;s length and SHA-256 before GnuPG runs. The separately preserved [JPEG extraction](experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc) and [opening-copy receipt](experiments/records/dukotah-g02-signature-corpus/opening-crosscheck.json) document the one-line repair, canonical text and isolated GPG verdicts without changing the 133-case source scan.\n\nFrom the extracted experiment bundle, run `python experiments/records/dukotah-g02-signature-corpus/check.py --replay` with GnuPG installed. It rebuilds the corpus in a temporary directory, reruns the unchanged source verifier, and independently checks all signatures and the four opening variants in isolated keyrings. The quicker `--check` mode verifies the saved bytes, controls, opening-copy relationships and snapshot comparison without invoking GnuPG. Neither mode needs the upstream repository or network.\n\nThe source code and archived table are pinned to [Dukotah/cicada3301 at `f08b20b`](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L8-provenance). This is a provenance check, not a Liber Primus decryption test.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/dukotah-g02-signature-corpus/article.md&quot;,
-  &quot;script_sha256&quot;: &quot;72a6b80581e66126a5bc3cb83304498b1ab5fdb0312024495958690acf5a83fe&quot;,
+  &quot;script_sha256&quot;: &quot;2f7b33d6f3c99a13f152404aada95db96b371f735e6e0dc2b836076203e7d0fb&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;audit&quot;,
     &quot;label&quot;: &quot;Source or input audit&quot;,
@@ -84124,6 +84133,319 @@
         &quot;evolving alphabet&quot;,
         &quot;rotating alphabet&quot;,
         &quot;changing alphabet&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="wulfic-session17-period-detectors"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-session17-period-detectors&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Two checks for a repeating key length&quot;,
+  &quot;question&quot;: &quot;Do source Test8 known-text key inference and Test9 split-column/Kasiski checks identify a repeat period across their named LP2 pages?&quot;,
+  &quot;reader_question&quot;: &quot;Do these pages show a repeating key length?&quot;,
+  &quot;summary&quot;: &quot;The source known-text check produced no report over its 25% line. The split-column check flagged 29 of 34 pages, the same as the middle complete shuffled search.&quot;,
+  &quot;finding&quot;: &quot;Test8 examined 4,239 distinct page/text/offset lag grids (8,478 sign-equivalent source settings) on LP2-04–17, with a best 10/76=13.2% key-lag match and no strict &gt;25% reports. Twelve of 49 shuffled whole searches equaled or exceeded that best. Test9 flagged 29/34 LP2-04–37 pages; 26/49 whole shuffles flagged as many, and 5/49 matched its selected maximum ratio 2.28. Both source detectors registered the planted period13.&quot;,
+  &quot;limitations&quot;: &quot;The source candidate text set and sampled offsets do not cover unknown plaintext. Test9 has a permissive 1.3× column/page line: it flagged 27/34 uniform planted-control pages. Its Kasiski prime factors have no source acceptance threshold. Forty-nine within-page shuffles preserve frequency, not an encryption model, and do not support a universal no-period claim.&quot;,
+  &quot;next_steps&quot;: &quot;A period claim should state a page region, alphabet, clock and predicted held-out reading before inspecting a peak; compare the complete page/period search with controls matched to that model.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;period&quot;,
+    &quot;Kasiski&quot;,
+    &quot;index of coincidence&quot;,
+    &quot;known plaintext&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-session17-period-detectors/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Exact committed Wulfic page21–54 rune files aligned to current LP2-04–37; eight source-literal candidate passages digraph encoded by the pinned rule.&quot;,
+    &quot;procedure&quot;: &quot;Replay source Test8 full candidate/offset/prime-period lag scan on 14 pages, Test9 split-column IoC and repeated-trigram divisor summaries on 34 pages, one period13 plant and 49 shared full-search page shuffles.&quot;,
+    &quot;parameters&quot;: &quot;Test8: 4,239 distinct page/text/offset lag grids, two equivalent key signs, prime periods through113 and strict &gt;0.25; Test9: source prime periods through131, p≤page length/3, split mean IoC &gt;1.3×base; 49 shared shuffles.&quot;,
+    &quot;exclusions&quot;: &quot;Test8 source fallback weak-output display and downstream word/phrase score after a passed gate, alternate candidate passages, nonprime periods, interrupted/restarted keys, and a decryptor claim.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;bounded source period-detector replay with planted source-text period and full-scan nulls&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Unchanged source Test8/9 output parity, exact source/page hashes, independent modular pair and split-column pair enumerations, planted period and 49 shared searches&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-session17-period-detectors/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check &amp;&amp; python experiments/records/wulfic-session17-period-detectors/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT &amp;&amp; python experiments/records/wulfic-session17-period-detectors/replay_source.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check &amp;&amp; python experiments/records/wulfic-session17-period-detectors/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library plus separate Git checkout containing pinned Wulfic revision bf89d3d13aad2b8f2c95ab195cf1b092f250775c; original unlicensed source is verified by hash, not copied.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-session17-period-detectors/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/plan.json&quot;,
+        &quot;sha256&quot;: &quot;552bfb8e2e34ea7b1918ff1cf6c3114e04b3a5ffafb972aecaa47d94723bea9d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/plan.py&quot;,
+        &quot;sha256&quot;: &quot;04801fcc77b9a5647a9f90913b2efd33cd1df4722d64b66a2fec45a1401bf204&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/run.py&quot;,
+        &quot;sha256&quot;: &quot;e20c0df9eb67e389435680dcd1cdba659ebcd511bb6cfc853bb686765ff046b1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/check.py&quot;,
+        &quot;sha256&quot;: &quot;5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;c75e1dfb95a05765197f105e843e53c647a7e05e0e7f567d3b4440386d8d57cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/plot.py&quot;,
+        &quot;sha256&quot;: &quot;d2842092461841b095113327b1ed411787dc4ded98c831bd9342dcc84a9ad458&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/article.md&quot;,
+        &quot;sha256&quot;: &quot;571037b2772e478bb24a024a7f6a5f3a39dbb7559e9984a2f1c407e55e5212f7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/control-results.json&quot;,
+        &quot;sha256&quot;: &quot;32ad594424bf5d027eecf01c747be8347b249417f486f943cef5e7d4a6192ea2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/results.json&quot;,
+        &quot;sha256&quot;: &quot;db8a998cce146c4d2d3df133bb8cf9c61fa3b1cb692de9a7e0a667dd0a0758ee&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/source-replay.json&quot;,
+        &quot;sha256&quot;: &quot;8f97ed076f2fcc565fa1d129e318dae396a5791a9d7508073f1bfdeb30e876b3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;4d9996e0af564745c1b6e5176a925fccf5cb0ec24c182062dd4cbb00fb235244&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Best Test8 key-lag fraction and Test9 flagged page count versus the middle complete shuffled search.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned session17 source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session17_clean_solve.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned legacy-source caveat&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-31-periodic-ioc&quot;,
+    &quot;wulfic-periodic-word-crib-votes&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;The known-text lag screen found no source-defined hit. The split-column screen flagged many pages, but it flagged about as many after shuffling; both could detect a clean planted period.&quot;,
+  &quot;reader_limit&quot;: &quot;Only source passages, sampled offsets, named pages and prime periods were checked. A flagged period is not a decipherment.&quot;,
+  &quot;article&quot;: &quot;# Do these pages reveal a repeating key length?\n\nTwo checks in Wulfic&#x27;s archived [session 17 program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session17_clean_solve.py) look for a repeating key period. They **both detected a planted period of 13**, but neither gives convincing evidence for a period in the tested LP2 pages.\n\n![The known-plaintext lag check found no LP2 result above its report line. The split-column check flagged about as many LP2 pages as a typical complete shuffled search.](experiments/records/wulfic-session17-period-detectors/comparison.svg)\n\n**Check 8** tries eight fixed passages as possible plaintext on **LP2-04–17**. At each sampled alignment, it asks: “If this were the plaintext, would the implied key repeat after a prime number of runes?” The strongest LP2 match repeated at **10 of 76 positions**—**13.2%**, below the source&#x27;s **greater than 25%** report rule. None of the **4,239 distinct passage/alignment searches** crossed that rule. Twelve of 49 complete shuffled searches reached at least the observed best fraction. The source calculates both subtraction and addition implied keys, but one is the negative of the other, so their equality-at-a-lag evidence is identical; these are **8,478 source settings, not 8,478 independent ideas**.\n\n**Check 9** needs no guessed plaintext. On **LP2-04–37**, it splits each page into columns according to candidate prime periods, then compares the columns&#x27; rune repetition with the whole page. Its stated line flagged **29 of 34 pages**. That looks broad until the same complete scan is repeated after shuffling every page: the middle of 49 shuffled searches also flags **29 pages**, and **26 of 49** flag at least as many. The largest single LP2 column-to-page ratio was **2.28**; **5 of 49** shuffled whole scans reached it. The source also lists factors of distances between repeated trigrams, but sets no acceptance threshold for those factors, so they are preserved as descriptive data, not treated as separate hits.\n\nThe planted control used the source&#x27;s own P03 candidate text and a fixed 13-value repeating key. Check 8 ranked that exact period and text alignment first, with **248 of 248** lag pairs equal. Check 9 flagged period 13 on the planted page. Yet Check 9 also flagged **27 of 34** seeded uniform control pages, showing that its 1.3× page-baseline line is permissive in this grid. The plant tests whether these detectors can register a clean periodic construction; it does not calibrate every language, page length or interrupted cipher.\n\nThe [plan](experiments/records/wulfic-session17-period-detectors/plan.json) pins the exact source passages, offsets, prime periods, page mapping, thresholds and 49 shared full-search shuffles. [Results](experiments/records/wulfic-session17-period-detectors/results.json) retain all page/period values, the complete known-plaintext reports, Kasiski summaries and each shuffled maximum. The [control result](experiments/records/wulfic-session17-period-detectors/control-results.json) was written before checking LP2. The old source page numbers **21–54** map to the site&#x27;s **LP2-04–37**; all 34 pinned rune streams match the site rune for rune.\n\nWe also ran the unchanged pinned source script with its exact page files in a temporary directory. Its Test 8 printed **no strong periodicity**, and its Test 9 marked exactly the same **29 pages**. The [source execution receipt](experiments/records/wulfic-session17-period-detectors/source-replay.json) hashes the complete stdout after normalizing line endings to LF. This matches the source&#x27;s printed verdicts; our saved tables make its underlying measurements and full-search controls inspectable.\n\nThese are period *screens*, not decryption tests. Check 8&#x27;s authored passages could differ from any intended text, and its sampled alignments can miss an untried alignment. Check 9&#x27;s highest ratios often occur at long periods with short residue columns. The 49 shuffles preserve each page&#x27;s rune counts but do not model an encryption algorithm; the fractions above are descriptive full-selection comparisons, not universal probabilities. Other periods, boundaries, transcriptions, layers and changing key clocks remain outside scope. A separate [LP2-31 test](#/experiments/lp2-31-periodic-ioc) used one page, periods 2–20 and a different pooled coincidence statistic.\n\nTo reproduce, supply a separate Git checkout containing the pinned Wulfic revision; its unlicensed source is not copied into the experiment bundle:\n\n```text\npython experiments/records/wulfic-session17-period-detectors/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-session17-period-detectors/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT\npython experiments/records/wulfic-session17-period-detectors/replay_source.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-session17-period-detectors/plot.py --check\n```\n\nThe runner verifies exact source and page bytes. Its independent checker counts matching modular differences at each lag directly and enumerates equal rune pairs within split columns, then repeats the complete planted and shuffled searches without importing the runner.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-session17-period-detectors/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;5f9465dfb2d2d6290d4e684725aa83f52278ba9afbcb61f067dd0db3f3c44194&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;periodicity&quot;,
+      &quot;title&quot;: &quot;Period and key-length diagnostics&quot;,
+      &quot;aliases&quot;: [
+        &quot;periodic IoC&quot;,
+        &quot;key length&quot;,
+        &quot;periodicity&quot;,
+        &quot;key length detection&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
       ]
     }
   ]

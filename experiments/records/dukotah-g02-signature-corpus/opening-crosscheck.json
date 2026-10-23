@@ -1,0 +1,48 @@
+{
+  "schema": "liberpedia-g02-opening-crosscheck-v1",
+  "variants": {
+    "malformed": {
+      "path": "corpus/A-primary-artifacts/pgp/messages/ky_2013-01-opening-book-code.asc",
+      "bytes": 1456,
+      "sha256": "bd49e587e1f7252a67a966cd71681db291a37e90fb3944fed8b1032c3fec19a9"
+    },
+    "repaired": {
+      "path": "corpus/A-primary-artifacts/pgp/repaired/ky_2013-01-opening-book-code.repaired.asc",
+      "bytes": 1457,
+      "sha256": "bd6be7123f455d950177d465d5d6fdf02fcc46ae920971fe55daa4ba6adf5f5d"
+    },
+    "corpus_copy": {
+      "path": "corpus/A-primary-artifacts/pgp/messages/2013-01-opening-book-code.asc",
+      "bytes": 1458,
+      "sha256": "4c6ecff3eeabc05adb4eabe0a79596bedf74f831b062c587341b9f6052715c7c"
+    },
+    "jpeg_extraction": {
+      "path": "source-2013-jpeg-extraction.asc",
+      "bytes": 1459,
+      "sha256": "0dc4218d36e5bdfc453d7955b3297e4efdc518b2d15fa2df65fbb0476618659a"
+    }
+  },
+  "byte_relations": {
+    "repair_is_one_blank_line_after_hash": true,
+    "corpus_copy_is_repaired_plus_final_lf": true,
+    "jpeg_is_repaired_plus_one_trailing_space_and_final_lf": true
+  },
+  "identical_signature_packet_bytes": 543,
+  "identical_signature_packet_sha256": "efe29cd01d935d60bafb582f9c5a5b218a4a04f020da8c75d7eb315bbf803c2a",
+  "passing_canonical_lines_bytes": 635,
+  "passing_canonical_lines_sha256": "f40ba2f0dc1b55c8db0c59c03c4fdd12123ea4204c4ade4315867a3444821be8",
+  "source_extractor_fingerprints_all": 55,
+  "source_extractor_fingerprints_passing": 54,
+  "source_verdicts": {
+    "malformed": "FAIL",
+    "repaired": "PASS",
+    "corpus_copy": "PASS"
+  },
+  "isolated_gpg_verdicts": {
+    "malformed": "BADSIG",
+    "repaired": "VALIDSIG",
+    "corpus_copy": "VALIDSIG",
+    "jpeg_extraction": "VALIDSIG"
+  },
+  "valid_signature_fingerprint": "6D854CD7933322A601C3286D181F01E57A35090F"
+}

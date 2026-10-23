@@ -1,0 +1,103 @@
+{
+  "schema": "liberpedia-internal-source-claim-audit-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "VERDICT-OTP-CLASS",
+    "VERDICT-UNSOLVABLE-BY-DESIGN"
+  ],
+  "shared_source_command": "python liber-primus/analysis/round12/D3/pc_derivedkey.py",
+  "source_files": [
+    {
+      "path": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+      "sha256": "a3107806e86e9eb28671360175c27e6aa14b28c453a04c9916bea9c8e288e8fd"
+    },
+    {
+      "path": "liber-primus/analysis/round12/D3/results.json",
+      "sha256": "f4a1bf403b525eca4e1b5bd059b9f1c25b2c834a6368040df0bc93a1e22d443e"
+    },
+    {
+      "path": "liber-primus/analysis/round12/D3/RESULTS.md",
+      "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370"
+    },
+    {
+      "path": "liber-primus/analysis/round10b/B4-otp-steelman/b4_identifiability.py",
+      "sha256": "16047440109a8da4a6aed80e56b4d42c2cc76295889686471ff7dd8e2d53707e"
+    },
+    {
+      "path": "liber-primus/analysis/round10b/B4-otp-steelman/b4_results.json",
+      "sha256": "622c5d563c97feec721400a003510a224e01e182b111f1936ec6903734cfabb6"
+    }
+  ],
+  "fresh_d3_control": {
+    "execution": "Exact pinned source command from the source checkout, exit 0",
+    "scope": "Synthetic 174-rune English message, known short SHA-256-counter seed CICADA3301, five key-position skips, one wrong seed WELCOME, 200 shuffled-plaintext controls",
+    "ciphertext_adjacent_repeat_rate": 0.0,
+    "plain_english_score": -4.17,
+    "rigid_correct_seed_score": -6.835,
+    "skip_aware_correct_seed_score": -4.17,
+    "skip_aware_wrong_seed_score": -7.349,
+    "shuffled_plaintext_max_score": -6.044,
+    "character_recovery_fraction": 0.989,
+    "source_gate": "PASS",
+    "interpretation": "One source-constructed short-seed message is recoverable with the known seed and this decoder. This does not show that LP2 uses the construction, that an arbitrary unknown seed can be found, or that the actual LP2 text is solvable.",
+    "replay_dependencies": [
+      {
+        "path": "liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      }
+    ],
+    "replay_dependency_note": "Pinned Git-object bytes for directly and transitively imported source modules plus the English quadgram model. No external English corpus is needed for this synthetic control."
+  },
+  "saved_b4_g5": {
+    "availability": "Source-reported output; the KJV text used by the simulations is absent from the pinned Git tree, so this audit does not claim a fresh G5 rerun.",
+    "simulation_count_per_model": 40,
+    "statistics_tested": 6,
+    "source_separation_rule_absolute_z_greater_than": 2.93,
+    "maximum_observed_absolute_z": 1.6026511740312008,
+    "source_flag_separated": false,
+    "interpretation": "These six statistics did not separate these finite simulated A/B samples under the source rule. The source's A pad simulation itself uses Python random.Random(1000+s) for each of 40 seeds, so it is not a sampled physical secret pad or a proof of one-time-pad conditions. Non-separation is not proof that all ciphertext tests fail, that SHA-256 is information-theoretically equivalent to a random pad, or that LP2 uses either model."
+  },
+  "filter_distinction": "B4/G5 soft_filter_encipher resamples a key value after an output repeat; D3 encipher_keyskip advances key position. They are different algorithms, even though the D3 prose treats them as one filter family.",
+  "saved_b4_g4_context": "Measured LP2 is outside the source A external-pad simulation's 1.96-SD band on diag_cv_nz, while B derived-SHA and E ciphertext-autokey simulations are inside their respective six-stat bands. This is not a model-selection proof because source models, statistics and cutoffs were selected for the study.",
+  "existing_public_records": [
+    "source-independent-key-floor-audit",
+    "public-kdf-seed-stretch",
+    "dukotah-b04-full-source-replay"
+  ],
+  "recommended_reconciliation": "Link both source IDs to the exact synthetic D3 control and now-executed finite B04/KDF grids. Mark source claims of actual OTP identity and information-theoretic LP2 impossibility unresolved, with wider_method_excluded=false. Do not create a separate public experiment page for this shared source command.",
+  "source_repository_url": "https://github.com/Dukotah/cicada3301",
+  "source_revision_url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1"
+}

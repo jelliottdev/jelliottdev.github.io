@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 287,
+    "records": 288,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -3227,7 +3227,7 @@
       "id": "dukotah-g02-signature-corpus",
       "title": "Which archived Cicada signatures verify?",
       "question": "Do the signed files in the pinned public Cicada corpus verify against the canonical key, and does the older source table describe the same file snapshot?",
-      "summary": "All 133 pinned files were checked offline. Their 123 shared paths agree with the older source table; the difference in total file count comes from different corpus snapshots.",
+      "summary": "Of 133 pinned files, 114 verify. The lone bad copy is a malformed version of the signed 2013 opening message; its repaired and JPEG-extracted copies verify. The older source table covers a different corpus snapshot.",
       "tags": [
         "Cicada 3301",
         "PGP",
@@ -3235,7 +3235,7 @@
         "provenance",
         "source replay"
       ],
-      "finding": "Of 133 archived files, 114 verify under the specified Cicada public key. One copy has a bad signature; the rest are key files or have no recognized signature block. A separate check agrees on every file. The older published table used a larger corpus, but its 123 shared files have matching verification results.",
+      "finding": "Of 133 archived files, 114 verify under the specified Cicada public key. The one bad file is missing a blank line in its signed-message header. Its repaired copy and the original JPEG extraction verify; the source scan counts remain unchanged.",
       "record_type": {
         "id": "audit",
         "label": "Source or input audit",
@@ -3280,7 +3280,8 @@
       "pages": [],
       "artifacts": [
         "experiments/records/dukotah-g02-signature-corpus/source-archived-table.json",
-        "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip"
+        "experiments/records/dukotah-g02-signature-corpus/sources/asc-blobs.zip",
+        "experiments/records/dukotah-g02-signature-corpus/source-2013-jpeg-extraction.asc"
       ],
       "outcome": "supported",
       "retested_on": "2026-10-23",
@@ -24021,6 +24022,96 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-separator-clock-alberti.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-separator-clock-alberti/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-separator-clock-alberti.zip"
+    },
+    {
+      "id": "wulfic-session17-period-detectors",
+      "title": "Two checks for a repeating key length",
+      "question": "Do source Test8 known-text key inference and Test9 split-column/Kasiski checks identify a repeat period across their named LP2 pages?",
+      "summary": "The source known-text check produced no report over its 25% line. The split-column check flagged 29 of 34 pages, the same as the middle complete shuffled search.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "period",
+        "Kasiski",
+        "index of coincidence",
+        "known plaintext"
+      ],
+      "finding": "The known-text lag screen found no source-defined hit. The split-column screen flagged many pages, but it flagged about as many after shuffling; both could detect a clean planted period.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "periodicity",
+          "title": "Period and key-length diagnostics",
+          "aliases": [
+            "periodic IoC",
+            "key length",
+            "periodicity",
+            "key length detection"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-session17-period-detectors/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-session17-period-detectors",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-session17-period-detectors.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-session17-period-detectors/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-session17-period-detectors.zip"
     },
     {
       "id": "wulfic-square-title-vocabulary",
