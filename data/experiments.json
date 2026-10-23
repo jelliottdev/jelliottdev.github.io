@@ -6847,6 +6847,400 @@
       }
     },
     {
+      "id": "four-phase-ioc",
+      "title": "Four alternating rune streams: concentration check",
+      "status": "published",
+      "question": "Do the four position-modulo-four streams in the unsolved LP2 rune sequence retain unusually high rune concentration?",
+      "reader_question": "If the runes are split into four alternating messages, does each stream show the letter imbalance expected from a simple fixed substitution?",
+      "summary": "Each of the four manuscript phases has an ordinary collision rate under page-preserving shuffles. A planted four-stream substitution example is clearly detected.",
+      "tags": [
+        "four-way interleaving",
+        "four unreasonable things",
+        "decimation",
+        "four streams",
+        "index of coincidence",
+        "LP2",
+        "Dukotah"
+      ],
+      "family": {
+        "id": "four-phase-interleaving",
+        "title": "Alternating-stream checks",
+        "question": "Does splitting positions into fixed alternating streams expose a specified signal?",
+        "baseline": "four-phase-ioc"
+      },
+      "variant": {
+        "label": "Four global phases; monogram collision concentration",
+        "changes": []
+      },
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "text/lp1-01.txt",
+          "data/index.json"
+        ],
+        "representation": "The 29 GP runes on LP2-00–55 except the number-only LP2-50, concatenated in image-page order. Four phases use global position modulo four, with no reset at a page break.",
+        "procedure": "Measure the mean and maximum of the four phase IoCs. Shuffle rune order independently within each page 1999 times, rerunning the split and both measures. Plant a four-stream shifted-copy control from the solved LP1 warning page.",
+        "parameters": "55 rune-bearing pages; 12956 runes; random.Random(330122), 1999 page-shuffle trials; upper plus-one tails; Bonferroni for two measures.",
+        "exclusions": "The source's full 185-operation decoder sweep, other phase assignments, feedback ciphers, separate polyalphabetic keys and plaintext recovery."
+      },
+      "outcome": "not-supported",
+      "finding": "The observed phase-mean IoC is 0.034511, exceeded by 361 of 1999 page-shuffled controls (upper-tail p=0.181). The largest phase IoC is 0.034564, exceeded by 945 controls (p=0.473). The two-measure-adjusted minimum is 0.362. A planted four-stream control has mean IoC 0.064029, reached by none of 1999 whole-stream shuffles.",
+      "limitations": "This is a narrow new test, not an independent replay of the source's 185 variants. IoC only tests phase-wise symbol concentration. The original source's rune-bearing segment numbering omits number-only LP2-50, so its phrase pages 0–54 corresponds to actual pages 0–55 except 50. Its public model-building dependencies are incomplete.",
+      "next_steps": "Specify a different four-stream mechanism in advance, with its own recovery control and a maximum-over-choice null, before treating it as a new test.",
+      "reproduction": {
+        "command": "python experiments/records/four-phase-ioc/run.py --check",
+        "environment": "Python 3.12 standard library. A fresh copy of this experiment bundle contains all 55 page text files, the LP1 warning page, scripts and results; no network or model is required.",
+        "script": "experiments/records/four-phase-ioc/run.py",
+        "script_sha256": "d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7",
+        "inputs": [
+          {
+            "path": "data/index.json",
+            "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+          },
+          {
+            "path": "text/lp1-01.txt",
+            "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+          },
+          {
+            "path": "experiments/records/four-phase-ioc/plan.json",
+            "sha256": "97ea58f1075bb88503fa2acb27c11882394e8bca0c3b163b4e697d07e47588c9"
+          },
+          {
+            "path": "experiments/records/four-phase-ioc/check.py",
+            "sha256": "f4f7348faf6c5962906c4f41587805158f8863080bf61408a1e1c84f08d34002"
+          },
+          {
+            "path": "experiments/records/four-phase-ioc/plot.py",
+            "sha256": "349f21196cfc764131afb0b0d57408bfc83033d74c564d4373f3e21f7c75a331"
+          },
+          {
+            "path": "text/lp2-00.txt",
+            "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+          },
+          {
+            "path": "text/lp2-01.txt",
+            "sha256": "a1279ac40719889c41cc77f3ecfbdb82a48b1173844659e3eb5c41d17b638b89"
+          },
+          {
+            "path": "text/lp2-02.txt",
+            "sha256": "7d15037bd7103f1ee2146301f9640aafbe80467596c176bc7ab98e8964e2e4fa"
+          },
+          {
+            "path": "text/lp2-03.txt",
+            "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          },
+          {
+            "path": "text/lp2-04.txt",
+            "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+          },
+          {
+            "path": "text/lp2-05.txt",
+            "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+          },
+          {
+            "path": "text/lp2-06.txt",
+            "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+          },
+          {
+            "path": "text/lp2-07.txt",
+            "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+          },
+          {
+            "path": "text/lp2-08.txt",
+            "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+          },
+          {
+            "path": "text/lp2-09.txt",
+            "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+          },
+          {
+            "path": "text/lp2-10.txt",
+            "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+          },
+          {
+            "path": "text/lp2-11.txt",
+            "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+          },
+          {
+            "path": "text/lp2-12.txt",
+            "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+          },
+          {
+            "path": "text/lp2-13.txt",
+            "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+          },
+          {
+            "path": "text/lp2-14.txt",
+            "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+          },
+          {
+            "path": "text/lp2-15.txt",
+            "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+          },
+          {
+            "path": "text/lp2-16.txt",
+            "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+          },
+          {
+            "path": "text/lp2-17.txt",
+            "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+          },
+          {
+            "path": "text/lp2-18.txt",
+            "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+          },
+          {
+            "path": "text/lp2-19.txt",
+            "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+          },
+          {
+            "path": "text/lp2-20.txt",
+            "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+          },
+          {
+            "path": "text/lp2-21.txt",
+            "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+          },
+          {
+            "path": "text/lp2-22.txt",
+            "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+          },
+          {
+            "path": "text/lp2-23.txt",
+            "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+          },
+          {
+            "path": "text/lp2-24.txt",
+            "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+          },
+          {
+            "path": "text/lp2-25.txt",
+            "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+          },
+          {
+            "path": "text/lp2-26.txt",
+            "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+          },
+          {
+            "path": "text/lp2-27.txt",
+            "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+          },
+          {
+            "path": "text/lp2-28.txt",
+            "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+          },
+          {
+            "path": "text/lp2-29.txt",
+            "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+          },
+          {
+            "path": "text/lp2-30.txt",
+            "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+          },
+          {
+            "path": "text/lp2-31.txt",
+            "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+          },
+          {
+            "path": "text/lp2-32.txt",
+            "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+          },
+          {
+            "path": "text/lp2-33.txt",
+            "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+          },
+          {
+            "path": "text/lp2-34.txt",
+            "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+          },
+          {
+            "path": "text/lp2-35.txt",
+            "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+          },
+          {
+            "path": "text/lp2-36.txt",
+            "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+          },
+          {
+            "path": "text/lp2-37.txt",
+            "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+          },
+          {
+            "path": "text/lp2-38.txt",
+            "sha256": "824d939cc75ba329239b2c41a4d91a88decf9022c0f2b92627375362c21dc844"
+          },
+          {
+            "path": "text/lp2-39.txt",
+            "sha256": "15f7cd2a6d8cd3ea08d0d54032d20e933675184ce6c2ba6ea33a63642151f640"
+          },
+          {
+            "path": "text/lp2-40.txt",
+            "sha256": "fa2238761b43fb89e7665c4147d69ee88f5d61820ea49f1dd911689448cdc133"
+          },
+          {
+            "path": "text/lp2-41.txt",
+            "sha256": "e03b892107d9d53f585f5b1678c0e802fe4ccb052d3a5d51f02f9934cfb1371e"
+          },
+          {
+            "path": "text/lp2-42.txt",
+            "sha256": "74f08cb4170d495f6827e4b1517a33c30a60b7558b999c15875a211eb55d8457"
+          },
+          {
+            "path": "text/lp2-43.txt",
+            "sha256": "08ffb0f1d3d2e6a851dfc38576d0ca71aed2da81877bdba2e5664cc70046b268"
+          },
+          {
+            "path": "text/lp2-44.txt",
+            "sha256": "d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c"
+          },
+          {
+            "path": "text/lp2-45.txt",
+            "sha256": "63602b82c24cb114d96ee38d8bf8deccab87e9dc33f13c2bdf1d441a37a1d513"
+          },
+          {
+            "path": "text/lp2-46.txt",
+            "sha256": "81ec0f38db09e0aadbb6dd8fea8c0a77fabbb49bde2b896f4107bded1129e66f"
+          },
+          {
+            "path": "text/lp2-47.txt",
+            "sha256": "d5e6eed6db2807515d732804c5ad0c7efdc906ebd1845bd918acfdbbefb5f18e"
+          },
+          {
+            "path": "text/lp2-48.txt",
+            "sha256": "a81c8cb802491d80e59b0e2a615d27b560187143d377f17486b6a8fb72c4fcd4"
+          },
+          {
+            "path": "text/lp2-49.txt",
+            "sha256": "64d1d5db23dcf9d27955fba124be83119f077866c0c15347f33dd763958e0553"
+          },
+          {
+            "path": "text/lp2-51.txt",
+            "sha256": "313af6ab14d9075036fecf184c91a0c15ca9c0bef7bb816d10cdc00d6e89311a"
+          },
+          {
+            "path": "text/lp2-52.txt",
+            "sha256": "d4b0d59d8df39c8d91e2ac718fd3569f0980b6204f27194948d3cc7e8c975aca"
+          },
+          {
+            "path": "text/lp2-53.txt",
+            "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+          },
+          {
+            "path": "text/lp2-54.txt",
+            "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+          },
+          {
+            "path": "text/lp2-55.txt",
+            "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/four-phase-ioc/results.json",
+            "sha256": "9c0d94e129880bc3585ea12a4270bb03791967d817778f284bf46196840cfcbb"
+          },
+          {
+            "path": "experiments/records/four-phase-ioc/check.json",
+            "sha256": "559faf2b616c6315ba8629afd28f17706341196b54fad13e7e92413f59b42542"
+          },
+          {
+            "path": "experiments/records/four-phase-ioc/phase-comparison.svg",
+            "sha256": "13842bc780e5b32264a5657d3840d020e6c2700f12b44410fccd2825c910a8ec"
+          }
+        ]
+      },
+      "review": {
+        "reviewer": "Independent exact collision calculation, alternate-seed page-shuffle check, planted four-stream control, and byte-for-byte source-stream comparison",
+        "retested_on": "2026-10-22",
+        "kind": "computational",
+        "human_review": "pending"
+      },
+      "sources": [
+        {
+          "label": "Published Round 22 literal-imperatives results at pinned revision",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md"
+        },
+        {
+          "label": "Published source loader at pinned revision",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/run_stats.py"
+        }
+      ],
+      "related": [],
+      "visuals": [
+        {
+          "path": "experiments/records/four-phase-ioc/phase-comparison.svg",
+          "caption": "The phase assignment and four observed collision rates, each inside its page-shuffled middle-95% interval."
+        }
+      ],
+      "reader_note": "Four alternating streams show ordinary rune concentration under a page-preserving shuffle. This does not test every four-way cipher.",
+      "reader_limit": "A fixed positional split and a monogram statistic are narrower than the cited 185-operation sweep.",
+      "scope_summary": "LP2-00–55 except LP2-50 · 12956 runes · four phases · two IoC measures · 1999 page shuffles.",
+      "article": "## Result\n\n**Splitting the unsolved rune stream into four alternating streams does not expose the concentration expected from four simple substitution alphabets.** The four measured collision rates lie within the middle 95% of page-preserving shuffled comparisons. A planted four-stream example is detected by the same measure. This says nothing decisive about four separate running keys, feedback ciphers or a different way to assign runes to streams.\n\n![Successive rune positions assigned to four phases, followed by each phase's observed collision rate and the shuffled reference interval.](experiments/records/four-phase-ioc/phase-comparison.svg)\n\nTake every fourth rune, starting with positions zero, one, two and three. For each resulting stream, the index of coincidence (IoC) is the chance that two different positions contain the same rune. A fixed substitution or a fixed additive shift changes rune labels but preserves that concentration. An independent keyed stream that continually changes its substitution need not preserve it. [How IoC works](#/wiki/index-of-coincidence).\n\n| Check | Manuscript | Page-shuffle comparison |\n| --- | ---: | ---: |\n| Mean IoC across four phases | 0.034511 | 0.034416–0.034551 middle 95%; 361 of 1,999 shuffles at least as high |\n| Highest phase IoC | 0.034564 | 0.034460–0.034697 middle 95%; 945 of 1,999 shuffles at least as high |\n\nThe two upper-tail estimates are **0.181** and **0.473**. Neither is unusual; correcting for checking both measures gives a smallest adjusted estimate of **0.362**. Each comparison shuffles rune order *within each page*, keeping its length and rune counts. It then repeats the four-way split from the start of the concatenated book. Thus the test asks whether the original order adds a four-phase concentration signal beyond the fixed page histograms.\n\n## What was actually tested\n\nThe source is the [published “literal imperatives” sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md), which includes decimation and four-way interleaving among 185 operations. **This is an independent, narrower test, not a replay of its decoder verdict.** Its public checkout omits the generated nine-register language model and at least one corpus needed to rebuild it, so a fresh clone cannot currently rerun that entire scorer. The present record uses only the archived runes and a fully specified statistical comparison.\n\nThe source's phrase “LP2 pages 0–54” hides a numbering detail. Its loader drops an all-number page before numbering rune-bearing segments. Its 12,956-rune stream matches the actual images **LP2-00 through LP2-55, excluding number-only LP2-50**. We use those actual page labels: 55 rune-bearing pages, with the phase count continuing across page breaks. [Manuscript reader](#/reader).\n\nAs a power check, we Atbash-decoded the 184-rune [LP1 warning page](#/reader/lp1-01), made four copies shifted by 0, 3, 7 and 11 rune places, and interleaved them. Their mean phase IoC was **0.0640**. None of 1,999 whole-stream shuffles reached it. This confirms that the measure can see a strong four-stream substitution signal; it is not a control for every plausible cipher.\n\n## Repeat the check\n\nDownload [this experiment](downloads/experiments/four-phase-ioc.zip) for the script, fixed plan, input text, results and figure. From the repository root run:\n\n```text\npython experiments/records/four-phase-ioc/run.py --check\npython experiments/records/four-phase-ioc/check.py\n```\n\nThe [plan](experiments/records/four-phase-ioc/plan.json) fixes the page mapping, two measures, shuffling rule and 1,999 trials. The [results](experiments/records/four-phase-ioc/results.json) retain the observed scores and tail counts. An [independent arithmetic check](experiments/records/four-phase-ioc/check.json) repeats the mean-IoC comparison with another random seed. The result is conditional on this particular four-phase concentration model; it does not close the broader hint or the source's other operations.\n",
+      "article_path": "experiments/records/four-phase-ioc/article.md",
+      "script_sha256": "d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7",
+      "record_type": {
+        "id": "measurement",
+        "label": "Manuscript measurement",
+        "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+      }
+    },
+    {
       "id": "grid-alternative-layouts",
       "title": "LP2-49–51: directional prime paths under alternate grid layouts",
       "status": "published",
