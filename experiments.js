@@ -12,7 +12,12 @@ function refreshExperimentSupportUI(){
  const id=location.hash.match(/^#\/experiments\/([^?]+)/)?.[1];
  if(slot&&id){
   const record=experimentRecords?.find(item=>item.id===id);
-  if(record){const guides=experimentMethodGuides(record);slot.innerHTML=guides?`<details class="experiment-extra experiment-method-disclosure"><summary>Related method guides</summary>${guides}</details>`:'';}
+  if(record){
+   const html=experimentMethodGuidesContent(record),preview=document.createElement('div');
+   preview.innerHTML=html;
+   // Compare parsed markup: entity serialization must not replace focused links.
+   if(slot.innerHTML!==preview.innerHTML)slot.innerHTML=html;
+  }
  }
  if(typeof refreshIdeaSupport==='function')refreshIdeaSupport();
 }
@@ -151,6 +156,10 @@ function experimentRecordType(r){
   const kind=r.record_type||methodRecordKinds[methodRecordKindById[r.id]];
   if(!kind?.label)return '';
   return `<p class="small muted"><strong>${esc(kind.label)}</strong> · <a href="#/wiki/solving-methods?section=record-types">About record types</a></p>`;
+}
+function experimentMethodGuidesContent(r){
+ const guides=experimentMethodGuides(r);
+ return guides?`<h3>Method guides</h3>${guides}`:'';
 }
 function experimentMethodGuides(r){
   if(methodFamilyUnavailable)return '<div id="experiment-methods"><p>The method index could not be loaded. You can still browse the <a href="#/wiki/solving-methods">method-family map</a>.</p></div>';
@@ -376,7 +385,6 @@ function experimentArticle(r){
   const needsImages=r.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));
   const related=r.related.filter(id=>!familyIds.has(id));
-  const methodGuides=experimentMethodGuides(r);
   const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
@@ -405,7 +413,7 @@ function experimentArticle(r){
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
       <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Not tested</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
       <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles)}</div>
-      <div id="experiment-method-guides">${methodGuides?`<h3>Method guides</h3>${methodGuides}`:''}</div>
+      <div id="experiment-method-guides">${experimentMethodGuidesContent(r)}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     </details>
     ${footer()}</article>`;

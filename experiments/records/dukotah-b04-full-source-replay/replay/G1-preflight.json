@@ -1,0 +1,48 @@
+{
+  "schema": "liberpedia-b04-shared-preflight-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_files": {
+    "liber-primus/analysis/round13/B04/control.py": "a5570d74cee28c124ed9ec0962d81b7de3b879acec98f4763b419665fdf86ff1",
+    "liber-primus/analysis/round13/B04/ks.py": "1b332b0da0cf8febf89f3d57a4dbdee09a6d5802de847610e7ae41e1e50d0edb",
+    "liber-primus/analysis/round13/B04/harness.py": "67ee8710d75661dfb09a9da3b07b0ddb3c6bfd2e51b2713513509d98fd3c72e1",
+    "liber-primus/analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "liber-primus/src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "liber-primus/analysis/round13/B04/results_G1_rerun.json": "399b1475bcd6eb56bf0e96f8d7d5987a60b7e45c282535f2a550b4029fde1bbd",
+    "liber-primus/analysis/round13/B04/results_gates.json": "ce0c40cd47f2a196f86eda74d1d348068cb261a5bbb371ef391de5783735cc75"
+  },
+  "method": "Pinned source GP29 greedy transliteration; sha256_ctr/mod29 dictionary-resident key; sign -1; source encipher_keyskip(supp=.83, seed=3301); beam400 max_skip3; source English score_norm gate -5.5.",
+  "g1_current_code": {
+    "plaintext_runes": 174,
+    "skips_injected": 5,
+    "ct_doublet_rate": 0.0,
+    "plain_eng_norm": -4.1700003814005715,
+    "rigid_correct_seed": -6.835199495762858,
+    "beam_correct_seed": -4.1700003814005715,
+    "beam_wrong_seed": -7.349177020193378,
+    "char_recovery": 1.0,
+    "null_shuffledP_mean": -6.477617125471395,
+    "null_shuffledP_max": -6.043960170959304,
+    "beam_head": "THEPRIMESARESACREDANDTHETOTIENTFUNCTIONISSACREDALLTHINGSSHOU",
+    "PASS": true
+  },
+  "g1_current_code_pass": true,
+  "full_message": {
+    "plain_source": "control.py PLAIN (entire constant, not first 120/190 Latin chars)",
+    "plain_runes": 233,
+    "cipher_runes": 233,
+    "skipped_key_values": 10,
+    "max_skip_on_one_rune": 2,
+    "exact_all_runes": true,
+    "algebraic_check_exact_all_runes": true,
+    "independent_sha256_counter_key_check": true,
+    "source_score": -4.208861493021469,
+    "wrong_key_score": -7.218532215251952,
+    "rigid_correct_key_score": -7.587940304997882,
+    "score_gate": -5.5,
+    "full_message_gate_pass": true,
+    "plaintext_indices_sha256": "de701c4953e87af009816c441b3e23078871cdb5a968a69fdbdc9e82a35ae120",
+    "ciphertext_indices_sha256": "acb818db2e1aa01d5fb9ca783a9c007f235b222688e0ca1ccbbbf9b9d8a50ed3"
+  },
+  "archived_gate_note": "results_gates.json G1=false was an alias-field driver bug; GATE-NOTE.md and results_G1_rerun.json explicitly correct it. Current code returns G1 pass. Archived G2 Stage-A rank-1 is not rerun here.",
+  "scope": "Supports B-04 keyskip1/English source decoder and exact-key planted recovery only. Does not validate nine-register I2, keyskip2/pair, drift, finite-offset prefilters, full Stage-A rank over 1.38M cases, or any LP2 negative."
+}

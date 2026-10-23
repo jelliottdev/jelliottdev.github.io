@@ -102,10 +102,11 @@ function renderIdeaChecker(query){
         <a href="${esc(s.href)}">${esc(s.title)}</a> <span class="small muted">${esc(ideaSourceType(s))}</span>
         ${s.page?` · <a href="#/reader/${esc(s.page)}">Open reader</a>`:''}
         <p class="small muted">${esc(s.excerpt||'Complete recorded scope, finding, and limitations')}</p>${sourceExcerpt(s)}</li>`).join('')}</ol></details>`;
-    $('#idea-copy').onclick=async()=>{
+    const copyButton=$('#idea-copy');
+    copyButton.onclick=async()=>{
       const text=data.answer+'\n\nSources:\n'+data.sources.map((s,i)=>`[${i+1}] ${s.title} — https://jelliottdev.github.io/${s.href}`).join('\n');
-      try{await navigator.clipboard.writeText(text);$('#idea-copy').textContent='Copied';}
-      catch{$('#idea-copy').textContent='Select answer to copy';}
+      try{await navigator.clipboard.writeText(text);if(copyButton.isConnected)copyButton.textContent='Copied';}
+      catch{if(copyButton.isConnected)copyButton.textContent='Select answer to copy';}
     };
     status.textContent='Comparison ready.';
   }

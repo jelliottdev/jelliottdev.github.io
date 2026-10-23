@@ -1,0 +1,15 @@
+{
+  "schema": "b04-public-record-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_plan": "source/liber-primus/analysis/round13/B04/PREREG.md",
+  "source_gate_note": "source/liber-primus/analysis/round13/B04/GATE-NOTE.md",
+  "selection": "Fixed source dictionary, generators, reductions and score bar. G2 plant ranked against the entire Stage A grid before LP2 scoring. Stage D takes the top 50 rows from each A/B/C source summary, sorts by score and deduplicates to 150 ordered configurations.",
+  "stage_A": "2,165 ordered seeds × 16 generators × 5 reductions × 2 signs × 2 Atbash × 2 directions, offset 0, first 120 joined unsolved runes: 1,385,600 decodes.",
+  "stage_B": "504 core seeds × 10 key offsets × 16 generators × 2 reductions × 2 signs × 2 Atbash × 2 directions, first 120 joined unsolved runes: 1,290,240 decodes.",
+  "stage_C": "504 core seeds × 55 nonempty source page segments × 16 generators × 2 reductions × 2 signs × 2 Atbash, forward direction, offset 0, first up to 100 runes per segment: 3,548,160 decodes.",
+  "stage_D": "150 selected configurations × full page 0 (262 runes) and full joined unsolved stream (12,956 runes): 300 cells.",
+  "scorer": "Pinned source English quadgram model, skip-aware beam width 400 and maximum three key skips per rune; higher score is more English-like under that model. Fixed advancement bar −5.5.",
+  "controls": "Fresh full-grid G2 planted message ranked 1 of 1,385,600. Source G1 gate also passed. All A/B/C saved chunk merges and source result fields were independently checked; D accelerated decoder was compared with unchanged source on all 150 page-0 cells and four preselected full-book cells.",
+  "limits": "A source-defined search region, not all possible derived keys. G2 checks a planted first-120-rune case; it does not establish full-book detection power. Stage D reverse-key construction may change the key prefix when the full requested key length changes. Equal-score scheduling ties can change order or a cutoff member. No alternate seed dictionary, salt, stretching, cipher layers, languages, segmentation or skip model is covered.",
+  "portable_bundle": "The three source text files read for seeds are exact. Other armada18/19 books contribute filename stems only: this bundle stores their original names as empty placeholders; their contents are not read by the B04 seed generator. The portable runner replaces only the original Git-HEAD source gate with exact pinned SHA-256 checks and does not alter the decoder. Stage D uses the explicitly selected accelerated representation, crosschecked with unchanged source."
+}

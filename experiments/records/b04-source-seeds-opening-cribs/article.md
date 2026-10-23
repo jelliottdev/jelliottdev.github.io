@@ -1,6 +1,6 @@
 # Cryptographic seed streams against fixed LP2 openings
 
-**Finding.** We generated all **1,385,600** configurations in a published cryptographic-keystream grid and checked whether any can produce one of nine fixed, 12-rune known-reading openings at the start of the **55 nonempty pages in LP2-00–55** (LP2-50 is blank). **None reaches 12 runes.** The longest structurally possible prefix is six. This checks a new, narrow question against the published key candidates; it does not reproduce the source project's original English-scoring sweep.
+**Finding.** We generated all **1,385,600** configurations in a published cryptographic-keystream grid and checked whether any can produce one of nine fixed, 12-rune known-reading openings at the start of the **55 nonempty pages in LP2-00–55** (the pinned transcription has no runes for LP2-50). **None reaches 12 runes.** The longest structurally possible prefix is six. This checks a new, narrow question against the published key candidates; it does not reproduce the source project's original English-scoring sweep.
 
 ![Of 1,385,600 configurations, one can match six runes of a fixed opening, but none can match all twelve.](experiments/records/b04-source-seeds-opening-cribs/opening-prefix-funnel.svg)
 

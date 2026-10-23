@@ -1,0 +1,77 @@
+{
+  "candidate_count": 150,
+  "candidate_hash_serializations": {
+    "json_ensure_ascii_true_sha256": "4018a019cb8781d339bbb5467ab726ddeb9b5055515cdc173acd77b97a64d919",
+    "note": "First receipt used JSON ensure_ascii=True; source wrapper canonical serializer uses UTF-8 ensure_ascii=False. No candidate changed.",
+    "same_ordered_rows": true,
+    "wrapper_utf8_ensure_ascii_false_sha256": "4ba0eb2364ff02094a565d735a6304440d68024b2fb34c036dd5a4229a5e00f7"
+  },
+  "checkpoint_helper_path": "research\\performance\\b04-2026-10-23\\resumable.py",
+  "checkpoint_helper_sha256": "879ef7bed8b4a8dce59edc7734047258a2026f463a03d252bef4905ba34e394e",
+  "decoder_backend": "prefix_shared",
+  "decoder_implementation_path": "research\\performance\\beam-prefix-sharing-2026-10-23\\beam_shared.py",
+  "decoder_implementation_sha256": "8c554875eabeaa56f10222f05de675665df795e4e4b3c34e482c92cd11999909",
+  "expected_cells": 300,
+  "frozen_candidates_file_sha256": "ffc57415d37b72b5b2cf0d42b5b99ffb86006763b50c0b7e792b05342014c950",
+  "frozen_candidates_path": "research\\performance\\b04-stage-c-2026-10-23\\stage-d-frozen-candidates.json",
+  "holdout_validation_cells": [
+    {
+      "pick_index": 0,
+      "segment": "unsolved_full"
+    },
+    {
+      "pick_index": 49,
+      "segment": "unsolved_full"
+    },
+    {
+      "pick_index": 99,
+      "segment": "unsolved_full"
+    },
+    {
+      "pick_index": 149,
+      "segment": "unsolved_full"
+    }
+  ],
+  "holdout_validation_method": "After accelerated completion, recompute all returned decoder fields and key-read counts on these four book cells with the unchanged source decoder; compare exactly. Source page0 all 150 optional.",
+  "method_note": "Accelerated representation of the pinned source decoder, not execution of the unchanged source function. Candidate axes, score, skip policy, key generation, reversal and source zero-extension remain fixed.",
+  "nproc": 4,
+  "ordered_candidate_sha256": "4ba0eb2364ff02094a565d735a6304440d68024b2fb34c036dd5a4229a5e00f7",
+  "output_directory": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\b04-lp2-D-20261023",
+  "prior_inputs": {
+    "A": {
+      "independent_check_path": "research\\performance\\b04-stage-a-2026-10-23\\independent-check.json",
+      "independent_check_sha256": "8b34a655eddfbf0596a0100fdc57ce0e9f927e19d22e03f6c194a15ae2811c6e",
+      "merged_path": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\b04-lp2-A-20261023\\merged.json",
+      "merged_sha256": "1d84c31b1ef5b31527002edde24caad4bc9c41f37df0d69a443835628a43af54"
+    },
+    "B": {
+      "independent_check_path": "research\\performance\\b04-stage-b-2026-10-23\\independent-check.json",
+      "independent_check_sha256": "c82ff3bacdaeb2003543b98c914e9b9a6fe0dbbcf5731d38a5c1d59c442fd26c",
+      "merged_path": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\b04-lp2-B-20261023\\merged.json",
+      "merged_sha256": "0308ec7836085ded792b5b460a9aaea31eb0af7128fce1c83b0336f584d7465f"
+    },
+    "C": {
+      "independent_check_path": "research\\performance\\b04-stage-c-2026-10-23\\independent-check.json",
+      "independent_check_sha256": "8d59d5df6c71c68572b68fd3f87531318524ee204263797318903ded163e1390",
+      "merged_path": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\b04-lp2-C-20261023\\merged.json",
+      "merged_sha256": "ea183f6d4cf5a2c573c472ce39acc72b037d8767f68539e1b4dfc4bb3bfec0a1"
+    }
+  },
+  "runner_path": "research\\performance\\b04-stage-b-2026-10-23\\resumable_d.py",
+  "runner_sha256": "9ac6455d7f6ffa78fa0bac6e954328ddb22bdaf10035f5c605f69fccdd6dc524",
+  "schema": "b04-stage-d-execution-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_root": "C:\\Users\\ianex\\Documents\\Codex\\2026-10-19\\i-w\\work\\source-cache\\dukotah-cicada3301",
+  "source_tie_note": "A/B/C fresh and archived top50 row multisets match, but Stage B tied ordering differs; use the fresh ordered 150 candidates and report order differences.",
+  "status": "frozen before target decoding; no Stage D cells yet",
+  "targets": [
+    {
+      "name": "page0_full",
+      "runes": 262
+    },
+    {
+      "name": "unsolved_full",
+      "runes": 12956
+    }
+  ]
+}

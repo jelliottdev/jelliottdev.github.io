@@ -124,7 +124,7 @@ def run(seed_limit=None):
         "by_generator_reduction": {k: {str(i): c[i] for i in sorted(c)} for k, c in sorted(group_hist.items())},
         "exact_matches": exact, "long_prefix_examples": leading,
         "case_digest_sha256": digest.hexdigest(),
-        "scope": "Nine fixed 12-rune known-reading opening cribs at each of 55 nonempty LP2-00–55 page starts (LP2-50 is blank); source B-04 zero-offset generators and key-skip rule. New check, not the original English-score sweep.",
+        "scope": "Nine fixed 12-rune known-reading opening cribs at each of 55 nonempty LP2-00–55 page starts (the pinned transcription has no runes for LP2-50); source B-04 zero-offset generators and key-skip rule. New check, not the original English-score sweep.",
         "cribs": crib_manifest["cribs"], "pages": [p for p, _ in pages],
     }
     return result, time.perf_counter() - start

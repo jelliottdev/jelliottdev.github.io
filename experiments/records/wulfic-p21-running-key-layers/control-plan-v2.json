@@ -1,0 +1,10 @@
+{
+  "timing": "replaces unrun control-plan.json after its lexicon rule proved undefined for one-rune words; frozen before target scoring",
+  "page": "lp2-04",
+  "key_source": "deor_poem",
+  "offset": 0,
+  "plaintext_construction": "At each one-rune source word, use I (GP index 10), since the source wordlist excludes words shorter than three letters. At every other source word length, choose the lexicographically first A–Z-only word in the pinned source wordlist whose GP greedy encoding has exactly that rune length. Join at the source word boundaries. No target text influences selection.",
+  "branches": "all three direct modes and all six assigned-keyword layer variants",
+  "success": "exact complete rune recovery plus normalized IoC > 1.3 plus positive source word score",
+  "notes": "The source score cannot reward one-rune words. This engineered wordlist-based plaintext is a mechanical and gate check, not an LP2 reading model."
+}

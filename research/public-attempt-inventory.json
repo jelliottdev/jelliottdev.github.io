@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "d695f811db537d08e067fb9d0fc056727b7e3d560164f9779f4f4c4458a6cdb9",
-    "record_count": 280
+    "sha256": "9efe23012758170580705334db092abc2d12b17d1bfe3ffa9e71f6df83be2c07",
+    "record_count": 282
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,13 +27,13 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 28,
-    "unreconciled": 100,
-    "source_entries_reviewed": 68,
-    "source_entries_pending_review": 104,
+    "unreconciled": 99,
+    "source_entries_reviewed": 69,
+    "source_entries_pending_review": 103,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 100,
+    "pending_review_without_candidate_match": 99,
     "execution_replay_states": {
-      "complete-executed-grid": 21,
+      "complete-executed-grid": 22,
       "replayed-with-invalid-gate": 6,
       "partial-execution": 11
     },
@@ -187,6 +187,18 @@
               ]
             }
           ]
+        },
+        {
+          "record_id": "dukotah-b04-full-source-replay",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round13/B04/PREREG.md",
+                "liber-primus/analysis/round13/B04/harness.py"
+              ]
+            }
+          ]
         }
       ],
       "coverage_verified": false,
@@ -195,14 +207,26 @@
           {
             "record_id": "b04-source-seeds-opening-cribs",
             "covered_subclaim": "New exact-crib extension over all 1,385,600 zero-offset source settings, nine fixed 12-rune readings and 55 page starts. This does not replay or validate the original English-score negative."
+          },
+          {
+            "record_id": "dukotah-b04-full-source-replay",
+            "covered_subclaim": "Fresh G2 plant ranked first among 1,385,600 settings; exact A/B/C source-worker search completed 6,224,000 manuscript opening decodes and D completed 300 longer-text cells. Saved source result fields and histograms match; the accelerated D decoder matches unchanged source fields and key reads on 150 first-page cells and four preselected full-book cells. This verifies the finite source campaign, not all derived keys or languages."
           }
         ],
         "unresolved_parts": [
-          "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
-          "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
+          "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers. The planted 120-rune control does not establish detector power for every full-length true key; the fixed source negative remains conditional.",
+          "For reversed-key candidates, the source reverses different requested stream lengths at short and long stages, so Stage D need not continue the same key prefix. Equal-score ties can also change a top-50 cutoff member. These source behavior limits do not enlarge the tested seed or language space."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "dukotah-b04-full-source-replay"
+        ],
+        "scope": "Fresh complete source-defined G2 ranking gate, A/B/C 6,224,000 opening decodes and D 300 long-text cells, with pinned inputs, checkpoint/source-result parity and 154 unchanged-source D decoder comparisons. The source’s broader derived-key and language verdict is not verified.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -2446,9 +2470,23 @@
       "source_evidence_urls": [],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-b04-full-source-replay",
+            "covered_subclaim": "Fresh full B-04 A/B/C/D finite counts and source result parity support the underlying executed English-score grid. The 120-rune plant passes, while D reverse-key continuity and score-tie limits are measured. The source's separate register-power restatement is not independently replayed here."
+          }
+        ],
+        "unresolved_parts": [
+          "The stated modern/archaic English, Latin, Old English, abbreviated English, Welsh and vowel-dropped English recovery rates require their own source-matched planted controls; this B-04 record does not reproduce those power measurements or the stored top-50 rescore.",
+          "The alternative multi-draw rejection and independent key-drift rules remain outside the original B-04 decoder and this replay."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "RESTATE-R16-KDF",

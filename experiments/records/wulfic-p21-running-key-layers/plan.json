@@ -1,0 +1,109 @@
+{
+  "schema": "liberpedia-wulfic-p21-running-key-plan-v1",
+  "timing": "retrospective source replay; source script was read before freezing this grid",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py",
+  "source_files": {
+    "tools/legacy/p21_30_autokey_solver.py": {
+      "sha256": "a6de8271c4196b977746bc515dccf2232de1bb87222cf42cb02b048c373f6b28",
+      "bytes": 15859
+    },
+    "data/corpora/deor_poem.txt": {
+      "sha256": "be03dbfbc8d02dd6348611c973dd38ba3960c7d06833461783876546171fd143",
+      "bytes": 3142
+    },
+    "data/corpora/self_reliance.txt": {
+      "sha256": "db053efa73dbd6f7569a6b4459c292ce1e84e755415592de2a9d1db4d1c0cae6",
+      "bytes": 58315
+    },
+    "data/corpora/wordlist.txt": {
+      "sha256": "643c7f71d5caee9806be56f5ed83ba36e2246a06a04bcf4aaa0576790bb90d66",
+      "bytes": 3864805
+    },
+    "pages/page_21/runes.txt": {
+      "sha256": "8e8c780a25331ddd12795f10e3cdcc664243f220cac5b1669f4f1c011748ea63",
+      "bytes": 867
+    },
+    "pages/page_22/runes.txt": {
+      "sha256": "a3a5b5d5df246026cffedff359f026b11b7fbaa04b8c26d994b103c6489cc327",
+      "bytes": 871
+    },
+    "pages/page_23/runes.txt": {
+      "sha256": "1f536da2d51c7e734d81122b40a3045ae96a787b97e4707f2a80d6076dc1f902",
+      "bytes": 654
+    },
+    "pages/page_24/runes.txt": {
+      "sha256": "c902882a16fe5f25b4f5e5325198d668eed11b4cde8e88d85becdcfa8c55d16f",
+      "bytes": 698
+    },
+    "pages/page_25/runes.txt": {
+      "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4",
+      "bytes": 839
+    },
+    "pages/page_26/runes.txt": {
+      "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa",
+      "bytes": 884
+    },
+    "pages/page_27/runes.txt": {
+      "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270",
+      "bytes": 880
+    },
+    "pages/page_28/runes.txt": {
+      "sha256": "8335e7978b3d5d3e9c38199b259f1310fff2470d1beda0d3ccbe71de30ffac79",
+      "bytes": 898
+    },
+    "pages/page_29/runes.txt": {
+      "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186",
+      "bytes": 872
+    },
+    "pages/page_30/runes.txt": {
+      "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a",
+      "bytes": 900
+    }
+  },
+  "site_pages": {
+    "lp2-04": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9",
+    "lp2-05": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14",
+    "lp2-06": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22",
+    "lp2-07": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff",
+    "lp2-08": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953",
+    "lp2-09": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09",
+    "lp2-10": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0",
+    "lp2-11": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c",
+    "lp2-12": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7",
+    "lp2-13": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+  },
+  "page_mapping": "source global P21–30 = LP2-04–13, confirmed rune-for-rune",
+  "key_sources": [
+    "deor_poem",
+    "self_reliance"
+  ],
+  "branches": {
+    "running_key": {
+      "offsets": "range(0, len(key)-len(page), max(1,(len(key)-len(page))//200))",
+      "modes": [
+        "sub",
+        "add",
+        "beaufort"
+      ]
+    },
+    "keyword_plus_running_key": {
+      "offsets": "range(0, len(key)-len(page), max(1,(len(key)-len(page))//100))",
+      "keyword": "single assigned PAGE_CONFIG vector",
+      "key_combine": [
+        "keyword_plus_running",
+        "keyword_minus_running"
+      ],
+      "decode_modes": [
+        "sub",
+        "add",
+        "beaufort"
+      ]
+    }
+  },
+  "source_gate": "normalized 29× raw index of coincidence strictly >1.3; only passing outputs scored by source wordlist method",
+  "selection": "source per-page score then IoC ordering; retain all cases and report global top; no inferred reading from an isolated word hit",
+  "controls": "Before target, constructed full-length plaintext at LP2-04 source word lengths, encrypted by each mode and combination using declared DEOR offset 0; require complete recovery, IoC gate pass and positive source word score. Exact source-function parity on sampled cells.",
+  "null": "49 seeded within-page rune shuffles, same shuffled page used for every candidate in that trial; repeat full grid and retain global maximum source score, seed 20261023. Descriptive retrospective selection control.",
+  "limits": "This tests only source corpus encodings, coarse offsets, source page/keyword assignments, normalization, score and exact word skeleton. No claim about other key text, offsets, languages or manuscript mechanism."
+}

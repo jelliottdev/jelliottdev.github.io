@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 280,
+    "records": 282,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -1213,7 +1213,7 @@
         "English scorer",
         "LP2"
       ],
-      "finding": "For the A–Z mapping, respectively 13, 16 and 13 of 16 full-search shuffled maxima equalled or exceeded the source maximum on LP2-00, 31 and 54; for greedy GP mapping, 11, 14 and 9 of 16 did. Both positive-control searches rank the planted offset first and recover the complete LP1-04 reading.",
+      "finding": "The manifesto did not stand out from shuffled keys on the three tested pages. Every best-score result was matched or beaten by several shuffled-key searches.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -2742,6 +2742,135 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/doublet-sentence-residues.zip"
     },
     {
+      "id": "dukotah-b04-full-source-replay",
+      "title": "Cryptographic seed streams across the unsolved pages",
+      "question": "Does the pinned B04 dictionary and skip-aware decoder find a source-scored English reading in the unsolved manuscript?",
+      "summary": "Full pinned B04 A/B/C search plus D follow-up, with planted-message gate and original-decoder crosschecks.",
+      "tags": [
+        "B-04",
+        "source replay",
+        "derived key",
+        "cryptographic keystream",
+        "seed dictionary",
+        "skip-aware decoder"
+      ],
+      "finding": "This search found no English reading using its fixed list of Cicada-related seeds and key generators. A planted message ranked first, while none of 6.22 million short-text decodes passed the same score threshold. The 150 selected settings also failed that threshold on a whole page and the joined manuscript.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "seeded",
+          "title": "Seeded generators and generated keystreams",
+          "aliases": [
+            "PRNG",
+            "seed",
+            "generated keystream"
+          ]
+        },
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "alignment",
+          "title": "Offsets and key alignment",
+          "aliases": [
+            "offset",
+            "alignment",
+            "key alignment"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38",
+        "lp2-39",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48",
+        "lp2-49",
+        "lp2-51",
+        "lp2-52",
+        "lp2-53",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [
+        "experiments/records/dukotah-b04-full-source-replay/source/liber-primus/data/krisyotam_runes.txt"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-b04-full-source-replay",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-b04-full-source-replay.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-b04-full-source-replay/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-b04-full-source-replay.zip"
+    },
+    {
       "id": "dukotah-book-matrix-hill",
       "title": "Number panels as Hill-cipher keys",
       "question": "Do six pinned number-panel matrices, or the corrected LP2-15 panel, decode complete LP2 pages by fixed Hill blocks?",
@@ -2891,7 +3020,7 @@
         "planted control",
         "LP2"
       ],
-      "finding": "A 5,072-vector, two-seed, two-sign search per page produces best scores -6.90, -6.93 and -6.89 versus the source's -5.2 signal threshold. The source prose reports -6.86/-6.91/-6.89, differing on two pages from the pinned current executable. Its original const5 gate passes but lies outside the const0/const1 search; separate const0 and const1 a1=7 plants rank first among 112 one-tap rules and recover 100% of plaintext. Constant seeds make skips invisible, so these controls do not establish skip recovery.",
+      "finding": "None of 60,864 decodes reached the English-score threshold on the three tested pages. The search did recover both planted examples that used its allowed starting values.",
       "record_type": {
         "id": "replay",
         "label": "Method replay",
@@ -5057,7 +5186,7 @@
         "LP2",
         "search space"
       ],
-      "finding": "The synthetic LP1-06 plant is ranked first and recovers exactly at offset 3301. For the three LP2 pages, Emerson's selected-window scores are within the range of eight full-search shuffled-source maxima, with low held-out scores relative to the plant. LP2-54's holdout exceeds the eight shuffled holdouts but its selected window does not, and the finite controls do not support a general significance claim.",
+      "finding": "No convincing Emerson-key reading emerged. LP2-54’s continuation beat the eight shuffled controls, but the selected openings did not stand out and the continuations scored far below the planted reading.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -6469,7 +6598,7 @@
         "source replay",
         "B-05"
       ],
-      "finding": "The best main-grid score was −6.770531, the best constant-shift score −6.889604, and the best one-byte-variant score −6.744875; the required score was at least −5.5. The 180 rigid corners peaked at −7.096043. Each of the top five main-grid settings scored lower over the full unsolved stream than on the first 400 runes. All five selected full-stream continuations also stayed below the bar.",
+      "finding": "The tested keys derived from the number grid did not reach the English-score threshold. The five best opening candidates scored worse when extended to the full unsolved text.",
       "record_type": {
         "id": "replay",
         "label": "Method replay",
@@ -8309,7 +8438,7 @@
         "source replay",
         "index of coincidence"
       ],
-      "finding": "All 135 printed source top-three candidates and nine solved-text running-key rows replay exactly. Both planted direct and chain prime-key streams pass the full-grid positive controls. The smallest LP2 section tail is 4/100 on pages 00–02; a simple nine-section choice bound is 36/100. This bounded coincidence scan supplies no recovered reading or supported key.",
+      "finding": "Familiar number sequences yielded no established reading. The strongest rune-frequency pattern was also reached by 3 of 99 shuffled sections and did not clear the comparison after allowing for the nine sections searched.",
       "record_type": {
         "id": "replay",
         "label": "Method replay",
@@ -9987,7 +10116,7 @@
         "quadgrams",
         "cipher phase"
       ],
-      "finding": "All nine known-reading 51-rune controls cleared the fixed English-score threshold and ranked their planted true keys first. On LP2-53’s red span, zero of 42 candidate streams cleared −5.5; the best scored −6.6881. Of 999 rune-shuffled red spans, 460 had an equal or higher best-of-42 score. The 51 red rune positions are 128–178 zero-based; parsed word lengths are 5,4,4,11,2,3,2,6,5,5,2,2.",
+      "finding": "Neither known LP1 key made the red passage resemble the English reading controls. Its best score was ordinary: 460 of 999 shuffled passages scored at least as well after the same 42-setting search.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -10588,7 +10717,7 @@
         "prefix",
         "alphabet"
       ],
-      "finding": "Zero exact warning-prefix matches among all 6496 declared cases. This rejects only this opening under the stated transformations and input conventions.",
+      "finding": "Alphabet shifts, Atbash-style reversals and backward text did not reproduce the warning’s 12-rune opening in any of 6,496 cases.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -12893,7 +13022,7 @@
         "GP29",
         "known opening"
       ],
-      "finding": "Zero of 152,955 exact comparisons match; the longest shared prefix is four runes. Planted control and independent census pass.",
+      "finding": "Rearranging the alphabet with 43 keywords recovered none of the nine known 12-rune openings. The closest prefix matched four runes.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -15334,7 +15463,7 @@
         "XOR",
         "source replay"
       ],
-      "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. Its 21 controls recover when supplied their exact non-equal seed. Under the real search's all-equal seeds, 7/7 ciphertext-history plants recover, but 0/7 plaintext-history and 0/7 mixed-history plants do. The negative is limited to the executed grid and is not a power-validated exclusion of the latter modes.",
+      "finding": "None of 23,520 settings reached the English-score threshold. But the search also missed all 14 planted plaintext-history and mixed-history examples when limited to its actual starting values, so that negative result cannot rule out those methods.",
       "record_type": {
         "id": "replay",
         "label": "Method replay",
@@ -16544,7 +16673,7 @@
         "fixed crib",
         "source-derived batch"
       ],
-      "finding": "The exact source executable grid contains 24,231 generated key cases (19,986 distinct first-100-symbol streams) and 48,462 key-case/preset rows; zero produce a complete fixed opening. An independent full-grid path-state check verifies the result. The source's planned count, 49,302, includes 840 Perl and TeX rows the executable loop skips for string seeds.",
+      "finding": "None of the tested older random-generator keys reproduced a complete known 12-rune opening. Across 24,231 generated key cases and two skip rules, the closest match was four runes.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -18543,7 +18672,7 @@
         "full-page search",
         "search space"
       ],
-      "finding": "Across 292,318 whole-page offset/sign alignments, the best English quadgram score was −5.897 on the 66-rune LP2-49. No one of 16 shuffled-key global maxima reached it (add-one estimate 1/17), but the output is not coherent English. Four later GP-encoded Emerson windows also scored below it.",
+      "finding": "The highest-scoring output was not coherent English. LP2-49’s 66 runes nevertheless scored above all 16 shuffled-key search maxima.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -22586,6 +22715,86 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p21-literal-f-masks.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p21-literal-f-masks/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p21-literal-f-masks.zip"
+    },
+    {
+      "id": "wulfic-p21-running-key-layers",
+      "title": "Deor and Emerson as running keys on ten pages",
+      "question": "Do the archived Deor and Self-Reliance running-key or assigned-keyword-plus-running-key sweeps clear their own coincidence gate on LP2-04–13?",
+      "summary": "None of 24,639 source-defined settings passed the program’s normalized coincidence gate. The same gate recovered planted complete messages, including a later independent-key known-reading check.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "running key",
+        "layered keyword",
+        "Deor",
+        "Self-Reliance",
+        "index of coincidence"
+      ],
+      "finding": "Neither Deor nor Self-Reliance produced a candidate that passed the program’s first language screen on LP2-04–13. The complete replay checked 24,639 combinations of page, text offset and decoding rule. Planted messages could pass the screen, but the manuscript behaved like the shuffled-page controls.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "running-key",
+          "title": "Running keys from external texts",
+          "aliases": [
+            "running key",
+            "book key",
+            "running keys"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-p21-running-key-layers/plan.json",
+        "experiments/records/wulfic-p21-running-key-layers/control-plan-v2.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-p21-running-key-layers",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p21-running-key-layers.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p21-running-key-layers/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p21-running-key-layers.zip"
     },
     {
       "id": "wulfic-page24-prime-columnar",

@@ -1,0 +1,249 @@
+{
+  "id": "wulfic-p21-running-key-layers",
+  "status": "published",
+  "title": "Deor and Emerson as running keys on ten pages",
+  "question": "Do the archived Deor and Self-Reliance running-key or assigned-keyword-plus-running-key sweeps clear their own coincidence gate on LP2-04–13?",
+  "reader_question": "Did those two texts work as keys for these pages?",
+  "summary": "None of 24,639 source-defined settings passed the program’s normalized coincidence gate. The same gate recovered planted complete messages, including a later independent-key known-reading check.",
+  "finding": "The direct sweep tested 12,327 cases and peaked at normalized coincidence 1.148; the keyword-plus-running-key sweep tested 12,312 and peaked at 1.173. Neither reached the source threshold >1.3. All 49 complete within-page-shuffle searches likewise had no gate pass. The unchanged pinned source script, staged with its exact Git blobs under its expected legacy paths, prints no result on all ten pages.",
+  "limitations": "The program samples coarse source-text offsets, uses two committed GP-encoded texts and one assigned keyword per page, then rejects anything below a strict whole-page coincidence gate. Nine wordlist-constructed controls are easy for the scorer. Three language diagnostics were post-target and one-page only; the independent known-reading control ranked its correct setting first. Other offsets, keys, editions, boundaries, languages, skip rules and gates are not ruled out.",
+  "next_steps": "A new running-key proposal needs a specific text, offset/clock and held-out readable prediction; this source gate did not distinguish the manuscript from 49 page shuffles.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "running key",
+    "layered keyword",
+    "Deor",
+    "Self-Reliance",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-p21-running-key-layers/plan.json",
+      "experiments/records/wulfic-p21-running-key-layers/control-plan-v2.json"
+    ],
+    "representation": "Exact committed source global P21–30 rune files, each independently aligned with current LP2-04–13; source GP29 greedy encoding of committed Deor and Self-Reliance text.",
+    "procedure": "Reconstruct every executed direct running-key and assigned-keyword-plus-running-key offset/mode cell from the pinned program. Check normalized 29×IoC >1.3 before source wordlist scoring. Repeat the entire grid on 49 common seeded page shuffles. Execute the unchanged source in an isolated legacy-path staging tree.",
+    "parameters": "12,327 direct and 12,312 layered settings; two committed texts; three decode directions; keyword±running combinations for the layered branch; source offset step max(1,max_offset//200) or //100; 49 controls seed 20261023.",
+    "exclusions": "The same program’s autokey-seed branch (already published separately), unsampled offsets, unassigned keywords, other texts or editions, alternate runic alphabets, other scores, interrupted clocks and page ranges."
+  },
+  "review": {
+    "kind": "exact-source bounded replay and source-gate audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Unchanged source execution and independent full-grid source-function checker; nine full-message controls; three retrospective one-page language diagnostics with source-function rank verification",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-p21-running-key-layers/power.py --source-root PATH_TO_PINNED_CHECKOUT --check && python experiments/records/wulfic-p21-running-key-layers/check.py --source-root PATH_TO_PINNED_CHECKOUT && python experiments/records/wulfic-p21-running-key-layers/plot.py --check",
+    "environment": "Python 3 standard library; exact public Wulfic Git checkout at bf89d3d13aad2b8f2c95ab195cf1b092f250775c. Upstream unlicensed script and corpora are not redistributed; all necessary Git blobs are SHA-256 verified.",
+    "script": "experiments/records/wulfic-p21-running-key-layers/check.py",
+    "script_sha256": "746e316d08f6314c33b2feb83050141a02da1f1243205b99d43383431b020b2a",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/plan.json",
+        "sha256": "37ee1c84d3c9fd974dd43eec40c5296c738d89861f8691bca8c9d2deb60724d8"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/control-plan.json",
+        "sha256": "931d959a554c9003779913002d33126dba53ded872764981f7be1fd1630422b8"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/control-plan-v2.json",
+        "sha256": "6ec4853982a2289bd05ddaa19f2a1e041fa6ed8c61a2db4fcf886ea822e7dbfb"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum-plan.json",
+        "sha256": "43d864198a17fbb7ed0e1c6bf946c545323f20bfd1e5fd3eb6d0b228f6377954"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum-v2-plan.json",
+        "sha256": "a779e1f1210e7157aa29ebc47a33a4027f07795a18d4154fdf664ef2d876871b"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum-v3-plan.json",
+        "sha256": "0d00b3b7ca57668694081046f079c81bf155284699a21525d5674ab1fbb10729"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/plan.py",
+        "sha256": "b546cf1e8feef43c5c29427bb6ce0575b4611880a2f83ee87f4555fed04d6cd8"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/run.py",
+        "sha256": "b507be043148736542d015a65431aed95881e5fc0ab92ceaa8c1eb6625a9b5db"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power.py",
+        "sha256": "1548d769cead655dff131d5711664e812275e4494ca12dc3817c781634ae4f39"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/check.py",
+        "sha256": "746e316d08f6314c33b2feb83050141a02da1f1243205b99d43383431b020b2a"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/plot.py",
+        "sha256": "6a118037bf8fd26b05f58faece1c61ef535012e5411afbda36cdc0c5cc4734f2"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/make_record.py",
+        "sha256": "cad05e429f57a84df7392c228bc37502585758fb3ab376873aea3ed1ebcbe332"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/article.md",
+        "sha256": "54534e17c9c6b148bfa9cf52cbc911d966c235815f879e64758342b78f09c708"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/controls.json",
+        "sha256": "d69d9085ff30f0596f0f4aba4e29076742e1b147bfa6922aad93f21c5188b06c"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/results.json",
+        "sha256": "546cf71ba832597a011be2fef440928be2ac2f18d2dc91ad053f4d6ee8718c9c"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum.json",
+        "sha256": "30981abb8c17cbd862d418abc5970ae98f9a5c07ba84c97163eb2dab0e4ccb66"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum-v2.json",
+        "sha256": "55892be3c307e865200926d4d04df42332e6b9905b36cf6cadd2e774eb506b7b"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/power-addendum-v3.json",
+        "sha256": "bd124faebb0ce1e94de32067e71f8c2dbbd2019ca6228d7549760210d29492c8"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/source-log.txt",
+        "sha256": "c71b7ee45e696f1a6da0e41fc2d61f75e87bf03da88464d15a486c65af86fac0"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-running-key-layers/gate.svg",
+        "sha256": "adc236aafab04ceb0d468655e6fc18d900ae4b34bba0b247a8a78b6d80ee272e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-p21-running-key-layers/gate.svg",
+      "caption": "Neither source branch reached its own first screen on LP2-04–13; complete planted messages show that the gate can pass."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic P21–30 source program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py"
+    },
+    {
+      "label": "Pinned legacy caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-autokey-seed-families",
+    "emerson-running-key",
+    "solved-reading-running-key"
+  ],
+  "reader_finding": "Neither Deor nor Self-Reliance produced a candidate that passed the program’s first language screen on LP2-04–13. The complete replay checked 24,639 combinations of page, text offset and decoding rule. Planted messages could pass the screen, but the manuscript behaved like the shuffled-page controls.",
+  "reader_limit": "This tests two particular editions, sampled text offsets and one assigned keyword per page. A reading rejected by the coincidence screen would be missed; other texts, offsets and key clocks remain open.",
+  "article": "# Two running-key searches on LP2-04–13\n\nThe archived program tried two ways to use a passage of **Deor** or Emerson's **Self-Reliance** as a key. In one, it applied the passage directly to the page runes. In the other, it combined each passage rune with that page's assigned keyword rune first. It sampled offsets across each key text and tried three ways to combine key and ciphertext values modulo 29.\n\n**Result:** None of the **24,639** source-defined settings passed the program's first screen: the decoded page had to have normalized rune index of coincidence **above 1.3**. The program therefore did not reach its wordlist ranking step on any of these pages. Running the unmodified pinned script on its exact committed inputs printed “No results with IoC > 1.3” for all ten source pages. The ten source rune streams match current LP2-04–13 rune for rune.\n\n![The source gate and controls](gate.svg)\n\nThe direct branch checked **12,327** page, offset and mode settings; the keyword-plus-running-key branch checked **12,312**. Their highest normalized coincidence values were **1.148** and **1.173**, below the 1.3 gate. Repeating the full search on **49** seeded shuffles, each of which shuffled every page once and shared that shuffled corpus across all settings, also produced no passing candidate. That control gives no evidence that the gate distinguished the actual pages from these shuffles.\n\n## What the control shows\n\nNine constructed full-page messages, using the source page's word lengths and the source wordlist, were encrypted and recovered exactly under all three direct modes and six layered modes. All nine cleared the coincidence screen and received positive wordlist scores. The word score ranks passing outputs; it is not a second source acceptance gate. Selecting words from that dictionary also makes these controls unusually easy for its scorer.\n\nAfter observing the target result, we ran three one-page language checks. The first used **Deor as both message and key**. Its correct setting ranked first, but this shared text makes the check too favorable. The second used Deor as message and Self-Reliance as key. Its intended Deor reading ranked **second**, while the alternative Self-Reliance reading ranked **first**:\n\n```text\ncipher = Deor + Self-Reliance  (mod 29)\ncipher − Self-Reliance = Deor  (score 68)\ncipher − Deor = Self-Reliance  (score 201)\n```\n\nFor this additive rule, swapping plaintext and key leaves the same ciphertext. Both corpora can therefore produce plausible outputs from one planted cipher, and the higher English score alone cannot identify which text was intended as the key. We kept the rank-two control visible rather than hiding it.\n\nThe third check used **261 decoded runes from a documented LP1 reading**, independent of either key text, encrypted with Self-Reliance at offset zero. The complete message was recovered; its coincidence was **1.665**, its source word score **118**, and the correct setting ranked **first** in the same one-page candidate grid. This check shows the source screen can admit one real known-reading sequence under an imposed LP2-04 word skeleton. All three checks were devised **after** the manuscript result, so none is a pre-target estimate of power across other messages or pages.\n\n## Scope and source\n\nThe source's old page labels 21–30 mean LP2-04–13 here. The source's data paths were stale after repository relocation; for the exact replay, we staged its **unchanged script and committed file bytes** under the relative paths it expects. The source's two corpora, wordlist, page files and script are each pinned by Git revision and SHA-256 in the [plan](plan.json). Its `range` steps sample roughly **200 direct offsets** and **100 layered offsets** per page and key text, rather than every possible offset. The range also excludes the endpoint where the remaining key text exactly fits the page. The second branch uses only its single assigned keyword per page.\n\nThis is a replay of a historical **search rule**, not evidence that running keys or layered keys are impossible. It does not test altered page segmentation, other translations or editions of the key texts, skipped key positions, other keyword assignments, or a decryption that fails the script's coincidence gate. Isolated wordlist matches would not by themselves establish a reading; here, no target candidate reached that stage.\n\n## Reproduce\n\nUse the pinned [source revision](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py) as a sibling `source-archives/Wulfic-Cicada3301-Liber_Primus` checkout, or pass its path with `--source-root`. The runner verifies every needed Git blob and the ten site-page hashes before comparing any result. This record does not redistribute the upstream corpus or script.\n\n```sh\npython experiments/records/wulfic-p21-running-key-layers/run.py --source-root PATH_TO_PINNED_CHECKOUT\npython experiments/records/wulfic-p21-running-key-layers/power.py --source-root PATH_TO_PINNED_CHECKOUT --check\npython experiments/records/wulfic-p21-running-key-layers/check.py --source-root PATH_TO_PINNED_CHECKOUT\npython experiments/records/wulfic-p21-running-key-layers/plot.py --check\n```\n\nThe [results](results.json) contain the full grid counts, per-page best records and all 49 null-grid summaries. The [original-script output](source-log.txt) is retained for comparison. The three post-target controls have separate [first](power-addendum.json), [second](power-addendum-v2.json) and [known-reading](power-addendum-v3.json) receipts and plans.\n",
+  "article_path": "experiments/records/wulfic-p21-running-key-layers/article.md",
+  "script_sha256": "746e316d08f6314c33b2feb83050141a02da1f1243205b99d43383431b020b2a",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "running-key",
+      "title": "Running keys from external texts",
+      "aliases": [
+        "running key",
+        "book key",
+        "running keys"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}
