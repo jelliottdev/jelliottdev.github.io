@@ -1,0 +1,171 @@
+{
+  "status": "published",
+  "review": {
+    "reviewer": "Independent archived-word audit plus full 463-cut enumeration",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "id": "study-here-bidirectional-pointer",
+  "title": "LP1: the 331 / 133 STUDY HERE pointer",
+  "question": "Does the forward-331/reverse-133 pointer uniquely select STUDY HERE and reproduce both reported prime block sums?",
+  "summary": "The indices select STUDY HERE, but that adjacent phrase occurs five times. The last-block GP sum matches 26,893; the first-block sum is 72,065, not 71,963.",
+  "tags": [
+    "STUDY HERE",
+    "LP1",
+    "464 words",
+    "Gematria Primus",
+    "prime sum",
+    "index pointer"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "artifacts": [
+      "experiments/records/study-here-bidirectional-pointer/plan.json",
+      "experiments/records/lp1-word-length-balance/words.json"
+    ],
+    "representation": "Four solved LP1 sections concatenated into the pinned 464-word order; original ciphertext rune values and published literal readings.",
+    "procedure": "Confirm forward and reverse indices, recalculate GP block sums, enumerate all adjacent STUDY HERE pairs and all 463 possible word cuts.",
+    "parameters": "One-based word positions; split after forward word 331; GP prime values from the archived alphabet; no resegmentation.",
+    "exclusions": "The reporter’s unavailable private 464-word list, alternate page sets, changed punctuation rules, probability under a prespecified search or any LP2 decoding rule."
+  },
+  "outcome": "not-supported",
+  "finding": "The archived text has STUDY HERE at five adjacent pairs; the selected 331/133 pair gives first/last GP sums 72,065/26,893. Only the latter matches the reported 71,963/26,893. Thirteen of 463 cuts yield two prime sums, but this selected cut does not.",
+  "limitations": "The original poster’s exact input list was not supplied. A 102-point discrepancy may reflect different transcription or accounting. Phrase and positions were selected after the solved reading was known; cut counts are descriptive.",
+  "next_steps": "Obtain the reporter’s exact word ledger to locate the 102-point discrepancy, and require a predetermined LP2 readout before treating the pointer as a cipher instruction.",
+  "reproduction": {
+    "command": "python experiments/records/study-here-bidirectional-pointer/run.py --check",
+    "environment": "Python 3 standard library; offline.",
+    "script": "experiments/records/study-here-bidirectional-pointer/run.py",
+    "script_sha256": "eb39579844704d1d1ed6b3061051b3168e7d6607825629df143a68cf39d5fdb7",
+    "inputs": [
+      {
+        "path": "experiments/records/study-here-bidirectional-pointer/plan.json",
+        "sha256": "0666d898665214943e76c5b890ce6b0e37e0e3ca81c895624e82c4a2f510b898"
+      },
+      {
+        "path": "experiments/records/lp1-word-length-balance/words.json",
+        "sha256": "67582fbfc7399b8ed12df8c3e234169b78e8410dccdda7455182fa0df36e8165"
+      },
+      {
+        "path": "scripts/audit_464_pointer.py",
+        "sha256": "85c59f4861bf239222335a64c1ee27843f33d8d8a39bdd815aea6780fa4b1c07"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "data/pages/lp1-01.json",
+        "sha256": "5c93bc312f1608038f486d86f6560cd5635e142e9a521a1df0984c21aca7a0d0"
+      },
+      {
+        "path": "data/pages/lp1-03.json",
+        "sha256": "1d98dffa8f8a9198a627edbe54c8170f8b919cfee42f5bd63499e4ace789ced7"
+      },
+      {
+        "path": "data/pages/lp1-04.json",
+        "sha256": "dc070cbf19a3a399540dd040aa25467780445ec7e5623b7fe464ba6151c08642"
+      },
+      {
+        "path": "data/pages/lp1-06.json",
+        "sha256": "6e1d8c083d87a6ce0c7f1035599735c461038ff286dc3d48a54b2ec2cd260692"
+      },
+      {
+        "path": "data/pages/lp1-07.json",
+        "sha256": "082370c0f23c8c626bec9e892f245a64bf65053e60830c8f034ca741b4fd9797"
+      },
+      {
+        "path": "data/pages/lp1-08.json",
+        "sha256": "4bed0573a39072fd9e47993224858112c54220c396afb09ac8d2a022f98b919c"
+      },
+      {
+        "path": "data/pages/lp1-09.json",
+        "sha256": "1c668d9e8b3c6082c22fee32cec43c7abee38e093135a1b8f2cbf805db5fbd1a"
+      },
+      {
+        "path": "data/pages/lp1-14.json",
+        "sha256": "9ba8c89ed16cb93932617e37519c5bfb543014beab081ea8dd17f4a429d20ace"
+      },
+      {
+        "path": "data/pages/lp1-15.json",
+        "sha256": "add0203dfa99705777a748c41b7457a834dd3a2cd3c1c47d55338aceb7548f48"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/study-here-bidirectional-pointer/results.json",
+        "sha256": "5de36f373d4b62e6551438f8f5cec0e732cbac5db7563e827b0fd12ce9a00a24"
+      },
+      {
+        "path": "experiments/records/study-here-bidirectional-pointer/pointer-locations.svg",
+        "sha256": "ac7b71873dd4ab89dab104c7ce3211551fe4b3e4ccafaab866c9a4078a4fc2a1"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Archived 464-word audit and source hashes",
+      "url": "https://jelliottdev.github.io/exports/464-pointer.json"
+    },
+    {
+      "label": "Prime-sum guide",
+      "url": "https://jelliottdev.github.io/#/wiki/prime-sums"
+    }
+  ],
+  "related": [
+    "lp1-word-length-balance"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/study-here-bidirectional-pointer/pointer-locations.svg",
+      "caption": "All five STUDY HERE locations in the fixed solved reading, with the selected split’s checked sums."
+    }
+  ]
+}

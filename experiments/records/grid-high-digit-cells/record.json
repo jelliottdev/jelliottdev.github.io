@@ -1,0 +1,87 @@
+{
+  "id": "grid-high-digit-cells",
+  "title": "The LP2 grid’s 4-prefix cells",
+  "status": "published",
+  "question": "Do the seventeen 4-prefix cells supply evidence for a separate nibble channel?",
+  "summary": "The restricted suffix range follows exactly from byte-sized base 60. The cells are positionally concentrated under two simple placement controls; no readout or key is specified.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "grid",
+    "base 60",
+    "nibble",
+    "4-prefix",
+    "spatial clustering"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "The original 32×8 table of case-sensitive two-character tokens; focus only on cells beginning with 4.",
+    "procedure": "Count suffix symbols; check byte-bounded base-60 maximum; measure four eight-row block counts and orthogonal adjacencies; compare fixed marked-cell placement controls.",
+    "parameters": "17 marked cells; 20,000 seeded global-position and row-count-preserving column trials; no output decoding.",
+    "exclusions": "Transcription alternatives affecting other cells, adaptive routes, a proposed key and plaintext."
+  },
+  "outcome": "inconclusive",
+  "finding": "Seventeen cells have 11 distinct suffix symbols; 0–9/A–F are permitted by a one-byte base-60 interpretation, with five hexadecimal symbols absent. Seven touching pairs occur; 43/20,000 global and 464/20,000 row-conditioned placements had at least seven.",
+  "limitations": "The position measures were chosen after seeing the grid. Neither control models its creation. Restricted suffixes are a byte-range consequence, not evidence for a second layer.",
+  "next_steps": "Specify a fixed cell order, decoding rule and held-out output before treating the positions as a cipher.",
+  "review": {
+    "reviewer": "Independent computational recount against archived text",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-high-digit-cells/run.py --check",
+    "environment": "Python 3.12 standard library; independent check: python experiments/records/grid-high-digit-cells/check.py",
+    "script": "experiments/records/grid-high-digit-cells/run.py",
+    "script_sha256": "fa906382941492287c2b3a28cdcb1dfc8a166e40bd559c12795c433279029830",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-high-digit-cells/plan.json",
+        "sha256": "cc4df6b4964beb5452de2c255b91d707f16734f35c21a2076ed88265457feaa5"
+      },
+      {
+        "path": "experiments/records/grid-high-digit-cells/check.py",
+        "sha256": "c30a8bb74c68b45484f4162ec00b4033f84f2c6d7b66eb849bdbf2978eeda6fb"
+      },
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-high-digit-cells/results.json",
+        "sha256": "8c313146d70d964d1782a318d198633c55d3d44e803afc2a9536baf71a2a4f32"
+      },
+      {
+        "path": "experiments/records/grid-high-digit-cells/cells.svg",
+        "sha256": "2e4627713ba8d99ee00a71e890cf7d0df63172a44d1cfb9d3d4f8cb9a07def12"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/grid-high-digit-cells/cells.svg",
+      "caption": "The LP2 grid’s 4-prefix cells"
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source proposal",
+      "url": "https://github.com/o3rynn/cicada-faw/tree/72f92e7ac8acf9b2e660e23d654107652cb00fb0"
+    },
+    {
+      "label": "Manuscript grid record",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    }
+  ],
+  "related": [
+    "grid-radix-reconciliation"
+  ]
+}

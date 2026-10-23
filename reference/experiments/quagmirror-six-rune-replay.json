@@ -1,0 +1,92 @@
+{
+  "status": "published",
+  "review": {
+    "reviewer": "Independent standard-library recurrence matches pinned source stdout; source repository commit and file hash frozen",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "id": "quagmirror-six-rune-replay",
+  "title": "QuagMirror draft: replay of its first six runes",
+  "question": "What does the pinned QuagMirror script actually produce before its debug stop?",
+  "summary": "The pinned script reaches six LP2-00 runes and produces DCBWJO. Its unfinished code stops there; no page reading is demonstrated.",
+  "tags": [
+    "QuagMirror",
+    "Möbius",
+    "autokey",
+    "keyed alphabet",
+    "LP2-00",
+    "method replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00"
+    ],
+    "artifacts": [
+      "experiments/records/quagmirror-six-rune-replay/plan.json"
+    ],
+    "representation": "Archived LP2-00 first six runes as zero-based GP indices; nine 29-entry substitution tables from the pinned draft script.",
+    "procedure": "Recalculate the source autokey and Möbius-driven table selection for its six executed positions, including the two explicit startup overrides; compare intermediate and final streams with the source stdout.",
+    "parameters": "Pinned source commit 88ef1e60; first six cipher indices 15,8,18,3,6,19; first-position and second-position overrides retained.",
+    "exclusions": "All positions beyond six, alternative repository drafts, thematic key search, full-page plaintext or English-score controls."
+  },
+  "outcome": "inconclusive",
+  "finding": "Independent replay agrees with the script: autokey indices 15,28,2,10,3,14 and output indices 23,5,17,7,11,3 transliterate to DCBWJO. The source has an explicit break after six positions.",
+  "limitations": "The public repository contains multiple changing variants. This record covers only the pinned file and its six-position debug prefix. DCBWJO is not a coherent plaintext and no complete output is present.",
+  "next_steps": "Freeze one complete variant, remove the debug stop only with specified state behavior, then test full output and a held-out page without reselecting rule transitions.",
+  "reproduction": {
+    "command": "python experiments/records/quagmirror-six-rune-replay/run.py --check",
+    "environment": "Python 3 standard library; offline.",
+    "script": "experiments/records/quagmirror-six-rune-replay/run.py",
+    "script_sha256": "cbb1a72308d843421213cd6514d8f3555c5482bb11f16a370947118d45c64f72",
+    "inputs": [
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/plan.json",
+        "sha256": "fd7136dcd01afcf68d775f07d20bda13fa28831892690c0cd6eaba013b1806be"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/results.json",
+        "sha256": "1a221749f2803a79bc73e9945223a96798823ebedbbfd4602d3aaa880e154463"
+      },
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/six-rune-trace.svg",
+        "sha256": "d81183fbb0bf82f9ed1771d6000f9249197a2de029710fb156e24962c796c3da"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned public QuagMirror draft script",
+      "url": "https://github.com/sgroveman/cicada3301_lp/blob/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts/Mobius_AT_QuagMirror.py"
+    },
+    {
+      "label": "Archived LP2-00 manuscript page",
+      "url": "https://jelliottdev.github.io/#/page/lp2-00"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/quagmirror-six-rune-replay/six-rune-trace.svg",
+      "caption": "The source script processes six positions; this diagram shows its cipher, autokey, table and output values."
+    }
+  ],
+  "article": "# How far does the QuagMirror draft run?\n\n**Result.** The pinned public script processes the first **six runes of LP2-00**, then deliberately stops. An independent replay obtains the same index streams and the transliteration **DCBWJO**. That is a match to the draft program's output, not a reading of the page. The code does not run its proposed method across a complete word or page.\n\nThe idea combines an autokey calculation with one of nine handwritten 29-symbol substitution tables. At each position, Möbius values associated with the position and a prime-derived totient choose the table. Previous cipher and output symbols feed the next autokey calculation. The first two positions contain explicit overrides in the source. Those choices are retained here; silently removing them would replay a different method.\n\n![A five-row diagram traces the six cipher indices through the autokey indices, selected mirror tables, output indices and Latin fragments.](experiments/records/quagmirror-six-rune-replay/six-rune-trace.svg)\n\n| Stage | Six values |\n| --- | --- |\n| Archived LP2-00 rune indices | 15, 8, 18, 3, 6, 19 |\n| Autokey indices | 15, 28, 2, 10, 3, 14 |\n| Output indices | 23, 5, 17, 7, 11, 3 |\n| Latin fragments | D C B W J O |\n\nThe replay checks the source's first six input indices against this site's LP2-00 transcription. It stores all nine permutation tables and every fixed choice in the [plan](experiments/records/quagmirror-six-rune-replay/plan.json), then calculates each row in the [result](experiments/records/quagmirror-six-rune-replay/results.json). The tables are permutations, but that property alone does not make the output intelligible or prove an encryption mechanism.\n\nThis is a **WIP source-version replay**. The repository contains several changing scripts; it would be misleading to combine their rules into one historical \"QuagMirror\" result. The particular file [Mobius_AT_QuagMirror.py at pinned commit 88ef1e60](https://github.com/sgroveman/cicada3301_lp/blob/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts/Mobius_AT_QuagMirror.py) has SHA-256 `e317878190994910afbbdc5707a66af73a684b29abdd9d7e443563aba9d15a66`. Its `break` after six processed positions is part of the code, so this record cannot test its remaining page output, any later revisions or proposed thematic keywords. A complete candidate needs one frozen version, a declared rule for every position, full output and an untouched-text check.\n\nRun `python experiments/records/quagmirror-six-rune-replay/run.py --check` from the repository root. Python's standard library suffices. The saved plan and results make this exact six-position variant available offline without shipping the source discussion or changing its unfinished state.\n",
+  "article_path": "experiments/records/quagmirror-six-rune-replay/article.md",
+  "script_sha256": "cbb1a72308d843421213cd6514d8f3555c5482bb11f16a370947118d45c64f72",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

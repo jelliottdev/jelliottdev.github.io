@@ -1,0 +1,109 @@
+{
+  "id": "lp2-54-55-word-square",
+  "status": "published",
+  "title": "LP2-54–55: the 8×8 word arrangement",
+  "question": "Do the final two pages contain 64 non-heading words, and does that count specify a labyrinth route?",
+  "summary": "Removing the one-rune-plus-eight red opening leaves exactly 64 words: 48 start on LP2-54 and 16 on LP2-55. The arrangement does not select a route.",
+  "tags": [
+    "LP2-54",
+    "LP2-55",
+    "8x8",
+    "word grid",
+    "labyrinth",
+    "spiral",
+    "red heading"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Archived word-token export, independently reconstructed from both page transcriptions; first two opening tokens excluded.",
+    "procedure": "Count remaining words by page of start, arrange in manuscript order as eight columns, and enumerate eight simple inward-spiral variants.",
+    "parameters": "One 66-word source span; two opening tokens excluded; 64 remaining cells; eight fixed routes without scoring.",
+    "exclusions": "Other word-boundary transcriptions, visual maze walls, arbitrary traversals, rune transformations and plaintext."
+  },
+  "outcome": "supported",
+  "finding": "The 64-word arrangement reproduces after removing the two opening tokens. Its 48/16 page split gives a six-row/two-row boundary. The count leaves multiple routes and no output operation.",
+  "limitations": "The heading exclusion follows the source proposal and visible red opening. A square count does not establish an intended labyrinth route or decipherment.",
+  "next_steps": "Fix start, turning rule, readout and validation target before interpreting words; compare with other fixed routes on held-out text.",
+  "review": {
+    "reviewer": "Independent direct-text word reconstruction",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-54-55-word-square/run.py --check",
+    "environment": "Python 3.12 standard library; independent check.py",
+    "script": "experiments/records/lp2-54-55-word-square/run.py",
+    "script_sha256": "3e123f94839a681a76aa31c0189b8e13c8716bb4bbc7b7aa28ce01c71f3ee28a",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-54-55-word-square/plan.json",
+        "sha256": "85b13bcb7d550b60d33ba2e101f9e23a6db9803ac3386172c4b9babe9ee3aaff"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-word-square/check.py",
+        "sha256": "1596a04caf3b9e7c84f7744bc8a21421cbd654be253ef38eda90ea5a05f5d87b"
+      },
+      {
+        "path": "exports/unsolved-word-tokens.json",
+        "sha256": "fd6a8d02d472567a06fc85384d4961971cb67c93720b3d2b0ad7c53ec39cdb8a"
+      },
+      {
+        "path": "images/lp2-54.jpg",
+        "sha256": "dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      },
+      {
+        "path": "text/lp2-55.txt",
+        "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-54-55-word-square/results.json",
+        "sha256": "2640cfe9e6208db38ca3efd8326f9d71f1253b7a9539081b4825ea259c4874e9"
+      },
+      {
+        "path": "experiments/records/lp2-54-55-word-square/word-square.svg",
+        "sha256": "bc2fa266f68d79d79759cba22b76630b374ac4ce2e4f85f4ff7fe8d00b35605e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-54-55-word-square/word-square.svg",
+      "caption": "Word positions 1–64 in an eight-column grid, distinguishing their page of start."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Archived LP2-54 page image and record",
+      "url": "https://jelliottdev.github.io/#/page/lp2-54"
+    },
+    {
+      "label": "Archived LP2-55 page image and record",
+      "url": "https://jelliottdev.github.io/#/page/lp2-55"
+    }
+  ],
+  "related": [
+    "sectionwise-rune-profile"
+  ],
+  "article": "# Can the last two pages form an 8×8 word grid?\n\n**Yes, under the proposed heading exclusion.** The archived text has **66 words** beginning on LP2-54–55. The red opening is a one-rune word followed by an eight-rune word. Removing those two leaves **64 words**: 48 begin on LP2-54 and 16 on LP2-55. In manuscript order, they fill exactly six rows and two rows of an 8×8 grid.\n\n![Eight-by-eight grid of word positions: six rows start on LP2-54 and two on LP2-55.](experiments/records/lp2-54-55-word-square/word-square.svg)\n\nThis is a clean **arrangement**, not a reading. One of the 64 words crosses the page boundary; the grid keeps it whole and assigns it to the page where it starts. An independent check reconstructs all 66 words directly from the two page transcriptions and agrees with the archived word-token export.\n\nThe proposed “labyrinth” continuation does not give a start corner or turning direction. Even the simplest inward orthogonal spiral has **eight** different corner/direction variants on this grid. All visit every cell once, and each begins with a different sequence. The [saved result](experiments/records/lp2-54-55-word-square/results.json) lists all eight routes; it does not select the one whose output looks best. A decipherment test still needs a fixed route, a rule for turning words into cipher material, and an output criterion set before reading it.\n\n## Reproduce\n\nRun `python experiments/records/lp2-54-55-word-square/run.py --check` and `python experiments/records/lp2-54-55-word-square/check.py` from the repository root. The [plan](experiments/records/lp2-54-55-word-square/plan.json) pins the page transcriptions, word export and page images. The source suggestion is recorded in the supplied September 2026 discussion; the [page record](#/page/lp2-54) shows the red opening.\n",
+  "article_path": "experiments/records/lp2-54-55-word-square/article.md",
+  "script_sha256": "3e123f94839a681a76aa31c0189b8e13c8716bb4bbc7b7aa28ce01c71f3ee28a",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

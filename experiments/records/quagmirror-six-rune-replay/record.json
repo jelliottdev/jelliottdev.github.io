@@ -1,0 +1,84 @@
+{
+  "status": "published",
+  "review": {
+    "reviewer": "Independent standard-library recurrence matches pinned source stdout; source repository commit and file hash frozen",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "id": "quagmirror-six-rune-replay",
+  "title": "QuagMirror draft: replay of its first six runes",
+  "question": "What does the pinned QuagMirror script actually produce before its debug stop?",
+  "summary": "The pinned script reaches six LP2-00 runes and produces DCBWJO. Its unfinished code stops there; no page reading is demonstrated.",
+  "tags": [
+    "QuagMirror",
+    "Möbius",
+    "autokey",
+    "keyed alphabet",
+    "LP2-00",
+    "method replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00"
+    ],
+    "artifacts": [
+      "experiments/records/quagmirror-six-rune-replay/plan.json"
+    ],
+    "representation": "Archived LP2-00 first six runes as zero-based GP indices; nine 29-entry substitution tables from the pinned draft script.",
+    "procedure": "Recalculate the source autokey and Möbius-driven table selection for its six executed positions, including the two explicit startup overrides; compare intermediate and final streams with the source stdout.",
+    "parameters": "Pinned source commit 88ef1e60; first six cipher indices 15,8,18,3,6,19; first-position and second-position overrides retained.",
+    "exclusions": "All positions beyond six, alternative repository drafts, thematic key search, full-page plaintext or English-score controls."
+  },
+  "outcome": "inconclusive",
+  "finding": "Independent replay agrees with the script: autokey indices 15,28,2,10,3,14 and output indices 23,5,17,7,11,3 transliterate to DCBWJO. The source has an explicit break after six positions.",
+  "limitations": "The public repository contains multiple changing variants. This record covers only the pinned file and its six-position debug prefix. DCBWJO is not a coherent plaintext and no complete output is present.",
+  "next_steps": "Freeze one complete variant, remove the debug stop only with specified state behavior, then test full output and a held-out page without reselecting rule transitions.",
+  "reproduction": {
+    "command": "python experiments/records/quagmirror-six-rune-replay/run.py --check",
+    "environment": "Python 3 standard library; offline.",
+    "script": "experiments/records/quagmirror-six-rune-replay/run.py",
+    "script_sha256": "cbb1a72308d843421213cd6514d8f3555c5482bb11f16a370947118d45c64f72",
+    "inputs": [
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/plan.json",
+        "sha256": "fd7136dcd01afcf68d775f07d20bda13fa28831892690c0cd6eaba013b1806be"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/results.json",
+        "sha256": "1a221749f2803a79bc73e9945223a96798823ebedbbfd4602d3aaa880e154463"
+      },
+      {
+        "path": "experiments/records/quagmirror-six-rune-replay/six-rune-trace.svg",
+        "sha256": "d81183fbb0bf82f9ed1771d6000f9249197a2de029710fb156e24962c796c3da"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned public QuagMirror draft script",
+      "url": "https://github.com/sgroveman/cicada3301_lp/blob/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts/Mobius_AT_QuagMirror.py"
+    },
+    {
+      "label": "Archived LP2-00 manuscript page",
+      "url": "https://jelliottdev.github.io/#/page/lp2-00"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/quagmirror-six-rune-replay/six-rune-trace.svg",
+      "caption": "The source script processes six positions; this diagram shows its cipher, autokey, table and output values."
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "id": "later-message-f-omission",
+  "title": "2016 and 2017 message lengths after omitting F",
+  "status": "published",
+  "question": "Do both preserved signed messages become prime-length GP rune streams after F is omitted?",
+  "summary": "Under one declared GP transliteration, the 2016/2017 bodies contain 177/45 runes and four F runes each. Omitting F leaves prime lengths 173/41; omitting W also leaves two prime lengths.",
+  "tags": [
+    "2016 message",
+    "2017 message",
+    "Fehu",
+    "F rune",
+    "prime length",
+    "transliteration",
+    "historical attempt"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "exports/steganography/message-2016.outguess.bin",
+      "exports/steganography/message-2017.asc"
+    ],
+    "representation": "Signed Latin-letter message bodies encoded into GP rune indices by unique shortest aliases with V mapped to U; PGP signature armor excluded.",
+    "procedure": "Verify preserved message bytes, encode both bodies, count original and F-omitted lengths, then repeat one-symbol omission for each of all 29 GP rune indices.",
+    "parameters": "2016 and 2017 manifest body boundaries; fixed GP alphabet; one symbol type removed from each body at a time; primality by trial division.",
+    "exclusions": "Other transliterations, sentence segmentations, key-layer behavior, unsolved manuscript text or inference of author intent."
+  },
+  "outcome": "supported",
+  "finding": "The original lengths are 177/45. Each has four F runes, so F removal gives 173/41, both prime. W removal also yields two primes, 173/43; these are the only two of 29 single-symbol omissions with that property under this encoding.",
+  "limitations": "The signed sources are Latin text, and rune counts depend on a chosen GP encoding and body boundary. The 2-of-29 comparison is conditional and not a probability of intent or an LP2 cipher result.",
+  "next_steps": "For any proposed LP2 application, fix whether F is copied, deleted or changes key advancement, then predict a full unread passage and compare with controls.",
+  "review": {
+    "reviewer": "Deterministic recount of two hash-verified signed bodies and all 29 single-rune omissions",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/later-message-f-omission/run.py --check",
+    "environment": "Python 3 standard library; offline.",
+    "script": "experiments/records/later-message-f-omission/run.py",
+    "script_sha256": "99b5d316b0c16d2fd12c433b54ca3865c99fac6bb97375a8b0332b4523e4fa4a",
+    "inputs": [
+      {
+        "path": "experiments/records/later-message-f-omission/plan.json",
+        "sha256": "e4e38bb1a8f86b6b9e656458794731daceebe43bc24258a0bd8cdd54436f91f1"
+      },
+      {
+        "path": "scripts/later_message_sums.py",
+        "sha256": "6b3c51d54c4bf99ac8cad29f916872da5ca01ad17b7963288a1c141c94ecfd0b"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/evidence/later-messages.json",
+        "sha256": "d8b91c57aedb3a2fbe5d8d91195995d25f733a6be1f51c2f3050fe97b2a96d6b"
+      },
+      {
+        "path": "exports/steganography/message-2016.outguess.bin",
+        "sha256": "fe89e77519dfaca998a257ed39c2861303029de2a49183db00eea0fda3a28010"
+      },
+      {
+        "path": "exports/steganography/message-2017.asc",
+        "sha256": "e2a4afbe5eff01641bf40dc0aa6636000842ca7947163b7d383e3f9874621b58"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/later-message-f-omission/results.json",
+        "sha256": "c0c825ceeac945c6d5552e445287cc743937031be6068b0f8fe5498bbae91334"
+      },
+      {
+        "path": "experiments/records/later-message-f-omission/omission-counts.svg",
+        "sha256": "365f0e4be093fa7b6dbef7a63db4d85c873cf2ccef887d95b39a57b7c2307657"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Preserved signed-message evidence manifest",
+      "url": "https://jelliottdev.github.io/data/evidence/later-messages.json"
+    },
+    {
+      "label": "Later messages: source and signature guide",
+      "url": "https://jelliottdev.github.io/#/wiki/later-messages"
+    }
+  ],
+  "related": [
+    "fehu-coordinate-triad"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/later-message-f-omission/omission-counts.svg",
+      "caption": "Original and F-omitted message lengths; W is the only other single-rune omission yielding two prime lengths under this encoding."
+    }
+  ]
+}

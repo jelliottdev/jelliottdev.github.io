@@ -1,0 +1,203 @@
+{
+  "id": "lp1-seven-word-825-census",
+  "title": "LP1 seven-word GP-825 window census",
+  "status": "published",
+  "question": "How many seven-word windows in solved LP1 have exactly 21 runes and a Gematria Primus sum of 825?",
+  "summary": "One of 652 section-internal windows matches the two fixed counts. The reported 716-window denominator does not reproduce; this does not validate the proposed LP2 phrase or a page link.",
+  "tags": [
+    "LP1",
+    "LP2-00–02",
+    "seven words",
+    "825",
+    "Gematria Primus",
+    "word sums",
+    "source claim",
+    "selection effects"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-05",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-14",
+      "lp1-15",
+      "lp1-16"
+    ],
+    "representation": "Seven solved LP1 sections, decoded runes from published reading traces and word separators from archived rune text. No seven-word window crosses a section boundary.",
+    "procedure": "Enumerate all section-internal seven-word windows; count decoded runes and sum their GP prime values; retain windows with exactly 21 runes and sum 825.",
+    "parameters": "Seven consecutive words, 21 decoded runes, GP sum 825; no spelling expansion or alternative boundaries.",
+    "exclusions": "The proposed LP2 phrase and its rune spelling, cross-section windows, alternative LP1 layers, the original selection process, probability of intent and decryption."
+  },
+  "outcome": "supported",
+  "finding": "The declared LP1 corpus has 694 rune words and 652 section-internal seven-word windows. Exactly one meets both fixed conditions: warning word 9 (zero-based), YOU CNOW TO BE TRUE TEST THE, with 21 runes, GP sum 825 and index sum 232. The reported denominator 716 does not follow from these inputs.",
+  "limitations": "The numeric target and comparison phrase were selected during exploration. The one match is an exact census under this text layer, not an adjusted significance test or evidence that the proposed LP2 phrase is correct. The LP1-05 square cells are included as rune words.",
+  "next_steps": "Before a cross-manuscript claim, pin the LP2 phrase's exact runes and calculate its sums independently; then account for all candidate phrases, spellings, windows and numeric targets considered.",
+  "family": {
+    "id": "lp1-seven-word-825-census",
+    "title": "Seven-word GP-sum comparisons",
+    "question": "Does the reported LP1 window count and match reproduce under fixed word boundaries?",
+    "baseline": "lp1-seven-word-825-census"
+  },
+  "variant": {
+    "label": "Seven solved LP1 sections, section-internal windows",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Deterministic census against archived rune text and published reading traces",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp1-seven-word-825-census/run.py --check",
+    "environment": "Python 3 standard library; no network or AI calls.",
+    "script": "experiments/records/lp1-seven-word-825-census/run.py",
+    "script_sha256": "1b5611a7226eb11f84041c759f03f05f9a094adbef4c656e7f42280396431b32",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "text/lp1-01.txt",
+        "sha256": "24446b5c4c341769509271a7c06148bef1f9e56035531c37865a095b247d2fe3"
+      },
+      {
+        "path": "text/lp1-03.txt",
+        "sha256": "0b248054d595d187ef404e800d782601a7f585daba110e9f116a159df67f6e74"
+      },
+      {
+        "path": "text/lp1-04.txt",
+        "sha256": "588d7987032930a14019a5af56641d706743079ada0636c48303cddd2327c5ad"
+      },
+      {
+        "path": "text/lp1-05.txt",
+        "sha256": "eb29e0b98fc7099c3f8f97cdec0d8d151d307ec1cf3d23d1afb648f86e99bb9c"
+      },
+      {
+        "path": "text/lp1-06.txt",
+        "sha256": "9e9d6df87e84487639530cb82a1e59f8f0aff1af43bff8cfb392c7b7a7b150ff"
+      },
+      {
+        "path": "text/lp1-07.txt",
+        "sha256": "df8f566750c5707d715fd67471251cadbb965954c73d00bf93b4bebabb240c2f"
+      },
+      {
+        "path": "text/lp1-08.txt",
+        "sha256": "a8db415fab30f1a413def0a58c215384594732e8285269ba68d2d5d9b99c479c"
+      },
+      {
+        "path": "text/lp1-09.txt",
+        "sha256": "2c9e28d073749033e2ea08e8f4d780e37b45e3344b73490f11d8625e7ec633b2"
+      },
+      {
+        "path": "text/lp1-10.txt",
+        "sha256": "7fab106f7615476fa180b30f386688d1d9dedf980d91cbe7536b06ebb2b9da2b"
+      },
+      {
+        "path": "text/lp1-11.txt",
+        "sha256": "1234cb2c232d83c1044919d3e391b4ee3bff12c6f180fa5586b0af75f7571805"
+      },
+      {
+        "path": "text/lp1-12.txt",
+        "sha256": "7ffc5a822d60bfc36ecdb9cb9df95a98d2c48fe6af625f5d9e0c6a5f8193b1cd"
+      },
+      {
+        "path": "text/lp1-13.txt",
+        "sha256": "141734c60bbaed277e5ab598d5cf49fc5ebde0d5202663e2030cbe4c50fdafaf"
+      },
+      {
+        "path": "text/lp1-14.txt",
+        "sha256": "b78c773af0ce3c3e8858e78b791be59c1bc224babcd1b49e5e05d9b2ad2be2cc"
+      },
+      {
+        "path": "text/lp1-15.txt",
+        "sha256": "aefc3e83cccc6305c657125e1290348bdd79f635a5fa0fb87098dfcae177cc2b"
+      },
+      {
+        "path": "text/lp1-16.txt",
+        "sha256": "3ba86b3cacff98e3c94e3075c8c0b93bb1c53d9bed5fe96ad58cf3b08cc11082"
+      },
+      {
+        "path": "scripts/audit_lp1_825_window.py",
+        "sha256": "45eff5f82783171bb0363d0cb56e4eb8bb62cbec2590f2dad4df450f37ac06c1"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "research/source-intake/lp1-seven-word-825-audit.json",
+        "sha256": "8fca0987757985a4de787309b2babb5feb7efc738b1e49695d767f6f57d185b8"
+      },
+      {
+        "path": "experiments/records/lp1-seven-word-825-census/windows.svg",
+        "sha256": "1167b58d38b25191d78752ebeb69eba73f02aabf516fd54ce56417c83f5cf22b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Supplied-claim audit and input hashes",
+      "url": "https://jelliottdev.github.io/research/source-intake/lp1-seven-word-825-audit.md"
+    },
+    {
+      "label": "Archived LP1 warning page",
+      "url": "https://jelliottdev.github.io/#/page/lp1-01"
+    }
+  ],
+  "related": [
+    "totient-map-route",
+    "selected-phrase-word-sums",
+    "word-sum-corpus-control"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp1-seven-word-825-census/windows.svg",
+      "caption": "One of 652 section-internal LP1 windows meets both fixed counts; the marker is enlarged for visibility."
+    }
+  ],
+  "article": "# LP1 seven-word GP-825 match\n\nOne proposed LP2 reading was compared with a seven-word stretch of the solved LP1 warning. This test checks the **LP1 side of that comparison**: how many seven-word stretches have exactly 21 runes and a Gematria Primus sum of 825?\n\n## Result\n\nAmong **652** seven-word windows kept within their solved LP1 sections, **one** meets both conditions. It starts at zero-based word 9 of the warning: `YOU CNOW TO BE TRUE TEST THE`. The decoded-rune trace gives it 21 runes, GP sum 825 and zero-based rune-index sum 232. The source discussion reported 716 windows; that denominator does not reproduce with these seven sections and word boundaries. Even joining all 694 words across section breaks gives only 688 possible starts.\n\n![One qualifying LP1 window among 652 section-internal windows](experiments/records/lp1-seven-word-825-census/windows.svg)\n\nThe result confirms an exact match in LP1 under the declared trace. It does **not** establish that the proposed LP2 phrase has the stated rune spelling or sum, that the two passages are linked, or that a decryption rule follows. The phrase and numeric criteria were selected during exploration, so `1/652` is a census of these LP1 windows, not a chance probability for the full search.\n\n## Reproduce\n\nRun `python experiments/records/lp1-seven-word-825-census/run.py --check` from the repository root. The [saved census](research/source-intake/lp1-seven-word-825-audit.json) includes all seven section counts and input hashes. Word separators come from the archived runes; decoded symbols come from the published reading traces. The [source note](research/source-intake/lp1-seven-word-825-audit.md) explains the one documented LP1-10 rune swap and the Latin-label spelling difference.\n",
+  "article_path": "experiments/records/lp1-seven-word-825-census/article.md",
+  "script_sha256": "1b5611a7226eb11f84041c759f03f05f9a094adbef4c656e7f42280396431b32",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

@@ -73,7 +73,7 @@ LP2-00–55: direct polynomial streams, degree at most eight · Bounded solving 
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-6 related records
+7 related records
 Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
 Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
@@ -85,6 +85,8 @@ LP2-54–55: reset ciphertext state at selected F runes · Manuscript measuremen
 LP2-54–55: skip selected F runes in ciphertext feedback · Manuscript measurement
 
 LP2-54: fixed ciphertext and plaintext feedback on the red header · Bounded solving test
+
+Literal cumulative-sum autokey on LP2 · Bounded solving test
 
 
 
@@ -107,8 +109,12 @@ Emerson as an additive LP2 running key · Bounded solving test
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-1 related record
+3 related records
 Can a correct key fail under the wrong alignment rule? · Control
+
+I/M rune proximity to F interruptions · Manuscript measurement
+
+Delete F runes, then test lag-13 repeats · Manuscript measurement
 
 
 
@@ -125,8 +131,10 @@ LP2: pair the 2,883-rune sections by subtraction · Bounded solving test
 Cipher composition and ordered pipelines
 Combine a bounded set of transformations in a declared order, tracking intermediate representations.
 
-1 related record
+2 related records
 LP2-40: replay the FOR EVERY opening arithmetic · Source or input audit
+
+QuagMirror draft: replay of its first six runes · Method replay
 
 
 
@@ -170,12 +178,14 @@ LP2-00–55: reverse the order of word-like segments · Bounded solving test
 Grid layouts, spirals and route ciphers
 Choose an explicit layout and traversal through its cells.
 
-3 related records
+4 related records
 LP2-00–55: simple row and column reading routes · Bounded solving test
 
 LP2-00–02: 27 × 27 totient-map route replay · Method replay
 
 LP2-15–22: digit spirals and Roman/HALFMAN selector · Method replay
+
+LP2-54–55: the 8×8 word arrangement · Manuscript measurement
 
 
 
@@ -220,8 +230,10 @@ LP2 red initials: corrected page-order test · Manuscript measurement
 Null symbols, deletion and padding
 Remove declared symbols or positions while accounting for shortened output and changed alignment.
 
-1 related record
+2 related records
 Deleting one fixed rune type: adjacent-pair census · Manuscript measurement
+
+2016 and 2017 message lengths after omitting F · Manuscript measurement
 
 
 
@@ -239,7 +251,7 @@ Numbers and representations
 Gematria and rune-sum mappings
 Map runes or groups to numerical totals and count competing matches.
 
-8 related records
+10 related records
 LP1-05: candidate word sums and rune segmentation · Manuscript measurement
 
 Selected phrase and MYRMELEONTIDAE: five word-sum candidates · Manuscript measurement
@@ -255,6 +267,10 @@ LP2-27–32: eleven-rune sums of 563 and 569 · Manuscript measurement
 LP1 square: dictionary candidate space for the selected phrase · Control
 
 LP2: replaying the 59-Fehu coordinate triad · Method replay
+
+LP1 seven-word GP-825 window census · Manuscript measurement
+
+LP1: the 331 / 133 STUDY HERE pointer · Manuscript measurement
 
 
 
@@ -277,12 +293,14 @@ LP2-00–55: emirp row sums with the same page shuffles · Manuscript measuremen
 Radix changes and byte encodings
 Specify how symbols become digits, integers and bytes.
 
-3 related records
+4 related records
 LP2-49–51: direct text and file-header screen · Bounded solving test
 
 LP2-49–51: fixed bit-grid barcode scan · Bounded solving test
 
 LP2-49–51: does 59 observed symbols mean base 59? · Source or input audit
+
+The LP2 grid’s 4-prefix cells · Manuscript measurement
 
 
 
@@ -293,7 +311,7 @@ Operate on explicitly encoded bits or bytes, with alignment and key rules.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-9 related records
+10 related records
 Magic squares: does one fixed entry determine the rest? · Manuscript measurement
 
 LP2-49–51: directional prime-path reconstruction · Manuscript measurement
@@ -311,6 +329,8 @@ LP1 embedded messages: remove the changing outer digit · Source or input audit
 LP2-15: prime-only totient and Fibonacci-gap proposal · Source or input audit
 
 LP2-49–51: directional prime paths under alternate grid layouts · Manuscript measurement
+
+LP2-16–22’s 59×59 digit count · Manuscript measurement
 
 
 
@@ -656,6 +676,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
 - LP2-54: fixed ciphertext and plaintext feedback on the red header
   https://jelliottdev.github.io/#/experiments/lp2-54-header-feedback
+- Literal cumulative-sum autokey on LP2
+  https://jelliottdev.github.io/#/experiments/cumulative-autokey-literal
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
@@ -668,6 +690,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Can a correct key fail under the wrong alignment rule?
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- I/M rune proximity to F interruptions
+  https://jelliottdev.github.io/#/experiments/im-near-f-markers
+- Delete F runes, then test lag-13 repeats
+  https://jelliottdev.github.io/#/experiments/f-delete-lag13
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction
@@ -676,6 +702,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - LP2-40: replay the FOR EVERY opening arithmetic
   https://jelliottdev.github.io/#/experiments/page40-for-every-arithmetic
+- QuagMirror draft: replay of its first six runes
+  https://jelliottdev.github.io/#/experiments/quagmirror-six-rune-replay
 - Switching rules and adaptive decoding
   https://jelliottdev.github.io/reference/articles/method-adaptive-rules.html
 - Unrestricted additive keys and one-time-pad hypotheses
@@ -696,6 +724,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/totient-map-route
 - LP2-15–22: digit spirals and Roman/HALFMAN selector
   https://jelliottdev.github.io/#/experiments/cc-roman-matrix-replay
+- LP2-54–55: the 8×8 word arrangement
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-word-square
 - Grilles and positional extraction
   https://jelliottdev.github.io/reference/articles/method-positional-extraction.html
 - Acrostics and boundary-letter extraction
@@ -722,6 +752,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-nulls.html
 - Deleting one fixed rune type: adjacent-pair census
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
+- 2016 and 2017 message lengths after omitting F
+  https://jelliottdev.github.io/#/experiments/later-message-f-omission
 - Interleaved streams and separate decoding
   https://jelliottdev.github.io/reference/articles/method-interleaving.html
 - Four alternating rune streams: concentration check
@@ -744,6 +776,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/word-sum-corpus-control
 - LP2: replaying the 59-Fehu coordinate triad
   https://jelliottdev.github.io/#/experiments/fehu-coordinate-triad
+- LP1 seven-word GP-825 window census
+  https://jelliottdev.github.io/#/experiments/lp1-seven-word-825-census
+- LP1: the 331 / 133 STUDY HERE pointer
+  https://jelliottdev.github.io/#/experiments/study-here-bidirectional-pointer
 - Prime indexing and value transforms
   https://jelliottdev.github.io/reference/articles/prime-indices.html
 - LP2-00–55: fixed divisor labels of rune positions
@@ -760,6 +796,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-barcode-fixed-render
 - LP2-49–51: does 59 observed symbols mean base 59?
   https://jelliottdev.github.io/#/experiments/grid-radix-reconciliation
+- The LP2 grid’s 4-prefix cells
+  https://jelliottdev.github.io/#/experiments/grid-high-digit-cells
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Magic squares and numerical grids
@@ -782,6 +820,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-15-totient-gap-audit
 - LP2-49–51: directional prime paths under alternate grid layouts
   https://jelliottdev.github.io/#/experiments/grid-alternative-layouts
+- LP2-16–22’s 59×59 digit count
+  https://jelliottdev.github.io/#/experiments/lp2-seven-page-square-fits
 - Differential and cumulative decoding
   https://jelliottdev.github.io/reference/articles/method-differences.html
 - LP2-39: do crib-difference triplets recur elsewhere?
