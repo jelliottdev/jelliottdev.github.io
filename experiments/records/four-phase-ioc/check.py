@@ -55,7 +55,7 @@ def main():
     if target.exists():
         assert json.loads(target.read_text(encoding="utf-8")) == result
     else:
-        target.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        target.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     print("PASS: independent IoC arithmetic, original page mapping and second-seed page shuffle")
 
 

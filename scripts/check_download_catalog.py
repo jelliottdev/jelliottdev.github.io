@@ -1,14 +1,39 @@
 """Verify catalog sizes and hashes against the exact published file bytes.
 
 Run before export builders in CI, so stale hashes cannot be hidden by rebuilding.
-No Git dependency: works in a checkout or a complete static-site directory.
+Git line-ending checks are optional; the byte check also works in a static-site directory.
 """
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def portable_line_ending_errors(root, crlf_paths):
+    """Catch files whose catalog hashes Windows CRLF but Git publishes LF."""
+    if not crlf_paths or not (root / ".git").exists():
+        return []
+    try:
+        result = subprocess.run(
+            ["git", "check-attr", "-z", "--stdin", "text", "eol"],
+            cwd=root, input=b"\0".join(name.encode("utf-8") for name in crlf_paths) + b"\0",
+            capture_output=True, check=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return []
+    fields = result.stdout.split(b"\0")
+    attrs = {}
+    for i in range(0, len(fields) - 2, 3):
+        name = fields[i].decode("utf-8")
+        attrs.setdefault(name, {})[fields[i + 1]] = fields[i + 2]
+    errors = []
+    for name, item in attrs.items():
+        if item.get(b"text") in (b"set", b"auto") and item.get(b"eol") == b"lf":
+            errors.append(f"Git normalizes CRLF after catalog hashing: {name}")
+    return errors
 
 
 def verify_scopes(root, records):
@@ -52,6 +77,7 @@ def verify(root):
     records = json.loads((root / "data/catalog.json").read_text(encoding="utf-8"))["files"]
     errors = []
     seen = set()
+    crlf_paths = []
     for record in records:
         name = record["path"]
         path = (root / name).resolve()
@@ -65,8 +91,11 @@ def verify(root):
             errors.append(f"Missing file: {name}")
             continue
         data = path.read_bytes()
+        if b"\r\n" in data:
+            crlf_paths.append(name)
         if len(data) != record["bytes"] or hashlib.sha256(data).hexdigest() != record["sha256"]:
             errors.append(f"Published bytes differ from catalog: {name}")
+    errors.extend(portable_line_ending_errors(root, crlf_paths))
     errors.extend(verify_scopes(root, records))
     return len(records), errors
 

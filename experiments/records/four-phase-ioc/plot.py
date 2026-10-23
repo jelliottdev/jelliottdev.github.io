@@ -50,5 +50,5 @@ lines += [
     '<text x="16" y="447" class="small">A narrow test of concentration, not every cipher.</text>',
     '</svg>'
 ]
-(HERE / "phase-comparison.svg").write_text("\n".join(lines) + "\n", encoding="utf-8")
+(HERE / "phase-comparison.svg").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 print("Wrote phase-comparison.svg")

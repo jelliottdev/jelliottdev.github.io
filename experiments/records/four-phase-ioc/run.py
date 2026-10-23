@@ -158,7 +158,7 @@ def main() -> None:
             raise SystemExit("FAIL: saved results differ from rerun")
         print("PASS: page mapping, phase scores, 1,999 page-shuffled controls and planted four-stream control")
     else:
-        target.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        target.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
         print(json.dumps({"observed": result["observed"], "null": result["null"], "control": result["planted_control"]}, indent=2))
 
 

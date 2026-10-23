@@ -53,6 +53,9 @@ def inspect(path):
 
 
 def main():
+    # Preserve the published CSV bytes on Windows, where stdout otherwise
+    # translates DictWriter's explicit LF terminator to CRLF.
+    sys.stdout.reconfigure(newline="")
     writer = csv.DictWriter(sys.stdout, fieldnames=[
         "page", "sha256", "red_pixels", "source_total_rule",
         "largest_red_component_px_equiv", "large_component_count",

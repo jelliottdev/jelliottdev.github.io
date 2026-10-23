@@ -42,5 +42,5 @@ parts.extend([
     '<text x="42" y="272" font-family="Arial,sans-serif" font-size="13" fill="#43535d">LP2-07 and LP2-53: small red text counted as large initials by the total-red rule</text>',
     '</svg>',
 ])
-(HERE / 'page-order.svg').write_text(''.join(parts) + '\n', encoding='utf-8')
+(HERE / 'page-order.svg').write_text(''.join(parts) + '\n', encoding='utf-8', newline='\n')
 print('Saved page-order.svg')

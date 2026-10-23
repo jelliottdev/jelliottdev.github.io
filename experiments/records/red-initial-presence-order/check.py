@@ -78,7 +78,7 @@ def main():
         'independent_gap_lower_p': independent_lower,
         'independent_gap_upper_p': independent_upper,
     }
-    (HERE / 'check.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+    (HERE / 'check.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8', newline='\n')
     print('PASS: independent page inventory, exact span/adjacency counts and second-seed spacing tails')
 
 

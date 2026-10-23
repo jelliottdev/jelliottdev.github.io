@@ -99,7 +99,7 @@
     "command": "python experiments/records/four-phase-ioc/run.py --check",
     "environment": "Python 3.12 standard library. A fresh copy of this experiment bundle contains all 55 page text files, the LP1 warning page, scripts and results; no network or model is required.",
     "script": "experiments/records/four-phase-ioc/run.py",
-    "script_sha256": "d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7",
+    "script_sha256": "cf36868fe3ca67e600e30e9a48206f4375796d8304aec2596c2c2135b82fa04f",
     "inputs": [
       {
         "path": "data/index.json",
@@ -111,15 +111,15 @@
       },
       {
         "path": "experiments/records/four-phase-ioc/plan.json",
-        "sha256": "97ea58f1075bb88503fa2acb27c11882394e8bca0c3b163b4e697d07e47588c9"
+        "sha256": "c2d1f4ecc399714eecc9b7f26f9f48024d8d4d6d359907403af89c78e994b795"
       },
       {
         "path": "experiments/records/four-phase-ioc/check.py",
-        "sha256": "f4f7348faf6c5962906c4f41587805158f8863080bf61408a1e1c84f08d34002"
+        "sha256": "17147f44e7be56164537f5e2e23e3781fb024ce6c83d7413ebf1f4c3defe41c8"
       },
       {
         "path": "experiments/records/four-phase-ioc/plot.py",
-        "sha256": "349f21196cfc764131afb0b0d57408bfc83033d74c564d4373f3e21f7c75a331"
+        "sha256": "f1974bfe1885b504b5a3218fa8efa7a6dd8aaf1f8b36295a2a3482a4ab72cfe0"
       },
       {
         "path": "text/lp2-00.txt",
@@ -345,15 +345,15 @@
     "outputs": [
       {
         "path": "experiments/records/four-phase-ioc/results.json",
-        "sha256": "9c0d94e129880bc3585ea12a4270bb03791967d817778f284bf46196840cfcbb"
+        "sha256": "65ce7f34fcfcf6c7ea2a14e583d535fb4cead35767fb4fc709558cddcbbb8df1"
       },
       {
         "path": "experiments/records/four-phase-ioc/check.json",
-        "sha256": "559faf2b616c6315ba8629afd28f17706341196b54fad13e7e92413f59b42542"
+        "sha256": "b278c69600d0737e605c1e6ff555efa873764d120cc126aaa99bcf794dd7edae"
       },
       {
         "path": "experiments/records/four-phase-ioc/phase-comparison.svg",
-        "sha256": "13842bc780e5b32264a5657d3840d020e6c2700f12b44410fccd2825c910a8ec"
+        "sha256": "51ae619992c6aa10115e6287aa2be492fe494324fc1e8ea231f8d55a6ad42097"
       }
     ]
   },
@@ -383,9 +383,9 @@
   "reader_note": "Four alternating streams show ordinary rune concentration under a page-preserving shuffle. This does not test every four-way cipher.",
   "reader_limit": "A fixed positional split and a monogram statistic are narrower than the cited 185-operation sweep.",
   "scope_summary": "LP2-00–55 except LP2-50 · 12956 runes · four phases · two IoC measures · 1999 page shuffles.",
-  "article": "## Result\n\n**Splitting the unsolved rune stream into four alternating streams does not expose the concentration expected from four simple substitution alphabets.** The four measured collision rates lie within the middle 95% of page-preserving shuffled comparisons. A planted four-stream example is detected by the same measure. This says nothing decisive about four separate running keys, feedback ciphers or a different way to assign runes to streams.\n\n![Successive rune positions assigned to four phases, followed by each phase's observed collision rate and the shuffled reference interval.](experiments/records/four-phase-ioc/phase-comparison.svg)\n\nTake every fourth rune, starting with positions zero, one, two and three. For each resulting stream, the index of coincidence (IoC) is the chance that two different positions contain the same rune. A fixed substitution or a fixed additive shift changes rune labels but preserves that concentration. An independent keyed stream that continually changes its substitution need not preserve it. [How IoC works](#/wiki/index-of-coincidence).\n\n| Check | Manuscript | Page-shuffle comparison |\n| --- | ---: | ---: |\n| Mean IoC across four phases | 0.034511 | 0.034416–0.034551 middle 95%; 361 of 1,999 shuffles at least as high |\n| Highest phase IoC | 0.034564 | 0.034460–0.034697 middle 95%; 945 of 1,999 shuffles at least as high |\n\nThe two upper-tail estimates are **0.181** and **0.473**. Neither is unusual; correcting for checking both measures gives a smallest adjusted estimate of **0.362**. Each comparison shuffles rune order *within each page*, keeping its length and rune counts. It then repeats the four-way split from the start of the concatenated book. Thus the test asks whether the original order adds a four-phase concentration signal beyond the fixed page histograms.\n\n## What was actually tested\n\nThe source is the [published “literal imperatives” sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md), which includes decimation and four-way interleaving among 185 operations. **This is an independent, narrower test, not a replay of its decoder verdict.** Its public checkout omits the generated nine-register language model and at least one corpus needed to rebuild it, so a fresh clone cannot currently rerun that entire scorer. The present record uses only the archived runes and a fully specified statistical comparison.\n\nThe source's phrase “LP2 pages 0–54” hides a numbering detail. Its loader drops an all-number page before numbering rune-bearing segments. Its 12,956-rune stream matches the actual images **LP2-00 through LP2-55, excluding number-only LP2-50**. We use those actual page labels: 55 rune-bearing pages, with the phase count continuing across page breaks. [Manuscript reader](#/reader).\n\nAs a power check, we Atbash-decoded the 184-rune [LP1 warning page](#/reader/lp1-01), made four copies shifted by 0, 3, 7 and 11 rune places, and interleaved them. Their mean phase IoC was **0.0640**. None of 1,999 whole-stream shuffles reached it. This confirms that the measure can see a strong four-stream substitution signal; it is not a control for every plausible cipher.\n\n## Repeat the check\n\nDownload [this experiment](downloads/experiments/four-phase-ioc.zip) for the script, fixed plan, input text, results and figure. From the repository root run:\n\n```text\npython experiments/records/four-phase-ioc/run.py --check\npython experiments/records/four-phase-ioc/check.py\n```\n\nThe [plan](experiments/records/four-phase-ioc/plan.json) fixes the page mapping, two measures, shuffling rule and 1,999 trials. The [results](experiments/records/four-phase-ioc/results.json) retain the observed scores and tail counts. An [independent arithmetic check](experiments/records/four-phase-ioc/check.json) repeats the mean-IoC comparison with another random seed. The result is conditional on this particular four-phase concentration model; it does not close the broader hint or the source's other operations.\n",
+  "article": "## Finding\n\n**Splitting the unsolved rune stream into four alternating streams does not expose the concentration expected from four simple substitution alphabets.** The four measured collision rates lie within the middle 95% of page-preserving shuffled comparisons. A planted four-stream example is detected by the same measure. This says nothing decisive about four separate running keys, feedback ciphers or a different way to assign runes to streams.\n\n![Successive rune positions assigned to four phases, followed by each phase's observed collision rate and the shuffled reference interval.](experiments/records/four-phase-ioc/phase-comparison.svg)\n\nTake every fourth rune, starting with positions zero, one, two and three. For each resulting stream, the index of coincidence (IoC) is the chance that two different positions contain the same rune. A fixed substitution or a fixed additive shift changes rune labels but preserves that concentration. An independent keyed stream that continually changes its substitution need not preserve it. [How IoC works](#/wiki/index-of-coincidence).\n\n| Check | Manuscript | Page-shuffle comparison |\n| --- | ---: | ---: |\n| Mean IoC across four phases | 0.034511 | 0.034416–0.034551 middle 95%; 361 of 1,999 shuffles at least as high |\n| Highest phase IoC | 0.034564 | 0.034460–0.034697 middle 95%; 945 of 1,999 shuffles at least as high |\n\nThe two upper-tail estimates are **0.181** and **0.473**. Neither is unusual; correcting for checking both measures gives a smallest adjusted estimate of **0.362**. Each comparison shuffles rune order *within each page*, keeping its length and rune counts. It then repeats the four-way split from the start of the concatenated book. Thus the test asks whether the original order adds a four-phase concentration signal beyond the fixed page histograms.\n\n## What was actually tested\n\nThe source is the [published “literal imperatives” sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md), which includes decimation and four-way interleaving among 185 operations. **This is an independent, narrower test, not a replay of its decoder verdict.** Its public checkout omits the generated nine-register language model and at least one corpus needed to rebuild it, so a fresh clone cannot currently rerun that entire scorer. The present record uses only the archived runes and a fully specified statistical comparison.\n\nThe source's phrase “LP2 pages 0–54” hides a numbering detail. Its loader drops an all-number page before numbering rune-bearing segments. Its 12,956-rune stream matches the actual images **LP2-00 through LP2-55, excluding number-only LP2-50**. We use those actual page labels: 55 rune-bearing pages, with the phase count continuing across page breaks. [Manuscript reader](#/reader).\n\nAs a power check, we Atbash-decoded the 184-rune [LP1 warning page](#/reader/lp1-01), made four copies shifted by 0, 3, 7 and 11 rune places, and interleaved them. Their mean phase IoC was **0.0640**. None of 1,999 whole-stream shuffles reached it. This confirms that the measure can see a strong four-stream substitution signal; it is not a control for every plausible cipher.\n\n## Repeat the check\n\nDownload [this experiment](downloads/experiments/four-phase-ioc.zip) for the script, fixed plan, input text, results and figure. From the repository root run:\n\n```text\npython experiments/records/four-phase-ioc/run.py --check\npython experiments/records/four-phase-ioc/check.py\n```\n\nThe [plan](experiments/records/four-phase-ioc/plan.json) fixes the page mapping, two measures, shuffling rule and 1,999 trials. The [results](experiments/records/four-phase-ioc/results.json) retain the observed scores and tail counts. An [independent arithmetic check](experiments/records/four-phase-ioc/check.json) repeats the mean-IoC comparison with another random seed. The result is conditional on this particular four-phase concentration model; it does not close the broader hint or the source's other operations.\n",
   "article_path": "experiments/records/four-phase-ioc/article.md",
-  "script_sha256": "d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7",
+  "script_sha256": "cf36868fe3ca67e600e30e9a48206f4375796d8304aec2596c2c2135b82fa04f",
   "record_type": {
     "id": "measurement",
     "label": "Manuscript measurement",

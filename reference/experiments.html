@@ -6922,7 +6922,7 @@
     &quot;command&quot;: &quot;python experiments/records/four-phase-ioc/run.py --check&quot;,
     &quot;environment&quot;: &quot;Python 3.12 standard library. A fresh copy of this experiment bundle contains all 55 page text files, the LP1 warning page, scripts and results; no network or model is required.&quot;,
     &quot;script&quot;: &quot;experiments/records/four-phase-ioc/run.py&quot;,
-    &quot;script_sha256&quot;: &quot;d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7&quot;,
+    &quot;script_sha256&quot;: &quot;cf36868fe3ca67e600e30e9a48206f4375796d8304aec2596c2c2135b82fa04f&quot;,
     &quot;inputs&quot;: [
       {
         &quot;path&quot;: &quot;data/index.json&quot;,
@@ -6934,15 +6934,15 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/plan.json&quot;,
-        &quot;sha256&quot;: &quot;97ea58f1075bb88503fa2acb27c11882394e8bca0c3b163b4e697d07e47588c9&quot;
+        &quot;sha256&quot;: &quot;c2d1f4ecc399714eecc9b7f26f9f48024d8d4d6d359907403af89c78e994b795&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/check.py&quot;,
-        &quot;sha256&quot;: &quot;f4f7348faf6c5962906c4f41587805158f8863080bf61408a1e1c84f08d34002&quot;
+        &quot;sha256&quot;: &quot;17147f44e7be56164537f5e2e23e3781fb024ce6c83d7413ebf1f4c3defe41c8&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/plot.py&quot;,
-        &quot;sha256&quot;: &quot;349f21196cfc764131afb0b0d57408bfc83033d74c564d4373f3e21f7c75a331&quot;
+        &quot;sha256&quot;: &quot;f1974bfe1885b504b5a3218fa8efa7a6dd8aaf1f8b36295a2a3482a4ab72cfe0&quot;
       },
       {
         &quot;path&quot;: &quot;text/lp2-00.txt&quot;,
@@ -7168,15 +7168,15 @@
     &quot;outputs&quot;: [
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/results.json&quot;,
-        &quot;sha256&quot;: &quot;9c0d94e129880bc3585ea12a4270bb03791967d817778f284bf46196840cfcbb&quot;
+        &quot;sha256&quot;: &quot;65ce7f34fcfcf6c7ea2a14e583d535fb4cead35767fb4fc709558cddcbbb8df1&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/check.json&quot;,
-        &quot;sha256&quot;: &quot;559faf2b616c6315ba8629afd28f17706341196b54fad13e7e92413f59b42542&quot;
+        &quot;sha256&quot;: &quot;b278c69600d0737e605c1e6ff555efa873764d120cc126aaa99bcf794dd7edae&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/four-phase-ioc/phase-comparison.svg&quot;,
-        &quot;sha256&quot;: &quot;13842bc780e5b32264a5657d3840d020e6c2700f12b44410fccd2825c910a8ec&quot;
+        &quot;sha256&quot;: &quot;51ae619992c6aa10115e6287aa2be492fe494324fc1e8ea231f8d55a6ad42097&quot;
       }
     ]
   },
@@ -7206,9 +7206,9 @@
   &quot;reader_note&quot;: &quot;Four alternating streams show ordinary rune concentration under a page-preserving shuffle. This does not test every four-way cipher.&quot;,
   &quot;reader_limit&quot;: &quot;A fixed positional split and a monogram statistic are narrower than the cited 185-operation sweep.&quot;,
   &quot;scope_summary&quot;: &quot;LP2-00–55 except LP2-50 · 12956 runes · four phases · two IoC measures · 1999 page shuffles.&quot;,
-  &quot;article&quot;: &quot;## Result\n\n**Splitting the unsolved rune stream into four alternating streams does not expose the concentration expected from four simple substitution alphabets.** The four measured collision rates lie within the middle 95% of page-preserving shuffled comparisons. A planted four-stream example is detected by the same measure. This says nothing decisive about four separate running keys, feedback ciphers or a different way to assign runes to streams.\n\n![Successive rune positions assigned to four phases, followed by each phase&#x27;s observed collision rate and the shuffled reference interval.](experiments/records/four-phase-ioc/phase-comparison.svg)\n\nTake every fourth rune, starting with positions zero, one, two and three. For each resulting stream, the index of coincidence (IoC) is the chance that two different positions contain the same rune. A fixed substitution or a fixed additive shift changes rune labels but preserves that concentration. An independent keyed stream that continually changes its substitution need not preserve it. [How IoC works](#/wiki/index-of-coincidence).\n\n| Check | Manuscript | Page-shuffle comparison |\n| --- | ---: | ---: |\n| Mean IoC across four phases | 0.034511 | 0.034416–0.034551 middle 95%; 361 of 1,999 shuffles at least as high |\n| Highest phase IoC | 0.034564 | 0.034460–0.034697 middle 95%; 945 of 1,999 shuffles at least as high |\n\nThe two upper-tail estimates are **0.181** and **0.473**. Neither is unusual; correcting for checking both measures gives a smallest adjusted estimate of **0.362**. Each comparison shuffles rune order *within each page*, keeping its length and rune counts. It then repeats the four-way split from the start of the concatenated book. Thus the test asks whether the original order adds a four-phase concentration signal beyond the fixed page histograms.\n\n## What was actually tested\n\nThe source is the [published “literal imperatives” sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md), which includes decimation and four-way interleaving among 185 operations. **This is an independent, narrower test, not a replay of its decoder verdict.** Its public checkout omits the generated nine-register language model and at least one corpus needed to rebuild it, so a fresh clone cannot currently rerun that entire scorer. The present record uses only the archived runes and a fully specified statistical comparison.\n\nThe source&#x27;s phrase “LP2 pages 0–54” hides a numbering detail. Its loader drops an all-number page before numbering rune-bearing segments. Its 12,956-rune stream matches the actual images **LP2-00 through LP2-55, excluding number-only LP2-50**. We use those actual page labels: 55 rune-bearing pages, with the phase count continuing across page breaks. [Manuscript reader](#/reader).\n\nAs a power check, we Atbash-decoded the 184-rune [LP1 warning page](#/reader/lp1-01), made four copies shifted by 0, 3, 7 and 11 rune places, and interleaved them. Their mean phase IoC was **0.0640**. None of 1,999 whole-stream shuffles reached it. This confirms that the measure can see a strong four-stream substitution signal; it is not a control for every plausible cipher.\n\n## Repeat the check\n\nDownload [this experiment](downloads/experiments/four-phase-ioc.zip) for the script, fixed plan, input text, results and figure. From the repository root run:\n\n```text\npython experiments/records/four-phase-ioc/run.py --check\npython experiments/records/four-phase-ioc/check.py\n```\n\nThe [plan](experiments/records/four-phase-ioc/plan.json) fixes the page mapping, two measures, shuffling rule and 1,999 trials. The [results](experiments/records/four-phase-ioc/results.json) retain the observed scores and tail counts. An [independent arithmetic check](experiments/records/four-phase-ioc/check.json) repeats the mean-IoC comparison with another random seed. The result is conditional on this particular four-phase concentration model; it does not close the broader hint or the source&#x27;s other operations.\n&quot;,
+  &quot;article&quot;: &quot;## Finding\n\n**Splitting the unsolved rune stream into four alternating streams does not expose the concentration expected from four simple substitution alphabets.** The four measured collision rates lie within the middle 95% of page-preserving shuffled comparisons. A planted four-stream example is detected by the same measure. This says nothing decisive about four separate running keys, feedback ciphers or a different way to assign runes to streams.\n\n![Successive rune positions assigned to four phases, followed by each phase&#x27;s observed collision rate and the shuffled reference interval.](experiments/records/four-phase-ioc/phase-comparison.svg)\n\nTake every fourth rune, starting with positions zero, one, two and three. For each resulting stream, the index of coincidence (IoC) is the chance that two different positions contain the same rune. A fixed substitution or a fixed additive shift changes rune labels but preserves that concentration. An independent keyed stream that continually changes its substitution need not preserve it. [How IoC works](#/wiki/index-of-coincidence).\n\n| Check | Manuscript | Page-shuffle comparison |\n| --- | ---: | ---: |\n| Mean IoC across four phases | 0.034511 | 0.034416–0.034551 middle 95%; 361 of 1,999 shuffles at least as high |\n| Highest phase IoC | 0.034564 | 0.034460–0.034697 middle 95%; 945 of 1,999 shuffles at least as high |\n\nThe two upper-tail estimates are **0.181** and **0.473**. Neither is unusual; correcting for checking both measures gives a smallest adjusted estimate of **0.362**. Each comparison shuffles rune order *within each page*, keeping its length and rune counts. It then repeats the four-way split from the start of the concatenated book. Thus the test asks whether the original order adds a four-phase concentration signal beyond the fixed page histograms.\n\n## What was actually tested\n\nThe source is the [published “literal imperatives” sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md), which includes decimation and four-way interleaving among 185 operations. **This is an independent, narrower test, not a replay of its decoder verdict.** Its public checkout omits the generated nine-register language model and at least one corpus needed to rebuild it, so a fresh clone cannot currently rerun that entire scorer. The present record uses only the archived runes and a fully specified statistical comparison.\n\nThe source&#x27;s phrase “LP2 pages 0–54” hides a numbering detail. Its loader drops an all-number page before numbering rune-bearing segments. Its 12,956-rune stream matches the actual images **LP2-00 through LP2-55, excluding number-only LP2-50**. We use those actual page labels: 55 rune-bearing pages, with the phase count continuing across page breaks. [Manuscript reader](#/reader).\n\nAs a power check, we Atbash-decoded the 184-rune [LP1 warning page](#/reader/lp1-01), made four copies shifted by 0, 3, 7 and 11 rune places, and interleaved them. Their mean phase IoC was **0.0640**. None of 1,999 whole-stream shuffles reached it. This confirms that the measure can see a strong four-stream substitution signal; it is not a control for every plausible cipher.\n\n## Repeat the check\n\nDownload [this experiment](downloads/experiments/four-phase-ioc.zip) for the script, fixed plan, input text, results and figure. From the repository root run:\n\n```text\npython experiments/records/four-phase-ioc/run.py --check\npython experiments/records/four-phase-ioc/check.py\n```\n\nThe [plan](experiments/records/four-phase-ioc/plan.json) fixes the page mapping, two measures, shuffling rule and 1,999 trials. The [results](experiments/records/four-phase-ioc/results.json) retain the observed scores and tail counts. An [independent arithmetic check](experiments/records/four-phase-ioc/check.json) repeats the mean-IoC comparison with another random seed. The result is conditional on this particular four-phase concentration model; it does not close the broader hint or the source&#x27;s other operations.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/four-phase-ioc/article.md&quot;,
-  &quot;script_sha256&quot;: &quot;d0db35dd2e3081f7451bd06549c998771373bb7dd096dafb6af5db9bfd9e67f7&quot;,
+  &quot;script_sha256&quot;: &quot;cf36868fe3ca67e600e30e9a48206f4375796d8304aec2596c2c2135b82fa04f&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;measurement&quot;,
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
@@ -22534,37 +22534,37 @@
     &quot;inputs&quot;: [
       {
         &quot;path&quot;: &quot;research/red-initials-audit.csv&quot;,
-        &quot;sha256&quot;: &quot;ec6df822d6840e7ce5c81e736f16307dfff3ad6662eeebf5192e17635ae352b1&quot;
+        &quot;sha256&quot;: &quot;4312d114cd6b5d3bc6bf2628a58094a9978deb4754f4ecbf595f5057fbbad3d9&quot;
       },
       {
         &quot;path&quot;: &quot;scripts/audit_red_initials.py&quot;,
-        &quot;sha256&quot;: &quot;324bd169caaf513a3886a744775ee674015157c6e52503a933d171f2998f18cc&quot;
+        &quot;sha256&quot;: &quot;acf3d305c95bfe153530271b6c60d37a3af18f500d05a913444b6b47c9dfcb9f&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/plan.json&quot;,
-        &quot;sha256&quot;: &quot;caa11265eb439099dac9612d71468050acc6fb19c63f4b919bd3bfbb06bd6048&quot;
+        &quot;sha256&quot;: &quot;8b14e9513da1f4252289f7922d0c754bade951034291b7659b205cf73cbf0a74&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/check.py&quot;,
-        &quot;sha256&quot;: &quot;8250b5ffcad56e5e3cf7951fa03ae261f73a52ae0fef06c93850dcc39d43a6ad&quot;
+        &quot;sha256&quot;: &quot;5f0596594e4f070a4a94419085ab630764238f522d91eef05192a3e71ce84418&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/plot.py&quot;,
-        &quot;sha256&quot;: &quot;bae6c37534ec8cbefbd70ce4ae4f73aa71cc7db8b4ed8c5d522eeb90ad951b45&quot;
+        &quot;sha256&quot;: &quot;ac572cfe8b6a530e4c176d463d406f97db8a8cf3248384c848bc27febee2ca84&quot;
       }
     ],
     &quot;outputs&quot;: [
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/results.json&quot;,
-        &quot;sha256&quot;: &quot;22666744992dd174431afd0d536b87a26783194d87191386f6d42eead4dbe282&quot;
+        &quot;sha256&quot;: &quot;9b96a1973b80f04faffe1b3c638775e67a40cd0d4ffb2b22c3e0a3b8ca7de0cf&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/check.json&quot;,
-        &quot;sha256&quot;: &quot;9f8c97d7bd141805c0d67ef8e69b58063f4a37e7242ba8dc4e29a1e540606426&quot;
+        &quot;sha256&quot;: &quot;0c6ae3c987afd287099f0ce30e7fc80107fe29e6d11b0dd130bea2996ac11afd&quot;
       },
       {
         &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/page-order.svg&quot;,
-        &quot;sha256&quot;: &quot;6d7f048aca74f9c7c2227cbd11dc0cb588f288576653d3c0079a330f394c52c1&quot;
+        &quot;sha256&quot;: &quot;c416df770bb49d1b153364c04dbe5c9fb82e87cd4f5ca03da3746128b45eb016&quot;
       }
     ]
   },
