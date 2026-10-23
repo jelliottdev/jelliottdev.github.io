@@ -15,6 +15,14 @@ The second command decodes LP1-01 with Atbash and checks the literal result agai
 control. Unusual spellings are preserved intentionally. For setup and a
 rune-by-rune explanation, open reference/articles/running-scripts.txt.
 
+RUN ONE EXPERIMENT
+Published experiment records and articles are included here. Their scripts,
+source inputs and saved outputs are in separate, complete experiment ZIPs:
+  https://jelliottdev.github.io/downloads/experiments/<record-id>.zip
+Find the record ID and bundle URL in data/experiment-index.json. Extract the
+chosen ZIP into an empty folder and follow its START-HERE-<record-id>.txt.
+This keeps the reference download small as the experiment archive grows.
+
 CHOOSE A TASK
 Check every known reading (nine sections, 17 pages):
   python scripts/reproduce_reading.py --check-all

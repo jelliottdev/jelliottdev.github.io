@@ -1,0 +1,699 @@
+CICADA 3301 - LIBER PRIMUS 2
+COLLECTED SOLUTION IDEAS
+Collected through October 23, 2026
+
+Scope: Existing public proposals and implemented attack ideas found in GitHub
+repositories, Reddit discussions, solver websites/wikis, and accessible old
+4chan archives. This is a deduplicated catalog, not new solution development.
+Includes approaches already attempted; inclusion does not mean untested,
+promising, correct, or endorsed. Reported failures were not independently rerun.
+Speculative interpretations and disputed solution claims are identified.
+
+Numbering: LP2 uses the original filenames 0.jpg through 57.jpg. Some sources
+instead use combined-book numbering or omit the runeless page 50. Page 56
+(AN END) and page 57 (PARABLE) provide clues for attacking the remaining pages.
+LP1 material appears below only where someone proposed applying it to LP2.
+
+
+1. STRUCTURE, BOUNDARIES, AND THE UNIT OF ENCRYPTION
+
+  1.1 Separate encryption by artwork-defined section.
+      Treat each change in marginal artwork and red heading as a potential
+      change of cipher, key, or initialization rule.
+
+  1.2 Separate encryption by page.
+      Test whether individual pages can be solved independently even when
+      neighboring pages have matching artwork.
+
+  1.3 One continuous stream across pages.
+      Carry key position across page boundaries instead of restarting it.
+
+  1.4 Smaller reset boundaries.
+      Restart a key at a word, line, clause, sentence, paragraph, or section
+      delimiter; compare these alternatives within the same cipher family.
+
+  1.5 Whole-word or multi-rune encryption.
+      Treat words or rune groups as encryption units rather than assuming
+      that each ciphertext rune independently represents one plaintext rune.
+
+  1.6 Word-length skeleton as a plaintext constraint.
+      Match sequences of rune-word lengths against dictionaries, word n-grams,
+      or whole passages, retaining punctuation and joining physical line wraps.
+
+  1.7 Alternative plaintext language or spelling.
+      Search beyond ordinary modern English: Latin, Old English, Welsh,
+      German, archaic/phonetic English, or vowel-dropped English. Account for
+      multigraph runes and C/K, U/V, S/Z spelling equivalences.
+
+
+2. CLASSICAL CIPHERS AND THEIR LP-SPECIFIC VARIANTS
+
+  2.1 Reapply the demonstrated LP cipher toolkit.
+      Direct transliteration, Atbash, Caesar shifts, and combinations such as
+      Atbash plus a shift; allow different combinations by section.
+
+  2.2 Repeating-key Vigenere and related arithmetic.
+      Test Vigenere, Beaufort, and variant sign conventions over 29 runes.
+      Subcategories:
+        - Dictionary keys and Cicada vocabulary.
+        - Longer periods that small samples cannot reliably expose.
+        - Different starting phases and reversed key/text directions.
+
+  2.3 Modified dictionary keys.
+      Replace a particular letter throughout a candidate word, following the
+      CIRCUMFERENCE -> FIRFUMFERENFE precedent; a normal wordlist misses this.
+
+  2.4 Pattern-expanded keys.
+      Extend a short key by rotating it between repetitions, or traversing it
+      forward then backward, with or without repeated endpoints.
+
+  2.5 Alternating alphabets.
+      Interleave separate alphabets or keys on alternating positions or
+      residue classes; allow their periods to differ.
+
+  2.6 Keyword-reordered alphabets.
+      Build a mixed alphabet from a keyword before applying Vigenere or
+      autokey, rather than always using the published GP order.
+
+  2.7 Grouped Vigenere.
+      Apply one key step to a variable-sized group of runes rather than
+      advancing the key after every rune.
+
+  2.8 Affine encryption.
+      Combine multiplication and addition modulo 29, including periodic
+      sequences of multiplier/offset pairs.
+
+  2.9 Progressive/Alberti-style encryption.
+      Rotate the working alphabet as the text proceeds instead of using a
+      stationary substitution or a simple repeating key.
+
+  2.10 Hill cipher.
+       Use rune vectors and modular matrices; proposed keys include the
+       existing LP magic squares, alongside searched 2x2 and 3x3 matrices.
+
+  2.11 Playfair-style digraph encryption.
+       Explore pair-based rules that discourage identical adjacent symbols,
+       motivated by LP2's unusually low doublet count.
+
+  2.12 Fractionation.
+       Split runes into coordinates, transpose the coordinate stream, and
+       reconstruct symbols: Bifid, Trifid, or Polybius-style constructions.
+
+  2.13 Substitution beyond individual runes.
+       Frequency-based substitutions of rune bigrams/trigrams, or homophonic
+       mappings, rather than only ordinary one-symbol substitution.
+
+  2.14 Layered encryption.
+       Combine a keyword cipher with a mathematical stream or transposition;
+       test the layer order instead of assuming a single operation.
+
+
+3. INTERRUPTERS, NULLS, AND KEY SYNCHRONIZATION
+
+  3.1 Search the F-interrupter pattern.
+      Decide which F runes are unenciphered interruptions and which are
+      ordinary encrypted symbols; skip key advancement at interruptions.
+
+  3.2 Generalize the interrupter rune.
+      Allow any of the 29 runes, rather than only F, to be the interrupter in
+      an unsolved section.
+
+  3.3 Recover the key from a short prefix first.
+      Attack the beginning before the first interruption, then use the
+      recovered key to locate later interruptions and extend the plaintext.
+
+  3.4 Joint key-and-interrupter search.
+      Use exhaustive subsets, sequential search, beam search, or dynamic
+      programming to recover key alignment and language together.
+
+  3.5 Two interpretations of interruption in alternating alphabets.
+      An interrupter could pause the alphabet alternation itself, or only
+      pause the key position within the currently selected alphabet.
+
+  3.6 Interrupter locations as a separate message.
+      Read positions, gaps, or the presence/absence of F as a numeric or
+      binary stream independent of the main decryption.
+
+  3.7 Interrupters as block boundaries.
+      Partition the stream at F and interpret the resulting blocks as
+      permutations or block codes, including Lehmer-code-style proposals.
+
+  3.8 Additional nulls or padding.
+      Consider whether unexplained word lengths reflect inserted symbols
+      beyond the familiar F mechanism.
+
+
+4. AUTOKEY, FEEDBACK, AND THE DOUBLET DEFICIT
+
+  4.1 Plaintext autokey.
+      Extend a seed with previously recovered plaintext.
+
+  4.2 Ciphertext autokey.
+      Extend a seed with earlier ciphertext instead.
+
+  4.3 Gematria-feedback autokey.
+      Feed back a previous rune's GP prime value, rather than its alphabet
+      index; also proposed with totients and related arithmetic transforms.
+
+  4.4 Cumulative feedback.
+      Generate each key step from running GP sums or longer rune history,
+      rather than a single preceding rune.
+
+  4.5 Recover an unknown feedback function using cribs.
+      Infer a lookup table from guessed plaintext, reject contradictions,
+      and see whether the same table extends the rest of the passage.
+
+  4.6 Difference/integral encoding.
+      Examine adjacent rune differences or cumulative sums modulo 29 to
+      undo a possible chained or cumulative encoding layer.
+
+  4.7 Anti-repeat key switching.
+      Change or advance the Vigenere key when the next output would repeat
+      the preceding ciphertext rune.
+
+  4.8 Anti-repeat rejection sampling.
+      A generator may discard candidate key symbols until the output is
+      different, sometimes tolerating repeats. Decode with key skips and
+      drift rather than fixed ciphertext/key alignment.
+
+  4.9 Residual doublets as clues.
+      Examine the surviving doubles by identity, spacing, parity, word
+      boundary, or section to distinguish deliberate exceptions from noise.
+
+  4.10 Two-track interleaving.
+       Separate alternating or periodically interleaved streams to see
+       whether the low adjacent-repeat rate hides ordinary component texts.
+
+
+5. NUMBER-THEORETIC AND GENERATED KEYSTREAMS
+
+  5.1 Prime sequence and prime-minus-one sequence.
+      Extend the page-56 method, varying start, stride, direction, additive
+      offset, and whether the sequence restarts at a structural boundary.
+
+  5.2 Totient sequences.
+      Use phi(n), phi(prime_n), iterated totients, or totients of running
+      sums; distinguish these from the simpler prime-minus-one case.
+
+  5.3 Primes selected by another sequence.
+      Use Fibonacci-indexed primes, totient-indexed primes, their emirps,
+      or the totients of those selected values.
+
+  5.4 Prime gaps and prime indices.
+      Use differences between successive primes or the index of a prime
+      rather than the prime's numerical magnitude.
+
+  5.5 Fibonacci-family streams.
+      Search Fibonacci or Lucas sequences with different initial seeds
+      and starting offsets, reduced modulo 29.
+
+  5.6 Other arithmetic functions and elementary sequences.
+      Proposed streams include Mobius mu, Carmichael lambda, divisor counts
+      and sums, triangular numbers, squares, cubes, factorials, Catalan
+      numbers, composites, powers of two, naturals, and odd numbers.
+
+  5.7 Mathematical constants.
+      Use digits of pi, e, the golden ratio, or sqrt(2) as a key stream.
+
+  5.8 OEIS sequence search.
+      Compare implied keys with known integer sequences, or apply candidate
+      sequences directly to short cribs under different offsets and shifts.
+
+  5.9 The LP1 numeric-square function.
+      Use abs(3301 - p) and related prime/totient/Fibonacci-prime variants
+      inferred from the earlier square's numerical relationships.
+
+  5.10 Gromark/chain-addition keys.
+       Expand a short numeric primer through recursive addition instead of
+       repeating the primer unchanged.
+
+  5.11 Seeded pseudorandom streams.
+       Proposed families include LCG, LFSR, Mersenne Twister, BBS, ISAAC,
+       and combinations such as a Geffe generator.
+
+  5.12 Historically plausible software generators.
+       Reproduce Python 2.x, Perl, bash RANDOM, PHP mt_rand, .NET Random,
+       or TeX generators, including implementation-specific seed handling.
+
+  5.13 Hash-expanded and stretched keys.
+       Expand a short Cicada-related word, number, or artifact through
+       repeated hashes, counter-mode hashes, or a key-derivation function.
+
+  5.14 Artifact-derived seeds.
+       Seed a generator from release times, page numbers, familiar Cicada
+       primes, PGP-related values, or numbers left unused in earlier rounds.
+
+
+6. GEMATRIA AS DATA, INDEXES, OR DIRECTIONS
+
+  6.1 GP word sums as a key stream.
+      Sum rune-prime values per word, then use the sums directly or map them
+      through prime-index/totient operations.
+
+  6.2 GP line, sentence, and section totals.
+      Treat larger text-unit sums as key material rather than reducing
+      everything to individual alphabet indexes.
+
+  6.3 Prime and emirp selection.
+      Extract words, lines, or sentences whose sums are prime or reverse to
+      another prime; use the selected material or its locations.
+
+  6.4 Product of GP sentence sums.
+      Apply the numerical treatment associated with the earlier instar
+      parable to the repeated PARABLE clue and related text.
+
+  6.5 Gematria values as positions.
+      Use a word's number to select a page, word, rune, or another location
+      in the book, following the words/map/numbers/direction hint.
+
+  6.6 Gematria values as movement instructions.
+      Interpret values, prime indexes, or totients as turns and distances
+      through a text grid or drawn path.
+
+  6.7 Work in the prime-value channel before taking mod 29.
+      Explore multiplication, factorization, digit sums, or arithmetic on
+      full GP magnitudes rather than only alphabet positions.
+
+  6.8 Separate numerical digit planes.
+      Read components of GP values in different bases as separate streams.
+
+  6.9 Entire sections as large integers.
+      Concatenate or pack numerical values and test for primes, powers,
+      binary structure, or a cryptographic numerical object.
+
+  6.10 Invert a numerical sum into possible words.
+       Enumerate partitions of a target number into GP primes, filtering by
+       word length, repetition, and vowels to produce candidate cribs.
+
+
+7. THE BOOK AS ITS OWN KEY
+
+  7.1 Solved plaintext as a running key.
+      Try solved pages or sections, including starts at successive words.
+
+  7.2 Solved plaintext with modified rune spellings.
+      Replace a chosen rune throughout a solved key text, following the
+      modified-CIRCUMFERENCE precedent.
+
+  7.3 Another ciphertext page as the key.
+      Apply page-on-page subtraction, XOR, or other combinations; search
+      for reused key material or aligned repeated plaintext.
+
+  7.4 Reverse the key/message roles.
+      Treat LP2 itself as a pad for earlier unsolved artifacts rather than
+      assuming LP2 is always the object to decrypt.
+
+  7.5 Acrostics and positional extractions from solved text.
+      Read initials, final letters, every-nth symbols, or other selected
+      positions after decryption instead of from the ciphertext.
+
+  7.6 Cross-section keyword clues.
+      Reuse DIVINITY, CIRCUMFERENCE, INSTAR, and the LP1 wisdom-square words;
+      also combine CONSUMPTION, PRESERVATION, and ADHERENCE as key clues.
+
+  7.7 LP1 magic squares as general key material.
+      Read square entries in rows, columns, diagonals, or spirals; use the
+      resulting stream directly, as matrix data, or through GP arithmetic.
+
+  7.8 Hidden diagonal structure in the magic squares. [speculative]
+      Rearrange or inspect diagonals to expose 3301/1033-related sums and
+      connect them with later signed-message GP totals.
+
+
+8. EXTERNAL TEXTS AND BOOK CIPHERS
+
+  8.1 A separate book cipher.
+      Interpret LP words or numerical values as page/line/word/letter
+      references into an external text rather than a substitution key.
+
+  8.2 Previously referenced Cicada literature as running keys.
+      Mabinogion, Emerson's Self-Reliance, Gibson's Agrippa, The King in
+      Yellow, and Crowley's Book of the Law are recurring candidates.
+
+  8.3 William Blake as the external-text clue.
+      Use the cover's Blake imagery to select poems, passages, or a book
+      that supplies key material.
+
+  8.4 Jung's Red Book/Liber Novus connection. [speculative]
+      Treat its Liber Primus section and shared journey/self-knowledge
+      themes as a possible reference text or interpretation guide.
+
+  8.5 Runic and Norse sources.
+      Try rune poems, the Eddas, Beowulf, or Deor as keys or crib sources.
+
+  8.6 Religious, occult, and philosophical corpora.
+      Existing searches propose Kabbalistic, Gnostic, Hermetic, alchemical,
+      Thelemic, Taoist, and other scriptural/philosophical texts as keys.
+
+  8.7 Mathematical/scientific reference texts.
+      Try sources such as Euclid and Newton's Principia, prompted by the
+      mathematical language and cover artwork.
+
+  8.8 Cypherpunk writing and manifestos.
+      Use the Cypherpunk's Manifesto and related liberty/privacy texts as
+      running keys or sources of characteristic plaintext.
+
+  8.9 Cicada's own signed messages as key text.
+      Test earlier instructions, PGP-signed prose, and later LP reminders.
+
+  8.10 Fibonacci-indexed Bible references. [speculative]
+       Interpret adjacent Fibonacci numbers as chapter/verse coordinates,
+       including proposals using Genesis because the title means first book.
+
+
+9. READING ORDER, GRIDS, AND PHYSICAL LAYOUT
+
+  9.1 Reverse reading direction.
+      Reverse whole sections, individual lines, or alternate lines
+      (boustrophedon) before applying an existing cipher.
+
+  9.2 Columnar and diagonal transposition.
+      Rearrange the rune stream into grids and read columns or diagonals;
+      also proposed after an initial substitution/key operation.
+
+  9.3 Rail-fence transposition.
+      Read a zigzag across different numbers of rails.
+
+  9.4 Spiral or perimeter-peeling order.
+      Follow the spiral artwork, reading inward/outward or in either
+      direction instead of using ordinary row order.
+
+  9.5 Square-length sections as matrices.
+      A section with a square rune count may be intended as a square grid;
+      the 729-rune opening section motivates a 27x27 arrangement.
+
+  9.6 Mobius-style traversal.
+      Read forward and backward through joined rows or wrap a text strip
+      with a reversal, taking the Mobius illustration as an instruction.
+
+  9.7 Prime/Fibonacci-index extraction.
+      Read runes at prime or Fibonacci positions, or take every nth rune
+      with different starting phases.
+
+  9.8 Page reordering.
+      Use artwork groups, numerical relationships, or geometric layouts
+      to choose a different order for the page stream.
+
+  9.9 Page superimposition.
+      Overlay pages or align matching artwork to expose selected text,
+      image differences, or paired streams.
+
+  9.10 Layout counts as a separate stream.
+       Read rune counts per line, word lengths, line starts, or page totals
+       as encoded numerical data.
+
+  9.11 Delimiter and ornament encoding.
+       Treat distinct dot patterns, spaces, and section marks as symbols;
+       proposals include binary/ternary readings and ASCII control meanings.
+
+  9.12 27x27 mirrored-triplet navigation. [disputed solution claim]
+       Arrange pages 0-2 in a grid, derive keys from mirrored three-rune
+       nodes, use totients for movement and Mobius values for phase, then
+       subtract modulo 29. The author's proposed plaintext is unverified.
+
+
+10. ARTWORK AS INSTRUCTIONS OR KEY SELECTION
+
+  10.1 Matching artwork implies matching cipher treatment.
+       Transfer an LP1 method or key clue to an LP2 section with related
+       symbols, instead of treating all pictures as decoration.
+
+  10.2 Branches and roots encode a sequence.
+       Count highlighted branches and interpret the tree/roots as a
+       Fibonacci structure or another numerical branching rule.
+
+  10.3 Mayfly means an ephemeral key. [speculative]
+       Take the short-lived insect as a hint toward one-use or changing
+       key material.
+
+  10.4 Tree of life / tree of knowledge. [speculative]
+       Read the oak, roots, and cross through Kabbalistic/tree symbolism
+       to select a text, concept, or key.
+
+  10.5 Cuneiform gives the number system.
+       Read the illustrated numerals in base 60, including the 1033/3301
+       relationship, and apply that base to the mixed-character tables.
+
+  10.6 Constellation interpretation of the dots. [speculative]
+       Match groups to Orion's belt, Aquila, Bootes, or other proposed
+       star patterns; use the match as a map or orientation clue.
+
+  10.7 Geographic or celestial map. [speculative]
+       Interpret the map/road/direction wording as coordinates, navigation,
+       or a star map rather than a metaphor for ordinary decryption.
+
+  10.8 Repeated dead-oak imagery selects a starting point. [speculative]
+       Archived 2016 discussions connect the lightened reminder image's
+       oak with LP2 tree/numeric pages and propose prioritizing that section.
+
+  10.9 True/false paths as dark/light shading. [speculative]
+       An archived proposal treats the warning as an instruction to follow
+       darker rather than lighter strokes in the illustrations.
+
+  10.10 Recover the source artwork.
+        Compare original public-domain images with LP edits for added or
+        removed marks, and inspect titles or source context for key clues.
+
+
+11. MUSIC AND AUDIO CONNECTIONS
+
+  11.1 Marginal dots as musical notes. [speculative]
+       Treat dot height and arrangement as notation rather than stars.
+
+  11.2 Gregorian/square notation. [speculative]
+       Compare the marks with chant notation or solfege, allowing a staff
+       with a different number of lines than a modern musical staff.
+
+  11.3 Constellations arranged as a score. [speculative]
+       Lay proposed star-pattern matches out as sheet music and apply a
+       musical cipher.
+
+  11.4 Earlier Cicada music as key material.
+       Compare notes, pauses, timing, or spectrogram information from the
+       earlier music with the book's marks and numerical patterns.
+
+
+12. THE MIXED-CHARACTER TABLES ON LP2 PAGES 49-51
+
+  12.1 Decode the pairs as base-60 values/bytes.
+       Interpret the two-character tokens numerically and concatenate
+       their values into a binary payload.
+
+  12.2 Alternative digit alphabets or bases.
+       Vary the ordering of digits/uppercase/lowercase, or try nearby
+       bases such as 59, 61, 62, and 64.
+
+  12.3 First character is a group label.
+       Split tokens into groups 0-4 and read only each token's second
+       character, rather than treating every pair as one base-60 number.
+
+  12.4 Group 4 supplies a key. [speculative]
+       Interpret the fourth-index group's string 97DEF756B98A80EB9 as
+       hexadecimal and try it as key material for the other groups.
+
+  12.5 Payload as the runic text's key.
+       Apply the decoded bytes, their reductions modulo 29, or transformed
+       versions as a repeating key or pad for LP2.
+
+  12.6 Payload as several hashes.
+       Split the 256-byte object into digest-sized blocks and compare
+       candidate inputs against those blocks.
+
+  12.7 Payload related to the AN END hash.
+       Hash the object, combine its blocks, or otherwise test whether it
+       supplies the page-56 preimage or key information.
+
+  12.8 Payload as an encrypted file/container.
+       Look for compressed data, OpenPGP, common file headers, or ciphertext
+       requiring an external symmetric key.
+
+  12.9 Payload as an RSA-related number.
+       Interpret it as a large integer, modulus, or ciphertext instead of
+       readable text.
+
+  12.10 Payload as a bitmap or QR-like object.
+        Rasterize bits at different widths and inspect for image structure.
+
+  12.11 Payload under XOR or bytewise encryption.
+        Test repeating XOR keys, transformations, reversal, and combination
+        with other known Cicada byte strings.
+
+  12.12 Numerical pair labels as directions. [speculative]
+        Interpret the leading 0-4 values as routing instructions through
+        the table, following the later numbers/direction clue.
+
+
+13. RED TEXT, GLYPHS, AND IMAGE STEGANOGRAPHY
+
+  13.1 Isolate red text.
+       Read headings, red initials, and other rubricated passages as a
+       separate stream or as the strongest short plaintext cribs.
+
+  13.2 The long red passage on page 53.
+       Attack its 51 runes independently under every relevant key phase
+       and interrupter interpretation; compare its word-length skeleton.
+
+  13.3 Red-text gematria links. [speculative]
+       A Reddit proposal connects page 23's reported red-rune sum, 691,
+       with TEST THE KNOWLEDGE as a possible instruction/key clue.
+
+  13.4 Brightness, contrast, and color separation.
+       Expose faint artwork or marks and separate color channels to see
+       whether material is hidden in dark backgrounds or colored strokes.
+
+  13.5 OutGuess with candidate passwords.
+       Search keyed extraction on original images, using LP vocabulary
+       or other Cicada-derived key material.
+
+  13.6 Other image-steganography methods.
+       Test steghide-style embedding, low-bit channels, and JPEG/DCT
+       coefficient channels rather than relying only on OutGuess.
+
+  13.7 Appended data, metadata, and embedded files.
+       Inspect JPEG tails, comments, EXIF/XMP, and recoverable file objects.
+
+  13.8 Glyph shape and placement as bits.
+       Look for deliberately different rune variants, widths, baselines,
+       spacing, kerning, or color modulation.
+
+  13.9 Audit the transcription itself.
+       Re-read ambiguous glyphs, missing lines, separators, and doublet
+       sites; specifically test whether omitted repeated glyphs created
+       the apparent doublet deficit (haplography).
+
+  13.10 Recover a source PDF/PostScript/font artifact.
+        A pre-render source might preserve text, font names, or layout
+        information absent from the circulating page JPEGs.
+
+
+14. THE PAGE-56 DEEP-WEB HASH
+
+  14.1 Search for an existing preimage instead of reversing the digest.
+       Compare candidate pages and archived hidden-service content against
+       the printed target; the found page might provide the next LP2 clue.
+
+  14.2 Identify what was hashed.
+       Test raw HTML, visible text, an address, a URL with/without its
+       suffix or protocol, or another object referred to as a page.
+
+  14.3 Encoding and normalization variants.
+       Account for line endings, whitespace, capitalization, character
+       encoding, and trailing newlines when hashing candidate content.
+
+  14.4 Other 512-bit hash algorithms.
+       Alongside SHA-512, existing attempts include Whirlpool, SHA3-512,
+       BLAKE2b-512, and Streebog.
+
+  14.5 Four MD5 hashes instead of one 512-bit digest. [speculative]
+       Split the hex into four 32-character blocks. A 2016 proposal sorts
+       the blocks by initial characters 1, 2, 3, 4; later posts add prime-
+       permutation interpretations of that order.
+
+  14.6 Limited candidate-space brute force.
+       Published searches try onion-address lists, IPv4 strings, US phone
+       numbers, and very short arbitrary byte strings as possible inputs.
+
+  14.7 Pastebin as the page source.
+       Search or enumerate candidate paste pages and compare their content
+       under the target hash.
+
+  14.8 Internal book artifact as the preimage.
+       Hash page images, transcriptions, solved passages, or the numerical
+       payload before assuming the page must be newly found elsewhere.
+
+  14.9 Digest as encoded address data. [disputed]
+       Proposals reinterpret digest bits as a v2 onion address or public-key
+       material. These are alternative-encoding claims, not hash inversion;
+       published critiques challenge specific conversions and chronology.
+
+  14.10 Search archived services and old mirrors.
+        Recover historical candidate content that may no longer be live,
+        especially material from the original v2-onion era.
+
+
+15. EARLIER ARTIFACTS, PUBLIC PADS, AND EXTERNAL KEY RECOVERY
+
+  15.1 The 2013 missing primes.
+       Use the omitted-prime set as a keystream, seed, or selection rule.
+
+  15.2 Earlier unused numbers and hashes.
+       Revisit the 2012 P.S. number, onion-cookie hashes, and other strings
+       left without an agreed role; apply them as keys or generator seeds.
+
+  15.3 CicadaOS binary material.
+       Treat the wisdom/folly files, DATA blobs, audio bytes, or combinations
+       of archived ISO artifacts as potential pads.
+
+  15.4 Earlier image/onion payloads.
+       Re-extract known clue images, inspect surviving HTML and payloads,
+       and combine unresolved high-entropy byte strings with LP2 data.
+
+  15.5 PGP artifacts as key material.
+       Test public-key bytes, signature packets, fingerprints, or associated
+       numeric data, rather than only the signed message's prose.
+
+  15.6 Published randomness as a pad.
+       Candidate families include NIST beacon output, RANDOM.ORG archives,
+       RAND's random-digit tables, and the Marsaglia random-number CD-ROM.
+
+  15.7 Blockchain data as a public pad.
+       Use pre-release Bitcoin block hashes, headers, nonces, timestamps,
+       Merkle roots, or selected blocks as reproducible high-entropy material.
+
+  15.8 Historical toolchain as a clue to key generation.
+       Infer the software/platform from image rendering, fonts, PGP/RSA
+       artifacts, or metadata to narrow plausible PRNG implementations.
+
+  15.9 Recover missing public clues from archives.
+       Search old IRC records, repository histories, paste mirrors, and
+       authenticated releases for an overlooked key or key-generation rule.
+
+  15.10 A privately distributed key. [speculative]
+        The missing material may have gone to earlier successful solvers;
+        this motivates searching public recollections or surviving records
+        for evidence of what was actually supplied.
+
+
+16. CRIB STRATEGIES AND ALTERNATIVE READINGS OF THE TASK
+
+  16.1 Repeated LP phrasing as cribs.
+       Try likely heading/instruction language such as A KOAN, AN
+       INSTRUCTION, KNOW THIS, WELCOME, or another repeated LP expression.
+
+  16.2 Long thematic words as anchors.
+       Match long rune-word slots to philosophical vocabulary; an older
+       Reddit example proposes EGALITARIANISM on page 43. A proposed fit
+       supplies a testable key fragment, not a confirmed translation.
+
+  16.3 Single-rune word constraints.
+       Test A or I, with O as an additional literary possibility, to
+       constrain a cipher's key or alphabet mapping.
+
+  16.4 Plaintext marker or pointer cribs.
+       Search for URL-like material, including a proposed WWW sequence,
+       or other structured output instead of only ordinary prose.
+
+  16.5 The solved prose describes the algorithm. [speculative]
+       Read instructions about circumferences, finding divinity within,
+       shedding, and direction as operations on text, grids, or keys.
+
+  16.6 An ideological/personal journey supplies the missing interpretation.
+       [speculative] Existing proposals emphasize the parables and changing
+       the solver's perspective to identify what operation or source is meant.
+
+  16.7 Intentionally unsolvable or message-free LP2. [speculative]
+       The ImpossiPrimus hypothesis proposes a permanent challenge rather
+       than recoverable plaintext. The related private-pad hypothesis keeps
+       real plaintext but requires unavailable key material. These are
+       explanations of the impasse, not decryption methods.
+
+
+COLLECTION LIMITS
+
+This covers discoverable public material, not every post or private solver
+discussion. Some 4plebs pages and deleted material could not be read directly;
+accessible archive mirrors and surviving discussions supplied partial coverage.
+Duplicate forks, repeated keyword guesses, generic encouragement, unrelated
+identity conspiracies, and unsupported plaintext dumps were not counted as
+separate ideas. No large repositories, image sets, ISOs, or corpora were cloned
+or downloaded, and no cryptanalysis jobs were run for this catalog.

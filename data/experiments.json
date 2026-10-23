@@ -11275,6 +11275,204 @@
       }
     },
     {
+      "id": "grid-payload-prf-opening-cribs",
+      "status": "published",
+      "title": "Page 49–51 payload PRF keys against fixed LP2 openings",
+      "question": "Can any pinned B-05 payload-derived key produce one of nine fixed 12-rune known-reading openings at an LP2 page start under the source key-skip rule?",
+      "reader_question": "Were the page 49–51 payload-derived keys checked against LP2 openings?",
+      "summary": "All 70,680 published B-05 source configurations were checked against nine 12-rune openings at 55 nonempty LP2-00–55 page starts. None produced a complete opening under the source key-skip rule.",
+      "finding": "The longest feasible opening was five runes; zero of 70,680 configurations matched all 12. This is a fixed-opening check of already enumerated source keys, separate from the earlier English-score replay.",
+      "limitations": "The nine openings and page-start location are assumptions of this test. It does not exclude other plaintexts, other payload-derived constructions, other offsets beyond the source grid, or a general cipher family.",
+      "next_steps": "Test a new plaintext or payload construction only when it has an independent reason and a finite, declared scope.",
+      "outcome": "not-supported",
+      "tags": [
+        "page 49–51",
+        "payload",
+        "PRF",
+        "key skip",
+        "fixed crib",
+        "source-derived batch"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/grid-payload-prf-source-grid/cases.jsonl"
+        ],
+        "representation": "Current GP29 transcription, first 12 runes of each nonempty LP2-00–55 page; nine fixed 12-rune published-reading openings; source B-05 effective key streams.",
+        "procedure": "Regenerate all four pinned B-05 source parts, normalize sign and source key-Atbash into effective keys, verify source case hashes, and exactly check key-skip path feasibility without beam pruning or language scoring.",
+        "parameters": "70,680 source configurations, 59,948 distinct effective 1,597-symbol keys, up to three rejected draws between emitted runes, 55 page starts and nine 12-rune cribs. Source offsets, directions, signs, shifts and contested-byte variants are unchanged.",
+        "exclusions": "No new source seeds, payloads, page-order rules, non-source offsets, other language assumptions or full-page decryption claims."
+      },
+      "review": {
+        "reviewer": "Full saved-case-hash parity, source-part reconciliation and planted PRF-key skip controls",
+        "retested_on": "2026-10-23",
+        "kind": "computational reuse of pinned source-derived key grid",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/grid-payload-prf-opening-cribs/run.py && python experiments/records/grid-payload-prf-opening-cribs/check.py && python experiments/records/grid-payload-prf-opening-cribs/plot.py --check",
+        "environment": "Python 3.12 with prior B-05 source-grid dependencies; source code, payloads, saved case receipt and page/crib inputs are local; no network required.",
+        "script": "experiments/records/grid-payload-prf-opening-cribs/run.py",
+        "script_sha256": "4740932bcdfa24f085d46472f5b74d66c1efa518e09644533f16a6b2e566920c",
+        "inputs": [
+          {
+            "path": "experiments/engines/fixed_crib_skip.py",
+            "sha256": "70f1f80324b41c0307b134c119fc5489c31d2d09f7434c3c1b24a34426a65caa"
+          },
+          {
+            "path": "data/index.json",
+            "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+          },
+          {
+            "path": "experiments/suites/feedback-opening-census/manifest.json",
+            "sha256": "fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/run.py",
+            "sha256": "4740932bcdfa24f085d46472f5b74d66c1efa518e09644533f16a6b2e566920c"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/check.py",
+            "sha256": "f92c8e4656be16a7142da1901a6ec5ab673e3626dea7ef4863ce5d20c384b34c"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/plot.py",
+            "sha256": "3b52b3fc4df50d673d6bd4149f6aa3aa659ace4a9bb082934e6950229fc8eaf0"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/article.md",
+            "sha256": "bdb88b87b8766fc6a21a4e233731c57edf338d2173d922eb6d533f2ee7342424"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/page-inputs.json",
+            "sha256": "00233244627f0095c7029d41223b492f4f89db479dbf6b7dab2cc8c3932272d4"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-source-grid/dedup_engine.py",
+            "sha256": "35f5090f5e4da39a29424c75f21b193f4187d618c1d8d3c60574e5b3939e1432"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-source-grid/cases.jsonl",
+            "sha256": "2c7479a42c7c651135a210a3ec806db17e7acdcdb057cee09584eb2276d20c6c"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-contested-masks/cases.json",
+            "sha256": "f41fb7693ea11f642a47e0a91acc784082fc37ac00025735a25fa3cd4758c306"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/round13/B05/prf.py",
+            "sha256": "b7237b35810ca4f1021e92d8793c7c99a734eee25270fb336ee0d36086bd360f"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/round13/B05/sweep.py",
+            "sha256": "e578c5e74c53fb86dfe704d02a34ee76fc76682589445779b93833fabaf6606a"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/pp49_51/canon_256.bin",
+            "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/pp49_51/canon_256_decpref.bin",
+            "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/results.json",
+            "sha256": "e9288e7afc4032284976b8dedb11757901d8d13f37a9a514ed167d8524207002"
+          },
+          {
+            "path": "experiments/records/grid-payload-prf-opening-cribs/b05-opening-funnel.svg",
+            "sha256": "8ee4b5fc5e53556a3c378daad660df3607e224cbb61a44d7dd7752d315fdd068"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/grid-payload-prf-opening-cribs/b05-opening-funnel.svg",
+          "caption": "Count of B-05 source configurations able to match at least each number of fixed opening runes; exact counts appear beside log-scale bars."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned B-05 source preregistration",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B05/PREREG.md"
+        },
+        {
+          "label": "Pinned B-05 generator",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B05/prf.py"
+        }
+      ],
+      "related": [
+        "grid-payload-prf-source-grid",
+        "grid-payload-prf-seed-corner"
+      ],
+      "article": "# Page 49–51 payloads as keys: fixed-opening check\n\n**Finding.** We retested the complete published B-05 candidate grid against a different, narrower question: can any source-defined key produce one of nine fixed, 12-rune known-reading openings at the start of a nonempty LP2-00–55 page? Across **70,680 source configurations**, **none can** under the source's key-skip rule. The longest feasible prefix is five runes.\n\n![B-05 source configurations thin from short opening matches to no complete 12-rune match.](experiments/records/grid-payload-prf-opening-cribs/b05-opening-funnel.svg)\n\n## What was compared\n\nThe earlier [B-05 source-grid replay](experiments/records/grid-payload-prf-source-grid/article.md) regenerated the source's 70,680 English-scored cases from the page 49–51 payload bytes. Its four grouped parts include 12 payload representations, 15 PRFs, two byte reductions, direction/sign/Atbash/offset choices, constant shifts, and variants at six contested payload bytes. Those cases reduce to **59,948 distinct effective key streams** for the original 400-rune screen. We reused the exact effective streams and their source case identities, checking every generated key hash against the saved case receipt. In the reverse branch, the original full-length stream is reversed *before* the offset is taken.\n\nFor each key, an exact path checker asked whether its first symbols could decode the first 12 runes of any included page as any of the nine independently published reading openings. It permits up to **three rejected key draws** between output runes; each rejected draw must have produced the preceding ciphertext rune. This tests whether a path exists, without English scoring or beam pruning. The earlier replay's null English score and this new fixed-opening failure answer different questions.\n\n| Longest opening prefix | Source configurations |\n| --- | ---: |\n| 1 rune | 46,041 |\n| 2 runes | 22,136 |\n| 3 runes | 2,461 |\n| 4 runes | 40 |\n| 5 runes | 2 |\n| 12 runes | **0** |\n\nSeveral source configurations share effective key bytes, so these are **configuration counts**, not independent keys. The result excludes the specified B-05 keys as producers of these nine exact openings at these 55 page starts. It does **not** show that an unsolved page must begin with one of the known readings, or that payload-derived keys, other offsets, other plaintexts or other page groupings are impossible.\n\n## Repeat it\n\n```bash\npython experiments/records/grid-payload-prf-opening-cribs/run.py\npython experiments/records/grid-payload-prf-opening-cribs/check.py\npython experiments/records/grid-payload-prf-opening-cribs/plot.py --check\n```\n\n`run.py` regenerates the source keys from pinned payload bytes, verifies all previously saved case hashes and preserves every original case in a compact digest. `check.py` verifies the four source-part totals and plants both an ordinary and a forced-skip 12-rune opening under a real payload-derived PRF key. All page text and crib CSV inputs are pinned by hash. This is one grouped test of a finite source grid, not a separate experiment for every key.\n",
+      "article_path": "experiments/records/grid-payload-prf-opening-cribs/article.md",
+      "script_sha256": "4740932bcdfa24f085d46472f5b74d66c1efa518e09644533f16a6b2e566920c",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      }
+    },
+    {
       "id": "grid-payload-prf-seed-corner",
       "status": "published",
       "title": "Can the number-grid payload seed a rune key?",
@@ -33731,6 +33929,358 @@
       }
     },
     {
+      "id": "py27-prior-front-opening-cribs",
+      "status": "published",
+      "title": "Python 2.7 priority seeds against fixed LP2 openings",
+      "question": "Can any of R21-L3's 45,975 priority seed words, under its four Python 2.7 generator settings and keyskip1 decoder rule, produce one of nine fixed 12-rune openings at an LP2 page start?",
+      "reader_question": "Could the Python 2.7 priority seeds produce a familiar LP2 opening?",
+      "summary": "Across 183,900 generated seed-and-setting cases, none produces any of nine fixed 12-rune openings at the start of 55 nonempty LP2 pages. The closest reaches five runes.",
+      "finding": "All 45,975 source priority words were reconstructed and crossed with the four source reducer and ABI settings. The exact keyskip1 path test found zero complete openings, with maximum feasible prefix five; 183,356 of the 183,900 cases have different first-45-symbol key streams. This new fixed-crib result does not replay the source's English-panel screen.",
+      "limitations": "Only nine predeclared openings at 55 page starts in LP2-00–55 were tested. It assumes source sign -1, no Atbash, zero starting offset and the exact keyskip1 collision rule. Other plaintexts, offsets, transitions, seeds beyond the priority front and later positions remain untested. The source's original 884,000-case language-panel claim is separate and not reproduced here.",
+      "next_steps": "Test another source-specified key or offset rule against a fixed plaintext claim, or obtain the missing original panel model to replay R21-L3's language score independently.",
+      "outcome": "not-supported",
+      "tags": [
+        "R21-L3",
+        "Python 2.7",
+        "MT19937",
+        "priority seed",
+        "key skip",
+        "fixed crib",
+        "source-derived batch"
+      ],
+      "related": [
+        "py27-reducer-sweep-source-audit",
+        "r26-derived-generators-opening-cribs",
+        "lp2-known-vigenere-keys"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/py27-prior-front-opening-cribs/source/seedprior20.json"
+        ],
+        "representation": "Canonical GP29 transcription; first 12 runes of every nonempty LP2-00–55 page (LP2-50 is blank); nine fixed 12-rune known-reading openings.",
+        "procedure": "Rebuild the source's exact 45,975-word ordered priority front. For each word, generate all four source Python 2.7 reducer and ABI key prefixes. Test exact existential keyskip1 paths against fixed page-start openings, with no beam pruning or English score.",
+        "parameters": "45,975 priority words × grb5_mod_i386, grb5_rej_i386, shuffle29_i386, random29_amd64 = 183,900 generated cases; source sign -1, no Atbash, zero offset, up to three collision-rejected key draws per rune; nine openings and 55 page starts.",
+        "exclusions": "Later dense seed words, other reducers, another Python runtime or ABI map, different starting offsets, keyskip2, other plaintexts, alternate rune transcriptions, non-page-start matches and the unavailable source language-panel verdict."
+      },
+      "review": {
+        "reviewer": "Independent full-grid path-state checker, source seed-order digest, MT19937 reference vector and planted skip controls",
+        "retested_on": "2026-10-23",
+        "kind": "computational check of source-defined seed grid",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/py27-prior-front-opening-cribs/run.py && python experiments/records/py27-prior-front-opening-cribs/check.py && python experiments/records/py27-prior-front-opening-cribs/plot.py --check",
+        "environment": "Python 3 standard library, pinned MIT-licensed source Python 2.7 generator and seed list bundled locally; no network, API or language model required.",
+        "script": "experiments/records/py27-prior-front-opening-cribs/run.py",
+        "script_sha256": "062a1ce76476fcba90a5e94f442de3e8ebf614323e03b23dd148c114188a92d4",
+        "inputs": [
+          {
+            "path": "data/index.json",
+            "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+          },
+          {
+            "path": "experiments/suites/feedback-opening-census/manifest.json",
+            "sha256": "fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225"
+          },
+          {
+            "path": "experiments/engines/fixed_crib_skip.py",
+            "sha256": "70f1f80324b41c0307b134c119fc5489c31d2d09f7434c3c1b24a34426a65caa"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/run.py",
+            "sha256": "062a1ce76476fcba90a5e94f442de3e8ebf614323e03b23dd148c114188a92d4"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/check.py",
+            "sha256": "a070da940714e10f46198a7cd6c7a13ffbf67166dd96662b4936e41c5c6fb9df"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/plot.py",
+            "sha256": "daabda8a9802d19eecfecc5597a08fd2b5456bb85aade671504571c4ab8d8df4"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/article.md",
+            "sha256": "9585c990a065159bee4ee4ba65def33e8ec7632059a3b33c9b6ac41cf07b0ab5"
+          },
+          {
+            "path": "data/pages/lp2-00.json",
+            "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+          },
+          {
+            "path": "data/pages/lp2-01.json",
+            "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+          },
+          {
+            "path": "data/pages/lp2-02.json",
+            "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+          },
+          {
+            "path": "data/pages/lp2-03.json",
+            "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+          },
+          {
+            "path": "data/pages/lp2-04.json",
+            "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+          },
+          {
+            "path": "data/pages/lp2-05.json",
+            "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+          },
+          {
+            "path": "data/pages/lp2-06.json",
+            "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+          },
+          {
+            "path": "data/pages/lp2-07.json",
+            "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+          },
+          {
+            "path": "data/pages/lp2-08.json",
+            "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+          },
+          {
+            "path": "data/pages/lp2-09.json",
+            "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+          },
+          {
+            "path": "data/pages/lp2-10.json",
+            "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+          },
+          {
+            "path": "data/pages/lp2-11.json",
+            "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+          },
+          {
+            "path": "data/pages/lp2-12.json",
+            "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+          },
+          {
+            "path": "data/pages/lp2-13.json",
+            "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+          },
+          {
+            "path": "data/pages/lp2-14.json",
+            "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+          },
+          {
+            "path": "data/pages/lp2-15.json",
+            "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+          },
+          {
+            "path": "data/pages/lp2-16.json",
+            "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+          },
+          {
+            "path": "data/pages/lp2-17.json",
+            "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+          },
+          {
+            "path": "data/pages/lp2-18.json",
+            "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+          },
+          {
+            "path": "data/pages/lp2-19.json",
+            "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+          },
+          {
+            "path": "data/pages/lp2-20.json",
+            "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+          },
+          {
+            "path": "data/pages/lp2-21.json",
+            "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+          },
+          {
+            "path": "data/pages/lp2-22.json",
+            "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+          },
+          {
+            "path": "data/pages/lp2-23.json",
+            "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+          },
+          {
+            "path": "data/pages/lp2-24.json",
+            "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+          },
+          {
+            "path": "data/pages/lp2-25.json",
+            "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+          },
+          {
+            "path": "data/pages/lp2-26.json",
+            "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+          },
+          {
+            "path": "data/pages/lp2-27.json",
+            "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+          },
+          {
+            "path": "data/pages/lp2-28.json",
+            "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+          },
+          {
+            "path": "data/pages/lp2-29.json",
+            "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+          },
+          {
+            "path": "data/pages/lp2-30.json",
+            "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+          },
+          {
+            "path": "data/pages/lp2-31.json",
+            "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+          },
+          {
+            "path": "data/pages/lp2-32.json",
+            "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+          },
+          {
+            "path": "data/pages/lp2-33.json",
+            "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+          },
+          {
+            "path": "data/pages/lp2-34.json",
+            "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+          },
+          {
+            "path": "data/pages/lp2-35.json",
+            "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+          },
+          {
+            "path": "data/pages/lp2-36.json",
+            "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+          },
+          {
+            "path": "data/pages/lp2-37.json",
+            "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+          },
+          {
+            "path": "data/pages/lp2-38.json",
+            "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+          },
+          {
+            "path": "data/pages/lp2-39.json",
+            "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+          },
+          {
+            "path": "data/pages/lp2-40.json",
+            "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+          },
+          {
+            "path": "data/pages/lp2-41.json",
+            "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+          },
+          {
+            "path": "data/pages/lp2-42.json",
+            "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+          },
+          {
+            "path": "data/pages/lp2-43.json",
+            "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+          },
+          {
+            "path": "data/pages/lp2-44.json",
+            "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+          },
+          {
+            "path": "data/pages/lp2-45.json",
+            "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+          },
+          {
+            "path": "data/pages/lp2-46.json",
+            "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+          },
+          {
+            "path": "data/pages/lp2-47.json",
+            "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+          },
+          {
+            "path": "data/pages/lp2-48.json",
+            "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+          },
+          {
+            "path": "data/pages/lp2-49.json",
+            "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+          },
+          {
+            "path": "data/pages/lp2-51.json",
+            "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+          },
+          {
+            "path": "data/pages/lp2-52.json",
+            "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+          },
+          {
+            "path": "data/pages/lp2-53.json",
+            "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+          },
+          {
+            "path": "data/pages/lp2-54.json",
+            "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+          },
+          {
+            "path": "data/pages/lp2-55.json",
+            "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/source/gen_py27.py",
+            "sha256": "01217361c1d873046bb8d85a2030d18c046f49365a172313e84f30f198a1190d"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/source/seedprior20.json",
+            "sha256": "139896bfe4e85d108c42cc61c767c2f7db421ba9741b6b3b40896d55ffd89052"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/source/sweep.py",
+            "sha256": "bf1ba0b62bc9d8df383ee3950b2823f0b2dbd0f938d3f6b5650522cd989c9cfe"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/results.json",
+            "sha256": "e8a39d78459eeea3cd18c9cde75a2114d731974ee600d3f0b62b5e181cd3d259"
+          },
+          {
+            "path": "experiments/records/py27-prior-front-opening-cribs/prior-front-prefixes.svg",
+            "sha256": "51a65f8f9a700dc1ac82b4336a2af68e28bc69fbaba9f03a0fdf3993bd3b7293"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/py27-prior-front-opening-cribs/prior-front-prefixes.svg",
+          "caption": "The longest structurally feasible known opening matches five of twelve runes; no case matches the entire fixed opening."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned R21-L3 seed and generator sweep",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py"
+        },
+        {
+          "label": "Pinned ordered seed proposal list",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/P3/seedprior20.json"
+        },
+        {
+          "label": "Pinned Python 2.7 random generator",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/G3/gen_py27.py"
+        }
+      ],
+      "article": "# Python 2.7 priority seeds against fixed LP2 openings\n\n**Finding.** None of the **45,975 priority words** in the published [R21-L3 sweep](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py) produces any of nine fixed 12-rune known-reading openings at the start of the 55 nonempty pages in LP2-00–55. We checked all four source generator settings—**183,900 generated cases**—under the source's key-skip rule. The closest match reaches five runes.\n\n![No Python 2.7 priority-seed case matches a complete twelve-rune opening; the longest match is five.](experiments/records/py27-prior-front-opening-cribs/prior-front-prefixes.svg)\n\n## What was checked\n\nThe source orders 433 proposed 32-bit words, then adds the ±512 neighbourhood around its first 64 words, removing repeated values. That yields **45,975 words** before its later dense-from-zero search. We reconstructed the order from the pinned `seedprior20.json` and checked its SHA-256 digest against the earlier source audit. For each word we used exactly the source's four settings:\n\n| Setting | How the key starts |\n| --- | --- |\n| `grb5_mod_i386` | One 32-bit seed word; five random bits modulo 29 |\n| `grb5_rej_i386` | One 32-bit seed word; reject five-bit values 29–31 |\n| `shuffle29_i386` | One 32-bit seed word; repeated shuffled rune alphabet |\n| `random29_amd64` | Multiply the word by the source constant into 64 bits; seed with its low and high 32-bit words |\n\nWe generated the first **45 key symbols**, enough to allow 12 accepted symbols with up to three rejected symbols between them. A rejected symbol is permitted only if it would have repeated the preceding ciphertext rune. The test searches every valid skip path, without ranking or discarding one because its English score looks poor. It uses the source's subtraction direction, zero starting offset, no Atbash, and the same nine predeclared openings used in other site experiments.\n\n## What the result means\n\n| Best opening prefix per case | Generated cases |\n| --- | ---: |\n| 1 rune | 115,884 |\n| 2 runes | 64,488 |\n| 3 runes | 3,409 |\n| 4 runes | 108 |\n| 5 runes | 11 |\n| All 12 runes | **0** |\n\nThere are **183,356 different first-45-symbol streams** among the 183,900 generated cases. The counts above are settings and seeds tested, not separate solving ideas. The useful conclusion is limited: *this priority seed grid cannot produce any of these nine exact openings at those page starts under the stated skip rule.* Other plaintext openings, later positions, further seeds and other key rules are outside the result.\n\nR21-L3 originally screened **884,000** word-and-setting cases on LP2-00 with an English-language panel. This record does **not** reproduce that language-panel claim: its model inputs are unavailable in the pinned source. The fixed-opening criterion here is independent of that panel and asks a narrower, directly checkable question.\n\n## Reproduce\n\nFrom the repository root:\n\n```bash\npython experiments/records/py27-prior-front-opening-cribs/run.py\npython experiments/records/py27-prior-front-opening-cribs/check.py\npython experiments/records/py27-prior-front-opening-cribs/plot.py --check\n```\n\nThe record bundles the pinned source seed list and Python 2.7 generator under their MIT license. `results.json` gives each setting's prefix counts and a digest over all 183,900 case results. The separate checker rebuilds the whole grid, uses its own exact path-state search, checks 400 small cases against brute tree search, verifies a reference MT19937 output vector, and recovers planted openings with and without a forced skipped key symbol.\n",
+      "article_path": "experiments/records/py27-prior-front-opening-cribs/article.md",
+      "script_sha256": "062a1ce76476fcba90a5e94f442de3e8ebf614323e03b23dd148c114188a92d4",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      }
+    },
+    {
       "id": "py27-reducer-sweep-source-audit",
       "status": "published",
       "title": "Python 2.7 reducer sweep: source and control audit",
@@ -34021,7 +34571,7 @@
         "command": "python experiments/records/quagmirror-variant-continuations/run.py",
         "environment": "Python 3 with SymPy 1.14 or compatible sieve.mobiusrange; the three source files are bundled and run offline.",
         "script": "experiments/records/quagmirror-variant-continuations/run.py",
-        "script_sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676",
+        "script_sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66",
         "inputs": [
           {
             "path": "data/pages/lp2-00.json",
@@ -34037,7 +34587,7 @@
           },
           {
             "path": "experiments/records/quagmirror-variant-continuations/check.py",
-            "sha256": "2150d212148c9a76fae73712455052ae091ab82da76dd0584c7df02d88f3fc1b"
+            "sha256": "ec411712ee7fda53d50eeed29c80c45c4c4273e5bf243b9dcb68c2311bfc72f5"
           },
           {
             "path": "experiments/records/quagmirror-variant-continuations/plot.py",
@@ -34045,7 +34595,7 @@
           },
           {
             "path": "experiments/records/quagmirror-variant-continuations/run.py",
-            "sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676"
+            "sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66"
           },
           {
             "path": "experiments/records/quagmirror-variant-continuations/source/LICENSE",
@@ -34100,7 +34650,7 @@
       ],
       "article": "# Three QuagMirror drafts beyond the six-rune example\n\nThe [six-rune draft](#/experiments/quagmirror-six-rune-replay) is one of four scripts in the same [pinned public repository](https://github.com/sgroveman/cicada3301_lp/tree/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts). We ran the other three **as written**, including their fixed debug stops and handwritten mirror tables. All start from the same 729 source rune indices covering LP2-00–02. The indices match Liberpedia's page transcription after treating the two printed forms of the J rune as the same alphabet position.\n\n## Finding\n\nThe scripts process **49, 153 and 500 positions** respectively. Each produces short English-like fragments mixed with unreadable text. None processes its whole 729-rune input, supplies a planted recovery control, or checks a reading on held-out text. Reproducing these outputs establishes what the drafts actually do; it does not establish a plaintext for LP2.\n\n![The original script stops after 153 runes, version 4 after 49, and the WIP script after 500; page boundaries occur after 262 and 528.](experiments/records/quagmirror-variant-continuations/coverage.svg)\n\n| Script | Positions | Beginning of its output |\n| --- | ---: | --- |\n| Original | 153 | `DIUINITY WITHIN HAUING BOTH IHING...` |\n| Version 4 | 49 | `DIUINITY WITHIN PRAY FOR ANY CORRUPTIBLE...` |\n| WIP | 500 | `DIUINITH WITHIN EUEN DIATH OSW...` |\n\nThese are **three different drafts**, not three confirmations of one decryption. Their rules and stopping points differ. Version 4 contains a pass-through at source index 17 that uses `continue` before the loop counter advances. Its nominal `index >= 48` debug stop therefore occurs after **49 input positions**. We retain that behavior; silently changing it would create another method. The [complete outputs and numeric streams](experiments/records/quagmirror-variant-continuations/results.json) are saved so a promising fragment can be read in context rather than selected in isolation.\n\n## What the replay checks\n\nEach script contains nine 29-symbol substitution tables, a hard-coded 729-index ciphertext, a numerical recurrence, and a Latin-fragment mapping. The [checker](experiments/records/quagmirror-variant-continuations/check.py) confirms that the tables are permutations, the source ciphertext matches the 729 runes on LP2-00–02, the printed numeric rows have the stated lengths, and the printed final text follows from those numeric outputs and the script's own spacing marks. This independently checks the **input and output trace**; it is not an independent proof that the recurrence recovers meaningful plaintext.\n\nThe first fragments may look deliberate. Assessing them requires the full output, a fixed method for every rune, a criterion chosen before seeing the result, and a positive control showing that the program can recover a known message made with its proposed cipher. The source drafts provide no such control. The longer WIP output is valuable evidence of how the apparent opening continues under the same code, but it does not by itself validate or refute every QuagMirror-style method.\n\n## Reproduce\n\nFrom a Liberpedia checkout with Python 3 and SymPy installed:\n\n```bash\npython experiments/records/quagmirror-variant-continuations/check.py\npython experiments/records/quagmirror-variant-continuations/run.py\n```\n\nThe runner executes the three bundled [pinned scripts](experiments/records/quagmirror-variant-continuations/source/OG_quag_mirror.py), extracts their complete printed output tables, and compares the results with the saved file. Their source revision is `88ef1e60b0738b8b28db96bc9dc44dc4da8dd307`; the record lists every file hash. No word choice, table, or stop point is adjusted during the replay.\n",
       "article_path": "experiments/records/quagmirror-variant-continuations/article.md",
-      "script_sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676",
+      "script_sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66",
       "record_type": {
         "id": "replay",
         "label": "Method replay",

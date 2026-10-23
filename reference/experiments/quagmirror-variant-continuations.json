@@ -45,7 +45,7 @@
     "command": "python experiments/records/quagmirror-variant-continuations/run.py",
     "environment": "Python 3 with SymPy 1.14 or compatible sieve.mobiusrange; the three source files are bundled and run offline.",
     "script": "experiments/records/quagmirror-variant-continuations/run.py",
-    "script_sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676",
+    "script_sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66",
     "inputs": [
       {
         "path": "data/pages/lp2-00.json",
@@ -61,7 +61,7 @@
       },
       {
         "path": "experiments/records/quagmirror-variant-continuations/check.py",
-        "sha256": "2150d212148c9a76fae73712455052ae091ab82da76dd0584c7df02d88f3fc1b"
+        "sha256": "ec411712ee7fda53d50eeed29c80c45c4c4273e5bf243b9dcb68c2311bfc72f5"
       },
       {
         "path": "experiments/records/quagmirror-variant-continuations/plot.py",
@@ -69,7 +69,7 @@
       },
       {
         "path": "experiments/records/quagmirror-variant-continuations/run.py",
-        "sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676"
+        "sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66"
       },
       {
         "path": "experiments/records/quagmirror-variant-continuations/source/LICENSE",
@@ -124,7 +124,7 @@
   ],
   "article": "# Three QuagMirror drafts beyond the six-rune example\n\nThe [six-rune draft](#/experiments/quagmirror-six-rune-replay) is one of four scripts in the same [pinned public repository](https://github.com/sgroveman/cicada3301_lp/tree/88ef1e60b0738b8b28db96bc9dc44dc4da8dd307/Solving%20Attempts). We ran the other three **as written**, including their fixed debug stops and handwritten mirror tables. All start from the same 729 source rune indices covering LP2-00–02. The indices match Liberpedia's page transcription after treating the two printed forms of the J rune as the same alphabet position.\n\n## Finding\n\nThe scripts process **49, 153 and 500 positions** respectively. Each produces short English-like fragments mixed with unreadable text. None processes its whole 729-rune input, supplies a planted recovery control, or checks a reading on held-out text. Reproducing these outputs establishes what the drafts actually do; it does not establish a plaintext for LP2.\n\n![The original script stops after 153 runes, version 4 after 49, and the WIP script after 500; page boundaries occur after 262 and 528.](experiments/records/quagmirror-variant-continuations/coverage.svg)\n\n| Script | Positions | Beginning of its output |\n| --- | ---: | --- |\n| Original | 153 | `DIUINITY WITHIN HAUING BOTH IHING...` |\n| Version 4 | 49 | `DIUINITY WITHIN PRAY FOR ANY CORRUPTIBLE...` |\n| WIP | 500 | `DIUINITH WITHIN EUEN DIATH OSW...` |\n\nThese are **three different drafts**, not three confirmations of one decryption. Their rules and stopping points differ. Version 4 contains a pass-through at source index 17 that uses `continue` before the loop counter advances. Its nominal `index >= 48` debug stop therefore occurs after **49 input positions**. We retain that behavior; silently changing it would create another method. The [complete outputs and numeric streams](experiments/records/quagmirror-variant-continuations/results.json) are saved so a promising fragment can be read in context rather than selected in isolation.\n\n## What the replay checks\n\nEach script contains nine 29-symbol substitution tables, a hard-coded 729-index ciphertext, a numerical recurrence, and a Latin-fragment mapping. The [checker](experiments/records/quagmirror-variant-continuations/check.py) confirms that the tables are permutations, the source ciphertext matches the 729 runes on LP2-00–02, the printed numeric rows have the stated lengths, and the printed final text follows from those numeric outputs and the script's own spacing marks. This independently checks the **input and output trace**; it is not an independent proof that the recurrence recovers meaningful plaintext.\n\nThe first fragments may look deliberate. Assessing them requires the full output, a fixed method for every rune, a criterion chosen before seeing the result, and a positive control showing that the program can recover a known message made with its proposed cipher. The source drafts provide no such control. The longer WIP output is valuable evidence of how the apparent opening continues under the same code, but it does not by itself validate or refute every QuagMirror-style method.\n\n## Reproduce\n\nFrom a Liberpedia checkout with Python 3 and SymPy installed:\n\n```bash\npython experiments/records/quagmirror-variant-continuations/check.py\npython experiments/records/quagmirror-variant-continuations/run.py\n```\n\nThe runner executes the three bundled [pinned scripts](experiments/records/quagmirror-variant-continuations/source/OG_quag_mirror.py), extracts their complete printed output tables, and compares the results with the saved file. Their source revision is `88ef1e60b0738b8b28db96bc9dc44dc4da8dd307`; the record lists every file hash. No word choice, table, or stop point is adjusted during the replay.\n",
   "article_path": "experiments/records/quagmirror-variant-continuations/article.md",
-  "script_sha256": "b212558b67fac40b4dc21d396ab49214d083a0762df456c0b9adf66c33bfa676",
+  "script_sha256": "39f93917a0e00de34e7346f235609de74474138256fec9f442c6bbb71ce5dd66",
   "record_type": {
     "id": "replay",
     "label": "Method replay",

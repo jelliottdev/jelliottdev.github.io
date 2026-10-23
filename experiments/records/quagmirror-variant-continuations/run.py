@@ -54,7 +54,7 @@ def execute(name: str) -> dict:
     expected = "".join(fixed["latin_fragments"][value] +
                        (" " if i + 1 in fixed["section1_spaces"] else "")
                        for i, value in enumerate(pt))
-    if expected.rstrip() != final_text.rstrip():
+    if expected != final_text:
         raise ValueError("Printed transliteration differs from numeric output table")
     if ct != fixed["section1"][:len(ct)]:
         raise ValueError("Source processed different input than its declared section1")

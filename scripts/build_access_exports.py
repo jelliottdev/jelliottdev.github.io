@@ -612,6 +612,14 @@ The second command decodes LP1-01 with Atbash and checks the literal result agai
 control. Unusual spellings are preserved intentionally. For setup and a
 rune-by-rune explanation, open reference/articles/running-scripts.txt.
 
+RUN ONE EXPERIMENT
+Published experiment records and articles are included here. Their scripts,
+source inputs and saved outputs are in separate, complete experiment ZIPs:
+  https://jelliottdev.github.io/downloads/experiments/<record-id>.zip
+Find the record ID and bundle URL in data/experiment-index.json. Extract the
+chosen ZIP into an empty folder and follow its START-HERE-<record-id>.txt.
+This keeps the reference download small as the experiment archive grows.
+
 CHOOSE A TASK
 Check every known reading (nine sections, 17 pages):
   python scripts/reproduce_reading.py --check-all
@@ -768,11 +776,16 @@ for experiment in read('data/experiments.json')['records']:
   if not any(f['path']==path for f in files):register(path,'Experiment file')
 
 # Bundles preserve each member's exact bytes and repository-relative path.
-for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Page-only JPEG','Historical page copy','Archived seventh-onion JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide','Experiment file'})]:
+for name,roles in [('original-images',{'Historical later-message image','Original JPEG','Page-only JPEG','Historical page copy','Archived seventh-onion JPEG','Historical illustrated cover','Historical opening image','Historical second-chance image'}),('transcriptions-and-readings',{'Archived rune transcription','Reviewed rune derivative','Literal known reading','Contextual whole-section reading'}),('reference-data',{'Structured page record','Plain-text page reference','Known-reading provenance','Known method parameters','Spelling and prime-sum calculations','Reference article','Assistant source excerpts','Experiment registry','Experiment contribution guide'})]:
  if name=='transcriptions-and-readings':roles.add('Visible Latin text derivative')
  if name=='reference-data':roles.update({'Known-reading vocabulary map', 'Topic discovery index', 'Known-reading trace', 'Experiment discovery index', 'Structured experiment record'})
  if name=='reference-data':roles.update({'Mathematical illustration','Idea coverage notes','Britannica book-code evidence','Word reset bound','Position divisor bound','Polynomial stream bound','Historical printed spelling evidence','Parable audio evidence','Repeated marker audit','Transcription layer inventory','Wing and Tree window audit','Later-message arithmetic','Historical later-message provenance','Geometric mapping audit','Historical second-chance provenance','Grid prime-path audit','Emirp chain audit','Grid binary audit','JPEG byte audit','Gap file-size audit','Doublet audit','Word length audit','Image window comparison','Rune lag measurements','Number panel arithmetic','Alphanumeric grid transcription','Known-reading page-sum comparison','LP2-56 dot pixel measurements','Editorial visual observations','Compact guide discovery index','Artwork catalogue evidence','Analysis figure','Historical opening provenance','Historical book-cipher reproduction','Historical puzzle reconstruction','Historical transcription source','Historical generated candidate output','Historical transcription comparison','Historical RSA reproduction','Illustrated cover provenance','Reference article index','Embedded payload evidence','Embedded payload file','Reproduction script','Visual measurement conventions','Bundle instructions','Page and alphabet index','Archived rune transcription','Archived rune IoC baseline','Isolated signature verification results'})
- selected=[f for f in files if f['role'] in roles];path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
+ selected=[f for f in files if f['role'] in roles]
+ if name=='reference-data':
+  # Per-experiment ZIPs already carry every hashed dependency. Keep the common
+  # reference archive readable offline without copying all models/results again.
+  selected.extend(f for f in files if f['role']=='Experiment file' and f['path'].endswith('/article.md'))
+ path=f'downloads/{name}.zip';(root/'downloads').mkdir(exist_ok=True)
  if name=='reference-data':
   instructions=next(f for f in selected if f['path']=='downloads/REFERENCE-DATA-README.txt')
   selected.append({**instructions,'path':'START-HERE.txt','source_path':instructions['path']})

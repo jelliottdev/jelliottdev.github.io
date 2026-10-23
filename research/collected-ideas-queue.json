@@ -1,0 +1,2652 @@
+{
+  "schema": "liberpedia-collected-ideas-queue-v1",
+  "compiled": "2026-10-23",
+  "source": {
+    "path": "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt",
+    "sha256": "4f386fa2084f3a2248794b3a656b2cd6aa742c3a643936ba75724c4775fbc9b6",
+    "label": "User-supplied compilation of156 public LP2 ideas",
+    "historical_attempts_verified": false,
+    "note": "The compilation supplies no per-item source URLs. It is intake evidence, not a verified history of execution or priority."
+  },
+  "interpretation": "Known means already represented as an idea, candidate or source lane, not fully tested. New/new-extension means not already captured at this specificity in this intake review, never original discovery. Queue rows are plans, not experiment results. Multiple variants sharing an engine remain grouped.",
+  "counts": {
+    "source_ideas": 156,
+    "novelty_dispositions": {
+      "known": 120,
+      "new-extension": 17,
+      "new": 19
+    },
+    "new_queue_groups": 27,
+    "queued_source_ideas": 36,
+    "new_experiments_run": 0
+  },
+  "intake": [
+    {
+      "source_id": "1.1",
+      "title": "Separate encryption by artwork-defined section.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "sectionwise-rune-profile"
+      ],
+      "existing_evidence": [
+        "experiments/records/sectionwise-rune-profile/record.json"
+      ],
+      "coverage_note": "Artwork sections were profiled statistically; no section-specific cipher/key/reinitialization comparison. Freeze a cipher, candidate keys and section breakpoints.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.2",
+      "title": "Separate encryption by page.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "feedback-opening-census",
+        "lp2-prime-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/feedback-opening-census/record.json",
+        "experiments/records/lp2-prime-openings/record.json"
+      ],
+      "coverage_note": "Opening checks are page-local; compare independent full-page fits against joined-pages fits under the same fixed decoder and score.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.3",
+      "title": "One continuous stream across pages.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "page-join-sensitivity",
+        "feedback-opening-census"
+      ],
+      "existing_evidence": [
+        "experiments/records/page-join-sensitivity/record.json",
+        "experiments/records/feedback-opening-census/record.json"
+      ],
+      "coverage_note": "Page joins were audited as word boundaries, not key-continuity rules. Freeze page ordering and a cipher/key before continuous-versus-reset comparison.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.4",
+      "title": "Smaller reset boundaries.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "feedback-opening-census",
+        "word-reset-repetition"
+      ],
+      "existing_evidence": [
+        "experiments/records/feedback-opening-census/record.json",
+        "experiments/records/word-reset-repetition/record.json"
+      ],
+      "coverage_note": "Feedback census covers page continuity versus word reset only; line/clause/sentence/paragraph/section resets require declared delimiter parsing and a shared decoder.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.5",
+      "title": "Whole-word or multi-rune encryption.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "word-reset-repetition"
+      ],
+      "existing_evidence": [
+        "experiments/records/word-reset-repetition/record.json"
+      ],
+      "coverage_note": "No whole-word or variable multi-rune encryption transform is specified; state unit mapping, reversibility, key advancement and a target before executable queueing.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.6",
+      "title": "Word-length skeleton as a plaintext constraint.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "page-join-sensitivity",
+        "lp1-word-length-balance"
+      ],
+      "existing_evidence": [
+        "experiments/records/page-join-sensitivity/record.json",
+        "experiments/records/lp1-word-length-balance/record.json"
+      ],
+      "coverage_note": "Word lengths and page joins were measured, but no fixed dictionary/passage skeleton search with punctuation and joined wraps is recorded. Pin corpus edition and alignment/scoring rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "1.7",
+      "title": "Alternative plaintext language or spelling.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "parallel-languages",
+        "known-reading-languages",
+        "target-sized-languages"
+      ],
+      "existing_evidence": [
+        "experiments/records/parallel-languages/record.json",
+        "experiments/records/known-reading-languages/record.json",
+        "experiments/records/target-sized-languages/record.json"
+      ],
+      "coverage_note": "Eight-language length-profile comparison includes Welsh; not a decryption search under archaic/vowelless/phonetic spelling and GP alias equivalences. Freeze transliteration and corpus.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.1",
+      "title": "Reapply the demonstrated LP cipher toolkit.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-alphabet-warning-prefix",
+        "lp2-known-vigenere-keys"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-alphabet-warning-prefix/record.json",
+        "experiments/records/lp2-known-vigenere-keys/record.json"
+      ],
+      "coverage_note": "Known direct-toolkit examples and two-key openings do not cover a finite sectionwise Atbash/Caesar/composition grid. Define exact compositions and selection control.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.2",
+      "title": "Repeating-key Vigenere and related arithmetic.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys",
+        "public-wordlist-vigenere"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json",
+        "experiments/records/public-wordlist-vigenere/record.json"
+      ],
+      "coverage_note": "Two known keys and 43 source wordlist keys have narrow opening checks; longer periods, broader lexicon, reversed text/key and phase-by-section remain outside those scopes.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.3",
+      "title": "Modified dictionary keys.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-wordlist-vigenere"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-wordlist-vigenere/record.json"
+      ],
+      "coverage_note": "The archived 43 wordlist keys did not enumerate systematic one-letter substitutions of candidate keys. Specify source wordlist, replaced rune(s), and whether replacements affect GP multigraphs.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.4",
+      "title": "Pattern-expanded keys.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "public-wordlist-vigenere"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-wordlist-vigenere/record.json"
+      ],
+      "coverage_note": "No exact rotating/palindromic key expansion record. Freeze endpoint repetition, rotation increment, base-key list, and phase.",
+      "queue_id": "classical-key-schedule-variants"
+    },
+    {
+      "source_id": "2.5",
+      "title": "Alternating alphabets.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "four-phase-ioc"
+      ],
+      "existing_evidence": [
+        "experiments/records/four-phase-ioc/record.json"
+      ],
+      "coverage_note": "Residue-period diagnostics are not an alternating-key decryption. Freeze number of tracks, alphabets, phases and key periods.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.6",
+      "title": "Keyword-reordered alphabets.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json"
+      ],
+      "coverage_note": "No keyword-mixed alphabet replay. Specify keyword normalization, duplicate handling and whether both cipher and key alphabets are remapped.",
+      "queue_id": "classical-key-schedule-variants"
+    },
+    {
+      "source_id": "2.7",
+      "title": "Grouped Vigenere.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json"
+      ],
+      "coverage_note": "No variable-size grouped Vigenere rule or group schedule. Define group boundaries and key advancement exactly.",
+      "queue_id": "classical-key-schedule-variants"
+    },
+    {
+      "source_id": "2.8",
+      "title": "Affine encryption.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "literal-prime-affine",
+        "literal-prime-affine-pages",
+        "word-internal-affine-all-lags"
+      ],
+      "existing_evidence": [
+        "experiments/records/literal-prime-affine/record.json",
+        "experiments/records/literal-prime-affine-pages/record.json",
+        "experiments/records/word-internal-affine-all-lags/record.json"
+      ],
+      "coverage_note": "Literal-prime palette closure and observed lag maps do not test periodic affine decryption on rune indices. Freeze multiplier/offset periods and invertibility.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.9",
+      "title": "Progressive/Alberti-style encryption.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "alberti-branch-arithmetic"
+      ],
+      "existing_evidence": [
+        "experiments/records/alberti-branch-arithmetic/record.json"
+      ],
+      "coverage_note": "The LP2-39 Alberti branch arithmetic is a specific proposal audit; progressive alphabet-rotation schedules and source key are still needed for a general bounded decryption test.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.10",
+      "title": "Hill cipher.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "magic-square-freedom",
+        "lp2-54-55-word-square"
+      ],
+      "existing_evidence": [
+        "experiments/records/magic-square-freedom/record.json",
+        "experiments/records/lp2-54-55-word-square/record.json"
+      ],
+      "coverage_note": "Magic-square structural tests are not modular Hill decryption. Freeze 2x2/3x3 matrix candidates, padding, block alignment and mod-29 invertibility.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.11",
+      "title": "Playfair-style digraph encryption.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "doublet-collision-edits"
+      ],
+      "existing_evidence": [
+        "experiments/records/doublet-collision-edits/record.json"
+      ],
+      "coverage_note": "Low doublets motivate but do not specify Playfair. Pin 29-symbol digraph grid, merge/filler convention and rectangle/row/column rules.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.12",
+      "title": "Fractionation.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "fehu-coordinate-triad"
+      ],
+      "existing_evidence": [
+        "experiments/records/fehu-coordinate-triad/record.json"
+      ],
+      "coverage_note": "Coordinate triad is not Bifid/Trifid/Polybius fractionation. Need a 29-symbol coordinate table, period and recombination rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.13",
+      "title": "Substitution beyond individual runes.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "doublet-context"
+      ],
+      "existing_evidence": [
+        "experiments/records/doublet-context/record.json"
+      ],
+      "coverage_note": "Bigram/doublet profiles exist; no bounded digraph/trigraph or homophonic substitution search. Specify alphabet and mapping cardinality, word-boundary policy and language objective.",
+      "queue_id": null
+    },
+    {
+      "source_id": "2.14",
+      "title": "Layered encryption.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys",
+        "lp2-row-column-routes"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json",
+        "experiments/records/lp2-row-column-routes/record.json"
+      ],
+      "coverage_note": "Individual key and route tests do not close composition. Select fixed two layers, exact order, keys/routes and held-out criterion.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.1",
+      "title": "Search the F-interrupter pattern.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-54-55-autokey-reset",
+        "lp2-54-55-autokey-skip"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-54-55-autokey-reset/record.json",
+        "experiments/records/lp2-54-55-autokey-skip/record.json",
+        "research/batch-ready-intake.json#lanfear-f-copy-and-reset"
+      ],
+      "coverage_note": "All 64 F masks were assessed for one difference recurrence on LP2-54–55; general key-pause interpretation on other sections/ciphers is untested.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.2",
+      "title": "Generalize the interrupter rune.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "single-rune-null-doublets"
+      ],
+      "existing_evidence": [
+        "experiments/records/single-rune-null-doublets/record.json"
+      ],
+      "coverage_note": "Each rune deletion was checked for doublets; no 29-rune candidate interrupter decoding under a fixed key and pause convention.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.3",
+      "title": "Recover the key from a short prefix first.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-54-header-feedback"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-54-header-feedback/record.json"
+      ],
+      "coverage_note": "Header/prefix feedback checks do not recover a key before first F then predict later interrupts. Requires an independent prefix crib and frozen extension rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.4",
+      "title": "Joint key-and-interrupter search.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-54-55-autokey-reset",
+        "lp2-54-55-autokey-skip"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-54-55-autokey-reset/record.json",
+        "experiments/records/lp2-54-55-autokey-skip/record.json"
+      ],
+      "coverage_note": "Six-F mask enumeration is exact for one recurrence; joint unknown-key plus interruption search needs a fixed key prior, decoder and train/holdout split.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.5",
+      "title": "Two interpretations of interruption in alternating alphabets.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "four-phase-ioc"
+      ],
+      "existing_evidence": [
+        "experiments/records/four-phase-ioc/record.json"
+      ],
+      "coverage_note": "No source-defined two-alphabet cipher with the two pause semantics. Freeze alternation schedule and key-advance rule.",
+      "queue_id": "alternating-alphabet-interruption-clocks"
+    },
+    {
+      "source_id": "3.6",
+      "title": "Interrupter locations as a separate message.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "im-near-f-markers",
+        "f-delete-lag13"
+      ],
+      "existing_evidence": [
+        "experiments/records/im-near-f-markers/record.json",
+        "experiments/records/f-delete-lag13/record.json"
+      ],
+      "coverage_note": "F-neighbor and deletion statistics do not decode F position/gap bits. Specify binary coding, ordering, framing and non-post-hoc message criterion.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.7",
+      "title": "Interrupters as block boundaries.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "block-boundary-doublets"
+      ],
+      "existing_evidence": [
+        "experiments/records/block-boundary-doublets/record.json"
+      ],
+      "coverage_note": "Boundary doublet checks are not a Lehmer/block-permutation decode. Specify block definition, rank direction, alphabet and incomplete blocks.",
+      "queue_id": null
+    },
+    {
+      "source_id": "3.8",
+      "title": "Additional nulls or padding.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "single-rune-null-doublets",
+        "doublet-collision-edits"
+      ],
+      "existing_evidence": [
+        "experiments/records/single-rune-null-doublets/record.json",
+        "experiments/records/doublet-collision-edits/record.json",
+        "research/batch-ready-intake.json#ozon-insert-filler-between-doublets"
+      ],
+      "coverage_note": "Single-type deletion and source filler edits cover narrow nulls; multiple null classes/word-length correction need insertion/removal model and bounds.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.1",
+      "title": "Plaintext autokey.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "feedback-opening-census",
+        "cumulative-autokey-literal"
+      ],
+      "existing_evidence": [
+        "experiments/records/feedback-opening-census/record.json",
+        "experiments/records/cumulative-autokey-literal/record.json"
+      ],
+      "coverage_note": "Scalar-primed plaintext feedback lags 1–16 and a distinct cumulative rule are tested; arbitrary seed vectors and key layer are not.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.2",
+      "title": "Ciphertext autokey.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "feedback-opening-census",
+        "linear-ciphertext-feedback"
+      ],
+      "existing_evidence": [
+        "experiments/records/feedback-opening-census/record.json",
+        "experiments/records/linear-ciphertext-feedback/record.json"
+      ],
+      "coverage_note": "Scalar-primed ciphertext feedback lags 1–16 are checked at fixed page openings; larger primers, other positions and key layers remain.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.3",
+      "title": "Gematria-feedback autokey.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "r26-derived-generators-opening-cribs",
+        "lp2-totient-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/r26-derived-generators-opening-cribs/record.json",
+        "experiments/records/lp2-totient-openings/record.json"
+      ],
+      "coverage_note": "Generated prime/totient keys and index-feedback tests exist; a previous ciphertext or plaintext GP-prime feedback recurrence needs its exact reduction/update rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.4",
+      "title": "Cumulative feedback.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cumulative-autokey-literal",
+        "public-multihistory-feedback"
+      ],
+      "existing_evidence": [
+        "experiments/records/cumulative-autokey-literal/record.json",
+        "experiments/records/public-multihistory-feedback/record.json",
+        "research/batch-ready-intake.json#ozon-additive-feedback"
+      ],
+      "coverage_note": "One literal cumulative recurrence and seven fixed history functions have been replayed; other running GP-prime sum feedback needs a defined state transition.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.5",
+      "title": "Recover an unknown feedback function using cribs.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "feedback-opening-census"
+      ],
+      "existing_evidence": [
+        "experiments/records/feedback-opening-census/record.json"
+      ],
+      "coverage_note": "No unknown lookup-table inference with contradiction tracking from predeclared cribs. Freeze table domain, allowed ambiguity, training cribs and holdout pages.",
+      "queue_id": "crib-inferred-feedback-table"
+    },
+    {
+      "source_id": "4.6",
+      "title": "Difference/integral encoding.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "ea-difference-independence",
+        "cumulative-autokey-literal"
+      ],
+      "existing_evidence": [
+        "experiments/records/ea-difference-independence/record.json",
+        "experiments/records/cumulative-autokey-literal/record.json"
+      ],
+      "coverage_note": "Adjacent differences and one cumulative inversion were tested; multi-layer integral encoding with alternate boundaries requires an exact recurrence.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.7",
+      "title": "Anti-repeat key switching.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "doublet-collision-edits"
+      ],
+      "existing_evidence": [
+        "experiments/records/doublet-collision-edits/record.json",
+        "research/batch-ready-intake.json#ozon-delete-second-doublet"
+      ],
+      "coverage_note": "Source collision edits do not test event-driven key switch in a specified cipher. Freeze switch trigger, key list and whether rejected output consumes key.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.8",
+      "title": "Anti-repeat rejection sampling.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "decoder-skip-controls",
+        "b04-source-seeds-opening-cribs",
+        "r26-derived-generators-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/decoder-skip-controls/record.json",
+        "experiments/records/b04-source-seeds-opening-cribs/record.json",
+        "experiments/records/r26-derived-generators-opening-cribs/record.json",
+        "research/batch-ready-intake.json#dukotah-b04-short-cryptographic-seeds"
+      ],
+      "coverage_note": "Skip-aware source seed grids exist; no general generator-to-doublet rejection model is identified. Additional variants need exact rejection rule and keyed controls.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.9",
+      "title": "Residual doublets as clues.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "doublet-context",
+        "doublet-placement",
+        "doublet-section-residues",
+        "doublet-boundaries"
+      ],
+      "existing_evidence": [
+        "experiments/records/doublet-context/record.json",
+        "experiments/records/doublet-placement/record.json",
+        "experiments/records/doublet-section-residues/record.json",
+        "experiments/records/doublet-boundaries/record.json"
+      ],
+      "coverage_note": "Identity, neighboring differences, placement, residue/parity and boundary contexts are already measured within declared archived-transcription scopes; no causal cipher inferred.",
+      "queue_id": null
+    },
+    {
+      "source_id": "4.10",
+      "title": "Two-track interleaving.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "four-phase-ioc"
+      ],
+      "existing_evidence": [
+        "experiments/records/four-phase-ioc/record.json"
+      ],
+      "coverage_note": "Four-phase periodic statistic is not deinterleaving two plaintext streams. Freeze track period, ordering, cipher per track and evaluation corpus.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.1",
+      "title": "Prime sequence and prime-minus-one sequence.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-prime-openings",
+        "lp2-prime-minus-one-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-prime-openings/record.json",
+        "experiments/records/lp2-prime-minus-one-openings/record.json"
+      ],
+      "coverage_note": "Consecutive prime and prime-minus-one opening grids cover fixed start/offset choices; nonunit stride, reverse direction and section restarts are a new bounded extension.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.2",
+      "title": "Totient sequences.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-totient-openings",
+        "lp2-15-totient-gap-audit"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-totient-openings/record.json",
+        "experiments/records/lp2-15-totient-gap-audit/record.json"
+      ],
+      "coverage_note": "Consecutive phi(n) openings and panel arithmetic are tested; phi(prime), iterated and running-sum inputs need separate exact streams.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.3",
+      "title": "Primes selected by another sequence.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-panel-prime-openings",
+        "lp2-fibonacci-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-panel-prime-openings/record.json",
+        "experiments/records/lp2-fibonacci-openings/record.json"
+      ],
+      "coverage_note": "The exact 16-value LP2-15 panel and Fibonacci shifts are covered; Fibonacci/totient indexed prime and emirp variants require a pinned index convention and bounded starts.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.4",
+      "title": "Prime gaps and prime indices.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-prime-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-prime-openings/record.json"
+      ],
+      "coverage_note": "Prime-value sequence tests do not use prime gaps or indices. Specify zero/one-based indexing, start/stride and reductions.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.5",
+      "title": "Fibonacci-family streams.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-fibonacci-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-fibonacci-openings/record.json"
+      ],
+      "coverage_note": "A fixed uninterrupted Fibonacci opening search exists; Lucas recurrence and broader initial seeds/reset points are outside it.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.6",
+      "title": "Other arithmetic functions and elementary sequences.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "mobius-zero-mask-known-page",
+        "position-divisor-labels",
+        "direct-polynomial-streams"
+      ],
+      "existing_evidence": [
+        "experiments/records/mobius-zero-mask-known-page/record.json",
+        "experiments/records/position-divisor-labels/record.json",
+        "experiments/records/direct-polynomial-streams/record.json"
+      ],
+      "coverage_note": "Mobius masks/divisor labels and polynomial diagnostics cover only named transforms. Carmichael/Catalan/factorial/etc. are not one test; queue exact small streams with fixed seeds, not a blanket sequence sweep.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.7",
+      "title": "Mathematical constants.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json"
+      ],
+      "coverage_note": "No pinned digits-of-constants stream test. Freeze decimal expansion/source digits, digit grouping, offset, sign and length.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.8",
+      "title": "OEIS sequence search.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-prime-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-prime-openings/record.json"
+      ],
+      "coverage_note": "OEIS search is an unbounded discovery method unless sequence IDs, terms, transforms, offsets and selection correction are frozen; only specific series can enter an executable queue.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.9",
+      "title": "The LP1 numeric-square function.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-15-mobius-panel",
+        "lp2-panel-prime-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-15-mobius-panel/record.json",
+        "experiments/records/lp2-panel-prime-openings/record.json"
+      ],
+      "coverage_note": "LP2-15 square construction and panel stream are covered; transferring abs(3301-p) or prime/totient derivatives as a key to other sections needs a fixed enumeration.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.10",
+      "title": "Gromark/chain-addition keys.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "lp2-fibonacci-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-fibonacci-openings/record.json"
+      ],
+      "coverage_note": "No Gromark/chain-addition decoding with fixed primer and recurrence. State primer digits, carry/modulus, expansion and reset boundary.",
+      "queue_id": "gromark-chain-addition"
+    },
+    {
+      "source_id": "5.11",
+      "title": "Seeded pseudorandom streams.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-prng-seed-sweep",
+        "typed-seed-random-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-prng-seed-sweep/record.json",
+        "experiments/records/typed-seed-random-opening-cribs/record.json"
+      ],
+      "coverage_note": "Seven source-defined PRNGs and typed seed variants have bounded tests; LFSR/Geffe or other named generators need tap and seed conventions before queueing.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.12",
+      "title": "Historically plausible software generators.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "py27-prior-front-opening-cribs",
+        "py27-reducer-sweep-source-audit"
+      ],
+      "existing_evidence": [
+        "experiments/records/py27-prior-front-opening-cribs/record.json",
+        "experiments/records/py27-reducer-sweep-source-audit/record.json"
+      ],
+      "coverage_note": "Python-2.7 source front grid is checked; Perl/bash/PHP/.NET/TeX streams need exact implementation versions, seeds and update semantics.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.13",
+      "title": "Hash-expanded and stretched keys.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-kdf-seed-stretch",
+        "grid-payload-prf-seed-corner"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-kdf-seed-stretch/record.json",
+        "experiments/records/grid-payload-prf-seed-corner/record.json"
+      ],
+      "coverage_note": "One source-defined KDF grid and four payload PRFs are tested; arbitrary Cicada seed/hash chains require precise source byte encoding and iteration schedule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "5.14",
+      "title": "Artifact-derived seeds.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-prng-seed-sweep",
+        "typed-seed-random-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-prng-seed-sweep/record.json",
+        "experiments/records/typed-seed-random-opening-cribs/record.json"
+      ],
+      "coverage_note": "Fixed seed dictionaries and typed seeds exist; additional release-time/PGP/unused-number candidates need provenance and time-zone/byte encoding rules.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.1",
+      "title": "GP word sums as a key stream.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "selected-phrase-word-sums",
+        "word-sum-corpus-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/selected-phrase-word-sums/record.json",
+        "experiments/records/word-sum-corpus-control/record.json"
+      ],
+      "coverage_note": "GP word sums are checked as arithmetic/crib collisions, not as an ordered keystream. Freeze word source, sum-to-index map and reset rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.2",
+      "title": "GP line, sentence, and section totals.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-row-prime-sums"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-row-prime-sums/record.json"
+      ],
+      "coverage_note": "Row prime-sum counts exist; using line/sentence/section totals as key steps needs exact delimiter semantics and reduction.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.3",
+      "title": "Prime and emirp selection.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-row-prime-sums",
+        "lp2-row-emirp-sums"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-row-prime-sums/record.json",
+        "experiments/records/lp2-row-emirp-sums/record.json"
+      ],
+      "coverage_note": "Prime/emirp row sums are measured; extracting selected words or sentences into a second stream needs unit selection, ordering and acceptance criterion.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.4",
+      "title": "Product of GP sentence sums.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "selected-phrase-word-sums"
+      ],
+      "existing_evidence": [
+        "experiments/records/selected-phrase-word-sums/record.json"
+      ],
+      "coverage_note": "Parable GP totals/product are documented; transfer of instar-style sentence-product arithmetic to LP2 requires exact sentences, representation and output mapping.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.5",
+      "title": "Gematria values as positions.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cross-section-index-inversion",
+        "totient-map-route"
+      ],
+      "existing_evidence": [
+        "experiments/records/cross-section-index-inversion/record.json",
+        "experiments/records/totient-map-route/record.json",
+        "research/batch-ready-intake.json#89ron-729-index-inversion"
+      ],
+      "coverage_note": "Specific index inversion/route proposals exist; arbitrary word-sum page/word/rune pointers need explicit index base, wrap rule and target source.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.6",
+      "title": "Gematria values as movement instructions.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-row-column-routes",
+        "totient-map-route",
+        "lp2-turtle-spatial-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-row-column-routes/record.json",
+        "experiments/records/totient-map-route/record.json",
+        "experiments/records/lp2-turtle-spatial-replay/record.json"
+      ],
+      "coverage_note": "Named routes/movements have bounded replays; other GP-driven movements require a concrete direction table, start, wrap/stop rule and target grid.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.7",
+      "title": "Work in the prime-value channel before taking mod 29.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "literal-prime-affine",
+        "literal-prime-quadratic"
+      ],
+      "existing_evidence": [
+        "experiments/records/literal-prime-affine/record.json",
+        "experiments/records/literal-prime-quadratic/record.json"
+      ],
+      "coverage_note": "Fixed literal-prime palette maps are bounded; multiplication/factorization/digit sums before mod29 is a different, presently unspecified operator family.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.8",
+      "title": "Separate numerical digit planes.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cc-roman-matrix-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/cc-roman-matrix-replay/record.json"
+      ],
+      "coverage_note": "One source matrix/numeric interpretation is replayed; GP value digit planes across bases need exact padding, endianness and symbol mapping.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.9",
+      "title": "Entire sections as large integers.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "direct-polynomial-streams"
+      ],
+      "existing_evidence": [
+        "experiments/records/direct-polynomial-streams/record.json"
+      ],
+      "coverage_note": "Polynomial recurrence diagnostics are not section packing into large integers. Choose radix, separators/endianness and explicit prime/power/byte predicate.",
+      "queue_id": null
+    },
+    {
+      "source_id": "6.10",
+      "title": "Invert a numerical sum into possible words.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "word-sum-corpus-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/word-sum-corpus-control/record.json"
+      ],
+      "coverage_note": "Corpus collisions at four totals are measured; constrained inverse GP-sum enumeration requires a pinned rune lexicon, word lengths and vowel/repetition policy.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.1",
+      "title": "Solved plaintext as a running key.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "emerson-running-key",
+        "lp2-known-vigenere-keys"
+      ],
+      "existing_evidence": [
+        "experiments/records/emerson-running-key/record.json",
+        "experiments/records/lp2-known-vigenere-keys/record.json"
+      ],
+      "coverage_note": "External Emerson offsets and two LP keys are checked; solved LP plaintext at successive word starts as running key needs pinned solved-text version and start grid.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.2",
+      "title": "Solved plaintext with modified rune spellings.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-wordlist-vigenere"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-wordlist-vigenere/record.json"
+      ],
+      "coverage_note": "No whole solved-key-text rune replacement sweep. Specify source solved passage and replacement pair(s), retaining exact GP transliteration.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.3",
+      "title": "Another ciphertext page as the key.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "public-lp2-as-pad"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-lp2-as-pad/record.json"
+      ],
+      "coverage_note": "LP2-as-pad tests the reverse direction, not page-on-page ciphertext reuse. Freeze page pairings, alignment, operation and byte/rune XOR semantics.",
+      "queue_id": "ciphertext-page-as-key"
+    },
+    {
+      "source_id": "7.4",
+      "title": "Reverse the key/message roles.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-lp2-as-pad"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-lp2-as-pad/record.json"
+      ],
+      "coverage_note": "LP2 as a skip-aware key was tested against five pinned objects; other earlier artifacts or alignment rules remain outside that exact record.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.5",
+      "title": "Acrostics and positional extractions from solved text.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "line-initial-layout-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/line-initial-layout-control/record.json"
+      ],
+      "coverage_note": "Some initials/layout controls exist for source claims; systematic solved-text initial/final/every-nth extraction needs pinned plaintext, punctuation handling and n-range.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.6",
+      "title": "Cross-section keyword clues.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys",
+        "public-wordlist-vigenere"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-known-vigenere-keys/record.json",
+        "experiments/records/public-wordlist-vigenere/record.json"
+      ],
+      "coverage_note": "Two known keys and 43 wordlist keys do not exhaust the listed cross-section keywords/combinations. Pin exact strings, variant spellings and concatenation order.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.7",
+      "title": "LP1 magic squares as general key material.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "magic-square-freedom",
+        "lp1-payload-outer-ring",
+        "lp2-panel-prime-openings"
+      ],
+      "existing_evidence": [
+        "experiments/records/magic-square-freedom/record.json",
+        "experiments/records/lp1-payload-outer-ring/record.json",
+        "experiments/records/lp2-panel-prime-openings/record.json"
+      ],
+      "coverage_note": "Square construction/perimeter and one LP2 panel stream are documented; LP1 square read orders as direct key/matrix need exact source square and path convention.",
+      "queue_id": null
+    },
+    {
+      "source_id": "7.8",
+      "title": "Hidden diagonal structure in the magic squares. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "magic-square-freedom"
+      ],
+      "existing_evidence": [
+        "experiments/records/magic-square-freedom/record.json"
+      ],
+      "coverage_note": "3301/1033 diagonal interpretation is a speculative relationship, not a cipher test. Specify an exact rearrangement and independent predicted value before testing.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.1",
+      "title": "A separate book cipher.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "emerson-book-cipher-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/emerson-book-cipher-control/record.json"
+      ],
+      "coverage_note": "Historical Emerson coordinates are reproduced; applying page/line/word/letter pointers from LP2 needs a specified external text edition and extraction convention.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.2",
+      "title": "Previously referenced Cicada literature as running keys.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "emerson-running-key",
+        "emerson-book-cipher-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/emerson-running-key/record.json",
+        "experiments/records/emerson-book-cipher-control/record.json"
+      ],
+      "coverage_note": "One pinned Emerson derivative was searched at contiguous offsets on three LP2 pages; Mabinogion/Agrippa/King-in-Yellow/Book-of-Law versions need fixed editions, normalization and same held-out scoring.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.3",
+      "title": "William Blake as the external-text clue.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "emerson-running-key"
+      ],
+      "existing_evidence": [
+        "experiments/records/emerson-running-key/record.json"
+      ],
+      "coverage_note": "Blake cover is a source clue, not a key definition. Identify a specific poem/edition, order/normalization and cipher before running.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.4",
+      "title": "Jung's Red Book/Liber Novus connection. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Jung thematic similarity is a speculative source lead; no exact passage/edition or extraction/key rule is supplied.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.5",
+      "title": "Runic and Norse sources.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Rune poems/Eddas/Beowulf/Deor are distinct source-edition candidates; pin text, transliteration and decoder before treating any as a tested key.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.6",
+      "title": "Religious, occult, and philosophical corpora.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Kabbalistic/Gnostic/Hermetic/alchemical/Thelemic/Taoist corpora are not a finite hypothesis. Select individual text editions/passages and a shared fixed search protocol.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.7",
+      "title": "Mathematical/scientific reference texts.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Euclid/Newton are source leads; exact text edition and passage, normalization and key/extraction mapping are missing.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.8",
+      "title": "Cypherpunk writing and manifestos.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Cypherpunk manifesto is a distinct candidate running-key corpus; pin canonical text bytes, case/punctuation normalization, cipher and holdout threshold.",
+      "queue_id": "cypherpunk-manifesto-running-key"
+    },
+    {
+      "source_id": "8.9",
+      "title": "Cicada's own signed messages as key text.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-kdf-seed-stretch",
+        "public-prng-seed-sweep"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-kdf-seed-stretch/record.json",
+        "experiments/records/public-prng-seed-sweep/record.json"
+      ],
+      "coverage_note": "Some signed-message words/numbers enter fixed seed grids; whole signed prose as running key needs authenticated message bytes, signature provenance and decoding convention.",
+      "queue_id": null
+    },
+    {
+      "source_id": "8.10",
+      "title": "Fibonacci-indexed Bible references. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Genesis/Fibonacci chapter-verse mapping is speculative; freeze Fibonacci pair start, testament/edition, chapter/verse indexing and a predicted output before testing.",
+      "queue_id": "fibonacci-bible-pointer"
+    },
+    {
+      "source_id": "9.1",
+      "title": "Reverse reading direction.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-word-reversal",
+        "lp2-word-order-reversal",
+        "lp2-row-column-routes"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-word-reversal/record.json",
+        "experiments/records/lp2-word-order-reversal/record.json",
+        "experiments/records/lp2-row-column-routes/record.json",
+        "data/method-families.json#routes"
+      ],
+      "coverage_note": "Reverse and boustrophedon routes are already named; tested segment reversals do not exhaust alternation, text layers or composition.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.2",
+      "title": "Columnar and diagonal transposition.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-row-column-routes"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-row-column-routes/record.json",
+        "data/method-families.json#routes"
+      ],
+      "coverage_note": "Column/diagonal route family is already documented; the current sixteen routes do not test arbitrary grid widths or column permutations.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.3",
+      "title": "Rail-fence transposition.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "rail-fence-visible-words"
+      ],
+      "existing_evidence": [
+        "experiments/records/rail-fence-visible-words/record.json"
+      ],
+      "coverage_note": "The fixed rail-fence replay already records this method. Other rails, segmentation and combined layers require separate bounds.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.4",
+      "title": "Spiral or perimeter-peeling order.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cc-roman-matrix-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/cc-roman-matrix-replay/record.json",
+        "data/method-families.json#routes"
+      ],
+      "coverage_note": "Spiral and perimeter route ideas are already documented; the Roman digit spiral is only a specific replay, not every rune-grid spiral.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.5",
+      "title": "Square-length sections as matrices.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cross-section-index-inversion",
+        "totient-map-route",
+        "lp2-seven-page-square-fits"
+      ],
+      "existing_evidence": [
+        "experiments/records/cross-section-index-inversion/record.json",
+        "experiments/records/totient-map-route/record.json",
+        "experiments/records/lp2-seven-page-square-fits/record.json",
+        "data/reported-attempts.json#cc-section-matrix-fits"
+      ],
+      "coverage_note": "The 729-rune opening square and section-matrix proposals are already queued/replayed in limited forms.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.6",
+      "title": "Mobius-style traversal.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "quagmirror-six-rune-replay",
+        "cc-roman-matrix-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/quagmirror-six-rune-replay/record.json",
+        "experiments/records/cc-roman-matrix-replay/record.json",
+        "data/reported-attempts.json#cc-section-matrix-fits"
+      ],
+      "coverage_note": "MÃ¶bius/wrapped-grid routing is a known interpretation. A deterministic strip join and read order are still needed; the shared name is not proof the navigation was tested.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.7",
+      "title": "Prime/Fibonacci-index extraction.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "line-initial-layout-control"
+      ],
+      "existing_evidence": [
+        "experiments/records/line-initial-layout-control/record.json",
+        "data/method-families.json#grilles"
+      ],
+      "coverage_note": "Positional extraction is already documented. Prime/Fibonacci index selection needs a frozen stream, index origin and exclusions before a new bounded run.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.8",
+      "title": "Page reordering.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-page-order-permutations"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-page-order-permutations/record.json",
+        "data/method-families.json#transposition"
+      ],
+      "coverage_note": "Page reordering is already considered. The existing grid permutation test is narrower; this catalog gives no new complete order.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.9",
+      "title": "Page superimposition.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "dead-tree-alignment",
+        "page-margin-row-alignment"
+      ],
+      "existing_evidence": [
+        "experiments/records/dead-tree-alignment/record.json",
+        "experiments/records/page-margin-row-alignment/record.json",
+        "data/method-families.json#image-processing"
+      ],
+      "coverage_note": "Image overlays and alignment are known leads. A shared artwork match is not a text-mask decoder; specify page pair, registration and readout.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.10",
+      "title": "Layout counts as a separate stream.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "line-initial-layout-control",
+        "lp1-word-length-balance"
+      ],
+      "existing_evidence": [
+        "experiments/records/line-initial-layout-control/record.json",
+        "experiments/records/lp1-word-length-balance/record.json",
+        "research/public-attempt-inventory.json#B-12"
+      ],
+      "coverage_note": "Line-fill, word counts and page geometry as a separate channel already have source entry B-12; do not duplicate it or treat the histogram checks as a decoding test.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.11",
+      "title": "Delimiter and ornament encoding.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-spacing-gap-audit"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-spacing-gap-audit/record.json",
+        "data/reported-attempts.json#lp2-spacing-as-bits"
+      ],
+      "coverage_note": "Spacing/delimiter bit-channel proposal is already queued. Need an image-level symbol inventory and fixed binary/ternary mapping.",
+      "queue_id": null
+    },
+    {
+      "source_id": "9.12",
+      "title": "27x27 mirrored-triplet navigation. [disputed solution claim]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "totient-map-route"
+      ],
+      "existing_evidence": [
+        "experiments/records/totient-map-route/record.json"
+      ],
+      "coverage_note": "The supplied 27x27 mirrored-triplet method already has a dedicated replay; its proposed plaintext remains unverified.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.1",
+      "title": "Matching artwork implies matching cipher treatment.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/source-intake/batch-b-2026-10-22.md"
+      ],
+      "coverage_note": "Artwork-to-method interpretation is already retained. It needs a particular transferred rule, not general thematic resemblance.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.2",
+      "title": "Branches and roots encode a sequence.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "alberti-branch-arithmetic"
+      ],
+      "existing_evidence": [
+        "experiments/records/alberti-branch-arithmetic/record.json",
+        "articles/branches.html"
+      ],
+      "coverage_note": "Retain explicit Fibonacci/branch-graph counting as a candidate beyond image reuse and the LP2-39 arithmetic audit. Need annotated branch junctions, roots/tips and a fixed traversal; count the full allowed tree set on controls.",
+      "queue_id": "branch-graph-sequence-reads"
+    },
+    {
+      "source_id": "10.3",
+      "title": "Mayfly means an ephemeral key. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Ephemeral/one-use key interpretation of the mayfly adds an explicit semantic lead. No key construction, target or falsifiable prediction is supplied.",
+      "queue_id": "mayfly-ephemeral-key-reading"
+    },
+    {
+      "source_id": "10.4",
+      "title": "Tree of life / tree of knowledge. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/works-and-influences.html"
+      ],
+      "coverage_note": "Tree-of-life/knowledge symbolism belongs to the existing interpretation/reference research, not a new specified cipher. No exact text or operation is selected.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.5",
+      "title": "Cuneiform gives the number system.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-radix-reconciliation"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-radix-reconciliation/record.json"
+      ],
+      "coverage_note": "Base-60 interpretation and conditional byte constraints are already documented; this is not a new decoding experiment.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.6",
+      "title": "Constellation interpretation of the dots. [speculative]",
+      "novelty": "new-extension",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/source-intake/batch-c-2026-10-22.md"
+      ],
+      "coverage_note": "Orion geometry was already retained; add the explicitly named Aquila and Bootes candidates to that comparison, with a fixed star catalog/epoch/projection and full candidate-search controls.",
+      "queue_id": "dot-constellation-candidate-extension"
+    },
+    {
+      "source_id": "10.7",
+      "title": "Geographic or celestial map. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-turtle-spatial-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-turtle-spatial-replay/record.json",
+        "data/reported-attempts.json#poster-coordinate-signpost-search"
+      ],
+      "coverage_note": "Map/coordinate readings already exist. The turtle-path replay is one rule, not proof against arbitrary geographic or celestial interpretations.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.8",
+      "title": "Repeated dead-oak imagery selects a starting point. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "dead-tree-alignment",
+        "dead-tree-cross-carrier"
+      ],
+      "existing_evidence": [
+        "experiments/records/dead-tree-alignment/record.json",
+        "experiments/records/dead-tree-cross-carrier/record.json"
+      ],
+      "coverage_note": "Repeated-tree provenance and proposed cipher relevance already separated. Prioritizing a section from shared imagery supplies no new transform.",
+      "queue_id": null
+    },
+    {
+      "source_id": "10.9",
+      "title": "True/false paths as dark/light shading. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Explicit dark-versus-light true/false path reading is not captured by the contrast tools alone. Need original illustrated path, reproducible mask, branch choices and readout; never select shading after seeing words.",
+      "queue_id": "dark-light-artwork-paths"
+    },
+    {
+      "source_id": "10.10",
+      "title": "Recover the source artwork.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "dead-tree-alignment",
+        "dead-tree-cross-carrier"
+      ],
+      "existing_evidence": [
+        "experiments/records/dead-tree-alignment/record.json",
+        "experiments/records/dead-tree-cross-carrier/record.json",
+        "docs/KNOWLEDGE-GAPS.md"
+      ],
+      "coverage_note": "Source-artwork comparison is an established research lane; keep source identity, image transform and claimed cipher relevance separate.",
+      "queue_id": null
+    },
+    {
+      "source_id": "11.1",
+      "title": "Marginal dots as musical notes. [speculative]",
+      "novelty": "new-extension",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "data/method-families.json#symbol-systems"
+      ],
+      "coverage_note": "A notation family is documented but the specific marginal-dot-to-note readout is not a recorded experiment. Freeze dot coordinates, staff, reading order and note-to-rune mapping.",
+      "queue_id": "dot-music-notation"
+    },
+    {
+      "source_id": "11.2",
+      "title": "Gregorian/square notation. [speculative]",
+      "novelty": "new-extension",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "data/method-families.json#symbol-systems"
+      ],
+      "coverage_note": "Add the specific Gregorian/square-notation staff alternative to the same dot-music queue item, with staff count, clef and solfege interpretation fixed in advance.",
+      "queue_id": "dot-music-notation"
+    },
+    {
+      "source_id": "11.3",
+      "title": "Constellations arranged as a score. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "The composite constellation-to-score route adds distinct choices; track with dot-music, requiring a fixed constellation registration and score mapping before reading outputs.",
+      "queue_id": "dot-music-notation"
+    },
+    {
+      "source_id": "11.4",
+      "title": "Earlier Cicada music as key material.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "instar-narrowband-lines"
+      ],
+      "existing_evidence": [
+        "experiments/records/instar-narrowband-lines/record.json",
+        "data/reported-attempts.json#music-reverse-table-canon"
+      ],
+      "coverage_note": "Earlier audio/music as keys already appears in the music and watermark proposals. The narrowband measurement does not test arbitrary musical key extraction.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.1",
+      "title": "Decode the pairs as base-60 values/bytes.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-direct-bytes",
+        "grid-radix-reconciliation"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-direct-bytes/record.json",
+        "experiments/records/grid-radix-reconciliation/record.json"
+      ],
+      "coverage_note": "Conditional base-60 byte conversion is already established and reproduced under specific transcription choices.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.2",
+      "title": "Alternative digit alphabets or bases.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-radix-reconciliation"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-radix-reconciliation/record.json",
+        "articles/alphanumeric-grids.html"
+      ],
+      "coverage_note": "Alternative bases/digit orders are a documented family; base59 versus60 has a bounded reconciliation. No new order is specified by this generic list.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.3",
+      "title": "First character is a group label.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "grid-high-digit-cells"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-high-digit-cells/record.json"
+      ],
+      "coverage_note": "Treat the first digit as a class label and emit second-character streams per class. Existing 4-prefix statistics do not decode all five suffix channels; freeze order, alphabet and recombination.",
+      "queue_id": "grid-prefix-split-channels"
+    },
+    {
+      "source_id": "12.4",
+      "title": "Group 4 supplies a key. [speculative]",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "grid-high-digit-cells"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-high-digit-cells/record.json"
+      ],
+      "coverage_note": "The existing record confirms suffix string 97DEF756B98A80EB9 but does not use it as a key. It has 17 hex nibbles, not an integral byte length: choose and justify packing/padding, algorithm and target before testing.",
+      "queue_id": "grid-prefix-split-channels"
+    },
+    {
+      "source_id": "12.5",
+      "title": "Payload as the runic text's key.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-payload-prf-source-grid",
+        "grid-payload-prf-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-payload-prf-source-grid/record.json",
+        "experiments/records/grid-payload-prf-opening-cribs/record.json",
+        "research/public-attempt-inventory.json#B-05"
+      ],
+      "coverage_note": "Payload-as-key and PRF-seed branches are already queued and partly replayed; fixed openings/English-score bounds do not close all direct-pad or repeated-key uses.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.6",
+      "title": "Payload as several hashes.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Retain explicit splitting of the 256 bytes into digest-sized blocks and matching a frozen candidate-input corpus. Specify block lengths/offsets, algorithms and complete comparison count.",
+      "queue_id": "grid-payload-digest-blocks"
+    },
+    {
+      "source_id": "12.7",
+      "title": "Payload related to the AN END hash.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#R30-B2-RSA-GPG"
+      ],
+      "coverage_note": "Payload/key/hash-preimage branches already exist in the source-blob matrix and page56 preimage work. No new byte transform is fixed here.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.8",
+      "title": "Payload as an encrypted file/container.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-direct-bytes",
+        "grid-openpgp-literal"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-direct-bytes/record.json",
+        "experiments/records/grid-openpgp-literal/record.json",
+        "research/public-attempt-reconciliation.json#R30-B1-BLOB-CRYPTO"
+      ],
+      "coverage_note": "Headers, packet/container and keyed encryption branches already tracked. Current byte-zero headers and tag11 checks are limited, not a general encrypted-container exclusion.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.9",
+      "title": "Payload as an RSA-related number.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "rsa-window-54-source-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/rsa-window-54-source-replay/record.json",
+        "research/public-attempt-reconciliation.json#E-01"
+      ],
+      "coverage_note": "RSA/modulus/ciphertext interpretations already tracked, with a narrower 54-byte-window replay complete.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.10",
+      "title": "Payload as a bitmap or QR-like object.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "grid-barcode-fixed-render"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-barcode-fixed-render/record.json",
+        "data/reported-attempts.json#grid-data-matrix-report"
+      ],
+      "coverage_note": "The same bitmap/barcode idea is already queued. The 64-bit rendering result is not evidence about other widths, padding or finder patterns.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.11",
+      "title": "Payload under XOR or bytewise encryption.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#R30-B1-BLOB-CRYPTO"
+      ],
+      "coverage_note": "XOR, reversed blobs and external symmetric keys already belong to the source-blob battery; no duplicate queue item for this generic restatement.",
+      "queue_id": null
+    },
+    {
+      "source_id": "12.12",
+      "title": "Numerical pair labels as directions. [speculative]",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "grid-high-digit-cells"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-high-digit-cells/record.json"
+      ],
+      "coverage_note": "Leading 0â€“4 values as route instructions is distinct from suffix statistics. Track with prefix-split channels; freeze five-state direction table, origin, boundary handling and readout.",
+      "queue_id": "grid-prefix-split-channels"
+    },
+    {
+      "source_id": "13.1",
+      "title": "Isolate red text.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "red-initial-presence-order",
+        "lp2-39-header-cribs",
+        "lp2-54-header-feedback"
+      ],
+      "existing_evidence": [
+        "experiments/records/red-initial-presence-order/record.json",
+        "experiments/records/lp2-39-header-cribs/record.json",
+        "experiments/records/lp2-54-header-feedback/record.json"
+      ],
+      "coverage_note": "Red headings/initials as separate targets already form multiple records. Counts of large initials are not a transcription of all red prose.",
+      "queue_id": null
+    },
+    {
+      "source_id": "13.2",
+      "title": "The long red passage on page 53.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "red-initial-presence-order"
+      ],
+      "existing_evidence": [
+        "experiments/records/red-initial-presence-order/record.json"
+      ],
+      "coverage_note": "Add LP2-53 long red passage as a specific independent target. Verify the claimed51 runes from original image, delimit the exact span, then freeze cipher/key phases and interrupter masks.",
+      "queue_id": "lp2-53-red-passage"
+    },
+    {
+      "source_id": "13.3",
+      "title": "Red-text gematria links. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [],
+      "coverage_note": "Retain the specific LP2-23 red-sum691 / TEST THE KNOWLEDGE claim for arithmetic and encoding audit. Need the source post, exact red rune range and rune encoding; a numerical match alone is not an instruction.",
+      "queue_id": "lp2-23-red-sum-691"
+    },
+    {
+      "source_id": "13.4",
+      "title": "Brightness, contrast, and color separation.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "data/method-families.json#image-processing"
+      ],
+      "coverage_note": "Brightness/contrast/RGB separation are existing inspection tools. No new carrier, extraction rule or prediction is specified.",
+      "queue_id": null
+    },
+    {
+      "source_id": "13.5",
+      "title": "OutGuess with candidate passwords.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "outguess-default-key",
+        "outguess-guard-sweep"
+      ],
+      "existing_evidence": [
+        "experiments/records/outguess-default-key/record.json",
+        "experiments/records/outguess-guard-sweep/record.json",
+        "research/public-attempt-inventory.json#R29-L1-ONION-STEGO"
+      ],
+      "coverage_note": "Extend known password-attack work from the earlier onion chain to exact LP2 original carriers and a frozen LP-word key list. Default-key results do not cover this.",
+      "queue_id": "lp2-keyed-and-alternative-stego"
+    },
+    {
+      "source_id": "13.6",
+      "title": "Other image-steganography methods.",
+      "novelty": "new-extension",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#R29-L1-ONION-STEGO"
+      ],
+      "coverage_note": "Track steghide and explicit JPEG/DCT/bit-channel tools on LP2 carriers in the same stego task. Need versioned extraction rules, a finite key/channel list and planted format-specific controls.",
+      "queue_id": "lp2-keyed-and-alternative-stego"
+    },
+    {
+      "source_id": "13.7",
+      "title": "Appended data, metadata, and embedded files.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/embedded-payloads.html"
+      ],
+      "coverage_note": "Appended bytes, metadata and embedded payload inspection already documented in the extraction/provenance work. Do not infer exhaustive absence from one inspected field.",
+      "queue_id": null
+    },
+    {
+      "source_id": "13.8",
+      "title": "Glyph shape and placement as bits.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#R30-A1-FONT"
+      ],
+      "coverage_note": "Glyph variants and baseline/advance channels already have source lanes R30-A1-FONT and R30-A2-SUBPIXEL; preserve their input/control gaps.",
+      "queue_id": null
+    },
+    {
+      "source_id": "13.9",
+      "title": "Audit the transcription itself.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "cross-source-word-boundaries",
+        "haplography-diagonal-bound",
+        "image-row-coverage"
+      ],
+      "existing_evidence": [
+        "experiments/records/cross-source-word-boundaries/record.json",
+        "experiments/records/haplography-diagonal-bound/record.json",
+        "experiments/records/image-row-coverage/record.json",
+        "data/reported-attempts.json#manual-rune-transcription-recheck"
+      ],
+      "coverage_note": "Transcription/haplography checks are already queued, with limited independent text/image coverage; this is not a complete visual re-transcription claim.",
+      "queue_id": null
+    },
+    {
+      "source_id": "13.10",
+      "title": "Recover a source PDF/PostScript/font artifact.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#G-01"
+      ],
+      "coverage_note": "PDF/PostScript/font provenance is already a source lane, including archive asset search; no new source artifact or toolchain identifier is supplied.",
+      "queue_id": null
+    },
+    {
+      "source_id": "14.1",
+      "title": "Search for an existing preimage instead of reversing the digest.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#candidate",
+        "articles/reported-attempts.html#metafysica-dwh-page-sweep"
+      ],
+      "coverage_note": "No pinned, enumerated historical candidate corpus with saved exact bytes and a complete result table. Compare each manifest entry to the target; do not label a broad web search complete.",
+      "queue_id": null
+    },
+    {
+      "source_id": "14.2",
+      "title": "Identify what was hashed.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#algorithm",
+        "scripts/check_lp2_target.py"
+      ],
+      "coverage_note": "The documentation explains the ambiguity and checker tests one exact byte file under SHA-512. A specific candidate still needs a frozen byte/serialization matrix and archived variants.",
+      "queue_id": null
+    },
+    {
+      "source_id": "14.3",
+      "title": "Encoding and normalization variants.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#algorithm",
+        "articles/hashes-and-addresses.html"
+      ],
+      "coverage_note": "No bounded normalization experiment is recorded. Fix a candidate and transformation list before checking; do not apply transformations after seeing mismatches.",
+      "queue_id": null
+    },
+    {
+      "source_id": "14.4",
+      "title": "Other 512-bit hash algorithms.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#algorithm"
+      ],
+      "coverage_note": "No exact alternate-algorithm candidate grid is recorded. The attachment gives algorithm names but no input-byte list or historical result files.",
+      "queue_id": "internal-artifact-hash-matrix"
+    },
+    {
+      "source_id": "14.5",
+      "title": "Four MD5 hashes instead of one 512-bit digest. [speculative]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#algorithm"
+      ],
+      "coverage_note": "This is a distinct speculative construction, not four established hashes. Locate the 2016 proposal and fix block boundaries, permutation and candidate byte inputs before testing.",
+      "queue_id": "four-md5-target-blocks"
+    },
+    {
+      "source_id": "14.6",
+      "title": "Limited candidate-space brute force.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "scripts/check_lp2_target.py"
+      ],
+      "coverage_note": "No complete published enumeration is archived. Record alphabet, length/range, encoding, algorithm and count for each separate finite batch; do not collapse these unlike spaces into one claimed exhaustive test.",
+      "queue_id": "bounded-hash-input-enumerations"
+    },
+    {
+      "source_id": "14.7",
+      "title": "Pastebin as the page source.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/reported-attempts.html#metafysica-dwh-page-sweep",
+        "articles/lp2-56-target.html#candidate"
+      ],
+      "coverage_note": "Need a timestamped Pastebin URL/content manifest and exact response bytes; enumeration of unknown or deleted pages cannot be inferred from testing a few extant pages.",
+      "queue_id": "pastebin-preimage-corpus"
+    },
+    {
+      "source_id": "14.8",
+      "title": "Internal book artifact as the preimage.",
+      "novelty": "new-extension",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "scripts/check_lp2_target.py",
+        "articles/reported-attempts.html#lp2-56-hash-solved-text-checksum"
+      ],
+      "coverage_note": "The checker supports this, but no archive-wide manifest/output table for original JPEGs, transcriptions, solved passages and payload bytes exists. A completed-text checksum remains conditional on a proposed complete reading.",
+      "queue_id": "internal-artifact-hash-matrix"
+    },
+    {
+      "source_id": "14.9",
+      "title": "Digest as encoded address data. [disputed]",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/hashes-and-addresses.html",
+        "research/source-intake/batch-b-2026-10-22.md"
+      ],
+      "coverage_note": "No deterministic conversion, address checksum, chronology check or public derivation receipt is recorded for this specific proposal. Treat it as a disputed representation claim, not hash inversion.",
+      "queue_id": "digest-address-reinterpretation"
+    },
+    {
+      "source_id": "14.10",
+      "title": "Search archived services and old mirrors.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/lp2-56-target.html#candidate",
+        "research/source-intake/batch-b-2026-10-22.md"
+      ],
+      "coverage_note": "Need timestamped archived responses, redirect and compression handling, and a finite service/URL manifest. The existing file checker does not discover missing historical content.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.1",
+      "title": "The 2013 missing primes.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "grid-alternative-layouts"
+      ],
+      "existing_evidence": [
+        "experiments/records/grid-alternative-layouts/record.json"
+      ],
+      "coverage_note": "The 2013 omitted-prime set must be sourced exactly and mapped to one finite key/selection rule. Do not count LP2 grid-prime records as this test.",
+      "queue_id": "historical-artifact-keysets"
+    },
+    {
+      "source_id": "15.2",
+      "title": "Earlier unused numbers and hashes.",
+      "novelty": "new-extension",
+      "existing_record_ids": [
+        "h03-ps-layout-replay"
+      ],
+      "existing_evidence": [
+        "experiments/records/h03-ps-layout-replay/record.json",
+        "research/public-attempt-reconciliation.json#H-03"
+      ],
+      "coverage_note": "Earlier-artifact key derivation is untested as a grouped finite family. Preserve exact artifact bytes and define offset, reduction, direction and key-skip semantics per source.",
+      "queue_id": "historical-artifact-keysets"
+    },
+    {
+      "source_id": "15.3",
+      "title": "CicadaOS binary material.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#R12-A1",
+        "research/public-attempt-reconciliation.json#R28-L1-CICADAOS-PADS-DENSE-PAIR",
+        "research/execution-ready-queue.json"
+      ],
+      "coverage_note": "Pinned source attempts exist but the archive has no independent full literal-byte-pad replay covering their input completeness, dense offsets and pair-skip branch. This is already a source queue, not a newly discovered technique.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.4",
+      "title": "Earlier image/onion payloads.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#H-03",
+        "research/public-attempt-reconciliation.json#R29-L1-ONION-STEGO"
+      ],
+      "coverage_note": "The source attempts address particular extraction or XOR tests; they do not form an LP2-key corpus. Recover byte-identical carriers and define the combination/derivation grid.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.5",
+      "title": "PGP artifacts as key material.",
+      "novelty": "new",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/pgp-signatures.html",
+        "research/public-attempt-inventory.json#R30-B2-RSA-GPG"
+      ],
+      "coverage_note": "No bounded packet/fingerprint-to-rune keystream rule and target scope is archived. Distinguish provenance-signature verification from using those bytes as cipher keys.",
+      "queue_id": "pgp-packet-pad-candidates"
+    },
+    {
+      "source_id": "15.6",
+      "title": "Published randomness as a pad.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#R17-PUBLIC-PAD",
+        "research/public-attempt-inventory.json#B-13-MARSAGLIA",
+        "research/public-attempt-inventory.json#R24-C8-DATE-INDEXED-PAD"
+      ],
+      "coverage_note": "Published source sweeps and corrections are already queued; exact byte/date/offset coverage and scorer-power claims need reconciliation before any whole-family negative. A dated page-signature join is a specific untested extension.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.7",
+      "title": "Blockchain data as a public pad.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-reconciliation.json#R17-PUBLIC-PAD",
+        "research/public-attempt-inventory.json#R24-C8-DATE-INDEXED-PAD"
+      ],
+      "coverage_note": "The source has a blockchain pad lane, but source-reported offset coverage is not a Liberpedia replay and the timestamp-joined variant is explicitly distinct. Pin chain, block range, field serialization and key alignment.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.8",
+      "title": "Historical toolchain as a clue to key generation.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "py27-reducer-sweep-source-audit",
+        "r26-derived-generators-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/py27-reducer-sweep-source-audit/record.json",
+        "experiments/records/r26-derived-generators-opening-cribs/record.json",
+        "research/public-attempt-inventory.json#R19-G3"
+      ],
+      "coverage_note": "Some period-specific generator variants have bounded records, but a source-linked rendering/font/PGP-to-generator prior is a separate evidentiary argument; do not treat a plausible platform as proof of a key stream.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.9",
+      "title": "Recover missing public clues from archives.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#G-02",
+        "research/public-attempt-inventory.json#I-03",
+        "articles/2013-twitter-gematria.html"
+      ],
+      "coverage_note": "Already a provenance/source-recovery track rather than a bounded decryption experiment. A newly recovered artifact would become a candidate only with fixed bytes, authenticity and a stated decoding rule.",
+      "queue_id": null
+    },
+    {
+      "source_id": "15.10",
+      "title": "A privately distributed key. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#VERDICT-UNSOLVABLE-BY-DESIGN",
+        "articles/one-time-pad.html"
+      ],
+      "coverage_note": "Represented as an explanatory hypothesis, not a tested key. No finite search can exclude an arbitrary unreleased pad; a specific public recollection or surviving byte artifact would be new evidence.",
+      "queue_id": null
+    },
+    {
+      "source_id": "16.1",
+      "title": "Repeated LP phrasing as cribs.",
+      "novelty": "known",
+      "existing_record_ids": [
+        "lp2-39-header-cribs",
+        "lp2-known-vigenere-keys",
+        "b04-source-seeds-opening-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-39-header-cribs/record.json",
+        "experiments/records/lp2-known-vigenere-keys/record.json",
+        "experiments/records/b04-source-seeds-opening-cribs/record.json"
+      ],
+      "coverage_note": "Existing finite crib tests do not cover every proposed phrase, location or cipher. Freeze the phrase-to-rune transliteration, exact target window, key rule and held-out check for each new branch.",
+      "queue_id": null
+    },
+    {
+      "source_id": "16.2",
+      "title": "Long thematic words as anchors.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "lp2-39-header-cribs"
+      ],
+      "existing_evidence": [
+        "experiments/records/lp2-39-header-cribs/record.json",
+        "articles/method-cribs.html"
+      ],
+      "coverage_note": "No exact page-43 word-slot/key-fragment replay found. Recover the cited Reddit proposal, preserve its transcription and spelling/rune segmentation, then demand continuation beyond the fitted word.",
+      "queue_id": "lp2-43-egalitarianism-crib"
+    },
+    {
+      "source_id": "16.3",
+      "title": "Single-rune word constraints.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "single-rune-null-doublets"
+      ],
+      "existing_evidence": [
+        "experiments/records/single-rune-null-doublets/record.json",
+        "articles/method-cribs.html"
+      ],
+      "coverage_note": "No finite positional word-identity crib is recorded. List exact one-rune tokens by page and boundary source; score each hypothesized plaintext under a specified key/cipher with held-out predictions.",
+      "queue_id": "singleton-word-cribs"
+    },
+    {
+      "source_id": "16.4",
+      "title": "Plaintext marker or pointer cribs.",
+      "novelty": "new",
+      "existing_record_ids": [
+        "lp2-39-header-cribs"
+      ],
+      "existing_evidence": [
+        "articles/method-cribs.html",
+        "experiments/records/lp2-39-header-cribs/record.json"
+      ],
+      "coverage_note": "No exact WWW/window/cipher test or URL syntax recognizer is recorded. Fix the expected token encoding and placement before searching, then validate adjacent structure rather than a three-letter fit.",
+      "queue_id": "url-structured-cribs"
+    },
+    {
+      "source_id": "16.5",
+      "title": "The solved prose describes the algorithm. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "public-circumference-substitutions",
+        "page40-for-every-arithmetic",
+        "study-here-bidirectional-pointer"
+      ],
+      "existing_evidence": [
+        "experiments/records/public-circumference-substitutions/record.json",
+        "experiments/records/page40-for-every-arithmetic/record.json",
+        "experiments/records/study-here-bidirectional-pointer/record.json"
+      ],
+      "coverage_note": "Several named literal readings are already tested, but a general instruction cannot be marked exhausted. Each new mapping needs exact quoted words, a fixed operation/target and a prediction on unseen material.",
+      "queue_id": null
+    },
+    {
+      "source_id": "16.6",
+      "title": "An ideological/personal journey supplies the missing interpretation.",
+      "novelty": "known",
+      "existing_record_ids": [],
+      "existing_evidence": [
+        "articles/solving-methods.html",
+        "articles/method-cribs.html"
+      ],
+      "coverage_note": "This is interpretive context, not yet a finite experiment. Only a specified text transformation, page target and discriminating result would create a new testable candidate.",
+      "queue_id": null
+    },
+    {
+      "source_id": "16.7",
+      "title": "Intentionally unsolvable or message-free LP2. [speculative]",
+      "novelty": "known",
+      "existing_record_ids": [
+        "source-independent-key-floor-audit"
+      ],
+      "existing_evidence": [
+        "research/public-attempt-inventory.json#VERDICT-UNSOLVABLE-BY-DESIGN",
+        "experiments/records/source-independent-key-floor-audit/record.json",
+        "articles/one-time-pad.html"
+      ],
+      "coverage_note": "Already represented as a hypothesis and theoretical limitation, not evidence that LP2 lacks plaintext. Keep it separate from bounded key-generator failures and from the private-key variant.",
+      "queue_id": null
+    }
+  ],
+  "queue": [
+    {
+      "id": "classical-key-schedule-variants",
+      "title": "Rotating, folded and keyword-mixed Vigenere variants",
+      "source_idea_ids": [
+        "2.4",
+        "2.6",
+        "2.7"
+      ],
+      "state": "needs-scope",
+      "next_action": "Freeze one family manifest for rotating/folded endpoints, mixed-alphabet construction and grouped key advancement; retain distinct variant outputs.",
+      "existing_record_ids": [
+        "lp2-known-vigenere-keys",
+        "public-wordlist-vigenere"
+      ],
+      "scope_and_gates": [
+        "No exact rotating/palindromic key expansion record. Freeze endpoint repetition, rotation increment, base-key list, and phase.",
+        "No keyword-mixed alphabet replay. Specify keyword normalization, duplicate handling and whether both cipher and key alphabets are remapped.",
+        "No variable-size grouped Vigenere rule or group schedule. Define group boundaries and key advancement exactly."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "alternating-alphabet-interruption-clocks"
+      ]
+    },
+    {
+      "id": "alternating-alphabet-interruption-clocks",
+      "title": "Two interruption clocks for alternating alphabets",
+      "source_idea_ids": [
+        "3.5"
+      ],
+      "state": "needs-rule",
+      "next_action": "Specify whether a marker pauses alphabet alternation or only the selected key; prove planted round trips for both state machines.",
+      "existing_record_ids": [
+        "four-phase-ioc"
+      ],
+      "scope_and_gates": [
+        "No source-defined two-alphabet cipher with the two pause semantics. Freeze alternation schedule and key-advance rule."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "classical-key-schedule-variants"
+      ]
+    },
+    {
+      "id": "crib-inferred-feedback-table",
+      "title": "Infer a fixed feedback table from cribs",
+      "source_idea_ids": [
+        "4.5"
+      ],
+      "state": "needs-rule",
+      "next_action": "Freeze table domain, consistency constraints and held-out continuation before learning any table entries.",
+      "existing_record_ids": [
+        "feedback-opening-census"
+      ],
+      "scope_and_gates": [
+        "No unknown lookup-table inference with contradiction tracking from predeclared cribs. Freeze table domain, allowed ambiguity, training cribs and holdout pages."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "singleton-word-cribs",
+        "url-structured-cribs"
+      ]
+    },
+    {
+      "id": "gromark-chain-addition",
+      "title": "Gromark and chain-addition primers",
+      "source_idea_ids": [
+        "5.10"
+      ],
+      "state": "needs-scope",
+      "next_action": "Pin primer alphabet/range, recurrence, carry rule and boundary behavior; treat the full primer search as one bounded family.",
+      "existing_record_ids": [
+        "lp2-fibonacci-openings"
+      ],
+      "scope_and_gates": [
+        "No Gromark/chain-addition decoding with fixed primer and recurrence. State primer digits, carry/modulus, expansion and reset boundary."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "ciphertext-page-as-key",
+      "title": "One LP2 ciphertext page as another page’s key",
+      "source_idea_ids": [
+        "7.3"
+      ],
+      "state": "needs-scope",
+      "next_action": "Declare page pairs, alignment, arithmetic and reset rules; distinguish this direction from LP2-as-pad on external artifacts.",
+      "existing_record_ids": [
+        "public-lp2-as-pad"
+      ],
+      "scope_and_gates": [
+        "LP2-as-pad tests the reverse direction, not page-on-page ciphertext reuse. Freeze page pairings, alignment, operation and byte/rune XOR semantics."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "cypherpunk-manifesto-running-key",
+      "title": "Cypherpunk manifesto as a running-key candidate",
+      "source_idea_ids": [
+        "8.8"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Pin exact edition and text bytes before choosing normalization, target pages and key offsets.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Cypherpunk manifesto is a distinct candidate running-key corpus; pin canonical text bytes, case/punctuation normalization, cipher and holdout threshold."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "fibonacci-bible-pointer",
+      "title": "Fibonacci chapter-and-verse pointers",
+      "source_idea_ids": [
+        "8.10"
+      ],
+      "state": "needs-rule",
+      "next_action": "Locate the proposal and freeze edition, Fibonacci pair start and reference/readout rules; do not tune to a desired verse.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Genesis/Fibonacci chapter-verse mapping is speculative; freeze Fibonacci pair start, testament/edition, chapter/verse indexing and a predicted output before testing."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "branch-graph-sequence-reads",
+      "title": "Fibonacci or other sequences from annotated branches",
+      "source_idea_ids": [
+        "10.2"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Annotate junctions/tips on exact page crops; freeze traversal and controls before comparing numerical sequences.",
+      "existing_record_ids": [
+        "alberti-branch-arithmetic"
+      ],
+      "scope_and_gates": [
+        "Retain explicit Fibonacci/branch-graph counting as a candidate beyond image reuse and the LP2-39 arithmetic audit. Need annotated branch junctions, roots/tips and a fixed traversal; count the full allowed tree set on controls."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "mayfly-ephemeral-key-reading",
+      "title": "Mayfly as a one-use or ephemeral-key hint",
+      "source_idea_ids": [
+        "10.3"
+      ],
+      "state": "needs-rule",
+      "next_action": "Retain as an interpretation lead until it specifies a key construction and a discriminating prediction.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Ephemeral/one-use key interpretation of the mayfly adds an explicit semantic lead. No key construction, target or falsifiable prediction is supplied."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "dot-constellation-candidate-extension",
+      "title": "Add Aquila and Bootes to the existing star-pattern lead",
+      "source_idea_ids": [
+        "10.6"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Use a declared star catalogue/epoch/projection and correct for the full set of candidate patterns and registrations.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Orion geometry was already retained; add the explicitly named Aquila and Bootes candidates to that comparison, with a fixed star catalog/epoch/projection and full candidate-search controls."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "dot-music-notation"
+      ]
+    },
+    {
+      "id": "dark-light-artwork-paths",
+      "title": "Dark/light strokes as true/false path choices",
+      "source_idea_ids": [
+        "10.9"
+      ],
+      "state": "needs-rule",
+      "next_action": "Pin the artwork, threshold/branch rule and readout without discretionary path choices.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Explicit dark-versus-light true/false path reading is not captured by the contrast tools alone. Need original illustrated path, reproducible mask, branch choices and readout; never select shading after seeing words."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "dot-music-notation",
+      "title": "Dots as notes, chant notation or a constellation-derived score",
+      "source_idea_ids": [
+        "11.1",
+        "11.2",
+        "11.3"
+      ],
+      "state": "needs-rule",
+      "next_action": "Keep staff/clef/order/mapping variants in one family, each frozen before decoding and checked against equally flexible controls.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "A notation family is documented but the specific marginal-dot-to-note readout is not a recorded experiment. Freeze dot coordinates, staff, reading order and note-to-rune mapping.",
+        "Add the specific Gregorian/square-notation staff alternative to the same dot-music queue item, with staff count, clef and solfege interpretation fixed in advance.",
+        "The composite constellation-to-score route adds distinct choices; track with dot-music, requiring a fixed constellation registration and score mapping before reading outputs."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "dot-constellation-candidate-extension"
+      ]
+    },
+    {
+      "id": "grid-prefix-split-channels",
+      "title": "Grid prefix classes, suffix streams and the 17-nibble key",
+      "source_idea_ids": [
+        "12.3",
+        "12.4",
+        "12.12"
+      ],
+      "state": "needs-rule",
+      "next_action": "Reconstruct five class channels; explicitly resolve the odd hex-nibble packing and any direction table before a key/route test.",
+      "existing_record_ids": [
+        "grid-high-digit-cells"
+      ],
+      "scope_and_gates": [
+        "Treat the first digit as a class label and emit second-character streams per class. Existing 4-prefix statistics do not decode all five suffix channels; freeze order, alphabet and recombination.",
+        "The existing record confirms suffix string 97DEF756B98A80EB9 but does not use it as a key. It has 17 hex nibbles, not an integral byte length: choose and justify packing/padding, algorithm and target before testing.",
+        "Leading 0â€“4 values as route instructions is distinct from suffix statistics. Track with prefix-split channels; freeze five-state direction table, origin, boundary handling and readout."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "grid-payload-digest-blocks",
+      "title": "The 256-byte payload as several digests",
+      "source_idea_ids": [
+        "12.6"
+      ],
+      "state": "needs-scope",
+      "next_action": "Freeze digest algorithms, block boundaries, candidate-byte corpus and complete match accounting.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Retain explicit splitting of the 256 bytes into digest-sized blocks and matching a frozen candidate-input corpus. Specify block lengths/offsets, algorithms and complete comparison count."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "four-md5-target-blocks",
+        "internal-artifact-hash-matrix"
+      ]
+    },
+    {
+      "id": "lp2-53-red-passage",
+      "title": "Independently attack LP2-53’s long red passage",
+      "source_idea_ids": [
+        "13.2"
+      ],
+      "state": "needs-source-check",
+      "next_action": "Verify the exact red-rune span and claimed count, then declare key phases, masks and untouched continuation.",
+      "existing_record_ids": [
+        "red-initial-presence-order"
+      ],
+      "scope_and_gates": [
+        "Add LP2-53 long red passage as a specific independent target. Verify the claimed51 runes from original image, delimit the exact span, then freeze cipher/key phases and interrupter masks."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "lp2-23-red-sum-691",
+      "title": "Audit the red-sum 691 and TEST THE KNOWLEDGE claim",
+      "source_idea_ids": [
+        "13.3"
+      ],
+      "state": "needs-source-check",
+      "next_action": "Obtain the cited proposal and exact red span; check rune spelling/sums before any cipher interpretation.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Retain the specific LP2-23 red-sum691 / TEST THE KNOWLEDGE claim for arithmetic and encoding audit. Need the source post, exact red rune range and rune encoding; a numerical match alone is not an instruction."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "lp2-keyed-and-alternative-stego",
+      "title": "Keyed OutGuess and alternative channels on LP2 carriers",
+      "source_idea_ids": [
+        "13.5",
+        "13.6"
+      ],
+      "state": "needs-scope",
+      "next_action": "Use original carrier hashes, a finite password/tool/channel manifest and planted extraction controls; keep this separate from onion-chain scope.",
+      "existing_record_ids": [
+        "outguess-default-key",
+        "outguess-guard-sweep"
+      ],
+      "scope_and_gates": [
+        "Extend known password-attack work from the earlier onion chain to exact LP2 original carriers and a frozen LP-word key list. Default-key results do not cover this.",
+        "Track steghide and explicit JPEG/DCT/bit-channel tools on LP2 carriers in the same stego task. Need versioned extraction rules, a finite key/channel list and planted format-specific controls."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "internal-artifact-hash-matrix",
+      "title": "Internal artifact hashes and alternate 512-bit algorithms",
+      "source_idea_ids": [
+        "14.4",
+        "14.8"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Extend the existing JPEG-hash lead with a pinned text/payload/image corpus and explicit normalization/algorithm matrix; do not relabel prior JPEG checks as new.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "No exact alternate-algorithm candidate grid is recorded. The attachment gives algorithm names but no input-byte list or historical result files.",
+        "The checker supports this, but no archive-wide manifest/output table for original JPEGs, transcriptions, solved passages and payload bytes exists. A completed-text checksum remains conditional on a proposed complete reading."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "four-md5-target-blocks",
+        "grid-payload-digest-blocks"
+      ]
+    },
+    {
+      "id": "four-md5-target-blocks",
+      "title": "Four MD5 blocks rather than one 512-bit digest",
+      "source_idea_ids": [
+        "14.5"
+      ],
+      "state": "needs-source-check",
+      "next_action": "Recover the cited proposal; freeze block order and candidate inputs, distinguishing a testable construction from arbitrary permutations.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "This is a distinct speculative construction, not four established hashes. Locate the 2016 proposal and fix block boundaries, permutation and candidate byte inputs before testing."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "grid-payload-digest-blocks",
+        "internal-artifact-hash-matrix"
+      ]
+    },
+    {
+      "id": "bounded-hash-input-enumerations",
+      "title": "Finite onion, IPv4, phone and short-byte candidate spaces",
+      "source_idea_ids": [
+        "14.6"
+      ],
+      "state": "needs-scope",
+      "next_action": "Obtain source receipts and declare each alphabet/range/encoding/count and cost before any enumeration; none is launched by intake.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "No complete published enumeration is archived. Record alphabet, length/range, encoding, algorithm and count for each separate finite batch; do not collapse these unlike spaces into one claimed exhaustive test."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "pastebin-preimage-corpus",
+      "title": "A dated Pastebin corpus as preimage candidates",
+      "source_idea_ids": [
+        "14.7"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Require a bounded URL/content manifest with preserved response bytes and archive dates; an open-ended crawl is not a completed test.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "Need a timestamped Pastebin URL/content manifest and exact response bytes; enumeration of unknown or deleted pages cannot be inferred from testing a few extant pages."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "digest-address-reinterpretation",
+      "title": "Explicit digest-to-address or public-key encodings",
+      "source_idea_ids": [
+        "14.9"
+      ],
+      "state": "needs-rule",
+      "next_action": "Record the claimed deterministic conversion and audit format validity, lost bits and chronology; do not call this hash inversion.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "No deterministic conversion, address checksum, chronology check or public derivation receipt is recorded for this specific proposal. Treat it as a disputed representation claim, not hash inversion."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "historical-artifact-keysets",
+      "title": "2013 omitted primes and earlier unresolved strings as keys",
+      "source_idea_ids": [
+        "15.1",
+        "15.2"
+      ],
+      "state": "needs-inputs",
+      "next_action": "Pin the exact omitted-prime set and earlier artifact bytes, then define the key derivation and target before combining variants.",
+      "existing_record_ids": [
+        "grid-alternative-layouts",
+        "h03-ps-layout-replay"
+      ],
+      "scope_and_gates": [
+        "The 2013 omitted-prime set must be sourced exactly and mapped to one finite key/selection rule. Do not count LP2 grid-prime records as this test.",
+        "Earlier-artifact key derivation is untested as a grouped finite family. Preserve exact artifact bytes and define offset, reduction, direction and key-skip semantics per source."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "pgp-packet-pad-candidates"
+      ]
+    },
+    {
+      "id": "pgp-packet-pad-candidates",
+      "title": "PGP packet bytes and fingerprints as key material",
+      "source_idea_ids": [
+        "15.5"
+      ],
+      "state": "needs-rule",
+      "next_action": "Freeze packet boundaries, fingerprint encoding and byte-to-rune conversion, distinct from signature verification and RSA structure.",
+      "existing_record_ids": [],
+      "scope_and_gates": [
+        "No bounded packet/fingerprint-to-rune keystream rule and target scope is archived. Distinguish provenance-signature verification from using those bytes as cipher keys."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "historical-artifact-keysets"
+      ]
+    },
+    {
+      "id": "lp2-43-egalitarianism-crib",
+      "title": "EGALITARIANISM as a specific LP2-43 anchor",
+      "source_idea_ids": [
+        "16.2"
+      ],
+      "state": "needs-source-check",
+      "next_action": "Recover the cited slot/proposal, fix rune segmentation and derive a key fragment that predicts unchosen continuation.",
+      "existing_record_ids": [
+        "lp2-39-header-cribs"
+      ],
+      "scope_and_gates": [
+        "No exact page-43 word-slot/key-fragment replay found. Recover the cited Reddit proposal, preserve its transcription and spelling/rune segmentation, then demand continuation beyond the fitted word."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": []
+    },
+    {
+      "id": "singleton-word-cribs",
+      "title": "A/I/O constraints on one-rune words",
+      "source_idea_ids": [
+        "16.3"
+      ],
+      "state": "needs-scope",
+      "next_action": "List one-rune tokens under a pinned word-boundary layer, declare cipher/key hypotheses and test held-out predictions.",
+      "existing_record_ids": [
+        "single-rune-null-doublets"
+      ],
+      "scope_and_gates": [
+        "No finite positional word-identity crib is recorded. List exact one-rune tokens by page and boundary source; score each hypothesized plaintext under a specified key/cipher with held-out predictions."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "crib-inferred-feedback-table",
+        "url-structured-cribs"
+      ]
+    },
+    {
+      "id": "url-structured-cribs",
+      "title": "WWW and URL-shaped output cribs",
+      "source_idea_ids": [
+        "16.4"
+      ],
+      "state": "needs-rule",
+      "next_action": "Specify rune encoding, window/placement and adjacent syntax requirements; a three-letter match alone is insufficient.",
+      "existing_record_ids": [
+        "lp2-39-header-cribs"
+      ],
+      "scope_and_gates": [
+        "No exact WWW/window/cipher test or URL syntax recognizer is recorded. Fix the expected token encoding and placement before searching, then validate adjacent structure rather than a three-letter fit."
+      ],
+      "result": null,
+      "has_been_run": false,
+      "related_queue_ids": [
+        "crib-inferred-feedback-table",
+        "singleton-word-cribs"
+      ]
+    }
+  ]
+}

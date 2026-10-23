@@ -24,6 +24,19 @@ def main():
             for item in manifest:
                 assert hashlib.sha256(bundle.read(item["path"])).hexdigest() == item["sha256"]
             bundle.extractall(target)
+        # The core download carries experiment explanations and discovery, while
+        # each complete experiment ZIP owns its large models and saved outputs.
+        records = json.loads((ROOT / "data/experiments.json").read_bytes())["records"]
+        bundled = {entry["path"] for entry in manifest}
+        for record in records:
+            assert record["article_path"] in bundled, record["id"]
+            assert f"reference/experiments/{record['id']}.json" in bundled
+            assert (ROOT / f"downloads/experiments/{record['id']}.zip").is_file()
+        catalog = json.loads((ROOT / "data/catalog.json").read_bytes())["files"]
+        for entry in catalog:
+            if entry["role"] == "Experiment file" and not entry["path"].endswith("/article.md"):
+                assert entry["path"] not in bundled, entry["path"]
+        assert "separate, complete experiment ZIPs" in (target / "START-HERE.txt").read_text(encoding="utf-8")
         # Catch omission or staleness of discovery data independently of the
         # bundle manifest (which can consistently describe an outdated file).
         topics = json.loads((target / "data/topics.json").read_text(encoding="utf-8"))

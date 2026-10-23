@@ -57,7 +57,7 @@ def verify() -> dict:
         reconstructed = "".join(
             fixed["latin_fragments"][value] + (" " if i + 1 in fixed["section1_spaces"] else "")
             for i, value in enumerate(row["plaintext_indices"]))
-        assert reconstructed.rstrip() == row["final_text"].rstrip()
+        assert reconstructed == row["final_text"]
     assert saved["variants"][1]["positions_processed"] == 49
     return {"variants": 3, "source_runes_checked": 729,
             "processed_positions": [row["positions_processed"] for row in saved["variants"]],
