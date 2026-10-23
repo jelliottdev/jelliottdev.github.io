@@ -1,0 +1,27 @@
+{
+  "schema": "liberpedia-wulfic-p24-plan-v1",
+  "frozen_on": "2026-10-23",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "scripts": ["tools/legacy/p24_char_tests.py", "tools/legacy/p24_prime0_post.py"],
+    "path_repair": "Both scripts use BASE = parent.parent from tools/legacy, which points to tools/pages; the pinned page object is pages/page_24/runes.txt. Replay the literal operations using that object, not an archived successful run."
+  },
+  "overlap": "The published prime-fibonacci-position-extraction record includes direct one-based prime selection across LP2, including LP2-07. This record adds the archived page-specific zero-based selector, its complement, four source columnar reorderings, and the complete subsequent zero-based-prime columnar/Caesar/trigram grid. One-based prime is a source parity check, not a new negative finding.",
+  "target": "Pinned source page_24 GP29 runes; byte-for-byte verified as current LP2-07. Include all visible rune characters; punctuation and separators do not advance the position. Source `is_prime(0)` and `is_prime(1)` are false.",
+  "stage_one": {
+    "arms": ["one-based prime positions", "zero-based prime positions", "zero-based nonprime complement", "columnar widths 5, 7, 11, 13 on the whole page"],
+    "output": "Full GP29 selected/reordered streams, lengths, SHA256 and normalized GP29 IoC; keep one-based arm identifiable as existing overlap. Columnar reorderings preserve the full-page GP29 histogram."
+  },
+  "stage_two": {
+    "input": "Only stage-one zero-based prime selection, preserving source order.",
+    "widths": "Every integer 2 through 14 inclusive, source row-major fill then column-major read, retaining a short final row.",
+    "shifts": "Every GP29 Caesar subtraction 0 through 28 inclusive after the columnar read.",
+    "score": "Exact source Runeglish label concatenation and source COMMON_3GRAMS weighted raw total, scanned with overlapping length-three Latin windows. No dictionary/English judgment beyond that list. Exactly 13 × 29 = 377 settings; source stable sort by decreasing trigram score then decreasing GP29 IoC; retain full scores and top outputs.",
+    "invariant": "Permutation of a fixed extracted rune stream and a uniform GP29 shift preserve rune frequencies, hence all 377 settings have the same normalized IoC. IoC must not be presented as 377 independent signals."
+  },
+  "selection_control": "Repeat the entire 377-setting stage-two grid on 256 within-page rune shuffles, seeded Random(20261023 + trial). Compare the observed maximum source trigram score with the maximum from each full shuffled grid. This evaluates selection under source scoring, not a cipher model. Preserve raw source score units and an add-one tail estimate; do not call short fragments a reading.",
+  "positive_control": "Before examining LP2 scores, make a synthetic 208-rune page with seeded uniform GP29 background. At zero-based prime positions plant a stream that, after columnar width 7 and shift 5, consists of repeating GP indices [T,H,E] (Latin THE). Invert the source columnar operation and shift exactly. Require exact target recovery, source function parity, and a planted full-grid maximum above all 49 same-length seeded uniform synthetic pages. This tests the particular selector, ordering, shift, and scorer, not natural-language sensitivity in general.",
+  "checks": "Independently reconstruct prime positions, columnar permutations, all 377 scores, output hashes, IoC invariance, and all 256 null maxima. Compare source helper functions on representative strings/widths/shifts at the pinned revision. Document the broken source relative path without silently changing the original program.",
+  "limits": "One historical source page, source GP29/runeglish transcription, fixed widths and all shifts, raw short-stream trigram score. No broader claim about other positions, keys, language models, intermediate ciphers, or columnar order."
+}

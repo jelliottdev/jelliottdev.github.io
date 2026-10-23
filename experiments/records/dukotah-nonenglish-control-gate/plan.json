@@ -1,0 +1,49 @@
+{
+  "schema": "liberpedia-source-gate-audit-v1",
+  "frozen_on": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_lane": "R24-C1-ext-nonenglish",
+  "question": "Do the four non-English planted controls satisfy the source's literal preregistered power criterion?",
+  "source_rule": "For each non-English register, power_LM > power_EN; at least one validated non-English register is required before manuscript re-adjudication.",
+  "source_rule_witness": "source-PREREG.md lines 97-99 and 144-146",
+  "execution_rule_witness": "source-control.py lines 180-194 and 217-222",
+  "registers": [
+    "LATIN",
+    "GREEK",
+    "OLD_ENGLISH",
+    "ENOCHIAN"
+  ],
+  "inputs": [
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md",
+      "sha256": "40b775c10991b99dfcff84a8c58cef80df6caefaa373c0a5ea72c8d386c8f3b2"
+    },
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-control.py",
+      "sha256": "89215a1d1ebb774916b79fb01f8cedb3937f2f1e0c0afcccafea0bd579a9b5cf"
+    },
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json",
+      "sha256": "11f73472ad03def01605d776fa6d36240238d90a00e076aa5d740d51de78febf"
+    },
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-readjudicate.py",
+      "sha256": "e5787516d3d348577ce8d75ee1c4d33bee7cb1cf0d9b6a79376fbe9d0165fc36"
+    },
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-results.json",
+      "sha256": "b867af74a14ca7b9d2a93c1ff2fca11ce1dcb8e767467db3a71d14b949ec2821"
+    },
+    {
+      "path": "experiments/records/dukotah-nonenglish-control-gate/source-manifest.json",
+      "sha256": "590e73f2360d44d30066fc6e1ebc9fde18c8ac18aa5410f4ff2f40c38fde549b"
+    }
+  ],
+  "checks": [
+    "Verify source files against pinned Git-object SHA-256 manifest.",
+    "Extract the literal source rule and implementation replacement from pinned file lines.",
+    "Independently recompute preregistered and executed validation decisions from all four saved control rows.",
+    "Report source's manuscript grid as reported-only; no manuscript decoder execution is performed."
+  ],
+  "interpretation": "A control-rule mismatch invalidates the source's claim of control-validated exclusion, regardless of the saved manuscript score. It does not show that any non-English hypothesis is true."
+}

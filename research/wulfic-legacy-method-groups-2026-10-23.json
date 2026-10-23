@@ -10,11 +10,11 @@
   "group_count": 22,
   "triage_counts_by_script": {
     "utility": 3,
-    "replayed_adaptation": 3,
-    "open_optimizer": 40,
-    "partial": 36,
+    "replayed_adaptation": 4,
+    "open_optimizer": 38,
+    "partial": 32,
     "blocked_input": 16,
-    "replayed_source_bounded": 4,
+    "replayed_source_bounded": 9,
     "replayed_source_and_amended_diagnostic": 1,
     "replayed_source_with_control_limit": 1,
     "replayed_source_premise_only": 2,
@@ -55,8 +55,10 @@
       "id": "page-statistics-and-diagnostics",
       "script_count": 8,
       "triage": "partial",
-      "scope": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required.",
+      "scope": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually.",
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
       "scripts": [
@@ -132,8 +134,9 @@
       "id": "autokey-feedback",
       "script_count": 3,
       "triage": "partial",
-      "scope": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection.",
+      "scope": "The keyword/two-/three-rune seed recurrences in autokey_comprehensive.py and p21_30_autokey_solver.py have one grouped bounded record. Their running-key/double-layer branches and stream_cipher_attack.py remain open; other autokey clocks are separate.",
       "related_site_records": [
+        "wulfic-autokey-seed-families",
         "cumulative-autokey-literal",
         "multiplicative-ciphertext-autokey"
       ],
@@ -272,7 +275,7 @@
       "id": "targeted-page24-optimizers",
       "script_count": 6,
       "triage": "open_optimizer",
-      "scope": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation.",
+      "scope": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement.",
       "related_site_records": [],
       "scripts": [
         "tools/legacy/p24_apply_targeted_map.py",
@@ -286,9 +289,11 @@
     {
       "id": "targeted-page25-optimizers",
       "script_count": 2,
-      "triage": "open_optimizer",
-      "scope": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available.",
-      "related_site_records": [],
+      "triage": "partial",
+      "scope": "The exact Liber AL first-stage offset search is replayed as a new corrected-input variant on source page_25 = LP2-08. Four sampled-offset plants recover but both off-grid 137 plants are missed; it is not exhaustive. The historical report is absent and follow-on p25_hillclimb.py remains untested.",
+      "related_site_records": [
+        "wulfic-liber-al-offset-sweep"
+      ],
       "scripts": [
         "tools/legacy/p25_hillclimb.py",
         "tools/legacy/p25_liberal_offset_sweep.py"
@@ -298,7 +303,7 @@
       "id": "anchored-hillclimbers",
       "script_count": 10,
       "triage": "open_optimizer",
-      "scope": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate.",
+      "scope": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run.",
       "related_site_records": [],
       "scripts": [
         "tools/legacy/anchored_hillclimb_modes_p21.py",
@@ -317,7 +322,7 @@
       "id": "gpu-key-optimization",
       "script_count": 9,
       "triage": "open_optimizer",
-      "scope": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate.",
+      "scope": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection.",
       "related_site_records": [],
       "scripts": [
         "tools/legacy/analyze_v3_decode.py",
@@ -335,7 +340,7 @@
       "id": "key-postprocessing-and-verification",
       "script_count": 12,
       "triage": "blocked_input",
-      "scope": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it.",
+      "scope": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim.",
       "related_site_records": [],
       "scripts": [
         "tools/legacy/analyze_verified_keys.py",
@@ -442,7 +447,7 @@
         "data/gpu_hill_checkpoint_gpu1_v3.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/analyze_verified_keys.py",
@@ -458,7 +463,7 @@
         "verified_keys.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/anchored_hillclimb_modes_p21.py",
@@ -474,7 +479,7 @@
         "anchored_p21_modes_results.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/anchored_hillclimb_p21.py",
@@ -488,7 +493,7 @@
         "No runes.txt for page 21"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/anchored_hillclimb_pages21_30.py",
@@ -504,7 +509,7 @@
         "summary.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/autokey_comprehensive.py",
@@ -512,16 +517,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/autokey_comprehensive.py",
       "source_docstring_first_line": "Comprehensive Autokey Cipher Test for Liber Primus",
       "group_id": "autokey-feedback",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt"
       ],
       "related_site_records": [
-        "cumulative-autokey-literal",
-        "multiplicative-ciphertext-autokey"
+        "wulfic-autokey-seed-families"
       ],
-      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+      "remaining_work": "Grouped source keyword and two-/three-rune plaintext/ciphertext autokey seed recurrences replayed with source singleton and IoC gates. The separate running-key and double-layer branches remain open."
     },
     {
       "path": "tools/legacy/batch_solver.py",
@@ -566,7 +570,7 @@
       "literal_page_paths": [],
       "literal_data_references": [],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/check_p32_crib.py",
@@ -605,9 +609,11 @@
         "self_reliance.txt"
       ],
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually."
     },
     {
       "path": "tools/legacy/combined_cipher_test.py",
@@ -639,7 +645,7 @@
         "data/key_anchors.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/crib_verify.py",
@@ -673,7 +679,7 @@
         "/runes.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/decode_p14_p15.py",
@@ -708,7 +714,7 @@
         "verified_keys.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/deep_page_analysis.py",
@@ -725,9 +731,11 @@
         "verified_keys.json"
       ],
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually."
     },
     {
       "path": "tools/legacy/diagnose_free_text.py",
@@ -742,7 +750,7 @@
         "data/gpu_hill_checkpoint_gpu1.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/export_top_candidates.py",
@@ -757,7 +765,7 @@
         "ranked_summary.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/extract_confirmed_cribs.py",
@@ -774,7 +782,7 @@
         "gpu_hill_checkpoint_gpu1_v3.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/extract_lp_text.py",
@@ -790,7 +798,7 @@
         "data/lp_extraction.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/find_new_cribs.py",
@@ -805,7 +813,7 @@
         "data/gpu_hill_checkpoint_gpu1.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/fskip_verified_solver.py",
@@ -847,7 +855,7 @@
         "data/v3_confirmed_cribs.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/generate_runeglish.py",
@@ -864,7 +872,7 @@
         "verified_keys.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/gpu_hillclimber.py",
@@ -880,7 +888,7 @@
         "/runes.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/gpu_hillclimber_v2.py",
@@ -898,7 +906,7 @@
         "data/self_reliance.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/gpu_hillclimber_v3.py",
@@ -917,7 +925,7 @@
         "data/self_reliance.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/gpu_hillclimber_v4.py",
@@ -938,7 +946,7 @@
         "data/v3_confirmed_cribs.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/gpu_running_key.py",
@@ -981,7 +989,7 @@
         "data/wordlist.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/hillclimb_substitute.py",
@@ -1016,7 +1024,7 @@
         "data/key_anchors.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/keyword_stepped_stream.py",
@@ -1145,7 +1153,7 @@
         "data/gpu_hill_gpu0.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+      "remaining_work": "Four optimizer revisions lack a finite source stop rule; GPU1/v3/v4 warm-start checkpoints are absent from pinned Git, while several text corpora merely moved paths. A fresh capped run would not replay the old selection."
     },
     {
       "path": "tools/legacy/mono_sub_solver.py",
@@ -1179,9 +1187,11 @@
         "runes.txt"
       ],
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually."
     },
     {
       "path": "tools/legacy/p02_crib_drag.py",
@@ -1304,15 +1314,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p08_grid_analysis.py",
       "source_docstring_first_line": "P08 Bigram Grid Analysis — Historical Exploration Notes",
       "group_id": "page-statistics-and-diagnostics",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt"
       ],
       "related_site_records": [
-        "wulfic-letter-encoding-bounds"
+        "wulfic-p08-hint-grid-keys"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The LP1-08 OutGuess payload matches the source grid. Seven fixed and five all-phase GP29 key streams were replayed with the corrected source page path; bigram-substitution, Koan-key and other branches remain open."
     },
     {
       "path": "tools/legacy/p20_count.py",
@@ -1328,9 +1338,11 @@
         "runes.txt"
       ],
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually."
     },
     {
       "path": "tools/legacy/p20_interlocking.py",
@@ -1357,7 +1369,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py",
       "source_docstring_first_line": "P21-30 Autokey + Running Key Solver",
       "group_id": "autokey-feedback",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt",
@@ -1366,10 +1378,9 @@
         "data/wordlist.txt"
       ],
       "related_site_records": [
-        "cumulative-autokey-literal",
-        "multiplicative-ciphertext-autokey"
+        "wulfic-autokey-seed-families"
       ],
-      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+      "remaining_work": "Grouped source keyword/two-/three-rune and distinct four-rune DEOR seed rules replayed on corrected page inputs; this is a bounded screen, not a general autokey exclusion."
     },
     {
       "path": "tools/legacy/p21_30_keyword_sweep.py",
@@ -1492,7 +1503,7 @@
         "wordlist.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p24_candidate_process.py",
@@ -1507,7 +1518,7 @@
         "p24_candidate_processed.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p24_char_tests.py",
@@ -1515,7 +1526,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_char_tests.py",
       "source_docstring_first_line": "Targeted character-prime and columnar tests for Page 24",
       "group_id": "page-statistics-and-diagnostics",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "Targeted character-prime and columnar tests for Page 24\nSaves outputs to data/p24_candidates.txt\n",
@@ -1523,9 +1534,9 @@
         "runes.txt"
       ],
       "related_site_records": [
-        "wulfic-letter-encoding-bounds"
+        "wulfic-page24-prime-columnar"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "Source page-24 character and zero-based-prime views have a bounded source-operation replay on corrected LP2-07; other interpretations and later selected optimizers remain open."
     },
     {
       "path": "tools/legacy/p24_prime0_post.py",
@@ -1533,16 +1544,16 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_prime0_post.py",
       "source_docstring_first_line": "",
       "group_id": "page-statistics-and-diagnostics",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "p24_prime0_post.txt",
         "runes.txt"
       ],
       "related_site_records": [
-        "wulfic-letter-encoding-bounds"
+        "wulfic-page24-prime-columnar"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The zero-based prime stream, widths 2–14, 29 GP shifts and source trigram scorer were replayed on corrected LP2-07; later prime-complement and candidate-refinement branches remain open."
     },
     {
       "path": "tools/legacy/p24_process_top_candidates.py",
@@ -1558,7 +1569,7 @@
         "runes.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p24_refine.py",
@@ -1574,7 +1585,7 @@
         "wordlist.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p24_seeded_hillclimb.py",
@@ -1591,7 +1602,7 @@
         "wordlist.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p24_view_candidate.py",
@@ -1606,7 +1617,7 @@
         "runes.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+      "remaining_work": "Candidate files and archived outputs survive only in a rejected archive; p24_refine_results.txt is absent from pinned Git. The wordlist is committed at a relocated path, not missing. Rebuild selected candidates on corrected input before testing refinement."
     },
     {
       "path": "tools/legacy/p25_hillclimb.py",
@@ -1614,7 +1625,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p25_hillclimb.py",
       "source_docstring_first_line": "",
       "group_id": "targeted-page25-optimizers",
-      "triage": "open_optimizer",
+      "triage": "partial",
       "literal_page_paths": [],
       "literal_data_references": [
         "liber_al_vel_legis.txt",
@@ -1622,8 +1633,10 @@
         "p25_offset_results.txt",
         "runes.txt"
       ],
-      "related_site_records": [],
-      "remaining_work": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available."
+      "related_site_records": [
+        "wulfic-liber-al-offset-sweep"
+      ],
+      "remaining_work": "The exact Liber AL first-stage offset search is replayed as a new corrected-input variant on source page_25 = LP2-08. Four sampled-offset plants recover but both off-grid 137 plants are missed; it is not exhaustive. The historical report is absent and follow-on p25_hillclimb.py remains untested."
     },
     {
       "path": "tools/legacy/p25_liberal_offset_sweep.py",
@@ -1631,15 +1644,17 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p25_liberal_offset_sweep.py",
       "source_docstring_first_line": "",
       "group_id": "targeted-page25-optimizers",
-      "triage": "open_optimizer",
+      "triage": "replayed_adaptation",
       "literal_page_paths": [],
       "literal_data_references": [
         "liber_al_vel_legis.txt",
         "p25_offset_results.txt",
         "runes.txt"
       ],
-      "related_site_records": [],
-      "remaining_work": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available."
+      "related_site_records": [
+        "wulfic-liber-al-offset-sweep"
+      ],
+      "remaining_work": "Complete 102-row coarse/top-six/±200 first-stage search replayed on corrected global page_25 = LP2-08 with exact relocated corpus, four recovered sampled-offset plants, two missed off-grid plants and 199 whole-selection shuffle controls. Historical output unavailable; unselected offsets and p25_hillclimb.py remain open."
     },
     {
       "path": "tools/legacy/period_crib_solve.py",
@@ -1705,7 +1720,7 @@
         "summary.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/refine_and_batch.py",
@@ -1738,7 +1753,7 @@
         "data/verified_keys.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/segment_anchored_results.py",
@@ -1754,7 +1769,7 @@
         "summary.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/segment_runeglish.py",
@@ -1766,7 +1781,7 @@
       "literal_page_paths": [],
       "literal_data_references": [],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/session16_deep_solve.py",
@@ -1829,7 +1844,7 @@
         "data/key_search_corpus.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/singleton_stream_search.py",
@@ -1928,10 +1943,11 @@
         "/runes.txt"
       ],
       "related_site_records": [
+        "wulfic-autokey-seed-families",
         "cumulative-autokey-literal",
         "multiplicative-ciphertext-autokey"
       ],
-      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+      "remaining_work": "The keyword/two-/three-rune seed recurrences in autokey_comprehensive.py and p21_30_autokey_solver.py have one grouped bounded record. Their running-key/double-layer branches and stream_cipher_attack.py remain open; other autokey clocks are separate."
     },
     {
       "path": "tools/legacy/structural_analysis.py",
@@ -1945,9 +1961,11 @@
         "runes.txt"
       ],
       "related_site_records": [
+        "wulfic-p08-hint-grid-keys",
+        "wulfic-page24-prime-columnar",
         "wulfic-letter-encoding-bounds"
       ],
-      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+      "remaining_work": "The P08 source-grid key sweep and P24 zero-based-prime/columnar operation have bounded records. Other descriptive statistics and proposed predictors in this group remain open; source page numbers must be mapped individually."
     },
     {
       "path": "tools/legacy/test_lp1_runningkey.py",
@@ -2081,7 +2099,7 @@
         "data/key_anchors.json"
       ],
       "related_site_records": [],
-      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+      "remaining_work": "An archived verified_keys.json exists but its source archive disclaims the old claims; selected anchored_results files were untracked and are absent. Relocated word corpora are available. Independently verify anchors before a fresh run."
     },
     {
       "path": "tools/legacy/validate_crib_candidates.py",
@@ -2137,7 +2155,7 @@
         "data/verify_decode_report.txt"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     },
     {
       "path": "tools/legacy/verify_key_parse.py",
@@ -2192,7 +2210,7 @@
         "data/gpu_hill_checkpoint_gpu1_pre_refine.json"
       ],
       "related_site_records": [],
-      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+      "remaining_work": "These scripts consume selected keys and GPU or anchored outputs. Several required checkpoints are genuinely absent from Git; corpora were relocated and archived verified_keys.json is available but explicitly disclaimed. Check independence of each verification claim."
     }
   ]
 }

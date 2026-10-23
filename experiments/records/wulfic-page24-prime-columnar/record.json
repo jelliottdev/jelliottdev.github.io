@@ -1,0 +1,126 @@
+{
+  "id": "wulfic-page24-prime-columnar",
+  "status": "published",
+  "title": "Prime positions and column readings on LP2-07",
+  "question": "Does the archived zero-based prime extraction followed by column reading and GP29 shifts yield an unusual trigram score on LP2-07?",
+  "reader_question": "What if we take prime-indexed runes, rearrange them, then shift the alphabet?",
+  "summary": "The complete 377-setting archived page-specific grid found no distinctive score: 222 of 256 full-search shuffles equaled or exceeded its best result.",
+  "finding": "The best source trigram score was 225 at width 10, shift 16 on 46 zero-based-prime runes from LP2-07. In 222 of 256 page-shuffled full searches, the maximum was at least 225 (add-one 223/257). All 377 settings share exactly the same GP29 IoC, 0.981, because columnar reordering and alphabet shifting preserve rune frequencies.",
+  "limitations": "Only source page 24/current LP2-07, its 46-rune zero-based-prime selection, widths 2–14, shifts 0–28 and the source short Runeglish trigram table were tested. Shuffles are a selection control rather than a cipher model. The source relative page path is broken in the pinned tree, so this is a replay of stated operations from verified page bytes, not verification of a saved upstream run. Other index origins, layers and language scorers remain open.",
+  "next_steps": "Fix a specific alternate positional or decoding rule and a longer predicted passage before scoring it; compare its entire selected search with controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-07",
+    "source replay",
+    "prime positions",
+    "columnar transposition",
+    "Caesar shift",
+    "selection effects"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-07"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-page24-prime-columnar/inputs.json",
+      "experiments/records/wulfic-page24-prime-columnar/plan.json",
+      "experiments/records/wulfic-page24-prime-columnar/positive.json"
+    ],
+    "representation": "All 208 pinned source page_24 runes, GP29-indexed, byte-for-byte equal to current LP2-07; punctuation and separators excluded from positions.",
+    "procedure": "Record seven first-stage source views. From zero-based prime positions, replay widths 2–14 and all 29 GP shifts under the source weighted Runeglish trigram scorer, then rerun that full grid after each of 256 within-page shuffles.",
+    "parameters": "Seven source views; one subsequent 13×29=377-setting grid; 256 complete-search shuffles with Random(20261023+trial). Planted selector/columnar/shift/scorer control fixed before manuscript scoring.",
+    "exclusions": "Other pages, index origins, prime complements in the second stage, widths or shifts outside source bounds, other scoring models, second ciphers or selected fragments."
+  },
+  "review": {
+    "kind": "pinned archived-source operation replay with source-function parity, planted control and complete-search shuffles",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent scalar checker reconstructs every source arm, 377 sorted candidate outputs and 256 full-search controls.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-page24-prime-columnar/check.py && python experiments/records/wulfic-page24-prime-columnar/plot.py --check && python experiments/records/wulfic-page24-prime-columnar/run.py --check",
+    "environment": "Python 3 standard library for bundled-input checks. snapshot_inputs.py and positive.py additionally use a local checkout of the pinned upstream commit.",
+    "script": "experiments/records/wulfic-page24-prime-columnar/check.py",
+    "script_sha256": "ffd5478791543c9a78e0ea1affe50c38b034f976d2cad4abd54d6381a1066f85",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/plan.json",
+        "sha256": "270344666ab741136f1550b0782bbeb5e3be15a01cad94b04245ecc245742327"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/inputs.json",
+        "sha256": "83b205180acb0c56eea6d13cbd7b4aeb53cb477b9816ce8daf34e298e88bb1c9"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/positive.json",
+        "sha256": "999e5d9de89b6063bbe1105e067d870cc5afebe0a9b6406f8be2e231cfcb3d1f"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/snapshot_inputs.py",
+        "sha256": "2d0ee807edc9c6e26c0cc8dd7c76954aa5ab6c11b6fda130a43bcccf1a7116a7"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/positive.py",
+        "sha256": "e354627f2332a1600b39be398d3198360cb294427f1525595ebf9a4c455b33a0"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/engine.py",
+        "sha256": "9869f77f59533e5f0f5e328507b403674086bdf7751c1509d4e22805bdb23557"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/run.py",
+        "sha256": "378fa77c7672559e41d5b4daf6bfd80188145a1dfbccfbf9cd1639d3b7118e0e"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/check.py",
+        "sha256": "ffd5478791543c9a78e0ea1affe50c38b034f976d2cad4abd54d6381a1066f85"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/plot.py",
+        "sha256": "ab034e2a2927b37a6e63b66c09f6f0b247d1bece858b27a67f769236ef6d562f"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/make_record.py",
+        "sha256": "67b3323eb7c69de8a3fd5d3c30268caaac4b31b481dba41e44165486bb74bb1a"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/article.md",
+        "sha256": "3dcc95807dabab9483ab6f609ac2b9ebf58bef4381eb4e16a5171f9145d715a8"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/results.json",
+        "sha256": "4f174d079c768b6245dbe6428a3ddde8206e082f7bb4e0521b87babbda740091"
+      },
+      {
+        "path": "experiments/records/wulfic-page24-prime-columnar/comparison.svg",
+        "sha256": "f65e3195d840dec94e45d5f261d08b65b46bc50dbae3a89842ead9fa708ce14e"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-page24-prime-columnar/comparison.svg",
+      "caption": "The best weighted trigram score on the page compared with maxima from 256 shuffles that each repeated all 377 settings."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned archived p24_char_tests.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_char_tests.py"
+    },
+    {
+      "label": "Pinned archived p24_prime0_post.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_prime0_post.py"
+    }
+  ],
+  "related": [
+    "prime-fibonacci-position-extraction",
+    "english-scorer-controls"
+  ]
+}

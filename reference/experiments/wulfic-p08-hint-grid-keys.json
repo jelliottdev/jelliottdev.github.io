@@ -1,0 +1,190 @@
+{
+  "id": "wulfic-p08-hint-grid-keys",
+  "status": "published",
+  "title": "Keys from LP1-08’s hidden grid",
+  "question": "Do the fixed, repeated keys derived from the solved P08 hint grid pass the source's frequency screen on LP2 pages?",
+  "reader_question": "Can the earlier hint grid serve as a repeating key for Liber Primus?",
+  "summary": "The source's grid matches the saved LP1-08 OutGuess payload. Its old page range includes nine solved LP1 pages, where 99 of 103 phase-sweep threshold hits occur. Four hits on LP2-32 reduce to two frequency relations and no independently checked reading.",
+  "finding": "Across 17,766 source-specified rotated-key cases, 99 of 103 IoC>1.25 hits are on solved LP1 pages. The four LP2 hits are all on LP2-32; three are algebraically related. A retrospective LP2-only shared-shuffle diagnostic has 0/199 maxima at the observed 1.382, but does not identify a reading or cipher.",
+  "limitations": "This is a corrected-path adaptation: the source script points at nonexistent tools/pages. The original old P08–54 range covers LP1-08–16 and LP2-00–37 only. The source screen tests rune frequency, not readable text. The LP2-only comparison was selected after inspecting the LP1/LP2 split; conditional shuffles and 199 trials do not account for the wider historical choice of clue interpretations and key families.",
+  "next_steps": "Require a fixed full-page decoding rule with preserved word structure and a held-out prediction before treating a grid-derived key as a reading.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source adaptation",
+    "P08 hint",
+    "running key",
+    "frequency screen",
+    "negative control"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-08",
+      "lp1-09",
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-14",
+      "lp1-15",
+      "lp1-16",
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-p08-hint-grid-keys/plan.json",
+      "experiments/records/wulfic-p08-hint-grid-keys/source-pages.json",
+      "experiments/records/wulfic-p08-hint-grid-keys/diagnostic-plan.json",
+      "experiments/records/outguess-default-key/results/lp1-08.bin"
+    ],
+    "representation": "Exact committed Wulfic page_08–54 rune files, mapped to current LP1-08–16 and LP2-00–37; 14/28-value keys from source-embedded hint pairs independently matched to the saved LP1-08 OutGuess bytes.",
+    "procedure": "Verify source-grid rows against the 140-byte LP1-08 payload; correct the legacy page path, replay seven unrotated keys and five keys at all rotations in three GP29 modes using the source IoC/singleton gates; encrypt known LP1 readings as positive controls; shuffle each source page 199 times and repeat the whole phase sweep.",
+    "parameters": "47 pages; 987 fixed and 17,766 rotated-key cases; 510 planted transforms; source fixed IoC>1.3 or IoC>1.15 with singletons I/A, rotated IoC>1.25; 199 shared page shuffles. A later LP2-only readout uses the same random stream.",
+    "exclusions": "Other grid interpretations, bigram substitution, Koan-text keys, later LP2 pages, non-GP29 encodings, alternative word scoring and any broader historical idea search."
+  },
+  "review": {
+    "kind": "pinned public-source corrected-path adaptation with independently verified carrier bytes, observed cases and planted controls",
+    "retested_on": "2026-10-23",
+    "reviewer": "LP1-08 extracted rows match the source literal exactly; all 47 raw page arrays, source-row key arithmetic, 18,753 observed scores and 510 planted recoveries independently checked; complete seeded null recomputes in run.py and diagnostic.py",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-p08-hint-grid-keys/run.py --check && python experiments/records/wulfic-p08-hint-grid-keys/diagnostic.py --check && python experiments/records/wulfic-p08-hint-grid-keys/check.py && python experiments/records/wulfic-p08-hint-grid-keys/check_carrier.py --check && python experiments/records/wulfic-p08-hint-grid-keys/plot.py --check",
+    "environment": "Python 3 with NumPy; source page bytes and the archived 140-byte LP1-08 extraction are bundled, so the external sparse Git checkout is not required to rerun the adaptation.",
+    "script": "experiments/records/wulfic-p08-hint-grid-keys/run.py",
+    "script_sha256": "599f1c1676c7d65e2c2282be548cee47f543c26f4524efbc3d314b3b68cce5db",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/plan.json",
+        "sha256": "228e948e6c522837b913bbcb65de2405f4c65098617cc4817d53120bf20b050d"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/source-pages.json",
+        "sha256": "946eafb05e168e4eb25d60dc2449629536de3f1c16829f67966ad2f162a41a5e"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/diagnostic-plan.json",
+        "sha256": "dca71c8c2837c22e2aa95a5403f2981e72b1e08ee4e42b7901f1468ca953f717"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/prepare.py",
+        "sha256": "dab5fc890ae024c3cb76f439ef991349f86a46334acc16c3596c938d5e20a6b3"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/run.py",
+        "sha256": "599f1c1676c7d65e2c2282be548cee47f543c26f4524efbc3d314b3b68cce5db"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/diagnostic.py",
+        "sha256": "6b5e0b7f9342d3201bc667baac76e8f0418bd9d38eadaa227a87d94d837d4ab7"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/check.py",
+        "sha256": "cbd8bf264428db68182bed548a3a8b79b278cfd960c35fcf3a36440c17c87072"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/check_carrier.py",
+        "sha256": "b7f2d7d0a91f4c6a2f8d34dd91aacb41e62d7bbca456b8c73275eb25cc18adc4"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/plot.py",
+        "sha256": "b57963eb3ee9cef0b21687fb11762764e53624a07b983ae3bd57066edfe5e5bc"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/make_record.py",
+        "sha256": "c081239e6b9922b67d83b73b0e5a3eb413953e534f04ea6f273ee11bccefacd6"
+      },
+      {
+        "path": "experiments/records/outguess-default-key/plan.json",
+        "sha256": "6ac84a37ecb5e39f8a87285993ee60c9a51cca20211a135cf6250d16044b1dc8"
+      },
+      {
+        "path": "experiments/records/outguess-default-key/results/report.json",
+        "sha256": "e3ba7c744fcb654c87bd5a73b26e41cd9ddf8da00111fe2ddd869179de4d4c3a"
+      },
+      {
+        "path": "experiments/records/outguess-default-key/results/lp1-08.bin",
+        "sha256": "4767d811f22abdb15bfee53c29bbd2488b123a9c290f63712f4ed12fdbc5963d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/results.json",
+        "sha256": "a67b01974568b35a14feb44b58b876359b755d05eb1ff00093cb77aecf93ad6c"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/diagnostic-results.json",
+        "sha256": "bd865970eb2e36563299aff06befab27aa6a4b564c4f265bb467498d3b0e46a3"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/carrier-audit.json",
+        "sha256": "0986b549881fb3d68d66078afa047b1f86105b3a990eabd0f31b82d3ede18c4f"
+      },
+      {
+        "path": "experiments/records/wulfic-p08-hint-grid-keys/comparison.svg",
+        "sha256": "c0cf7819ac42c9bbf134b3c6ceb28dbd4fa8c771310537c961271cb80f856b3c"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Wulfic P08 grid analysis at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p08_grid_analysis.py"
+    }
+  ],
+  "related": [
+    "solved-reading-running-key",
+    "wulfic-native-key-streams",
+    "lp2-row-column-routes"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-p08-hint-grid-keys/comparison.svg",
+      "caption": "Most source threshold hits occur on solved LP1 pages; the four LP2 hits share only two frequency relations and have no verified plaintext."
+    }
+  ],
+  "article": "# Keys made from the P08 hint grid\n\nThe source calls its hint page **P08**; this is today's [LP1-08](#/wiki/2014-stage05), not LP2-08. An earlier [OutGuess extraction](#/wiki/outguess) from the original LP1-08 JPEG saved a 140-byte message. All **28 two-character groups** in its two grid rows match the [archived Wulfic script](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p08_grid_analysis.py) in order. We checked the stored extraction against its recorded image and output hashes; this verifies the grid's provenance without treating the subsequent key idea as established.\n\nThe script converts each row's characters to Gematria Primus values and treats their differences or raw values as repeating keys. For example, its first `TL` / `SL` pair contributes **28, 0** to one 28-value key. We tested the script's seven fixed keys and the five keys it rotates through every phase.\n\n**The threshold hits do not establish a reading.** The source's full old P08–54 range includes nine solved LP1 pages. Of **103** rotated-key hits above its index-of-coincidence cutoff, **99** are on those solved pages. The remaining **four** are on LP2-00–37, all on LP2-32. Three share one frequency relation: `KEY_A` subtraction and `KEY_B` addition give the same text, while `KEY_A` Beaufort reflects its alphabet and therefore has the same frequency score. The fourth uses a different raw-row key.\n\n![Of 103 source cutoff hits, 99 occur on solved LP1 pages and 4 on unsolved LP2 pages. The strongest LP2 frequency score is a retrospective diagnostic, not a reading.](experiments/records/wulfic-p08-hint-grid-keys/comparison.svg)\n\nIndex of coincidence measures how often two rune positions carry the same rune; here it is scaled by 29. A high score measures concentration, not whether the rune order forms a readable message.\n\nThe strongest LP2 case is **1.382** on LP2-32, a 121-rune page. Its first 30 decoded runes transliterate as `LTHIOWRDBEOBNGTHJLBDOEWONJEAMFLBSEBTHF`. The reflected variant begins `NIOTHOEAEGEOBEOHIOENEOGWOEYLEUIFNEOXJEOIOF`; the other key begins `DCCYJNGUXSBTHCDNGPNGDDLBTHHGEOMHCNGCO`. These are candidate outputs for inspection, not verified plaintext. The source's own word score operates mostly on letter bigrams after removing the manuscript's word boundaries; it supplies no independent whole-page reading or held-out prediction.\n\nThe source's cutoff can detect the kind of text it seeks: we encrypted **17 established LP1 readings** with each of the five rotated keys at two phases and three directions. All **510** controls decrypted exactly and passed the same IoC cutoff. That tests the cutoff on those known-reading lengths, not on every possible language or layered cipher.\n\nAfter seeing that the solved pages dominated, we examined LP2 separately using the **same 199 page shuffles** specified for the full sweep. None of the 199 shuffled LP2 maxima reached 1.382; **7 of 199** had at least four cutoff hits. This is explicitly a **post-observation subset diagnostic**. The shuffles preserve each page's rune counts but destroy position order. They do not model the full historical search over clues, keys and scoring choices, and zero observed shuffle exceedances does not imply zero chance or identify an encryptor.\n\nThe original script's page loader resolves to `tools/pages`, which contains no page files at the pinned commit. We corrected only that path and loaded the **47 committed `pages/page_08`–`page_54` Git blobs**. Under the modern page names these are LP1-08–16 and LP2-00–37. The corrected-path run has **987 fixed-key cases** (20 cutoff hits, all on solved LP1) and **17,766 rotated-key cases**. Its raw-input snapshot, all candidate scores, controls and both null readouts are bundled; it is an adaptation of the source's fixed arithmetic, not a claim that the legacy command itself ran as written.\n\nThis test covers the specified 14/28-value keys, three GP29 directions, and all source key phases on those pages. It leaves aside the same script's separate bigram-substitution, Koan-key and free arithmetic ideas, later LP2 pages, other hint encodings and other reading criteria. See the [carrier comparison](experiments/records/wulfic-p08-hint-grid-keys/carrier-audit.json), [frozen plan](experiments/records/wulfic-p08-hint-grid-keys/plan.json), [complete results](experiments/records/wulfic-p08-hint-grid-keys/results.json), and [LP2-only diagnostic plan](experiments/records/wulfic-p08-hint-grid-keys/diagnostic-plan.json).\n\nTo reproduce from the experiment ZIP or a full Liberpedia checkout with Python and NumPy:\n\n```text\npython experiments/records/wulfic-p08-hint-grid-keys/run.py --check\npython experiments/records/wulfic-p08-hint-grid-keys/diagnostic.py --check\npython experiments/records/wulfic-p08-hint-grid-keys/check.py\npython experiments/records/wulfic-p08-hint-grid-keys/check_carrier.py --check\npython experiments/records/wulfic-p08-hint-grid-keys/plot.py --check\n```\n\nThe independent checker rebuilds every observed key from the source's paired rows, checks every source page array against its preserved raw bytes, and reevaluates all 18,753 observed cases and 510 planted controls. The seeded full-null replays are checked by the two complete run commands.\n",
+  "article_path": "experiments/records/wulfic-p08-hint-grid-keys/article.md",
+  "script_sha256": "599f1c1676c7d65e2c2282be548cee47f543c26f4524efbc3d314b3b68cce5db",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

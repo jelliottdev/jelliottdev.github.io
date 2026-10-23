@@ -1,0 +1,49 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "record_id": "wulfic-liber-al-offset-sweep",
+  "frozen_before_manuscript_scoring": "2026-10-23",
+  "kind": "new corrected-input replay of a pinned finite source search; not verification of archived optimizer output",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "script_path": "tools/legacy/p25_liberal_offset_sweep.py",
+    "script_sha256": "090040051afcbe9862fcfa3f252796dcbb4955593139bf6a80a86461fbb8b9d7",
+    "script_git_blob": "0dfacb35a605c7d1c486a5d377369548c03094ef",
+    "original_report_path": "data/p25_offset_results.txt",
+    "original_report_state": "absent from pinned Git tree"
+  },
+  "inputs": {
+    "source_page_path": "pages/page_25/runes.txt",
+    "source_page_sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4",
+    "source_page_git_blob": "d30ee237bdde26c6e33d6ebe843d05d62c5738aa",
+    "source_page_actual_identity": "LP2-08 (global image ordinal 25), 255 GP runes; not LP2-25",
+    "corpus_runtime_path_in_source": "reference/liber_al_vel_legis.txt",
+    "corpus_pinned_path": "data/corpora/liber_al_vel_legis.txt",
+    "corpus_sha256": "aeadc7374e1aa34342763e3740515c92bfda5902f57b56067a06501bb0cbff66",
+    "corpus_git_blob": "f3a8ea4964f314db45dc1e2bba021ebb30fed4c9",
+    "corpus_bytes": 11837,
+    "adapter": "Load exact pinned source functions from Git; remap only its moved PAGES_DIR and REF file paths to exact Git objects. Keep its GP mapping, greedy corpus conversion, key construction, decryption, scoring, IoC, selection, and tuple-sort ordering unchanged."
+  },
+  "search": {
+    "page": 25,
+    "cipher_modes": ["beaufort", "sub"],
+    "coarse_offsets": "0..5000 inclusive, step 100",
+    "coarse_rows": 102,
+    "selection": "Sort source tuples (score, IoC, offset, mode, first 200 runeglish characters) descending and take first six rows, including both modes and tie order.",
+    "refinement": "Union all integer offsets within plus or minus 200 of each selected coarse offset; lower bound zero; evaluate both source modes at every refined offset. Keep duplicate coarse/refined rows as the source does.",
+    "reported_rows": 100,
+    "criterion": "The source's weighted THE/AND/ING/ION/ENT/TIO trigram score on the unbroken GP runeglish text. IoC is a secondary sort key, not a decoding proof."
+  },
+  "controls": {
+    "positive": "Construct 255-rune plaintext by repeating GP [TH,E,A,N,D] (visible THEAND), encrypt with the source's own key slice at each of coarse offsets 300 and 1700 in each mode. Each planted exact offset/mode must appear in the source-selected top 100 and round-trip to the planted plaintext. Check an off-grid 137 variant as a documented sensitivity diagnostic, not a gate.",
+    "source_equivalence": "Compare optimized scorer and selected-row tuples with the literal source functions on all planted controls and at least 40 deterministic pseudo-random short messages; independent checker also rebuilds top-100 rows without importing runner internals.",
+    "order_control": "199 deterministic uniform shuffles of the actual 255 rune indices, each re-running the complete coarse-top-six-refined selection with its original source criterion. Seed 20261023. Report rank of the manuscript maximum only as a shuffle-order comparison, not a cipher-model probability or general decryption exclusion."
+  },
+  "exclusions": [
+    "LP2-25/current global image ordinal 42",
+    "other corpus editions, encodings, offsets, directions, or GP spellings",
+    "the follow-on unseeded substitution optimizer p25_hillclimb.py",
+    "a claim that a high common-trigram score is meaningful English or a decoded page",
+    "a replay of the unavailable historical data/p25_offset_results.txt"
+  ]
+}

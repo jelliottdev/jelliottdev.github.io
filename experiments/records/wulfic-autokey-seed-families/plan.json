@@ -1,0 +1,32 @@
+{
+  "schema": "liberpedia-wulfic-autokey-seed-plan-v1",
+  "frozen_on": "2026-10-23",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "scripts": [
+      {"path": "tools/legacy/autokey_comprehensive.py", "git_blob": "f7fc204869f46a2c32f5c2a6f2c7fb642a85f49a"},
+      {"path": "tools/legacy/p21_30_autokey_solver.py", "git_blob": "c8ea084ed1f3abe175249587ae61c01bfb828331"}
+    ],
+    "page_mapping": "Source old21..54 are current LP2-04..37. Pinned source rune streams were individually checked nonempty and byte-for-byte in GP29 indices against current site text. The archived scripts' relocated relative page paths do not resolve; their source output is not treated as a negative result."
+  },
+  "prior_work": {
+    "lookup": "research/prior_work.py was queried for both exact source paths and autokey-feedback terms; no exact source-path record was returned.",
+    "overlap": "public-multihistory-feedback tests all-equal seeds with different scoring and wider operators; feedback-opening-census tests 12-rune openings rather than whole-page source gates. The P21–30 script has 17/18 keyword vectors identical to the comprehensive script on contained pages and six identical operators; only its four-rune DEOR vector differs from the comprehensive three-rune DEOR. Avoid double-counting those 17*10*6 repeated configurations.",
+    "thematic_user_proposal": "A manuscript-derived numerical autokey was supplied without an exact recurrence or shed/reset rule. This tests only the source's explicit plaintext/ciphertext feedback recurrences, not that broader idea."
+  },
+  "test": {
+    "representation": "Source GP29 order and source comprehensive word parser's singleton positions, preserving page boundaries. Each source phase starts its seed at page position zero; no word reset.",
+    "modes": ["pt_sub", "pt_add", "pt_beau", "ct_sub", "ct_add", "ct_beau"],
+    "comprehensive_phase1": "All 22 literal keyword arrays * 6 modes * 34 old pages21..54, source all-singleton I/A gate then normalized GP29 IoC > 1.3 hit screen.",
+    "comprehensive_phase2": "Every 29^2 two-rune seed * 6 modes * 34 pages, same gate/screen.",
+    "comprehensive_phase3": "Every 29^3 three-rune seed * 6 modes * old pages21..54 with at least three source singletons; same gate/screen and same source skip on pages with fewer than three.",
+    "p21_distinct": "Only the P21–30 script's source four-rune DEOR [23,18,3,4] on its ten pages and six modes; its IoC>1.3 screen has no singleton requirement. Its other 17 keyword arrays duplicate the comprehensive phase1 operator/page domain. Its separate Deor/Emerson running-key and double-layer branches are excluded as different methods and data dependencies.",
+    "selection": "For each phase and the distinct P21 DEOR subgroup, report all-source setting count, singleton-compatible count, hit count, best post-gate normalized IoC, page/seed/mode, full decoded-output SHA256, and per-page counts. Preserve exact source >1.3 strict inequality and page eligibility.",
+    "null": "Repeat each complete phase and the P21 DEOR subgroup on 49 independently seeded within-page rune shuffles; preserve page lengths and original singleton positions; seed 20261023. Compare complete-search maxima and hit counts, not a single chosen candidate. Null is a control, not a cipher model.",
+    "positive_control": "Before LP2 outcomes, take independently recorded LP1 warning GP values, tile to old21 page length, set source singleton positions alternately to I/A, and encrypt with CABAL under each of six modes. Original extracted source functions must recover exact planted stream and pass all-singleton and IoC>1.3 gate. One changed seed must fail planted plaintext-feedback gate; ciphertext-feedback seed may still pass because its suffix is seed-independent. This is a constructed solved-reading-derived control, not an original-source LP1 validation.",
+    "source_parity": "Compare sampled source functions and source keyword vectors with optimized engine before running. Independently verify every saved winner by scalar recurrence and recompute scores/hashes. Check exact source blobs at the pinned revision.",
+    "optimization": "Source-equivalent affine prefix/suffix algebra may prune seeds failing singleton positions before scoring. Ciphertext-feedback suffix is computed once per page/mode/seed length; all seed-dependent prefixes are still counted exactly. Validate candidate rows and ties against direct source functions on samples; do not change scoring or skip source settings."
+  },
+  "interpretation_limits": "One source-defined key list and finite two-/three-rune seeds, selected old pages, six unreset GP29 feedback modes, source singleton/Ioc gate. A hit is not English proof. Ciphertext-feedback seed can only affect its own k-rune prefix, so long-page scores cannot identify the seed. No broad autokey or emergence hypothesis is closed."
+}

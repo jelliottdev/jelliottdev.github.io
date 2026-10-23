@@ -1,0 +1,105 @@
+{
+  "id": "wulfic-liber-al-offset-sweep",
+  "status": "published",
+  "title": "Liber AL offset search on LP2-08",
+  "question": "Does the pinned Liber AL key conversion and adaptive offset search make the corrected archive page_25 (LP2-08) stand out under its own common-trigram score?",
+  "reader_question": "Does the Book of the Law unlock this page?",
+  "summary": "The full source offset search produces an ordinary common-trigram score on LP2-08. It also misses a planted message at an offset the coarse stage does not promote.",
+  "finding": "The best LP2-08 score is 670; 154 of 199 shuffled-order controls score at least as high after the complete search. Four planted messages at coarse offsets 300 and 1700 are found in both modes; the same message at off-grid offset 137 is missed in both. The source search examines 2,104 refined offsets, not all possible positions.",
+  "limitations": "This is a new corrected-input variant because the source's archived optimizer outputs are disclaimed and its historical offset report is absent. Shuffling rune order is a descriptive control, not a cipher model. The score counts six English trigrams in unbroken runeglish and cannot establish a reading; missed offsets, other book editions, mappings, page identities and the follow-on substitution optimizer remain outside scope.",
+  "next_steps": "If the text-page link has independent evidence, specify a key offset or a fuller search rule before looking at output; test its ability to recover a held-out message and repeat full-selection controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "running key",
+    "Liber AL vel Legis",
+    "offset search",
+    "source-derived test",
+    "selection effect"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-08"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-liber-al-offset-sweep/plan.json"
+    ],
+    "representation": "Exact 255 GP29 runes from pinned Wulfic global page_25 file, aligned to LP2-08; exact 11,837-byte committed Liber AL corpus greedily converted by the source to 8,187 GP values.",
+    "procedure": "Run the source's complete 102-row coarse search, take its six best tuple-sorted rows, examine both modes within ±200 of those offsets, keep duplicate coarse/refined rows and source top 100. Repeat the complete selection on 199 shuffled-order pages; run sampled and off-grid planted controls.",
+    "parameters": "Source offsets 0..5,000 in steps of 100 followed by source-selected ±200 neighborhoods; Beaufort and subtract modes; source weighted six-trigram score and IoC secondary ordering; shuffle seed 20261023.",
+    "exclusions": "LP2-25/current ordinal 42, unselected offsets, other corpus editions or encodings, the source's stochastic P25 substitution postprocessor, and a claim that all running keys or all offsets fail."
+  },
+  "review": {
+    "kind": "new corrected-input source-bound replay with selection controls",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned Git byte checks, four sampled-offset and two off-grid plants, 40 independent source-function oracles, independent complete row and 199-control reconstruction",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-liber-al-offset-sweep/run.py --source-repo PATH_TO_PINNED_CLONE --check",
+    "environment": "Python 3 standard library and a local clone containing Git objects for Wulfic commit bf89d3d; the source, page and corpus SHA-256 values are checked before computation. No source code or copyrighted book text is republished in the experiment ZIP.",
+    "script": "experiments/records/wulfic-liber-al-offset-sweep/run.py",
+    "script_sha256": "e3a65e73a024acd5439248dc1dcd8c16edf569d39cfe67ef668f82285521d903",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/plan.json",
+        "sha256": "ad57bb9390cf0d0aa5195471150f7d968ff7f4f3af138245a342b2266eb1935c"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/plan-frozen.json",
+        "sha256": "0f65db34334b0c428299a5ae62ad6045e374606613169f86e0d18b1a9345683d"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/run.py",
+        "sha256": "e3a65e73a024acd5439248dc1dcd8c16edf569d39cfe67ef668f82285521d903"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/check.py",
+        "sha256": "987bc4c15bc91d7b768fd373343627ec06fea73b4ea7b59f82fb04f62d8909b1"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/plot.py",
+        "sha256": "1bd9b3bcd5be814fa9bf4c8e396d20e554350069405e0c5795759fed4a55cd18"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/controls.json",
+        "sha256": "9f0f75bc2222a57c2c138cb468902e04fd9f8591ceb9e4bbb66d12e62f039086"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/results.json",
+        "sha256": "a2acdfc1d881e4de40c5e63a86e27c9db1c8f60112a72be0e820f81512798ce9"
+      },
+      {
+        "path": "experiments/records/wulfic-liber-al-offset-sweep/comparison.svg",
+        "sha256": "fb366851094aa5f6bc35331a649ab2fb3c0299c79259e324dcd796a2b646673c"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-liber-al-offset-sweep/comparison.svg",
+      "caption": "A planted message at off-grid offset 137 is missed. The page's best source score is below the shuffled-order median."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Liber AL offset search source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p25_liberal_offset_sweep.py"
+    },
+    {
+      "label": "Pinned corpus provenance and byte source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/corpora/liber_al_vel_legis.txt"
+    },
+    {
+      "label": "Source archive warning about historical optimizer outputs",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/archive/hillclimbers/20260529/README.md"
+    }
+  ],
+  "related": [
+    "emerson-running-key",
+    "cypherpunk-manifesto-running-key",
+    "wulfic-keyed-transposition-cohort"
+  ]
+}

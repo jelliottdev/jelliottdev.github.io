@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 254,
+    "records": 259,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -2307,6 +2307,37 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-mdl-order-profile.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-mdl-order-profile/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-mdl-order-profile.zip"
+    },
+    {
+      "id": "dukotah-nonenglish-control-gate",
+      "title": "A language-search control did not pass its frozen rule",
+      "question": "Did four archived non-English language controls satisfy the source’s preregistered power test?",
+      "summary": "The source reports 20,480 decodes, but its four language controls all tie the English scorer on the frozen detection-rate test. The program substituted a different comparison to proceed.",
+      "tags": [
+        "language models",
+        "source audit",
+        "positive controls",
+        "selection effects",
+        "LP2",
+        "Latin",
+        "Greek",
+        "Old English",
+        "Enochian"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md",
+        "experiments/records/dukotah-nonenglish-control-gate/source-control.py",
+        "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-nonenglish-control-gate",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-nonenglish-control-gate.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-nonenglish-control-gate/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-nonenglish-control-gate.zip"
     },
     {
       "id": "dukotah-ornament-fresh-reader-gate",
@@ -12999,6 +13030,71 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-adfgvx-fractionation.zip"
     },
     {
+      "id": "wulfic-autokey-seed-families",
+      "title": "Short seeds for autokey ciphers",
+      "question": "Do the pinned source keyword, two-rune, or three-rune autokey seeds pass their one-rune and IoC screens on the selected LP2 pages?",
+      "summary": "Four related archived search branches were replayed on verified LP2 page streams. None passed the source-defined hit screen; the gate and ciphertext-feedback design sharply limit what that result can exclude.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "autokey",
+        "feedback",
+        "keywords",
+        "seed search",
+        "index of coincidence",
+        "plaintext autokey",
+        "ciphertext autokey"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-autokey-seed-families/inputs.json",
+        "experiments/records/wulfic-autokey-seed-families/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-autokey-seed-families",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-autokey-seed-families.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-autokey-seed-families/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-autokey-seed-families.zip"
+    },
+    {
       "id": "wulfic-cicada-byte-key-phases",
       "title": "Archived Cicada numbers and byte streams as LP2 keys",
       "question": "Do 25 archived number or byte sources recover LP2 under the pinned phase-averaged stay/advance/skip key detector?",
@@ -13817,6 +13913,34 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-lfsr-singleton-constraints.zip"
     },
     {
+      "id": "wulfic-liber-al-offset-sweep",
+      "title": "Liber AL offset search on LP2-08",
+      "question": "Does the pinned Liber AL key conversion and adaptive offset search make the corrected archive page_25 (LP2-08) stand out under its own common-trigram score?",
+      "summary": "The full source offset search produces an ordinary common-trigram score on LP2-08. It also misses a planted message at an offset the coarse stage does not promote.",
+      "tags": [
+        "LP2",
+        "running key",
+        "Liber AL vel Legis",
+        "offset search",
+        "source-derived test",
+        "selection effect"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-08"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-liber-al-offset-sweep/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-liber-al-offset-sweep",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-liber-al-offset-sweep.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-liber-al-offset-sweep/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-liber-al-offset-sweep.zip"
+    },
+    {
       "id": "wulfic-local-codebook-invariants",
       "title": "Fixed local codebooks and repeat preservation",
       "question": "Do source-defined fixed context, word and aligned-block encoders preserve more repeated units than LP2 contains?",
@@ -14073,6 +14197,113 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-number-key-streams.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-number-key-streams/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-number-key-streams.zip"
+    },
+    {
+      "id": "wulfic-p08-hint-grid-keys",
+      "title": "Keys from LP1-08’s hidden grid",
+      "question": "Do the fixed, repeated keys derived from the solved P08 hint grid pass the source's frequency screen on LP2 pages?",
+      "summary": "The source's grid matches the saved LP1-08 OutGuess payload. Its old page range includes nine solved LP1 pages, where 99 of 103 phase-sweep threshold hits occur. Four hits on LP2-32 reduce to two frequency relations and no independently checked reading.",
+      "tags": [
+        "LP2",
+        "source adaptation",
+        "P08 hint",
+        "running key",
+        "frequency screen",
+        "negative control"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp1-08",
+        "lp1-09",
+        "lp1-10",
+        "lp1-11",
+        "lp1-12",
+        "lp1-13",
+        "lp1-14",
+        "lp1-15",
+        "lp1-16",
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-p08-hint-grid-keys/plan.json",
+        "experiments/records/wulfic-p08-hint-grid-keys/source-pages.json",
+        "experiments/records/wulfic-p08-hint-grid-keys/diagnostic-plan.json",
+        "experiments/records/outguess-default-key/results/lp1-08.bin"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-p08-hint-grid-keys",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p08-hint-grid-keys.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p08-hint-grid-keys/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p08-hint-grid-keys.zip"
+    },
+    {
+      "id": "wulfic-page24-prime-columnar",
+      "title": "Prime positions and column readings on LP2-07",
+      "question": "Does the archived zero-based prime extraction followed by column reading and GP29 shifts yield an unusual trigram score on LP2-07?",
+      "summary": "The complete 377-setting archived page-specific grid found no distinctive score: 222 of 256 full-search shuffles equaled or exceeded its best result.",
+      "tags": [
+        "LP2-07",
+        "source replay",
+        "prime positions",
+        "columnar transposition",
+        "Caesar shift",
+        "selection effects"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-07"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-page24-prime-columnar/inputs.json",
+        "experiments/records/wulfic-page24-prime-columnar/plan.json",
+        "experiments/records/wulfic-page24-prime-columnar/positive.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-page24-prime-columnar",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-page24-prime-columnar.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-page24-prime-columnar/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-page24-prime-columnar.zip"
     },
     {
       "id": "wulfic-periodic-alphabet-lags",
