@@ -4,9 +4,9 @@
   "title": "Public 43-key Vigenère sweep",
   "question": "Do the 43 archived wordlist keys reproduce the public GP Vigenère outputs and recover any of nine fixed known-reading openings on LP2-00–55?",
   "reader_question": "Did the public wordlist Vigenère sweep turn any unsolved page start into a known reading?",
-  "summary": "The 43 fixed keys reproduce 2,365 archived page prefixes; none matches a declared 12-rune known-reading opening in 21,285 exact comparisons.",
-  "finding": "All 2,365 rune-bearing key/page starts match the pinned public output archive. Zero of 21,285 exact 12-rune opening comparisons match; the planted encryption control passes.",
-  "limitations": "Only phase zero, GP subtraction, page-start positions, this public key list, our transcription, and nine exact known openings are checked. The source's informal no-good-result statement has no declared language-score threshold.",
+  "summary": "All 2,494 complete archived page–key output strings reproduce. None of the nine fixed 12-rune openings matches the 2,365 rune-bearing unsolved-page starts.",
+  "finding": "Full archived output matches in 2,494/2,494 cases across 58 pages and 43 keys. The original fixed-opening test remains 0/21,285 exact comparisons.",
+  "limitations": "The 12-rune negative result covers only phase-zero page starts, this source key list, our transcription and nine exact openings. Complete source-output reproduction confirms the archived transform but not the source informal no-good-result judgment, which has no declared language-score threshold.",
   "next_steps": "For a new claim, specify key derivation, alignment, position and success criterion before inspecting plaintext; compare against this fixed sweep.",
   "outcome": "not-supported",
   "tags": [
@@ -77,13 +77,13 @@
       "lp2-55"
     ],
     "representation": "LP2-00–55 rune stream in canonical 29-rune GP order; LP2-50 is number-only.",
-    "procedure": "Subtract each source key modulo 29 from the page rune stream at phase zero; compare first 12 decoded runes with nine predeclared known readings; compare nine-rune prefixes against source archive headings.",
-    "parameters": "43 archived keys, 56 unsolved pages, 55 rune-bearing pages, nine 12-rune openings, 21,285 exact comparisons.",
-    "exclusions": "Other keys, phases, directions, word resets, page segments, languages, and semantic assessment of full plaintext."
+    "procedure": "Subtract each source key modulo 29 at page phase zero; compare nine fixed 12-rune openings on LP2-00–55; separately verify complete Latin rune-label streams for all 58 archived pages.",
+    "parameters": "43 archived keys, 58 complete source pages (56 unsolved-page opening-test pages), nine 12-rune openings, 21,285 exact opening comparisons.",
+    "exclusions": "Other keys, phases, directions, word resets, page segments, languages, and semantic assessment of the complete plaintext strings."
   },
   "review": {
-    "reviewer": "Independent GP arithmetic and all 2,365 public archived nine-rune prefixes checked",
-    "retested_on": "2026-10-22",
+    "reviewer": "Independent prefix arithmetic, 2,494 complete source-output strings, and pinned input/source hashes checked",
+    "retested_on": "2026-10-23",
     "kind": "computational",
     "human_review": "pending"
   },
@@ -103,7 +103,7 @@
       },
       {
         "path": "experiments/records/public-wordlist-vigenere/check.py",
-        "sha256": "5cfab93ef53373ff2caf89e8f509d6f73b5db488d1e9da14a3946b1e06e0feb1"
+        "sha256": "422adf01a9253f373974b26e08610213ccb37818333179411b539941e650e3a0"
       },
       {
         "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
@@ -332,6 +332,14 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
+      },
+      {
+        "path": "text/lp2-57.txt",
+        "sha256": "c89a73dc20c77308cb6b65d76895f18ada8b9cd9ff788fad3fd7ee521f36f9a0"
       }
     ],
     "outputs": [
@@ -342,6 +350,10 @@
       {
         "path": "experiments/records/public-wordlist-vigenere/key-sweep.svg",
         "sha256": "522404f3c33b6e2b675099e3394566fefa4ad8c23cebc7e15c47045ca1332394"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/source-output-certificate.json",
+        "sha256": "f9a6e3c6d9e78188ec3af224eea6f61a848f4c63b22d82f349c4776cc7ee7e2b"
       }
     ]
   },
@@ -364,7 +376,7 @@
       "caption": "The fixed source keys produced no exact match to the nine 12-rune openings."
     }
   ],
-  "article": "# A public 43-key Vigenère sweep\n\nAn archived attempt tried Liber Primus-related words as repeating Vigenère keys. Its [README](https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/README.md) describes a wordlist; its [output archive](https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/vigenere-bruteforce-results.zip) contains **43** rune keys across 58 page files. The archive includes an additional DIVINITY key after the listed words. We take the keys from the archived output, rather than silently reducing the set to the README list.\n\n## Finding\n\n![A fixed-key sweep: 43 keys across 55 rune-bearing unsolved pages, with no 12-rune known-opening match.](experiments/records/public-wordlist-vigenere/key-sweep.svg)\n\nAll **2,365** rune-bearing key–page prefixes in our LP2-00–55 replay match the beginning of the pinned public output archive. LP2-50 contains only the alphanumeric grid, so its 43 nominal cases have no rune output. None of the 2,365 decoded starts equals any of nine predeclared, 12-rune known-reading openings: **0 of 21,285 comparisons**. A planted MOUNTAIN plaintext encrypts and decrypts correctly with the first source key.\n\nThis verifies the public arithmetic for the beginning of each output and rules out **these keys, at page-start phase zero, for these nine exact openings** on our transcription. It does not mean that every wordlist Vigenère attempt has failed. A different key, phase, word-boundary reset, alphabet, page segment, or plaintext beginning is outside this check. The source's “no good result” is an editorial observation, not a numerical language score, so we do not present it as a measured threshold.\n\n## What was done\n\nFor every rune position *j* on each page, we computed plaintext index `P[j] = C[j] − K[j mod length(K)] (mod 29)`. Non-rune marks and the number square remain visible but do not advance the key. We kept the GP rune order and the printed page boundaries fixed. The [plan](experiments/records/public-wordlist-vigenere/plan.json) pins all 43 rune keys and the public repository revision. The saved [results](experiments/records/public-wordlist-vigenere/results.json) give every page/key prefix and its input hash. The independent [check](experiments/records/public-wordlist-vigenere/check.py) recomputes those prefixes; when passed the original ZIP, it also checks all 2,365 nine-rune prefixes against the archived headings. The archive uses both `IA` and `IO` for one GP rune, which the checker treats as alternative labels for the *same* symbol.\n\nThis is related to the [two known Vigenère keys and nine openings](#/experiments/lp2-known-vigenere-keys), but it is a different fixed source key list and a narrower phase rule. The nine openings are a diagnostic: their absence does not prove that no decoded output contains meaningful text elsewhere.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/public-wordlist-vigenere/run.py --check` and `python experiments/records/public-wordlist-vigenere/check.py`. To verify against the source's archived output, download the ZIP from the pinned GitHub revision, verify its SHA-256 against the [plan](experiments/records/public-wordlist-vigenere/plan.json), then pass it with `--source-archive PATH` to the checker.\n",
+  "article": "# A public 43-key Vigenère sweep\n\nAn archived attempt tried Liber Primus-related words as repeating Vigenère keys. Its [README](https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/README.md) describes a wordlist; its [output archive](https://github.com/LiberPrimus/Failed-Attempts/blob/d219a8099f8d24e52496e9ee3456ed9980893884/bruteforce/vigenere/vigenere-bruteforce-results.zip) contains **43** rune keys across 58 page files. The archive includes an additional DIVINITY key after the listed words. We take the keys from the archived output, rather than silently reducing the set to the README list.\n\n## Finding\n\n![A fixed-key sweep: 43 keys across 55 rune-bearing unsolved pages, with no 12-rune known-opening match.](experiments/records/public-wordlist-vigenere/key-sweep.svg)\n\nThe **complete decoded rune streams** match the pinned public output in all **2,494 page–key cases** (43 keys across 58 archived pages). That includes **2,408 cases** on LP2-00–55; LP2-50 contains only the alphanumeric grid and has no rune output. None of the 2,365 rune-bearing page starts equals any of nine predeclared, 12-rune known-reading openings: **0 of 21,285 comparisons**. A planted MOUNTAIN plaintext encrypts and decrypts correctly with the first source key.\n\nThis verifies the public arithmetic throughout each archived output and rules out **these keys, at page-start phase zero, for these nine exact openings** on our transcription. It does not mean that every wordlist Vigenère attempt has failed. A different key, phase, word-boundary reset, alphabet, page segment, or plaintext beginning is outside this check. The source's “no good result” is an editorial observation, not a numerical language score, so we do not present it as a measured threshold.\n\n## What was done\n\nFor every rune position *j* on each page, we computed plaintext index `P[j] = C[j] − K[j mod length(K)] (mod 29)`. Non-rune marks and the number square remain visible but do not advance the key. We kept the GP rune order and the printed page boundaries fixed. The [plan](experiments/records/public-wordlist-vigenere/plan.json) pins all 43 rune keys and the public repository revision. The saved [results](experiments/records/public-wordlist-vigenere/results.json) give every LP2-00–55 page/key prefix and its input hash. The independent [check](experiments/records/public-wordlist-vigenere/check.py) recomputes those prefixes; with the source ZIP, it compares the **full Latin rune-label stream** on all 58 archived pages. The [source-output certificate](experiments/records/public-wordlist-vigenere/source-output-certificate.json) records that wider audit. The archive uses both `IA` and `IO` for one GP rune. We normalize that label, omit the separately structured eight-cell alphanumeric grid rows, and keep letters in lines with inline numbers; rune labels are not unambiguously separable by greedy spelling, so the comparison uses complete joined label strings.\n\nThis is related to the [two known Vigenère keys and nine openings](#/experiments/lp2-known-vigenere-keys), but it is a different fixed source key list and a narrower phase rule. The nine openings are a diagnostic: their absence does not prove that no decoded output contains meaningful text elsewhere.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/public-wordlist-vigenere/run.py --check` and `python experiments/records/public-wordlist-vigenere/check.py`. To verify every complete archived output, download the ZIP from the pinned GitHub revision and pass it with `--source-archive PATH` to the checker; the source ZIP and page inputs are hash-checked.\n",
   "article_path": "experiments/records/public-wordlist-vigenere/article.md",
   "script_sha256": "8dc8211ac0553c319922f176acef9110256e6c57f4d29c81247f0d6656d72cd3",
   "record_type": {

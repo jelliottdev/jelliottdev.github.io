@@ -2,7 +2,7 @@
   "schema": "liberpedia-public-repository-method-inventory-v1",
   "repository": "https://github.com/LiberPrimus/Failed-Attempts",
   "revision": "d219a8099f8d24e52496e9ee3456ed9980893884",
-  "audited_on": "2026-10-22",
+  "audited_on": "2026-10-23",
   "scope": "All 10 files in the pinned Git tree, including .gitignore and the root README. Methods are grouped by operation; changing a key, page, radius, or hash algorithm does not create another method-family record.",
   "tree_file_count": 10,
   "status_definitions": {
@@ -19,11 +19,11 @@
         "bruteforce/vigenere/vigenere-bruteforce-results.zip"
       ],
       "specific_cases": "43 rune keys in the ZIP applied to each of 58 source page files; the README wordlist omits the archive's final DIVINITY key.",
-      "rule_status": "No source generator script is supplied. GP subtraction, key phase zero and uninterrupted rune advance are recovered from source output and verified by 2,365 nine-rune-prefix comparisons on 55 rune-bearing LP2-00–55 pages.",
+      "rule_status": "No original generator script is supplied. GP subtraction, page phase zero and uninterrupted rune advance are recovered from source output; 2,494/2,494 complete archived page–key strings reproduce.",
       "status": "replayed",
       "record": "experiments/records/public-wordlist-vigenere/record.json",
-      "finding_scope": "None of nine fixed 12-rune known-reading openings occurs at a replayed page start; this does not validate the source's unquantified no-good-result judgment for full outputs.",
-      "unresolved": "The original script, its exact plaintext scoring rule, and any nonzero key phases are not supplied. The local record does not assess all 58 source pages."
+      "finding_scope": "All 58 archived pages and 43 keys reproduce completely; the fixed opening test on LP2-00–55 finds none of nine predeclared 12-rune openings among 21,285 comparisons. The source gives no numerical language score.",
+      "unresolved": "Original generator source, exact plaintext scoring rule and any nonzero key phases are not supplied; complete-output reproduction does not establish a solved reading."
     },
     {
       "id": "circumference-rune-substitution",
@@ -37,8 +37,8 @@
       "rule_status": "README states round(2πR) mod 29, while both archived output files implement truncation. The local record exposes both rather than silently choosing one.",
       "status": "replayed",
       "record": "experiments/records/public-circumference-substitutions/record.json",
-      "finding_scope": "Both truncated variants reproduce nine-rune prefixes on all 55 rune-bearing pages on LP2-00–55. The prime-radius map reaches only 18 of 29 output symbols; no language criterion was supplied.",
-      "unresolved": "The source's interesting-result criterion is unspecified, and its page 56 output is outside the local LP2-unsolved scope."
+      "finding_scope": "Both truncated variants reproduce every complete archived page output, 57/57 each. Nearest rounding does not. The prime-radius map reaches only 18 of 29 runes; no language criterion was supplied.",
+      "unresolved": "The source interesting-result criterion remains unspecified. Frozen plan hashes describe CRLF checkout bytes; the pinned Git LF bytes and exact newline conversion are separately verified."
     },
     {
       "id": "deepweb-hash-against-jpegs",
@@ -49,11 +49,11 @@
         "deepweb-hash/checksums.txt"
       ],
       "specific_cases": "The script calls sha512sum and b2sum on 75 original JPEGs and searches for the concatenated 128-hex-character page-56 target. The archived text contains 75 SHA-512 and 75 BLAKE2 rows and no literal target match.",
-      "rule_status": "Hash algorithms and target are specified, but the script references an external liber-primus__images--full directory absent from this pinned Git tree.",
-      "status": "missing_rule_or_input",
-      "record": null,
-      "finding_scope": "Only the archived checksum table has been counted and searched; original image bytes were not independently rehashed against this source's corpus.",
-      "unresolved": "Exact 75 JPEG input bytes and their provenance must be pinned before an independent replay. This is not evidence for or against an LP2 rune cipher."
+      "rule_status": "The 75 exact source JPEG bytes are identified by all 150 SHA-512/BLAKE2b-512 saved checksum entries. Both digest algorithms and target are specified and independently replayed.",
+      "status": "replayed",
+      "record": "experiments/records/public-deepweb-jpeg-hashes/record.json",
+      "finding_scope": "None of 150 complete source-JPEG digests matches the LP2-56 target. A separately frozen follow-up on 58 seventh-onion JPEGs also finds 0/116 target matches; those different bytes are not represented as the source corpus.",
+      "unresolved": "Neither byte set is independently authenticated as puzzle-creator originals. Other files, transformations, combined files and web-page hashing remain outside this specified lookup."
     }
   ],
   "other_tree_files": [
@@ -61,6 +61,6 @@
     "README.md"
   ],
   "unreplayed_runnable_with_inputs": 0,
-  "unreplayed_missing_rule_or_input": 1,
+  "unreplayed_missing_rule_or_input": 0,
   "note": "This inventory closes this one pinned repository tree, not public Liber Primus repositories generally."
 }

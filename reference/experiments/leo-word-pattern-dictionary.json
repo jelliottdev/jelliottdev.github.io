@@ -1,0 +1,98 @@
+{
+  "id": "leo-word-pattern-dictionary",
+  "status": "published",
+  "title": "Can LP2 words be shifted dictionary words?",
+  "question": "Do complete LP2 words of four to eight runes match a pinned dictionary under Caesar or affine word-level maps more often than uniform-random rune words?",
+  "reader_question": "Could each LP2 word simply be a shifted dictionary word?",
+  "summary": "A pinned source replay finds no Caesar-pattern matches among 628 LP2 words of six to eight runes; short-word and affine matches are common under the source's random-word comparison.",
+  "finding": "For lengths four through eight, Caesar-pattern matches are 165/511, 12/317, 0/256, 0/216 and 0/156. The original 2,000-word-per-length random control gives 627, 45, 4, 0 and 0. Affine match rates resemble that control. The published 'reversed' operator reverses a difference tuple, which is not literal word reversal.",
+  "limitations": "Results depend on the pinned external dictionary, relikd word segmentation and source random baseline. A lack of dictionary-pattern hits does not rule out other vocabularies, hidden word boundaries, longer transforms or plaintext recovery. The source dictionary and page files have not been redistributed.",
+  "next_steps": "A more specific wordwise proposal should freeze a vocabulary, boundary rule and transform before testing held-out pages, then compare its matches with controls that preserve the same word-length distribution.",
+  "outcome": "not-supported",
+  "tags": [
+    "word patterns",
+    "dictionary",
+    "Caesar",
+    "affine",
+    "source replay",
+    "word boundaries"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-word-pattern-dictionary/plan.json"
+    ],
+    "representation": "Nine pinned unsolved relikd sections, 12,956 rune symbols, full source-visible words of rune lengths 4–8. The 18 source page files and source rune dictionary are SHA-256 pinned but must be obtained separately.",
+    "procedure": "Build sets of mod-29 neighboring-rune difference tuples from the dictionary, then count exact Caesar, source-reversed-difference, literal reversed-word Caesar and affine-normalized membership. Compare source's 2,000 uniform-random words per length and solved LP1 plaintext.",
+    "parameters": "GP29; word lengths 4–8; random.Random(1) continuously across lengths; 2,000 random words per length.",
+    "exclusions": "Other dictionaries, alternative segmentation, per-word key inference beyond tuple membership, whole-page readability and all other cipher families."
+  },
+  "review": {
+    "reviewer": "Independent arithmetic and pinned-source receipt checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-word-pattern-dictionary/run.py --source-root PATH --check && python experiments/records/leo-word-pattern-dictionary/check.py --source-root PATH",
+    "environment": "Python 3.9+ standard library; source-root must be relikd/LiberPrayground at pinned revision and is hash-checked. Upstream code and corpus are not copied into this record.",
+    "script": "experiments/records/leo-word-pattern-dictionary/run.py",
+    "script_sha256": "41b70328ed7cf441b69623d90a03c7bfa63e53fca2cba8dfc812771bd3ae71ec",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/plan.json",
+        "sha256": "4f0b75cad5236822044fbe6ba90d8efad8fb4c2994fcc44b60948f95f52cea49"
+      },
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/check.py",
+        "sha256": "45eb7b3496034715913b5bb49d5703836778b7c26250a18e98dfb5972b54ef19"
+      },
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/plot.py",
+        "sha256": "b43d7c258c9addf560cbeec11f4266b72fd154e16bf8ad30a790cf4c484e66c2"
+      },
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/run.py",
+        "sha256": "41b70328ed7cf441b69623d90a03c7bfa63e53fca2cba8dfc812771bd3ae71ec"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/results.json",
+        "sha256": "d253253a31c9e9d066eeb47b5eb2256704f2c89bafb3ca8b22e3734b4d25833d"
+      },
+      {
+        "path": "experiments/records/leo-word-pattern-dictionary/word-patterns.svg",
+        "sha256": "cd79af44cc2a54cad6af74dfc2752c7159de29d29c3fdec0deab032dbf388fd4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Leo T1 source and original receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests2.py"
+    },
+    {
+      "label": "Pinned relikd source data",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "doublet-sentence-residues",
+    "word-reset-repetition"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-word-pattern-dictionary/word-patterns.svg",
+      "caption": "LP2 and uniform-random affine pattern occupancy by word length, from the source's pinned dictionary."
+    }
+  ],
+  "article": "# Do short LP2 words resemble shifted dictionary words?\n\n## Finding\n\nThe [published word-pattern test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests2.py) reproduces from its pinned inputs. A Caesar-shifted dictionary word has the same sequence of differences between neighboring runes. Among LP2 words of four through eight runes, Caesar-pattern matches are **165/511, 12/317, 0/256, 0/216 and 0/156**. The 2,000 random rune words sampled at each length yield **627, 45, 4, 0 and 0** matches. Longer LP2 words give no Caesar-pattern hits in this dictionary; short words alone are weak evidence because the dictionary covers many possible patterns.\n\nAllowing any invertible affine multiplier raises the LP2 matches to **511, 166, 13, 1 and 0**. The matched random-word rates are very similar, especially for lengths four through six. The solved-page plaintext check has Caesar matches in **322 of 325** words at these lengths, confirming that the dictionary can recognize most known reading words under the same segmentation. These observations do not identify a cipher or rule out other vocabularies and word-boundary choices.\n\n![Affine dictionary-pattern match rates for LP2 words and uniform-random rune words, grouped by word length. They are similar at each length.](experiments/records/leo-word-pattern-dictionary/word-patterns.svg)\n\n## What was compared\n\nWe used the nine unsolved-section rune transcriptions and `dictionary_all-rune.txt` from [relikd/LiberPrayground at commit `719380e`](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4). Word separators follow that source; line wraps are ignored. The [plan](experiments/records/leo-word-pattern-dictionary/plan.json) pins SHA-256 hashes for all 18 section files and the 10.3 MB dictionary. The script checks those hashes before counting. It also repeats the original test's single seeded stream of 2,000 independent uniform-random words per length.\n\nThe source calls one column “reversed.” Its code reverses the **difference tuple**. Literal reversal of a word also changes the sign of each difference: `Δ(reverse(word)) = −reverse(Δ(word)) (mod 29)`. We retain the source's values for an exact replay and report literal reversed-word values separately in [results.json](experiments/records/leo-word-pattern-dictionary/results.json). This correction affects that column's interpretation, not the Caesar or affine findings.\n\n## Reproduce\n\nFetch the pinned relikd revision above, then run `python experiments/records/leo-word-pattern-dictionary/run.py --source-root PATH --check` and `python experiments/records/leo-word-pattern-dictionary/check.py --source-root PATH`. `PATH` is its checkout directory, containing `pages/` and `data/dictionary_all-rune.txt`. The input files are linked and hash-checked but not redistributed here. The separate checker rebuilds the complete LP2 Caesar and affine counts using first-rune anchored offsets, checks source fingerprints and verifies the reversal identity. The seeded random and solved-text controls are recomputed by `run.py`; the checker compares their published counts. `plot.py` regenerates the figure from `results.json`.\n",
+  "article_path": "experiments/records/leo-word-pattern-dictionary/article.md",
+  "script_sha256": "41b70328ed7cf441b69623d90a03c7bfa63e53fca2cba8dfc812771bd3ae71ec",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "id": "leo-transform-periodic-profile",
+  "status": "published",
+  "title": "Do transformed LP2 runes show a reliable period?",
+  "question": "Does the reported period-238 coincidence peak survive a source-bound replay and controls that select the best transform and period?",
+  "reader_question": "Is the period 238 signal a useful clue?",
+  "summary": "A published period-238 peak reproduces. A planted 13-cycle yields a multiple of 13 under the same search, but its selected score is lower than most shuffle maxima.",
+  "finding": "The pinned pages 27–32 two-step difference stream has normalized periodic coincidence 1.412285 at period 238, with source within-profile z 5.950736. One of 499 selected-maximum rune shuffles reaches the observed peak. A planted 13-cycle has very high period-13 coincidence (23.464); the ranking selects period 143 = 11 × 13, passing the literal frozen positive criterion. However, its selected standardized score falls below 452 shuffle maxima, so this score alone poorly distinguishes a known periodic source. The observed peak does not identify an encryption cycle.",
+  "limitations": "The shuffle tail is conditional on the five-transform, eligible-period scan on pages 27–32. A nine-section selection bound does not cover the separate concatenated stream, other statistics, segmentation choices or prior source analyses. The planted control satisfies the period-multiple gate, but within-profile z is not a calibrated universal periodicity detector. This record does not test decryption.",
+  "next_steps": "A proposed periodic cipher should specify a key, transformation and expected held-out decoding result, then pass a planted-control gate under a scorer selected before LP2 outcomes.",
+  "outcome": "inconclusive",
+  "tags": [
+    "periodic coincidence",
+    "source replay",
+    "transforms",
+    "positive control",
+    "statistical controls"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-transform-periodic-profile/plan.json"
+    ],
+    "representation": "Nine pinned unsolved relikd rune sections (12,956 runes); pages 27–32 are the selected conditional-control section.",
+    "procedure": "Replay five source rune transformations, normalized periodic coincidence through 300 in each section and through 600 in the concatenation; independently measure fourgram spacings and word boundaries. Shuffle pages 27–32 rune order 499 times, taking the maximum within-profile z across all five transforms and periods, then test a planted 13-cycle.",
+    "parameters": "GP29; at least six symbols per residue column; random.Random seeds 330103 and 1330; 499 shuffles.",
+    "exclusions": "Other text sources, other selection families, alternate word boundaries, full-page plaintext tests and all decryption claims."
+  },
+  "review": {
+    "reviewer": "Independent standard-library metric checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay and instrument audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-transform-periodic-profile/run.py --source-root PATH --check && python experiments/records/leo-transform-periodic-profile/check.py --source-root PATH",
+    "environment": "Python 3.9+ with NumPy and Numba for the full scan; independent checker uses the standard library. PATH is a pinned relikd checkout and all nine input hashes are verified.",
+    "script": "experiments/records/leo-transform-periodic-profile/run.py",
+    "script_sha256": "9c269d6ffb0672539591a75a36db7ad48d14ebf4bc82aeae54accf13ae50179e",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/plan.json",
+        "sha256": "cfe430189ee85b05b346793b282268942e464920c71cc4d6c519f127d75a440f"
+      },
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/check.py",
+        "sha256": "23f4a3ae6fe50e15bd9aec3a61c797c7468dc6178ec3b648993e43aa0b777c8f"
+      },
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/plot.py",
+        "sha256": "be2ae634d8c2d08f159542331bed6adfe5b99c09f29348460567981efb1b38ce"
+      },
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/run.py",
+        "sha256": "9c269d6ffb0672539591a75a36db7ad48d14ebf4bc82aeae54accf13ae50179e"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/results.json",
+        "sha256": "b39374f92fdcca3339d49b0c9ce7ab49fca682b896b46f0d3bef349b86442343"
+      },
+      {
+        "path": "experiments/records/leo-transform-periodic-profile/periodic-profile.svg",
+        "sha256": "93b27ee040fc1621f0f8671cbbe9897e2c30af9c50690c66de56441ff3abf332"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Leo test and source receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests3.py"
+    },
+    {
+      "label": "Pinned relikd rune transcription",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "lp2-31-periodic-ioc",
+    "word-reset-repetition"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-transform-periodic-profile/periodic-profile.svg",
+      "caption": "The source peak and a strong planted periodic stream under the same selected score."
+    }
+  ],
+  "article": "# Does a periodic signal survive transformations of LP2?\n\n**Finding.** A previously reported peak reproduces: in the pinned LP2 pages 27–32 transcription, taking each rune minus the rune two places earlier gives a normalized coincidence score of **1.412** at period **238**. That is the highest score in this source profile. It is an observation about this transform and transcription, not a recovered key.\n\n![The source peak, shuffle controls and planted positive control](periodic-profile.svg)\n\nThe harder question is whether the scoring rule reliably points to a periodic source. We scanned the source's five representations—original runes, neighboring differences, neighboring sums, two-step differences and nonzero neighboring ratios—over every eligible period through 300. In 499 shuffles of the same page group's runes, one shuffle reached or exceeded the real-data peak when we took the best result across all five representations and periods. The resulting **conditional** tail fraction is 2/500. Allowing for selection among the nine page groups gives a simple bound of 18/500. Neither calculation covers the separate concatenated-page scan, other statistics or earlier choices that led to this analysis.\n\nOur frozen positive control makes the practical limit clear. We planted a strong 13-rune cycle, replacing 10% of its symbols at random. Its ordinary coincidence score at period 13 was **23.464**. The source's within-profile ranking selected period **143 = 11 × 13**, so the literal planned criterion of finding 13 or a multiple **passed**. Yet its maximum standardized score fell below **452 of the 499** shuffle maxima. This score alone would not distinguish that known periodic source from its shuffle controls. The real period-238 peak should not be treated as evidence that the manuscript has a 238-rune encryption cycle.\n\n## What was measured\n\nWe used the nine unsolved text sections and alphabet from the pinned [relikd transcription](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4). The operator and unweighted average over residue-column coincidence scores follow [Leo's test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests3.py). The complete profile also records repeated four-rune spacing, visible word-edge counts and a separate all-section concatenation. Those additional scans are descriptive; the shuffle fraction above is conditional on the pages 27–32 scan only.\n\nAt period 238, a 1,431-symbol two-step-difference stream leaves only six or seven symbols per residue column. That makes an unusually high average sensitive to small-column coincidences. The source reports this peak as about 1.412 and z 6.0; the independent replay gives 1.412285 and z 5.950736 before rounding.\n\n## Reproduce\n\nObtain the pinned relikd checkout. From the repository root, substitute its path for `PATH`:\n\n```text\npython experiments/records/leo-transform-periodic-profile/run.py --source-root PATH --check\npython experiments/records/leo-transform-periodic-profile/check.py --source-root PATH\n```\n\nThe first command recomputes the nine section profiles and all 499 shuffles from the source bytes. The second independently checks the source hashes, the full pages 27–32 period profile, visible word edges and control arithmetic without importing the producer. Exact source text is linked rather than redistributed here. Neither command tests a decryption or rules out periodic ciphers.\n",
+  "article_path": "experiments/records/leo-transform-periodic-profile/article.md",
+  "script_sha256": "9c269d6ffb0672539591a75a36db7ad48d14ebf4bc82aeae54accf13ae50179e",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

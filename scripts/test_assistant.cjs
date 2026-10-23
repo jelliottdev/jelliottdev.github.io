@@ -150,7 +150,7 @@ for(const record of published){
   assert(downloads.includes(`href="${output.path}" download`),'A readable result must be directly downloadable');
  }
  assert(rendered.includes('href="downloads/reference-data.zip" download'));
- assert.equal(rendered.includes('href="downloads/original-images.zip" download'),record.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path)));
+ assert.equal(rendered.includes('href="downloads/original-images.zip" download'),record.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path)));
  const family=rendered.indexOf('aria-label="Experiment family comparison"');
  if(family>=0)assert(family>rendered.indexOf('id="experiment-reproduce"'));
 }

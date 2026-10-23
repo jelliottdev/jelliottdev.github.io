@@ -1,0 +1,427 @@
+{
+  "id": "wulfic-native-key-streams",
+  "status": "published",
+  "title": "Prime, solved-text and grid streams as LP2 keys",
+  "question": "Do six source-defined streams of primes, solved LP1 values and number-grid values yield LP2 readings under a drift-tolerant GP29 decoder?",
+  "reader_question": "What happens when Cicada's own numbers are used as a key?",
+  "summary": "All 5,742 source settings reproduce with no reading-threshold hit. Several keys end before the tested text does, so those scores cannot establish whole-section failure.",
+  "finding": "No +30 threshold hits in 5,742 source settings. Finite keys of 256–726 values leave later emissions neutral in several arms; whole-section exclusions are inconclusive. Supplemental controls establish detection only at lengths within each key.",
+  "limitations": "The source starts each key at zero and scores only until a finite key ends. The supplemental controls were designed after the LP2 source results, not preregistered. Results do not cover cyclic keys, other starts, alternate grid transcriptions, other languages or other ciphers.",
+  "next_steps": "State a precise alternative key alignment or extension rule before running a larger search; plant a full-length control under that rule and adjust for selecting many variants.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "prime key",
+    "known readings",
+    "number grid",
+    "power check"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-native-key-streams/plan.json",
+      "experiments/records/wulfic-native-key-streams/source-stage_i_candidates.tsv",
+      "experiments/records/wulfic-native-key-streams/source-stage_m_candidates.tsv",
+      "exports/alphanumeric-grids.csv"
+    ],
+    "representation": "Pinned 12,956-rune section 7–15 stream plus three grid-relative windows; Stage I key values from source-solved LP1 text or primes, Stage M grid representations matching Liberpedia's 256 tokens.",
+    "procedure": "Replay pinned Stage I and M complete candidate grids, then measure a separately identified post-replay planted-key diagnostic within each finite key's usable length.",
+    "parameters": "Three Stage I keys × 10 alignments and three Stage M keys × 12 alignments; all three sub/add/Beaufort directions and 29 shifts; start at zero; source reading threshold log LR >=30. Supplemental 20 planted and 20 wrong-key draws per stream.",
+    "exclusions": "Other start positions or cycling, arbitrary LP1-derived streams, different grid bytes or digit mappings, different scoring language, and Stage I's separate nine-rune vocabulary check."
+  },
+  "review": {
+    "kind": "exact public-source replay with bounded post-replay power diagnostic",
+    "retested_on": "2026-10-23",
+    "reviewer": "Two complete source TSVs reproduced byte-for-byte; independent site rune/grid and parameter-grid checks; planted/wrong-key detector controls",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-native-key-streams/run.py --check && python experiments/records/wulfic-native-key-streams/check.py && python experiments/records/wulfic-native-key-streams/plot.py --check",
+    "environment": "Python 3.12 for bundled checks. Optional full source replay and controls require a pinned Wulfic checkout with its NumPy dependencies.",
+    "script": "experiments/records/wulfic-native-key-streams/run.py",
+    "script_sha256": "3afa17ffc79cf6fad10aad284a15d8b04b7323cb2340fea7c384141fdec0f8aa",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-native-key-streams/plan.json",
+        "sha256": "d53f5f51a39eefbc7d98607e42747c8609f1c8562f573ba59e62f1e4b2980cfe"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/check.py",
+        "sha256": "f7ff06874694d700598abf95f927c23b47cde943b77703afc568178bc800abb2"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/plot.py",
+        "sha256": "1b2397f86bee3197f3adc903b33e8b039cdac091273e4f9c66181615b25ff1e8"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/replay_source.py",
+        "sha256": "2b4181edd4897f214777a5d0dd21577367094d99112f06e773981c5cd0bcce01"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/calibrate.py",
+        "sha256": "a6a09b0ec071539a7aef262d46f282a735ed21d65e5be9a39c7ec403daa03a58"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/make_plan.py",
+        "sha256": "ecdf95966320926eb4a02988dcae62d9631b3dcaeac3f5d145a1c60d1fbe6eda"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/make_record.py",
+        "sha256": "ba978270cd543b7a6992ac2d9be06a032a9e77e33f97a32ad27e3b1e88c2fccb"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/source-stage_i_candidates.tsv",
+        "sha256": "9b908d885675549fc05e67755ba108ed0cfd3a4959be6f56f9833b40dce31125"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/source-stage_m_candidates.tsv",
+        "sha256": "c4ee0b409eb2ab2d861d5d4e2cd9cdad268118399643e4b2065234e7037f7973"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/supplemental-controls.tsv",
+        "sha256": "f09a8a21d9c4c8b10c1d3adb88e0964c2b1d5986d39e7fb204851dc0503fe44b"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-ab-reset-alphabets/layout.json",
+        "sha256": "f3908ef8eacd4feb17177260b41def75a119c31420722b3193e4fe51e83ae95d"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-ab-reset-alphabets/check.py",
+        "sha256": "4e373b45b4a6f9063d232308602101f499f6fade97b47b8068c2cfa89d3155b3"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-native-key-streams/results.json",
+        "sha256": "0dc094db97c1d23e10764b93e78afffe6a118dcdc15fcef03578eefc547e198d"
+      },
+      {
+        "path": "experiments/records/wulfic-native-key-streams/comparison.svg",
+        "sha256": "43f2eea4c968890c583d18aaba2af85addefccf2e2a549c762db13610fb0aea6"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-native-key-streams/comparison.svg",
+      "caption": "LP2's best score for each source key remains below the reading threshold; the bounded planted controls score above it."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wulfic Stage I source at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_i.py"
+    },
+    {
+      "label": "Wulfic Stage M source at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_m.py"
+    },
+    {
+      "label": "Pinned source output tables",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+    }
+  ],
+  "related": [
+    "wulfic-number-key-streams",
+    "grid-direct-bytes",
+    "solved-reading-running-key"
+  ],
+  "article": "# Do Cicada's own numbers work as a key?\n\n**No setting crossed the reading threshold, but the short keys leave whole-section claims inconclusive.** We replayed [Wulfic's Stage I](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_i.py) and [Stage M](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_m.py) from one pinned source revision. Their **5,742 recorded settings** test prime numbers, values derived from solved LP1 text, and three readings of the LP2 number grid. None reaches the program's **+30 reading threshold**. Both complete tables reproduce the published source files byte-for-byte.\n\n![Six source keys: each LP2 score stays below the reading threshold, while planted key controls are higher.](experiments/records/wulfic-native-key-streams/comparison.svg)\n\nThe blue point for each key is its best LP2 score on an alignment of at least 100 runes. Gray shows the range from 20 planted encryptions under that **same key and detector**. Control texts have different lengths because the source keys do.\n\n## What was actually tried\n\nStage I starts at the beginning of three streams: consecutive primes; one Gematria sum per solved LP1 word; or the prime value of each solved LP1 rune. Stage M starts at the beginning of three streams read from the printed 256-cell grid: its base-60 bytes, their regrouped five-bit values, or the individual base-60 digits. The grid streams contain **256, 409 and 512 values**, respectively. The [independent checker](experiments/records/wulfic-native-key-streams/check.py) confirms that the source's grid tokens match Liberpedia's 256 transcribed tokens, then constructs all three numeric streams from those tokens.\n\nFor each key, the source applies three arithmetic directions and 29 shifts. Stage I scores nine manuscript sections separately and as one joined stream; Stage M also tests positions immediately after and ending at the grid. The detector tolerates occasional skipped or repeated key steps and scores whether decrypted rune frequencies resemble known LP1 text. Its key starts at **position zero**. These are six source-defined streams under one decoder, not a general search of possible Cicada-derived keys.\n\n**Key length matters here.** Once the detector runs off the end of a key, later runes contribute a neutral score. In particular, Stage M's long-page result mostly measures what its first few hundred grid-derived values do, not a complete-page decryption. Stage I's LP1 word-sum stream likewise has only 726 values. The highest LP2 score in either complete table is from the **nine-rune** section 10 (+4.83), far too short to carry a strong reading. Among alignments of at least 100 runes, the best scores are **−65.54** for Stage I and **−13.75** for Stage M.\n\n## Did the detector have enough power?\n\nAfter inspecting the source results, we added a **supplemental diagnostic**. It plants each exact key in 20 anti-doublet encryptions, using text lengths that fit within the key: **729, 650 and 729 runes** for the three Stage I keys, and **230, 368 and 460** for the grid keys. **All 120 planted scores pass +30; none of the 120 wrong-key scores does.** This shows the detector can recognize these keys within those bounded lengths. Because the diagnostic was designed after the LP2 replay, it is a power check, **not** a preregistered source control or a correction for selecting a promising key after the fact. The [plan](experiments/records/wulfic-native-key-streams/plan.json) and [control table](experiments/records/wulfic-native-key-streams/supplemental-controls.tsv) state its exact rules and values.\n\nThis excludes no alternate start position, repeated grid key, other base-60 reading, different plaintext model or cipher. Stage I also performs a separate **nine-rune square-title vocabulary check**; it is not part of these stream scores and deserves its own treatment if used as evidence.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/wulfic-native-key-streams/run.py --check`, `python experiments/records/wulfic-native-key-streams/check.py` and `python experiments/records/wulfic-native-key-streams/plot.py --check`. The bundled [candidate tables](experiments/records/wulfic-native-key-streams/results.json) and controls are hashed in the record. To rerun the historical programs, check out the [source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus) at commit `bf89d3d13aad2b8f2c95ab195cf1b092f250775c` and run `python experiments/records/wulfic-native-key-streams/replay_source.py --source-dir PATH_TO_CLONE`. The wrapper writes into a temporary directory and checks both full output tables byte-for-byte. Run `calibrate.py --source-dir PATH_TO_CLONE --check` to repeat our supplemental diagnostic.\n",
+  "article_path": "experiments/records/wulfic-native-key-streams/article.md",
+  "script_sha256": "3afa17ffc79cf6fad10aad284a15d8b04b7323cb2340fea7c384141fdec0f8aa",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

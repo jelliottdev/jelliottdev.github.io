@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import PurePosixPath
+import re
 import zipfile
 
 
@@ -24,7 +25,9 @@ def build(root, record):
         if not source.is_relative_to(root.resolve()):
             raise ValueError("Bundle member escapes repository: " + name)
         data = source.read_bytes()
-        if name.startswith("images/") and path.suffix.lower() in (".jpg", ".jpeg", ".png"):
+        shared_original = (name.startswith("images/") or
+                           re.fullmatch(r"exports/sources/cicada-2014-seventh-onion/\d+\.jpg", name))
+        if shared_original and path.suffix.lower() in (".jpg", ".jpeg", ".png"):
             omitted.append({"path": name, "bytes": len(data),
                             "sha256": hashlib.sha256(data).hexdigest()})
         else:
@@ -54,7 +57,7 @@ def build(root, record):
         instructions += (
             "Original image inputs are NOT included in this ZIP.\n"
             "Download https://jelliottdev.github.io/downloads/original-images.zip\n"
-            "and extract it into the same folder, preserving images/.\n"
+            "and extract it into the same folder, preserving every original path.\n"
             f"Then verify the images required by this experiment:\n"
             f"  python scripts/verify_bundle.py {image_manifest}\n\n"
         )

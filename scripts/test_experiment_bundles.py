@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     records = json.loads((ROOT / "data/experiments.json").read_text(encoding="utf-8"))["records"]
+    with zipfile.ZipFile(ROOT / 'downloads/original-images.zip') as original_archive:
+        shared_originals = {item['path']: item for item in
+                            json.loads(original_archive.read('ORIGINAL-IMAGES-CONTENTS.json'))}
     with tempfile.TemporaryDirectory(prefix="experiment-bundles-", dir=ROOT.parent) as folder:
         workspace = Path(folder).resolve()
         assert workspace.is_relative_to(ROOT.parent.resolve()) and workspace != ROOT
@@ -41,7 +44,9 @@ def main():
                 actual = members.get(item["path"], images.get(item["path"]))
                 assert actual and actual["sha256"] == item["sha256"], item["path"]
             assert members[record["reproduction"]["script"]]["sha256"] == record["script_sha256"]
-            assert all(name.startswith("images/") for name in images)
+            for name, item in images.items():
+                assert name in shared_originals, ('Missing from shared image bundle', experiment_id, name)
+                assert item['sha256'] == shared_originals[name]['sha256'], ('Wrong image version', experiment_id, name)
             assert not set(members) & set(images)
             assert (target / f"experiments/records/{experiment_id}/record.json").is_file()
             plan_file = target / f"experiments/records/{experiment_id}/plan.json"

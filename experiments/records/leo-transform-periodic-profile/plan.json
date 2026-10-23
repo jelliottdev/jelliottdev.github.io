@@ -1,0 +1,44 @@
+{
+  "schema": "leo-transform-profile-plan-v1",
+  "source_revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_test_revision": "a32bdc0e06ea58532fbaf4329acae4a0b1020513",
+  "source_sha256": {
+    "pages/p0-2.txt": "d2ca725bfdc1b2ac649889b23bdf27eb9e7fbfa89406efdc1f3cd078c582b6ba",
+    "pages/p3-7.txt": "ea055d3ee79a203864b57f30a089c00408638ad6b472f4088c4464731d40d340",
+    "pages/p8-14.txt": "2fca7f620ccd54ad3152fc6e6a1267bd1276a0edea91f1aa18fb151fde7fdea9",
+    "pages/p15-22.txt": "c81efaef79e2ca617d685494febd48a5cb1fb1667911aff06034df772bfb8076",
+    "pages/p23-26.txt": "3ee57ea27030dd2bdfc4ea995b448306b4f66f47d2f5708faa22fb36e6bd2bb2",
+    "pages/p27-32.txt": "096cd567a748201a5bef70ed6fa5647b1c081f2a538fa3ffa73b7caa83f4be9a",
+    "pages/p33-39.txt": "f4e3588c9e8277d6ca6b665182af64ae40382db18640b7a4adc14518a7ee8f15",
+    "pages/p40-53.txt": "b901b5c5dc7e49d519d011d6fbaf6857b67854256287a3c5b0604cf0b4aeebd8",
+    "pages/p54-55.txt": "0d0bc798840ae2a8d1375f61c9f7f8d76adf5c127d51088d4b05b4fc40e8442b"
+  },
+  "sections": [
+    "p0-2",
+    "p3-7",
+    "p8-14",
+    "p15-22",
+    "p23-26",
+    "p27-32",
+    "p33-39",
+    "p40-53",
+    "p54-55"
+  ],
+  "transforms": [
+    "raw",
+    "diff1",
+    "sum1",
+    "diff2",
+    "ratio_nonzero"
+  ],
+  "period_rule": "1..min(300,floor(stream_length/6)); concatenate all nine sections, then 1..min(600,floor(stream_length/6))",
+  "statistic": "source unweighted mean of 29-normalized per-column index of coincidence; source z is within-profile (score-mean)/population_sd",
+  "selection_control": {
+    "section": "p27-32",
+    "shuffles": 499,
+    "seed": 330103,
+    "null": "shuffle original rune order within section, then recompute all five transforms and all eligible periods, retain maximum source z; plus-one tail; Bonferroni 9 for postselected section"
+  },
+  "positive_control": "length 1433, repeated 13-symbol key with 10% uniform replacement, seed 1330; detect 13 or a multiple in full scan",
+  "claim_limit": "descriptive source profile plus one conditional selection-aware control; no cipher family eliminated"
+}

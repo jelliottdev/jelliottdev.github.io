@@ -1,7 +1,6 @@
 """Independent map check and optional comparison to both archived outputs."""
 import argparse
 import hashlib
-import itertools
 import json
 import math
 import re
@@ -16,22 +15,12 @@ LABELS = ('F', 'U', 'TH', 'O', 'R', 'C', 'G', 'W', 'H', 'N', 'I', 'J', 'EO',
           'P', 'X', 'S', 'T', 'B', 'E', 'M', 'L', 'NG', 'OE', 'D', 'A', 'AE', 'Y', 'IA', 'EA')
 
 
-def heading_chunks(path):
-    text = path.read_text(encoding='utf-8')
-    chunks = re.split(r'-{6,} ↓  Page \d+  ↓ -{6,}', text)
-    assert len(chunks) == 58, len(chunks)  # Source also has page 56.
-    for chunk in chunks[1:57]:
-        lines = [re.sub(r'^\s*\d+\s+', '', line.strip()) for line in chunk.splitlines()]
-        first = next((line for line in lines if line and not re.search(r'\d', line)
-                      and re.search('[A-Z]', line)), '')
-        yield re.sub('[^A-Z]', '', first.upper())
+GRID_ROW = re.compile(r'^\s*(?:[0-9A-Za-z]{2}\s+){7}[0-9A-Za-z]{2}\s*$')
 
 
-def match_latin(measured, archived):
-    variants = [('IA', 'IO') if rune == 'ᛡ' else (LABELS[RUNES.index(rune)],)
-                for rune in measured]
-    return any(archived.startswith(''.join(parts)) or ''.join(parts).startswith(archived)
-               for parts in itertools.product(*variants))
+def latin_stream(chunk):
+    return ''.join(''.join(re.findall(r'[A-Z]+', line))
+                   for line in chunk.splitlines() if not GRID_ROW.fullmatch(line)).replace('IO', 'IA')
 
 
 def main():
@@ -58,16 +47,27 @@ def main():
                 assert hashlib.sha256(transformed.encode()).hexdigest() == entry['outputs'][name]['output_sha256']
     print('PASS: four maps, all 56 page hashes, and per-page output digests reproduce')
     if args.source_directory:
+        certificate = json.loads((HERE / 'source-output-certificate.json').read_text(encoding='utf-8'))
         for radius, source in zip(('index', 'prime'), plan['source_outputs']):
             path = args.source_directory / Path(source['path']).name
-            assert hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256']
-            pairs = [(entry['outputs'][f'{radius}-truncate']['first_nine_runes'], heading)
-                     for entry, heading in zip(result['pages'], heading_chunks(path))]
-            tested = [(runes, heading) for runes, heading in pairs if runes and heading]
-            matching = sum(match_latin(runes, heading) for runes, heading in tested)
-            print(json.dumps({'radius': radius, 'archive_pages_compared': len(tested),
-                              'matching_first_lines': matching}))
-            assert matching == len(tested), 'Public archive output diverges'
+            lf_bytes = path.read_bytes().replace(b'\r\n', b'\n')
+            assert hashlib.sha256(lf_bytes).hexdigest() == certificate['variants'][radius]['source_git_lf_sha256']
+            assert hashlib.sha256(lf_bytes.replace(b'\n', b'\r\n')).hexdigest() == source['sha256']
+            chunks = re.split(r'-{6,} ↓  Page \d+  ↓ -{6,}', lf_bytes.decode('utf-8'))
+            assert len(chunks) == 58
+            table = [math.floor(2 * math.pi * r) % 29
+                     for r in (range(29) if radius == 'index' else PRIMES)]
+            matching = 0
+            for page in range(57):
+                input_path = ROOT / 'text' / f'lp2-{page:02d}.txt'
+                assert hashlib.sha256(input_path.read_bytes()).hexdigest() == certificate['page_sha256'][f'lp2-{page:02d}']
+                ciphertext = [RUNES.index(c) for c in input_path.read_text(encoding='utf-8') if c in RUNES]
+                expected = ''.join(LABELS[table[c]] for c in ciphertext).replace('IO', 'IA')
+                assert expected == latin_stream(chunks[page + 1]), (radius, page)
+                matching += 1
+            assert matching == certificate['variants'][radius]['complete_matches'] == 57
+            print(json.dumps({'radius': radius, 'archived_complete_strings_compared': matching,
+                              'matching_complete_strings': matching}))
 
 
 if __name__ == '__main__':

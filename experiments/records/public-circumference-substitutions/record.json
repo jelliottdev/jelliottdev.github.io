@@ -4,8 +4,8 @@
   "title": "Public 2πR rune substitutions",
   "question": "Do the index- and prime-radius 2πR transforms reproduce archived outputs, and does the stated rounding rule match the archive?",
   "reader_question": "What happens when each rune is transformed using the circumference formula?",
-  "summary": "Archived output uses truncation despite the README saying round. Both source nine-rune prefixes replay on 55 rune-bearing pages; prime-radius maps reach only 18 of 29 output runes.",
-  "finding": "The two truncated maps reproduce nine-rune prefixes on all 55 rune-bearing pages in each pinned source output. The nearest-rounded maps differ. Index-radius output reaches 26 runes with truncation, 25 with rounding; prime-radius output reaches 18 with either.",
+  "summary": "Archived output uses truncation despite the README saying round. Both truncated variants reproduce all 57 complete archived page outputs; prime-radius maps reach only 18 of 29 runes.",
+  "finding": "The index- and prime-radius truncation maps reproduce 57/57 full source-page streams each; nearest rounding differs. The source provides no language score.",
   "limitations": "The source gives no prespecified language score. These are fixed symbol substitutions; reproducing their output or counting collisions is not a full decryption test.",
   "next_steps": "Any stronger circumference claim needs a complete decoding direction, plaintext prediction and independent evaluation criterion.",
   "outcome": "inconclusive",
@@ -77,13 +77,13 @@
       "lp2-55"
     ],
     "representation": "LP2-00–55 in canonical 29-rune GP order; non-rune marks retained.",
-    "procedure": "Map each rune by 2π times its zero-based index or GP prime value, modulo 29; compare nearest rounding with truncation and source nine-rune prefixes.",
-    "parameters": "Four 29-symbol maps, 56 pages, 55 rune-bearing source-output comparisons per archived variant.",
-    "exclusions": "Other geometric formulas, secondary keys, reverse maps, full language scoring and source page 56."
+    "procedure": "Map each rune by 2π times its zero-based index or GP prime value, modulo 29; compare nearest rounding with truncation and separately verify all 57 complete archived source-page streams per variant.",
+    "parameters": "Four 29-symbol maps; 56 LP2-unsolved pages in the original test and 57 complete source pages per archived truncation variant.",
+    "exclusions": "Other geometric formulas, secondary keys, reverse maps and full language scoring. Archived page 56 is checked only for complete-output agreement."
   },
   "review": {
-    "reviewer": "Independent floor-based map and two 55-page source-output checks",
-    "retested_on": "2026-10-22",
+    "reviewer": "Independent floor-based map, 114 complete source-output strings, and LF/CRLF byte receipts checked",
+    "retested_on": "2026-10-23",
     "kind": "computational",
     "human_review": "pending"
   },
@@ -103,7 +103,7 @@
       },
       {
         "path": "experiments/records/public-circumference-substitutions/check.py",
-        "sha256": "5d15ece83d1ed110bd2f51714ad59050c8e13549646d76f68a13ffd0796f9f08"
+        "sha256": "6ae7e4959e4575df0b99d40c4fe05f476e6b4b4b3c08f091af7eb38991ace4b5"
       },
       {
         "path": "text/lp2-00.txt",
@@ -328,6 +328,10 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
       }
     ],
     "outputs": [
@@ -338,6 +342,10 @@
       {
         "path": "experiments/records/public-circumference-substitutions/mapping-coverage.svg",
         "sha256": "c326abf978c68f935df887a5a667bc5d32f60f42f9750baccc820d65f11bc2ba"
+      },
+      {
+        "path": "experiments/records/public-circumference-substitutions/source-output-certificate.json",
+        "sha256": "92c1920f6e40e79e58f969ef0cbb3bf9126fc5cd71c1afd86009aacc62f8f98c"
       }
     ]
   },

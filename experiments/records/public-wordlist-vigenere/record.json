@@ -4,9 +4,9 @@
   "title": "Public 43-key Vigenère sweep",
   "question": "Do the 43 archived wordlist keys reproduce the public GP Vigenère outputs and recover any of nine fixed known-reading openings on LP2-00–55?",
   "reader_question": "Did the public wordlist Vigenère sweep turn any unsolved page start into a known reading?",
-  "summary": "The 43 fixed keys reproduce 2,365 archived page prefixes; none matches a declared 12-rune known-reading opening in 21,285 exact comparisons.",
-  "finding": "All 2,365 rune-bearing key/page starts match the pinned public output archive. Zero of 21,285 exact 12-rune opening comparisons match; the planted encryption control passes.",
-  "limitations": "Only phase zero, GP subtraction, page-start positions, this public key list, our transcription, and nine exact known openings are checked. The source's informal no-good-result statement has no declared language-score threshold.",
+  "summary": "All 2,494 complete archived page–key output strings reproduce. None of the nine fixed 12-rune openings matches the 2,365 rune-bearing unsolved-page starts.",
+  "finding": "Full archived output matches in 2,494/2,494 cases across 58 pages and 43 keys. The original fixed-opening test remains 0/21,285 exact comparisons.",
+  "limitations": "The 12-rune negative result covers only phase-zero page starts, this source key list, our transcription and nine exact openings. Complete source-output reproduction confirms the archived transform but not the source informal no-good-result judgment, which has no declared language-score threshold.",
   "next_steps": "For a new claim, specify key derivation, alignment, position and success criterion before inspecting plaintext; compare against this fixed sweep.",
   "outcome": "not-supported",
   "tags": [
@@ -77,13 +77,13 @@
       "lp2-55"
     ],
     "representation": "LP2-00–55 rune stream in canonical 29-rune GP order; LP2-50 is number-only.",
-    "procedure": "Subtract each source key modulo 29 from the page rune stream at phase zero; compare first 12 decoded runes with nine predeclared known readings; compare nine-rune prefixes against source archive headings.",
-    "parameters": "43 archived keys, 56 unsolved pages, 55 rune-bearing pages, nine 12-rune openings, 21,285 exact comparisons.",
-    "exclusions": "Other keys, phases, directions, word resets, page segments, languages, and semantic assessment of full plaintext."
+    "procedure": "Subtract each source key modulo 29 at page phase zero; compare nine fixed 12-rune openings on LP2-00–55; separately verify complete Latin rune-label streams for all 58 archived pages.",
+    "parameters": "43 archived keys, 58 complete source pages (56 unsolved-page opening-test pages), nine 12-rune openings, 21,285 exact opening comparisons.",
+    "exclusions": "Other keys, phases, directions, word resets, page segments, languages, and semantic assessment of the complete plaintext strings."
   },
   "review": {
-    "reviewer": "Independent GP arithmetic and all 2,365 public archived nine-rune prefixes checked",
-    "retested_on": "2026-10-22",
+    "reviewer": "Independent prefix arithmetic, 2,494 complete source-output strings, and pinned input/source hashes checked",
+    "retested_on": "2026-10-23",
     "kind": "computational",
     "human_review": "pending"
   },
@@ -103,7 +103,7 @@
       },
       {
         "path": "experiments/records/public-wordlist-vigenere/check.py",
-        "sha256": "5cfab93ef53373ff2caf89e8f509d6f73b5db488d1e9da14a3946b1e06e0feb1"
+        "sha256": "422adf01a9253f373974b26e08610213ccb37818333179411b539941e650e3a0"
       },
       {
         "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
@@ -332,6 +332,14 @@
       {
         "path": "text/lp2-55.txt",
         "sha256": "c9ef8c39d86b56fc1493462468d98362e95cd1c47ff731254eac380a864e471a"
+      },
+      {
+        "path": "text/lp2-56.txt",
+        "sha256": "6220306fba1f79b294a6c7e202807344aeedc3038ca0d201ca0456d86f15f266"
+      },
+      {
+        "path": "text/lp2-57.txt",
+        "sha256": "c89a73dc20c77308cb6b65d76895f18ada8b9cd9ff788fad3fd7ee521f36f9a0"
       }
     ],
     "outputs": [
@@ -342,6 +350,10 @@
       {
         "path": "experiments/records/public-wordlist-vigenere/key-sweep.svg",
         "sha256": "522404f3c33b6e2b675099e3394566fefa4ad8c23cebc7e15c47045ca1332394"
+      },
+      {
+        "path": "experiments/records/public-wordlist-vigenere/source-output-certificate.json",
+        "sha256": "f9a6e3c6d9e78188ec3af224eea6f61a848f4c63b22d82f349c4776cc7ee7e2b"
       }
     ]
   },
