@@ -36671,6 +36671,8 @@
           "url": "https://jelliottdev.github.io/experiments/records/lp2-fibonacci-openings/results.json"
         }
       ],
+      "reader_finding": "Fibonacci shifts produced 1,540 distinct page outputs; none began with any of nine known 12-rune openings. Starting later repeats the same 14-term cycle under these rules.",
+      "reader_limit": "This test uses the standard Fibonacci seeds 0 and 1, with uninterrupted shifts restarting on each page. Other seeds, skips or plaintext beginnings remain untested.",
       "article": "# Fibonacci shifts and known openings\n\nThis variant replaces the prime-minus-one schedule with Fibonacci numbers while preserving the baseline's pages, offsets, arithmetic directions, advancement and exact-opening rule. It has its own result page because changing a sequence is a different test, even when the surrounding procedure stays fixed.\n\nAll 3190 planned configurations completed. They produced **1540 distinct page outputs**, none of which matched one of the nine declared 12-rune openings. The distinction between configurations and outputs matters: many starting offsets repeat the same transformation.\n\n## Define the sequence before using it\n\nThis test uses F_0 = 0, F_1 = 1, and each subsequent term is the sum of the previous two:\n\n```text\n0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...\n```\n\nFor input rune index c at position j, starting offset s, and direction d:\n\n```text\noutput[j] = (c + d × F_(j+s)) mod 29\nd = −1 for subtraction, +1 for addition\n```\n\nOffset zero starts with 0, 1, 1, 2. Offset one starts with 1, 1, 2, 3. Stating the initial terms avoids the ambiguity between conventions that begin the written list with 0, 1 or 1, 1.\n\nThe input is the full archived rune stream, including headings. Every recognized rune consumes one term. Non-rune characters do not. The schedule restarts at each page and does not restart at a word or row.\n\n## Why 29 starting offsets do not mean 29 different phases\n\nOnly the remainder modulo 29 affects an output rune. The first 14 Fibonacci remainders are:\n\n```text\n0, 1, 1, 2, 3, 5, 8, 13, 21, 5, 26, 2, 28, 1\n```\n\nThe next two remainders are 0 and 1, the starting pair. A single repeated value would not be enough to establish a cycle: the recurrence needs two successive values. Once the pair repeats, all later values follow the same recurrence and repeat too.\n\nThe checker verifies that no earlier pair equals the initial pair. The exact period is therefore 14 for this sequence modulo 29. Offsets 0, 14 and 28 are equivalent; offsets 1 and 15 are equivalent; and so on.\n\nThe offset range 0–28 was retained to isolate the schedule change from the [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings). It already includes every phase of this Fibonacci residue cycle. Larger starting offsets cannot add outputs under these same rules. That conclusion would need reconsideration if a proposed method used unreduced term values to control some additional operation.\n\n## What was compared\n\n| Item | Scope |\n| --- | --- |\n| Pages | LP2-00–55; LP2-50 has no recognized runes and contributes no candidates |\n| Offsets | Every integer 0–28 |\n| Directions | Addition and subtraction |\n| Boundaries | Page reset; uninterrupted rune-by-rune advancement |\n| Match | First 12 output indices equal a fixed known opening |\n| Configurations | 55 nonempty pages × 29 offsets × two directions = 3190 |\n| Distinct page outputs | 1540, counted by comparing complete output tuples within each page |\n\nEach output was compared with the openings of Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. The plan stores the exact vectors and their source-trace hashes.\n\nThe nominal configuration count gives 28,710 comparisons; after removing duplicate page outputs there are 13,860. Neither figure is a count of statistically independent observations. There is no significance test or general English score here.\n\n## Result and its limits\n\nThere were zero exact opening matches. Every complete candidate remains available in the saved result, including the repetitions needed to compare with the declared offset range.\n\nThis excludes only the nine chosen beginnings under the stated transformation. A genuine reading beginning differently would not match. Interruptions, heading removal, reversals, altered Fibonacci seeds, additional constant shifts and combinations with another cipher were not tested.\n\nThe sequence is being tested as a conventional candidate idea. This record does not identify a manuscript instruction requiring Fibonacci numbers or establish them as an intended key.\n\n## Controls and retest\n\nThe plan and runner were committed as 3c9a990 before the page search ran. The residue-cycle calculation was checked while specifying the plan, without examining candidate page outputs. No scope or acceptance rule changed after the search.\n\nA hand control subtracts 0, 1, 1, 2 from indices 25, 11, 22, 15, producing 25, 10, 21, 13 modulo 29. This checks arithmetic; it is not a known plaintext.\n\nThe runner generates Fibonacci integers by repeated addition. The separate checker uses fast doubling:\n\n```text\nGiven a = F_k and b = F_(k+1):\nF_(2k)   = a × (2b − a)\nF_(2k+1) = a² + b²\n```\n\nIt verifies every saved term and candidate through inverse arithmetic, audits the complete configuration set, checks the reference openings against their source CSVs, and verifies every offset against its equivalent offset modulo 14. It also counts distinct full output tuples independently. A complete second execution reproduces the saved result exactly. Human review remains pending.\n\n## Reproduce\n\nFrom the repository root with Python 3.12:\n\n```sh\npython experiments/records/lp2-fibonacci-openings/run.py --check\npython experiments/records/lp2-fibonacci-openings/check.py\n```\n\nTo save a fresh result without replacing the reviewed output:\n\n```sh\npython experiments/records/lp2-fibonacci-openings/run.py --output fibonacci-rerun.json\n```\n\nAll commands use local files and the standard library. The output file must not already exist. Inspect `residue_cycle`, `distinct_page_outputs`, and each candidate's page, offset, sign, complete output indices and matching-opening list.\n\nFor the interpretation of the common opening rule, compare the [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings). The [ordinary-prime variant](#/experiments/lp2-prime-openings) illustrates a different source of duplicate coverage: schedules that differ only by a constant output shift.\n",
       "article_path": "experiments/records/lp2-fibonacci-openings/article.md",
       "script_sha256": "09caa98d544adea0c3cd79f736d114295ec798e3be4f249fbbad8ea03ed075b5",
@@ -37345,6 +37347,8 @@
           "caption": "The exact search space: two known keys, all phases, both arithmetic directions, 56 pages, and nine fixed openings. No opening matches occurred; other plaintext beginnings remain outside this test."
         }
       ],
+      "reader_finding": "The Welcome and second-koan keys did not recover any of nine known 12-rune openings. Every starting position in each key and both addition and subtraction were tested.",
+      "reader_limit": "The keys ran continuously and restarted on each page. Other keys, pauses or skips in the key, and different beginnings remain untested.",
       "article": "# Two known Vigenère keys against known openings\n\n## Why this test?\n\nReusing a key that already worked elsewhere is an understandable first attempt. The known Welcome and second-koan readings supply two concrete key vectors. This experiment asks whether uninterrupted use of either vector recovers any of nine recorded openings at the beginning of an archived LP2-00–55 page.\n\nIt is an exact-opening search, not a general language test. There is no reason every valid plaintext must reuse one of these openings. A negative result therefore rules out only the declared combinations and criterion.\n\n## Plan fixed before running\n\nThe plan and runner were committed as `8a93183` before execution. The selected input is the complete archived rune stream for each of LP2-00–55, including headings. Non-alphabet characters are removed. There are no corrections, reversals, interruptions or cross-page carry.\n\nThe two key vectors are copied from the published reading parameters, without re-encoding their labels as prime values:\n\n| Known reading | Key indices | Phases |\n| --- | --- | --- |\n| Welcome | 23, 10, 1, 10, 9, 10, 16, 26 | 0–7 |\n| Second koan | 0, 10, 4, 0, 1, 19, 0, 18, 4, 18, 9, 0, 18 | 0–12 |\n\nFor each phase, both subtraction and addition are tested modulo 29. Each page starts independently at the selected phase. Every rune consumes one key value; punctuation consumes none. The known interruption lists are not transplanted onto unrelated pages, and there is no rule to skip every F.\n\nThis makes 42 parameter cases per page, or 2352 across 56 pages. These are parameter cases, not a claim that every output string is unique.\n\n## Exact comparison\n\nEach output's first 12 rune indices are compared with the first 12 indices from nine known-reading traces: Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. The vectors, trace paths and hashes are fixed in the plan. Comparing rune indices avoids ambiguity from multi-letter Latin labels.\n\nEach of the 2352 candidates receives nine exact comparisons: 21,168 in total. Nothing is searched at later positions. The criterion does not ask whether a candidate resembles English, has familiar short fragments, or scores well under a language model.\n\n## Results\n\nAll 2352 cases completed, and no candidate matched any of the nine specified opening vectors. Every complete candidate sequence is retained, including its page, key ID, phase, arithmetic sign, and list of matching opening IDs. The list is empty for every case in this run.\n\nThis is not evidence that repeating keys cannot work on these pages. Different keys, interruption schedules, headings, beginnings, or page boundaries remain outside the test. It does not estimate a probability that any cipher hypothesis is true.\n\n## Controls and independent check\n\nThe 17 known page readings reproduced before the search. Those controls use their own recorded boundary and interruption conventions; they are not counted among the 2352 unknown-page candidates.\n\nThe new decoder also recovers the first 12 known output indices of both Welcome and the second koan at phase zero with subtraction. Neither control has an interruption in those first 12 positions. This checks the same uninterrupted operation used in the new search.\n\nA separate checker verifies every candidate using a rotated key iterator and explicit wraparound arithmetic, checks all nine opening vectors against the trace CSVs, and checks that every parameter tuple occurs exactly once. The complete runner was then repeated and every saved candidate and match decision agreed.\n\n## Reproduce\n\nUse Python 3.12.10 and a repository checkout. No third-party package, network connection or AI service is used.\n\n```\npython experiments/records/lp2-known-vigenere-keys/run.py --check\npython experiments/records/lp2-known-vigenere-keys/check.py\n```\n\nTo save a separate report:\n\n```\npython experiments/records/lp2-known-vigenere-keys/run.py --output my-known-key-scan.json\n```\n\nThe output file must not already exist. [Download the saved candidates](experiments/records/lp2-known-vigenere-keys/results.json). The `alphabet` field maps indices back to runes; `sign` is -1 for subtraction and +1 for addition. Phase is the first key slot consumed at the beginning of that page. This convention resets for every case.\n\n## Retest and later changes\n\nCodex performed the complete rerun and independent checker on 20 October 2026. No keys, phases, opening vectors, input rules or matching criteria changed after the first result. The checker and coverage diagram were added after the search to verify and explain the saved result. Human review remains pending.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) tests a different transformation family and a single warning prefix. Its result must not be added to this record as if the criteria were identical. The [Vigenère guide](#/wiki/vigenere) explains the known key use, and the [interruption guide](#/wiki/interruptions) explains why key alignment needs care.\n\nA justified new key list, heading convention or interruption hypothesis needs a separately declared variant. An interruption search can grow rapidly; its bounds and stopping rule must be fixed before inspecting candidate text. Do not add exceptions merely until a fragment appears readable.\n",
       "article_path": "experiments/records/lp2-known-vigenere-keys/article.md",
       "script_sha256": "8a76a9610ec49765b563e9222e288f523c7ebd4d6dce9a7377d286f085a3c762",
@@ -40604,6 +40608,8 @@
           "url": "https://jelliottdev.github.io/#/wiki/prime-minus-one"
         }
       ],
+      "reader_finding": "None of the 3,190 outputs from adding or subtracting successive primes began with any of nine known 12-rune openings.",
+      "reader_limit": "Only the first 29 starting points were checked, without skips. Ordinary-prime and prime-minus-one shifts differ by a constant alphabet shift, so these are closely related tests.",
       "article": "# What changes if we use primes instead?\n\nThis is a single-variable follow-up to the [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings). It replaces the sequence 1, 2, 4, 6, 10… with 2, 3, 5, 7, 11… and leaves the page selection, starting offsets, arithmetic directions, advancement and match rule unchanged.\n\nAll 3190 candidates completed. None began with one of the nine fixed 12-rune openings. The result is limited to that opening rule; the script does not decide whether a candidate is meaningful text.\n\n## Why compare these two?\n\nThe [known LP2-56 recipe](#/wiki/prime-minus-one) uses primes minus one. Trying ordinary primes is an understandable next step, but it is useful to know exactly how much it changes.\n\nLet c be an input rune index, p the next prime, and d the direction: +1 for addition or −1 for subtraction. Both outputs are reduced modulo 29.\n\n```text\nbaseline = c + d × (p − 1)\nvariant  = c + d × p\n\nvariant − baseline = d\n```\n\nWith subtraction, every variant output is one alphabet position below the corresponding baseline output. With addition, every output is one position above. This relationship holds at every rune and every tested starting offset. It does not depend on whether the text has a meaningful reading.\n\nThe checker verifies that relationship for every saved output, as well as checking the prime arithmetic independently.\n\n## What stayed fixed?\n\n| Setting | Both experiments |\n| --- | --- |\n| Pages | LP2-00–55; the nonrunic LP2-50 contributes no candidates |\n| Representation | All archived runes, including headings, in source order |\n| Starting offsets | 0–28 inclusive; zero starts at prime 2 |\n| Directions | Addition and subtraction modulo 29 |\n| Advancement | One term per rune, without interruptions |\n| Reset | Restart the sequence on each page; not at rows or words |\n| Criterion | First 12 output indices exactly match one of nine fixed openings |\n\nThe nine openings are Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. Their vectors and source hashes are preserved in the plan.\n\nThis is 55 rune-bearing pages × 29 offsets × two directions = 3190 full candidates, each compared with nine openings: 28,710 comparisons. The bound of 29 offsets does not cover every possible starting point in a nonrepeating sequence.\n\n## What the result means\n\nNeither schedule produced one of the declared beginnings within these bounds. The two results are related, not independent statistical confirmations. There is no probability calculation or language score here.\n\nFor an exact opening criterion, a one-position difference matters: an output can match a fixed opening while its shifted counterpart does not. For a search that already tries all 29 constant shifts after decoding, however, the two schedules cover the same set of outputs. Adding one to a shift merely chooses another member of that same set. Such a search should not count these schedules as independent extra coverage.\n\nThe constant-shift equivalence assumes identical input, offsets and advancement. It does not automatically apply when one version skips a rune and the other consumes a key term.\n\n## Controls and review\n\nA hand calculation checks that input indices 25, 11, 22, 15 minus primes 2, 3, 5, 7 give 23, 8, 17, 8 modulo 29. This is an arithmetic control, not a claimed plaintext. The baseline's known LP2-56 control establishes the prime-minus-one reading separately.\n\nThe plan and runner were committed as e897c97 before this variant ran. The baseline result was already known; this is explicitly a follow-up, not a blinded independent test. No scope or acceptance rule changed after the variant result was inspected.\n\nA complete rerun matches the saved result exactly. The independent checker generates primes by trial division rather than the runner's sieve, verifies every candidate through inverse arithmetic, checks the complete set of page/offset/direction cases, verifies each opening against its CSV, and compares every output with its baseline counterpart. Review is computational; human review remains pending.\n\n## Reproduce it\n\nFrom the repository root, with Python 3.12:\n\n```sh\npython experiments/records/lp2-prime-openings/run.py --check\npython experiments/records/lp2-prime-openings/check.py\n```\n\nTo save a fresh result at a new path:\n\n```sh\npython experiments/records/lp2-prime-openings/run.py --output prime-rerun.json\n```\n\nThe scripts use the standard library and local files. Every candidate retains its complete output indices, page, offset, direction and matching-opening list. The checker also requires the baseline's frozen plan and results, which are included in the repository and reference-data download.\n\n## Remaining questions\n\nOther starting offsets, different beginnings, interruptions, reversed input and different boundary rules remain outside this search. Fibonacci and totient schedules would be distinct variants, not conclusions implied by this one. A broader plaintext score would need documented controls and a clear interpretation before its rankings could support a claim.\n",
       "article_path": "experiments/records/lp2-prime-openings/article.md",
       "script_sha256": "4f45a282ea5137ee6da3323357ecaa3698ee765b716e8dfcac930d3afe205635",
@@ -41701,6 +41707,8 @@
           "caption": "The first six actual output positions in LP2-31’s ordinary column-first route. Each maps back to an archived source line and rune position; the full report retains all 269 positions."
         }
       ],
+      "reader_finding": "None of the 880 tested row-and-column readings began with the first 12 runes of any of nine known passages. This includes backward and alternating directions.",
+      "reader_limit": "Only nine known beginnings were checked. Columns follow rune positions in each text row; physically aligned columns or added substitutions would be different tests.",
       "article": "# Simple row and column transposition routes\n\n## Why this test?\n\nReading a page backwards or down its columns is a natural first attempt. But “try transposition” leaves many decisions unstated: the alignment of uneven rows, which corner to start from, whether direction alternates, and whether symbols are also substituted.\n\nThis record tests a small, explicit set of pure rearrangements. Its success criterion is exact agreement with one of nine known 12-rune openings at the start of the output. It does not score English or assume every valid plaintext must reuse an existing opening.\n\n## Plan and input layout\n\nThe plan and runner were committed as `26802b6` before execution. Use all archived LP2-00–55 text, retaining recognized runes and grouping them by source line. Headings remain included. Non-rune characters and lines without runes are ignored. LP2-50 remains an explicit zero-rune page and produces no routes.\n\nRows are left-aligned by rune ordinal, not by measured image coordinates. The first rune of every nonempty line is in ordinal column zero. Short rows remain short; missing cells are skipped, not padded. This convention can differ from the manuscript's physical column alignment.\n\n## The sixteen route choices\n\n| Choice | Options | Meaning |\n| --- | --- | --- |\n| Main axis | Rows / columns | Visit a complete row or ordinal column at a time |\n| Outer direction | Forward / reversed | Top-to-bottom versus bottom-to-top rows; left-to-right versus right-to-left columns |\n| Initial inner direction | Forward / reversed | Left-to-right versus right-to-left within a row; top-to-bottom versus bottom-to-top within a column |\n| Alternate inner direction | No / yes | Keep the same direction, or reverse it on every other visited row/column |\n\nThe product is 2 × 2 × 2 × 2 = 16 parameter routes per nonempty page. Alternation begins with the selected initial direction and changes by visited-group ordinal, not by the original printed row number. Some routes or output strings can coincide; 16 is a parameter count, not a claim of 16 distinct texts on every page.\n\nNo substitution, fixed shift or repeating key is applied. A pure transposition uses every source position once and keeps its rune value.\n\n## Hand-checkable ragged-row controls\n\nFor the invented rows `ABC`, `DE`, `F`, ordinary column-first reading gives `ADFBEC`. Row-first reading with alternating directions gives `ABCEDF`. These are implementation controls only, not manuscript inputs or results.\n\nThe independent checker verifies those controls and constructs every real route by sorting source coordinates with a separate ordering-key implementation. It checks that each saved route is a complete permutation and every output index comes from its declared source position.\n\n## Results and limits\n\nAll 880 parameter routes completed across the 55 pages with eligible runes. No output's first 12 indices matched any of the nine fixed known-reading openings. There are 7920 exact opening comparisons in total.\n\nThe nine opening vectors come from Warning, Welcome, Some Wisdom, first koan, Loss of Divinity, second koan, Instruction, LP2-56 and LP2-57. Their exact values and source-trace hashes are recorded in the plan. They were fixed before this search.\n\nThis negative result is limited to those openings, these routes and the archived layout convention. It does not rule out other beginnings, arbitrary column permutations, spirals, rectangular reflow, physical coordinate alignment, a different region, or transposition combined with substitution. There is no probability claim or general readability score.\n\n## Follow an output back to its source\n\nEach page has a `source_positions` array. Every entry gives its zero-based source ordinal, one-based archived line, one-based rune position within that line, and alphabet index. Each candidate's `source_ordinals` array is the output-to-input mapping: its first number tells you which original position supplied output position zero.\n\nThe accompanying `output_indices` array contains the corresponding rune indices. The `alphabet` list maps indices back to rune symbols. Original whitespace and punctuation are not part of the permutation.\n\nThe diagram shows the first six positions of the ordinary column-first route on LP2-31. It is extracted from the saved result, not an invented grid. All 269 positions are retained in that route's complete trace.\n\n## Reproduce\n\nUse Python 3.12.10 and the repository checkout. No third-party package or network service is required.\n\n```\npython experiments/records/lp2-row-column-routes/run.py --check\npython experiments/records/lp2-row-column-routes/check.py\n```\n\nThe first command regenerates and compares every source position, route, output index and match decision. The second uses the independent ordering-key checker. Both reject discrepancies rather than silently replacing the saved result.\n\n[Download all routes and source traces](experiments/records/lp2-row-column-routes/results.json). To save another report, run the main script with `--output my-routes.json`; it refuses an existing filename. The plot script reads the saved result and draws one trace without searching again.\n\n## Verification\n\nOn 20 October 2026, a complete rerun reproduced all 880 saved candidates. A separate ordering-key implementation checked every route against its source positions. The route rules, layout convention, opening vectors and matching criterion stayed fixed after the first run. The checker and diagram were added afterward to make the result easier to verify.\n\n## Related work and next variants\n\nThe [fixed-alphabet experiment](#/experiments/lp2-alphabet-warning-prefix) includes whole-stream reversal with shifts and a different opening criterion. The [transposition guide](#/wiki/transposition) explains the documented historical 14-column permutation. Neither record establishes that every transposition on an unsolved page has been searched.\n\nA physically aligned column model, a justified spiral, a new region or an added substitution needs a separately planned variant. Preserve its source-coordinate trace so another reader can tell exactly which operation was performed.\n",
       "article_path": "experiments/records/lp2-row-column-routes/article.md",
       "script_sha256": "7db305eae184041f3bd4732625f7f240aa1da82170a722e94b6d72dae87c421c",
@@ -43494,6 +43502,8 @@
           "url": "https://jelliottdev.github.io/#/experiments/lp2-prime-minus-one-openings"
         }
       ],
+      "reader_finding": "Adding or subtracting totients of consecutive integers produced 3,190 outputs; none began with any of nine known 12-rune openings.",
+      "reader_limit": "Only the first 29 starting points were checked, with the sequence restarting on each page. Totients of rune values or sums, or different plaintext beginnings, require a different test.",
       "article": "# Totients of consecutive integers\n\n“Try the totient function” leaves an important choice unresolved: the totients of which numbers? This experiment uses consecutive positive integers, beginning with φ(1), rather than consecutive primes.\n\nAll 3190 planned page/offset/direction configurations completed and produced 3190 distinct page outputs. None began with one of the nine declared 12-rune openings. This is an exact-opening result, not an assessment of general readability.\n\n## What changes from the baseline?\n\nThe [prime-minus-one baseline](#/experiments/lp2-prime-minus-one-openings) applies the sequence 1, 2, 4, 6, 10… derived from successive primes. This variant changes only that schedule:\n\n```text\nInput integer:  1  2  3  4  5  6  7  8  9 10\nTotient:        1  1  2  2  4  2  6  4  6  4\n```\n\nThe totient φ(n) counts integers k from 1 through n whose greatest common divisor with n is 1. Thus φ(8) = 4 because 1, 3, 5 and 7 qualify. For n = 9, the six qualifying integers are 1, 2, 4, 5, 7 and 8. They do not all have to be prime; they must be coprime to the chosen n. The convention φ(1) = 1 is included.\n\nFor a prime p, every integer from 1 through p−1 is coprime to p. Therefore φ(p) = p−1. Applying φ to consecutive primes would reproduce the baseline schedule and is not a separate experiment under otherwise identical rules.\n\nSee the [totient guide](#/wiki/totient) for the definition, factorization formula and connection to the known LP2-56 recipe.\n\n## Exact transformation\n\nFor rune position j, starting offset s and direction d:\n\n```text\noutput[j] = (input[j] + d × φ(j+s+1)) mod 29\nd = −1 for subtraction, +1 for addition\n```\n\nPositions and offsets are zero-based. Offset zero starts at φ(1); offset one starts at φ(2). Both start with the value 1, but their later terms differ. A matching first value does not make two schedules identical.\n\n| Setting | Declared choice |\n| --- | --- |\n| Pages | LP2-00–55; LP2-50 has no recognized runes and contributes no candidates |\n| Input | All archived runes in order, including headings |\n| Starting offsets | Every integer 0–28, selecting initial inputs 1–29 |\n| Arithmetic | Addition and subtraction modulo 29 |\n| Advancement | One term per recognized rune; non-rune characters consume no terms |\n| Boundaries | Reset at each page, not at words or rows; no interruptions |\n| Acceptance | Exact first-12-index match to a declared known opening |\n\nEach of the 55 nonempty pages has 58 configurations, for 3190 in total. The complete output tuple is retained for every configuration. Checking those tuples found no repeated outputs within a page in this particular bounded search. That observation is not a proof that arbitrary later totient offsets must all differ.\n\n## The opening criterion\n\nThe references are the first 12 output indices from Warning, Welcome, Some Wisdom, the first koan, Loss of Divinity, the second koan, Instruction, LP2-56 and LP2-57. Their vectors and source-trace hashes are fixed in the plan.\n\nThere were 28,710 exact comparisons and zero matches. The code does not reward partial words or rank how English-like a candidate appears. A valid plaintext with a different beginning would fail this criterion.\n\n## Controls and retest\n\nThe plan and runner were committed as c84258a before execution. No input conventions, offset bounds or acceptance rules changed after inspecting the search results.\n\nThe runner uses a totient sieve: it starts with each integer n and removes the fraction divisible by each distinct prime factor. The separate checker takes a deliberately different route, calculating gcd(k,n) for every k from 1 through n and counting the ones. It verifies every generated totient needed by the search, not just the small examples.\n\nA hand arithmetic control subtracts 1, 1, 2, 2 from indices 25, 11, 22, 15 to obtain 24, 10, 20, 13 modulo 29. This is not presented as a known reading. The checker then verifies all candidate outputs by undoing their arithmetic, checks the complete configuration set, audits the opening vectors against their source CSVs, and counts distinct page outputs. A full second execution reproduces the saved JSON exactly.\n\nReview is computational; human review remains pending.\n\n## Reproduce\n\nFrom the repository root, with Python 3.12:\n\n```sh\npython experiments/records/lp2-totient-openings/run.py --check\npython experiments/records/lp2-totient-openings/check.py\n```\n\nTo save a fresh result at a path that does not already exist:\n\n```sh\npython experiments/records/lp2-totient-openings/run.py --output totient-rerun.json\n```\n\nThe scripts use the standard library and local files, without network or model calls. The result stores the applied totient sequence, page lengths, all complete candidates and their match decisions.\n\n## What this leaves open\n\nLater offsets, different beginnings, interruptions, heading removal, transposition and combined transformations remain outside the test. Applying φ directly to rune values, prime sums or another derived input would also be a different procedure.\n\nThe manuscript’s reference to the totient makes it a reasonable function to examine; it does not determine those choices. A future record should state its inputs as precisely as its formula. This family now documents prime-minus-one, ordinary primes, Fibonacci and consecutive-integer totients under a common narrow opening criterion; it does not exhaust numerical ciphers.\n",
       "article_path": "experiments/records/lp2-totient-openings/article.md",
       "script_sha256": "c3ec24c0961e29b34f6c2592eea5c5b18a72f5ff77dd1df759af3fcd1408661f",
@@ -51415,6 +51425,8 @@
           "caption": "Shared-scale distributions for the manuscript target and all eight languages alphabetically. All languages use identical styling; 9+ is a display group, not the scoring bins."
         }
       ],
+      "reader_finding": "English had the closest word-length pattern among the eight tested languages. It remained closest under all three counting methods.",
+      "reader_limit": "This comparison assumes that encryption preserves word boundaries and word lengths. It ranks these reference texts; it does not identify the hidden language.",
       "article": "## What this comparison tells us\n\n**English has the closest word-length distribution among the eight reference languages tested.** This comparison is useful only if the manuscript's separators correspond to plaintext word boundaries and the encryption preserves one counted unit per rune. Those conditions are unverified for unsolved LP2. The ordering of other close candidates changes when a fixed GP-style grouping is applied to all eight. A nearest distribution is not a plaintext identification or a decoded word.\n\nThe experiment uses translations of the **same 997 development sentences and 1,012 evaluation sentences** from FLORES-200. The languages were fixed before scoring: English, Welsh, German, French, Spanish, Italian, Portuguese and Finnish. They give a manageable Latin-script comparison without adding a transliteration model for other scripts. They are not a shortlist inferred from the manuscript, and the ranking is not a search across all languages.\n\nThe plan and source files were committed in `738a812` before any scores were calculated. It is a predeclared comparison within this project, not an external preregistration. Human review is pending.\n\n## Word-length results\n\nThe distance is **total variation** between word-length distributions: half the sum of their absolute frequency differences. Zero means identical distributions; one means no overlap. We count lengths 1 through 15 separately and put longer words in a final 16+ bin. A value of 0.084 is a distance, not an 8.4% chance of anything.\n\n| Language | Letters | GP grouping sensitivity |\n| --- | ---: | ---: |\n| English | 0.0840 | 0.1148 |\n| Welsh | 0.1721 | 0.1731 |\n| German | 0.1757 | 0.1708 |\n| French | 0.1827 | 0.1759 |\n| Portuguese | 0.2131 | 0.2058 |\n| Spanish | 0.2240 | 0.2127 |\n| Italian | 0.2359 | 0.2311 |\n| Finnish | 0.4022 | 0.3927 |\n\n[Open the comparison chart](experiments/records/parallel-languages/comparison.svg). The chart shows the same results with article-resampling ranges. The JSON also contains the accent-folded letter comparison, which keeps the same language order.\n\nThe ordering depends on the counting convention. A language ranking is conditional on both the corpus and the assumed relationship between plaintext units and ciphertext runes. The full table keeps every tested candidate visible.\n\n## Why the rankings differ\n\nThe manuscript has a pronounced peak at length three: **24.86% of its tokens contain three runes**. The language profiles differ in how much mass they place at each length. The distribution chart shows the manuscript first, followed by all eight languages alphabetically, using identical scales and the same styling for every language.\n\nThe first-place result still has a visible mismatch: English has 19.07% three-letter words, below the manuscript's three-rune share. A ranking measures relative closeness among the tested profiles; it does not establish that the nearest profile is a good explanation of the ciphertext.\n\n[Open all nine distribution panels](experiments/records/parallel-languages/distributions.svg). Lengths 9 and above are combined only for display; scoring retains the original 16 bins. Every full distribution is also available in the results JSON.\n\n## The assumptions that make lengths useful\n\nThis comparison requires manuscript word boundaries to preserve plaintext word boundaries, and one counted plaintext unit to correspond to one ciphertext rune. A position-dependent substitution can preserve lengths even when letter frequencies change. Inserted nulls, deleted symbols, word splitting, different spacing, or units representing syllables can break the comparison.\n\nThe manuscript target is the existing [rune-token ledger](exports/unsolved-word-tokens.json): **2,896 tokens and 12,956 runes from LP2-00–55**, including headings. Line wraps and slash wraps are removed; tokens can continue across page boundaries. Internal apostrophes count zero, and decimal labels are excluded. See [word lengths](#/wiki/word-lengths) for the exact boundary convention and its historical alternatives. Pooling the pages assumes their aggregate is meaningful; it does not establish that every section has one language or cipher.\n\nFor FLORES, letters are lowercased and normalized to NFC. Alphabetic runs are words; internal straight or curly apostrophes are removed without splitting the word. Hyphens and other nonletters separate words. Numbers contribute no letters. Each sentence is tokenized independently. This is an explicit mechanical convention, not a linguist's definition of a word. The comparison retains every aligned sentence; it does not truncate each language to a different passage to equalize word totals.\n\nThe GP sensitivity folds combining accents and greedily groups ING, TH, EO, NG, OE, AE, IA, IO and EA, longest first. ING/NG, IO/IA, K/C and Z/S share symbols. Other letters remain. **This is not a validated translation into Gematria Primus.** Pronunciation, ambiguous segmentation and unsupported letters remain unresolved. A supplementary mechanical Welsh-digraph calculation is retained in the raw data as a representation check, not as a separate candidate category or a preferred model. It groups CH, DD, FF, NG, LL, PH, RH and TH and gives a length distance of 0.1466; it does not resolve morphological parsing. The raw-letter and GP profiles can contain more than 29 distinct symbols, so they cannot be literal bijective mappings into a 29-rune alphabet as written. This inventory mismatch is reported in the downloadable results rather than silently repaired by deleting rare letters.\n\n## Repetition gives a different test\n\nIoC is the probability that two different sampled positions contain the same symbol. Adjacent repetition here counts equal neighbors **within words only**. Both require stronger assumptions than lengths: equality must survive a fixed one-to-one substitution. They are not preserved by a general polyalphabetic cipher.\n\n| Text, using letter units | IoC | Equal adjacent pairs |\n| --- | ---: | ---: |\n| Unsolved rune target | 0.03448 | 0.63% |\n| English | 0.06597 | 2.42% |\n| Welsh | 0.06387 | 5.74% |\n| German | 0.07344 | 2.33% |\n| French | 0.06912 | 2.42% |\n| Portuguese | 0.07072 | 1.00% |\n| Spanish | 0.07111 | 0.77% |\n| Italian | 0.07305 | 4.57% |\n| Finnish | 0.07282 | 9.31% |\n\nThe language profiles have letter IoCs between **0.06387 and 0.07344**, far from the target's **0.03448**. None of these profiles supplies a close single-substitution explanation of the pooled manuscript. The GP sensitivity does not remove that discrepancy. Spanish is closest on the adjacent-repeat measure, yet has a much poorer word-length match. These conflicting rankings are why we do not blend the measures into an unexplained “language likelihood.”\n\nThis does not eliminate Welsh, English or any other language under a different cipher. It weakens the proposed fixed-substitution comparison under these text and unit conventions. See [cipher invariants](#/wiki/cipher-invariants) for what different transformations preserve.\n\n## Controls and sampling sensitivity\n\nEach development-language word-length profile was compared with each evaluation-language profile. The nearest development profile identified the corresponding evaluation language **8 out of 8 times in each of the three representations**. That is a useful check that this dataset and statistic can distinguish the chosen languages at this sample size. It is not 100% accuracy on unknown manuscripts: there are only eight whole-document controls, drawn from the same benchmark, and they are much longer than the target.\n\nFor the error bars we resample the **281 source-article URL groups** in the evaluation split, with replacement, 200 times using seed 3301. All sentences from a sampled article are kept. The same article draw is used for all eight languages, preserving the matched-content comparison and avoiding treating every sentence as independent. English has the smallest length distance in all 200 draws in all three representations. This is stability to this corpus resampling—not a 100% probability that the manuscript is English. The target transcription is held fixed; these intervals omit uncertainty about its boundaries, genre and cipher.\n\nFLORES contains translated web material. It controls subject matter across languages, but not the difference between that material and Liber Primus's philosophical style, historical spelling or possible nonstandard prose. Translation practices can also affect lengths. A separately fixed, genre-matched parallel corpus remains a follow-up. The [exact-token control](#/experiments/target-sized-languages) now checks complete 2,896-token samples: all reference samples identify their own language profile, but every manuscript-to-profile distance exceeds the corresponding observed control range. Those ranges are descriptive, not confidence limits or rejection thresholds. The [known-LP reading control](#/experiments/known-reading-languages) is now complete as a computational comparison, with human review pending. A separate [shorter aligned-block variant](#/experiments/parallel-language-blocks) now checks eight disjoint evaluation blocks per language; it preserves matching sentences rather than enforcing exactly equal word counts.\n\n## Reproduce it\n\nDownload this experiment's bundle. It includes the source translations, source-article metadata, plan, token ledger, scripts, result JSON and chart. No API, account, model download or network request is needed to rerun the analysis; Python 3's standard library is enough.\n\n```sh\npython experiments/records/parallel-languages/run.py --check\npython experiments/records/parallel-languages/check.py\npython experiments/records/parallel-languages/distribution_figure.py --check\n```\n\nThe first command verifies input hashes, recomputes the comparisons and the 200 resamples, and checks the saved report and chart. Without `--check`, it writes those two outputs. The second uses a separate regex tokenizer and integer-count formulas to verify the 24 language profiles, additional digraph sensitivity, manuscript profile, IoC, repeated neighbors, distances and ordering. It does not independently reimplement the bootstrap. The final command checks that the distribution chart matches the saved counts; it does not perform another experiment. The ledger itself has a separate [transcription/word-length reproduction](#/wiki/word-lengths).\n\n[Raw results](experiments/records/parallel-languages/results.json) · [Frozen plan](experiments/records/parallel-languages/plan.json) · [Source attribution](experiments/records/parallel-languages/SOURCE.txt)\n\n## Sources and reuse\n\n- [FLORES-200 documentation](https://github.com/facebookresearch/flores/blob/main/flores200/README.md): aligned translation benchmark and language list.\n- [Original archive](https://dl.fbaipublicfiles.com/nllb/flores200_dataset.tar.gz): exact extracted translation and metadata files; archive and extracted-file hashes are recorded in the plan.\n- [Dataset card and license](https://huggingface.co/datasets/facebook/flores): Creative Commons Attribution-ShareAlike 4.0 International. Source translations are redistributed unchanged. This derived analysis and its article are also offered under CC BY-SA 4.0.\n\n## Check against known LP readings\n\nThe [known-reading control](#/experiments/known-reading-languages) now tests all nine established reading sections and their pool. The pool ranks closest to English, while some individual sections do not. It also documents how LP2-56's embedded hash distorts an unfiltered letter-token count. This supplies a manuscript-specific caution beyond the within-FLORES controls.\n",
       "article_path": "experiments/records/parallel-languages/article.md",
       "script_sha256": "2770ff9ecd31f24a8f66a76b1da18e0ca7f518962f4bde8b15dceb001bddaa4c",
@@ -61632,6 +61644,275 @@
             "entropy",
             "IoC",
             "index of coincidence"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "round19-decoder-repair-controls",
+      "title": "Can a correct key look wrong to the decoder?",
+      "status": "published",
+      "question": "Across the pinned Round 19 skip and drift constructions, which decoders can recover known text when given the correct key?",
+      "reader_question": "Could a decoder mistake the right key for a failed decryption?",
+      "summary": "With the same planted message and correct key, the original beam can lose most runes while a permissive drift decoder recovers them. The repaired source control grid reproduces its gate decisions, with tiny score-rounding differences that fail the frozen bit-exact acceptance condition.",
+      "finding": "For one paired-skip 240-rune control, exact recovery is 45.8% with the original beam and 100% with permissive drift. Across 20 gated groups per decoder, the original passes 0 and drift cost 8 passes 20. All 2,100 rows and 300 group decisions agree with source except tiny score roundoff in 88 row values and eight summary values; the original exact non-timing acceptance was not met.",
+      "limitations": "Synthetic known-key English-derived text at 240/400 runes. Gate uses medians across seven seeds and does not establish every-seed recovery. No wrong-key calibration for all ten modes, unknown-key LP2 search or general cipher exclusion. The post-result 3e-15 score tolerance is diagnostic, not a retroactive change to the exact replay plan.",
+      "next_steps": "Pair any proposed LP2 skip decoder with source-matched planted recovery tests and wrong-key controls before interpreting a failed or readable candidate search.",
+      "outcome": "supported",
+      "tags": [
+        "decoder alignment",
+        "key skipping",
+        "free drift",
+        "known key",
+        "source control",
+        "beam search"
+      ],
+      "family": {
+        "id": "decoder-alignment-controls",
+        "title": "Decoder alignment controls",
+        "question": "Can declared decoders recover planted plaintext under matching and mismatched alignment rules?",
+        "baseline": "decoder-skip-controls"
+      },
+      "variant": {
+        "label": "Round 19 G-FIX ten-decoder known-key grid",
+        "changes": [
+          {
+            "field": "artifacts",
+            "before": [
+              "exports/readings/first-koan.csv",
+              "exports/readings/instruction.csv",
+              "exports/readings/loss-of-divinity.csv",
+              "exports/readings/lp2-56.csv",
+              "exports/readings/lp2-57.csv",
+              "exports/readings/second-koan.csv",
+              "exports/readings/some-wisdom.csv",
+              "exports/readings/warning.csv",
+              "exports/readings/welcome.csv"
+            ],
+            "after": [
+              "experiments/records/round19-decoder-repair-controls/plan.json",
+              "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_fix.json"
+            ],
+            "reason": "Round 19 G-FIX uses source-defined skip/drift constructions and a wider ten-decoder grid; it also records floating-point replay limits."
+          },
+          {
+            "field": "representation",
+            "before": "First min(240, available) output rune indices from all nine known-reading traces; canonical GP labels only for scoring.",
+            "after": "Synthetic English-derived GP29 rune ciphertext from the pinned Self-Reliance text; the construction and correct key are given to each decoder.",
+            "reason": "Round 19 G-FIX uses source-defined skip/drift constructions and a wider ten-decoder grid; it also records floating-point replay limits."
+          },
+          {
+            "field": "procedure",
+            "before": "Plant ordinary addition, probabilistic collision skipping, value rewriting and one unrelated advance plus skipping; decode with correct/wrong deterministic key fixtures using rigid subtraction and four bounded beams.",
+            "after": "Replay the exact Round 19 G-FIX source grid; check every keyed row, independently recompute 300 group summaries and distinguish exact-byte failure from post-result tiny-roundoff agreement.",
+            "reason": "Round 19 G-FIX uses source-defined skip/drift constructions and a wider ten-decoder grid; it also records floating-point replay limits."
+          },
+          {
+            "field": "parameters",
+            "before": "Nine traces, three seeds, key-value repetitions 1 and 4, 10000 slots; beam widths 16/64 crossed with skip limits 1/3; cumulative quadgram selection, normalized acceptance -5.5; 216 plants and 2160 decoder results.",
+            "after": "Fifteen constructions, ten decoder modes, lengths 240/400, seven seeds, beam width 400; 2,100 decodes; 200 gated construction-and-length groups using median recovery at least 90% and median score at least −5.5.",
+            "reason": "Round 19 G-FIX uses source-defined skip/drift constructions and a wider ten-decoder grid; it also records floating-point replay limits."
+          },
+          {
+            "field": "exclusions",
+            "before": "No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.",
+            "after": "No LP2 ciphertext, unknown-key search, calibrated wrong-key false positives, full-length power for all ten modes or family-wide cipher exclusion.",
+            "reason": "Round 19 G-FIX uses source-defined skip/drift constructions and a wider ten-decoder grid; it also records floating-point replay limits."
+          }
+        ]
+      },
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/round19-decoder-repair-controls/plan.json",
+          "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_fix.json"
+        ],
+        "representation": "Synthetic English-derived GP29 rune ciphertext from the pinned Self-Reliance text; the construction and correct key are given to each decoder.",
+        "procedure": "Replay the exact Round 19 G-FIX source grid; check every keyed row, independently recompute 300 group summaries and distinguish exact-byte failure from post-result tiny-roundoff agreement.",
+        "parameters": "Fifteen constructions, ten decoder modes, lengths 240/400, seven seeds, beam width 400; 2,100 decodes; 200 gated construction-and-length groups using median recovery at least 90% and median score at least −5.5.",
+        "exclusions": "No LP2 ciphertext, unknown-key search, calibrated wrong-key false positives, full-length power for all ten modes or family-wide cipher exclusion."
+      },
+      "review": {
+        "kind": "retrospective source-defined decoder power replay with disclosed numerical mismatch",
+        "retested_on": "2026-10-23",
+        "reviewer": "Independent tuple-keyed row coverage, exact field comparison, 300 summary recounts and source gate checks",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/round19-decoder-repair-controls/run.py --check && python experiments/records/round19-decoder-repair-controls/plot.py --check",
+        "environment": "Python 3 standard library; pinned MIT source and data bundled offline. Full rerun stages a disposable source copy; four workers recommended.",
+        "script": "experiments/records/round19-decoder-repair-controls/run.py",
+        "script_sha256": "6e06950e12392f4383530f28035c39e6ed51d3a858812cb64b3593500981242e",
+        "inputs": [
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/plan.json",
+            "sha256": "2dc04804402079aa56ace46e1dcfcdd53c882149cb3d00fed4bb569df4965c00"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/precision-addendum.json",
+            "sha256": "a7b79701a8f3383a21b3323b2938991aa327f5becc543c53c763d4e420a08089"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/run.py",
+            "sha256": "6e06950e12392f4383530f28035c39e6ed51d3a858812cb64b3593500981242e"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/check.py",
+            "sha256": "8d6b5bc355eb44ec5eee510b06ac331f5058435a12a8a1665955f28a418fd090"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/plot.py",
+            "sha256": "69edb907badd384e323932fb3656fd4a632c9a9719c59213ce71e9cb9dd42f5b"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+            "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round11/lib_numchannel.py",
+            "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round12/C1/feedback.py",
+            "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/constructions.py",
+            "sha256": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/driftbeam.py",
+            "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_base.json",
+            "sha256": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_book.json",
+            "sha256": "7cba860b701f57faba2f5d8a484df875f325c09dc613d299e4d1c0662d41a31b"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/run_gates.py",
+            "sha256": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/run_stats.py",
+            "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/benchmark/plant.py",
+            "sha256": "88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/data/keys/self_reliance.txt",
+            "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/src/lp/ciphers.py",
+            "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/src/lp/corpus.py",
+            "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/src/lp/stats.py",
+            "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_fix.json",
+            "sha256": "12c4e0f3a152bf2619aa3fa83a0d401a76365a5f3e8a3144d181375affe07c6b"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/replayed-out_fix.json",
+            "sha256": "9f0ae8e8a2fa9c49ba09dc9a44d2e9f4ce54cab351fb2a76ae66735f377d0e10"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/results.json",
+            "sha256": "082bf5b42afcb063fced2c0ceb6ae180b131248e7605e394d7df6184e2f0eaf6"
+          },
+          {
+            "path": "experiments/records/round19-decoder-repair-controls/decoder-repair-controls.svg",
+            "sha256": "0fc3ab5ed1db8bd0486d04c237a5d065a2083e4550748f5ad86cb47edeb1e161"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/round19-decoder-repair-controls/decoder-repair-controls.svg",
+          "caption": "One fixed planted message and key: the original beam loses over half the runes while a permissive drift decoder recovers all of them."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned Round 19 I1 construction, decoder and archived G-FIX output",
+          "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1"
+        }
+      ],
+      "related": [
+        "round19-decoder-baseline-control",
+        "round19-full-book-decoder-power",
+        "round19-decoder-null-bars"
+      ],
+      "reader_finding": "Same known message and key: 45.8% recovery with the original beam versus 100% with permissive drift. Across source-gated groups: 0/20 versus 20/20.",
+      "reader_limit": "This checks the decoder on planted text; the source replay differs in tiny score bits and does not test an unknown LP2 key.",
+      "scope_summary": "15 planted constructions · 10 decoder rules · 240/400 runes · seven seeds · correct key supplied.",
+      "article": "# A correct key can fail in the wrong decoder\n\nThe [Round 19 I1 source](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1) encrypts known English-derived rune text with several ways of skipping key draws, then supplies the **correct key** to ten decoders. If a decoder cannot follow a planted message, its failure on an unknown LP2 key would tell us little.\n\n![The source's original beam passes none of its twenty gated construction and length groups. Several permissive drift modes pass all twenty.](experiments/records/round19-decoder-repair-controls/decoder-repair-controls.svg)\n\n**Finding:** On one 240-rune paired-skip message (seed 0), the original beam recovered **45.8%** of runes with the correct key; a permissive drift decoder recovered **100%** from that same message and key. Across the source's twenty gated construction-and-length groups, the original beam passed **0** and the permissive decoder with cost 8 passed **20**. Its cost-4 sibling also passed twenty; other exact or paired settings passed fewer. A group pass means the median of seven seeded messages met both exact-rune recovery of at least 90% and a language score of at least −5.5. It does not mean every message was fully recovered. The pictured seed was selected for explanation after the source results were known; the full grid supports the broader comparison.\n\nThe 2,100 decodes cover **15 constructed cases**, ten decoder settings, two lengths (240 and 400 runes), and seven seeds. Ten constructions per length belong to the source's positive gate; the baseline and four extra probes are measured separately. The constructions include paired skipped draws, free drift, occasional pointer jumps, key-dependent two-draw decisions, and keys with long repeated runs. Every result uses synthetic ciphertext with the known construction and correct key supplied. This is an instrument-power test, **not an LP2 decryption**. The separate [full-book control](experiments/records/round19-full-book-decoder-power/article.md) tests two rules at 12,956 runes; it does not establish full-length power for all ten rules here.\n\nThe exact source command was replayed without changing its functions or its pinned Self-Reliance text. The [frozen retrospective plan](experiments/records/round19-decoder-repair-controls/plan.json) demanded bit-exact non-timing JSON. **That exact condition failed:** 88 of 2,100 row scores and eight of 300 summary score fields differ at the final floating-point bits, by at most 2.665×10⁻¹⁵ and 1.777×10⁻¹⁵ respectively. The cause of those tiny differences is not established. All other non-timing fields, construction/seed coverage, group decisions and skip limits match exactly. A [post-result comparison](experiments/records/round19-decoder-repair-controls/precision-addendum.json) bounds the score differences at 3×10⁻¹⁵; it does not change the original acceptance rule.\n\nAllowing more key-pointer movement helps these known-key plants, but it also creates more ways for a **wrong key** to fit. This replay does not run wrong-key controls for all ten modes. The [separate Round 19 null-bar audit](experiments/records/round19-decoder-null-bars/article.md) examines that calibration question. A language score or 90% recovery gate here does not give a false-positive rate for unknown keys, other languages, other message lengths, or the actual LP2 cipher. The complete case grid and source bytes are included so a different decoder rule can be checked without treating these 2,100 settings as 2,100 independent ideas.\n\nFrom the extracted experiment folder, run `python experiments/records/round19-decoder-repair-controls/run.py --check` to verify saved source/replay rows and independently recompute all 300 group summaries. To repeat the 2,100 decodes, run `python experiments/records/round19-decoder-repair-controls/run.py --nproc 4`. The runner copies the pinned source into a temporary directory and leaves the archived output unchanged. Use `python experiments/records/round19-decoder-repair-controls/plot.py --check` to verify the chart.\n",
+      "article_path": "experiments/records/round19-decoder-repair-controls/article.md",
+      "script_sha256": "6e06950e12392f4383530f28035c39e6ed51d3a858812cb64b3593500981242e",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "alignment",
+          "title": "Offsets and key alignment",
+          "aliases": [
+            "offset",
+            "alignment",
+            "key alignment"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
           ]
         }
       ]

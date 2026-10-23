@@ -1,0 +1,119 @@
+{
+  "schema": "liberpedia-round19-i1-fix-controls-v1",
+  "plan_sha256": "2dc04804402079aa56ace46e1dcfcdd53c882149cb3d00fed4bb569df4965c00",
+  "source_id": [
+    "I1-02",
+    "I1-05"
+  ],
+  "source_rows_compared": 2100,
+  "source_groups_compared": 300,
+  "row_scores_with_tiny_roundoff": 88,
+  "largest_row_score_delta": 2.6645352591003757e-15,
+  "summary_score_fields_with_tiny_roundoff": 8,
+  "largest_summary_score_delta": 1.7763568394002505e-15,
+  "non_score_non_timing_fields_exact": true,
+  "score_absolute_tolerance": 3e-15,
+  "gated_groups": 200,
+  "gated_groups_passing": 110,
+  "by_mode": [
+    {
+      "mode": "repo_ms3",
+      "passed": 0,
+      "gated": 20
+    },
+    {
+      "mode": "exact_ms8",
+      "passed": 0,
+      "gated": 20
+    },
+    {
+      "mode": "exact_auto",
+      "passed": 4,
+      "gated": 20
+    },
+    {
+      "mode": "pair_ms8",
+      "passed": 7,
+      "gated": 20
+    },
+    {
+      "mode": "drift_l0",
+      "passed": 0,
+      "gated": 20
+    },
+    {
+      "mode": "drift_l4",
+      "passed": 20,
+      "gated": 20
+    },
+    {
+      "mode": "drift_l8",
+      "passed": 20,
+      "gated": 20
+    },
+    {
+      "mode": "drift_l16",
+      "passed": 19,
+      "gated": 20
+    },
+    {
+      "mode": "drift_mf1",
+      "passed": 20,
+      "gated": 20
+    },
+    {
+      "mode": "drift_mf3",
+      "passed": 20,
+      "gated": 20
+    }
+  ],
+  "by_construction": [
+    {
+      "mechanism": "coin_from_key",
+      "passed": 11,
+      "gated": 20
+    },
+    {
+      "mechanism": "drift_at",
+      "passed": 20,
+      "gated": 40
+    },
+    {
+      "mechanism": "free_drift",
+      "passed": 19,
+      "gated": 40
+    },
+    {
+      "mechanism": "keyskip",
+      "passed": 24,
+      "gated": 40
+    },
+    {
+      "mechanism": "skip_by_two",
+      "passed": 36,
+      "gated": 60
+    }
+  ],
+  "scope": "Known-key synthetic decoder power at 240 and 400 runes; no LP2 candidate key or cipher test.",
+  "frozen_exact_non_timing_acceptance_met": false,
+  "post_result_numeric_diagnostic_passed": true,
+  "precision_addendum_sha256": "a7b79701a8f3383a21b3323b2938991aa327f5becc543c53c763d4e420a08089",
+  "illustrative_same_message_and_key": {
+    "construction": "skip_by_two supp=0.83",
+    "length": 240,
+    "seed": 0,
+    "selected_after_source_results": true,
+    "decoders": [
+      {
+        "mode": "repo_ms3",
+        "recovery": 0.4583333333333333,
+        "score": -5.8754518187616664
+      },
+      {
+        "mode": "drift_l8",
+        "recovery": 1.0,
+        "score": -4.5057352954760095
+      }
+    ]
+  }
+}

@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "0b41b1784c4678329cba17f99395c21affebfd2c7a9eaf89d521e63a3a48ab3a",
-    "record_count": 279
+    "sha256": "d695f811db537d08e067fb9d0fc056727b7e3d560164f9779f4f4c4458a6cdb9",
+    "record_count": 280
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,13 +27,13 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 28,
-    "unreconciled": 102,
-    "source_entries_reviewed": 66,
-    "source_entries_pending_review": 106,
+    "unreconciled": 100,
+    "source_entries_reviewed": 68,
+    "source_entries_pending_review": 104,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 102,
+    "pending_review_without_candidate_match": 100,
     "execution_replay_states": {
-      "complete-executed-grid": 19,
+      "complete-executed-grid": 21,
       "replayed-with-invalid-gate": 6,
       "partial-execution": 11
     },
@@ -2956,9 +2956,32 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-decoder-repair-controls",
+            "covered_subclaim": "The complete G-FIX grid: 15 constructions, 10 decoder modes, two lengths, seven seeds. All 300 group decisions agree; 88 row scores and 8 summary score values differ by at most 2.665e-15 and 1.777e-15. Original bit-exact replay acceptance failed; separate post-result numerical agreement check passed."
+          }
+        ],
+        "unresolved_parts": [
+          "No unknown-key LP2 search or full-length power across all ten modes was tested.",
+          "The exact non-timing acceptance condition was not met; the diagnostic score tolerance was added after observing the replay.",
+          "Wrong-key calibration for all ten policies and other source I1 stages are outside this record."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-repair-controls"
+        ],
+        "scope": "All 2,100 source G-FIX jobs and 300 groups executed. Non-score fields and gate decisions agree exactly; score differences fail the frozen bit-exact condition.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-03",
@@ -3027,9 +3050,32 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-decoder-repair-controls",
+            "covered_subclaim": "The same G-FIX complete grid includes 16/32-run keys and adaptive skip limits. Exact recoveries, inferred skips and every source pass decision match. Score floats are numerically close rather than bit-identical."
+          }
+        ],
+        "unresolved_parts": [
+          "No unknown-key LP2 search or full-length power across all ten modes was tested.",
+          "The exact non-timing acceptance condition was not met; the diagnostic score tolerance was added after observing the replay.",
+          "Wrong-key calibration for all ten policies and other source I1 stages are outside this record."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-repair-controls"
+        ],
+        "scope": "All 2,100 source G-FIX jobs and 300 groups executed. Non-score fields and gate decisions agree exactly; score differences fail the frozen bit-exact condition.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-06",

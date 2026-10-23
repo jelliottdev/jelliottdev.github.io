@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 279,
+    "records": 280,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -10700,7 +10700,7 @@
         "repeated phases",
         "known plaintext"
       ],
-      "finding": "Zero fixed-opening matches among 1540 distinct page outputs. All 3190 nominal configurations reproduce. The independent checker verifies the exact 14-term residue cycle and every repeated-offset equivalence.",
+      "finding": "Fibonacci shifts produced 1,540 distinct page outputs; none began with any of nine known 12-rune openings. Starting later repeats the same 14-term cycle under these rules.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -10922,7 +10922,7 @@
         "second koan",
         "known plaintext"
       ],
-      "finding": "Zero matching cases among 2352 completed candidates, with 21168 exact opening comparisons. The separate checker and full rerun reproduce every sequence and decision.",
+      "finding": "The Welcome and second-koan keys did not recover any of nine known 12-rune openings. Every starting position in each key and both addition and subtraction were tested.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -11589,7 +11589,7 @@
         "prime-minus-one",
         "known plaintext"
       ],
-      "finding": "Zero exact opening matches in 28710 comparisons. All 3190 candidate sequences reproduce, and every output equals the baseline plus the arithmetic direction modulo 29.",
+      "finding": "None of the 3,190 outputs from adding or subtracting successive primes began with any of nine known 12-rune openings.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -11821,7 +11821,7 @@
         "alternating direction",
         "route cipher"
       ],
-      "finding": "None of 880 routes matched any of nine known passage openings. An independent source-position check reproduced every output.",
+      "finding": "None of the 880 tested row-and-column readings began with the first 12 runes of any of nine known passages. This includes backward and alternating directions.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -12306,7 +12306,7 @@
         "offset",
         "known plaintext"
       ],
-      "finding": "Zero exact opening matches among 3190 distinct page outputs and 28710 comparisons. The full rerun matches, and the separate checker derives every applied totient through gcd counting and audits every candidate.",
+      "finding": "Adding or subtracting totients of consecutive integers produced 3,190 outputs; none began with any of nine known 12-rune openings.",
       "record_type": {
         "id": "method",
         "label": "Bounded solving test",
@@ -14289,7 +14289,7 @@
         "IoC",
         "language identification"
       ],
-      "finding": "English has the smallest word-length distance in all three representations and all 200 paired article resamples. Other close candidates change order with representation. None of the eight letter profiles is close to the pooled rune IoC under a fixed substitution.",
+      "finding": "English had the closest word-length pattern among the eight tested languages. It remained closest under all three counting methods.",
       "record_type": {
         "id": "measurement",
         "label": "Manuscript measurement",
@@ -17247,6 +17247,76 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/round19-decoder-null-bars.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/round19-decoder-null-bars/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/round19-decoder-null-bars.zip"
+    },
+    {
+      "id": "round19-decoder-repair-controls",
+      "title": "Can a correct key look wrong to the decoder?",
+      "question": "Across the pinned Round 19 skip and drift constructions, which decoders can recover known text when given the correct key?",
+      "summary": "With the same planted message and correct key, the original beam can lose most runes while a permissive drift decoder recovers them. The repaired source control grid reproduces its gate decisions, with tiny score-rounding differences that fail the frozen bit-exact acceptance condition.",
+      "tags": [
+        "decoder alignment",
+        "key skipping",
+        "free drift",
+        "known key",
+        "source control",
+        "beam search"
+      ],
+      "finding": "Same known message and key: 45.8% recovery with the original beam versus 100% with permissive drift. Across source-gated groups: 0/20 versus 20/20.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "alignment",
+          "title": "Offsets and key alignment",
+          "aliases": [
+            "offset",
+            "alignment",
+            "key alignment"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": {
+        "id": "decoder-alignment-controls",
+        "title": "Decoder alignment controls",
+        "question": "Can declared decoders recover planted plaintext under matching and mismatched alignment rules?",
+        "baseline": "decoder-skip-controls"
+      },
+      "variant_label": "Round 19 G-FIX ten-decoder known-key grid",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/round19-decoder-repair-controls/plan.json",
+        "experiments/records/round19-decoder-repair-controls/source/liber-primus/analysis/round19/I1/out_fix.json"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/round19-decoder-repair-controls",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/round19-decoder-repair-controls.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/round19-decoder-repair-controls/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/round19-decoder-repair-controls.zip"
     },
     {
       "id": "round19-full-book-decoder-power",

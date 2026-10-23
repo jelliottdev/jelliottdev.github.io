@@ -317,7 +317,7 @@ Number-grid bytes as a key with skipped positions · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-24 related records
+25 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -366,12 +366,14 @@ Grid and onion bytes as LP2 keys · Method replay
 
 Can the decoder follow a known key through a full book? · Control
 
+Can a correct key look wrong to the decoder? · Control
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-12 related records
+13 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -395,6 +397,8 @@ Can skipped key draws shift a page start? · Method replay
 When wrong keys cross a language-score line · Control
 
 Can the decoder follow a known key through a full book? · Control
+
+Can a correct key look wrong to the decoder? · Control
 
 
 
@@ -1202,7 +1206,7 @@ Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-41 related records
+42 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -1284,6 +1288,8 @@ When wrong keys cross a language-score line · Control
 Can the decoder follow a known key through a full book? · Control
 
 Can a guessed word seed a short feedback key? · Method replay
+
+Can a correct key look wrong to the decoder? · Control
 
 
 
@@ -1634,6 +1640,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/wulfic-doublet-leak-h-o
 - Can the decoder follow a known key through a full book?
   https://jelliottdev.github.io/#/experiments/round19-full-book-decoder-power
+- Can a correct key look wrong to the decoder?
+  https://jelliottdev.github.io/#/experiments/round19-decoder-repair-controls
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction

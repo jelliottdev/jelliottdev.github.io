@@ -11,19 +11,19 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 66,
+    "source_entries_reviewed": 68,
     "reproduced_subclaim": 3,
-    "partial": 35,
+    "partial": 37,
     "unsupported_source_verdict": 18,
     "blocked_exact_replay": 3,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 47,
+    "source_entries_with_published_record_link": 49,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 19,
+      "complete-executed-grid": 21,
       "partial-execution": 11,
       "replayed-with-invalid-gate": 6
     }
@@ -1836,6 +1836,64 @@
           "round19-full-book-decoder-power"
         ],
         "scope": "Eight source-defined G-BOOK jobs at 12,956 runes: two decoder modes, three correct-key seeds and one wrong-key control per mode.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "I1-02",
+      "source_claim": "The source permissive decoder can recover its declared skip and drift positive controls.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "round19-decoder-repair-controls",
+          "covered_subclaim": "The complete G-FIX grid: 15 constructions, 10 decoder modes, two lengths, seven seeds. All 300 group decisions agree; 88 row scores and 8 summary score values differ by at most 2.665e-15 and 1.777e-15. Original bit-exact replay acceptance failed; separate post-result numerical agreement check passed."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/I1/run_gates.py",
+        "liber-primus/analysis/round19/I1/out_fix.json"
+      ],
+      "unresolved_parts": [
+        "No unknown-key LP2 search or full-length power across all ten modes was tested.",
+        "The exact non-timing acceptance condition was not met; the diagnostic score tolerance was added after observing the replay.",
+        "Wrong-key calibration for all ten policies and other source I1 stages are outside this record."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-repair-controls"
+        ],
+        "scope": "All 2,100 source G-FIX jobs and 300 groups executed. Non-score fields and gate decisions agree exactly; score differences fail the frozen bit-exact condition.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "I1-05",
+      "source_claim": "Earlier misses on long repeated key runs reflect limited decoder skip budgets rather than an impossible transition relation.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "round19-decoder-repair-controls",
+          "covered_subclaim": "The same G-FIX complete grid includes 16/32-run keys and adaptive skip limits. Exact recoveries, inferred skips and every source pass decision match. Score floats are numerically close rather than bit-identical."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/I1/run_gates.py",
+        "liber-primus/analysis/round19/I1/out_fix.json"
+      ],
+      "unresolved_parts": [
+        "No unknown-key LP2 search or full-length power across all ten modes was tested.",
+        "The exact non-timing acceptance condition was not met; the diagnostic score tolerance was added after observing the replay.",
+        "Wrong-key calibration for all ten policies and other source I1 stages are outside this record."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-repair-controls"
+        ],
+        "scope": "All 2,100 source G-FIX jobs and 300 groups executed. Non-score fields and gate decisions agree exactly; score differences fail the frozen bit-exact condition.",
         "wider_method_excluded": false
       }
     }

@@ -83,7 +83,7 @@
       "lp2-55"
     ],
     "artifacts": [],
-    "representation": "Existing rune-only joined LP2-00\u201355 token ledger, 2896 tokens, headings included; no decimal tokens. Three shared representations plus a Welsh digraph sensitivity; details in plan.",
+    "representation": "Existing rune-only joined LP2-00–55 token ledger, 2896 tokens, headings included; no decimal tokens. Three shared representations plus a Welsh digraph sensitivity; details in plan.",
     "procedure": "Total variation distance between word-length histograms, bins 1..15 and16+. Lower is closer. Rank eight languages separately for each of first three representations. Never combine metrics into a language probability. IoC and within-word adjacent-identical fraction; separate distances under fixed bijective substitution only. Distinct symbol inventory reported. Dev language profiles classify each whole devtest language by word-length distance (8 held-out documents per representation). No tuning after scoring.",
     "parameters": "Eight fixed languages; all 997 dev and 1012 devtest aligned sentences; 281 devtest article clusters; 200 paired bootstrap draws; seed 3301; 16 length bins.",
     "exclusions": "No decryption; no claim one global cipher/language; no posterior; no all-language coverage; no genre-matched medieval/philosophical corpus; no unknown phonetic conversion; no unspaced languages or mixed plaintext inference."
@@ -246,5 +246,7 @@
       "path": "experiments/records/parallel-languages/distributions.svg",
       "caption": "Shared-scale distributions for the manuscript target and all eight languages alphabetically. All languages use identical styling; 9+ is a display group, not the scoring bins."
     }
-  ]
+  ],
+  "reader_finding": "English had the closest word-length pattern among the eight tested languages. It remained closest under all three counting methods.",
+  "reader_limit": "This comparison assumes that encryption preserves word boundaries and word lengths. It ranks these reference texts; it does not identify the hidden language."
 }

@@ -1,0 +1,25 @@
+{
+  "schema": "beam-prefix-sharing-fixtures-v1",
+  "timing": "Frozen before benchmarking or evaluating the experimental implementation against the source.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+  "source_function": "liber-primus/analysis/campaign18_skip/skipdecode.py:beam_decode",
+  "gate": "Every returned field must match exactly (including floating-point score and beam_score), as must ObservedKey read count, highest index, padding reads and extension count. Fail closed on any discrepancy.",
+  "fixtures": [
+    {"id":"english-120", "type":"english", "length":120, "key_length":500, "seed":101, "sign":-1, "offset":0, "beam_width":400, "max_skip":3, "atbash":false},
+    {"id":"english-120-offset", "type":"english", "length":120, "key_length":502, "seed":102, "sign":1, "offset":7, "beam_width":400, "max_skip":3, "atbash":true},
+    {"id":"english-400", "type":"english", "length":400, "key_length":1500, "seed":103, "sign":-1, "offset":3, "beam_width":400, "max_skip":3, "atbash":false},
+    {"id":"random-1", "type":"random", "length":1, "key_length":1, "seed":104, "sign":1, "offset":0, "beam_width":20, "max_skip":3, "atbash":false},
+    {"id":"random-12", "type":"random", "length":12, "key_length":12, "seed":105, "sign":-1, "offset":2, "beam_width":20, "max_skip":3, "atbash":true},
+    {"id":"random-43", "type":"random", "length":43, "key_length":43, "seed":106, "sign":1, "offset":4, "beam_width":50, "max_skip":2, "atbash":false},
+    {"id":"random-120", "type":"random", "length":120, "key_length":520, "seed":107, "sign":-1, "offset":0, "beam_width":400, "max_skip":3, "atbash":true},
+    {"id":"random-240", "type":"random", "length":240, "key_length":1000, "seed":108, "sign":1, "offset":5, "beam_width":400, "max_skip":3, "atbash":false},
+    {"id":"pad-short-key", "type":"random", "length":120, "key_length":9, "seed":109, "sign":-1, "offset":3, "beam_width":60, "max_skip":3, "atbash":false},
+    {"id":"pad-boundary-equal", "type":"random", "length":40, "key_length":162, "seed":110, "sign":1, "offset":2, "beam_width":60, "max_skip":3, "atbash":true},
+    {"id":"no-skip", "type":"random", "length":120, "key_length":130, "seed":111, "sign":-1, "offset":2, "beam_width":60, "max_skip":0, "atbash":false},
+    {"id":"ties-zeros", "type":"zeros", "length":55, "key_length":10, "seed":0, "sign":-1, "offset":0, "beam_width":20, "max_skip":3, "atbash":false},
+    {"id":"ties-constant-nonzero", "type":"constant", "length":55, "key_length":230, "seed":7, "sign":1, "offset":1, "beam_width":20, "max_skip":3, "atbash":true}
+  ],
+  "generated_random_matrix": "Additional 32 fixed cases from Random(3301), lengths 2..320, key lengths short/adequate, signs both, offsets 0..7, skip 0..4 and beam widths 1..100; cases generated and saved before the first source-versus-experimental comparison.",
+  "full_length_case": "One paired source/experimental 12,956-rune decode using the same B04 GP indices, source deterministic SHA key and max_skip=3; only after all short gates pass."
+}

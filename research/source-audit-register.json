@@ -500,10 +500,14 @@
       "source_branch": "Round19 I1 implemented a permissive drift decoder; source reports G-EQ/G-BASE/G-FIX passed, including 20/20 planted construction cells.",
       "source_gate": "G-FP passed for lambda>=8 and failed for lambda<=6; old -5.5 bar becomes unsafe under permissive paths.",
       "input_availability": "I1 scripts/results committed at prefix-adjusted paths; assigned evidence includes fix tables.",
-      "existing_coverage": "public-nskips-crossover reuses I1 decoder for a distinct skip-count ladder, not the full I1 mode/control grid.",
-      "unresolved": "No LP2 key is solved by these plant controls; wrong-key null calibration is essential for later sweeps.",
+      "existing_coverage": "round19-decoder-repair-controls covers the complete fixed source control grid; no LP2 key search.",
+      "unresolved": "No general cipher exclusion or full wrong-key calibration; bit-exact score replay acceptance was not met.",
       "next_action": "Group I1-02/I1-05/I1-08 as one decoder power/calibration source replay if not already covered elsewhere.",
-      "independently_replayed_by_audit": false
+      "independently_replayed_by_audit": false,
+      "subsequent_replay": {
+        "record": "round19-decoder-repair-controls",
+        "scope": "Complete 2,100 G-FIX jobs and 300 independently recounted summaries. Original exact acceptance failed on tiny score floats; all non-score fields and gate decisions match."
+      }
     },
     {
       "source_id": "I1-03",
@@ -543,10 +547,14 @@
       "source_branch": "I1 corrects L7-B low-entropy-pad r=16/32 misses as decoder skip-budget failures, not an impossible transition relation.",
       "source_gate": "Source repaired budget/mode controls passed relevant cases; blanket old-beam negative remains invalid for those plants.",
       "input_availability": "I1 out_fix.json committed; source generator and full gate files require path reconciliation.",
-      "existing_coverage": "Related public-nskips-crossover uses I1 but does not replay this budget correction.",
-      "unresolved": "Actual LP2 key search under repaired relation not represented by this correction alone.",
+      "existing_coverage": "round19-decoder-repair-controls covers the complete fixed source control grid; no LP2 key search.",
+      "unresolved": "No general cipher exclusion or full wrong-key calibration; bit-exact score replay acceptance was not met.",
       "next_action": "Fold into I1 grouped source-control record; avoid a separate manuscript null.",
-      "independently_replayed_by_audit": false
+      "independently_replayed_by_audit": false,
+      "subsequent_replay": {
+        "record": "round19-decoder-repair-controls",
+        "scope": "Complete 2,100 G-FIX jobs and 300 independently recounted summaries. Original exact acceptance failed on tiny score floats; all non-score fields and gate decisions match."
+      }
     },
     {
       "source_id": "I1-06",

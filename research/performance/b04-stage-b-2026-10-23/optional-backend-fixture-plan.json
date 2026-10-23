@@ -1,0 +1,19 @@
+{
+  "schema": "b04-stage-d-optional-backend-fixtures-v1",
+  "timing": "Frozen before wrapper modification and synthetic backend outcomes",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "existing_wrapper_sha256": "f24dc1b9bd7afd030b2973786bb60e9f60ec0c710517c63a579900d10d780506",
+  "existing_test_sha256": "702c30f3b6dd8401cdeff12ad7405a89966e766b4b54d79c533f79afe7021962",
+  "prototype_sha256": "8c554875eabeaa56f10222f05de675665df795e4e4b3c34e482c92cd11999909",
+  "synthetic": "Use existing synthetic_inputs: two segments lengths 10 and 16, two stable-deduplicated picks (sha256_ctr and sha512_ctr); separately reversal+offset+Atbash+rej29, all-F ties and short-key zero padding direct calls",
+  "comparisons": [
+    "source vs prefix_shared complete decode dict on every cell and special case",
+    "source vs prefix_shared complete cell semantic rows and ObservedKey key-read audit",
+    "identical summary semantic fields excluding manifest identity and elapsed time",
+    "serial vs four-worker cells/summary for both backends",
+    "partial checkpoint resume and tamper refusal",
+    "cross-backend cache refusal via manifest identity",
+    "modified prototype/wrapper identity refusal"
+  ],
+  "real_stage_d": false
+}
