@@ -1,0 +1,31 @@
+{
+  "schema": "liberpedia-manifesto-running-key-plan-v1",
+  "frozen_before_scoring": "2026-10-23",
+  "question": "Does any whole-page additive running key cut from this pinned Eric Hughes manifesto yield a convincing LP2 reading under the declared English scorer?",
+  "source_url": "https://activism.net/cypherpunk/manifesto.html",
+  "source_retrieved": "2026-10-23",
+  "source_extraction": "Decode pinned HTML as Latin-1. Take bytes from the first literal 'Privacy is necessary' through the next literal 'Eric Hughes' following 'Onward.' (exclusive). Replace HTML tags with spaces, unescape entities, uppercase, retain ASCII A-Z only. This excludes the heading and signature/date metadata.",
+  "source_normalized_letters": 4072,
+  "source_normalized_sha256": "f0666596d96fdcfd2bd845c53dec63b9e6962303657d0b9eec44432568c02182",
+  "key_variants": [
+    {"id": "ascii-ordinal", "rule": "A=0 through Z=25; one source letter supplies one residue. This is a substantive alphabet assumption used in the Emerson comparison, not a canonical GP encoding.", "key_length": 4072},
+    {"id": "gp-greedy", "rule": "Greedily consume the longest canonical GP Latin label from the normalized source string, including across erased word boundaries. For otherwise unmapped V,K,Z,Q use aliases U,C,S,C, matching the pinned public source encoder; one parsed rune supplies one residue.", "key_length": 3893, "key_sha256": "a1efa2eb61473c08b3ac133fe87de6933f1f92dbdbc8f68daaaba345180c317d"}
+  ],
+  "cipher_rule": "Each target page starts at its first archived rune. Plaintext GP index P_i=(C_i-K_{offset+i}) mod 29. One key unit advances per rune; manuscript punctuation and layout do not advance the key. No wrap or skip.",
+  "targets": ["lp2-00", "lp2-31", "lp2-54"],
+  "offsets": "All zero-based contiguous offsets in each variant's key-unit sequence leaving enough units to decode the complete target page.",
+  "score": "For every complete decoded page, concatenate canonical GP Latin labels (data/index.json) and compute mean base-10 log likelihood of overlapping four-letter groups under the pinned English quadgram table; unseen groups receive count 0.01. Higher is better. Rank by score then smaller offset.",
+  "null_controls": "For each target and each key variant, search all offsets in 16 independently shuffled copies of that variant's complete key-index sequence. Python Random seeds 330100 through 330115; retain the maximum per complete shuffle, not isolated random-offset scores.",
+  "positive_control": "For each key variant, encode the full 264-rune decoded LP1-04 section with that key at offset 3301, search all eligible offsets with the identical scorer, and require the planted offset to rank first before computing LP2 results.",
+  "decision": "Report complete-page maxima, their place among 16 full-search shuffled controls, and positive-control rank. A score alone or a favorable word fragment is not a decryption. No p-value or claim about other editions, key rules, page subsets, or running keys generally.",
+  "inputs": [
+    {"path": "experiments/records/cypherpunk-manifesto-running-key/source.html", "sha256": "e63fe33f5de9f49b842d02d3d8e42c5f132edb480d6c2173b54084bcf090afe1"},
+    {"path": "data/index.json", "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"},
+    {"path": "data/evidence/known-readings.json", "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"},
+    {"path": "experiments/records/english-scorer-controls/english_quadgrams.txt", "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"},
+    {"path": "experiments/records/b04-source-seeds-opening-cribs/source/skipdecode.py", "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"},
+    {"path": "text/lp2-00.txt", "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"},
+    {"path": "text/lp2-31.txt", "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"},
+    {"path": "text/lp2-54.txt", "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"}
+  ]
+}

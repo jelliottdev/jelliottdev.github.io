@@ -1,0 +1,382 @@
+{
+  "id": "outguess-keyed-lp2",
+  "title": "Six keyed OutGuess probes on LP2 images",
+  "status": "published",
+  "question": "Do six fixed manuscript-derived passphrases retrieve an identifiable hidden message from any original LP2 JPEG?",
+  "summary": "Six keys across 58 LP2 images yielded 232 nonempty OutGuess outputs, but none was authenticated as a message. All 36 planted-key controls passed.",
+  "tags": [
+    "OutGuess",
+    "steganography",
+    "JPEG",
+    "keyed extraction",
+    "passphrase",
+    "Liber Primus",
+    "hidden message"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55",
+      "lp2-56",
+      "lp2-57"
+    ],
+    "representation": "Original archived JPEG bytes for all 58 LP2 pages; the six synthetic planted carriers are separate controls, not target images.",
+    "procedure": "Retrieve each original image once with each of six frozen literal keys using the clean guarded OutGuess build. First recover the known 43-byte payload from six pinned key-specific carriers under all six keys. Retain every status, diagnostic, length, hash and output byte stream.",
+    "parameters": "Six exact ASCII keys, 58 original images, 348 retrievals, six planted carriers x six retrieval keys, 10-second per-call timeout, four worker processes, guarded OutGuess SHA-256 bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
+    "exclusions": "Unlisted passphrases and case variants; other tools and steganographic channels; recompressed or edited JPEGs; source-level absence proof; treating successful extraction as authenticated message."
+  },
+  "outcome": "inconclusive",
+  "finding": "232 of 348 calls returned nonempty bytes. For each key, all nonempty outputs have one repeated length across the images; the byte streams differ and show no inspected readable message or common file header. Six planted carriers each recover only under their own key.",
+  "limitations": "A successful retrieval or repeated length is not payload authentication. The six-key list is narrow, file-header inspection is not exhaustive, and this guarded Windows build is not an independent OutGuess implementation. Initial synthetic covers failed one correct-key roundtrip; replacement control bytes were pinned before the original-image run. Exact executable is a Windows PE build; other operating systems can inspect the saved bytes and source/build specification but cannot run that binary natively.",
+  "next_steps": "Review the retained bytes if a concrete signature or decoding rule is proposed. Test new keys only in a separately frozen extension with positive controls, not by enlarging this completed grid after seeing its output.",
+  "family": {
+    "id": "outguess-original-jpegs",
+    "title": "OutGuess retrieval from original JPEGs",
+    "question": "Which payloads can a specified OutGuess build and key retrieve from the original image bytes?",
+    "baseline": "outguess-default-key"
+  },
+  "review": {
+    "reviewer": "Independent saved-byte/hash check and planted-key cross-check by Codex",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/outguess-keyed-lp2/run.py --outguess experiments/records/outguess-keyed-lp2/tool/outguess-guarded-win64.exe --output-dir PATH/TO/new-output --check",
+    "environment": "Python 3 standard library on Windows. The bundle contains the exact tested guarded OutGuess executable with notices, plus six planted carrier controls. Original LP2 JPEGs must be placed at declared repository paths; extract outputs.zip for saved-byte checking.",
+    "script": "experiments/records/outguess-keyed-lp2/run.py",
+    "script_sha256": "1581adcddfed43df01288ffecc4173e382f416ba9ef98ceef78b1b1b589604ec",
+    "inputs": [
+      {
+        "path": "experiments/records/outguess-keyed-lp2/plan.json",
+        "sha256": "00d35c677a20fb468ec012cb407cea0ba99799cc6bbaf9a8633ed00eb550c9f6"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/run.py",
+        "sha256": "1581adcddfed43df01288ffecc4173e382f416ba9ef98ceef78b1b1b589604ec"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/check.py",
+        "sha256": "98c0ad7b730a3bdd4de63c3dd8d284b01536dd14704325957a5f21212543ddea"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/plot.py",
+        "sha256": "772e03a53aadf63f54de8252330aae626318d66ad51916a2c5b73633e2a8db89"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/plant-cover.jpg",
+        "sha256": "569b3f66cdb5c9843ce6bfa6e16185ef7e1eb02aa66b06b8125773bed85bafd3"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/plant-payload.txt",
+        "sha256": "ba442e5450117688d3b79aa745f1329f5988840f211a84d726260446a7e052c7"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-0.jpg",
+        "sha256": "f9c44f2394fe15153559f53f502f42fc78e77bb027a6c26fd0d907de5363ed11"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-1.jpg",
+        "sha256": "e821c698a723624da2d4784bebefc65bd2fe4c5e19daec894bbd34992c3a9639"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-2.jpg",
+        "sha256": "a9cface43d8021c234e51a8770b832dd2a3f04501e866ad2e3c423a743b7f47a"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-3.jpg",
+        "sha256": "739bc0a6e9d64ae40d6a38b9a4b805479cdb7fbcfeb7360db815cc67fcc848ef"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-4.jpg",
+        "sha256": "7a8e509358f90f59492667692aae0ce495527af8f7c0f92522e8760a1010d8a8"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/source/planted-5.jpg",
+        "sha256": "82cda5e5c0f8597582bb40c0a5b14b34a4f00c6f0831ae2769b8a829ea849fb7"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/tool/outguess-guarded-win64.exe",
+        "sha256": "bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/tool/NOTICES.txt",
+        "sha256": "9d06dbd0490a9990bed89cfb534732a202e6833bf91fc6ef84aac7b76b185e0d"
+      },
+      {
+        "path": "experiments/records/outguess-guard-pilot/build.py",
+        "sha256": "4216e5c8074833b71763f369e399ad22d92f44876ea2c3a37eaca9ea6c34f96a"
+      },
+      {
+        "path": "experiments/records/outguess-guard-pilot/build-spec.json",
+        "sha256": "14e13f8c1ddd5cf76a42c64f86c82788ed2027649b4b55e4d9c98bbe0df55568"
+      },
+      {
+        "path": "experiments/records/outguess-guard-pilot/clean-build-report.json",
+        "sha256": "e09039edc391f30a01b854658fa8dd3a0a925ff8d8a82a8518cf5f7ad61328c7"
+      },
+      {
+        "path": "experiments/records/outguess-guard-pilot/source-audit.json",
+        "sha256": "e851024ea46ef5b698e00f11084641972d6e3468bf66333286f2d3863d99df01"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/outguess-keyed-lp2/results.json",
+        "sha256": "2cce54bde8908c3f0f5611c99ff58ab6bb42627ca507a967cac2fbf229bc528f"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/outputs.zip",
+        "sha256": "940a2e4d59f6d3e7be84835504ab0cd4a623a67bd1b64cf5f7de854e026f802f"
+      },
+      {
+        "path": "experiments/records/outguess-keyed-lp2/figure.svg",
+        "sha256": "a4929da83b45089fb41ed34eda79c2b348b9dbaacc0a3534514a7fb17012a632"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned upstream OutGuess source",
+      "url": "https://github.com/resurrecting-open-source-projects/outguess/tree/24810e14327c2bbeedeaadd3e24491f2a4425c02"
+    },
+    {
+      "label": "Default-key baseline",
+      "url": "https://jelliottdev.github.io/#/experiments/outguess-default-key"
+    }
+  ],
+  "related": [
+    "outguess-default-key",
+    "outguess-guard-sweep"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/outguess-keyed-lp2/figure.svg",
+      "caption": "Nonempty outputs among 58 images for each fixed key; counts do not identify messages."
+    }
+  ],
+  "variant": {
+    "label": "Six exact keyed probes on original LP2 images",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-00",
+          "lp1-01",
+          "lp1-02",
+          "lp1-03",
+          "lp1-04",
+          "lp1-05",
+          "lp1-06",
+          "lp1-07",
+          "lp1-08",
+          "lp1-09",
+          "lp1-10",
+          "lp1-11",
+          "lp1-12",
+          "lp1-13",
+          "lp1-14",
+          "lp1-15",
+          "lp1-16",
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55",
+          "lp2-56",
+          "lp2-57"
+        ],
+        "after": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55",
+          "lp2-56",
+          "lp2-57"
+        ],
+        "reason": "This variant isolates the bounded keyed OutGuess search on LP2 original JPEGs."
+      },
+      {
+        "field": "representation",
+        "before": "Original archived JPEG bytes with fixed SHA-256 hashes: 75 manuscript images plus opening-2014 and 1033. No recompression or image transformations.",
+        "after": "Original archived JPEG bytes for all 58 LP2 pages; the six synthetic planted carriers are separate controls, not target images.",
+        "reason": "This variant isolates the bounded keyed OutGuess search on LP2 original JPEGs."
+      },
+      {
+        "field": "procedure",
+        "before": "One OutGuess retrieval per image with literal key Default key. Retain all output bytes and stderr/return codes; compare ten expected payload hashes. Repeat complete run for reproducibility.",
+        "after": "Retrieve each original image once with each of six frozen literal keys using the clean guarded OutGuess build. First recover the known 43-byte payload from six pinned key-specific carriers under all six keys. Retain every status, diagnostic, length, hash and output byte stream.",
+        "reason": "This variant isolates the bounded keyed OutGuess search on LP2 original JPEGs."
+      },
+      {
+        "field": "parameters",
+        "before": "77 images; one key; 20 seconds per invocation; pinned upstream commit 24810e14327c2bbeedeaadd3e24491f2a4425c02, Windows port binary SHA-256 b342b8b85d678d3b2ed26efab70fba2b3956725670be7149b89646868f0ebade.",
+        "after": "Six exact ASCII keys, 58 original images, 348 retrievals, six planted carriers x six retrieval keys, 10-second per-call timeout, four worker processes, guarded OutGuess SHA-256 bdc1810e59cb1152e7c3da88b38eaedfe49eba1656b4a4ab6f8c2b3f40126273.",
+        "reason": "This variant isolates the bounded keyed OutGuess search on LP2 original JPEGs."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other keys, other builds/platforms, other steganographic methods, recompressed files, signature verification, and interpretation of candidate bytes.",
+        "after": "Unlisted passphrases and case variants; other tools and steganographic channels; recompressed or edited JPEGs; source-level absence proof; treating successful extraction as authenticated message.",
+        "reason": "This variant isolates the bounded keyed OutGuess search on LP2 original JPEGs."
+      }
+    ]
+  }
+}

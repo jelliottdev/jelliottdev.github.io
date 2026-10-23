@@ -19,7 +19,8 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 14
+    "published_followup_records": 23,
+    "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
     {
@@ -138,7 +139,11 @@
         "experiments/records/lp2-known-vigenere-keys/record.json"
       ],
       "coverage_note": "Known direct-toolkit examples and two-key openings do not cover a finite sectionwise Atbash/Caesar/composition grid. Define exact compositions and selection control.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wholepage-known-vigenere-keys",
+        "wholepage-affine-gp29"
+      ]
     },
     {
       "source_id": "2.2",
@@ -153,7 +158,10 @@
         "experiments/records/public-wordlist-vigenere/record.json"
       ],
       "coverage_note": "Two known keys and 43 source wordlist keys have narrow opening checks; longer periods, broader lexicon, reversed text/key and phase-by-section remain outside those scopes.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wholepage-known-vigenere-keys"
+      ]
     },
     {
       "source_id": "2.3",
@@ -166,7 +174,10 @@
         "experiments/records/public-wordlist-vigenere/record.json"
       ],
       "coverage_note": "The archived 43 wordlist keys did not enumerate systematic one-letter substitutions of candidate keys. Specify source wordlist, replaced rune(s), and whether replacements affect GP multigraphs.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "mutated-dictionary-key-openings"
+      ]
     },
     {
       "source_id": "2.4",
@@ -235,7 +246,10 @@
         "experiments/records/word-internal-affine-all-lags/record.json"
       ],
       "coverage_note": "Literal-prime palette closure and observed lag maps do not test periodic affine decryption on rune indices. Freeze multiplier/offset periods and invertibility.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wholepage-affine-gp29"
+      ]
     },
     {
       "source_id": "2.9",
@@ -402,7 +416,10 @@
         "experiments/records/f-delete-lag13/record.json"
       ],
       "coverage_note": "F-neighbor and deletion statistics do not decode F position/gap bits. Specify binary coding, ordering, framing and non-post-hoc message criterion.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "f-interrupter-gap-direct-read"
+      ]
     },
     {
       "source_id": "3.7",
@@ -944,7 +961,10 @@
         "experiments/records/lp2-known-vigenere-keys/record.json"
       ],
       "coverage_note": "External Emerson offsets and two LP keys are checked; solved LP plaintext at successive word starts as running key needs pinned solved-text version and start grid.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "solved-reading-running-key"
+      ]
     },
     {
       "source_id": "7.2",
@@ -1258,7 +1278,10 @@
         "data/method-families.json#grilles"
       ],
       "coverage_note": "Positional extraction is already documented. Prime/Fibonacci index selection needs a frozen stream, index origin and exclusions before a new bounded run.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "prime-fibonacci-position-extraction"
+      ]
     },
     {
       "source_id": "9.8",
@@ -2274,14 +2297,20 @@
       "source_idea_ids": [
         "8.8"
       ],
-      "state": "needs-inputs",
+      "state": "bounded-followup-recorded",
       "next_action": "Pin exact edition and text bytes before choosing normalization, target pages and key offsets.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "Cypherpunk manifesto is a distinct candidate running-key corpus; pin canonical text bytes, case/punctuation normalization, cipher and holdout threshold."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "cypherpunk-manifesto-running-key"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Other source versions, boundaries, languages, clock rules and untested pages remain open."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2497,7 +2526,7 @@
         "13.5",
         "13.6"
       ],
-      "state": "needs-scope",
+      "state": "bounded-followup-recorded",
       "next_action": "Use original carrier hashes, a finite password/tool/channel manifest and planted extraction controls; keep this separate from onion-chain scope.",
       "existing_record_ids": [
         "outguess-default-key",
@@ -2507,8 +2536,14 @@
         "Extend known password-attack work from the earlier onion chain to exact LP2 original carriers and a frozen LP-word key list. Default-key results do not cover this.",
         "Track steghide and explicit JPEG/DCT/bit-channel tools on LP2 carriers in the same stego task. Need versioned extraction rules, a finite key/channel list and planted format-specific controls."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "outguess-keyed-lp2"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Six exact strings only. Binary outputs are unauthenticated; other passphrases, tools and image transforms remain open."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2619,7 +2654,7 @@
         "15.1",
         "15.2"
       ],
-      "state": "needs-inputs",
+      "state": "bounded-followup-recorded",
       "next_action": "Pin the exact omitted-prime set and earlier artifact bytes, then define the key derivation and target before combining variants.",
       "existing_record_ids": [
         "grid-alternative-layouts",
@@ -2629,8 +2664,14 @@
         "The 2013 omitted-prime set must be sourced exactly and mapped to one finite key/selection rule. Do not count LP2 grid-prime records as this test.",
         "Earlier-artifact key derivation is untested as a grouped finite family. Preserve exact artifact bytes and define offset, reduction, direction and key-skip semantics per source."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "historical-prime-and-ps-keys"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Only the exact published B3 nine-stream grid was replayed; cookie hashes, packet bytes and other derivations remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "pgp-packet-pad-candidates"
       ]

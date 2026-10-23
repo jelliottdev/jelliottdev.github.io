@@ -1,0 +1,180 @@
+{
+  "id": "cypherpunk-manifesto-running-key",
+  "title": "Cypherpunk Manifesto as an LP2 running key",
+  "status": "published",
+  "question": "Does any contiguous offset of Eric Hughes's manifesto, converted by either of two fixed key mappings and subtracted modulo 29, produce a convincing complete LP2 page?",
+  "summary": "Both planted controls rank first; on each of three LP2 pages, several of sixteen equally searched shuffled keys match or beat the best manifesto score under either mapping.",
+  "tags": [
+    "running key",
+    "Cypherpunk Manifesto",
+    "Eric Hughes",
+    "Gematria Primus",
+    "source text",
+    "offset search",
+    "English scorer",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-04",
+      "lp2-00",
+      "lp2-31",
+      "lp2-54"
+    ],
+    "artifacts": [
+      "experiments/records/cypherpunk-manifesto-running-key/source.html"
+    ],
+    "representation": "Pinned 1993 manifesto page fetched 2026-10-23; 4,072 normalized ASCII letters from the essay body. Separate A=0..25 and greedy GP-rune key sequences; canonical 29-index ciphertext and Latin labels.",
+    "procedure": "At every no-wrap contiguous offset that covers the complete target page, subtract one key unit per rune modulo 29. Rank full-page English quadgram scores. Repeat the entire offset search on sixteen seeded value-shuffled keys per mapping/page. Plant an LP1-04 known reading with each mapping at offset 3301 and require rank one before LP2 scoring.",
+    "parameters": "Two named source mappings; LP2-00 (262 runes), LP2-31 (269), LP2-54 (232); 3,804–3,841 A–Z offsets and 3,625–3,662 GP offsets per page; 16 complete shuffled-key searches for every mapping/page; one fixed subtraction direction and scorer.",
+    "exclusions": "Other source editions or passages, preserving source word boundaries during GP parsing, reverse arithmetic, skip/feedback clocks, wraps, other LP2 pages, arbitrary internal starts, non-English scoring and any general rejection of running keys."
+  },
+  "outcome": "not-supported",
+  "finding": "For the A–Z mapping, respectively 13, 16 and 13 of 16 full-search shuffled maxima equalled or exceeded the source maximum on LP2-00, 31 and 54; for greedy GP mapping, 11, 14 and 9 of 16 did. Both positive-control searches rank the planted offset first and recover the complete LP1-04 reading.",
+  "limitations": "The text is a pinned public copy, not an authenticated puzzle key. Sixteen shuffles are a coarse matched search reference and not a calibrated p-value; shuffled keys are unlike other coherent source texts. English quadgram scoring can miss meaningful non-English or nonstandard plaintext. Human review pending.",
+  "next_steps": "A follow-up needs to predeclare a different source edition, encoding, cipher direction or key clock, then repeat positive controls and complete-offset null searches over entire pages.",
+  "family": {
+    "id": "emerson-running-key",
+    "title": "Pinned-source running-key tests",
+    "question": "Does a specified source text and key clock predict a held-out LP2 continuation?",
+    "baseline": "emerson-running-key"
+  },
+  "variant": {
+    "label": "Eric Hughes manifesto, two key mappings and full-page scores",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp1-06",
+          "lp2-00",
+          "lp2-31",
+          "lp2-54"
+        ],
+        "after": [
+          "lp1-04",
+          "lp2-00",
+          "lp2-31",
+          "lp2-54"
+        ],
+        "reason": "Plant a full-page LP1 control and use the same three LP2 target pages."
+      },
+      {
+        "field": "representation",
+        "before": "Preserved 50-paragraph Emerson PDF derivative normalized to 43,516 ASCII A–Z letters; A=0 through Z=25; first 192 archived rune indices of each target page; canonical GP Latin labels for scoring.",
+        "after": "Pinned 1993 manifesto page fetched 2026-10-23; 4,072 normalized ASCII letters from the essay body. Separate A=0..25 and greedy GP-rune key sequences; canonical 29-index ciphertext and Latin labels.",
+        "reason": "Replace the Emerson extract with the manifesto and test two declared key mappings."
+      },
+      {
+        "field": "procedure",
+        "before": "For every no-wrap source offset, subtract source-letter values modulo 29 from each target's first 192 rune indices. Select the maximum English quadgram score on the first 96 runes and assess the next 96 at the same offset. Repeat the complete search on eight seeded letter shuffles. Plant a known LP1-06 reading with the same key at offset 3301 and search it blindly.",
+        "after": "At every no-wrap contiguous offset that covers the complete target page, subtract one key unit per rune modulo 29. Rank full-page English quadgram scores. Repeat the entire offset search on sixteen seeded value-shuffled keys per mapping/page. Plant an LP1-04 known reading with each mapping at offset 3301 and require rank one before LP2 scoring.",
+        "reason": "Select on whole-page scores and use sixteen matched full searches for each mapping."
+      },
+      {
+        "field": "parameters",
+        "before": "LP2-00, 31 and 54; 43,325 zero-based offsets per search; 96 selection plus 96 holdout runes; eight full-source shuffles with seeds 330100–330107; one fixed source, arithmetic direction, model and representation.",
+        "after": "Two named source mappings; LP2-00 (262 runes), LP2-31 (269), LP2-54 (232); 3,804–3,841 A–Z offsets and 3,625–3,662 GP offsets per page; 16 complete shuffled-key searches for every mapping/page; one fixed subtraction direction and scorer.",
+        "reason": "Use complete page lengths and all eligible offsets of the shorter source."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other source texts or editions, a GP segmentation of source English, reverse arithmetic, source wrapping, passage restarts, word/page-dependent key clocks, other LP2 pages or positions, non-English scoring, and any claim that running keys in general are excluded.",
+        "after": "Other source editions or passages, preserving source word boundaries during GP parsing, reverse arithmetic, skip/feedback clocks, wraps, other LP2 pages, arbitrary internal starts, non-English scoring and any general rejection of running keys.",
+        "reason": "Describe source-, mapping-, page- and scorer-specific bounds."
+      }
+    ]
+  },
+  "review": {
+    "reviewer": "Codex; full deterministic run, independent HTML-parser and counted-quadgram replay; human review pending",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/cypherpunk-manifesto-running-key/run.py --check",
+    "environment": "Python 3 standard library; offline from repository root or extracted experiment ZIP. Independent checker command is in the article.",
+    "script": "experiments/records/cypherpunk-manifesto-running-key/run.py",
+    "script_sha256": "237232f5d7e4ffadfcfd311acbed4d2b706106b835d75564fc687a17dabb3483",
+    "inputs": [
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/plan.json",
+        "sha256": "55d3f88d0c6cea94dc869e6e54c1ef51b600e7dee73637eff8f4c88a05d8d337"
+      },
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/check.py",
+        "sha256": "30a587f6e1861a753fa182406a9167ed596dd558d73ec75f32087ff65e8a6228"
+      },
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/plot.py",
+        "sha256": "9c6be54521256ecf405f69141e8a4d14e561cdf6ec4047992330ddd8d0b19cb4"
+      },
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/source.html",
+        "sha256": "e63fe33f5de9f49b842d02d3d8e42c5f132edb480d6c2173b54084bcf090afe1"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "text/lp2-00.txt",
+        "sha256": "b355ac7bdaae831ab74b57fc858ab11881948a6d4556729bac38e34b42d42966"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-54.txt",
+        "sha256": "1db13348f42c5c70371ce88ddba07409440e4c18036416146df60cfa844135eb"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/results.json",
+        "sha256": "f9cc6bff82c7cd32c6daccc72eec03d6fa8737815d1905803cebf5a08e090eda"
+      },
+      {
+        "path": "experiments/records/cypherpunk-manifesto-running-key/whole-page-scores.svg",
+        "sha256": "45d7726415b8da2afd6f7be5ed10bc375d722f349c6460c67febbe191b5512bb"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Eric Hughes, A Cypherpunk's Manifesto (source copy)",
+      "url": "https://activism.net/cypherpunk/manifesto.html"
+    },
+    {
+      "label": "Existing Emerson running-key experiment",
+      "url": "https://jelliottdev.github.io/#/experiments/emerson-running-key"
+    },
+    {
+      "label": "English scorer calibration",
+      "url": "https://jelliottdev.github.io/#/experiments/english-scorer-controls"
+    }
+  ],
+  "related": [
+    "emerson-running-key",
+    "english-scorer-controls",
+    "search-maximum-controls"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/cypherpunk-manifesto-running-key/whole-page-scores.svg",
+      "caption": "Best complete-page scores for two manifesto key mappings compared with the ranges from sixteen equally searched shuffled keys on each LP2 target."
+    }
+  ]
+}

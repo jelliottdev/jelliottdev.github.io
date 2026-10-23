@@ -1,0 +1,12 @@
+{
+  "schema": "liberpedia-f-interrupter-gap-direct-read-plan-v1",
+  "source": "User-supplied 156-idea compilation, item 3.6: read F positions, gaps or presence as an independent numeric/binary stream. This test is a new narrowly specified direct-gap variant, not a historical source replay.",
+  "question": "Can every gap between consecutive F runes be read directly as one Gematria Primus symbol without skipping, wrapping or reducing values?",
+  "scope": "LP2-00 through LP2-55; retain exactly the 29 GP runes in manuscript order, including headings; ignore punctuation and spacing.",
+  "boundary_rules": ["global-concatenated-pages", "within-page-only"],
+  "gap_rules": ["position-distance", "intervening-rune-count"],
+  "value_maps": ["zero-based-index-0-to-28", "exact-GP-prime-value"],
+  "strict_rule": "Preserve every consecutive F pair under each boundary rule. Position distance is right ordinal minus left ordinal; intervening count is that distance minus one. A value maps only if it is literally in the chosen 29-value alphabet. Retain every unmapped gap as a gap, not a skipped symbol; a complete direct reading needs zero unmapped gaps.",
+  "controls": "Synthetic gap sequence with GP prime distances 2, 3, 5, 7 and 11 must map under the exact-prime rule; synthetic distances 1, 2, 3, 4 and 5 must map as zero-based indices. An out-of-range gap must remain unmapped.",
+  "excluded": "No modulo 29, prime ordinal inversion, pad values, chosen subsets/fragments, byte packing, F-presence bits, absolute F positions, post-hoc page selection, key or plaintext reading."
+}
