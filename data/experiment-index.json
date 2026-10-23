@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 288,
+    "records": 290,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -5360,6 +5360,119 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/english-scorer-controls.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/english-scorer-controls/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/english-scorer-controls.zip"
+    },
+    {
+      "id": "eternalth-f-preserving-vigenere",
+      "title": "Fixed-key F-preserving Vigenère on LP2",
+      "question": "Can the pinned AIRAUMFERAE Vigenère operators explain complete LP2 pages when applied to a fixed 26-letter GP transliteration?",
+      "summary": "With one explicit 26-letter conversion and page-local key reset, 53 of 55 LP2 pages contain output letters forbidden by the source F-preserving operator. The ordinary invertible branch has no English-like complete-page output.",
+      "tags": [
+        "LP2",
+        "source method",
+        "Vigenère",
+        "F-preserving operator",
+        "fixed key",
+        "English scoring",
+        "whole pages"
+      ],
+      "finding": "This exact F-preserving rule cannot produce 53 of the 55 tested page strings. The two compatible pages remain undecoded. With the same key, no ordinary Vigenère output passed the English-score check.",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      },
+      "method_topics": [
+        {
+          "id": "polyalphabetic",
+          "title": "Repeating-key and polyalphabetic ciphers",
+          "aliases": [
+            "Vigenere",
+            "Beaufort",
+            "repeating key",
+            "polyalphabetic",
+            "repeating key cipher",
+            "substitution",
+            "polyalphabetic substitution"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38",
+        "lp2-39",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48",
+        "lp2-49",
+        "lp2-51",
+        "lp2-52",
+        "lp2-53",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/eternalth-f-preserving-vigenere",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/eternalth-f-preserving-vigenere.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/eternalth-f-preserving-vigenere/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/eternalth-f-preserving-vigenere.zip"
     },
     {
       "id": "f-delete-lag13",
@@ -17086,6 +17199,81 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/rejection-channel-information.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/rejection-channel-information/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/rejection-channel-information.zip"
+    },
+    {
+      "id": "relikd-trigram-shift-control",
+      "title": "Three-rune shift display: recovery control",
+      "question": "Does a locally ranked three-rune shift display recover known decoded pages strongly enough to justify a later LP2 screen?",
+      "summary": "The highest-scoring displayed row beat all 49 shuffled searches but recovered only 129 of 207 known runes. The recovery gate failed; no unsolved LP2 page was screened.",
+      "tags": [
+        "source method",
+        "trigram",
+        "shift",
+        "known reading",
+        "control",
+        "candidate scoring"
+      ],
+      "finding": "The highest-scoring row still had 78 wrong runes out of 207. The tool found some correct fragments, but did not recover the known page well enough for the planned LP2 test.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp1-01",
+        "lp1-03",
+        "lp1-04",
+        "lp1-05",
+        "lp1-06",
+        "lp1-07",
+        "lp1-08",
+        "lp1-09",
+        "lp1-10",
+        "lp1-11",
+        "lp1-12",
+        "lp1-13",
+        "lp1-14",
+        "lp1-15",
+        "lp1-16",
+        "lp2-56",
+        "lp2-57"
+      ],
+      "artifacts": [
+        "experiments/records/relikd-trigram-shift-control/precontrol-plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/relikd-trigram-shift-control",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/relikd-trigram-shift-control.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/relikd-trigram-shift-control/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/relikd-trigram-shift-control.zip"
     },
     {
       "id": "repeated-long-ngrams",

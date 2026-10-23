@@ -75,6 +75,11 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(json.loads((self.root / 'data/checker-records.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
 
+    def test_article_link_permissions_are_derived_not_imported(self):
+        record = copy.deepcopy(self.record)
+        record['article_links'] = {'invented.json': 'research/unreviewed.json'}
+        self.assertNotIn('article_links', self.run_build(record)[0])
+
     def test_generated_python_cache_is_not_a_reproduction_input(self):
         record = copy.deepcopy(self.record)
         path = 'experiments/records/test-record/__pycache__/run.cpython-312.pyc'

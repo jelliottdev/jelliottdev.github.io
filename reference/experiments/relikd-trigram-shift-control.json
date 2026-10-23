@@ -1,0 +1,151 @@
+{
+  "id": "relikd-trigram-shift-control",
+  "status": "published",
+  "title": "Three-rune shift display: recovery control",
+  "question": "Does a locally ranked three-rune shift display recover known decoded pages strongly enough to justify a later LP2 screen?",
+  "reader_question": "If fragments look like English, did the method recover the page?",
+  "summary": "The highest-scoring displayed row beat all 49 shuffled searches but recovered only 129 of 207 known runes. The recovery gate failed; no unsolved LP2 page was screened.",
+  "finding": "Across 51 known-page/start displays, the source's first-ranked rows recovered an average 50.4% of rune positions. The added English scorer selected an LP1-06 row with 129/207=62.3% exact runes; no one of 49 full-search shuffle maxima scored as high, yet the declared 70% recovery gate failed.",
+  "limitations": "The original program ranks three-rune blocks independently and does not define a coherent decoder or English acceptance gate. Its language-model training overlap with the known readings is not excluded. The +7 plant tests a simple fixed shift, and 49 shuffles are a finite display control, not a cipher null or a probability claim.",
+  "next_steps": "Require a rule connecting blocks, then demonstrate known-reading recovery and a matched complete-search control before testing unsolved pages.",
+  "outcome": "inconclusive",
+  "tags": [
+    "source method",
+    "trigram",
+    "shift",
+    "known reading",
+    "control",
+    "candidate scoring"
+  ],
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-05",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-10",
+      "lp1-11",
+      "lp1-12",
+      "lp1-13",
+      "lp1-14",
+      "lp1-15",
+      "lp1-16",
+      "lp2-56",
+      "lp2-57"
+    ],
+    "artifacts": [
+      "experiments/records/relikd-trigram-shift-control/precontrol-plan.json"
+    ],
+    "representation": "17 already decoded GP29 rune streams, 15 from LP1 and the two solved LP2 end pages, each shifted by +7 modulo 29.",
+    "procedure": "Execute pinned NGramShifter on each page at three starting positions, preserving all 29 ranked local shifts per block; score complete printed rows and compare with 49 shared within-page shuffles.",
+    "parameters": "51 page/start displays; 29 rank rows each; 100 scored quadgram eligibility; selected recovery >=70% and score above >=47/49 shuffle maxima required before any target screen.",
+    "exclusions": "No unsolved LP2 target, global key constraint, interrupted cipher, validation of unknown key laws, or held-out language-model claim."
+  },
+  "review": {
+    "kind": "source method control and calibration",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact pinned source output and independent modular enumeration; complete 49-search selection recheck",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/relikd-trigram-shift-control/run.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check && python experiments/records/relikd-trigram-shift-control/check.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND && python experiments/records/relikd-trigram-shift-control/plot.py --check",
+    "environment": "Python 3 standard library and a separate Git checkout at revision 719380ebee0523ad7f2fbf389c6f960d51bea5a4; unlicensed original code is read as verified Git blobs, not bundled. Python -X utf8 handles its implicit source-file decoding on Windows.",
+    "script": "experiments/records/relikd-trigram-shift-control/check.py",
+    "script_sha256": "570b4e7a3e8929650d58c8547e900879da54abef5f6194398ee42ebbb9e93609",
+    "inputs": [
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/precontrol-plan.json",
+        "sha256": "6da0fc08f29f0fb530c8aaa60c7a867f4086439603b400d6d931cbc26b0800e4"
+      },
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/run.py",
+        "sha256": "0dcc63eb944567d9f2f2357eb7c2b51dcc6b0db300d43fa76c5c57d4b344868d"
+      },
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/check.py",
+        "sha256": "570b4e7a3e8929650d58c8547e900879da54abef5f6194398ee42ebbb9e93609"
+      },
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/plot.py",
+        "sha256": "29beb477492a2cceb0be4776a7b62775624ce9e03200676079c45fbb6e1dfd15"
+      },
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/article.md",
+        "sha256": "5fed10f0251b35dd89405e154a77cc19f032cdc793e4cef932ba974e4e82a071"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/results.json",
+        "sha256": "b363e3708b65ad02d01780c45cba8cb1adbe384f3db70fc341499346e5f6f9a9"
+      },
+      {
+        "path": "experiments/records/relikd-trigram-shift-control/comparison.svg",
+        "sha256": "a2b28bd45d3c03617a2d3d77da8e16726d75fd9fba23a54ff6a17cfaaceef16f"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/relikd-trigram-shift-control/comparison.svg",
+      "caption": "High English score and incomplete known-text recovery in the same selected row."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned LiberPrayground method",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/FailedAttempts.py"
+    }
+  ],
+  "related": [
+    "english-scorer-controls",
+    "lp2-trigram-repeats"
+  ],
+  "reader_finding": "The highest-scoring row still had 78 wrong runes out of 207. The tool found some correct fragments, but did not recover the known page well enough for the planned LP2 test.",
+  "reader_limit": "Only known readings were tested; the scorer's training overlap is unknown.",
+  "article": "# Testing a three-rune shift display\n\nThe pinned LiberPrayground program displays possible readings **three runes at a time**. For each block it tries all 29 alphabet shifts and ranks them by a rune-trigram frequency table. It repeats the display from three starting positions. Each block chooses its own ranked shift; the program does not require one key to connect adjacent blocks.\n\nWe checked that display on **17 already decoded page streams** (15 LP1 pages and solved LP2-56–57). Adding 7 to every known rune gave every block a known correct shift. The original program's block output matched a separate enumeration of all 29 shifts. Yet its first-ranked row recovered only **50.4%** of known runes on average across the 51 page/starting-position displays (range 32.1–64.5%). Five blocks had ties for the top frequency; stable source ordering chooses one displayed alternative without resolving the tie.\n\n![The selected row scores well but falls short of exact recovery](experiments/records/relikd-trigram-shift-control/comparison.svg)\n\nWe also scored all 29 displayed rows per starting position with a fixed English quadgram table. Blank source cells broke text into separate runs; a row needed at least 100 scored quadgrams. The best-scoring row was on LP1-06: **129 of 207 runes matched, leaving 78 wrong**. Its score was higher than the maximum of each of 49 complete searches on within-page shuffled controls. That is a finite comparison of this display and score, not a probability that it decoded a page. The scorer's training overlap with these known readings has not been excluded.\n\nThe selected row starts **“OANDEDNDEEDWEDTSES…”**; the known reading starts **“OANAMANDECIDEDTOGO…”**. The resemblance is real, but so are the mismatches.\n\nThe fixed control rule required both score separation from at least 47 of 49 shuffled maxima **and 70% exact recovery** before screening unsolved LP2. The 70% line is a practical threshold chosen for this control, not a universal decoding standard. The score condition passed; recovery did not. We did **not** run this setup on unsolved LP2. The +7 construction verifies a simple known shift and source arithmetic; it does not test whether an unknown cipher uses an interrupted or changing key. Likewise, plausible-looking fragments can arise because every three-rune block is independently selected from a language table.\n\nThis is a control audit of a local-fragment display, not a failed Liber Primus decryption. A proposed decoder would need an explicit rule connecting blocks and a known-reading recovery control for that rule before an unsolved-page result could carry weight.\n\n## Inspect and reproduce\n\nThe [frozen control plan](experiments/records/relikd-trigram-shift-control/precontrol-plan.json) fixes the 17 pages, three starts, 29 ranked rows, score eligibility, +7 plant and 49 shared shuffles. [Complete measurements](experiments/records/relikd-trigram-shift-control/results.json) preserve every first-ranked page/start display and every shuffle maximum. The original program is [pinned at revision 719380e](https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/FailedAttempts.py); it has no license file in that Git tree, so its code is not copied into this record.\n\nWith a separate checkout of that exact revision, run Python in UTF-8 mode. This matters on Windows because the original frequency loader does not declare its file encoding.\n\n```text\npython -X utf8 experiments/records/relikd-trigram-shift-control/run.py --source-root PATH_TO_LIBERPRAYGROUND --check\npython experiments/records/relikd-trigram-shift-control/check.py --source-root PATH_TO_LIBERPRAYGROUND\npython experiments/records/relikd-trigram-shift-control/plot.py --check\n```\n\nThe runner executes the original method from verified Git objects in a temporary directory and compares its entire saved result. The checker separately derives the 29 shifts, all selected rows and all 49 complete-search maxima without importing that method. No manuscript target or external service is needed.\n",
+  "article_path": "experiments/records/relikd-trigram-shift-control/article.md",
+  "script_sha256": "570b4e7a3e8929650d58c8547e900879da54abef5f6194398ee42ebbb9e93609",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "automatic-search",
+      "title": "Automatic search and language scoring",
+      "aliases": [
+        "hill climbing",
+        "simulated annealing",
+        "genetic algorithm",
+        "brute force",
+        "automatic search",
+        "beam search"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}

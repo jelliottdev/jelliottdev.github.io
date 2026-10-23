@@ -1,0 +1,16 @@
+{
+  "schema": "scratch-relikd-trigram-control-plan-v1",
+  "timing": "Frozen before any LP2 target run; exploratory controls only",
+  "source_commit": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_method": "LP/FailedAttempts.py:NGramShifter.ngram_probability_heatmap, gramsize=3",
+  "source_sha256": "654a96ea2331658ba74640a695fc62c1c7255a864dee1eb96808b766ab422a25",
+  "trigram_file": {"path": "data/p-3gram.txt", "sha256": "edd7a1740592effdac05ae4d23e38c48e0778b577b715736cdf605c61c95c89d"},
+  "known_readings": {"path": "data/evidence/known-readings.json", "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"},
+  "scorer": {"path": "experiments/records/english-scorer-controls/english_quadgrams.txt", "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062", "floor_count": 0.01, "provenance_limit": "This is a separately pinned model, but overlap of its training data with the 17 known readings has not been independently excluded. Do not describe the score control as held out."},
+  "known_page_scope": "All 17 decoded page streams in the frozen known-readings file, separately by page; no selection of favorable pages after outcomes.",
+  "plant": "Add GP index 7 modulo 29 to every rune of each known page. Exact correct local decryption shift is 7 at every complete three-rune block.",
+  "search": "For each page scan all 3 starting phases and all 29 ranked output rows. Preserve all tied shifts and blanks; no independently chosen fragment substitutions outside the source heatmap. Maximize mean English quadgram log10 likelihood over contiguous printed Latin segments, with blank blocks breaking segments. A candidate is eligible only with >=100 scored quadgrams. Scores use the fixed model above and are descriptive; top-row exact-rune recovery is also measured.",
+  "null": "49 shared seeded controls with seed 20261023: within each known page, shuffle its GP indices once per trial, add 7 modulo 29, and repeat the same full 3-phase by 29-row scan; use the maximum over all eligible page/phase/row candidates in each trial.",
+  "power_gate": "Before considering LP2, the planted known-text max must exceed at least 47 of the 49 whole-search shuffle maxima and the selected output must contain at least 70% of the known plaintext runes in exact positions across complete blocks. Failure means the heatmap/scorer is too weak for a negative LP2 finding under this setup.",
+  "limits": "The source only prints local fragments, not a unified decoder. The quadgram score is an added diagnostic, not an upstream acceptance rule. A shift-7 plant is simple and cannot validate interrupted or changing alphabets. Do not test LP2 if this gate fails."
+}

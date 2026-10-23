@@ -3,7 +3,7 @@ import argparse
 import json
 import re
 
-from build_experiments import ROOT, require, validate_family, validate_record
+from build_experiments import ROOT, article_link_aliases, require, validate_family, validate_record
 
 
 def preflight(identifiers, root=ROOT):
@@ -22,6 +22,7 @@ def preflight(identifiers, root=ROOT):
         require(all(identifier in by_id and identifier != record['id']
                     for identifier in record['related']), 'Related IDs must be published or in this batch')
         validate_family(record, by_id)
+        article_link_aliases(root, record, set(by_id))
     return selected
 
 

@@ -1,0 +1,32 @@
+{
+  "schema": "eternalth-source-parity-receipt-v1",
+  "repository": "https://github.com/Eternalth/Liber-Primus",
+  "revision": "a662136a916435767a74e6198f0549d5878b1d0a",
+  "source_path": "VigenereFenglish.cpp",
+  "source_git_blob": "a582dc36ee6589fd09a705dbdf0ba3ee936e8beb",
+  "source_sha256": "4da87a7e0372ca9f22ef6e376e49a8c2e3e9a030db80acba2c72052a20778422",
+  "license_note": "No license file among the four tracked files; source code is linked, not bundled.",
+  "compile_command": "g++ -std=c++11 -O2 VigenereFenglish.cpp -o vigenere-fenglish.exe",
+  "compiler": "g++ (MinGW-W64 x86_64-ucrt-posix-seh, built by Brecht Sanders, r4) 16.1.0",
+  "stdin_rule": "Each fixture followed by LF; the program reads one whitespace-delimited token with cin.",
+  "stdout_rule": "Drop only blank lines; retain the two uppercase output lines in original order.",
+  "fixtures": [
+    {
+      "input": "ABCDEFGHIJKLFABC",
+      "ordinary_plus": "AJTDYRLLZJOLNRBW",
+      "f_preserving_plus": "AJTDYFLLZJOLFRBW"
+    },
+    {
+      "input": "AF",
+      "ordinary_plus": "AN",
+      "f_preserving_plus": "AF"
+    },
+    {
+      "input": "AX",
+      "ordinary_plus": "AF",
+      "f_preserving_plus": "AF"
+    }
+  ],
+  "interpretation": "The second output preserves input F but still increments its key counter on every character. AF and AX collide in the second output; no general inverse exists.",
+  "scope": "Source parity on three synthetic tokens; not a source manuscript sweep or an LP2 result."
+}

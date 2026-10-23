@@ -34,6 +34,14 @@ const guard=setTimeout(()=>{console.error('Verifier race test did not finish');p
  assert.equal(latest,'Verified exact match: images/fixture.jpg');
  first.resolve(bytes.buffer);await firstPending;assert.equal(newResult.textContent,latest,'Earlier selection cannot replace the latest file result');
  assert.equal(digestCalls,1);
+ const clearSelection=()=>$('#verify-file').onchange({target:{files:[]}});
+ await clearSelection();assert.equal(newResult.textContent,'','Clearing the file removes the previous exact-match claim');
+ const clearedRead=deferred(),clearedPending=start(file(()=>clearedRead.promise));
+ assert.equal(newResult.textContent,'Calculating SHA-256…');
+ await clearSelection();assert.equal(newResult.textContent,'','An empty selection cannot leave a permanent loading status');
+ clearedRead.resolve(bytes.buffer);await clearedPending;
+ assert.equal(newResult.textContent,'','A read completed after clearing cannot restore stale verification');
+ assert.equal(digestCalls,1,'Cleared reads are discarded before hashing');
  const staleError=deferred(),errorPending=start(file(()=>staleError.promise));
  await render();const afterError=$('#verify-result');staleError.reject(Error('old read failed'));await errorPending;
  assert.equal(afterError.textContent,'','A stale read failure cannot replace new-page state or throw a null-write error');
@@ -50,5 +58,5 @@ const guard=setTimeout(()=>{console.error('Verifier race test did not finish');p
  await render();context.crypto.subtle.digest=async()=>{throw Error('digest unavailable')};
  await start(file(async()=>bytes.buffer));assert($('#verify-result').textContent.includes('Browser verification is unavailable'));
  assert.equal(context.document.activeElement,focus);
- console.log('PASS: captured verifier result, overlapping file choices, stale reads/digests/errors, latest-result accuracy and unchanged focus. DOM stubs do not verify rendering.');
+ console.log('PASS: captured verifier result, overlapping file choices, stale reads/digests/errors, cleared-selection accuracy and unchanged focus. DOM stubs do not verify rendering.');
 })().catch(error=>{console.error(error);process.exitCode=1}).finally(()=>clearTimeout(guard));

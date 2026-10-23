@@ -167,7 +167,8 @@ async function downloadsPage(pageId,version){if(!db.catalog){const response=awai
  let verifyVersion=0;
  $('#verify-file').onchange=async e=>{
   const version=++verifyVersion,file=e.target.files[0];
-  if(!file||!verifyResult.isConnected)return;
+  if(!verifyResult.isConnected)return;
+  if(!file){verifyResult.textContent='';return;}
   const isCurrent=()=>version===verifyVersion&&verifyResult.isConnected;
   verifyResult.textContent='Calculating SHA-256…';
   try{

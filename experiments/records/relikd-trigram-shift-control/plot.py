@@ -1,0 +1,48 @@
+"""Small, readable control figure from the frozen result receipt."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+DATA = json.loads((HERE / "results.json").read_text(encoding="utf-8"))
+winner = DATA["selected_known_max"]
+assert (winner["exact_runes"], winner["complete_runes"]) == (129, 207)
+assert len(DATA["null_maxima"]) == 49
+best_null = max(x["max"]["mean_quadgram_log10"] for x in DATA["null_maxima"])
+assert best_null < winner["mean_quadgram_log10"]
+
+svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 304" role="img" aria-labelledby="title desc">
+<title id="title">A good score did not recover the known reading</title>
+<desc id="desc">The selected row recovered 129 of 207 runes, or 62 percent, below the declared 70 percent recovery gate. Its English score was higher than all 49 shuffled-search maxima.</desc>
+<rect width="320" height="304" fill="#f5f7f8"/>
+<g font-family="Arial, sans-serif" fill="#17252d">
+<text x="18" y="30" font-size="18" font-weight="700">Fragment recovery on known text</text>
+<text x="18" y="59" font-size="13">Known text, shifted by +7, then reconstructed</text>
+<text x="18" y="96" font-size="14" font-weight="700">Exact runes recovered</text>
+<rect x="18" y="109" width="260" height="22" fill="#dce5e9"/>
+<rect x="18" y="109" width="162" height="22" fill="#2f6074"/>
+<line x1="200" x2="200" y1="102" y2="137" stroke="#ab542f" stroke-width="2"/>
+<text x="18" y="153" font-size="15" font-weight="700">129 / 207 = 62%</text>
+<text x="208" y="153" font-size="13" fill="#823a22">70% gate</text>
+<text x="18" y="184" font-size="14" font-weight="700">English score</text>
+<text x="18" y="211" font-size="15" font-weight="700">0 / 49 shuffled searches</text>
+<text x="18" y="235" font-size="13">had a higher score</text>
+<line x1="18" x2="302" y1="263" y2="263" stroke="#cbd6db"/>
+<text x="18" y="290" font-size="13" font-weight="700">Score passed; recovery gate failed.</text>
+</g></svg>'''
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--check", action="store_true")
+    args = ap.parse_args()
+    target = HERE / "comparison.svg"
+    raw = svg.encode("utf-8")
+    if args.check:
+        assert target.read_bytes() == raw
+    else:
+        target.write_bytes(raw)
+    print(hashlib.sha256(raw).hexdigest())
+
+if __name__ == "__main__":
+    main()

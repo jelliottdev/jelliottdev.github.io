@@ -228,6 +228,52 @@ def validate_family(r, by_id):
             'A variant needs a scope change; document an identical retest in the original record')
 
 
+def authored_link_targets(markdown):
+    """Match authored hyperlinks, excluding the renderer's fenced/inline code and images."""
+    fenced = False
+    for line in markdown.splitlines():
+        if line.startswith('```'):
+            fenced = not fenced
+            continue
+        if not fenced:
+            prose = re.sub(r'`[^`]+`', '', line)
+            yield from re.findall(r'(?<!!)\[[^\]\n]+\]\(([^)]+)\)', prose)
+
+
+def article_link_aliases(root, record, published_ids):
+    """Vetted navigation links, separate from hashed scientific/image dependencies."""
+    aliases = {}
+    declared = {record['article_path'], record['reproduction']['script']}
+    declared.update(item['path'] for group in ('inputs', 'outputs')
+                    for item in record['reproduction'][group])
+    for href in authored_link_targets(record['article']):
+        if href in declared or href.startswith(('https://', '#/')):
+            continue
+        # Unsafe examples stay escaped. Never decode or guess URL/path syntax.
+        if not re.fullmatch(r'[a-zA-Z0-9_./-]+', href) or any(
+                part in ('', '.', '..') for part in href.split('/')):
+            continue
+        zip_match = re.fullmatch(r'downloads/experiments/([a-z0-9-]+)\.zip', href)
+        if zip_match:
+            require(zip_match[1] in published_ids, 'Article ZIP must name a published record: ' + href)
+            aliases[href] = href  # Bundles are built after this registry.
+            continue
+        candidate = root / href
+        if '/' not in href or not candidate.is_file():
+            candidate = root / Path(record['article_path']).parent / href
+        resolved = candidate.resolve()
+        require(resolved.is_relative_to(root.resolve()) and resolved.is_file(),
+                'Article link has no in-repository file: ' + record['id'] + ': ' + href)
+        target = resolved.relative_to(root.resolve()).as_posix()
+        owner = re.match(r'^experiments/records/([a-z0-9-]+)/', target)
+        if owner:
+            require(owner[1] in published_ids, 'Article link must name a published record: ' + target)
+            if target == f'experiments/records/{owner[1]}/article.md':
+                target = '#/experiments/' + owner[1]
+        aliases[href] = target
+    return aliases
+
+
 def build(root=ROOT):
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
@@ -262,6 +308,10 @@ def build(root=ROOT):
     by_id = {r['id']: r for r in records}
     for r in records:
         validate_family(r, by_id)
+        r.pop('article_links', None)  # Export-only permissions are always derived here.
+        aliases = article_link_aliases(root, r, ids)
+        if aliases:
+            r['article_links'] = aliases
     families = {}
     for r in records:
         if r.get('family'):

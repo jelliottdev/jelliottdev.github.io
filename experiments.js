@@ -520,7 +520,7 @@ function experimentArticle(r,catalog=experimentRecords){
     </details>
     <details class="experiment-extra"><summary>Detailed analysis and sources</summary>
       <dl class="experiment-scope"><dt>Pages and files</dt><dd>${experimentDetailedTargets(r)}</dd><dt>Input</dt><dd>${esc(r.scope.representation)}</dd><dt>Method</dt><dd>${esc(r.scope.procedure)}</dd><dt>Bounds</dt><dd>${esc(r.scope.parameters)}</dd><dt>Not tested</dt><dd>${esc(r.scope.exclusions)}</dd></dl>
-      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles)}</div>
+      <div class="experiment-prose">${renderExperimentMarkdown(r.article,accountFiles,r.article_links||{})}</div>
       <div id="experiment-method-guides">${experimentMethodGuidesContent(r)}</div>
       <h3 id="experiment-sources">Sources</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}">${esc(s.label)}</a></li>`).join('')}</ul>
     </details>
@@ -528,17 +528,29 @@ function experimentArticle(r,catalog=experimentRecords){
 }
 
 // Authored experiment Markdown: escaped text, links, headings, lists, simple tables and code; no embedded HTML.
-function renderExperimentMarkdown(markdown,files=[]){
+function renderExperimentMarkdown(markdown,files=[],articleLinks={}){
   const safeLink=href=>/^https:\/\/[^\s<>"']+$/.test(href)||
     /^#\/(?:wiki\/[a-z0-9-]+|page\/lp[12]-\d{2}|reader\/lp[12]-\d{2}|experiments\/[a-z0-9-]+)(?:\?[a-zA-Z0-9_%=&.-]+)?$/.test(href)||
     (files.includes(href)&&/^[a-zA-Z0-9_./-]+$/.test(href)&&!href.startsWith('/')&&!href.split('/').includes('..'));
+
+  const canonicalLocal=href=>typeof href==='string'&&/^[a-zA-Z0-9_./-]+$/.test(href)&&
+    href.split('/').every(part=>part&&part!=='.'&&part!=='..');
+  const anchorHref=href=>{
+    // Aliases are builder-vetted navigation, never new image/reproduction inputs.
+    const aliases=articleLinks&&typeof articleLinks==='object'&&!Array.isArray(articleLinks)?articleLinks:{};
+    if(Object.hasOwn(aliases,href)&&canonicalLocal(href)){
+      const target=aliases[href];
+      if(canonicalLocal(target)||typeof target==='string'&&/^#\/experiments\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(target))return target;
+    }
+    return safeLink(href)?href:null;
+  };
 
   let inCode=false,code=[],paragraph=[],html=[],listType='',codeNumber=0;
   const codeBlock=lines=>{const number=++codeNumber;return `<div class="copyable-block unwrapped"><div class="block-tools"><span role="status"></span><button type="button" data-wrap-block aria-pressed="false" aria-label="Wrap lines in experiment text block ${number}">Wrap lines</button><button type="button" data-copy-block aria-label="Copy experiment text block ${number}">Copy</button></div><pre class="reading-text" tabindex="0" aria-label="Experiment text block ${number}">${esc(lines.join('\n'))}</pre></div>`;};
   const inline=text=>String(text).split(/(`[^`]+`|\[[^\]\n]+\]\([^)]+\))/g).map(part=>{
     if(/^`[^`]+`$/.test(part))return '<code>'+esc(part.slice(1,-1))+'</code>';
     const link=part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if(link)return safeLink(link[2])?`<a href="${esc(link[2])}">${esc(link[1])}</a>`:esc(part);
+    if(link){const href=anchorHref(link[2]);return href?`<a href="${esc(href)}">${esc(link[1])}</a>`:esc(part);}
     return esc(part).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g,'<em>$1</em>');
   }).join('');
   const closeList=()=>{if(listType){html.push(`</${listType}>`);listType='';}};
