@@ -1,0 +1,271 @@
+{
+  "id": "semantic-seed-screen-gate-audit",
+  "status": "published",
+  "title": "Semantic-seed sweep: an unreachable screen gate",
+  "question": "Could candidates in the published R26-C semantic-seed sweep reach its full hit test?",
+  "reader_question": "Did this seed search actually let promising answers through to its final check?",
+  "summary": "The pinned sweep reproduced 4,274 screening rows, but none could reach its full test: the code requires a score of +5 from a log-probability measure that cannot exceed zero.",
+  "finding": "A planted key recovered all 120 screening runes and was still discarded at −4.35. The 4,274 source rows and best score −6.5781 reproduce, but zero escalations follow mechanically from the unreachable +5 gate; this is not a negative cipher result.",
+  "limitations": "The original nine-register model and three exact training corpora are absent from the pinned source. Its full hitfn20 gate and source-reported planted control were not independently replayed. The bundled control.json is a source artifact, not our validation of the complete pipeline.",
+  "next_steps": "Obtain or exactly rebuild the original language panel, use a predeclared screen threshold on the correct score scale, prove that a planted key passes the entire screen-to-hit path, then rerun this bounded candidate set.",
+  "outcome": "inconclusive",
+  "tags": [
+    "semantic seeds",
+    "derived keystreams",
+    "PRNG",
+    "prime ladder",
+    "totient ladder",
+    "source audit",
+    "unreachable threshold",
+    "score scale",
+    "hitfn20",
+    "R26-C"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/semantic-seed-screen-gate-audit/source-manifest.json"
+    ],
+    "representation": "Pinned Dukotah/LP2 flattened 12,956-rune transcription, first 120 runes screened, 240-rune full-hit path never reached. Source labels 0–54 skip blank Liberpedia LP2-50 and include LP2-55.",
+    "procedure": "Regenerate the 323 source seeds; run the exact 4,274 source screens; inspect the promotion condition and score domain; pass a source-generated planted perfect-recovery key through that same screen.",
+    "parameters": "292 integer seeds through seven generators and 31 phrase seeds through three generators, each with exact and pair decoders at offset zero; beam width 64; source promotion bar +5.",
+    "exclusions": "No corrected-threshold sweep, full language-panel adjudication, original model rebuild, other seeds/generators/offsets, or inference that a derived-key family is ruled out."
+  },
+  "review": {
+    "reviewer": "Exact pinned-source screen replay and independent score-domain checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational source audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/semantic-seed-screen-gate-audit/run.py --replay && python experiments/records/semantic-seed-screen-gate-audit/check.py",
+    "environment": "Python 3.12 with NumPy; all pinned source screening inputs bundled under the MIT license. Full screen replay takes about three minutes. The missing language-panel model is not required for the screen and is not reproduced.",
+    "script": "experiments/records/semantic-seed-screen-gate-audit/run.py",
+    "script_sha256": "856f17c04041a57ce798848f670281e8198c8d2a8012cf6e4216f9a21c2d0d91",
+    "inputs": [
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/run.py",
+        "sha256": "856f17c04041a57ce798848f670281e8198c8d2a8012cf6e4216f9a21c2d0d91"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/check.py",
+        "sha256": "ea9790ed7fa645aa31530a377bc5d5ebfbea316ccdaf25199c0b9ae5edd0499f"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/plan.json",
+        "sha256": "386f32f5631662e913d49f7ebec3e91f556551b200a27325f2f19036987d6440"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source-manifest.json",
+        "sha256": "dab155afd0b97ecb894c076dda10bcf71abaf0c75ec4316483b85a752814669e"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/LICENSE",
+        "sha256": "da00a2f25a95974e6ba5835ff9f5b99a3ea56b02b68c663b0944ff6420890d95"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "7b8885fda99d5941cc0cdf49834b3ec9bbe50cbbb3a7da6e0fef2b18d9e07d69"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round19/G2/gen_perl.py",
+        "sha256": "48e4cc24316b585acefa6b5d6de7978925b2ecb6438a0cf71a9a18f2295ceedf"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round19/G3/gen_py27.py",
+        "sha256": "24a347b02a9c0436acdbb359a98db856a0c649ae382976267cff36c51d3262ae"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round19/I1/driftbeam.py",
+        "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round19/I2/adjudicate.py",
+        "sha256": "3d007a7e2084954d87a595d758f6f08a49cfe93c1e5583db1856b1a432b387af"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round19/I3/nullcurve19.py",
+        "sha256": "1cb4b0e5fb08cf3ac4532cd4af0a61a83d8c96058ed76b4b2d016b29b09c075b"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round20/HITFN/hitfn20.py",
+        "sha256": "551d4b052e0a8310dd9203f8723cbca2fa1b3cf6f97f8b2791d8caf9e5be529b"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round20/P3/panelmax20.py",
+        "sha256": "d477295abc94367db3da3d33f9cb85ceef1a36b662eba979df7a2572a318e204"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/build_seeds.py",
+        "sha256": "152b3b7862f8ce03303b9566fc51d0555ce0561cf16d35800fc93312d30d538e"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/control.json",
+        "sha256": "3c81f136ada55c37b4a1b95dd8bf8c71d5ea5336d4ed69e35930eac6fbcc8540"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/control.py",
+        "sha256": "9be141701b8496bab5888f42ffb3bab3195d8e0ce5caf776b4bde3111c3c0b76"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/ledger.json",
+        "sha256": "6db95b64ed65513f3527c5d4ae59997febdda1e87e84cda50670e57073daa1ad"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/PREREG.md",
+        "sha256": "1db30444ed6126de06d25fb9b5518df405f510492230fda81d3ff4677b1b0fe1"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/RESULTS.md",
+        "sha256": "a48186a0344827f4e6dcfcad020aacca3923e1f46474cad330b16a8fd784b47c"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/seeds.json",
+        "sha256": "3e4af19fc4b43427367360f2cf09ad06f88ff8c7c7ea405da1564ed0f2b1a8cd"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/summary.json",
+        "sha256": "e64b11b964ef4046d40abece335ab797a0fe92241126f50fc0f32dee9f5e3a8b"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/round26/C/sweep.py",
+        "sha256": "5859dc9dc0d1f3c5bd599b6c44a0f488c3429564765d6ba1cbe4d8cb4d27577c"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/results.json",
+        "sha256": "c7c28b5712d4daa31378c08c1ef2b7b68ae0bff4d8918fdab4188a3a20011f3e"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/rows.jsonl",
+        "sha256": "c593e82c3f063bcfa23b850be9b4a3ecdd82cb5290dc8ec4689810f55b54799a"
+      },
+      {
+        "path": "experiments/records/semantic-seed-screen-gate-audit/gate.svg",
+        "sha256": "23772db9527daefa38b867495a1f112048d608d640df2f3cdd3020338075b279"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/semantic-seed-screen-gate-audit/gate.svg",
+      "caption": "A 120/120 planted decode scored −4.35 but failed the +5 promotion rule; the normalized log-probability score cannot exceed zero."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned R26-C source sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round26/C/sweep.py"
+    },
+    {
+      "label": "Pinned source score definition",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/src/lp/score.py"
+    },
+    {
+      "label": "Pinned source results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round26/C/RESULTS.md"
+    }
+  ],
+  "related": [
+    "seed-crib-controls",
+    "decoder-skip-controls",
+    "cumulative-autokey-literal"
+  ]
+}

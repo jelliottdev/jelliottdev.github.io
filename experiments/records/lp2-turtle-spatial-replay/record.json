@@ -1,0 +1,148 @@
+{
+  "id": "lp2-turtle-spatial-replay",
+  "title": "LP2 number streams as turtle paths",
+  "status": "published",
+  "question": "Do the fixed 72 turtle drawing rules from a published LP2 number-channel test reproduce, and do any produce a geometric shape beyond shuffled controls?",
+  "summary": "The source's 12,956-rune stream, 72 paths and 14,400 shuffled controls reproduce. The same six uncorrected path/measure pairs screen as unusual; none meets the source's later figure-flag rule. No plaintext readout is defined.",
+  "pages_note": "LP2-00–49 and LP2-51–55; blank LP2-50 omitted in the source's segment numbering",
+  "bounds_note": "72 fixed turtle rules × 200 shuffles each; 12,956 runes in each path",
+  "tags": [
+    "turtle graphics",
+    "spatial reading",
+    "numbers are the direction",
+    "Gematria Primus",
+    "prime values",
+    "prime indices",
+    "totient",
+    "geometry",
+    "reported attempt"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "The 55 nonempty source transcription segments equal Liberpedia LP2-00–49 plus LP2-51–55, including F (index zero); source stream SHA-256 79b14e630946b64cdca838f328e73904f506df576d15e21fcb46271d4b4c8040.",
+    "procedure": "For each rune take its GP prime, one-based prime index, or prime totient. Turn modulo 4, 6, 8, 12, 29 or 360, using absolute or relative heading, then step by one unit or proportional to the value. Measure six declared path statistics and compare with 200 seeded histogram-preserving shuffles for every case. Run planted square and block-comb controls.",
+    "parameters": "3 streams × 6 moduli × 2 turn interpretations × 2 step rules = 72 fixed constructions; 200 shuffles per construction = 14,400 null paths.",
+    "exclusions": "Per-page resets, pen-up markers, 3D or L-system routes, other angles or step rules, and any plaintext extraction along a path. G3 base32 and coordinate pointer framings from the broader source lane are not reimplemented in this geometric record."
+  },
+  "outcome": "not-supported",
+  "finding": "All 72 geometric constructions and their 14,400 initial shuffles completed. The independent replay finds the same six initial p<0.01 path/measure screens as the source and reproduces both planted-shape controls. The source's later figure-flag rule accepts none of the six. This is no evidence of a glyph under the specified detector, and no decryption rule follows from the paths.",
+  "limitations": "The 200-shuffle screen does not resolve a familywise extreme-tail probability. The source's later normal-tail refinement is model-dependent, especially for discrete raster measures; closure and caging duplicate the same ratio. Sampled crossings and floating-point ties cause small source-versus-replay numerical differences. The source's empirical two-sided formula can exceed 1 for tied values. These caveats do not change which six cases entered the initial screen.",
+  "next_steps": "A new candidate should freeze a distinct drawing or readout rule, its recognized feature and a calibration set before examining LP2; then show the proposed feature on a held-out page or source stream.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-turtle-spatial-replay/run.py --check; python experiments/records/lp2-turtle-spatial-replay/run.py --full-null --check; python experiments/records/lp2-turtle-spatial-replay/plot.py",
+    "environment": "Python 3 with NumPy and SciPy; offline run from repository root. The full-null check repeats 14,400 path-and-detector evaluations.",
+    "script": "experiments/records/lp2-turtle-spatial-replay/run.py",
+    "script_sha256": "03f9427c9df4e2dcff12ef1067b8f38c81245a3bb0500ac85471abd66699237d",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/source-ledger.json",
+        "sha256": "05c88d2b5237614b8870bd3debbddc4725130ac91f1bd84d14331bc9fa47eca9"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/plot.py",
+        "sha256": "62ee1c3a2b8decfb8a59112ed13075e87d357409449664fe34b240b9790ef548"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/results.json",
+        "sha256": "f580331464e29d6fff3811ef1ff2cfe2f77ec2a8c0226d0af0faa4d36d4a7393"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/paths.svg",
+        "sha256": "67741fa3d8b45d5de7ba0ece2b396be30470fb3e5aaa4aba5d5c96c2b5046b50"
+      }
+    ]
+  },
+  "review": {
+    "kind": "independent computational replay of a pinned public source",
+    "retested_on": "2026-10-22",
+    "reviewer": "Independent path construction, archived-measure comparison and planted-shape checks",
+    "human_review": "pending"
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-turtle-spatial-replay/paths.svg",
+      "caption": "A planted square beside one fixed LP2 turtle path and a shuffled-control path, drawn on a shared scale for the latter two."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned preregistered method",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md"
+    },
+    {
+      "label": "Pinned source report",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/RESULTS.md"
+    },
+    {
+      "label": "Pinned source transcript",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/data/krisyotam_runes.txt"
+    }
+  ],
+  "related": [
+    "lp2-row-column-routes",
+    "totient-map-route",
+    "cc-roman-matrix-replay"
+  ]
+}

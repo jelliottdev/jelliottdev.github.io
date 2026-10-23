@@ -1,0 +1,18 @@
+{
+  "id": "semantic-seed-screen-gate-audit",
+  "source_repository": "https://github.com/Dukotah/cicada3301",
+  "source_commit": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_lane": "liber-primus/analysis/round26/C",
+  "source_license": "MIT; bundled source/LICENSE",
+  "question": "Can a candidate pass R26-C's score screen and reach its full hitfn20 gate?",
+  "scope": "The exact source's 323 semantic seeds, seven generators where type-compatible, exact/pair decoders, offset zero, and first 120 runes of its flattened LP2 0–54 transcription.",
+  "screen_replay": "Run the unmodified source sweep in a temporary copy; compare all 4,274 saved JSON rows. The original pinned control.json gates execution, but the original model-backed control is not independently rerun.",
+  "independent_check": "Verify candidate cardinality, unique configurations, source AST promotion condition, log-probability upper bound, saved score range, and a source-generated planted key that recovers 120/120 but fails promotion.",
+  "missing_full_gate_inputs": [
+    "analysis/round19/I2/models/panel.npz (gitignored)",
+    "data/keys/mabinogion.txt",
+    "data/kjv.txt",
+    "data/keys/welsh/welsh_mabinogion.txt"
+  ],
+  "interpretation": "An audit of a historical procedure, not a negative result about semantic-seeded ciphers. The full gate's zero-survivor result follows mechanically from an unreachable +5 screen bar."
+}

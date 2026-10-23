@@ -1,0 +1,156 @@
+{
+  "id": "lp2-turtle-spatial-replay",
+  "title": "LP2 number streams as turtle paths",
+  "status": "published",
+  "question": "Do the fixed 72 turtle drawing rules from a published LP2 number-channel test reproduce, and do any produce a geometric shape beyond shuffled controls?",
+  "summary": "The source's 12,956-rune stream, 72 paths and 14,400 shuffled controls reproduce. The same six uncorrected path/measure pairs screen as unusual; none meets the source's later figure-flag rule. No plaintext readout is defined.",
+  "pages_note": "LP2-00–49 and LP2-51–55; blank LP2-50 omitted in the source's segment numbering",
+  "bounds_note": "72 fixed turtle rules × 200 shuffles each; 12,956 runes in each path",
+  "tags": [
+    "turtle graphics",
+    "spatial reading",
+    "numbers are the direction",
+    "Gematria Primus",
+    "prime values",
+    "prime indices",
+    "totient",
+    "geometry",
+    "reported attempt"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "The 55 nonempty source transcription segments equal Liberpedia LP2-00–49 plus LP2-51–55, including F (index zero); source stream SHA-256 79b14e630946b64cdca838f328e73904f506df576d15e21fcb46271d4b4c8040.",
+    "procedure": "For each rune take its GP prime, one-based prime index, or prime totient. Turn modulo 4, 6, 8, 12, 29 or 360, using absolute or relative heading, then step by one unit or proportional to the value. Measure six declared path statistics and compare with 200 seeded histogram-preserving shuffles for every case. Run planted square and block-comb controls.",
+    "parameters": "3 streams × 6 moduli × 2 turn interpretations × 2 step rules = 72 fixed constructions; 200 shuffles per construction = 14,400 null paths.",
+    "exclusions": "Per-page resets, pen-up markers, 3D or L-system routes, other angles or step rules, and any plaintext extraction along a path. G3 base32 and coordinate pointer framings from the broader source lane are not reimplemented in this geometric record."
+  },
+  "outcome": "not-supported",
+  "finding": "All 72 geometric constructions and their 14,400 initial shuffles completed. The independent replay finds the same six initial p<0.01 path/measure screens as the source and reproduces both planted-shape controls. The source's later figure-flag rule accepts none of the six. This is no evidence of a glyph under the specified detector, and no decryption rule follows from the paths.",
+  "limitations": "The 200-shuffle screen does not resolve a familywise extreme-tail probability. The source's later normal-tail refinement is model-dependent, especially for discrete raster measures; closure and caging duplicate the same ratio. Sampled crossings and floating-point ties cause small source-versus-replay numerical differences. The source's empirical two-sided formula can exceed 1 for tied values. These caveats do not change which six cases entered the initial screen.",
+  "next_steps": "A new candidate should freeze a distinct drawing or readout rule, its recognized feature and a calibration set before examining LP2; then show the proposed feature on a held-out page or source stream.",
+  "reproduction": {
+    "command": "python experiments/records/lp2-turtle-spatial-replay/run.py --check; python experiments/records/lp2-turtle-spatial-replay/run.py --full-null --check; python experiments/records/lp2-turtle-spatial-replay/plot.py",
+    "environment": "Python 3 with NumPy and SciPy; offline run from repository root. The full-null check repeats 14,400 path-and-detector evaluations.",
+    "script": "experiments/records/lp2-turtle-spatial-replay/run.py",
+    "script_sha256": "03f9427c9df4e2dcff12ef1067b8f38c81245a3bb0500ac85471abd66699237d",
+    "inputs": [
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/source-ledger.json",
+        "sha256": "05c88d2b5237614b8870bd3debbddc4725130ac91f1bd84d14331bc9fa47eca9"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/plot.py",
+        "sha256": "62ee1c3a2b8decfb8a59112ed13075e87d357409449664fe34b240b9790ef548"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/results.json",
+        "sha256": "f580331464e29d6fff3811ef1ff2cfe2f77ec2a8c0226d0af0faa4d36d4a7393"
+      },
+      {
+        "path": "experiments/records/lp2-turtle-spatial-replay/paths.svg",
+        "sha256": "67741fa3d8b45d5de7ba0ece2b396be30470fb3e5aaa4aba5d5c96c2b5046b50"
+      }
+    ]
+  },
+  "review": {
+    "kind": "independent computational replay of a pinned public source",
+    "retested_on": "2026-10-22",
+    "reviewer": "Independent path construction, archived-measure comparison and planted-shape checks",
+    "human_review": "pending"
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-turtle-spatial-replay/paths.svg",
+      "caption": "A planted square beside one fixed LP2 turtle path and a shuffled-control path, drawn on a shared scale for the latter two."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned preregistered method",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md"
+    },
+    {
+      "label": "Pinned source report",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/RESULTS.md"
+    },
+    {
+      "label": "Pinned source transcript",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/data/krisyotam_runes.txt"
+    }
+  ],
+  "related": [
+    "lp2-row-column-routes",
+    "totient-map-route",
+    "cc-roman-matrix-replay"
+  ],
+  "article": "# Drawing a path from LP2’s rune numbers\n\nCan the manuscript’s numbers be read as drawing instructions? A [published test](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md) turns each rune into a number, then uses that number to turn and advance an imaginary pen. We independently rebuilt its **72 fixed drawing rules** and checked the resulting paths against its [archived measurements](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json). The test asks whether any path forms an unusually orderly figure. It does not turn a path back into decoded words.\n\n![A deliberately planted square, the LP2 prime-value path, and its shuffled control drawn by the same rule](experiments/records/lp2-turtle-spatial-replay/paths.svg)\n\nThe left path is a known square placed to check that the renderer can show an obvious shape. The other two use **relative turns and unit steps modulo 4**. One uses the manuscript’s rune order; the other shuffles those same numbers. The manuscript and shuffle panels share a coordinate scale. Their resemblance is a visual comparison for this one rule, not a test of all 72 by itself.\n\n| Question | What this replay found |\n| --- | --- |\n| Does the published construction reproduce? | **Yes.** The local rune files give the same 12,956-symbol input as the pinned public transcription, and all 72 path settings were rebuilt. |\n| Can the drawing method show a deliberate shape? | **Yes.** A planted square closes, and a planted block-comb has perfect measured symmetry. The controls separate from their 200 shuffled versions on multiple recorded measures. |\n| Was a decoding rule found? | **No.** A geometric path is not plaintext. The source’s full comparison flagged no path as a glyph or pointer under its declared rule. Our replay reports its precise coverage and statistical limits below. |\n\n## The drawing rule\n\nEvery rune has a Gematria Primus prime value. The source tried three number streams: the **prime itself**, its **one-based prime index**, or its **totient** (one less than the prime). For each number it chose a turn on one of six angular grids (4, 6, 8, 12, 29 or 360 directions). The heading either becomes that angle or rotates by that angle. The pen then advances one unit or a distance proportional to the number. These choices make **3 × 6 × 2 × 2 = 72** paths, with no hand-selected route between runes.\n\nThe source’s phrase “LP2 pages 0–54” means its first **55 nonempty transcription segments**. Its file omits the blank LP2-50, so its final segment corresponds to **Liberpedia LP2-55**. We verified the source stream against local LP2-00–49 and LP2-51–55 text, rune for rune; the UTF-8 rune-stream SHA-256 is `79b14e630946b64cdca838f328e73904f506df576d15e21fcb46271d4b4c8040`. This matters: stopping at Liberpedia LP2-54 would draw a different 12,880-rune path.\n\n## What the comparison can say\n\nThe [source report](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/RESULTS.md) compared each path with 200 histogram-preserving shuffles. It measured path closure, sampled self-crossings, occupied raster cells, displacement relative to total travel, symmetry and connected components. We reran **all 14,400 shuffled paths** and reproduced the same **six path/measure pairs** passing the initial, uncorrected screen. None passed the source’s later rule for flagging a candidate figure. That is a **bounded result for these 72 drawing rules and this shape detector**, not a proof that all number-based or geometric readings fail.\n\nThe independent path measurements agree with the source to numerical precision except for one sampled crossing in one case; the screen-level conclusion is unchanged. Some reported tail values differ where a real measurement and shuffled values are equal to machine precision. The source’s two-sided counting formula can even return a value above 1 for ties, so those numbers are best read as screening ranks rather than precise probabilities.\n\nTwo of the six measurements, **closure** and **caging**, are the same net-displacement divided by path-length formula. They should not be read as separate confirmation. The source also used a normal-tail approximation to refine rare events beyond what 2,000 shuffled samples can measure directly; that tail estimate depends on the approximation, especially for discrete counts such as connected components. The source therefore reports a useful controlled screen, while a strong claim about a specific picture would still need an independently frozen recognizer and a larger suitable null.\n\nThis record keeps geometry separate from language. A meaningful text read along a path could leave no distinctive drawn figure. Conversely, a visually suggestive walk would need an explicit rule for selecting and reading symbols before it could count as a decryption.\n\n## Reproduce\n\nFrom the repository root:\n\n```text\npython experiments/records/lp2-turtle-spatial-replay/run.py --check\n```\n\nThis checks the pinned rune stream, all 72 constructed paths, the planted controls and the saved result. `--full-null --check` additionally repeats the 200 shuffles for every path. The script needs Python 3, NumPy and SciPy; the visual is regenerated with `python experiments/records/lp2-turtle-spatial-replay/plot.py`. The [saved results](experiments/records/lp2-turtle-spatial-replay/results.json) contain every path’s measurements and comparison differences; [source measurements](experiments/records/lp2-turtle-spatial-replay/source-ledger.json) are preserved verbatim from the pinned revision for offline checking.\n",
+  "article_path": "experiments/records/lp2-turtle-spatial-replay/article.md",
+  "script_sha256": "03f9427c9df4e2dcff12ef1067b8f38c81245a3bb0500ac85471abd66699237d",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
