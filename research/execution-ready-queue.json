@@ -11,8 +11,8 @@
     "reproduction_command_entries": 64,
     "ready_unclaimed_source_programs": 0,
     "completed_draft_partial": 0,
-    "claimed_by_other_agent": 2,
-    "covered_or_partial": 17,
+    "claimed_by_other_agent": 0,
+    "covered_or_partial": 19,
     "umbrella_verdict_or_audit": 7,
     "blocked_or_audit_needed": 38,
     "source_entries_in_disposition_total": 64,
@@ -58,8 +58,8 @@
     },
     {
       "source_id": "B-04",
-      "disposition": "claimed-by-another-agent",
-      "runnable_method": "B-04 source-seed opening-crib replay is under active integration; do not count it as unclaimed.",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
       "reproduce_command": "cd liber-primus/analysis/round13/B04 && python3 sweep.py --nproc 6",
       "source_evidence": [
         {
@@ -80,7 +80,14 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "b04-source-seeds-opening-cribs"
+      ],
+      "remaining_source_scope": [
+        "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
+        "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
+      ]
     },
     {
       "source_id": "B-05",
@@ -1047,8 +1054,8 @@
     },
     {
       "source_id": "R26-A-GEN-SWEEP-FIRST-FIRE",
-      "disposition": "claimed-by-another-agent",
-      "runnable_method": "R26-A fixed-crib generator sweep and source control audit are assigned to another agent; do not duplicate.",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published fixed-opening follow-up; original full language-scoring campaign remains unreplayed. See reconciliation for exact exclusions.",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py && cd analysis/round26/A && python3 sweep.py  # controls gate then sweep -> sweep.jsonl + control.json",
       "source_evidence": [
         {
@@ -1057,7 +1064,14 @@
         }
       ],
       "ledger_status": "partially-run",
-      "ledger_control": "PASS (all three generators). Plant a keystream from the exact generator-under-test, encipher held-out English (self_reliance.txt L=240) under the repo keyskip1 relation, adjudicate with hitfn20(truth_idx): Perl r29 median recovery 1.000 (HIT=True, control pmax 24.90 vs bar 7.63); TeX pgf_rnd29 1.000 (HIT=True); Py2.7 grb5_mod wordsize=64 1.000 (HIT=True). control_min_recovery=1.000>=0.90 -> all validated (control.json all_controls_validated:true). Power ~1.0 on win-condition registers -> a null is a real negative."
+      "ledger_control": "PASS (all three generators). Plant a keystream from the exact generator-under-test, encipher held-out English (self_reliance.txt L=240) under the repo keyskip1 relation, adjudicate with hitfn20(truth_idx): Perl r29 median recovery 1.000 (HIT=True, control pmax 24.90 vs bar 7.63); TeX pgf_rnd29 1.000 (HIT=True); Py2.7 grb5_mod wordsize=64 1.000 (HIT=True). control_min_recovery=1.000>=0.90 -> all validated (control.json all_controls_validated:true). Power ~1.0 on win-condition registers -> a null is a real negative.",
+      "published_record_ids": [
+        "r26-derived-generators-opening-cribs"
+      ],
+      "remaining_source_scope": [
+        "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
+        "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
+      ]
     },
     {
       "source_id": "R26-B-KEYTEXT-RUNNINGKEY-SKIPAWARE",
@@ -1244,5 +1258,7 @@
       "path": "research/collected-ideas-queue.json",
       "scope": "26 grouped additions from a 156-idea supplied compilation; separate conceptual intake, not additional source reproduction commands or completed tests."
     }
-  ]
+  ],
+  "reconciled_on": "2026-10-23",
+  "reconciliation_note": "Removed two stale agent claims after verifying their published fixed-opening follow-ups. These are partial matches, not replays or closure of the original language-scoring campaigns."
 }

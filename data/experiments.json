@@ -20894,6 +20894,323 @@
       }
     },
     {
+      "id": "leo-chain-key-alignment",
+      "status": "published",
+      "title": "Do number sequences fit the rune-difference chain?",
+      "question": "Do source-defined numerical sequence keys produce a reliable 28-state LP2 chain signal after searching all mappings, offsets, signs and doublet clocks?",
+      "reader_question": "Did primes or Fibonacci numbers reveal the rune chain?",
+      "summary": "All nine source best settings reproduce. The largest source-selected section score, 1.146, is near the 39-shuffle complete-grid median of 1.147; 20 shuffles match or exceed it.",
+      "finding": "The pinned 21-effective-sequence × 14-bijection × 300-offset × 2-sign × 2-clock grid reproduces all nine source maxima. Both planted prime-chain controls recover their clock and score 1.663. On the source-highlighted pages 54–55, 20/39 full-grid shuffles reach the observed maximum 1.146.",
+      "limitations": "The section control is conditional on the source-highlighted maximum and uses only 39 shuffled complete searches. IoC is not plaintext recovery. Other sequences, mappings, section choices and ciphers remain outside this finite grid.",
+      "next_steps": "A stronger chain claim needs a specified generator and key-clock rule that predicts held-out rune changes or plaintext beyond a selected score.",
+      "outcome": "not-supported",
+      "tags": [
+        "sequence keys",
+        "prime sequence",
+        "Fibonacci",
+        "chain cipher",
+        "doublet clock",
+        "source replay",
+        "selection control"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/leo-chain-key-alignment/plan.json"
+        ],
+        "representation": "Nine pinned unsolved relikd LP2 rune sections, each analyzed through its first 500 adjacent rune changes (307 on pages 54–55).",
+        "procedure": "Replay source-named numerical streams under 14 nonzero-change bijections, 300 offsets, signs ±1 and both doublet key clocks; compare all nine source maxima and planted controls; rerun full grid on 39 within-section shuffles of source-selected pages 54–55.",
+        "parameters": "21 effectively eligible sequence entries, including duplicate prime/primeidx; 352,800 evaluated settings per section, 39 selected-section shuffles; 2 planted prime-chain controls.",
+        "exclusions": "Other generators, more offsets, different key boundaries or maps, language scoring, full decryption and unselected-section null tails."
+      },
+      "review": {
+        "reviewer": "Independent scalar verification of source maxima and planted controls",
+        "retested_on": "2026-10-23",
+        "kind": "source-bound computational replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/leo-chain-key-alignment/run.py --source-root LEO --check && python experiments/records/leo-chain-key-alignment/check.py --source-root LEO && python experiments/records/leo-chain-key-alignment/plot.py --check",
+        "environment": "Python 3.9+ with NumPy and Numba for full grid; independently checked with Python standard library. LEO is pinned source checkout including relikd data.",
+        "script": "experiments/records/leo-chain-key-alignment/run.py",
+        "script_sha256": "3cf05bfa1761e2903bacfc84fd6d3946a052d80f82e3b38e985321874a2de3bf",
+        "inputs": [
+          {
+            "path": "experiments/records/leo-chain-key-alignment/plan.json",
+            "sha256": "029e6963e43ddf3db2ec6f0983ec81fc878e862d585d93196523108cd473f24a"
+          },
+          {
+            "path": "experiments/records/leo-chain-key-alignment/run.py",
+            "sha256": "3cf05bfa1761e2903bacfc84fd6d3946a052d80f82e3b38e985321874a2de3bf"
+          },
+          {
+            "path": "experiments/records/leo-chain-key-alignment/check.py",
+            "sha256": "84e1f411bee0ecc9116b7ac938bb2091f2d3278ab20ddf24fd28a0bbe620a6c6"
+          },
+          {
+            "path": "experiments/records/leo-chain-key-alignment/plot.py",
+            "sha256": "bb6f0ade0a33fcc583816b7d029c4921ab98a51d88f6404725dd17f794107b6e"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/leo-chain-key-alignment/results.json",
+            "sha256": "25b6aef82d188297d9275d7c8903290bdfed4e284d09642cc1ca0910348bef55"
+          },
+          {
+            "path": "experiments/records/leo-chain-key-alignment/chain-key-control.svg",
+            "sha256": "37de569a9b726a9d2c71566703802c208b8ed489378d5ca6c55a1aa1c5082951"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned Leo sequence-key source method",
+          "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py"
+        },
+        {
+          "label": "Pinned source result receipt",
+          "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/tests5.txt"
+        },
+        {
+          "label": "Pinned relikd section transcription",
+          "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+        }
+      ],
+      "related": [
+        "leo-shared-key-differences",
+        "leo-transform-periodic-profile"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/leo-chain-key-alignment/chain-key-control.svg",
+          "caption": "The source-selected section’s best chain score beside the full-grid shuffled-search range."
+        }
+      ],
+      "article": "# Do number sequences fit the rune-difference chain?\n\nA [published test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py) asks whether LP2's **change from one rune to the next** follows a numerical key stream. It tries primes, Fibonacci numbers, π digits and other named sequences. Each nonzero rune change is mapped into one of 28 values; a repeated rune becomes a zero-change placeholder. The test allows two clocks: the placeholder either consumes a key value or it does not.\n\n## Finding\n\n![The strongest source-selected section score is near the median of 39 shuffled complete searches.](experiments/records/leo-chain-key-alignment/chain-key-control.svg)\n\nOur full replay matches the source's printed best result in **all nine sections**. The largest is pages 54–55: a cubic-number key at offset 25, one discrete-log mapping and the consume-at-doublets clock gives normalized coincidence **1.146**. That value is the best after searching **352,800 settings for this section**. Repeating the *entire* grid on 39 shuffled versions of the same section produced a median best of **1.147**; **20 of 39** matched or exceeded 1.146. This comparison was made on the section highlighted by the source printout, so it is conditional on that earlier selection. The reported best does not stand out under this control.\n\nThe source's planted controls work. We encoded a known 1,500-rune passage with a prime-number chain and tested both key-clock conventions. Each full-grid search recovered the planted family and clock, scoring **1.663**. The offset is 51 rather than the encryption start of 50 because the scan begins with the *second* ciphertext rune's change. That control shows the search can recover this particular synthetic construction; it does not mean every chain cipher would produce an equally strong signal.\n\n## What was searched\n\nThe [frozen plan](experiments/records/leo-chain-key-alignment/plan.json) gives the source's nine section files, sequence generators, 14 mappings of nonzero changes, 300 key offsets, two signs and two placeholder clocks. The source names 23 sequences, but its own length gate skips **emirps and twin primes** in this window; 21 are evaluated. Its `primeidx` stream duplicates `prime` and is retained for faithful replay, not counted as a separate idea. The [results](experiments/records/leo-chain-key-alignment/results.json) list each section's best setting and the strongest setting for each eligible sequence. This is one method family with many parameter settings, not hundreds of independent experiments.\n\nThe [independent checker](experiments/records/leo-chain-key-alignment/check.py) recalculates each selected score with scalar arithmetic, verifies the nine rounded source-receipt values and confirms both planted encryptions. The complete-grid runner also reproduces all 39 shuffle maxima. The graphic shows the conditional comparison for pages 54–55.\n\nCoincidence measures repeated values, not intelligible plaintext. This experiment does not decrypt a page, score language, test other source inputs or rule out sequence-derived ciphers with different mappings, clocks or boundaries. The 39-shuffle control is a modest conditional reference, not a universal probability for every numerical idea.\n\n## Reproduce\n\nUse the pinned [Leo source checkout](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/tree/a32bdc0e06ea58532fbaf4329acae4a0b1020513) at `LEO`, with its separately pinned [relikd transcription](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4) in the source's `sources/relikd_LiberPrayground` directory. The scripts verify source, π, baseline and section hashes before computing:\n\n```text\npython experiments/records/leo-chain-key-alignment/run.py --source-root LEO --check\npython experiments/records/leo-chain-key-alignment/check.py --source-root LEO\npython experiments/records/leo-chain-key-alignment/plot.py --check\n```\n\nThe full search uses NumPy and Numba; the independent checker uses Python's standard library. This record describes the source method without copying its implementation.\n",
+      "article_path": "experiments/records/leo-chain-key-alignment/article.md",
+      "script_sha256": "3cf05bfa1761e2903bacfc84fd6d3946a052d80f82e3b38e985321874a2de3bf",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "leo-chain-sequence-keys",
+      "status": "published",
+      "title": "Number-sequence keys in direct and chain views",
+      "question": "Do source-defined integer sequences produce unusually concentrated output under direct or chain-increment decoding of nine LP2 sections?",
+      "reader_question": "Could prime, Fibonacci or totient numbers be the key?",
+      "summary": "The full published source grid reproduces, but its selected coincidence peaks remain compatible with matched shuffled sections once section choice is included.",
+      "finding": "All 135 printed source top-three candidates and nine solved-text running-key rows replay exactly. Both planted direct and chain prime-key streams pass the full-grid positive controls. The smallest LP2 section tail is 4/100 on pages 00–02; a simple nine-section choice bound is 36/100. This bounded coincidence scan supplies no recovered reading or supported key.",
+      "limitations": "The source grid uses 24 named sequences, offsets 0–199, two signs, five views and whole-section coincidence as its score. Several names and views are exact duplicates or complements; they are retained as named source settings, not counted as distinct ideas. The 99-shuffle section controls preserve rune counts but do not model every possible cipher or an English reading. The prime-index stream is ineligible for the observed section lengths.",
+      "next_steps": "A specific sequence proposal should freeze its source, phase, boundary and decoder, then predict a held-out readable result rather than selecting a high coincidence peak.",
+      "outcome": "inconclusive",
+      "tags": [
+        "number sequence",
+        "prime",
+        "Fibonacci",
+        "totient",
+        "chain cipher",
+        "source replay",
+        "index of coincidence"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/leo-chain-sequence-keys/plan.json"
+        ],
+        "representation": "Nine pinned relikd unsolved sections, their generated Leo dataset indices, forward and reverse nonrepeat chain increments and original or Atbash GP29 runes.",
+        "procedure": "Replay the named 24-sequence, 200-offset, two-sign grid on five source streams; retain three best rows per section and stream. Replay the source solved-text running-key arm. For each section, select the grid maximum and compare with the same selection on 99 rune-order shuffles. Gate on planted raw and chain prime-key streams first.",
+        "parameters": "Source sequence rules from pinned tests4.py; GP29 and chain Z28/Z29; random.Random(330104/330105) planted controls and 330104 section shuffles; plus-one selected-grid tails.",
+        "exclusions": "Other key sources, offsets outside 0–199, alternative section joins or boundaries, English scoring, held-out plaintext and every cipher outside the declared source grid."
+      },
+      "review": {
+        "reviewer": "Independent source-receipt and planted-recovery checker",
+        "retested_on": "2026-10-23",
+        "kind": "computational source replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/leo-chain-sequence-keys/run.py --source-root LEO --text-root RELIKD --check && python experiments/records/leo-chain-sequence-keys/check.py --source-root LEO --text-root RELIKD",
+        "environment": "Python 3.9+ with NumPy and Numba for the full grid; separate checker uses the standard library. LEO and RELIKD are pinned checkouts, with LEO dataset.json generated from RELIKD; source hashes are checked before computation.",
+        "script": "experiments/records/leo-chain-sequence-keys/run.py",
+        "script_sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8",
+        "inputs": [
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/plan.json",
+            "sha256": "6d0ea6ecaae2b00a6300bc1924ae577c01726c266e78041cbad233391947ae2a"
+          },
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/run.py",
+            "sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8"
+          },
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/check.py",
+            "sha256": "92338292bfbbe42eebdfcedffe683d6a67d43499eb491fd111bf75d2e54f94fa"
+          },
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/plot.py",
+            "sha256": "d52dedce5bc3d15bc89da97687eb8b17c63ac95c55eeb25717f15d78341bc0f7"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/results.json",
+            "sha256": "5a451bb78a770c6411d62e81fe44cffca5c2210c26f84b8991d85c025876d5da"
+          },
+          {
+            "path": "experiments/records/leo-chain-sequence-keys/section-key-grid.svg",
+            "sha256": "4a1ad46cf116843813e7c49cc40db3946444a47b7f3b6cd1a212d2fa18e3ceb7"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned Leo source test and receipt",
+          "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests4.py"
+        },
+        {
+          "label": "Pinned relikd source transcription",
+          "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+        }
+      ],
+      "related": [
+        "leo-transform-periodic-profile",
+        "wulfic-number-key-streams",
+        "direct-polynomial-streams"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/leo-chain-sequence-keys/section-key-grid.svg",
+          "caption": "Source-grid maxima compared with matched rune-order shuffles, by LP2 section."
+        }
+      ],
+      "article": "# Do familiar number sequences unlock LP2's rune stream?\n\n**Finding.** A published search through prime, Fibonacci, totient, polynomial, π-digit and related key streams reproduces exactly, but its best coincidence scores do not establish a decipherment. We replayed the source's whole-section candidate grid across nine LP2 sections. The strongest selected result, on pages 00–02, was matched or exceeded by 3 of 99 shuffled sections. Its plus-one tail is **4/100**; allowing for choosing among nine sections gives a simple bound of **36/100**. The other sections' conditional tails range from 7/100 to 88/100.\n\n![Selected source-grid maxima compared with matched rune shuffles for each LP2 section.](experiments/records/leo-chain-sequence-keys/section-key-grid.svg)\n\nThis is an index-of-coincidence test. A higher score says the output symbol frequencies are less uniform under this one measure; it does not produce readable text or identify a key. The best of many keys needs to be compared with the **best** of the same many keys on controls. Two planted streams, one directly masked with a prime sequence and one encoded through the source's chain rule, cleared that full-grid control gate. No scanned LP2 section clears a nine-section selection comparison.\n\n## What the source searched\n\n[Leo's fourth test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests4.py) defined 24 named integer streams, offsets 0–199 and both additive directions. It scored five views of each section: the original GP29 rune indices, Atbash, forward and reverse chain increments modulo 28, and forward chain increments tested modulo 29. Some names generate identical effective keys; the 500-element prime-index stream is too short for these section lengths. We retain all source names in the [complete result](experiments/records/leo-chain-sequence-keys/results.json) while reusing exact complement identities for the reverse-chain and Atbash scores. The saved top three candidates in all **45 section-and-view rows** match the pinned source receipt, as do all nine first-400-rune solved-text running-key rows.\n\nThe source's chain view turns a nonrepeating adjacent rune step into a number from 0 to 27; equal adjacent runes are omitted. This is a different question from directly subtracting a sequence from the original 29-symbol ciphertext. The result is limited to those exact representations, keys and offsets. It cannot rule out a different key source, sequence phase, boundary rule or a decoder scored by actual plaintext.\n\n## Reproduce\n\nObtain [Leo's pinned repository](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/tree/a32bdc0e06ea58532fbaf4329acae4a0b1020513) with its generated `dataset.json`, and the [pinned relikd text](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4). The [plan](experiments/records/leo-chain-sequence-keys/plan.json) pins every input hash and the source grid. Substitute the two checkout paths below:\n\n```text\npython experiments/records/leo-chain-sequence-keys/run.py --source-root LEO --text-root RELIKD --check\npython experiments/records/leo-chain-sequence-keys/check.py --source-root LEO --text-root RELIKD\n```\n\nThe first command recomputes every source setting, planted control and selected-grid shuffle. The separate checker verifies the input bytes, all 135 printed top candidates, all nine solved-text key rows, planted-key recovery and the exact arithmetic symmetries. The pinned external source code and transcription are linked, not republished here.\n",
+      "article_path": "experiments/records/leo-chain-sequence-keys/article.md",
+      "script_sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "leo-shared-key-differences",
+      "status": "published",
+      "title": "Do LP2 sections share a running key?",
+      "question": "Does the source difference-IoC cross-section scan reveal an alignment that survives a complete-search control?",
+      "reader_question": "Do two LP2 sections appear to share a running key?",
+      "summary": "A planted shared key is detectable, but the strongest distinct LP2 section alignment is near the shuffled-search median. The saved source score disagrees with the pinned current formula at a tested alignment.",
+      "finding": "The top distinct-section score is 6.0117 (pages 3–7 versus 33–39, shift 25, overlap 1120); 53 of 99 shuffled whole searches match or exceed it. The all-pair maximum 11.319 is a self-pair at lag one, not cross-section evidence. The source printout gives z=3.3 for another tested alignment, while pinned current code gives z=5.68; an older SD approximation is numerically consistent with 3.3, but the historical formula used is unverified.",
+      "limitations": "The 36-pair shuffle comparison was specified after the self-pair maximum appeared and is exploratory. Shuffling section order does not model every plausible cipher. No plaintext or key is recovered.",
+      "next_steps": "A shared-key claim needs a key-advance and section-alignment rule specified in advance, then a held-out plaintext prediction beyond a selected difference score.",
+      "outcome": "inconclusive",
+      "tags": [
+        "running key",
+        "shared key",
+        "cross-section",
+        "difference IoC",
+        "source replay",
+        "selection control"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/leo-shared-key-differences/plan.json"
+        ],
+        "representation": "Nine pinned relikd LP2 unsolved section rune streams; 12,956 runes total.",
+        "procedure": "Replay the source synthetic shared-key power example; scan all 45 unordered section pairs over shifts with at least 300 rune overlap, then 99 seeded full-search section-order shuffles. A clearly post-observation follow-up restricts to 36 distinct-section pairs and 99 separate full-search controls.",
+        "parameters": "GP29, 1,200-rune synthetic overlap, 300 source-style null draws, 99 all-pair shuffles and 99 distinct-pair follow-up shuffles.",
+        "exclusions": "Other transcriptions, key models, alternate boundaries or shifts, reverse transforms and full decryption."
+      },
+      "review": {
+        "reviewer": "Independent winning-window arithmetic and shared-key cancellation check",
+        "retested_on": "2026-10-23",
+        "kind": "source-bound statistical replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/leo-shared-key-differences/run.py --source-root REL --check && python experiments/records/leo-shared-key-differences/followup.py --source-root REL --check && python experiments/records/leo-shared-key-differences/check.py --source-root REL --source-test-root LEO && python experiments/records/leo-shared-key-differences/plot.py --check",
+        "environment": "Python 3.9+ with NumPy and Numba for full search; source transcriptions and Leo test receipts supplied as separately pinned checkouts.",
+        "script": "experiments/records/leo-shared-key-differences/run.py",
+        "script_sha256": "c7db41008f763e257f97401524b94cc9475e8c8de97d29cf91874628253c4259",
+        "inputs": [
+          {
+            "path": "experiments/records/leo-shared-key-differences/plan.json",
+            "sha256": "a74bd27f63387831676677292468a53939b4b576e1a1e4cdc5b6e35221368f5d"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/followup-plan.json",
+            "sha256": "50056963b32fba8c5c4a8690ec8c0abd0286df1f814697f2b8fcfd16f6d1614c"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/run.py",
+            "sha256": "c7db41008f763e257f97401524b94cc9475e8c8de97d29cf91874628253c4259"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/followup.py",
+            "sha256": "429b53be15ff57d05a7a91c714fcd3544bb32febb04b188001f939701d6ab32d"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/check.py",
+            "sha256": "a9d6229a20395b35b50ccf0337d8d47896ce5988a2cfcaa71a1c5e75c5356f71"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/plot.py",
+            "sha256": "c8cfc3cffd6fcb752eccf9a32c4c02952dfcffe1ae0e7b9592e9ec569b1d3319"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/leo-shared-key-differences/results.json",
+            "sha256": "699a5e13b487a4422a96adf1992e15f172126740d3c14bfecf12a26f0e78d527"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/followup-results.json",
+            "sha256": "044f252ab8b4a57aa62f0d855a94ecfe04cf5f2832d052a071f7cd924143513c"
+          },
+          {
+            "path": "experiments/records/leo-shared-key-differences/cross-section-control.svg",
+            "sha256": "05fcf6d004d5a276a0af59652657ea65db9609d5299909d67d09d19140db29f9"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Leo-Y-Zhang pinned tests5 method",
+          "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py"
+        },
+        {
+          "label": "Pinned source result receipt",
+          "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/tests5.txt"
+        },
+        {
+          "label": "Pinned relikd transcription",
+          "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+        }
+      ],
+      "related": [
+        "leo-transform-periodic-profile",
+        "ea-frequency-control"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/leo-shared-key-differences/cross-section-control.svg",
+          "caption": "The strongest distinct-section score against maxima from 99 shuffled complete searches."
+        }
+      ],
+      "article": "# Do LP2 sections share a running key?\n\nIf two rune streams use the **same additive key at the same position**, subtracting their ciphertexts cancels that key. A [published source test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py) measured whether the resulting differences look more structured than chance across nine LP2 sections and many relative shifts. This record replays that calculation and checks its strongest alignments.\n\n## Finding\n\n![A cross-section peak of 6.01 sits almost on the shuffled-search median of 6.03; 53 of 99 shuffled complete searches reach at least the observed score.](experiments/records/leo-shared-key-differences/cross-section-control.svg)\n\nThe strongest alignment **between different sections** is pages 3–7 against pages 33–39, shifted by 25 runes with 1,120 runes overlapping. Its normalized difference score is **6.01**. After seeing that result, we ran a separate whole-search control: shuffle rune order within each of the nine sections, then search all 36 distinct section pairs and every eligible shift again. **53 of 99** shuffled searches reached at least 6.01; their median maximum was **6.03**. This is an exploratory, post-observation comparison, not a discovery probability fixed in advance. The observed cross-section peak does not stand out under this control.\n\nThe source also included each section paired with itself. Under the pinned current code, the largest all-pair score is **11.32**, from adjacent runes within pages 40–53. It is a local difference-pattern measurement, not evidence that two sections share a key. None of 99 whole-section-shuffle searches reached this self-pair score, which confirms the local ordering signal but does not identify its cause. The manuscript's uneven difference distribution and word structure are plausible contributors; this test does not separate them.\n\n## Why the archived numbers differ\n\nThe source's saved [result printout](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/tests5.txt) lists pages 15–22 against pages 33–39 as its top pair at shift 1,598, overlap 305, score **3.3**. That *same* alignment has score **5.68** under the standard-deviation formula in the pinned `lp.py`. Applying an approximation of `0.75 / √n` to its unchanged difference count gives **3.25**, which rounds to the archived 3.3. This shows a numerical inconsistency between the saved printout and the pinned current formula. The approximation is one possible explanation; we have not established which code version or formula produced the printout.\n\nThe source's synthetic example is a useful positive control. Two known rune texts encrypted with one shared key have difference IoC **1.047**; 300 source-style unaligned comparisons average **1.000**. Kappa also rises from a null mean of **0.0367** to **0.0592**. The statistic can detect this planted relationship at that length. It does not imply the LP2 sections have it.\n\n## Method and limits\n\nThe [frozen plan](experiments/records/leo-shared-key-differences/plan.json) names the nine exact section files, the 1,200-rune synthetic example, all 45 unordered pair scans (including nine self-pairs), every shift with at least 300 runes overlapping, and 99 full-search shuffles. The [post-observation plan](experiments/records/leo-shared-key-differences/followup-plan.json) explicitly filters to 36 different-section pairs. Results and every selected alignment are [saved](experiments/records/leo-shared-key-differences/results.json); the [follow-up results](experiments/records/leo-shared-key-differences/followup-results.json) preserve all 99 control maxima. An [independent check](experiments/records/leo-shared-key-differences/check.py) recomputes each reported winning window directly and verifies both source receipts.\n\nShuffling entire sections breaks real short-range rune structure, so the control answers a conditional question about this scoring/search procedure. It does not test every possible key reset, transposition, cipher layer or alignment. A high difference score alone is not a decryption.\n\n## Reproduce\n\nThe source text is a separately pinned [relikd transcription](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4); the scripts verify every input SHA-256. With that checkout at `REL` and the pinned Leo source checkout at `LEO`, run from the repository root:\n\n```text\npython experiments/records/leo-shared-key-differences/run.py --source-root REL --check\npython experiments/records/leo-shared-key-differences/followup.py --source-root REL --check\npython experiments/records/leo-shared-key-differences/check.py --source-root REL --source-test-root LEO\npython experiments/records/leo-shared-key-differences/plot.py --check\n```\n\nThe full search uses NumPy and Numba; the independent window checker uses Python's standard library. The source license allows reading and checking, but this record does not copy its implementation.\n",
+      "article_path": "experiments/records/leo-shared-key-differences/article.md",
+      "script_sha256": "c7db41008f763e257f97401524b94cc9475e8c8de97d29cf91874628253c4259",
+      "record_type": {
+        "id": "measurement",
+        "label": "Manuscript measurement",
+        "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+      }
+    },
+    {
       "id": "leo-transform-periodic-profile",
       "status": "published",
       "title": "Do transformed LP2 runes show a reliable period?",
@@ -59255,6 +59572,248 @@
       }
     },
     {
+      "id": "wulfic-grid-native-keys",
+      "status": "published",
+      "title": "Cicada-derived keys against the LP2 grid",
+      "question": "Do Wulfic's fixed earlier-Cicada key streams make the 256-cell LP2 grid pass its byte or GP29 reading screens?",
+      "reader_question": "Do known Cicada numbers unlock the 256-cell grid?",
+      "summary": "Exact Stage N replay finds no source-screen hit among 456 settings: 72 byte-key operations and 384 GP29 readings. The screens have only post-replay synthetic detector diagnostics.",
+      "finding": "The best byte output is 42.6% printable, below the source's 90% screen, with no named signature. The highest rune log likelihood is 4.63 nats, below +30. No source setting passes.",
+      "limitations": "The source uses one row-order grid and reversal, specified key starts/streams, a permissive byte-printability or offset-zero signature screen, and a solved-LP1 unigram detector. Planted controls were added after replay and do not establish power against all plausible LP2 messages.",
+      "next_steps": "For another grid-key hypothesis, specify the key bytes, start, operation, route and full-stream success criterion before testing; calibrate its detector on planted examples of the intended message type.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "grid",
+        "source replay",
+        "key stream",
+        "byte decode",
+        "rune decode"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv",
+          "experiments/records/wulfic-grid-native-keys/source-profile.json",
+          "exports/alphanumeric-grids.csv"
+        ],
+        "representation": "Printed 32×8 grid as 256 base-60-derived bytes or 512 separate base-60 digits, conditionally using the site's pinned digit order; forward and full reverse only.",
+        "procedure": "Replay source Stage N all 456 rows, independently rebuild the grid from site export, repeat 72 byte transforms and 384 GP29 likelihood calculations, then run explicitly post-replay synthetic detector diagnostics.",
+        "parameters": "12 finite byte keys×3 operations×2 directions=72; two GP29 grid encodings×2 directions×3 decode modes×(29 constant shifts+3 rune streams)=384; source thresholds 90% printable or listed signature, and log LR+30 nats.",
+        "exclusions": "Other grid layouts, ten disputed stems, later offsets, decryption-plus-decompression, other key derivations/starts, different scoring languages and plaintext interpretation beyond the source screens."
+      },
+      "review": {
+        "kind": "exact public-source replay with post-replay detector diagnostics",
+        "retested_on": "2026-10-23",
+        "reviewer": "456-row source output reproduced byte-for-byte; site grid and all byte/rune scores independently recalculated from pinned numerical source inputs",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-grid-native-keys/run.py --check && python experiments/records/wulfic-grid-native-keys/check.py && python experiments/records/wulfic-grid-native-keys/plot.py --check",
+        "environment": "Python 3 standard library for bundled verification. Optional source replay/profile export requires the pinned Wulfic checkout with its dependencies.",
+        "script": "experiments/records/wulfic-grid-native-keys/run.py",
+        "script_sha256": "f4bff9fd60c2d3ed088d19f40b19b0dbda881c356842d4111e6242467f3be0d8",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/plan.json",
+            "sha256": "c841a60a6273d1296a262ba5ace5ea96891aa03f222eb1e7539e2d1a016cb5d0"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/check.py",
+            "sha256": "13b5d3b83c5d48155053aa343e55add27ab2a0160e0a940eaa32e07867593d0b"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/plot.py",
+            "sha256": "766dd6cfee7e3c39e8179c8a27f9bd67d315ed73b506a3c2e9cc2ad5a6bd63e1"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/prepare_source.py",
+            "sha256": "d825139037d4ce7e9eafeab635936ac414f443b16a63bf13a6af1718e3b9d571"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/replay_source.py",
+            "sha256": "30f4f02459bf7e8ce6a03b2710641241d46a8e583d11211caf9edeb43e94f717"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/make_plan.py",
+            "sha256": "b433206e042f3595314d5b81bec9e171a351520a91594181ccfcf594a523722d"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/make_record.py",
+            "sha256": "55cd2e44bf44371af89f6132148528f38655c604c0ec8b9562615f7225f98d62"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv",
+            "sha256": "2e12cc94850b562bad191d477b187cf63d470afb3efe439135de25863fcc20b8"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/source-profile.json",
+            "sha256": "0bc71522718dc9dc19627519c76f9d82339e0db1018fe607abe4ca7b0000a22e"
+          },
+          {
+            "path": "exports/alphanumeric-grids.csv",
+            "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/results.json",
+            "sha256": "eb0f2c3ce60e2bb4449c80d567962437ce85be76718e88425c974995e2e10220"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-native-keys/comparison.svg",
+            "sha256": "66aa1327ae81ff30848c3018d5361aade92caefa8fc72e9c68f015e51503d1ce"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-grid-native-keys/comparison.svg",
+          "caption": "Best of the fixed source screens compared with their separate pass thresholds."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Wulfic Stage N at pinned revision",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_n.py"
+        },
+        {
+          "label": "Pinned source findings",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+        }
+      ],
+      "related": [
+        "grid-direct-bytes",
+        "wulfic-native-key-streams"
+      ],
+      "article": "# Do native Cicada keys read the number grid?\n\nThe 256 printed cells on LP2-49–51 can be converted to bytes under the documented base-60 convention. Wulfic's Stage N tests whether several keys drawn from earlier Cicada material make those bytes resemble text, a file, or runes. **None of its 456 fixed settings reaches its own reading screen.** This is a bounded keyed-grid check, not a claim that the grid has no encoded message.\n\n![Best byte-printability and GP29 likelihood compared with the original source thresholds](experiments/records/wulfic-grid-native-keys/comparison.svg)\n\n## The two screens\n\nThe **byte screen** uses the printed 32 × 8 grid in row order or its full reversal. For each, it repeats one of 12 source keys and applies XOR, byte subtraction or byte addition. Those **72 outputs** are screened for at least 90% printable bytes or an offset-zero signature such as PNG, JPEG, gzip, ZIP, PDF or a length-consistent OpenPGP packet header. The best printable fraction is **42.6%**; no signature is reported. A printable result would only be a candidate, not a proven reading.\n\nThe **rune screen** takes either the 256 grid bytes modulo 29 or the 512 individual base-60 digits modulo 29. In each representation it tests forward and reversed order. It then scores three GP29 decoding directions under every constant shift, plus the source's prime, `DIVINITY` and `FIRFUMFERENFE` streams. These **384 settings** use the source's drift-tolerant solved-LP1 rune-frequency detector. The largest log-likelihood ratio is **4.63 nats**, below the source pass level of **+30**.\n\nThe [complete 456-row source result](experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv) retains each key, operation, direction, screen value and verdict. The byte screen uses a permissive printable threshold; the rune screen is a unigram detector. Neither tests whether a longer decoded phrase is meaningful or whether a key derived from different puzzle material works.\n\n## What this does and does not establish\n\nThe original Stage N run did **not** include a planted detector-control gate. We regenerated its table exactly, then added separate, **post-replay** checks that its byte operations can recover synthetic printable text and that its rune likelihood can recognize a simple planted high-signal case. Those diagnostics catch broken implementations; they are not a preregistered LP2 power study and do not justify rejecting a whole cipher family.\n\nThe result is about the source's row-order grid, full reversal, named keys, operations, two rune encodings and two fixed thresholds. It does not cover other grid routes, uncertain glyph readings, offsets within a file, key starts and drift models beyond the source, decompression after decryption, or different languages. The [direct-byte experiment](#/experiments/grid-direct-bytes) checks unkeyed whole-stream formats over more routes and stem choices; this record answers the separate keyed question.\n\n## Reproduce\n\nWe ran the [pinned Stage N source](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_n.py) at commit `bf89d3d`; its 456-row TSV matches the pinned repository byte-for-byte. The bundled [numerical input profile](experiments/records/wulfic-grid-native-keys/source-profile.json) records the exact key streams and unigram distribution exported from that checkout; no upstream source code is copied. The site’s own 256-cell [grid export](exports/alphanumeric-grids.csv) independently reproduces every source grid byte and base-60 digit.\n\nWith Python's standard library, run from the extracted Liberpedia repository:\n\n```text\npython experiments/records/wulfic-grid-native-keys/run.py --check\npython experiments/records/wulfic-grid-native-keys/check.py\npython experiments/records/wulfic-grid-native-keys/plot.py --check\n```\n\nThe checker rebuilds the grid, replays every byte operation, and independently calculates all 384 GP29 likelihood scores from the recorded numerical inputs. It also runs the explicitly post-replay planted byte and rune diagnostics. The [plan](experiments/records/wulfic-grid-native-keys/plan.json) pins files, source revision and exact thresholds; `prepare_source.py` regenerates the numerical profile when supplied a matching external checkout.\n",
+      "article_path": "experiments/records/wulfic-grid-native-keys/article.md",
+      "script_sha256": "f4bff9fd60c2d3ed088d19f40b19b0dbda881c356842d4111e6242467f3be0d8",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "wulfic-grid-periodic-byte-invariant",
+      "status": "published",
+      "title": "Repeating-byte-alphabet invariant on the LP2 grid",
+      "question": "Do equal-byte pairs in the LP2 grid support a periodically repeated one-to-one byte alphabet?",
+      "reader_question": "Could a repeating byte alphabet explain the number grid?",
+      "summary": "Exact Stage X2 replay checks both grid routes and every period 1–128. No period exceeds the uniform-null maximum; conditional plaintext-control exclusions range from 78 to 247 of 256 cells.",
+      "finding": "No grid reading/period cell exceeds the maximum of 100,000 uniform-byte nulls. Under the source's lower 0.1% control rule, 241/256 cells are excluded for Emerson English, 247/256 for solved LP1 runes, 247/256 for HEX, and 78/256 for Base64. No decoding is produced.",
+      "limitations": "The exclusions require a fixed bijection at each periodic residue and the source's exact plaintext-control classes and 256-byte representation. Other grid routes, transformations, layered ciphers and plaintext distributions remain outside scope.",
+      "next_steps": "A proposed surviving period needs a specified key, decoding rule and held-out check. Alternate byte routes or control classes require their own declared test and controls.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "source replay",
+        "number grid",
+        "periodic substitution",
+        "byte equality",
+        "search bounds"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-grid-periodic-byte-invariant/source-stage_x_periodic.tsv"
+        ],
+        "representation": "The 256 printed grid tokens as base-60 bytes, traversed in printed 32×8 row order or column-major order.",
+        "procedure": "Replay only pinned Wulfic Stage X2 and independently reconstruct all 256 grid coincidence counts, pair capacities and source decisions; verify a planted residue-bijection invariant.",
+        "parameters": "Two readings × periods 1–128; 100,000 seeded uniform-null blocks; 9,024 Emerson, 2,646 solved-LP1, 10,000 HEX and 10,000 Base64 256-byte controls; source upper-maximum and lower-0.1%-quantile rules.",
+        "exclusions": "Other traversal routes, offsets, payload extraction, compression, non-bijective or changing alphabets, transposition, layered ciphers, and Stage X1/X3/X4 tests."
+      },
+      "review": {
+        "kind": "exact public-source Stage X2 replay with independent complete grid-row check",
+        "retested_on": "2026-10-23",
+        "reviewer": "Pinned source table reproduced byte-for-byte; 256 site-grid counts and decisions independently checked; mathematical planted controls passed",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-grid-periodic-byte-invariant/run.py --check && python experiments/records/wulfic-grid-periodic-byte-invariant/plot.py --check",
+        "environment": "Bundled verification uses Python 3 standard library. The optional full pinned-source replay needs NumPy and the external checkout.",
+        "script": "experiments/records/wulfic-grid-periodic-byte-invariant/run.py",
+        "script_sha256": "3aca5e1492c8c664c299038c43224e7b3905449240c2316e0218006e338071ee",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/plan.json",
+            "sha256": "a9d0c32815cd688b1bb89f666eff6b8334d7fbf547c1db144c531f4df018a9a5"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/check.py",
+            "sha256": "97f3533909991cd1d6d6cab64d470a99d76ed5005d5da5fcef41f6ae60fbf962"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/plot.py",
+            "sha256": "785755c805496afca39c60f6cf91cd5caad13857b13192b5d1da570a9e49f553"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/replay_source.py",
+            "sha256": "6b4e904283c5d195311e3e5d541f4f525c224d47702777cf600a55a6ef5fe822"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/make_record.py",
+            "sha256": "a9e5baac823d998c07293022543381f39f6089a7ed18ebfcf360b7a220e721ee"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/source-stage_x_periodic.tsv",
+            "sha256": "331e6c3f1f668444273cb08835b99eb34be948fb0fcf8b407a8e455a8676a863"
+          },
+          {
+            "path": "exports/alphanumeric-grids.csv",
+            "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/results.json",
+            "sha256": "51a6d589f8c44622c43d26d0eba6ca95c4f604e306e24fbf71ef6f119cd86e72"
+          },
+          {
+            "path": "experiments/records/wulfic-grid-periodic-byte-invariant/comparison.svg",
+            "sha256": "d0c7fffb8d615ed03e494eff340c6361bc4e5df4de183ddbf6b079be2452fb5f"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-grid-periodic-byte-invariant/comparison.svg",
+          "caption": "Conditional exclusions by plaintext-control class among 256 grid-reading/period cells. No cell had the source's positive structural signal."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Wulfic Stage X at pinned revision",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_x.py"
+        },
+        {
+          "label": "Pinned source grid construction",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/keys.py"
+        }
+      ],
+      "related": [
+        "grid-direct-bytes",
+        "rune-direct-compression"
+      ],
+      "article": "# Does the number grid retain a repeating alphabet's pattern?\n\nThe 256 printed cells on LP2-49–51 can be read as bytes. Wulfic's Stage X2 asks whether those bytes could come from a plaintext stream through a **different one-to-one byte substitution at each position of a repeating period**. A one-to-one substitution changes byte values, but it cannot change whether two bytes encrypted with the *same* substitution are equal. That gives a test without guessing any of the substitutions.\n\n**Finding:** across both declared ways to traverse the grid and every period **1–128**, no equality count exceeds the maximum from 100,000 uniform-byte controls. The source's lower-tail rule excludes **241 of 256 reading/period cells** under its English control, **247** under solved LP1 runes, **247** under hexadecimal digits, and **78** under Base64. These are conditional exclusions of this one model; many Base64 cells remain open, and no byte stream has been decoded.\n\n![Conditional exclusions by plaintext control class among 256 grid-reading and period cells](experiments/records/wulfic-grid-periodic-byte-invariant/comparison.svg)\n\nThe [full table](experiments/records/wulfic-grid-periodic-byte-invariant/source-stage_x_periodic.tsv) gives the observed pair count, uniform-null maximum, control cutoff and verdict for each of the 256 cells. A cell is one reading order and one period, **not a separate puzzle idea**.\n\n## What was compared\n\nThe two reading orders are the printed row order of the 32 × 8 grid and a column-major traversal of the same cells. For each period `p`, the test groups positions by their remainder after division by `p` and counts equal-byte pairs *within* those groups. If a fixed, one-to-one alphabet is reused at each residue, that count is unchanged by encryption.\n\nThe source compares the observed count with 100,000 seeded blocks of uniform random bytes. It calls a structural hit only when the grid exceeds **every** such block at the same period. It also compares with 256-byte plaintext windows from Emerson, the solved LP1 rune stream, and generated hexadecimal and Base64 streams. Its exclusion rule asks whether the grid falls below a class's **lower 0.1% control cutoff**. English and LP1 therefore test specific source representations, not every possible language, text encoding or symbol frequency.\n\nThe source supplies 9,024 Emerson windows, 2,646 LP1 windows, and 10,000 each of the hexadecimal and Base64 controls. Our independent checker rebuilds the grid bytes from Liberpedia's printed-token export, recalculates **all 256 observed equality counts and pair capacities**, checks every reported decision against its cutoff, and plants residue-specific bijections to verify the invariant. That planted test is a **post-replay mathematical diagnostic**; it is not an original source power study.\n\n## What remains open\n\nAn exclusion only applies if the bytes really represent the proposed plaintext class and every residue uses a fixed bijection with no extra processing. It does not rule out a changing alphabet, non-bijective mapping, transposition, compression, keyed stream or a different grid traversal. The uniform-null maximum is a finite-control threshold, not a decryption score. This record replays **Stage X2 only**; the source's X1 byte-uniformity, X3 integer and X4 decompression screens are separate questions.\n\n## Reproduce\n\nFrom the repository root, Python's standard library checks the bundled source result and rebuilds the figure:\n\n```text\npython experiments/records/wulfic-grid-periodic-byte-invariant/run.py --check\npython experiments/records/wulfic-grid-periodic-byte-invariant/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-grid-periodic-byte-invariant/plan.json) pins the exact source revision, grid export, control counts and rules. The 256-row table was generated with the unmodified [pinned Stage X program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_x.py), calling only its X2 component. To repeat the full 100,000-draw source calculation from a matching external checkout, run:\n\n```text\npython experiments/records/wulfic-grid-periodic-byte-invariant/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThe optional source replay requires NumPy, verifies the checkout revision and its four input hashes, then compares its regenerated table **byte-for-byte** with the bundled one. Source code stays in its original repository.\n",
+      "article_path": "experiments/records/wulfic-grid-periodic-byte-invariant/article.md",
+      "script_sha256": "3aca5e1492c8c664c299038c43224e7b3905449240c2316e0218006e338071ee",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
       "id": "wulfic-local-codebook-invariants",
       "status": "published",
       "title": "Fixed local codebooks and repeat preservation",
@@ -60520,6 +61079,406 @@
       "article": "# Could a mathematical sequence be the LP2 key?\n\n**The specified number streams did not produce a reading under the tested model.** We replayed two public experiments that turn mathematical sequences into GP29 key values: fixed constants and concatenated numbers in [Stage AG](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ag.py), and arithmetic functions in [Stage AH](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ah.py). **None of the 19,140 scored settings met the source's reading threshold.** All 594 adequately long stream/alignment/mode groups met its exclusion rule. The remaining 66 groups use only *nine runes* from section 10, so they cannot settle much.\n\n![No tested setting reached the reading threshold; the only undecided groups use nine runes.](experiments/records/wulfic-number-key-streams/comparison.svg)\n\n## The tested keys\n\nStage AG uses base-29 digits of π, e, φ, √2, √3, ln 2 and √3301, plus concatenated primes, positive integers and prime totients. Stage AH uses φ(n), divisor sums, cumulative totients, prime gaps, φ(φ(n)) and nφ(n), each directly and as a running sum, reduced modulo 29. That gives **22 named streams, 21 distinct streams**: the running sum of φ(n) is the same sequence as the direct cumulative-totient stream.\n\nThe source reads each key from one of **1,000 possible starting positions**, allowing occasional stays and skips so a small alignment error need not destroy a genuine signal. It tests three arithmetic directions and all 29 shifts on sections 7–15 individually, then on their joined stream. Its score asks whether the resulting rune frequencies look more like the solved LP1 readings than a flat-rune reference. The [frozen plan](experiments/records/wulfic-number-key-streams/plan.json) gives the exact settings and input hashes.\n\nThe source set **+30** as its reading threshold. For groups long enough to judge, the best score was **−47.85**, on section 7 using the running sum of φ(φ(n)); a positive score this far away was never reached. The best score over *all* settings was only **+1.76**, on section 10's nine runes. The source's exclusion criterion requires **all 29 shifts in a group to score at most −10**, with its planted controls working. It holds for every group outside that short section: **270/300** Stage AG groups and **324/360** Stage AH groups. The groups are model settings, not separate proposed solutions.\n\n## Why the check is credible—and limited\n\nFor each named stream, the pinned program planted a known-key encryption at both 729 and 3,316 runes, with two key-continuation rules. All **88 positive controls** exceeded +30; the corresponding wrong-key controls stayed below it. We ran the complete source programs and compared all four [candidate and control tables](experiments/records/wulfic-number-key-streams/results.json) byte-for-byte with the published tables. An [independent check](experiments/records/wulfic-number-key-streams/check.py) rebuilds the 12,956-rune manuscript stream from Liberpedia's page files, checks the full parameter grid and controls, and verifies small arithmetic prefixes and the duplicate sequence.\n\nThis result concerns these **particular base-29 streams and the source's drift-tolerant frequency model**. It does not reject other numerical keys, different ways to turn a constant into runes, different boundaries or a cipher with a different plaintext distribution. Nor does a failure to reach the reading threshold establish that the manuscript was not constructed with mathematics.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/wulfic-number-key-streams/run.py --check` and `python experiments/records/wulfic-number-key-streams/check.py`. The full upstream rerun needs a separate checkout of [Wulfic's repository](https://github.com/Wulfic/Cicada3301-Liber_Primus) at commit `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`, with its Python dependencies installed; run `python experiments/records/wulfic-number-key-streams/replay_source.py --source-dir PATH_TO_CLONE`. That wrapper checks the pinned source files, runs both stages into a temporary folder and compares their complete output tables with this archive.\n",
       "article_path": "experiments/records/wulfic-number-key-streams/article.md",
       "script_sha256": "90a0a31c55ae19187a8275ef51a39f1d5cb62b9e43c36dd34f0ae046975e0e9b",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "wulfic-periodic-alphabet-lags",
+      "status": "published",
+      "title": "Repeating-alphabet periods across LP2",
+      "question": "At which periods does LP2 preserve the rune agreement expected when the same bijective alphabet repeats?",
+      "reader_question": "Could a repeating alphabet explain the rune patterns?",
+      "summary": "An exact source replay checks all 12,935 periods. Under its controlled equality model, 10,030 are excluded, including 1033, 1729 and 3301; 2,905 remain open and none is positively detected.",
+      "finding": "Stage AE's valid source run excludes 10,030 of 12,935 periods using its 5% plaintext-agreement model and binomial lower-tail rule. All 100 planted periodic controls passed and none was excluded; no LP2 lag passed the positive rule.",
+      "limitations": "The result assumes a fixed bijective alphabet at each periodic residue, the source's English/LP1 controls, anti-doublet simulation and transcription. Lag-pair dependence and selection over 12,935 periods limit probability interpretation; other stateful or layered ciphers are not tested.",
+      "next_steps": "For any remaining candidate period, specify a complete alphabet/key rule and test held-out output; for other periodic models, establish a fresh invariant and positive-control power before using absence of equality as evidence.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "source replay",
+        "periodic key",
+        "alphabet",
+        "lag equality",
+        "search bounds"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_lags.tsv",
+          "experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_controls.tsv"
+        ],
+        "representation": "The joined 12,956-rune LP2 sections 7–15 stream in canonical GP29 order, with punctuation and page/line breaks omitted for rune-lag counting.",
+        "procedure": "Replay pinned Wulfic Stage AE source; independently reconstruct every rune-lag agreement count from site page text, three named binomial lower tails and a planted periodic bijection.",
+        "parameters": "All 12,935 lags 11–12,945; p_H=0.050 lower-tail threshold exp(-10), positive threshold 0.01/12,935 against empirical p0; 20 anti-doublet flat nulls and 100 planted controls at five named periods from Emerson and LP1; source seed3301.",
+        "exclusions": "Lags below11 or above12945, per-page resets, non-bijective or changing alphabets, keyed/drifting state, additional encryption layers, alternate transcriptions and languages with a different equality baseline."
+      },
+      "review": {
+        "kind": "exact public-source replay with independent all-lag statistic check",
+        "retested_on": "2026-10-23",
+        "reviewer": "Two source TSVs reproduced byte-for-byte; all 12,935 LP2 counts independently reconstructed; named exact binomial tails and planted periodic bijection checked",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-periodic-alphabet-lags/run.py --check && python experiments/records/wulfic-periodic-alphabet-lags/check.py && python experiments/records/wulfic-periodic-alphabet-lags/plot.py --check",
+        "environment": "Python 3 standard library for bundled verification. Optional full source replay requires the pinned Wulfic checkout with NumPy.",
+        "script": "experiments/records/wulfic-periodic-alphabet-lags/run.py",
+        "script_sha256": "1462d5de86294c1d519cb38f6b3f2aac51af17619e5cede4fa57f6c4e6056279",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/plan.json",
+            "sha256": "32eee37ccecc2d4e1848f161cc286564897e712f8eda8bd27f64232ec94031ab"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/check.py",
+            "sha256": "9b3ed7024a1c6d3854fa1a939d8fc2619016f65da6aa3f3d6f0dea57c4f51b20"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/plot.py",
+            "sha256": "29de1cb394c1eaac1fc0035ac64d9ad3f21caa5913a6a9e74d244535054b0ec8"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/replay_source.py",
+            "sha256": "1204488b679ea8063cb4218c4ed60456ae395fdce6c2ee7decb8b06bd92f8465"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/make_plan.py",
+            "sha256": "9ee02f6f590116ed0f668a9583d5413c57630f47da651d1d254ddad159312856"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/make_record.py",
+            "sha256": "f4bdb453d25378b58f90d6add1e2d4e4cf02c7748a6f9854e8d3b2138a77de9f"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_lags.tsv",
+            "sha256": "02654c749024993252a58d61931f86cccbb6fbce1d7b304660dba12cf372ec9e"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_controls.tsv",
+            "sha256": "91616a09c8307b95b986bd149d607768c099438339c711c1b8063b88a1123160"
+          },
+          {
+            "path": "data/index.json",
+            "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+          },
+          {
+            "path": "data/pages/lp2-00.json",
+            "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+          },
+          {
+            "path": "data/pages/lp2-01.json",
+            "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+          },
+          {
+            "path": "data/pages/lp2-02.json",
+            "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+          },
+          {
+            "path": "data/pages/lp2-03.json",
+            "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+          },
+          {
+            "path": "data/pages/lp2-04.json",
+            "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+          },
+          {
+            "path": "data/pages/lp2-05.json",
+            "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+          },
+          {
+            "path": "data/pages/lp2-06.json",
+            "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+          },
+          {
+            "path": "data/pages/lp2-07.json",
+            "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+          },
+          {
+            "path": "data/pages/lp2-08.json",
+            "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+          },
+          {
+            "path": "data/pages/lp2-09.json",
+            "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+          },
+          {
+            "path": "data/pages/lp2-10.json",
+            "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+          },
+          {
+            "path": "data/pages/lp2-11.json",
+            "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+          },
+          {
+            "path": "data/pages/lp2-12.json",
+            "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+          },
+          {
+            "path": "data/pages/lp2-13.json",
+            "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+          },
+          {
+            "path": "data/pages/lp2-14.json",
+            "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+          },
+          {
+            "path": "data/pages/lp2-15.json",
+            "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+          },
+          {
+            "path": "data/pages/lp2-16.json",
+            "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+          },
+          {
+            "path": "data/pages/lp2-17.json",
+            "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+          },
+          {
+            "path": "data/pages/lp2-18.json",
+            "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+          },
+          {
+            "path": "data/pages/lp2-19.json",
+            "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+          },
+          {
+            "path": "data/pages/lp2-20.json",
+            "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+          },
+          {
+            "path": "data/pages/lp2-21.json",
+            "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+          },
+          {
+            "path": "data/pages/lp2-22.json",
+            "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+          },
+          {
+            "path": "data/pages/lp2-23.json",
+            "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+          },
+          {
+            "path": "data/pages/lp2-24.json",
+            "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+          },
+          {
+            "path": "data/pages/lp2-25.json",
+            "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+          },
+          {
+            "path": "data/pages/lp2-26.json",
+            "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+          },
+          {
+            "path": "data/pages/lp2-27.json",
+            "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+          },
+          {
+            "path": "data/pages/lp2-28.json",
+            "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+          },
+          {
+            "path": "data/pages/lp2-29.json",
+            "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+          },
+          {
+            "path": "data/pages/lp2-30.json",
+            "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+          },
+          {
+            "path": "data/pages/lp2-31.json",
+            "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+          },
+          {
+            "path": "data/pages/lp2-32.json",
+            "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+          },
+          {
+            "path": "data/pages/lp2-33.json",
+            "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+          },
+          {
+            "path": "data/pages/lp2-34.json",
+            "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+          },
+          {
+            "path": "data/pages/lp2-35.json",
+            "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+          },
+          {
+            "path": "data/pages/lp2-36.json",
+            "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+          },
+          {
+            "path": "data/pages/lp2-37.json",
+            "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+          },
+          {
+            "path": "data/pages/lp2-38.json",
+            "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+          },
+          {
+            "path": "data/pages/lp2-39.json",
+            "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+          },
+          {
+            "path": "data/pages/lp2-40.json",
+            "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+          },
+          {
+            "path": "data/pages/lp2-41.json",
+            "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+          },
+          {
+            "path": "data/pages/lp2-42.json",
+            "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+          },
+          {
+            "path": "data/pages/lp2-43.json",
+            "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+          },
+          {
+            "path": "data/pages/lp2-44.json",
+            "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+          },
+          {
+            "path": "data/pages/lp2-45.json",
+            "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+          },
+          {
+            "path": "data/pages/lp2-46.json",
+            "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+          },
+          {
+            "path": "data/pages/lp2-47.json",
+            "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+          },
+          {
+            "path": "data/pages/lp2-48.json",
+            "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+          },
+          {
+            "path": "data/pages/lp2-49.json",
+            "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+          },
+          {
+            "path": "data/pages/lp2-50.json",
+            "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+          },
+          {
+            "path": "data/pages/lp2-51.json",
+            "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+          },
+          {
+            "path": "data/pages/lp2-52.json",
+            "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+          },
+          {
+            "path": "data/pages/lp2-53.json",
+            "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+          },
+          {
+            "path": "data/pages/lp2-54.json",
+            "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+          },
+          {
+            "path": "data/pages/lp2-55.json",
+            "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/results.json",
+            "sha256": "a43e77115e3dcb3fe214ff669defe9cc81be3625f887ecbb955daef938ee1292"
+          },
+          {
+            "path": "experiments/records/wulfic-periodic-alphabet-lags/comparison.svg",
+            "sha256": "b51ca8696906be750498bc353818047813c0dab4d829c1ad1daff8c5daf3c97a"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-periodic-alphabet-lags/comparison.svg",
+          "caption": "Named-period LP2 rune agreement against the lowest planted control, with the all-lag result below."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Wulfic Stage AE at pinned revision",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ae.py"
+        },
+        {
+          "label": "Pinned source findings",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+        }
+      ],
+      "related": [
+        "periodic-affine-crib-capacity",
+        "lp2-31-periodic-ioc"
+      ],
+      "article": "# Does rune equality reveal a repeating alphabet?\n\nIf an encryption alphabet repeats every **L** runes, the same alphabet acts on positions `i` and `i+L`. A one-to-one alphabet preserves whether those two plaintext runes are equal. Wulfic's Stage AE uses that invariant to check **every possible lag from 11 to 12,945** in the joined unsolved LP2 text. This is a way to test a whole family of periodic substitutions without guessing the alphabets themselves.\n\n**Result:** the source's controlled rule excludes **10,030 of 12,935 periods**, including 1033, 1729 and 3301. It leaves **2,905 periods open**. No period has the excess equality required for a positive detection. An open period is not evidence that it is the key length.\n\n![Observed LP2 rune equality versus the lowest planted periodic-alphabet rate at periods 1033, 1729 and 3301](experiments/records/wulfic-periodic-alphabet-lags/comparison.svg)\n\n| Repeating period | LP2 equal rune pairs | LP2 rate | Lowest planted-control rate | Source verdict |\n| --- | ---: | ---: | ---: | --- |\n| 1033 | 422 / 11,923 | 3.54% | 5.65% | Excluded |\n| 1729 | 407 / 11,227 | 3.63% | 5.20% | Excluded |\n| 3301 | 326 / 9,655 | 3.38% | 5.69% | Excluded |\n\nThe figure shows *rates* for three named periods. The actual decision uses a binomial tail, not a simple line at 5%. The [complete source table](experiments/records/wulfic-periodic-alphabet-lags/source-stage_ae_lags.tsv) has the pair count, equality count, rates and verdict for every tested lag.\n\n## What the comparison means\n\nThe source assumes a periodic key selecting a fixed, **bijective** rune alphabet at each residue position. At the correct period, equal ciphertext pairs then occur exactly where plaintext pairs are equal, before any other processing. The model allows the observed anti-doublet tendency by redrawing 81% of adjacent repeat collisions in its simulated streams. Its lower-bound test asks whether the observed equality count is unusually small if the plaintext's agreement probability is at least 5%.\n\nThe source generated 20 flat-rune null streams and 100 periodic-alphabet positive controls: ten each from Emerson prose and solved LP1 at periods 1033, 1729, 3301, 6000 and 9000. None of the 20 null streams triggered its positive rule. **All 100 positive controls passed and none was excluded** at its planted period. The full source run reported valid. This establishes that its chosen controls can distinguish these planted cases; it does not prove that every natural-language text or every periodic cipher has the same agreement rate.\n\nThe exclusion count is conditional on the source's English/LP1 control sources, 5% minimum-agreement assumption, binomial model and archived transcription. Lag pairs share rune positions, so the binomial tail is a model-based score rather than an exact independent-trial probability. The per-lag exclusion threshold is not a correction for selecting among all 12,935 periods. A changing alphabet, non-bijective mapping, running state, word reset or additional transformation may break the equality invariant. These cases remain outside the test.\n\n## Reproduce\n\nThe two bundled tables were regenerated from the unmodified [pinned Stage AE program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ae.py) at commit `bf89d3d`; both match that revision's output byte-for-byte. From the extracted Liberpedia repository, Python's standard library verifies the bundle and independently recounts all 12,935 lag agreements from the 56 page text files:\n\n```text\npython experiments/records/wulfic-periodic-alphabet-lags/run.py --check\npython experiments/records/wulfic-periodic-alphabet-lags/check.py\npython experiments/records/wulfic-periodic-alphabet-lags/plot.py --check\n```\n\nThe independent checker builds a bitset for each rune, counts matches at every lag, verifies the three named lower-tail probabilities, and checks a planted periodic alphabet that must preserve equality. The [plan](experiments/records/wulfic-periodic-alphabet-lags/plan.json) pins all manuscript inputs and source revision. The optional `replay_source.py` reruns the original program from a matching checkout; it requires that repository and its NumPy dependency. Wulfic's Stages AC and AD explore related lagged-key ideas, but their pinned `--quick` runs fail in a shared control-array shape operation before LP2 scoring. This record does not present their historical outputs as reproduced.\n",
+      "article_path": "experiments/records/wulfic-periodic-alphabet-lags/article.md",
+      "script_sha256": "1462d5de86294c1d519cb38f6b3f2aac51af17619e5cede4fa57f6c4e6056279",
       "record_type": {
         "id": "replay",
         "label": "Method replay",

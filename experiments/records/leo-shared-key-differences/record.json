@@ -1,0 +1,106 @@
+{
+  "id": "leo-shared-key-differences",
+  "status": "published",
+  "title": "Do LP2 sections share a running key?",
+  "question": "Does the source difference-IoC cross-section scan reveal an alignment that survives a complete-search control?",
+  "reader_question": "Do two LP2 sections appear to share a running key?",
+  "summary": "A planted shared key is detectable, but the strongest distinct LP2 section alignment is near the shuffled-search median. The saved source score disagrees with the pinned current formula at a tested alignment.",
+  "finding": "The top distinct-section score is 6.0117 (pages 3–7 versus 33–39, shift 25, overlap 1120); 53 of 99 shuffled whole searches match or exceed it. The all-pair maximum 11.319 is a self-pair at lag one, not cross-section evidence. The source printout gives z=3.3 for another tested alignment, while pinned current code gives z=5.68; an older SD approximation is numerically consistent with 3.3, but the historical formula used is unverified.",
+  "limitations": "The 36-pair shuffle comparison was specified after the self-pair maximum appeared and is exploratory. Shuffling section order does not model every plausible cipher. No plaintext or key is recovered.",
+  "next_steps": "A shared-key claim needs a key-advance and section-alignment rule specified in advance, then a held-out plaintext prediction beyond a selected difference score.",
+  "outcome": "inconclusive",
+  "tags": [
+    "running key",
+    "shared key",
+    "cross-section",
+    "difference IoC",
+    "source replay",
+    "selection control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-shared-key-differences/plan.json"
+    ],
+    "representation": "Nine pinned relikd LP2 unsolved section rune streams; 12,956 runes total.",
+    "procedure": "Replay the source synthetic shared-key power example; scan all 45 unordered section pairs over shifts with at least 300 rune overlap, then 99 seeded full-search section-order shuffles. A clearly post-observation follow-up restricts to 36 distinct-section pairs and 99 separate full-search controls.",
+    "parameters": "GP29, 1,200-rune synthetic overlap, 300 source-style null draws, 99 all-pair shuffles and 99 distinct-pair follow-up shuffles.",
+    "exclusions": "Other transcriptions, key models, alternate boundaries or shifts, reverse transforms and full decryption."
+  },
+  "review": {
+    "reviewer": "Independent winning-window arithmetic and shared-key cancellation check",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound statistical replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-shared-key-differences/run.py --source-root REL --check && python experiments/records/leo-shared-key-differences/followup.py --source-root REL --check && python experiments/records/leo-shared-key-differences/check.py --source-root REL --source-test-root LEO && python experiments/records/leo-shared-key-differences/plot.py --check",
+    "environment": "Python 3.9+ with NumPy and Numba for full search; source transcriptions and Leo test receipts supplied as separately pinned checkouts.",
+    "script": "experiments/records/leo-shared-key-differences/run.py",
+    "script_sha256": "c7db41008f763e257f97401524b94cc9475e8c8de97d29cf91874628253c4259",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-shared-key-differences/plan.json",
+        "sha256": "a74bd27f63387831676677292468a53939b4b576e1a1e4cdc5b6e35221368f5d"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/followup-plan.json",
+        "sha256": "50056963b32fba8c5c4a8690ec8c0abd0286df1f814697f2b8fcfd16f6d1614c"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/run.py",
+        "sha256": "c7db41008f763e257f97401524b94cc9475e8c8de97d29cf91874628253c4259"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/followup.py",
+        "sha256": "429b53be15ff57d05a7a91c714fcd3544bb32febb04b188001f939701d6ab32d"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/check.py",
+        "sha256": "a9d6229a20395b35b50ccf0337d8d47896ce5988a2cfcaa71a1c5e75c5356f71"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/plot.py",
+        "sha256": "c8cfc3cffd6fcb752eccf9a32c4c02952dfcffe1ae0e7b9592e9ec569b1d3319"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-shared-key-differences/results.json",
+        "sha256": "699a5e13b487a4422a96adf1992e15f172126740d3c14bfecf12a26f0e78d527"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/followup-results.json",
+        "sha256": "044f252ab8b4a57aa62f0d855a94ecfe04cf5f2832d052a071f7cd924143513c"
+      },
+      {
+        "path": "experiments/records/leo-shared-key-differences/cross-section-control.svg",
+        "sha256": "05fcf6d004d5a276a0af59652657ea65db9609d5299909d67d09d19140db29f9"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Leo-Y-Zhang pinned tests5 method",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py"
+    },
+    {
+      "label": "Pinned source result receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/tests5.txt"
+    },
+    {
+      "label": "Pinned relikd transcription",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "leo-transform-periodic-profile",
+    "ea-frequency-control"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-shared-key-differences/cross-section-control.svg",
+      "caption": "The strongest distinct-section score against maxima from 99 shuffled complete searches."
+    }
+  ]
+}

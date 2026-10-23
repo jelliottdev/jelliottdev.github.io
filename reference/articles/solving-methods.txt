@@ -38,7 +38,7 @@ Allow several ciphertext symbols to represent the same plaintext symbol.
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-19 related records
+20 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -77,6 +77,8 @@ Restarted alphabets at five LP2 boundaries · Method replay
 
 Unit shifts in a restarted LP2 key · Method replay
 
+Repeating-alphabet periods across LP2 · Method replay
+
 
 
 Fractionation and coordinate alphabets
@@ -107,7 +109,7 @@ Keys, sequences and state
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-10 related records
+13 related records
 LP2-00–55: prime-minus-one shifts and known openings · Bounded solving test
 
 LP2-00–55: ordinary primes instead of primes minus one · Bounded solving test
@@ -127,6 +129,12 @@ Earlier puzzle numbers as LP2 rune keys · Method replay
 Mathematical digit streams as LP2 keys · Method replay
 
 Prime, solved-text and grid streams as LP2 keys · Method replay
+
+Cicada-derived keys against the LP2 grid · Method replay
+
+Number-sequence keys in direct and chain views · Method replay
+
+Do number sequences fit the rune-difference chain? · Method replay
 
 
 
@@ -195,7 +203,7 @@ Python 2.7 priority seeds against fixed LP2 openings · Bounded solving test
 Running keys from external texts
 Convert a specified external text into a stream of key symbols.
 
-5 related records
+6 related records
 Emerson as an additive LP2 running key · Bounded solving test
 
 LP2 as a running key for shorter Cicada texts · Method replay
@@ -205,6 +213,8 @@ Cypherpunk Manifesto as an LP2 running key · Bounded solving test
 Solved manuscript readings as a running key · Bounded solving test
 
 Prime, solved-text and grid streams as LP2 keys · Method replay
+
+Do LP2 sections share a running key? · Manuscript measurement
 
 
 
@@ -513,7 +523,7 @@ Operate on explicitly encoded bits or bytes, with alignment and key rules.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-12 related records
+14 related records
 Magic squares: does one fixed entry determine the rest? · Manuscript measurement
 
 LP2-49–51: directional prime-path reconstruction · Manuscript measurement
@@ -538,12 +548,16 @@ Grid prefix channels as repeating rune keys · Bounded solving test
 
 Numerical matrix lengths across LP2 sections · Manuscript measurement
 
+Cicada-derived keys against the LP2 grid · Method replay
+
+Repeating-byte-alphabet invariant on the LP2 grid · Method replay
+
 
 
 Differential and cumulative decoding
 Transform changes between values with declared direction, lag, modulus and initial conditions.
 
-4 related records
+7 related records
 LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement
 
 One LP2 page as another page’s key · Manuscript measurement
@@ -551,6 +565,12 @@ One LP2 page as another page’s key · Manuscript measurement
 Unit shifts in a restarted LP2 key · Method replay
 
 Do transformed LP2 runes show a reliable period? · Manuscript measurement
+
+Do LP2 sections share a running key? · Manuscript measurement
+
+Number-sequence keys in direct and chain views · Method replay
+
+Do number sequences fit the rune-difference chain? · Method replay
 
 
 
@@ -776,7 +796,7 @@ Diagnosis and validation
 Period and key-length diagnostics
 Measure position-dependent patterns with matched null models and correction for searched periods.
 
-6 related records
+8 related records
 LP2-31: periodic IoC for periods 2-20 · Manuscript measurement
 
 LP2-31: periodic IoC with within-row shuffles · Manuscript measurement
@@ -788,6 +808,10 @@ Reading every nth rune · Bounded solving test
 Restarted alphabets at five LP2 boundaries · Method replay
 
 Do transformed LP2 runes show a reliable period? · Manuscript measurement
+
+Repeating-alphabet periods across LP2 · Method replay
+
+Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 
 
 
@@ -848,7 +872,7 @@ Fixed local codebooks and repeat preservation · Method replay
 Invariants and bounded exclusions
 State the assumptions under which an operation preserves or forbids an observed property.
 
-9 related records
+10 related records
 Literal prime alphabet: affine permutations for every modulus above 109 · Alphabet-wide analysis
 
 Literal prime alphabet: quadratic permutations for every modulus above 109 · Alphabet-wide analysis
@@ -866,6 +890,8 @@ Equality structure of the LP2-53 red passage · Manuscript measurement
 Can LP2 words be shifted dictionary words? · Method replay
 
 Fixed local codebooks and repeat preservation · Method replay
+
+Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 
 
 
@@ -1036,6 +1062,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/wulfic-stage-ab-reset-alphabets
 - Unit shifts in a restarted LP2 key
   https://jelliottdev.github.io/#/experiments/wulfic-stage-af-unit-shifts
+- Repeating-alphabet periods across LP2
+  https://jelliottdev.github.io/#/experiments/wulfic-periodic-alphabet-lags
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Block and matrix transformations
@@ -1066,6 +1094,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/wulfic-number-key-streams
 - Prime, solved-text and grid streams as LP2 keys
   https://jelliottdev.github.io/#/experiments/wulfic-native-key-streams
+- Cicada-derived keys against the LP2 grid
+  https://jelliottdev.github.io/#/experiments/wulfic-grid-native-keys
+- Number-sequence keys in direct and chain views
+  https://jelliottdev.github.io/#/experiments/leo-chain-sequence-keys
+- Do number sequences fit the rune-difference chain?
+  https://jelliottdev.github.io/#/experiments/leo-chain-key-alignment
 - Autokey and ciphertext feedback
   https://jelliottdev.github.io/reference/articles/method-feedback.html
 - Ciphertext symbols and differences around LP2 doublets
@@ -1130,6 +1164,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/cypherpunk-manifesto-running-key
 - Solved manuscript readings as a running key
   https://jelliottdev.github.io/#/experiments/solved-reading-running-key
+- Do LP2 sections share a running key?
+  https://jelliottdev.github.io/#/experiments/leo-shared-key-differences
 - Keystream interruptions and reset rules
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Can a correct key fail under the wrong alignment rule?
@@ -1322,6 +1358,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-alternative-layouts
 - LP2-16–22’s 59×59 digit count
   https://jelliottdev.github.io/#/experiments/lp2-seven-page-square-fits
+- Repeating-byte-alphabet invariant on the LP2 grid
+  https://jelliottdev.github.io/#/experiments/wulfic-grid-periodic-byte-invariant
 - Differential and cumulative decoding
   https://jelliottdev.github.io/reference/articles/method-differences.html
 - LP2-39: do crib-difference triplets recur elsewhere?

@@ -1,0 +1,128 @@
+{
+  "id": "wulfic-grid-native-keys",
+  "status": "published",
+  "title": "Cicada-derived keys against the LP2 grid",
+  "question": "Do Wulfic's fixed earlier-Cicada key streams make the 256-cell LP2 grid pass its byte or GP29 reading screens?",
+  "reader_question": "Do known Cicada numbers unlock the 256-cell grid?",
+  "summary": "Exact Stage N replay finds no source-screen hit among 456 settings: 72 byte-key operations and 384 GP29 readings. The screens have only post-replay synthetic detector diagnostics.",
+  "finding": "The best byte output is 42.6% printable, below the source's 90% screen, with no named signature. The highest rune log likelihood is 4.63 nats, below +30. No source setting passes.",
+  "limitations": "The source uses one row-order grid and reversal, specified key starts/streams, a permissive byte-printability or offset-zero signature screen, and a solved-LP1 unigram detector. Planted controls were added after replay and do not establish power against all plausible LP2 messages.",
+  "next_steps": "For another grid-key hypothesis, specify the key bytes, start, operation, route and full-stream success criterion before testing; calibrate its detector on planted examples of the intended message type.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "grid",
+    "source replay",
+    "key stream",
+    "byte decode",
+    "rune decode"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv",
+      "experiments/records/wulfic-grid-native-keys/source-profile.json",
+      "exports/alphanumeric-grids.csv"
+    ],
+    "representation": "Printed 32×8 grid as 256 base-60-derived bytes or 512 separate base-60 digits, conditionally using the site's pinned digit order; forward and full reverse only.",
+    "procedure": "Replay source Stage N all 456 rows, independently rebuild the grid from site export, repeat 72 byte transforms and 384 GP29 likelihood calculations, then run explicitly post-replay synthetic detector diagnostics.",
+    "parameters": "12 finite byte keys×3 operations×2 directions=72; two GP29 grid encodings×2 directions×3 decode modes×(29 constant shifts+3 rune streams)=384; source thresholds 90% printable or listed signature, and log LR+30 nats.",
+    "exclusions": "Other grid layouts, ten disputed stems, later offsets, decryption-plus-decompression, other key derivations/starts, different scoring languages and plaintext interpretation beyond the source screens."
+  },
+  "review": {
+    "kind": "exact public-source replay with post-replay detector diagnostics",
+    "retested_on": "2026-10-23",
+    "reviewer": "456-row source output reproduced byte-for-byte; site grid and all byte/rune scores independently recalculated from pinned numerical source inputs",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-grid-native-keys/run.py --check && python experiments/records/wulfic-grid-native-keys/check.py && python experiments/records/wulfic-grid-native-keys/plot.py --check",
+    "environment": "Python 3 standard library for bundled verification. Optional source replay/profile export requires the pinned Wulfic checkout with its dependencies.",
+    "script": "experiments/records/wulfic-grid-native-keys/run.py",
+    "script_sha256": "f4bff9fd60c2d3ed088d19f40b19b0dbda881c356842d4111e6242467f3be0d8",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/plan.json",
+        "sha256": "c841a60a6273d1296a262ba5ace5ea96891aa03f222eb1e7539e2d1a016cb5d0"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/check.py",
+        "sha256": "13b5d3b83c5d48155053aa343e55add27ab2a0160e0a940eaa32e07867593d0b"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/plot.py",
+        "sha256": "766dd6cfee7e3c39e8179c8a27f9bd67d315ed73b506a3c2e9cc2ad5a6bd63e1"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/prepare_source.py",
+        "sha256": "d825139037d4ce7e9eafeab635936ac414f443b16a63bf13a6af1718e3b9d571"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/replay_source.py",
+        "sha256": "30f4f02459bf7e8ce6a03b2710641241d46a8e583d11211caf9edeb43e94f717"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/make_plan.py",
+        "sha256": "b433206e042f3595314d5b81bec9e171a351520a91594181ccfcf594a523722d"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/make_record.py",
+        "sha256": "55cd2e44bf44371af89f6132148528f38655c604c0ec8b9562615f7225f98d62"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv",
+        "sha256": "2e12cc94850b562bad191d477b187cf63d470afb3efe439135de25863fcc20b8"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/source-profile.json",
+        "sha256": "0bc71522718dc9dc19627519c76f9d82339e0db1018fe607abe4ca7b0000a22e"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/results.json",
+        "sha256": "eb0f2c3ce60e2bb4449c80d567962437ce85be76718e88425c974995e2e10220"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-native-keys/comparison.svg",
+        "sha256": "66aa1327ae81ff30848c3018d5361aade92caefa8fc72e9c68f015e51503d1ce"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-grid-native-keys/comparison.svg",
+      "caption": "Best of the fixed source screens compared with their separate pass thresholds."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wulfic Stage N at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_n.py"
+    },
+    {
+      "label": "Pinned source findings",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "wulfic-native-key-streams"
+  ],
+  "article": "# Do native Cicada keys read the number grid?\n\nThe 256 printed cells on LP2-49–51 can be converted to bytes under the documented base-60 convention. Wulfic's Stage N tests whether several keys drawn from earlier Cicada material make those bytes resemble text, a file, or runes. **None of its 456 fixed settings reaches its own reading screen.** This is a bounded keyed-grid check, not a claim that the grid has no encoded message.\n\n![Best byte-printability and GP29 likelihood compared with the original source thresholds](experiments/records/wulfic-grid-native-keys/comparison.svg)\n\n## The two screens\n\nThe **byte screen** uses the printed 32 × 8 grid in row order or its full reversal. For each, it repeats one of 12 source keys and applies XOR, byte subtraction or byte addition. Those **72 outputs** are screened for at least 90% printable bytes or an offset-zero signature such as PNG, JPEG, gzip, ZIP, PDF or a length-consistent OpenPGP packet header. The best printable fraction is **42.6%**; no signature is reported. A printable result would only be a candidate, not a proven reading.\n\nThe **rune screen** takes either the 256 grid bytes modulo 29 or the 512 individual base-60 digits modulo 29. In each representation it tests forward and reversed order. It then scores three GP29 decoding directions under every constant shift, plus the source's prime, `DIVINITY` and `FIRFUMFERENFE` streams. These **384 settings** use the source's drift-tolerant solved-LP1 rune-frequency detector. The largest log-likelihood ratio is **4.63 nats**, below the source pass level of **+30**.\n\nThe [complete 456-row source result](experiments/records/wulfic-grid-native-keys/source-stage_n_results.tsv) retains each key, operation, direction, screen value and verdict. The byte screen uses a permissive printable threshold; the rune screen is a unigram detector. Neither tests whether a longer decoded phrase is meaningful or whether a key derived from different puzzle material works.\n\n## What this does and does not establish\n\nThe original Stage N run did **not** include a planted detector-control gate. We regenerated its table exactly, then added separate, **post-replay** checks that its byte operations can recover synthetic printable text and that its rune likelihood can recognize a simple planted high-signal case. Those diagnostics catch broken implementations; they are not a preregistered LP2 power study and do not justify rejecting a whole cipher family.\n\nThe result is about the source's row-order grid, full reversal, named keys, operations, two rune encodings and two fixed thresholds. It does not cover other grid routes, uncertain glyph readings, offsets within a file, key starts and drift models beyond the source, decompression after decryption, or different languages. The [direct-byte experiment](#/experiments/grid-direct-bytes) checks unkeyed whole-stream formats over more routes and stem choices; this record answers the separate keyed question.\n\n## Reproduce\n\nWe ran the [pinned Stage N source](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_n.py) at commit `bf89d3d`; its 456-row TSV matches the pinned repository byte-for-byte. The bundled [numerical input profile](experiments/records/wulfic-grid-native-keys/source-profile.json) records the exact key streams and unigram distribution exported from that checkout; no upstream source code is copied. The site’s own 256-cell [grid export](exports/alphanumeric-grids.csv) independently reproduces every source grid byte and base-60 digit.\n\nWith Python's standard library, run from the extracted Liberpedia repository:\n\n```text\npython experiments/records/wulfic-grid-native-keys/run.py --check\npython experiments/records/wulfic-grid-native-keys/check.py\npython experiments/records/wulfic-grid-native-keys/plot.py --check\n```\n\nThe checker rebuilds the grid, replays every byte operation, and independently calculates all 384 GP29 likelihood scores from the recorded numerical inputs. It also runs the explicitly post-replay planted byte and rune diagnostics. The [plan](experiments/records/wulfic-grid-native-keys/plan.json) pins files, source revision and exact thresholds; `prepare_source.py` regenerates the numerical profile when supplied a matching external checkout.\n",
+  "article_path": "experiments/records/wulfic-grid-native-keys/article.md",
+  "script_sha256": "f4bff9fd60c2d3ed088d19f40b19b0dbda881c356842d4111e6242467f3be0d8",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

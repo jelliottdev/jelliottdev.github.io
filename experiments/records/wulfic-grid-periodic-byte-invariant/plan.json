@@ -1,0 +1,30 @@
+{
+  "schema": "liberpedia-wulfic-stage-x2-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "script": "tools/run_stage_x.py",
+    "script_sha256": "29b1a75394a4a8b198531a52c185dac6e2a8f1661c01c2e19092a77c9a34eb1d",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47",
+    "emerson_sha256": "a56d5bb419a8c28c4e0187a937c01991ea953817c036ee7f7f835ea2084c03a0"
+  },
+  "scope": {
+    "grid": "256 printed LP2-49–51 tokens as base-60 byte values; row order R and 32-by-8 column-major order C only.",
+    "periods": "Every integer 1–128 for both readings.",
+    "statistic": "For each period p, count equal byte pairs at positions with the same residue modulo p. A residue-specific bijection preserves this count.",
+    "controls": "100,000 seeded iid-uniform byte blocks; 9,024 Emerson 256-byte windows; 2,646 solved-LP1-rune windows; 10,000 seeded hexadecimal and 10,000 seeded Base64 windows.",
+    "decision": "Structural PASS only when observed count exceeds every uniform null; a plaintext class is EXCLUDED only when observed count is below its lower 0.1% control quantile.",
+    "exclusions": "No other grid route, offset, byte transform, key stream, dictionary, decompressor, or layered cipher is tested. X1, X3 and X4 are not replayed in this record."
+  },
+  "inputs": [
+    {
+      "path": "experiments/records/wulfic-grid-periodic-byte-invariant/source-stage_x_periodic.tsv",
+      "sha256": "331e6c3f1f668444273cb08835b99eb34be948fb0fcf8b407a8e455a8676a863"
+    },
+    {
+      "path": "exports/alphanumeric-grids.csv",
+      "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+    }
+  ]
+}

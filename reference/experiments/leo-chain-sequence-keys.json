@@ -1,0 +1,100 @@
+{
+  "id": "leo-chain-sequence-keys",
+  "status": "published",
+  "title": "Number-sequence keys in direct and chain views",
+  "question": "Do source-defined integer sequences produce unusually concentrated output under direct or chain-increment decoding of nine LP2 sections?",
+  "reader_question": "Could prime, Fibonacci or totient numbers be the key?",
+  "summary": "The full published source grid reproduces, but its selected coincidence peaks remain compatible with matched shuffled sections once section choice is included.",
+  "finding": "All 135 printed source top-three candidates and nine solved-text running-key rows replay exactly. Both planted direct and chain prime-key streams pass the full-grid positive controls. The smallest LP2 section tail is 4/100 on pages 00–02; a simple nine-section choice bound is 36/100. This bounded coincidence scan supplies no recovered reading or supported key.",
+  "limitations": "The source grid uses 24 named sequences, offsets 0–199, two signs, five views and whole-section coincidence as its score. Several names and views are exact duplicates or complements; they are retained as named source settings, not counted as distinct ideas. The 99-shuffle section controls preserve rune counts but do not model every possible cipher or an English reading. The prime-index stream is ineligible for the observed section lengths.",
+  "next_steps": "A specific sequence proposal should freeze its source, phase, boundary and decoder, then predict a held-out readable result rather than selecting a high coincidence peak.",
+  "outcome": "inconclusive",
+  "tags": [
+    "number sequence",
+    "prime",
+    "Fibonacci",
+    "totient",
+    "chain cipher",
+    "source replay",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-chain-sequence-keys/plan.json"
+    ],
+    "representation": "Nine pinned relikd unsolved sections, their generated Leo dataset indices, forward and reverse nonrepeat chain increments and original or Atbash GP29 runes.",
+    "procedure": "Replay the named 24-sequence, 200-offset, two-sign grid on five source streams; retain three best rows per section and stream. Replay the source solved-text running-key arm. For each section, select the grid maximum and compare with the same selection on 99 rune-order shuffles. Gate on planted raw and chain prime-key streams first.",
+    "parameters": "Source sequence rules from pinned tests4.py; GP29 and chain Z28/Z29; random.Random(330104/330105) planted controls and 330104 section shuffles; plus-one selected-grid tails.",
+    "exclusions": "Other key sources, offsets outside 0–199, alternative section joins or boundaries, English scoring, held-out plaintext and every cipher outside the declared source grid."
+  },
+  "review": {
+    "reviewer": "Independent source-receipt and planted-recovery checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-chain-sequence-keys/run.py --source-root LEO --text-root RELIKD --check && python experiments/records/leo-chain-sequence-keys/check.py --source-root LEO --text-root RELIKD",
+    "environment": "Python 3.9+ with NumPy and Numba for the full grid; separate checker uses the standard library. LEO and RELIKD are pinned checkouts, with LEO dataset.json generated from RELIKD; source hashes are checked before computation.",
+    "script": "experiments/records/leo-chain-sequence-keys/run.py",
+    "script_sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/plan.json",
+        "sha256": "6d0ea6ecaae2b00a6300bc1924ae577c01726c266e78041cbad233391947ae2a"
+      },
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/run.py",
+        "sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8"
+      },
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/check.py",
+        "sha256": "92338292bfbbe42eebdfcedffe683d6a67d43499eb491fd111bf75d2e54f94fa"
+      },
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/plot.py",
+        "sha256": "d52dedce5bc3d15bc89da97687eb8b17c63ac95c55eeb25717f15d78341bc0f7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/results.json",
+        "sha256": "5a451bb78a770c6411d62e81fe44cffca5c2210c26f84b8991d85c025876d5da"
+      },
+      {
+        "path": "experiments/records/leo-chain-sequence-keys/section-key-grid.svg",
+        "sha256": "4a1ad46cf116843813e7c49cc40db3946444a47b7f3b6cd1a212d2fa18e3ceb7"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Leo source test and receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests4.py"
+    },
+    {
+      "label": "Pinned relikd source transcription",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "leo-transform-periodic-profile",
+    "wulfic-number-key-streams",
+    "direct-polynomial-streams"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-chain-sequence-keys/section-key-grid.svg",
+      "caption": "Source-grid maxima compared with matched rune-order shuffles, by LP2 section."
+    }
+  ],
+  "article": "# Do familiar number sequences unlock LP2's rune stream?\n\n**Finding.** A published search through prime, Fibonacci, totient, polynomial, π-digit and related key streams reproduces exactly, but its best coincidence scores do not establish a decipherment. We replayed the source's whole-section candidate grid across nine LP2 sections. The strongest selected result, on pages 00–02, was matched or exceeded by 3 of 99 shuffled sections. Its plus-one tail is **4/100**; allowing for choosing among nine sections gives a simple bound of **36/100**. The other sections' conditional tails range from 7/100 to 88/100.\n\n![Selected source-grid maxima compared with matched rune shuffles for each LP2 section.](experiments/records/leo-chain-sequence-keys/section-key-grid.svg)\n\nThis is an index-of-coincidence test. A higher score says the output symbol frequencies are less uniform under this one measure; it does not produce readable text or identify a key. The best of many keys needs to be compared with the **best** of the same many keys on controls. Two planted streams, one directly masked with a prime sequence and one encoded through the source's chain rule, cleared that full-grid control gate. No scanned LP2 section clears a nine-section selection comparison.\n\n## What the source searched\n\n[Leo's fourth test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests4.py) defined 24 named integer streams, offsets 0–199 and both additive directions. It scored five views of each section: the original GP29 rune indices, Atbash, forward and reverse chain increments modulo 28, and forward chain increments tested modulo 29. Some names generate identical effective keys; the 500-element prime-index stream is too short for these section lengths. We retain all source names in the [complete result](experiments/records/leo-chain-sequence-keys/results.json) while reusing exact complement identities for the reverse-chain and Atbash scores. The saved top three candidates in all **45 section-and-view rows** match the pinned source receipt, as do all nine first-400-rune solved-text running-key rows.\n\nThe source's chain view turns a nonrepeating adjacent rune step into a number from 0 to 27; equal adjacent runes are omitted. This is a different question from directly subtracting a sequence from the original 29-symbol ciphertext. The result is limited to those exact representations, keys and offsets. It cannot rule out a different key source, sequence phase, boundary rule or a decoder scored by actual plaintext.\n\n## Reproduce\n\nObtain [Leo's pinned repository](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/tree/a32bdc0e06ea58532fbaf4329acae4a0b1020513) with its generated `dataset.json`, and the [pinned relikd text](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4). The [plan](experiments/records/leo-chain-sequence-keys/plan.json) pins every input hash and the source grid. Substitute the two checkout paths below:\n\n```text\npython experiments/records/leo-chain-sequence-keys/run.py --source-root LEO --text-root RELIKD --check\npython experiments/records/leo-chain-sequence-keys/check.py --source-root LEO --text-root RELIKD\n```\n\nThe first command recomputes every source setting, planted control and selected-grid shuffle. The separate checker verifies the input bytes, all 135 printed top candidates, all nine solved-text key rows, planted-key recovery and the exact arithmetic symmetries. The pinned external source code and transcription are linked, not republished here.\n",
+  "article_path": "experiments/records/leo-chain-sequence-keys/article.md",
+  "script_sha256": "587eba06b23801d79b539abeb4e55863b565bf812de3693bebc46be192b38ef8",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

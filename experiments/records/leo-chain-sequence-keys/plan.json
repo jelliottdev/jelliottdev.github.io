@@ -1,0 +1,37 @@
+{
+  "schema": "leo-tests4-sequence-plan-v1",
+  "source_revision": "a32bdc0e06ea58532fbaf4329acae4a0b1020513",
+  "transcription_revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_inputs": {
+    "tests4.py": "9af245cdf30a8be86d33bb97fad1b58cfb05f2b4e9bd71704b651d88aa2b6808",
+    "results/tests4.txt": "c4460d48e2a03db9e0ccbc563bb1d155b1c6e8c3503ffb62678f2c4e9e6b4b4b",
+    "dataset.json": "5a564c8b1b89c3e09884fc4a6c83faa58cc533cee000430e9bca835f6bb63114",
+    "pi.txt": "822b9266ef0da3415ca06ce929c1563a496e9092f90e7fa4afdd1cfe6f77a712"
+  },
+  "text_sha256": {
+    "p0-2": "d2ca725bfdc1b2ac649889b23bdf27eb9e7fbfa89406efdc1f3cd078c582b6ba",
+    "p3-7": "ea055d3ee79a203864b57f30a089c00408638ad6b472f4088c4464731d40d340",
+    "p8-14": "2fca7f620ccd54ad3152fc6e6a1267bd1276a0edea91f1aa18fb151fde7fdea9",
+    "p15-22": "c81efaef79e2ca617d685494febd48a5cb1fb1667911aff06034df772bfb8076",
+    "p23-26": "3ee57ea27030dd2bdfc4ea995b448306b4f66f47d2f5708faa22fb36e6bd2bb2",
+    "p27-32": "096cd567a748201a5bef70ed6fa5647b1c081f2a538fa3ffa73b7caa83f4be9a",
+    "p33-39": "f4e3588c9e8277d6ca6b665182af64ae40382db18640b7a4adc14518a7ee8f15",
+    "p40-53": "b901b5c5dc7e49d519d011d6fbaf6857b67854256287a3c5b0604cf0b4aeebd8",
+    "p54-55": "0d0bc798840ae2a8d1375f61c9f7f8d76adf5c127d51088d4b05b4fc40e8442b"
+  },
+  "source_grid": {
+    "streams": ["forward-chain-z28", "backward-chain-z28", "forward-chain-z29", "raw-z29", "atbash-z29"],
+    "sequences": ["n", "n+1", "n^2", "n^3", "tri", "prime", "prime-1", "prime+1", "2*prime", "prime^2", "prime_gap", "prime_cumsum", "fib", "lucas", "phi(n)", "phi(prime_n)=prime-1 dup", "2^n", "3^n", "3301*n", "n*29+...", "prime_index_of_prime", "catalan", "factorial", "pi_digits"],
+    "offsets": "0..199",
+    "signs": [1, -1],
+    "score": "alphabet-size-normalized whole-section index of coincidence; source prints top three per stream/section",
+    "sequence_eligibility": "source len(seq)>400, then len(seq)>=stream_length+200; preserve source's 500-element prime-index sequence and duplicate names",
+    "solved_running_key": "LP solved plaintext GP indices mod28, first 400 chain increments of each unsolved section, both signs, all offsets 0..len(K)-n-1"
+  },
+  "preoutcome_controls": {
+    "positive": "Generate 1200 GP29 plaintext symbols from a fixed English-like solved-source segment, add a source prime key at offset 47 in raw Z29, and independently construct a chain-Z28 source-prime-key ciphertext; require their planted rule to exceed a matched whole-grid shuffle 95th percentile, not exact key identity where equivalent keys tie.",
+    "null": "For each of nine unsolved source sections, shuffle raw rune order 99 times with fixed random.Random(330104), reconstruct each stream, scan the complete eligible sequence/offset/sign grid, and retain the maximum score; plus-one selected-grid tail. If this full control exceeds the runtime gate, retain the source replay as descriptive and disclose the unavailable control rather than using a partial null as a full-grid p-value.",
+    "runtime_gate": "Benchmark one 729-rune synthetic source-length section and one shuffle before LP2 scoring; full nine-section source grid plus controls should complete in about ten minutes or less on the local host."
+  },
+  "claim_limit": "Replay source settings and measure selected maxima only; no broad arithmetic-key or chain-cipher exclusion without a sufficiently powered positive gate and matched controls."
+}

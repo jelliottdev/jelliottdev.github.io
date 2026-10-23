@@ -1,0 +1,95 @@
+{
+  "id": "leo-chain-key-alignment",
+  "status": "published",
+  "title": "Do number sequences fit the rune-difference chain?",
+  "question": "Do source-defined numerical sequence keys produce a reliable 28-state LP2 chain signal after searching all mappings, offsets, signs and doublet clocks?",
+  "reader_question": "Did primes or Fibonacci numbers reveal the rune chain?",
+  "summary": "All nine source best settings reproduce. The largest source-selected section score, 1.146, is near the 39-shuffle complete-grid median of 1.147; 20 shuffles match or exceed it.",
+  "finding": "The pinned 21-effective-sequence × 14-bijection × 300-offset × 2-sign × 2-clock grid reproduces all nine source maxima. Both planted prime-chain controls recover their clock and score 1.663. On the source-highlighted pages 54–55, 20/39 full-grid shuffles reach the observed maximum 1.146.",
+  "limitations": "The section control is conditional on the source-highlighted maximum and uses only 39 shuffled complete searches. IoC is not plaintext recovery. Other sequences, mappings, section choices and ciphers remain outside this finite grid.",
+  "next_steps": "A stronger chain claim needs a specified generator and key-clock rule that predicts held-out rune changes or plaintext beyond a selected score.",
+  "outcome": "not-supported",
+  "tags": [
+    "sequence keys",
+    "prime sequence",
+    "Fibonacci",
+    "chain cipher",
+    "doublet clock",
+    "source replay",
+    "selection control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/leo-chain-key-alignment/plan.json"
+    ],
+    "representation": "Nine pinned unsolved relikd LP2 rune sections, each analyzed through its first 500 adjacent rune changes (307 on pages 54–55).",
+    "procedure": "Replay source-named numerical streams under 14 nonzero-change bijections, 300 offsets, signs ±1 and both doublet key clocks; compare all nine source maxima and planted controls; rerun full grid on 39 within-section shuffles of source-selected pages 54–55.",
+    "parameters": "21 effectively eligible sequence entries, including duplicate prime/primeidx; 352,800 evaluated settings per section, 39 selected-section shuffles; 2 planted prime-chain controls.",
+    "exclusions": "Other generators, more offsets, different key boundaries or maps, language scoring, full decryption and unselected-section null tails."
+  },
+  "review": {
+    "reviewer": "Independent scalar verification of source maxima and planted controls",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound computational replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/leo-chain-key-alignment/run.py --source-root LEO --check && python experiments/records/leo-chain-key-alignment/check.py --source-root LEO && python experiments/records/leo-chain-key-alignment/plot.py --check",
+    "environment": "Python 3.9+ with NumPy and Numba for full grid; independently checked with Python standard library. LEO is pinned source checkout including relikd data.",
+    "script": "experiments/records/leo-chain-key-alignment/run.py",
+    "script_sha256": "3cf05bfa1761e2903bacfc84fd6d3946a052d80f82e3b38e985321874a2de3bf",
+    "inputs": [
+      {
+        "path": "experiments/records/leo-chain-key-alignment/plan.json",
+        "sha256": "029e6963e43ddf3db2ec6f0983ec81fc878e862d585d93196523108cd473f24a"
+      },
+      {
+        "path": "experiments/records/leo-chain-key-alignment/run.py",
+        "sha256": "3cf05bfa1761e2903bacfc84fd6d3946a052d80f82e3b38e985321874a2de3bf"
+      },
+      {
+        "path": "experiments/records/leo-chain-key-alignment/check.py",
+        "sha256": "84e1f411bee0ecc9116b7ac938bb2091f2d3278ab20ddf24fd28a0bbe620a6c6"
+      },
+      {
+        "path": "experiments/records/leo-chain-key-alignment/plot.py",
+        "sha256": "bb6f0ade0a33fcc583816b7d029c4921ab98a51d88f6404725dd17f794107b6e"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/leo-chain-key-alignment/results.json",
+        "sha256": "25b6aef82d188297d9275d7c8903290bdfed4e284d09642cc1ca0910348bef55"
+      },
+      {
+        "path": "experiments/records/leo-chain-key-alignment/chain-key-control.svg",
+        "sha256": "37de569a9b726a9d2c71566703802c208b8ed489378d5ca6c55a1aa1c5082951"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Leo sequence-key source method",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/tests5.py"
+    },
+    {
+      "label": "Pinned source result receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/tests5.txt"
+    },
+    {
+      "label": "Pinned relikd section transcription",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4"
+    }
+  ],
+  "related": [
+    "leo-shared-key-differences",
+    "leo-transform-periodic-profile"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/leo-chain-key-alignment/chain-key-control.svg",
+      "caption": "The source-selected section’s best chain score beside the full-grid shuffled-search range."
+    }
+  ]
+}
