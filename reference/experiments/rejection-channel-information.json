@@ -1,0 +1,119 @@
+{
+  "id": "rejection-channel-information",
+  "status": "published",
+  "title": "What a collision filter reveals under a random key",
+  "question": "Under an independent uniform key, does the visible output of a rune-collision filter depend on the plaintext rune?",
+  "reader_question": "Do the missing doublets point toward plaintext?",
+  "summary": "Exact conditional comparison of two collision filters fitted to LP2's adjacent-repeat count; independent finite-field oracle and source formula checks.",
+  "finding": "Under the stated independent uniform-key model, each filter's visible next-symbol law is plaintext-independent. Skip and rewrite filters can have identical visible laws while differing by about 374 expected extra key draws over 12,955 transitions.",
+  "limitations": "This proves only a conditional model identity. It does not identify the LP2 generator, test real keys or decrypt a page. Both filters are fitted to the observed repeat count; source English-corpus entropy and Monte Carlo arms are not replayed because their exact corpora are unavailable.",
+  "next_steps": "A proposed LP2 filter needs a specified key source, rejection rule and reset behavior, plus planted recovery and a held-out check. Seek a prediction that distinguishes mechanisms beyond the fitted doublet count.",
+  "outcome": "supported",
+  "tags": [
+    "doublets",
+    "key skips",
+    "information",
+    "null model",
+    "source audit"
+  ],
+  "scope": {
+    "pages": [],
+    "representation": "LP2's aggregate 86 equal adjacent pairs among 12,955 pairs; no LP2 rune stream is decoded.",
+    "procedure": "Fit skip and rewrite parameters to the aggregate repeat rate, derive the conditional output and key-draw laws, compare with the source's preserved closed forms, and verify a nontrivial finite-field control exhaustively.",
+    "parameters": "29-symbol alphabet, 12,956 rune events, independent uniform key, memory of previous visible ciphertext symbol, one-step filter law; exact N=3 oracle with skip s=1/2 and rewrite t=3/5.",
+    "exclusions": "Structured or plaintext-dependent keys, reset variants, actual LP2 plaintext/key recovery, source English-corpus entropy estimates and original stochastic simulations.",
+    "artifacts": [
+      "experiments/records/rejection-channel-information/source/c_budget.json",
+      "experiments/records/rejection-channel-information/source/b_drawcount.json"
+    ]
+  },
+  "review": {
+    "reviewer": "Independent exact finite-field oracle",
+    "retested_on": "2026-10-23",
+    "kind": "computational mathematical audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/rejection-channel-information/run.py --check && python experiments/records/rejection-channel-information/check.py",
+    "environment": "Python 3 standard library; bundled source formulas and receipts.",
+    "script": "experiments/records/rejection-channel-information/run.py",
+    "script_sha256": "71240e4d57adb8214dbbf58d8f35ae24c6d608d6f0ce2c87dc1d0baa0ed64c0d",
+    "inputs": [
+      {
+        "path": "experiments/records/rejection-channel-information/plan.json",
+        "sha256": "12fe53ce44a6507deb71e062a75d8c5809774550ed031ca142cd1e037e5626fa"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/run.py",
+        "sha256": "71240e4d57adb8214dbbf58d8f35ae24c6d608d6f0ce2c87dc1d0baa0ed64c0d"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/check.py",
+        "sha256": "3e5e454f69fded5b7edd24f21ac891497776162ee07d32b08e61b43d74df26ce"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/a_locus.py",
+        "sha256": "693da4f0ed8c29d95cb4b6b028dc46381a55b1cfa0449483c6b995e964b28531"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/b_drawcount.json",
+        "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/b_drawcount.py",
+        "sha256": "791452f0a127b5943e31504435918fd677cfd91d1856fa377054a90eb127e798"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/c_budget.json",
+        "sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/c_budget.py",
+        "sha256": "b159911369928865ddf628e5880bd11e6f22f0ee90cc97a32664395b51bf8d0e"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/source/PREREG.md",
+        "sha256": "49f049b34b44ab46ec43c34af23babb71b0261c211f547ab8b070721d47f3614"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/rejection-channel-information/results.json",
+        "sha256": "5169b57e47e4a5829f61028f95db41677b627b9b960f874de9fe62451eb39e98"
+      },
+      {
+        "path": "experiments/records/rejection-channel-information/channel-comparison.svg",
+        "sha256": "6161b74222d5b70093f8a648c27c230fa99221c56fb5b4be36582e7d7ab11563"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 18 L2 source analysis",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak"
+    }
+  ],
+  "related": [
+    "lp2-filter-fingerprint-models",
+    "public-nskips-crossover",
+    "source-independent-key-floor-audit"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/rejection-channel-information/channel-comparison.svg",
+      "caption": "Two fitted mechanisms have the same visible one-step law but consume different amounts of key material under the declared model."
+    }
+  ],
+  "article": "# What a missing doublet can—and cannot—tell us\n\n## Finding\n\nThe joined rune stream for **LP2-00–55** has **86 equal adjacent pairs among 12,955 pairs**. The pinned [Round 18 filter analysis](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) considers an encryptor that avoids some repeated ciphertext runes by discarding a key draw and trying again. We checked the exact probability law behind that idea.\n\n**If key symbols are independent and uniformly distributed**, every plaintext rune produces the same distribution of visible ciphertext runes after this filter. The unusually few repeats can reveal something about a *possible filter*, but the filter alone gives no clue about which plaintext rune produced an output. This does not show that LP2 uses such a key or that its text cannot be solved by other means.\n\n![The same observed repeat rate can be produced by a skip filter that consumes roughly 374 extra key draws, or by a rewrite filter that consumes no extra key draws. The visible ciphertext law is identical under the stated independent uniform-key model.](experiments/records/rejection-channel-information/channel-comparison.svg)\n\n## Why the same output can hide different mechanisms\n\nLet the alphabet have 29 runes and let a candidate ciphertext rune be the plaintext rune plus a fresh uniform key symbol, modulo 29. A **skip filter** rejects a candidate matching the preceding output with probability *s* and draws another key symbol. Fitting its expected repeat rate to 86/12,955 gives *s* ≈ **0.8129**. The probability of a visible repeat is then `(1 − s)/(29 − s)`; each particular nonmatching rune has probability `1/(29 − s)`. Neither probability depends on the plaintext rune.\n\nA different **rewrite filter** can match the same output law: when a candidate repeats, sometimes replace it with a new uniform rune. The fitted replacement probability is about **0.8363**. Here that replacement randomness is separate from the key stream. These mechanisms have the same visible one-step distribution. They differ in a testable way if an independent key stream is known: the skip model would consume about **374 extra key symbols** over 12,955 transitions on average, while the rewrite model would consume none. The source's fixed *s* = 0.8129 gives the same approximate drift; our exact calculation reproduces its preserved analytic mean.\n\nThis is a model comparison, not a claim that doublet suppression was actually performed. A key with structure, a plaintext-dependent filter, or a different reset rule changes the argument. The observed count was used to fit both models; it cannot independently validate either one.\n\n## What was checked\n\nThe [plan](experiments/records/rejection-channel-information/plan.json) pins the source code and preserved numerical receipts. We re-derived the conditional probabilities, matched the source's closed repeat-rate and draw-count formulas, and checked both filters by independently enumerating every key, plaintext and previous-output combination in a nontrivial three-symbol control model. Zero suppression correctly returns a uniform output.\n\nRun `python experiments/records/rejection-channel-information/run.py --check` and `python experiments/records/rejection-channel-information/check.py` from the repository root. The source's English-text entropy estimates and corpus-based simulations are **not reproduced** here because their exact corpora are not in the pinned source. Those estimates must not be read as a measured amount of LP2 plaintext leaked by the filter.\n",
+  "article_path": "experiments/records/rejection-channel-information/article.md",
+  "script_sha256": "71240e4d57adb8214dbbf58d8f35ae24c6d608d6f0ce2c87dc1d0baa0ed64c0d",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}

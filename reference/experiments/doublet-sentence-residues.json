@@ -1,0 +1,97 @@
+{
+  "id": "doublet-sentence-residues",
+  "status": "published",
+  "title": "Do doublets favor positions within sentences?",
+  "question": "Do the 86 LP2 doublets cluster by sentence-relative rune position modulo two through eight?",
+  "reader_question": "Are repeated runes placed at particular points in sentences?",
+  "summary": "All seven public sentence-relative residue counts reproduce from pinned punctuation boundaries, but 2,068 of 5,000 section-preserving controls show a best pattern at least as strong.",
+  "finding": "The strongest tested grouping is modulo three (26, 23, 37 events); its selected score is matched or exceeded in 2,068 of 5,000 controls. A concentrated planted pattern is detected.",
+  "limitations": "Only position residues modulo 2â€“8 under the pinned relikd punctuation rule and uniform within-section event-placement control were tested. Other punctuation rules, event clustering and cipher-specific position laws are not covered.",
+  "next_steps": "Any proposed sentence-based cipher should declare its punctuation and reset rule, predict specific doublet positions or decoded text, and compare with a matching control rather than selecting a residue after inspection.",
+  "outcome": "not-supported",
+  "tags": [
+    "doublets",
+    "sentence structure",
+    "modular positions",
+    "selection effects",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/doublet-sentence-residues/sentence-boundaries.json"
+    ],
+    "representation": "All 12,956 runes of the nine LP2 unsolved sections, with source-derived sentence reset rune ordinals from the pinned relikd text. A doublet event is placed at its second rune.",
+    "procedure": "Recount all 86 doublets; measure sentence-relative positions modulo 2â€“8; compare the largest chi-square/df score with the same seven-way maximum in 5,000 placements retaining each section's number of events and the punctuation boundaries. Verify a concentrated planted modulo-seven pattern.",
+    "parameters": "Nine fixed sections, 86 events, seven moduli, random.Random(3301), 5,000 controls; ties counted in the upper tail.",
+    "exclusions": "Different punctuation or source text, word-relative and section-relative coordinates, moduli outside 2â€“8, event identities, cipher-specific nulls and plaintext recovery."
+  },
+  "review": {
+    "reviewer": "Independent source-punctuation and event recount",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/doublet-sentence-residues/run.py --check && python experiments/records/doublet-sentence-residues/check.py",
+    "environment": "Python 3 standard library. Optional upstream-byte verification uses check.py --source-pages with the pinned relikd checkout.",
+    "script": "experiments/records/doublet-sentence-residues/run.py",
+    "script_sha256": "d056e80724c491922a80c9653f894e0a6bcc447290c17aedc9159dbad0ceebbd",
+    "inputs": [
+      {
+        "path": "experiments/records/doublet-sentence-residues/plan.json",
+        "sha256": "b35e9c40bf609f0068e4a34ab9b26fb93577946bbd6da503503f9c7ae25de55c"
+      },
+      {
+        "path": "experiments/records/doublet-sentence-residues/sentence-boundaries.json",
+        "sha256": "c1ff0b4ab5232be5c1dd3bf0fda276d3bc33e99cac057ac1883db0b2d2fc6ab2"
+      },
+      {
+        "path": "experiments/records/doublet-sentence-residues/run.py",
+        "sha256": "d056e80724c491922a80c9653f894e0a6bcc447290c17aedc9159dbad0ceebbd"
+      },
+      {
+        "path": "experiments/records/doublet-sentence-residues/check.py",
+        "sha256": "5d5027010af856443ca4ca93fc323b0e4cd1861a1342418d37b3b98b1c9563ca"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/doublet-sentence-residues/results.json",
+        "sha256": "3ee91cf147121d3c5d4e642b8cb18a8ab0871c875c74015e30706c14e4d8ce69"
+      },
+      {
+        "path": "experiments/records/doublet-sentence-residues/sentence-residues.svg",
+        "sha256": "af236d4c4684921ddf3f810fe1f1909f230311ab50871e9a8238cacccdbcbd0e"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Leo-Y-Zhang source method and receipt",
+      "url": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py"
+    },
+    {
+      "label": "Pinned relikd source transcription",
+      "url": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4/pages"
+    }
+  ],
+  "related": [
+    "doublet-section-residues",
+    "doublet-context"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/doublet-sentence-residues/sentence-residues.svg",
+      "caption": "The strongest of the seven tested residue groupings, with its selection-aware section-preserving comparison."
+    }
+  ],
+  "article": "# Do repeated runes favor a sentence position?\n\n## Finding\n\nThe 86 adjacent equal-rune pairs show **no unusual concentration at a sentence-relative position modulo 2 through 8** under a control that keeps each section's number of doublets and the visible punctuation fixed. The strongest of the seven patterns is modulo three: **26, 23 and 37** doublets at positions 0, 1 and 2. In **2,068 of 5,000** controls, at least one modulus had a pattern as strong. This is a bounded position test, not a general exclusion of block ciphers or a decryption result.\n\n![Three bars show the strongest observed grouping, 26, 23 and 37 doublets by sentence position modulo three. Expected counts are about 29, 29 and 28. Of 5,000 section-preserving controls, 2,068 found an equal or stronger best grouping across all seven moduli.](experiments/records/doublet-sentence-residues/sentence-residues.svg)\n\n## Counting from a sentence boundary\n\nThe [source test](https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py) resets the rune-position count after a period, semicolon or section mark; line wraps do not reset it. This site's transcription preserves the 12,956 runes but not all of that punctuation. We therefore took just the reset rune ordinals from the [pinned relikd source text](https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4/pages). The [boundary file](experiments/records/doublet-sentence-residues/sentence-boundaries.json) gives the source-text hash and reset ordinals for each of the nine sections, without republishing either repository's source text or code.\n\nAll nine section lengths, the 86 doublet locations and **all seven published sentence-relative count vectors** reproduce. For each possible second-rune position, we compute its distance from the latest sentence boundary. The comparison randomly relocates the same number of doublets within each section, preserving sentence boundaries and applying the entire seven-modulus scan to every control. A deliberately concentrated modulo-seven placement scores **82.53**, above every control maximum, so the test detects a strong pattern when one is present.\n\nThe result depends on this transcription, its punctuation boundaries, moduli 2–8 and a uniform-placement control. It does not preserve clustering or model a specific cipher's event positions. Other sentence definitions and other position rules need separate tests. The related [section-position test](#/experiments/doublet-section-residues) addresses a different coordinate system.\n\n## Reproduce\n\nRun `python experiments/records/doublet-sentence-residues/run.py --check` and `python experiments/records/doublet-sentence-residues/check.py`. To verify the upstream punctuation extraction as well, fetch relikd/LiberPrayground at commit `719380ebee0523ad7f2fbf389c6f960d51bea5a4` and pass its `pages` folder to `check.py --source-pages PATH`. The checker validates each source file's SHA-256 and reconstructs every reset ordinal before recounting the doublets.\n",
+  "article_path": "experiments/records/doublet-sentence-residues/article.md",
+  "script_sha256": "d056e80724c491922a80c9653f894e0a6bcc447290c17aedc9159dbad0ceebbd",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

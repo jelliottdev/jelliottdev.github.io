@@ -1,0 +1,58 @@
+{
+  "schema": "liberpedia-public-rsa-payload-e01-plan-v1",
+  "source_repository": "Dukotah/cicada3301",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_lane": "Round 18 L5 E-01, whole 256-byte pp49-51 payload as raw RSA block",
+  "scope": "Reproduce source e01_extended.py exactly using three pinned payload variants, its two 4096-bit Cicada PGP key moduli and one 432-bit 2013 puzzle modulus, exponents 65537/3/17, available big/little and zero-padded left-aligned encodings, and its three structural predicates. No extra payload mutations.",
+  "criterion": "Each valid s<n yields an RSA public-power result, tested for PKCS#1 v1.5 signature, PKCS#1 v1.5 encryption or EMSA-PSS structural marker. Declare only strict structural hit; preserve loose hits separately.",
+  "controls": "Source generates a fresh RSA private key and real PKCS#1/PSS examples, asserts signature+PSS positives and zero strict detections among 10,000 random blocks. Exact control bytes nondeterministic; compare source row outputs separately.",
+  "exclusions": [
+    "No claim about a private-key decryption of the payload",
+    "No arbitrary RSA moduli or extra padding/encoding",
+    "No hash preimage search",
+    "No conclusion about the source puzzle beyond this finite interpretation"
+  ],
+  "inputs": [
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source-expected.json",
+      "sha256": "5a5113f72737a4fed909c97f590c484ecd6313500cd02d9cb5c1edb60cd1e3e7"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/corpus/A-primary-artifacts/pgp/keys/cicada-3301-pubkey.keys.openpgp.org.asc",
+      "sha256": "29691c605ae3ed146e94d42e2eb741b592f513f02745dcefed7697d5fb2bf05c"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/armada20/pgp_welcome.txt",
+      "sha256": "29cf9d856da51f8038b8671a1b42e69e7475022f5e8df4582c5fd958451ecdca"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/pp49_51/canon_256.bin",
+      "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/pp49_51/canon_256_decpref.bin",
+      "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+      "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/round18/L5-payload/e01_extended.py",
+      "sha256": "739922cdfd6eea91d171efac5c606e929f70c3855d9a5ac39dbb01a7749f8a88"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/round18/L5-payload/moduli.json",
+      "sha256": "e7bc8e9ccf0a5a86867ebe8c74e8dc9555d9771601e84abbb9a4947726f97438"
+    },
+    {
+      "path": "experiments/records/public-rsa-payload-e01/source/liber-primus/analysis/round18/L5-payload/payload_resolved.bin",
+      "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+    }
+  ],
+  "source_evidence_note": "The PGP armor and 2013 welcome text are pinned as independent modulus witnesses. They do not add candidate settings to the frozen E-01 sweep."
+}

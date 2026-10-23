@@ -190,6 +190,11 @@ assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice
 assert.equal(Search.experiments(liveDocs,'OutGuess without a key')[0].document.id,'outguess-default-key');
 assert.equal(Search.experiments(liveDocs,'keyed OutGuess on LP2-31')[0].document.id,'outguess-keyed-lp2');
 assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
+assert.equal(Search.experiments(liveDocs,'one LP2 page as another page key')[0].document.id,
+ 'lp2-page-pair-english','Page-as-key wording must retrieve the page-pair operation');
+assert.equal(Search.supporting(liveDocs,'simple substitution guessed opening')[0].document.id,
+ 'monoalphabetic-crib-capacity','Crib compatibility is supporting evidence, not a decryption');
+assert.equal(Search.experiments(liveDocs,'simple substitution guessed opening').length,0);
 console.log('PASS: method and exclusions remain available in details; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
 for(const query of ['Have we tried checking if its a different language than English?',
  'another language','could it be German','different languages on LP2-31']){

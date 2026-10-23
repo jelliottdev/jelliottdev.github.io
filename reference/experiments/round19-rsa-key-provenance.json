@@ -1,0 +1,166 @@
+{
+  "id": "round19-rsa-key-provenance",
+  "status": "published",
+  "title": "Round 19 RSA key scan: source replay and provenance",
+  "question": "Does the source's expanded 23-modulus RSA scan yield a padding match, and are all 23 keys actually Cicada keys?",
+  "reader_question": "Did the larger RSA scan test more Cicada keys?",
+  "summary": "All 738 source settings reproduce, with no structural match. The expanded set contains 20 unrelated archived PGP packets, so its larger count does not establish wider Cicada-key coverage.",
+  "finding": "594 valid public-power settings produced no source-defined PKCS#1 or PSS structure; 144 inputs were invalid. The 22 parsed PGP packets comprise two Cicada packets and 20 keys archived for unrelated reasons.",
+  "limitations": "This is a whole-payload public-power replay and key-provenance audit. It does not test RSA private-key decryption, other byte windows, or unknown keys. The 540 evaluated rows under unrelated keys are exploratory, not Cicada-key coverage.",
+  "next_steps": "Treat a future key as a Cicada candidate only with an independent authorship or puzzle-source link; specify any new RSA block, padding, and success criterion before testing.",
+  "outcome": "not-supported",
+  "tags": [
+    "number grid",
+    "RSA",
+    "PGP",
+    "source audit",
+    "public repository"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "Three pinned 256-byte grid readings as whole RSA values, two byte orders and source zero-extension alignments.",
+    "procedure": "Recompute every Round 19 C1 E-01 source row under its named moduli and exponents, test source structural predicates, and derive OpenPGP fingerprints and moduli from pinned armored witnesses.",
+    "parameters": "23 named moduli (22 PGP packets plus one 2013 puzzle modulus), three payload readings, source endian/alignment options, three exponents: 738 named settings, 594 valid and 144 s>=n exclusions.",
+    "exclusions": "Private-key RSA operations, extra modulus witnesses, unknown keys, partial payload blocks, and alternate padding."
+  },
+  "review": {
+    "reviewer": "Independent key-packet and RSA arithmetic checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/round19-rsa-key-provenance/run.py --check && python experiments/records/round19-rsa-key-provenance/check.py",
+    "environment": "Python 3 and cryptography for source genuine-frame controls; independent checker uses standard library.",
+    "script": "experiments/records/round19-rsa-key-provenance/run.py",
+    "script_sha256": "f164ff4fbcd24fc30f2d5edb4d0534b6b61e6314a7619d5a51d616cefe4f93fb",
+    "inputs": [
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/plan.json",
+        "sha256": "0fb035cdae91047ce594e7860f701983782b325cdbf552cdb6167a98a974e130"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/run.py",
+        "sha256": "f164ff4fbcd24fc30f2d5edb4d0534b6b61e6314a7619d5a51d616cefe4f93fb"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/check.py",
+        "sha256": "8164dbfe534890e6f4aeae493bad71cd88d494f203518103d3a6c6021d3ed565"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/e01_rsa.py",
+        "sha256": "f7e5144cfcfca94896d1097cc8403fc38dc4c4f1be3037884cf038e6d5f1ac41"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/extract_moduli.py",
+        "sha256": "b103e26c8fc98ae222db13f86da86b9efa8544a962caf7f7a1ce1889a2be6351"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/00.asc",
+        "sha256": "8ff42a7f4089e2be2de14cf83717d6027bae2bbfe919fa668e45934b2289dd2b"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/01.asc",
+        "sha256": "ab348b56fd620b25ac0e2285ff3014b1944bf0464273437eb5ec26d5b3bfe1e5"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/02.asc",
+        "sha256": "d792674a9b98b9922c4570508ac5105835770057ee1ca847ce186e2b0f6b5660"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/03.asc",
+        "sha256": "c6c26d6eda2c5e24eba09d4cae64ed017bf497935239656769aafeefe2413bc9"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/04.asc",
+        "sha256": "a60639aee22b63a017cfea24cc0607e94f4562506ecc1992eda59fb4a7eaf1fb"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/05.asc",
+        "sha256": "6d9028e26dbcf4eff3e89adf88d15c4aa2fa5e091be5f4e3820b85cb9a9ea33d"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/06.asc",
+        "sha256": "07891f591da81d3e3da67b58398e542984fe56ed1788c7bd71c97d1f7d0a82ba"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/keys/07.asc",
+        "sha256": "7878abb3bff532d1581541063cc6bbc96db8e55def765045103985f48e2f0d66"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/moduli.json",
+        "sha256": "e7bc8e9ccf0a5a86867ebe8c74e8dc9555d9771601e84abbb9a4947726f97438"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/out_e01.json",
+        "sha256": "0a9023c56e4bec4b3d7c0472059f6bc598ed60248db3918cef69ad260086eb73"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/payload_resolved.bin",
+        "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/PREREG.md",
+        "sha256": "0fa2715a9ef007631adb708dd30814bbe82af6465b9b1456022b65b1e1dc2601"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/source/witness-map.json",
+        "sha256": "0a10b2504feda3c1c8c4bdf9e962a6868531e81206fd0b287ff8b5e27d57f68e"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/results.json",
+        "sha256": "be27619c1d1c29f74df043c09f4090c2f218648a310839c9c89c96af1f46a9b0"
+      },
+      {
+        "path": "experiments/records/round19-rsa-key-provenance/key-provenance.svg",
+        "sha256": "4766dad8e755fbc64221373b2344b04631f1b6d02a82fc16de823b3d7d0c21c6"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 19 C1 source and preregistration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C1/e01_rsa.py"
+    },
+    {
+      "label": "Public solver key file used by the source scan",
+      "url": "https://github.com/aadishgoel/Cicada-3301/blob/master/PGPKey.txt"
+    }
+  ],
+  "related": [
+    "public-rsa-payload-e01",
+    "rsa-window-54-source-replay"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/round19-rsa-key-provenance/key-provenance.svg",
+      "caption": "The source's larger scan mixes two Cicada PGP packets with 20 unrelated archived PGP packets; no valid setting produced source-defined structure."
+    }
+  ],
+  "article": "# A broader RSA scan, and what its keys actually are\n\n## Finding\n\nThe pinned [Round 19 C1 E-01 source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C1/e01_rsa.py) tries the whole 256-byte LP2-49–51 number-grid payload under **23 named RSA moduli**. We reproduced all **738 named settings**: 594 valid public-power calculations, 144 inputs too large for their modulus, and **zero** of the specified PKCS#1 or PSS structural matches. The source's preserved control receipt records six successful genuine-frame plants and zero hits in its 10,000-block random gate. That random gate is a sample, not proof that its detector has zero false positives.\n\n![The source's 738 RSA settings divided by key provenance and fit. Of 72 settings under the two Cicada PGP packets, 54 are evaluated and 18 excluded; 648 settings use 20 other archived PGP packets, with 540 evaluated and 108 excluded; 18 settings under the small 2013 puzzle modulus are all excluded.](experiments/records/round19-rsa-key-provenance/key-provenance.svg)\n\nThe key provenance changes how to read that result. The source's broad file scan found **22 PGP key packets**, but only **two** are the Cicada PGP primary key and subkey used in the [earlier whole-payload test](#/experiments/public-rsa-payload-e01). The other 20 are from files the repository holds for unrelated purposes: Bitcoin Core, Tails, Tor Browser, GnuPG, other solver material, and a separate keyserver witness. A key's presence somewhere in a Cicada research repository does not make it a key published by Cicada. The 2013 puzzle modulus is a separate 23rd candidate and is too small for the whole payload.\n\nThus the source arithmetic is reproducible, but its description of the extended scan as covering **23 published 3301 moduli** is unsupported by the witness files. The **540 valid rows under unrelated keys are exploratory comparisons**, not increased coverage of authenticated Cicada keys. The 54 valid Cicada-key settings correspond to the earlier record's 162 matcher checks (three matcher types per setting). We do not count them as a second independent failed idea.\n\n## How the audit works\n\nWe pinned the three 256-byte payload readings, source script and output, original three-modulus list, and one armored witness containing each of the 22 PGP packets. The source's one missing vendor witness was fetched from its [public repository](https://github.com/aadishgoel/Cicada-3301/blob/master/PGPKey.txt); its three parsed fingerprints match the archived result. Each OpenPGP packet's v4 fingerprint and RSA modulus are derived from the packet bytes rather than accepted from a filename. The 738 settings retain source byte order, alignment, public exponents, and the source's PKCS#1 v1.5 type-1/type-2 and PSS checks.\n\nThe source's type-2 detector accepts a valid-looking `00 02 ... 00` frame without knowing a message to recover. A rare random match is therefore possible. Its historical 10,000-block gate passed, but the zero-match requirement can flip between runs; it should not be treated as a proven zero-false-positive instrument. The absence of structural hits in these 594 deterministic outputs remains reproducible.\n\nThere is no evidence here that the grid is an RSA ciphertext or signature. Public exponentiation also cannot decrypt a ciphertext without a private exponent. This record only tests the specified **whole-payload public-power interpretations**; it does not test 54-byte windows, unknown keys, private-key operations, or other padding and payload transforms.\n\n## Reproduce\n\nThe [plan](experiments/records/round19-rsa-key-provenance/plan.json) pins every local input by SHA-256. Run `python experiments/records/round19-rsa-key-provenance/run.py --check` to reconstruct all source rows from the pinned packet moduli and payload bytes. Run `python experiments/records/round19-rsa-key-provenance/check.py` for an independent packet parser and arithmetic/structure check. To rerun the source's planted and random controls (requires `cryptography`), run `python -c \"import sys; sys.path.insert(0, 'experiments/records/round19-rsa-key-provenance/source'); import e01_rsa; print(e01_rsa.positive_control())\"` from the repository root. The random count can change between runs; it does not affect the deterministic arithmetic replay.\n",
+  "article_path": "experiments/records/round19-rsa-key-provenance/article.md",
+  "script_sha256": "f164ff4fbcd24fc30f2d5edb4d0534b6b61e6314a7619d5a51d616cefe4f93fb",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

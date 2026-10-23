@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 27,
+    "published_followup_records": 36,
     "followup_count_note": "Distinct published records linked by queue results or subsequent_record_ids on already-known intake ideas; parameter settings are not counted."
   },
   "intake": [
@@ -34,7 +34,11 @@
         "experiments/records/sectionwise-rune-profile/record.json"
       ],
       "coverage_note": "Artwork sections were profiled statistically; no section-specific cipher/key/reinitialization comparison. Freeze a cipher, candidate keys and section breakpoints.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wulfic-stage-ab-reset-alphabets",
+        "wulfic-stage-af-unit-shifts"
+      ]
     },
     {
       "source_id": "1.2",
@@ -49,7 +53,11 @@
         "experiments/records/lp2-prime-openings/record.json"
       ],
       "coverage_note": "Opening checks are page-local; compare independent full-page fits against joined-pages fits under the same fixed decoder and score.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wulfic-stage-ab-reset-alphabets",
+        "wulfic-stage-af-unit-shifts"
+      ]
     },
     {
       "source_id": "1.3",
@@ -79,7 +87,11 @@
         "experiments/records/word-reset-repetition/record.json"
       ],
       "coverage_note": "Feedback census covers page continuity versus word reset only; line/clause/sentence/paragraph/section resets require declared delimiter parsing and a shared decoder.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "wulfic-stage-ab-reset-alphabets",
+        "wulfic-stage-af-unit-shifts"
+      ]
     },
     {
       "source_id": "1.5",
@@ -142,7 +154,8 @@
       "queue_id": null,
       "subsequent_record_ids": [
         "wholepage-known-vigenere-keys",
-        "wholepage-affine-gp29"
+        "wholepage-affine-gp29",
+        "monoalphabetic-crib-capacity"
       ]
     },
     {
@@ -575,7 +588,10 @@
         "research/batch-ready-intake.json#dukotah-b04-short-cryptographic-seeds"
       ],
       "coverage_note": "Skip-aware source seed grids exist; no general generator-to-doublet rejection model is identified. Additional variants need exact rejection rule and keyed controls.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "rejection-channel-information"
+      ]
     },
     {
       "source_id": "4.9",
@@ -594,7 +610,10 @@
         "experiments/records/doublet-boundaries/record.json"
       ],
       "coverage_note": "Identity, neighboring differences, placement, residue/parity and boundary contexts are already measured within declared archived-transcription scopes; no causal cipher inferred.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "doublet-sentence-residues"
+      ]
     },
     {
       "source_id": "4.10",
@@ -996,7 +1015,10 @@
         "experiments/records/public-lp2-as-pad/record.json"
       ],
       "coverage_note": "LP2-as-pad tests the reverse direction, not page-on-page ciphertext reuse. Freeze page pairings, alignment, operation and byte/rune XOR semantics.",
-      "queue_id": "ciphertext-page-as-key"
+      "queue_id": "ciphertext-page-as-key",
+      "subsequent_record_ids": [
+        "lp2-page-pair-english"
+      ]
     },
     {
       "source_id": "7.4",
@@ -1209,7 +1231,10 @@
         "data/method-families.json#routes"
       ],
       "coverage_note": "Column/diagonal route family is already documented; the current sixteen routes do not test arbitrary grid widths or column permutations.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "lp2-row-column-english"
+      ]
     },
     {
       "source_id": "9.3",
@@ -1334,7 +1359,10 @@
         "research/public-attempt-inventory.json#B-12"
       ],
       "coverage_note": "Line-fill, word counts and page geometry as a separate channel already have source entry B-12; do not duplicate it or treat the histogram checks as a decoding test.",
-      "queue_id": null
+      "queue_id": null,
+      "subsequent_record_ids": [
+        "layout-count-streams"
+      ]
     },
     {
       "source_id": "9.11",
@@ -2689,14 +2717,20 @@
       "source_idea_ids": [
         "15.5"
       ],
-      "state": "needs-rule",
-      "next_action": "Freeze packet boundaries, fingerprint encoding and byte-to-rune conversion, distinct from signature verification and RSA structure.",
+      "state": "bounded-followup-recorded",
+      "next_action": "Require a new proposal to name its packet bytes, conversion and cipher relation; do not rerun the published four-stream rule.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "No bounded packet/fingerprint-to-rune keystream rule and target scope is archived. Distinguish provenance-signature verification from using those bytes as cipher keys."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "pgp-packet-keys"
+        ],
+        "scope": "Four pinned Cicada primary/subkey packet bodies and binary v4 fingerprints, byte mod29, repeating page-local GP29 arithmetic, all phases and both signs over55 complete pages. Newly defined bounded baseline, not a historical replay.",
+        "remaining_scope": "Signature packets, parsed fields, other byte-to-rune conversions, nonrepeating use, interruption clocks, additional key layers and unrelated public keys are outside this baseline."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "historical-artifact-keysets"
       ]

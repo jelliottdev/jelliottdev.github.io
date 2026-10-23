@@ -1,0 +1,86 @@
+{
+  "schema": "liberpedia-public-p20-static-boundary-v1",
+  "plan_sha256": "4b2ae64ea58110c5e7358f562433bc72beccc843a622aa9e595fef84f89421fa",
+  "source_revision": "a39e7de90ff9414791fe5f4f8d44540bd0bdb089",
+  "source_input_sha256": "b42e02d5197553584f5355cedd5e61a813bba43a5899a7df310ab135425c8725",
+  "source_manifest_missing_git_tree": [
+    ".github/workflows/verify.yml",
+    ".gitignore"
+  ],
+  "source_script_semantic_matches": {
+    "33_boundary_complete_crossvalidation": true,
+    "35_exact_null_independent_verifier": true,
+    "38_positive_control_plant_and_recover": true
+  },
+  "numeric_contexts": [
+    2,
+    4,
+    17,
+    44,
+    47,
+    18,
+    26,
+    43
+  ],
+  "assignment_count": 34020,
+  "fit_counts": {
+    "4,4": 0,
+    "4,5": 0,
+    "5,4": 0,
+    "5,5": 0,
+    "5,6": 0,
+    "6,5": 0,
+    "6,6": 5
+  },
+  "leave_one": {
+    "folds": 8,
+    "logical_equivalence": "Any held-out hit corresponds to an eight-context global fit after restoring the held-out allowed state pair. Since every sub-saturated global fit count is zero, every sub-saturated leave-one hit count is zero.",
+    "lower_complexity_holdout_hits_total": 0,
+    "saturated_hits_each_fold": [
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "uniform_expected_each_fold": [
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086,
+      4.938307446654086
+    ]
+  },
+  "leave_two": {
+    "double_holdout_hits_total": 0,
+    "fit_models_total": 4633416,
+    "folds": 28,
+    "logical_equivalence": "Any double-holdout p5/d5 hit corresponds to a global eight-context p5/d5 fit. The global p5/d5 count is zero, therefore every one of the 28 double-holdout hit counts is zero.",
+    "uniform_expected_hits_total": 0.7146890004810745
+  },
+  "exact_c18_null": {
+    "training_assignments": 3780,
+    "holdout_menu_size": 9,
+    "observed_hits": 5,
+    "expected_hits": 4.938307446654086,
+    "exact_p_hits_ge_observed": 0.5523905497673823,
+    "multiplicity_histogram": {
+      "0": 3948,
+      "1": 2218,
+      "2": 618,
+      "3": 94,
+      "4": 11
+    }
+  },
+  "planted_controls": {
+    "exact_low_complexity_laws_recovered": 2,
+    "mutated_exact_laws_recovered": 0
+  },
+  "scope_note": "Conditional on the source's bundled normalized numeric menus; no original raw workspace or page plaintext is reconstructed."
+}

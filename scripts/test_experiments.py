@@ -95,6 +95,17 @@ class RegistryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'SHA-256 mismatch'):
             self.run_build()
 
+    def test_reproduction_command_checker_must_be_bundled(self):
+        relative = 'experiments/records/test-record/check.py'
+        helper = self.root / relative
+        helper.write_text('print("independent check")\n', encoding='utf-8')
+        self.record['reproduction']['command'] += ' && python ' + relative
+        with self.assertRaisesRegex(ValueError, 'undeclared bundle files.*check.py'):
+            self.run_build()
+        self.record['reproduction']['inputs'].append({
+            'path': relative, 'sha256': hashlib.sha256(helper.read_bytes()).hexdigest()})
+        self.assertEqual(len(self.run_build()), 1)
+
     def add_plan_fixture(self, input_digest=None, report_digest=None, declare_dependency=True):
         prefix = 'experiments/records/test-record/'
         original = self.record['reproduction']['inputs'][0]
@@ -171,6 +182,7 @@ class RegistryTests(unittest.TestCase):
         for name in ('run.py', 'article.md'):
             (folder / name).write_bytes((self.root / 'experiments/records/test-record' / name).read_bytes())
         variant['reproduction']['script'] = prefix + 'run.py'
+        variant['reproduction']['command'] = 'python ' + prefix + 'run.py'
         variant['scope']['parameters'] = 'two rows'
         variant['variant'] = {'label': 'Two-row variant', 'changes': [
             {'field': 'parameters', 'before': 'one row', 'after': 'two rows',

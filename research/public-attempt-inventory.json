@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "32387e8c40a47fb041f2bedd1f49d3e37d4ea49a259e53f5f8cc1cacd6f2dfed",
-    "record_count": 192
+    "sha256": "deec55bd04cee0ae817b9d17149ed3a91a11a5076234c16bcc66d971b32571ac",
+    "record_count": 205
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,11 +26,11 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 22,
-    "unreconciled": 133,
-    "source_entries_reviewed": 35,
+    "candidate_overlap": 23,
+    "unreconciled": 129,
+    "source_entries_reviewed": 38,
     "execution_replay_states": {
-      "complete-executed-grid": 8,
+      "complete-executed-grid": 9,
       "partial-execution": 2,
       "replayed-with-invalid-gate": 3
     },
@@ -661,8 +661,20 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
+      "reconciliation_state": "candidate-overlap",
+      "candidate_records": [
+        {
+          "record_id": "public-rsa-payload-e01",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L5-payload/PREREG.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false
     },
     {
@@ -900,6 +912,28 @@
       "reconciliation_state": "partial",
       "candidate_records": [
         {
+          "record_id": "public-rsa-payload-e01",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L5-payload/PREREG.md"
+              ]
+            }
+          ]
+        },
+        {
+          "record_id": "round19-rsa-key-provenance",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round19/C1/e01_rsa.py"
+              ]
+            }
+          ]
+        },
+        {
           "record_id": "rsa-window-54-source-replay",
           "reasons": [
             {
@@ -917,11 +951,18 @@
           {
             "record_id": "rsa-window-54-source-replay",
             "covered_subclaim": "The R28-L5 E-01w extension: 203 contiguous 54-byte windows in each of three pinned 256-byte payload variants, two byte orders, the published 2013 432-bit modulus and exponents 65537, 3 and 17. Strict PKCS#1/PSS structural checks find no hit; planted RSA and random-buffer controls calibrate this window test."
+          },
+          {
+            "record_id": "public-rsa-payload-e01",
+            "covered_subclaim": "Round18 whole-payload E-01: three pinned 256-byte readings, two Cicada 4096-bit PGP moduli, three valid encodings, three exponents and three structural predicates; all162 evaluated rows reproduced,12 invalid encodings excluded. Independent PGP packet/modulus witnesses and arithmetic checked."
+          },
+          {
+            "record_id": "round19-rsa-key-provenance",
+            "covered_subclaim": "All738 named Round19/C1 settings reconstructed;594 valid,144 invalid,zero structural matches. Packet witnesses show20 of22 PGP packets are unrelated archived keys; only54 valid settings use the two Cicada packets, already covered by Round18."
           }
         ],
         "unresolved_parts": [
-          "The round-19 C1 extraction of other moduli, 738 named tuples and their structural matchers is not replayed here.",
-          "The round-16 shared file itself evaluated zero relevant modular exponentiations; its coverage-limited verdict must not be confused with the later ledger restatement."
+          "Exact deterministic grids are reproduced; no claim of all possible RSA keys, padding schemes, byte selections or private-key operations. The source zero-random-hit gate is stochastic, not a proof of zero false positives."
         ],
         "rejected_candidates": [
           {
@@ -930,6 +971,16 @@
           }
         ],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-rsa-payload-e01",
+          "rsa-window-54-source-replay",
+          "round19-rsa-key-provenance"
+        ],
+        "scope": "All deterministic executable grid cells of the Round18 whole256-byte test, Round19/C1 738 named settings and R28-L5 54-byte windows. Round19 key provenance is corrected. Source nondeterministic random-block gate is not treated as a zero-false-positive guarantee.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1704,9 +1755,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay."
+          }
+        ],
+        "unresolved_parts": [
+          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R18-L2-B-DRIFT",
@@ -1720,9 +1784,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay."
+          }
+        ],
+        "unresolved_parts": [
+          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R18-L2-BEAM-LENGTH-POWER",
@@ -1785,9 +1862,22 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "rejection-channel-information",
+            "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed."
+          }
+        ],
+        "unresolved_parts": [
+          "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "B-13-MARSAGLIA",

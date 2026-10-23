@@ -11,17 +11,17 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 35,
+    "source_entries_reviewed": 38,
     "reproduced_subclaim": 1,
-    "partial": 18,
+    "partial": 21,
     "unsupported_source_verdict": 16,
-    "source_entries_with_published_record_link": 24,
+    "source_entries_with_published_record_link": 27,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
+      "complete-executed-grid": 9,
       "replayed-with-invalid-gate": 3,
-      "complete-executed-grid": 8,
       "partial-execution": 2
     }
   },
@@ -34,6 +34,14 @@
         {
           "record_id": "rsa-window-54-source-replay",
           "covered_subclaim": "The R28-L5 E-01w extension: 203 contiguous 54-byte windows in each of three pinned 256-byte payload variants, two byte orders, the published 2013 432-bit modulus and exponents 65537, 3 and 17. Strict PKCS#1/PSS structural checks find no hit; planted RSA and random-buffer controls calibrate this window test."
+        },
+        {
+          "record_id": "public-rsa-payload-e01",
+          "covered_subclaim": "Round18 whole-payload E-01: three pinned 256-byte readings, two Cicada 4096-bit PGP moduli, three valid encodings, three exponents and three structural predicates; all162 evaluated rows reproduced,12 invalid encodings excluded. Independent PGP packet/modulus witnesses and arithmetic checked."
+        },
+        {
+          "record_id": "round19-rsa-key-provenance",
+          "covered_subclaim": "All738 named Round19/C1 settings reconstructed;594 valid,144 invalid,zero structural matches. Packet witnesses show20 of22 PGP packets are unrelated archived keys; only54 valid settings use the two Cicada packets, already covered by Round18."
         }
       ],
       "rejected_inventory_candidates": [
@@ -42,16 +50,27 @@
           "reason": "The record tests rank correlation of payload values and doublet gaps. It performs no RSA modular exponentiation or padding check; the only commonality is a source filename."
         }
       ],
-      "covered_subclaim": "R28-L5 E-01w's bounded 432-bit payload-window extension, not E-01's entire public-moduli search.",
+      "covered_subclaim": "R28-L5 E-01w's bounded 432-bit payload-window extension, not E-01's entire public-moduli search. Round18 whole-payload E-01: three pinned 256-byte readings, two Cicada 4096-bit PGP moduli, three valid encodings, three exponents and three structural predicates; all162 evaluated rows reproduced,12 invalid encodings excluded. Independent PGP packet/modulus witnesses and arithmetic checked.",
       "unresolved_parts": [
-        "The round-19 C1 extraction of other moduli, 738 named tuples and their structural matchers is not replayed here.",
-        "The round-16 shared file itself evaluated zero relevant modular exponentiations; its coverage-limited verdict must not be confused with the later ledger restatement."
+        "Exact deterministic grids are reproduced; no claim of all possible RSA keys, padding schemes, byte selections or private-key operations. The source zero-random-hit gate is stochastic, not a proof of zero false positives."
       ],
       "source_evidence": [
         "liber-primus/analysis/round16/zeroFP/RESULTS.md",
-        "liber-primus/analysis/round19/C1/RESULTS.md"
+        "liber-primus/analysis/round19/C1/RESULTS.md",
+        "liber-primus/analysis/round18/L5-payload/e01_extended.py",
+        "liber-primus/analysis/round18/L5-payload/e01_results.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-rsa-payload-e01",
+          "rsa-window-54-source-replay",
+          "round19-rsa-key-provenance"
+        ],
+        "scope": "All deterministic executable grid cells of the Round18 whole256-byte test, Round19/C1 738 named settings and R28-L5 54-byte windows. Round19 key provenance is corrected. Source nondeterministic random-block gate is not treated as a zero-false-positive guarantee.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "E-02",
@@ -944,42 +963,104 @@
         "scope": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested.",
         "wider_method_excluded": false
       }
+    },
+    {
+      "source_id": "R18-L2-INFO-BUDGET",
+      "source_claim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rejection-channel-information",
+          "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed."
+        }
+      ],
+      "covered_subclaim": "Exact plaintext-independent visible next-symbol law under iid uniform independent key symbols; no measured English-corpus mutual-information estimate is replayed.",
+      "unresolved_parts": [
+        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.py",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R18-L2-B-DRIFT",
+      "source_claim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rejection-channel-information",
+          "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay."
+        }
+      ],
+      "covered_subclaim": "Exact fitted-skip geometric draw-count mean and variance, including373.607 expected extra draws over12,955 transitions; no beam-decoder or corpus simulation replay.",
+      "unresolved_parts": [
+        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.py",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R18-L2-A-LOCUS",
+      "source_claim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rejection-channel-information",
+          "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay."
+        }
+      ],
+      "covered_subclaim": "Skip/rewrite observational equivalence under the declared uniform independent key and separately drawn replacement randomness; no unique locus inference or seven-model simulation replay.",
+      "unresolved_parts": [
+        "Original corpus-dependent simulations and broader mechanism claims remain outside this exact conditional arithmetic check; no LP2 key identified."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L2-filter-leak/a_locus.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.py",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.py",
+        "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
+        "liber-primus/analysis/round18/L2-filter-leak/c_budget.json"
+      ],
+      "whole_entry_coverage_verified": false
     }
   ],
   "next_batch": [
     {
-      "source_id": "R16-scorer",
-      "subclaim": "Five-page, 200-null scorer calibration",
-      "operation": "Replay pinned old and rune-matched quadgram scorers, recomputing sigma separation and null SD with an independent implementation.",
-      "readiness": "Finite source code/results present; audit model and input hashes.",
-      "overlap": "english-scorer-controls is related, not exact."
-    },
-    {
       "source_id": "R19-FINITE-ORNAMENT-REGISTER",
       "subclaim": "Nine-register ornament-band census",
       "operation": "Score 74 fixed bands against 2,000 own-length uniform-rune controls and the declared restricted-alphabet/IoC guard.",
-      "readiness": "Finite bands/results present; audit model and test-half inputs.",
+      "readiness": "Blocked for exact source power gate: missing original models/testhalves.npz. Preserve 74-band result as reported until the held-out model is recovered.",
       "overlap": "No exact local record."
     },
     {
       "source_id": "R20-N2-HAPLOGRAPHY-AUTOKEY",
       "subclaim": "Bounded physical merge-schedule falsifier",
       "operation": "Recreate nonzero-diagonal invariant and adversarial duplicate-merge schedule through K=40, with planted autokey recovery.",
-      "readiness": "Finite source rules/results present; audit raw diagonals and schedule.",
+      "readiness": "Blocked for exact source control: missing original pride.txt; invariant, K=0..40 and synthetic control are already published in haplography-diagonal-bound.",
       "overlap": "Doublet and autokey observations are not this reopener."
     },
     {
       "source_id": "R30-B1-BLOB-CRYPTO",
       "subclaim": "Three-blob symmetric-key battery",
       "operation": "Pin blobs/derived keys and replay symmetric-cipher and pairwise-XOR screens with controls.",
-      "readiness": "Source code present; exact blob/tool audit required.",
+      "readiness": "Blocked for complete source replay: pinned checkout lacks analysis/armada_osint/artifacts/folly.bin (and B1 also extracts/T2.bin); source battery and modulus branch require their exact bytes.",
       "overlap": "Can share audited inputs with R30-B2, keeping verdicts separate."
     },
     {
       "source_id": "R30-B2-RSA-GPG",
       "subclaim": "Three-blob RSA/GPG structural matrix",
       "operation": "On the same pinned blobs, test modulus parity/factors/gcd, complete PGP packet chains and key/hash branches with controls.",
-      "readiness": "Source code has developer-specific path; audit inputs and tools first.",
+      "readiness": "Blocked for complete source replay: pinned checkout lacks analysis/armada_osint/artifacts/folly.bin (and B1 also extracts/T2.bin); source battery and modulus branch require their exact bytes.",
       "overlap": "grid-openpgp-literal is a different packet gate."
     }
   ]

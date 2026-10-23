@@ -12,7 +12,7 @@ The ledger mixes research questions and units of work. Some statuses also refer 
 
 Next source-review unit: screen the ledger's 48 negative entries for runnable, archived evidence; cluster equivalent sweeps before replay; start with entries whose inputs and positive controls are available. Record missing files explicitly. In parallel, inspect the other candidate repositories by stable revision and add their distinct methods to the same source-specific intake. No public-repository coverage percentage is warranted yet.
 
-The [public-attempt inventory](public-attempt-inventory.json) now indexes all 172 entries from that exact ledger and links source files to candidate local records. A shared source filename is only a discovery hint: the [reconciliation notes](public-attempt-reconciliation.json) reject three false overlaps and identify the precise covered subclaims in eight entries. Neither file treats a source's negative label as an independently reproduced result or counts ledger entries as distinct solving ideas.
+The [public-attempt inventory](public-attempt-inventory.json) now indexes all 172 entries from that exact ledger and links source files to candidate local records. A shared source filename is only a discovery hint: the [reconciliation notes](public-attempt-reconciliation.json) reject three false overlaps and identify the precise covered subclaims in reviewed entries. Neither file treats a source's negative label as an independently reproduced result or counts ledger entries as distinct solving ideas.
 
 ## A repository with a complete method inventory
 

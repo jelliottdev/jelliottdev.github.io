@@ -150,6 +150,14 @@ def validate_record(root, path, pages):
             data = local(root, file.get('path')).read_bytes()
             require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                     'SHA-256 mismatch: ' + str(file.get('path')))
+    command_files = set(re.findall(r'(?:experiments/records|scripts)/[\w./-]+\.py',
+                                  reproduction['command']))
+    bundled_files = {reproduction['script'],
+                     *(f['path'] for f in reproduction['inputs']),
+                     *(f['path'] for f in reproduction['outputs'])}
+    require(command_files <= bundled_files,
+            'Reproduction command uses undeclared bundle files: ' +
+            ', '.join(sorted(command_files - bundled_files)))
     validate_plan_provenance(root, identifier, reproduction)
     validate_batch(root, d)
     require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),

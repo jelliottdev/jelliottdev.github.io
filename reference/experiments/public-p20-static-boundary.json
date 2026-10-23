@@ -1,0 +1,100 @@
+{
+  "id": "public-p20-static-boundary",
+  "status": "published",
+  "title": "A bounded test of the P20 boundary model",
+  "question": "Do the supplied numeric P20 boundary states support a single static affine rule modulo 83?",
+  "reader_question": "Has the proposed P20 static boundary rule been checked?",
+  "summary": "The pinned source's finite calculation reproduces on its bundled numeric menus. Six lower-complexity model classes have no complete fit; five saturated fits are ordinary under its exact conditioned comparison.",
+  "finding": "Across 34,020 allowed state-pair assignments at eight contexts, six lower-complexity classes have zero complete fits and the saturated (6,6) class has five. An independent exact calculation gives 4.94 expected and P(at least five)=0.552. Two planted low-complexity laws are recovered exactly.",
+  "limitations": "The original raw workspace is absent. We did not independently derive the eight numeric menus or feature vectors from LP2, and this conditional replay does not decode a page or exclude dynamic boundary rules. The pinned source's manifest also names two absent files, so its quick verifier does not pass.",
+  "next_steps": "Recover or independently reconstruct the raw section data and state-menu extraction; then test a frozen rule on held-out manuscript boundaries.",
+  "outcome": "inconclusive",
+  "tags": [
+    "public-source replay",
+    "boundary states",
+    "static affine model",
+    "GF83",
+    "exact null",
+    "source provenance"
+  ],
+  "related": [],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "research/source-intake/emmanuel-p20-a39e7de.json",
+      "experiments/records/public-p20-static-boundary/plan.json"
+    ],
+    "representation": "Eight source-supplied numeric boundary contexts for an 812-rune section named P20 by the external repository; no asserted mapping to one Liberpedia page.",
+    "procedure": "Verify pinned Git blobs, execute source scripts 33, 35 and 38 in isolation, compare regenerated JSON objects, and independently calculate the menu product and exact conditioned tail.",
+    "parameters": "34,020 assignments; seven joint feature-count classes over GF(83), including saturated (6,6); conditioned c18 menu of nine state pairs; two planted affine laws plus one-value mutations.",
+    "exclusions": "Original raw-data derivation, all other static or dynamic state models, independent manuscript decryption, and other sections of LP2."
+  },
+  "review": {
+    "reviewer": "Pinned Git-blob replay, semantic result comparison, separate exact arithmetic checker and planted controls",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-p20-static-boundary/run.py --source PATH_TO_SOURCE_CLONE --check && python experiments/records/public-p20-static-boundary/check.py --source PATH_TO_SOURCE_CLONE",
+    "environment": "Python 3 and Git. Clone external source at pinned commit a39e7de90ff9414791fe5f4f8d44540bd0bdb089 and supply its path; no external source code is bundled.",
+    "script": "experiments/records/public-p20-static-boundary/run.py",
+    "script_sha256": "09650385340b998e434926da7f8a732f1f35b419a2c03b364338c96502ad8750",
+    "inputs": [
+      {
+        "path": "experiments/records/public-p20-static-boundary/plan.json",
+        "sha256": "4b2ae64ea58110c5e7358f562433bc72beccc843a622aa9e595fef84f89421fa"
+      },
+      {
+        "path": "experiments/records/public-p20-static-boundary/make_plan.py",
+        "sha256": "c7161b3afb66bb7f895895811e97558670517cd5dee184468aa04a3f4372a551"
+      },
+      {
+        "path": "experiments/records/public-p20-static-boundary/check.py",
+        "sha256": "f78300c578825bf8049ae6c95c1b89813a0df75a41d987fa642af21074648695"
+      },
+      {
+        "path": "experiments/records/public-p20-static-boundary/make_record.py",
+        "sha256": "8e7a34cc3b0e4994f62e4514e45bc585c42fb6ac25f3d95b3d58bceb39fceb6b"
+      },
+      {
+        "path": "research/source-intake/emmanuel-p20-a39e7de.json",
+        "sha256": "f4d320e85874959b44b7f120336f14dfd9a04640f99639a5592260933fe8b2dc"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-p20-static-boundary/results.json",
+        "sha256": "8b9dd9524f70d00d01964115f90ec54e6b57c464e64116c0b095b6b6706b168d"
+      },
+      {
+        "path": "experiments/records/public-p20-static-boundary/boundary-fit.svg",
+        "sha256": "dc19a044ce16e4fef90dd5afdd37dc5e4505aab6fe2417c4a4651fe14e54356d"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned P20 analysis repository",
+      "url": "https://github.com/emmanuel6474/liber-primus-p20-analysis/tree/a39e7de90ff9414791fe5f4f8d44540bd0bdb089"
+    },
+    {
+      "label": "Repository provenance and missing raw-workspace disclosure",
+      "url": "https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/PROVENANCE.md"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/public-p20-static-boundary/boundary-fit.svg",
+      "caption": "Finite static-affine fits on the eight supplied numeric contexts and the exact conditioned comparison for five saturated fits."
+    }
+  ],
+  "article": "# A bounded test of the P20 boundary model\n\n**Question.** In a published P20 analysis, do the supplied numeric boundary states support a single *static affine* rule over the finite field modulo 83?\n\n**Result.** The source's finite calculation reproduces, including its independent check and planted controls. Across **34,020** allowed assignments of state pairs at eight boundary contexts, **six** stated lower-complexity combinations have **no** complete fit. The saturated six-feature/six-feature combination has **five** fits. That count is ordinary under the source's exact conditioned comparison: **4.94** fits expected, with probability **0.552** of five or more. It does not identify a boundary transform or decode a page.\n\n![Eight supplied boundary contexts yield no fit in six lower-complexity static classes; five saturated fits are near the exact null expectation.](experiments/records/public-p20-static-boundary/boundary-fit.svg)\n\n## What the finite test actually says\n\nThe [pinned repository](https://github.com/emmanuel6474/liber-primus-p20-analysis/tree/a39e7de90ff9414791fe5f4f8d44540bd0bdb089) describes an **812-rune section it calls P20**. Its bundled numeric file gives eight chosen boundary contexts, six numeric features per context and a menu of permissible pairs of state values. Choosing one pair from each menu gives 34,020 assignments. A proposed *static affine* rule would express each of the two output state coordinates as a fixed linear combination of selected features plus a constant, all modulo 83. The scripts test the declared feature-count pairs `(4,4)`, `(4,5)`, `(5,4)`, `(5,5)`, `(5,6)`, `(6,5)` and `(6,6)` against all eight contexts.\n\nThe zeros are exact **within those eight supplied menus and model classes**. The five `(6,6)` fits use all six features for each coordinate plus an intercept. The source separately asks whether the held-out c18 menu’s five fits distinguish it from alternatives. Its independent exact finite-population calculation finds the observed count unexceptional. Two planted low-complexity affine laws are recovered exactly, while one-value mutations break them. These controls show the fitter can recover simple laws when they are present in synthetic data.\n\nWe ran the source's [complete cross-validation](https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/analysis/33_boundary_complete_crossvalidation.py), [independent exact-null verifier](https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/analysis/35_exact_null_independent_verifier.py), and [plant-and-recover control](https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/analysis/38_positive_control_plant_and_recover.py) from pinned Git blobs in a temporary directory. Each passed and regenerated a JSON object identical to its committed result. Liberpedia's separate checker recomputes the 34,020 menu product and the exact probability from the saved weight histogram.\n\nThe repository calls itself **partial** and [says the original raw workspace is missing](https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/PROVENANCE.md). This test **does not independently derive its eight state menus or six features from the manuscript**. It cannot rule out a dynamic or different boundary rule. Its “P20” is the source's section label; this record does not equate it to one Liberpedia page.\n\n## Reproduce from the pinned source\n\nThe pinned Git tree has no explicit license, so the experiment ZIP contains our harness, plan and results, **not** copies of the source code or normalized numeric input. Clone the [source repository](https://github.com/emmanuel6474/liber-primus-p20-analysis/tree/a39e7de90ff9414791fe5f4f8d44540bd0bdb089), check out commit `a39e7de90ff9414791fe5f4f8d44540bd0bdb089`, then from the Liberpedia repository root run:\n\n```text\npython experiments/records/public-p20-static-boundary/run.py --source PATH_TO_SOURCE_CLONE --check\npython experiments/records/public-p20-static-boundary/check.py --source PATH_TO_SOURCE_CLONE\n```\n\nThe harness reads exact Git blobs, verifies SHA-256 hashes and revision, and executes the three scripts in a temporary directory. The [source's quick `verify.py`](https://github.com/emmanuel6474/liber-primus-p20-analysis/blob/a39e7de90ff9414791fe5f4f8d44540bd0bdb089/verify.py) has a separate defect: its hash manifest names `.gitignore` and `.github/workflows/verify.yml`, but neither file exists in that commit, so the quick check fails before reaching the mathematical assertions. This record runs the mathematical scripts directly; it does not report the quick verifier as passing. [The file-by-file intake](research/source-intake/emmanuel-p20-a39e7de.json) documents all 85 tracked files, 20 active analysis scripts and that limit.\n",
+  "article_path": "experiments/records/public-p20-static-boundary/article.md",
+  "script_sha256": "09650385340b998e434926da7f8a732f1f35b419a2c03b364338c96502ad8750",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

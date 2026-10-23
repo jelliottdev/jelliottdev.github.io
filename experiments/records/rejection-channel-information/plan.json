@@ -1,0 +1,51 @@
+{
+  "schema": "liberpedia-source-theorem-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "R18-L2-INFO-BUDGET",
+    "R18-L2-B-DRIFT",
+    "R18-L2-A-LOCUS"
+  ],
+  "question": "Under a uniformly random independent key, does collision rejection disclose the plaintext through its visible ciphertext distribution?",
+  "inputs_note": "The three source scripts, two preserved receipts, preregistration, and license are pinned below. Original English-corpus simulations are outside this exact arithmetic replay.",
+  "model": {
+    "alphabet_size": 29,
+    "observed_equal_pairs": 86,
+    "observed_adjacent_pairs": 12955,
+    "key": "iid uniform, independent of plaintext",
+    "skip": "If a candidate ciphertext symbol repeats the previous accepted symbol, reject it with probability s, redraw an independent key symbol, and retry.",
+    "rewrite": "If a candidate repeats the previous output, replace it with one new uniform symbol with probability t; otherwise accept.",
+    "fit": "Choose s and t separately so the expected adjacent repeat probability equals 86/12955. This is model calibration, not evidence that either mechanism generated LP2.",
+    "criterion": "Compare the exact conditional distribution of each visible output given previous output and any plaintext symbol; independently enumerate a small-field case."
+  },
+  "inputs": [
+    {
+      "path": "experiments/records/rejection-channel-information/source/a_locus.py",
+      "sha256": "693da4f0ed8c29d95cb4b6b028dc46381a55b1cfa0449483c6b995e964b28531"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/b_drawcount.json",
+      "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/b_drawcount.py",
+      "sha256": "791452f0a127b5943e31504435918fd677cfd91d1856fa377054a90eb127e798"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/c_budget.json",
+      "sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/c_budget.py",
+      "sha256": "b159911369928865ddf628e5880bd11e6f22f0ee90cc97a32664395b51bf8d0e"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/rejection-channel-information/source/PREREG.md",
+      "sha256": "49f049b34b44ab46ec43c34af23babb71b0261c211f547ab8b070721d47f3614"
+    }
+  ]
+}

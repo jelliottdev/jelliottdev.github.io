@@ -1,0 +1,10 @@
+{
+  "schema": "liberpedia-doublet-sentence-residues-plan-v1",
+  "question": "Do LP2 doublets favor a rune position modulo 2–8 counted from visible sentence punctuation?",
+  "source_method": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/lag_and_parity_tests.py",
+  "source_receipt": "https://github.com/Leo-Y-Zhang/LiberPrimusAnalysis/blob/a32bdc0e06ea58532fbaf4329acae4a0b1020513/results/lag_and_parity.txt",
+  "source_text": "https://github.com/relikd/LiberPrayground/tree/719380ebee0523ad7f2fbf389c6f960d51bea5a4/pages",
+  "boundary_rule": "Period, section mark, or semicolon ends a sentence; count subsequent rune at zero. Line breaks do not reset. Only source-derived reset rune ordinals and source text hashes are distributed here, not upstream text or code.",
+  "scan": {"moduli": [2,3,4,5,6,7,8], "statistic": "max across moduli of chi-square/df against opportunity-weighted expectations", "trials": 5000, "seed": 3301, "null": "For each section preserve its observed doublet count; uniformly sample eligible second-rune positions without replacement, then evaluate all seven moduli and retain the maximum. Punctuation reset positions stay fixed.", "plant": "For each section move its observed event count to the earliest eligible positions at sentence-relative residue zero modulo seven; the detector must identify that concentration."},
+  "exclusions": "Other punctuation interpretations, altered word breaks, moduli above eight, doublet identities, cipher-specific nulls and any decryption rule."
+}

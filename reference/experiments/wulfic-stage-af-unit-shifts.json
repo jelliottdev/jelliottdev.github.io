@@ -1,0 +1,452 @@
+{
+  "id": "wulfic-stage-af-unit-shifts",
+  "status": "published",
+  "title": "Unit shifts in a restarted LP2 key",
+  "question": "If a position key restarts and each unit gets a separate additive shift, do within-unit ciphertext differences recur across LP2 units as the model predicts?",
+  "reader_question": "What if a page or line key restarts with a different shift?",
+  "summary": "A pinned public follow-up allowed a different shift per unit; its difference invariant still missed LP2 at all five tested boundaries.",
+  "finding": "All five within-unit difference counts sat near the source’s flat-rune null and below its planted shifted-restart bounds. The complete 200-null and 100-per-source simulation reproduced both original result tables byte-for-byte.",
+  "limitations": "This tests a shared restarting position key plus one constant shift per unit, additive or Beaufort, with within-unit gaps 2–300 and the source’s two plaintext controls. It does not exclude nonlinear feedback, changing shifts within a unit, other plaintext distributions or arbitrary restart schemes.",
+  "next_steps": "Any broader shifted-restart proposal should specify its changing-state rule and verify planted recovery under the same doublet handling before testing LP2.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "restart",
+    "unit shift",
+    "difference invariant",
+    "controls"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-stage-af-unit-shifts/plan.json",
+      "experiments/records/wulfic-stage-ab-reset-alphabets/layout.json"
+    ],
+    "representation": "All 12,956 GP runes on 55 rune-bearing LP2-00–55 pages, with segment, paragraph, clause, line and page boundaries preserved.",
+    "procedure": "Replay Wulfic Stage AF from pinned revision. For each boundary type count equal within-unit mod-29 differences between positions separated by 2–300 runes; compare with 200 flat anti-doublet nulls and 100 planted draws from each of two plaintext sources.",
+    "parameters": "GP29, five unit types, gap 2–300, seed 3301; planted additive and Beaufort directions alternate; original five-sigma log-count criterion.",
+    "exclusions": "Different state equations, shifts changing inside a unit, other gap ranges or boundary marks, other plaintext priors and alternative doublet handling."
+  },
+  "review": {
+    "kind": "exact public-source replay with independent manuscript and difference-statistic check",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source outputs byte-for-byte; independent site page reconstruction and pure-Python difference count; planted additive and Beaufort controls",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-stage-af-unit-shifts/run.py --check && python experiments/records/wulfic-stage-af-unit-shifts/check.py && python experiments/records/wulfic-stage-af-unit-shifts/plot.py --check",
+    "environment": "Python 3.12 and NumPy for offline checks. Optional full source simulation uses the pinned upstream checkout with NumPy.",
+    "script": "experiments/records/wulfic-stage-af-unit-shifts/run.py",
+    "script_sha256": "29976bc95532163c8b791bb51df9c48c31d01b0773d0c8ebcec12cfa0fc5a51b",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/plan.json",
+        "sha256": "813f37d027a956aad8a29963736c1a66afa619762e427cfa31396c47a1219cb9"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_results.tsv",
+        "sha256": "bdcedcdd63f01c9a4d4aa7483f01b872df83138c28561fc2e18ca626b49a5771"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_controls.tsv",
+        "sha256": "d6240a3a95cecee461086e16b11f359132f6c2d9e477474aa307d2d7d5c6316b"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/check.py",
+        "sha256": "a946dd7836438d08a8fa0a960ed5f612509cef733695fbcd3755056bb5b10f94"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/plot.py",
+        "sha256": "d20bc276b2dcec86236ae6c943d20c3679bd0cc22696d64774679274b06e9d8f"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/replay_source.py",
+        "sha256": "ae9062c8abb97861bd715dc46e0769b459c03253ca30b5500faadb64660e06f1"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-ab-reset-alphabets/layout.json",
+        "sha256": "f3908ef8eacd4feb17177260b41def75a119c31420722b3193e4fe51e83ae95d"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-ab-reset-alphabets/check.py",
+        "sha256": "4e373b45b4a6f9063d232308602101f499f6fade97b47b8068c2cfa89d3155b3"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/results.json",
+        "sha256": "c376a952e95f4facc0213b8fd626c8ae5f6b45967a2a69e895f740f1821ccba5"
+      },
+      {
+        "path": "experiments/records/wulfic-stage-af-unit-shifts/comparison.svg",
+        "sha256": "8c4f6084a8c17d564ef25d61761067fc8dd6b9abd8d171bcffc568c6bf4ef4c6"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-stage-af-unit-shifts/comparison.svg",
+      "caption": "LP2 difference-match ratios are near the random expectation, while the planted shifted-restart bounds are higher."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wulfic Stage AF source at pinned revision",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_af.py"
+    },
+    {
+      "label": "Pinned source result and control tables",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings"
+    },
+    {
+      "label": "Master transcription provenance in source repository",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/PROVENANCE.md"
+    }
+  ],
+  "related": [
+    "wulfic-stage-ab-reset-alphabets",
+    "word-reset-repetition",
+    "sectionwise-rune-profile"
+  ],
+  "family": {
+    "id": "wulfic-restart-models",
+    "title": "Keys that restart at a boundary",
+    "question": "Do shared position keys restarting at fixed boundaries match the manuscript, with or without an extra shift for each unit?",
+    "baseline": "wulfic-stage-ab-reset-alphabets"
+  },
+  "variant": {
+    "label": "An extra shift for each unit",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/wulfic-stage-ab-reset-alphabets/plan.json",
+          "experiments/records/wulfic-stage-ab-reset-alphabets/layout.json"
+        ],
+        "after": [
+          "experiments/records/wulfic-stage-af-unit-shifts/plan.json",
+          "experiments/records/wulfic-stage-ab-reset-alphabets/layout.json"
+        ],
+        "reason": "Stage AF adds a constant shift per unit and tests within-unit differences with its own pinned controls."
+      },
+      {
+        "field": "representation",
+        "before": "All 12,956 GP runes on 55 rune-bearing LP2-00–55 pages; source boundary marks are preserved, including words that wrap lines or pages.",
+        "after": "All 12,956 GP runes on 55 rune-bearing LP2-00–55 pages, with segment, paragraph, clause, line and page boundaries preserved.",
+        "reason": "Stage AF adds a constant shift per unit and tests within-unit differences with its own pinned controls."
+      },
+      {
+        "field": "procedure",
+        "before": "Replay Wulfic Stage AB from pinned revision and count equal ciphertext runes at equal in-unit positions for five restart boundaries; compare with 1,000 flat anti-doublet nulls and two sets of 200 planted restart encryptions.",
+        "after": "Replay Wulfic Stage AF from pinned revision. For each boundary type count equal within-unit mod-29 differences between positions separated by 2–300 runes; compare with 200 flat anti-doublet nulls and 100 planted draws from each of two plaintext sources.",
+        "reason": "Stage AF adds a constant shift per unit and tests within-unit differences with its own pinned controls."
+      },
+      {
+        "field": "parameters",
+        "before": "Five unit types, seed 3301, GP29; original five-sigma log-count lower criterion.",
+        "after": "GP29, five unit types, gap 2–300, seed 3301; planted additive and Beaufort directions alternate; original five-sigma log-count criterion.",
+        "reason": "Stage AF adds a constant shift per unit and tests within-unit differences with its own pinned controls."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other reset locations, feedback, unique alphabets per unit, non-rune channels, distinct plaintext priors and alternative doublet handling.",
+        "after": "Different state equations, shifts changing inside a unit, other gap ranges or boundary marks, other plaintext priors and alternative doublet handling.",
+        "reason": "Stage AF adds a constant shift per unit and tests within-unit differences with its own pinned controls."
+      }
+    ]
+  },
+  "article": "# Could a restarted key also shift at every boundary?\n\n**The tested shifted-restart model still does not fit LP2.** Giving each page, line or other unit its own additive shift removes the simple rune-for-rune comparison used in the [basic restart test](#/experiments/wulfic-stage-ab-reset-alphabets). It does not remove a second property: subtract two ciphertext runes *within the same unit*, and that unit's shift cancels. If the underlying position key restarts, equal plaintext differences at the same two positions still produce equal ciphertext differences across units.\n\n![Five shifted-restart comparisons: LP2 near the random expectation, planted controls to the right.](experiments/records/wulfic-stage-af-unit-shifts/comparison.svg)\n\nEach blue point is LP2's full difference-match count divided by the random-rune expectation for that boundary. Gray is the conservative lower bound from planted shifted-restart encryptions. **The horizontal scale is zoomed from 0.98 to 1.08** to make the modest but consistent separation visible; it does not start at zero. None of these points is decoded text.\n\n## What was tested\n\nThis is a byte-for-byte replay of [Wulfic's Stage AF program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_af.py) at its pinned revision. The model uses one shared key value at each position after a restart and one extra shift for each unit. It covers both additive and Beaufort directions in planted controls. For every section, paragraph, clause, line and page boundary, the statistic compares ciphertext differences between positions **2–300 runes apart within that same unit**. The complete input is **12,956 runes across 55 rune-bearing LP2 pages**.\n\nThe source tested **200 flat-rune nulls** and **100 planted encryptions for each of two plaintext sources**, Emerson essays and solved LP readings. Its anti-doublet rule was applied to controls. A test could be called excluded only where both planted sources separated from the null and LP2 fell below both predeclared five-standard-deviation lower bounds. The frozen [plan](experiments/records/wulfic-stage-af-unit-shifts/plan.json) records the exact rule and source hashes.\n\nThe page-reset case is illustrative: LP2 had **1,207,810** matching within-page differences; random controls averaged **1,208,036**. The weaker planted lower bound was **1,242,113**. The same comparison held at the other four boundaries, so the source marks all five cells **excluded under this model**. Our full source run reproduced its [results](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_results.tsv) and [controls](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_controls.tsv) byte-for-byte.\n\nThis does not rule out every resetting key. It tests a **shared position key plus one constant shift per unit**, using the source's plaintext examples and doublet treatment. Position-dependent shifts inside a unit, nonlinear feedback, a different plaintext distribution or a different boundary rule can erase this particular difference invariant. Even if the invariant were present, it would not alone identify a decryption key.\n\n## Reproduce\n\nRun `python experiments/records/wulfic-stage-af-unit-shifts/run.py --check` and `python experiments/records/wulfic-stage-af-unit-shifts/check.py` from the repository root with NumPy installed. The [independent checker](experiments/records/wulfic-stage-af-unit-shifts/check.py) rebuilds all five partitions from Liberpedia's page transcriptions and counts the difference collisions with a separate pure-Python method. It also encrypts a planted three-unit example in both additive and Beaufort forms and verifies that each unit's shift cancels.\n\nFor the full upstream Monte Carlo replay, clone the [pinned source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus), check out `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`, install NumPy, and run `python experiments/records/wulfic-stage-af-unit-shifts/replay_source.py --source-dir PATH_TO_CLONE`. The wrapper hashes source code and inputs, runs in a temporary output directory, and compares both resulting tables byte-for-byte.\n",
+  "article_path": "experiments/records/wulfic-stage-af-unit-shifts/article.md",
+  "script_sha256": "29976bc95532163c8b791bb51df9c48c31d01b0773d0c8ebcec12cfa0fc5a51b",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
