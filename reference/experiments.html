@@ -64500,6 +64500,159 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="wulfic-keyed-transposition-cohort"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-keyed-transposition-cohort&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Archived keyword-and-route transposition search&quot;,
+  &quot;question&quot;: &quot;What did the pinned ten-page keyword and rearrangement program actually test, and did its own scoring rule recognize words?&quot;,
+  &quot;reader_question&quot;: &quot;Does rearranging these keyed pages produce a reading?&quot;,
+  &quot;summary&quot;: &quot;The pinned program scores 585 selected route rows on its actual LP2-04–13 inputs. Every row has zero word matches; the higher values are bigram scores on unbroken text.&quot;,
+  &quot;finding&quot;: &quot;All ten archived page files match LP2-04–13 rune for rune, although the program calls them pages 21–30. Its keyword-column and magic-square planted inversions, and six other permutation properties, pass 80 controls. None of the 585 reported route rows produces a word match under its own embedded-word scorer. The source still exhaustively scores short-key column orders before retaining one best row per eligible page.&quot;,
+  &quot;limitations&quot;: &quot;The page keywords are proposals. The source scores unbroken GP runeglish, has no optional external wordlist in the pinned tree, and does not actually call the Myszkowski or disrupted methods advertised in comments. Other key schedules, segmentation rules, languages, page mappings and transpositions are outside this result.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a page/keyword link independently and a word-boundary or held-out plaintext criterion before treating a ranked route as a decryption candidate.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source-derived test&quot;,
+    &quot;transposition&quot;,
+    &quot;keyword&quot;,
+    &quot;route cipher&quot;,
+    &quot;source audit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-keyed-transposition-cohort/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Exact GP29 rune sequence from pinned Wulfic global page_21–30 files, aligned to current LP2-04–13 JSON. Source unbroken runeglish and 95-word embedded fallback.&quot;,
+    &quot;procedure&quot;: &quot;Execute the pinned source&#x27;s own solve_page loop for each aligned page with its fixed keyword/mode; retain every reported row and planted route controls.&quot;,
+    &quot;parameters&quot;: &quot;Ten fixed source page/key/mode assignments; all column permutations for source keywords of at most seven letters; source-listed fixed widths, rails, grid routes, prime extraction, every-nth and reversal.&quot;,
+    &quot;exclusions&quot;: &quot;No arbitrary key search, other current LP2 pages, new segmentation, alternative English model, Myszkowski or disrupted transposition, and no inference from a best score to a decipherment.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;source-defined bounded replay and source-input audit&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Exact pinned source digest; all ten archived/current rune alignments; 80 planted route controls; independent baseline and source-result structural checks&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-keyed-transposition-cohort/run.py --check --source-file PATH_TO_PINNED_SCRIPT&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library and an exact pinned public source file (or network access to its pinned GitHub URL). Source SHA-256 is checked before execution.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;e13e7c3b9a40471ab2f4b252208bd47de079631ddfbaf625b75a237a7adac900&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/plan.json&quot;,
+        &quot;sha256&quot;: &quot;b7fee2b8d39978c64f4af33a9b60f2891f5477c62af8321e53cae2f5e848bd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/run.py&quot;,
+        &quot;sha256&quot;: &quot;3d00a48de271e64c8544d75d1005f600353834e3bc140f9e5127665000083267&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/check.py&quot;,
+        &quot;sha256&quot;: &quot;e13e7c3b9a40471ab2f4b252208bd47de079631ddfbaf625b75a237a7adac900&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/plot.py&quot;,
+        &quot;sha256&quot;: &quot;2e1d739bb80675a43e1748c87f15f00443ea0e238cb42e84b5d0217841242ec9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;9eeda9e7ade984554138479cb6eaf8f83f1818b1c0a49278eedf5c48e643514a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/results.json&quot;,
+        &quot;sha256&quot;: &quot;fde8d0b7ff87355a1d4ec7c1384efae25aef5c0e567f3bf85020216900507498&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;76883a7ad7fcebee68480264e18f3c9d491913c6710b3588497307801a2601dc&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;On each actual target page, a selected route raises the bigram score, yet every source output has zero recognized words.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic transposition program&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/transposition_solver.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic legacy-method caveat&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;lp2-row-column-routes&quot;,
+    &quot;wulfic-adfgvx-fractionation&quot;,
+    &quot;lp2-word-order-reversal&quot;
+  ],
+  &quot;article&quot;: &quot;# What did the archived keyword-and-route search actually test?\n\nThe archived program first applies a proposed repeating keyword to each page, then tries column orders, a magic-square order, spirals, rails, diagonals and other rearrangements. Its files named `page_21` through `page_30` contain **LP2-04 through LP2-13**, respectively. We matched all ten rune streams exactly before replaying the program. The keyword assignments are proposals, not established decryption keys.\n\n## Result\n\nThe complete source loop produced **585 reported route rows** across the ten pages. The program also tries all column orders for six short keywords before retaining only each page&#x27;s best such order. Its highest numerical score differs across pages, but **none of the 585 rows matched even one word** under the program&#x27;s own word test. The numbers rank English letter pairs in an unbroken stream; they are not evidence of a reading.\n\n![Across ten actual target pages, selected routes raise the source bigram score, while every output has zero recognized words.](experiments/records/wulfic-keyed-transposition-cohort/comparison.svg)\n\nThe zero is a property of this *test design*: the program removes spacing and passes the whole output to a function that looks up entire space-separated words. Its pinned repository does not contain the optional `data/wordlist.txt`, so this replay uses its built-in 95-word fallback. The selected strings are far longer than any word in that fallback. A different, explicitly specified word-segmentation test might find short substrings, but that would be a different experiment.\n\n## What the controls establish\n\nWe planted known rune messages at each of the ten source lengths. The source keyword-column reversal restored each one, and the source&#x27;s 25-position magic-square inverse restored each one. Six other route functions preserved full length and the multiset of rune values on every planted stream. **All 80 controls passed.** These checks show the implemented routes run as claimed; they do not validate the proposed page keywords or the English ranking rule.\n\nThe source comments promise Myszkowski and disrupted transposition, but `solve_page` never calls either. Its prime-position extraction is not a full-message permutation. We report only the operators actually executed.\n\n## Reproduce and limits\n\nRun `python experiments/records/wulfic-keyed-transposition-cohort/run.py --check --source-file PATH_TO_PINNED_SCRIPT` to repeat the full source loop. Omit `--source-file` to fetch the exact script from its pinned GitHub revision; the runner rejects a different SHA-256. `python experiments/records/wulfic-keyed-transposition-cohort/check.py --source-file PATH_TO_PINNED_SCRIPT` independently checks the page alignment receipts, unchanged-keyword baselines, route selection, and zero-word result. With `--source-repo PATH_TO_PINNED_CLONE`, it also compares all ten archived page files rune by rune with the current LP2 pages. The scripts and saved results are included in the experiment download.\n\nThis replay covers the source&#x27;s exact ten input streams, fixed keyword assignments, routes and scoring rule. It does not test all transpositions or prove that no output can be read under another language or segmentation rule. Four nearby scripts are not silently counted as the same experiment: `p21_30_transposition.py` overlaps the columnar/prime route subset; `p21_30_rearrange.py` requires an absent wordlist for its own score; `p21_30_verified_rearrange.py` additionally requires an absent `verified_keys.json`; and `refine_and_batch.py` adds a stochastic monoalphabetic optimizer and unavailable training inputs. Their unresolved differences remain outside this result.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-keyed-transposition-cohort/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;e13e7c3b9a40471ab2f4b252208bd47de079631ddfbaf625b75a237a7adac900&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
 }</pre></article><article id="wulfic-keyword-prime-layer-grid"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-keyword-prime-layer-grid&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -67405,6 +67558,134 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="wulfic-periodic-word-crib-votes"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-periodic-word-crib-votes&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can word cribs predict a periodic key?&quot;,
+  &quot;question&quot;: &quot;Does the source word-vote solver at its page_30/period-17 and page_27/period-43 examples recover exact words it did not use to infer the key?&quot;,
+  &quot;reader_question&quot;: &quot;Can familiar words reveal a repeating key?&quot;,
+  &quot;summary&quot;: &quot;The archived word-vote solver produces no exact dictionary words in any untouched LP2 fold. It also fails the predeclared known-message gate, so this result does not rule out periodic-key ciphers.&quot;,
+  &quot;finding&quot;: &quot;Archived page_30 and page_27 correspond exactly to current LP2-13 and LP2-10. Across both pages, both alternating-word folds and all three directions, zero untouched words match an encoded source dictionary word. The source full-stream scores of 10–19 count substrings, not recovered words. Twelve planted periodic-key folds recover at most 11 of roughly 30 untouched words, below the fixed 50% gate; no null-rank exclusion follows.&quot;,
+  &quot;limitations&quot;: &quot;The source solver votes for each residue separately and enforces only within-word consistency, despite its description of cross-word consistency. The two periods are source examples rather than detected cycles. The 199-shuffle selected maximum is retained as a receipt but not interpreted because the positive gate fails. Missing public GPU checkpoint prevents reproduction of four related validators.&quot;,
+  &quot;next_steps&quot;: &quot;A new candidate should state its page, period, clock, direction, crib list and a held-out plaintext prediction before examining the remaining words.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source-derived test&quot;,
+    &quot;periodic key&quot;,
+    &quot;crib dragging&quot;,
+    &quot;word boundaries&quot;,
+    &quot;positive control&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-10&quot;,
+      &quot;lp2-13&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-periodic-word-crib-votes/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source page_27 and page_30 rune files, byte-checked against site LP2-10 and LP2-13. Source GP29 encoder and exact 335-entry dictionary (309 distinct encoded words).&quot;,
+    &quot;procedure&quot;: &quot;Replay original word-vote keys and source stdout on the two example page/period pairs. Separately train on alternating visible word slots, score exact dictionary words on untouched slots, run 12 planted known-message folds and 199 matched whole-selection shuffles.&quot;,
+    &quot;parameters&quot;: &quot;Source periods 43 and 17; SUB, ADD, BEAUFORT; visible 2–15-rune words; source-insertion-order vote ties; two train/holdout folds; 199 shuffles seeded 33014317.&quot;,
+    &quot;exclusions&quot;: &quot;Other pages, periods, dictionaries, language hypotheses, page-spanning clocks, the checkpoint-dependent validator scripts, linked-position phrase crib script, and a family-wide cipher rejection.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact source replay plus bounded held-out extension&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pinned source dictionary and page bytes; six source keys and twelve held-out folds independently checked; predeclared planted gate failed and null rank withheld&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-periodic-word-crib-votes/run.py --source-root PATH_TO_PINNED_CLONE --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library and Git checkout at pinned Wulfic revision; local site page JSON.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;acd58e24cb5991516f1604529f26d2e3b868e039b7255cc267c2618fedd2bdd1&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/plan.json&quot;,
+        &quot;sha256&quot;: &quot;9de3bc8b0b472a0edbb0dadde2aa537c6a5bd2726f7cfbdabda1928a99679981&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/run.py&quot;,
+        &quot;sha256&quot;: &quot;b3fa4a58686a1a24654acc731389570c00d949ff0b2f67136925a9e2be902ec1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/check.py&quot;,
+        &quot;sha256&quot;: &quot;acd58e24cb5991516f1604529f26d2e3b868e039b7255cc267c2618fedd2bdd1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/plot.py&quot;,
+        &quot;sha256&quot;: &quot;a127d5e8be01b21012a46a42285dbc6d43df32f3ac68b07d277952b4309178d1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/summary.json&quot;,
+        &quot;sha256&quot;: &quot;1ca8589fbaf9d7453e95038394784e844cd4aad06d4a99d600007236e2d36784&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/dictionary.json&quot;,
+        &quot;sha256&quot;: &quot;9a47154711e3a3abd7bfad382fa2d069d0061cc5bfa6acc57f1e142724ae2397&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/source_runs.json&quot;,
+        &quot;sha256&quot;: &quot;341e49137651bd889a39a794cb9a06ba63f43d8b9313010bd6a77a846e7832b9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/observed.json&quot;,
+        &quot;sha256&quot;: &quot;ef7c627a3ffa50336481061b29d1833be62287ff546c0caa13112b123a6271bb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/plants.json&quot;,
+        &quot;sha256&quot;: &quot;436d20322de2712e6005ad347b1636d9effb4c74ddf8df9c6e09f45d7cf89eff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/null.json&quot;,
+        &quot;sha256&quot;: &quot;52d0ae31b7e48364107010f1e9fb5fa4ee8bfb7564397f754c87f62b44e26efe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/heldout.svg&quot;,
+        &quot;sha256&quot;: &quot;ae317e9027168e7a42dc386a60320a01e93540534bf1b70154fee2aa96aadb60&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/heldout.svg&quot;,
+      &quot;caption&quot;: &quot;The voted key predicts no exact dictionary words in untouched LP2 slots. It also fails the known-message control.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic period-constrained crib solver&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/period_crib_solve.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic legacy-method warning&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;periodic-affine-crib-capacity&quot;,
+    &quot;wulfic-periodic-alphabet-lags&quot;
+  ],
+  &quot;article&quot;: &quot;# Can word cribs predict a periodic key?\n\nThe archived solver tries familiar words at each visible word slot, converts each guess into votes for a repeating key, and chooses the most-voted value at each key position. We replayed its two stated examples: archived `page_30` with period 17 and `page_27` with period 43. Those files are **LP2-13** and **LP2-10** in the current reader; their rune text matches exactly.\n\n## The check that matters\n\nWe inferred a key from half the visible word slots, then read the untouched half. Across both pages, both folds and all three source directions, **none of the untouched words exactly matches an encoded source-dictionary word**. The source&#x27;s full-stream vocabulary scores are 10–19, but those count substrings anywhere in the joined rune text. They are not 10–19 independently recovered words.\n\n![The key voted from half the word slots predicts no exact dictionary words in the untouched half, and known-message controls fail.](experiments/records/wulfic-periodic-word-crib-votes/heldout.svg)\n\nThe stronger caution is the **known-message control**. We encrypted source-dictionary words with a planted period-17 or period-43 key and applied the same vote and holdout procedure. The best fold recovered 11 of 31 untouched eligible words; several recovered none. All 12 planted folds miss the predeclared 50% recovery requirement. Thus this particular vote heuristic is not validated as a detector. Its failure on LP2 cannot exclude periodic keys.\n\n## What the source actually tests\n\nThe implementation checks whether each proposed word gives a consistent key **within that word**. It then tallies votes for each key residue independently. Although its description promises consistency with *other* word slots, the code does not require a complete mutually consistent sentence or key. The source&#x27;s three directions also include equivalent subtraction/addition reconstructions under signed keys; those are alternate parameterizations, not independent confirmations.\n\nThe dictionary has 335 source entries, 309 distinct GP rune words after encoding. The page and period pairs were examples in the script, not periods established by this experiment. A 199-shuffle whole-selection reference was computed across both pages, all three directions and both folds, but **its rank is not interpreted** because the positive control failed. This record measures the specified solver, not the entire periodic-key family.\n\nFour related source scripts validate candidate phrases against `data/gpu_hill_checkpoint_gpu1.json`; that checkpoint is absent from the pinned public tree. We have not replaced it with another key or described those validations as reproduced. The separate `lp_crib_drag.py` uses a different linked-position rule and is outside this record.\n\n## Repeat it\n\nFrom a clone of [the pinned source revision](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c), run `python experiments/records/wulfic-periodic-word-crib-votes/run.py --source-root PATH_TO_CLONE --check` to recalculate all saved rows and controls. The independent `check.py --source-root PATH_TO_CLONE` extracts the original dictionary directly from the source, reconstructs the six unrefined keys and twelve holdout scores, and checks the source stdout receipts. Omit `--check` to regenerate the saved outputs.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-periodic-word-crib-votes/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;acd58e24cb5991516f1604529f26d2e3b868e039b7255cc267c2618fedd2bdd1&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
 }</pre></article><article id="wulfic-position-alphabet-flatness-bound"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-position-alphabet-flatness-bound&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -67741,6 +68022,222 @@
   &quot;article&quot;: &quot;# Could earlier Cicada bytes select LP2&#x27;s substitution alphabet?\n\nOne proposed way to use another file as a key is to let **each byte select a hidden rune alphabet**. The same byte selects the same alphabet whenever it returns. Wulfic&#x27;s Stage W tests that model without guessing the alphabets: it asks whether runes under a repeated byte label show the repetitions expected of text. It checks five specified byte streams at every source phase, once for each of nine marked sections and once across the joined text of **LP2-00–55**.\n\n**Finding:** the source&#x27;s control gate passes. None of its **50 key/alignment settings** reaches the +30-nat detection threshold. **Twelve** have enough positive-control power to exclude this exact model; **38** are untestable, so their low LP2 scores do not count as exclusions. The best LP2 score is **+0.84**, using source byte file `page_17.bin` against the section covering **LP2-23–26**; that setting is untestable. No reading is produced.\n\n![Stage W decisions for five key sources, ten alignments per source](experiments/records/wulfic-position-alphabet-long-keys/comparison.svg)\n\nThe figure&#x27;s “Page 17/21/43” labels name [byte files in the source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/outguess), **not** manuscript pages LP2-17/21/43. Their origin as puzzle payloads has not been independently verified here. The marked sections follow the [`$` boundaries in the source transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt). We checked its rune sequence against Liberpedia&#x27;s page text: all **56** LP2 pages match rune for rune. Relevant boundaries are: section 11, the last 150 runes of LP2-15 through LP2-22; section 12, LP2-23–26; and section 15, LP2-40–55. Section 10 contains only the first nine runes of LP2-15, so these sections are not always whole-page ranges.\n\n| Source byte stream | Excluded alignments | Untestable |\n| --- | --- | ---: |\n| Wisdom hint | Joined LP2-00–55; LP2-40–55 | 8 |\n| Wisdom hint, reversed | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_17.bin` | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_21.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n| Source file `page_43.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n\nThese are **five source keys under one method**, evaluated at ten alignments. They are not fifty unrelated solving ideas. The [complete candidate table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv) gives every score, phase and verdict.\n\n## Why the controls matter\n\nThe score uses rune repetitions within each byte-selected class. It averages a likelihood ratio over **all possible starting phases** of the named byte key; the best individual phase is shown separately in the table, but it is **not** the decision score. The source regards a mean score of at least **+30 nats** as a hit.\n\nFor each key and alignment, Stage W makes five synthetic messages encrypted by that exact kind of byte-selected alphabet and five flat negative messages made with an unrelated additive key. It also scores one LP2 stream against each shuffled key. If any flat negative or shuffled-key null reaches +30, the whole run is void. The highest such negative here is **+0.64**. A specific key/alignment is called excluded only if **all five** same-length positives reach +30 while LP2 does not. This is why the many short sections remain untestable, even though their LP2 scores are low. The [control table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv) shows all **505** controls.\n\nThe earlier Stage S used the same LP2 score but its original negative-control design made that run void. We regenerated just the **50 Stage S LP2 scores** that Stage W requires. Each row matches the corresponding row in the pinned source&#x27;s full 200-row Stage S table, and all 50 agree with the Stage W candidates. This numerical dependency does **not** revive Stage S&#x27;s invalid conclusion; Stage W&#x27;s own corrected controls decide what can be said here.\n\nThe result applies to these raw byte streams, their source-defined phase search and a key that stays in step. Skips, resets, another key source, a changing alphabet or an additional cipher layer are outside the tested model.\n\n## Reproduce\n\nFrom the Liberpedia repository root, Python&#x27;s standard library checks the three bundled tables, recalculates all source verdicts and verifies the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/run.py --check\npython experiments/records/wulfic-position-alphabet-long-keys/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-long-keys/plan.json) pins the source revision, byte-file hashes, all settings and the decision rules. The two Stage W tables were regenerated with the unmodified [pinned Stage W program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py) and match its published source files **byte-for-byte**. The Stage S subset was regenerated with the [pinned score function](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py). To repeat the full calculation from a matching external checkout with NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThat wrapper verifies the pinned inputs, regenerates the Stage S dependency and the two Stage W tables in a temporary directory, then compares them byte-for-byte with the bundled files. The source code remains in its original repository.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/article.md&quot;,
   &quot;script_sha256&quot;: &quot;993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-prime-keyword-stream-families"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-prime-keyword-stream-families&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Prime and keyword stream families&quot;,
+  &quot;question&quot;: &quot;Do three archived keyword and prime-stream searches yield a distinctive, source-defined reading on their selected LP2 pages?&quot;,
+  &quot;reader_question&quot;: &quot;Can a word or prime sequence act as the missing key?&quot;,
+  &quot;summary&quot;: &quot;Three complete pinned source grids were replayed together. Their screens do not establish a reading; a prime-stream IoC peak is an unresolved lead under a coarse 49-control comparison.&quot;,
+  &quot;finding&quot;: &quot;The repeating-keyword search produced zero all-singleton fits among 540 settings (best IoC 1.119; 18/49 full-search shuffles reached it). The prime-stream search tested 11,880 settings and yielded nine permissive sequential screen hits; its highest IoC was 1.174 on LP2-09 (1/49 shuffles reached it), but that output missed all six one-rune checks and did not read as a passage. The keyword-stepped search tested 5,285,280 settings; 2,270 passed its all-singleton gate, none exceeded the source IoC 1.3 hit threshold, and its best gated IoC 1.281 was reached by 12/49 shuffles.&quot;,
+  &quot;limitations&quot;: &quot;The prime IoC peak is exploratory and 49 complete-search controls provide coarse tail resolution. Within-page shuffles preserve rune counts but are not a cipher model. Source keyword lists, prime generators, old page selections, offsets and screens define the tested scope. Some stepped arithmetic duplicates a published combined-key grid; neither a high IoC nor a quick-word fragment proves decryption.&quot;,
+  &quot;next_steps&quot;: &quot;Precommit a specific prime rule and a predicted longer passage or held-out page, then test it without another selection search.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;prime streams&quot;,
+    &quot;keywords&quot;,
+    &quot;index of coincidence&quot;,
+    &quot;stepped key&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-36&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-prime-keyword-stream-families/inputs.json&quot;,
+      &quot;experiments/records/wulfic-prime-keyword-stream-families/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned archived rune bytes verified against current canonical LP2 GP29 values. Old source page_N equals current LP2-(N-17); branch-specific source word parsers set singleton positions.&quot;,
+    &quot;procedure&quot;: &quot;Replay three archived finite searches as one shared batch: source keywords, source prime generators and F-skip, and keyword-stepped prime streams. Preserve each source screen and compare branch maxima against 49 full-search within-page shuffles.&quot;,
+    &quot;parameters&quot;: &quot;540 repeating-keyword settings on ten pages; 11,880 prime-stream settings on eight pages; 5,285,280 stepped-keyword settings on eleven pages; three arithmetic directions; 49 seeded complete-search controls, seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;Other keywords, prime orders, resets, page sets, languages, model scorers, source-defined but uncalled prime generators, and the optional unverified verified_keys.json input.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;pinned archived-source replay with selected-function parity and full-search shuffle controls&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Sampled key streams and decodes matched extracted pinned source functions; independent scalar checks reconstruct saved winners and 49-control statistics.&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-prime-keyword-stream-families/check.py &amp;&amp; python experiments/records/wulfic-prime-keyword-stream-families/plot.py --check &amp;&amp; python experiments/records/wulfic-prime-keyword-stream-families/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 with NumPy and Numba. The optional source_parity.py additionally requires a local checkout of the pinned Wulfic commit; the core replay runs from bundled inputs.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/plan.json&quot;,
+        &quot;sha256&quot;: &quot;46bb135b0bfafff260b78bc513c10468155657858a2a1db3c791b3be11f894bc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;56fb0967b8f71bb6deebd0e8124a01fbd02058df148ba67427f3952fc7bc16bb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/snapshot_inputs.py&quot;,
+        &quot;sha256&quot;: &quot;0dfb64ed216679f92128db787df6422942127877bbf6ad7e86bd0d8a3a486328&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/engine.py&quot;,
+        &quot;sha256&quot;: &quot;f2f48cbe69f64395d19c9ef8d23515c6b1a5f89297389b4fb3b2b2e4647b034d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/run.py&quot;,
+        &quot;sha256&quot;: &quot;4e297ddc24ea496ee25cb29be26c736fcb7f3e05b8dc25c5debbdc00c79427ef&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/source_parity.py&quot;,
+        &quot;sha256&quot;: &quot;e75855b4f60b36695b032e35e94df9e77fef6b278a5f9bb071a59aef7af1c104&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/check.py&quot;,
+        &quot;sha256&quot;: &quot;ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/plot.py&quot;,
+        &quot;sha256&quot;: &quot;50094aa1dbb77e9ad8b90b44d672e4eab73ca04a4152cc0337f1d80e1d038578&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;36adad713b4da6342e95bc3d23157acf97ca8b854deb4971da94e42c5152f310&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/article.md&quot;,
+        &quot;sha256&quot;: &quot;c3858fd97d5eee11b2d51305e91dac5609f0104d839349b2bb4922ce86b92afd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/index.json&quot;,
+        &quot;sha256&quot;: &quot;c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-prime-layer-grid/keys.json&quot;,
+        &quot;sha256&quot;: &quot;d02945ed823b108fc4078b8f846686f706e0cd6a87b629e5850b64098765ebf5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/results.json&quot;,
+        &quot;sha256&quot;: &quot;528159c82e8591d35d68d3e1c879c87f3b13ec5bab6f9cc293d7f1f17793e01d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;2e4a5a1fede2ade0250c493d01df706708a5fae375df0e965f093d77dcdbeb7a&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Observed best IoC in each complete source search against the range of 49 within-page shuffled full searches. The prime peak is a lead, not a reading.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned archived p21_30_keyword_sweep.py&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_keyword_sweep.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned archived prime_stream_solver.py&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/prime_stream_solver.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned archived keyword_stepped_stream.py&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/keyword_stepped_stream.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-keyword-prime-layer-grid&quot;,
+    &quot;historical-prime-and-ps-keys&quot;,
+    &quot;lp2-panel-prime-openings&quot;
+  ],
+  &quot;article&quot;: &quot;# Prime and keyword streams in three archived searches\n\nCould a familiar word, a reordered prime list, or a word-controlled walk through primes decode these LP2 pages? Three archived scripts ask related questions. We replayed their complete finite grids together on verified page text. **The source screens do not establish a complete reading.** One prime-stream IoC peak is unusual against this small control set, so it remains a lead to inspect rather than a solved page.\n\n![Observed maximum IoC for each source search against 49 complete shuffled searches](experiments/records/wulfic-prime-keyword-stream-families/comparison.svg)\n\n| Source method | What it tried | What happened |\n| --- | --- | --- |\n| Repeating keywords | 18 named words, three directions, ten pages | None of 540 outputs made every one-rune word an I or A. The best IoC was 1.119, reached or exceeded in 18 of 49 shuffled searches. |\n| Prime streams | Sequential and five alternate prime orders; three key forms, three directions, and the source&#x27;s F-skip rule on eight pages | Nine sequential settings passed at least one permissive source screen. The highest IoC was 1.174 on LP2-09; one of 49 shuffled searches reached it. This output missed all six one-rune word checks and its inspected opening is not a coherent passage. |\n| Keyword-stepped primes | 20 literal keyword arrays, eight prime-index rules, offsets 0–1000, three directions, eleven pages | Of 5,285,280 settings, 2,270 passed the source&#x27;s all-singleton I/A gate. None reached its IoC &gt; 1.3 hit threshold. The highest gated IoC was 1.281; 12 of 49 shuffled searches reached it. |\n\nThese are **three source methods**, not millions of separate experiments. The control repeats each entire search after shuffling rune order *within each page*, so the comparison includes the choice of its best setting. A shuffled page preserves length and rune frequencies, but not word structure or a realistic encryption process. Forty-nine controls give only a coarse reference, especially for a rare peak. An IoC peak or a short accidental word is not a decryption.\n\n## What was actually replayed\n\nThe archived programs call pages `page_21`, `page_28`, and so forth. Those map to current **LP2-04** and **LP2-11** by subtracting 17; the archive&#x27;s page bytes and rune counts were checked against the current page text before scoring. The source&#x27;s word-boundary parsers differ slightly, so each branch keeps its own one-rune positions. The programs&#x27; relocated file paths are broken in the archived checkout; this replay uses the verified pinned input bytes and preserves the source operations and scoring screens.\n\nThe first script repeats 18 parsed keywords. Its optional `data/verified_keys.json` branch was left out: that exact path is absent from the pinned Git tree. An archived file with the same basename exists elsewhere in the tree, but the script does not load it and its provenance was not assumed. The prime script uses 80 valid sequential offsets plus five named nonsequential generators; its listed offset 5000 cannot hold a page in the source&#x27;s 5,133-prime table. Its `gp_ext` stream repeats sequential offset zero, so it is an output alias. The stepped script searches all 20 literal arrays and all eight source generators. Some `keyword_add_sequential` settings already occur in the earlier [combined keyword-and-prime test](#/experiments/wulfic-keyword-prime-layer-grid): 17,600 source settings share those exact arrays, offsets, signs, and pages. That overlap is recorded, not counted as a new idea.\n\nThe highest prime IoC comes from adding a totient-based sequential stream starting at prime index 110 on LP2-09. Its IoC is 1.174, quick word score is 9, and **zero of six** source one-rune word positions become I or A. The script&#x27;s top *retained* candidate is different because it ranks permissive screen hits by a combined heuristic. Neither output is a documented reading. Further work would need a fixed rule that predicts a longer passage or an untouched page, not a higher score selected from another flexible grid.\n\n## Check and reproduce\n\nEach branch passed a synthetic arithmetic control: a planted GP29 stream with I/A at all one-rune positions was encrypted under one declared setting, then recovered exactly and crossed the source hit threshold. This checks that the operations can detect that artificial pattern; it does not establish power to recognize English. We also compared sampled key streams, decodes, and keyword parsing with functions extracted from the pinned source revision. An independent scalar checker reconstructs every saved page winner and its full decoded-output hash.\n\nThe [result table](experiments/records/wulfic-prime-keyword-stream-families/results.json), [frozen plan](experiments/records/wulfic-prime-keyword-stream-families/plan.json), and [input snapshot](experiments/records/wulfic-prime-keyword-stream-families/inputs.json) specify the exact pages, keys, counts, null seed, and source revision. Run `python experiments/records/wulfic-prime-keyword-stream-families/check.py` for the independent checks. Run `python experiments/records/wulfic-prime-keyword-stream-families/run.py --check` to repeat all three complete grids and 49 controls. The optional `source_parity.py` additionally requires a checkout of the pinned upstream commit.\n\nThis bounded replay covers those exact old source settings and selected LP2 pages. It does not exclude different keywords, prime orderings, resets, pages, or cipher families.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-prime-keyword-stream-families/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;replay&quot;,
     &quot;label&quot;: &quot;Method replay&quot;,
@@ -68878,6 +69375,442 @@
   &quot;article&quot;: &quot;# Could a restarted key also shift at every boundary?\n\n**The tested shifted-restart model still does not fit LP2.** Giving each page, line or other unit its own additive shift removes the simple rune-for-rune comparison used in the [basic restart test](#/experiments/wulfic-stage-ab-reset-alphabets). It does not remove a second property: subtract two ciphertext runes *within the same unit*, and that unit&#x27;s shift cancels. If the underlying position key restarts, equal plaintext differences at the same two positions still produce equal ciphertext differences across units.\n\n![Five shifted-restart comparisons: LP2 near the random expectation, planted controls to the right.](experiments/records/wulfic-stage-af-unit-shifts/comparison.svg)\n\nEach blue point is LP2&#x27;s full difference-match count divided by the random-rune expectation for that boundary. Gray is the conservative lower bound from planted shifted-restart encryptions. **The horizontal scale is zoomed from 0.98 to 1.08** to make the modest but consistent separation visible; it does not start at zero. None of these points is decoded text.\n\n## What was tested\n\nThis is a byte-for-byte replay of [Wulfic&#x27;s Stage AF program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_af.py) at its pinned revision. The model uses one shared key value at each position after a restart and one extra shift for each unit. It covers both additive and Beaufort directions in planted controls. For every section, paragraph, clause, line and page boundary, the statistic compares ciphertext differences between positions **2–300 runes apart within that same unit**. The complete input is **12,956 runes across 55 rune-bearing LP2 pages**.\n\nThe source tested **200 flat-rune nulls** and **100 planted encryptions for each of two plaintext sources**, Emerson essays and solved LP readings. Its anti-doublet rule was applied to controls. A test could be called excluded only where both planted sources separated from the null and LP2 fell below both predeclared five-standard-deviation lower bounds. The frozen [plan](experiments/records/wulfic-stage-af-unit-shifts/plan.json) records the exact rule and source hashes.\n\nThe page-reset case is illustrative: LP2 had **1,207,810** matching within-page differences; random controls averaged **1,208,036**. The weaker planted lower bound was **1,242,113**. The same comparison held at the other four boundaries, so the source marks all five cells **excluded under this model**. Our full source run reproduced its [results](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_results.tsv) and [controls](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_controls.tsv) byte-for-byte.\n\nThis does not rule out every resetting key. It tests a **shared position key plus one constant shift per unit**, using the source&#x27;s plaintext examples and doublet treatment. Position-dependent shifts inside a unit, nonlinear feedback, a different plaintext distribution or a different boundary rule can erase this particular difference invariant. Even if the invariant were present, it would not alone identify a decryption key.\n\n## Reproduce\n\nRun `python experiments/records/wulfic-stage-af-unit-shifts/run.py --check` and `python experiments/records/wulfic-stage-af-unit-shifts/check.py` from the repository root with NumPy installed. The [independent checker](experiments/records/wulfic-stage-af-unit-shifts/check.py) rebuilds all five partitions from Liberpedia&#x27;s page transcriptions and counts the difference collisions with a separate pure-Python method. It also encrypts a planted three-unit example in both additive and Beaufort forms and verifies that each unit&#x27;s shift cancels.\n\nFor the full upstream Monte Carlo replay, clone the [pinned source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus), check out `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`, install NumPy, and run `python experiments/records/wulfic-stage-af-unit-shifts/replay_source.py --source-dir PATH_TO_CLONE`. The wrapper hashes source code and inputs, runs in a temporary output directory, and compares both resulting tables byte-for-byte.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/wulfic-stage-af-unit-shifts/article.md&quot;,
   &quot;script_sha256&quot;: &quot;29976bc95532163c8b791bb51df9c48c31d01b0773d0c8ebcec12cfa0fc5a51b&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-two-time-pad-premise"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-two-time-pad-premise&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Do the proposed two-time-pad regions match?&quot;,
+  &quot;question&quot;: &quot;Do the six fixed aligned-copy regions in three pinned Wulfic legacy scripts exist on their verified LP2 input, and what does the separate page-pair difference screen show?&quot;,
+  &quot;reader_question&quot;: &quot;Do the claimed identical rune spans actually occur?&quot;,
+  &quot;summary&quot;: &quot;The three scripts’ specific identical-span premises fail on their committed source pages; a separate page-pair frequency screen does not establish key reuse.&quot;,
+  &quot;finding&quot;: &quot;The corrected source stream has 8,226 runes. Five of six proposed paired regions exceed it; the sole in-bounds region matches at 7/404 aligned positions and differs at the first. The P27/P44 prefix also fails. The independent 1,122-case page-pair screen reaches IoC 1.2296 at most; 43/199 page-shuffled full searches reach at least that maximum. Only 2/10 matched-length planted known-reading pairs encrypted with a shared key cross the source 1.15 threshold.&quot;,
+  &quot;limitations&quot;: &quot;This falsifies six named identical-ciphertext premises, not general shared-key encryption: equal keys can yield different ciphertexts when plaintexts differ, and equal ciphertext alone does not prove equal keys. All 34 source page blobs exist in Git despite the sparse local checkout and match the site pages; the source pair-score functions were replayed exactly. The period and crib loops based on the failed alignments are not meaningful complete decoding tests. The page-pair controls were added after preliminary outcomes were viewed. Page shuffling preserves unigram counts, not natural plaintext, and the IoC screen misses most planted reuse pairs at length 137. Running-key branches of one source script are separate from this grouped claim.&quot;,
+  &quot;next_steps&quot;: &quot;A renewed key-reuse proposal needs a specified pair alignment, key clock and held-out plaintext prediction. It need not posit identical ciphertext; it should demonstrate detection power at the tested lengths.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;two-time pad&quot;,
+    &quot;shared key&quot;,
+    &quot;crib dragging&quot;,
+    &quot;input mapping&quot;,
+    &quot;difference IoC&quot;,
+    &quot;source audit&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-44&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-two-time-pad-premise/plan.json&quot;,
+      &quot;experiments/records/wulfic-keyword-prime-layer-grid/source-gp-hashes.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Corrected source old page_21–54 = LP2-04–37, GP29 rune-only, continuous 8,226-rune stream. Label-disambiguation check on LP2-27 and LP2-44. Four direct-reading LP1 pages provide matched-length planted pairs.&quot;,
+    &quot;procedure&quot;: &quot;Check all six source asserted identical regions, the claimed page27/page44 prefix and period bounds on the original committed Git page objects; replay the separate all-page-pair ±IoC source function, then 199 whole-search page-wise shuffles and all ten fixed 137-rune shared-key plants.&quot;,
+    &quot;parameters&quot;: &quot;Six asserted regions, one 6,726-rune period, 34 pages, 561 unordered pairs ×2 operations=1,122 screens, IoC&gt;1.15, 199 seeded full-search shuffles (seed20261023), five 137-rune reading windows forming ten fixed pairs.&quot;,
+    &quot;exclusions&quot;: &quot;Unknown key-reuse alignments or periods, arbitrary key clocks, crib readability scoring under the failed source-copy assumption, alternative transcriptions, and separate solved/reference-text running-key branches.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;retrospective pinned-source premise audit and bounded pair-screen replay&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Independent page-JSON checker of every alignment, all 1,122 pair screens, 199 shuffled whole searches and ten planted controls; exact parity of all 34 committed source page objects and source score functions&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-two-time-pad-premise/run.py --check &amp;&amp; python experiments/records/wulfic-two-time-pad-premise/check.py &amp;&amp; python experiments/records/wulfic-two-time-pad-premise/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; full Liberpedia checkout. Pinned Wulfic Git checkout for the optional original-file/function parity check; a sparse checkout works if its Git objects are present.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ff4bb5d390f1a51ac986af959582e29c7446d1f99beee777aca06a47ae0fef02&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/plan.json&quot;,
+        &quot;sha256&quot;: &quot;640c724ee78e8515ba9550e62129dd7bd7e73ec97a167d2210ca748ec6d034c9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-prime-layer-grid/source-gp-hashes.json&quot;,
+        &quot;sha256&quot;: &quot;526e341b37fff79bb02537da26df7722250d6aedd4e9b5f10a9a617d4503ce50&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-04.txt&quot;,
+        &quot;sha256&quot;: &quot;c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-05.txt&quot;,
+        &quot;sha256&quot;: &quot;91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-06.txt&quot;,
+        &quot;sha256&quot;: &quot;3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-07.txt&quot;,
+        &quot;sha256&quot;: &quot;07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-08.txt&quot;,
+        &quot;sha256&quot;: &quot;3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-09.txt&quot;,
+        &quot;sha256&quot;: &quot;0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-10.txt&quot;,
+        &quot;sha256&quot;: &quot;54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-11.txt&quot;,
+        &quot;sha256&quot;: &quot;deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-12.txt&quot;,
+        &quot;sha256&quot;: &quot;40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-13.txt&quot;,
+        &quot;sha256&quot;: &quot;0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-14.txt&quot;,
+        &quot;sha256&quot;: &quot;d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-15.txt&quot;,
+        &quot;sha256&quot;: &quot;858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-16.txt&quot;,
+        &quot;sha256&quot;: &quot;0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-17.txt&quot;,
+        &quot;sha256&quot;: &quot;0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-18.txt&quot;,
+        &quot;sha256&quot;: &quot;9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-19.txt&quot;,
+        &quot;sha256&quot;: &quot;532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-20.txt&quot;,
+        &quot;sha256&quot;: &quot;f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-21.txt&quot;,
+        &quot;sha256&quot;: &quot;afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-22.txt&quot;,
+        &quot;sha256&quot;: &quot;37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-23.txt&quot;,
+        &quot;sha256&quot;: &quot;ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-24.txt&quot;,
+        &quot;sha256&quot;: &quot;b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-25.txt&quot;,
+        &quot;sha256&quot;: &quot;18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-26.txt&quot;,
+        &quot;sha256&quot;: &quot;11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-27.txt&quot;,
+        &quot;sha256&quot;: &quot;8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-28.txt&quot;,
+        &quot;sha256&quot;: &quot;7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-29.txt&quot;,
+        &quot;sha256&quot;: &quot;187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-30.txt&quot;,
+        &quot;sha256&quot;: &quot;b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-31.txt&quot;,
+        &quot;sha256&quot;: &quot;493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-32.txt&quot;,
+        &quot;sha256&quot;: &quot;fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-33.txt&quot;,
+        &quot;sha256&quot;: &quot;80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-34.txt&quot;,
+        &quot;sha256&quot;: &quot;548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-35.txt&quot;,
+        &quot;sha256&quot;: &quot;3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-36.txt&quot;,
+        &quot;sha256&quot;: &quot;b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-37.txt&quot;,
+        &quot;sha256&quot;: &quot;027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-10.json&quot;,
+        &quot;sha256&quot;: &quot;62de5c58842d30d359e514450b9a6bc75020adf472dd0ccfcdbc5795c5860f9b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-11.json&quot;,
+        &quot;sha256&quot;: &quot;b5d54900e6883f96c6da7f1abe2fcd7a83ded8b5686684c098383a53de2a171d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-12.json&quot;,
+        &quot;sha256&quot;: &quot;d2d6971ef1cb0430827b347dcd6fdc018de6245112c6dcfab5b795e618889504&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp1-13.json&quot;,
+        &quot;sha256&quot;: &quot;bd4c0fcab4fc5bdaafb929e10ac59f9b67a6ae99072de20f91286002b32dbe02&quot;
+      },
+      {
+        &quot;path&quot;: &quot;text/lp2-44.txt&quot;,
+        &quot;sha256&quot;: &quot;d6b11b5b7d6204c43d46c53ea1d247628a476c808879d1c2f4e96b7971a3209c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/run.py&quot;,
+        &quot;sha256&quot;: &quot;ff4bb5d390f1a51ac986af959582e29c7446d1f99beee777aca06a47ae0fef02&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/check.py&quot;,
+        &quot;sha256&quot;: &quot;5dc06b834c67bfe9544168380251ea50eaef9d4e05658f84e245bf46dcac274b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/plot.py&quot;,
+        &quot;sha256&quot;: &quot;b98745f54cda905acf10f8517b51298506ccb975c6ef1a89a6680b00aa5537c3&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/results.json&quot;,
+        &quot;sha256&quot;: &quot;ae7ae056e184648456bf0a704ac75bf4bcb4109a3ee7b5575f732cfa3b0d165e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/alignment.svg&quot;,
+        &quot;sha256&quot;: &quot;af4991bf6d17231a53e5e4fddbe7eaaf65470c50c0aa3129dcda1d1e5bab62de&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Wulfic two-time-pad crib drag at pinned revision&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/ttp_crib_drag.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Wulfic period-based crib script at pinned revision&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_crib.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Wulfic page-pair analysis at pinned revision&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_pad_analysis.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;leo-shared-key-differences&quot;,
+    &quot;solved-reading-running-key&quot;,
+    &quot;emerson-running-key&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/alignment.svg&quot;,
+      &quot;caption&quot;: &quot;Five of six proposed paired regions exceed the verified source stream; the remaining pair and the separate page-pair frequency screen do not establish the claimed shared-key alignment.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Do the proposed two-time-pad regions actually match?\n\nThree [archived Wulfic scripts](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy) propose paired rune positions where a key could be reused. Their crib-dragging rules depend on those positions lining up. **The six claimed copies do not match the verified manuscript text.** Five point past the end of the scripts&#x27; own page stream. The one pair entirely inside that stream has only **7 equal runes in 404 aligned positions**, with a mismatch at the first position.\n\nThis checks the scripts&#x27; **specific claim of identical ciphertext spans**. Sharing an additive key does *not* require identical ciphertext: if the plaintexts differ, their ciphertexts normally differ too. Conversely, identical ciphertext alone would not prove that the keys match. The failed copy claim cannot support these crib placements, but it does not settle the general key-reuse question.\n\n![Five proposed paired regions exceed the source stream; the in-bounds pair has 7 equal runes out of 404. A separate pairwise statistic is close to its shuffled-search median.](experiments/records/wulfic-two-time-pad-premise/alignment.svg)\n\nThe source calls its input files pages 21–54. We recovered **all 34 page files from the pinned source commit&#x27;s Git objects**; their rune contents match the [verified input mapping](experiments/records/wulfic-keyword-prime-layer-grid/source-gp-hashes.json) to **LP2-04–37**, an **8,226-rune** stream. The files were merely omitted from the sparse local checkout. The proposed period of 6,726 would require positions through 13,451 for its first two blocks. Its subtraction loop cannot run on this input. The other script says its page 27 is a prefix of page 44. On the correctly mapped pages, those are LP2-10 and LP2-27: only **9 of the 234 available aligned runes** agree, beginning with a mismatch. Reading the labels instead as LP2-27 and LP2-44 still does not rescue the claim: **13 of 234** agree, again with a mismatch at the start.\n\nOne script also makes a separate, finite measurement: subtract or add every pair among those 34 pages, align at page starts, and screen the resulting rune frequencies. We replayed all **1,122** page-pair/operation cases and confirmed each score against the pinned script&#x27;s own functions and committed page files. Five crossed its IoC screen of 1.15; the highest is **1.23** for LP2-12 against LP2-14 over **137 runes**. This is a selected frequency score, not readable plaintext. In a retrospective control that shuffles each page once per trial and repeats the whole pair search, **43 of 199** trials reached at least 1.23. The shuffled-search median was **1.19**.\n\nThe source screen has limited power at those lengths. When we encrypted ten fixed pairs of established LP1 readings with a deliberately shared key, only **two of ten** differences crossed 1.15. A score below that line therefore cannot rule out every reused key. The shuffles preserve each page&#x27;s rune counts; they show how the *maximum of this search* behaves under that conditional comparison, not the chance that an arbitrary cipher is correct.\n\nThis result rejects the **specific claimed aligned-copy regions** as a basis for these crib placements. It does not exclude other two-time-pad or key-reuse models, which could use different ciphertexts and still share a key. We did not score cribs under a shared-key assumption whose named alignments fail the input check. The source script&#x27;s running-key branches are separate proposals; [solved-text running keys](#/experiments/solved-reading-running-key) and [an Emerson running key](#/experiments/emerson-running-key) have their own bounded records.\n\nThe [plan](experiments/records/wulfic-two-time-pad-premise/plan.json) pins the three source files, exact page mapping, six paired spans, pairwise screen and controls. It is a **retrospective replay plan**: preliminary page results were inspected before the local plan was written, and the 199 shuffles are a diagnostic rather than a prospective discovery test. [Results](experiments/records/wulfic-two-time-pad-premise/results.json) retain every proposed region, the five threshold hits, all control maxima and all ten planted pairs.\n\nTo reproduce from a full Liberpedia checkout, run:\n\n```text\npython experiments/records/wulfic-two-time-pad-premise/run.py --check\npython experiments/records/wulfic-two-time-pad-premise/check.py\npython experiments/records/wulfic-two-time-pad-premise/plot.py --check\n```\n\nThe independent checker reads the page JSON separately from the producer&#x27;s text files. Pass `--source-root PATH_TO_WULFIC_CHECKOUT` to the checker to verify the three original script hashes, all 34 page Git objects and every page-pair score from the source functions at commit `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`. A sparse checkout works if those Git objects are present.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-two-time-pad-premise/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ff4bb5d390f1a51ac986af959582e29c7446d1f99beee777aca06a47ae0fef02&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;replay&quot;,
     &quot;label&quot;: &quot;Method replay&quot;,

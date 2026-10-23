@@ -1,0 +1,121 @@
+{
+  "id": "wulfic-periodic-word-crib-votes",
+  "status": "published",
+  "title": "Can word cribs predict a periodic key?",
+  "question": "Does the source word-vote solver at its page_30/period-17 and page_27/period-43 examples recover exact words it did not use to infer the key?",
+  "reader_question": "Can familiar words reveal a repeating key?",
+  "summary": "The archived word-vote solver produces no exact dictionary words in any untouched LP2 fold. It also fails the predeclared known-message gate, so this result does not rule out periodic-key ciphers.",
+  "finding": "Archived page_30 and page_27 correspond exactly to current LP2-13 and LP2-10. Across both pages, both alternating-word folds and all three directions, zero untouched words match an encoded source dictionary word. The source full-stream scores of 10–19 count substrings, not recovered words. Twelve planted periodic-key folds recover at most 11 of roughly 30 untouched words, below the fixed 50% gate; no null-rank exclusion follows.",
+  "limitations": "The source solver votes for each residue separately and enforces only within-word consistency, despite its description of cross-word consistency. The two periods are source examples rather than detected cycles. The 199-shuffle selected maximum is retained as a receipt but not interpreted because the positive gate fails. Missing public GPU checkpoint prevents reproduction of four related validators.",
+  "next_steps": "A new candidate should state its page, period, clock, direction, crib list and a held-out plaintext prediction before examining the remaining words.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source-derived test",
+    "periodic key",
+    "crib dragging",
+    "word boundaries",
+    "positive control"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-10",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-periodic-word-crib-votes/plan.json"
+    ],
+    "representation": "Pinned source page_27 and page_30 rune files, byte-checked against site LP2-10 and LP2-13. Source GP29 encoder and exact 335-entry dictionary (309 distinct encoded words).",
+    "procedure": "Replay original word-vote keys and source stdout on the two example page/period pairs. Separately train on alternating visible word slots, score exact dictionary words on untouched slots, run 12 planted known-message folds and 199 matched whole-selection shuffles.",
+    "parameters": "Source periods 43 and 17; SUB, ADD, BEAUFORT; visible 2–15-rune words; source-insertion-order vote ties; two train/holdout folds; 199 shuffles seeded 33014317.",
+    "exclusions": "Other pages, periods, dictionaries, language hypotheses, page-spanning clocks, the checkpoint-dependent validator scripts, linked-position phrase crib script, and a family-wide cipher rejection."
+  },
+  "review": {
+    "kind": "exact source replay plus bounded held-out extension",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source dictionary and page bytes; six source keys and twelve held-out folds independently checked; predeclared planted gate failed and null rank withheld",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-periodic-word-crib-votes/run.py --source-root PATH_TO_PINNED_CLONE --check",
+    "environment": "Python 3 standard library and Git checkout at pinned Wulfic revision; local site page JSON.",
+    "script": "experiments/records/wulfic-periodic-word-crib-votes/check.py",
+    "script_sha256": "acd58e24cb5991516f1604529f26d2e3b868e039b7255cc267c2618fedd2bdd1",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/plan.json",
+        "sha256": "9de3bc8b0b472a0edbb0dadde2aa537c6a5bd2726f7cfbdabda1928a99679981"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/run.py",
+        "sha256": "b3fa4a58686a1a24654acc731389570c00d949ff0b2f67136925a9e2be902ec1"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/check.py",
+        "sha256": "acd58e24cb5991516f1604529f26d2e3b868e039b7255cc267c2618fedd2bdd1"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/plot.py",
+        "sha256": "a127d5e8be01b21012a46a42285dbc6d43df32f3ac68b07d277952b4309178d1"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/summary.json",
+        "sha256": "1ca8589fbaf9d7453e95038394784e844cd4aad06d4a99d600007236e2d36784"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/dictionary.json",
+        "sha256": "9a47154711e3a3abd7bfad382fa2d069d0061cc5bfa6acc57f1e142724ae2397"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/source_runs.json",
+        "sha256": "341e49137651bd889a39a794cb9a06ba63f43d8b9313010bd6a77a846e7832b9"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/observed.json",
+        "sha256": "ef7c627a3ffa50336481061b29d1833be62287ff546c0caa13112b123a6271bb"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/plants.json",
+        "sha256": "436d20322de2712e6005ad347b1636d9effb4c74ddf8df9c6e09f45d7cf89eff"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/null.json",
+        "sha256": "52d0ae31b7e48364107010f1e9fb5fa4ee8bfb7564397f754c87f62b44e26efe"
+      },
+      {
+        "path": "experiments/records/wulfic-periodic-word-crib-votes/heldout.svg",
+        "sha256": "ae317e9027168e7a42dc386a60320a01e93540534bf1b70154fee2aa96aadb60"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-periodic-word-crib-votes/heldout.svg",
+      "caption": "The voted key predicts no exact dictionary words in untouched LP2 slots. It also fails the known-message control."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic period-constrained crib solver",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/period_crib_solve.py"
+    },
+    {
+      "label": "Pinned Wulfic legacy-method warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "periodic-affine-crib-capacity",
+    "wulfic-periodic-alphabet-lags"
+  ]
+}

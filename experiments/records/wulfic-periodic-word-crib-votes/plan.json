@@ -1,0 +1,20 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "id": "wulfic-periodic-word-crib-votes",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "primary_source": {"path": "tools/legacy/period_crib_solve.py", "git_blob": "8900cd18fc2b8f431e6318a3025c64591b034f37"},
+  "question": "Does the source's word-by-word periodic key voting yield a repeatable held-out reading on its two named page/period examples?",
+  "source_targets": [
+    {"source_file": "pages/page_30/runes.txt", "current_page": "lp2-13", "period": 17, "basis": "source default and docstring example"},
+    {"source_file": "pages/page_27/runes.txt", "current_page": "lp2-10", "period": 43, "basis": "source docstring example"}
+  ],
+  "modes": ["SUB", "ADD", "BEAUFORT"],
+  "dictionary": "Exact  source lp_vocab_latin list, converted by the source's greedy Latin-to-GP encoder; preserve duplicate entries as source votes. Hash extracted list and encoded words in inputs.json.",
+  "source_rule": "For each visible 2..15-rune word, vote for each key residue/value implied by each length-matched source dictionary crib that is internally consistent; take maximum vote per residue with source insertion-order ties and zero at empty positions; source optional one-position-at-a-time refinement only if <=10 key positions have vote fraction <0.3. Run the two source targets and all three directions.",
+  "source_score": "Record exact source lp_score and first decoded text, but do not interpret its substring vocabulary count as independent words or calibrated evidence. Source's docstring claims interword consistency, while implementation has only within-word consistency and aggregate residue voting; audit that distinction explicitly.",
+  "heldout_extension": "Within each source target, train separate keys from alternating visible word slots (even or odd ordinal), then count exact dictionary-word matches on the untouched opposite slots. Apply same six mode/target selection to every control, max across modes, targets and two train/holdout folds. This is a separately named diagnostic, not original source output.",
+  "null_control": "199 seeded within-page rune shuffles preserving each target's word lengths; rerun the complete vote, fold and selection procedure. Seed 33014317; measure selected maximum held-out count and rate. No decryption-negative if the planted positive control fails.",
+  "positive_control": "Build deterministic periodic-key ciphers from a declared sequence of source dictionary words with source GP encoder at each target length/period, including both train/heldout folds. Plant one random GP key per source period, test all three directions and require heldout exact-word rate at least 0.5 for the matching direction before using the null comparison as a detector.",
+  "related_source_scope": "crib_verify.py and validate_crib_candidates.py are checkpoint-key validators of the same broad crib search but require data/gpu_hill_checkpoint_gpu1.json, absent from pinned Git tree. check_p32_crib.py and beaufort_crib.py also consume that checkpoint. lp_crib_drag.py uses a different TTP phrase-consistency model and is excluded pending separate exact source test. No substitute key is fabricated.",
+  "limitations": "Two example page/period pairs, not an independently validated period detection; LP-focused dictionary selected by the source; possible source parser and label errors; no claim about other periods, plaintext languages, page-spanning keys or all periodic ciphers."
+}

@@ -1,0 +1,217 @@
+{
+  "id": "wulfic-prime-keyword-stream-families",
+  "status": "published",
+  "title": "Prime and keyword stream families",
+  "question": "Do three archived keyword and prime-stream searches yield a distinctive, source-defined reading on their selected LP2 pages?",
+  "reader_question": "Can a word or prime sequence act as the missing key?",
+  "summary": "Three complete pinned source grids were replayed together. Their screens do not establish a reading; a prime-stream IoC peak is an unresolved lead under a coarse 49-control comparison.",
+  "finding": "The repeating-keyword search produced zero all-singleton fits among 540 settings (best IoC 1.119; 18/49 full-search shuffles reached it). The prime-stream search tested 11,880 settings and yielded nine permissive sequential screen hits; its highest IoC was 1.174 on LP2-09 (1/49 shuffles reached it), but that output missed all six one-rune checks and did not read as a passage. The keyword-stepped search tested 5,285,280 settings; 2,270 passed its all-singleton gate, none exceeded the source IoC 1.3 hit threshold, and its best gated IoC 1.281 was reached by 12/49 shuffles.",
+  "limitations": "The prime IoC peak is exploratory and 49 complete-search controls provide coarse tail resolution. Within-page shuffles preserve rune counts but are not a cipher model. Source keyword lists, prime generators, old page selections, offsets and screens define the tested scope. Some stepped arithmetic duplicates a published combined-key grid; neither a high IoC nor a quick-word fragment proves decryption.",
+  "next_steps": "Precommit a specific prime rule and a predicted longer passage or held-out page, then test it without another selection search.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "prime streams",
+    "keywords",
+    "index of coincidence",
+    "stepped key"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-16",
+      "lp2-17",
+      "lp2-22",
+      "lp2-28",
+      "lp2-34",
+      "lp2-36"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-prime-keyword-stream-families/inputs.json",
+      "experiments/records/wulfic-prime-keyword-stream-families/plan.json"
+    ],
+    "representation": "Pinned archived rune bytes verified against current canonical LP2 GP29 values. Old source page_N equals current LP2-(N-17); branch-specific source word parsers set singleton positions.",
+    "procedure": "Replay three archived finite searches as one shared batch: source keywords, source prime generators and F-skip, and keyword-stepped prime streams. Preserve each source screen and compare branch maxima against 49 full-search within-page shuffles.",
+    "parameters": "540 repeating-keyword settings on ten pages; 11,880 prime-stream settings on eight pages; 5,285,280 stepped-keyword settings on eleven pages; three arithmetic directions; 49 seeded complete-search controls, seed 20261023.",
+    "exclusions": "Other keywords, prime orders, resets, page sets, languages, model scorers, source-defined but uncalled prime generators, and the optional unverified verified_keys.json input."
+  },
+  "review": {
+    "kind": "pinned archived-source replay with selected-function parity and full-search shuffle controls",
+    "retested_on": "2026-10-23",
+    "reviewer": "Sampled key streams and decodes matched extracted pinned source functions; independent scalar checks reconstruct saved winners and 49-control statistics.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-prime-keyword-stream-families/check.py && python experiments/records/wulfic-prime-keyword-stream-families/plot.py --check && python experiments/records/wulfic-prime-keyword-stream-families/run.py --check",
+    "environment": "Python 3 with NumPy and Numba. The optional source_parity.py additionally requires a local checkout of the pinned Wulfic commit; the core replay runs from bundled inputs.",
+    "script": "experiments/records/wulfic-prime-keyword-stream-families/check.py",
+    "script_sha256": "ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/plan.json",
+        "sha256": "46bb135b0bfafff260b78bc513c10468155657858a2a1db3c791b3be11f894bc"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/inputs.json",
+        "sha256": "56fb0967b8f71bb6deebd0e8124a01fbd02058df148ba67427f3952fc7bc16bb"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/snapshot_inputs.py",
+        "sha256": "0dfb64ed216679f92128db787df6422942127877bbf6ad7e86bd0d8a3a486328"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/engine.py",
+        "sha256": "f2f48cbe69f64395d19c9ef8d23515c6b1a5f89297389b4fb3b2b2e4647b034d"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/run.py",
+        "sha256": "4e297ddc24ea496ee25cb29be26c736fcb7f3e05b8dc25c5debbdc00c79427ef"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/source_parity.py",
+        "sha256": "e75855b4f60b36695b032e35e94df9e77fef6b278a5f9bb071a59aef7af1c104"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/check.py",
+        "sha256": "ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/plot.py",
+        "sha256": "50094aa1dbb77e9ad8b90b44d672e4eab73ca04a4152cc0337f1d80e1d038578"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/make_record.py",
+        "sha256": "36adad713b4da6342e95bc3d23157acf97ca8b854deb4971da94e42c5152f310"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/article.md",
+        "sha256": "c3858fd97d5eee11b2d51305e91dac5609f0104d839349b2bb4922ce86b92afd"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/keys.json",
+        "sha256": "d02945ed823b108fc4078b8f846686f706e0cd6a87b629e5850b64098765ebf5"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/results.json",
+        "sha256": "528159c82e8591d35d68d3e1c879c87f3b13ec5bab6f9cc293d7f1f17793e01d"
+      },
+      {
+        "path": "experiments/records/wulfic-prime-keyword-stream-families/comparison.svg",
+        "sha256": "2e4a5a1fede2ade0250c493d01df706708a5fae375df0e965f093d77dcdbeb7a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-prime-keyword-stream-families/comparison.svg",
+      "caption": "Observed best IoC in each complete source search against the range of 49 within-page shuffled full searches. The prime peak is a lead, not a reading."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned archived p21_30_keyword_sweep.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_keyword_sweep.py"
+    },
+    {
+      "label": "Pinned archived prime_stream_solver.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/prime_stream_solver.py"
+    },
+    {
+      "label": "Pinned archived keyword_stepped_stream.py",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/keyword_stepped_stream.py"
+    }
+  ],
+  "related": [
+    "wulfic-keyword-prime-layer-grid",
+    "historical-prime-and-ps-keys",
+    "lp2-panel-prime-openings"
+  ],
+  "article": "# Prime and keyword streams in three archived searches\n\nCould a familiar word, a reordered prime list, or a word-controlled walk through primes decode these LP2 pages? Three archived scripts ask related questions. We replayed their complete finite grids together on verified page text. **The source screens do not establish a complete reading.** One prime-stream IoC peak is unusual against this small control set, so it remains a lead to inspect rather than a solved page.\n\n![Observed maximum IoC for each source search against 49 complete shuffled searches](experiments/records/wulfic-prime-keyword-stream-families/comparison.svg)\n\n| Source method | What it tried | What happened |\n| --- | --- | --- |\n| Repeating keywords | 18 named words, three directions, ten pages | None of 540 outputs made every one-rune word an I or A. The best IoC was 1.119, reached or exceeded in 18 of 49 shuffled searches. |\n| Prime streams | Sequential and five alternate prime orders; three key forms, three directions, and the source's F-skip rule on eight pages | Nine sequential settings passed at least one permissive source screen. The highest IoC was 1.174 on LP2-09; one of 49 shuffled searches reached it. This output missed all six one-rune word checks and its inspected opening is not a coherent passage. |\n| Keyword-stepped primes | 20 literal keyword arrays, eight prime-index rules, offsets 0–1000, three directions, eleven pages | Of 5,285,280 settings, 2,270 passed the source's all-singleton I/A gate. None reached its IoC > 1.3 hit threshold. The highest gated IoC was 1.281; 12 of 49 shuffled searches reached it. |\n\nThese are **three source methods**, not millions of separate experiments. The control repeats each entire search after shuffling rune order *within each page*, so the comparison includes the choice of its best setting. A shuffled page preserves length and rune frequencies, but not word structure or a realistic encryption process. Forty-nine controls give only a coarse reference, especially for a rare peak. An IoC peak or a short accidental word is not a decryption.\n\n## What was actually replayed\n\nThe archived programs call pages `page_21`, `page_28`, and so forth. Those map to current **LP2-04** and **LP2-11** by subtracting 17; the archive's page bytes and rune counts were checked against the current page text before scoring. The source's word-boundary parsers differ slightly, so each branch keeps its own one-rune positions. The programs' relocated file paths are broken in the archived checkout; this replay uses the verified pinned input bytes and preserves the source operations and scoring screens.\n\nThe first script repeats 18 parsed keywords. Its optional `data/verified_keys.json` branch was left out: that exact path is absent from the pinned Git tree. An archived file with the same basename exists elsewhere in the tree, but the script does not load it and its provenance was not assumed. The prime script uses 80 valid sequential offsets plus five named nonsequential generators; its listed offset 5000 cannot hold a page in the source's 5,133-prime table. Its `gp_ext` stream repeats sequential offset zero, so it is an output alias. The stepped script searches all 20 literal arrays and all eight source generators. Some `keyword_add_sequential` settings already occur in the earlier [combined keyword-and-prime test](#/experiments/wulfic-keyword-prime-layer-grid): 17,600 source settings share those exact arrays, offsets, signs, and pages. That overlap is recorded, not counted as a new idea.\n\nThe highest prime IoC comes from adding a totient-based sequential stream starting at prime index 110 on LP2-09. Its IoC is 1.174, quick word score is 9, and **zero of six** source one-rune word positions become I or A. The script's top *retained* candidate is different because it ranks permissive screen hits by a combined heuristic. Neither output is a documented reading. Further work would need a fixed rule that predicts a longer passage or an untouched page, not a higher score selected from another flexible grid.\n\n## Check and reproduce\n\nEach branch passed a synthetic arithmetic control: a planted GP29 stream with I/A at all one-rune positions was encrypted under one declared setting, then recovered exactly and crossed the source hit threshold. This checks that the operations can detect that artificial pattern; it does not establish power to recognize English. We also compared sampled key streams, decodes, and keyword parsing with functions extracted from the pinned source revision. An independent scalar checker reconstructs every saved page winner and its full decoded-output hash.\n\nThe [result table](experiments/records/wulfic-prime-keyword-stream-families/results.json), [frozen plan](experiments/records/wulfic-prime-keyword-stream-families/plan.json), and [input snapshot](experiments/records/wulfic-prime-keyword-stream-families/inputs.json) specify the exact pages, keys, counts, null seed, and source revision. Run `python experiments/records/wulfic-prime-keyword-stream-families/check.py` for the independent checks. Run `python experiments/records/wulfic-prime-keyword-stream-families/run.py --check` to repeat all three complete grids and 49 controls. The optional `source_parity.py` additionally requires a checkout of the pinned upstream commit.\n\nThis bounded replay covers those exact old source settings and selected LP2 pages. It does not exclude different keywords, prime orderings, resets, pages, or cipher families.\n",
+  "article_path": "experiments/records/wulfic-prime-keyword-stream-families/article.md",
+  "script_sha256": "ec6269952e4bea49720efc624d6798f77e2d4e6341db7a8a4311e8bf98e41e3e",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

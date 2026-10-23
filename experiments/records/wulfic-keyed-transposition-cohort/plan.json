@@ -1,0 +1,16 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "id": "wulfic-keyed-transposition-cohort",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_file": "tools/legacy/transposition_solver.py",
+  "source_git_blob": "4d869f34244c2088a81715ad65735f5d5f356d01",
+  "source_sha256": "805bdee5479deebbe6037d479574495efd59b1625060d11f332e994fd35fecda",
+  "question": "What does the source's fixed keyword-decryption and rearrangement grid produce on the actual ten rune streams read by its program?",
+  "target_mapping": "Source pages/page_21 through page_30 are global image ordinals and match current LP2-04 through LP2-13 exactly by GP rune sequence; they are not current LP2-21 through LP2-30.",
+  "source_page_numbers": [21,22,23,24,25,26,27,28,29,30],
+  "current_page_ids": ["lp2-04","lp2-05","lp2-06","lp2-07","lp2-08","lp2-09","lp2-10","lp2-11","lp2-12","lp2-13"],
+  "source_methods": "Run every operator invoked by solve_page: source keyword-column variants, all permutations when keyword-character count <=7, two 25-position magic-square directions, listed plain column widths, spiral/snake/rail/diagonal widths, prime extraction, every-nth routes, reversal, two keyword+magic compositions where eligible, and no-transposition baseline. Preserve source code, source scoring, ties and source order.",
+  "source_scoring": "The archived combined_score on continuous GP runeglish; its word scorer sees an unbroken string, so ordinary word matches cannot be inferred from that score. No substitutions, whitespace reconstruction or new language model.",
+  "positive_controls": "Independently check route permutation length/multiset, forward/reverse round trips where claimed invertible, and a planted known-message keyword-column route. Record source functions that fail their own claimed inversion rather than silently fixing them.",
+  "limitations": "The source keyword assignments are proposals, not verified LP2 decryption keys; source documentation advertises methods not actually invoked. A best score is a ranked candidate, not a reading. Other four scripts in this cohort use different scorers or absent external inputs and are audited separately."
+}

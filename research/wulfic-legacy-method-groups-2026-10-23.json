@@ -12,17 +12,20 @@
     "utility": 3,
     "replayed_adaptation": 3,
     "open_optimizer": 40,
-    "partial": 35,
+    "partial": 36,
     "blocked_input": 16,
-    "candidate_finite": 9,
-    "replayed_source_and_amended_diagnostic": 1
+    "replayed_source_bounded": 4,
+    "replayed_source_and_amended_diagnostic": 1,
+    "replayed_source_with_control_limit": 1,
+    "replayed_source_premise_only": 2,
+    "replayed_source_screen_and_premise": 1
   },
   "priority_groups": [
-    "keyword-prime-double-layer",
+    "autokey-feedback",
+    "transposition-rearrangement",
     "periodic-crib-constraints",
     "two-time-pad-cribs",
-    "autokey-feedback",
-    "transposition-rearrangement"
+    "keyword-prime-double-layer"
   ],
   "groups": [
     {
@@ -112,9 +115,10 @@
       "id": "keyword-prime-double-layer",
       "script_count": 5,
       "triage": "partial",
-      "scope": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension.",
+      "scope": "The combined layer and three additional finite prime/keyword script grids have bounded replays. verify_keyword_ioc.py and any untested screen or key interpretation remain open.",
       "related_site_records": [
-        "wulfic-keyword-prime-layer-grid"
+        "wulfic-keyword-prime-layer-grid",
+        "wulfic-prime-keyword-stream-families"
       ],
       "scripts": [
         "tools/legacy/combined_cipher_test.py",
@@ -156,9 +160,10 @@
     {
       "id": "periodic-crib-constraints",
       "script_count": 6,
-      "triage": "candidate_finite",
-      "scope": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family.",
+      "triage": "partial",
+      "scope": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted.",
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
       "scripts": [
@@ -173,9 +178,10 @@
     {
       "id": "two-time-pad-cribs",
       "script_count": 3,
-      "triage": "candidate_finite",
-      "scope": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments.",
+      "triage": "partial",
+      "scope": "The three scripts’ claimed aligned-copy premises and one all-page-pair frequency screen are replayed. Their downstream crib placements were not scored after the named alignments failed; other shared-key models remain open.",
       "related_site_records": [
+        "wulfic-two-time-pad-premise",
         "leo-shared-key-differences"
       ],
       "scripts": [
@@ -205,8 +211,9 @@
       "id": "transposition-rearrangement",
       "script_count": 5,
       "triage": "partial",
-      "scope": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls.",
+      "scope": "transposition_solver.py has a source-exact fixed-key route replay on its actual LP2-04–13 inputs. Its four sibling scripts use different word/optimizer gates or absent source inputs; their additional branches remain open.",
       "related_site_records": [
+        "wulfic-keyed-transposition-cohort",
         "lp2-row-column-routes"
       ],
       "scripts": [
@@ -537,16 +544,17 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/beaufort_crib.py",
       "source_docstring_first_line": "Beaufort Crib Dragger - Targeted LP Phrase Search",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "partial",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt",
         "data/beaufort_crib_results.txt"
       ],
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted."
     },
     {
       "path": "tools/legacy/check_cuda_ascii.py",
@@ -566,7 +574,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/check_p32_crib.py",
       "source_docstring_first_line": "",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "partial",
       "literal_page_paths": [
         32
       ],
@@ -577,9 +585,10 @@
         "pages/page_32/runes.txt"
       ],
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted."
     },
     {
       "path": "tools/legacy/cipher_analysis.py",
@@ -638,16 +647,17 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/crib_verify.py",
       "source_docstring_first_line": "Crib Verification Tool",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "partial",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt",
         "data/gpu_hill_checkpoint_gpu1.json"
       ],
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted."
     },
     {
       "path": "tools/legacy/decode_best_key.py",
@@ -1014,15 +1024,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/keyword_stepped_stream.py",
       "source_docstring_first_line": "Keyword-Stepped Prime Stream Cipher Test",
       "group_id": "keyword-prime-double-layer",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt"
       ],
       "related_site_records": [
-        "wulfic-keyword-prime-layer-grid"
+        "wulfic-prime-keyword-stream-families"
       ],
-      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+      "remaining_work": "Source keyword-stepped stream and finite offset screen replayed; other arithmetic streams are outside scope."
     },
     {
       "path": "tools/legacy/lfsr4_fast.py",
@@ -1111,16 +1121,17 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lp_crib_drag.py",
       "source_docstring_first_line": "LP Word-Boundary Crib Drag",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "partial",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt",
         "data/gpu_hill_checkpoint_gpu1.json"
       ],
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted."
     },
     {
       "path": "tools/legacy/monitor_gpu_output.py",
@@ -1366,7 +1377,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_keyword_sweep.py",
       "source_docstring_first_line": "Systematic test: ALL P63 keywords × ALL modes on ALL P21-30 pages.",
       "group_id": "keyword-prime-double-layer",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "\nSystematic test: ALL P63 keywords × ALL modes on ALL P21-30 pages.\nAlso compare with verified_keys.json to find the real source of high IoC claims.\n",
@@ -1374,9 +1385,9 @@
         "data/verified_keys.json"
       ],
       "related_site_records": [
-        "wulfic-keyword-prime-layer-grid"
+        "wulfic-prime-keyword-stream-families"
       ],
-      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+      "remaining_work": "Source repeating-keyword grid replayed on corrected page identities; this is an opening/singleton screen, not a verified decryption."
     },
     {
       "path": "tools/legacy/p21_30_rearrange.py",
@@ -1392,9 +1403,10 @@
         "data/wordlist.txt"
       ],
       "related_site_records": [
+        "wulfic-keyed-transposition-cohort",
         "lp2-row-column-routes"
       ],
-      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+      "remaining_work": "transposition_solver.py has a source-exact fixed-key route replay on its actual LP2-04–13 inputs. Its four sibling scripts use different word/optimizer gates or absent source inputs; their additional branches remain open."
     },
     {
       "path": "tools/legacy/p21_30_second_layer.py",
@@ -1422,9 +1434,10 @@
         "/runes.txt"
       ],
       "related_site_records": [
+        "wulfic-keyed-transposition-cohort",
         "lp2-row-column-routes"
       ],
-      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+      "remaining_work": "transposition_solver.py has a source-exact fixed-key route replay on its actual LP2-04–13 inputs. Its four sibling scripts use different word/optimizer gates or absent source inputs; their additional branches remain open."
     },
     {
       "path": "tools/legacy/p21_30_verified_rearrange.py",
@@ -1441,9 +1454,10 @@
         "data/wordlist.txt"
       ],
       "related_site_records": [
+        "wulfic-keyed-transposition-cohort",
         "lp2-row-column-routes"
       ],
-      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+      "remaining_work": "transposition_solver.py has a source-exact fixed-key route replay on its actual LP2-04–13 inputs. Its four sibling scripts use different word/optimizer gates or absent source inputs; their additional branches remain open."
     },
     {
       "path": "tools/legacy/p21_refined_subsweep.py",
@@ -1633,15 +1647,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/period_crib_solve.py",
       "source_docstring_first_line": "Period-Constrained Crib Dragging Solver",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "replayed_source_with_control_limit",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt"
       ],
       "related_site_records": [
-        "periodic-affine-crib-capacity"
+        "wulfic-periodic-word-crib-votes"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "Two archived example page/period source outputs reproduced; held-out exact-word check found zero, but planted controls failed the predeclared recovery gate."
     },
     {
       "path": "tools/legacy/populate_runes.py",
@@ -1665,15 +1679,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/prime_stream_solver.py",
       "source_docstring_first_line": "Prime Stream Cipher Solver — Liber Primus Pages 21-54",
       "group_id": "keyword-prime-double-layer",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt"
       ],
       "related_site_records": [
-        "wulfic-keyword-prime-layer-grid"
+        "wulfic-prime-keyword-stream-families"
       ],
-      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+      "remaining_work": "Source prime generators, F-skip and screen replayed; permissive hits are not plaintext readings."
     },
     {
       "path": "tools/legacy/rank_anchored_results.py",
@@ -1706,9 +1720,10 @@
         "No runes.txt for page 21"
       ],
       "related_site_records": [
+        "wulfic-keyed-transposition-cohort",
         "lp2-row-column-routes"
       ],
-      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+      "remaining_work": "transposition_solver.py has a source-exact fixed-key route replay on its actual LP2-04–13 inputs. Its four sibling scripts use different word/optimizer gates or absent source inputs; their additional branches remain open."
     },
     {
       "path": "tools/legacy/refine_verified_keys.py",
@@ -1989,16 +2004,16 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/transposition_solver.py",
       "source_docstring_first_line": "Comprehensive Transposition Solver for P21-30 (and P31-54)",
       "group_id": "transposition-rearrangement",
-      "triage": "partial",
+      "triage": "replayed_source_bounded",
       "literal_page_paths": [],
       "literal_data_references": [
         "runes.txt",
         "wordlist.txt"
       ],
       "related_site_records": [
-        "lp2-row-column-routes"
+        "wulfic-keyed-transposition-cohort"
       ],
-      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+      "remaining_work": "Entire source solve_page loop replayed on ten byte-aligned streams, with 80 planted route controls. Source best-score rows are not readings; four sibling scripts remain separate."
     },
     {
       "path": "tools/legacy/ttp_crib_drag.py",
@@ -2006,15 +2021,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/ttp_crib_drag.py",
       "source_docstring_first_line": "TTP Crib Driver — exploit two-time-pad constraints to confirm crib positions.",
       "group_id": "two-time-pad-cribs",
-      "triage": "candidate_finite",
+      "triage": "replayed_source_premise_only",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt"
       ],
       "related_site_records": [
-        "leo-shared-key-differences"
+        "wulfic-two-time-pad-premise"
       ],
-      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+      "remaining_work": "Claimed P27/P44 prefix checked on corrected source pages; downstream crib dragging was not scored after the prefix failed."
     },
     {
       "path": "tools/legacy/twotime_crib.py",
@@ -2022,15 +2037,15 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_crib.py",
       "source_docstring_first_line": "Two-Time-Pad Crib Dragging Attack on Liber Primus P21-P54",
       "group_id": "two-time-pad-cribs",
-      "triage": "candidate_finite",
+      "triage": "replayed_source_premise_only",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt"
       ],
       "related_site_records": [
-        "leo-shared-key-differences"
+        "wulfic-two-time-pad-premise"
       ],
-      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+      "remaining_work": "Named identical-ciphertext spans checked against the exact source stream; downstream shared-key crib placements were not scored."
     },
     {
       "path": "tools/legacy/twotime_pad_analysis.py",
@@ -2038,7 +2053,7 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_pad_analysis.py",
       "source_docstring_first_line": "Two-Time Pad Detection & Running Key Analysis for Liber Primus",
       "group_id": "two-time-pad-cribs",
-      "triage": "candidate_finite",
+      "triage": "replayed_source_screen_and_premise",
       "literal_page_paths": [],
       "literal_data_references": [
         "deor_poem.txt",
@@ -2049,9 +2064,9 @@
         "self_reliance.txt"
       ],
       "related_site_records": [
-        "leo-shared-key-differences"
+        "wulfic-two-time-pad-premise"
       ],
-      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+      "remaining_work": "Named period/alignment premise and all 1,122 page-pair operation scores replayed; other running-key branches remain outside this record."
     },
     {
       "path": "tools/legacy/update_anchors.py",
@@ -2074,16 +2089,17 @@
       "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/validate_crib_candidates.py",
       "source_docstring_first_line": "validate_crib_candidates.py — Cross-check a crib candidate against the",
       "group_id": "periodic-crib-constraints",
-      "triage": "candidate_finite",
+      "triage": "partial",
       "literal_page_paths": [],
       "literal_data_references": [
         "/runes.txt",
         "data/gpu_hill_checkpoint_gpu1.json"
       ],
       "related_site_records": [
+        "wulfic-periodic-word-crib-votes",
         "periodic-affine-crib-capacity"
       ],
-      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+      "remaining_work": "period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted."
     },
     {
       "path": "tools/legacy/verify_circumference.py",
@@ -2157,9 +2173,10 @@
         "wordlist.txt"
       ],
       "related_site_records": [
-        "wulfic-keyword-prime-layer-grid"
+        "wulfic-keyword-prime-layer-grid",
+        "wulfic-prime-keyword-stream-families"
       ],
-      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+      "remaining_work": "The combined layer and three additional finite prime/keyword script grids have bounded replays. verify_keyword_ioc.py and any untested screen or key interpretation remain open."
     },
     {
       "path": "tools/legacy/word_refine.py",

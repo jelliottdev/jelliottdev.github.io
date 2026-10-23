@@ -1,4 +1,5 @@
-"""Check every experiment archive and rerun representative scripts in isolation."""
+"""Check experiment archives and rerun representative scripts in isolation."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -10,9 +11,103 @@ from verify_bundle import verify
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# These are rebuilt from the registry/content during a release. They are not
+# inputs to the experiment bundles unless a record explicitly declares one.
+GENERATED_RELEASE_OUTPUTS = {
+    'data/catalog.json',
+    'data/experiment-index.json',
+    'data/articles.json',
+    'data/article-search.json',
+    'data/guide-index.json',
+    'data/method-families.json',
+    'downloads/SHA256SUMS.txt',
+    'downloads/reference-data.zip',
+}
 
-def main():
+
+def _git(root, *args):
+    return subprocess.run(['git', '-C', str(root), *args], capture_output=True, check=True)
+
+
+def select_records(root, records, ref):
+    """Return (selected IDs, reason); uncertainty selects all, never a subset."""
+    all_ids = {record['id'] for record in records}
+    try:
+        top = Path(_git(root, 'rev-parse', '--show-toplevel').stdout.decode().strip()).resolve()
+        if top != root.resolve():
+            raise ValueError('validation root is not the Git repository root')
+        commit = _git(root, 'rev-parse', '--verify', '--end-of-options',
+                      f'{ref}^{{commit}}').stdout.decode().strip()
+        base = json.loads(_git(root, 'show', f'{commit}:data/experiments.json').stdout)['records']
+        diff = _git(root, 'diff', '--name-only', '-z', '--no-ext-diff', commit, '--').stdout
+        staged = _git(root, 'diff', '--cached', '--name-only', '-z', '--no-ext-diff', commit, '--').stdout
+        untracked = _git(root, 'ls-files', '--others', '--exclude-standard', '-z').stdout
+    except (OSError, subprocess.CalledProcessError, ValueError, KeyError,
+            UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return all_ids, f'full fallback: cannot establish a safe Git baseline ({exc})'
+
+    base_by_id = {record['id']: record for record in base}
+    current_by_id = {record['id']: record for record in records}
+    if len(base_by_id) != len(base) or len(current_by_id) != len(records):
+        return all_ids, 'full fallback: duplicate record ID in a registry'
+    if set(base_by_id) - all_ids:
+        return all_ids, 'full fallback: record removed since baseline'
+
+    selected = {identifier for identifier, record in current_by_id.items()
+                if record != base_by_id.get(identifier)}
+    changed = {name.decode('utf-8').replace('\\', '/') for output in (diff, staged, untracked)
+               for name in output.split(b'\0') if name}
+    dependencies = {}
+    for registry in (base, records):
+        for record in registry:
+            script = record.get('reproduction', {}).get('script')
+            if script:
+                dependencies.setdefault(script, set()).add(record['id'])
+            for item in record.get('reproduction', {}).get('inputs', []) + record.get('reproduction', {}).get('outputs', []):
+                dependencies.setdefault(item['path'], set()).add(record['id'])
+            for item in record.get('scope', {}).get('artifacts', []):
+                dependencies.setdefault(item, set()).add(record['id'])
+
+    for name in changed:
+        if name == 'data/experiments.json':
+            continue  # Each record is compared with the baseline registry above.
+        if name.startswith('scripts/') or name.startswith(('experiments/engines/', 'experiments/suites/')):
+            return all_ids, f'full fallback: shared validator or engine changed ({name})'
+        if name == 'downloads/original-images.zip':
+            return all_ids, 'full fallback: shared original-image archive changed'
+        matched = dependencies.get(name)
+        if matched:
+            selected.update(matched & all_ids)
+        parts = name.split('/')
+        if len(parts) >= 4 and parts[:2] == ['experiments', 'records']:
+            if parts[2] in all_ids:
+                selected.add(parts[2])
+            continue
+        if len(parts) == 3 and parts[:2] == ['downloads', 'experiments'] and name.endswith('.zip'):
+            identifier = name.rsplit('/', 1)[-1][:-4]
+            if identifier in all_ids:
+                selected.add(identifier)
+            continue
+        if matched or name in GENERATED_RELEASE_OUTPUTS:
+            continue
+        elif name.startswith(('data/', 'downloads/', 'experiments/')):
+            return all_ids, f'full fallback: unclassified shared input changed ({name})'
+    return selected, f'changed since {commit[:12]}'
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--changed-from', metavar='REF', help='validate only safely affected bundles since REF')
+    args = parser.parse_args(argv)
     records = json.loads((ROOT / "data/experiments.json").read_text(encoding="utf-8"))["records"]
+    if args.changed_from:
+        selected, reason = select_records(ROOT, records, args.changed_from)
+    else:
+        selected, reason = {record['id'] for record in records}, 'full validation (default/CI)'
+    print(f'Experiment bundles: selected {len(selected)}/{len(records)} ({reason})', flush=True)
+    if not selected:
+        print('PASS: no experiment bundles changed; default/CI still validates all bundles.')
+        return
     with zipfile.ZipFile(ROOT / 'downloads/original-images.zip') as original_archive:
         shared_originals = {item['path']: item for item in
                             json.loads(original_archive.read('ORIGINAL-IMAGES-CONTENTS.json'))}
@@ -21,6 +116,8 @@ def main():
         assert workspace.is_relative_to(ROOT.parent.resolve()) and workspace != ROOT
         for record in records:
             experiment_id = record["id"]
+            if experiment_id not in selected:
+                continue
             target = workspace / experiment_id
             target.mkdir()
             with zipfile.ZipFile(ROOT / "downloads/experiments" / f"{experiment_id}.zip") as archive:
@@ -77,8 +174,8 @@ def main():
                     result = subprocess.run([sys.executable, str(target / script), *args], cwd=target,
                                             capture_output=True, text=True, encoding="utf-8", timeout=60)
                     assert result.returncode == 0, (experiment_id, script, result.stdout + result.stderr)
-        print(f"PASS: all {len(records)} experiment bundles preserve declared files and hashes; "
-              "selected numeric, trigram, reverse-add and corpus-control runners/checkers pass in isolated extractions.")
+        print(f"PASS: selected {len(selected)}/{len(records)} experiment bundles preserve declared files and hashes; "
+              "applicable representative runners/checkers pass in isolated extractions.")
 
 
 if __name__ == "__main__":

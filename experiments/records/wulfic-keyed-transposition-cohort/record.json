@@ -1,0 +1,146 @@
+{
+  "id": "wulfic-keyed-transposition-cohort",
+  "status": "published",
+  "title": "Archived keyword-and-route transposition search",
+  "question": "What did the pinned ten-page keyword and rearrangement program actually test, and did its own scoring rule recognize words?",
+  "reader_question": "Does rearranging these keyed pages produce a reading?",
+  "summary": "The pinned program scores 585 selected route rows on its actual LP2-04–13 inputs. Every row has zero word matches; the higher values are bigram scores on unbroken text.",
+  "finding": "All ten archived page files match LP2-04–13 rune for rune, although the program calls them pages 21–30. Its keyword-column and magic-square planted inversions, and six other permutation properties, pass 80 controls. None of the 585 reported route rows produces a word match under its own embedded-word scorer. The source still exhaustively scores short-key column orders before retaining one best row per eligible page.",
+  "limitations": "The page keywords are proposals. The source scores unbroken GP runeglish, has no optional external wordlist in the pinned tree, and does not actually call the Myszkowski or disrupted methods advertised in comments. Other key schedules, segmentation rules, languages, page mappings and transpositions are outside this result.",
+  "next_steps": "Specify a page/keyword link independently and a word-boundary or held-out plaintext criterion before treating a ranked route as a decryption candidate.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source-derived test",
+    "transposition",
+    "keyword",
+    "route cipher",
+    "source audit"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-keyed-transposition-cohort/plan.json"
+    ],
+    "representation": "Exact GP29 rune sequence from pinned Wulfic global page_21–30 files, aligned to current LP2-04–13 JSON. Source unbroken runeglish and 95-word embedded fallback.",
+    "procedure": "Execute the pinned source's own solve_page loop for each aligned page with its fixed keyword/mode; retain every reported row and planted route controls.",
+    "parameters": "Ten fixed source page/key/mode assignments; all column permutations for source keywords of at most seven letters; source-listed fixed widths, rails, grid routes, prime extraction, every-nth and reversal.",
+    "exclusions": "No arbitrary key search, other current LP2 pages, new segmentation, alternative English model, Myszkowski or disrupted transposition, and no inference from a best score to a decipherment."
+  },
+  "review": {
+    "kind": "source-defined bounded replay and source-input audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact pinned source digest; all ten archived/current rune alignments; 80 planted route controls; independent baseline and source-result structural checks",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-keyed-transposition-cohort/run.py --check --source-file PATH_TO_PINNED_SCRIPT",
+    "environment": "Python 3 standard library and an exact pinned public source file (or network access to its pinned GitHub URL). Source SHA-256 is checked before execution.",
+    "script": "experiments/records/wulfic-keyed-transposition-cohort/check.py",
+    "script_sha256": "e13e7c3b9a40471ab2f4b252208bd47de079631ddfbaf625b75a237a7adac900",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/plan.json",
+        "sha256": "b7fee2b8d39978c64f4af33a9b60f2891f5477c62af8321e53cae2f5e848bd8d"
+      },
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/run.py",
+        "sha256": "3d00a48de271e64c8544d75d1005f600353834e3bc140f9e5127665000083267"
+      },
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/check.py",
+        "sha256": "e13e7c3b9a40471ab2f4b252208bd47de079631ddfbaf625b75a237a7adac900"
+      },
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/plot.py",
+        "sha256": "2e1d739bb80675a43e1748c87f15f00443ea0e238cb42e84b5d0217841242ec9"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/inputs.json",
+        "sha256": "9eeda9e7ade984554138479cb6eaf8f83f1818b1c0a49278eedf5c48e643514a"
+      },
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/results.json",
+        "sha256": "fde8d0b7ff87355a1d4ec7c1384efae25aef5c0e567f3bf85020216900507498"
+      },
+      {
+        "path": "experiments/records/wulfic-keyed-transposition-cohort/comparison.svg",
+        "sha256": "76883a7ad7fcebee68480264e18f3c9d491913c6710b3588497307801a2601dc"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-keyed-transposition-cohort/comparison.svg",
+      "caption": "On each actual target page, a selected route raises the bigram score, yet every source output has zero recognized words."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic transposition program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/transposition_solver.py"
+    },
+    {
+      "label": "Pinned Wulfic legacy-method caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "lp2-row-column-routes",
+    "wulfic-adfgvx-fractionation",
+    "lp2-word-order-reversal"
+  ]
+}
