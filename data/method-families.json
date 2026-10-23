@@ -64,7 +64,10 @@
         "lp2-53-red-known-keys",
         "wholepage-known-vigenere-keys",
         "historical-prime-and-ps-keys",
-        "mutated-dictionary-key-openings"
+        "mutated-dictionary-key-openings",
+        "periodic-affine-crib-capacity",
+        "wholepage-progressive-caesar",
+        "wholepage-public-wordlist"
       ],
       "description": "Change the substitution according to position in a repeated key."
     },
@@ -314,7 +317,8 @@
         "h03-ps-layout-replay",
         "line-initial-layout-control",
         "solved-text-selection-source-gate",
-        "prime-fibonacci-position-extraction"
+        "prime-fibonacci-position-extraction",
+        "fixed-step-position-extraction"
       ],
       "description": "Select positions using a mask or indexing rule."
     },
@@ -679,7 +683,8 @@
         "lp2-23-red-sum-claim",
         "grid-prefix-split-openings",
         "decimal-chain-opening-cribs",
-        "mutated-dictionary-key-openings"
+        "mutated-dictionary-key-openings",
+        "periodic-affine-crib-capacity"
       ],
       "description": "Use a declared plaintext hypothesis to constrain a defined cipher model."
     },
@@ -763,7 +768,8 @@
       "related": [
         "lp2-31-periodic-ioc",
         "lp2-31-row-shuffle-ioc",
-        "lp2-00-02-lag35-selection"
+        "lp2-00-02-lag35-selection",
+        "fixed-step-position-extraction"
       ],
       "description": "Measure position-dependent patterns with matched null models and correction for searched periods."
     },
@@ -1075,7 +1081,9 @@
         "SMT solvers",
         "constraint solvers"
       ],
-      "related": [],
+      "related": [
+        "periodic-affine-crib-capacity"
+      ],
       "description": "Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search."
     },
     {
@@ -1093,7 +1101,9 @@
         "rotating alphabet",
         "changing alphabet"
       ],
-      "related": [],
+      "related": [
+        "wholepage-progressive-caesar"
+      ],
       "description": "Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping."
     },
     {
@@ -1349,6 +1359,10 @@
     "wholepage-known-vigenere-keys": "method",
     "prime-fibonacci-position-extraction": "method",
     "wholepage-affine-gp29": "method",
-    "mutated-dictionary-key-openings": "method"
+    "mutated-dictionary-key-openings": "method",
+    "fixed-step-position-extraction": "method",
+    "periodic-affine-crib-capacity": "control",
+    "wholepage-progressive-caesar": "method",
+    "wholepage-public-wordlist": "method"
   }
 }

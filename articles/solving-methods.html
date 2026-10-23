@@ -12,7 +12,7 @@
 <section class="method-family" id="family-homophonic"><h3><a href="#/wiki/method-homophonic">Homophonic and many-to-one substitutions</a></h3><p>Allow several ciphertext symbols to represent the same plaintext symbol.</p>
 </section>
 <section class="method-family" id="family-polyalphabetic"><h3><a href="#/wiki/vigenere">Repeating-key and polyalphabetic ciphers</a></h3><p>Change the substitution according to position in a repeated key.</p>
-<details><summary>12 related records</summary><ul>
+<details><summary>15 related records</summary><ul>
 <li><a href="#/experiments/lp2-known-vigenere-keys">LP2-00–55: two known Vigenère keys and nine openings</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/alberti-branch-arithmetic">Alberti branch proposal: LP2-39 row and modulo-31 arithmetic</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/public-wordlist-vigenere">Public 43-key Vigenère sweep</a> <span class="small muted">· Method replay</span></li>
@@ -25,6 +25,9 @@
 <li><a href="#/experiments/wholepage-known-vigenere-keys">Two known LP1 keys across complete LP2 pages</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/historical-prime-and-ps-keys">Earlier puzzle numbers as LP2 rune keys</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/mutated-dictionary-key-openings">One-rune changes to public dictionary keys</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/periodic-affine-crib-capacity">How many periodic affine keys can fit a twelve-rune opening?</a> <span class="small muted">· Control</span></li>
+<li><a href="#/experiments/wholepage-progressive-caesar">Progressive Caesar shifts on complete LP2 pages</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/wholepage-public-wordlist">Public wordlist keys on complete LP2 pages</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-fractionation"><h3><a href="#/wiki/method-fractionation">Fractionation and coordinate alphabets</a></h3><p>Split symbols into coordinates, rearrange the components, then regroup.</p>
@@ -134,6 +137,9 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-moving-alphabets"><h3><a href="#/wiki/method-moving-alphabets">Moving disks, rotors and evolving alphabets</a></h3><p>Change the substitution through an explicit offset or alphabet-update rule, with declared state and stepping.</p>
+<details><summary>1 related record</summary><ul>
+<li><a href="#/experiments/wholepage-progressive-caesar">Progressive Caesar shifts on complete LP2 pages</a> <span class="small muted">· Bounded solving test</span></li>
+</ul></details>
 </section>
 </div></details></section>
 <section class="method-group"><h2 id="order-and-selection">Order and selection</h2><details><summary>9 method families</summary><div class="method-family-list">
@@ -154,11 +160,12 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-grilles"><h3><a href="#/wiki/method-positional-extraction">Grilles and positional extraction</a></h3><p>Select positions using a mask or indexing rule.</p>
-<details><summary>4 related records</summary><ul>
+<details><summary>5 related records</summary><ul>
 <li><a href="#/experiments/h03-ps-layout-replay">2012 P.S. digit-block layout readings</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/line-initial-layout-control">Do positional runes in LP2 hide a message?</a> <span class="small muted">· Method replay</span></li>
 <li><a href="#/experiments/solved-text-selection-source-gate">Solved-text selections: what the source controls prove</a> <span class="small muted">· Source or input audit</span></li>
 <li><a href="#/experiments/prime-fibonacci-position-extraction">Runes at prime and Fibonacci positions</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/fixed-step-position-extraction">Reading every nth rune</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-acrostics"><h3><a href="#/wiki/method-acrostics">Acrostics and boundary-letter extraction</a></h3><p>Select initial, final or regularly indexed symbols from defined units.</p>
@@ -339,7 +346,7 @@
 </ul></details>
 </section>
 <section class="method-family" id="family-cribs"><h3><a href="#/wiki/method-cribs">Known plaintext and crib searches</a></h3><p>Use a declared plaintext hypothesis to constrain a defined cipher model.</p>
-<details><summary>16 related records</summary><ul>
+<details><summary>17 related records</summary><ul>
 <li><a href="#/experiments/seed-crib-controls">Does matching the opening text identify a seed?</a> <span class="small muted">· Control</span></li>
 <li><a href="#/experiments/lp2-39-header-cribs">LP2-39: twenty proposed red-header cribs</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/word-sum-corpus-control">LP1 square: dictionary candidate space for the selected phrase</a> <span class="small muted">· Control</span></li>
@@ -356,6 +363,7 @@
 <li><a href="#/experiments/grid-prefix-split-openings">Grid prefix channels as repeating rune keys</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/decimal-chain-opening-cribs">Five-digit chain-addition keys</a> <span class="small muted">· Bounded solving test</span></li>
 <li><a href="#/experiments/mutated-dictionary-key-openings">One-rune changes to public dictionary keys</a> <span class="small muted">· Bounded solving test</span></li>
+<li><a href="#/experiments/periodic-affine-crib-capacity">How many periodic affine keys can fit a twelve-rune opening?</a> <span class="small muted">· Control</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-automatic-search"><h3><a href="#/wiki/method-automatic-search">Automatic search and language scoring</a></h3><p>Explore a bounded model with a scorer whose ability and false positives have been checked.</p>
@@ -373,14 +381,18 @@
 <section class="method-family" id="family-ai"><h3><a href="#/wiki/method-ai-readings">AI-assisted candidate interpretation</a></h3><p>Treat generated readings as proposals requiring independent, reproducible checks.</p>
 </section>
 <section class="method-family" id="family-constraints"><h3><a href="#/wiki/method-constraints">Constraint solving, SAT and SMT</a></h3><p>Encode an explicit model and ask which assignments satisfy it; distinguish contradiction, non-uniqueness and an unfinished search.</p>
+<details><summary>1 related record</summary><ul>
+<li><a href="#/experiments/periodic-affine-crib-capacity">How many periodic affine keys can fit a twelve-rune opening?</a> <span class="small muted">· Control</span></li>
+</ul></details>
 </section>
 </div></details></section>
 <section class="method-group"><h2 id="diagnosis-and-validation">Diagnosis and validation</h2><details><summary>6 method families</summary><div class="method-family-list">
 <section class="method-family" id="family-periodicity"><h3><a href="#/wiki/periodic-ioc">Period and key-length diagnostics</a></h3><p>Measure position-dependent patterns with matched null models and correction for searched periods.</p>
-<details><summary>3 related records</summary><ul>
+<details><summary>4 related records</summary><ul>
 <li><a href="#/experiments/lp2-31-periodic-ioc">LP2-31: periodic IoC for periods 2-20</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/lp2-31-row-shuffle-ioc">LP2-31: periodic IoC with within-row shuffles</a> <span class="small muted">· Manuscript measurement</span></li>
 <li><a href="#/experiments/lp2-00-02-lag35-selection">The LP2 opening section’s lag-35 peak</a> <span class="small muted">· Manuscript measurement</span></li>
+<li><a href="#/experiments/fixed-step-position-extraction">Reading every nth rune</a> <span class="small muted">· Bounded solving test</span></li>
 </ul></details>
 </section>
 <section class="method-family" id="family-repetition"><h3><a href="#/wiki/rune-ngrams">Repeats, doublets and word structure</a></h3><p>Test structural constraints without automatically converting them into a cipher identification.</p>

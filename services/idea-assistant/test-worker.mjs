@@ -106,14 +106,16 @@ for(const [query,expected] of [
  ['Fibonacci on LP2-31','lp2-fibonacci-openings'],
  ['reverse words on LP2-31','lp2-word-reversal'],
  ['reverse word order on LP2-31','lp2-word-order-reversal'],
- ['OutGuess on LP2-31',['outguess-default-key','outguess-guard-sweep']],
+ ['OutGuess on LP2-31','outguess-keyed-lp2'],
+ ['keyed OutGuess on LP2-31','outguess-keyed-lp2'],
+ ['OutGuess without a key','outguess-default-key'],
 ]){
  const response=await realHandler(request(query),realEnv);
  assert.equal(response.status,200);
  const first=(await response.json()).sources[0].id;
- assert((Array.isArray(expected)?expected:[expected]).includes(first));
+ assert((Array.isArray(expected)?expected:[expected]).includes(first), `${query}: unexpected leading source ${first}`);
 }
-assert.equal(realCalls,4);
+assert.equal(realCalls,6);
 for(const query of ['dead tree on LP2-55']){
  assert.equal((await (await realHandler(request(query),realEnv)).json()).reason,'no-matching-records',query);
 }
@@ -124,5 +126,5 @@ for(const [query,expected] of [['trigrams on LP2-31','lp2-trigram-repeats'],
  assert.equal(response.sources[0].id,expected,query);
 }
 assert.equal((await (await realHandler(request('has anyone tried LP2-31'),realEnv)).json()).reason,'no-matching-records');
-assert.equal(realCalls,7);
+assert.equal(realCalls,9);
 console.log('PASS: current published experiments retain complete scope through the hosted handler; page-only queries still skip inference. Model binding mocked.');

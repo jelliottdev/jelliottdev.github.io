@@ -150,7 +150,7 @@ for(const record of published){
   assert(downloads.includes(`href="${output.path}" download`),'A readable result must be directly downloadable');
  }
  assert(rendered.includes('href="downloads/reference-data.zip" download'));
- assert.equal(rendered.includes('href="downloads/original-images.zip" download'),record.reproduction.inputs.some(f=>/\.(jpe?g|png)$/i.test(f.path)));
+ assert.equal(rendered.includes('href="downloads/original-images.zip" download'),record.reproduction.inputs.some(f=>/^images\/.*\.(jpe?g|png)$/i.test(f.path)));
  const family=rendered.indexOf('aria-label="Experiment family comparison"');
  if(family>=0)assert(family>rendered.indexOf('id="experiment-reproduce"'));
 }
@@ -186,7 +186,9 @@ assert.equal(Search.supporting(liveDocs,'Could Beaufort ciphertext autokey expla
 assert.equal(Search.experiments(liveDocs,'totient of rune values on LP2-31')[0].document.id,totient.id);
 assert.equal(Search.experiments(liveDocs,'Fibonacci on LP2-31')[0].document.id,'lp2-fibonacci-openings');
 assert.deepEqual(new Set(Search.experiments(liveDocs,'OutGuess on LP2-31').slice(0,2).map(r=>r.document.id)),
- new Set(['outguess-default-key','outguess-guard-sweep']),'Generic OutGuess retrieval should expose both baseline and guarded-build records');
+ new Set(['outguess-keyed-lp2','outguess-guard-sweep']),'Generic OutGuess retrieval should expose keyed probes and their guarded-build baseline');
+assert.equal(Search.experiments(liveDocs,'OutGuess without a key')[0].document.id,'outguess-default-key');
+assert.equal(Search.experiments(liveDocs,'keyed OutGuess on LP2-31')[0].document.id,'outguess-keyed-lp2');
 assert.equal(Search.experiments(liveDocs,'has anyone tried LP2-31').length,0);
 console.log('PASS: method and exclusions remain available in details; mixed page requests disclose uncovered pages; real-record lexical retrieval stays separate from proof of identical scope.');
 for(const query of ['Have we tried checking if its a different language than English?',
@@ -204,7 +206,7 @@ console.log('PASS: natural-language comparison queries reach the language measur
 for(const query of ["English scorer", "quadgrams shuffled controls"]){
  assert.equal(Search.supporting(liveDocs,query)[0].document.id,"english-scorer-controls",query);
 }
-for(const query of ['scorer calibration','alias collapse matched scorer','rune matched scorer']){
+for(const query of ['scorer calibration','alias collapse matched scorer','rune matched scorer calibration']){
  assert.equal(Search.supporting(liveDocs,query)[0].document.id,'rune-matched-scorer-calibration',query);
  assert.equal(Search.experiments(liveDocs,query).length,0,'Scorer calibration is supporting evidence, not a cipher test');
 }
