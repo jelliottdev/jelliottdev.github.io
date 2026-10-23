@@ -1,0 +1,137 @@
+{
+  "id": "h03-ps-layout-replay",
+  "status": "published",
+  "title": "2012 P.S. digit-block layout readings",
+  "question": "Do the fixed column and line readings of the 2012 P.S. digit block reveal printable pair-ASCII text or a pinned longer constant?",
+  "reader_question": "Does turning the 2012 P.S. number block into columns reveal a message?",
+  "summary": "Six bare-block and four indented-layout readings of the original 131 digits all fail the calibrated text-shape and pinned-constant screens. Two four-digit motifs appear only in separate indented routes.",
+  "finding": "No reading reaches 95% printable digit-pair ASCII or contains a pinned longer constant. The bare block has no 3301 or 1033 motif; the five-column indented variant places one in each of two different routes. Ten planted messages pass; 200 random blocks produce no hits at the amended gate.",
+  "limitations": "This is a fixed-layout test, not a proof that the historical message contains no other hidden content. The five-column visual-indent extension was disclosed after the bare-block negative. Short four-digit motifs were report-only and do not establish a decoded message.",
+  "next_steps": "A new P.S. reading should state its physical layout and success rule before examining results, then run the same control on random digit blocks.",
+  "outcome": "not-supported",
+  "tags": [
+    "2012",
+    "P.S.",
+    "historical message",
+    "digit block",
+    "column reading",
+    "matrix",
+    "ASCII",
+    "source replay",
+    "control calibration"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/h03-ps-layout-replay/source/ky_2012-01-final-message.asc",
+      "experiments/records/h03-ps-layout-replay/source-manifest.json"
+    ],
+    "representation": "The three original backslash-continued P.S. digit lines (40+45+46=131 digits) from the pinned 2012 signed-message text; second variant preserves the five-column visual indent of P.S. and a following space.",
+    "procedure": "Read bare lines in four column directions, concatenation and reversal; repeat four column directions with a five-column indent on the first line. For each, test both two-digit pair alignments for printable ASCII fraction >=95%, longer pinned constants and report-only short motifs/compositeness.",
+    "parameters": "Six bare and four indented readings; two pair alignments; ten planted readable blocks; 200 random 131-digit three-line controls. The source raised its initial 80% cutoff to 95% after the negative control failed and before real-data screening.",
+    "exclusions": "Arbitrary column widths, digit substitutions/reordering, other encodings, running keys, additional source messages and any interpretation of a four-digit motif alone as a hit."
+  },
+  "review": {
+    "reviewer": "Independent primary-text extraction, route reconstruction and separately written checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/h03-ps-layout-replay/run.py && python experiments/records/h03-ps-layout-replay/check.py",
+    "environment": "Python 3 standard library; all pinned source bytes bundled, no network call needed.",
+    "script": "experiments/records/h03-ps-layout-replay/run.py",
+    "script_sha256": "7cf5bcc6df9a5a32dc15a7d74043afefa5bd2942165cc8918af97cde2f375e9b",
+    "inputs": [
+      {
+        "path": "experiments/records/h03-ps-layout-replay/run.py",
+        "sha256": "7cf5bcc6df9a5a32dc15a7d74043afefa5bd2942165cc8918af97cde2f375e9b"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/check.py",
+        "sha256": "31f9c6996c008bd915a1af6fa7c6a463ae44da6014b341048f5f381034e85d32"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source-manifest.json",
+        "sha256": "0ead324a74b9b9bbca1b6f3c6c7c2d0a3a1afe527ee14076b54a3786fd61c05f"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/ky_2012-01-final-message.asc",
+        "sha256": "9580bf80f70b304d8bf0fc16a519839661d85ce436fa56ab888ea579149dc564"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/PREREG.md",
+        "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/RESULTS.md",
+        "sha256": "fffa904290616fa02c77104b5349bd004f5fe5131fd506e7841fd68f45a26df7"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/l5_payload_micro.py",
+        "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/h03r_indented.py",
+        "sha256": "2f563b9bddf8d3e7b6fe9c265ce19a2cacca623ee4206d3f1f708b3c24d2e02e"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/results.json",
+        "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/h03-ps-layout-replay/results.json",
+        "sha256": "0cd3f845c5a96e76b2f52498e8050f0887b5ee888bcb450ebf8862d771736080"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/readings.svg",
+        "sha256": "ee8953bf99602d73667616a24069e40c2cb4690039eda5fa20a15b4ff76f75e7"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/h03-ps-layout-replay/readings.svg",
+      "caption": "Printable-pair proportions for ten physical-layout readings, shown against the amended 95% gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned 2012 signed-message text",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/A-primary-artifacts/pgp/messages/ky_2012-01-final-message.asc"
+    },
+    {
+      "label": "Source preregistration and amendments",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+    },
+    {
+      "label": "Source test code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+    },
+    {
+      "label": "Indented layout extension",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/h03r_indented.py"
+    },
+    {
+      "label": "Source reported results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/RESULTS.md"
+    }
+  ],
+  "related": [
+    "rsa-window-54-source-replay"
+  ],
+  "article": "## Finding\n\nThe 2012 closing message places **131 digits on three physical lines** after “P.S.” A proposed reading turns that ragged block by taking columns instead of lines. We replayed the six fixed readings of the digits alone and four more readings that preserve the **five-character “P.S. ” indent**. **None passes the amended 95% printable-pair screen or matches a pinned longer constant.**\n\n![Printable-pair scores for all ten fixed readings of the 2012 P.S. block.](experiments/records/h03-ps-layout-replay/readings.svg)\n\nThe often-mentioned short strings **“3301” and “1033” do not occur in any of the six bare-block readings**. When the visual indent is preserved, “3301” appears once in one column direction and “1033” once in another. They are separate four-digit matches, not a continuous decoded message. The surrounding pair-decoded text does not meet the screen: the indented readings range from **73.8% to 78.5%** printable, against the **95%** threshold. All ten derived 131-digit integers also have explicit compositeness witnesses; primality was a report-only observation, not a hit condition.\n\n## Why the 95% threshold matters\n\nThe source initially borrowed an **80% printable** cutoff from a test of arbitrary bytes. A pair of decimal digits can only be 00–99, and **68 of those 100 values** map to printable ASCII characters. The old cutoff therefore produced **37 route firings in 200 random blocks** in the source's own control, before the real P.S. block was tested. The source raised the threshold to **95%** and repeated its controls before examining the real readings. Our independent run also shows the problem: **61 old-cutoff route firings** across 200 newly generated random blocks, but **zero** at 95%. All **10 planted readable blocks** pass the amended gate.\n\nThe five-column indent was added as a disclosed extension **after** the six bare readings returned no hits. It is reasonable to inspect the physical layout, but a newly noticed four-digit match is not a predeclared success. We retain the observed strings as observations and apply the same fixed 95% gate to the extra four routes.\n\n## Exact scope and reproduction\n\nThe [pinned signed-message text](experiments/records/h03-ps-layout-replay/source/ky_2012-01-final-message.asc) supplies the three digit lines, of lengths **40, 45 and 46**. The source runner refers to a separate local corpus path absent from its pinned checkout; we used the pinned repository's `.asc` copy and verified that its extracted digits exactly match the source's saved results. The test covers only four directions of column reading, the joined lines and their reverse, plus the four indented column readings. It does not test arbitrary widths, rearranged digits, a different numeral encoding or an unknown running key.\n\nFrom the Liberpedia repository root, run:\n\n```text\npython experiments/records/h03-ps-layout-replay/run.py\npython experiments/records/h03-ps-layout-replay/check.py\n```\n\nThe [result](experiments/records/h03-ps-layout-replay/results.json) and [source manifest](experiments/records/h03-ps-layout-replay/source-manifest.json) include the exact input provenance. A separate checker reconstructs all ten routes from the physical lines, checks their scores and short-string counts, and compares them with the pinned source result.\n",
+  "article_path": "experiments/records/h03-ps-layout-replay/article.md",
+  "script_sha256": "7cf5bcc6df9a5a32dc15a7d74043afefa5bd2942165cc8918af97cde2f375e9b",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

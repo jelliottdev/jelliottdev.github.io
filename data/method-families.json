@@ -131,7 +131,8 @@
         "lp2-54-header-feedback",
         "cumulative-autokey-literal",
         "lp2-54-header-dictionary",
-        "feedback-opening-census"
+        "feedback-opening-census",
+        "block-lookahead-feedback"
       ],
       "description": "Use earlier plaintext or ciphertext to update later decoding state."
     },
@@ -147,7 +148,10 @@
       ],
       "related": [
         "seed-crib-controls",
-        "semantic-seed-screen-gate-audit"
+        "semantic-seed-screen-gate-audit",
+        "grid-payload-prf-seed-corner",
+        "grid-payload-prf-contested-masks",
+        "public-prng-seed-sweep"
       ],
       "description": "Generate a stream from a bounded seed space with explicit output conversion and alignment."
     },
@@ -269,7 +273,9 @@
         "skip counting",
         "positional extraction"
       ],
-      "related": [],
+      "related": [
+        "h03-ps-layout-replay"
+      ],
       "description": "Select positions using a mask or indexing rule."
     },
     {
@@ -545,7 +551,8 @@
         "public key"
       ],
       "related": [
-        "grid-openpgp-literal"
+        "grid-openpgp-literal",
+        "rsa-window-54-source-replay"
       ],
       "description": "Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism."
     },
@@ -941,7 +948,8 @@
       ],
       "related": [
         "single-rune-null-doublets",
-        "later-message-f-omission"
+        "later-message-f-omission",
+        "doublet-collision-edits"
       ],
       "description": "Remove declared symbols or positions while accounting for shortened output and changed alignment."
     },
@@ -1205,6 +1213,13 @@
     "lp2-turtle-spatial-replay": "replay",
     "public-wordlist-vigenere": "replay",
     "public-circumference-substitutions": "replay",
-    "semantic-seed-screen-gate-audit": "audit"
+    "semantic-seed-screen-gate-audit": "audit",
+    "block-lookahead-feedback": "replay",
+    "doublet-collision-edits": "control",
+    "grid-payload-prf-seed-corner": "replay",
+    "rsa-window-54-source-replay": "replay",
+    "grid-payload-prf-contested-masks": "replay",
+    "h03-ps-layout-replay": "replay",
+    "public-prng-seed-sweep": "replay"
   }
 }

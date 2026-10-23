@@ -20,6 +20,7 @@ jobs:
           node-version: '22'
       - run: python scripts/check_download_catalog.py
       - run: python scripts/test_download_catalog.py
+      - run: python scripts/test_staged_catalog.py
       - run: python scripts/test_export_reproducibility.py
       - run: python scripts/test_experiment_bundles.py
       - run: node services/idea-assistant/test-worker.mjs

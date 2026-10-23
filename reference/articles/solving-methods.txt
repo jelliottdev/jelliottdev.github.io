@@ -77,7 +77,7 @@ LP2-00–55: direct polynomial streams, degree at most eight · Bounded solving 
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-9 related records
+10 related records
 Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
 Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
@@ -96,15 +96,23 @@ LP2-54: dictionary check for simple autokey cribs · Method replay
 
 Feedback ciphers with fixed starting values · Bounded solving test
 
+Block-start lookahead feedback: zero-key completion · Method replay
+
 
 
 Seeded generators and generated keystreams
 Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
-2 related records
+5 related records
 Does matching the opening text identify a seed? · Control
 
 Semantic-seed sweep: an unreachable screen gate · Source or input audit
+
+Can the number-grid payload seed a rune key? · Method replay
+
+Do alternate grid bytes change the payload-derived key? · Method replay
+
+Seven seeded generator streams against LP2 · Method replay
 
 
 
@@ -210,6 +218,10 @@ LP2-54–55: the 8×8 word arrangement · Manuscript measurement
 Grilles and positional extraction
 Select positions using a mask or indexing rule.
 
+1 related record
+2012 P.S. digit-block layout readings · Method replay
+
+
 
 Acrostics and boundary-letter extraction
 Select initial, final or regularly indexed symbols from defined units.
@@ -254,10 +266,12 @@ LP2 grid as a page-order table? · Method replay
 Null symbols, deletion and padding
 Remove declared symbols or positions while accounting for shortened output and changed alignment.
 
-2 related records
+3 related records
 Deleting one fixed rune type: adjacent-pair census · Manuscript measurement
 
 2016 and 2017 message lengths after omitting F · Manuscript measurement
+
+Collision edits for scarce adjacent doublets · Control
 
 
 
@@ -448,8 +462,10 @@ Specify the order of transformations and verify each intermediate artifact.
 Public-key messages and cryptographic artifacts
 Work from explicit parameters and historical artifacts rather than assuming the rune text uses the same mechanism.
 
-1 related record
+2 related records
 LP2 grid as an OpenPGP literal packet? · Method replay
+
+RSA structure in 54-byte payload windows · Method replay
 
 
 
@@ -744,12 +760,20 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-header-dictionary
 - Feedback ciphers with fixed starting values
   https://jelliottdev.github.io/#/experiments/feedback-opening-census
+- Block-start lookahead feedback: zero-key completion
+  https://jelliottdev.github.io/#/experiments/block-lookahead-feedback
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - Semantic-seed sweep: an unreachable screen gate
   https://jelliottdev.github.io/#/experiments/semantic-seed-screen-gate-audit
+- Can the number-grid payload seed a rune key?
+  https://jelliottdev.github.io/#/experiments/grid-payload-prf-seed-corner
+- Do alternate grid bytes change the payload-derived key?
+  https://jelliottdev.github.io/#/experiments/grid-payload-prf-contested-masks
+- Seven seeded generator streams against LP2
+  https://jelliottdev.github.io/#/experiments/public-prng-seed-sweep
 - Running keys from external texts
   https://jelliottdev.github.io/reference/articles/method-running-key.html
 - Emerson as an additive LP2 running key
@@ -804,6 +828,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-54-55-word-square
 - Grilles and positional extraction
   https://jelliottdev.github.io/reference/articles/method-positional-extraction.html
+- 2012 P.S. digit-block layout readings
+  https://jelliottdev.github.io/#/experiments/h03-ps-layout-replay
 - Acrostics and boundary-letter extraction
   https://jelliottdev.github.io/reference/articles/method-acrostics.html
 - Word, row, page and section boundaries
@@ -836,6 +862,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/single-rune-null-doublets
 - 2016 and 2017 message lengths after omitting F
   https://jelliottdev.github.io/#/experiments/later-message-f-omission
+- Collision edits for scarce adjacent doublets
+  https://jelliottdev.github.io/#/experiments/doublet-collision-edits
 - Interleaved streams and separate decoding
   https://jelliottdev.github.io/reference/articles/method-interleaving.html
 - Four alternating rune streams: concentration check
@@ -962,6 +990,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/cover-rsa.html
 - LP2 grid as an OpenPGP literal packet?
   https://jelliottdev.github.io/#/experiments/grid-openpgp-literal
+- RSA structure in 54-byte payload windows
+  https://jelliottdev.github.io/#/experiments/rsa-window-54-source-replay
 - Hash targets and candidate retrieval
   https://jelliottdev.github.io/reference/articles/hashes-and-addresses.html
 - Compression and packed symbol streams

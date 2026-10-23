@@ -1,0 +1,139 @@
+{
+  "id": "rsa-window-54-source-replay",
+  "status": "published",
+  "title": "RSA structure in 54-byte payload windows",
+  "question": "Do contiguous 54-byte windows of the LP2-49–51 grid payload contain a PKCS#1- or PSS-shaped block under the published 2013 modulus?",
+  "reader_question": "Could the grid payload hide a 432-bit RSA block inside one short stretch?",
+  "summary": "All 203 contiguous 54-byte positions were checked in both byte orders across three pinned payload readings. None passed the fixed strict RSA-structure screen; planted examples did.",
+  "finding": "The independent replay agrees with the source: zero strict frames across 1,218 direct readings and 2,493 modular exponentiations. One loose PSS-shaped row per payload reading, at offset 62 with exponent 17, fails the required zero-padding length. All 15 planted strict frames were recovered.",
+  "limitations": "A structural pattern is not a verified signature over a known message. This result is limited to three pinned payload readings, the published 2013 432-bit modulus, 54-byte contiguous windows, two byte orders, exponents 65537/3/17 and the source’s PKCS#1 v1.5/PSS recognizers. Other moduli, formats and noncontiguous arrangements remain outside scope.",
+  "next_steps": "Treat a new RSA proposal as distinct only when it supplies a different justified modulus, input construction or recognizer; preserve its exact bytes and run a planted control before screening.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "alphanumeric grid",
+    "RSA",
+    "PKCS#1",
+    "PSS",
+    "payload",
+    "source replay",
+    "search bounds"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/rsa-window-54-source-replay/source-manifest.json"
+    ],
+    "representation": "Three pinned 256-byte readings of the base-60 grid payload: canon_256, canon_256_decpref and payload_resolved.",
+    "procedure": "For starts 0–202, take 54 bytes in both directions; inspect each directly, then for exponents 65537, 3 and 17 inspect pow(value,e,2013 modulus) only when value is below the modulus. Apply the source’s strict/loose PKCS#1 v1.5 and PSS structural tiers.",
+    "parameters": "3 payload readings × 203 windows × 2 directions = 1,218 direct inspections; 2,493 modular exponentiations after 1,161 s≥n exclusions. Ten planted type-1 and five planted PSS signatures; 200 random-buffer controls.",
+    "exclusions": "Other moduli or exponents, noncontiguous windows, bit shifts, 54-byte windows built from different grid routes, signatures without these PKCS#1/PSS frame shapes, and verification against a known signed message."
+  },
+  "review": {
+    "reviewer": "Independent full-grid implementation and separately written checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/rsa-window-54-source-replay/run.py && python experiments/records/rsa-window-54-source-replay/check.py",
+    "environment": "Python 3 standard library; no network calls needed after downloading the bundled pinned source files.",
+    "script": "experiments/records/rsa-window-54-source-replay/run.py",
+    "script_sha256": "747243cadaccee2bc2add74c3f4e79408aa1f808e1cae85b73d09e574e772659",
+    "inputs": [
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/run.py",
+        "sha256": "747243cadaccee2bc2add74c3f4e79408aa1f808e1cae85b73d09e574e772659"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/check.py",
+        "sha256": "dea6b4a1a9b7388888d10cfa8483ea1714ccf18a96af1a55a06071f4b26aa81f"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source-manifest.json",
+        "sha256": "05d03ebfe5c71a70a3da529f617d4712004d69255355bcb499dfe039f16993ad"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/PREREG.md",
+        "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/RESULTS.md",
+        "sha256": "fffa904290616fa02c77104b5349bd004f5fe5131fd506e7841fd68f45a26df7"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/l5_payload_micro.py",
+        "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/results.json",
+        "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/moduli.json",
+        "sha256": "e7bc8e9ccf0a5a86867ebe8c74e8dc9555d9771601e84abbb9a4947726f97438"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/payload_resolved.bin",
+        "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/results.json",
+        "sha256": "e28b56658aad579fc9fb71b915c637a1659645ccac6922cc9b3f969f74fadd18"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/windows.svg",
+        "sha256": "b762122747aeec1fd659681c82e30656d69b4fdac61415d10cdaf505a5a70ff9"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/rsa-window-54-source-replay/windows.svg",
+      "caption": "A 54-byte window slides across each 256-byte payload reading; only the fixed modulus and exponents were tested."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source protocol",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+    },
+    {
+      "label": "Pinned source test code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+    },
+    {
+      "label": "Pinned source results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/RESULTS.md"
+    },
+    {
+      "label": "Published 2013 modulus file",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/C1/moduli.json"
+    }
+  ],
+  "related": [
+    "grid-direct-bytes",
+    "grid-stem-uncertainty",
+    "grid-openpgp-literal"
+  ]
+}

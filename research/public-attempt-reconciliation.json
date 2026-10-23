@@ -10,17 +10,42 @@
     "inventory_sha256": "ee92f1873b6edbda1e4bcd286ffa867770e3f8b9ac0bdc86c4c81936fbbead60"
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap.",
-  "counts": {"source_entries_reviewed": 18, "reproduced_subclaim": 1, "partial": 4, "unsupported_source_verdict": 13, "source_entries_with_published_record_link": 6, "source_entries_with_source_replay_audit_only": 2, "false_candidate_links_rejected": 3, "whole_entry_coverage_verified": 0},
+  "counts": {
+    "source_entries_reviewed": 29,
+    "reproduced_subclaim": 1,
+    "partial": 8,
+    "unsupported_source_verdict": 20,
+    "source_entries_with_published_record_link": 10,
+    "source_entries_with_source_replay_audit_only": 2,
+    "false_candidate_links_rejected": 3,
+    "whole_entry_coverage_verified": 0
+  },
   "entries": [
     {
       "source_id": "E-01",
       "source_claim": "Treat the LP2-49–51 payload as an RSA signature or ciphertext under published Cicada moduli and inspect PKCS#1/PSS/OAEP structure.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "rejected_inventory_candidates": [{"record_id": "payload-doublet-gaps", "reason": "The record tests rank correlation of payload values and doublet gaps. It performs no RSA modular exponentiation or padding check; the only commonality is a source filename."}],
-      "covered_subclaim": null,
-      "unresolved_parts": ["No Liberpedia replay of the later round-19 C1 modulus extraction, 738 named tuples, or its structural matchers.", "The round-16 shared file itself evaluated zero relevant modular exponentiations; its coverage-limited verdict must not be confused with the later ledger restatement."],
-      "source_evidence": ["liber-primus/analysis/round16/zeroFP/RESULTS.md", "liber-primus/analysis/round19/C1/RESULTS.md"],
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rsa-window-54-source-replay",
+          "covered_subclaim": "The R28-L5 E-01w extension: 203 contiguous 54-byte windows in each of three pinned 256-byte payload variants, two byte orders, the published 2013 432-bit modulus and exponents 65537, 3 and 17. Strict PKCS#1/PSS structural checks find no hit; planted RSA and random-buffer controls calibrate this window test."
+        }
+      ],
+      "rejected_inventory_candidates": [
+        {
+          "record_id": "payload-doublet-gaps",
+          "reason": "The record tests rank correlation of payload values and doublet gaps. It performs no RSA modular exponentiation or padding check; the only commonality is a source filename."
+        }
+      ],
+      "covered_subclaim": "R28-L5 E-01w's bounded 432-bit payload-window extension, not E-01's entire public-moduli search.",
+      "unresolved_parts": [
+        "The round-19 C1 extraction of other moduli, 738 named tuples and their structural matchers is not replayed here.",
+        "The round-16 shared file itself evaluated zero relevant modular exponentiations; its coverage-limited verdict must not be confused with the later ledger restatement."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/zeroFP/RESULTS.md",
+        "liber-primus/analysis/round19/C1/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -28,56 +53,122 @@
       "source_claim": "Interpret the 256-byte LP2-49–51 payload as either a contiguous page-order permutation or a numeric sequence tracking adjacent-doublet gaps.",
       "status": "reproduced-subclaim",
       "record_links": [
-        {"record_id": "grid-page-order-permutations", "covered_subclaim": "E-02A: the source's 201 consecutive 56-byte windows contain no permutation of 0–55; its 200 consecutive 57-byte windows contain no permutation of 0–56. The record also tests 16,384 additional fixed grid readings, which are Liberpedia extensions, not source trials."},
-        {"record_id": "payload-doublet-gaps", "covered_subclaim": "E-02B: pinned payload values read as uint8, uint16 little/big endian and fixed varint variants do not reach the source's |Spearman rho|>0.5 effect-size gate against the 85 inter-doublet gaps. The record's seven readings and circular controls extend the source's three core encodings."}
+        {
+          "record_id": "grid-page-order-permutations",
+          "covered_subclaim": "E-02A: the source's 201 consecutive 56-byte windows contain no permutation of 0–55; its 200 consecutive 57-byte windows contain no permutation of 0–56. The record also tests 16,384 additional fixed grid readings, which are Liberpedia extensions, not source trials."
+        },
+        {
+          "record_id": "payload-doublet-gaps",
+          "covered_subclaim": "E-02B: pinned payload values read as uint8, uint16 little/big endian and fixed varint variants do not reach the source's |Spearman rho|>0.5 effect-size gate against the 85 inter-doublet gaps. The record's seven readings and circular controls extend the source's three core encodings."
+        }
       ],
       "rejected_inventory_candidates": [],
-      "unresolved_parts": ["These negatives apply to the stated consecutive windows and seven declared numeric readings, not every payload transform or page-pointer scheme.", "The source hypothesis's sample gap list begins with 122, while its executed report begins 85, 249, 197; the record fixes its event definition and results rather than treating the informal example as input."],
-      "source_evidence": ["liber-primus/analysis/round16/zeroFP/PREREG.md", "liber-primus/analysis/round16/zeroFP/RESULTS.md", "liber-primus/analysis/round16/zeroFP/results.json"],
+      "unresolved_parts": [
+        "These negatives apply to the stated consecutive windows and seven declared numeric readings, not every payload transform or page-pointer scheme.",
+        "The source hypothesis's sample gap list begins with 122, while its executed report begins 85, 249, 197; the record fixes its event definition and results rather than treating the informal example as input."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/zeroFP/PREREG.md",
+        "liber-primus/analysis/round16/zeroFP/RESULTS.md",
+        "liber-primus/analysis/round16/zeroFP/results.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "H-03",
       "source_claim": "The ledger bundles two micro-crosses: 2013 onion cookies XORed with four blobs, and a 2012 P.S. digit-string rotate-90°/matrix reading.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "rejected_inventory_candidates": [
-        {"record_id": "grid-page-order-permutations", "reason": "A permutation window in the LP2 grid is neither cookie XOR nor the 2012 P.S. rotation."},
-        {"record_id": "payload-doublet-gaps", "reason": "A doublet-gap correlation is neither cookie XOR nor the 2012 P.S. rotation."}
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "h03-ps-layout-replay",
+          "covered_subclaim": "The R28-L5 H-03r 2012 P.S. branch: the original 131-digit three-line source text in six bare layout readings plus four five-column-indented readings under the amended 95% digit-pair printability gate. Ten readings miss the gate; planted and random-block controls pass their declared checks."
+        }
       ],
-      "covered_subclaim": null,
-      "unresolved_parts": ["No Liberpedia replay of the source's 64 cookie-XOR trials or its 80% printable gate.", "The pinned round-16 RESULTS describes only the cookie-XOR branch; it does not document an executed 2012 P.S. rotate-90°/matrix branch, although the ledger hypothesis names it. The ledger's 'NULL complete' label therefore cannot close both bundled questions."],
-      "source_evidence": ["liber-primus/analysis/round16/zeroFP/PREREG.md", "liber-primus/analysis/round16/zeroFP/RESULTS.md"],
+      "rejected_inventory_candidates": [
+        {
+          "record_id": "grid-page-order-permutations",
+          "reason": "A permutation window in the LP2 grid is neither cookie XOR nor the 2012 P.S. rotation."
+        },
+        {
+          "record_id": "payload-doublet-gaps",
+          "reason": "A doublet-gap correlation is neither cookie XOR nor the 2012 P.S. rotation."
+        }
+      ],
+      "covered_subclaim": "A later source-defined P.S. block-reading extension (R28-L5 H-03r), not the ledger's cookie-XOR branch.",
+      "unresolved_parts": [
+        "No Liberpedia replay of the source's 64 cookie-XOR trials or its 80% printable gate.",
+        "The pinned round-16 RESULTS describes only the cookie-XOR branch; its ledger 'NULL complete' label cannot close both bundled questions. The separate P.S. replay uses R28-L5's amended 95% gate and does not retroactively make the round-16 branch an executed source trial."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/zeroFP/PREREG.md",
+        "liber-primus/analysis/round16/zeroFP/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "R22-C-LITERAL-IMPERATIVES",
       "source_claim": "Run the solved-text imperatives as 185 decimation, iteration, reversal, interleave and number-keystream operations.",
       "status": "partial",
-      "record_links": [{"record_id": "four-phase-ioc", "covered_subclaim": "One narrow X1 implication: four position-modulo-four streams do not have unusually high rune concentration against page-preserving shuffles; a planted four-stream substitution is detected. It does not replay any of the 185 source decoders."}],
+      "record_links": [
+        {
+          "record_id": "four-phase-ioc",
+          "covered_subclaim": "One narrow X1 implication: four position-modulo-four streams do not have unusually high rune concentration against page-preserving shuffles; a planted four-stream substitution is detected. It does not replay any of the 185 source decoders."
+        }
+      ],
       "audit_note": "research/dukotah-r22-c-scope-audit-2026-10-22.md",
-      "unresolved_parts": ["The source's 185-operation panel/decoder verdict was not rerun: its checkout lacks generated panel.npz and a required Mabinogion model input.", "Its 'LP2 0–54' label actually means 55 nonempty source segments, Liberpedia LP2-00–49 and LP2-51–55."],
-      "source_evidence": ["liber-primus/analysis/round22/C-literal-imperatives/PREREG.md", "liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md"],
+      "unresolved_parts": [
+        "The source's 185-operation panel/decoder verdict was not rerun: its checkout lacks generated panel.npz and a required Mabinogion model input.",
+        "Its 'LP2 0–54' label actually means 55 nonempty source segments, Liberpedia LP2-00–49 and LP2-51–55."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round22/C-literal-imperatives/PREREG.md",
+        "liber-primus/analysis/round22/C-literal-imperatives/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "R22-B-TURTLE-SPATIAL-RENDER",
       "source_claim": "Draw LP2 prime-value, index or totient streams as 72 turtle paths and search for geometric structure plus G3 base32/coordinate pointers.",
       "status": "partial",
-      "record_links": [{"record_id": "lp2-turtle-spatial-replay", "covered_subclaim": "G1 turtle construction: all 72 fixed paths, 200 seeded shuffled controls each (14,400 null paths), the same six initial shape-stat screens, and the two planted-shape controls. The source reports zero figures crossing its later flag gate."}],
+      "record_links": [
+        {
+          "record_id": "lp2-turtle-spatial-replay",
+          "covered_subclaim": "G1 turtle construction: all 72 fixed paths, 200 seeded shuffled controls each (14,400 null paths), the same six initial shape-stat screens, and the two planted-shape controls. The source reports zero figures crossing its later flag gate."
+        }
+      ],
       "rejected_inventory_candidates": [],
-      "unresolved_parts": ["G3 base32, onion and coordinate-pointer framings are not part of the Liberpedia replay.", "The source's 2,000-sample-plus-normal-tail refinements were inspected in its ledger, not independently regenerated. Its closure and caging statistics duplicate the same ratio; floating-point ties and a sampled crossing produce small source/replay differences.", "The 12,956-rune source path includes Liberpedia LP2-55 because blank LP2-50 is omitted by source segment numbering."],
-      "source_evidence": ["liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md", "liber-primus/analysis/round22/B-turtle-spatial-render/RESULTS.md", "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json"],
+      "unresolved_parts": [
+        "G3 base32, onion and coordinate-pointer framings are not part of the Liberpedia replay.",
+        "The source's 2,000-sample-plus-normal-tail refinements were inspected in its ledger, not independently regenerated. Its closure and caging statistics duplicate the same ratio; floating-point ties and a sampled crossing produce small source/replay differences.",
+        "The 12,956-rune source path includes Liberpedia LP2-55 because blank LP2-50 is omitted by source segment numbering."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md",
+        "liber-primus/analysis/round22/B-turtle-spatial-render/RESULTS.md",
+        "liber-primus/analysis/round22/B-turtle-spatial-render/ledger.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "R22-D-ILLUSTRATION-DROPCAP",
       "source_claim": "A large-red-initial channel encodes data in page presence, spacing, centroid and rune identity.",
       "status": "partial",
-      "record_links": [{"record_id": "red-initial-presence-order", "covered_subclaim": "The corrected 13-page large-initial presence list has ordinary spacing under four stated measures. This is a new page-presence test, not a replay of the source's 15-page five-statistic verdict."}],
+      "record_links": [
+        {
+          "record_id": "red-initial-presence-order",
+          "covered_subclaim": "The corrected 13-page large-initial presence list has ordinary spacing under four stated measures. This is a new page-presence test, not a replay of the source's 15-page five-statistic verdict."
+        }
+      ],
       "audit_note": "research/dukotah-red-initial-audit-2026-10-22.md",
-      "unresolved_parts": ["The image audit reproduces all 58 source red-pixel totals but shows that LP2-07 and LP2-53 have no large initial despite crossing the source's total-red-pixel threshold.", "The source's 15-page feature list, initial string, gap counts and conclusion cannot be transferred to the corrected 13-page set.", "Multiple initials and initials below earlier text require an explicit within-page order; identity, centroid and full source statistics remain untested on the corrected features."],
-      "source_evidence": ["liber-primus/analysis/round22/D-illustration-dropcap/RESULTS.md", "liber-primus/analysis/round22/D-illustration-dropcap/features.json"],
+      "unresolved_parts": [
+        "The image audit reproduces all 58 source red-pixel totals but shows that LP2-07 and LP2-53 have no large initial despite crossing the source's total-red-pixel threshold.",
+        "The source's 15-page feature list, initial string, gap counts and conclusion cannot be transferred to the corrected 13-page set.",
+        "Multiple initials and initials below earlier text require an explicit within-page order; identity, centroid and full source statistics remain untested on the corrected features."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round22/D-illustration-dropcap/RESULTS.md",
+        "liber-primus/analysis/round22/D-illustration-dropcap/features.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -86,9 +177,16 @@
       "status": "unsupported-source-verdict",
       "record_links": [],
       "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md",
-      "covered_subclaim": "Source commands were replayed: 3,508 selections, six length-cell crossings, zero family crossings, matching the report. This is an audit of the source run, not a published independent Liberpedia experiment.",
-      "unresolved_parts": ["The two planted controls pass their length-specific bars but neither passes the same final family bar used for the manuscript, so power of the final negative rule is not demonstrated.", "The five source 'pages' are decoded sections spanning ten LP1 manuscript images; the source concatenation order is not manuscript order.", "Printed-line and word geometry is outside this entry and treated by R23-A2."],
-      "source_evidence": ["liber-primus/analysis/round22/A-selfembedded-read/PREREG.md", "liber-primus/analysis/round22/A-selfembedded-read/RESULTS.md"],
+      "covered_subclaim": "Source commands were replayed: 3,508 selections, six length-cell crossings, zero family crossings, matching the report. This is an audit of the source run, not a published independent experiment.",
+      "unresolved_parts": [
+        "Both planted controls pass length bars but neither passes the final family bar, so power of the final negative rule is unproven.",
+        "The five decoded sections span ten LP1 images and are not in manuscript order.",
+        "Printed-line and word geometry belongs to R23-A2."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round22/A-selfembedded-read/PREREG.md",
+        "liber-primus/analysis/round22/A-selfembedded-read/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -98,8 +196,15 @@
       "record_links": [],
       "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md",
       "covered_subclaim": "Source commands were replayed: 48 reads, one length-cell crossing, zero family crossings, matching the report. This is an audit of the source run, not a published independent Liberpedia experiment.",
-      "unresolved_parts": ["Both planted acrostics beat their own length bars but neither meets the final family bar; zero family survivors is therefore not a control-validated absence of comparable hidden text.", "The source null shuffles pooled letters and does not preserve printed-line or word-start structure; family calibration over the full selection procedure is unresolved.", "Liberpedia's LP1 row breaks do not match the source's image-row geometry, so a local archive variant cannot be treated as the same test."],
-      "source_evidence": ["liber-primus/analysis/round23/A2-line-acrostic/PREREG.md", "liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md"],
+      "unresolved_parts": [
+        "Both planted acrostics beat their own length bars but neither meets the final family bar; zero family survivors is therefore not a control-validated absence of comparable hidden text.",
+        "The source null shuffles pooled letters and does not preserve printed-line or word-start structure; family calibration over the full selection procedure is unresolved.",
+        "Liberpedia's LP1 row breaks do not match the source's image-row geometry, so a local archive variant cannot be treated as the same test."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round23/A2-line-acrostic/PREREG.md",
+        "liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -107,21 +212,54 @@
       "source_claim": "Derive LP2 keystreams from 2,165 Cicada-themed short seeds through hash, HMAC, AES, RC4 and ChaCha constructions, then use a skip-aware decoder.",
       "status": "unsupported-source-verdict",
       "record_links": [],
-      "related_but_not_overlap": [{"record_id": "seed-crib-controls", "reason": "Synthetic planted seed/crib recovery does not replay the source's seed dictionary, generators, reduction/sign/offset grid or LP2 decodes."}],
+      "related_but_not_overlap": [
+        {
+          "record_id": "seed-crib-controls",
+          "reason": "Synthetic planted seed/crib recovery does not replay the source's seed dictionary, generators, reduction/sign/offset grid or LP2 decodes."
+        }
+      ],
       "covered_subclaim": null,
-      "unresolved_parts": ["No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.", "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."],
-      "source_evidence": ["liber-primus/analysis/round13/B04/PREREG.md", "liber-primus/analysis/round13/B04/sweep.py", "liber-primus/analysis/round13/B04/ks.py"],
+      "unresolved_parts": [
+        "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
+        "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round13/B04/PREREG.md",
+        "liber-primus/analysis/round13/B04/sweep.py",
+        "liber-primus/analysis/round13/B04/ks.py"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "B-05",
       "source_claim": "Expand the LP2-49–51 256-byte payload as a PRF seed under eight stream/hash constructions, rather than reading its bytes directly as plaintext or a key stream.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "related_but_not_overlap": [{"record_id": "grid-direct-bytes", "reason": "Direct ASCII/UTF-8/header readings of the payload do not implement PRF expansion or the source's 70,680 skip-aware decodes."}],
-      "covered_subclaim": null,
-      "unresolved_parts": ["No independent replay of payload variants, contested-byte sensitivity, PRF expansion, 70,680 decodes, or planted avalanche controls."],
-      "source_evidence": ["liber-primus/analysis/round13/B05/PREREG.md", "liber-primus/analysis/round13/B05/sweep.py", "liber-primus/analysis/round13/B05/control_results.json"],
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "grid-payload-prf-seed-corner",
+          "covered_subclaim": "32 offset-zero cases: two payloads, four PRFs, two byte reductions and two signs; first 400 runes, forward, no Atbash."
+        },
+        {
+          "record_id": "grid-payload-prf-contested-masks",
+          "covered_subclaim": "Part 2a: 64 alternate six-byte readings, 3,840 PRF calls and 2,596 distinct key/sign cases; first 400 runes at offset zero, forward, no Atbash."
+        }
+      ],
+      "related_but_not_overlap": [
+        {
+          "record_id": "grid-direct-bytes",
+          "reason": "Direct ASCII/UTF-8/header readings of the payload do not implement PRF expansion or the source's 70,680 skip-aware decodes."
+        }
+      ],
+      "covered_subclaim": "Two bounded PRF-expansion corners, including contested-byte sensitivity, not the full B-05 sweep.",
+      "unresolved_parts": [
+        "Remaining PRFs, offsets, directions, Atbash, full 70,680 decodes and planted avalanche controls are not closed.",
+        "Part 2a does not independently adjudicate the image readings."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round13/B05/PREREG.md",
+        "liber-primus/analysis/round13/B05/sweep.py",
+        "liber-primus/analysis/round13/B05/control_results.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -130,8 +268,18 @@
       "status": "unsupported-source-verdict",
       "record_links": [],
       "covered_subclaim": null,
-      "unresolved_parts": ["No independent replay of the four source lanes or their 8.38-billion effective offset census.", "The source's English trigram prefilter retained only 5 of 8 planted offsets, so its coverage is conditional even where its later beam was sensitive."],
-      "source_evidence": ["liber-primus/analysis/round17/PREREG.md", "liber-primus/analysis/round17/SYNTHESIS.md", "liber-primus/analysis/round17/P0_dense/RESULTS.md", "liber-primus/analysis/round17/P1_blockchain/RESULTS.md", "liber-primus/analysis/round17/P2_beacons/RESULTS.md", "liber-primus/analysis/round17/P3_tables/RESULTS.md"],
+      "unresolved_parts": [
+        "No independent replay of the four source lanes or their 8.38-billion effective offset census.",
+        "The source's English trigram prefilter retained only 5 of 8 planted offsets, so its coverage is conditional even where its later beam was sensitive."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round17/PREREG.md",
+        "liber-primus/analysis/round17/SYNTHESIS.md",
+        "liber-primus/analysis/round17/P0_dense/RESULTS.md",
+        "liber-primus/analysis/round17/P1_blockchain/RESULTS.md",
+        "liber-primus/analysis/round17/P2_beacons/RESULTS.md",
+        "liber-primus/analysis/round17/P3_tables/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -139,10 +287,23 @@
       "source_claim": "Model exactly two consumed key draws per rejected doublet and rescreen 245,975 top-prior Py2.7 MT words, rather than using a one-draw skip beam.",
       "status": "unsupported-source-verdict",
       "record_links": [],
-      "related_but_not_overlap": [{"record_id": "decoder-skip-controls", "reason": "Its generic planted skip controls do not implement the source's pair-step j+=2 transition, seed slice or 245,975-word screen."}],
+      "related_but_not_overlap": [
+        {
+          "record_id": "decoder-skip-controls",
+          "reason": "Its generic planted skip controls do not implement the source's pair-step j+=2 transition, seed slice or 245,975-word screen."
+        }
+      ],
       "covered_subclaim": null,
-      "unresolved_parts": ["No exact pair-step decoder replay, source-prior seed screen, panel calibration or three-clause hit gate.", "The source's own result is bounded to a 245,975-word Py2.7 MT slice at offset zero, not other generators or the full seed space."],
-      "source_evidence": ["liber-primus/analysis/round24/C2-skip-by-two/PREREG.md", "liber-primus/analysis/round24/C2-skip-by-two/control.py", "liber-primus/analysis/round24/C2-skip-by-two/sweep.py", "liber-primus/analysis/round24/C2-skip-by-two/RESULTS.md"],
+      "unresolved_parts": [
+        "No exact pair-step decoder replay, source-prior seed screen, panel calibration or three-clause hit gate.",
+        "The source's own result is bounded to a 245,975-word Py2.7 MT slice at offset zero, not other generators or the full seed space."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round24/C2-skip-by-two/PREREG.md",
+        "liber-primus/analysis/round24/C2-skip-by-two/control.py",
+        "liber-primus/analysis/round24/C2-skip-by-two/sweep.py",
+        "liber-primus/analysis/round24/C2-skip-by-two/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -151,8 +312,14 @@
       "status": "unsupported-source-verdict",
       "record_links": [],
       "covered_subclaim": null,
-      "unresolved_parts": ["The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.", "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."],
-      "source_evidence": ["liber-primus/analysis/round26/A/PREREG.md", "liber-primus/analysis/round26/A/RESULTS.md"],
+      "unresolved_parts": [
+        "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
+        "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round26/A/PREREG.md",
+        "liber-primus/analysis/round26/A/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -160,19 +327,43 @@
       "source_claim": "Use 33 named text sources as letters-only running keys under skip-aware exact/pair decoding across a planned nine-page LP2 slice.",
       "status": "unsupported-source-verdict",
       "record_links": [],
-      "related_but_not_overlap": [{"record_id": "emerson-running-key", "reason": "The local record uses one text, three pages and rigid subtraction, not this source's 33 texts and skip-aware decoder."}],
+      "related_but_not_overlap": [
+        {
+          "record_id": "emerson-running-key",
+          "reason": "The local record uses one text, three pages and rigid subtraction, not this source's 33 texts and skip-aware decoder."
+        }
+      ],
       "covered_subclaim": null,
-      "unresolved_parts": ["The pinned source itself reports only 1,562 partial decodes; the remainder of its planned page/offset grid is not a settled negative.", "No Liberpedia replay of the 33-source corpus, exact/pair skip relations or language-panel gate."],
-      "source_evidence": ["liber-primus/analysis/round26/B/PREREG.md", "liber-primus/analysis/round26/B/RESULTS.md"],
+      "unresolved_parts": [
+        "The pinned source itself reports only 1,562 partial decodes; the remainder of its planned page/offset grid is not a settled negative.",
+        "No Liberpedia replay of the 33-source corpus, exact/pair skip relations or language-panel gate."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round26/B/PREREG.md",
+        "liber-primus/analysis/round26/B/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "R26-C-SEMANTIC-SEED-ZOO",
       "source_claim": "Enumerate 323 corpus-semantic seeds through seven generators and exact/pair decoders, screening 4,274 combinations for a derived LP2 key.",
       "status": "unsupported-source-verdict",
-      "record_links": [{"record_id": "semantic-seed-screen-gate-audit", "covered_subclaim": "The source's exact 4,274 screening rows and best score −6.5781 reproduce. Its +5 promotion condition is unreachable for the nonpositive normalized log-probability score; an independently planted 120/120 correct key scores −4.35 and is also discarded. This reproduces a gate defect, not a negative seed-search result."}],
-      "unresolved_parts": ["The original nine-register model and three training corpora are missing from the pinned source; the final hitfn20 path was not independently run.", "A corrected score-scale gate with a planted key passing screen and final check is needed before this bounded seed set can receive a negative verdict."],
-      "source_evidence": ["liber-primus/analysis/round26/C/PREREG.md", "liber-primus/analysis/round26/C/sweep.py", "liber-primus/analysis/round26/C/rows.jsonl", "liber-primus/analysis/round26/C/RESULTS.md"],
+      "record_links": [
+        {
+          "record_id": "semantic-seed-screen-gate-audit",
+          "covered_subclaim": "The source's exact 4,274 screening rows and best score −6.5781 reproduce. Its +5 promotion condition is unreachable for the nonpositive normalized log-probability score; an independently planted 120/120 correct key scores −4.35 and is also discarded. This reproduces a gate defect, not a negative seed-search result."
+        }
+      ],
+      "unresolved_parts": [
+        "The original nine-register model and three training corpora are missing from the pinned source; the final hitfn20 path was not independently run.",
+        "A corrected score-scale gate with a planted key passing screen and final check is needed before this bounded seed set can receive a negative verdict."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round26/C/PREREG.md",
+        "liber-primus/analysis/round26/C/sweep.py",
+        "liber-primus/analysis/round26/C/rows.jsonl",
+        "liber-primus/analysis/round26/C/RESULTS.md"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -181,8 +372,15 @@
       "status": "unsupported-source-verdict",
       "record_links": [],
       "covered_subclaim": null,
-      "unresolved_parts": ["No independent replay of the two large source binaries, 24,080-cell grid, stage-B candidate adjudication or planted keyskip2 control.", "The source's tested strides leave most byte offsets off-grid; its result is conditional on those offsets, five byte reductions and the stated language registers."],
-      "source_evidence": ["liber-primus/analysis/round28/L1/PREREG.md", "liber-primus/analysis/round28/L1/RESULTS.md", "liber-primus/analysis/round28/L1/results.json"],
+      "unresolved_parts": [
+        "No independent replay of the two large source binaries, 24,080-cell grid, stage-B candidate adjudication or planted keyskip2 control.",
+        "The source's tested strides leave most byte offsets off-grid; its result is conditional on those offsets, five byte reductions and the stated language registers."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round28/L1/PREREG.md",
+        "liber-primus/analysis/round28/L1/RESULTS.md",
+        "liber-primus/analysis/round28/L1/results.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
@@ -190,25 +388,314 @@
       "source_claim": "Blind-read 15 payload cells and sweep 128 contested-byte variants through the full LP2 direct-key battery.",
       "status": "unsupported-source-verdict",
       "record_links": [],
-      "related_but_not_overlap": [{"record_id": "grid-stem-uncertainty", "reason": "Ten I/l text variants do not replay the source's blind pixel read or 128 payload-byte variants."}],
+      "related_but_not_overlap": [
+        {
+          "record_id": "grid-stem-uncertainty",
+          "reason": "Ten I/l text variants do not replay the source's blind pixel read or 128 payload-byte variants."
+        }
+      ],
       "covered_subclaim": null,
-      "unresolved_parts": ["No independent 15-cell blind image reading, 128-variant battery or 21,628,416 source decodes.", "The source's 100/100 witness-unanimous control and first failed control run require separate validation before accepting its read-half conclusion."],
-      "source_evidence": ["liber-primus/analysis/round28/L2/PREREG.md", "liber-primus/analysis/round28/L2/RESULTS.md", "liber-primus/analysis/round28/L2/reader_out.json", "liber-primus/analysis/round28/L2/sweep_summary.json"],
+      "unresolved_parts": [
+        "No independent 15-cell blind image reading, 128-variant battery or 21,628,416 source decodes.",
+        "The source's 100/100 witness-unanimous control and first failed control run require separate validation before accepting its read-half conclusion."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round28/L2/PREREG.md",
+        "liber-primus/analysis/round28/L2/RESULTS.md",
+        "liber-primus/analysis/round28/L2/reader_out.json",
+        "liber-primus/analysis/round28/L2/sweep_summary.json"
+      ],
       "whole_entry_coverage_verified": false
     },
     {
       "source_id": "R28-L5-PAYLOAD-MICRO",
       "source_claim": "Test three bounded micro-structure branches: 54-byte RSA windows, payload varints against doublet gaps and 2012 P.S. block matrix readings.",
       "status": "partial",
-      "record_links": [{"record_id": "payload-doublet-gaps", "covered_subclaim": "The E-02v branch's 12 declared varint readings against inter-doublet gap targets remain below the |Spearman rho| 0.5 effect-size gate; this does not test its RSA or P.S. branches."}],
-      "unresolved_parts": ["E-01w: no local replay of 203 consecutive 54-byte windows, three payload variants, two byte orders and strict PKCS#1/PSS structural matchers under the published 432-bit modulus.", "H-03r: no local replay of six original 2012 P.S. digit-block readings plus four indented-block readings using the amended 95% printable-pair gate and controls."],
-      "source_evidence": ["liber-primus/analysis/round28/L5/PREREG.md", "liber-primus/analysis/round28/L5/RESULTS.md", "liber-primus/analysis/round28/L5/results.json"],
+      "record_links": [
+        {
+          "record_id": "rsa-window-54-source-replay",
+          "covered_subclaim": "E-01w: the exact bounded 203-window, three-payload, two-order, three-exponent 432-bit RSA structural check and controls."
+        },
+        {
+          "record_id": "payload-doublet-gaps",
+          "covered_subclaim": "E-02v overlap: seven explicitly declared numeric readings against the fixed 85 inter-doublet gaps remain below |Spearman rho| 0.5. This is not the full source 12-reading by three-payload-variant census."
+        },
+        {
+          "record_id": "h03-ps-layout-replay",
+          "covered_subclaim": "H-03r: six original and four indented P.S. layouts under the amended 95% digit-pair gate with planted and random-block controls."
+        }
+      ],
+      "unresolved_parts": [
+        "E-02v: exact source 12 varint readings against both stated gap targets across three payload variants remain unreplayed as a full matrix. The seven-reading local overlap cannot close that branch.",
+        "No general RSA or steganographic exclusion follows from the bounded E-01w and H-03r checks."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round28/L5/PREREG.md",
+        "liber-primus/analysis/round28/L5/RESULTS.md",
+        "liber-primus/analysis/round28/L5/results.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R16-PRNG",
+      "source_claim": "Seven named PRNG streams over 1,877 fixed seeds and four sign/direction settings as LP2 keys.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-prng-seed-sweep",
+          "covered_subclaim": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120."
+        }
+      ],
+      "covered_subclaim": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120.",
+      "unresolved_parts": [
+        "The replay covers executed daily-spaced seeds, not hourly seeds in the source plan.",
+        "Generator vectors were self-generated, not checked against external PHP/.NET/ISAAC runtimes; other seeds, offsets, reductions and languages remain open."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/prng/PREREG.md",
+        "liber-primus/analysis/round16/prng/prng_sweep.py",
+        "liber-primus/analysis/round16/prng/results.json",
+        "liber-primus/analysis/round16/prng/RESULTS.md"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R12-C1",
+      "source_claim": "Bounded k-history feedback/autokey functions on LP2.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No exact local replay of the 21-function sweep, score panel or planted controls.",
+        "Other k bounds and functions remain open."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/C1/RESULTS.md",
+        "liber-primus/analysis/round12/C1/sweep.py",
+        "liber-primus/analysis/round12/C1/control.py"
+      ],
+      "whole_entry_coverage_verified": false,
+      "related_but_not_overlap": [
+        {
+          "record_id": "feedback-opening-census",
+          "reason": "Scalar-primed lag census is not the k-history function sweep."
+        },
+        {
+          "record_id": "linear-ciphertext-feedback",
+          "reason": "A doublet invariant is not its decoder."
+        }
+      ]
+    },
+    {
+      "source_id": "R16-KDF",
+      "source_claim": "PBKDF2, scrypt, EVP_BytesToKey and iterated-hash LP2 keys from 534 Cicada-themed secrets.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local replay of the 692,064 Stage-A decodes, salt/iteration grid or controls.",
+        "The English first-stage filter, other salts, secrets, offsets, KDFs and languages remain open."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/KDF/PREREG.md",
+        "liber-primus/analysis/round16/KDF/RESULTS.md",
+        "liber-primus/analysis/round16/KDF/results_A.json",
+        "liber-primus/analysis/round16/KDF/results_gates.json",
+        "liber-primus/analysis/round16/KDF/results_summary.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R16-scorer",
+      "source_claim": "Matched runic versus old quadgram scorer on five solved pages and 200 random-keystream nulls.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No exact five-page/200-null score comparison or +3.6% sigma check.",
+        "The existing English scorer control uses different inputs."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/scorer/scorer.py",
+        "liber-primus/analysis/round16/scorer/measure.py",
+        "liber-primus/analysis/round16/scorer/results.json",
+        "liber-primus/analysis/round16/scorer/RESULTS.md"
+      ],
+      "whole_entry_coverage_verified": false,
+      "related_but_not_overlap": [
+        {
+          "record_id": "english-scorer-controls",
+          "reason": "Related calibration, but not established as the same five pages and 200 nulls."
+        }
+      ]
+    },
+    {
+      "source_id": "R20-N2-HAPLOGRAPHY-AUTOKEY",
+      "source_claim": "Duplicate-rune merge schedules through K=40 against nonzero difference diagonals.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local replay of the source schedule, diagonal invariant or planted autokey control.",
+        "Doublet and feedback records measure other events."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round20/N2/RESULTS.md",
+        "liber-primus/analysis/round20/N2/PREREG.md",
+        "liber-primus/analysis/round20/N2/results.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R29-L1-ONION-STEGO",
+      "source_claim": "Three onion images, 4,013 keys, OutGuess 0.4 and steghide.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local 24,078 image/key/tool extraction replay or onion3-divider artifact check.",
+        "Default-key manuscript-image scans are a different test."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round29/L1-onion3-crack/"
+      ],
+      "whole_entry_coverage_verified": false,
+      "related_but_not_overlap": [
+        {
+          "record_id": "outguess-default-key",
+          "reason": "Only Default key on manuscript images."
+        },
+        {
+          "record_id": "outguess-guard-sweep",
+          "reason": "Different image set and password bound."
+        }
+      ]
+    },
+    {
+      "source_id": "R30-B1-BLOB-CRYPTO",
+      "source_claim": "Three pinned blobs under source-derived symmetric keys, seven cipher families and pairwise XOR.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local three-blob, roughly 37-key battery, detector controls or 12 pairwise XORs.",
+        "An off-corpus key remains outside scope."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round30/B1-blob-crypto/"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R30-B2-RSA-GPG",
+      "source_claim": "Three source blobs as RSA modulus/ciphertext, OpenPGP, AES-key and hash-preimage material.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No exact three-blob RSA/GPG/key replay or byte0 base-rate guard.",
+        "Source script hard-codes a developer path that needs audited local replacement."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round30/B2-rsa-gpg/"
+      ],
+      "whole_entry_coverage_verified": false,
+      "related_but_not_overlap": [
+        {
+          "record_id": "grid-openpgp-literal",
+          "reason": "A full tag-11 packet at byte zero across grid readings, not this three-blob matrix."
+        }
+      ]
+    },
+    {
+      "source_id": "R19-FINITE-ORNAMENT-REGISTER",
+      "source_claim": "Nine-register language screening of 74 runic ornament bands with own-length nulls.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No exact 74-band, 2,000-null-per-length or restricted-alphabet-gate replay.",
+        "Three source panel crossings fail its separate decoration guard; model/data inputs need audit."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/finite/RESULTS.md",
+        "liber-primus/analysis/round19/finite/PREREG.md",
+        "liber-primus/analysis/round19/finite/run_bands.py",
+        "liber-primus/analysis/round19/finite/out_bands.json",
+        "liber-primus/analysis/round19/finite/sweeprows.jsonl"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R20-N1-PDF-RUNIC-FONT-HUNT",
+      "source_claim": "195 distinct local PDFs and four named mirrors searched for runic text or an embedded font subset.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local replay of deduplication, mirror inventory or planted-font/image-wrap controls.",
+        "Only enumerated artifacts can be excluded."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round20/N1/RESULTS.md",
+        "liber-primus/analysis/round20/N1/PREREG.md",
+        "liber-primus/analysis/round20/N1/scan_results.json",
+        "liber-primus/analysis/round20/N1/mirror_sweep.json",
+        "liber-primus/analysis/round20/N1/control_results.json"
+      ],
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R30-A1-FONT",
+      "source_claim": "Per-occurrence allograph channel using 22,620 clean same-rune crop comparisons across 29 runes.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "covered_subclaim": null,
+      "unresolved_parts": [
+        "No local image/crop alignment, clustering or planted/different-rune controls.",
+        "Prose and variant_clusters.json used different clean-filter settings."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round30/A1-font/"
+      ],
       "whole_entry_coverage_verified": false
     }
   ],
   "next_batch": [
-    {"source_id": "R28-L5-PAYLOAD-MICRO", "subclaim": "E-01w", "operation": "Use each of 203 contiguous 54-byte payload windows under the published 432-bit 2013 modulus, three source payload variants, forward/reverse byte order and exponents 65537, 3 and 17; accept only predeclared strict PKCS#1 v1.5/PSS structural frames, with planted RSA and random-buffer controls.", "readiness": "Finite source rule and scripts available; verify exact payload variants, modulus bytes and pinned control material before executing.", "overlap": "The local doublet-gap record covers E-02v only."},
-    {"source_id": "R28-L5-PAYLOAD-MICRO", "subclaim": "H-03r", "operation": "Read the original 131-digit 2012 P.S. block in six source layout-preserving orders and the indented variant in four more; apply the amended 95% printable digit-pair gate, pinned-constant/prime checks and planted/random-block controls.", "readiness": "Finite source rule and scripts available; verify the exact original digit lines and indentation from the primary artifact before executing.", "overlap": "No local P.S. matrix-reading test."},
-    {"source_id": "R24-C2-SKIP-BY-TWO-DECODER", "subclaim": "Exact pair-step planted control and bounded top-prior screen", "operation": "Implement the source's j+=2 rejected-doublet transition, reproduce the pair-vs-one-draw planted recovery, then screen its pinned 245,975-word Py2.7-MT slice at offset zero with the matching calibrated gate.", "readiness": "Source algorithm is finite; audit prior seed file and language-panel dependencies before treating the complete screen as executable.", "overlap": "Generic local skip controls do not implement this relation."}
+    {
+      "source_id": "R16-scorer",
+      "subclaim": "Five-page, 200-null scorer calibration",
+      "operation": "Replay pinned old and rune-matched quadgram scorers, recomputing sigma separation and null SD with an independent implementation.",
+      "readiness": "Finite source code/results present; audit model and input hashes.",
+      "overlap": "english-scorer-controls is related, not exact."
+    },
+    {
+      "source_id": "R19-FINITE-ORNAMENT-REGISTER",
+      "subclaim": "Nine-register ornament-band census",
+      "operation": "Score 74 fixed bands against 2,000 own-length uniform-rune controls and the declared restricted-alphabet/IoC guard.",
+      "readiness": "Finite bands/results present; audit model and test-half inputs.",
+      "overlap": "No exact local record."
+    },
+    {
+      "source_id": "R20-N2-HAPLOGRAPHY-AUTOKEY",
+      "subclaim": "Bounded physical merge-schedule falsifier",
+      "operation": "Recreate nonzero-diagonal invariant and adversarial duplicate-merge schedule through K=40, with planted autokey recovery.",
+      "readiness": "Finite source rules/results present; audit raw diagonals and schedule.",
+      "overlap": "Doublet and autokey observations are not this reopener."
+    },
+    {
+      "source_id": "R30-B1-BLOB-CRYPTO",
+      "subclaim": "Three-blob symmetric-key battery",
+      "operation": "Pin blobs/derived keys and replay symmetric-cipher and pairwise-XOR screens with controls.",
+      "readiness": "Source code present; exact blob/tool audit required.",
+      "overlap": "Can share audited inputs with R30-B2, keeping verdicts separate."
+    },
+    {
+      "source_id": "R30-B2-RSA-GPG",
+      "subclaim": "Three-blob RSA/GPG structural matrix",
+      "operation": "On the same pinned blobs, test modulus parity/factors/gcd, complete PGP packet chains and key/hash branches with controls.",
+      "readiness": "Source code has developer-specific path; audit inputs and tools first.",
+      "overlap": "grid-openpgp-literal is a different packet gate."
+    }
   ]
 }

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 352" role="img" aria-labelledby="title desc">
+  <title id="title">How the 54-byte RSA-window test was bounded</title>
+  <desc id="desc">For each of three 256-byte payload readings, a 54-byte window is shifted from byte 0 through byte 202, read in two directions, and checked directly or after raising to three exponents modulo the published 2013 modulus. The result is zero strict frames; 15 of 15 planted frames were recovered.</desc>
+  <style>
+    text{font-family:system-ui,-apple-system,Segoe UI,sans-serif;fill:#202832}
+    .head{font-size:19px;font-weight:700}.label{font-size:14px}.minor{font-size:12px;fill:#596775}
+    .metric{font-size:19px;font-weight:700;fill:#244f67}.line{stroke:#cad2d8;stroke-width:1}
+  </style>
+  <rect width="540" height="352" fill="#f7f8f9"/>
+  <text class="head" x="20" y="34">A fixed test of payload windows</text>
+  <text class="minor" x="20" y="56">One row below is one of three pinned 256-byte readings.</text>
+  <text class="label" x="20" y="91">256-byte payload</text>
+  <rect x="20" y="105" width="500" height="22" rx="2" fill="#dde5e9"/>
+  <rect x="20" y="105" width="105.5" height="22" rx="2" fill="#386885"/>
+  <rect x="414.5" y="105" width="105.5" height="22" rx="2" fill="#7399ac"/>
+  <text class="minor" x="20" y="148">First window: bytes 0–53</text>
+  <text class="minor" x="520" y="148" text-anchor="end">Last: 202–255</text>
+  <path class="line" d="M20 166H520"/>
+  <text class="metric" x="20" y="196">203</text><text class="label" x="80" y="196">start positions</text>
+  <text class="metric" x="20" y="230">2</text><text class="label" x="80" y="230">byte directions per window</text>
+  <text class="metric" x="20" y="264">3</text><text class="label" x="80" y="264">exponents: 65,537 · 3 · 17</text>
+  <path class="line" d="M20 281H520"/>
+  <text class="label" x="20" y="309">Strict structural matches</text><text class="metric" x="520" y="309" text-anchor="end">0</text>
+  <text class="label" x="20" y="335">Planted signature frames recovered</text><text class="metric" x="520" y="335" text-anchor="end">15 / 15</text>
+</svg>

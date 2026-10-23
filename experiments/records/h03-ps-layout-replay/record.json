@@ -1,0 +1,129 @@
+{
+  "id": "h03-ps-layout-replay",
+  "status": "published",
+  "title": "2012 P.S. digit-block layout readings",
+  "question": "Do the fixed column and line readings of the 2012 P.S. digit block reveal printable pair-ASCII text or a pinned longer constant?",
+  "reader_question": "Does turning the 2012 P.S. number block into columns reveal a message?",
+  "summary": "Six bare-block and four indented-layout readings of the original 131 digits all fail the calibrated text-shape and pinned-constant screens. Two four-digit motifs appear only in separate indented routes.",
+  "finding": "No reading reaches 95% printable digit-pair ASCII or contains a pinned longer constant. The bare block has no 3301 or 1033 motif; the five-column indented variant places one in each of two different routes. Ten planted messages pass; 200 random blocks produce no hits at the amended gate.",
+  "limitations": "This is a fixed-layout test, not a proof that the historical message contains no other hidden content. The five-column visual-indent extension was disclosed after the bare-block negative. Short four-digit motifs were report-only and do not establish a decoded message.",
+  "next_steps": "A new P.S. reading should state its physical layout and success rule before examining results, then run the same control on random digit blocks.",
+  "outcome": "not-supported",
+  "tags": [
+    "2012",
+    "P.S.",
+    "historical message",
+    "digit block",
+    "column reading",
+    "matrix",
+    "ASCII",
+    "source replay",
+    "control calibration"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/h03-ps-layout-replay/source/ky_2012-01-final-message.asc",
+      "experiments/records/h03-ps-layout-replay/source-manifest.json"
+    ],
+    "representation": "The three original backslash-continued P.S. digit lines (40+45+46=131 digits) from the pinned 2012 signed-message text; second variant preserves the five-column visual indent of P.S. and a following space.",
+    "procedure": "Read bare lines in four column directions, concatenation and reversal; repeat four column directions with a five-column indent on the first line. For each, test both two-digit pair alignments for printable ASCII fraction >=95%, longer pinned constants and report-only short motifs/compositeness.",
+    "parameters": "Six bare and four indented readings; two pair alignments; ten planted readable blocks; 200 random 131-digit three-line controls. The source raised its initial 80% cutoff to 95% after the negative control failed and before real-data screening.",
+    "exclusions": "Arbitrary column widths, digit substitutions/reordering, other encodings, running keys, additional source messages and any interpretation of a four-digit motif alone as a hit."
+  },
+  "review": {
+    "reviewer": "Independent primary-text extraction, route reconstruction and separately written checker",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/h03-ps-layout-replay/run.py && python experiments/records/h03-ps-layout-replay/check.py",
+    "environment": "Python 3 standard library; all pinned source bytes bundled, no network call needed.",
+    "script": "experiments/records/h03-ps-layout-replay/run.py",
+    "script_sha256": "7cf5bcc6df9a5a32dc15a7d74043afefa5bd2942165cc8918af97cde2f375e9b",
+    "inputs": [
+      {
+        "path": "experiments/records/h03-ps-layout-replay/run.py",
+        "sha256": "7cf5bcc6df9a5a32dc15a7d74043afefa5bd2942165cc8918af97cde2f375e9b"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/check.py",
+        "sha256": "31f9c6996c008bd915a1af6fa7c6a463ae44da6014b341048f5f381034e85d32"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source-manifest.json",
+        "sha256": "0ead324a74b9b9bbca1b6f3c6c7c2d0a3a1afe527ee14076b54a3786fd61c05f"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/ky_2012-01-final-message.asc",
+        "sha256": "9580bf80f70b304d8bf0fc16a519839661d85ce436fa56ab888ea579149dc564"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/PREREG.md",
+        "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/RESULTS.md",
+        "sha256": "fffa904290616fa02c77104b5349bd004f5fe5131fd506e7841fd68f45a26df7"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/l5_payload_micro.py",
+        "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/h03r_indented.py",
+        "sha256": "2f563b9bddf8d3e7b6fe9c265ce19a2cacca623ee4206d3f1f708b3c24d2e02e"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/source/results.json",
+        "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/h03-ps-layout-replay/results.json",
+        "sha256": "0cd3f845c5a96e76b2f52498e8050f0887b5ee888bcb450ebf8862d771736080"
+      },
+      {
+        "path": "experiments/records/h03-ps-layout-replay/readings.svg",
+        "sha256": "ee8953bf99602d73667616a24069e40c2cb4690039eda5fa20a15b4ff76f75e7"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/h03-ps-layout-replay/readings.svg",
+      "caption": "Printable-pair proportions for ten physical-layout readings, shown against the amended 95% gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned 2012 signed-message text",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/corpus/A-primary-artifacts/pgp/messages/ky_2012-01-final-message.asc"
+    },
+    {
+      "label": "Source preregistration and amendments",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+    },
+    {
+      "label": "Source test code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+    },
+    {
+      "label": "Indented layout extension",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/h03r_indented.py"
+    },
+    {
+      "label": "Source reported results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/RESULTS.md"
+    }
+  ],
+  "related": [
+    "rsa-window-54-source-replay"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "source_commit": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_part": "B-05 Part 2a",
+  "case_count": 3840,
+  "target_runes": 12956,
+  "screen_runes": 400,
+  "scope": "64 two-witness masks at six fixed byte positions \u00d7 15 PRFs \u00d7 two byte reductions \u00d7 two signs; offset zero, forward, no Atbash",
+  "contested_positions": [
+    25,
+    175,
+    182,
+    199,
+    215,
+    237
+  ],
+  "null": {
+    "method": "source's 200 shuffled 400-rune heads",
+    "mean": -7.30239,
+    "max": -7.001322
+  },
+  "threshold": {
+    "english_floor": -5.5,
+    "null_max": -7.001322,
+    "rule": "score >= -5.5 and score > null maximum"
+  },
+  "control": {
+    "all_pass": true,
+    "generators": [
+      "sha256_ctr",
+      "rc4",
+      "hmac_drbg_sha256",
+      "aes256_ctr_k"
+    ],
+    "correct_scores": [
+      -4.17,
+      -4.17,
+      -4.17,
+      -4.17
+    ],
+    "character_recovery": [
+      0.989474,
+      0.989474,
+      0.989474,
+      0.989474
+    ]
+  },
+  "best": {
+    "mask": 13,
+    "generator": "sha256_ctr",
+    "reduction": "reject",
+    "sign": 1,
+    "score": -6.872099
+  },
+  "hit_count": 0,
+  "input_sha256": {
+    "majority_payload": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5",
+    "decimal_preferred_payload": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd",
+    "rune_transcription": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "quadgram_model": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+  }
+}

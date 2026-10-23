@@ -1,0 +1,99 @@
+{
+  "schema": "liberpedia-rsa-window-54-replay-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_inputs_sha256": {
+    "canon_256.bin": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5",
+    "canon_256_decpref.bin": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd",
+    "l5_payload_micro.py": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738",
+    "LICENSE": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59",
+    "moduli.json": "e7bc8e9ccf0a5a86867ebe8c74e8dc9555d9771601e84abbb9a4947726f97438",
+    "payload_resolved.bin": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290",
+    "PREREG.md": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685",
+    "results.json": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7",
+    "RESULTS.md": "fffa904290616fa02c77104b5349bd004f5fe5131fd506e7841fd68f45a26df7"
+  },
+  "modulus_bits": 432,
+  "modulus_hex": "ae748248f4ea586231b4ff888b00fa5d65e75eeb80e8832b6e5e4478970c88293b436e2851cedd4ff960735a22330f62a659e229529f",
+  "exponents": [
+    65537,
+    3,
+    17
+  ],
+  "controls": {
+    "pkcs1_v15_sha1": {
+      "recovered": 10,
+      "planted": 10
+    },
+    "pss_sha1": {
+      "recovered": 5,
+      "planted": 5
+    },
+    "random_256_byte_buffers": 200,
+    "random_strict_hits": 0
+  },
+  "variants": {
+    "canon_256": {
+      "windows": 203,
+      "direct_reads": 406,
+      "modular_exponentiations": 831,
+      "excluded_s_ge_n": 387,
+      "strict_hits": [],
+      "loose_hits": [
+        {
+          "offset": 62,
+          "order": "be",
+          "mode": "pow",
+          "e": 17,
+          "match": {
+            "scheme": "pss",
+            "hash": "sha256",
+            "salt_len": 20,
+            "strict": false
+          }
+        }
+      ]
+    },
+    "canon_256_decpref": {
+      "windows": 203,
+      "direct_reads": 406,
+      "modular_exponentiations": 831,
+      "excluded_s_ge_n": 387,
+      "strict_hits": [],
+      "loose_hits": [
+        {
+          "offset": 62,
+          "order": "be",
+          "mode": "pow",
+          "e": 17,
+          "match": {
+            "scheme": "pss",
+            "hash": "sha256",
+            "salt_len": 20,
+            "strict": false
+          }
+        }
+      ]
+    },
+    "payload_resolved": {
+      "windows": 203,
+      "direct_reads": 406,
+      "modular_exponentiations": 831,
+      "excluded_s_ge_n": 387,
+      "strict_hits": [],
+      "loose_hits": [
+        {
+          "offset": 62,
+          "order": "be",
+          "mode": "pow",
+          "e": 17,
+          "match": {
+            "scheme": "pss",
+            "hash": "sha256",
+            "salt_len": 20,
+            "strict": false
+          }
+        }
+      ]
+    }
+  }
+}

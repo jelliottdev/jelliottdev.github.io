@@ -1,0 +1,139 @@
+{
+  "id": "public-prng-seed-sweep",
+  "status": "published",
+  "title": "Seven seeded generator streams against LP2",
+  "question": "Do any of seven source-defined pseudorandom keystreams, under 1,877 fixed seeds and four sign/direction settings, give the LP2 opening a convincing English score?",
+  "reader_question": "Could the LP2 key stream come from a seeded random-number generator?",
+  "summary": "A replay of a pinned public seven-generator sweep tested 52,556 120-rune decodes. None reached the source's fixed English score bar; a planted control did.",
+  "finding": "The strongest manuscript candidate scored −6.347 against a required −5.500. The planted control scored −4.155 with full recovery. The replay's winner and score match the original run.",
+  "limitations": "The executed source tested daily-spaced seeds rather than the hourly seeds in its plan, mod-29 reduction only, offset zero and the source's own implementations. PHP, .NET and ISAAC reference vectors in this script are self-generated, not independent runtime checks. No other generators, reductions, seeds, offsets, languages or key-skip rules are excluded.",
+  "next_steps": "A new PRNG proposal needs an exact implementation and seed mapping, an external vector where available, a planted decode under the proposed rule, and a predeclared seed/offset bound.",
+  "outcome": "not-supported",
+  "tags": [
+    "PRNG",
+    "keystream",
+    "PHP mt_rand",
+    ".NET System.Random",
+    "ISAAC",
+    "Blum-Blum-Shub",
+    "LFSR",
+    "Geffe",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00"
+    ],
+    "artifacts": [
+      "experiments/records/public-prng-seed-sweep/source/analysis/seed_sweep/ct.bin"
+    ],
+    "representation": "The source's 12,956-byte zero-based GP rune stream; first 120 runes scored under its English quadgram model.",
+    "procedure": "Run the source's seven generators for each of its 1,877 fixed seeds; decode both signs and both directions with its beam width 400 and maximum three rejected symbols; compare scores to the fixed −5.5 bar and 200 shuffled-prefix nulls.",
+    "parameters": "Seven implementations × 1,877 seeds × 2 signs × 2 directions = 52,556 decodes; modulo-29 reduction, key offset zero, 120-rune screen.",
+    "exclusions": "Hourly seed grid in the plan, rejection reduction, other generators or seeding conventions, nonzero offsets, longer first-stage screens, other scoring languages, and other key-skip transition rules."
+  },
+  "review": {
+    "reviewer": "Source executable replay with independent ciphertext and result checks; generator runtime equivalence not externally verified",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-prng-seed-sweep/run.py",
+    "environment": "Python 3 standard library. Source and inputs are bundled. Full rerun takes several minutes; checker alone is quick.",
+    "script": "experiments/records/public-prng-seed-sweep/run.py",
+    "script_sha256": "6f90914996d244aa59e9014b6ac6839e31584ca5aa5ad9025961137f5c7038f0",
+    "inputs": [
+      {
+        "path": "experiments/records/public-prng-seed-sweep/run.py",
+        "sha256": "6f90914996d244aa59e9014b6ac6839e31584ca5aa5ad9025961137f5c7038f0"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/check.py",
+        "sha256": "232fdc657e51058fad0782b03e4ba63823aee355f7d000e222583f54379df293"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/plot.py",
+        "sha256": "16c85f3c8755f600a5d8b95e7b58547a5ad713c42e093ea3e477b0797429a034"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/round16/prng/prng_sweep.py",
+        "sha256": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/round16/prng/PREREG.md",
+        "sha256": "f14a565a7bb7c08c49ab6c0b3f7cc16459ebaae2000692f3ddec64a20b08a88c"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/round16/prng/RESULTS.md",
+        "sha256": "2bf78f62badb7714b5462e62d6fc3811a19126731f8b2901ff6989b506fe66a6"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/round16/prng/original_results.json",
+        "sha256": "f982e35cc2866f4a2a7655063e8f3390d15ccd6629742680e190f9a1219614e8"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/seed_sweep/ct.bin",
+        "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/round16/prng/results.json",
+        "sha256": "c817b402dce91ca92e1fd286808e680777814736948c8638bbad9033417dc0fe"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/score.svg",
+        "sha256": "2598463808c02b9a2d15747a8908918036c6f9e43ed038099603c35988047465"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/public-prng-seed-sweep/score.svg",
+      "caption": "The planted decode clears the fixed score bar; the strongest of 52,556 LP2 decodes does not. Higher is better."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned test plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/prng/PREREG.md"
+    },
+    {
+      "label": "Pinned executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/prng/prng_sweep.py"
+    },
+    {
+      "label": "Pinned reported results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/prng/RESULTS.md"
+    }
+  ],
+  "related": [
+    "seed-crib-controls",
+    "decoder-skip-controls"
+  ]
+}

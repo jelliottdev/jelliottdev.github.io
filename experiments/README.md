@@ -131,8 +131,14 @@ Three different fields organize the work:
 When the retested record is ready to publish:
 
 1. Add its exact ID to `related` for at least one relevant method family. Link only families that help describe the actual procedure; a word mentioned in the background is not enough. Do not create a new broad family for every parameter change.
-2. Add its ID to `record_kind_by_id` with an existing key from `record_kinds`: `manuscript`, `control`, `alphabet`, `audit`, `historical`, or `replay`. Read the definitions in the same file before choosing. A method replay can reproduce a proposed procedure without confirming its reading.
+2. Add its ID to `record_kind_by_id` with an existing key from `record_kinds`: `method`, `measurement`, `control`, `alphabet`, `audit`, `historical`, or `replay`. Read the definitions in the same file before choosing. A method replay can reproduce a proposed procedure without confirming its reading.
 3. Keep these edits together with the record's publication. The experiment builder requires type assignments to cover exactly the published records. The method-map builder requires linked records to be published. Drafts must therefore remain absent from both structures.
 4. Run the build commands above, then `node scripts/test_idea_coverage.cjs` and `python scripts/check_article_links.py`. Inspect the experiment's type label, its method-guide links, and its placement among baseline/variants. These checks validate organization and references; they do not reproduce the scientific calculation.
 
 If withdrawing a record to draft, remove its type assignment and method links in the same change, and review published records that reference it. Do not replace a missing or withdrawn test with a family-level claim that the method failed. If a retest changes only the result of an existing record, keep its identity and update the scope, outputs and explanation as required.
+
+## Parallel work and publication
+
+Before choosing a source test, compare the pinned ledger entry and decoding rule with both published records and unfinished record directories. Claim its exact source ID with the integrating agent; a shared source file is not sufficient to establish equivalence. Keep work in a separate directory and leave `status` as `draft` until the calculation, independent checker and interpretation are ready. The integrating agent publishes completed records together and owns shared indexes and builds.
+
+Use LF newlines for newly generated text. Preserve archived source bytes with explicit Git attributes when their exact hashes matter. After staging a release, run `python scripts/check_staged_catalog.py --all` before committing. This reads all indexed blobs in one Git process and catches files whose working bytes match the catalog but whose published bytes were normalized. Run `git diff --cached --check` and review the staged file list; do not stage another agent's unfinished directory.
