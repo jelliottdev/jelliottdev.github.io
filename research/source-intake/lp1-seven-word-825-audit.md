@@ -1,0 +1,9 @@
+# LP1 seven-word GP-825 claim
+
+The supplied discussion selects the proposed LP2 phrase “AS I GO THE WEATHER TURNS COLD” and compares it with a seven-word stretch of LP1's warning. This audit checks **only the LP1 side**. It uses the shipped decoded-rune trace, applies the documented LP1-10 pair correction used by that trace, keeps the archived word separators and maps decoded runes to their GP prime values and zero-based indices. It does not independently establish the proposed LP2 plaintext, its rune spelling or its sum.
+
+In the pinned seven solved LP1 sections there are **694 rune words**. The warning span beginning at zero-based word 9 reads `YOU CNOW TO BE TRUE TEST THE` under this trace's Latin labels. It has **7 words, 21 runes, GP sum 825 and index sum 232**. It is the **only** seven-word window with both 21 runes and GP sum 825 among **652 windows confined to their sections**. Concatenating all seven sections gives 688 possible seven-word starts, but that crosses section boundaries and may also traverse the LP1-05 square. Neither denominator is the discussion's 716. This audit does not know which alternate text or counting convention produced 716.
+
+The result is an exact census under its declared inputs, not a probability of deliberate linkage. The comparison phrase and its numeric criteria were selected after the proposed route was developed; a chance assessment must repeat the full phrase-and-window selection on controls. The author's `YOV`/`TRVE` spelling also differs from this site's decoded trace labels `YOU`/`TRUE`; the rune sequence, rather than Latin typography, is what this count fixes.
+
+Run `python scripts/audit_lp1_825_window.py --check`. The [saved report](lp1-seven-word-825-audit.json) gives section totals, the matching location and input hashes. The script is included in the reference download.

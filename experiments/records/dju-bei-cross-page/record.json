@@ -1,0 +1,100 @@
+{
+  "id": "dju-bei-cross-page",
+  "title": "DJU-BEI on LP2-27 and LP2-55",
+  "status": "published",
+  "question": "Does the reported six-rune DJU-BEI sequence occur at the stated rune offsets on LP2-27 and LP2-55?",
+  "summary": "The exact sequence appears once on each specified archived page: zero-based rune offsets 28 and 70, with the same visible word separator.",
+  "tags": [
+    "LP2-27",
+    "LP2-55",
+    "repeated sequence",
+    "six-gram",
+    "DJU BEI",
+    "cross-page",
+    "rune offsets"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-27",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "data/pages/lp2-27.json",
+      "data/pages/lp2-55.json"
+    ],
+    "representation": "The archived raw rune transcription on each of the two specified pages. The stream keeps only the 29 Gematria Primus runes, including headings, and resets the offset at each page.",
+    "procedure": "Scan all six-rune windows on each specified page for the exact rune sequence ᛞᛄᚢᛒᛖᛁ; record zero- and one-based positions and the original source slice including separators.",
+    "parameters": "One fixed six-rune target; no matching across a page boundary; punctuation and line breaks excluded from the offset.",
+    "exclusions": "Other manuscript pages, image-level transcription adjudication, plaintext or cipher inference, significance testing and a causal relation to doublet suppression."
+  },
+  "outcome": "supported",
+  "finding": "LP2-27 has exactly one occurrence at zero-based rune offset 28 (line 2, columns 11–17); LP2-55 has exactly one at offset 70 (line 4, columns 4–10). Both source slices are ᛞᛄᚢ-ᛒᛖᛁ.",
+  "limitations": "The two target pages and sequence were supplied after the pattern was noticed. This is a transcription-bound location check, not a prospectively selected statistical test or a demonstration of a decoding mechanism.",
+  "next_steps": "A proposed use of the recurrence should specify a complete operation that predicts other unseen pages or words, then test it on held-out material with the same offset convention.",
+  "family": {
+    "id": "dju-bei-cross-page",
+    "title": "Cross-page rune recurrence",
+    "question": "Where does an exact rune sequence recur across manuscript pages?",
+    "baseline": "dju-bei-cross-page"
+  },
+  "variant": {
+    "label": "Two specified pages and one fixed six-rune sequence",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Deterministic replay against two archived page transcriptions",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dju-bei-cross-page/run.py --check",
+    "environment": "Python 3 standard library; no network or AI calls.",
+    "script": "experiments/records/dju-bei-cross-page/run.py",
+    "script_sha256": "535c67e5f16ad3d549980707de5dbc9dac88efc8234a2895c0e60bf25f0490f9",
+    "inputs": [
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dju-bei-cross-page/results.json",
+        "sha256": "5b2d988939ca33fc1a2097c45cf491ed7ec60e04515597ff89914821e1408f9e"
+      },
+      {
+        "path": "experiments/records/dju-bei-cross-page/offsets.svg",
+        "sha256": "ade05febfec52bc0be2596b05136b788ba8e3f7ba1eb62f657e072c76352f7f0"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Discussion intake with original attachment hash and limits",
+      "url": "https://jelliottdev.github.io/research/source-intake/matrix-and-base-notes-2026-10-22.md"
+    },
+    {
+      "label": "LP2-27 source image",
+      "url": "https://jelliottdev.github.io/images/lp2-27.jpg"
+    },
+    {
+      "label": "LP2-55 source image",
+      "url": "https://jelliottdev.github.io/images/lp2-55.jpg"
+    }
+  ],
+  "related": [
+    "doublet-lag-profile",
+    "doublet-context"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dju-bei-cross-page/offsets.svg",
+      "caption": "The exact six-rune sequence at offsets 28 and 70 on the two specified pages."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "liberpedia-sectionwise-rune-profile-plan-v1",
+  "date": "2026-10-22",
+  "question": "How do rune collision and neighboring-equality rates vary across suggested LP2 artwork sections, particularly pages 40-53 versus 54-55?",
+  "source": "Archived text/lp2-NN.txt, using the 29 runes in data/index.json. Include headings, exclude number-only page 50 from rune counts.",
+  "groups": [[0, 2], [3, 7], [8, 14], [15, 22], [23, 26], [27, 32], [33, 39], [40, 53], [54, 55]],
+  "measures": ["pooled rune index of coincidence", "equal adjacent runes divided by within-page rune edges"],
+  "length_control": "Use every contiguous 308-rune window from the concatenated rune stream of pages 40-53. Count IoC within the window and doublets only at positions that share an original page. Compare the single pages 54-55 score with the distribution of earlier windows. Windows overlap and are descriptive, not independent trials or a p-value.",
+  "exclusions": "Alternate transcription, word-internal rate, keys, decryptions, section inference, and a generative cipher model."
+}

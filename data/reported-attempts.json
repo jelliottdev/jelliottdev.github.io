@@ -1351,13 +1351,13 @@
         "author": "CC",
         "reported": "2026-10-21",
         "attachment_id": "1562574778206912663",
-        "sha256": "e16b6f9b4d1d7d9bd87a1dfcc00fc3f9413aae3f7ad155e7157fda0fb914d817",
-        "public_url": "https://cdn.discordapp.com/attachments/1562574777355345991/1562574778206912663/Liber_Primus_Beginner_Guide_15-22.pdf?ex=6adbce2a&is=6ada7caa&hm=48e6b38c081d453420ac1f390ead5d9dde8666af4bc29b799cb9e6d0bfafcb8b"
+        "sha256": "e16b6f9b4d1d7d9bd87a1dfcc00fc3f9413aae3f7ad155e7157fda0fb914d817"
       },
       "reported_idea": "Different LP2 sections may be numerical matrices built from runes, GP primes, decimal prime digits or rune indices; spiral and geometric routes might select cells.",
-      "coverage": "Several raw counts and their rectangular fits reproduce, as recorded in the source-intake audit. The Fibonacci prime panel and one 27 by 27 totient route have narrower checks. The fits do not select the proposed traversal or decrypt the sections.",
+      "coverage": "Several raw counts and their rectangular fits reproduce in the source-intake audit. A bounded Stage 1/2 replay checks the LP2-15–22 digit spirals and selected Roman arithmetic. The fits do not select a unique traversal or decrypt the sections.",
       "related_records": [
-        "totient-map-route"
+        "totient-map-route",
+        "cc-roman-matrix-replay"
       ],
       "related_guides": [
         "method-routes",
@@ -1390,12 +1390,11 @@
         "author": "CC",
         "reported": "2026-10-22",
         "attachment_id": "1562832499955212429",
-        "sha256": "70bb9742fbb12439b6966c40d08c230325ab8fe87814de4dffcb8922805629ef",
-        "public_url": "https://cdn.discordapp.com/attachments/1562574777355345991/1562832499955212429/15-22_Stage_2_ROMANA.pdf?ex=6adb6cb0&is=6ada1b30&hm=c10b109e50bae7b6c051391a004b1ef83835067cb71c394d68092333323a12d0"
+        "sha256": "70bb9742fbb12439b6966c40d08c230325ab8fe87814de4dffcb8922805629ef"
       },
       "reported_idea": "Transpose the LP2-15 number square; select seven positions, take the final two digits of each entry, keep the first Roman-numeral symbol, then reorder by the HALFMAN letter ranking. The selected symbol values sum to 225.",
-      "coverage": "The seven selected values and their arithmetic sum can be checked, but the source derives its candidate reading alphabet from the proposed words and has not shown a complete decryption or held-out prediction. This chain has not been replayed as one Liberpedia experiment.",
-      "related_records": [],
+      "coverage": "The Stage 1/2 replay reproduces the seven selected Roman symbols and total of 225. Two of 80 nearby orientation/window cases also meet the declared conditions, both using the same seven numbers. The proposed reading alphabet derives from the candidate words; no complete decryption or held-out prediction is shown.",
+      "related_records": ["cc-roman-matrix-replay"],
       "related_guides": [
         "branches"
       ],
@@ -1424,7 +1423,7 @@
         "sha256": "976d41e4fb70be241b1d3d0f9e17b94a8bc4029f4dae93944c1319d56e071e74"
       },
       "reported_idea": "A selected seven-word LP1 span and the proposed LP2 phrase reportedly each use 21 runes with GP sum 825; their rune-index sums reportedly differ by one.",
-      "coverage": "The underlying 27 by 27 totient route has a bounded replay. The claimed LP1 seven-word-window uniqueness, 825 comparison and denominator have not been independently audited and do not validate the proposed plaintext.",
+      "coverage": "A pinned census finds one 21-rune, GP-825 match among 652 section-internal LP1 seven-word windows, at warning word 9. It does not reproduce the reported denominator 716 or independently establish the proposed LP2 phrase. The 27 by 27 totient route has a separate bounded replay.",
       "related_records": [
         "totient-map-route"
       ],
@@ -1452,10 +1451,12 @@
         "sha256": "1cac35c91551b3278227b4cca1fe2c88f1c96734cfc067bd9560a9445d26ca5d"
       },
       "reported_idea": "Compare rune IoC, doublet counts and repeated sequences across declared LP2 page groups, especially the long 40–55 section and pages 54–55.",
-      "coverage": "Existing studies measure several whole-corpus, page and lag statistics, but the exact group contrast and claimed LP2-27/55 repeated-position correspondence are not closed by those records.",
+      "coverage": "A sectionwise comparison puts LP2-54–55 IoC and doublet rate within the middle 95% of equal-length windows from LP2-40–53. A separate record locates the DJU-BEI sequence once on each of LP2-27 and LP2-55 without inferring a cipher.",
       "related_records": [
         "ea-difference-independence",
-        "doublet-lag-profile"
+        "doublet-lag-profile",
+        "sectionwise-rune-profile",
+        "dju-bei-cross-page"
       ],
       "related_guides": [
         "doublets",
@@ -1487,8 +1488,8 @@
         "sha256": "1cac35c91551b3278227b4cca1fe2c88f1c96734cfc067bd9560a9445d26ca5d"
       },
       "reported_idea": "A reported count of 59 distinct alphanumeric symbols and absent lowercase f prompted a base-59 interpretation, followed by base-60 and base-62 conversions in the same discussion.",
-      "coverage": "The site documents base-60 decoding and why a present digit of value 59 requires base at least 60 under the conventional ordering. Distinct-symbol count alone cannot set the radix. The exact 256-token downstream analysis in the extract has not been reconciled.",
-      "related_records": [],
+      "coverage": "A 256-token audit confirms 59 observed symbols, but both conventional base 60 and a custom base 59 alphabet omitting f are byte-valid. They change 220 token values; conventional base 59 is invalid. The two supplied token inventories differ at five cells, and no downstream cipher rule is established.",
+      "related_records": ["grid-radix-reconciliation"],
       "related_guides": [
         "alphanumeric-grids"
       ],

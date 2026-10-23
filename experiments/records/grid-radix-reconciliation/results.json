@@ -1,0 +1,246 @@
+{
+  "schema": "liberpedia-grid-radix-reconciliation-v1",
+  "inputs": {
+    "wiki_csv_sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5",
+    "quoted_tokens_sha256": "3d34144254b9f16555d0e06ec6c594bf356776d840370a3bc7977713dafabe8f"
+  },
+  "alphabets": {
+    "59_after_deleting_f": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdeghijklmnopqrstuvwx",
+    "59_without_renumbering": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx",
+    "60_conventional": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx",
+    "62_conventional": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  },
+  "datasets": {
+    "wiki": {
+      "inventory": {
+        "token_count": 256,
+        "distinct_tokens": 161,
+        "character_count": 512,
+        "distinct_characters": 59,
+        "missing_from_alphanumeric_62": [
+          "f",
+          "y",
+          "z"
+        ],
+        "maximum_conventional_digit": 59,
+        "lowercase_f_count": 0,
+        "leading_digit_counts": {
+          "0": 60,
+          "1": 58,
+          "2": 65,
+          "3": 56,
+          "4": 17
+        },
+        "token_4F_count": 1,
+        "token_0x_count": 3
+      },
+      "radices": {
+        "59_after_deleting_f": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 251,
+          "values_above_byte": 0,
+          "distinct_values": 161,
+          "byte_sha256": "511d4fdb69ffbae4707ef93acf7465421f5480208e28d8e8c598cafa0d33cb79",
+          "first_8_values": [
+            200,
+            227,
+            164,
+            183,
+            96,
+            233,
+            124,
+            180
+          ]
+        },
+        "59_without_renumbering": {
+          "valid": false,
+          "missing_digits": [],
+          "out_of_range_digits": [
+            "x"
+          ]
+        },
+        "60_conventional": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 255,
+          "values_above_byte": 0,
+          "distinct_values": 161,
+          "byte_sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290",
+          "first_8_values": [
+            203,
+            231,
+            167,
+            186,
+            97,
+            237,
+            126,
+            183
+          ]
+        },
+        "62_conventional": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 263,
+          "values_above_byte": 12,
+          "distinct_values": 161,
+          "byte_sha256": null,
+          "first_8_values": [
+            209,
+            237,
+            171,
+            192,
+            99,
+            243,
+            130,
+            189
+          ]
+        }
+      },
+      "base59_vs_60_changed_values": 220
+    },
+    "quoted": {
+      "inventory": {
+        "token_count": 256,
+        "distinct_tokens": 161,
+        "character_count": 512,
+        "distinct_characters": 59,
+        "missing_from_alphanumeric_62": [
+          "f",
+          "y",
+          "z"
+        ],
+        "maximum_conventional_digit": 59,
+        "lowercase_f_count": 0,
+        "leading_digit_counts": {
+          "0": 60,
+          "1": 58,
+          "2": 65,
+          "3": 56,
+          "4": 17
+        },
+        "token_4F_count": 1,
+        "token_0x_count": 3
+      },
+      "radices": {
+        "59_after_deleting_f": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 251,
+          "values_above_byte": 0,
+          "distinct_values": 161,
+          "byte_sha256": "238c8956938dc000b3c8ae5ceeccfe05062f8432066faea835502aeb0139cdc5",
+          "first_8_values": [
+            200,
+            227,
+            164,
+            183,
+            96,
+            233,
+            124,
+            180
+          ]
+        },
+        "59_without_renumbering": {
+          "valid": false,
+          "missing_digits": [],
+          "out_of_range_digits": [
+            "x"
+          ]
+        },
+        "60_conventional": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 255,
+          "values_above_byte": 0,
+          "distinct_values": 161,
+          "byte_sha256": "2a388f2949e9696d3124c90c0eb48f02c42d553ca6e6560ab9bcd28402380aab",
+          "first_8_values": [
+            203,
+            231,
+            167,
+            186,
+            97,
+            237,
+            126,
+            183
+          ]
+        },
+        "62_conventional": {
+          "valid": true,
+          "missing_digits": [],
+          "out_of_range_digits": [],
+          "maximum_value": 263,
+          "values_above_byte": 12,
+          "distinct_values": 161,
+          "byte_sha256": null,
+          "first_8_values": [
+            209,
+            237,
+            171,
+            192,
+            99,
+            243,
+            130,
+            189
+          ]
+        }
+      },
+      "base59_vs_60_changed_values": 220
+    }
+  },
+  "mismatch_count": 5,
+  "mismatches": [
+    {
+      "sequence": 46,
+      "page": "lp2-49",
+      "row": 6,
+      "column": 6,
+      "wiki": "1l",
+      "quoted": "1L"
+    },
+    {
+      "sequence": 51,
+      "page": "lp2-49",
+      "row": 7,
+      "column": 3,
+      "wiki": "0l",
+      "quoted": "0L"
+    },
+    {
+      "sequence": 166,
+      "page": "lp2-50",
+      "row": 11,
+      "column": 6,
+      "wiki": "0I",
+      "quoted": "0l"
+    },
+    {
+      "sequence": 173,
+      "page": "lp2-50",
+      "row": 12,
+      "column": 5,
+      "wiki": "2S",
+      "quoted": "2s"
+    },
+    {
+      "sequence": 247,
+      "page": "lp2-51",
+      "row": 8,
+      "column": 7,
+      "wiki": "3I",
+      "quoted": "3i"
+    }
+  ],
+  "interpretation": [
+    "Observed symbol count is not a radix: a 59-symbol sample may be drawn from a larger alphabet.",
+    "Base 59 becomes valid only after removing f and renumbering later lowercase digits. Under conventional alphanumeric values, x is digit 59 and is invalid in base 59.",
+    "Base 60 is uniquely compatible with both the conventional alphanumeric digit order and one byte per token for these inputs; this does not establish the intended decoding.",
+    "The quoted 256-token list and the wiki export are separate transcriptions. Exact output claims must identify which one was used."
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "id": "grid-radix-reconciliation",
+  "title": "LP2-49–51: does 59 observed symbols mean base 59?",
+  "status": "published",
+  "question": "Does the reported absence of lowercase f make the 256 alphanumeric grid pairs base-59 numbers rather than base-60 numbers?",
+  "summary": "The 59-symbol count reproduces, but symbol count alone does not determine a radix. A custom alphabet deleting f yields valid base-59 bytes; the conventional digit order requires base 60 for a byte-per-pair interpretation.",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "grid",
+    "base 59",
+    "base 60",
+    "base 62",
+    "radix",
+    "byte",
+    "transcription"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "exports/alphanumeric-grids.csv",
+      "experiments/records/grid-radix-reconciliation/source-tokens.txt"
+    ],
+    "representation": "All 256 two-character tokens in wiki row-major order and the 256-token sequence displayed in the supplied September 2026 discussion.",
+    "procedure": "Count case-sensitive symbols and compare the two transcriptions by coordinate. Convert each pair under four declared base/alphabet combinations and check numeral validity and the unsigned-byte bound.",
+    "parameters": "Ordinary alphabet 0–9 A–Z a–z; base-60 alphabet ends at x; custom base-59 alphabet removes f from that 60-symbol prefix and renumbers later letters. One token equals one positional two-digit value.",
+    "exclusions": "Alternative digit orders, changes to uncertain glyphs beyond the supplied lists, routes and transforms, cryptanalysis or a claim of intended plaintext."
+  },
+  "outcome": "supported",
+  "finding": "Both displayed inventories have 256 tokens, 161 distinct tokens and 59 observed characters, omitting f, y and z. The custom base-59 and ordinary base-60 interpretations both fit in bytes but differ on 220 wiki token values. Conventional base 59 is invalid because x has value 59; conventional base 62 yields 12 values above 255. The two token lists differ at five coordinates.",
+  "limitations": "The supplied discussion includes text excerpts, not its historical script files or original input file. The wiki and discussion lists share source lineage, and visually ambiguous characters remain unresolved. Mathematical validity of a representation does not show an intended cipher rule.",
+  "next_steps": "A downstream test must name its exact 256 tokens, alphabet, base, byte assumption and reading route before comparing outputs. Handle the five source differences and unresolved glyphs as input sensitivity.",
+  "family": {
+    "id": "grid-radix-reconciliation",
+    "title": "Grid representation and radix",
+    "question": "Which numeric interpretations are valid for the printed grid pairs, and under what assumptions?",
+    "baseline": "grid-radix-reconciliation"
+  },
+  "variant": {
+    "label": "Four explicit alphabet and radix combinations",
+    "changes": []
+  },
+  "review": {
+    "reviewer": "Deterministic script replay against the archived export and supplied quoted token list",
+    "retested_on": "2026-10-22",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-radix-reconciliation/run.py --check",
+    "environment": "Python 3 standard library; no network or AI calls.",
+    "script": "experiments/records/grid-radix-reconciliation/run.py",
+    "script_sha256": "440838e475c2812d526bd12fda1391d3f6b7a2a0611ad3f60bc535a28d72a1db",
+    "inputs": [
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      },
+      {
+        "path": "experiments/records/grid-radix-reconciliation/source-tokens.txt",
+        "sha256": "3d34144254b9f16555d0e06ec6c594bf356776d840370a3bc7977713dafabe8f"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-radix-reconciliation/results.json",
+        "sha256": "79642ed0621f22a3daf1b039e9be833eb8b602e0a12d75a2d87af541f81a02df"
+      },
+      {
+        "path": "experiments/records/grid-radix-reconciliation/digit-map.svg",
+        "sha256": "2d89bcf279c27efd8acf69e901cb621669b4893d8d3fad2b6e3f2e95e17ef1eb"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "256-token list transcribed from the supplied September 2026 discussion excerpt",
+      "url": "https://jelliottdev.github.io/experiments/records/grid-radix-reconciliation/source-tokens.txt"
+    },
+    {
+      "label": "Discussion intake with original attachment hash and limits",
+      "url": "https://jelliottdev.github.io/research/source-intake/matrix-and-base-notes-2026-10-22.md"
+    },
+    {
+      "label": "Archived alphanumeric grid inventory",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    }
+  ],
+  "related": [
+    "grid-stem-uncertainty",
+    "grid-round-glyphs",
+    "grid-direct-bytes"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/grid-radix-reconciliation/digit-map.svg",
+      "caption": "Deleting the unused f changes the numerical values assigned to later lowercase letters; it is a different digit alphabet."
+    }
+  ],
+  "article": "# Does the grid use base 59 or base 60?\n\n**Both are valid ways to number the 256 printed pairs, but they require different digit alphabets.** The archived grid transcription uses 59 of the 62 possible case-sensitive letters and digits: `f`, `y` and `z` do not occur. That count does not tell us the radix. A text can use fewer symbols than its alphabet permits.\n\nThe reported base-59 script explicitly deletes lowercase `f` from the candidate `0–9 A–Z a–x` alphabet and moves every later lowercase letter down one digit. Under that rule, `x` becomes 58, so base 59 is mathematically valid. Under the ordinary order without that deletion, `x` is digit 59 and **cannot** appear in a base-59 numeral. This is the difference between a custom alphabet and just changing 60 to 59 in a formula.\n\n![Two digit alphabets: deleting an unused f moves g from 42 to 41 and x from 59 to 58.](experiments/records/grid-radix-reconciliation/digit-map.svg)\n\n| Interpretation | `x` digit | `4F` value | Largest of 256 values | Fit in a byte? |\n| --- | ---: | ---: | ---: | --- |\n| Base 59, remove `f` and renumber | 58 | 251 | 251 | Yes |\n| Base 59, keep ordinary digit numbers | 59 | — | — | Invalid: `x` is out of range |\n| Base 60, ordinary digit order | 59 | 255 | 255 | Yes |\n| Base 62, ordinary digit order | 59 | 263 | 263 | No: 12 entries exceed 255 |\n\nThe **byte condition matters**. If each pair must be exactly one unsigned byte and the ordinary digit order is fixed, the presence of `x` requires a base of at least 60, while `4F` must be at most 255 and therefore requires a base of at most 60. That makes 60 the only base *under those two assumptions*. Deleting `f` changes the digit assignments, so the base-59 proposal falls outside that conditional proof. Dropping the byte condition permits base 62 as a positional representation, though not as one byte per pair.\n\nThe two valid byte conversions are materially different: **220 of 256 values change** between custom base 59 and ordinary base 60 on the wiki text. For example, the first pair `3N` is 200 in the custom base-59 scheme and 203 in base 60. The fact that both produce 256 bytes does not identify which, if either, was intended.\n\n## Which transcription was tested?\n\nThe pasted discussion includes a full 256-pair list. Its count of **59 observed characters** and **161 distinct pairs** reproduces, but that list differs from the wiki export at five coordinates: LP2-49 (6,6) `1L`/`1l` and (7,3) `0L`/`0l`; LP2-50 (11,6) `0l`/`0I` and (12,5) `2s`/`2S`; LP2-51 (8,7) `3i`/`3I`. These are the already documented [source transcription disagreements](#/wiki/seventh-onion-transcriptions?section=grid), not evidence for one base over another. They change the exact byte streams and their hashes under **both** encodings.\n\nThe more detailed transforms described later in the discussion are separate proposals. This audit does not replay those scripts, test routes through the grid or infer a plaintext. It fixes the elementary input and alphabet question so those experiments can state what they actually used. The [grid guide](#/wiki/alphanumeric-grids) explains the page layout and the conditional byte interpretation.\n\n## Reproduce\n\nRun `python experiments/records/grid-radix-reconciliation/run.py --check` from the repository or extracted experiment bundle. The [script](experiments/records/grid-radix-reconciliation/run.py) reads the coordinate-bearing [wiki grid export](exports/alphanumeric-grids.csv) and the [256 quoted tokens](experiments/records/grid-radix-reconciliation/source-tokens.txt), applies each declared alphabet and checks the saved [result table](experiments/records/grid-radix-reconciliation/results.json). It uses only the Python standard library. The quoted tokens came from the supplied September 2026 discussion; the original linked script files were not supplied, so this checks the displayed list and code excerpt, not an executable historical repository.\n",
+  "article_path": "experiments/records/grid-radix-reconciliation/article.md",
+  "script_sha256": "440838e475c2812d526bd12fda1391d3f6b7a2a0611ad3f60bc535a28d72a1db",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

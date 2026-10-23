@@ -9,6 +9,21 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
+REBUILT_COLLECTION_ARCHIVES = (
+    'reference-data.zip', 'original-images.zip',
+    'transcriptions-and-readings.zip',
+)
+
+
+def ignore_rebuilt_archives(directory, names):
+    """Do not copy archives that this test removes before its first build."""
+    ignored = shutil.ignore_patterns('.git', 'node_modules', '__pycache__')(directory, names)
+    relative = Path(directory).resolve().relative_to(ROOT.resolve())
+    if relative == Path('downloads'):
+        ignored.update(set(names) & set(REBUILT_COLLECTION_ARCHIVES))
+    elif relative == Path('downloads/experiments'):
+        ignored.update(name for name in names if name.endswith('.zip'))
+    return ignored
 
 
 def snapshot(root):
@@ -37,8 +52,8 @@ def compare(first, second):
 
 
 def remove_copied_archives(root):
-    for name in ['reference-data', 'original-images', 'transcriptions-and-readings']:
-        (root / 'downloads' / (name + '.zip')).unlink(missing_ok=True)
+    for name in REBUILT_COLLECTION_ARCHIVES:
+        (root / 'downloads' / name).unlink(missing_ok=True)
     for archive in (root / 'downloads/experiments').glob('*.zip'):
         assert archive.resolve().is_relative_to(root.resolve())
         archive.unlink()
@@ -50,7 +65,7 @@ def main():
         assert target.is_relative_to(ROOT.parent.resolve()) and target != ROOT.resolve()
         # No hard links: rebuilding this copy must not overwrite checkout files.
         shutil.copytree(ROOT, target, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns('.git', 'node_modules', '__pycache__'))
+                        ignore=ignore_rebuilt_archives)
         # Repository archives may have been produced on another OS/zlib version.
         # Establish a fresh baseline in this runtime before testing repeatability.
         remove_copied_archives(target)

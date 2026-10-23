@@ -1,0 +1,12 @@
+{
+  "schema": "liberpedia-short-window-lag13-plan-v1",
+  "date": "2026-10-22",
+  "question": "Are exact repeated two-rune patterns at lag 13 in 15-rune within-page windows more frequent than page-composition-preserving shuffles?",
+  "source_scope": "Archived LP2-00–55 rune-bearing page texts. Retain headings; exclude page-crossing windows and non-runes.",
+  "operational_rule": "A 15-rune window beginning at i qualifies if C[i]=C[i+13] and C[i+1]=C[i+14]. This is one narrow interpretation of an unspecified reported 'recurring pattern'; no source coordinates were supplied.",
+  "window_lengths": "Lengths 10-13 have no internal lag-13 pair; length 14 has one; length 15 has two. Only length 15 can contain this repeated two-rune pattern.",
+  "selection_control": "For each lag 2-28, count exact repeated two-rune patterns on every eligible within-page window of length lag+2. Divide by its exact fixed-page-composition shuffle expectation. Compare the observed lag-13 count to 499 page-preserving shuffles; compare the best observed ratio across all 27 lags to each shuffle's own best ratio. The latter adjusts for choosing a lag after looking across this declared range, but not for all possible pattern rules.",
+  "trials": 499,
+  "seed": 330113,
+  "excluded": "Word boundaries, keys, skipped runes, marker rules, non-exact motifs, windows longer than 15 for the fixed-lag claim, and a cipher generator."
+}

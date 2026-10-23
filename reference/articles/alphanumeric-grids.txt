@@ -164,6 +164,8 @@ Nearby bases under the same digit-value assignment
 
 *The base-59 figures are formal substitutions into the equation; invalid digits prevent them from being valid base-59 numerals. A small numerical result alone does not make a representation valid.
 
+The grids happen to use only 59 distinct letters and digits. That observation does not require a base of 59: a sample need not use every permitted digit. A separate reconciliation of the reported base-59 proposal checks a different, valid alphabet that removes unused lowercase f and renumbers later letters. Its byte values differ from the base-60 values here. The table above keeps the ordinary digit assignments fixed.
+
 Can the right digit be the more significant one?
 
 Not under these same assumptions. Reversing significance makes 0x worth 59b. Since b must be at least 60, that is at least 3540, already too large for a byte. The observed 2x would be 3542 at base 60. This concerns the two digits inside each pair; it does not decide the order of rows, pages, or bytes in a larger integer.
@@ -289,6 +291,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/scripts/export_alphanumeric_grids.py
 - coordinate-bearing report; Download its report and input hashes
   https://jelliottdev.github.io/exports/grid-radix-bound.json
+- separate reconciliation of the reported base-59 proposal
+  https://jelliottdev.github.io/#/experiments/grid-radix-reconciliation
 - standard-library Python script
   https://jelliottdev.github.io/scripts/audit_grid_radix.py
 - reference-data bundle

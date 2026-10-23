@@ -79,7 +79,8 @@ def build(root, record):
     reusable = False
     if destination.exists():
         with zipfile.ZipFile(destination) as archive:
-            reusable = (set(archive.namelist()) == set(members)
+            reusable = (len(archive.namelist()) == len(members)
+                        and set(archive.namelist()) == set(members)
                         and all(archive.read(name) == data for name, data in members.items()))
     if not reusable:
         with zipfile.ZipFile(destination, "w", zipfile.ZIP_DEFLATED) as archive:
@@ -87,7 +88,7 @@ def build(root, record):
                 info = zipfile.ZipInfo(name, (2026, 1, 1, 0, 0, 0))
                 info.compress_type = zipfile.ZIP_DEFLATED
                 archive.writestr(info, data)
-    with zipfile.ZipFile(destination) as archive:
-        assert len(archive.namelist()) == len(members)
-        assert all(archive.read(name) == data for name, data in members.items())
+        with zipfile.ZipFile(destination) as archive:
+            assert len(archive.namelist()) == len(members)
+            assert all(archive.read(name) == data for name, data in members.items())
     return destination.relative_to(root).as_posix(), len(members), len(omitted)

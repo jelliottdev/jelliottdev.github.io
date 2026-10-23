@@ -1,0 +1,18 @@
+{
+  "question": "Do the two supplied CC PDFs' LP2-15–22 digit-grid contacts and Roman/HALFMAN arithmetic reproduce from the archived text, and how selective is the stated Roman result among nearby orientation/window choices?",
+  "source": {
+    "stage_1_pdf_sha256": "e16b6f9b4d1d7d9bd87a1dfcc00fc3f9413aae3f7ad155e7157fda0fb914d817",
+    "stage_2_pdf_sha256": "70bb9742fbb12439b6966c40d08c230325ab8fe87814de4dffcb8922805629ef",
+    "pages": "Stage 1, 7–15 and 18–19; Stage 2, 2–6",
+    "source_identification": "CC, Hard Reset Beginner Guide and Hard Reset Stage 2, supplied 2026-10-22"
+  },
+  "input_rule": "Liberpedia data/index.json Gematria Primus lookup and text/lp2-15.txt through lp2-22.txt. Omit the nine-rune header on LP2-15, retain all 150 body runes including the red opening, and retain all runes on LP2-16–22.",
+  "fixed_replay": [
+    "Expand each rune's GP prime into ordinary unseparated decimal digits. Check 17² and 59² lengths.",
+    "Place digits center-out, right–down–left–up, and map each 4×4 printed-panel coordinate via 1→2, 2→3, 3→N−1, 4→N.",
+    "At each of sixteen resulting digit addresses, check odd labels for first digit of a rune and even labels for last digit.",
+    "Transpose printed 4×4 entries with label positions fixed; take positions 5–11, final two decimal digits, first Roman-numeral symbol, then direct HALFMAN rank order 4,1,5,3,6,2,7. Compare printed layout, inverse rank order and neighboring window."
+  ],
+  "selection_check": "For all eight 4×4 dihedral orientations and ten consecutive seven-position windows, apply the same Roman first-symbol and direct HALFMAN rule. Count outcomes that have both symbol-value sum 225 and descending values. The 80 trials are a local choice inventory, not a calibrated chance probability or exhaustive search over all possible rules.",
+  "excluded": "No reconstruction of the source's proposed word substitution as an independent key; no new transformation of ciphertext to readable text; no inference that chosen counts or contacts are cipher instructions; no statistical independence claim for sixteen contacts."
+}

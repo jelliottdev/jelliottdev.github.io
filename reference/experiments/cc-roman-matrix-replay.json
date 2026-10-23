@@ -1,0 +1,130 @@
+{
+  "id": "cc-roman-matrix-replay",
+  "title": "LP2-15–22: digit spirals and Roman/HALFMAN selector",
+  "status": "published",
+  "question": "Do the reported digit-grid contacts and seven-number Roman/HALFMAN result reproduce from archived rune text, and what happens under nearby orientation and window choices?",
+  "summary": "The 17×17 and 59×59 GP-digit grids, the registered rune-boundary counts, and the selected Roman total of 225 reproduce. Two of 80 local orientation/window cases meet both 225 and descending order, but both reuse the same seven numbers. No rune-to-plaintext rule is supplied.",
+  "tags": [
+    "LP2-15",
+    "LP2-16–22",
+    "numerical matrix",
+    "digit spiral",
+    "Roman numerals",
+    "HALFMAN",
+    "Fibonacci panel",
+    "reported attempt",
+    "selection effects"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22"
+    ],
+    "representation": "Archived LP2-15 body runes with nine-rune header excluded, plus all LP2-16–22 runes; each GP prime expanded to ordinary decimal digits. The printed LP2-15 number panel is an independent fixed input for the Roman selector.",
+    "procedure": "Build center-out right–down–left–up 17² and 59² digit spirals; register the printed 4×4 labels through 1→2, 2→3, 3→N−1, 4→N; check odd-label starts and even-label ends. Transpose the printed panel, take labels 5–11, convert final two digits to Roman numeral first symbols and apply direct HALFMAN ranking. Enumerate eight symmetries and ten consecutive seven-label windows as nearby controls.",
+    "parameters": "17×17 and 59×59 streams; sixteen contacts per grid; direct rank order 4,1,5,3,6,2,7; Roman symbols I,V,X,L; target symbol-value sum 225 and descending values. The 80-case scan does not include other word readings, numeric extractions, registrations or permutations.",
+    "exclusions": "No independent derivation of the five candidate plaintext words; no cipher execution, held-out plaintext, calibrated chance probability or claim that the supplied grids are authorial instructions."
+  },
+  "outcome": "inconclusive",
+  "finding": "LP2-15 body has 150 runes and 289 GP digits; LP2-16–22 has 1,744 runes and 3,481 GP digits. Under the specified registration, alternating rune-boundary contacts match 12/16 and 16/16. Transposed labels 5–11 give LXLLLXV, rearranged as LLLLXXV by direct HALFMAN ranking; symbol values sum to 225. Exactly 2/80 local orientation-window trials also meet sum 225 and descending order, but both contain the identical seven panel values.",
+  "limitations": "The representation, source grouping, proposed words, Roman extraction and coordinate map were chosen during exploration. Contacts sharing a rune are dependent. The 80 nearby choices are not the full search space and cannot be read as a p-value. Matching arithmetic does not identify a cipher or decrypt any text.",
+  "next_steps": "Independently establish the proposed word reading, then freeze one grid registration, route and rune readout before testing an untouched continuation; compare the complete selector with alternative representations and routes.",
+  "review": {
+    "reviewer": "Computational replay of pinned manuscript text and supplied PDFs",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/cc-roman-matrix-replay/run.py --check",
+    "environment": "Python 3 standard library",
+    "script": "experiments/records/cc-roman-matrix-replay/run.py",
+    "script_sha256": "49844dca6ee49cd106118e2f1e90b770d760186b156c4f8f40c415c86de57844",
+    "inputs": [
+      {
+        "path": "experiments/records/cc-roman-matrix-replay/plan.json",
+        "sha256": "9191dc9c6f732f1545b62ff2059bacd613a60540e35a9a73a812d1f0b19a2001"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/cc-roman-matrix-replay/results.json",
+        "sha256": "a55472172396211c655d057d41038273dcce7f0307aeebbbe03ed604ce49ca98"
+      },
+      {
+        "path": "experiments/records/cc-roman-matrix-replay/trace.svg",
+        "sha256": "18ded57a7569e1dfef7395a495d5ab54754f3bdfc3ed1109cd16c3816c415f2d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/cc-roman-matrix-replay/trace.svg",
+      "caption": "The two reported digit-grid counts and the selected seven-symbol Roman/HALFMAN calculation."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Source intake and supplied-file hashes",
+      "url": "https://jelliottdev.github.io/research/source-intake/cc-stage-replay-2026-10-22.md"
+    },
+    {
+      "label": "Original LP2-15 page",
+      "url": "https://jelliottdev.github.io/#/page/lp2-15"
+    }
+  ],
+  "related": [
+    "lp2-15-mobius-panel",
+    "lp2-15-totient-gap-audit"
+  ],
+  "article": "# Replaying the LP2-15–22 Roman matrix proposal\n\nThe two supplied guides construct digit grids from Gematria Primus (GP) prime values, map the printed [LP2-15](#/page/lp2-15) number panel into those grids, then connect seven transposed panel entries to Roman numerals and the word **HALFMAN**. We reproduced the stated counts and contacts against Liberpedia’s archived rune text. This is a replay of a **conditional construction**: it has not decrypted LP2-15–22.\n\n![A compact trace from the reported digit grids through the Roman initials, with the local selection check](experiments/records/cc-roman-matrix-replay/trace.svg)\n\n| Check | Reproduced result | What it establishes |\n| --- | --- | --- |\n| LP2-15 body, excluding nine-rune header | 150 runes → **289 digits = 17²** | The square fit needs the eleven red body runes. |\n| LP2-16–22, all runes | 1,744 runes → **3,481 digits = 59²** | A second exact square fit under the stated concatenation. |\n| Alternating rune-start/rune-end at 16 registered contacts | **12/16** on 17²; **16/16** on 59² | A real property of the stated registration and streams. The contacts are dependent and the registration was selected during investigation. |\n| Transposed panel, positions 5–11, Roman initials | `L X L L L X V` → `L L L L X X V` in direct HALFMAN order | Values sum to **225** and end descending. Ordering does not change the sum. |\n| Eight orientations × ten seven-position windows | **2/80** show both 225 and descending output | Both hits use the **same seven panel values**. They are not two independent confirmations. |\n\n## Follow one result\n\nThe position map sends printed coordinate 1→2, 2→3, 3→*N*−1, and 4→*N*. On each center-out digit spiral, registered positions 9, 10 and 11 straddle the final inner-square boundary. On the 17² grid, digits 225–226 are the two digits of **X = 47**, followed by the beginning of **NG = 79** at 227. On the 59² grid, digits 3249–3250 are **J = 37**, followed by **Y = 103** at 3251. This reproduces the reported beginning → end → beginning pattern in both streams. The inner-square addresses are fixed by the grid sizes; the rune-boundary coincidence is an additional observation under the chosen registration.\n\nFor the number trial, transposed positions 5–11 hold **3152, 3222, 3258, 3278, 3288, 4516, 1206**. Their last two digits are 52, 22, 58, 78, 88, 16 and 06. The first symbols of the corresponding Roman numerals are L, X, L, L, L, X and V. These individual symbol values add to **225**; the conventional Roman numeral for 225 is **CCXXV**, so `LLLLXXV` is an additive symbol list, not standard notation.\n\nThe [printed](#/wiki/lp2-15-panel) positions 5–11 have zero-based Fibonacci prime indices **5, 8, 13, 21, 34, 55, 89**, which also sum to 225. That arithmetic was already present in the selected panel window; the HALFMAN permutation only rearranges the Roman-symbol list. The proposed words FORK, DEDUCED, ROMANA, TO and HALFMAN come from an alphabet reconstructed from those same proposed word pairs. Fitting them does not independently validate the selector.\n\n## How sensitive is the Roman result?\n\nKeeping the seven-position window at 5–11 but using the printed panel yields **230**, not 225. Moving the transposed selection to positions 6–12 yields **180**. Inverting the HALFMAN order leaves the transposed 5–11 sum at 225 but makes the values **not descending**. Our fixed, local scan checks all eight square symmetries and all ten possible consecutive seven-position windows. Two of the 80 combinations satisfy both conditions, but they select exactly the same seven-number sequence under differently labeled orientations. The scan documents nearby choices; it cannot supply a p-value for the broader search that led to the proposal, which also includes word readings, digit extraction, Roman symbol choice, rank direction and coordinate registration.\n\nThe 16/16 larger-grid boundary result is worth preserving as a structural observation. It is not sixteen independent predictions: contacts can share a rune, and the same chosen representation and registration generate every contact. A cipher test would need a rule selected **before** inspecting a fresh passage that predicts where to read, what to emit and how to continue past position 11. The PDFs expressly leave that step open.\n\n## Reproduce\n\nFrom the repository root, with Python 3 and no external packages:\n\n```text\npython experiments/records/cc-roman-matrix-replay/run.py --check\n```\n\nThe [plan](experiments/records/cc-roman-matrix-replay/plan.json) fixes the source and choices; the [results](experiments/records/cc-roman-matrix-replay/results.json) include every registered address, its rune span, all 80 local Roman trials and input hashes. The [source-intake note](research/source-intake/cc-stage-replay-2026-10-22.md) records the two PDF hashes and scope.\n",
+  "article_path": "experiments/records/cc-roman-matrix-replay/article.md",
+  "script_sha256": "49844dca6ee49cd106118e2f1e90b770d760186b156c4f8f40c415c86de57844",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
