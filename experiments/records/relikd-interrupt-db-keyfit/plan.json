@@ -1,0 +1,249 @@
+{
+  "schema": "relikd-interrupt-db-keyfit-plan-v1",
+  "timing": "Frozen after reading saved candidate metadata and exploratory solved-text key-fit probes, before running the nine LP2 candidate key fits or outputs.",
+  "source_revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_sha256": {
+    "probability.py": "97ab4e9410b9dd02a7699d6d8e1832e8a246bb5c152ca634c5d2adfd430bffd9",
+    "LP/KeySearch.py": "654d22ee300b7dd21493cc13d043d636ee501484d8c2df93f1d84b01fbfd8232",
+    "LP/RuneSolver.py": "ac95f1004cc556d0a43b45307bf06c9b205b6023783cf940c180ccbe1d5adccc",
+    "LP/RuneText.py": "eeb01b05b20bdf95b74eac0f03fe0f1b1a26f962058061e4ea2fad9cf4a090e4",
+    "LP/Rune.py": "f2f36e8de4bed660181554d27e57b748404d81ca9619aedf97141f89c0522d52",
+    "LP/Alphabet.py": "81049ea7a9d68798e90cf7f9df10805ff2ee9bafaa0e3c54d1b5d1ed0e12c465",
+    "LP/utils.py": "d6d23a13dbff69c144af50e5721b82abd43696d7455cf660881373010b4a96f7",
+    "LP/Probability.py": "aab78f3cf6730a368a9ce5e9935df877ee5a0326c171dfb759f050ee7b9aa3d7",
+    "LP/NGrams.py": "2ffbf1e5c2ff44d6c48f7e283b01ad324956965ff89630637f14e45fac583b8a",
+    "LP/InterruptDB.py": "970743bd8ffe68ca041ed0f0377025a7d9d03ced9828aaed5d5fc31196e4de2c",
+    "LP/InterruptIndices.py": "2467553a859b4c8caca45f309ef6df1cc85449e086773a81fab554e6625f3618",
+    "db/db_norm.txt": "2728723ba8f7b6a32395fef784846bbcb0cb776a93b63d393b8d5d21a10a2b7b",
+    "db/db_indices.txt": "a2776f78f05099a3e431a5315b23eb6872c42120506a6c89c4aff025d367f824",
+    "data/p-1gram.txt": "b2dfd9628b9babcef2ab2970cf39422302b48cd4d456ff68d2722a355e74eadf",
+    "_solved.txt": "ad183dcffc77e0d6eaca41c16b2653e3cfbc52e106dde4e798abad1bdf51eea6",
+    "pages/p0-2.txt": "c54b019ed29305e29c3fdafa792106e3249d27998f94473a2652e7c7bb787521",
+    "pages/p27-32.txt": "a3b2365a8172455f004ff1352f40298af6944d47106e5cf1f9418436861907ff",
+    "pages/p40-53.txt": "282ce106e92eb69a11fdf38382670ebd3b73acf777e88be9e7142768edd5a73b",
+    "pages/p57_parable.txt": "c2ddff01c66c6ed3a0bc3ab1b5a4cc441c58e38bcc0753ca3d1590ec40db7102"
+  },
+  "repair": "The original main loop calls a broken pattern_solver and then unconditionally continues; its break_cipher branch is unreachable. Execute break_cipher's saved-row body directly without claiming the original script produced a negative result.",
+  "saved_row_filter": "Exact probability.py db_norm filter: score>=0.55 and interrupt rune index 0 (F); nine rows in three LP2 sections, order preserved. No new candidate generation.",
+  "candidate_rows": [
+    {
+      "source_line": 15,
+      "section": "p0-2",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.56711,
+      "interrupt_index": 0,
+      "key_length": 14,
+      "skip_occurrences": [
+        1,
+        4,
+        5,
+        6,
+        8,
+        12,
+        13,
+        14,
+        16,
+        17,
+        20
+      ]
+    },
+    {
+      "source_line": 18,
+      "section": "p0-2",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.5589,
+      "interrupt_index": 0,
+      "key_length": 17,
+      "skip_occurrences": [
+        5,
+        6,
+        8,
+        9,
+        10,
+        14,
+        16,
+        17,
+        19
+      ]
+    },
+    {
+      "source_line": 22,
+      "section": "p0-2",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.55519,
+      "interrupt_index": 0,
+      "key_length": 21,
+      "skip_occurrences": [
+        1,
+        4,
+        5,
+        6,
+        7,
+        12,
+        14,
+        15,
+        16,
+        20
+      ]
+    },
+    {
+      "source_line": 23,
+      "section": "p0-2",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.55519,
+      "interrupt_index": 0,
+      "key_length": 21,
+      "skip_occurrences": [
+        1,
+        3,
+        4,
+        6,
+        7,
+        12,
+        14,
+        15,
+        16,
+        20
+      ]
+    },
+    {
+      "source_line": 207,
+      "section": "p27-32",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.58252,
+      "interrupt_index": 0,
+      "key_length": 13,
+      "skip_occurrences": [
+        2,
+        5,
+        6,
+        10,
+        12,
+        13,
+        15,
+        17,
+        18,
+        19
+      ]
+    },
+    {
+      "source_line": 208,
+      "section": "p27-32",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.58252,
+      "interrupt_index": 0,
+      "key_length": 13,
+      "skip_occurrences": [
+        2,
+        5,
+        6,
+        10,
+        12,
+        13,
+        15,
+        16,
+        18,
+        19
+      ]
+    },
+    {
+      "source_line": 221,
+      "section": "p27-32",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.58503,
+      "interrupt_index": 0,
+      "key_length": 26,
+      "skip_occurrences": [
+        2,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        20
+      ]
+    },
+    {
+      "source_line": 283,
+      "section": "p40-53",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.59027,
+      "interrupt_index": 0,
+      "key_length": 20,
+      "skip_occurrences": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "source_line": 284,
+      "section": "p40-53",
+      "interrupt_count": 20,
+      "saved_interrupt_score": 0.59027,
+      "interrupt_index": 0,
+      "key_length": 20,
+      "skip_occurrences": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20
+      ]
+    }
+  ],
+  "operators": [
+    {
+      "name": "Vigenere",
+      "source_key_class": "GuessVigenere",
+      "source_solver_class": "VigenereSolver",
+      "mean_similarity_limit": 0.05
+    },
+    {
+      "name": "Affine",
+      "source_key_class": "GuessAffine",
+      "source_solver_class": "AffineSolver",
+      "mean_similarity_limit": 0.04
+    }
+  ],
+  "source_clock": "Use db_indices first 20 F rune positions; if at least 21 occur, fit only before the 21st F. Remove each listed 1-based F occurrence from that fit prefix. Solver preserves skipped F and advances the periodic key only on non-skipped runes; punctuation does not advance it. Decode the full source section with the fitted key.",
+  "controls": {
+    "authentic": "Source p57_parable runes, unencrypted with key length 1 and no skips; both key-fit branches must return identity and exact full 95-rune reading.",
+    "matched_length": "First 419, 416, and 472 GP runes of source _solved.txt, encrypted separately with periodic key lengths 14, 26, and 20. Those are the three source fit-prefix lengths before skipping. Vigenere key b_j=(7j+3) mod29. Affine key a_j=((5j+1) mod28)+1, b_j=(7j+3) mod29. The full fitted key and complete plaintext must recover exactly; report each branch/length, do not tune after outcomes. No F skipping in this language control, so it is easier than target fitting.",
+    "skip_fixture": "A separate short constructed string with selected F interruptions must match source solver's clock and preserve skipped F. This checks mechanics, not language power.",
+    "interpretation": "A branch may be called a bounded negative only if all three matched-length controls for that branch recover completely and the exact source threshold is calibrated; otherwise target outputs are descriptive candidate replay only. Authentic length-1 success alone is not sufficient."
+  },
+  "target_output": "For each of the nine saved rows and both source solvers, preserve fitted key, mean source similarity, source-threshold decision, full source-section decoded GP indices hash, and readable prefix. No post hoc word scoring or arbitrary key changes.",
+  "limits": "Saved candidate rows and source model are historical inputs; target LP2 outcomes were not inspected before this plan. The matched-length controls are conditional on the source's English unigram model and do not cover other languages, key schedules, interruptions or corpora."
+}

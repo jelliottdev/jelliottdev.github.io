@@ -6709,7 +6709,7 @@ Two letter-encoding bounds on LP2 · Bounded solving test
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-35 related records
+37 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -6779,6 +6779,10 @@ A keyword that shifts with each rune · Method replay
 Fixed-key F-preserving Vigenère on LP2 · Bounded solving test
 
 A rotating-key search stopped at its first screen · Method replay
+
+A column solver with a short-key limit · Bounded solving test
+
+Interrupt-key fits needed a stronger known-text check · Method replay
 
 
 
@@ -7006,7 +7010,7 @@ Four archived texts as running keys · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-26 related records
+28 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -7058,6 +7062,10 @@ Can the decoder follow a known key through a full book? · Control
 Can a correct key look wrong to the decoder? · Control
 
 Cryptographic seed streams across the unsolved pages · Method replay
+
+A column solver with a short-key limit · Bounded solving test
+
+Interrupt-key fits needed a stronger known-text check · Method replay
 
 
 
@@ -8211,6 +8219,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/eternalth-f-preserving-vigenere
 - A rotating-key search stopped at its first screen
   https://jelliottdev.github.io/#/experiments/relikd-rotated-key-source-gate
+- A column solver with a short-key limit
+  https://jelliottdev.github.io/#/experiments/d4v1-column-unigram-key-recovery
+- Interrupt-key fits needed a stronger known-text check
+  https://jelliottdev.github.io/#/experiments/relikd-interrupt-db-keyfit
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Does the fractionation reversal undo its own shuffle?
@@ -14895,6 +14907,8 @@ We reran the published fingerprint parser on our hosted images. Its two page gro
 
 In the full repository, run python research/source-intake/audit-r18-jpeg-fingerprints.py --check to repeat the 58-file comparison. The audit data lists each input hash and the two complete metadata vectors.
 
+The embedded LP2-00 profile also matches the 2,576-byte saved Ghostscript reference profile byte for byte. This identifies shared profile data, not a unique program or version: profiles can be reused. The comparison receipt records the image and profile hashes.
+
 Reproduce the complete inventory
 
 python -m pip install Pillow
@@ -15012,6 +15026,10 @@ Sources, related references, and files
   https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L1-toolchain/jpeg_fingerprint.py
 - audit data
   https://jelliottdev.github.io/research/source-intake/r18-jpeg-fingerprint-replay-2026-10-23.json
+- saved Ghostscript reference profile
+  https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round30/A3-gs-pdf-forensics/gs906_srgb.icc
+- comparison receipt
+  https://jelliottdev.github.io/research/source-intake/r30-profile-and-art-source-audit-2026-10-23.json
 - reference-data bundle; reference data
   https://jelliottdev.github.io/downloads/reference-data.zip
 - original-image bundle; original images
@@ -30090,7 +30108,7 @@ Research coverage: facts, attempts and next tests
 
 What the archive already establishes, where its evidence is incomplete, and which bounded experiment series should come next.
 
-The research archive currently contains 292 published reproducible records: 62 bounded solving or extraction tests, 90 proposed-method replay, 76 manuscript measurements, 27 controls, 34 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
+The research archive currently contains 294 published reproducible records: 63 bounded solving or extraction tests, 91 proposed-method replay, 76 manuscript measurements, 27 controls, 34 source or input audits, 2 alphabet-wide analyses, and 1 historical reproduction. The method map has 54 families; 2 have no linked completed record. A missing link means not documented here, not “never tried”; a linked record covers only its stated inputs and bounds.
 
 Record type matters as much as outcome. The prime-shift test applies a specified rule to unsolved pages. The doublet measurement describes a ciphertext feature. The tree-source audit checks artwork provenance. Only the first is a bounded attempt to use a candidate solving operation; none is a complete LP2 solve. Have we tried it? separates these roles when searching.
 
@@ -37134,6 +37152,476 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "running key",
         "book key",
         "running keys"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "d4v1-column-unigram-key-recovery",
+  "status": "published",
+  "title": "A column solver with a short-key limit",
+  "question": "Does the pinned source’s automatic column-frequency solver produce English-like LP2 pages with fixed repeating-key lengths 2, 3 or 5?",
+  "reader_question": "Has a program tried to infer a short repeating key from rune frequencies?",
+  "summary": "A pinned C++ solver discards hard-coded possible interrupter positions, infers one shift per Vigenère column from solved-rune frequencies, then decrypts the unfiltered page. We replayed its direct numeric preview for three fixed short key lengths and added controlled whole-page English scoring.",
+  "finding": "None of 165 LP2 outputs reached the fixed English line. One page-length known-text passage was recovered in 107 of 165 settings and not recovered in 58. The best actual score, −6.778 on LP2-55/KL5, came from a setting that did not recover that passage; 107 of 199 full-search shuffles had an equal or higher maximum. The source automatic-period mode missed a period-3 plant in all nine complete-reading controls.",
+  "limitations": "Only fixed KL2,3,5 and the direct numeric preview were scored as English. The same constructed passage was adjusted to each target page length; its recovery is not a statistical power estimate or a guarantee for other English text. The source unigram target comes from known solved readings, so those reading checks are in-sample. Settings that did not recover the passage cannot support a ciphertext rejection. Other key lengths, automatic period, patched/rune/Latin candidate branches, different interrupter clocks and other languages remain open. The English scorer and null selection are added analyses, not claims of original-source execution.",
+  "next_steps": "A longer-key or automatic-period claim should first recover planted full readings under that exact page and interruption rule, then score its full search against matched nulls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "Vigenere",
+    "repeating key",
+    "column frequencies",
+    "source method"
+  ],
+  "related": [
+    "wholepage-known-vigenere-keys",
+    "lp2-31-periodic-ioc",
+    "d4v1-positional-totient-streams",
+    "english-scorer-controls"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "representation": "Archived GP29 rune order including headings; source pages17–72 aligned to site LP2-00–55, with LP2-50 excluded because its pinned transcription has no runes.",
+    "procedure": "For each page and fixed KL2,3,5, remove source-listed possible-interrupter positions for column inference only; select each of29 shifts by source solved-page unigram target; apply the inferred key to the original page, then apply the separately pinned English quadgram score. Plant exact known texts and repeat the full 165-setting search on199 pagewise shuffled controls.",
+    "parameters": "3 fixed periods ×55 rune-bearing pages =165 outputs; 9 complete-reading plants, 165 page-length plants, 199 full-search shuffle replicates, English line −5.5.",
+    "exclusions": "No other fixed periods, KL0 target verdict, source alternate patched/rune/Latin key transforms, modified interrupter list, other languages or key layers."
+  },
+  "review": {
+    "kind": "fixed-period source key-inference replay with controlled English screen",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent histogram/assembled-text checker reruns all165 outcomes, 165 page plants, 199 full-search shuffles; nine keys spot-checked against compiled pinned C++",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/d4v1-column-unigram-key-recovery/run.py --check && python experiments/records/d4v1-column-unigram-key-recovery/check.py && python experiments/records/d4v1-column-unigram-key-recovery/plot.py --check",
+    "environment": "Python 3, NumPy, Numba; offline. Original unlicensed C++ linked at pinned commit and not bundled.",
+    "script": "experiments/records/d4v1-column-unigram-key-recovery/run.py",
+    "script_sha256": "5043e09d62c0263d417cdf2bdc0c2094f743d5230c096eb284dc257bbdbb7e29",
+    "inputs": [
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/plan.json",
+        "sha256": "d029269ab0f2f9bd34b2f36de391230524d054ecc2127e73f90da85ad2f049c9"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/run.py",
+        "sha256": "5043e09d62c0263d417cdf2bdc0c2094f743d5230c096eb284dc257bbdbb7e29"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/check.py",
+        "sha256": "b6c13daa044ea28ffbbbd112445fbe721877873a92031f5791262b5f4ecc4716"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/plot.py",
+        "sha256": "a0c6e71211e76ccc5dfd86efaa9c93112399ea6c5c32d3d290b0689cee334c1b"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/interrupt-map.json",
+        "sha256": "48648b247c39b11a715f3b3818a74008ac3600c647b36430960e58fd41ef43ce"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/source-target.json",
+        "sha256": "3abdc19d5f6ac59dde292a091d652fada677c7eabba975b457c2ce629a100589"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/source-parity.json",
+        "sha256": "1c442aec65151c7ba22fe52e671ae247d35530c7b32786b1f57164bd964d1f51"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/execution-note.json",
+        "sha256": "51b31225054367b96704eaa2479aa67a263fc20e5ff37069f6d5fed1bb6fd10f"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/lp2-56.csv",
+        "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/results.json",
+        "sha256": "d2bb76b1936257313c9ef5830c748943708c88d262bc7f05feb547cae65ebf24"
+      },
+      {
+        "path": "experiments/records/d4v1-column-unigram-key-recovery/summary.svg",
+        "sha256": "5d8a6c48e70c10f27c846b8feaeaa0362c297d214d20d899ed466ab47150cade"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/d4v1-column-unigram-key-recovery/summary.svg",
+      "caption": "Out of 165 page-and-key-length outputs, 107 recovered a planted readable text; none of those scored as English."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned C++ automatic Vigenère solver",
+      "url": "https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp"
+    },
+    {
+      "label": "Pinned source possible-interrupter definitions",
+      "url": "https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/solutions.cpp"
+    },
+    {
+      "label": "Archived manuscript and reading source index",
+      "url": "https://jelliottdev.github.io/#/wiki/sources"
+    }
+  ],
+  "reader_finding": "This short-key solver produced no English-like LP2 output. It recovered the planted passage in 107 of 165 page-and-key-length settings; the other 58 did not recover it. Shuffled searches often scored higher than the best manuscript result.",
+  "reader_limit": "The test uses key lengths 2, 3 and 5, one planted passage, and the source’s exact rule for removing possible interrupters. It does not rule out repeating-key ciphers or longer keys.",
+  "article": "# A column solver with a short-key limit\n\n**Result.** The source's column-frequency solver produced 165 complete-page readings using fixed key lengths 2, 3 and 5. None reached the predeclared English score line. The solver recovered **one planted readable passage in 107 of those 165 page-and-key-length settings**; it did not recover the passage in the other 58. Among all LP2 outputs, the highest score was −6.78 on LP2-55 at key length 5, but that setting did not recover the plant. The highest-scoring LP2 output in a setting that recovered the plant was LP2-49 at key length 3 (−6.95). A full-search shuffle comparison found 107 of 199 trials with a maximum at least as high as the overall LP2 best.\n\n![Of 165 page-and-key-length outputs, 107 recovered a planted reading, and none of those passed the English score line.](experiments/records/d4v1-column-unigram-key-recovery/summary.svg)\n\nThe [pinned C++ solver](https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp) asks for a page and a key length. It removes the source's listed possible interrupter positions, divides the remaining runes into repeating-key columns, and chooses the shift in each column that best matches a frequency table from solved pages. Its first preview applies the inferred key to the **original, unfiltered** page. We reproduced that direct numeric preview for fixed lengths 2, 3 and 5 on LP2-00–55, omitting the number-only LP2-50. This is **one source method with three bounds**, not three different cipher ideas.\n\n| Check | Outcome |\n| --- | --- |\n| Nine archived readings encrypted with fixed repeating keys | Exact key recovered on 9/9 at length 2, 9/9 at length 3, and 8/9 at length 5 |\n| The same readable passage fitted to each target page's length, with its exact source interrupter positions | 107/165 key recoveries; every planted passage also clears the English score line |\n| LP2 complete-page outputs | 0/165 clear the −5.5 English score line, including 0/107 in settings that recovered the plant |\n| 199 shuffled-page trials, each rerunning all pages and all three lengths | 107 global maxima equal or exceed the strongest actual output; plus-one tail 108/200 |\n\nThis check used **one constructed passage**, adjusted to each target page's length. Recovering it shows that a setting can work on that passage; failing to recover it leaves that setting without this positive check. It is not a statistical power estimate or a guarantee for other English text. The source removes listed rune positions **before finding the key**, which can change column phase, but decrypts the unfiltered page afterward. On the 23 pages where listed positions fall inside the page, many plants fail for that reason. A different key schedule or an implementation that preserves phase after removals is outside this replay. The source's automatic key-length setting also chose a longer period rather than the planted length 3 for all nine complete known-reading controls, so this record makes no negative claim about automatic mode.\n\nThe English quadgram score and its −5.5 line are **our added screen**, calibrated against the nine complete readings and 199 complete-search shuffle controls. The original program derives its unigram target from known solved readings; checks on those readings are in-sample for that key-inference target, not an independent language-generalization test. Its unigram fitness alone does not certify English. We did not count its alternate rune, Latin or patched-key transforms as tested here. The [source-order correction note](experiments/records/d4v1-column-unigram-key-recovery/execution-note.json) documents a discarded exploratory implementation whose floating-point summation could change a tied shift. The final key inference agrees with compiled original C++ on nine fixed page-and-length cases, and an independent checker reconstructs every target row, plant and shuffle.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/d4v1-column-unigram-key-recovery/plan.json), [complete results](experiments/records/d4v1-column-unigram-key-recovery/results.json), [source interrupter map](experiments/records/d4v1-column-unigram-key-recovery/interrupt-map.json) and [source target frequencies](experiments/records/d4v1-column-unigram-key-recovery/source-target.json) are supplied with the experiment. From the repository root run `python experiments/records/d4v1-column-unigram-key-recovery/run.py --check`, followed by `check.py` and `plot.py --check`. The checks require Python with NumPy and Numba, but no network fetch or upstream source checkout. The unlicensed source program is linked and pinned by revision rather than copied into the archive.\n",
+  "article_path": "experiments/records/d4v1-column-unigram-key-recovery/article.md",
+  "script_sha256": "5043e09d62c0263d417cdf2bdc0c2094f743d5230c096eb284dc257bbdbb7e29",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  },
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
       ]
     }
   ]
@@ -96543,6 +97031,260 @@ Article: https://jelliottdev.github.io/reference/articles/reading-lp2-57.html
         "OTP",
         "unrestricted key",
         "arbitrary key"
+      ]
+    }
+  ]
+}
+
+---
+
+{
+  "id": "relikd-interrupt-db-keyfit",
+  "status": "published",
+  "title": "Interrupt-key fits needed a stronger known-text check",
+  "question": "Can the saved LiberPrayground interrupt positions support complete Vigenère or affine key recovery?",
+  "reader_question": "Did removing selected F runes reveal a readable key or message?",
+  "summary": "The original interrupt-key branch was unreachable. Running its nine saved candidates through both source fitters yields 13 passing similarity scores, but none of six comparable known-text controls recovers a complete message.",
+  "finding": "The source's one-rune-key solved-page and skip-clock controls pass. At source candidate lengths 14, 20 and 26, Vigenère recovers 69–86% and affine 35–59% of six constructed known-text messages. Thirteen of 18 saved LP2 key fits clear the source's similarity limit, which therefore cannot establish a reading here.",
+  "limitations": "This is an explicitly extracted branch, not an original program run or a fresh search for interrupt positions. The six longer controls fail complete recovery, so the target misses cannot exclude either cipher family. The known-text controls contain no deleted F runes and are easier than the target fits. Candidate fits use only 404–455 runes before decoding entire sections; no English interpretation is claimed for the decoded streams.",
+  "next_steps": "A proposed interrupt-key reading needs complete recovery on comparable known text, a specified skip clock and key source, then a bounded comparison of its complete decoded message.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "interruptions",
+    "Vigenère",
+    "affine",
+    "source method",
+    "control power"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53"
+    ],
+    "artifacts": [
+      "experiments/records/relikd-interrupt-db-keyfit/plan.json"
+    ],
+    "representation": "The exact three pinned source section streams p0-2, p27-32 and p40-53 agree with site rune data, including empty LP2-50. Nine saved database rows are fitted on section prefixes; the fitted keys are then applied to the full 22 nonempty pages across those sections.",
+    "procedure": "Extract the otherwise unreachable source break_cipher saved-row branch. For each row, delete its declared F occurrences before the twenty-first F from the fit prefix, fit both original source key models, and decode the complete section with source skip-clock semantics. Independently recount fits and decoded hashes.",
+    "parameters": "Nine source database rows selected by interrupt F and score at least 0.55; two source fitters (18 outputs); source mean-similarity limits 0.05 and 0.04; six matched-length known-text controls plus solved-page and short skip-clock controls.",
+    "exclusions": "No regeneration of interrupt database rows, no other interruption rune, altered language model, arbitrary key length, additional LP2 section, new plaintext scorer or whole-family exclusion."
+  },
+  "review": {
+    "kind": "explicitly extracted source branch and control-power replay",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned Git-object hashes, exact source/site stream crosswalk and independent key-fit/full-decode arithmetic",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/relikd-interrupt-db-keyfit/run.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --phase all --check && python -X utf8 experiments/records/relikd-interrupt-db-keyfit/check.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND && python experiments/records/relikd-interrupt-db-keyfit/plot.py --check",
+    "environment": "Python 3 standard library and a separate Git checkout of LiberPrayground pinned at 719380ebee0523ad7f2fbf389c6f960d51bea5a4. The runner reads hash-checked Git blobs, so sparse checkout omissions do not substitute source files. The unlicensed source is not bundled.",
+    "script": "experiments/records/relikd-interrupt-db-keyfit/check.py",
+    "script_sha256": "432a1854ddc74f0d746c48217ebf59581655e41a77eb0bc97bfd5cea8125211f",
+    "inputs": [
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/plan.json",
+        "sha256": "6308f34602604c5bdcf948b964afcef4ba79480f6c7170b3b08c093cddf473fb"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/run.py",
+        "sha256": "eb9b2714893f6491585ac743acd6bc168fff12b6f06c0f4aa5e2e1fd923095cd"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/check.py",
+        "sha256": "432a1854ddc74f0d746c48217ebf59581655e41a77eb0bc97bfd5cea8125211f"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/plot.py",
+        "sha256": "0238db48529b755f1f56558823e870e994e79ab5d59f214fa2ee0d799f07aecb"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/article.md",
+        "sha256": "b142a1ec224116a13a3980ad64f4f80d8936182bbffb201bf1679481c2868631"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/controls.json",
+        "sha256": "c7835ff66eb05255912cb4b20cc9927efc86e9edd30853ccb213a1174008b463"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/results.json",
+        "sha256": "8ab48588d23e278f2f144dfcf7d61a5dd59762ed2bcb8ed9f7c91a26a97e7cc5"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/control-power.svg",
+        "sha256": "c1caa161d69db3e149d2d972ed3585bcaf708fb366ff7a3e6f0c296b5e761981"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/relikd-interrupt-db-keyfit/control-power.svg",
+      "caption": "Comparable planted messages are only partly recovered; source similarity fits alone cannot establish a reading."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned original search loop and interrupt-key branch",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/probability.py"
+    },
+    {
+      "label": "Pinned key fitting code",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/KeySearch.py"
+    },
+    {
+      "label": "Pinned saved interrupt candidates",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/db/db_norm.txt"
+    }
+  ],
+  "related": [
+    "relikd-rotated-key-source-gate"
+  ],
+  "reader_finding": "Thirteen saved LP2 key fits pass the source score limit, but six comparable planted known messages are only partly recovered. No readable message has been established.",
+  "reader_limit": "The original branch was unreachable and these are nine saved candidates, not a full interrupt search. The control failure prevents a negative claim about Vigenère or affine ciphers.",
+  "article": "# The saved interrupt-key candidates did not pass a known-text check\n\nThe [original LiberPrayground program](https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/probability.py) contains a second search path: remove selected `ᚠ` runes, fit a repeating Vigenère or affine key to the remaining text, then decode the full section while preserving the removed runes. **That path never ran in the original main loop.** A broken earlier call raises an error, and an unconditional `continue` would skip it even after that call is repaired. We extracted the saved-row operations without claiming the original program had tested them.\n\nThe source database supplies **nine candidate rows** from three sections. Each is tried with the source's two key fitters, for 18 outputs. The key fit uses only about 404–455 runes before the twenty-first `ᚠ`; it then applies the inferred key to sections as long as 3,008 runes.\n\n![Six known-text controls are only partly recovered, although thirteen LP2 fits clear the source limit.](experiments/records/relikd-interrupt-db-keyfit/control-power.svg)\n\nThe source fitters recovered an authentic 95-rune solved page with a one-rune identity key. They also reproduced a small skipped-`ᚠ` clock example. At the saved candidates' more demanding key lengths **14, 20 and 26**, however, all six constructed known-text messages failed complete recovery. The Vigenère fits recovered 69–86% of their runes; affine recovered 35–59%. These language controls are slightly easier than the target fits because they do not delete any `ᚠ` before estimating the key.\n\nDespite that weak control result, **13 of 18 LP2 fits clear the source's similarity limit**. This means the source limit readily reports candidate keys without demonstrating that its fitter can recover a complete known message at comparable lengths. A reported fit is **not** a reading, and the five misses do not rule out either cipher family.\n\nThe nine source rows, key lengths, skip positions, code and inputs are frozen in the [plan](experiments/records/relikd-interrupt-db-keyfit/plan.json). The [results](experiments/records/relikd-interrupt-db-keyfit/results.json) retain each fitted key, score, threshold decision and full decoded-stream hash. The source database scores that selected these rows were historical candidate metadata; we did not regenerate or broaden its interrupt search. The controls were run before these LP2 key fits. The plan records earlier exploratory known-text calibration, so its timing should not be read as independent preregistration of control choices.\n\nTo reproduce, obtain the pinned source Git revision `719380ebee0523ad7f2fbf389c6f960d51bea5a4` and substitute its path below. The scripts read and hash-check Git objects, including files omitted from a sparse checkout; they do not redistribute the unlicensed source.\n\n```text\npython -X utf8 experiments/records/relikd-interrupt-db-keyfit/run.py --source-root SOURCE --phase all --check\npython -X utf8 experiments/records/relikd-interrupt-db-keyfit/check.py --source-root SOURCE\npython experiments/records/relikd-interrupt-db-keyfit/plot.py --check\n```\n",
+  "article_path": "experiments/records/relikd-interrupt-db-keyfit/article.md",
+  "script_sha256": "432a1854ddc74f0d746c48217ebf59581655e41a77eb0bc97bfd5cea8125211f",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "title": "Repeating-key and polyalphabetic ciphers",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "title": "Keystream interruptions and reset rules",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
       ]
     }
   ]

@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "0f4acb76bb4c936c101c41c145449341e6ac4b82536c1c8c81d9a9893cf169e9",
-    "record_count": 288
+    "sha256": "c8d8688f57ce52ba34ecfabf60c7e05833803e3405e1c3f8976c9ab88a3fc6f9",
+    "record_count": 294
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,11 +27,11 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 29,
-    "unreconciled": 95,
-    "source_entries_reviewed": 73,
-    "source_entries_pending_review": 99,
+    "unreconciled": 93,
+    "source_entries_reviewed": 75,
+    "source_entries_pending_review": 97,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 95,
+    "pending_review_without_candidate_match": 93,
     "execution_replay_states": {
       "partial-execution": 14,
       "complete-executed-grid": 23,
@@ -4901,9 +4901,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The embedded LP2-00 ICC profile is byte-identical to the committed 2,576-byte reference profile.",
+          "A match to one reference profile does not identify a unique exporting application or version. No cross-version uniqueness test or source PDF was supplied."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Reproduced a profile-byte subclaim only; the source release-window and most-likely-version statements remain unverified."
+      }
     },
     {
       "source_id": "R30-B1-BLOB-CRYPTO",
@@ -4964,9 +4973,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "unsupported-source-verdict",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [],
+        "unresolved_parts": [
+          "The saved source is a five-row illustration catalogue with seven reference links, not an exhaustive attribution method or result.",
+          "Its processed-photo, font-origin and cipher-navigation statements require separate primary evidence. No maker identification or universal absence of one is established."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Read-only source catalogue audit; external references and individual image comparisons were not replayed."
+      }
     },
     {
       "source_id": "R30-D1-LEDGER-AUDIT",

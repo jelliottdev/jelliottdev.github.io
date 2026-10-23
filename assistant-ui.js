@@ -161,7 +161,10 @@ function renderIdeaChecker(query,version){
     } else if(searchNow&&idea)status.textContent=!canCompare&&(matches.length||supporting.length)?
       'Read the related evidence below; no AI comparison was requested.':'Index checked. No AI request was needed.';
   }
-  input.addEventListener('input',()=>{shownIdea='';reset()});
+  input.addEventListener('input',()=>{
+    shownIdea='';reset();results.replaceChildren();
+    $('#idea-coverage').replaceChildren();$('#reported-attempts').replaceChildren();
+  });
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();if(!submit.disabled)$('#experiment-form').requestSubmit();}});
   cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
   $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});history.replaceState(null,'','#/experiments?'+p);draw(true,true);};

@@ -33,6 +33,8 @@ We reran the published fingerprint parser on our hosted images. Its two page gro
 
 In the full repository, run python research/source-intake/audit-r18-jpeg-fingerprints.py --check to repeat the 58-file comparison. The audit data lists each input hash and the two complete metadata vectors.
 
+The embedded LP2-00 profile also matches the 2,576-byte saved Ghostscript reference profile byte for byte. This identifies shared profile data, not a unique program or version: profiles can be reused. The comparison receipt records the image and profile hashes.
+
 Reproduce the complete inventory
 
 python -m pip install Pillow
@@ -150,6 +152,10 @@ Sources, related references, and files
   https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L1-toolchain/jpeg_fingerprint.py
 - audit data
   https://jelliottdev.github.io/research/source-intake/r18-jpeg-fingerprint-replay-2026-10-23.json
+- saved Ghostscript reference profile
+  https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round30/A3-gs-pdf-forensics/gs906_srgb.icc
+- comparison receipt
+  https://jelliottdev.github.io/research/source-intake/r30-profile-and-art-source-audit-2026-10-23.json
 - reference-data bundle; reference data
   https://jelliottdev.github.io/downloads/reference-data.zip
 - original-image bundle; original images

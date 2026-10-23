@@ -52,6 +52,38 @@ function harness(query=''){
  assert(h.$('experiment-results').innerHTML.includes('<strong>Limit:</strong>'));
  assert(!h.context.experimentSearchResult({...record,reader_limit:undefined}).includes(record.limitations),'Cards do not expand long technical limitations when no curated limit exists');
  const exact=JSON.parse(Search.experimentDocs([record])[0].text);assert.equal(exact.finding,record.finding);assert.equal(exact.limitations,record.limitations,'Model evidence remains exact');
+ // Editing invalidates every result surface, including asynchronously refreshed support.
+ const snapshotSections=['experiment-results','idea-coverage','reported-attempts','experiment-answer'];
+ let classifyCalls=0;const classify=h.context.AssistantSearch.classify;
+ h.context.AssistantSearch={...Search,classify(...args){classifyCalls++;return classify(...args)}};
+ for(const value of ['unrelated new method','']){
+  for(const id of snapshotSections)h.$(id).innerHTML='Previous idea content';
+  input.value=value;input.listeners.input();
+  for(const id of snapshotSections)assert.equal(h.$(id).innerHTML,'',id+' clears when the idea changes');
+  vm.runInContext('refreshIdeaSupport()',h.context);
+  for(const id of snapshotSections)assert.equal(h.$(id).innerHTML,'',id+' stays clear after late support completion');
+ }
+ assert.equal(classifyCalls,0,'Editing never launches local classification');assert.equal(h.apiCalls,0,'Editing never launches inference');
+ // Pending configuration must not submit the old question after an edit.
+ let resolveConfig;h.context.pendingConfig=new Promise(resolve=>{resolveConfig=resolve});
+ vm.runInContext('assistantConfig=null;assistantConfigPromise=pendingConfig',h.context);
+ input.value='prime stream LP2-15';h.$('experiment-form').onsubmit({preventDefault(){}});
+ assert(classifyCalls>0);assert(h.$('experiment-results').innerHTML.includes(record.reader_finding),'Explicit submit restores current matches');
+ assert.equal(h.$('idea-status').textContent,'Preparing the comparison…');
+ input.value='unrelated new method';input.listeners.input();
+ vm.runInContext("assistantConfig={endpoint:'https://mock.example/ask'}",h.context);resolveConfig();await flush();
+ assert.equal(h.apiCalls,0,'Superseded configuration cannot request comparison');
+ for(const id of snapshotSections)assert.equal(h.$(id).innerHTML,'');
+ // An in-flight comparison cannot restore stale answer/status or support after editing.
+ let resolveComparison,comparisonSignal;
+ h.context.fetch=(url,options)=>{assert.equal(options.method,'POST');comparisonSignal=options.signal;return new Promise(resolve=>{resolveComparison=resolve})};
+ h.context.loadSupportingIndex=async()=>({documents:[]});
+ input.value='prime stream LP2-15';h.$('experiment-form').onsubmit({preventDefault(){}});
+ assert.equal(h.$('idea-status').textContent,'Comparing the documented scope…');
+ input.value='';input.listeners.input();assert(comparisonSignal.aborted,'Editing aborts the superseded comparison');
+ resolveComparison({ok:true,json:async()=>({answer:'Old comparison [1]',sources:[{id:record.id,href:'#/experiments/'+record.id,title:record.title}]})});await flush();
+ for(const id of snapshotSections)assert.equal(h.$(id).innerHTML,'',id+' ignores a late comparison');
+ assert.equal(h.$('idea-status').textContent,'');assert(!h.$('idea-submit').disabled);
  const retry=harness('prime stream');await retry.context.experimentsPage('',1,retry.query);
  retry.pending[0].reject(new Error('Offline'));await flush();
  assert(!retry.$('idea-retry').hidden);assert(retry.$('idea-submit').disabled);assert.equal(retry.$('experiment-query').value,'prime stream');
@@ -69,5 +101,5 @@ function harness(query=''){
  }
  const empty=harness();await empty.context.experimentsPage('',1);assert.equal(empty.$('experiment-results').innerHTML,'');
  empty.pending[0].resolve(empty.okay([]));await flush();assert(empty.$('experiment-results').innerHTML.includes('No experiment records published yet'),'A confirmed empty registry is distinct from loading');
- console.log('PASS: immediate editable checker, shared deferred load, loading/empty/error/retry, preserved input/focus, stale success/error, plain cards with exact model evidence and zero automatic AI requests.');
+ console.log('PASS: immediate editable checker, shared deferred load, loading/empty/error/retry, preserved input/focus, stale success/error, plain cards with exact model evidence, edited-idea invalidation, late support/config/comparison guards and zero automatic AI requests.');
 })().catch(error=>{console.error(error);process.exitCode=1});

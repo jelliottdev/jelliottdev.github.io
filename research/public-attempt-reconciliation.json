@@ -11,10 +11,10 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 73,
+    "source_entries_reviewed": 75,
     "reproduced_subclaim": 3,
-    "partial": 41,
-    "unsupported_source_verdict": 19,
+    "partial": 42,
+    "unsupported_source_verdict": 20,
     "blocked_exact_replay": 3,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
@@ -2073,6 +2073,39 @@
         "scope": "Exact pinned D3 synthetic 174-rune source control was rerun and passed. It is a counterexample to treating every short-seed construction as computation-proof; it is not a test showing that the actual LP2 ciphertext is solvable or unsolvable.",
         "wider_method_excluded": false
       }
+    },
+    {
+      "source_id": "R30-A3-PDF-FORENSICS",
+      "source_claim": "The embedded ICC match narrows the producer to a Ghostscript 9.01–9.15 version window, most likely 9.05, 9.06 or 9.07.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round30/A3-gs-pdf-forensics/control_results.json",
+        "liber-primus/analysis/round30/A3-gs-pdf-forensics/gs906_srgb.icc",
+        "research/source-intake/r30-profile-and-art-source-audit-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "The embedded LP2-00 ICC profile is byte-identical to the committed 2,576-byte reference profile.",
+        "A match to one reference profile does not identify a unique exporting application or version. No cross-version uniqueness test or source PDF was supplied."
+      ],
+      "audit_note": "Reproduced a profile-byte subclaim only; the source release-window and most-likely-version statements remain unverified.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R30-C1-ART-ATTRIBUTION",
+      "source_claim": "No individual artist can be attributed to the Liber Primus artwork.",
+      "status": "unsupported-source-verdict",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round30/C1-art-attribution/catalogue.json",
+        "research/source-intake/r30-profile-and-art-source-audit-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "The saved source is a five-row illustration catalogue with seven reference links, not an exhaustive attribution method or result.",
+        "Its processed-photo, font-origin and cipher-navigation statements require separate primary evidence. No maker identification or universal absence of one is established."
+      ],
+      "audit_note": "Read-only source catalogue audit; external references and individual image comparisons were not replayed.",
+      "whole_entry_coverage_verified": false
     }
   ],
   "next_batch": [

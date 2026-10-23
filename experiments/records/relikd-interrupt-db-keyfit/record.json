@@ -1,0 +1,218 @@
+{
+  "id": "relikd-interrupt-db-keyfit",
+  "status": "published",
+  "title": "Interrupt-key fits needed a stronger known-text check",
+  "question": "Can the saved LiberPrayground interrupt positions support complete Vigenère or affine key recovery?",
+  "reader_question": "Did removing selected F runes reveal a readable key or message?",
+  "summary": "The original interrupt-key branch was unreachable. Running its nine saved candidates through both source fitters yields 13 passing similarity scores, but none of six comparable known-text controls recovers a complete message.",
+  "finding": "The source's one-rune-key solved-page and skip-clock controls pass. At source candidate lengths 14, 20 and 26, Vigenère recovers 69–86% and affine 35–59% of six constructed known-text messages. Thirteen of 18 saved LP2 key fits clear the source's similarity limit, which therefore cannot establish a reading here.",
+  "limitations": "This is an explicitly extracted branch, not an original program run or a fresh search for interrupt positions. The six longer controls fail complete recovery, so the target misses cannot exclude either cipher family. The known-text controls contain no deleted F runes and are easier than the target fits. Candidate fits use only 404–455 runes before decoding entire sections; no English interpretation is claimed for the decoded streams.",
+  "next_steps": "A proposed interrupt-key reading needs complete recovery on comparable known text, a specified skip clock and key source, then a bounded comparison of its complete decoded message.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "interruptions",
+    "Vigenère",
+    "affine",
+    "source method",
+    "control power"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53"
+    ],
+    "artifacts": [
+      "experiments/records/relikd-interrupt-db-keyfit/plan.json"
+    ],
+    "representation": "The exact three pinned source section streams p0-2, p27-32 and p40-53 agree with site rune data, including empty LP2-50. Nine saved database rows are fitted on section prefixes; the fitted keys are then applied to the full 22 nonempty pages across those sections.",
+    "procedure": "Extract the otherwise unreachable source break_cipher saved-row branch. For each row, delete its declared F occurrences before the twenty-first F from the fit prefix, fit both original source key models, and decode the complete section with source skip-clock semantics. Independently recount fits and decoded hashes.",
+    "parameters": "Nine source database rows selected by interrupt F and score at least 0.55; two source fitters (18 outputs); source mean-similarity limits 0.05 and 0.04; six matched-length known-text controls plus solved-page and short skip-clock controls.",
+    "exclusions": "No regeneration of interrupt database rows, no other interruption rune, altered language model, arbitrary key length, additional LP2 section, new plaintext scorer or whole-family exclusion."
+  },
+  "review": {
+    "kind": "explicitly extracted source branch and control-power replay",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned Git-object hashes, exact source/site stream crosswalk and independent key-fit/full-decode arithmetic",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python -X utf8 experiments/records/relikd-interrupt-db-keyfit/run.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --phase all --check && python -X utf8 experiments/records/relikd-interrupt-db-keyfit/check.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND && python experiments/records/relikd-interrupt-db-keyfit/plot.py --check",
+    "environment": "Python 3 standard library and a separate Git checkout of LiberPrayground pinned at 719380ebee0523ad7f2fbf389c6f960d51bea5a4. The runner reads hash-checked Git blobs, so sparse checkout omissions do not substitute source files. The unlicensed source is not bundled.",
+    "script": "experiments/records/relikd-interrupt-db-keyfit/check.py",
+    "script_sha256": "432a1854ddc74f0d746c48217ebf59581655e41a77eb0bc97bfd5cea8125211f",
+    "inputs": [
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/plan.json",
+        "sha256": "6308f34602604c5bdcf948b964afcef4ba79480f6c7170b3b08c093cddf473fb"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/run.py",
+        "sha256": "eb9b2714893f6491585ac743acd6bc168fff12b6f06c0f4aa5e2e1fd923095cd"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/check.py",
+        "sha256": "432a1854ddc74f0d746c48217ebf59581655e41a77eb0bc97bfd5cea8125211f"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/plot.py",
+        "sha256": "0238db48529b755f1f56558823e870e994e79ab5d59f214fa2ee0d799f07aecb"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/article.md",
+        "sha256": "b142a1ec224116a13a3980ad64f4f80d8936182bbffb201bf1679481c2868631"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/controls.json",
+        "sha256": "c7835ff66eb05255912cb4b20cc9927efc86e9edd30853ccb213a1174008b463"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/results.json",
+        "sha256": "8ab48588d23e278f2f144dfcf7d61a5dd59762ed2bcb8ed9f7c91a26a97e7cc5"
+      },
+      {
+        "path": "experiments/records/relikd-interrupt-db-keyfit/control-power.svg",
+        "sha256": "c1caa161d69db3e149d2d972ed3585bcaf708fb366ff7a3e6f0c296b5e761981"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/relikd-interrupt-db-keyfit/control-power.svg",
+      "caption": "Comparable planted messages are only partly recovered; source similarity fits alone cannot establish a reading."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned original search loop and interrupt-key branch",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/probability.py"
+    },
+    {
+      "label": "Pinned key fitting code",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/KeySearch.py"
+    },
+    {
+      "label": "Pinned saved interrupt candidates",
+      "url": "https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/db/db_norm.txt"
+    }
+  ],
+  "related": [
+    "relikd-rotated-key-source-gate"
+  ],
+  "reader_finding": "Thirteen saved LP2 key fits pass the source score limit, but six comparable planted known messages are only partly recovered. No readable message has been established.",
+  "reader_limit": "The original branch was unreachable and these are nine saved candidates, not a full interrupt search. The control failure prevents a negative claim about Vigenère or affine ciphers."
+}
