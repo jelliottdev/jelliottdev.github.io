@@ -1,0 +1,30 @@
+{
+  "schema": "liberpedia-wulfic-deor-interlock-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "method_path": "tools/legacy/p20_interlocking.py",
+    "method_sha256": "4c8f02bc4a8e055e29e9dcd0902fa12c727862b17fe0465f4bab7895dde4cfcd",
+    "poem_path_at_commit": "data/corpora/deor_poem.txt",
+    "poem_sha256": "be03dbfbc8d02dd6348611c973dd38ba3960c7d06833461783876546171fd143",
+    "path_note": "Archived script still requests data/deor_poem.txt and pages/page_20/runes.txt. The poem is now in data/corpora; old page_20 is current LP2-03 by nonempty GP-rune length and SHA256."
+  },
+  "input": {
+    "page": "Current text/lp2-03.txt, 217 GP29 runes, exactly matching pinned old pages/page_20/runes.txt after GP-rune filtering.",
+    "page_gp_sha256": "56a087903b931d30a717e5595c885b14ab6cccab92d5110c894aa2b27edda3b6",
+    "partition": "Keep rune indices 2,3,5,7,11,13,17,19,23 (prime indices) as the 65-symbol prime stream. The remaining 152 are the nonprime stream. Preserve each subsequence's reading order.",
+    "deor": "Use pinned deor-poem-source.txt exactly as the source parser does: split before the literal prefix DEOR POEM (MODERN ENGLISH, uppercase the older section, greedily parse TH/AE/NG/OE/EO/IO/EA and source ASCII letters. This yields 960 GP29 values; the first 600 offsets are eligible. See input-parser-amendment.json for the correction to the frozen initial plan."
+  },
+  "original_source_procedure": {
+    "first_stage": "At each of 600 Deor offsets and each of beaufort/sub/add, decode all 65 prime-index ciphertext values and choose the maximum raw IoC, with source iteration order breaking ties.",
+    "second_stage": "Repeat the selected 65-value plaintext as key. For each sub/add/beaufort and offset 0..64, decode the 152 nonprime values. Preserve source's best raw IoC and its impossible HIT comparison raw_ioc>1.3.",
+    "caesar_diagnostic": "Try 29 modular shifts of the nonprime values. Preserve the original impossible raw_ioc>1.5 branch and calculate the common shift-invariant IoC.",
+    "gate_issue": "Source ioc() is unnormalized Σf(f−1)/(N(N−1)), in [0,1]. Comparisons to 1.3 and 1.5 cannot pass for any input. Zero printed HIT rows therefore cannot be a negative finding."
+  },
+  "separate_amended_diagnostic": {
+    "metric": "Report normalized IoC =29×raw IoC, without changing source decoders or selection. The source's second-stage 1.3 and Caesar 1.5 can then be interpreted as descriptive candidate screens, not validated decryption thresholds.",
+    "null": "Run 199 seeded complete-page GP29 shuffles preserving the 217-rune histogram and recompute the complete prime/nonprime split, first-stage best selection and second-stage maximum. Seed 20261023. Compare whole-procedure maxima with the observed one; no per-variant cherry-picking.",
+    "positive": "Use synthetic residue vectors to verify the three algebraic decoder signs, prime/nonprime partition lengths, exact Deor parser, 65-value key repetition and shift-invariant IoC. This checks implementation, not power to recognize English."
+  },
+  "limits": "One current LP2 page and one pinned Deor corpus under an unusual split-by-ciphertext-value assumption. First-stage best selection is adaptive. A corrected normalized-IoC comparison is a post-source diagnostic, not the original script's result. No claim about all split-stream or running-key ciphers."
+}

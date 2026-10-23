@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 245,
+    "records": 250,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -2087,6 +2087,36 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-grid-cell-adjudication.zip"
     },
     {
+      "id": "dukotah-h03-onion-cookie-xor",
+      "title": "Do the onion cookies reveal text by XOR?",
+      "question": "Does the exact source-executed cookie-to-blob XOR grid produce any 32-byte output with at least 80% printable ASCII?",
+      "summary": "The executable 64-case source grid reproduces a null at its printable threshold; the written plan describes additional cases and checks that this executable did not run.",
+      "tags": [
+        "XOR",
+        "onion cookies",
+        "base 60 payload",
+        "source replay",
+        "LP2"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-49",
+        "lp2-50",
+        "lp2-51"
+      ],
+      "artifacts": [
+        "experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json",
+        "experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-h03-onion-cookie-xor",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-h03-onion-cookie-xor.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-h03-onion-cookie-xor/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-h03-onion-cookie-xor.zip"
+    },
+    {
       "id": "dukotah-image-template-rebuild",
       "title": "Can the archived LP2 image read be rebuilt from the original pages?",
       "question": "Do the pinned four-stage image-template programs reproduce their archived line, shape and count-alignment outputs from the 56 original LP2 JPEGs?",
@@ -2305,6 +2335,43 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-ornament-fresh-reader-gate.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-ornament-fresh-reader-gate/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-ornament-fresh-reader-gate.zip"
+    },
+    {
+      "id": "dukotah-payload-varint-matrix",
+      "title": "Do LP2 grid bytes track doublet gaps? Source varint matrix",
+      "question": "Does the exact source-defined 24-comparison varint grid show strong rank alignment with adjacent repeated-rune distances?",
+      "summary": "The complete source E-02v varint matrix reproduces: all 24 comparisons stay below the stated 0.5 rank-correlation gate.",
+      "tags": [
+        "LP2-49",
+        "LP2-50",
+        "LP2-51",
+        "byte grid",
+        "doublet gaps",
+        "varint",
+        "source replay"
+      ],
+      "family": {
+        "id": "grid-doublet-gap-encodings",
+        "title": "Grid encodings and doublet gaps",
+        "question": "Do integer sequences read from the byte grid track the gaps between repeated runes?",
+        "baseline": "payload-doublet-gaps"
+      },
+      "variant_label": "Three byte versions: complete source varint matrix",
+      "pages": [
+        "lp2-49",
+        "lp2-50",
+        "lp2-51"
+      ],
+      "artifacts": [
+        "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+        "experiments/records/dukotah-payload-varint-matrix/source/ct.bin"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/dukotah-payload-varint-matrix",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/dukotah-payload-varint-matrix.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/dukotah-payload-varint-matrix/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/dukotah-payload-varint-matrix.zip"
     },
     {
       "id": "dukotah-t2-fresh-controls",
@@ -9024,8 +9091,13 @@
         "varint",
         "rank correlation"
       ],
-      "family": null,
-      "variant_label": null,
+      "family": {
+        "id": "grid-doublet-gap-encodings",
+        "title": "Grid encodings and doublet gaps",
+        "question": "Do integer sequences read from the byte grid track the gaps between repeated runes?",
+        "baseline": "payload-doublet-gaps"
+      },
+      "variant_label": "Seven readings of one byte version",
       "pages": [
         "lp2-49",
         "lp2-50",
@@ -9680,7 +9752,7 @@
       "id": "public-multihistory-feedback",
       "title": "Two-to-six-rune feedback and autokey screen",
       "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
-      "summary": "A pinned public 23,520-configuration feedback sweep is rerun against LP2, with 21 planted controls and an independently recomputed winning decode.",
+      "summary": "The 23,520-setting source sweep found no convincing English reading. A separate power check shows its actual all-equal-seed search misses its own plaintext- and mixed-history plants.",
       "tags": [
         "autokey",
         "feedback cipher",
@@ -9752,7 +9824,7 @@
       "artifacts": [
         "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt"
       ],
-      "outcome": "not-supported",
+      "outcome": "inconclusive",
       "retested_on": "2026-10-22",
       "url": "https://jelliottdev.github.io/#/experiments/public-multihistory-feedback",
       "record_url": "https://jelliottdev.github.io/reference/experiments/public-multihistory-feedback.json",
@@ -12894,6 +12966,39 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/word-sum-corpus-control.zip"
     },
     {
+      "id": "wulfic-adfgvx-fractionation",
+      "title": "Does the fractionation reversal undo its own shuffle?",
+      "question": "What do the archived 6×5 keyword-grid routes produce on six intended LP2 pages, and does the archived columnar reversal invert its forward transform?",
+      "summary": "The archived reversal fails 476 of 588 planted round trips. A repaired inverse passes all 588, but neither route yields a verified page reading under the source’s limited keyword and width grid.",
+      "tags": [
+        "LP2",
+        "source-derived test",
+        "fractionation",
+        "Polybius grid",
+        "columnar transposition",
+        "source audit"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-27",
+        "lp2-28",
+        "lp2-30"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-adfgvx-fractionation/plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-adfgvx-fractionation",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-adfgvx-fractionation.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-adfgvx-fractionation/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-adfgvx-fractionation.zip"
+    },
+    {
       "id": "wulfic-cicada-byte-key-phases",
       "title": "Archived Cicada numbers and byte streams as LP2 keys",
       "question": "Do 25 archived number or byte sources recover LP2 under the pinned phase-averaged stay/advance/skip key detector?",
@@ -12976,6 +13081,35 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-cicada-byte-key-phases.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-cicada-byte-key-phases/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-cicada-byte-key-phases.zip"
+    },
+    {
+      "id": "wulfic-deor-interlocking-streams",
+      "title": "Deor and interlocking rune streams",
+      "question": "Does the archived prime-index split and Deor-to-derived-key sequence produce a distinctive second-stream IoC on current LP2-03?",
+      "summary": "The original source hit thresholds are impossible for its raw score. A separately normalized whole-procedure control finds no distinctive final-stage peak in this bounded test.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "Deor",
+        "interlocking streams",
+        "index of coincidence",
+        "impossible source gate"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-03"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-deor-interlocking-streams/source-run.txt",
+        "experiments/records/wulfic-deor-interlocking-streams/input-parser-amendment.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-deor-interlocking-streams",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-deor-interlocking-streams.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-deor-interlocking-streams/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-deor-interlocking-streams.zip"
     },
     {
       "id": "wulfic-doublet-leak-h-o",
@@ -13613,6 +13747,37 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-letter-encoding-bounds.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-letter-encoding-bounds/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-letter-encoding-bounds.zip"
+    },
+    {
+      "id": "wulfic-lfsr-singleton-constraints",
+      "title": "Can single-rune words pin down an LFSR key?",
+      "question": "Do source-defined GF(29) linear-feedback streams of lengths one through five make every visible one-rune word on LP2-28, LP2-24 and LP2-21 read I or A?",
+      "summary": "The source's exact I/A singleton constraints admit four five-state Beaufort settings on LP2-28, about 27,400 settings on LP2-24 and 5.8 million on LP2-21. These are crib fits, not readings.",
+      "tags": [
+        "LP2",
+        "source-derived test",
+        "LFSR",
+        "one-rune words",
+        "crib constraints",
+        "search bounds"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-21",
+        "lp2-24",
+        "lp2-28"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-lfsr-singleton-constraints/plan.json",
+        "experiments/records/wulfic-lfsr-singleton-constraints/inputs.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-lfsr-singleton-constraints",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-lfsr-singleton-constraints.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-lfsr-singleton-constraints/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-lfsr-singleton-constraints.zip"
     },
     {
       "id": "wulfic-local-codebook-invariants",

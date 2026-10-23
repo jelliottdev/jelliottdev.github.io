@@ -4,11 +4,11 @@
   "title": "Two-to-six-rune feedback and autokey screen",
   "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
   "reader_question": "Could each rune be decoded using a key derived from the preceding runes?",
-  "summary": "A pinned public 23,520-configuration feedback sweep is rerun against LP2, with 21 planted controls and an independently recomputed winning decode.",
-  "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. All 21 planted k=3 controls recover correctly; no tested output provides a convincing English reading.",
-  "limitations": "Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities. Their wrong seeds need not converge. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
+  "summary": "The 23,520-setting source sweep found no convincing English reading. A separate power check shows its actual all-equal-seed search misses its own plaintext- and mixed-history plants.",
+  "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. Its 21 controls recover when supplied their exact non-equal seed. Under the real search's all-equal seeds, 7/7 ciphertext-history plants recover, but 0/7 plaintext-history and 0/7 mixed-history plants do. The negative is limited to the executed grid and is not a power-validated exclusion of the latter modes.",
+  "limitations": "The supplemental plant check is retrospective and fixes k=3, sign -1 and the source control passage. Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities; wrong seeds need not converge, as this measured gate confirms. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
   "next_steps": "A concrete feedback proposal should specify its recurrence, seed, boundary reset and output language before scoring; test matched planted examples and apply the same full selection to null controls.",
-  "outcome": "not-supported",
+  "outcome": "inconclusive",
   "tags": [
     "autokey",
     "feedback cipher",
@@ -85,7 +85,7 @@
     "exclusions": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers."
   },
   "review": {
-    "reviewer": "Source executable replay with independent winning-rule and score calculation; archived source results crosschecked",
+    "reviewer": "Source executable replay with independent winning-rule and score calculation; independent search-domain plant audit",
     "retested_on": "2026-10-22",
     "kind": "computational source replay",
     "human_review": "pending"
@@ -167,6 +167,22 @@
       {
         "path": "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt",
         "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/gate-plan.json",
+        "sha256": "f67acf0c21f524c2aa9df134f1b4c5999628184bebd883488b21e8e175263cea"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/gate.py",
+        "sha256": "15e9aee1a2b7fa2f524650a68a564e8f902c5776036a4114b1b1f94c239dbef5"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/check_gate.py",
+        "sha256": "fea4e214821979e8b729bb8599c34607cb68a5c9ecdfd745f289d46df46fb945"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/gate_plot.py",
+        "sha256": "dd2b6884a58222aa4e46eab420d126fdeaba9a8592324b368661f0621ad74df8"
       }
     ],
     "outputs": [
@@ -185,6 +201,14 @@
       {
         "path": "experiments/records/public-multihistory-feedback/feedback.svg",
         "sha256": "c4b5bc2ea047c2f3293cf59d6c55230b79ade04877b285040cdab4e69e247dee"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/gate-results.json",
+        "sha256": "1fe023a1c3d94de055212a6b0479d2af7c27bc9b7bbfe2d89617dd670e0c8904"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/search-domain-gate.svg",
+        "sha256": "613fb2bf788ca1877c9c0c1d9dba61d8c502c9576ccddd35409515f4cae45e38"
       }
     ]
   },
@@ -196,6 +220,10 @@
     {
       "path": "experiments/records/public-multihistory-feedback/feedback.svg",
       "caption": "Each rule maps two to six earlier symbols into a key value used to decode the next rune."
+    },
+    {
+      "path": "experiments/records/public-multihistory-feedback/search-domain-gate.svg",
+      "caption": "The source search recovers ciphertext-history controls but none of its non-equal-seed plaintext or mixed-history controls under the 29 tried all-equal seeds."
     }
   ],
   "sources": [
@@ -214,6 +242,7 @@
   ],
   "related": [
     "cumulative-autokey-literal",
-    "linear-ciphertext-feedback"
+    "linear-ciphertext-feedback",
+    "crib-inferred-feedback-table"
   ]
 }

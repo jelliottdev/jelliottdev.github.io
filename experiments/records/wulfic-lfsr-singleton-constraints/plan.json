@@ -1,0 +1,23 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "id": "wulfic-lfsr-singleton-constraints",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_file": "tools/legacy/lfsr_gf29_solver.py",
+  "source_git_blob": "8feb6b5dc0412a82120e6ec1957bbdad082adf34",
+  "question": "Can the source's zero-clock GF(29) linear feedback streams satisfy every visible singleton word as GP rune I or A on its three intended LP2 targets?",
+  "page_mapping": "The source's historical P28/P24/P21 mean current LP2-28/24/21, physically global scan ordinals 45/41/38. Do not use current pinned page_28/page_24/page_21, which now mean LP2-11/07/04.",
+  "targets": ["lp2-28", "lp2-24", "lp2-21"],
+  "alphabet": "Canonical 29 GP rune indices 0..28; I=10 and A=24",
+  "representation": "Page-local continuous rune positions starting at 0. Split singleton words on the source parser's hyphen, bullet, newline, space, slash and period; apostrophe does not split. Text layer pinned by site page JSON SHA-256.",
+  "model": "For L=1..5, enumerate every ordered feedback tuple (a_0,...,a_{L-1}) in GF(29)^L, including zeros. Initial state is any GF(29)^L vector. k_n=sum_j a_j*k_(n-L+j) mod 29. For each tuple and mode, solve first L singleton constraints by all 2^L I/A assignments when the L×L basis matrix is invertible; test all remaining singleton positions. Mode sub: P=C−K; add: P=C+K; beaufort: P=K−C, all mod29. The source method does not enumerate singular first-L systems.",
+  "scope": {
+    "lengths": [1, 2, 3, 4, 5],
+    "coefficient_range": [0, 28],
+    "modes": ["sub", "add", "beaufort"],
+    "singleton_values": [10, 24],
+    "source_algorithm": "first-L invertible constraint basis only",
+    "statistics": "per page/length/mode feedback tuples considered, invertible bases, best singleton match, full-match parameter counts and exact full decode digests; no source English-score verdict without a calibrated whole-selection reference"
+  },
+  "controls": "Before manuscript calculation, planted streams at L=1..5 and each named mode must recover their exact first L and full singleton path, with all first-L basis matrices invertible. Exhaustive small-modulus and L<=2 oracles independently check solver arithmetic; full candidate streams are recomputed from parameters and matched against every singleton.",
+  "exclusions": "Non-I/A singleton plaintext, page-spanning state, key skips, nonlinear recurrences, singular first-L systems, other GP encodings, arbitrary scoring rules, and claims about every LFSR or an LP2 solution."
+}

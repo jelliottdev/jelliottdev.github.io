@@ -1,0 +1,152 @@
+{
+  "id": "wulfic-lfsr-singleton-constraints",
+  "status": "published",
+  "title": "Can single-rune words pin down an LFSR key?",
+  "question": "Do source-defined GF(29) linear-feedback streams of lengths one through five make every visible one-rune word on LP2-28, LP2-24 and LP2-21 read I or A?",
+  "reader_question": "Can one-rune words reveal the key stream?",
+  "summary": "The source's exact I/A singleton constraints admit four five-state Beaufort settings on LP2-28, about 27,400 settings on LP2-24 and 5.8 million on LP2-21. These are crib fits, not readings.",
+  "finding": "Across all 29^L feedback tuples for each L=1–5, no selected page has a complete singleton fit at L1–2. At L5, the source's first-L invertible search yields four LP2-28 Beaufort fits, 27,424 combined subtraction/Beaufort fits on LP2-24 and 5,808,457 on LP2-21. Addition has exact signed-state symmetry with subtraction and is not counted again in that comparison. All four LP2-28 full-page example decodes have normalized IoC below the source's 1.3 shortcut; no full-page English selection claim is made.",
+  "limitations": "Assumes every visible one-rune word is plaintext I or A, canonical GP indices, page-local continuous key and first-L invertible basis. Singular first-L systems are excluded by the source algorithm. Full-grid dictionary scoring is not calibrated or claimed. Fitting singleton slots does not identify a ciphertext generator or decryption.",
+  "next_steps": "Specify a single candidate's taps, starting state, direction, page boundary rule and out-of-crib plaintext prediction before testing additional text.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source-derived test",
+    "LFSR",
+    "one-rune words",
+    "crib constraints",
+    "search bounds"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-21",
+      "lp2-24",
+      "lp2-28"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-lfsr-singleton-constraints/plan.json",
+      "experiments/records/wulfic-lfsr-singleton-constraints/inputs.json"
+    ],
+    "representation": "Canonical GP29 page-local rune streams; source parser singleton positions: 12 on LP2-28, 9 on LP2-24, 7 on LP2-21. Pinned archived scan ordinals 45, 41 and 38 separately checked by unchanged source parser.",
+    "procedure": "Exhaust feedback tap tuples over GF(29), solve invertible first-L singleton constraints for all I/A assignments, test remaining singletons and decode example full pages exactly; independent small-grid oracle and planted controls.",
+    "parameters": "L=1..5; each coefficient 0..28; plaintext I=10 or A=24 at visible one-rune words; sub/add/Beaufort directions; first-L invertible systems only; 29^L tuples per length and target.",
+    "exclusions": "Different singleton plaintext, non-GP mapping, page-spanning or skipped clocks, singular source basis, other recurrence families, whole-grid calibrated English verdict and proof of decryption."
+  },
+  "review": {
+    "kind": "source-defined bounded extension with exact input alignment and independent oracle",
+    "retested_on": "2026-10-23",
+    "reviewer": "15 scanner plants; independent full L1/L2, 100-tuple L3–L5, all 45 rows and full-page examples; post-scan exhaustive small-field oracles and nonconsecutive GF29 plants",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-lfsr-singleton-constraints/run.py --check",
+    "environment": "Python 3 standard library for saved-output checks; C++17 g++ compiler for the complete exhaustive run.",
+    "script": "experiments/records/wulfic-lfsr-singleton-constraints/check.py",
+    "script_sha256": "a92acd8df27112ca0396c00f721b8af0914bd32f75d0ab6342fb518f9d0775ef",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/plan.json",
+        "sha256": "63daeec2054a87331543010a62bcbea86d8f76308e4f30f0bacff43e5d8a4960"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/inputs.json",
+        "sha256": "59a0a5f43f4c7fc4ad92f827d8506748810fb6c724aab1ec9175caed5be20ef5"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/scan-input.txt",
+        "sha256": "4a9947968a087183e35e4762b309fcf4d0bcc6e9d5d60ca8a28622e57a964c4a"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/scan.cpp",
+        "sha256": "8574ebfa8a2616cd1d52c909155b26f063576d33b72108378e94b3a02c5a0381"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/prepare.py",
+        "sha256": "5ca2b9ce84231574dc29c524e7d54a7fcebe96d90c2d8f1b73d66158df777882"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/controls.py",
+        "sha256": "5d4cde2e10f0f1d5eadad53f10eb1e838bf22a91d4a8933f74ab4aa1a45d4fba"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/finalize.py",
+        "sha256": "b75eaab3d8ae8810ae6ff31d42cb181b88a128076d171241b3673d346a19807a"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/run.py",
+        "sha256": "815a4ac1cc7757024a642527bc8a33401dce133d54da436629fcf47985af073a"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/plot.py",
+        "sha256": "bf6cc6954ff1504ad21be94b7a26ebac0168c426fbf10aaea45d6bf571d0bd5b"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/check_source_input.py",
+        "sha256": "82e7c5a7209f973d59b28c27069cf1a4179616c03f21b260dd57838abbd7fb47"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/results.json",
+        "sha256": "90e1374ac537404bdeefc9ca3d2e64f0a1737dc0bc292a8e8765bc476734dd6e"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/full-summary.tsv",
+        "sha256": "f438602fe856d3245bcc32a45bec6bd1e786c3dc116850d1b9cfb35e685086ac"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/spot-summary.tsv",
+        "sha256": "b2c3733619c9d5bb166d467200c0cc9ef9a7187f20c1c9ffa214940e3356098f"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-input.txt",
+        "sha256": "39ee0bbcf4b243843969aa2a5e28790d0e7a5646fd1931c4e7546974ba12d51c"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-summary.tsv",
+        "sha256": "783c76ec98b88312e23238678f5fd8102fb8b3848144edcc745c8961ac271314"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-candidates.tsv",
+        "sha256": "a4882f884530dd99be398973cc749812406db440ac0376a4f189071413847b25"
+      },
+      {
+        "path": "experiments/records/wulfic-lfsr-singleton-constraints/fits.svg",
+        "sha256": "0ffb4b143bd1533964d147986ba0ef1e6e6bee91ffd5044966a4a8766884c9a8"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-lfsr-singleton-constraints/fits.svg",
+      "caption": "Singleton-crib fits by page and linear-feedback memory length; a fit is not a decoded reading."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic GF(29) LFSR proposal",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_gf29_solver.py"
+    },
+    {
+      "label": "Pinned Wulfic legacy trust note",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "periodic-affine-crib-capacity",
+    "solved-reading-running-key",
+    "wulfic-early-keyspace-diagnostics"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "schema": "liberpedia-source-replay-plan-v1",
+  "source_id": "H-03",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "classification": "Source-known replay plan frozen before our execution; the original source result was already visible.",
+  "question": "Does the source-executed 64-case decoded-cookie XOR cross produce at least 80% printable ASCII in any 32-byte block?",
+  "case_grid": {
+    "cookies": [
+      "key_cookie167.txt",
+      "key_cookie761.txt"
+    ],
+    "blobs": [
+      "canon_256.bin",
+      "rsahex_cu343_761.bin",
+      "rsahex_fv7ly_1033.bin",
+      "rsahex_avowy_3301.bin"
+    ],
+    "offsets": [
+      0,
+      32,
+      64,
+      96,
+      128,
+      160,
+      192,
+      224
+    ],
+    "cookie_form": "Hex-decode the 64-character text to 32 bytes; source does not execute the raw-text form named in PREREG.",
+    "xor": "Cookie byte j XOR blob byte offset+j, j=0..31.",
+    "printable": "Count bytes 0x20 through 0x7e inclusive; hit threshold at least 0.8, hence at least 26 of 32.",
+    "reported_case_count": 64
+  },
+  "controls": [
+    "Plant a 32-byte ASCII block at the first 32-byte blob slot by XORing a known plaintext with cookie167; original source function must flag that case as a hit.",
+    "Independently reconstruct all 64 outputs and printable counts without importing source."
+  ],
+  "source_plan_gap": "PREREG describes 128 raw-plus-decoded cookie trials and additional digest/PKCS gates. The executable h03_cookies_xor() implements only the decoded 64 and a first-two-byte 00 01 hint; its null cannot close the broader preregistered grid.",
+  "source_files": [
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie167.txt",
+      "sha256": "a2c8fdfc1b20645a9011b13d4807790be698f11c1ca3a5fa5c602dbe7310c399"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie761.txt",
+      "sha256": "62d7d286c2096029461a50583bc98120074b196c9dedba191d8122cdfae63f60"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_avowy_3301.bin",
+      "sha256": "4f1cef871153b8211472d6afd0acfa120eb331b8793e6eb7690484bcb1f89da2"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_cu343_761.bin",
+      "sha256": "05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_fv7ly_1033.bin",
+      "sha256": "d8c0f83cf91d0deda658035e3eb07712b12e72b36ed0e471a71a2fe07dd14ba6"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/pp49_51/canon_256.bin",
+      "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/PREREG.md",
+      "sha256": "fab3e2035d56d91ce134b7f5c23aa05a1cec6aec6e588ad3107a2068cb8eb8c4"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/results.json",
+      "sha256": "0fccc201604d692cc84a9419a05ae50e7ca3770a03ba2fa9912de12d5cf523b4"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/RESULTS.md",
+      "sha256": "e401a140ab72cc1872310e75d162ca60840a9a3dc4b2d1b8c76f8ce79a9b7103"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+      "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+    },
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    }
+  ]
+}

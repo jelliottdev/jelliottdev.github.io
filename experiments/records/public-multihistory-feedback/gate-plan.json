@@ -1,0 +1,10 @@
+{
+  "schema": "liberpedia-r12-c1-search-domain-gate-v1",
+  "timing": "Frozen after reproducing the source's control.py exact-seed gate and before testing its actual all-equal seed search or LP2 sweep. The source's saved negative was already known, so this is a retrospective power audit.",
+  "question": "Can the real sweep's 29 all-equal seeds recover control.py's own non-all-equal-seed planted cipher for each source function and feedback mode?",
+  "plant": "Use source control.py's exact 212-rune PLAIN, greedy GP mapping, k=3, sign=-1 and true seed [7,11,2]. Encipher separately with all seven source f values and each of ct, pt and mix history.",
+  "search": "For every plant, decode with its correct f, k, sign and mode, but only with the seed list used in sweep.py: zero-seed tail for ct; [v,v,v] for v=0..28 for pt/mix. Select the maximum source canonical English quadgram score_norm over the region after the first three runes, with the same strict greater-than tie rule as sweep.py.",
+  "positive_gate": "Require the selected candidate to recover at least 90% of the known post-primer rune indices and score at least -5.5. Also report whether ANY tried seed attains 90% recovery, irrespective of score selection. The source exact [7,11,2] decode must give 100% recovery in all 21 conditions.",
+  "controls": "CT mode must recover the full tail regardless of prefix seed. Explicitly audit the 29 tested seed strings against [7,11,2]. Independently verify the encipher/decode inverse on all 21 plants, and ensure a wrong-f decode does not score as English as control.py reports.",
+  "interpretation": "A failed search-domain plant means the source's 29-primer sweep has not demonstrated power for this source feedback class, even if its separately supplied true-seed control passed. It does not imply that no seed or no feedback cipher can fit LP2; nor does a passed plant validate other k, corpus lengths or language registers."
+}

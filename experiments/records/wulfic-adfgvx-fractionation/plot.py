@@ -1,0 +1,30 @@
+"""Make a compact mobile-first explanation of the inverse control."""
+import argparse
+import json
+from pathlib import Path
+P=Path(__file__).resolve().parent
+def main():
+    a=argparse.ArgumentParser(); a.add_argument('--check',action='store_true'); opt=a.parse_args()
+    r=json.loads((P/'results.json').read_text(encoding='utf-8'))
+    assert r['planted_roundtrips']==588 and r['source_roundtrip_failures']==476 and r['exact_roundtrip_failures']==0
+    svg='''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 322" role="img" aria-labelledby="title desc">
+<title id="title">Does the column reversal undo the transposition?</title>
+<desc id="desc">Of 588 planted messages, the archived reversal restores 112 and fails 476. The separately corrected reversal restores all 588.</desc>
+<rect width="340" height="322" fill="#f4f6f8"/>
+<g font-family="Arial, sans-serif" fill="#202a32">
+<text x="20" y="31" font-size="18" font-weight="700">Reverse the columns</text>
+<text x="20" y="58" font-size="14">A known message was scrambled, then restored.</text>
+<text x="20" y="86" font-size="14">Did every symbol return to its place?</text>
+<text x="20" y="126" font-size="15" font-weight="700">Archived reversal</text>
+<text x="20" y="151" font-size="14">112 complete recoveries</text>
+<rect x="20" y="165" width="300" height="24" rx="3" fill="#d3dae0"/>
+<rect x="20" y="165" width="57" height="24" rx="3" fill="#316181"/>
+<text x="20" y="216" font-size="15" font-weight="700">Corrected inverse</text>
+<text x="20" y="241" font-size="14">588 complete recoveries</text>
+<rect x="20" y="255" width="300" height="24" rx="3" fill="#316181"/>
+<text x="20" y="308" font-size="13" fill="#4c5c66">Same 14 keys, 6 pages and 7 widths.</text>
+</g></svg>\n'''
+    path=P/'reversal.svg'
+    if opt.check: assert path.read_text(encoding='utf-8')==svg
+    else: path.write_text(svg,encoding='utf-8',newline='\n')
+if __name__=='__main__': main()

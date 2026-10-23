@@ -1,0 +1,50 @@
+"""Render compact, phone-readable result and source-gate diagram."""
+import json
+from pathlib import Path
+import sys
+
+HERE = Path(__file__).resolve().parent
+
+
+def render():
+    data = json.loads((HERE / 'results.json').read_text(encoding='utf-8'))
+    first = data['observed']['first']['normalized_ioc']
+    second = data['observed']['second']['normalized_ioc']
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 392" role="img" aria-labelledby="title desc">
+<title id="title">The two-stage Deor test</title>
+<desc id="desc">The source divides 217 runes into 65 prime-index and 152 other runes. The original raw IoC gates exceed the maximum possible score. Under a separately normalized diagnostic, 18 of 199 shuffles matched the first-stage maximum and 110 matched the second-stage maximum.</desc>
+<rect width="340" height="392" fill="#f5f6f7"/>
+<g font-family="Arial,sans-serif" fill="#263744">
+<text x="18" y="31" font-size="18" font-weight="700">Two streams, one source test</text>
+<text x="18" y="60" font-size="14">LP2-03 · 217 runes</text>
+<path d="M 170 70 V 91 M 170 91 H 81 V 105 M 170 91 H 252 V 105" stroke="#718490" stroke-width="2" fill="none"/>
+<rect x="18" y="105" width="132" height="53" rx="5" fill="#e3ebef"/>
+<rect x="190" y="105" width="132" height="53" rx="5" fill="#e3ebef"/>
+<text x="32" y="128" font-size="14" font-weight="700">Prime-index runes</text>
+<text x="32" y="148" font-size="14">65 · Deor key</text>
+<text x="204" y="128" font-size="14" font-weight="700">Other runes</text>
+<text x="204" y="148" font-size="14">152 · derived key</text>
+<text x="18" y="190" font-size="15" font-weight="700">Original source gates cannot pass</text>
+<text x="18" y="213" font-size="14">Raw coincidence score: 0 to 1</text>
+<text x="18" y="235" font-size="14">Required: above 1.3 or 1.5</text>
+<line x1="18" y1="253" x2="322" y2="253" stroke="#c4ccd1"/>
+<text x="18" y="278" font-size="15" font-weight="700">Separate normalized comparison</text>
+<text x="18" y="303" font-size="14">Deor stage: {first:.2f} · 18/199 shuffles ≥</text>
+<text x="18" y="327" font-size="14">Derived-key stage: {second:.2f} · 110/199 ≥</text>
+<text x="18" y="361" font-size="13" fill="#506371">No distinctive final-stage score in this</text>
+<text x="18" y="379" font-size="13" fill="#506371">bounded page and key test.</text>
+</g></svg>'''
+
+
+def main():
+    output = HERE / 'comparison.svg'
+    value = render()
+    if '--check' in sys.argv:
+        assert output.read_text(encoding='utf-8') == value
+    else:
+        output.write_text(value, encoding='utf-8', newline='\n')
+    print('PASS: compact Deor comparison figure')
+
+
+if __name__ == '__main__':
+    main()

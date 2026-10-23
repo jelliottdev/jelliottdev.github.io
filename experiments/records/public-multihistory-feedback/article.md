@@ -4,11 +4,21 @@ A feedback cipher can derive each new key symbol from earlier symbols. [This pub
 
 ## Finding
 
-**None of the 23,520 source configurations produced a convincing English reading.** The strongest result scored **−6.299**, below the source's required **−5.500**. It came from a **66-rune segment**, not the continuous manuscript: a five-rune plaintext-history XOR rule on the reversed segment, with an all-six seed. The source program successfully recovered all **21 planted cases** at history length three and gave wrong-rule decodes much lower scores.
+**None of the 23,520 source configurations produced a convincing English reading.** The strongest result scored **−6.299**, below the source's required **−5.500**. It came from a **66-rune segment**, not the continuous manuscript: a five-rune plaintext-history XOR rule on the reversed segment, with an all-six seed. The source program recovered all **21 planted cases when given their correct seed**. A further check below shows that its actual limited seed search does **not** recover the plaintext-history or mixed-history plants.
 
 ![The planted control clears the score threshold; the highest-scoring LP2 candidate remains below it.](experiments/records/public-multihistory-feedback/scores.svg)
 
 These are English quadgram scores; higher means the transliterated output resembles the training text more closely. The strongest short fragment is still well below the planted English sample. A score by itself would never establish a solution without a coherent continuation.
+
+### Did the real search pass its planted test?
+
+The source's control encrypts the same 212-rune English passage under each of its seven rules and three history modes, using initial seed **7, 11, 2**. It decrypts each with that exact seed. The real sweep instead tries only **0,0,0** through **28,28,28** for plaintext and mixed history. We ran that actual seed-search step against the source's own planted ciphertexts, holding the correct rule, sign and history length fixed:
+
+![The actual search recovers all seven visible-rune-history plants but none of the seven decoded-rune or seven mixed-history plants.](experiments/records/public-multihistory-feedback/search-domain-gate.svg)
+
+**Visible-ciphertext history: 7/7 recovered. Plaintext history: 0/7. Mixed history: 0/7.** No tried all-equal seed reaches 90% rune recovery in either of the latter groups, even before selecting the highest English score. The correct non-equal seed still recovers all 21 plants. An [independent recurrence check](experiments/records/public-multihistory-feedback/check_gate.py) reproduces every candidate's rune recovery and score. This is a **retrospective power check** using the source's already published control passage, not a new blinded trial.
+
+The negative screen therefore has a useful, narrower result: these executed settings produced no persuasive English reading. Its correct-seed control does not show that the **actual all-equal-seed search** could find a plaintext- or mixed-history cipher with a different initial state. The source did not test all 29³ seeds at history length three, let alone all 29^k seeds at larger lengths.
 
 ## How the tested rules work
 
@@ -31,3 +41,11 @@ python experiments/records/public-multihistory-feedback/run.py
 It runs the 21 planted controls before the full sweep, then checks the saved result against the separately archived source output. The independent checker reconstructs the 12,956 source rune indices and **recomputes the winning XOR/plaintext-history decode and score** without calling the source's feedback decoder. For a quick check of the packaged outputs, run `python experiments/records/public-multihistory-feedback/check.py`. The full sweep takes several minutes.
 
 The code, transcription and scoring table are included from [Dukotah/cicada3301 revision f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1), with the repository's license. This record matches that program's executed parameters; it does not claim to rule out other functions, alphabets, seed states or non-English plaintext.
+
+The [separately frozen gate plan](experiments/records/public-multihistory-feedback/gate-plan.json), [21-case results](experiments/records/public-multihistory-feedback/gate-results.json), and source-search check can be rerun without the several-minute LP2 sweep:
+
+```sh
+python experiments/records/public-multihistory-feedback/gate.py
+python experiments/records/public-multihistory-feedback/check_gate.py
+python experiments/records/public-multihistory-feedback/gate_plot.py
+```

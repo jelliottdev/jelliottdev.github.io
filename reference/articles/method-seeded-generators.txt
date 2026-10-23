@@ -38,6 +38,16 @@ for position, value in enumerate(ciphertext):
     print(position, before, state, value, plain)
 assert decoded == [0, 1, 2, 3, 4]
 
+Linear-feedback keys
+
+A linear-feedback shift register (LFSR) keeps a short list of previous values. It calculates a new value from a weighted sum of that list, drops the oldest value, and appends the new one. In a GF(29) version, the values are rune indices 0–28 and the arithmetic wraps modulo 29.
+
+For a two-value example, start with [3, 5] and add the two values each time. The stream begins 3, 5, 8, 13, 21, 5, 26…. After 21, the sum is 34, which wraps to 5:
+
+[13, 21] → 13 + 21 = 34 → output 5 → new state [21, 5]
+
+A proposed key must fix the weights, starting list, output timing and reset rule. The single-rune-word test searches short states under one explicit set of rules. Its many surviving settings illustrate why fitting a few guessed letters does not identify a key: the rest of the page must follow too.
+
 What a real proposal must fix
 
 Record the exact generator, seed encoding and allowed seed range. For a byte-oriented generator, specify character encoding, byte order, counter format and how outputs become rune indices. State whether an output is consumed before the first rune, how punctuation is treated, and where the stream restarts. A password, decimal number and its binary integer representation are different seed inputs unless the implementation explicitly equates them.
@@ -94,6 +104,10 @@ A failed seed search excludes only its tested settings under its acceptance crit
 Arithmetic keystreams · Alignment · All method families
 
 Sources, related references, and files
+- wraps modulo 29
+  https://jelliottdev.github.io/reference/articles/modular-arithmetic.html
+- single-rune-word test
+  https://jelliottdev.github.io/#/experiments/wulfic-lfsr-singleton-constraints
 - known-crib seed experiment
   https://jelliottdev.github.io/#/experiments/seed-crib-controls
 - unrestricted keys and one-time-pad claims

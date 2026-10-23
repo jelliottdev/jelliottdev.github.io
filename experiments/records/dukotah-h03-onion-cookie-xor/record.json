@@ -1,0 +1,153 @@
+{
+  "id": "dukotah-h03-onion-cookie-xor",
+  "status": "published",
+  "title": "Do the onion cookies reveal text by XOR?",
+  "question": "Does the exact source-executed cookie-to-blob XOR grid produce any 32-byte output with at least 80% printable ASCII?",
+  "reader_question": "Have the 2013 onion cookies been XORed against the grid and later blobs?",
+  "summary": "The executable 64-case source grid reproduces a null at its printable threshold; the written plan describes additional cases and checks that this executable did not run.",
+  "finding": "Across two decoded cookies, four 256-byte objects and eight aligned 32-byte blocks each, zero of 64 XOR outputs reaches 26/32 printable bytes; the maximum is 20/32. A planted 32-byte ASCII block is detected by the original source function. A retrospective source-helper/strict-padding/named-prefix diagnostic finds zero matches on the same 64 outputs and recovers all three synthetic controls.",
+  "limitations": "The raw-cookie arm cannot be reconstructed from the written plan: 64 ASCII characters versus 32-byte blocks with no alignment rule. The broader digest/string set and encoding are unspecified. The pinned executable implements only 64 hex-decoded cases. The supplementary PKCS and one-prefix checks are retrospective, exact-predicate diagnostics, not the original source run.",
+  "next_steps": "Specify the raw-cookie interpretation and exact digest or padding targets before treating the full written H-03 plan as executed.",
+  "outcome": "not-supported",
+  "tags": [
+    "XOR",
+    "onion cookies",
+    "base 60 payload",
+    "source replay",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json",
+      "experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json"
+    ],
+    "representation": "Exact source two cookie hex files, LP2 grid payload and three 256-byte onion RSA-hex blobs.",
+    "procedure": "Run pinned h03_cookies_xor() unchanged; independently compute every 32-byte XOR and printable count and compare the archived source summary. Plant an ASCII output into a temporary blob for a gate control. Separately apply the source helper, strict eight-FF and one named-prefix predicates to those same fixed 64 outputs with positive controls.",
+    "parameters": "2 decoded 32-byte cookies × 4 256-byte objects × 8 offsets (0..224 by32)=64 cases; 0x20..0x7e printable and gate ≥26/32.",
+    "exclusions": "Unspecified raw-cookie mapping, unaligned offsets, cookies used as cryptographic keys, other blobs or transcriptions, unspecified hashes/strings or encodings, and any LP2 decipherment claim."
+  },
+  "review": {
+    "reviewer": "Exact source replay with independent 64-case XOR recount",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound cryptographic cross-check",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-h03-onion-cookie-xor/run.py && python experiments/records/dukotah-h03-onion-cookie-xor/check.py && python experiments/records/dukotah-h03-onion-cookie-xor/structure.py && python experiments/records/dukotah-h03-onion-cookie-xor/plot.py",
+    "environment": "Python 3.9+; no network or optional packages.",
+    "script": "experiments/records/dukotah-h03-onion-cookie-xor/run.py",
+    "script_sha256": "9f306501119ecc4809e9db79e1d3925a4c1ca553be50fa5719918062b9d7b1c7",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/check.py",
+        "sha256": "7dda88a584fdee42f1bb555d66a89148966779b70e652cdeeabfdb1b3d272254"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/plot.py",
+        "sha256": "bf1061ef4c95c80a1797e3418d6ce5e3c1536da8164b54276c0a49e72f97dd1e"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json",
+        "sha256": "63f89c7eee2819dfc1d288419fcdc6c1e4ceaf4fc8feb7bd3f89b05ba6b744cf"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/run.py",
+        "sha256": "9f306501119ecc4809e9db79e1d3925a4c1ca553be50fa5719918062b9d7b1c7"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie167.txt",
+        "sha256": "a2c8fdfc1b20645a9011b13d4807790be698f11c1ca3a5fa5c602dbe7310c399"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie761.txt",
+        "sha256": "62d7d286c2096029461a50583bc98120074b196c9dedba191d8122cdfae63f60"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_avowy_3301.bin",
+        "sha256": "4f1cef871153b8211472d6afd0acfa120eb331b8793e6eb7690484bcb1f89da2"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_cu343_761.bin",
+        "sha256": "05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_fv7ly_1033.bin",
+        "sha256": "d8c0f83cf91d0deda658035e3eb07712b12e72b36ed0e471a71a2fe07dd14ba6"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/pp49_51/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/PREREG.md",
+        "sha256": "fab3e2035d56d91ce134b7f5c23aa05a1cec6aec6e588ad3107a2068cb8eb8c4"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/RESULTS.md",
+        "sha256": "e401a140ab72cc1872310e75d162ca60840a9a3dc4b2d1b8c76f8ce79a9b7103"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/results.json",
+        "sha256": "0fccc201604d692cc84a9419a05ae50e7ca3770a03ba2fa9912de12d5cf523b4"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+        "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json",
+        "sha256": "e705c90987171d27d3ede97b9c4d1ae47a730bb75f2db44543467896c599031b"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure.py",
+        "sha256": "a718ad35252c13ccf168ee21095b80f4a407efdb266e7c7bd1b55f8e784589dc"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/article.md",
+        "sha256": "9f12514d3d99f004f1ee6d6640631d24fbb0cd3ce1efab5305af766ac820da44"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/cases.json",
+        "sha256": "cf290bf9a04fec1e4339e50ba224235e54a3c7b247cf087dd8c6144e7f51c710"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/results.json",
+        "sha256": "13faf49c9b4f44143fdd637274e2639ba022059bbc7282a573d6af25e5887336"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure-results.json",
+        "sha256": "7c3512cdcc53899fad6003709cbdd5e29c34b0b1ef9da01cd2d350299faa8e39"
+      },
+      {
+        "path": "experiments/records/dukotah-h03-onion-cookie-xor/xor-maxima.svg",
+        "sha256": "d10f6760e70bfce0b4fb7b7f057f82125cf0cd6e5222c154a7fb5d24f6d21d02"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Dukotah H-03 source plan, executable and saved result",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP"
+    }
+  ],
+  "related": [
+    "public-rsa-payload-e01"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-h03-onion-cookie-xor/xor-maxima.svg",
+      "caption": "The highest printable count within each of eight cookie/object pairs stays below the 26-of-32-byte gate."
+    }
+  ]
+}

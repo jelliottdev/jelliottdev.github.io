@@ -1,0 +1,20 @@
+{
+  "schema": "liberpedia-source-e02v-plan-v1",
+  "source": "Dukotah/cicada3301 f08b20b632d91209ddbaa747e8e2f23df0c78ba1, round28/L5 E-02v; this local plan follows the already published source procedure, not a prospective preregistration",
+  "question": "Does any source-defined base-128 reading of one of the three pinned LP2-49–51 payload versions track the source's two equal-rune gap sequences?",
+  "inputs": [
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin", "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256_decpref.bin", "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/payload_resolved.bin", "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/ct.bin", "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/l5_payload_micro.py", "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/PREREG.md", "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"},
+    {"path": "experiments/records/dukotah-payload-varint-matrix/source/source-results.json", "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"}
+  ],
+  "format_amendment": "After calculation, the same fixed input paths and hashes were rewritten as the publication validator's list schema. The pre-result plan had SHA-256 d9be6ff3734f039b3912f876514b68794dbdf44b271aabaf5633acaf63070617; no test rule or input changed.",
+  "grid": "3 exact payload versions × 2 base-128 orders (LEB128 and MSB-first) × 2 byte directions × 2 targets = 24 rows; decoding begins at byte zero and drops incomplete trailing values",
+  "targets": "Take 86 adjacent equal-byte starts in the pinned 12,956-byte ct.bin. Compare first 85 consecutive distances, or the 86-element sequence with first start 122 prepended.",
+  "criterion": "At least 20 decoded values; |tie-aware Spearman rho| > 0.5, followed only then by source 100,000-permutation p < 0.0001. Preserve strict inequalities.",
+  "controls": "Independently encode the real 85 gaps in both base-128 orders and require exact round-trip and rho 1; compare all 24 rows to source's archived E-02v results. Source's original positive 10/10 and random negative 0/50 control receipt is reported separately, not re-created with a different RNG state.",
+  "limits": "Only three pinned byte versions, four byte-order readings and two stated targets. This is a source-scope completion of an overlapping published seven-reading local experiment, not a new cipher discovery or an exclusion of arbitrary payload transformations."
+}

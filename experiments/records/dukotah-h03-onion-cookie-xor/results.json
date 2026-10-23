@@ -1,0 +1,33 @@
+{
+  "source": {
+    "test": "H-03",
+    "verdict": "NULL",
+    "trials": 64,
+    "hits": [],
+    "max_printable": 0.625,
+    "notes": "32-byte cookies XOR'd against each 32-byte block of four 256-byte blobs. 0 hits above 80% printable threshold."
+  },
+  "planted": {
+    "test": "H-03",
+    "verdict": "HIT",
+    "trials": 64,
+    "hits": [
+      {
+        "cookie": "cookie167",
+        "blob": "canon_256",
+        "offset": 0,
+        "printable_ratio": 1.0,
+        "entropy": 3.825,
+        "xor_head": "504c414e54454420",
+        "pkcs1_hint": false,
+        "verdict": "HIT",
+        "xor_full": "504c414e54454420434f4f4b494520584f5220434f4e54524f4c205041535321"
+      }
+    ],
+    "max_printable": 1.0,
+    "notes": "See hits list."
+  },
+  "source_stdout": "\n============================================================\nH-03: 2013 onion cookies XOR'd against four 256-byte blobs\n============================================================\nCookie 167: 32 bytes: 6941f707ff39d259...\nCookie 761: 32 bytes: 7bc1e7805ccfa518...\nBlob canon_256: 256 bytes\nBlob rsahex_cu343: 256 bytes\nBlob rsahex_fv7ly: 256 bytes\nBlob rsahex_avowy: 256 bytes\n  Notable: cookie167 XOR rsahex_avowy@128: printable=53.12%, head=527f9e60ba0054b8\n  Notable: cookie761 XOR canon_256@0: printable=53.12%, head=b026403a3d22dbaf\n  Notable: cookie761 XOR rsahex_avowy@96: printable=62.50%, head=7180647a07076bed\n  All NULL: 64 XOR trials, 0 over 80% printable threshold\n  Max printable ratio across all trials:\n    0.625 at cookie761 XOR rsahex_avowy@96\n",
+  "planted_stdout": "\n============================================================\nH-03: 2013 onion cookies XOR'd against four 256-byte blobs\n============================================================\nCookie 167: 32 bytes: 6941f707ff39d259...\nCookie 761: 32 bytes: 7bc1e7805ccfa518...\nBlob canon_256: 256 bytes\nBlob rsahex_cu343: 256 bytes\nBlob rsahex_fv7ly: 256 bytes\nBlob rsahex_avowy: 256 bytes\n  *** HIT: cookie167 XOR canon_256@0: printable=100.00%, head=504c414e54454420434f4f4b49452058\n  Notable: cookie167 XOR rsahex_avowy@128: printable=53.12%, head=527f9e60ba0054b8\n  Notable: cookie761 XOR canon_256@0: printable=56.25%, head=42cc51c9f7b33361\n  Notable: cookie761 XOR rsahex_avowy@96: printable=62.50%, head=7180647a07076bed\n",
+  "plant_plaintext": "PLANTED COOKIE XOR CONTROL PASS!"
+}

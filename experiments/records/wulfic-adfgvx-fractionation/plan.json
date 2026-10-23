@@ -1,0 +1,23 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "id": "wulfic-adfgvx-fractionation",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_file": "tools/legacy/adfgvx_test.py",
+  "source_git_blob": "77b787a48adb2414c507f194ddbfe35a0bb00d2a",
+  "question": "What does the source's stated 6×5 fractionation grid actually evaluate on its six intended LP2 pages, and does its columnar reversal invert the stated transform?",
+  "target_mapping": "Source historical P21,22,23,27,28,30 are LP2-21,22,23,27,28,30, now pinned global scan folders 38,39,40,44,45,47. Current bare page_21 etc are different pages.",
+  "targets": ["lp2-21", "lp2-22", "lp2-23", "lp2-27", "lp2-28", "lp2-30"],
+  "alphabet": "GP indices 0..28, 6×5 row-major table with cell (5,4) unused; source keyword-first deduplicated alphabet",
+  "keywords": ["DIVINITY", "SHADOWS", "CABAL", "MOURNFUL", "OBSCURA", "VOID", "AETHEREAL", "BUFFERS", "CARNAL", "ANALOG", "FORM", "CICADA", "CONSUMPTION", "ENCRYPT"],
+  "source_named_routes": {
+    "split_points": ["n", "n-5", "n+5", "n//2", "2*n//3"],
+    "columnar_widths": [7, 11, 13, 17, 19, 23, 29],
+    "direct": true,
+    "coordinate_shifts": ["sub", "add"]
+  },
+  "source_gate": "score_plain >20 OR raw IoC >1.3. Keep invalid defractionated cells as -1 exactly as source does; source IoC counts them as one repeated symbol. Report invalid count separately and never treat this gate as a decode verdict.",
+  "corrected_variant": "For each of the same seven widths only, invert the source's columnar_transpose exactly using natural column order and actual per-column lengths. This is a separate named variant, never substituted for a source result. Retain all 14 keys and six targets.",
+  "controls": "Before manuscript scoring, use deterministic known GP messages at each of the six target lengths, every keyword and every seven widths: fractionate, columnar_transpose, then require corrected inverse plus defractionate to recover the exact full message. Measure source inverse failures on those same planted streams; direct table inversion must recover all 29 symbols. Independently compare source and local table, parser, split and score on source-pinned examples.",
+  "scope_note": "The source's four other split points return fewer than n pairs and are skipped by its own length condition; preserve named skipped rows. The P08 running-key and solved-page running-key bonus blocks are different experiments and excluded from this fractionation grid.",
+  "exclusions": "Other widths, table keys, page ranges, keyed column orders, cipher-level encodings of coordinate streams, null handling other than source's -1, and any claim that high source score or raw IoC identifies a plaintext."
+}

@@ -1,0 +1,183 @@
+{
+  "id": "dukotah-payload-varint-matrix",
+  "status": "published",
+  "title": "Do LP2 grid bytes track doublet gaps? Source varint matrix",
+  "question": "Does the exact source-defined 24-comparison varint grid show strong rank alignment with adjacent repeated-rune distances?",
+  "reader_question": "Have the LP2 grid's byte versions been read as base-128 gap sequences?",
+  "summary": "The complete source E-02v varint matrix reproduces: all 24 comparisons stay below the stated 0.5 rank-correlation gate.",
+  "finding": "Three pinned payload versions, four base-128 reading directions and two gap targets yield 24 source rows. All rows match the archived source output. The strongest absolute Spearman correlation is 0.1187, below the source's strict >0.5 first-stage gate. An independent 24-row recount and planted exact gap encoding pass.",
+  "limitations": "This source-scope replay overlaps the existing seven-reading payload-doublet-gaps record; it adds the three exact byte versions and reproduces every source E-02v row. It excludes arbitrary encodings, offsets, event definitions and any claim about the underlying cipher. The source's 10 positive and 50 random controls are cited from its saved receipt, not independently re-executed with its original RNG state.",
+  "next_steps": "A new payload-to-gap proposal must state an exact byte version, transform, alignment, gap definition and control before testing.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "byte grid",
+    "doublet gaps",
+    "varint",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+      "experiments/records/dukotah-payload-varint-matrix/source/ct.bin"
+    ],
+    "representation": "Three exact source 256-byte payload versions and the source's 12,956-byte LP2 rune stream.",
+    "procedure": "Decode LEB128 or MSB-first base 128 from byte zero in forward or reverse order; compare each stream's first 85 or 86 values with the two source equal-rune event-gap targets using tie-aware Spearman ranks; compare every result to the saved source row.",
+    "parameters": "3 byte versions × 4 decoders × 2 targets = 24 rows; minimum 20 values; strict |rho|>0.5 first gate, then source 100,000-permutation p<0.0001 second gate only for rows passing the first.",
+    "exclusions": "Other byte transforms, offsets, gap definitions, untested cipher mechanisms and any whole-LP2 decryption claim."
+  },
+  "review": {
+    "reviewer": "Independent source-row and tied-rank recount",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound computational replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-payload-varint-matrix/run.py && python experiments/records/dukotah-payload-varint-matrix/check.py && python experiments/records/dukotah-payload-varint-matrix/plot.py",
+    "environment": "Python 3 standard library; no network.",
+    "script": "experiments/records/dukotah-payload-varint-matrix/run.py",
+    "script_sha256": "350b47e16562fe3ee2952f3f59a7edfd52bb5050d8590dd7cf2de6c81a1ffda3",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/plan.json",
+        "sha256": "fc7fe2eeca705ced4340a01f41f9c38545e04d30153c126e99b24487eba61a8c"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/run.py",
+        "sha256": "350b47e16562fe3ee2952f3f59a7edfd52bb5050d8590dd7cf2de6c81a1ffda3"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/check.py",
+        "sha256": "505640aea20c83ca8e255f47095bc131851f7ffbd7cf1c6417b0dc9573048e09"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/plot.py",
+        "sha256": "2c44c0d1050ef46894e3ab87707f273d8e0251fa714dc79868ff17594326f5a3"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/payload_resolved.bin",
+        "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/ct.bin",
+        "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/l5_payload_micro.py",
+        "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/PREREG.md",
+        "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/source/source-results.json",
+        "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/results.json",
+        "sha256": "bd7631a478f7d458ce8ecc38c1be2e8184a8021662fe6d73f651ca7ad324d620"
+      },
+      {
+        "path": "experiments/records/dukotah-payload-varint-matrix/varint-gap-matrix.svg",
+        "sha256": "09bf236fe2a3862f34d9174f6fe8077008a18ec690a3d17014e2879a78846a6b"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-payload-varint-matrix/varint-gap-matrix.svg",
+      "caption": "The strongest comparison in each source byte version stays far below the stated rank-correlation gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Source E-02v code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+    },
+    {
+      "label": "Source plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+    },
+    {
+      "label": "Saved source results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/results.json"
+    }
+  ],
+  "related": [
+    "payload-doublet-gaps",
+    "doublet-placement",
+    "grid-page-order-permutations"
+  ],
+  "reader_note": "All 24 source varint comparisons reproduce below the effect-size gate.",
+  "reader_limit": "Three pinned byte versions, fixed byte-zero start and two stated gap targets.",
+  "scope_summary": "LP2-49–51 payload · 3 byte versions · 24 varint-gap comparisons.",
+  "family": {
+    "id": "grid-doublet-gap-encodings",
+    "title": "Grid encodings and doublet gaps",
+    "question": "Do integer sequences read from the byte grid track the gaps between repeated runes?",
+    "baseline": "payload-doublet-gaps"
+  },
+  "variant": {
+    "label": "Three byte versions: complete source varint matrix",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+          "experiments/records/doublet-placement/results.json"
+        ],
+        "after": [
+          "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+          "experiments/records/dukotah-payload-varint-matrix/source/ct.bin"
+        ],
+        "reason": "Use all three source payload versions and the exact source rune stream."
+      },
+      {
+        "field": "representation",
+        "before": "Pinned 256-byte source grid and 86 within-page equal-rune-pair starts on archived LP2-00–55, concatenated in page order for gap distances.",
+        "after": "Three exact source 256-byte payload versions and the source's 12,956-byte LP2 rune stream.",
+        "reason": "Reproduce the named source variants, rather than one existing payload transcription."
+      },
+      {
+        "field": "procedure",
+        "before": "Decode seven fixed integer/varint readings at byte zero. Compare first available values with 85 inter-event distances and with the first one-based event coordinate plus those distances using tie-aware Spearman correlation. Audit all 84 nonzero rotations of the 85-gap target with the best-of-seven statistic.",
+        "after": "Decode LEB128 or MSB-first base 128 from byte zero in forward or reverse order; compare each stream's first 85 or 86 values with the two source equal-rune event-gap targets using tie-aware Spearman ranks; compare every result to the saved source row.",
+        "reason": "Replay the source varint matrix; retain the earlier seven-reading and rotation test as a separate baseline."
+      },
+      {
+        "field": "parameters",
+        "before": "Seven byte readings; two targets; 14 comparisons; 85 gap distances; 84 alignment controls; published effect-size gate |rho| >= 0.5.",
+        "after": "3 byte versions × 4 decoders × 2 targets = 24 rows; minimum 20 values; strict |rho|>0.5 first gate, then source 100,000-permutation p<0.0001 second gate only for rows passing the first.",
+        "reason": "Expose the exact source decoder, target and conditional decision-gate differences."
+      },
+      {
+        "field": "exclusions",
+        "before": "Other payload transcriptions, starting offsets, byte permutations, transforms, noncontiguous selections, distinct event definitions, and inference of a cipher mechanism.",
+        "after": "Other byte transforms, offsets, gap definitions, untested cipher mechanisms and any whole-LP2 decryption claim.",
+        "reason": "Keep the source-matrix bounds separate from the earlier alignment experiment."
+      }
+    ]
+  }
+}

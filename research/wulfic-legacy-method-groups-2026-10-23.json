@@ -1,0 +1,2181 @@
+{
+  "schema": "liberpedia-wulfic-legacy-method-groups-v1",
+  "date": "2026-10-23",
+  "status": "internal static source triage; no source result was certified by this inventory",
+  "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+  "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_warning": "The upstream legacy README says old page/rune pairs and paths may be wrong. Current archived page_N maps 00..16 to LP1-00..16 and 17..74 to LP2-00..57; historic outputs need individual replay.",
+  "counting_rule": "107 launchers/helpers are grouped into method/dependency families. Groups are queue units, not 22 independent cipher hypotheses or completed experiments.",
+  "script_count": 107,
+  "group_count": 22,
+  "triage_counts_by_script": {
+    "utility": 3,
+    "replayed_adaptation": 3,
+    "open_optimizer": 40,
+    "partial": 35,
+    "blocked_input": 16,
+    "candidate_finite": 9,
+    "replayed_source_and_amended_diagnostic": 1
+  },
+  "priority_groups": [
+    "keyword-prime-double-layer",
+    "periodic-crib-constraints",
+    "two-time-pad-cribs",
+    "autokey-feedback",
+    "transposition-rearrangement"
+  ],
+  "groups": [
+    {
+      "id": "archive-maintenance",
+      "script_count": 3,
+      "triage": "utility",
+      "scope": "Corpus preparation only; not a cipher attempt. Audit changes to source files before any reuse.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/add_circumference_anchor.py",
+        "tools/legacy/populate_runes.py",
+        "tools/legacy/translate_runes.py"
+      ]
+    },
+    {
+      "id": "external-clue-inspection",
+      "script_count": 2,
+      "triage": "partial",
+      "scope": "Pin the hint or circumference source artifact and check whether an actual finite decryption rule is stated.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/analyze_hints.py",
+        "tools/legacy/verify_circumference.py"
+      ]
+    },
+    {
+      "id": "page-statistics-and-diagnostics",
+      "script_count": 8,
+      "triage": "partial",
+      "scope": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required.",
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "scripts": [
+        "tools/legacy/cipher_analysis.py",
+        "tools/legacy/deep_page_analysis.py",
+        "tools/legacy/p02_analyze.py",
+        "tools/legacy/p08_grid_analysis.py",
+        "tools/legacy/p20_count.py",
+        "tools/legacy/p24_char_tests.py",
+        "tools/legacy/p24_prime0_post.py",
+        "tools/legacy/structural_analysis.py"
+      ]
+    },
+    {
+      "id": "first-pass-cipher-sweeps",
+      "script_count": 6,
+      "triage": "open_optimizer",
+      "scope": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/advanced_cipher_solver.py",
+        "tools/legacy/batch_solver.py",
+        "tools/legacy/session16_deep_solve.py",
+        "tools/legacy/session17_clean_solve.py",
+        "tools/legacy/solve_p21_30.py",
+        "tools/legacy/theory_orchestrator.py"
+      ]
+    },
+    {
+      "id": "monoalphabetic-substitution",
+      "script_count": 3,
+      "triage": "partial",
+      "scope": "Separate complete whole-page substitution from short seeded hillclimbs; compare with existing crib-capacity and direct-affine records before a new controlled run.",
+      "related_site_records": [
+        "monoalphabetic-crib-capacity"
+      ],
+      "scripts": [
+        "tools/legacy/hillclimb_substitute.py",
+        "tools/legacy/mono_sub_solver.py",
+        "tools/legacy/p21_refined_subsweep.py"
+      ]
+    },
+    {
+      "id": "adfgvx-fractionation",
+      "script_count": 1,
+      "triage": "replayed_adaptation",
+      "scope": "Already tested as a corrected-input bounded adaptation; source shortcuts and other fractionation layouts remain outside scope.",
+      "related_site_records": [
+        "wulfic-adfgvx-fractionation"
+      ],
+      "scripts": [
+        "tools/legacy/adfgvx_test.py"
+      ]
+    },
+    {
+      "id": "keyword-prime-double-layer",
+      "script_count": 5,
+      "triage": "partial",
+      "scope": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension.",
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "scripts": [
+        "tools/legacy/combined_cipher_test.py",
+        "tools/legacy/keyword_stepped_stream.py",
+        "tools/legacy/p21_30_keyword_sweep.py",
+        "tools/legacy/prime_stream_solver.py",
+        "tools/legacy/verify_keyword_ioc.py"
+      ]
+    },
+    {
+      "id": "autokey-feedback",
+      "script_count": 3,
+      "triage": "partial",
+      "scope": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection.",
+      "related_site_records": [
+        "cumulative-autokey-literal",
+        "multiplicative-ciphertext-autokey"
+      ],
+      "scripts": [
+        "tools/legacy/autokey_comprehensive.py",
+        "tools/legacy/p21_30_autokey_solver.py",
+        "tools/legacy/stream_cipher_attack.py"
+      ]
+    },
+    {
+      "id": "running-key-corpora",
+      "script_count": 2,
+      "triage": "partial",
+      "scope": "Source LP1 key selection mixes solved and unsolved pages under old numbering. Correct source/input mapping before any original claim; genuine solved-reading and named-corpus keys have narrower existing tests.",
+      "related_site_records": [
+        "solved-reading-running-key",
+        "emerson-running-key"
+      ],
+      "scripts": [
+        "tools/legacy/gpu_running_key.py",
+        "tools/legacy/test_lp1_runningkey.py"
+      ]
+    },
+    {
+      "id": "periodic-crib-constraints",
+      "script_count": 6,
+      "triage": "candidate_finite",
+      "scope": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family.",
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "scripts": [
+        "tools/legacy/beaufort_crib.py",
+        "tools/legacy/check_p32_crib.py",
+        "tools/legacy/crib_verify.py",
+        "tools/legacy/lp_crib_drag.py",
+        "tools/legacy/period_crib_solve.py",
+        "tools/legacy/validate_crib_candidates.py"
+      ]
+    },
+    {
+      "id": "two-time-pad-cribs",
+      "script_count": 3,
+      "triage": "candidate_finite",
+      "scope": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments.",
+      "related_site_records": [
+        "leo-shared-key-differences"
+      ],
+      "scripts": [
+        "tools/legacy/ttp_crib_drag.py",
+        "tools/legacy/twotime_crib.py",
+        "tools/legacy/twotime_pad_analysis.py"
+      ]
+    },
+    {
+      "id": "lfsr-and-formula-keys",
+      "script_count": 6,
+      "triage": "partial",
+      "scope": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction.",
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "scripts": [
+        "tools/legacy/lfsr4_fast.py",
+        "tools/legacy/lfsr4_solver.py",
+        "tools/legacy/lfsr_alberti_solver.py",
+        "tools/legacy/lfsr_gf29_solver.py",
+        "tools/legacy/lfsr_singleton_solver.py",
+        "tools/legacy/singleton_stream_search.py"
+      ]
+    },
+    {
+      "id": "transposition-rearrangement",
+      "script_count": 5,
+      "triage": "partial",
+      "scope": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls.",
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "scripts": [
+        "tools/legacy/p21_30_rearrange.py",
+        "tools/legacy/p21_30_transposition.py",
+        "tools/legacy/p21_30_verified_rearrange.py",
+        "tools/legacy/refine_and_batch.py",
+        "tools/legacy/transposition_solver.py"
+      ]
+    },
+    {
+      "id": "deor-interlocking",
+      "script_count": 2,
+      "triage": "partial",
+      "scope": "Exact P20 source gate and corrected normalized diagnostic are drafted. solve_p20 targets a different older count/input: verify its actual stream and key rule before treating it as the same test.",
+      "related_site_records": [
+        "wulfic-deor-interlocking-streams"
+      ],
+      "scripts": [
+        "tools/legacy/p20_interlocking.py",
+        "tools/legacy/solve_p20.py"
+      ]
+    },
+    {
+      "id": "targeted-solved-reading-keys",
+      "script_count": 4,
+      "triage": "blocked_input",
+      "scope": "Verify original claimed known-reading plaintext, key provenance and page identity. Historical “solved” labels cannot serve as ground truth without independent source checks.",
+      "related_site_records": [
+        "solved-reading-running-key"
+      ],
+      "scripts": [
+        "tools/legacy/decode_p14_p15.py",
+        "tools/legacy/fskip_verified_solver.py",
+        "tools/legacy/solve_p61_p62.py",
+        "tools/legacy/verify_key_parse.py"
+      ]
+    },
+    {
+      "id": "targeted-page02-cribs",
+      "script_count": 7,
+      "triage": "open_optimizer",
+      "scope": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/p02_crib_drag.py",
+        "tools/legacy/p02_crib_extend.py",
+        "tools/legacy/p02_crib_refine.py",
+        "tools/legacy/p02_hillclimb2.py",
+        "tools/legacy/p02_known_plaintext.py",
+        "tools/legacy/p02_p18_deepsolve.py",
+        "tools/legacy/p02_sa_solve.py"
+      ]
+    },
+    {
+      "id": "targeted-page24-optimizers",
+      "script_count": 6,
+      "triage": "open_optimizer",
+      "scope": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/p24_apply_targeted_map.py",
+        "tools/legacy/p24_candidate_process.py",
+        "tools/legacy/p24_process_top_candidates.py",
+        "tools/legacy/p24_refine.py",
+        "tools/legacy/p24_seeded_hillclimb.py",
+        "tools/legacy/p24_view_candidate.py"
+      ]
+    },
+    {
+      "id": "targeted-page25-optimizers",
+      "script_count": 2,
+      "triage": "open_optimizer",
+      "scope": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/p25_hillclimb.py",
+        "tools/legacy/p25_liberal_offset_sweep.py"
+      ]
+    },
+    {
+      "id": "anchored-hillclimbers",
+      "script_count": 10,
+      "triage": "open_optimizer",
+      "scope": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/anchored_hillclimb_modes_p21.py",
+        "tools/legacy/anchored_hillclimb_p21.py",
+        "tools/legacy/anchored_hillclimb_pages21_30.py",
+        "tools/legacy/crib_extension.py",
+        "tools/legacy/export_top_candidates.py",
+        "tools/legacy/extract_confirmed_cribs.py",
+        "tools/legacy/find_new_cribs.py",
+        "tools/legacy/rank_anchored_results.py",
+        "tools/legacy/segment_anchored_results.py",
+        "tools/legacy/update_anchors.py"
+      ]
+    },
+    {
+      "id": "gpu-key-optimization",
+      "script_count": 9,
+      "triage": "open_optimizer",
+      "scope": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/analyze_v3_decode.py",
+        "tools/legacy/check_cuda_ascii.py",
+        "tools/legacy/decode_best_key.py",
+        "tools/legacy/gpu_hillclimber.py",
+        "tools/legacy/gpu_hillclimber_v2.py",
+        "tools/legacy/gpu_hillclimber_v3.py",
+        "tools/legacy/gpu_hillclimber_v4.py",
+        "tools/legacy/hillclimb_monitor.py",
+        "tools/legacy/monitor_gpu_output.py"
+      ]
+    },
+    {
+      "id": "key-postprocessing-and-verification",
+      "script_count": 12,
+      "triage": "blocked_input",
+      "scope": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/analyze_verified_keys.py",
+        "tools/legacy/decrypt_page_with_verified_key.py",
+        "tools/legacy/diagnose_free_text.py",
+        "tools/legacy/extract_lp_text.py",
+        "tools/legacy/gap_filler.py",
+        "tools/legacy/generate_runeglish.py",
+        "tools/legacy/key_pattern_analysis.py",
+        "tools/legacy/refine_verified_keys.py",
+        "tools/legacy/segment_runeglish.py",
+        "tools/legacy/show_current_decode.py",
+        "tools/legacy/verify_decode.py",
+        "tools/legacy/word_refine.py"
+      ]
+    },
+    {
+      "id": "targeted-page21-and-p43",
+      "script_count": 2,
+      "triage": "partial",
+      "scope": "Correct old page labels and recover seed keys before source-specific second-layer or cross-page claims; do not adopt named high-IoC claims as independent discoveries.",
+      "related_site_records": [],
+      "scripts": [
+        "tools/legacy/p21_30_second_layer.py",
+        "tools/legacy/solve_p43_p00.py"
+      ]
+    }
+  ],
+  "scripts": [
+    {
+      "path": "tools/legacy/add_circumference_anchor.py",
+      "git_blob": "487bf30b3733c743e71127604289ec142fdce7ab",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/add_circumference_anchor.py",
+      "source_docstring_first_line": "",
+      "group_id": "archive-maintenance",
+      "triage": "utility",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Saved key_anchors.json",
+        "data/key_anchors.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Corpus preparation only; not a cipher attempt. Audit changes to source files before any reuse."
+    },
+    {
+      "path": "tools/legacy/adfgvx_test.py",
+      "git_blob": "77b787a48adb2414c507f194ddbfe35a0bb00d2a",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/adfgvx_test.py",
+      "source_docstring_first_line": "ADFGVX-Style Fractionation Cipher Test for Liber Primus",
+      "group_id": "adfgvx-fractionation",
+      "triage": "replayed_adaptation",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-adfgvx-fractionation"
+      ],
+      "remaining_work": "Already tested as a corrected-input bounded adaptation; source shortcuts and other fractionation layouts remain outside scope."
+    },
+    {
+      "path": "tools/legacy/advanced_cipher_solver.py",
+      "git_blob": "0b1c6c3573aeca4bd263230c81b3ebb654b9a2b5",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py",
+      "source_docstring_first_line": "Advanced Cipher Solver for Liber Primus Pages 21-54",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "liber_al_vel_legis.txt",
+        "runes.txt",
+        "self_reliance.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/analyze_hints.py",
+      "git_blob": "c1329754e170d0c8a828df29508f24b475dae3db",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/analyze_hints.py",
+      "source_docstring_first_line": "Analyze the binary hint files from Cicada 3301 ISO.",
+      "group_id": "external-clue-inspection",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "data/folly_hint.txt",
+        "data/folly_rev_hint.txt",
+        "data/wisdom_hint.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Pin the hint or circumference source artifact and check whether an actual finite decryption rule is stated."
+    },
+    {
+      "path": "tools/legacy/analyze_v3_decode.py",
+      "git_blob": "21e6968c081af525e31445017f636e9bb50c4e60",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/analyze_v3_decode.py",
+      "source_docstring_first_line": "Full decode analysis of GPU hillclimber v3 checkpoint.",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1_v3.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/analyze_verified_keys.py",
+      "git_blob": "0d8ca21c5453b6b2ee709037f867dca5a0c80065",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/analyze_verified_keys.py",
+      "source_docstring_first_line": "Deep Analysis of Verified Keys — Finding the Key Generation Pattern",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "runes.txt",
+        "verified_keys.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/anchored_hillclimb_modes_p21.py",
+      "git_blob": "ee976532fb4fcb3488bf0bb9ca63240c716f2b52",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/anchored_hillclimb_modes_p21.py",
+      "source_docstring_first_line": "Anchored hillclimb across modes for Page 21.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "No runes.txt for page",
+        "Results written to data/anchored_p21_modes_results.json and log appended to data/anchored_p21_modes_log.jsonl",
+        "anchored_p21_modes_results.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/anchored_hillclimb_p21.py",
+      "git_blob": "263ee5da8cb86cb038797850a392f190ac8456ab",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/anchored_hillclimb_p21.py",
+      "source_docstring_first_line": "Anchored hillclimb for Page 21.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "No runes.txt for page 21"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/anchored_hillclimb_pages21_30.py",
+      "git_blob": "4e63e064d22ae80746f3d87aba85248470e97fc6",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/anchored_hillclimb_pages21_30.py",
+      "source_docstring_first_line": "Batch anchored hillclimb across pages 21..30 and modes (sub, add, beaufort).",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        " No runes.txt, skipping",
+        ".json",
+        "summary.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/autokey_comprehensive.py",
+      "git_blob": "f7fc204869f46a2c32f5c2a6f2c7fb642a85f49a",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/autokey_comprehensive.py",
+      "source_docstring_first_line": "Comprehensive Autokey Cipher Test for Liber Primus",
+      "group_id": "autokey-feedback",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "cumulative-autokey-literal",
+        "multiplicative-ciphertext-autokey"
+      ],
+      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+    },
+    {
+      "path": "tools/legacy/batch_solver.py",
+      "git_blob": "c66a8b88ec367103fb9afca03a9ba391bd467e5f",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/batch_solver.py",
+      "source_docstring_first_line": "",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "\n* No runes.txt found.\n",
+        "/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/beaufort_crib.py",
+      "git_blob": "ef1b83ea789a630c218e46eeda232a9b393e80f9",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/beaufort_crib.py",
+      "source_docstring_first_line": "Beaufort Crib Dragger - Targeted LP Phrase Search",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/beaufort_crib_results.txt"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/check_cuda_ascii.py",
+      "git_blob": "1d75fd7af434bf88feceb54bd0762758f03123b9",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/check_cuda_ascii.py",
+      "source_docstring_first_line": "",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/check_p32_crib.py",
+      "git_blob": "0d2825301a4457d50d674f41ebf9472fb47e6a69",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/check_p32_crib.py",
+      "source_docstring_first_line": "",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [
+        32
+      ],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "data/key_anchors.json",
+        "pages/page_32/runes.txt"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/cipher_analysis.py",
+      "git_blob": "58940d5f89d6540ec57f14cef4641e648ee9bee2",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/cipher_analysis.py",
+      "source_docstring_first_line": "Comprehensive cipher analysis for Pages 21-54 of Liber Primus",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "liber_al_vel_legis.txt",
+        "runes.txt",
+        "self_reliance.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/combined_cipher_test.py",
+      "git_blob": "0062ce4cbe732f72c6f094373123817b75314f57",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/combined_cipher_test.py",
+      "source_docstring_first_line": "Test COMBINED cipher: keyword Vigenere + prime totient stream.",
+      "group_id": "keyword-prime-double-layer",
+      "triage": "replayed_adaptation",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "remaining_work": "Complete corrected-input 224,128-cell source grid is recorded; do not count the sibling scripts as covered."
+    },
+    {
+      "path": "tools/legacy/crib_extension.py",
+      "git_blob": "6ce405e9dcc5911d4b3524dd66a4654fe8c693cd",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/crib_extension.py",
+      "source_docstring_first_line": "Crib Extension Tool — extend key from confirmed anchor positions",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "data/key_anchors.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/crib_verify.py",
+      "git_blob": "488456fc107d438b3715422ace869c0a9880c62c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/crib_verify.py",
+      "source_docstring_first_line": "Crib Verification Tool",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/decode_best_key.py",
+      "git_blob": "6c57404ccddb1043e8c5e368a701633633904b2c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/decode_best_key.py",
+      "source_docstring_first_line": "Decode Best Key — Analyzes GPU hillclimber checkpoint keys",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".json",
+        ".txt",
+        "/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/decode_p14_p15.py",
+      "git_blob": "ac1d51d0834538793f69a59c37ec4d60b252446c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/decode_p14_p15.py",
+      "source_docstring_first_line": "Decode P14 and P15 with FIRFUMFERENFE key + F-skip rule.",
+      "group_id": "targeted-solved-reading-keys",
+      "triage": "blocked_input",
+      "literal_page_paths": [
+        14,
+        15
+      ],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key"
+      ],
+      "remaining_work": "Verify original claimed known-reading plaintext, key provenance and page identity. Historical “solved” labels cannot serve as ground truth without independent source checks."
+    },
+    {
+      "path": "tools/legacy/decrypt_page_with_verified_key.py",
+      "git_blob": "efc7a667c4a94b8957b523e51c9dc67799525299",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/decrypt_page_with_verified_key.py",
+      "source_docstring_first_line": "",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "No runes.txt for page",
+        "runes.txt",
+        "verified_keys.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/deep_page_analysis.py",
+      "git_blob": "bb8946f95f31b618a39f945972df484103a83ddc",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/deep_page_analysis.py",
+      "source_docstring_first_line": "Deep analysis of promising pages: P39 (IoC 1.63 with verified key SUB) and P54 (IoC 13.01).",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Try to load from pages/page_XX/runes.txt (raw rune text).",
+        "_runeglish.txt",
+        "runes.txt",
+        "verified_keys.json"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/diagnose_free_text.py",
+      "git_blob": "18375da7228ea48dacf6dbe7c8812640cda43203",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/diagnose_free_text.py",
+      "source_docstring_first_line": "Honest validation: are we finding real signal or forcing the text to say what we want?",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/export_top_candidates.py",
+      "git_blob": "270eb16aa6843eeacf301b91d6ea18a1509dd31c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/export_top_candidates.py",
+      "source_docstring_first_line": "Export top-ranked anchored candidates to a Markdown report.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "_seg.json",
+        "ranked_summary.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/extract_confirmed_cribs.py",
+      "git_blob": "37f07a0162431e8caaf0d0dff475cb3d75b71e94",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/extract_confirmed_cribs.py",
+      "source_docstring_first_line": "Extract confirmed cribs from the current GPU hillclimber v3 checkpoint.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1_v3.json",
+        "data/v3_confirmed_cribs.json",
+        "gpu_hill_checkpoint_gpu1_v3.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/extract_lp_text.py",
+      "git_blob": "3336d55fe219a470a78932b9a41635a21a3834ab",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/extract_lp_text.py",
+      "source_docstring_first_line": "LP text extraction from the best available sub-mode key.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu0.json",
+        "data/lp_extraction.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/find_new_cribs.py",
+      "git_blob": "40c2a25882a65e313b44ed89c4c091f6fa3e20ac",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/find_new_cribs.py",
+      "source_docstring_first_line": "",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/fskip_verified_solver.py",
+      "git_blob": "69733a74b305739447d4a68a29986aca0405d63b",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/fskip_verified_solver.py",
+      "source_docstring_first_line": "F-Skip Verified Key Solver + Single-Rune Word Keystream Analysis",
+      "group_id": "targeted-solved-reading-keys",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Read rune text for a page from the runes_full.txt or runeglish directory.",
+        "_runeglish.txt",
+        "runes.txt",
+        "verified_keys.json"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key"
+      ],
+      "remaining_work": "Verify original claimed known-reading plaintext, key provenance and page identity. Historical “solved” labels cannot serve as ground truth without independent source checks."
+    },
+    {
+      "path": "tools/legacy/gap_filler.py",
+      "git_blob": "869350def8c62717d57111bc044f6e9b60b68815",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gap_filler.py",
+      "source_docstring_first_line": "Word-slot gap filler for Liber Primus hillclimber output.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "Saved: data/gap_filler_decode.txt",
+        "Saved: data/gap_filler_result.json",
+        "data/emerson_essays.txt",
+        "data/gap_filler_decode.txt",
+        "data/gap_filler_result.json",
+        "data/gpu_hill_checkpoint_gpu1_v3.json",
+        "data/gpu_hill_checkpoint_gpu1_v4.json",
+        "data/self_reliance.txt",
+        "data/v3_confirmed_cribs.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/generate_runeglish.py",
+      "git_blob": "cfb922d84ae07a7ad9732bf9aa162958a31bd8ab",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/generate_runeglish.py",
+      "source_docstring_first_line": "",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ": runes.txt not found at ",
+        "_runeglish.txt",
+        "runes.txt",
+        "verified_keys.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/gpu_hillclimber.py",
+      "git_blob": "f414132f1194bf0fc8ada5226c04a28823ad803d",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gpu_hillclimber.py",
+      "source_docstring_first_line": "GPU-Accelerated Hillclimber for Liber Primus P21-P54",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".json",
+        ".txt",
+        "/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/gpu_hillclimber_v2.py",
+      "git_blob": "4cec8f5ddeaa79c449aa0dfa31b5f1194c06db4c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gpu_hillclimber_v2.py",
+      "source_docstring_first_line": "GPU-Accelerated Hillclimber v2 — Liber Primus P21-P54",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".json",
+        ".txt",
+        "/runes.txt",
+        "data/emerson_essays.txt",
+        "data/self_reliance.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/gpu_hillclimber_v3.py",
+      "git_blob": "8ab879d6246f276d3e3e0a4fdafeb564880bd0c8",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gpu_hillclimber_v3.py",
+      "source_docstring_first_line": "GPU-Accelerated Hillclimber v3 -- Liber Primus P21-P54",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".json",
+        ".txt",
+        "/runes.txt",
+        "_v3.json",
+        "data/emerson_essays.txt",
+        "data/self_reliance.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/gpu_hillclimber_v4.py",
+      "git_blob": "abe9fb1d5efa7ed439fc6a60eb3536c2906122d8",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gpu_hillclimber_v4.py",
+      "source_docstring_first_line": "GPU-Accelerated Hillclimber v4 -- Liber Primus P21-P54",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".json",
+        ".txt",
+        "/runes.txt",
+        "_v3.json",
+        "_v4.json",
+        "data/emerson_essays.txt",
+        "data/self_reliance.txt",
+        "data/v3_confirmed_cribs.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/gpu_running_key.py",
+      "git_blob": "9f04687a047763d1c73b00c78fc314995fbb5c22",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/gpu_running_key.py",
+      "source_docstring_first_line": "GPU Running-Key Scanner for Liber Primus P21-P54",
+      "group_id": "running-key-corpora",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".txt",
+        "/runes.txt",
+        "data/deor_poem.txt",
+        "data/emerson_essays.txt",
+        "data/key_search_corpus.txt",
+        "data/self_reliance.txt",
+        "data/wordlist.txt",
+        "reference/liber_al_vel_legis.txt"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key",
+        "emerson-running-key"
+      ],
+      "remaining_work": "Source LP1 key selection mixes solved and unsolved pages under old numbering. Correct source/input mapping before any original claim; genuine solved-reading and named-corpus keys have narrower existing tests."
+    },
+    {
+      "path": "tools/legacy/hillclimb_monitor.py",
+      "git_blob": "ab9624e737feb321bfafd45fa3129e6cacb30916",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/hillclimb_monitor.py",
+      "source_docstring_first_line": "hillclimb_monitor.py — Real-time monitoring & validation for gpu_hillclimber_v2",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "ERROR: No checkpoint found at data/gpu_hill_checkpoint_gpu1.json",
+        "_solution.json",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "data/hillclimb_monitor_latest.json",
+        "data/wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/hillclimb_substitute.py",
+      "git_blob": "cba61e0f5472ca9282aa500cc833e9fcf9e7b257",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/hillclimb_substitute.py",
+      "source_docstring_first_line": "",
+      "group_id": "monoalphabetic-substitution",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".txt",
+        "p24_hillclimb_results.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [
+        "monoalphabetic-crib-capacity"
+      ],
+      "remaining_work": "Separate complete whole-page substitution from short seeded hillclimbs; compare with existing crib-capacity and direct-affine records before a new controlled run."
+    },
+    {
+      "path": "tools/legacy/key_pattern_analysis.py",
+      "git_blob": "c9041492e6b46ec2e8ebeb6375e2532e5e0971ac",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/key_pattern_analysis.py",
+      "source_docstring_first_line": "Key Pattern Analysis — extract key values at perfect-crib positions,",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "\nAnchors saved to data/key_anchors.json",
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu0.json",
+        "data/key_anchors.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/keyword_stepped_stream.py",
+      "git_blob": "581d63198adabf754741b00a12385d6d4129850e",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/keyword_stepped_stream.py",
+      "source_docstring_first_line": "Keyword-Stepped Prime Stream Cipher Test",
+      "group_id": "keyword-prime-double-layer",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+    },
+    {
+      "path": "tools/legacy/lfsr4_fast.py",
+      "git_blob": "1e441ce08bf79bb733139121ddbf2cbf272c57f4",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr4_fast.py",
+      "source_docstring_first_line": "LFSR Degree 4 Algebraic Solver — OPTIMIZED",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "lfsr4_results.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction."
+    },
+    {
+      "path": "tools/legacy/lfsr4_solver.py",
+      "git_blob": "c12dd1f0fd5541f838ffc4a9ab3bbeac89c7c88c",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr4_solver.py",
+      "source_docstring_first_line": "LFSR Degree 4 Algebraic Solver for Liber Primus",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction."
+    },
+    {
+      "path": "tools/legacy/lfsr_alberti_solver.py",
+      "git_blob": "c26f72160c3dbf0da10df1c60c72f5df39a38141",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py",
+      "source_docstring_first_line": "LFSR and Alberti Cipher Solver for Liber Primus",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction."
+    },
+    {
+      "path": "tools/legacy/lfsr_gf29_solver.py",
+      "git_blob": "8feb6b5dc0412a82120e6ec1957bbdad082adf34",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_gf29_solver.py",
+      "source_docstring_first_line": "GF(29) LFSR solver for Liber Primus unsolved pages.",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "replayed_adaptation",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "Complete source singleton-constraint grid is recorded on verified page identities; other formula branches in this script are not all replayed."
+    },
+    {
+      "path": "tools/legacy/lfsr_singleton_solver.py",
+      "git_blob": "2086f99f1b95579eac8ec4a343243a3a9543e3f0",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_singleton_solver.py",
+      "source_docstring_first_line": "LFSR solver with HARD single-rune word constraint using linear algebra.",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction."
+    },
+    {
+      "path": "tools/legacy/lp_crib_drag.py",
+      "git_blob": "2d6c267ef2a2402ba0d3a4fa6ae63befca0ca286",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lp_crib_drag.py",
+      "source_docstring_first_line": "LP Word-Boundary Crib Drag",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/monitor_gpu_output.py",
+      "git_blob": "0b6979810acc4ca3b5b77b9ccb6f11bb60de6112",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/monitor_gpu_output.py",
+      "source_docstring_first_line": "Simple monitor: tail the GPU hillclimber output file and print key events.",
+      "group_id": "gpu-key-optimization",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "data/gpu_hill_gpu0.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Four optimizer revisions plus monitor/view utilities share a mutable checkpoint lineage; pin checkpoint, training corpus, score and exact stopping gate."
+    },
+    {
+      "path": "tools/legacy/mono_sub_solver.py",
+      "git_blob": "029c702b0902b0b4626c8c0ed55be31bdae556a0",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/mono_sub_solver.py",
+      "source_docstring_first_line": "Monoalphabetic substitution hillclimber for short ciphertexts.",
+      "group_id": "monoalphabetic-substitution",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "emerson_essays.txt",
+        "key_search_corpus.txt",
+        "self_reliance.txt"
+      ],
+      "related_site_records": [
+        "monoalphabetic-crib-capacity"
+      ],
+      "remaining_work": "Separate complete whole-page substitution from short seeded hillclimbs; compare with existing crib-capacity and direct-affine records before a new controlled run."
+    },
+    {
+      "path": "tools/legacy/p02_analyze.py",
+      "git_blob": "322dfc936fa697fa27d54ab755649fcc353a53cb",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_analyze.py",
+      "source_docstring_first_line": "P02 Word-by-Word Decode Analysis",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/p02_crib_drag.py",
+      "git_blob": "f9e41ab77568cb80dd21e47f3a0d0a9f590e740b",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_crib_drag.py",
+      "source_docstring_first_line": "P02 Focused Crib-Drag Solver",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_crib_extend.py",
+      "git_blob": "73c8a6dedd1d36587e8c9649a1b9213a884a95e5",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_crib_extend.py",
+      "source_docstring_first_line": "P02 crib extension: verify FELLOW at w6, check w14 cross-cycle consistency.",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "pages/page_02/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_crib_refine.py",
+      "git_blob": "a807dce03701d5d3e5d785b4a2cb7a5b77136476",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_crib_refine.py",
+      "source_docstring_first_line": "P02 Crib Dragging Key Refinement",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "data/wordlist.txt",
+        "pages/page_02/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_hillclimb2.py",
+      "git_blob": "b26cb85b9bb3054f7e4fb28650d134de5383c641",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_hillclimb2.py",
+      "source_docstring_first_line": "P02 Hill-Climber with English bigrams from Emerson corpus",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "emerson_essays.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_known_plaintext.py",
+      "git_blob": "6bfdbfd0853dd91bff7a7aceb52eeabd0fd20599",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_known_plaintext.py",
+      "source_docstring_first_line": "P02 Known-Plaintext Attack",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2,
+        6
+      ],
+      "literal_data_references": [
+        "ERROR: pages/page_02/runes.txt not found",
+        "ERROR: pages/page_06/runes.txt not found",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_p18_deepsolve.py",
+      "git_blob": "d0a592a6cb9dc22e4fc00b8d936882f455f54f0a",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_p18_deepsolve.py",
+      "source_docstring_first_line": "P02/P18 Deep Recovery + DIVINITY F-skip mod-17-class tests",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p02_sa_solve.py",
+      "git_blob": "8c7db9bb698505820aaab38b38b00c94ff9dbd75",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p02_sa_solve.py",
+      "source_docstring_first_line": "P02 Simulated Annealing Solver",
+      "group_id": "targeted-page02-cribs",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2
+      ],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Group related crib, annealing and refinement versions; pin each actual source page and every assumed plaintext anchor before a bounded test."
+    },
+    {
+      "path": "tools/legacy/p08_grid_analysis.py",
+      "git_blob": "a2c18b80991c536e8323d550719d632d00e4f757",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p08_grid_analysis.py",
+      "source_docstring_first_line": "P08 Bigram Grid Analysis — Historical Exploration Notes",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/p20_count.py",
+      "git_blob": "12628d358c2654a91548a0acfc28d353fa00d68e",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p20_count.py",
+      "source_docstring_first_line": "Quick investigation: How does P20 get 166 \"prime-position\" runes?",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [
+        20
+      ],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/p20_interlocking.py",
+      "git_blob": "75a1110e8a0fc9e7f48fa5fd921370744c532c06",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p20_interlocking.py",
+      "source_docstring_first_line": "P20 dual-stream interlocking cipher investigation.",
+      "group_id": "deor-interlocking",
+      "triage": "replayed_source_and_amended_diagnostic",
+      "literal_page_paths": [
+        20
+      ],
+      "literal_data_references": [
+        "data/deor_poem.txt",
+        "pages/page_20/runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-deor-interlocking-streams"
+      ],
+      "remaining_work": "Exact source stdout reproduced. Its >1.3 and >1.5 raw-IoC gates are impossible; separate normalized control is recorded. This says nothing about solve_p20.py."
+    },
+    {
+      "path": "tools/legacy/p21_30_autokey_solver.py",
+      "git_blob": "c8ea084ed1f3abe175249587ae61c01bfb828331",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_autokey_solver.py",
+      "source_docstring_first_line": "P21-30 Autokey + Running Key Solver",
+      "group_id": "autokey-feedback",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/deor_poem.txt",
+        "data/self_reliance.txt",
+        "data/wordlist.txt"
+      ],
+      "related_site_records": [
+        "cumulative-autokey-literal",
+        "multiplicative-ciphertext-autokey"
+      ],
+      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+    },
+    {
+      "path": "tools/legacy/p21_30_keyword_sweep.py",
+      "git_blob": "e2af0cb9977ca089ab9e925a50772cfe7dbd5ed1",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_keyword_sweep.py",
+      "source_docstring_first_line": "Systematic test: ALL P63 keywords × ALL modes on ALL P21-30 pages.",
+      "group_id": "keyword-prime-double-layer",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "\nSystematic test: ALL P63 keywords × ALL modes on ALL P21-30 pages.\nAlso compare with verified_keys.json to find the real source of high IoC claims.\n",
+        "/runes.txt",
+        "data/verified_keys.json"
+      ],
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+    },
+    {
+      "path": "tools/legacy/p21_30_rearrange.py",
+      "git_blob": "c1509801f9e14c31898bcae3aee03e9043b05a30",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_rearrange.py",
+      "source_docstring_first_line": "P21-30 Keyword Decryption + Rearrangement Solver",
+      "group_id": "transposition-rearrangement",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        ": runes.txt not found",
+        "data/wordlist.txt"
+      ],
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+    },
+    {
+      "path": "tools/legacy/p21_30_second_layer.py",
+      "git_blob": "1e93873d5794bb1149826adc79c14cc76c4c830d",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py",
+      "source_docstring_first_line": "P21-30 Second Layer Analysis.",
+      "group_id": "targeted-page21-and-p43",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Correct old page labels and recover seed keys before source-specific second-layer or cross-page claims; do not adopt named high-IoC claims as independent discoveries."
+    },
+    {
+      "path": "tools/legacy/p21_30_transposition.py",
+      "git_blob": "b0020857ef503afd70dab066381c69039fa1a5a7",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_transposition.py",
+      "source_docstring_first_line": "P21-30 Transposition Solver",
+      "group_id": "transposition-rearrangement",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+    },
+    {
+      "path": "tools/legacy/p21_30_verified_rearrange.py",
+      "git_blob": "aa9e171df0c28795ca69f6984038dd0dafbfea46",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_verified_rearrange.py",
+      "source_docstring_first_line": "P21-30 Verified Key + Rearrangement Solver",
+      "group_id": "transposition-rearrangement",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        ": runes.txt not found",
+        "data/verified_keys.json",
+        "data/wordlist.txt"
+      ],
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+    },
+    {
+      "path": "tools/legacy/p21_refined_subsweep.py",
+      "git_blob": "77d58f659b29dd472e7b645a707504e5884ffbe7",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_refined_subsweep.py",
+      "source_docstring_first_line": "Deterministic substitution + digraph sweep for top refined p21 candidates.",
+      "group_id": "monoalphabetic-substitution",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".txt",
+        "p21_bounded_refine_cond_fskip_top_results.txt",
+        "p21_bounded_refine_top_results.txt"
+      ],
+      "related_site_records": [
+        "monoalphabetic-crib-capacity"
+      ],
+      "remaining_work": "Separate complete whole-page substitution from short seeded hillclimbs; compare with existing crib-capacity and direct-affine records before a new controlled run."
+    },
+    {
+      "path": "tools/legacy/p24_apply_targeted_map.py",
+      "git_blob": "6060d26010a18e10fcc8b4db3bcf20628b84c0d8",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_apply_targeted_map.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "candidate_w14_s25.txt",
+        "p24_refine_results.txt",
+        "p24_targeted_map_applied.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p24_candidate_process.py",
+      "git_blob": "0ab9ab7ee6171acf271cb073e6604b95ff9cd21d",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_candidate_process.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "p24_candidate_full_width14_shift25.txt",
+        "p24_candidate_processed.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p24_char_tests.py",
+      "git_blob": "65ecc45f58d807e7b11fa323eca847188c27e4cd",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_char_tests.py",
+      "source_docstring_first_line": "Targeted character-prime and columnar tests for Page 24",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Targeted character-prime and columnar tests for Page 24\nSaves outputs to data/p24_candidates.txt\n",
+        "p24_candidates.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/p24_prime0_post.py",
+      "git_blob": "dae139ce93b3fe3441f945aa56603f215e68288b",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_prime0_post.py",
+      "source_docstring_first_line": "",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "p24_prime0_post.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/p24_process_top_candidates.py",
+      "git_blob": "eabc365ff3d4ee2376611f577b3b4c74d945ef22",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_process_top_candidates.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        ".txt",
+        "p24_prime0_post.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p24_refine.py",
+      "git_blob": "474c905339b8c8ac904e1c90c5275813dc6d4296",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_refine.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "candidate_w14_s25.txt",
+        "p24_refine_results.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p24_seeded_hillclimb.py",
+      "git_blob": "8453e37cf549ccc0179a5535258af8308681aa28",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_seeded_hillclimb.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "candidate_w14_s25.txt",
+        "p24_seeded_refine.txt",
+        "p24_targeted_map_applied.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p24_view_candidate.py",
+      "git_blob": "dde243c350ebff74400ba71b837979251946c98a",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p24_view_candidate.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page24-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "p24_candidate_full_width14_shift25.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Candidate viewing/refinement scripts are downstream of selected anchors; recover candidate provenance and exact target bytes before evaluation."
+    },
+    {
+      "path": "tools/legacy/p25_hillclimb.py",
+      "git_blob": "08413cd8b9c83e9277905803154328ad08469a7b",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p25_hillclimb.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page25-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "liber_al_vel_legis.txt",
+        "p25_hillclimb_results.txt",
+        "p25_offset_results.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available."
+    },
+    {
+      "path": "tools/legacy/p25_liberal_offset_sweep.py",
+      "git_blob": "0dfacb35a605c7d1c486a5d377369548c03094ef",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p25_liberal_offset_sweep.py",
+      "source_docstring_first_line": "",
+      "group_id": "targeted-page25-optimizers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "liber_al_vel_legis.txt",
+        "p25_offset_results.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Check the source page mapping and candidate checkpoint, then derive a finite grid and planted recovery control if available."
+    },
+    {
+      "path": "tools/legacy/period_crib_solve.py",
+      "git_blob": "8900cd18fc2b8f431e6318a3025c64591b034f37",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/period_crib_solve.py",
+      "source_docstring_first_line": "Period-Constrained Crib Dragging Solver",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/populate_runes.py",
+      "git_blob": "6b250d5affa58ec69c8218618c21cec40dace769",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/populate_runes.py",
+      "source_docstring_first_line": "",
+      "group_id": "archive-maintenance",
+      "triage": "utility",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        " blocks in runes_full.txt",
+        "LiberPrimus/reference/transcripts/runes_full.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Corpus preparation only; not a cipher attempt. Audit changes to source files before any reuse."
+    },
+    {
+      "path": "tools/legacy/prime_stream_solver.py",
+      "git_blob": "3b579f4aa60d18049889ce5d671ccbfe5a0d3b20",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/prime_stream_solver.py",
+      "source_docstring_first_line": "Prime Stream Cipher Solver — Liber Primus Pages 21-54",
+      "group_id": "keyword-prime-double-layer",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+    },
+    {
+      "path": "tools/legacy/rank_anchored_results.py",
+      "git_blob": "6a3e86d47afee5948bfdf2b7bc8bd7e5c6d239ea",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/rank_anchored_results.py",
+      "source_docstring_first_line": "Rank anchored hillclimb results by segmentation, quadgram, and word-score.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Rank anchored hillclimb results by segmentation, quadgram, and word-score.\nWrites `data/anchored_results/ranked_summary.json` and prints top 12 runs.\n",
+        "_seg.json",
+        "p*_*.json",
+        "ranked_summary.json",
+        "summary.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/refine_and_batch.py",
+      "git_blob": "7c084e6eeae360e43fae67faa7122611a27aece0",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/refine_and_batch.py",
+      "source_docstring_first_line": "Refinement runner: focused transposition + mono-sub for page 21,",
+      "group_id": "transposition-rearrangement",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        " No runes.txt for page ",
+        "No runes.txt for page 21"
+      ],
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+    },
+    {
+      "path": "tools/legacy/refine_verified_keys.py",
+      "git_blob": "d64d8144c31fbb1ffdc21a3d555778148d5a7729",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/refine_verified_keys.py",
+      "source_docstring_first_line": "Refine verified_keys.json keys by fixing singleton-failing positions.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/verified_keys.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/segment_anchored_results.py",
+      "git_blob": "cb04ab2a8a572d3629828491e7c616542ba7875a",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/segment_anchored_results.py",
+      "source_docstring_first_line": "Segment best plaintexts from anchored hillclimb results.",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "_seg.json",
+        "p*_*.json",
+        "summary.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/segment_runeglish.py",
+      "git_blob": "08322a37dddf6bb99e7766efbad4e473862fa443",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/segment_runeglish.py",
+      "source_docstring_first_line": "Segment Runeglish text extracted from character-level prime extraction.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/session16_deep_solve.py",
+      "git_blob": "976bc6298ac7450838837b1fdbe4b81a70dd3c74",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session16_deep_solve.py",
+      "source_docstring_first_line": "Session 16 — Deep solve for partially solved + unsolved pages.",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/session17_clean_solve.py",
+      "git_blob": "e5d06c73163fa6408be32bb0240f652d8b7b503d",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/session17_clean_solve.py",
+      "source_docstring_first_line": "Session 17 — Clean Brute-Force Solver (NO hillclimbing)",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [
+        2,
+        3,
+        18,
+        19,
+        20
+      ],
+      "literal_data_references": [
+        "   no key in verified_keys.json",
+        "  pages/page_20/runes.txt not found",
+        "  verified_keys.json not found",
+        "ERROR: pages/page_02/runes.txt not found",
+        "ERROR: pages/page_03/runes.txt not found",
+        "ERROR: pages/page_18/runes.txt not found",
+        "ERROR: pages/page_19/runes.txt not found",
+        "TEST 7: FULL DECODE using verified_keys.json on claimed ADD-mode pages",
+        "deor_poem.txt",
+        "gpu_hill_checkpoint_gpu1_v4.json",
+        "runes.txt",
+        "verified_keys.json",
+        "wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/show_current_decode.py",
+      "git_blob": "0b9b726db24af444b1c892e046a6785af0026543",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/show_current_decode.py",
+      "source_docstring_first_line": "show_current_decode.py — Decode entire P21-54 cipher using the current",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "data/key_search_corpus.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/singleton_stream_search.py",
+      "git_blob": "167a39bb348500a3806128b0e7debae995ff9bc0",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/singleton_stream_search.py",
+      "source_docstring_first_line": "Singleton-Constrained Key Stream Search",
+      "group_id": "lfsr-and-formula-keys",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-lfsr-singleton-constraints"
+      ],
+      "remaining_work": "GF29 singleton LFSR finite grid has a separate draft. Fast/ordinary LFSR4 are optimizer aliases; Alberti and formula branches need rule-by-rule crosswalk and input correction."
+    },
+    {
+      "path": "tools/legacy/solve_p20.py",
+      "git_blob": "05a7d226dab2ffb4ad3f324039ae0c8d56e639ab",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p20.py",
+      "source_docstring_first_line": "Deep solver for Page 20's non-prime stream (646 runes).",
+      "group_id": "deor-interlocking",
+      "triage": "partial",
+      "literal_page_paths": [
+        20
+      ],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-deor-interlocking-streams"
+      ],
+      "remaining_work": "Exact P20 source gate and corrected normalized diagnostic are drafted. solve_p20 targets a different older count/input: verify its actual stream and key rule before treating it as the same test."
+    },
+    {
+      "path": "tools/legacy/solve_p21_30.py",
+      "git_blob": "7b47e63f43f6882ca481b2ba82bd2ca682e77ecd",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p21_30.py",
+      "source_docstring_first_line": "Solver for Pages 21-30 of Liber Primus",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "No runes.txt for page ",
+        "deor_poem.txt",
+        "runes.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/solve_p43_p00.py",
+      "git_blob": "93d24ffd44573368411fbddf0aad3adb6f84a594",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p43_p00.py",
+      "source_docstring_first_line": "P43 + P00 Analysis — IoC 2.0632 (Highest signal in any unsolved page)",
+      "group_id": "targeted-page21-and-p43",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Load verified_keys.json and analyze the key patterns for unsolved pages.",
+        "runes.txt",
+        "verified_keys.json",
+        "verified_keys.json not found"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Correct old page labels and recover seed keys before source-specific second-layer or cross-page claims; do not adopt named high-IoC claims as independent discoveries."
+    },
+    {
+      "path": "tools/legacy/solve_p61_p62.py",
+      "git_blob": "23e99651c721116cb4a29d01dcb90ae93dcfebf3",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p61_p62.py",
+      "source_docstring_first_line": "BREAKTHROUGH: Pages 61-62 decrypt with DIVINITY key + F-skip!",
+      "group_id": "targeted-solved-reading-keys",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key"
+      ],
+      "remaining_work": "Verify original claimed known-reading plaintext, key provenance and page identity. Historical “solved” labels cannot serve as ground truth without independent source checks."
+    },
+    {
+      "path": "tools/legacy/stream_cipher_attack.py",
+      "git_blob": "0a588175f9a1b7537740803876d762ab542b50a7",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py",
+      "source_docstring_first_line": "Systematic stream cipher attack on ALL unsolved pages.",
+      "group_id": "autokey-feedback",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "cumulative-autokey-literal",
+        "multiplicative-ciphertext-autokey"
+      ],
+      "remaining_work": "Compare exact feedback clock, reset and skip rules against cumulative and ciphertext-autokey records; freeze original target mapping and full selection."
+    },
+    {
+      "path": "tools/legacy/structural_analysis.py",
+      "git_blob": "19e2236a0e23422586e27637a94c05c6d4334760",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/structural_analysis.py",
+      "source_docstring_first_line": "Structural Analysis — P27=P44 relationship + novel cipher hypotheses",
+      "group_id": "page-statistics-and-diagnostics",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt"
+      ],
+      "related_site_records": [
+        "wulfic-letter-encoding-bounds"
+      ],
+      "remaining_work": "Crosswalk each statistic or assertion against published measurements, then isolate any untested predictor with a predeclared control. Page-name corrections are required."
+    },
+    {
+      "path": "tools/legacy/test_lp1_runningkey.py",
+      "git_blob": "e8827dfe5c7e9f33063d3a1edf9565144b76e6dc",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/test_lp1_runningkey.py",
+      "source_docstring_first_line": "Test LP1 (pages 0-20 + other solved pages) as a running key for P21-54.",
+      "group_id": "running-key-corpora",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key",
+        "emerson-running-key"
+      ],
+      "remaining_work": "Source LP1 key selection mixes solved and unsolved pages under old numbering. Correct source/input mapping before any original claim; genuine solved-reading and named-corpus keys have narrower existing tests."
+    },
+    {
+      "path": "tools/legacy/theory_orchestrator.py",
+      "git_blob": "95e0af0f8d1d7432f3d13e43d0ae4a81326e45cc",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/theory_orchestrator.py",
+      "source_docstring_first_line": "Lightweight orchestrator to run multiple CPU-based theory tests across pages.",
+      "group_id": "first-pass-cipher-sweeps",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "autokey_keywords.txt",
+        "combined_cipher_test.txt",
+        "mono_sub_quick.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Extract finite operator definitions and a common score/selection gate; do not count parameterized sweeps as independent failures."
+    },
+    {
+      "path": "tools/legacy/translate_runes.py",
+      "git_blob": "db00412fc611128626db6039c8e3a0b8884f5f9f",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/translate_runes.py",
+      "source_docstring_first_line": "",
+      "group_id": "archive-maintenance",
+      "triage": "utility",
+      "literal_page_paths": [
+        0
+      ],
+      "literal_data_references": [
+        "c:\\Users\\tyler\\Repos\\Cicada3301\\LiberPrimus\\pages\\page_00\\runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Corpus preparation only; not a cipher attempt. Audit changes to source files before any reuse."
+    },
+    {
+      "path": "tools/legacy/transposition_solver.py",
+      "git_blob": "4d869f34244c2088a81715ad65735f5d5f356d01",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/transposition_solver.py",
+      "source_docstring_first_line": "Comprehensive Transposition Solver for P21-30 (and P31-54)",
+      "group_id": "transposition-rearrangement",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt",
+        "wordlist.txt"
+      ],
+      "related_site_records": [
+        "lp2-row-column-routes"
+      ],
+      "remaining_work": "Pin original key and route sets, distinguish an invertible route from unconstrained word rearrangement, and rerun a complete selection with round-trip controls."
+    },
+    {
+      "path": "tools/legacy/ttp_crib_drag.py",
+      "git_blob": "487bcc4d296eade3641badd9972dfefaab8fb8d8",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/ttp_crib_drag.py",
+      "source_docstring_first_line": "TTP Crib Driver — exploit two-time-pad constraints to confirm crib positions.",
+      "group_id": "two-time-pad-cribs",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "leo-shared-key-differences"
+      ],
+      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+    },
+    {
+      "path": "tools/legacy/twotime_crib.py",
+      "git_blob": "596996bce3d118a3d645facac1ebf1a8cf335dd2",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_crib.py",
+      "source_docstring_first_line": "Two-Time-Pad Crib Dragging Attack on Liber Primus P21-P54",
+      "group_id": "two-time-pad-cribs",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt"
+      ],
+      "related_site_records": [
+        "leo-shared-key-differences"
+      ],
+      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+    },
+    {
+      "path": "tools/legacy/twotime_pad_analysis.py",
+      "git_blob": "222bbf124d17ef608b98b33be29e5627b8d36215",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/twotime_pad_analysis.py",
+      "source_docstring_first_line": "Two-Time Pad Detection & Running Key Analysis for Liber Primus",
+      "group_id": "two-time-pad-cribs",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "deor_poem.txt",
+        "emerson_essays.txt",
+        "liber_al_vel_legis.txt",
+        "runes.txt",
+        "runes_full.txt",
+        "self_reliance.txt"
+      ],
+      "related_site_records": [
+        "leo-shared-key-differences"
+      ],
+      "remaining_work": "First verify the source docstring’s claimed identical ciphertext spans on corrected current pages; only then extract the exact shared-key pair set, alignment and crib rule. Compare with existing pairwise whole-page and key-difference experiments."
+    },
+    {
+      "path": "tools/legacy/update_anchors.py",
+      "git_blob": "d670096ed2330a36110d94747b0c80a65829ae2b",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/update_anchors.py",
+      "source_docstring_first_line": "",
+      "group_id": "anchored-hillclimbers",
+      "triage": "open_optimizer",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "Saved key_anchors.json",
+        "data/key_anchors.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Treat anchor creation, optimization, rank/segment/export utilities as one dependency chain; independently verify anchors before scoring any candidate."
+    },
+    {
+      "path": "tools/legacy/validate_crib_candidates.py",
+      "git_blob": "cae9415fdc0e93143a85c1f02511daf45dec7ea6",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/validate_crib_candidates.py",
+      "source_docstring_first_line": "validate_crib_candidates.py — Cross-check a crib candidate against the",
+      "group_id": "periodic-crib-constraints",
+      "triage": "candidate_finite",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json"
+      ],
+      "related_site_records": [
+        "periodic-affine-crib-capacity"
+      ],
+      "remaining_work": "Pin target pages, source periods and crib dictionary; then replay complete consistency checks with a held-out plaintext constraint. Several scripts are diagnostics/validators of the same crib family."
+    },
+    {
+      "path": "tools/legacy/verify_circumference.py",
+      "git_blob": "25b13e079002ad8c8f636d77a116e81ca89de94f",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/verify_circumference.py",
+      "source_docstring_first_line": "",
+      "group_id": "external-clue-inspection",
+      "triage": "partial",
+      "literal_page_paths": [
+        27
+      ],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "pages/page_27/runes.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "Pin the hint or circumference source artifact and check whether an actual finite decryption rule is stated."
+    },
+    {
+      "path": "tools/legacy/verify_decode.py",
+      "git_blob": "6bc30801a3c29b2d097ce7db0f83c8998898bb81",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/verify_decode.py",
+      "source_docstring_first_line": "Decode Verifier -- Cryptographic reproducibility test.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "Report saved: data/verify_decode_report.txt",
+        "data/emerson_essays.txt",
+        "data/gpu_hill_checkpoint_gpu1_v3.json",
+        "data/gpu_hill_checkpoint_gpu1_v4.json",
+        "data/self_reliance.txt",
+        "data/verify_decode_report.txt"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    },
+    {
+      "path": "tools/legacy/verify_key_parse.py",
+      "git_blob": "795b5b8b9dbfd337e6aafc7620a2f7196e0dd535",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/verify_key_parse.py",
+      "source_docstring_first_line": "Verify key parsing correction for P17 and P28",
+      "group_id": "targeted-solved-reading-keys",
+      "triage": "blocked_input",
+      "literal_page_paths": [
+        17,
+        28
+      ],
+      "literal_data_references": [
+        "pages/page_17/runes.txt",
+        "pages/page_28/runes.txt"
+      ],
+      "related_site_records": [
+        "solved-reading-running-key"
+      ],
+      "remaining_work": "Verify original claimed known-reading plaintext, key provenance and page identity. Historical “solved” labels cannot serve as ground truth without independent source checks."
+    },
+    {
+      "path": "tools/legacy/verify_keyword_ioc.py",
+      "git_blob": "9b75e8762aee2014affa765c8b2be2340e42d74f",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/verify_keyword_ioc.py",
+      "source_docstring_first_line": "Verify P21-30 keyword decryption IoC and then attempt word-level rearrangement.",
+      "group_id": "keyword-prime-double-layer",
+      "triage": "partial",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "runes.txt",
+        "verified_keys.json",
+        "wordlist.txt"
+      ],
+      "related_site_records": [
+        "wulfic-keyword-prime-layer-grid"
+      ],
+      "remaining_work": "The exact combined 16×103×4 source grid is replayed. Crosswalk stepped, standalone prime and P21-30 keyword rules and input pages before any distinct grouped extension."
+    },
+    {
+      "path": "tools/legacy/word_refine.py",
+      "git_blob": "10ed746e15e9709e40bb91fbd6fdf4f78d3e22bd",
+      "source_url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/word_refine.py",
+      "source_docstring_first_line": "word_refine.py — Word-boundary-aware key refinement for the LP hillclimber.",
+      "group_id": "key-postprocessing-and-verification",
+      "triage": "blocked_input",
+      "literal_page_paths": [],
+      "literal_data_references": [
+        "/runes.txt",
+        "data/gpu_hill_checkpoint_gpu1.json",
+        "data/gpu_hill_checkpoint_gpu1_pre_refine.json"
+      ],
+      "related_site_records": [],
+      "remaining_work": "These scripts consume selected keys/cribs and segment outputs. Pin upstream candidate and inspect whether verification is independent of the construction that selected it."
+    }
+  ]
+}

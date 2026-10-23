@@ -1,0 +1,13 @@
+{
+  "schema": "liberpedia-post-source-diagnostic-plan-v1",
+  "classification": "Source-known, retrospective extension; fixed before running this diagnostic, after the 64 XOR outputs were available",
+  "scope": "Apply structure checks only to the same 64 hex-decoded-cookie XOR outputs in cases.json. This does not supply the undefined raw-cookie arm.",
+  "source_pkcs_helper": "Call pinned zerofp_tests.pkcs1_v15_check on each 32-byte output: prefix 00 01, at least one FF byte, then 00. Report its exact predicate, not a generic RSA validity verdict.",
+  "strict_pkcs_control": "Separately count prefix 00 01 followed by at least eight FF bytes and then 00; this is a diagnostic stricter than the source helper.",
+  "source_named_digest": "Check the one unused H-03 source-code target an_end_prefix20 = 36367763ab73313a5ce0cd854ba3d6a39e4b8770 as an exact byte substring in each 32-byte output. Do not claim a sweep of all known 3301 hashes/strings.",
+  "positive_controls": [
+    "One synthetic 32-byte block beginning 00 01 + eight FF bytes + 00 must pass both PKCS predicates.",
+    "One synthetic 32-byte block containing the exact source named 20-byte AN END prefix must be detected."
+  ],
+  "failure_interpretation": "No hits would exclude only these exact structures in the 64 fixed outputs. It would not test unspecified targets, encodings, raw-cookie rules or cryptographic use of cookies."
+}

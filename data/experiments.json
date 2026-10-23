@@ -10119,6 +10119,167 @@
       }
     },
     {
+      "id": "dukotah-h03-onion-cookie-xor",
+      "status": "published",
+      "title": "Do the onion cookies reveal text by XOR?",
+      "question": "Does the exact source-executed cookie-to-blob XOR grid produce any 32-byte output with at least 80% printable ASCII?",
+      "reader_question": "Have the 2013 onion cookies been XORed against the grid and later blobs?",
+      "summary": "The executable 64-case source grid reproduces a null at its printable threshold; the written plan describes additional cases and checks that this executable did not run.",
+      "finding": "Across two decoded cookies, four 256-byte objects and eight aligned 32-byte blocks each, zero of 64 XOR outputs reaches 26/32 printable bytes; the maximum is 20/32. A planted 32-byte ASCII block is detected by the original source function. A retrospective source-helper/strict-padding/named-prefix diagnostic finds zero matches on the same 64 outputs and recovers all three synthetic controls.",
+      "limitations": "The raw-cookie arm cannot be reconstructed from the written plan: 64 ASCII characters versus 32-byte blocks with no alignment rule. The broader digest/string set and encoding are unspecified. The pinned executable implements only 64 hex-decoded cases. The supplementary PKCS and one-prefix checks are retrospective, exact-predicate diagnostics, not the original source run.",
+      "next_steps": "Specify the raw-cookie interpretation and exact digest or padding targets before treating the full written H-03 plan as executed.",
+      "outcome": "not-supported",
+      "tags": [
+        "XOR",
+        "onion cookies",
+        "base 60 payload",
+        "source replay",
+        "LP2"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json",
+          "experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json"
+        ],
+        "representation": "Exact source two cookie hex files, LP2 grid payload and three 256-byte onion RSA-hex blobs.",
+        "procedure": "Run pinned h03_cookies_xor() unchanged; independently compute every 32-byte XOR and printable count and compare the archived source summary. Plant an ASCII output into a temporary blob for a gate control. Separately apply the source helper, strict eight-FF and one named-prefix predicates to those same fixed 64 outputs with positive controls.",
+        "parameters": "2 decoded 32-byte cookies × 4 256-byte objects × 8 offsets (0..224 by32)=64 cases; 0x20..0x7e printable and gate ≥26/32.",
+        "exclusions": "Unspecified raw-cookie mapping, unaligned offsets, cookies used as cryptographic keys, other blobs or transcriptions, unspecified hashes/strings or encodings, and any LP2 decipherment claim."
+      },
+      "review": {
+        "reviewer": "Exact source replay with independent 64-case XOR recount",
+        "retested_on": "2026-10-23",
+        "kind": "source-bound cryptographic cross-check",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/dukotah-h03-onion-cookie-xor/run.py && python experiments/records/dukotah-h03-onion-cookie-xor/check.py && python experiments/records/dukotah-h03-onion-cookie-xor/structure.py && python experiments/records/dukotah-h03-onion-cookie-xor/plot.py",
+        "environment": "Python 3.9+; no network or optional packages.",
+        "script": "experiments/records/dukotah-h03-onion-cookie-xor/run.py",
+        "script_sha256": "9f306501119ecc4809e9db79e1d3925a4c1ca553be50fa5719918062b9d7b1c7",
+        "inputs": [
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/check.py",
+            "sha256": "7dda88a584fdee42f1bb555d66a89148966779b70e652cdeeabfdb1b3d272254"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/plot.py",
+            "sha256": "bf1061ef4c95c80a1797e3418d6ce5e3c1536da8164b54276c0a49e72f97dd1e"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json",
+            "sha256": "63f89c7eee2819dfc1d288419fcdc6c1e4ceaf4fc8feb7bd3f89b05ba6b744cf"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/run.py",
+            "sha256": "9f306501119ecc4809e9db79e1d3925a4c1ca553be50fa5719918062b9d7b1c7"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie167.txt",
+            "sha256": "a2c8fdfc1b20645a9011b13d4807790be698f11c1ca3a5fa5c602dbe7310c399"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada20/key_cookie761.txt",
+            "sha256": "62d7d286c2096029461a50583bc98120074b196c9dedba191d8122cdfae63f60"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_avowy_3301.bin",
+            "sha256": "4f1cef871153b8211472d6afd0acfa120eb331b8793e6eb7690484bcb1f89da2"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_cu343_761.bin",
+            "sha256": "05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/armada_osint/onions_ibotpeaches/rsahex_fv7ly_1033.bin",
+            "sha256": "d8c0f83cf91d0deda658035e3eb07712b12e72b36ed0e471a71a2fe07dd14ba6"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/pp49_51/canon_256.bin",
+            "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/PREREG.md",
+            "sha256": "fab3e2035d56d91ce134b7f5c23aa05a1cec6aec6e588ad3107a2068cb8eb8c4"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/RESULTS.md",
+            "sha256": "e401a140ab72cc1872310e75d162ca60840a9a3dc4b2d1b8c76f8ce79a9b7103"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/results.json",
+            "sha256": "0fccc201604d692cc84a9419a05ae50e7ca3770a03ba2fa9912de12d5cf523b4"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/source/liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+            "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json",
+            "sha256": "e705c90987171d27d3ede97b9c4d1ae47a730bb75f2db44543467896c599031b"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure.py",
+            "sha256": "a718ad35252c13ccf168ee21095b80f4a407efdb266e7c7bd1b55f8e784589dc"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/article.md",
+            "sha256": "9f12514d3d99f004f1ee6d6640631d24fbb0cd3ce1efab5305af766ac820da44"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/cases.json",
+            "sha256": "cf290bf9a04fec1e4339e50ba224235e54a3c7b247cf087dd8c6144e7f51c710"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/results.json",
+            "sha256": "13faf49c9b4f44143fdd637274e2639ba022059bbc7282a573d6af25e5887336"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/structure-results.json",
+            "sha256": "7c3512cdcc53899fad6003709cbdd5e29c34b0b1ef9da01cd2d350299faa8e39"
+          },
+          {
+            "path": "experiments/records/dukotah-h03-onion-cookie-xor/xor-maxima.svg",
+            "sha256": "d10f6760e70bfce0b4fb7b7f057f82125cf0cd6e5222c154a7fb5d24f6d21d02"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Pinned Dukotah H-03 source plan, executable and saved result",
+          "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP"
+        }
+      ],
+      "related": [
+        "public-rsa-payload-e01"
+      ],
+      "visuals": [
+        {
+          "path": "experiments/records/dukotah-h03-onion-cookie-xor/xor-maxima.svg",
+          "caption": "The highest printable count within each of eight cookie/object pairs stays below the 26-of-32-byte gate."
+        }
+      ],
+      "article": "# Do the onion cookies reveal text by XOR?\n\nThe [H‑03 source test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP) takes two 32-byte values from the 2013 onion cookies and XORs each with eight successive 32-byte blocks of four objects: the LP2-49–51 grid payload and three later onion RSA-hex blobs. We replayed its executable with the exact preserved inputs and independently recomputed every output byte.\n\n![For each cookie and object, the most printable of eight XOR blocks remains below the 26-of-32-byte gate.](experiments/records/dukotah-h03-onion-cookie-xor/xor-maxima.svg)\n\n**None of the 64 executed blocks reaches the source's 80% printable-ASCII gate.** The highest has **20 of 32** printable bytes, from cookie 761 with the fourth object. A deliberately planted 32-byte ASCII block is recovered by the original source function, so this threshold can detect that kind of output. The [complete 64-case table](experiments/records/dukotah-h03-onion-cookie-xor/cases.json) preserves the XOR bytes and counts.\n\n## What the null covers\n\nThe source's written plan describes **128 trials** using both raw and hex-decoded cookie forms, plus digest and PKCS-structure checks. Its saved executable performs **64 trials using the hex-decoded form**. It applies the printable gate and records only a two-byte `00 01` hint; it does not execute the full written digest or padding tests. Our replay matches the executable and saved result, so the negative applies to **these 64 block-aligned XOR operations**, not to every use of the cookies as keys or the full written plan.\n\nThe remaining raw-form cases cannot be reproduced as written: each file contains **64 ASCII hex characters**, while the plan pairs a “32-byte cookie” with each **32-byte block** and never says which 32 raw characters to use or whether to repeat, truncate or change block size. We did not invent that rule. The plan also leaves the set and encoding of “known 3301 hashes/strings” unspecified.\n\nA [separately frozen, retrospective diagnostic](experiments/records/dukotah-h03-onion-cookie-xor/structure-plan.json) checks the same 64 outputs for the source code's PKCS helper pattern, a stricter eight-`FF` padding pattern, and the one **20-byte AN END prefix** explicitly named in that code. All three yield **zero matches**; synthetic examples pass each predicate. This only addresses those exact structures in the executed 64 outputs. The helper accepts one `FF`, so its rule is not a general statement that a block is valid PKCS#1 padding.\n\nThe objects are exact local source bytes, including `canon_256.bin`; a different grid transcription would be a different input. No readable plaintext or new key is recovered here.\n\n## Reproduce\n\nThe [replay plan](experiments/records/dukotah-h03-onion-cookie-xor/replay-plan.json) hashes the pinned source programs and six input files. Run from the repository root with Python:\n\n```text\npython experiments/records/dukotah-h03-onion-cookie-xor/run.py\npython experiments/records/dukotah-h03-onion-cookie-xor/check.py\npython experiments/records/dukotah-h03-onion-cookie-xor/structure.py\npython experiments/records/dukotah-h03-onion-cookie-xor/plot.py\n```\n\nThe first command runs the original H‑03 function and a temporary planted case. The second recomputes all 64 XORs without importing that function and compares the source's saved summary. This plan was frozen before our replay, **after** the source's result was available; it is not a new preregistration.\n",
+      "article_path": "experiments/records/dukotah-h03-onion-cookie-xor/article.md",
+      "script_sha256": "9f306501119ecc4809e9db79e1d3925a4c1ca553be50fa5719918062b9d7b1c7",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
       "id": "dukotah-image-template-rebuild",
       "status": "published",
       "title": "Can the archived LP2 image read be rebuilt from the original pages?",
@@ -11220,6 +11381,197 @@
         "id": "audit",
         "label": "Source or input audit",
         "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+      }
+    },
+    {
+      "id": "dukotah-payload-varint-matrix",
+      "status": "published",
+      "title": "Do LP2 grid bytes track doublet gaps? Source varint matrix",
+      "question": "Does the exact source-defined 24-comparison varint grid show strong rank alignment with adjacent repeated-rune distances?",
+      "reader_question": "Have the LP2 grid's byte versions been read as base-128 gap sequences?",
+      "summary": "The complete source E-02v varint matrix reproduces: all 24 comparisons stay below the stated 0.5 rank-correlation gate.",
+      "finding": "Three pinned payload versions, four base-128 reading directions and two gap targets yield 24 source rows. All rows match the archived source output. The strongest absolute Spearman correlation is 0.1187, below the source's strict >0.5 first-stage gate. An independent 24-row recount and planted exact gap encoding pass.",
+      "limitations": "This source-scope replay overlaps the existing seven-reading payload-doublet-gaps record; it adds the three exact byte versions and reproduces every source E-02v row. It excludes arbitrary encodings, offsets, event definitions and any claim about the underlying cipher. The source's 10 positive and 50 random controls are cited from its saved receipt, not independently re-executed with its original RNG state.",
+      "next_steps": "A new payload-to-gap proposal must state an exact byte version, transform, alignment, gap definition and control before testing.",
+      "outcome": "not-supported",
+      "tags": [
+        "LP2-49",
+        "LP2-50",
+        "LP2-51",
+        "byte grid",
+        "doublet gaps",
+        "varint",
+        "source replay"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "artifacts": [
+          "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+          "experiments/records/dukotah-payload-varint-matrix/source/ct.bin"
+        ],
+        "representation": "Three exact source 256-byte payload versions and the source's 12,956-byte LP2 rune stream.",
+        "procedure": "Decode LEB128 or MSB-first base 128 from byte zero in forward or reverse order; compare each stream's first 85 or 86 values with the two source equal-rune event-gap targets using tie-aware Spearman ranks; compare every result to the saved source row.",
+        "parameters": "3 byte versions × 4 decoders × 2 targets = 24 rows; minimum 20 values; strict |rho|>0.5 first gate, then source 100,000-permutation p<0.0001 second gate only for rows passing the first.",
+        "exclusions": "Other byte transforms, offsets, gap definitions, untested cipher mechanisms and any whole-LP2 decryption claim."
+      },
+      "review": {
+        "reviewer": "Independent source-row and tied-rank recount",
+        "retested_on": "2026-10-23",
+        "kind": "source-bound computational replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/dukotah-payload-varint-matrix/run.py && python experiments/records/dukotah-payload-varint-matrix/check.py && python experiments/records/dukotah-payload-varint-matrix/plot.py",
+        "environment": "Python 3 standard library; no network.",
+        "script": "experiments/records/dukotah-payload-varint-matrix/run.py",
+        "script_sha256": "350b47e16562fe3ee2952f3f59a7edfd52bb5050d8590dd7cf2de6c81a1ffda3",
+        "inputs": [
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/plan.json",
+            "sha256": "fc7fe2eeca705ced4340a01f41f9c38545e04d30153c126e99b24487eba61a8c"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/run.py",
+            "sha256": "350b47e16562fe3ee2952f3f59a7edfd52bb5050d8590dd7cf2de6c81a1ffda3"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/check.py",
+            "sha256": "505640aea20c83ca8e255f47095bc131851f7ffbd7cf1c6417b0dc9573048e09"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/plot.py",
+            "sha256": "2c44c0d1050ef46894e3ab87707f273d8e0251fa714dc79868ff17594326f5a3"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+            "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/canon_256_decpref.bin",
+            "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/payload_resolved.bin",
+            "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/ct.bin",
+            "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/l5_payload_micro.py",
+            "sha256": "6d6863617799ef51b86edd14f065a2b25f112935fa9fb1712139ff11f70ca738"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/PREREG.md",
+            "sha256": "cd188f4b2e7975dc59377b436aa7c1f8e6e3c217699f6ab4c23e9c039b865685"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/source/source-results.json",
+            "sha256": "07984725014e6a49c3e49ff7161272f6c4709ed77bd265b1082137d5e178caf7"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/results.json",
+            "sha256": "bd7631a478f7d458ce8ecc38c1be2e8184a8021662fe6d73f651ca7ad324d620"
+          },
+          {
+            "path": "experiments/records/dukotah-payload-varint-matrix/varint-gap-matrix.svg",
+            "sha256": "09bf236fe2a3862f34d9174f6fe8077008a18ec690a3d17014e2879a78846a6b"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/dukotah-payload-varint-matrix/varint-gap-matrix.svg",
+          "caption": "The strongest comparison in each source byte version stays far below the stated rank-correlation gate."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Source E-02v code",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py"
+        },
+        {
+          "label": "Source plan",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+        },
+        {
+          "label": "Saved source results",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/results.json"
+        }
+      ],
+      "related": [
+        "payload-doublet-gaps",
+        "doublet-placement",
+        "grid-page-order-permutations"
+      ],
+      "reader_note": "All 24 source varint comparisons reproduce below the effect-size gate.",
+      "reader_limit": "Three pinned byte versions, fixed byte-zero start and two stated gap targets.",
+      "scope_summary": "LP2-49–51 payload · 3 byte versions · 24 varint-gap comparisons.",
+      "family": {
+        "id": "grid-doublet-gap-encodings",
+        "title": "Grid encodings and doublet gaps",
+        "question": "Do integer sequences read from the byte grid track the gaps between repeated runes?",
+        "baseline": "payload-doublet-gaps"
+      },
+      "variant": {
+        "label": "Three byte versions: complete source varint matrix",
+        "changes": [
+          {
+            "field": "artifacts",
+            "before": [
+              "experiments/records/grid-page-order-permutations/source/canon_256.bin",
+              "experiments/records/doublet-placement/results.json"
+            ],
+            "after": [
+              "experiments/records/dukotah-payload-varint-matrix/source/canon_256.bin",
+              "experiments/records/dukotah-payload-varint-matrix/source/ct.bin"
+            ],
+            "reason": "Use all three source payload versions and the exact source rune stream."
+          },
+          {
+            "field": "representation",
+            "before": "Pinned 256-byte source grid and 86 within-page equal-rune-pair starts on archived LP2-00–55, concatenated in page order for gap distances.",
+            "after": "Three exact source 256-byte payload versions and the source's 12,956-byte LP2 rune stream.",
+            "reason": "Reproduce the named source variants, rather than one existing payload transcription."
+          },
+          {
+            "field": "procedure",
+            "before": "Decode seven fixed integer/varint readings at byte zero. Compare first available values with 85 inter-event distances and with the first one-based event coordinate plus those distances using tie-aware Spearman correlation. Audit all 84 nonzero rotations of the 85-gap target with the best-of-seven statistic.",
+            "after": "Decode LEB128 or MSB-first base 128 from byte zero in forward or reverse order; compare each stream's first 85 or 86 values with the two source equal-rune event-gap targets using tie-aware Spearman ranks; compare every result to the saved source row.",
+            "reason": "Replay the source varint matrix; retain the earlier seven-reading and rotation test as a separate baseline."
+          },
+          {
+            "field": "parameters",
+            "before": "Seven byte readings; two targets; 14 comparisons; 85 gap distances; 84 alignment controls; published effect-size gate |rho| >= 0.5.",
+            "after": "3 byte versions × 4 decoders × 2 targets = 24 rows; minimum 20 values; strict |rho|>0.5 first gate, then source 100,000-permutation p<0.0001 second gate only for rows passing the first.",
+            "reason": "Expose the exact source decoder, target and conditional decision-gate differences."
+          },
+          {
+            "field": "exclusions",
+            "before": "Other payload transcriptions, starting offsets, byte permutations, transforms, noncontiguous selections, distinct event definitions, and inference of a cipher mechanism.",
+            "after": "Other byte transforms, offsets, gap definitions, untested cipher mechanisms and any whole-LP2 decryption claim.",
+            "reason": "Keep the source-matrix bounds separate from the earlier alignment experiment."
+          }
+        ]
+      },
+      "article": "# Can the LP2 grid bytes describe doublet gaps?\n\nThe [source's E‑02v test](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md) treats the 256-byte LP2-49–51 grid payload as a sequence of base-128 integers. It asks whether those integers rise and fall with the distances between adjacent repeated runes elsewhere in LP2. This extends our [earlier seven-reading check](#/experiments/payload-doublet-gaps) to the source's **three byte versions and all 24 stated comparisons**.\n\n![Across three pinned byte versions, the strongest rank correlations are 0.119, 0.119 and 0.117, far below the source's 0.5 gate.](experiments/records/dukotah-payload-varint-matrix/varint-gap-matrix.svg)\n\n**All 24 rows reproduce the source's saved result; none reaches its stated effect-size gate.** Each byte version was decoded as both LEB128 and MSB-first base 128, reading bytes forward or backward. Each of those four streams was compared with 85 distances between repeated-rune events and with a related 86-value sequence that starts at the first event's position. The strongest absolute Spearman rank correlation is **0.1187**, against a required **greater than 0.5**. Because no row crosses that first gate, the source's 100,000-permutation second stage is not invoked.\n\nThis tests a specific *numeric reading* of the grid, not whether repeated runes matter or whether the payload encodes something else. The three byte versions differ, but their best correlations are nearly identical. The [complete row table](experiments/records/dukotah-payload-varint-matrix/results.json) preserves decoded lengths, compared lengths and signed correlations, so the small differences are inspectable.\n\n## How it was checked\n\nThe four pinned inputs are exact source bytes: three 256-byte payload versions and its 12,956-byte LP2 rune stream. That stream has 86 adjacent repeat events; their 85 distances start **85, 249, 197, 129, 127**. We independently decoded and ranked each of the 24 cases, then compared each rounded row with the source's archived output. The original source reports **10/10** planted gap-sequence recoveries and **0/50** random-payload hits. Our separate positive check re-encodes all 85 real gaps in both base-128 orders, recovers them exactly and obtains correlation 1.\n\nThe [local plan](experiments/records/dukotah-payload-varint-matrix/plan.json) fixes inputs and rules for this replay, but it follows an already published source result; it is **not an independent preregistration**. The source's controls are archived receipts, whereas our positive check and independent 24-row recount were run here. Arbitrary byte transformations, start offsets, gap definitions and cipher mechanisms remain outside the test.\n\nRun from the repository root with Python 3:\n\n```text\npython experiments/records/dukotah-payload-varint-matrix/run.py\npython experiments/records/dukotah-payload-varint-matrix/check.py\npython experiments/records/dukotah-payload-varint-matrix/plot.py\n```\n",
+      "article_path": "experiments/records/dukotah-payload-varint-matrix/article.md",
+      "script_sha256": "350b47e16562fe3ee2952f3f59a7edfd52bb5050d8590dd7cf2de6c81a1ffda3",
+      "record_type": {
+        "id": "measurement",
+        "label": "Manuscript measurement",
+        "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
       }
     },
     {
@@ -43418,11 +43770,22 @@
       "related": [
         "doublet-placement",
         "grid-page-order-permutations",
-        "grid-direct-bytes"
+        "grid-direct-bytes",
+        "dukotah-payload-varint-matrix"
       ],
       "reader_note": "Seven literal byte readings fail the declared doublet-gap correlation gate.",
       "reader_limit": "Only fixed byte-zero readings and two event-gap definitions are tested.",
       "scope_summary": "LP2-49–51 grid · LP2-00–55 doublets · 14 fixed comparisons.",
+      "family": {
+        "id": "grid-doublet-gap-encodings",
+        "title": "Grid encodings and doublet gaps",
+        "question": "Do integer sequences read from the byte grid track the gaps between repeated runes?",
+        "baseline": "payload-doublet-gaps"
+      },
+      "variant": {
+        "label": "Seven readings of one byte version",
+        "changes": []
+      },
       "article": "# Do the byte-grid values encode doublet spacing?\n\n**No direct rank alignment was found under seven specified byte readings.** The strongest absolute correlation is **0.119**, below the published 0.5 gate. This checks one way the [LP2-49–51 numerical grid](#/wiki/alphanumeric-grids) might encode positions of repeated adjacent runes elsewhere in LP2; it does not assess every possible use of the grid.\n\n![Seven payload readings compared with the gap sequence. All bars fall below the declared 0.5 gate.](experiments/records/payload-doublet-gaps/gap-correlation.svg)\n\nAn equal-rune pair is called a *doublet*. There are 86 such pairs within the archived LP2-00–55 page texts. Put their starting rune positions in page order, then subtract each from the next: that makes **85 gaps**. The first few are `85, 249, 197, 129`. We compared this sequence with numbers read from the published 256-byte grid file, beginning at byte zero each time.\n\n| Byte reading | Values used | Correlation with 85 gaps |\n| --- | ---: | ---: |\n| One unsigned byte per number | 85 | +0.043 |\n| Two-byte integers, little endian | 85 | −0.018 |\n| Two-byte integers, big endian | 85 | −0.026 |\n| LEB128, forward / reversed bytes | 85 each | −0.027 / +0.004 |\n| MSB-first base-128, forward / reversed bytes | 85 each | −0.040 / −0.004 |\n\nThe source's later varint test also prepended the one-based location of the first doublet, **122**, making an 86-value target. The largest absolute correlation across both targets is **0.119**: forward LEB128 against that 86-value sequence. [The full result table](experiments/records/payload-doublet-gaps/results.json) retains all 14 comparisons and the number of values each decoding produced.\n\n## How the comparison was checked\n\nThe statistic is Spearman's rank correlation: it asks whether large payload numbers tend to line up with large doublet gaps, without requiring their magnitudes to match. The test fixes the reading direction and starts at the first byte and first gap. It does **not** shift the payload until a favorable match appears. As an alignment check, we circularly shifted the 85-gap target through its other 84 positions, repeating the largest-of-seven comparison each time. **83 of 84** shifted alignments matched or exceeded the unshifted maximum. Those shifts are dependent descriptive controls, not a calibrated cipher null or a p-value.\n\nEncoding all 85 actual gaps into either varint format and decoding them again recovers every gap exactly. A separate checker recomputes all 14 correlations with a different midrank algorithm. This establishes that the tested encoders and rank calculations work; it does not prove the grid cannot hide a transformed gap list.\n\nThe [earlier published fixed-width check](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/zeroFP/zerofp_tests.py) used unsigned 8- and 16-bit values. A [later extension](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/l5_payload_micro.py) tested the two variable-length readings and both byte directions. This replay uses the pinned source byte file and Liberpedia's separately archived [doublet coordinates](#/experiments/doublet-placement). No inference is made about alternate grid transcriptions, arbitrary offsets, other encodings or a decoder that first transforms the bytes.\n\n## Reproduce\n\nExtract this experiment and the reference-data bundle together, then run:\n\n```sh\npython experiments/records/payload-doublet-gaps/run.py --check\npython experiments/records/payload-doublet-gaps/check.py\n```\n\nBoth scripts use only the Python standard library.\n",
       "article_path": "experiments/records/payload-doublet-gaps/article.md",
       "script_sha256": "c1f41ad49befd3a64d03b8847234eb848a672981563b1dbbc31629f18b7f71a6",
@@ -47287,11 +47650,11 @@
       "title": "Two-to-six-rune feedback and autokey screen",
       "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
       "reader_question": "Could each rune be decoded using a key derived from the preceding runes?",
-      "summary": "A pinned public 23,520-configuration feedback sweep is rerun against LP2, with 21 planted controls and an independently recomputed winning decode.",
-      "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. All 21 planted k=3 controls recover correctly; no tested output provides a convincing English reading.",
-      "limitations": "Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities. Their wrong seeds need not converge. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
+      "summary": "The 23,520-setting source sweep found no convincing English reading. A separate power check shows its actual all-equal-seed search misses its own plaintext- and mixed-history plants.",
+      "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. Its 21 controls recover when supplied their exact non-equal seed. Under the real search's all-equal seeds, 7/7 ciphertext-history plants recover, but 0/7 plaintext-history and 0/7 mixed-history plants do. The negative is limited to the executed grid and is not a power-validated exclusion of the latter modes.",
+      "limitations": "The supplemental plant check is retrospective and fixes k=3, sign -1 and the source control passage. Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities; wrong seeds need not converge, as this measured gate confirms. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
       "next_steps": "A concrete feedback proposal should specify its recurrence, seed, boundary reset and output language before scoring; test matched planted examples and apply the same full selection to null controls.",
-      "outcome": "not-supported",
+      "outcome": "inconclusive",
       "tags": [
         "autokey",
         "feedback cipher",
@@ -47368,7 +47731,7 @@
         "exclusions": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers."
       },
       "review": {
-        "reviewer": "Source executable replay with independent winning-rule and score calculation; archived source results crosschecked",
+        "reviewer": "Source executable replay with independent winning-rule and score calculation; independent search-domain plant audit",
         "retested_on": "2026-10-22",
         "kind": "computational source replay",
         "human_review": "pending"
@@ -47450,6 +47813,22 @@
           {
             "path": "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt",
             "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/gate-plan.json",
+            "sha256": "f67acf0c21f524c2aa9df134f1b4c5999628184bebd883488b21e8e175263cea"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/gate.py",
+            "sha256": "15e9aee1a2b7fa2f524650a68a564e8f902c5776036a4114b1b1f94c239dbef5"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/check_gate.py",
+            "sha256": "fea4e214821979e8b729bb8599c34607cb68a5c9ecdfd745f289d46df46fb945"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/gate_plot.py",
+            "sha256": "dd2b6884a58222aa4e46eab420d126fdeaba9a8592324b368661f0621ad74df8"
           }
         ],
         "outputs": [
@@ -47468,6 +47847,14 @@
           {
             "path": "experiments/records/public-multihistory-feedback/feedback.svg",
             "sha256": "c4b5bc2ea047c2f3293cf59d6c55230b79ade04877b285040cdab4e69e247dee"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/gate-results.json",
+            "sha256": "1fe023a1c3d94de055212a6b0479d2af7c27bc9b7bbfe2d89617dd670e0c8904"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/search-domain-gate.svg",
+            "sha256": "613fb2bf788ca1877c9c0c1d9dba61d8c502c9576ccddd35409515f4cae45e38"
           }
         ]
       },
@@ -47479,6 +47866,10 @@
         {
           "path": "experiments/records/public-multihistory-feedback/feedback.svg",
           "caption": "Each rule maps two to six earlier symbols into a key value used to decode the next rune."
+        },
+        {
+          "path": "experiments/records/public-multihistory-feedback/search-domain-gate.svg",
+          "caption": "The source search recovers ciphertext-history controls but none of its non-equal-seed plaintext or mixed-history controls under the 29 tried all-equal seeds."
         }
       ],
       "sources": [
@@ -47497,9 +47888,10 @@
       ],
       "related": [
         "cumulative-autokey-literal",
-        "linear-ciphertext-feedback"
+        "linear-ciphertext-feedback",
+        "crib-inferred-feedback-table"
       ],
-      "article": "# Multi-rune feedback and autokey\n\nA feedback cipher can derive each new key symbol from earlier symbols. [This published screen](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/RESULTS.md) tested whether LP2 behaves that way when the key depends on the previous two to six runes.\n\n## Finding\n\n**None of the 23,520 source configurations produced a convincing English reading.** The strongest result scored **−6.299**, below the source's required **−5.500**. It came from a **66-rune segment**, not the continuous manuscript: a five-rune plaintext-history XOR rule on the reversed segment, with an all-six seed. The source program successfully recovered all **21 planted cases** at history length three and gave wrong-rule decodes much lower scores.\n\n![The planted control clears the score threshold; the highest-scoring LP2 candidate remains below it.](experiments/records/public-multihistory-feedback/scores.svg)\n\nThese are English quadgram scores; higher means the transliterated output resembles the training text more closely. The strongest short fragment is still well below the planted English sample. A score by itself would never establish a solution without a coherent continuation.\n\n## How the tested rules work\n\nAt each position, the program reads the previous *k* symbols, passes them through one of seven fixed functions, then adds or subtracts the resulting value modulo 29. The seven functions are an index sum, prime-value sum, XOR, prime-of-index-sum, prime-of-prime-sum, last-symbol difference and alternating sum. It tries three kinds of history: the visible ciphertext, the plaintext decoded so far, or the modulo-29 sum of the two. The source also tries both directions of the rune stream and both arithmetic signs.\n\n![A five-rune history is mapped to a key value, then combined with the next ciphertext rune to produce a proposed plaintext rune.](experiments/records/public-multihistory-feedback/feedback.svg)\n\nThe screen covers the **12,956-rune continuous unsolved stream** plus its **55 nonempty source segments**. For ciphertext history, symbols after the first *k* positions do not depend on the initial seed. For plaintext and mixed history, the source tries only the **29 all-equal seeds** `0…0` through `28…28` at each *k*, then keeps the best score. That is a thin slice of the possible **29^k** initial states. In particular, a wrong initial plaintext state need not “lock on” to the correct state later; the source's broader claim that a genuine autokey would necessarily reveal itself under these seeds is not established by this test.\n\nThe source's 200 shuffled controls score the raw full stream, while its reported best is selected from thousands of configurations, many on short segments. That shuffle maximum is not a full best-of-grid null. The result is therefore **no supported English reading in the executed grid**, not a statistical exclusion of every feedback cipher.\n\n## Reproduce\n\nDownload the experiment ZIP and run from its extracted folder:\n\n```sh\npython experiments/records/public-multihistory-feedback/run.py\n```\n\nIt runs the 21 planted controls before the full sweep, then checks the saved result against the separately archived source output. The independent checker reconstructs the 12,956 source rune indices and **recomputes the winning XOR/plaintext-history decode and score** without calling the source's feedback decoder. For a quick check of the packaged outputs, run `python experiments/records/public-multihistory-feedback/check.py`. The full sweep takes several minutes.\n\nThe code, transcription and scoring table are included from [Dukotah/cicada3301 revision f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1), with the repository's license. This record matches that program's executed parameters; it does not claim to rule out other functions, alphabets, seed states or non-English plaintext.\n",
+      "article": "# Multi-rune feedback and autokey\n\nA feedback cipher can derive each new key symbol from earlier symbols. [This published screen](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/RESULTS.md) tested whether LP2 behaves that way when the key depends on the previous two to six runes.\n\n## Finding\n\n**None of the 23,520 source configurations produced a convincing English reading.** The strongest result scored **−6.299**, below the source's required **−5.500**. It came from a **66-rune segment**, not the continuous manuscript: a five-rune plaintext-history XOR rule on the reversed segment, with an all-six seed. The source program recovered all **21 planted cases when given their correct seed**. A further check below shows that its actual limited seed search does **not** recover the plaintext-history or mixed-history plants.\n\n![The planted control clears the score threshold; the highest-scoring LP2 candidate remains below it.](experiments/records/public-multihistory-feedback/scores.svg)\n\nThese are English quadgram scores; higher means the transliterated output resembles the training text more closely. The strongest short fragment is still well below the planted English sample. A score by itself would never establish a solution without a coherent continuation.\n\n### Did the real search pass its planted test?\n\nThe source's control encrypts the same 212-rune English passage under each of its seven rules and three history modes, using initial seed **7, 11, 2**. It decrypts each with that exact seed. The real sweep instead tries only **0,0,0** through **28,28,28** for plaintext and mixed history. We ran that actual seed-search step against the source's own planted ciphertexts, holding the correct rule, sign and history length fixed:\n\n![The actual search recovers all seven visible-rune-history plants but none of the seven decoded-rune or seven mixed-history plants.](experiments/records/public-multihistory-feedback/search-domain-gate.svg)\n\n**Visible-ciphertext history: 7/7 recovered. Plaintext history: 0/7. Mixed history: 0/7.** No tried all-equal seed reaches 90% rune recovery in either of the latter groups, even before selecting the highest English score. The correct non-equal seed still recovers all 21 plants. An [independent recurrence check](experiments/records/public-multihistory-feedback/check_gate.py) reproduces every candidate's rune recovery and score. This is a **retrospective power check** using the source's already published control passage, not a new blinded trial.\n\nThe negative screen therefore has a useful, narrower result: these executed settings produced no persuasive English reading. Its correct-seed control does not show that the **actual all-equal-seed search** could find a plaintext- or mixed-history cipher with a different initial state. The source did not test all 29³ seeds at history length three, let alone all 29^k seeds at larger lengths.\n\n## How the tested rules work\n\nAt each position, the program reads the previous *k* symbols, passes them through one of seven fixed functions, then adds or subtracts the resulting value modulo 29. The seven functions are an index sum, prime-value sum, XOR, prime-of-index-sum, prime-of-prime-sum, last-symbol difference and alternating sum. It tries three kinds of history: the visible ciphertext, the plaintext decoded so far, or the modulo-29 sum of the two. The source also tries both directions of the rune stream and both arithmetic signs.\n\n![A five-rune history is mapped to a key value, then combined with the next ciphertext rune to produce a proposed plaintext rune.](experiments/records/public-multihistory-feedback/feedback.svg)\n\nThe screen covers the **12,956-rune continuous unsolved stream** plus its **55 nonempty source segments**. For ciphertext history, symbols after the first *k* positions do not depend on the initial seed. For plaintext and mixed history, the source tries only the **29 all-equal seeds** `0…0` through `28…28` at each *k*, then keeps the best score. That is a thin slice of the possible **29^k** initial states. In particular, a wrong initial plaintext state need not “lock on” to the correct state later; the source's broader claim that a genuine autokey would necessarily reveal itself under these seeds is not established by this test.\n\nThe source's 200 shuffled controls score the raw full stream, while its reported best is selected from thousands of configurations, many on short segments. That shuffle maximum is not a full best-of-grid null. The result is therefore **no supported English reading in the executed grid**, not a statistical exclusion of every feedback cipher.\n\n## Reproduce\n\nDownload the experiment ZIP and run from its extracted folder:\n\n```sh\npython experiments/records/public-multihistory-feedback/run.py\n```\n\nIt runs the 21 planted controls before the full sweep, then checks the saved result against the separately archived source output. The independent checker reconstructs the 12,956 source rune indices and **recomputes the winning XOR/plaintext-history decode and score** without calling the source's feedback decoder. For a quick check of the packaged outputs, run `python experiments/records/public-multihistory-feedback/check.py`. The full sweep takes several minutes.\n\nThe code, transcription and scoring table are included from [Dukotah/cicada3301 revision f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1), with the repository's license. This record matches that program's executed parameters; it does not claim to rule out other functions, alphabets, seed states or non-English plaintext.\n\nThe [separately frozen gate plan](experiments/records/public-multihistory-feedback/gate-plan.json), [21-case results](experiments/records/public-multihistory-feedback/gate-results.json), and source-search check can be rerun without the several-minute LP2 sweep:\n\n```sh\npython experiments/records/public-multihistory-feedback/gate.py\npython experiments/records/public-multihistory-feedback/check_gate.py\npython experiments/records/public-multihistory-feedback/gate_plot.py\n```\n",
       "article_path": "experiments/records/public-multihistory-feedback/article.md",
       "script_sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461",
       "record_type": {
@@ -62494,6 +62886,148 @@
       }
     },
     {
+      "id": "wulfic-adfgvx-fractionation",
+      "status": "published",
+      "title": "Does the fractionation reversal undo its own shuffle?",
+      "question": "What do the archived 6×5 keyword-grid routes produce on six intended LP2 pages, and does the archived columnar reversal invert its forward transform?",
+      "reader_question": "Does this grid-and-shuffle method work on LP2?",
+      "summary": "The archived reversal fails 476 of 588 planted round trips. A repaired inverse passes all 588, but neither route yields a verified page reading under the source’s limited keyword and width grid.",
+      "finding": "The source names 1,260 settings; its own length rule skips 336, and 2 of the remaining 924 cross its vocabulary-score gate. Its raw IoC is bounded by 1, so the IoC >1.3 gate cannot fire. A separately labeled exact inverse produces 2 score-gated rows among 588 settings. Every gated setting has invalid grid cells. The correction repairs a transposition inverse; it does not identify the manuscript cipher.",
+      "limitations": "Only 14 source keywords, six checked page streams, five split rules, seven natural-order column widths and two coordinate shifts. The source gate can reward a few words even when invalid cells were dropped; raw IoC is not normalized or controlled. No general fractionation or plaintext verdict.",
+      "next_steps": "Specify a coordinate-stream encoding, a single keyed transposition, null treatment and a held-out reading before interpreting further keyword matches.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "source-derived test",
+        "fractionation",
+        "Polybius grid",
+        "columnar transposition",
+        "source audit"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-27",
+          "lp2-28",
+          "lp2-30"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-adfgvx-fractionation/plan.json"
+        ],
+        "representation": "Source GP29 rune order; 6×5 keyword-first table with the last cell empty. Archived source page_38/39/40/44/45/47 rune streams independently match the corresponding current LP2 pages under the source parser.",
+        "procedure": "Replay split, archived column reversal, direct and coordinate-shift routes exactly. Separately correct natural-order column lengths and compare 588 full-message planted round trips.",
+        "parameters": "14 source keywords; six source-intended LP2 pages; split n/n−5/n+5/n//2/2n//3; widths 7,11,13,17,19,23,29; sub/add coordinate shifts.",
+        "exclusions": "Other widths, keys, keyed column orders, coordinate-stream encodings, alternate null handling, source bonus running-key methods and any decryption claim."
+      },
+      "review": {
+        "kind": "source-defined bounded replay plus separately identified inverse repair",
+        "retested_on": "2026-10-23",
+        "reviewer": "All 1,512 scored routes checked against AST-extracted pinned source functions; 588 planted controls and exact page parser alignments",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-adfgvx-fractionation/run.py --check",
+        "environment": "Python 3 standard library; optional pinned Wulfic Git checkout for source-function parity audit.",
+        "script": "experiments/records/wulfic-adfgvx-fractionation/check.py",
+        "script_sha256": "877e653cc34b87260f92d8aac34f2e8476184c601d04016281c6a3cf1438defb",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/plan.json",
+            "sha256": "c9a358f71dd86cf5fdd5f7c0f34902b693ab42dde6c64769bb1a39724b371b56"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/run.py",
+            "sha256": "df9c9971c92fddf60059a8a57706b0f6aeb1dca9b2295a9783dc5c896ac8cb55"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/check.py",
+            "sha256": "877e653cc34b87260f92d8aac34f2e8476184c601d04016281c6a3cf1438defb"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/plot.py",
+            "sha256": "f0a6f7e7d95496a3585b1f6bb4dae99b37ddd0e6a07039cd7f74be4c3a9d2570"
+          },
+          {
+            "path": "data/pages/lp2-21.json",
+            "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+          },
+          {
+            "path": "data/pages/lp2-22.json",
+            "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+          },
+          {
+            "path": "data/pages/lp2-23.json",
+            "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+          },
+          {
+            "path": "data/pages/lp2-27.json",
+            "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+          },
+          {
+            "path": "data/pages/lp2-28.json",
+            "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+          },
+          {
+            "path": "data/pages/lp2-30.json",
+            "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/inputs.json",
+            "sha256": "6acfdcd6c3b147782d7b3326ba7b264817796f83213ad628a18cd13b9a880c17"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/results.json",
+            "sha256": "f226168a8693206269202809afbb69129a40c0922b7766645093bb068c1867ae"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/cases.jsonl",
+            "sha256": "723ab6694587bd86b689ba25a2713310eaff95447d6fb7b9094bdf9b64baa654"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/controls.json",
+            "sha256": "2e2536b0186e12e98099ef34179b73c1c7217dab9ef746edb5e5b1612f1a8b46"
+          },
+          {
+            "path": "experiments/records/wulfic-adfgvx-fractionation/reversal.svg",
+            "sha256": "524ae9b2d1dbbe357973342a799c65219e6cca9b5ad66017de998ccbaabd82c9"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-adfgvx-fractionation/reversal.svg",
+          "caption": "Known-message controls: the archived column reversal restores 112 of 588 planted messages; the separately repaired inverse restores all 588."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned Wulfic fractionation script",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/adfgvx_test.py"
+        },
+        {
+          "label": "Pinned Wulfic legacy-method warning",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+        }
+      ],
+      "related": [
+        "wulfic-early-keyspace-diagnostics",
+        "lp2-known-vigenere-keys",
+        "wulfic-local-codebook-invariants"
+      ],
+      "article": "# Does the archived fractionation test reverse its own shuffle?\n\nThe archived proposal puts the 29 rune values in a keyword-mixed 6×5 grid. Each rune becomes a row and column number; the proposal then tries several ways to rearrange those numbers. We replayed its **14 keywords on six intended LP2 pages**. The historical page filenames were checked against the rune streams: source `page_38`, for example, is LP2-21, not LP2-38.\n\n## The decisive control\n\nBefore looking for a reading, a reversal must be able to undo the matching forward shuffle. We planted a known rune message at each target length, each keyword and each of the seven column widths. The archived reversal restored **112 of 588** messages exactly. It failed the other **476**, because it allocates a full-height slice to short columns. A separately labeled inverse using the columns' actual lengths restored **all 588**. The correction is an implementation repair, not evidence that this is the manuscript cipher.\n\n![The archived reversal restores 112 of 588 planted messages; the corrected inverse restores all 588.](experiments/records/wulfic-adfgvx-fractionation/reversal.svg)\n\n## What the manuscript run found\n\nThe source names **1,260 settings**. Its own length rule skips **336** split settings, leaving **924 scored settings**. Two cross its vocabulary-score gate: `CABAL`, width 7 on LP2-28, and `CONSUMPTION`, width 19 on LP2-30. Both produce invalid grid cells (8 and 33 respectively). The score omits invalid cells when forming words, so these hits need inspection rather than a reading claim. The source's other gate, **raw IoC above 1.3, can never fire**: its IoC formula always returns a value between 0 and 1.\n\nThe separate corrected inverse has **588 settings** on the same pages, keys and widths. Two cross that same heuristic gate: `CARNAL`, width 29 on LP2-27, and `CABAL`, width 7 on LP2-28. They produce 15 and 8 invalid cells. The `CABAL` row is identical under both reversals at that particular stream length. No setting here provides a verified coherent page reading.\n\nThe direct route simply fractionates and defractionates each observed rune, returning the original cipher stream. It is a useful identity control, not a decipherment. Four named split points always produce too few pairs and are skipped by the source rule. The source also includes two running-key tests after this grid; those are different methods and are outside this record.\n\n## Repeat the check\n\nDownload the experiment files and run `python experiments/records/wulfic-adfgvx-fractionation/run.py --check` to verify the saved outputs against the pinned page JSON. `python experiments/records/wulfic-adfgvx-fractionation/check.py --checkout PATH_TO_WULFIC_CLONE` additionally reads the pinned source commit, verifies all six historical page mappings, and independently checks all 1,512 scored route outputs and source scoring. Omit `--check` on the first command to regenerate the outputs. The source checkout must resolve commit `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`.\n\nThis bounds the specified keys, six pages, widths, split rules, and coordinate shifts. It does not test other transposition keys, coordinate encodings, null conventions, or a general fractionation cipher family. The source's vocabulary score and unnormalized IoC are exploratory filters; neither is a calibrated probability of a correct decryption.\n",
+      "article_path": "experiments/records/wulfic-adfgvx-fractionation/article.md",
+      "script_sha256": "877e653cc34b87260f92d8aac34f2e8476184c601d04016281c6a3cf1438defb",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
       "id": "wulfic-cicada-byte-key-phases",
       "status": "published",
       "title": "Archived Cicada numbers and byte streams as LP2 keys",
@@ -62672,6 +63206,143 @@
       "article": "# Can archived Cicada numbers and byte streams serve as LP2 keys?\n\n**Finding.** In this exact Stage R search, none of the 43,500 source settings reached the declared +30 detection score. The strongest LP2 score was **+2.41** on a nine-rune title section, but that section is **too short to reach +30 with this scorer under any key**. Among the other sections, the best was **−50.75**; the complete joined stream peaked at **−1,479.67**. All 200 planted positive controls exceeded +30 and all 200 wrong-key controls stayed below it. This is a result about the specified detector and inputs, not a claim that these sources cannot be used in another construction.\n\n![Three detection-score extrema against the source pass line.](experiments/records/wulfic-cicada-byte-key-phases/comparison.svg)\n\nThe figure shows the lowest positive-control score, the highest LP2 score, and the highest negative-control score. Each point is an extremum of a different group, not one representative trial. The LP2 maximum comes from the title section, whose score ceiling is below the pass line.\n\n## What was tested\n\nThe [pinned Stage R program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_r.py) collected 25 numerical or byte sources connected to earlier Cicada material. They include the published prime product and RSA modulus as decimal digits, cookie values, a source hash, two hex strings, a hint, and several archived byte files. A file name such as `page_17.bin` is the archive's label for a candidate key file; it is not itself proof of a Liber Primus page number or of an authenticated hidden payload.\n\nEach source became two GP29 key streams: values reduced modulo 29, and values above the largest divisible range rejected before reduction. For each of those 50 streams, the test tried three arithmetic modes (`sub`, `add`, `beaufort`) and all 29 shifts against nine source sections separately and their continuous join. This gives **50 × 3 × 29 × 10 = 43,500** settings. Source section labels 7–15 refer to that program's transcript divisions; they are not manuscript page numbers. Together they cover the unsolved LP2 text through page 55, with some section boundaries inside pages.\n\nThe scorer allows the key stream to stay, advance once, or advance twice between runes, with probabilities 0.02, 0.96 and 0.02. It averages over **every** possible cyclic starting phase instead of choosing the most flattering one. It compares decoded-rune frequencies with those of the solved LP1 text and reports a log likelihood ratio; **+30** was the source's fixed pass line.\n\nThe nine-rune title accounts for **4,350** of the 43,500 settings. Its largest possible per-rune emission ratio is 3.467, so even a perfect path cannot exceed **9 × ln(3.467) = 11.19 nats**. The +30 line is mathematically unreachable there. The longer sections can reach the line in principle, though the planted controls test detection power only at 729 and 3,316 runes. Neither kind of evidence makes all 43,500 settings equally informative.\n\n## What makes the screen interpretable\n\nThe source first encrypted solved LP1 text with each key under its own stay/advance/skip model, then measured the correct key and an independent wrong key. It used two lengths (729 and 3,316 runes) and two anti-doublet rekey settings. That produced 200 positive–negative pairs. The weakest correct-key score was **+169.09**; the strongest wrong-key score was **−60.86**. The positive controls show that this detector can recover keys generated by its own model at the tested lengths. They do not establish equal power against every possible real encryption scheme.\n\nOur separately written compiled forward-sum implementation agreed with the pinned original scorer on 108 real cells spanning short and long source keys, short and joined LP2 sections, all three modes, and multiple shifts (largest absolute difference **2.27 × 10⁻¹² nats**). Synthetic equal-mass and skewed-emission cases check ties and pruning. It preserved the source control generator and random seed. The replay then checked every rounded candidate and control row against the two original source tables. These checks verify the computation; they do not establish that any candidate source was the actual LP2 key.\n\n## Read or rerun the data\n\n- [Full source candidate table](experiments/records/wulfic-cicada-byte-key-phases/source-stage_r_candidates.tsv) — one row per setting.\n- [Source control table](experiments/records/wulfic-cicada-byte-key-phases/source-stage_r_controls.tsv) — 200 positive–negative pairs.\n- [Packaged numeric inputs](experiments/records/wulfic-cicada-byte-key-phases/source-profile.npz) — the exact 50 key streams, section runes, and emission ratios used by the checker.\n- [Result summary](experiments/records/wulfic-cicada-byte-key-phases/results.json) and [declared plan](experiments/records/wulfic-cicada-byte-key-phases/plan.json).\n\nRun `python experiments/records/wulfic-cicada-byte-key-phases/check.py` to verify full-table hashes, controls and a spread of independently computed cells. Add `--full` to recompute all 43,500 LP2 scores from the packaged numeric inputs. To repeat source construction and planted controls from the pinned checkout, use `replay.py --source PATH --workers 4 --output PATH`; it writes only to the given output directory. The compiled scorer needs NumPy and Numba. `plot.py --check` verifies the figure against the result summary.\n\nThis screen does not test other starting distributions, source preprocessing, key schedules, language models, interruption probabilities, or later cipher layers. A proposal using one of these sources with a different specific rule remains a separate test.\n",
       "article_path": "experiments/records/wulfic-cicada-byte-key-phases/article.md",
       "script_sha256": "21828619eeaae5a6afd7f238d27bfa060666fe9538ec2525eeb3fffce1236652",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "wulfic-deor-interlocking-streams",
+      "status": "published",
+      "title": "Deor and interlocking rune streams",
+      "question": "Does the archived prime-index split and Deor-to-derived-key sequence produce a distinctive second-stream IoC on current LP2-03?",
+      "reader_question": "Can Deor unlock one stream and use it to unlock the rest?",
+      "summary": "The original source hit thresholds are impossible for its raw score. A separately normalized whole-procedure control finds no distinctive final-stage peak in this bounded test.",
+      "finding": "The original hit conditions cannot be satisfied: raw IoC is at most 1, while the program requires more than 1.3 or 1.5. On LP2-03, its selected first-stage candidate adds Deor at offset 47 and scores 0.0649; the second subtracts the selected key at offset 31 and scores 0.0404. A separate normalized comparison gives a second-stage maximum of 1.173, reached or exceeded by 110 of 199 whole-procedure shuffles. The first-stage maximum is 1.882, reached by 18 of 199 shuffles.",
+      "limitations": "Zero original source HIT rows are not negative evidence because the gates cannot pass. The normalized test was frozen separately and measures only one page, one pinned Deor stream, a prime-index partition, the source direction/offset grids and one histogram-preserving shuffle model. Synthetic controls verify arithmetic, not power to detect English. Other two-stream ciphers remain untested.",
+      "next_steps": "A stronger proposal should specify how the streams are separated, how the first output keys the second, and a full expected reading or held-out prediction before inspecting the result.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "source replay",
+        "Deor",
+        "interlocking streams",
+        "index of coincidence",
+        "impossible source gate"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-03"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-deor-interlocking-streams/source-run.txt",
+          "experiments/records/wulfic-deor-interlocking-streams/input-parser-amendment.json"
+        ],
+        "representation": "Current LP2-03 canonical GP29 rune values, exactly matching archived old page_20 after filtering; split by whether rune index is prime.",
+        "procedure": "Replay original code in a temp folder; independently run all 1,800 first-stage Deor variants, select maximum raw IoC, then all 195 repeating-derived-key variants, retaining original unreachable HIT gates. Separately compare 29×normalized maxima with 199 whole-procedure page shuffles.",
+        "parameters": "217 runes:65 prime-index,152 other; source Old English Deor parser yields960 values; 3 modes×600 offsets and3 modes×65 repeat offsets; 29 Caesar shifts; 199 seeded page shuffles, seed20261023.",
+        "exclusions": "Other pages, alternative prime definitions/partitions, modern Deor translation, other poems, word resets, variable key feedback, other language scores and all untested stream rules."
+      },
+      "review": {
+        "kind": "exact archived-source replay plus separately declared normalized diagnostic",
+        "retested_on": "2026-10-23",
+        "reviewer": "Unchanged source stdout matches archived input; independent selected-decode arithmetic and full 199-control rerun; parser amendment retains initial failed exploratory result.",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-deor-interlocking-streams/check.py && python experiments/records/wulfic-deor-interlocking-streams/plot.py --check",
+        "environment": "Python3 standard library. Exact original-script replay additionally requires a local checkout of pinned upstream revision bf89d3d13aad2b8f2c95ab195cf1b092f250775c.",
+        "script": "experiments/records/wulfic-deor-interlocking-streams/check.py",
+        "script_sha256": "2e531b2aa78b279e8062884ab58562291cb742a024c274ebe3e65ba8bffd720e",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/plan.json",
+            "sha256": "70cf233a15b525acfb394e92ad73a5de88e73598b8a891c2cfb215a7f17b88cd"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/plan-initial-frozen.json",
+            "sha256": "1cc0fa2e110324577d4a98f9980e772fec3f5f6890806b20b1864f8508eb5337"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/input-parser-amendment.json",
+            "sha256": "4ff117d951cc8f0b57a3c04cc896c01ee88d2a3ab1eb769f1a894e3bace8affd"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/deor-poem-source.txt",
+            "sha256": "be03dbfbc8d02dd6348611c973dd38ba3960c7d06833461783876546171fd143"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/source-run.txt",
+            "sha256": "cc8ccd3442c6bf44c8f31b9b228ae71ab15a92e4d114d1993f90912c70c2a5a0"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/run.py",
+            "sha256": "b7bd4afc06fb4a4a35730e53cc8d2eb680da361668d75f24d90e7fff6b07134e"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/replay_source.py",
+            "sha256": "ca0c4c740f5136954b91c0c56c67e63f20c1ffbca2e47d9520f372aff2db993a"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/check.py",
+            "sha256": "2e531b2aa78b279e8062884ab58562291cb742a024c274ebe3e65ba8bffd720e"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/plot.py",
+            "sha256": "d4c5da7a53adf37e13df22eba4c8c58af98ab9da71fb6214a377526d0dd2cffe"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/make_record.py",
+            "sha256": "3a6d461c342c304a0fb90c0c4020790574076d5266295c6537cbb091cc796f15"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/article.md",
+            "sha256": "d049da4a2585bf71ab9e65e4e84b6108ea544507cd8d8ac50c21635289f97bb1"
+          },
+          {
+            "path": "data/index.json",
+            "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+          },
+          {
+            "path": "text/lp2-03.txt",
+            "sha256": "6f7c152762935269e35f5b3499f5b08d663849a2c8eb55d74fd237f7d5291c7e"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/results.json",
+            "sha256": "a43664de55b171c472ef3b3858a05f89000eed2f73a49230a66be31ea0ce0c0e"
+          },
+          {
+            "path": "experiments/records/wulfic-deor-interlocking-streams/comparison.svg",
+            "sha256": "8e748eba82f2329399062d94eb7012b7c41f15575cfb40fbe57127e9008dc52b"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-deor-interlocking-streams/comparison.svg",
+          "caption": "The original raw-score thresholds cannot be reached; a separate normalized full-search comparison finds no unusual final-stage peak."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned archived Deor two-stream script",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p20_interlocking.py"
+        },
+        {
+          "label": "Pinned Deor poem input",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/corpora/deor_poem.txt"
+        }
+      ],
+      "related": [
+        "wulfic-keyword-prime-layer-grid",
+        "wulfic-letter-encoding-bounds"
+      ],
+      "article": "# Can one rune stream unlock another?\n\nAn [archived test](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p20_interlocking.py) divides one LP2 page by each rune’s zero-based alphabet index. Indices **2, 3, 5, 7, 11, 13, 17, 19 and 23** go into one stream; all others go into another. These are alphabet positions, not Gematria Primus prime values. It tries a passage from the Old English poem *Deor* as a key for the first stream, then reuses its best output as a repeating key for the second.\n\n**The original script cannot report a hit.** Its coincidence score is between 0 and 1, but its two hit checks require scores above **1.3** and **1.5**. We reproduced its exact output, including zero hits. That zero says nothing about whether the idea works; the gates are unreachable for *any* input.\n\n![The source splits 217 runes into two streams; its original score gates are impossible, while a separate normalized comparison finds no distinctive final-stage score.](experiments/records/wulfic-deor-interlocking-streams/comparison.svg)\n\n## What a corrected comparison shows\n\nWe separately multiplied the same coincidence score by 29, a conventional normalization that makes a threshold such as 1.3 possible. We kept the source's key directions, offsets and choice of the best first-stream result. The second-stream maximum is **1.17**. In **110 of 199** seeded shuffles of the page, the *whole two-stage search* reached at least that score. The amended 1.3 screen found no second-stream candidate here. The selected first-stream score, **1.88**, was reached by 18 of 199 shuffles. The first-stage peak alone does not turn into a distinctive final-stage result.\n\nThe shuffles preserve the page's rune counts and redo both stages, including the adaptive choice of first key. They show how this exact search behaves under a simple control; they are not an encryption model or a proof that every interlocking cipher fails.\n\n## Exact bounds and reproduction\n\nThe source's “page 20” is **current LP2-03**: its 217 rune values match the archived input. It yields 65 prime-index and 152 other runes. The source tries three directions at 600 *Deor* offsets, then three directions at 65 repeat-key offsets. Only the Old English section of the pinned poem is parsed, producing 960 rune values. The separate Caesar-shift check cannot change coincidence score, so all 29 shifts tie on that measure.\n\nOur [pinned plan](experiments/records/wulfic-deor-interlocking-streams/plan.json) and [saved results](experiments/records/wulfic-deor-interlocking-streams/results.json) preserve the source calculation and label the normalized comparison as a later diagnostic. An [input-parser amendment](experiments/records/wulfic-deor-interlocking-streams/input-parser-amendment.json) records that an initial exploratory run mistakenly included the poem's modern translation; the published diagnostic uses the source's 960-value stream. The original source output is saved as a short [trace](experiments/records/wulfic-deor-interlocking-streams/source-run.txt), and `python experiments/records/wulfic-deor-interlocking-streams/check.py` repeats the independent computation and controls. The pinned external checkout can be used with [the source replay wrapper](experiments/records/wulfic-deor-interlocking-streams/replay_source.py).\n\nThis is one page, one poem, a value-based split and a fixed repeating-key rule. It does not test other partitions, poems, word boundaries, feedback rules or language-based readings.\n",
+      "article_path": "experiments/records/wulfic-deor-interlocking-streams/article.md",
+      "script_sha256": "2e531b2aa78b279e8062884ab58562291cb742a024c274ebe3e65ba8bffd720e",
       "record_type": {
         "id": "replay",
         "label": "Method replay",
@@ -65147,6 +65818,166 @@
         "id": "method",
         "label": "Bounded solving test",
         "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      }
+    },
+    {
+      "id": "wulfic-lfsr-singleton-constraints",
+      "status": "published",
+      "title": "Can single-rune words pin down an LFSR key?",
+      "question": "Do source-defined GF(29) linear-feedback streams of lengths one through five make every visible one-rune word on LP2-28, LP2-24 and LP2-21 read I or A?",
+      "reader_question": "Can one-rune words reveal the key stream?",
+      "summary": "The source's exact I/A singleton constraints admit four five-state Beaufort settings on LP2-28, about 27,400 settings on LP2-24 and 5.8 million on LP2-21. These are crib fits, not readings.",
+      "finding": "Across all 29^L feedback tuples for each L=1–5, no selected page has a complete singleton fit at L1–2. At L5, the source's first-L invertible search yields four LP2-28 Beaufort fits, 27,424 combined subtraction/Beaufort fits on LP2-24 and 5,808,457 on LP2-21. Addition has exact signed-state symmetry with subtraction and is not counted again in that comparison. All four LP2-28 full-page example decodes have normalized IoC below the source's 1.3 shortcut; no full-page English selection claim is made.",
+      "limitations": "Assumes every visible one-rune word is plaintext I or A, canonical GP indices, page-local continuous key and first-L invertible basis. Singular first-L systems are excluded by the source algorithm. Full-grid dictionary scoring is not calibrated or claimed. Fitting singleton slots does not identify a ciphertext generator or decryption.",
+      "next_steps": "Specify a single candidate's taps, starting state, direction, page boundary rule and out-of-crib plaintext prediction before testing additional text.",
+      "outcome": "inconclusive",
+      "tags": [
+        "LP2",
+        "source-derived test",
+        "LFSR",
+        "one-rune words",
+        "crib constraints",
+        "search bounds"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-21",
+          "lp2-24",
+          "lp2-28"
+        ],
+        "artifacts": [
+          "experiments/records/wulfic-lfsr-singleton-constraints/plan.json",
+          "experiments/records/wulfic-lfsr-singleton-constraints/inputs.json"
+        ],
+        "representation": "Canonical GP29 page-local rune streams; source parser singleton positions: 12 on LP2-28, 9 on LP2-24, 7 on LP2-21. Pinned archived scan ordinals 45, 41 and 38 separately checked by unchanged source parser.",
+        "procedure": "Exhaust feedback tap tuples over GF(29), solve invertible first-L singleton constraints for all I/A assignments, test remaining singletons and decode example full pages exactly; independent small-grid oracle and planted controls.",
+        "parameters": "L=1..5; each coefficient 0..28; plaintext I=10 or A=24 at visible one-rune words; sub/add/Beaufort directions; first-L invertible systems only; 29^L tuples per length and target.",
+        "exclusions": "Different singleton plaintext, non-GP mapping, page-spanning or skipped clocks, singular source basis, other recurrence families, whole-grid calibrated English verdict and proof of decryption."
+      },
+      "review": {
+        "kind": "source-defined bounded extension with exact input alignment and independent oracle",
+        "retested_on": "2026-10-23",
+        "reviewer": "15 scanner plants; independent full L1/L2, 100-tuple L3–L5, all 45 rows and full-page examples; post-scan exhaustive small-field oracles and nonconsecutive GF29 plants",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/wulfic-lfsr-singleton-constraints/run.py --check",
+        "environment": "Python 3 standard library for saved-output checks; C++17 g++ compiler for the complete exhaustive run.",
+        "script": "experiments/records/wulfic-lfsr-singleton-constraints/check.py",
+        "script_sha256": "a92acd8df27112ca0396c00f721b8af0914bd32f75d0ab6342fb518f9d0775ef",
+        "inputs": [
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/plan.json",
+            "sha256": "63daeec2054a87331543010a62bcbea86d8f76308e4f30f0bacff43e5d8a4960"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/inputs.json",
+            "sha256": "59a0a5f43f4c7fc4ad92f827d8506748810fb6c724aab1ec9175caed5be20ef5"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/scan-input.txt",
+            "sha256": "4a9947968a087183e35e4762b309fcf4d0bcc6e9d5d60ca8a28622e57a964c4a"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/scan.cpp",
+            "sha256": "8574ebfa8a2616cd1d52c909155b26f063576d33b72108378e94b3a02c5a0381"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/prepare.py",
+            "sha256": "5ca2b9ce84231574dc29c524e7d54a7fcebe96d90c2d8f1b73d66158df777882"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/controls.py",
+            "sha256": "5d4cde2e10f0f1d5eadad53f10eb1e838bf22a91d4a8933f74ab4aa1a45d4fba"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/finalize.py",
+            "sha256": "b75eaab3d8ae8810ae6ff31d42cb181b88a128076d171241b3673d346a19807a"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/run.py",
+            "sha256": "815a4ac1cc7757024a642527bc8a33401dce133d54da436629fcf47985af073a"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/plot.py",
+            "sha256": "bf6cc6954ff1504ad21be94b7a26ebac0168c426fbf10aaea45d6bf571d0bd5b"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/check_source_input.py",
+            "sha256": "82e7c5a7209f973d59b28c27069cf1a4179616c03f21b260dd57838abbd7fb47"
+          },
+          {
+            "path": "data/pages/lp2-21.json",
+            "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+          },
+          {
+            "path": "data/pages/lp2-24.json",
+            "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+          },
+          {
+            "path": "data/pages/lp2-28.json",
+            "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/results.json",
+            "sha256": "90e1374ac537404bdeefc9ca3d2e64f0a1737dc0bc292a8e8765bc476734dd6e"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/full-summary.tsv",
+            "sha256": "f438602fe856d3245bcc32a45bec6bd1e786c3dc116850d1b9cfb35e685086ac"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/spot-summary.tsv",
+            "sha256": "b2c3733619c9d5bb166d467200c0cc9ef9a7187f20c1c9ffa214940e3356098f"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-input.txt",
+            "sha256": "39ee0bbcf4b243843969aa2a5e28790d0e7a5646fd1931c4e7546974ba12d51c"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-summary.tsv",
+            "sha256": "783c76ec98b88312e23238678f5fd8102fb8b3848144edcc745c8961ac271314"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/control-candidates.tsv",
+            "sha256": "a4882f884530dd99be398973cc749812406db440ac0376a4f189071413847b25"
+          },
+          {
+            "path": "experiments/records/wulfic-lfsr-singleton-constraints/fits.svg",
+            "sha256": "0ffb4b143bd1533964d147986ba0ef1e6e6bee91ffd5044966a4a8766884c9a8"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/wulfic-lfsr-singleton-constraints/fits.svg",
+          "caption": "Singleton-crib fits by page and linear-feedback memory length; a fit is not a decoded reading."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned Wulfic GF(29) LFSR proposal",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_gf29_solver.py"
+        },
+        {
+          "label": "Pinned Wulfic legacy trust note",
+          "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+        }
+      ],
+      "related": [
+        "periodic-affine-crib-capacity",
+        "solved-reading-running-key",
+        "wulfic-early-keyspace-diagnostics"
+      ],
+      "article": "# Can single-rune words pin down an LFSR key?\n\nAn [LFSR](#/wiki/method-seeded-generators?section=lfsr) generates a key from a short memory of earlier values. Here it remembers one to five rune indices and calculates each next value modulo 29. The test assumes that every visible one-rune word in the unknown plaintext is **I** or **A**.\n\n**Finding.** With one or two values of memory, no tested setting fits all the one-rune words on any of the three pages. With five, LP2-21 admits about **5.8 million** fitting parameter settings and LP2-24 about **27,400**. LP2-28 admits **four**, all under the Beaufort direction. A fit means only that those few positions read I or A; none is an established reading of the page.\n\n![Number of LFSR parameter settings satisfying every visible one-rune word as I or A, by page and key memory length.](experiments/records/wulfic-lfsr-singleton-constraints/fits.svg)\n\nThe source's historical labels P28, P24 and P21 refer to **LP2-28, LP2-24 and LP2-21**. In the pinned repository's current global page folders, those are scans **45, 41 and 38**. We checked the rune streams and the precise positions of the 12, 9 and 7 one-rune words against the unchanged source parser before scanning. Using today's `page_28` folder would instead test LP2-11.\n\n| Page | One-rune words | Complete fits at L3 | L4 | L5 |\n| --- | ---: | ---: | ---: | ---: |\n| LP2-28 | 12 | 0 | 0 | **4** |\n| LP2-24 | 9 | 0 | 24 | **27,424** |\n| LP2-21 | 7 | 6 | 6,846 | **5,808,457** |\n\nThese counts combine the source's subtraction and Beaufort directions. Its addition direction gives the **same decoded streams** as subtraction with every initial key value negated, so it is reported in the result file but not counted twice in the table. At L1 and L2, none of the three pages has a complete fit. Every L5 row includes all **20,511,149** ordered feedback tuples, including zero coefficients.\n\nThe four LP2-28 candidates have normalized full-page indices of coincidence **0.978–1.142**, below the source's `>1.3` shortcut. That observation is descriptive: we did not calibrate the source's other dictionary shortcut over the entire selected grid, and neither shortcut would establish a decryption by itself. The [result file](experiments/records/wulfic-lfsr-singleton-constraints/results.json) gives each of those four full-page decode hashes, key parameters, and exact singleton values. It also preserves example decodes for the larger rows.\n\n## What the calculation covers\n\nFor state length L from **1 through 5**, the source defines each next key value as a linear combination of the previous L key values modulo 29. Its solver tries all tap tuples and all I/A assignments for the first L one-rune words, solves for the starting state, then checks every remaining one-rune word. We reproduced that **first-L invertible** procedure in all three directions. Planted streams recovered their exact taps and starting states for every length and direction. An independent checker recalculates every L1/L2 result, the first 100 tap tuples at L3–L5, every published full-page example, and the pinned input positions. It also exhausts small GF(3) and GF(5) tap/state spaces against a direct recurrence oracle and tests nonconsecutive singleton positions in GF(29). These checker controls were completed after the manuscript scan; the small-field oracle had been specified in the frozen plan.\n\nThis is a test of a **specific English singleton crib and source search rule**. If one-rune words use other plaintext symbols, the state advances across pages, the key skips, or the first-L basis is singular, these counts do not decide the model. In particular, millions of L5 fits on the page with only seven one-rune words show why satisfying a small crib is not evidence of a solution. A candidate needs a rule fixed in advance that predicts substantial text outside the singleton positions.\n\nTo repeat the saved-output checks, run:\n\n```text\npython experiments/records/wulfic-lfsr-singleton-constraints/run.py --check\n```\n\nThe full four-minute sweep needs a C++17 `g++` compiler:\n\n```text\npython experiments/records/wulfic-lfsr-singleton-constraints/run.py\n```\n\nThe [plan](experiments/records/wulfic-lfsr-singleton-constraints/plan.json) fixes the bounds and assumptions. The [input ledger](experiments/records/wulfic-lfsr-singleton-constraints/inputs.json) pins the page text and one-rune positions. The [pinned source script](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_gf29_solver.py) defines the historical proposal; its archived execution and old optimizer output are not treated as verified results.\n",
+      "article_path": "experiments/records/wulfic-lfsr-singleton-constraints/article.md",
+      "script_sha256": "a92acd8df27112ca0396c00f721b8af0914bd32f75d0ab6342fb518f9d0775ef",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
       }
     },
     {

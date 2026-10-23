@@ -23,9 +23,9 @@
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 16,
-      "replayed-with-invalid-gate": 5,
-      "partial-execution": 8
+      "complete-executed-grid": 15,
+      "partial-execution": 10,
+      "replayed-with-invalid-gate": 6
     }
   },
   "entries": [
@@ -109,6 +109,10 @@
         {
           "record_id": "h03-ps-layout-replay",
           "covered_subclaim": "The R28-L5 H-03r 2012 P.S. branch: the original 131-digit three-line source text in six bare layout readings plus four five-column-indented readings under the amended 95% digit-pair printability gate. Ten readings miss the gate; planted and random-block controls pass their declared checks."
+        },
+        {
+          "record_id": "dukotah-h03-onion-cookie-xor",
+          "covered_subclaim": "All 64 executable hex-decoded-cookie XOR cases reproduce, with independent full-byte recount and an original-source planted ASCII recovery. Retrospective helper/strict padding and one named-prefix checks on these same outputs have explicit predicates and passing plants."
         }
       ],
       "rejected_inventory_candidates": [
@@ -121,16 +125,25 @@
           "reason": "A doublet-gap correlation is neither cookie XOR nor the 2012 P.S. rotation."
         }
       ],
-      "covered_subclaim": "A later source-defined P.S. block-reading extension (R28-L5 H-03r), not the ledger's cookie-XOR branch.",
+      "covered_subclaim": "The 64 executable cookie-XOR cases and the separately amended P.S. block-reading extension, at the scopes on their record links.",
       "unresolved_parts": [
-        "No Liberpedia replay of the source's 64 cookie-XOR trials or its 80% printable gate.",
-        "The pinned round-16 RESULTS describes only the cookie-XOR branch; its ledger 'NULL complete' label cannot close both bundled questions. The separate P.S. replay uses R28-L5's amended 95% gate and does not retroactively make the round-16 branch an executed source trial."
+        "Written raw-cookie trials cannot be reconstructed: 64 ASCII characters versus 32-byte blocks, with no alignment or reduction rule. The full digest/string target set and encoding are unspecified. The executable64 must not be described as the written128.",
+        "P.S. layout source original gate was invalid; the published P.S. test uses its explicitly amended 95% predicate. No blanket cookie/key or layout exclusion follows."
       ],
       "source_evidence": [
         "liber-primus/analysis/round16/zeroFP/PREREG.md",
         "liber-primus/analysis/round16/zeroFP/RESULTS.md"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-h03-onion-cookie-xor",
+          "h03-ps-layout-replay"
+        ],
+        "scope": "64 executable cookie cases and a separately amended P.S. layout extension. Written raw/digest branches are not fully specified, and extra structure tests are retrospective.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R22-C-LITERAL-IMPERATIVES",
@@ -506,18 +519,32 @@
         {
           "record_id": "h03-ps-layout-replay",
           "covered_subclaim": "H-03r: six original and four indented P.S. layouts under the amended 95% digit-pair gate with planted and random-block controls."
+        },
+        {
+          "record_id": "dukotah-payload-varint-matrix",
+          "covered_subclaim": "Complete E-02v executable matrix: 3 payload variants ×4 varint decoders ×2 targets =24 comparisons; exact source row parity and independent ranks plus a planted encoding round-trip. Twelve decoded streams are not twelve distinct decoder types."
         }
       ],
       "unresolved_parts": [
-        "E-02v: exact source 12 varint readings against both stated gap targets across three payload variants remain unreplayed as a full matrix. The seven-reading local overlap cannot close that branch.",
-        "No general RSA or steganographic exclusion follows from the bounded E-01w and H-03r checks."
+        "The complete E-02v deterministic matrix is reproduced, while its original random-control receipt is archived evidence rather than a replay with the original RNG state. No row triggers the conditional 100,000-permutation second stage.",
+        "E-01w uses its bounded RSA grid; H-03r uses an amended 95% gate after the original source control failed. These do not establish a general cryptographic or steganographic exclusion."
       ],
       "source_evidence": [
         "liber-primus/analysis/round28/L5/PREREG.md",
         "liber-primus/analysis/round28/L5/RESULTS.md",
         "liber-primus/analysis/round28/L5/results.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "rsa-window-54-source-replay",
+          "dukotah-payload-varint-matrix",
+          "h03-ps-layout-replay"
+        ],
+        "scope": "Bounded RSA window grid, complete deterministic varint matrix, and P.S. layout extension with an amended gate. Original stochastic receipts and invalid original layout gate are not converted into successful source-wide closure.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R16-PRNG",
@@ -562,7 +589,8 @@
       ],
       "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299.",
       "unresolved_parts": [
-        "Only all-equal seeds were searched for plaintext/mixed history, and the source raw-stream null is not the full selected-search null."
+        "The full 23,520 executed settings are published; the actual 29 all-equal primer search now recovers 7/7 ciphertext-history source plants but 0/7 plaintext-history and 0/7 mixed-history plants with the source control’s non-equal true seed. This is a failed domain-power check for those latter classes.",
+        "The new audit is retrospective, k=3 and sign−1 with the published source control text. Other seeds, recurrences, lengths, scoring and reset rules remain open; no source whole-family exclusion."
       ],
       "source_evidence": [
         "liber-primus/analysis/round12/C1/RESULTS.md",
@@ -581,11 +609,11 @@
         }
       ],
       "execution_replay": {
-        "state": "complete-executed-grid",
+        "state": "replayed-with-invalid-gate",
         "record_ids": [
           "public-multihistory-feedback"
         ],
-        "scope": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299.",
+        "scope": "Published source grid plus a retrospective actual-seed-domain audit: original true-seed plants pass, but plaintext/mixed plants cannot be recovered by its all-equal search domain.",
         "wider_method_excluded": false
       }
     },
