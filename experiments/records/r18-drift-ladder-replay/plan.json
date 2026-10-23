@@ -1,0 +1,49 @@
+{
+  "schema": "r18-drift-ladder-source-replay-plan-v1",
+  "frozen_on": "2026-10-23",
+  "plan_character": "Source-read exact replay plan, not an independent preregistration",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_input_sha256": {
+    "analysis/round18/L2-filter-leak/fastbeam.py": "2f61c708bdcb1bfcfeb8ecd6f10d2918648bdb3ed3ba2a770d3a02b6c31251e2",
+    "analysis/round18/L2-filter-leak/filter_models.py": "940d44b8eeea4f4f98002681a89a71997597dfecd3c487aa34fd64df7ec7b761",
+    "analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "benchmark/null.py": "191f3e7ec0cf9a902b10d98e92f9539267e58f132f0ec605c383edfa1ea362e4",
+    "analysis/round11/lib_numchannel.py": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5",
+    "analysis/run_stats.py": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+    "data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "src/lp/autokey.py": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125",
+    "src/lp/ciphers.py": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+    "src/lp/corpus.py": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+    "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "src/lp/solve.py": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3",
+    "src/lp/stats.py": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2",
+    "analysis/round18/L2-filter-leak/b4_ladder.py": "969c6e88a93c0702f095256d075d8f0b8ecc1a35a15ea514eaaa83caa4027001",
+    "analysis/round13/B04/ks.py": "1b332b0da0cf8febf89f3d57a4dbdee09a6d5802de847610e7ae41e1e50d0edb",
+    "analysis/round13/B04/results_A.json": "5957e2b61bd28c2d06d5619bd5b1a2e7da353f95cf8f20f87ebf63f68d936000",
+    "analysis/round13/B04/results_B.json": "ccfdad7f6970902c85397c057146d3f86074de4ca7384807d9aaace489933eff",
+    "analysis/round13/B04/results_C.json": "a81ac5ae3357c2840da777d3bf7efb14d5c8b0c9db2cfe87b312dc7227fe7ec0",
+    "analysis/round13/B04/results_D.json": "4f6470f1f851fbb0445bc81f7ca77552835653cf10bb973cf0d9a90860d68db0",
+    "analysis/round15/KDF/kdf.py": "af53f1e4bdac90a335a8391feb35e844641dc54b2cd295cff82f3911a930ac8c",
+    "analysis/round16/KDF/results_summary.json": "d53acb556cfa350c91e3f08b29e5b5fc60d1692057a4f718a58640cf0c31593a",
+    "analysis/round16/KDF/results_A.json": "e7e1b9b3053c5e4daa09feab8f3164b79acbc4fb887875f88b4bcbc27b637a14",
+    "analysis/round16/prng/prng_sweep.py": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283",
+    "analysis/round16/prng/results.json": "f982e35cc2866f4a2a7655063e8f3390d15ccd6629742680e190f9a1219614e8"
+  },
+  "external_kjv_sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986",
+  "source_gate_sha256": "89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a",
+  "source_commands": [
+    "python fastbeam.py",
+    "python b4_ladder.py --stage b4pc",
+    "python b4_ladder.py --stage ladder --cands 400 --nproc 6"
+  ],
+  "gate": "F0 must pass 24 parity cases and B4-PC must rank the true offset first on three planted pages before interpreting the real-data ladder.",
+  "comparison": "B4: all 230 source-mined candidate identities, each 5,961-offset count and best/top8 rows must match source independent of multiprocessing order and elapsed time. F0 and B4-PC are blocking controls.",
+  "limits": "Source-read derived publication scope from the frozen combined B4/B5 plan. B5 full-length skip-channel run is pending separately. The 230 candidates are selected from earlier source top lists; 100-rune page starts and source score threshold do not exhaust keys, offsets, later text, or other decoding models.",
+  "source_result_sha256": {
+    "b4_control.json": "660d223cb001237b264a7d9f2c16b2a1d3d1fdc102c44839e62f1cd884e6d83c",
+    "b4_ladder.json": "047fedd6b38959d850d71a4c0e0d54cef27fad22e71e689e6b43e4f304d784b7"
+  },
+  "derived_from_combined_plan_sha256": "20a2157f0ffcb9a53f3840aa2c6d8555f6a3e168e200588918e36d5cfcccfaeb"
+}

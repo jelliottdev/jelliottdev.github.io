@@ -1,0 +1,90 @@
+{
+  "schema": "r18-drift-ladder-source-replay-results-v1",
+  "source_ids": [
+    "R18-L2-DRIFT-LADDER"
+  ],
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_read_replay_plan_sha256": "53b01f5eb60c6dcd2c56c8b480d2ca4057505616439f889b180656927f41fd29",
+  "original_combined_plan_sha256": "20a2157f0ffcb9a53f3840aa2c6d8555f6a3e168e200588918e36d5cfcccfaeb",
+  "dependency_amendment_sha256": "c8496e84cf13f842939b3f3f929abde26f0e7f7e8c29aa39aa0ab5b12af767a9",
+  "source_ladder_sha256": "047fedd6b38959d850d71a4c0e0d54cef27fad22e71e689e6b43e4f304d784b7",
+  "replayed_ladder_sha256": "a4046f6c069b06b53db20dd1525e87c4ddb53f40e403c7b33aff23725c9b69e1",
+  "f0_gate_pass": true,
+  "plant_pass": true,
+  "planted_pages": [
+    {
+      "source_segment_ordinal": 10,
+      "lp2_page_id": "lp2-10",
+      "start": 2397,
+      "true_offset": 2464,
+      "true_rank": 1,
+      "corrected_score": -4.086170755667866,
+      "uncorrected_score": -7.328194589792944,
+      "best_decoy_score": -6.722428315258752
+    },
+    {
+      "source_segment_ordinal": 30,
+      "lp2_page_id": "lp2-30",
+      "start": 7307,
+      "true_offset": 7505,
+      "true_rank": 1,
+      "corrected_score": -4.188194397994695,
+      "uncorrected_score": -7.302560108510651,
+      "best_decoy_score": -6.602384399481599
+    },
+    {
+      "source_segment_ordinal": 52,
+      "lp2_page_id": "lp2-53",
+      "start": 12469,
+      "true_offset": 12825,
+      "true_rank": 1,
+      "corrected_score": -3.948841333635436,
+      "uncorrected_score": -6.94045864317878,
+      "best_decoy_score": -6.652843192809471
+    }
+  ],
+  "real_search": {
+    "candidate_cases": 230,
+    "nonempty_segments": 55,
+    "segment_runes": 100,
+    "offsets_per_candidate": 5961,
+    "total_decodes": 1371030,
+    "declared_english_score_bar": -5.5,
+    "candidate_rows_at_or_above_bar": 0,
+    "best_overall": {
+      "score": -5.885278135881532,
+      "source_segment_ordinal": 52,
+      "lp2_page_id": "lp2-53",
+      "key_offset": 0,
+      "region": "control",
+      "candidate": {
+        "src": "B04-C",
+        "pub_score": -5.8852781358815305,
+        "fam": "b04",
+        "seed_hex": "616e656e64",
+        "gen": "sha256_chain",
+        "red": "rej29",
+        "sign": 1,
+        "atbash": 1,
+        "dir": "fwd"
+      }
+    },
+    "best_corrected": {
+      "score": -6.011713090936567,
+      "source_segment_ordinal": 49,
+      "lp2_page_id": "lp2-49",
+      "key_offset": 12320,
+      "region": "corrected"
+    },
+    "candidate_rows_exactly_matched": 230
+  },
+  "execution_trace": {
+    "first_isolated_pass_completed": 210,
+    "first_isolated_pass_missing_import_input": 20,
+    "missing_input": "analysis/seed_sweep/ct.bin",
+    "amended_retry_completed": 20,
+    "combined_replay_rows": 230,
+    "source_output_timing_not_compared": true
+  },
+  "interpretation": "No one of these 230 previously ranked candidate keys clears the source English-score gate in the tested 100-rune page starts. This does not exclude untested keys or skip models."
+}

@@ -1,0 +1,194 @@
+{
+  "id": "r18-drift-ladder-replay",
+  "status": "published",
+  "title": "Can skipped key draws shift a page start?",
+  "question": "When earlier runes consume extra key draws, does a drift-corrected offset recover a planted key and improve previously reported keys on LP2?",
+  "reader_question": "Could we miss a correct key by starting too early?",
+  "summary": "A planted key is recovered only after correcting for skipped draws. Replaying 1,371,030 real-page decodes over 230 previously ranked candidate keys yields no supported reading under the source score gate.",
+  "finding": "The true key ranks first on all three planted pages at corrected offsets, where its scores are -3.95 to -4.19; uncorrected starts score -6.94 to -7.33. Among 230 candidates across 55 nonempty page starts, the best new corrected score is -6.012 and the best overall -5.885 at a prior restart control; none reaches the source -5.5 reading bar. All 230 source candidate rows replay after a documented staged-input amendment.",
+  "limitations": "This tests 100-rune page starts under one continuous key-skip law, a score-selected 230-key list, a four-standard-deviation offset band, and a historical English-score gate. It does not exclude other keys, global starting positions, longer segments, or different skip rules.",
+  "next_steps": "A new key candidate should be tested at predicted drift-corrected offsets with the same planted control, then on held-out page text.",
+  "outcome": "not-supported",
+  "tags": [
+    "key skipping",
+    "drift",
+    "offset search",
+    "source replay",
+    "planted control",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/r18-drift-ladder-replay/plan.json",
+      "experiments/records/r18-drift-ladder-replay/plan-amendment.json"
+    ],
+    "representation": "Gematria Primus indices from the source transcription; 55 nonempty LP2-00â€“55 pages, with source ordinal 52 mapped to LP2-53.",
+    "procedure": "Run F0 parity gate, replay the three-page planted offset control, and search 230 source-mined key candidates at 5,961 offsets each over first 100 runes of every nonempty page; compare all candidate rows with pinned source output.",
+    "parameters": "Suppression 0.8129; beam width 400; maximum three skipped draws; predicted key offset start+rho*start with +/-4 standard deviations, plus uncorrected and restart controls; English-score gate -5.5.",
+    "exclusions": "Keys outside earlier top lists, other global key origins, text after each page first 100 runes, alternate boundaries or filter laws, source B5 skip-count channel."
+  },
+  "review": {
+    "reviewer": "F0 parity, three planted rank-one controls, complete source row comparison, independent offset and page-ID arithmetic",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound key-search replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage gate && python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage b4pc && python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage ladder --nproc 6 && python experiments/records/r18-drift-ladder-replay/check.py && python experiments/records/r18-drift-ladder-replay/plot.py --check",
+    "environment": "Python 3.9+ and NumPy; pinned Dukotah source checkout f08b20b. Runner verifies source/code/KJV/archived ct.bin hashes and stages a disposable source tree.",
+    "script": "experiments/records/r18-drift-ladder-replay/run.py",
+    "script_sha256": "982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf",
+    "inputs": [
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/plan.json",
+        "sha256": "53b01f5eb60c6dcd2c56c8b480d2ca4057505616439f889b180656927f41fd29"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/combined-plan-as-frozen.json",
+        "sha256": "20a2157f0ffcb9a53f3840aa2c6d8555f6a3e168e200588918e36d5cfcccfaeb"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/plan-amendment.json",
+        "sha256": "c8496e84cf13f842939b3f3f929abde26f0e7f7e8c29aa39aa0ab5b12af767a9"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/source-gate_F0.json",
+        "sha256": "89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/replayed-gate_F0.json",
+        "sha256": "220f6aeb64fb934f8749796b102a408a0ae1da6338ff6600a57dd64724ef711d"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/source-b4_control.json",
+        "sha256": "660d223cb001237b264a7d9f2c16b2a1d3d1fdc102c44839e62f1cd884e6d83c"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/replayed-b4_control.json",
+        "sha256": "0bb43c9183bc8a1974c6b4802b168da3a1eaf74e0bbbc09aada3cfa8e692c8cb"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/source-b4_ladder.json",
+        "sha256": "047fedd6b38959d850d71a4c0e0d54cef27fad22e71e689e6b43e4f304d784b7"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/replayed-b4_ladder.json",
+        "sha256": "a4046f6c069b06b53db20dd1525e87c4ddb53f40e403c7b33aff23725c9b69e1"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/results.json",
+        "sha256": "19a1204127a0a647f6e96b6ab447d3852ebcaf0df93d382550521ac8b093a496"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/run.py",
+        "sha256": "982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/check.py",
+        "sha256": "4d05d453f9a5791706ae0695bc69b0743d6a66b3c2869dbe231ad172c2a2e427"
+      },
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/plot.py",
+        "sha256": "72d998259edf55efd49e56e553a6d8c284b06bbd6c8c26f1ff7521e62bfd752a"
+      },
+      {
+        "path": "experiments/records/public-prng-seed-sweep/source/analysis/seed_sweep/ct.bin",
+        "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+      },
+      {
+        "path": "exports/sources/gutenberg-10-kjv.txt",
+        "sha256": "0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/r18-drift-ladder-replay/drift-ladder.svg",
+        "sha256": "5d6a9aaf2e0fbbd23570407e0cc1c99d81d61e0950ffe0429c56f43412f44f83"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 18 B4 source and result",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak"
+    }
+  ],
+  "related": [
+    "r18-filter-locus-replay",
+    "r18-keyskip-drift-power",
+    "b04-source-seeds-opening-cribs",
+    "public-kdf-seed-stretch",
+    "public-prng-seed-sweep"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/r18-drift-ladder-replay/drift-ladder.svg",
+      "caption": "The correct planted key scores near -4 only after offset correction; 230 mined keys on real pages stay below the source score bar."
+    }
+  ],
+  "article": "# Does key skipping move a page's starting position?\n\nIf an encryptor discards some key draws to prevent repeated output runes, the key position at a later page is **not** simply the number of preceding runes. This [published Round 18 test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) searches a predicted band of later key positions. We replayed its planted-key control and its search over previously reported candidate keys.\n\n## Finding\n\n![Three planted pages score much better at the corrected key position than at the uncorrected one. In the real manuscript, neither the best corrected score nor the best overall score reaches the source's reading bar.](experiments/records/r18-drift-ladder-replay/drift-ladder.svg)\n\nThe correction matters **when the simulated key is known to be right**: on three planted pages, the true offset ranks first, scoring about −4.0. Starting at the uncorrected position scores around −7.0 to −7.3 on those same pages. The planted control therefore shows that an otherwise good key could be missed by a rigid page-start test under this particular skip model.\n\nOn the real LP2 transcription, the source tests **230 candidate keystreams** mined from its earlier top lists. Each is checked at **5,961 positions** across the first 100 runes of each of **55 nonempty pages**: **1,371,030 decodes**. The best result in the newly corrected positions is **−6.012**. The best overall, **−5.885**, is at a previously tested page-restart position. Both remain below the source's declared **−5.5** reading bar. No candidate in this bounded set supplies a supported reading.\n\nThe source numbers the nonempty text segments from zero. Its “page 52” is **LP2-53** in the manuscript: LP2-50 has no rune text and drops out of that numbering. We checked this mapping against all 56 LP2-00–55 page records.\n\n## Scope and limits\n\nThe offset band assumes one continuous 29-value key stream, a per-draw skip probability derived from the manuscript's low adjacent-repeat rate, and a maximum of three skipped draws at a step. The source searches a predicted four-standard-deviation band plus uncorrected and page-restart controls. It inspects 100 runes per text page. The 230 keys came from earlier score-ranked lists; they are **not every possible key**. A low score here does not reject every key-skip method, other global starts, page rules, or later text.\n\nThe **−5.5** bar is the source's historical English-score gate, not a fresh held-out calibration for all choices behind this search. The plant verifies recovery under its synthetic rule, not that LP2 used that rule.\n\n## Reproduce\n\nThe [source-read replay plan](experiments/records/r18-drift-ladder-replay/plan.json) pins the source revision, candidate-list inputs, KJV text, and original output hashes. This B4 publication scope was derived from the [combined plan frozen before our replay](experiments/records/r18-drift-ladder-replay/combined-plan-as-frozen.json); neither plan is an independent preregistration of the published method. The first isolated pass exposed one missing staged input for the PRNG candidates. The [dependency amendment](experiments/records/r18-drift-ladder-replay/plan-amendment.json) pins an archived `ct.bin` that independently matches the source's `prep.py` output. We retained the 210 completed rows and retried the 20 affected candidates. The runner checks these bytes, stages files in a temporary directory, and leaves the source checkout untouched. Use the pinned source checkout as `SOURCE`:\n\n```text\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage gate\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage b4pc\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage ladder --nproc 6\npython experiments/records/r18-drift-ladder-replay/check.py\npython experiments/records/r18-drift-ladder-replay/plot.py --check\n```\n\nThe complete [source ladder](experiments/records/r18-drift-ladder-replay/source-b4_ladder.json) and [our replay](experiments/records/r18-drift-ladder-replay/replayed-b4_ladder.json) are retained. The checker compares all **230** candidate rows independent of multiprocessing order and derives the offset count from the page records. It also verifies the source's ordinal-to-page mapping.\n",
+  "article_path": "experiments/records/r18-drift-ladder-replay/article.md",
+  "script_sha256": "982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

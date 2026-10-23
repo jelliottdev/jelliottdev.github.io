@@ -1,0 +1,87 @@
+{
+  "id": "dukotah-image-template-rebuild",
+  "status": "published",
+  "title": "Can the archived LP2 image read be rebuilt from the original pages?",
+  "question": "Do the pinned four-stage image-template programs reproduce their archived line, shape and count-alignment outputs from the 56 original LP2 JPEGs?",
+  "reader_question": "Was the manuscript transcription checked directly against its images?",
+  "summary": "The original code runs on all 56 byte-matched JPEGs. Geometry counts match, but the fresh run finds 229 shape classes versus 226 archived and 233 count-matching lines versus 232. Its reported rune agreement is fitted and scored on the same LP2 lines.",
+  "finding": "Both runs have 646 line bands and 13,140 full-height glyphs. Four of 646 band glyph counts differ, leaving the fresh read with 16,237 glyphs versus 16,245 archived. The historical 226 classes are a saved output, not a source-code gate. The fresh 95.83% rune-label fit uses zero held-out lines.",
+  "limitations": "The original archived NPZ arrays have no available hashes. The source's class-to-rune mapping is trained and scored on the same canonical LP2 lines, so its agreement is not independent transcription accuracy. The checker validates receipts and arithmetic, not image pixels or disputed individual runes.",
+  "next_steps": "Pin the fresh 229-class instrument for any follow-on source rerun, and assess disputed glyphs against image crops with held-out readings before claiming independent transcription validation.",
+  "outcome": "inconclusive",
+  "tags": [
+    "transcription",
+    "source replay",
+    "image analysis",
+    "template matching",
+    "input provenance",
+    "held-out control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-image-template-rebuild/plan.json"
+    ],
+    "representation": "The 56 LP2-00–55 hosted JPEGs whose exact bytes match the pinned source capsule, the four original source scripts, the source canon and archived reports.",
+    "procedure": "Hash-check all source files and images; run unmodified segmentation, template clustering, template-DP reading and count alignment in an isolated temporary tree; compare fresh and archived summaries. The independent checker redoes both length alignments from compact receipts.",
+    "parameters": "Original 128-threshold image ink, 0.10 clustering threshold, >=100-glyph template inclusion, 15-cost line skips; no thresholds were retuned.",
+    "exclusions": "No independent human rune adjudication, held-out label evaluation, source cipher tests or general transcription correctness claim."
+  },
+  "review": {
+    "reviewer": "Independent count-alignment and hash checker",
+    "retested_on": "2026-10-23",
+    "kind": "source image pipeline rebuild",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-image-template-rebuild/check.py && python experiments/records/dukotah-image-template-rebuild/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check",
+    "environment": "Python 3.12 with NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 on the audited host. The full rebuild may be sensitive to other environments; compact receipt check uses the Python standard library.",
+    "script": "experiments/records/dukotah-image-template-rebuild/run.py",
+    "script_sha256": "070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/plan.json",
+        "sha256": "d42f077054c00574b3ce7bcf5741e1562e4c2f87f6787fe8242b9b07d3ff54e2"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/run.py",
+        "sha256": "070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/check.py",
+        "sha256": "eb4daf6134668284e3f69fe3f7dcefe0fef13b595bbae3cd170bcfabf884e163"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/results.json",
+        "sha256": "0a49f469df92cfdf8392bb37be3c2c93f969261e7664fdfed37604a0a3a24d74"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/line-counts.json",
+        "sha256": "687cddaeec250b51852209525878271cbc0f3582d05d196bbff564178bc35a43"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/pipeline.svg",
+        "sha256": "ca6e7b692738e2a4b712540d208a41336649da7ebec9ced921bd284b2d353da4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned segmentation source",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/geometry/segment2.py"
+    },
+    {
+      "label": "Pinned image reading and archived results",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-image-template-rebuild/pipeline.svg",
+      "caption": "The exact JPEGs reproduce geometry counts; template classes and count-matching lines differ slightly from the archived run."
+    }
+  ]
+}

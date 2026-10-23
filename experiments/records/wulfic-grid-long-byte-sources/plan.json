@@ -1,0 +1,71 @@
+{
+  "schema": "liberpedia-wulfic-stage-y-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "stage_y_sha256": "bdbef400fb886201b8d15d8d06671161895258c8985142aff8a9d08febc0061b",
+    "stage_r_sha256": "ca888f78cbdf504de69ceb3309c55a064cb890fd57fb5b19c9245228f2d29eec",
+    "stage_x_sha256": "29b1a75394a4a8b198531a52c185dac6e2a8f1661c01c2e19092a77c9a34eb1d",
+    "source_results_sha256": "111903b27bcea38410df52843179a7013a834d238062c57d5d16284dcafc9666",
+    "source_controls_sha256": "7b950b7dec54c63fc811ab555b2e05cb77dbcf8c7fe831574fb208f4e6b05f43"
+  },
+  "input": "The 256 byte values from the printed 32x8 LP2-49–51 number grid, under pinned source base-60 parsing. Six exact source byte streams: page_17.bin, page_21.bin, page_43.bin, wisdom_hint.txt, page_00 hex, onion-2 hex. Source filenames are archive identifiers, not manuscript-page identification.",
+  "source_files_sha256": {
+    "data/outguess/page_17.bin": "cbf1ccddc6c4bb2fd96d449e0667eb5be6c2a542de4e0f43e7ca188df7f289b1",
+    "data/outguess/page_21.bin": "21e26fbcfd0f8cc5706ca4228245854703efa143173b793066ab3a2577f40db3",
+    "data/outguess/page_43.bin": "0a318b3e9e195fdea9e941b7b458ae9cddef5147eec646b6da231b7d6615fe43",
+    "data/outguess/wisdom_hint.txt": "7e5ec097728197f5c0dba0729980565658fba486965809ffa25e3910a31c385a",
+    "data/outguess/page_00.txt": "2efba5e2283fa16592bedb7c339223bf2db94f07cf2d42188684aa393c12d180",
+    "reference/community/people_2014.md": "d2e546fd4e5505a3a3aa45dc6a453fd181b2d0a4f3295361f0e754e3a40ae56b"
+  },
+  "grid_readings": [
+    "R",
+    "R-rev",
+    "C",
+    "C-rev"
+  ],
+  "ops": [
+    "g^k",
+    "g-k",
+    "g+k",
+    "k-g"
+  ],
+  "key_rule": "For each source, every cyclic phase o; 256 consecutive bytes from source[(o+i) mod length]. No extra offsets or normalization.",
+  "statistic": "For each complete 256-byte output count D, the number of distinct byte values.",
+  "decision": "PASS if any exact source/reading/op/phase has D<=120. A source/reading/op cell is EXCLUDED when none of its phases pass. Otherwise report the exact phase and output; do not call a low-D candidate meaningful plaintext by itself.",
+  "controls": "All 24 source-planted positive cells must pass. No negative random grid may pass, and negative mean D must lie within 162.0±0.5. A failed gate voids all LP2 verdicts.",
+  "limitations": "Only exact printed-grid bytes, the six source byte streams, four fixed routes and four byte operations; no unknown external key, cropped or transformed bytes, page-local resets, entropy models beyond the exact iid-uniform distinct count, or language interpretation.",
+  "runtime_calibration": "Representative full 58152-phase, 16-cell search on a random 256-byte grid took 5.65 seconds on this host; source controls repeat searches, so full run is expected to take minutes.",
+  "bundled_source_bytes": [
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_17.bin",
+      "sha256": "cbf1ccddc6c4bb2fd96d449e0667eb5be6c2a542de4e0f43e7ca188df7f289b1",
+      "bytes": 58152
+    },
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_21.bin",
+      "sha256": "21e26fbcfd0f8cc5706ca4228245854703efa143173b793066ab3a2577f40db3",
+      "bytes": 58152
+    },
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_43.bin",
+      "sha256": "0a318b3e9e195fdea9e941b7b458ae9cddef5147eec646b6da231b7d6615fe43",
+      "bytes": 58152
+    },
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/wisdom_hint.txt",
+      "sha256": "7e5ec097728197f5c0dba0729980565658fba486965809ffa25e3910a31c385a",
+      "bytes": 3368
+    },
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_00-hex.bin",
+      "sha256": "f8fa59ec133168d8aaf9c67d13152286eebcec191c5668f7f143a2c7764fc530",
+      "bytes": 991
+    },
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/onion-2-hex.bin",
+      "sha256": "05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56",
+      "bytes": 256
+    }
+  ]
+}

@@ -12,9 +12,9 @@
     "ready_unclaimed_source_programs": 0,
     "completed_draft_partial": 0,
     "claimed_by_other_agent": 0,
-    "covered_or_partial": 23,
+    "covered_or_partial": 24,
     "umbrella_verdict_or_audit": 7,
-    "blocked_or_audit_needed": 34,
+    "blocked_or_audit_needed": 33,
     "source_entries_in_disposition_total": 64,
     "completed_draft_full": 0
   },
@@ -798,7 +798,7 @@
     },
     {
       "source_id": "R18-L2-DRIFT-LADDER",
-      "disposition": "blocked-or-input-audit-needed",
+      "disposition": "record-overlap-or-partial",
       "runnable_method": "liber-primus/data/kjv.txt",
       "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b4_ladder.py --stage b4pc && PYTHONUTF8=1 python3 b4_ladder.py --stage ladder --cands 400 --nproc 6",
       "source_evidence": [
@@ -812,7 +812,11 @@
         }
       ],
       "ledger_status": "negative",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "record_ids": [
+        "r18-drift-ladder-replay"
+      ],
+      "execution_note": "All230source candidate rows,3planted controls andF0 gate replayed with exact recovered KJV and pinned ct.bin dependency amendment. Broader keys and starts remain open."
     },
     {
       "source_id": "R18-L2-SKIP-CHANNEL",

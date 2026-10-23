@@ -9762,6 +9762,278 @@
     &quot;label&quot;: &quot;Manuscript measurement&quot;,
     &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
   }
+}</pre></article><article id="dukotah-image-template-rebuild"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;dukotah-image-template-rebuild&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can the archived LP2 image read be rebuilt from the original pages?&quot;,
+  &quot;question&quot;: &quot;Do the pinned four-stage image-template programs reproduce their archived line, shape and count-alignment outputs from the 56 original LP2 JPEGs?&quot;,
+  &quot;reader_question&quot;: &quot;Was the manuscript transcription checked directly against its images?&quot;,
+  &quot;summary&quot;: &quot;The original code runs on all 56 byte-matched JPEGs. Geometry counts match, but the fresh run finds 229 shape classes versus 226 archived and 233 count-matching lines versus 232. Its reported rune agreement is fitted and scored on the same LP2 lines.&quot;,
+  &quot;finding&quot;: &quot;Both runs have 646 line bands and 13,140 full-height glyphs. Four of 646 band glyph counts differ, leaving the fresh read with 16,237 glyphs versus 16,245 archived. The historical 226 classes are a saved output, not a source-code gate. The fresh 95.83% rune-label fit uses zero held-out lines.&quot;,
+  &quot;limitations&quot;: &quot;The original archived NPZ arrays have no available hashes. The source&#x27;s class-to-rune mapping is trained and scored on the same canonical LP2 lines, so its agreement is not independent transcription accuracy. The checker validates receipts and arithmetic, not image pixels or disputed individual runes.&quot;,
+  &quot;next_steps&quot;: &quot;Pin the fresh 229-class instrument for any follow-on source rerun, and assess disputed glyphs against image crops with held-out readings before claiming independent transcription validation.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;transcription&quot;,
+    &quot;source replay&quot;,
+    &quot;image analysis&quot;,
+    &quot;template matching&quot;,
+    &quot;input provenance&quot;,
+    &quot;held-out control&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/dukotah-image-template-rebuild/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;The 56 LP2-00–55 hosted JPEGs whose exact bytes match the pinned source capsule, the four original source scripts, the source canon and archived reports.&quot;,
+    &quot;procedure&quot;: &quot;Hash-check all source files and images; run unmodified segmentation, template clustering, template-DP reading and count alignment in an isolated temporary tree; compare fresh and archived summaries. The independent checker redoes both length alignments from compact receipts.&quot;,
+    &quot;parameters&quot;: &quot;Original 128-threshold image ink, 0.10 clustering threshold, &gt;=100-glyph template inclusion, 15-cost line skips; no thresholds were retuned.&quot;,
+    &quot;exclusions&quot;: &quot;No independent human rune adjudication, held-out label evaluation, source cipher tests or general transcription correctness claim.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent count-alignment and hash checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source image pipeline rebuild&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dukotah-image-template-rebuild/check.py &amp;&amp; python experiments/records/dukotah-image-template-rebuild/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 with NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 on the audited host. The full rebuild may be sensitive to other environments; compact receipt check uses the Python standard library.&quot;,
+    &quot;script&quot;: &quot;experiments/records/dukotah-image-template-rebuild/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/plan.json&quot;,
+        &quot;sha256&quot;: &quot;d42f077054c00574b3ce7bcf5741e1562e4c2f87f6787fe8242b9b07d3ff54e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/run.py&quot;,
+        &quot;sha256&quot;: &quot;070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/check.py&quot;,
+        &quot;sha256&quot;: &quot;eb4daf6134668284e3f69fe3f7dcefe0fef13b595bbae3cd170bcfabf884e163&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/results.json&quot;,
+        &quot;sha256&quot;: &quot;0a49f469df92cfdf8392bb37be3c2c93f969261e7664fdfed37604a0a3a24d74&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/line-counts.json&quot;,
+        &quot;sha256&quot;: &quot;687cddaeec250b51852209525878271cbc0f3582d05d196bbff564178bc35a43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/pipeline.svg&quot;,
+        &quot;sha256&quot;: &quot;ca6e7b692738e2a4b712540d208a41336649da7ebec9ced921bd284b2d353da4&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned segmentation source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/geometry/segment2.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned image reading and archived results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/pipeline.svg&quot;,
+      &quot;caption&quot;: &quot;The exact JPEGs reproduce geometry counts; template classes and count-matching lines differ slightly from the archived run.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## Finding\n\n**The image-reading pipeline runs on all 56 original LP2 JPEGs, but its saved output does not reproduce exactly.** The fresh run finds the same **646 line bands** and **13,140 full-height glyphs** as the archived run. It groups the glyphs into **229 shapes**, compared with **226** archived, and finds **233 lines** whose rune count matches the reference text, compared with **232** archived.\n\n![The fresh image read and archived run agree on line bands, but differ slightly in shape classes and count-matching lines.](experiments/records/dukotah-image-template-rebuild/pipeline.svg)\n\nOnly **4 of 646** line-band glyph counts changed: one on LP2-08, two on LP2-22, and one on LP2-54. The fresh run reads eight fewer glyphs in total. The 226-class figure is a saved result, not a required check in the code; the reader accepts every shape class seen at least 100 times. Its fresh 229-class bank selects 33 templates, while the archived bank selected 32. A fresh run can therefore be used as a **new, explicitly pinned instrument**, but it must not be presented as the original archived array or as proof that the reference transcription is correct.\n\n## What the stages establish\n\nThe original programs first locate line bands, collect glyph images, group similar shapes, and then choose a low-cost sequence of those shapes for each line. Those stages do **not** read the canonical rune transcription. We used the [pinned source code](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe) without changing its rules and checked every hosted image against the source&#x27;s byte hashes.\n\nThe final program compares the image-derived sequences with the LP2 reference text. It first aligns lines by length. The **233 count-matching lines** are a useful check on segmentation, but a matching length alone does not prove that the runes match. The program then learns a mapping from shape classes to rune letters **using those same lines** and reports **95.83% agreement on them**. It uses **zero held-out lines** and does not train on solved LP1 pages. This percentage is an in-sample fit, not an independent transcription accuracy estimate.\n\nWe do not know why the fresh and archived shape counts differ. A single-thread run and a stable-sort diagnostic still produced 229 classes. The original archived NPZ arrays have no available hashes, so their contents cannot be compared byte for byte. This record does not settle any disputed rune or test a cipher.\n\n## Reproduce\n\nThe [plan](experiments/records/dukotah-image-template-rebuild/plan.json) pins the 56 image hashes, original code, canonical text and historical reports. The [results](experiments/records/dukotah-image-template-rebuild/results.json) hold the fresh artifact hashes; [line counts](experiments/records/dukotah-image-template-rebuild/line-counts.json) allow a separate checker to redo both count-based alignments without using the source program.\n\nThe compact check takes seconds from a Liberpedia checkout:\n\n```text\npython experiments/records/dukotah-image-template-rebuild/check.py\n```\n\nFor the full image rebuild, use Python with NumPy, SciPy and Pillow, and a checkout of the [pinned source revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1). The wrapper verifies all source and image hashes, copies them into a temporary directory, then runs the four original programs in order. This takes several minutes and does not overwrite the saved results:\n\n```text\npython experiments/records/dukotah-image-template-rebuild/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check\n```\n\nThe checker verifies the compact receipts and, when given source and artifact directories, their bytes. It does **not** classify image pixels independently. Any follow-on test using these new arrays must identify them by their hashes rather than silently inherit the archived 226-class result.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dukotah-image-template-rebuild/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="dukotah-mdl-order-profile"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;dukotah-mdl-order-profile&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Does LP2&#x27;s rune order reveal a generator?&quot;,
+  &quot;question&quot;: &quot;Does a published first-order entropy dip survive a control that matches the manuscript&#x27;s scarce adjacent repeats?&quot;,
+  &quot;reader_question&quot;: &quot;Does an entropy dip reveal how LP2 was made?&quot;,
+  &quot;summary&quot;: &quot;The published 40-control entropy anomaly reproduces exactly, but it lies inside a new 1,000-stream control range after matching LP2&#x27;s 86 adjacent repeats.&quot;,
+  &quot;finding&quot;: &quot;Published order-one entropy is 4.7854 versus 4.8125 for 40 independent controls (z -14.6). Among 1,000 post-observation controls with exactly 86 adjacent repeats, the mean is 4.7871 and 207 are at or below LP2. The prominent dip is not exceptional under that matched model.&quot;,
+  &quot;limitations&quot;: &quot;The new controls were chosen after the anomaly and match only total adjacent repeats, not page structure, exact unigram counts, or word boundaries. In-sample high-order empirical entropy is not a held-out entropy-rate estimate; no key or plaintext is identified.&quot;,
+  &quot;next_steps&quot;: &quot;Predeclare a predictive model and compare it on held-out rune sequences against controls preserving the relevant observed structure.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;entropy&quot;,
+    &quot;rune order&quot;,
+    &quot;adjacent repeats&quot;,
+    &quot;source replay&quot;,
+    &quot;matched control&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/dukotah-mdl-order-profile/plan.json&quot;,
+      &quot;experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source GP29 transcription, 55 concatenated nonempty LP2 text segments, 12,956 runes; includes cross-segment transitions.&quot;,
+    &quot;procedure&quot;: &quot;Replay unchanged 40-iid-control source program exactly. Separately, compare empirical order-zero through order-two conditional entropy to 1,000 seeded controls constructed with exactly 86 adjacent repeat transitions.&quot;,
+    &quot;parameters&quot;: &quot;29 symbols, 12,956 runes, source 40 iid controls seed 3301; new matched controls seed 20261023, 1,000 replicates, 86 repeated transitions each.&quot;,
+    &quot;exclusions&quot;: &quot;No pagewise or wordwise matching, exact unigram-count conditioning, held-out predictive entropy, PPM, key search, or decryption.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Exact unchanged-source numeric replay and independent row-count entropy checker over all 1,000 controls&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-bound statistical replay with exploratory matched control&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/dukotah-mdl-order-profile/run.py --source-root SOURCE &amp;&amp; python experiments/records/dukotah-mdl-order-profile/diagnostic.py --source-root SOURCE --check &amp;&amp; python experiments/records/dukotah-mdl-order-profile/check.py --source-root SOURCE &amp;&amp; python experiments/records/dukotah-mdl-order-profile/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ standard library and pinned Dukotah checkout f08b20b. Source replay runs in a temporary copy; no third-party dependencies.&quot;,
+    &quot;script&quot;: &quot;experiments/records/dukotah-mdl-order-profile/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/plan.json&quot;,
+        &quot;sha256&quot;: &quot;31d72b7b3c263ce7be001eda8393b9693e216daf1fb098ca2b55192d0461bf81&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/source-plan-as-frozen.json&quot;,
+        &quot;sha256&quot;: &quot;31d72b7b3c263ce7be001eda8393b9693e216daf1fb098ca2b55192d0461bf81&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/source-replay-receipt.json&quot;,
+        &quot;sha256&quot;: &quot;bfac420a12ac56bd1ad2bc208a31d23da6070e67e956c5bde2c8d539718af7a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json&quot;,
+        &quot;sha256&quot;: &quot;434804cbf6011675cb4bd045518b37594a0fdf1a6083bf94c09036c0a38502d9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/source-mdl_result.json&quot;,
+        &quot;sha256&quot;: &quot;c20b617bd708b7b1ec4315071c9b5a2829815b6efcb5793148716682994fbfdc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/run.py&quot;,
+        &quot;sha256&quot;: &quot;4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/diagnostic.py&quot;,
+        &quot;sha256&quot;: &quot;df6043122d81f205517e35333dc0180dc5ba49be33d76bf4647b605a6b1ffa46&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/check.py&quot;,
+        &quot;sha256&quot;: &quot;1e051e54cdddd89a67e85a20292003bec589ab09399e43ca97187ebe39ccd2b0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/plot.py&quot;,
+        &quot;sha256&quot;: &quot;b28ff15c692ff960a67bbb52859f798930709bb639f7cc990370363b019e52a0&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/replayed-mdl_result.json&quot;,
+        &quot;sha256&quot;: &quot;7d95ad537f68b70dae1ce291ea07a33fcbf90664fe74fa83070be251510f5ae2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/diagnostic-results.json&quot;,
+        &quot;sha256&quot;: &quot;bb58bb4f43deaa8a55ac40294b08fb26a6666c4bb7f8a8f471a813077d94532e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/results.json&quot;,
+        &quot;sha256&quot;: &quot;9772b571c891027871ff4a6ab0b81315e128077a317c60ec2e0290da81da3a36&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/order-one-controls.svg&quot;,
+        &quot;sha256&quot;: &quot;b1345cc6128d40848bd9d994db8a4e2fb911ca87445fafae9964ec798d249ad9&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Dukotah MDL source and archived result&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/recon/i6_mdl&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;r18-entropy-budget-replay&quot;,
+    &quot;doublet-placement&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/order-one-controls.svg&quot;,
+      &quot;caption&quot;: &quot;The independent random comparison shows a large dip; repeat-matched controls place LP2 inside their central range.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Is LP2&#x27;s rune order unusually predictable?\n\nA [published analysis](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/recon/i6_mdl) compared 12,956 unsolved LP2 runes with 40 uniformly random streams. Its strongest result was a lower first-order conditional entropy: **4.7854** versus **4.8125** bits per rune, reported as *z* = −14.6. We reproduced every numeric field by running the unchanged source code.\n\n## What changes when repeats are matched?\n\n![The LP2 first-order entropy is far below independent random controls, but inside the range of controls constructed with the same number of adjacent repeats.](experiments/records/dukotah-mdl-order-profile/order-one-controls.svg)\n\nLP2 has only **86 adjacent equal-rune pairs** in 12,955 transitions. An independently random stream has many more. An ordinary first-order entropy calculation sees this missing transition and can look unusually low without identifying a cipher rule.\n\nWe therefore made 1,000 new control streams with **exactly 86** adjacent repeats each. Their mean first-order entropy is **4.7871**, and their middle 95% spans **4.7826–4.7915**. LP2&#x27;s **4.7854** falls inside; **207 of 1,000** controls are at or below it. Under this specific repeat-matched model, the prominent first-order dip is no longer exceptional.\n\n| Entropy order | LP2 | Repeat-matched mean | LP2 position among 1,000 controls |\n| --- | ---: | ---: | ---: |\n| No previous rune | 4.8565 | 4.8565 | 480 at or below |\n| One previous rune | 4.7854 | 4.7871 | 207 at or below |\n| Two previous runes | 3.5228 | 3.5196 | 685 at or below |\n\nThe source also tried compressors and phrase counts; their outputs replay exactly. Its order-three through order-five empirical entropies become very small for both LP2 and random controls because nearly all long contexts are seen too few times. Those in-sample values do **not** estimate a held-out entropy rate or establish that the text is generated by a PRNG, a hash chain, or a one-time pad.\n\n## What this covers\n\nThe source joins its **55 nonempty LP2 text segments** into one GP29 index stream, including transitions across segment boundaries. We used those same bytes and source alphabet. The new control matches stream length, alphabet size, and total adjacent-repeat count. It does **not** match each page, unigram frequency, word boundaries, or other structure. We designed it *after* seeing the source&#x27;s first-order anomaly, so it is a diagnostic of that anomaly, not a new discovery test. The suggested larger filtered-control and held-out PPM campaigns remain open.\n\n## Reproduce\n\nThe [source replay plan](experiments/records/dukotah-mdl-order-profile/source-plan-as-frozen.json) and [diagnostic plan](experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json) pin their separate scopes. With a checkout of the [pinned revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1), run from the Liberpedia repository root:\n\n```text\npython experiments/records/dukotah-mdl-order-profile/run.py --source-root SOURCE\npython experiments/records/dukotah-mdl-order-profile/diagnostic.py --source-root SOURCE --check\npython experiments/records/dukotah-mdl-order-profile/check.py --source-root SOURCE\npython experiments/records/dukotah-mdl-order-profile/plot.py --check\n```\n\nThe [source result](experiments/records/dukotah-mdl-order-profile/source-mdl_result.json), [fresh replay](experiments/records/dukotah-mdl-order-profile/replayed-mdl_result.json), and [1,000 diagnostic rows](experiments/records/dukotah-mdl-order-profile/diagnostic-results.json) are retained. The independent checker recalculates every reported entropy from raw rune transitions.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/dukotah-mdl-order-profile/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
 }</pre></article><article id="ea-difference-independence"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;ea-difference-independence&quot;,
   &quot;title&quot;: &quot;Nonzero difference uniformity and order under EA-stalling keys&quot;,
@@ -47381,6 +47653,199 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="r18-drift-ladder-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;r18-drift-ladder-replay&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can skipped key draws shift a page start?&quot;,
+  &quot;question&quot;: &quot;When earlier runes consume extra key draws, does a drift-corrected offset recover a planted key and improve previously reported keys on LP2?&quot;,
+  &quot;reader_question&quot;: &quot;Could we miss a correct key by starting too early?&quot;,
+  &quot;summary&quot;: &quot;A planted key is recovered only after correcting for skipped draws. Replaying 1,371,030 real-page decodes over 230 previously ranked candidate keys yields no supported reading under the source score gate.&quot;,
+  &quot;finding&quot;: &quot;The true key ranks first on all three planted pages at corrected offsets, where its scores are -3.95 to -4.19; uncorrected starts score -6.94 to -7.33. Among 230 candidates across 55 nonempty page starts, the best new corrected score is -6.012 and the best overall -5.885 at a prior restart control; none reaches the source -5.5 reading bar. All 230 source candidate rows replay after a documented staged-input amendment.&quot;,
+  &quot;limitations&quot;: &quot;This tests 100-rune page starts under one continuous key-skip law, a score-selected 230-key list, a four-standard-deviation offset band, and a historical English-score gate. It does not exclude other keys, global starting positions, longer segments, or different skip rules.&quot;,
+  &quot;next_steps&quot;: &quot;A new key candidate should be tested at predicted drift-corrected offsets with the same planted control, then on held-out page text.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;key skipping&quot;,
+    &quot;drift&quot;,
+    &quot;offset search&quot;,
+    &quot;source replay&quot;,
+    &quot;planted control&quot;,
+    &quot;LP2&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/r18-drift-ladder-replay/plan.json&quot;,
+      &quot;experiments/records/r18-drift-ladder-replay/plan-amendment.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Gematria Primus indices from the source transcription; 55 nonempty LP2-00â€“55 pages, with source ordinal 52 mapped to LP2-53.&quot;,
+    &quot;procedure&quot;: &quot;Run F0 parity gate, replay the three-page planted offset control, and search 230 source-mined key candidates at 5,961 offsets each over first 100 runes of every nonempty page; compare all candidate rows with pinned source output.&quot;,
+    &quot;parameters&quot;: &quot;Suppression 0.8129; beam width 400; maximum three skipped draws; predicted key offset start+rho*start with +/-4 standard deviations, plus uncorrected and restart controls; English-score gate -5.5.&quot;,
+    &quot;exclusions&quot;: &quot;Keys outside earlier top lists, other global key origins, text after each page first 100 runes, alternate boundaries or filter laws, source B5 skip-count channel.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;F0 parity, three planted rank-one controls, complete source row comparison, independent offset and page-ID arithmetic&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-bound key-search replay&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage gate &amp;&amp; python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage b4pc &amp;&amp; python experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage ladder --nproc 6 &amp;&amp; python experiments/records/r18-drift-ladder-replay/check.py &amp;&amp; python experiments/records/r18-drift-ladder-replay/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ and NumPy; pinned Dukotah source checkout f08b20b. Runner verifies source/code/KJV/archived ct.bin hashes and stages a disposable source tree.&quot;,
+    &quot;script&quot;: &quot;experiments/records/r18-drift-ladder-replay/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/plan.json&quot;,
+        &quot;sha256&quot;: &quot;53b01f5eb60c6dcd2c56c8b480d2ca4057505616439f889b180656927f41fd29&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/combined-plan-as-frozen.json&quot;,
+        &quot;sha256&quot;: &quot;20a2157f0ffcb9a53f3840aa2c6d8555f6a3e168e200588918e36d5cfcccfaeb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/plan-amendment.json&quot;,
+        &quot;sha256&quot;: &quot;c8496e84cf13f842939b3f3f929abde26f0e7f7e8c29aa39aa0ab5b12af767a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/source-gate_F0.json&quot;,
+        &quot;sha256&quot;: &quot;89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/replayed-gate_F0.json&quot;,
+        &quot;sha256&quot;: &quot;220f6aeb64fb934f8749796b102a408a0ae1da6338ff6600a57dd64724ef711d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/source-b4_control.json&quot;,
+        &quot;sha256&quot;: &quot;660d223cb001237b264a7d9f2c16b2a1d3d1fdc102c44839e62f1cd884e6d83c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/replayed-b4_control.json&quot;,
+        &quot;sha256&quot;: &quot;0bb43c9183bc8a1974c6b4802b168da3a1eaf74e0bbbc09aada3cfa8e692c8cb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/source-b4_ladder.json&quot;,
+        &quot;sha256&quot;: &quot;047fedd6b38959d850d71a4c0e0d54cef27fad22e71e689e6b43e4f304d784b7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/replayed-b4_ladder.json&quot;,
+        &quot;sha256&quot;: &quot;a4046f6c069b06b53db20dd1525e87c4ddb53f40e403c7b33aff23725c9b69e1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/results.json&quot;,
+        &quot;sha256&quot;: &quot;19a1204127a0a647f6e96b6ab447d3852ebcaf0df93d382550521ac8b093a496&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/run.py&quot;,
+        &quot;sha256&quot;: &quot;982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/check.py&quot;,
+        &quot;sha256&quot;: &quot;4d05d453f9a5791706ae0695bc69b0743d6a66b3c2869dbe231ad172c2a2e427&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/plot.py&quot;,
+        &quot;sha256&quot;: &quot;72d998259edf55efd49e56e553a6d8c284b06bbd6c8c26f1ff7521e62bfd752a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/public-prng-seed-sweep/source/analysis/seed_sweep/ct.bin&quot;,
+        &quot;sha256&quot;: &quot;73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252&quot;
+      },
+      {
+        &quot;path&quot;: &quot;exports/sources/gutenberg-10-kjv.txt&quot;,
+        &quot;sha256&quot;: &quot;0f1a83cbcdc1d3fae6bcc3daaa496d4fa723fcce9526e84e20df12ae33fda986&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/drift-ladder.svg&quot;,
+        &quot;sha256&quot;: &quot;5d6a9aaf2e0fbbd23570407e0cc1c99d81d61e0950ffe0429c56f43412f44f83&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Round 18 B4 source and result&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;r18-filter-locus-replay&quot;,
+    &quot;r18-keyskip-drift-power&quot;,
+    &quot;b04-source-seeds-opening-cribs&quot;,
+    &quot;public-kdf-seed-stretch&quot;,
+    &quot;public-prng-seed-sweep&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/r18-drift-ladder-replay/drift-ladder.svg&quot;,
+      &quot;caption&quot;: &quot;The correct planted key scores near -4 only after offset correction; 230 mined keys on real pages stay below the source score bar.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;# Does key skipping move a page&#x27;s starting position?\n\nIf an encryptor discards some key draws to prevent repeated output runes, the key position at a later page is **not** simply the number of preceding runes. This [published Round 18 test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L2-filter-leak) searches a predicted band of later key positions. We replayed its planted-key control and its search over previously reported candidate keys.\n\n## Finding\n\n![Three planted pages score much better at the corrected key position than at the uncorrected one. In the real manuscript, neither the best corrected score nor the best overall score reaches the source&#x27;s reading bar.](experiments/records/r18-drift-ladder-replay/drift-ladder.svg)\n\nThe correction matters **when the simulated key is known to be right**: on three planted pages, the true offset ranks first, scoring about −4.0. Starting at the uncorrected position scores around −7.0 to −7.3 on those same pages. The planted control therefore shows that an otherwise good key could be missed by a rigid page-start test under this particular skip model.\n\nOn the real LP2 transcription, the source tests **230 candidate keystreams** mined from its earlier top lists. Each is checked at **5,961 positions** across the first 100 runes of each of **55 nonempty pages**: **1,371,030 decodes**. The best result in the newly corrected positions is **−6.012**. The best overall, **−5.885**, is at a previously tested page-restart position. Both remain below the source&#x27;s declared **−5.5** reading bar. No candidate in this bounded set supplies a supported reading.\n\nThe source numbers the nonempty text segments from zero. Its “page 52” is **LP2-53** in the manuscript: LP2-50 has no rune text and drops out of that numbering. We checked this mapping against all 56 LP2-00–55 page records.\n\n## Scope and limits\n\nThe offset band assumes one continuous 29-value key stream, a per-draw skip probability derived from the manuscript&#x27;s low adjacent-repeat rate, and a maximum of three skipped draws at a step. The source searches a predicted four-standard-deviation band plus uncorrected and page-restart controls. It inspects 100 runes per text page. The 230 keys came from earlier score-ranked lists; they are **not every possible key**. A low score here does not reject every key-skip method, other global starts, page rules, or later text.\n\nThe **−5.5** bar is the source&#x27;s historical English-score gate, not a fresh held-out calibration for all choices behind this search. The plant verifies recovery under its synthetic rule, not that LP2 used that rule.\n\n## Reproduce\n\nThe [source-read replay plan](experiments/records/r18-drift-ladder-replay/plan.json) pins the source revision, candidate-list inputs, KJV text, and original output hashes. This B4 publication scope was derived from the [combined plan frozen before our replay](experiments/records/r18-drift-ladder-replay/combined-plan-as-frozen.json); neither plan is an independent preregistration of the published method. The first isolated pass exposed one missing staged input for the PRNG candidates. The [dependency amendment](experiments/records/r18-drift-ladder-replay/plan-amendment.json) pins an archived `ct.bin` that independently matches the source&#x27;s `prep.py` output. We retained the 210 completed rows and retried the 20 affected candidates. The runner checks these bytes, stages files in a temporary directory, and leaves the source checkout untouched. Use the pinned source checkout as `SOURCE`:\n\n```text\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage gate\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage b4pc\npython experiments/records/r18-drift-ladder-replay/run.py --source-root SOURCE --kjv exports/sources/gutenberg-10-kjv.txt --stage ladder --nproc 6\npython experiments/records/r18-drift-ladder-replay/check.py\npython experiments/records/r18-drift-ladder-replay/plot.py --check\n```\n\nThe complete [source ladder](experiments/records/r18-drift-ladder-replay/source-b4_ladder.json) and [our replay](experiments/records/r18-drift-ladder-replay/replayed-b4_ladder.json) are retained. The checker compares all **230** candidate rows independent of multiprocessing order and derives the offset count from the page records. It also verifies the source&#x27;s ordinal-to-page mapping.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/r18-drift-ladder-replay/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;982ae2c6a4c4959e92142bdd970beeed2aaaa798c95d430bdb492fbf5ceac1cf&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
 }</pre></article><article id="r18-entropy-budget-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;r18-entropy-budget-replay&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -60238,6 +60703,261 @@
     &quot;id&quot;: &quot;control&quot;,
     &quot;label&quot;: &quot;Control&quot;,
     &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  }
+}</pre></article><article id="wulfic-grid-compression-source-replay"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-grid-compression-source-replay&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Complete-stream decompression of the LP2 number grid&quot;,
+  &quot;question&quot;: &quot;Do the printed number-grid bytes form a complete raw DEFLATE, zlib, gzip, bzip2 or LZMA stream in any of four fixed routes?&quot;,
+  &quot;reader_question&quot;: &quot;Does the number grid decompress as a complete stream?&quot;,
+  &quot;summary&quot;: &quot;Exact Wulfic Stage X4 component replay and an independent checker find no end-of-stream across five decoders and four full-grid routes.&quot;,
+  &quot;finding&quot;: &quot;Zero of 20 complete-grid decoder calls reaches EOF. All 24 pinned X4 rows reproduce exactly, including four absent offset-zero signature rows. The source&#x27;s 100,000-block calibration yielded 552 raw-DEFLATE EOFs and zero observed for each other decoder; independent recomputation matches. Synthetic complete/truncated/trailing-junk controls pass as separately labeled post-replay diagnostics.&quot;,
+  &quot;limitations&quot;: &quot;Only 256 exact printed-grid bytes, four source routes, five decoder APIs, offset zero, a single call and 1 MiB output cap. Source EOF does not require consuming all input; zero calibration hits is finite-sample evidence, not a true zero rate. Other byte constructions, offsets, keys, formats and larger outputs remain untested.&quot;,
+  &quot;next_steps&quot;: &quot;A compression proposal should specify the grid bytes, route, exact codec and any pre-transform before testing, then validate a complete output and trailing-input rule.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;number grid&quot;,
+    &quot;source replay&quot;,
+    &quot;compression&quot;,
+    &quot;raw DEFLATE&quot;,
+    &quot;full stream&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-grid-compression-source-replay/source-stage_x4_rows.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;The 256 printed base-60 grid cells parsed to bytes in row/reversed-row/column/reversed-column order.&quot;,
+    &quot;procedure&quot;: &quot;Replay the pinned Stage X4 component with 100,000 seeded uniform-byte calibration blocks for each decoder. Test each complete grid route with raw DEFLATE, zlib, gzip, bzip2 and LZMA; also preserve Stage N offset-zero signature rows. Independently reconstruct the grid and every decoder result.&quot;,
+    &quot;parameters&quot;: &quot;Five source decoders × four routes = 20 complete-stream calls, plus four signature checks. One bounded call per decoder with 1 MiB output cap; source PASS requires EOF and empirical null rate ×20≤0.01.&quot;,
+    &quot;exclusions&quot;: &quot;Nonzero offsets, prefixes, modified grid cells, keys or other transformations, other compression formats, full-input-consumption requirement and larger decompressed outputs.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage X4 component replay with independent decoder and null checks&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;All 24 X4 rows matched pinned Stage X result subset; site grid rebuilt independently and all 500,000 decoder-calibration calls reproduced; later synthetic controls explicitly separated&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-grid-compression-source-replay/run.py --check &amp;&amp; python experiments/records/wulfic-grid-compression-source-replay/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library and NumPy. Optional external-source replay requires the pinned Wulfic checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;19266f23af9fde42e5e3f3c52986a19dfba0f5eff37530ccc9165982e22b4301&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/plan.json&quot;,
+        &quot;sha256&quot;: &quot;abd4afa5efe155851e0b4981f16c302a078aab483838ddd9822305338ae34b0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/check.py&quot;,
+        &quot;sha256&quot;: &quot;e27b23757b64366fb6967f0cd3955d9d6b7e301e525fbde84473edda322e8c45&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/plot.py&quot;,
+        &quot;sha256&quot;: &quot;93a5e2acfe99ed1ea247a331d3578913f8553eebedd30aa1a204afe48ea30cbd&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;e0597ecf571c3e980c848f871790726ec555aedc80323d73b28449e410a92886&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;08931a7dfc1f735fea2149e9ac89324b3666c59b085b9d36b10797ae985c3456&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/source-stage_x4_rows.tsv&quot;,
+        &quot;sha256&quot;: &quot;06aaeffe0ed244bbeff3ff774ed4084c225736e3b5da9fc5debd95cfc6d87e2a&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/results.json&quot;,
+        &quot;sha256&quot;: &quot;b27e852c0898a2553c5738602938cddb2ab25d0c784ea86dc6839a27a43b66e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/decoder-screen.svg&quot;,
+        &quot;sha256&quot;: &quot;a4ed9f7fe87e1ae368c21f6945d54e512d9281bf93ceb5845208d778907a850b&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/decoder-screen.svg&quot;,
+      &quot;caption&quot;: &quot;Five complete-stream decoders on four fixed grid routes. No call reaches decoder EOF; random raw DEFLATE can reach EOF and is calibrated separately.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage X source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_x.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned published Stage X result table&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_x_other.tsv&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-grid-periodic-byte-invariant&quot;,
+    &quot;grid-direct-bytes&quot;,
+    &quot;rune-direct-compression&quot;,
+    &quot;wulfic-grid-long-byte-sources&quot;
+  ],
+  &quot;article&quot;: &quot;# Does the printed grid contain a compressed stream?\n\nThe 256 cells on [LP2-49–51](#/wiki/alphanumeric-grids) can each be read as one base-60 byte. Wulfic&#x27;s Stage X4 passes the **complete 256-byte grid** to five standard decompressors in four fixed reading orders. It also checks the same four streams for known file starts.\n\n**Finding:** none of the **20 decoder calls** reaches the end of a compressed stream. None of the four streams matches the source&#x27;s offset-zero file signatures. We reran the pinned X4 component and reproduced all **24 published rows** exactly; an independent checker rebuilt the grid from Liberpedia&#x27;s tokens, repeated the five 100,000-block calibrations and checked every decoder result.\n\n![Four complete grid routes under five decoders; none reaches the end of a compressed stream](experiments/records/wulfic-grid-compression-source-replay/decoder-screen.svg)\n\nThe four orders are printed rows, reversed rows, columns of the 32 × 8 grid, and reversed columns. The five decoders are **raw DEFLATE, zlib, gzip, bzip2 and LZMA**. No byte is skipped, reordered within a route, keyed, or prefixed with a header. The [complete X4 result table](experiments/records/wulfic-grid-compression-source-replay/source-stage_x4_rows.tsv) keeps each decoder error and verdict.\n\n## Why the random-stream check matters\n\nThe source applied each decoder to **100,000 seeded random 256-byte blocks**. Raw DEFLATE reached end-of-stream **552** times; the other four decoders had **zero observed hits** in their respective samples. A raw DEFLATE end marker alone would therefore be weak evidence here. Zero observed calibration hits is a sample result, **not** proof that a format can never accept random bytes.\n\nThe source accepts `eof=True` from a single bounded decoder call, with at most **1 MiB of output**. It does **not** require every input byte to be consumed. Our separate synthetic controls confirm that all five implementations recognize a complete compressed message, reject a truncated one, and still report EOF when junk follows a complete stream. These controls were added **after** the source replay to check the implementation; they were not part of Stage X4&#x27;s original power gate.\n\nThe result excludes only an end-of-stream under these five APIs on these four exact 256-byte readings. A stream beginning at another offset, a different rendering of contested grid cells, a keyed transform, a larger output stopped by the cap, or another compression format remains outside this test. This also differs from the [direct-byte screen](#/experiments/grid-direct-bytes), which checks text and file headers rather than running full decompressors.\n\n## Reproduce\n\nFrom the repository root, with Python and NumPy:\n\n```text\npython experiments/records/wulfic-grid-compression-source-replay/run.py --check\npython experiments/records/wulfic-grid-compression-source-replay/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-grid-compression-source-replay/plan.json) fixes the input export, decoder APIs, routes, output cap, random seed and verdict rule. The [independent report](experiments/records/wulfic-grid-compression-source-replay/results.json) separates the manuscript results from calibration and the later diagnostics.\n\nWith the [pinned Stage X program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_x.py) at commit `bf89d3d`, this command reruns **X4 only**, compares every row with the committed Stage X table, and writes no file into the external checkout:\n\n```text\npython experiments/records/wulfic-grid-compression-source-replay/replay_source.py PATH_TO_WULFIC_CLONE\n```\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-grid-compression-source-replay/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;19266f23af9fde42e5e3f3c52986a19dfba0f5eff37530ccc9165982e22b4301&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-grid-long-byte-sources"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-grid-long-byte-sources&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Archived byte streams against the LP2 number grid&quot;,
+  &quot;question&quot;: &quot;Can any cyclic phase of six archived byte streams turn the LP2 number grid into a low-diversity byte block under four routes and four byte operations?&quot;,
+  &quot;reader_question&quot;: &quot;Do archived byte streams reveal a low-diversity grid message?&quot;,
+  &quot;summary&quot;: &quot;Exact Wulfic Stage Y replay finds no source/route/operation cell meeting its distinct-byte threshold after all cyclic phases; full controls pass.&quot;,
+  &quot;finding&quot;: &quot;All 24 source planted positives pass and all 18 negative controls stay above the cutoff. None of 96 source/route/operation cells has a phase with D≤120 distinct bytes; the minimum is D=139 over 2,865,136 phase trials. Both pinned source tables were reproduced byte-for-byte, and an independent checker recomputed every LP2 phase from the site grid and bundled byte inputs.&quot;,
+  &quot;limitations&quot;: &quot;This excludes low-diversity output under these six exact source bytes, four routes, four operations and all cyclic phases. It does not exclude a high-diversity plaintext, another key, different grid construction, altered key schedule, other decoding layer or another language.&quot;,
+  &quot;next_steps&quot;: &quot;A related proposal should specify a new source byte stream or transformation and predict a complete output, not select favorable fragments after inspecting many phases.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;number grid&quot;,
+    &quot;source replay&quot;,
+    &quot;running key&quot;,
+    &quot;byte operation&quot;,
+    &quot;control gate&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv&quot;,
+      &quot;experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;The 256 printed 32×8 grid cells parsed as base-60 byte values from Liberpedia&#x27;s exact token export.&quot;,
+    &quot;procedure&quot;: &quot;For each of six pinned source byte streams, all cyclic phases, row/row-reverse/column/column-reverse and XOR/grid-minus-key/grid-plus-key/key-minus-grid, count distinct values in the complete 256-byte output. Preserve source positive and negative gates and independently recompute all LP2 minima.&quot;,
+    &quot;parameters&quot;: &quot;Six source streams; 16 route/operation cells each; 2,865,136 source-phase trials. D≤120 passes. Twenty-four source positives at their planted cells, 18 uniform-grid negatives, and negative mean D within 162.0±0.5 are required for a valid run.&quot;,
+    &quot;exclusions&quot;: &quot;Other sources, partial or reordered bytes, offsets in grid or file structures beyond the source&#x27;s cyclic key phase, alternate statistics and later decoding layers.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage Y replay with independent exhaustive phase audit&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pinned source 97-row results and 43-row controls TSVs reproduced byte-for-byte; independent checker recomputes all 2,865,136 LP2 phases and exact published cell metrics&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-grid-long-byte-sources/run.py --check &amp;&amp; python experiments/records/wulfic-grid-long-byte-sources/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 and NumPy for the bundled full-phase checker. Optional pinned-source replay also uses NumPy and an external Wulfic checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;38b8fdaf7b06c8f84917242a41a15ef3fd8e6c27c58a49587bc76d90bd3f2059&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/plan.json&quot;,
+        &quot;sha256&quot;: &quot;f7f9a7015b50a2b97af117803646871b2ff5668a1f816da5ad034376c95787b3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/check.py&quot;,
+        &quot;sha256&quot;: &quot;802bd5fbfcbfc97f106687149c4c319bef87f731cae212112b31003328eed850&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/plot.py&quot;,
+        &quot;sha256&quot;: &quot;d0696822fdbbe85521d3c28aa65d39f6162ca58ff7db1d3bbb6184f7a489c87a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;669993af56d2429d3018ff340f8eccdb963a33c415ef42536846a940a7826fa8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;0b108863528a46b521c8c131a405ce83c9e4b28b2c577e09fcb5ffaa1af61a4a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv&quot;,
+        &quot;sha256&quot;: &quot;111903b27bcea38410df52843179a7013a834d238062c57d5d16284dcafc9666&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv&quot;,
+        &quot;sha256&quot;: &quot;7b950b7dec54c63fc811ab555b2e05cb77dbcf8c7fe831574fb208f4e6b05f43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/page_17.bin&quot;,
+        &quot;sha256&quot;: &quot;cbf1ccddc6c4bb2fd96d449e0667eb5be6c2a542de4e0f43e7ca188df7f289b1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/page_21.bin&quot;,
+        &quot;sha256&quot;: &quot;21e26fbcfd0f8cc5706ca4228245854703efa143173b793066ab3a2577f40db3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/page_43.bin&quot;,
+        &quot;sha256&quot;: &quot;0a318b3e9e195fdea9e941b7b458ae9cddef5147eec646b6da231b7d6615fe43&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/wisdom_hint.txt&quot;,
+        &quot;sha256&quot;: &quot;7e5ec097728197f5c0dba0729980565658fba486965809ffa25e3910a31c385a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/page_00-hex.bin&quot;,
+        &quot;sha256&quot;: &quot;f8fa59ec133168d8aaf9c67d13152286eebcec191c5668f7f143a2c7764fc530&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/inputs/onion-2-hex.bin&quot;,
+        &quot;sha256&quot;: &quot;05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/results.json&quot;,
+        &quot;sha256&quot;: &quot;c61bb860df910eff108d4d53ac6bf5c2066aab5bfd6bea8cdac0c5400607902e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;35a5fbd8d9c75659f7810cb286aa878d86047bd5a934e2ff3233f04ccbaa11de&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Lowest complete-block distinct-byte count across all phases and 16 route/operation cells for each source. The declared pass level is 120.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage Y source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_y.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Stage Y result table&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_y_results.tsv&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Stage Y control table&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_y_controls.tsv&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-grid-native-keys&quot;,
+    &quot;wulfic-grid-periodic-byte-invariant&quot;,
+    &quot;grid-direct-bytes&quot;,
+    &quot;wulfic-grid-compression-source-replay&quot;
+  ],
+  &quot;article&quot;: &quot;# Can archived byte streams unlock the number grid?\n\nThe [number grid on LP2-49–51](#/wiki/alphanumeric-grids) contains 256 printed cells that can be read as bytes. Wulfic&#x27;s Stage Y uses six specified byte streams as repeating keys, starting at **every possible position** in each stream. It checks four ways to traverse the grid and four byte operations.\n\n**Result:** none of the **96 source × route × operation cells** contains a phase that meets the source&#x27;s pass rule. The lowest decoded block has **139 distinct byte values**; the declared cutoff is **120**. All **24 planted positives** pass, and all **18 random-grid negatives** stay above the cutoff. The original two result tables were reproduced byte-for-byte, and our checker independently recomputed all **2,865,136 phase trials** from the site&#x27;s grid transcription.\n\n![The lowest distinct-byte count from each of six source files remains above the declared cutoff](experiments/records/wulfic-grid-long-byte-sources/comparison.svg)\n\nHere “distinct” means how many different byte values appear in a complete 256-byte output. A block restricted to ordinary text or a small alphabet may have few; a nearly uniform block generally has more. This is a **screen for low byte diversity**, not a text decoder. An intelligible answer with more than 120 different byte values would not pass this screen.\n\n## What was tested\n\nThe six inputs are three archive files named `page_17.bin`, `page_21.bin`, `page_43.bin`, the archived wisdom hint, 991 bytes parsed from the `page_00` hex text, and 256 bytes parsed from the second-onion hex string. The file numbers are **source archive names**, not a claim that they belong to manuscript pages LP2-17, LP2-21 or LP2-43. Their exact bytes and hashes are bundled with this record.\n\nFor each source, the key starts at every cyclic phase. The grid is read in printed row order, its reverse, column order, or its reverse. Each route is combined with XOR, grid minus key, grid plus key, or key minus grid modulo 256. This gives **16 cells per source**, each covering every phase. The [full 96-cell table](experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv) preserves the lowest count, its source phase, and the exact-source verdict. The best cell uses `page_43.bin`, printed row order and XOR at phase 43,059; its count is 139.\n\nThe source&#x27;s rule treats a cell as excluded when none of its phases has at most 120 distinct values. Its controls are part of that claim: every planted text, rune, hex and base64 case must pass at its planted location; random grids must produce no passes, with a mean distinct count within 0.5 of 162. The [42-row control table](experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv) records those checks. The source run reports a valid gate. This does **not** rule out a message that remains high-diversity under the chosen operation.\n\n## Reproduce\n\nThe [plan](experiments/records/wulfic-grid-long-byte-sources/plan.json) fixes the six inputs, four routes, operations, all-phase rule and threshold. The experiment download includes all six exact byte inputs. The checker reads Liberpedia&#x27;s 256 grid tokens, parses them independently as base-60 bytes, calculates every phase, and checks each published minimum, phase, mean, printable fraction, probability and verdict. It also tests 24 separately planted known-byte controls. Run from the repository root with Python and NumPy:\n\n```text\npython experiments/records/wulfic-grid-long-byte-sources/run.py --check\npython experiments/records/wulfic-grid-long-byte-sources/plot.py --check\n```\n\nWe also reran the [pinned Stage Y program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_y.py) at commit `bf89d3d`. With that external checkout, the optional wrapper recomputes the source&#x27;s own controls and results in a temporary directory and verifies them against its committed tables:\n\n```text\npython experiments/records/wulfic-grid-long-byte-sources/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThis only covers the six byte streams, the printed grid, these four routes and operations, and the source&#x27;s diversity cutoff. It does not test other keys, another grid construction, inserted or skipped bytes, decompression after a keyed transform, or a plaintext whose bytes remain diverse.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-grid-long-byte-sources/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;38b8fdaf7b06c8f84917242a41a15ef3fd8e6c27c58a49587bc76d90bd3f2059&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
 }</pre></article><article id="wulfic-grid-native-keys"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-grid-native-keys&quot;,

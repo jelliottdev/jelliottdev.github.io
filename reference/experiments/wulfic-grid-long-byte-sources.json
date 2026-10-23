@@ -1,0 +1,145 @@
+{
+  "id": "wulfic-grid-long-byte-sources",
+  "status": "published",
+  "title": "Archived byte streams against the LP2 number grid",
+  "question": "Can any cyclic phase of six archived byte streams turn the LP2 number grid into a low-diversity byte block under four routes and four byte operations?",
+  "reader_question": "Do archived byte streams reveal a low-diversity grid message?",
+  "summary": "Exact Wulfic Stage Y replay finds no source/route/operation cell meeting its distinct-byte threshold after all cyclic phases; full controls pass.",
+  "finding": "All 24 source planted positives pass and all 18 negative controls stay above the cutoff. None of 96 source/route/operation cells has a phase with D≤120 distinct bytes; the minimum is D=139 over 2,865,136 phase trials. Both pinned source tables were reproduced byte-for-byte, and an independent checker recomputed every LP2 phase from the site grid and bundled byte inputs.",
+  "limitations": "This excludes low-diversity output under these six exact source bytes, four routes, four operations and all cyclic phases. It does not exclude a high-diversity plaintext, another key, different grid construction, altered key schedule, other decoding layer or another language.",
+  "next_steps": "A related proposal should specify a new source byte stream or transformation and predict a complete output, not select favorable fragments after inspecting many phases.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "number grid",
+    "source replay",
+    "running key",
+    "byte operation",
+    "control gate"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv",
+      "experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv"
+    ],
+    "representation": "The 256 printed 32×8 grid cells parsed as base-60 byte values from Liberpedia's exact token export.",
+    "procedure": "For each of six pinned source byte streams, all cyclic phases, row/row-reverse/column/column-reverse and XOR/grid-minus-key/grid-plus-key/key-minus-grid, count distinct values in the complete 256-byte output. Preserve source positive and negative gates and independently recompute all LP2 minima.",
+    "parameters": "Six source streams; 16 route/operation cells each; 2,865,136 source-phase trials. D≤120 passes. Twenty-four source positives at their planted cells, 18 uniform-grid negatives, and negative mean D within 162.0±0.5 are required for a valid run.",
+    "exclusions": "Other sources, partial or reordered bytes, offsets in grid or file structures beyond the source's cyclic key phase, alternate statistics and later decoding layers."
+  },
+  "review": {
+    "kind": "exact public-source Stage Y replay with independent exhaustive phase audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source 97-row results and 43-row controls TSVs reproduced byte-for-byte; independent checker recomputes all 2,865,136 LP2 phases and exact published cell metrics",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-grid-long-byte-sources/run.py --check && python experiments/records/wulfic-grid-long-byte-sources/plot.py --check",
+    "environment": "Python 3 and NumPy for the bundled full-phase checker. Optional pinned-source replay also uses NumPy and an external Wulfic checkout.",
+    "script": "experiments/records/wulfic-grid-long-byte-sources/run.py",
+    "script_sha256": "38b8fdaf7b06c8f84917242a41a15ef3fd8e6c27c58a49587bc76d90bd3f2059",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/plan.json",
+        "sha256": "f7f9a7015b50a2b97af117803646871b2ff5668a1f816da5ad034376c95787b3"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/check.py",
+        "sha256": "802bd5fbfcbfc97f106687149c4c319bef87f731cae212112b31003328eed850"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/plot.py",
+        "sha256": "d0696822fdbbe85521d3c28aa65d39f6162ca58ff7db1d3bbb6184f7a489c87a"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/replay_source.py",
+        "sha256": "669993af56d2429d3018ff340f8eccdb963a33c415ef42536846a940a7826fa8"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/make_record.py",
+        "sha256": "0b108863528a46b521c8c131a405ce83c9e4b28b2c577e09fcb5ffaa1af61a4a"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv",
+        "sha256": "111903b27bcea38410df52843179a7013a834d238062c57d5d16284dcafc9666"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv",
+        "sha256": "7b950b7dec54c63fc811ab555b2e05cb77dbcf8c7fe831574fb208f4e6b05f43"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_17.bin",
+        "sha256": "cbf1ccddc6c4bb2fd96d449e0667eb5be6c2a542de4e0f43e7ca188df7f289b1"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_21.bin",
+        "sha256": "21e26fbcfd0f8cc5706ca4228245854703efa143173b793066ab3a2577f40db3"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_43.bin",
+        "sha256": "0a318b3e9e195fdea9e941b7b458ae9cddef5147eec646b6da231b7d6615fe43"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/wisdom_hint.txt",
+        "sha256": "7e5ec097728197f5c0dba0729980565658fba486965809ffa25e3910a31c385a"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/page_00-hex.bin",
+        "sha256": "f8fa59ec133168d8aaf9c67d13152286eebcec191c5668f7f143a2c7764fc530"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/inputs/onion-2-hex.bin",
+        "sha256": "05acf0d8e2ba7d851e2b4bbc32b85e461a1bd41576a50504487f33d4c1522c56"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/results.json",
+        "sha256": "c61bb860df910eff108d4d53ac6bf5c2066aab5bfd6bea8cdac0c5400607902e"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-long-byte-sources/comparison.svg",
+        "sha256": "35a5fbd8d9c75659f7810cb286aa878d86047bd5a934e2ff3233f04ccbaa11de"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-grid-long-byte-sources/comparison.svg",
+      "caption": "Lowest complete-block distinct-byte count across all phases and 16 route/operation cells for each source. The declared pass level is 120."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic Stage Y source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_y.py"
+    },
+    {
+      "label": "Pinned Stage Y result table",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_y_results.tsv"
+    },
+    {
+      "label": "Pinned Stage Y control table",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_y_controls.tsv"
+    }
+  ],
+  "related": [
+    "wulfic-grid-native-keys",
+    "wulfic-grid-periodic-byte-invariant",
+    "grid-direct-bytes",
+    "wulfic-grid-compression-source-replay"
+  ],
+  "article": "# Can archived byte streams unlock the number grid?\n\nThe [number grid on LP2-49–51](#/wiki/alphanumeric-grids) contains 256 printed cells that can be read as bytes. Wulfic's Stage Y uses six specified byte streams as repeating keys, starting at **every possible position** in each stream. It checks four ways to traverse the grid and four byte operations.\n\n**Result:** none of the **96 source × route × operation cells** contains a phase that meets the source's pass rule. The lowest decoded block has **139 distinct byte values**; the declared cutoff is **120**. All **24 planted positives** pass, and all **18 random-grid negatives** stay above the cutoff. The original two result tables were reproduced byte-for-byte, and our checker independently recomputed all **2,865,136 phase trials** from the site's grid transcription.\n\n![The lowest distinct-byte count from each of six source files remains above the declared cutoff](experiments/records/wulfic-grid-long-byte-sources/comparison.svg)\n\nHere “distinct” means how many different byte values appear in a complete 256-byte output. A block restricted to ordinary text or a small alphabet may have few; a nearly uniform block generally has more. This is a **screen for low byte diversity**, not a text decoder. An intelligible answer with more than 120 different byte values would not pass this screen.\n\n## What was tested\n\nThe six inputs are three archive files named `page_17.bin`, `page_21.bin`, `page_43.bin`, the archived wisdom hint, 991 bytes parsed from the `page_00` hex text, and 256 bytes parsed from the second-onion hex string. The file numbers are **source archive names**, not a claim that they belong to manuscript pages LP2-17, LP2-21 or LP2-43. Their exact bytes and hashes are bundled with this record.\n\nFor each source, the key starts at every cyclic phase. The grid is read in printed row order, its reverse, column order, or its reverse. Each route is combined with XOR, grid minus key, grid plus key, or key minus grid modulo 256. This gives **16 cells per source**, each covering every phase. The [full 96-cell table](experiments/records/wulfic-grid-long-byte-sources/source-stage_y_results.tsv) preserves the lowest count, its source phase, and the exact-source verdict. The best cell uses `page_43.bin`, printed row order and XOR at phase 43,059; its count is 139.\n\nThe source's rule treats a cell as excluded when none of its phases has at most 120 distinct values. Its controls are part of that claim: every planted text, rune, hex and base64 case must pass at its planted location; random grids must produce no passes, with a mean distinct count within 0.5 of 162. The [42-row control table](experiments/records/wulfic-grid-long-byte-sources/source-stage_y_controls.tsv) records those checks. The source run reports a valid gate. This does **not** rule out a message that remains high-diversity under the chosen operation.\n\n## Reproduce\n\nThe [plan](experiments/records/wulfic-grid-long-byte-sources/plan.json) fixes the six inputs, four routes, operations, all-phase rule and threshold. The experiment download includes all six exact byte inputs. The checker reads Liberpedia's 256 grid tokens, parses them independently as base-60 bytes, calculates every phase, and checks each published minimum, phase, mean, printable fraction, probability and verdict. It also tests 24 separately planted known-byte controls. Run from the repository root with Python and NumPy:\n\n```text\npython experiments/records/wulfic-grid-long-byte-sources/run.py --check\npython experiments/records/wulfic-grid-long-byte-sources/plot.py --check\n```\n\nWe also reran the [pinned Stage Y program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_y.py) at commit `bf89d3d`. With that external checkout, the optional wrapper recomputes the source's own controls and results in a temporary directory and verifies them against its committed tables:\n\n```text\npython experiments/records/wulfic-grid-long-byte-sources/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThis only covers the six byte streams, the printed grid, these four routes and operations, and the source's diversity cutoff. It does not test other keys, another grid construction, inserted or skipped bytes, decompression after a keyed transform, or a plaintext whose bytes remain diverse.\n",
+  "article_path": "experiments/records/wulfic-grid-long-byte-sources/article.md",
+  "script_sha256": "38b8fdaf7b06c8f84917242a41a15ef3fd8e6c27c58a49587bc76d90bd3f2059",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

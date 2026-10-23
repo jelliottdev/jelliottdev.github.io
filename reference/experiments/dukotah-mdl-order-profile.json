@@ -1,0 +1,179 @@
+{
+  "id": "dukotah-mdl-order-profile",
+  "status": "published",
+  "title": "Does LP2's rune order reveal a generator?",
+  "question": "Does a published first-order entropy dip survive a control that matches the manuscript's scarce adjacent repeats?",
+  "reader_question": "Does an entropy dip reveal how LP2 was made?",
+  "summary": "The published 40-control entropy anomaly reproduces exactly, but it lies inside a new 1,000-stream control range after matching LP2's 86 adjacent repeats.",
+  "finding": "Published order-one entropy is 4.7854 versus 4.8125 for 40 independent controls (z -14.6). Among 1,000 post-observation controls with exactly 86 adjacent repeats, the mean is 4.7871 and 207 are at or below LP2. The prominent dip is not exceptional under that matched model.",
+  "limitations": "The new controls were chosen after the anomaly and match only total adjacent repeats, not page structure, exact unigram counts, or word boundaries. In-sample high-order empirical entropy is not a held-out entropy-rate estimate; no key or plaintext is identified.",
+  "next_steps": "Predeclare a predictive model and compare it on held-out rune sequences against controls preserving the relevant observed structure.",
+  "outcome": "inconclusive",
+  "tags": [
+    "entropy",
+    "rune order",
+    "adjacent repeats",
+    "source replay",
+    "matched control",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-mdl-order-profile/plan.json",
+      "experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json"
+    ],
+    "representation": "Pinned source GP29 transcription, 55 concatenated nonempty LP2 text segments, 12,956 runes; includes cross-segment transitions.",
+    "procedure": "Replay unchanged 40-iid-control source program exactly. Separately, compare empirical order-zero through order-two conditional entropy to 1,000 seeded controls constructed with exactly 86 adjacent repeat transitions.",
+    "parameters": "29 symbols, 12,956 runes, source 40 iid controls seed 3301; new matched controls seed 20261023, 1,000 replicates, 86 repeated transitions each.",
+    "exclusions": "No pagewise or wordwise matching, exact unigram-count conditioning, held-out predictive entropy, PPM, key search, or decryption."
+  },
+  "review": {
+    "reviewer": "Exact unchanged-source numeric replay and independent row-count entropy checker over all 1,000 controls",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound statistical replay with exploratory matched control",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-mdl-order-profile/run.py --source-root SOURCE && python experiments/records/dukotah-mdl-order-profile/diagnostic.py --source-root SOURCE --check && python experiments/records/dukotah-mdl-order-profile/check.py --source-root SOURCE && python experiments/records/dukotah-mdl-order-profile/plot.py --check",
+    "environment": "Python 3.9+ standard library and pinned Dukotah checkout f08b20b. Source replay runs in a temporary copy; no third-party dependencies.",
+    "script": "experiments/records/dukotah-mdl-order-profile/run.py",
+    "script_sha256": "4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/plan.json",
+        "sha256": "31d72b7b3c263ce7be001eda8393b9693e216daf1fb098ca2b55192d0461bf81"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/source-plan-as-frozen.json",
+        "sha256": "31d72b7b3c263ce7be001eda8393b9693e216daf1fb098ca2b55192d0461bf81"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/source-replay-receipt.json",
+        "sha256": "bfac420a12ac56bd1ad2bc208a31d23da6070e67e956c5bde2c8d539718af7a0"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json",
+        "sha256": "434804cbf6011675cb4bd045518b37594a0fdf1a6083bf94c09036c0a38502d9"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/source-mdl_result.json",
+        "sha256": "c20b617bd708b7b1ec4315071c9b5a2829815b6efcb5793148716682994fbfdc"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/run.py",
+        "sha256": "4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/diagnostic.py",
+        "sha256": "df6043122d81f205517e35333dc0180dc5ba49be33d76bf4647b605a6b1ffa46"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/check.py",
+        "sha256": "1e051e54cdddd89a67e85a20292003bec589ab09399e43ca97187ebe39ccd2b0"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/plot.py",
+        "sha256": "b28ff15c692ff960a67bbb52859f798930709bb639f7cc990370363b019e52a0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/replayed-mdl_result.json",
+        "sha256": "7d95ad537f68b70dae1ce291ea07a33fcbf90664fe74fa83070be251510f5ae2"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/diagnostic-results.json",
+        "sha256": "bb58bb4f43deaa8a55ac40294b08fb26a6666c4bb7f8a8f471a813077d94532e"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/results.json",
+        "sha256": "9772b571c891027871ff4a6ab0b81315e128077a317c60ec2e0290da81da3a36"
+      },
+      {
+        "path": "experiments/records/dukotah-mdl-order-profile/order-one-controls.svg",
+        "sha256": "b1345cc6128d40848bd9d994db8a4e2fb911ca87445fafae9964ec798d249ad9"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Dukotah MDL source and archived result",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/recon/i6_mdl"
+    }
+  ],
+  "related": [
+    "r18-entropy-budget-replay",
+    "doublet-placement"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-mdl-order-profile/order-one-controls.svg",
+      "caption": "The independent random comparison shows a large dip; repeat-matched controls place LP2 inside their central range."
+    }
+  ],
+  "article": "# Is LP2's rune order unusually predictable?\n\nA [published analysis](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/recon/i6_mdl) compared 12,956 unsolved LP2 runes with 40 uniformly random streams. Its strongest result was a lower first-order conditional entropy: **4.7854** versus **4.8125** bits per rune, reported as *z* = −14.6. We reproduced every numeric field by running the unchanged source code.\n\n## What changes when repeats are matched?\n\n![The LP2 first-order entropy is far below independent random controls, but inside the range of controls constructed with the same number of adjacent repeats.](experiments/records/dukotah-mdl-order-profile/order-one-controls.svg)\n\nLP2 has only **86 adjacent equal-rune pairs** in 12,955 transitions. An independently random stream has many more. An ordinary first-order entropy calculation sees this missing transition and can look unusually low without identifying a cipher rule.\n\nWe therefore made 1,000 new control streams with **exactly 86** adjacent repeats each. Their mean first-order entropy is **4.7871**, and their middle 95% spans **4.7826–4.7915**. LP2's **4.7854** falls inside; **207 of 1,000** controls are at or below it. Under this specific repeat-matched model, the prominent first-order dip is no longer exceptional.\n\n| Entropy order | LP2 | Repeat-matched mean | LP2 position among 1,000 controls |\n| --- | ---: | ---: | ---: |\n| No previous rune | 4.8565 | 4.8565 | 480 at or below |\n| One previous rune | 4.7854 | 4.7871 | 207 at or below |\n| Two previous runes | 3.5228 | 3.5196 | 685 at or below |\n\nThe source also tried compressors and phrase counts; their outputs replay exactly. Its order-three through order-five empirical entropies become very small for both LP2 and random controls because nearly all long contexts are seen too few times. Those in-sample values do **not** estimate a held-out entropy rate or establish that the text is generated by a PRNG, a hash chain, or a one-time pad.\n\n## What this covers\n\nThe source joins its **55 nonempty LP2 text segments** into one GP29 index stream, including transitions across segment boundaries. We used those same bytes and source alphabet. The new control matches stream length, alphabet size, and total adjacent-repeat count. It does **not** match each page, unigram frequency, word boundaries, or other structure. We designed it *after* seeing the source's first-order anomaly, so it is a diagnostic of that anomaly, not a new discovery test. The suggested larger filtered-control and held-out PPM campaigns remain open.\n\n## Reproduce\n\nThe [source replay plan](experiments/records/dukotah-mdl-order-profile/source-plan-as-frozen.json) and [diagnostic plan](experiments/records/dukotah-mdl-order-profile/diagnostic-plan.json) pin their separate scopes. With a checkout of the [pinned revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1), run from the Liberpedia repository root:\n\n```text\npython experiments/records/dukotah-mdl-order-profile/run.py --source-root SOURCE\npython experiments/records/dukotah-mdl-order-profile/diagnostic.py --source-root SOURCE --check\npython experiments/records/dukotah-mdl-order-profile/check.py --source-root SOURCE\npython experiments/records/dukotah-mdl-order-profile/plot.py --check\n```\n\nThe [source result](experiments/records/dukotah-mdl-order-profile/source-mdl_result.json), [fresh replay](experiments/records/dukotah-mdl-order-profile/replayed-mdl_result.json), and [1,000 diagnostic rows](experiments/records/dukotah-mdl-order-profile/diagnostic-results.json) are retained. The independent checker recalculates every reported entropy from raw rune transitions.\n",
+  "article_path": "experiments/records/dukotah-mdl-order-profile/article.md",
+  "script_sha256": "4ad7732dc3bc24683b08aa6550a0986f372128b4cae7873b41cf00932815535c",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

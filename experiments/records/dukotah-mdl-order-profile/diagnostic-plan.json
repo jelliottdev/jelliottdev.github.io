@@ -1,0 +1,24 @@
+{
+  "schema": "dukotah-mdl-matched-repeat-diagnostic-plan-v1",
+  "frozen_on": "2026-10-23",
+  "status": "post-observation exploratory diagnostic; not historical source test or preregistered discovery",
+  "source_id": "D-02",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_replay_plan_sha256": "31d72b7b3c263ce7be001eda8393b9693e216daf1fb098ca2b55192d0461bf81",
+  "source_receipt_sha256": "bfac420a12ac56bd1ad2bc208a31d23da6070e67e956c5bde2c8d539718af7a0",
+  "source_result_sha256": "c20b617bd708b7b1ec4315071c9b5a2829815b6efcb5793148716682994fbfdc",
+  "transcription_sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+  "alphabet_sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+  "target": "55 source nonempty LP2 text segments concatenated, 12956 GP29 indices, including across-segment transitions exactly as source",
+  "model": "For each of 1000 controls, choose exactly the observed 86 of 12955 transition positions uniformly; at those positions repeat the preceding rune, elsewhere draw uniformly from the other 28 rune indices. Initial rune uniform 0..28. Thus length, alphabet and adjacent equal-pair count are exact controls, while unigram frequencies are uniform only in expectation.",
+  "seed": 20261023,
+  "replicates": 1000,
+  "statistics": [
+    "empirical conditional entropy H(X_i | X_(i-1))",
+    "empirical conditional entropy H(X_i | X_(i-2),X_(i-1))",
+    "unigram entropy",
+    "adjacent repeat count"
+  ],
+  "comparison": "Report observed value, control mean/SD, central 95-percent range and empirical rank for each entropy. This checks whether the published first-order dip remains unusual after matching repeat scarcity; it is not a held-out entropy-rate or plaintext/key test.",
+  "limitations": "Repeat count chosen after inspecting the source anomaly and fitted to the same manuscript. No exact unigram-count matching, page-specific variation, parameter-selection adjustment, PPM, held-out prediction, or original proposed 1000-filtered-controls campaign."
+}

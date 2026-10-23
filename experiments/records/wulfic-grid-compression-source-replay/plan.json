@@ -1,0 +1,20 @@
+{
+  "schema": "liberpedia-wulfic-stage-x4-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "stage_x_sha256": "29b1a75394a4a8b198531a52c185dac6e2a8f1661c01c2e19092a77c9a34eb1d",
+    "stage_n_sha256": "b3445d5e04eea89865898f8eafa40b2d5abd7948fb1f4e1b2b667a63a5f1a5c4",
+    "published_full_other_sha256": "6170a181d392a91fafac49c512b21d8c9bc4e864afebdf49f557a4af305bf10a"
+  },
+  "input": {
+    "path": "exports/alphanumeric-grids.csv",
+    "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5",
+    "rule": "Parse 256 printed two-character base-60 cells as bytes using 0–9,A–Z,a–x; 32×8 grid row and column readings."
+  },
+  "scope": "Exact Stage X4 component, not its X1/X2/X3 statistical or integer tests. Four complete grid readings: R, R reversed, C, C reversed. Five source decoders: zlib raw DEFLATE, zlib, gzip, bzip2, LZMA auto; plus previously documented Stage N offset-zero signatures.",
+  "source_null": "For each decoder, 100,000 seeded iid-uniform 256-byte blocks using NumPy default_rng(seed=3321). Source records fraction reaching decoder EOF. It declares PASS only when EOF and estimated rate ×20≤0.01; EOF with higher rate is inconclusive; no EOF is EXCLUDED.",
+  "source_decoder_semantics": "One decoder call, output cap 1 MiB; eof must be reached, but source does not require input fully consumed and does not test meaningfulness of output. An output hitting the cap without EOF is not a proof of invalid format. No offsets/prefixes or additional transforms.",
+  "post_replay_controls": "After source replay, test synthetic complete streams for each of five codecs, plus truncated and trailing-junk cases. These are implementation diagnostics, not preregistered source power controls and do not retroactively validate a broad negative conclusion.",
+  "limitations": "Only printed-grid bytes in four routes under those five complete-stream decoder APIs. Raw DEFLATE can produce EOF on random input (~0.0055 in source null), making an isolated EOF inconclusive. Zero calibrator hits for other codecs gives a finite-sample upper limit, not a true zero probability. Other byte parsing, uncertain cells, file offsets, keyed/composed transforms and >1MiB outputs remain untested."
+}

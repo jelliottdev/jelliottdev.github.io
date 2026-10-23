@@ -1,0 +1,95 @@
+{
+  "id": "dukotah-image-template-rebuild",
+  "status": "published",
+  "title": "Can the archived LP2 image read be rebuilt from the original pages?",
+  "question": "Do the pinned four-stage image-template programs reproduce their archived line, shape and count-alignment outputs from the 56 original LP2 JPEGs?",
+  "reader_question": "Was the manuscript transcription checked directly against its images?",
+  "summary": "The original code runs on all 56 byte-matched JPEGs. Geometry counts match, but the fresh run finds 229 shape classes versus 226 archived and 233 count-matching lines versus 232. Its reported rune agreement is fitted and scored on the same LP2 lines.",
+  "finding": "Both runs have 646 line bands and 13,140 full-height glyphs. Four of 646 band glyph counts differ, leaving the fresh read with 16,237 glyphs versus 16,245 archived. The historical 226 classes are a saved output, not a source-code gate. The fresh 95.83% rune-label fit uses zero held-out lines.",
+  "limitations": "The original archived NPZ arrays have no available hashes. The source's class-to-rune mapping is trained and scored on the same canonical LP2 lines, so its agreement is not independent transcription accuracy. The checker validates receipts and arithmetic, not image pixels or disputed individual runes.",
+  "next_steps": "Pin the fresh 229-class instrument for any follow-on source rerun, and assess disputed glyphs against image crops with held-out readings before claiming independent transcription validation.",
+  "outcome": "inconclusive",
+  "tags": [
+    "transcription",
+    "source replay",
+    "image analysis",
+    "template matching",
+    "input provenance",
+    "held-out control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-image-template-rebuild/plan.json"
+    ],
+    "representation": "The 56 LP2-00–55 hosted JPEGs whose exact bytes match the pinned source capsule, the four original source scripts, the source canon and archived reports.",
+    "procedure": "Hash-check all source files and images; run unmodified segmentation, template clustering, template-DP reading and count alignment in an isolated temporary tree; compare fresh and archived summaries. The independent checker redoes both length alignments from compact receipts.",
+    "parameters": "Original 128-threshold image ink, 0.10 clustering threshold, >=100-glyph template inclusion, 15-cost line skips; no thresholds were retuned.",
+    "exclusions": "No independent human rune adjudication, held-out label evaluation, source cipher tests or general transcription correctness claim."
+  },
+  "review": {
+    "reviewer": "Independent count-alignment and hash checker",
+    "retested_on": "2026-10-23",
+    "kind": "source image pipeline rebuild",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-image-template-rebuild/check.py && python experiments/records/dukotah-image-template-rebuild/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check",
+    "environment": "Python 3.12 with NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 on the audited host. The full rebuild may be sensitive to other environments; compact receipt check uses the Python standard library.",
+    "script": "experiments/records/dukotah-image-template-rebuild/run.py",
+    "script_sha256": "070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/plan.json",
+        "sha256": "d42f077054c00574b3ce7bcf5741e1562e4c2f87f6787fe8242b9b07d3ff54e2"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/run.py",
+        "sha256": "070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/check.py",
+        "sha256": "eb4daf6134668284e3f69fe3f7dcefe0fef13b595bbae3cd170bcfabf884e163"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/results.json",
+        "sha256": "0a49f469df92cfdf8392bb37be3c2c93f969261e7664fdfed37604a0a3a24d74"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/line-counts.json",
+        "sha256": "687cddaeec250b51852209525878271cbc0f3582d05d196bbff564178bc35a43"
+      },
+      {
+        "path": "experiments/records/dukotah-image-template-rebuild/pipeline.svg",
+        "sha256": "ca6e7b692738e2a4b712540d208a41336649da7ebec9ced921bd284b2d353da4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned segmentation source",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/geometry/segment2.py"
+    },
+    {
+      "label": "Pinned image reading and archived results",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe"
+    }
+  ],
+  "related": [],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-image-template-rebuild/pipeline.svg",
+      "caption": "The exact JPEGs reproduce geometry counts; template classes and count-matching lines differ slightly from the archived run."
+    }
+  ],
+  "article": "## Finding\n\n**The image-reading pipeline runs on all 56 original LP2 JPEGs, but its saved output does not reproduce exactly.** The fresh run finds the same **646 line bands** and **13,140 full-height glyphs** as the archived run. It groups the glyphs into **229 shapes**, compared with **226** archived, and finds **233 lines** whose rune count matches the reference text, compared with **232** archived.\n\n![The fresh image read and archived run agree on line bands, but differ slightly in shape classes and count-matching lines.](experiments/records/dukotah-image-template-rebuild/pipeline.svg)\n\nOnly **4 of 646** line-band glyph counts changed: one on LP2-08, two on LP2-22, and one on LP2-54. The fresh run reads eight fewer glyphs in total. The 226-class figure is a saved result, not a required check in the code; the reader accepts every shape class seen at least 100 times. Its fresh 229-class bank selects 33 templates, while the archived bank selected 32. A fresh run can therefore be used as a **new, explicitly pinned instrument**, but it must not be presented as the original archived array or as proof that the reference transcription is correct.\n\n## What the stages establish\n\nThe original programs first locate line bands, collect glyph images, group similar shapes, and then choose a low-cost sequence of those shapes for each line. Those stages do **not** read the canonical rune transcription. We used the [pinned source code](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe) without changing its rules and checked every hosted image against the source's byte hashes.\n\nThe final program compares the image-derived sequences with the LP2 reference text. It first aligns lines by length. The **233 count-matching lines** are a useful check on segmentation, but a matching length alone does not prove that the runes match. The program then learns a mapping from shape classes to rune letters **using those same lines** and reports **95.83% agreement on them**. It uses **zero held-out lines** and does not train on solved LP1 pages. This percentage is an in-sample fit, not an independent transcription accuracy estimate.\n\nWe do not know why the fresh and archived shape counts differ. A single-thread run and a stable-sort diagnostic still produced 229 classes. The original archived NPZ arrays have no available hashes, so their contents cannot be compared byte for byte. This record does not settle any disputed rune or test a cipher.\n\n## Reproduce\n\nThe [plan](experiments/records/dukotah-image-template-rebuild/plan.json) pins the 56 image hashes, original code, canonical text and historical reports. The [results](experiments/records/dukotah-image-template-rebuild/results.json) hold the fresh artifact hashes; [line counts](experiments/records/dukotah-image-template-rebuild/line-counts.json) allow a separate checker to redo both count-based alignments without using the source program.\n\nThe compact check takes seconds from a Liberpedia checkout:\n\n```text\npython experiments/records/dukotah-image-template-rebuild/check.py\n```\n\nFor the full image rebuild, use Python with NumPy, SciPy and Pillow, and a checkout of the [pinned source revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1). The wrapper verifies all source and image hashes, copies them into a temporary directory, then runs the four original programs in order. This takes several minutes and does not overwrite the saved results:\n\n```text\npython experiments/records/dukotah-image-template-rebuild/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check\n```\n\nThe checker verifies the compact receipts and, when given source and artifact directories, their bytes. It does **not** classify image pixels independently. Any follow-on test using these new arrays must identify them by their hashes rather than silently inherit the archived 226-class result.\n",
+  "article_path": "experiments/records/dukotah-image-template-rebuild/article.md",
+  "script_sha256": "070a3bba7b6f84a6584dd0f0698959947e6a2be45f76c6b437dc1dc474c69ce4",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}
