@@ -1,0 +1,165 @@
+{
+  "id": "d4v1-missing-prime-anchor-gate",
+  "status": "published",
+  "title": "Missing-prime keys and routes: checking the score",
+  "question": "Do the pinned missing-prime anchor trigger and the resulting source score pass known-text and shuffled-text controls before applying them to unsolved pages?",
+  "reader_question": "Can the missing-prime and grid-key score distinguish a reading from shuffled text?",
+  "summary": "A source program launches two numeric keys and route searches after three consecutive missing-prime word sums. Its unigram score passes every one of 199 shuffled controls for both keys on a known reading, and route order cannot change that score.",
+  "finding": "The synthetic three-word anchor triggered once and a broken sequence did not. Both pinned keys and six routes recovered a planted known reading. Yet all 199 shuffled controls for each key exceeded the source score bar after trying 29 Atbash shifts; all 199 route shuffles also passed, and any route permutation leaves this unigram score unchanged. No unsolved-page anchor counts or decodes were run.",
+  "limitations": "One 157-rune known reading was used and it contributed to the source solved-page frequency target; these are in-sample operator controls, not a general power estimate. The original score bars are weak on this fixture, but the key and route hypotheses are not excluded. The source key spelling differs from its own page transcription at five already documented cells; source/site punctuation changes word boundaries on three LP2 pages.",
+  "next_steps": "Freeze an order-sensitive English screen and matched full-search controls, then separately report source-transcription anchor counts before running any candidate key or route search on unsolved pages.",
+  "outcome": "inconclusive",
+  "tags": [
+    "source audit",
+    "missing primes",
+    "cuneiform",
+    "word anchors",
+    "Vigenere",
+    "transposition",
+    "positive controls",
+    "unigram score"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/d4v1-missing-prime-anchor-gate/fixture.json",
+      "experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp"
+    ],
+    "representation": "Pinned source secrets.cpp 256-pair stream and 180 missing primes; one 157-rune known direct reading from source Page 5. Synthetic three-word anchor and 199 shuffled conditional score controls; no unsolved LP2 target search.",
+    "procedure": "Verify source constants and five grid case differences; test three-word trigger, invert two key streams and six source route positions on a known reading; scan all 29 source Atbash shifts on 199 seeded shuffles for each key and use unigram invariance for routes.",
+    "parameters": "Missing-prime sums 73,79,83; keys of lengths 256 and 180; source strict score thresholds >0.91 (keys) and >0.90 (routes); route widths 3 and 7; 199 deterministic controls seeded 3301..3499.",
+    "exclusions": "No claim that an unsolved page contains an anchor, that either key/route decodes LP2, that other passages have the same control behavior, or that source letter-case ambiguities are resolved."
+  },
+  "review": {
+    "kind": "pinned-source positive-control and score-gate audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent checker recalculates 398 key-control maxima, six route plants and invariant route score; source C++ fixture confirms original tokenizer, anchor and key transforms",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/d4v1-missing-prime-anchor-gate/run.py --check && python experiments/records/d4v1-missing-prime-anchor-gate/check.py && python experiments/records/d4v1-missing-prime-anchor-gate/plot.py --check",
+    "environment": "Python 3 standard library; all ordinary check inputs are included. Optional source-controls.cpp needs a pinned upstream C++ checkout and C++20 compiler.",
+    "script": "experiments/records/d4v1-missing-prime-anchor-gate/run.py",
+    "script_sha256": "6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced",
+    "inputs": [
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/plan-frozen.json",
+        "sha256": "ed15be14c3a4b4673bddb18693185e2e90a25e21a485d2f721efe35e9ee68032"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/calibration-amendment.json",
+        "sha256": "55d65f17609df869f84656949624fc1a14aca309d07fe44badabe0fe740d1774"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/fixture.json",
+        "sha256": "866f95eb94e6b9eab54160f0956c1dd549d4c45aacabbfeb71b571a2047b61a8"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/run.py",
+        "sha256": "6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/check.py",
+        "sha256": "23681c1bcce54370ce885b65518a60f2756f4206379e8f0ae803a2f30b034f45"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/plot.py",
+        "sha256": "a1a82931973dbe30def2847109d47a77b57fb89374cf024502f0ff1c5d6b36e0"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp",
+        "sha256": "4f52c1cbd84ee6eb9093e079a4d7d6064a4cb6c9eeba60430b70e2a7dbd61b2d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/results.json",
+        "sha256": "e3712216e39feb3b5bbc9595462f0826267f7303d47344fb4385a29382c5d583"
+      },
+      {
+        "path": "experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg",
+        "sha256": "b333d8990511d460b4e66e02e82573ea56b4530947e60159e15cdc9e71b18de7"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg",
+      "caption": "Each source key exceeded its score threshold on all 199 shuffled controls; changing route order cannot change unigram fitness."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned original search and score rules",
+      "url": "https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp"
+    },
+    {
+      "label": "Pinned source key arrays",
+      "url": "https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/secrets.cpp"
+    },
+    {
+      "label": "Archived 2013 telnet-prime command transcript",
+      "url": "https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/004-first-onion/README.md"
+    },
+    {
+      "label": "Archived manuscript and transcription sources",
+      "url": "https://jelliottdev.github.io/#/wiki/sources"
+    }
+  ],
+  "related": [
+    "historical-prime-and-ps-keys",
+    "dukotah-fixed-numeric-keys",
+    "grid-radix-reconciliation",
+    "grid-stem-uncertainty",
+    "lp2-row-column-english"
+  ],
+  "reader_finding": "The source’s score accepted all 199 shuffled controls for each key. Rearranging the runes cannot change this score, so it cannot select a route. A high score here does not establish a readable message.",
+  "reader_limit": "This checks the scoring rule on one known passage. It does not test the keys on unsolved pages or rule out the proposed keys and routes.",
+  "article": "# Missing-prime keys and routes: checking the score\n\n**Result.** A pinned C++ search looks for three consecutive words whose rune-prime sums point to the 2013 missing-prime list. Only then does it try two repeating keys and several routes. Its final screen asks whether a candidate has rune frequencies like solved pages. On one known 157-rune reading, **all 199 shuffled controls passed that screen for each key** after the source's 29 Atbash shifts. Reordering runes cannot change this frequency score at all. These controls do not support treating a score above the source's threshold as a recovered reading.\n\n![Both source keys pass all 199 shuffled controls; changing a route cannot change the unigram score.](experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg)\n\n| What we checked | What happened |\n| --- | --- |\n| Three consecutive synthetic words with prime sums 73, 79 and 83 | The source trigger fired once. Inserting one nonmatching word stopped it. |\n| The 256-pair key and the 180 missing-prime key | Both recovered a deliberately encrypted known reading. After shuffling the ciphertext, **199/199** controls for each key still exceeded the source's strict 0.91 score threshold at some Atbash shift. |\n| Column, diagonal and inward-spiral routes at widths 3 and 7 | All six inverse-constructed examples recovered the reading. Every route preserves the same rune counts, so its score is unchanged for a fixed shift. All **199/199** shuffled route controls exceeded the source's strict 0.90 threshold. |\n\nThe test uses **one known reading that contributed to the source's solved-page frequency target**. These plants check the operator and the trigger; they do not estimate performance on other English passages. The shuffled texts are controls, not alternative proposed decipherments. We did **not** count anchor sequences on unsolved pages or run a manuscript decryption here. A later test needs a fixed reading-sensitive score and a full-search control before it can say whether these keys or routes help.\n\n## Source and transcription\n\nThe [pinned program](https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp) uses the 180 primes from 73 through 1223. Those match the archived **2013 telnet-command gap**, which is distinct from CicadaOS `prime_echo`. Its 256-pair source key is spelled exactly like the current LP2-49–51 transcription. The same program's `pages.h` differs from its `secrets.cpp` at five letter-case cells. Those five disagreements and the still-uncertain glyphs are documented in [the grid transcription comparison](#/experiments/grid-radix-reconciliation) and [stem review](#/experiments/grid-stem-uncertainty). This check preserves the source's `secrets.cpp` key without silently correcting it.\n\nThe source and current site agree on the rune order of all 56 mapped LP2 pages. Punctuation changes word boundaries on LP2-04, LP2-21 and LP2-41, so any future count of three-word anchors must name which transcription it uses. The exact-source version uses the pinned `pages.h` text. No target-page result is reported here.\n\n## Reproduce\n\nThe [frozen pretarget plan](experiments/records/d4v1-missing-prime-anchor-gate/plan-frozen.json), [control-calibration amendment](experiments/records/d4v1-missing-prime-anchor-gate/calibration-amendment.json), [source-derived fixture](experiments/records/d4v1-missing-prime-anchor-gate/fixture.json) and [all 199 control maxima](experiments/records/d4v1-missing-prime-anchor-gate/results.json) are included. Run `python experiments/records/d4v1-missing-prime-anchor-gate/run.py --check`, then `check.py` and `plot.py --check`. The independent checker recomputes both full shift searches and verifies six route plants. The optional [C++ fixture](experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp) can be compiled against the pinned upstream source to confirm its tokenizer, trigger and key transforms; upstream code is linked by revision and hash rather than bundled.\n",
+  "article_path": "experiments/records/d4v1-missing-prime-anchor-gate/article.md",
+  "script_sha256": "6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  },
+  "method_topics": [
+    {
+      "id": "transposition",
+      "title": "Transposition and permutations",
+      "aliases": [
+        "reverse",
+        "columns",
+        "permutation",
+        "read backwards",
+        "transposition",
+        "anagram",
+        "anagrams",
+        "rearrange letters",
+        "rearrange runes",
+        "column permutation"
+      ]
+    },
+    {
+      "id": "sums",
+      "title": "Gematria and rune-sum mappings",
+      "aliases": [
+        "gematria",
+        "word sums",
+        "rune sums",
+        "prime sums"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}

@@ -121,6 +121,7 @@ async function experimentsPage(id, version, query='') {
     bindLanguageBlockFigure();
     bindAffineLagFigure();
     bindBlockBoundaryFigure();
+    if(typeof GridStemView!=='undefined')GridStemView.bind(main.querySelector('.grid-stem-view'),{isCurrent:()=>version===renderId});
     startExperimentSupport();
     return;
   }
@@ -374,6 +375,7 @@ function affineLagWorkedExample(){
  <p class="affine-example-note">This is one matching pair, not proof of a cipher. The full count and shuffled comparison follow.</p></figure>`;
 }
 function experimentVisual(r,v){
+  if(r.id==='grid-stem-uncertainty'&&v.path.endsWith('/stem-map.svg')&&typeof GridStemView!=='undefined')return GridStemView.render();
   if(r.id==='block-boundary-doublets'&&v.path.endsWith('/boundaries.svg')){
     const sizes=Array.from({length:28},(_,index)=>`<option value="${index+2}">${index+2}</option>`).join('');
     return `<figure class="experiment-figure affine-lag-figure block-boundary-figure" data-results="experiments/records/block-boundary-doublets/results.json"><figcaption><strong>Inspect the 434 placements</strong><br>Choose a block size and a shared phase. Phase zero places a boundary after every full block, counting from the start of each page.</figcaption><div class="affine-lag-controls"><label>Block size<select data-block-size disabled>${sizes}</select></label><label>Phase<select data-block-phase disabled></select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><button type="button" data-figure-retry hidden style="min-height:44px">Retry counts</button><p class="small muted">The size and phase search was compared with the same search on 3,000 fixed-count controls. A single appealing row is not a selected-search result.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;

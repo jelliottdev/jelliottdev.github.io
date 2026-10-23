@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 294,
+    "records": 296,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -1362,6 +1362,80 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/d4v1-column-unigram-key-recovery.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/d4v1-column-unigram-key-recovery/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/d4v1-column-unigram-key-recovery.zip"
+    },
+    {
+      "id": "d4v1-missing-prime-anchor-gate",
+      "title": "Missing-prime keys and routes: checking the score",
+      "question": "Do the pinned missing-prime anchor trigger and the resulting source score pass known-text and shuffled-text controls before applying them to unsolved pages?",
+      "summary": "A source program launches two numeric keys and route searches after three consecutive missing-prime word sums. Its unigram score passes every one of 199 shuffled controls for both keys on a known reading, and route order cannot change that score.",
+      "tags": [
+        "source audit",
+        "missing primes",
+        "cuneiform",
+        "word anchors",
+        "Vigenere",
+        "transposition",
+        "positive controls",
+        "unigram score"
+      ],
+      "finding": "The source’s score accepted all 199 shuffled controls for each key. Rearranging the runes cannot change this score, so it cannot select a route. A high score here does not establish a readable message.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "transposition",
+          "title": "Transposition and permutations",
+          "aliases": [
+            "reverse",
+            "columns",
+            "permutation",
+            "read backwards",
+            "transposition",
+            "anagram",
+            "anagrams",
+            "rearrange letters",
+            "rearrange runes",
+            "column permutation"
+          ]
+        },
+        {
+          "id": "sums",
+          "title": "Gematria and rune-sum mappings",
+          "aliases": [
+            "gematria",
+            "word sums",
+            "rune sums",
+            "prime sums"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [],
+      "artifacts": [
+        "experiments/records/d4v1-missing-prime-anchor-gate/fixture.json",
+        "experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/d4v1-missing-prime-anchor-gate",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/d4v1-missing-prime-anchor-gate.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/d4v1-missing-prime-anchor-gate/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/d4v1-missing-prime-anchor-gate.zip"
     },
     {
       "id": "d4v1-positional-totient-streams",
@@ -17487,6 +17561,124 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/relikd-interrupt-db-keyfit.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/relikd-interrupt-db-keyfit/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/relikd-interrupt-db-keyfit.zip"
+    },
+    {
+      "id": "relikd-interrupt-pattern-database",
+      "title": "Mirror and alternating-group interrupt scores",
+      "question": "Do the committed LiberPrayground mirror and modulo interrupt scores reproduce, and can their structural scores identify a known period?",
+      "summary": "All 7,407 committed candidate scores reproduce to displayed precision. On a planted known reading, the true period leads 22 of 24 source-rule checks, but these scores neither discover skip positions nor decode LP2.",
+      "tags": [
+        "LP2",
+        "interruptions",
+        "mirrored key",
+        "alternating groups",
+        "source method",
+        "control power"
+      ],
+      "finding": "Every saved score can be reproduced, but a high rune-frequency score is not a decrypted message. The known-period control is imperfect, and the original skip-mask selection was not repeated on controls.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "periodicity",
+          "title": "Period and key-length diagnostics",
+          "aliases": [
+            "periodic IoC",
+            "key length",
+            "periodicity",
+            "key length detection"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-00",
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38",
+        "lp2-39",
+        "lp2-40",
+        "lp2-41",
+        "lp2-42",
+        "lp2-43",
+        "lp2-44",
+        "lp2-45",
+        "lp2-46",
+        "lp2-47",
+        "lp2-48",
+        "lp2-54",
+        "lp2-55"
+      ],
+      "artifacts": [
+        "experiments/records/relikd-interrupt-pattern-database/plan.json",
+        "experiments/records/relikd-interrupt-pattern-database/shuffle-plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/relikd-interrupt-pattern-database",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/relikd-interrupt-pattern-database.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/relikd-interrupt-pattern-database/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/relikd-interrupt-pattern-database.zip"
     },
     {
       "id": "relikd-rotated-key-source-gate",

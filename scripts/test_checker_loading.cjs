@@ -11,7 +11,7 @@ function harness(query=''){
  const context={URLSearchParams,AbortController,setTimeout,clearTimeout,renderId:1,
   location:{hash:'#/experiments'},history:{replaceState(){}},db:{pages:[{id:'lp2-15'}]},
   head:()=>'',footer:()=>'',esc:String,AssistantSearch:Search,AssistantMarkdown:require('../assistant-markdown.js'),IdeaCoverage:require('../idea-coverage.js'),
-  document:{activeElement:null},$:id=>elements.get(id),
+  document:{activeElement:null},$:id=>elements.get(id)||(id==='#idea-copy'?{isConnected:true}:undefined),
   fetch:(url,options)=>{
    if(options?.method==='POST'){apiCalls++;return Promise.resolve({ok:false,status:503,json:async()=>({})})}
    assert.equal(url,'data/checker-records.json','Cold readiness uses the dedicated evidence payload');
@@ -22,7 +22,7 @@ function harness(query=''){
   for(const [,id] of value.matchAll(/id="([^"]+)"/g)){
    const el={isConnected:true,value:'',innerHTML:'',textContent:'',hidden:false,disabled:false,listeners:{},attributes:{},
     addEventListener(type,fn){this.listeners[type]=fn},setAttribute(name,value){this.attributes[name]=value},replaceChildren(){this.innerHTML=''},
-    focus(){context.document.activeElement=this}};elements.set('#'+id,el);
+    focus(options){this.focusOptions=options;context.document.activeElement=this}};elements.set('#'+id,el);
   }
   const input=elements.get('#experiment-query');if(input)input.value=value.match(/<textarea[^>]*>([^<]*)<\/textarea>/)?.[1]||'';
  },get innerHTML(){return html}};
@@ -99,7 +99,46 @@ function harness(query=''){
   if(fails)stale.pending[0].reject(new Error('Late failure'));else stale.pending[0].resolve(stale.okay([record]));await flush();
   assert.equal(stale.context.main.innerHTML,'<h1>New route</h1>');assert(!old.isConnected);assert.equal(stale.apiCalls,0);
  }
+ // Stop/completion must not leave keyboard focus on the hidden cancellation control.
+ for(const mode of ['cancel','success','error','edit','navigation','resubmit']){
+  const active=harness('prime stream');await active.context.experimentsPage('',1,active.query);
+  active.pending[0].resolve(active.okay([record]));await flush();
+  const requests=[];
+  active.context.fetch=(url,options)=>new Promise(resolve=>requests.push({resolve,signal:options.signal}));
+  active.context.loadSupportingIndex=async()=>({documents:[]});
+  const form=active.$('experiment-form'),input=active.$('experiment-query'),stop=active.$('idea-cancel'),submit=active.$('idea-submit');
+  form.onsubmit({preventDefault(){}});assert.equal(requests.length,1);assert(!stop.hidden);stop.focus();
+  let expected=submit;
+  if(mode==='cancel'){
+   stop.onclick();assert(requests[0].signal.aborted);assert(stop.hidden);
+   assert.equal(active.$('idea-status').textContent,'Comparison stopped. Matching records remain available.');
+  }else if(mode==='edit'){
+   input.focus();input.value='new idea';input.listeners.input();expected=input;
+  }else if(mode==='navigation'){
+   active.context.renderId=2;active.context.main.innerHTML='<h1>Destination</h1>';
+   expected={destination:true};active.context.document.activeElement=expected;
+   active.context.stopExperimentAI();
+  }else if(mode==='resubmit'){
+   input.focus();input.listeners.input();form.onsubmit({preventDefault(){}});assert.equal(requests.length,2);assert(requests[0].signal.aborted);
+   input.focus();expected=input;
+  }
+  const response=mode==='error'?{ok:false,status:503,json:async()=>({})}:{ok:true,json:async()=>({answer:'Recorded result [1]',sources:[{id:record.id,href:'#/experiments/'+record.id,title:record.title}]})};
+  requests[0].resolve(response);await flush();
+  assert.equal(active.context.document.activeElement,expected,mode+' leaves focus on a current visible control');
+  if(['cancel','success','error'].includes(mode)){
+   assert(stop.hidden);assert(!submit.disabled);assert.equal(submit.focusOptions.preventScroll,true);
+  }
+  if(mode==='success')assert(active.$('experiment-answer').innerHTML.includes('Recorded result'));
+  if(mode==='error')assert.equal(active.$('idea-status').textContent,'Comparison unavailable.');
+  if(mode==='cancel')assert.equal(active.$('idea-status').textContent,'Comparison stopped. Matching records remain available.','Late completion cannot replace cancellation feedback');
+  if(mode==='navigation')assert.equal(active.context.main.innerHTML,'<h1>Destination</h1>');
+  if(mode==='resubmit'){
+   assert(!stop.hidden,'Superseded completion cannot hide the newer request control');
+   requests[1].resolve(response);await flush();assert.equal(active.context.document.activeElement,input,'Completion must not steal textarea focus');
+  }
+  assert.equal(requests.length,mode==='resubmit'?2:1,'Only explicit submissions request a comparison');
+ }
  const empty=harness();await empty.context.experimentsPage('',1);assert.equal(empty.$('experiment-results').innerHTML,'');
  empty.pending[0].resolve(empty.okay([]));await flush();assert(empty.$('experiment-results').innerHTML.includes('No experiment records published yet'),'A confirmed empty registry is distinct from loading');
- console.log('PASS: immediate editable checker, shared deferred load, loading/empty/error/retry, preserved input/focus, stale success/error, plain cards with exact model evidence, edited-idea invalidation, late support/config/comparison guards and zero automatic AI requests.');
+ console.log('PASS: immediate editable checker, shared deferred load, loading/empty/error/retry, preserved input/focus, stale success/error, plain cards with exact model evidence, edited-idea invalidation, late support/config/comparison guards, cancel/completion focus recovery and zero automatic AI requests.');
 })().catch(error=>{console.error(error);process.exitCode=1});

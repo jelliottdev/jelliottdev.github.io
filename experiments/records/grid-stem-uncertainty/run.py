@@ -36,7 +36,7 @@ def svg(cells, rows_by_page):
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} 1190" role="img" aria-labelledby="title desc">',
              '<title id="title">Grid cells with case-sensitive bare stems</title>',
              '<desc id="desc">Ten I-or-l cells across LP2-49 to LP2-51 are highlighted. One additional S-or-s transcription disagreement is marked separately.</desc>',
-             '<rect width="472" height="1190" fill="#fbfaf6"/>',
+             '<rect width="472" height="1190" fill="#ffffff"/>',
              '<g font-family="Arial, sans-serif" fill="#202c33">',
              '<text x="18" y="31" font-size="18" font-weight="bold">Case-sensitive grid positions</text>',
              '<text x="18" y="50" font-size="11">Coordinates follow the printed 8-column grids; this is a map, not a reading route.</text>']
@@ -52,8 +52,9 @@ def svg(cells, rows_by_page):
             for col in range(1, 9):
                 item = marked.get((page, row, col))
                 other = page == 'lp2-50' and row == 12 and col == 5
-                fill = '#dcebf1' if item else ('#f3dfc7' if other else '#eceae5')
-                parts.append(f'<rect x="{55+(col-1)*pitch}" y="{y}" width="39" height="24" rx="2" fill="{fill}"/>')
+                fill = '#dcebf1' if item else ('#e2e6ea' if other else '#eef1f4')
+                outline = ' stroke="#596b78" stroke-width="1" stroke-dasharray="3 2"' if other else ''
+                parts.append(f'<rect x="{55+(col-1)*pitch}" y="{y}" width="39" height="24" rx="2" fill="{fill}"{outline}/>')
                 if item:
                     parts.append(f'<text x="{55+(col-1)*pitch+19.5}" y="{y+17}" text-anchor="middle" font-size="13" font-weight="bold">{item["wiki_token"]}</text>')
                 elif other:
@@ -62,7 +63,7 @@ def svg(cells, rows_by_page):
         y += 13
     parts += ['<rect x="18" y="1150" width="13" height="13" fill="#dcebf1"/>',
               '<text x="38" y="1161" font-size="11">I/l bare stem</text>',
-              '<rect x="167" y="1150" width="13" height="13" fill="#f3dfc7"/>',
+              '<rect x="167" y="1150" width="13" height="13" fill="#e2e6ea" stroke="#596b78" stroke-width="1" stroke-dasharray="3 2"/>',
               '<text x="187" y="1161" font-size="11">S/s source disagreement</text>',
               '</g></svg>']
     assert y < 1140, y

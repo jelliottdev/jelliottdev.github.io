@@ -6,7 +6,7 @@ This is an **input audit**, not a proposed LP2 decryption. It supplies exact coo
 
 ## Locate the marks
 
-Grid rows begin at the first alphanumeric row on each page, excluding any runic lines. Columns run left to right from 1 to 8. The diagram maps the ten stems and, in tan, the separate `2S`/`2s` transcription disagreement. Select it for the complete SVG, and inspect the [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images before choosing a reading.
+Grid rows begin at the first alphanumeric row on each page, excluding any runic lines. Columns run left to right from 1 to 8. The diagram maps the ten stems and, with a dashed outline, the separate `2S`/`2s` transcription disagreement. Select it for the complete SVG, and inspect the [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images before choosing a reading.
 
 ![Ten bare-stem positions mapped across the three eight-column grids; one separate S/s disagreement is marked.](experiments/records/grid-stem-uncertainty/stem-map.svg)
 

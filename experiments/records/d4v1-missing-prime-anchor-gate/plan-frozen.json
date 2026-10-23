@@ -1,0 +1,44 @@
+{
+  "schema": "liberpedia-source-gate-plan-v1",
+  "frozen_before_target_anchor_counts": true,
+  "source": {
+    "repository": "https://github.com/d4v1-sudo/my_cicada_tools_cpp",
+    "revision": "6bba820aed72184837611a82c79c4587157080aa",
+    "function": "run_secrets_analysis() in src/utils.cpp",
+    "sha256": {
+      "src/utils.cpp": "ba41bd91810796fbb6c87ee238c17cf54bcb2baaa67af358332e4358fcc5a19d",
+      "src/secrets.cpp": "dda45c5ef756053a5b61e650a4d409a71b548077859072c4c034633456a85a86",
+      "src/core.cpp": "ff4d85b2928c9f5db88160a8dd65ec1c6a30e26488333c0c6afff4edb41d9634",
+      "src/pages.h": "465b18d271edea13c0a0ee0a1e68f396d1faf93962104cb0464126ed79a5b948",
+      "src/solutions.cpp": "8ea4357968c282ca4654a7bfd0c228348f51f9f438f739e022ceb4943d4de246"
+    },
+    "license": "No LICENSE/COPYING at pinned revision; link/hash original, do not vendor"
+  },
+  "related_source_plan_sha256": "d029269ab0f2f9bd34b2f36de391230524d054ecc2127e73f90da85ad2f049c9",
+  "provenance_checks": [
+    "Compare source page17..72 raw glyphs and separator order with site LP2-00..55, reporting rune parity and punctuation differences separately; do not silently normalize punctuation.",
+    "Check MISSING_PRIMES_2013 equals the archived telnet missing interval 73..1223, not CicadaOS prime_echo.",
+    "Seek a primary independently pinned witness for CUNEIFORM_STREAM two-character base60 values; absent a match, call it a source-defined key rather than a verified original clue."
+  ],
+  "trigger": {
+    "word_rule": "source ProcessedText.get_words(): maximal runs of indices<29, every other index separates",
+    "prime_rule": "exact source GP primes for each rune index",
+    "direct_hit": "sum is in source missing-prime set and (word length>1 or sum>120)",
+    "complement_hit": "3301−sum is in source missing-prime set, no length filter",
+    "launch_rule": "at least 3 consecutive hit words within the same source page; reset after any miss; only unsolved pages launch decoders"
+  },
+  "controls": {
+    "trigger_positive": "Synthetic three words with source GP-prime sums 73,79,83, separated by source hyphen token; must launch exactly once on a synthetic unsolved page.",
+    "trigger_negative": "Insert an ordinary nonhit word between the second and third marked words; must not launch.",
+    "key_positive": "Encrypt one documented solved reading with each exact source-derived repeating key and fixed Atbash overlay; original source decode must recover it. Record source unigram fitness and whether its >0.91 screen passes.",
+    "route_positive": "Invert each source column/diagonal/spiral route at at least two source widths with a documented solved reading; source route plus Atbash overlay must recover it. Record >0.90 screen.",
+    "gate_calibration": "Compare source solved-reading fitness, planted outputs, and matched within-page shuffled full route/key maxima; no negative manuscript claim if gate misses planted readings or often accepts nulls."
+  },
+  "target_execution_policy": "Do not score LP2 targets until source punctuation parity, key constants, trigger positives/negative, decoder and route plants, and fitness calibration are reported and reviewed. If source cuneiform has no primary witness, test only as a source-defined stream and state provenance limit. Do not treat repeated source-loop triggers as independent method attempts.",
+  "overlap": [
+    "historical-prime-and-ps-keys",
+    "dukotah-fixed-numeric-keys",
+    "lp2-row-column-routes",
+    "lp2-row-column-english"
+  ]
+}

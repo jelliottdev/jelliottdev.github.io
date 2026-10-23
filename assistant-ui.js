@@ -89,7 +89,11 @@ function renderIdeaChecker(query,version){
   const documents=()=>experimentDocuments;
   const cacheKey=()=>JSON.stringify([input.value.trim().replace(/\s+/g,' '),pages(),
     AssistantSearch.select(experimentDocuments,input.value.trim(),pages()).slice(0,2).map(r=>r.id)]);
-  const busy=value=>{submit.disabled=value||!recordsReady;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));};
+  const busy=value=>{
+    const restoreFocus=!value&&document.activeElement===cancel;
+    submit.disabled=value||!recordsReady;cancel.hidden=!value;answer.setAttribute('aria-busy',String(value));
+    if(restoreFocus&&submit.isConnected&&!submit.disabled)submit.focus({preventScroll:true});
+  };
   const reset=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);status.textContent=recordsReady?'':loadingRecords?'Loading research records. You can write your idea now.':'Research records unavailable. Retry loading to check your idea.';answer.replaceChildren();};
   function sourceExcerpt(s){
     if(s.kind==='experiment'){
@@ -166,7 +170,7 @@ function renderIdeaChecker(query,version){
     $('#idea-coverage').replaceChildren();$('#reported-attempts').replaceChildren();
   });
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();if(!submit.disabled)$('#experiment-form').requestSubmit();}});
-  cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
+  cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='Comparison stopped. Matching records remain available.';};
   $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
   async function loadRecords(){
     if(loadingRecords||!current())return;

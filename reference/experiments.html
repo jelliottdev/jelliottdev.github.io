@@ -4974,6 +4974,170 @@
       ]
     }
   ]
+}</pre></article><article id="d4v1-missing-prime-anchor-gate"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;d4v1-missing-prime-anchor-gate&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Missing-prime keys and routes: checking the score&quot;,
+  &quot;question&quot;: &quot;Do the pinned missing-prime anchor trigger and the resulting source score pass known-text and shuffled-text controls before applying them to unsolved pages?&quot;,
+  &quot;reader_question&quot;: &quot;Can the missing-prime and grid-key score distinguish a reading from shuffled text?&quot;,
+  &quot;summary&quot;: &quot;A source program launches two numeric keys and route searches after three consecutive missing-prime word sums. Its unigram score passes every one of 199 shuffled controls for both keys on a known reading, and route order cannot change that score.&quot;,
+  &quot;finding&quot;: &quot;The synthetic three-word anchor triggered once and a broken sequence did not. Both pinned keys and six routes recovered a planted known reading. Yet all 199 shuffled controls for each key exceeded the source score bar after trying 29 Atbash shifts; all 199 route shuffles also passed, and any route permutation leaves this unigram score unchanged. No unsolved-page anchor counts or decodes were run.&quot;,
+  &quot;limitations&quot;: &quot;One 157-rune known reading was used and it contributed to the source solved-page frequency target; these are in-sample operator controls, not a general power estimate. The original score bars are weak on this fixture, but the key and route hypotheses are not excluded. The source key spelling differs from its own page transcription at five already documented cells; source/site punctuation changes word boundaries on three LP2 pages.&quot;,
+  &quot;next_steps&quot;: &quot;Freeze an order-sensitive English screen and matched full-search controls, then separately report source-transcription anchor counts before running any candidate key or route search on unsolved pages.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;source audit&quot;,
+    &quot;missing primes&quot;,
+    &quot;cuneiform&quot;,
+    &quot;word anchors&quot;,
+    &quot;Vigenere&quot;,
+    &quot;transposition&quot;,
+    &quot;positive controls&quot;,
+    &quot;unigram score&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/d4v1-missing-prime-anchor-gate/fixture.json&quot;,
+      &quot;experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source secrets.cpp 256-pair stream and 180 missing primes; one 157-rune known direct reading from source Page 5. Synthetic three-word anchor and 199 shuffled conditional score controls; no unsolved LP2 target search.&quot;,
+    &quot;procedure&quot;: &quot;Verify source constants and five grid case differences; test three-word trigger, invert two key streams and six source route positions on a known reading; scan all 29 source Atbash shifts on 199 seeded shuffles for each key and use unigram invariance for routes.&quot;,
+    &quot;parameters&quot;: &quot;Missing-prime sums 73,79,83; keys of lengths 256 and 180; source strict score thresholds &gt;0.91 (keys) and &gt;0.90 (routes); route widths 3 and 7; 199 deterministic controls seeded 3301..3499.&quot;,
+    &quot;exclusions&quot;: &quot;No claim that an unsolved page contains an anchor, that either key/route decodes LP2, that other passages have the same control behavior, or that source letter-case ambiguities are resolved.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;pinned-source positive-control and score-gate audit&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Independent checker recalculates 398 key-control maxima, six route plants and invariant route score; source C++ fixture confirms original tokenizer, anchor and key transforms&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/d4v1-missing-prime-anchor-gate/run.py --check &amp;&amp; python experiments/records/d4v1-missing-prime-anchor-gate/check.py &amp;&amp; python experiments/records/d4v1-missing-prime-anchor-gate/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; all ordinary check inputs are included. Optional source-controls.cpp needs a pinned upstream C++ checkout and C++20 compiler.&quot;,
+    &quot;script&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/plan-frozen.json&quot;,
+        &quot;sha256&quot;: &quot;ed15be14c3a4b4673bddb18693185e2e90a25e21a485d2f721efe35e9ee68032&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/calibration-amendment.json&quot;,
+        &quot;sha256&quot;: &quot;55d65f17609df869f84656949624fc1a14aca309d07fe44badabe0fe740d1774&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/fixture.json&quot;,
+        &quot;sha256&quot;: &quot;866f95eb94e6b9eab54160f0956c1dd549d4c45aacabbfeb71b571a2047b61a8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/run.py&quot;,
+        &quot;sha256&quot;: &quot;6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/check.py&quot;,
+        &quot;sha256&quot;: &quot;23681c1bcce54370ce885b65518a60f2756f4206379e8f0ae803a2f30b034f45&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/plot.py&quot;,
+        &quot;sha256&quot;: &quot;a1a82931973dbe30def2847109d47a77b57fb89374cf024502f0ff1c5d6b36e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp&quot;,
+        &quot;sha256&quot;: &quot;4f52c1cbd84ee6eb9093e079a4d7d6064a4cb6c9eeba60430b70e2a7dbd61b2d&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/results.json&quot;,
+        &quot;sha256&quot;: &quot;e3712216e39feb3b5bbc9595462f0826267f7303d47344fb4385a29382c5d583&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg&quot;,
+        &quot;sha256&quot;: &quot;b333d8990511d460b4e66e02e82573ea56b4530947e60159e15cdc9e71b18de7&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg&quot;,
+      &quot;caption&quot;: &quot;Each source key exceeded its score threshold on all 199 shuffled controls; changing route order cannot change unigram fitness.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned original search and score rules&quot;,
+      &quot;url&quot;: &quot;https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned source key arrays&quot;,
+      &quot;url&quot;: &quot;https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/secrets.cpp&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived 2013 telnet-prime command transcript&quot;,
+      &quot;url&quot;: &quot;https://github.com/neuroretransmit/cicada/blob/ade9a02889ef8acbc8cde8edbfd0a785c369f4c3/2013/004-first-onion/README.md&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived manuscript and transcription sources&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/#/wiki/sources&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;historical-prime-and-ps-keys&quot;,
+    &quot;dukotah-fixed-numeric-keys&quot;,
+    &quot;grid-radix-reconciliation&quot;,
+    &quot;grid-stem-uncertainty&quot;,
+    &quot;lp2-row-column-english&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;The source’s score accepted all 199 shuffled controls for each key. Rearranging the runes cannot change this score, so it cannot select a route. A high score here does not establish a readable message.&quot;,
+  &quot;reader_limit&quot;: &quot;This checks the scoring rule on one known passage. It does not test the keys on unsolved pages or rule out the proposed keys and routes.&quot;,
+  &quot;article&quot;: &quot;# Missing-prime keys and routes: checking the score\n\n**Result.** A pinned C++ search looks for three consecutive words whose rune-prime sums point to the 2013 missing-prime list. Only then does it try two repeating keys and several routes. Its final screen asks whether a candidate has rune frequencies like solved pages. On one known 157-rune reading, **all 199 shuffled controls passed that screen for each key** after the source&#x27;s 29 Atbash shifts. Reordering runes cannot change this frequency score at all. These controls do not support treating a score above the source&#x27;s threshold as a recovered reading.\n\n![Both source keys pass all 199 shuffled controls; changing a route cannot change the unigram score.](experiments/records/d4v1-missing-prime-anchor-gate/control-screen.svg)\n\n| What we checked | What happened |\n| --- | --- |\n| Three consecutive synthetic words with prime sums 73, 79 and 83 | The source trigger fired once. Inserting one nonmatching word stopped it. |\n| The 256-pair key and the 180 missing-prime key | Both recovered a deliberately encrypted known reading. After shuffling the ciphertext, **199/199** controls for each key still exceeded the source&#x27;s strict 0.91 score threshold at some Atbash shift. |\n| Column, diagonal and inward-spiral routes at widths 3 and 7 | All six inverse-constructed examples recovered the reading. Every route preserves the same rune counts, so its score is unchanged for a fixed shift. All **199/199** shuffled route controls exceeded the source&#x27;s strict 0.90 threshold. |\n\nThe test uses **one known reading that contributed to the source&#x27;s solved-page frequency target**. These plants check the operator and the trigger; they do not estimate performance on other English passages. The shuffled texts are controls, not alternative proposed decipherments. We did **not** count anchor sequences on unsolved pages or run a manuscript decryption here. A later test needs a fixed reading-sensitive score and a full-search control before it can say whether these keys or routes help.\n\n## Source and transcription\n\nThe [pinned program](https://github.com/d4v1-sudo/my_cicada_tools_cpp/blob/6bba820aed72184837611a82c79c4587157080aa/src/utils.cpp) uses the 180 primes from 73 through 1223. Those match the archived **2013 telnet-command gap**, which is distinct from CicadaOS `prime_echo`. Its 256-pair source key is spelled exactly like the current LP2-49–51 transcription. The same program&#x27;s `pages.h` differs from its `secrets.cpp` at five letter-case cells. Those five disagreements and the still-uncertain glyphs are documented in [the grid transcription comparison](#/experiments/grid-radix-reconciliation) and [stem review](#/experiments/grid-stem-uncertainty). This check preserves the source&#x27;s `secrets.cpp` key without silently correcting it.\n\nThe source and current site agree on the rune order of all 56 mapped LP2 pages. Punctuation changes word boundaries on LP2-04, LP2-21 and LP2-41, so any future count of three-word anchors must name which transcription it uses. The exact-source version uses the pinned `pages.h` text. No target-page result is reported here.\n\n## Reproduce\n\nThe [frozen pretarget plan](experiments/records/d4v1-missing-prime-anchor-gate/plan-frozen.json), [control-calibration amendment](experiments/records/d4v1-missing-prime-anchor-gate/calibration-amendment.json), [source-derived fixture](experiments/records/d4v1-missing-prime-anchor-gate/fixture.json) and [all 199 control maxima](experiments/records/d4v1-missing-prime-anchor-gate/results.json) are included. Run `python experiments/records/d4v1-missing-prime-anchor-gate/run.py --check`, then `check.py` and `plot.py --check`. The independent checker recomputes both full shift searches and verifies six route plants. The optional [C++ fixture](experiments/records/d4v1-missing-prime-anchor-gate/source-controls.cpp) can be compiled against the pinned upstream source to confirm its tokenizer, trigger and key transforms; upstream code is linked by revision and hash rather than bundled.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/d4v1-missing-prime-anchor-gate/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;6d74290a04677f10bcf601dc0303ec6bc96f7dcfbfe6e420101695754acf0ced&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;transposition&quot;,
+      &quot;title&quot;: &quot;Transposition and permutations&quot;,
+      &quot;aliases&quot;: [
+        &quot;reverse&quot;,
+        &quot;columns&quot;,
+        &quot;permutation&quot;,
+        &quot;read backwards&quot;,
+        &quot;transposition&quot;,
+        &quot;anagram&quot;,
+        &quot;anagrams&quot;,
+        &quot;rearrange letters&quot;,
+        &quot;rearrange runes&quot;,
+        &quot;column permutation&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;sums&quot;,
+      &quot;title&quot;: &quot;Gematria and rune-sum mappings&quot;,
+      &quot;aliases&quot;: [
+        &quot;gematria&quot;,
+        &quot;word sums&quot;,
+        &quot;rune sums&quot;,
+        &quot;prime sums&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="d4v1-positional-totient-streams"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;d4v1-positional-totient-streams&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -28143,8 +28307,20 @@
     &quot;command&quot;: &quot;python experiments/records/grid-stem-uncertainty/run.py --check &amp;&amp; python experiments/records/grid-stem-uncertainty/check.py&quot;,
     &quot;environment&quot;: &quot;Python 3 standard library; no network or AI calls. Run from repository root or extracted experiment ZIP. Image interpretation requires human review.&quot;,
     &quot;script&quot;: &quot;experiments/records/grid-stem-uncertainty/run.py&quot;,
-    &quot;script_sha256&quot;: &quot;5d7a953a3ac7d44db3ce10134fa3e9cb53ae6ee3c014350820efc2222b79a5ee&quot;,
+    &quot;script_sha256&quot;: &quot;9c5a97d7bb6c2ce46c5e414444df75df6978972ce2497847c557331989c20d85&quot;,
     &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-50.json&quot;,
+        &quot;sha256&quot;: &quot;16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
       {
         &quot;path&quot;: &quot;experiments/records/grid-stem-uncertainty/plan.json&quot;,
         &quot;sha256&quot;: &quot;d14f04023961418e08e94afc79c2a66c217e47d5a4752c11147c3185dca7a3a4&quot;
@@ -28193,7 +28369,7 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/grid-stem-uncertainty/stem-map.svg&quot;,
-        &quot;sha256&quot;: &quot;b746e971dd49e2a79960a314157ca88d075dbfba916d51db02fa0ecfec823c34&quot;
+        &quot;sha256&quot;: &quot;d1f29e14fe25449b6187804d69f73569f555bc4aec6f5beb45138e28b33c5f78&quot;
       }
     ]
   },
@@ -28215,12 +28391,12 @@
   &quot;visuals&quot;: [
     {
       &quot;path&quot;: &quot;experiments/records/grid-stem-uncertainty/stem-map.svg&quot;,
-      &quot;caption&quot;: &quot;Ten I/l bare-stem cells across LP2-49–51, with the separate S/s disagreement marked in tan.&quot;
+      &quot;caption&quot;: &quot;Ten I/l bare-stem cells across LP2-49–51, with the separate S/s disagreement marked by a dashed outline.&quot;
     }
   ],
-  &quot;article&quot;: &quot;# The ten bare stems in the LP2-49–51 grids\n\n**Ten of the 256 grid entries contain a character shaped like a bare vertical stem.** The current wiki text writes that character as either uppercase `I` or lowercase `l`. The preserved page images show no dot or horizontal foot at these positions, so the shape alone does not settle the case. Six of the ten positions agree across the two preserved text transcriptions; agreement does not turn an indistinguishable shape into a verified character.\n\nThis is an **input audit**, not a proposed LP2 decryption. It supplies exact coordinates and a bounded sensitivity calculation for readers who convert the two-character entries into bytes. It does not change the published transcription silently.\n\n## Locate the marks\n\nGrid rows begin at the first alphanumeric row on each page, excluding any runic lines. Columns run left to right from 1 to 8. The diagram maps the ten stems and, in tan, the separate `2S`/`2s` transcription disagreement. Select it for the complete SVG, and inspect the [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images before choosing a reading.\n\n![Ten bare-stem positions mapped across the three eight-column grids; one separate S/s disagreement is marked.](experiments/records/grid-stem-uncertainty/stem-map.svg)\n\n| Page | Row, column | Seventh-onion text | Wiki text | If `I` | If `l` |\n| --- | --- | --- | --- | ---: | ---: |\n| LP2-49 | 1, 3 | `2l` | `2l` | 138 | 167 |\n| LP2-49 | 4, 2 | `3I` | `3I` | 198 | 227 |\n| LP2-49 | 6, 6 | `1L` | `1l` | 78 | 107 |\n| LP2-49 | 7, 3 | `0L` | `0l` | 18 | 47 |\n| LP2-50 | 2, 3 | `3I` | `3I` | 198 | 227 |\n| LP2-50 | 11, 6 | `0l` | `0I` | 18 | 47 |\n| LP2-50 | 12, 8 | `0I` | `0I` | 18 | 47 |\n| LP2-50 | 13, 7 | `2l` | `2l` | 138 | 167 |\n| LP2-51 | 2, 8 | `0l` | `0l` | 18 | 47 |\n| LP2-51 | 8, 7 | `3i` | `3I` | 198 | 227 |\n\nThe last two columns use the **conditional** digit order `0–9`, `A–Z`, `a–x` and the rule `byte = 60 × first digit + second digit`. They are not a claim that the manuscript intended base 60 or bytes. Changing `I` to `l` adds 29 to the value at every listed cell, but the number of changed bits depends on the first digit. The [full JSON report](experiments/records/grid-stem-uncertainty/results.json) keeps all coordinates, both values and the bit differences.\n\nThe `1L` and `0L` readings in the seventh-onion text would require an uppercase L with a foot; that foot is not visible in these image locations. The `3i` reading would require a dot; none is visible there. These observations constrain the historic transcriptions without deciding between `I` and `l`. At LP2-50 row 12, column 5, the distinct `2s`/`2S` disagreement is **not** a bare-stem case. In a close view, both preserved JPEG versions appear to show uppercase `S`; this remains a visual judgment for human review. The [five-source-difference guide](#/wiki/seventh-onion-transcriptions?section=grid) retains both text readings.\n\n## What changes if the ten cases remain open?\n\nStarting from the wiki&#x27;s 256 tokens, the script changes **only** these ten second characters. Each may be `I` or `l`, giving `2^10 = 1,024` complete inventories. The other 246 entries, including `2S`, remain fixed. This is a sensitivity envelope, not a claim that all 1,024 combinations are equally plausible. A consistent font or a future source could constrain several together.\n\n| Inventory measure | Current wiki text | Range across 1,024 variants |\n| --- | ---: | ---: |\n| Distinct two-character tokens | 161 | 160–163 |\n| Set bits in the 256 conditional bytes | 1,017 | 1,006–1,026 |\n| Even-valued conditional bytes | 134 | 129–139 |\n\nThe widely cited **161 distinct tokens** is therefore a property of one transcription, not an image-settled invariant. A later analysis that depends on exact token equality, a checksum, a bit image, or a route through these cells should specify its readings and rerun under relevant alternatives. This audit does not test any route or candidate plaintext.\n\n## Reproduce and review\n\nFrom the repository root, use Python 3&#x27;s standard library. If using the experiment ZIP, also extract [original-images.zip](downloads/original-images.zip) into the same folder before running the scripts; the experiment ZIP names and hashes its required page JPEGs but keeps those large images in the shared download.\n\n```text\npython experiments/records/grid-stem-uncertainty/run.py --check\npython experiments/records/grid-stem-uncertainty/check.py\n```\n\nThe first script verifies SHA-256 hashes for the wiki grid export, archived text and both preserved JPEG copies for each page, then enumerates every one of the 1,024 variants. The second rebuilds the 256 entries from the structured page records and independently checks every saved variant and metric. These checks verify the arithmetic and provenance; a person must still inspect the image shapes. The image files are preserved at [wiki LP2-49](images/lp2-49.jpg), [LP2-50](images/lp2-50.jpg), [LP2-51](images/lp2-51.jpg), and the [seventh-onion source collection](#/wiki/2014-seventh-onion?section=download).\n\nThe enumeration does **not** cover `0`/`O` or all conceivable glyph ambiguities, changes in numeral base, or the separate `2S`/`2s` choice. It also does not establish that independently changing the ten cases is typographically natural. Its purpose is to prevent a downstream result from being reported as robust merely because two text sources agree at a visually ambiguous stem.\n&quot;,
+  &quot;article&quot;: &quot;# The ten bare stems in the LP2-49–51 grids\n\n**Ten of the 256 grid entries contain a character shaped like a bare vertical stem.** The current wiki text writes that character as either uppercase `I` or lowercase `l`. The preserved page images show no dot or horizontal foot at these positions, so the shape alone does not settle the case. Six of the ten positions agree across the two preserved text transcriptions; agreement does not turn an indistinguishable shape into a verified character.\n\nThis is an **input audit**, not a proposed LP2 decryption. It supplies exact coordinates and a bounded sensitivity calculation for readers who convert the two-character entries into bytes. It does not change the published transcription silently.\n\n## Locate the marks\n\nGrid rows begin at the first alphanumeric row on each page, excluding any runic lines. Columns run left to right from 1 to 8. The diagram maps the ten stems and, with a dashed outline, the separate `2S`/`2s` transcription disagreement. Select it for the complete SVG, and inspect the [LP2-49](#/reader/lp2-49), [LP2-50](#/reader/lp2-50), and [LP2-51](#/reader/lp2-51) images before choosing a reading.\n\n![Ten bare-stem positions mapped across the three eight-column grids; one separate S/s disagreement is marked.](experiments/records/grid-stem-uncertainty/stem-map.svg)\n\n| Page | Row, column | Seventh-onion text | Wiki text | If `I` | If `l` |\n| --- | --- | --- | --- | ---: | ---: |\n| LP2-49 | 1, 3 | `2l` | `2l` | 138 | 167 |\n| LP2-49 | 4, 2 | `3I` | `3I` | 198 | 227 |\n| LP2-49 | 6, 6 | `1L` | `1l` | 78 | 107 |\n| LP2-49 | 7, 3 | `0L` | `0l` | 18 | 47 |\n| LP2-50 | 2, 3 | `3I` | `3I` | 198 | 227 |\n| LP2-50 | 11, 6 | `0l` | `0I` | 18 | 47 |\n| LP2-50 | 12, 8 | `0I` | `0I` | 18 | 47 |\n| LP2-50 | 13, 7 | `2l` | `2l` | 138 | 167 |\n| LP2-51 | 2, 8 | `0l` | `0l` | 18 | 47 |\n| LP2-51 | 8, 7 | `3i` | `3I` | 198 | 227 |\n\nThe last two columns use the **conditional** digit order `0–9`, `A–Z`, `a–x` and the rule `byte = 60 × first digit + second digit`. They are not a claim that the manuscript intended base 60 or bytes. Changing `I` to `l` adds 29 to the value at every listed cell, but the number of changed bits depends on the first digit. The [full JSON report](experiments/records/grid-stem-uncertainty/results.json) keeps all coordinates, both values and the bit differences.\n\nThe `1L` and `0L` readings in the seventh-onion text would require an uppercase L with a foot; that foot is not visible in these image locations. The `3i` reading would require a dot; none is visible there. These observations constrain the historic transcriptions without deciding between `I` and `l`. At LP2-50 row 12, column 5, the distinct `2s`/`2S` disagreement is **not** a bare-stem case. In a close view, both preserved JPEG versions appear to show uppercase `S`; this remains a visual judgment for human review. The [five-source-difference guide](#/wiki/seventh-onion-transcriptions?section=grid) retains both text readings.\n\n## What changes if the ten cases remain open?\n\nStarting from the wiki&#x27;s 256 tokens, the script changes **only** these ten second characters. Each may be `I` or `l`, giving `2^10 = 1,024` complete inventories. The other 246 entries, including `2S`, remain fixed. This is a sensitivity envelope, not a claim that all 1,024 combinations are equally plausible. A consistent font or a future source could constrain several together.\n\n| Inventory measure | Current wiki text | Range across 1,024 variants |\n| --- | ---: | ---: |\n| Distinct two-character tokens | 161 | 160–163 |\n| Set bits in the 256 conditional bytes | 1,017 | 1,006–1,026 |\n| Even-valued conditional bytes | 134 | 129–139 |\n\nThe widely cited **161 distinct tokens** is therefore a property of one transcription, not an image-settled invariant. A later analysis that depends on exact token equality, a checksum, a bit image, or a route through these cells should specify its readings and rerun under relevant alternatives. This audit does not test any route or candidate plaintext.\n\n## Reproduce and review\n\nFrom the repository root, use Python 3&#x27;s standard library. If using the experiment ZIP, also extract [original-images.zip](downloads/original-images.zip) into the same folder before running the scripts; the experiment ZIP names and hashes its required page JPEGs but keeps those large images in the shared download.\n\n```text\npython experiments/records/grid-stem-uncertainty/run.py --check\npython experiments/records/grid-stem-uncertainty/check.py\n```\n\nThe first script verifies SHA-256 hashes for the wiki grid export, archived text and both preserved JPEG copies for each page, then enumerates every one of the 1,024 variants. The second rebuilds the 256 entries from the structured page records and independently checks every saved variant and metric. These checks verify the arithmetic and provenance; a person must still inspect the image shapes. The image files are preserved at [wiki LP2-49](images/lp2-49.jpg), [LP2-50](images/lp2-50.jpg), [LP2-51](images/lp2-51.jpg), and the [seventh-onion source collection](#/wiki/2014-seventh-onion?section=download).\n\nThe enumeration does **not** cover `0`/`O` or all conceivable glyph ambiguities, changes in numeral base, or the separate `2S`/`2s` choice. It also does not establish that independently changing the ten cases is typographically natural. Its purpose is to prevent a downstream result from being reported as robust merely because two text sources agree at a visually ambiguous stem.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/grid-stem-uncertainty/article.md&quot;,
-  &quot;script_sha256&quot;: &quot;5d7a953a3ac7d44db3ce10134fa3e9cb53ae6ee3c014350820efc2222b79a5ee&quot;,
+  &quot;script_sha256&quot;: &quot;9c5a97d7bb6c2ce46c5e414444df75df6978972ce2497847c557331989c20d85&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;audit&quot;,
     &quot;label&quot;: &quot;Source or input audit&quot;,
@@ -63870,6 +64046,451 @@
         &quot;reset&quot;,
         &quot;pause key&quot;,
         &quot;skip key&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="relikd-interrupt-pattern-database"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;relikd-interrupt-pattern-database&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Mirror and alternating-group interrupt scores&quot;,
+  &quot;question&quot;: &quot;Do the committed LiberPrayground mirror and modulo interrupt scores reproduce, and can their structural scores identify a known period?&quot;,
+  &quot;reader_question&quot;: &quot;Did the saved mirror and alternating-group scores uncover a message?&quot;,
+  &quot;summary&quot;: &quot;All 7,407 committed candidate scores reproduce to displayed precision. On a planted known reading, the true period leads 22 of 24 source-rule checks, but these scores neither discover skip positions nor decode LP2.&quot;,
+  &quot;finding&quot;: &quot;The four mirror and twenty modulo source database files contain 7,407 candidate rows across nine sections; independent source-class replay agrees within 0.000005 for every saved score. A 600-rune known-text period-5 control leads in 22/24 arms. In a post-target diagnostic, 19/24 planted scores exceed all 49 matched whole-period-search shuffles.&quot;,
+  &quot;limitations&quot;: &quot;The committed rows do not supply an independently verified historic execution log, and we did not rerun the 2^20 skip-mask selection that produced the saved maxima. The known-text controls are given the correct F positions and test structural period detection, not complete-message decryption. Two modulo-b normal-frequency controls miss the true period. The 49 shuffles were added after LP2 score inspection and are not a selection-adjusted LP2 null. No cipher family is excluded or identified.&quot;,
+  &quot;next_steps&quot;: &quot;Before interpreting an interrupt/key proposal as a reading, demonstrate complete known-message recovery with the skip positions inferred rather than supplied, and compare the entire selection procedure with matched controls.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;interruptions&quot;,
+    &quot;mirrored key&quot;,
+    &quot;alternating groups&quot;,
+    &quot;source method&quot;,
+    &quot;control power&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/relikd-interrupt-pattern-database/plan.json&quot;,
+      &quot;experiments/records/relikd-interrupt-pattern-database/shuffle-plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Nine exact pinned source section rune streams were checked against 56 site page JSON files. Forty-four pages enter at least one saved score completely and seven enter partially; four text pages plus empty LP2-50 are verified-only. F or EA stops are taken from committed db_indices and the source&#x27;s first-20-interrupt cutoff.&quot;,
+    &quot;procedure&quot;: &quot;Parse and independently recount every committed mirror/modulo database row with exact source group and skip-clock rules. Apply each of 24 source scoring arms to a planted known-text period-5 construction, then run a labeled post-target 49-replicate known-control shuffle diagnostic. Compute exact actual page contribution from scored rune positions.&quot;,
+    &quot;parameters&quot;: &quot;Mirror a/b × high/norm (4 files), modulo-a and modulo-b for moduli 2/3 and all subgroups × high/norm (10 files each); 7,407 saved rows, 24 known-period controls, candidate periods 2–8, 49 post-target shuffles per control.&quot;,
+    &quot;exclusions&quot;: &quot;No fresh search over all interruption masks; no LP2 selection-adjusted p-value, candidate key recovery, plaintext language test, OEIS database search or uncommitted source branch.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;source database score audit and known-period control&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pinned Git-object score replay, separate source-class checker, exact source/site page mapping and 320-pixel visual review&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python -X utf8 experiments/records/relikd-interrupt-pattern-database/control.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check &amp;&amp; python -X utf8 experiments/records/relikd-interrupt-pattern-database/target.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check &amp;&amp; python -X utf8 experiments/records/relikd-interrupt-pattern-database/shuffle.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check &amp;&amp; python -X utf8 experiments/records/relikd-interrupt-pattern-database/coverage.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND --check &amp;&amp; python -X utf8 experiments/records/relikd-interrupt-pattern-database/check.py --source-root PATH_TO_PINNED_LIBERPRAYGROUND &amp;&amp; python experiments/records/relikd-interrupt-pattern-database/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library plus a separate LiberPrayground Git checkout pinned at 719380ebee0523ad7f2fbf389c6f960d51bea5a4. Scripts read and hash-check Git blobs even when the local checkout is sparse. The unlicensed source is not bundled.&quot;,
+    &quot;script&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;56f47596ba2f1678caf05bad18daef28fc77e74c5fc903ce8fd95c333ba3b753&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/plan.json&quot;,
+        &quot;sha256&quot;: &quot;358f2a67f5c9833dd78b116a6008e292c6e588babb6c85665c067bb851023fde&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/shuffle-plan.json&quot;,
+        &quot;sha256&quot;: &quot;da2c4eda730357a2f5510e8501edcf2897a51d67c1549fae9d98f698807a349b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/control.py&quot;,
+        &quot;sha256&quot;: &quot;a77b2f536583bd526e68595f54dde1883252e8ee84d2448d493960bbadd38a34&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/target.py&quot;,
+        &quot;sha256&quot;: &quot;9c0fafc887bcd3d10bbdb7abdd197702fd486a4e144a981fbba9554f0b674dd9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/shuffle.py&quot;,
+        &quot;sha256&quot;: &quot;86ee047b692dba5f564a470fdf374f88073acf9bc61d05503b0e6d52a68e1a32&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/coverage.py&quot;,
+        &quot;sha256&quot;: &quot;4f5ba124274cb70e333b1747d8cd95b71f099b536aa39ebd07e84709312e225a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/check.py&quot;,
+        &quot;sha256&quot;: &quot;56f47596ba2f1678caf05bad18daef28fc77e74c5fc903ce8fd95c333ba3b753&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/plot.py&quot;,
+        &quot;sha256&quot;: &quot;e0901034b2648041d2df53269868b4fe95c6c85b6eb263b908bc3ee1634fddec&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/article.md&quot;,
+        &quot;sha256&quot;: &quot;66ca36a6a1d09980a7e92a3df226529401f3943a3056abb4e6e6850f292dfe23&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-00.json&quot;,
+        &quot;sha256&quot;: &quot;858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-01.json&quot;,
+        &quot;sha256&quot;: &quot;5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-02.json&quot;,
+        &quot;sha256&quot;: &quot;53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-03.json&quot;,
+        &quot;sha256&quot;: &quot;49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-04.json&quot;,
+        &quot;sha256&quot;: &quot;023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-05.json&quot;,
+        &quot;sha256&quot;: &quot;a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-06.json&quot;,
+        &quot;sha256&quot;: &quot;77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-07.json&quot;,
+        &quot;sha256&quot;: &quot;ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-08.json&quot;,
+        &quot;sha256&quot;: &quot;9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-09.json&quot;,
+        &quot;sha256&quot;: &quot;6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-10.json&quot;,
+        &quot;sha256&quot;: &quot;f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-11.json&quot;,
+        &quot;sha256&quot;: &quot;01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-12.json&quot;,
+        &quot;sha256&quot;: &quot;b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-13.json&quot;,
+        &quot;sha256&quot;: &quot;019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-14.json&quot;,
+        &quot;sha256&quot;: &quot;9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-15.json&quot;,
+        &quot;sha256&quot;: &quot;18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-16.json&quot;,
+        &quot;sha256&quot;: &quot;17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-17.json&quot;,
+        &quot;sha256&quot;: &quot;59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-18.json&quot;,
+        &quot;sha256&quot;: &quot;4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-19.json&quot;,
+        &quot;sha256&quot;: &quot;8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-20.json&quot;,
+        &quot;sha256&quot;: &quot;b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-21.json&quot;,
+        &quot;sha256&quot;: &quot;a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-22.json&quot;,
+        &quot;sha256&quot;: &quot;e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-23.json&quot;,
+        &quot;sha256&quot;: &quot;095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-24.json&quot;,
+        &quot;sha256&quot;: &quot;140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-25.json&quot;,
+        &quot;sha256&quot;: &quot;d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-26.json&quot;,
+        &quot;sha256&quot;: &quot;1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-27.json&quot;,
+        &quot;sha256&quot;: &quot;a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-28.json&quot;,
+        &quot;sha256&quot;: &quot;b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-29.json&quot;,
+        &quot;sha256&quot;: &quot;5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-30.json&quot;,
+        &quot;sha256&quot;: &quot;16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-31.json&quot;,
+        &quot;sha256&quot;: &quot;aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-32.json&quot;,
+        &quot;sha256&quot;: &quot;4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-33.json&quot;,
+        &quot;sha256&quot;: &quot;16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-34.json&quot;,
+        &quot;sha256&quot;: &quot;a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-35.json&quot;,
+        &quot;sha256&quot;: &quot;a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-36.json&quot;,
+        &quot;sha256&quot;: &quot;0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-37.json&quot;,
+        &quot;sha256&quot;: &quot;8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-38.json&quot;,
+        &quot;sha256&quot;: &quot;96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-39.json&quot;,
+        &quot;sha256&quot;: &quot;7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-40.json&quot;,
+        &quot;sha256&quot;: &quot;1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-41.json&quot;,
+        &quot;sha256&quot;: &quot;f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-42.json&quot;,
+        &quot;sha256&quot;: &quot;c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-43.json&quot;,
+        &quot;sha256&quot;: &quot;1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-44.json&quot;,
+        &quot;sha256&quot;: &quot;fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-45.json&quot;,
+        &quot;sha256&quot;: &quot;c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-46.json&quot;,
+        &quot;sha256&quot;: &quot;dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-47.json&quot;,
+        &quot;sha256&quot;: &quot;0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-48.json&quot;,
+        &quot;sha256&quot;: &quot;4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-49.json&quot;,
+        &quot;sha256&quot;: &quot;b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-50.json&quot;,
+        &quot;sha256&quot;: &quot;16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-51.json&quot;,
+        &quot;sha256&quot;: &quot;b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-52.json&quot;,
+        &quot;sha256&quot;: &quot;bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-53.json&quot;,
+        &quot;sha256&quot;: &quot;699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-54.json&quot;,
+        &quot;sha256&quot;: &quot;7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/pages/lp2-55.json&quot;,
+        &quot;sha256&quot;: &quot;0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/control-results.json&quot;,
+        &quot;sha256&quot;: &quot;edf023c0638f69c926f4d68933ce8095f2cfe6fd23420d377b41db9e367b5c7c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/results.json&quot;,
+        &quot;sha256&quot;: &quot;a05afe7daeb2eb94228dda84942cf1a86915cfdf05c3b6aed1981acfd699ecb1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/shuffle-results.json&quot;,
+        &quot;sha256&quot;: &quot;98c10e5d1d78cd4d53555328d57b9927292b7f00603b569378550be3470307b4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/coverage.json&quot;,
+        &quot;sha256&quot;: &quot;9cf3de362f4968c9e5e1b368ec7b059310f8b77004820fb35a6ca211b94bb461&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/control.svg&quot;,
+        &quot;sha256&quot;: &quot;5637355355c65c8313c10aca3dae9ea3e61117dc0e25e960093a0117afa59d71&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/control.svg&quot;,
+      &quot;caption&quot;: &quot;The planted known period leads 22 of 24 source-rule score comparisons; interrupt positions were supplied.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned source database generation and group rules&quot;,
+      &quot;url&quot;: &quot;https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/InterruptDB.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned source score definitions&quot;,
+      &quot;url&quot;: &quot;https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/Probability.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned database interpretation&quot;,
+      &quot;url&quot;: &quot;https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/db/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;relikd-rotated-key-source-gate&quot;,
+    &quot;relikd-interrupt-db-keyfit&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;Every saved score can be reproduced, but a high rune-frequency score is not a decrypted message. The known-period control is imperfect, and the original skip-mask selection was not repeated on controls.&quot;,
+  &quot;reader_limit&quot;: &quot;The score archive covers 44 whole pages and parts of seven more. It cannot tell whether the selected high scores reflect a cipher, chance after a large search, or an untested rule.&quot;,
+  &quot;article&quot;: &quot;# Mirror and alternating-group scores in the saved interrupt database\n\nThe [pinned LiberPrayground source](https://github.com/relikd/LiberPrayground/blob/719380ebee0523ad7f2fbf389c6f960d51bea5a4/LP/InterruptDB.py) stores candidate ways to omit `ᚠ` or `ᛠ` runes and then group what remains. One group rule mirrors a repeating key position; two others alternate positions in pairs or threes, differing in whether the chosen runes are removed before or after that split. **A high score means the groups have striking rune frequencies. It does not reveal a key or words.**\n\n![Known-period detection: mirror 4/4, remove then split 10/10, split then remove 8/10.](experiments/records/relikd-interrupt-pattern-database/control.svg)\n\nOn a 600-rune known reading encrypted with a five-position pattern, the correct period scored above periods 2–8 in **22 of 24** source-rule controls. The two misses both use the “split, then remove” rule with the source&#x27;s normal-frequency score. A separately labeled **post-result** check shuffled the same planted ciphertext values, kept the inserted `ᚠ` positions fixed and repeated the period search 49 times. The planted score beat every shuffled maximum in 19 of 24 arms; five had at least one shuffled result as high. These are checks of the score&#x27;s ability to find a *known* pattern. We supplied the interrupt positions, so they do not show that the method can discover interruptions in LP2.\n\nWe then recounted **all 7,407 rows** in the 24 committed mirror/modulo database files. Every score agrees with the pinned source calculation to the displayed five-decimal rounding (absolute difference at most 0.000005). This verifies the saved arithmetic and the source-to-site rune streams, not how the database&#x27;s best skip sets were originally selected. Across its nine sections, **44 complete LP2 pages and parts of seven more** contribute at least one rune to a saved score; five other pages were verified against the source but entered no saved score. The [exact page coverage](experiments/records/relikd-interrupt-pattern-database/coverage.json) and [all row results](experiments/records/relikd-interrupt-pattern-database/results.json) are available for inspection.\n\n**No reading follows from the saved high scores.** The source selected over many skip sets and periods, and we did not repeat that expensive selection on shuffled LP2 pages. Comparing its best saved score with a fixed-rule random baseline would make chance patterns look more convincing. The positive controls establish only structural period detection under a supplied skip mask; they are not a complete-message decryption test. Two source-rule controls failed even that narrower gate. The saved files are evidence of candidate data, without an independently recovered execution log proving every historical search ran as documented.\n\nThe [base plan](experiments/records/relikd-interrupt-pattern-database/plan.json) fixes all 24 source files and the row recount. The [shuffle addendum](experiments/records/relikd-interrupt-pattern-database/shuffle-plan.json) was frozen after the LP2 row scores were inspected and must be read as a control-power diagnostic, not prior statistical confirmation. To reproduce, obtain the pinned Git revision `719380ebee0523ad7f2fbf389c6f960d51bea5a4` separately. These scripts hash-check its Git blobs and do not redistribute the source:\n\n```text\npython -X utf8 experiments/records/relikd-interrupt-pattern-database/control.py --source-root SOURCE --check\npython -X utf8 experiments/records/relikd-interrupt-pattern-database/target.py --source-root SOURCE --check\npython -X utf8 experiments/records/relikd-interrupt-pattern-database/shuffle.py --source-root SOURCE --check\npython -X utf8 experiments/records/relikd-interrupt-pattern-database/coverage.py --source-root SOURCE --check\npython -X utf8 experiments/records/relikd-interrupt-pattern-database/check.py --source-root SOURCE\npython experiments/records/relikd-interrupt-pattern-database/plot.py --check\n```\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/relikd-interrupt-pattern-database/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;56f47596ba2f1678caf05bad18daef28fc77e74c5fc903ce8fd95c333ba3b753&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;interruptions&quot;,
+      &quot;title&quot;: &quot;Keystream interruptions and reset rules&quot;,
+      &quot;aliases&quot;: [
+        &quot;interrupters&quot;,
+        &quot;reset&quot;,
+        &quot;pause key&quot;,
+        &quot;skip key&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;periodicity&quot;,
+      &quot;title&quot;: &quot;Period and key-length diagnostics&quot;,
+      &quot;aliases&quot;: [
+        &quot;periodic IoC&quot;,
+        &quot;key length&quot;,
+        &quot;periodicity&quot;,
+        &quot;key length detection&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
       ]
     }
   ]

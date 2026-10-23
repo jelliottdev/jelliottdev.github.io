@@ -1,0 +1,9 @@
+{
+  "schema": "relikd-interrupt-pattern-known-period-shuffle-v1",
+  "timing": "Post-target control addendum prompted by review. The original plan and saved LP2 scores remain unchanged. This control cannot provide a selection-adjusted LP2 p-value.",
+  "source_plan_sha256": "358f2a67f5c9833dd78b116a6008e292c6e588babb6c85665c067bb851023fde",
+  "seed": 33017331,
+  "replicates": 49,
+  "rule": "For each of the 24 already frozen known-text source arms, shuffle its complete ciphertext rune values with one deterministic permutation per replicate while preserving the inserted F positions. Repeat the same source scores for all candidate periods 2 through 8 and record the largest score in each shuffled replicate. Compare the pre-existing correct-period score to those 49 maxima. The exact same permutation seed sequence is shared across arms of equal ciphertext length, preserving dependence across variants.",
+  "interpretation": "This is a power check for the planted periodic signal given a known interrupt mask. It does not repeat the source's 2^20 skip-mask selection on shuffled LP2 text, and 0 of 49 would only be a count, not a zero probability or a cipher identification."
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "liberpedia-source-helper-measurement-audit-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_script": "liber-primus/analysis/round30/E1-render-reopen/measure_bars.py",
+  "source_script_sha256": "aca2d5ff3405d2bbf8464b40a6d47aaba828634b871b5fddbb2e6146d09514a5",
+  "input_images": [
+    {
+      "path": "images/lp2-49.jpg",
+      "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+    },
+    {
+      "path": "images/lp2-50.jpg",
+      "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+    },
+    {
+      "path": "images/lp2-51.jpg",
+      "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+    }
+  ],
+  "adaptation": "Only the hard-coded image path was redirected to the corresponding hosted original. Thresholds, bands, token grouping and character merging were unchanged.",
+  "source_helper_stdout": "idx 25 '3I': 2 chars: w41 h69 top1787 bot1856 | w8 h67 top1788 bot1855\nidx175 '0I': 2 chars: w49 h69 top2599 bot2668 | w8 h67 top2600 bot2667\nidx182 '2l': 2 chars: w43 h68 top2778 bot2846 | w8 h74 top2772 bot2846\nidx199 '0l': 1 chars: w65 h75 top803 bot878\nidx215 '1O': 2 chars: w19 h67 top1168 bot1235 | w70 h69 top1167 bot1236\nidx237 '0W': 1 chars: w148 h73 top1702 bot1775\nidx 24 '1n': 2 chars: w19 h67 top1788 bot1855 | w33 h43 top1812 bot1855\nidx172 '2S': 2 chars: w43 h68 top2599 bot2667 | w42 h69 top2599 bot2668\n",
+  "observations": [
+    "The helper measures the second components of indices25 and175 at height67, and index182 at height74.",
+    "Its character grouping returns one component rather than two for printed pairs at indices199 and237. The reported pair-level height alone does not isolate the right-hand character in those cases.",
+    "The selected known n control at index24 has height43; selected S at index172 has height69."
+  ],
+  "limits": [
+    "Only measure_bars.py was rerun; this is not a replay of every E1 crop/font/adjudication script.",
+    "A glyph-height measurement is not by itself an independently established I/l character identity or a globally identified font.",
+    "No base60 bytes or transcription were changed; existing ten-stem sensitivity bounds remain applicable until further adjudication."
+  ]
+}
