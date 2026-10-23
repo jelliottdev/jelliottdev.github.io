@@ -1,0 +1,99 @@
+{
+  "schema": "relikd-autokey-interrupt-db-plan-v1",
+  "timing": "Retrospective saved-row audit. Source files and README were read before the plan; first lines of two saved databases were inspected. The plan freezes all eight filenames, recurrence interpretations, controls and complete-row recount before further saved-row inspection. This is not a preregistered historical search.",
+  "source_revision": "719380ebee0523ad7f2fbf389c6f960d51bea5a4",
+  "source_license": "No license found at pinned revision; original scripts and corpus are external Git prerequisites, not bundled.",
+  "source_sha256": {
+    "LP/InterruptDB.py": "970743bd8ffe68ca041ed0f0377025a7d9d03ced9828aaed5d5fc31196e4de2c",
+    "LP/InterruptIndices.py": "2467553a859b4c8caca45f309ef6df1cc85449e086773a81fab554e6625f3618",
+    "LP/InterruptSearch.py": "21e3db2ec77a1d57076ac66059d11310a555cacc3932a022bd0beb954abfa1d1",
+    "LP/Probability.py": "aab78f3cf6730a368a9ce5e9935df877ee5a0326c171dfb759f050ee7b9aa3d7",
+    "LP/RuneText.py": "eeb01b05b20bdf95b74eac0f03fe0f1b1a26f962058061e4ea2fad9cf4a090e4",
+    "LP/Alphabet.py": "81049ea7a9d68798e90cf7f9df10805ff2ee9bafaa0e3c54d1b5d1ed0e12c465",
+    "LP/NGrams.py": "2ffbf1e5c2ff44d6c48f7e283b01ad324956965ff89630637f14e45fac583b8a",
+    "db/db_indices.txt": "a2776f78f05099a3e431a5315b23eb6872c42120506a6c89c4aff025d367f824",
+    "data/p-1gram.txt": "b2dfd9628b9babcef2ab2970cf39422302b48cd4d456ff68d2722a355e74eadf",
+    "_solved.txt": "ad183dcffc77e0d6eaca41c16b2653e3cfbc52e106dde4e798abad1bdf51eea6",
+    "pages/p0-2.txt": "c54b019ed29305e29c3fdafa792106e3249d27998f94473a2652e7c7bb787521",
+    "pages/p3-7.txt": "dad38fdac7a46e15ca19f38762225755bf3ddd553c83141e3bdfd9354f243486",
+    "pages/p8-14.txt": "c010b87c379263fffc0e75eb6a170ac1dd090cf56a579db9f64c4b866f6eccc5",
+    "pages/p15-22.txt": "cbb16452f0c09ea894aaf14015dc980f6a6e17ac6a653cbda9ab1226f0b027cc",
+    "pages/p23-26.txt": "43bc3a968d536ddd9642947437d20ec9be716e77ea488c80ee56c9e048d2a094",
+    "pages/p27-32.txt": "a3b2365a8172455f004ff1352f40298af6944d47106e5cf1f9418436861907ff",
+    "pages/p33-39.txt": "00c7defc87a99774ada0c3ec9c1d4eeb656f1f2c2eac3c5bb4e6ea517f0bbb25",
+    "pages/p40-53.txt": "282ce106e92eb69a11fdf38382670ebd3b73acf777e88be9e7142768edd5a73b",
+    "pages/p54-55.txt": "f4a2f9dde276a0ffa6c4f6e6319f37066e55a6e170722cc9b4f4b37d5b36aeba",
+    "db/db_high_autokey_+i.txt": "ba040b415e299ad15664848ac23759c6e675e40ae6edf34e8b4405ce56f02e36",
+    "db/db_high_autokey_+i_inv.txt": "bb8351928c32e767594de498dc867dbb24150857a9b5b60509dda81c81c71a24",
+    "db/db_high_autokey_-i.txt": "9450ca5448a2ee6a9ace16efca8faadfe8907daa100a0dc3bbd29891217c34ee",
+    "db/db_high_autokey_-i_inv.txt": "d7bb78332648cca7db8601ab36adb7abc70805f2df671753fc76ee7cffbadebc",
+    "db/db_high_autokey_+p.txt": "23a97940f9860f0b2a995ce8a5ce11a8bbf4f88a4aef3557c3b50f18aaad0b4f",
+    "db/db_high_autokey_+p_inv.txt": "800197c0e5e9c62f9362e5e409d098c42f84d49df1ebac366a8c55b715fa9f88",
+    "db/db_high_autokey_-p.txt": "b5f78131a14438775a3b8e86c3a8b22bf3d8f7ebb0959c1b8c534f63ff55a9de",
+    "db/db_high_autokey_-p_inv.txt": "f476884709ce86e1593ef283df02304efc9d3ebb537ce036bf1fe58cf2558d7c"
+  },
+  "sections": [
+    "p0-2",
+    "p3-7",
+    "p8-14",
+    "p15-22",
+    "p23-26",
+    "p27-32",
+    "p33-39",
+    "p40-53",
+    "p54-55"
+  ],
+  "files": [
+    "db/db_high_autokey_+i.txt",
+    "db/db_high_autokey_+i_inv.txt",
+    "db/db_high_autokey_-i.txt",
+    "db/db_high_autokey_-i_inv.txt",
+    "db/db_high_autokey_+p.txt",
+    "db/db_high_autokey_+p_inv.txt",
+    "db/db_high_autokey_-p.txt",
+    "db/db_high_autokey_-p_inv.txt"
+  ],
+  "source_execution": "The pinned __main__ calls only db_high_autokey_-p with no inversion. Seven other committed DB files have no active call in this revision; the variant interpretation comes from the adjacent source comment and filename, then is checked against every saved score.",
+  "transform": "For each candidate, first take the first 16 occurrences of source index 0; inverted files instead locate index 28 in the original, then map every rune index c to 28-c. Cut at the 17th occurrence if present, remove saved selected occurrences, and decode p_i=(y_i +/- f(p_(i-1))) mod29; f is GP prime or index, primer 0..28. The keylen=0 row is scored with primer1 by source find_best_solution; all other rows use their keylen field as primer. Score normalized 29xIoC of the entire decoded prefix (source IC_w_keylen with keylen1).",
+  "variant_bounds": {
+    "functions": [
+      "prime",
+      "index"
+    ],
+    "signs": [
+      "plus",
+      "minus"
+    ],
+    "input_inversion": [
+      false,
+      true
+    ],
+    "interrupt_rune": "source index0, or source index28 before inversion",
+    "max_interrupt_occurrences": 16,
+    "primer_fields": "0..28; field0 evaluates as primer1"
+  },
+  "known_control": {
+    "source": "_solved.txt",
+    "runes": 96,
+    "primer": 7,
+    "injected_interrupt_raw_positions": [
+      19,
+      43,
+      71
+    ],
+    "criteria": "Source-shaped removal of three inserted interrupt runes, complete 96-rune known text recovery, source-class parity for score and interruption position mapping. A separate fixed-skip primer ranking is descriptive, not required for recovery."
+  },
+  "target_criterion": "Recount every noncomment saved row in eight files to within source's five-decimal score print precision; distinguish called -p from seven uncalled saved variants. Report maxima as descriptive and never infer a fresh 2^16 search was run.",
+  "overlap": [
+    "gp-prime-plaintext-feedback unskipped prime plaintext recurrence",
+    "feedback-opening-census index-valued feedback",
+    "relikd-interrupt-pattern-database saved-row skip mechanics"
+  ],
+  "excluded": [
+    "fresh skip-mask search",
+    "OEIS corpus",
+    "alternate score functions",
+    "every possible autokey",
+    "language-scored decryption verdict"
+  ]
+}

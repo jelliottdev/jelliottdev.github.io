@@ -52,4 +52,25 @@ const loaded=imageState(true,2400);assert.equal(loaded.error.hidden,true);assert
 const stale=imageState();stale.image.isConnected=false;timers.at(-1).fn();stale.image.onerror();stale.image.onload();
 assert.equal(stale.loading.hidden,true);assert.equal(stale.error.hidden,true);assert.equal(stale.sheet.hidden,false);assert.equal(stale.zoom.disabled,false);
 assert(fs.readFileSync(path.join(root,'access.js'),'utf8').includes('class="reader-image-error" role="alert" hidden'));
-console.log('PASS: source-page text-version fallback preserves preferences; responsive comparison and image loading/failure/recovery preserve visible focus without stealing it. DOM stubs do not verify layout.');
+// Delayed restore belongs to the exact reader instance, hash and representation.
+const frames=[],scrolls=[];
+context.requestAnimationFrame=fn=>frames.push(fn);context.location={hash:'#/reader/lp2-02?view=image'};
+context.window={scrollY:10,scrollTo:value=>scrolls.push(value)};
+function scheduleRestore(){
+ const current={isConnected:true,getBoundingClientRect:()=>({top:90})};
+ elements.set('.reader-workspace',current);context.location.hash='#/reader/lp2-02?view=image';
+ vm.runInContext("readerPositionPage='lp2-02';readerView='image';readerPositions={image:500,text:20,compare:null}",context);
+ context.restoreReaderPosition('lp2-02');assert.equal(frames.length,1);
+ frames.shift()();assert.equal(frames.length,1);return current;
+}
+function finishRestore(){const before=scrolls.length;frames.shift()();return scrolls.length-before;}
+scheduleRestore();assert.equal(finishRestore(),1);assert.equal(scrolls.at(-1).top,600);
+scheduleRestore();vm.runInContext("readerView='text'",context);assert.equal(finishRestore(),0,'Image restore cannot override a newly selected Text position');
+context.location.hash='#/reader/lp2-02?view=text';context.restoreReaderPosition('lp2-02');frames.shift()();
+assert.equal(finishRestore(),1);assert.equal(scrolls.at(-1).top,120,'Text restores its own independent saved position');
+scheduleRestore();elements.set('.reader-workspace',{isConnected:true});assert.equal(finishRestore(),0,'Same-page rerender invalidates the old instance');
+const detached=scheduleRestore();detached.isConnected=false;assert.equal(finishRestore(),0);
+scheduleRestore();context.location.hash='#/reader/lp2-03';vm.runInContext("readerPositionPage='lp2-03'",context);assert.equal(finishRestore(),0,'Navigation invalidates pending restoration');
+scheduleRestore();context.location.hash='#/reader/lp2-02?view=text';assert.equal(finishRestore(),0,'A changed hash invalidates restoration even before view state catches up');
+const missing=scheduleRestore();frames.length=0;missing.isConnected=false;context.restoreReaderPosition('lp2-02');assert.equal(frames.length,0,'Detached readers do not schedule work');
+console.log('PASS: text-version preference fallback, comparison/image focus, and delayed reader restoration guarded by view, hash, page and exact connected instance. DOM stubs do not verify layout.');

@@ -80,10 +80,10 @@ container.querySelector=()=>({dataset:{researchState:'#/research?q=prime'}});ass
 console.log('PASS: directory query/type/group/outcome intersections, exact page scope, dates/missing dates, stable sorting, URL round trips, pagination, group traversal, escaping and remembered return positions.');
 
 // Execute the actual checker with small DOM stubs. This validates behavior, not layout.
-const elements=new Map();let html='',lastURL='',workerBody=null;
+const elements=new Map(),document={activeElement:null};let html='',lastURL='',workerBody=null;
 function element(id){if(!elements.has(id))elements.set(id,{value:'',innerHTML:'',textContent:'',isConnected:true,hidden:false,disabled:false,
-  addEventListener(type,fn){this[type]=fn},setAttribute(){},replaceChildren(){this.innerHTML=''},focus(){this.focused=true}});return elements.get(id);}
-const context={URLSearchParams,URL,AbortController,setTimeout,clearTimeout,console,ResearchIndex:Index,WikiSearch,
+  addEventListener(type,fn){this[type]=fn},setAttribute(){},replaceChildren(){this.innerHTML=''},focus(){this.focused=true;document.activeElement=this}});return elements.get(id);}
+const context={URLSearchParams,URL,AbortController,setTimeout,clearTimeout,console,document,ResearchIndex:Index,WikiSearch,
   AssistantSearch:Search,AssistantMarkdown:require('../assistant-markdown.js'),IdeaCoverage:require('../idea-coverage.js'),
   location:{hash:'#/experiments'},history:{replaceState(a,b,url){lastURL=url}},db:{pages:[{id:'lp2-15'},{id:'lp2-31'}]},
   head:()=>'',footer:()=>'',esc:value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),

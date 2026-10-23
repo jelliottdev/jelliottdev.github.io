@@ -1,0 +1,43 @@
+"""Small, mobile-readable account of the actual positive control."""
+import argparse
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+
+def build():
+    controls = json.loads((HERE / "control-results.json").read_text(encoding="utf8"))["rows"]
+    assert len(controls) == 8 and all(x["all_known_runes_recovered"] for x in controls)
+    first = sum(x["fixed_skip_primer_rank"] == 1 for x in controls)
+    assert first == 6
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 226" role="img" aria-labelledby="t d" font-family="Arial, sans-serif">
+<title id="t">Known-text control for eight saved autokey variants</title>
+<desc id="d">A 96-rune known reading is encrypted with primer seven. Three known interrupt runes are inserted. After those known positions are removed, all eight rules recover all 96 runes. The correct primer has the highest fixed-skip coincidence score in six of eight rules.</desc>
+<rect width="320" height="226" fill="#f4f6f7"/>
+<text x="16" y="26" fill="#202d36" font-size="17" font-weight="700">Known-text control</text>
+<text x="16" y="52" fill="#394c58" font-size="13">96 known runes + primer 7</text>
+<path d="M25 61 V74" stroke="#567283" stroke-width="2"/>
+<path d="M21 70 L25 75 L29 70" fill="none" stroke="#567283" stroke-width="2"/>
+<text x="16" y="94" fill="#394c58" font-size="13">Encrypt; insert 3 known interruptions</text>
+<path d="M25 104 V117" stroke="#567283" stroke-width="2"/>
+<path d="M21 113 L25 118 L29 113" fill="none" stroke="#567283" stroke-width="2"/>
+<text x="16" y="137" fill="#394c58" font-size="13">Remove those 3; decode each rule</text>
+<rect x="12" y="151" width="296" height="58" rx="4" fill="#e5eff3" stroke="#bfd3dd"/>
+<text x="22" y="176" fill="#20536e" font-size="18" font-weight="700">8 of 8</text>
+<text x="92" y="175" fill="#253e4b" font-size="13">recover all 96 runes</text>
+<text x="22" y="197" fill="#394c58" font-size="12">Primer 7 ranks first in {first} of 8</text>
+</svg>'''
+
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("--check", action="store_true")
+    args = p.parse_args()
+    output = build()
+    path = HERE / "control.svg"
+    if args.check:
+        assert path.read_text(encoding="utf8") == output
+    else:
+        path.write_text(output, encoding="utf8", newline="\n")
+    print("figure", len(output), "characters")

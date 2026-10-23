@@ -11,11 +11,11 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 76,
+    "source_entries_reviewed": 81,
     "reproduced_subclaim": 3,
-    "partial": 43,
+    "partial": 44,
     "unsupported_source_verdict": 20,
-    "blocked_exact_replay": 3,
+    "blocked_exact_replay": 7,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
     "source_entries_with_published_record_link": 55,
@@ -2127,6 +2127,100 @@
         "The remaining E1 scripts and font/reference argument require independent review; no definitive six-character reading or original-font identification is adopted."
       ],
       "audit_note": "Source-helper arithmetic only, not independent character adjudication or a decryption experiment.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-G1",
+      "source_claim": "8 seeds x 2,000 draws for 19 named bash/glibc/coreutils generator models; source validates the models but does not execute the later full LP2 seed search.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round19/G1/validate.py",
+        "liber-primus/analysis/round19/G1/validation.json",
+        "liber-primus/analysis/round19/G1/keystream.py",
+        "liber-primus/analysis/round19/G1/RESULTS.md",
+        "research/source-intake/dukotah-generator-five-gates-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "Era/reference-binary parity is prerequisite. Pinned result reports 19/19 model validation, but original bash 4.2 binary and era host are not included in the repository.",
+        "Link public-prng-seed-sweep only as related, not exact coverage. Keep G1 source validation source-reported until reference vectors and host are independently rerun; full seed search unrun."
+      ],
+      "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-G2",
+      "source_claim": "Perl 5.14 drand48 model and reduction parity for 13 seeds x 2,000 draws, plus a 9,984-decode timing pilot; source did not perform a full LP2 seed sweep.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round19/G2/validate.py",
+        "liber-primus/analysis/round19/G2/validation.json",
+        "liber-primus/analysis/round19/G2/gen_perl.py",
+        "liber-primus/analysis/round19/G2/RESULTS.md",
+        "research/source-intake/dukotah-generator-five-gates-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "Pinned model PASS relies on Perl reference and C drand48 vectors; the current Windows host has gcc but no perl executable, so era Perl parity is not independently reproduced.",
+        "Record model-validation/pilot as source-reported; do not convert 9,984 timing decodes into a negative LP2 search or infer the broad family excluded."
+      ],
+      "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R19-G2-CORRECTION",
+      "source_claim": "Source prior correction that Perl 5.14 was never swept end-to-end; compare the pinned G2 run ledger with the earlier priority claim.",
+      "status": "partial",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round19/G2/RESULTS.md",
+        "liber-primus/analysis/round19/G2/ledger.json",
+        "research/source-intake/dukotah-generator-five-gates-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "Document comparison is finite and locally inspectable; this is a correction to G2, not an independent cipher experiment.",
+        "Attach to R19-G2 as the same method-history correction; preserve full Perl seed/domain search as unrun."
+      ],
+      "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "G4-TEX-RNG",
+      "source_claim": "Four TeX PRNG families / 15,808 source-reference output elements; 10,000-decode timing pilot, no adjudicated LP2 key search.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round19/G4/gen_tex.py",
+        "liber-primus/analysis/round19/G4/validation.json",
+        "liber-primus/analysis/round19/G4/control.py",
+        "liber-primus/analysis/round19/G4/READY.md",
+        "research/source-intake/dukotah-generator-five-gates-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "Source generator byte-parity receipts are committed. Faithful manuscript scoring uses I2 models/panel.npz, absent from pinned tree and not exactly rebuildable because one Welsh input hash is unrecovered.",
+        "Keep generator parity and timing pilot separate from a negative LP2 search; require exact I2 panel before any faithful T1a target screen."
+      ],
+      "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
+      "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "R20-SG3-PY27-RANDOM29",
+      "source_claim": "Time-boxed exact Python-2.7 init_by_array([w]) random29 screen; source reports 2,458,000 words, 230 promoted, zero hits, or 0.05723% of 2^32.",
+      "status": "blocked-exact-replay",
+      "record_links": [],
+      "source_evidence": [
+        "liber-primus/analysis/round20/S-G3/poscontrol.py",
+        "liber-primus/analysis/round20/S-G3/sweep.py",
+        "liber-primus/analysis/round20/S-G3/out_poscontrol.json",
+        "liber-primus/analysis/round20/S-G3/out_sweep.json",
+        "liber-primus/analysis/round20/S-G3/sweep.jsonl",
+        "research/source-intake/dukotah-generator-five-gates-2026-10-23.json"
+      ],
+      "unresolved_parts": [
+        "Source plant imports I2 adjudicate and nine-register panel.npz. Exact panel absent and its Welsh builder input unrecovered, so neither plant nor target source score can be rerun without changing the instrument.",
+        "Link the two related records as narrower/different scope only. Preserve source report as reported, not independently replayed; 99.94% of word space unexamined."
+      ],
+      "audit_note": "Pinned source files and execution prerequisites reviewed. No new generator control or LP2 target was executed by this review; existing related records are not exact replay evidence.",
       "whole_entry_coverage_verified": false
     }
   ],

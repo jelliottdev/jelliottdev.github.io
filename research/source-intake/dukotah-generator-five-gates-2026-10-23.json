@@ -1,0 +1,168 @@
+{
+  "schema": "internal-five-entry-execution-gates-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "scope": "Read-only source/control feasibility and conservative reconciliation proposals. No manuscript target decode or generator parity is newly claimed by this receipt.",
+  "shared_blocker": "G4 and S-G3 depend on exact I2 panel.npz. See research/dependencies/i2-panel-2026-10-23/report.md; Welsh training file expected 524561 bytes SHA256 4b3fd9261e284a8aa653d2d84d5766aa67ab8f0f161f6102981cb0c0bbb1e237.",
+  "entries": [
+    {
+      "source_id": "R19-G1",
+      "finite_source_branch": "8 seeds x 2,000 draws for 19 named bash/glibc/coreutils generator models; source validates the models but does not execute the later full LP2 seed search.",
+      "gate": "Era/reference-binary parity is prerequisite. Pinned result reports 19/19 model validation, but original bash 4.2 binary and era host are not included in the repository.",
+      "existing_scope": "public-prng-seed-sweep is a smaller, different seven-stream/1,877-seed LP2 test; no exact 19-model G1 validation linked.",
+      "reconciliation_proposal": "Link public-prng-seed-sweep only as related, not exact coverage. Keep G1 source validation source-reported until reference vectors and host are independently rerun; full seed search unrun.",
+      "source_files": [
+        {
+          "path": "liber-primus/analysis/round19/G1/validate.py",
+          "git_object": "cd00e77fc4f3d93e336beca33785cb9274ef0092",
+          "bytes": 18040,
+          "sha256": "eaf635422ac49c284863293eeac5b18df20188e9cfcd4a0c0bf75bcaf6c59c29"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G1/validation.json",
+          "git_object": "6ad3d8388681bf4c67f38a50afad81f97593bded",
+          "bytes": 35479,
+          "sha256": "636b4fad6450f7fb5a323cecd65f7a5a376468c430a43d12964fe28edd5566bf"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G1/keystream.py",
+          "git_object": "df7a8158ddb5889ba90ee5ebc984c5898cfb3cd7",
+          "bytes": 6633,
+          "sha256": "fdb95a91de1ca90c8b5ff6683cf9c2ee6aff60fe9bfb332e6849d5203c0913f1"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G1/RESULTS.md",
+          "git_object": "c5a2cc3d5ca9a4eda161b2294ec8afd5b9824cad",
+          "bytes": 21265,
+          "sha256": "04bb1397781ff86710f536e84652939531f3f730023cef264548391ccf3b70f5"
+        }
+      ]
+    },
+    {
+      "source_id": "R19-G2",
+      "finite_source_branch": "Perl 5.14 drand48 model and reduction parity for 13 seeds x 2,000 draws, plus a 9,984-decode timing pilot; source did not perform a full LP2 seed sweep.",
+      "gate": "Pinned model PASS relies on Perl reference and C drand48 vectors; the current Windows host has gcc but no perl executable, so era Perl parity is not independently reproduced.",
+      "existing_scope": "R26-derived-generator opening tests are a different fixed-crib screen; no full G2 source search published.",
+      "reconciliation_proposal": "Record model-validation/pilot as source-reported; do not convert 9,984 timing decodes into a negative LP2 search or infer the broad family excluded.",
+      "source_files": [
+        {
+          "path": "liber-primus/analysis/round19/G2/validate.py",
+          "git_object": "f9a94eaec163b14f9d12d191dc7333647d8dae89",
+          "bytes": 10702,
+          "sha256": "8549fe668532f9aa83ec941dea9038c72f3fa154cee47906506cf0d32f1049c6"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G2/validation.json",
+          "git_object": "ba2569d653aa1618141f80ead128e2a0fe03b18c",
+          "bytes": 69746,
+          "sha256": "05b573edfc543c7ee12e1b000530919ec2b4bbfcad285a2528ddac7e9ec2330e"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G2/gen_perl.py",
+          "git_object": "413896972d0024aae20fd83d07c7f471cb37c823",
+          "bytes": 18403,
+          "sha256": "42ed5db2577b4f6db564192634ab8930e2d4a8db1eda3fa09e77ba1f2b4919ee"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G2/RESULTS.md",
+          "git_object": "d73a78a403ca7355527dd380083afaaf8df25a03",
+          "bytes": 24286,
+          "sha256": "dbe35c9532b0f1d13103bbcf32206bf3fd11ca5c100f729db0ef241229581503"
+        }
+      ]
+    },
+    {
+      "source_id": "R19-G2-CORRECTION",
+      "finite_source_branch": "Source prior correction that Perl 5.14 was never swept end-to-end; compare the pinned G2 run ledger with the earlier priority claim.",
+      "gate": "Document comparison is finite and locally inspectable; this is a correction to G2, not an independent cipher experiment.",
+      "existing_scope": "No exact public source correction link; related G2 generator records do not assert full Perl search.",
+      "reconciliation_proposal": "Attach to R19-G2 as the same method-history correction; preserve full Perl seed/domain search as unrun.",
+      "source_files": [
+        {
+          "path": "liber-primus/analysis/round19/G2/RESULTS.md",
+          "git_object": "d73a78a403ca7355527dd380083afaaf8df25a03",
+          "bytes": 24286,
+          "sha256": "dbe35c9532b0f1d13103bbcf32206bf3fd11ca5c100f729db0ef241229581503"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G2/ledger.json",
+          "git_object": "fd69def93a5a5fb9d843bbeaaac744ab8de86d5f",
+          "bytes": 12192,
+          "sha256": "b647ef32cc5facd4bac178edc43098dc44903499c29d4f8f41f4f413701b59b4"
+        }
+      ]
+    },
+    {
+      "source_id": "G4-TEX-RNG",
+      "finite_source_branch": "Four TeX PRNG families / 15,808 source-reference output elements; 10,000-decode timing pilot, no adjudicated LP2 key search.",
+      "gate": "Source generator byte-parity receipts are committed. Faithful manuscript scoring uses I2 models/panel.npz, absent from pinned tree and not exactly rebuildable because one Welsh input hash is unrecovered.",
+      "existing_scope": "No source-exact G4 generator validation or search record linked.",
+      "reconciliation_proposal": "Keep generator parity and timing pilot separate from a negative LP2 search; require exact I2 panel before any faithful T1a target screen.",
+      "source_files": [
+        {
+          "path": "liber-primus/analysis/round19/G4/gen_tex.py",
+          "git_object": "b3a3d10984b6b2a4a29d92f6d823303ecb608d40",
+          "bytes": 22332,
+          "sha256": "4dc8c14bfd14f6c3e6ba637e23de72439a1cb5324404094a93691646878d0796"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G4/validation.json",
+          "git_object": "bd3041d538ea50fedbab6fe7577eb447145fc892",
+          "bytes": 5998,
+          "sha256": "bb523c254aece0c39025405aba5265d09f211fe407000ec9fda52d4222cbd109"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G4/control.py",
+          "git_object": "1615a625f182efb7a54697314df44eb587e2844a",
+          "bytes": 9555,
+          "sha256": "9f06b227dba10606ccf227b03af3a38c817b44180973bada2cd4620fa2d31164"
+        },
+        {
+          "path": "liber-primus/analysis/round19/G4/READY.md",
+          "git_object": "4f7d087dd7937a77a790406c4868fd16edd7db75",
+          "bytes": 12724,
+          "sha256": "df3ae363c727e8ed90cb90dfb52334d0d257b2f956a42341cc84a7f5183118d5"
+        }
+      ]
+    },
+    {
+      "source_id": "R20-SG3-PY27-RANDOM29",
+      "finite_source_branch": "Time-boxed exact Python-2.7 init_by_array([w]) random29 screen; source reports 2,458,000 words, 230 promoted, zero hits, or 0.05723% of 2^32.",
+      "gate": "Source plant imports I2 adjudicate and nine-register panel.npz. Exact panel absent and its Welsh builder input unrecovered, so neither plant nor target source score can be rerun without changing the instrument.",
+      "existing_scope": "py27-prior-front-opening-cribs tests 45,975 priority words under fixed cribs, and py27-reducer-sweep-source-audit reconciles a different saved reducer sweep; neither replays S-G3.",
+      "reconciliation_proposal": "Link the two related records as narrower/different scope only. Preserve source report as reported, not independently replayed; 99.94% of word space unexamined.",
+      "source_files": [
+        {
+          "path": "liber-primus/analysis/round20/S-G3/poscontrol.py",
+          "git_object": "02c0715fecce0a2cdc10238970b90fd2118ee6dc",
+          "bytes": 4195,
+          "sha256": "64040f620a59f5a1817cd55e9317571ee51ff6d1d3b0dabdcb15f4c4a51a7acc"
+        },
+        {
+          "path": "liber-primus/analysis/round20/S-G3/sweep.py",
+          "git_object": "44d34d26ab57b39aaef605a926731d89403eb876",
+          "bytes": 7935,
+          "sha256": "aa0ac3530c577e323eb04bb9e138cea0a018ce13e9a344a32ede970ce4a62ae9"
+        },
+        {
+          "path": "liber-primus/analysis/round20/S-G3/out_poscontrol.json",
+          "git_object": "7f1003872a35e3b7a7beb57ea89a29864f4e1792",
+          "bytes": 662,
+          "sha256": "316cd2e4667ba890ffb6148d08e6a5163410a02ed694d698d612ac6a61ee8c02"
+        },
+        {
+          "path": "liber-primus/analysis/round20/S-G3/out_sweep.json",
+          "git_object": "6a004e6eb2a78d2e7311dc768d9410bf12ac13a2",
+          "bytes": 3682,
+          "sha256": "8032bcb691798dd7937874bfcc06bab5dc991743f6ead6ed90395332a45d977b"
+        },
+        {
+          "path": "liber-primus/analysis/round20/S-G3/sweep.jsonl",
+          "git_object": "7f2f883b1fac41ca5f25f1ba4ce9383b5dc0a914",
+          "bytes": 33621,
+          "sha256": "3adfaae80a8cb01a6ee91fd74d5b000d5b8ba1ad04bbaa504240f44caa0644b8"
+        }
+      ]
+    }
+  ]
+}

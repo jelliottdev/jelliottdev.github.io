@@ -8,11 +8,11 @@ function saveReaderPositions(){
 }
 function restoreReaderPosition(id){
  if(readerPositionPage!==id||!location.hash.startsWith(`#/reader/${id}`))return;
- const offset=readerPositions[readerView];
- if(!Number.isFinite(offset))return;
+ const view=readerView,hash=location.hash,workspace=document.querySelector('.reader-workspace');
+ const offset=readerPositions[view];
+ if(!Number.isFinite(offset)||!workspace?.isConnected)return;
  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-  const workspace=document.querySelector('.reader-workspace');
-  if(!workspace||readerPositionPage!==id)return;
+  if(!workspace.isConnected||document.querySelector('.reader-workspace')!==workspace||readerPositionPage!==id||readerView!==view||location.hash!==hash)return;
   window.scrollTo({top:Math.max(0,workspace.getBoundingClientRect().top+window.scrollY+offset),behavior:'instant'});
  }));
 }
