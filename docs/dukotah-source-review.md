@@ -2,7 +2,7 @@
 
 Source reviewed at commit `f08b20b632d91209ddbaa747e8e2f23df0c78ba1`, not a moving branch. The complete Git tree lists 4,388 entries; the central ledger contains 172 entries. This was a targeted source/code review, not execution of the repository's experiments or an audit of every file. Downloaded-source SHA-256 hashes are recorded in `dukotah-source-manifest.json`.
 
-The later [red-initial source audit](../research/dukotah-red-initial-audit-2026-10-22.md) is a narrow independent check of the repository's Round 22 illustration extractor. It reproduces all 58 red-pixel totals and identifies two false drop-cap classifications; the resulting sequence tests remain to be rerun on corrected features.
+The later [red-initial source audit](../research/dukotah-red-initial-audit-2026-10-22.md) is a narrow independent check of the repository's Round 22 illustration extractor. It reproduces all 58 red-pixel totals and identifies two false drop-cap classifications. A [corrected page-presence order test](../experiments/records/red-initial-presence-order/article.md) now checks spacing on the 13-page set; individual rune identities and large-initial centroids remain untested.
 
 ## Highest-value additions
 

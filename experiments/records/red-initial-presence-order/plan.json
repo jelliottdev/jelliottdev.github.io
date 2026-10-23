@@ -1,0 +1,29 @@
+{
+  "question": "Does the corrected placement of pages with large red initials show unusual spacing under a uniform 13-of-58 page-placement control?",
+  "classification": "Exploratory follow-up to a source feature-extraction error. The page list and separation threshold were inspected before this plan; p-values describe the declared comparison only.",
+  "inputs": [
+    {
+      "path": "research/red-initials-audit.csv",
+      "sha256": "ec6df822d6840e7ce5c81e736f16307dfff3ad6662eeebf5192e17635ae352b1"
+    },
+    {
+      "path": "scripts/audit_red_initials.py",
+      "sha256": "324bd169caaf513a3886a744775ee674015157c6e52503a933d171f2998f18cc"
+    }
+  ],
+  "population": "LP2 pages 00 through 57, in printed release order; binary presence on a page if at least one red component has 10000 or more full-resolution-equivalent pixels at half-resolution sampling and four-connectivity.",
+  "comparison": "Uniform random 13-page subsets of the 58 positions, sampled without replacement; 100000 trials from Python random.Random(3301). The source's 15-page total-red list is a descriptive comparator, not another null.",
+  "statistics": [
+    "Internal-gap population variance; report both lower and upper empirical tails. Low variance does not distinguish periodic spacing from a contiguous block.",
+    "Span from first to last selected page, lower tail for page clustering.",
+    "Longest run of consecutive selected pages, upper tail for local clustering.",
+    "zlib level-9 compressed byte length of the 58 presence bits, right padded to 64 bits, lower tail; report ties and whether this test has any discrimination."
+  ],
+  "significance_reporting": "Plus-one Monte Carlo estimates (tail hits + 1)/(100000 + 1). Report all tails and the minimum Bonferroni-adjusted tail probability across the five declared directions; do not call a null result proof against an encoded message.",
+  "controls": [
+    "Thirteen approximately equally spaced positions including endpoints must show low internal-gap variance.",
+    "Thirteen consecutive positions must show a short span and a long run; the variance test alone may also respond and must not be called a cluster detector.",
+    "The original 15-page source list and corrected 13-page list must reproduce the sets in the image-audit table."
+  ],
+  "exclusions": "Rune identities, red centroid positions, multiple initials on one page, page artwork, arbitrary decoders, nonuniform author placement, and any claim that a message has or has not been hidden."
+}

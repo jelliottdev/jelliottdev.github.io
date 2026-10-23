@@ -22032,6 +22032,187 @@
     &quot;label&quot;: &quot;Source or input audit&quot;,
     &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
   }
+}</pre></article><article id="red-initial-presence-order"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;red-initial-presence-order&quot;,
+  &quot;title&quot;: &quot;LP2 red initials: corrected page-order test&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the pages bearing large red initials have unusual spacing compared with a uniform 13-of-58 page placement?&quot;,
+  &quot;reader_question&quot;: &quot;Once pages with ordinary red text are removed, is the pattern of pages with large red initials unusually spaced?&quot;,
+  &quot;summary&quot;: &quot;The corrected 13-page list has ordinary spacing under four specified measures; one compressed-bit measure has almost no resolving power at this length.&quot;,
+  &quot;tags&quot;: [
+    &quot;red initials&quot;,
+    &quot;drop caps&quot;,
+    &quot;illuminated runes&quot;,
+    &quot;LP2-07&quot;,
+    &quot;LP2-53&quot;,
+    &quot;page order&quot;,
+    &quot;page spacing&quot;,
+    &quot;image classification&quot;,
+    &quot;source replay&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;visual-marker-order&quot;,
+    &quot;title&quot;: &quot;Order of visual page markers&quot;,
+    &quot;question&quot;: &quot;Does a precisely identified visual marker occur on pages in an unusual order?&quot;,
+    &quot;baseline&quot;: &quot;red-initial-presence-order&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Large-red-initial page presence; uniform placement null&quot;,
+    &quot;changes&quot;: []
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;,
+      &quot;lp2-56&quot;,
+      &quot;lp2-57&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;research/red-initials-audit.csv&quot;
+    ],
+    &quot;representation&quot;: &quot;Binary page presence from the archived JPEG image audit: at least one red component of 10000 full-resolution-equivalent pixels, measured with four-connectivity after half-resolution sampling. The original JPEG SHA-256 values are recorded per row in the audit CSV.&quot;,
+    &quot;procedure&quot;: &quot;Compare 13 corrected page positions with uniform 13-page subsets of 58; test internal-gap variance in both directions and packed-bit compression with 100000 seeded samples; count span and adjacent-run tails exactly; run evenly spaced and consecutive planted controls.&quot;,
+    &quot;parameters&quot;: &quot;Pages 00–57; 13 selected; random.Random(3301) with 100000 subsets; zlib level 9; plus-one Monte Carlo tails; five tail directions with Bonferroni correction.&quot;,
+    &quot;exclusions&quot;: &quot;Initial-rune identities, multiple initials on one page, red centroids, nonuniform authorship or section-placement models, alternate image segmentation, arbitrary encodings and any complete decryption rule.&quot;
+  },
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;finding&quot;: &quot;No declared spacing measure is unusual for a uniform 13-of-58 subset. The internal-gap variance is 12.85 (upper-tail estimate 0.328); the longest run is two (exact upper-tail 0.968); the span is 57 (exact lower-tail 1). The zlib score is 16 bytes, matched by 99977 of 100000 random subsets. These are narrow page-order results, not a proof against hidden information.&quot;,
+  &quot;limitations&quot;: &quot;Exploratory after source misclassification was noticed. Uniform page placement is only a reference, not an authorship model. The presence bit discards the two second initials and the locations of later initials. Compression has almost no discrimination here; a spaced control also uses 16 bytes. None of these statistics tests a general code.&quot;,
+  &quot;next_steps&quot;: &quot;Annotate each large initial and its within-page position before rerunning identity and centroid analyses; test new placement models only with fixed rules and matching controls.&quot;,
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/red-initial-presence-order/run.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3.12 standard library for page-order analysis and independent checker. To regenerate the image-audit CSV, download original-images.zip and install Pillow 11.3.0, NumPy 2.5.4 and opencv-python-headless 5.0.0.93. No network or hosted AI is used during replay.&quot;,
+    &quot;script&quot;: &quot;experiments/records/red-initial-presence-order/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;3ee7f4163a8ec46d7f49d6c24419243d0d3827299b7a5c2cc1c297772fe11d6b&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;research/red-initials-audit.csv&quot;,
+        &quot;sha256&quot;: &quot;ec6df822d6840e7ce5c81e736f16307dfff3ad6662eeebf5192e17635ae352b1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;scripts/audit_red_initials.py&quot;,
+        &quot;sha256&quot;: &quot;324bd169caaf513a3886a744775ee674015157c6e52503a933d171f2998f18cc&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/plan.json&quot;,
+        &quot;sha256&quot;: &quot;caa11265eb439099dac9612d71468050acc6fb19c63f4b919bd3bfbb06bd6048&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/check.py&quot;,
+        &quot;sha256&quot;: &quot;8250b5ffcad56e5e3cf7951fa03ae261f73a52ae0fef06c93850dcc39d43a6ad&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/plot.py&quot;,
+        &quot;sha256&quot;: &quot;bae6c37534ec8cbefbd70ce4ae4f73aa71cc7db8b4ed8c5d522eeb90ad951b45&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/results.json&quot;,
+        &quot;sha256&quot;: &quot;22666744992dd174431afd0d536b87a26783194d87191386f6d42eead4dbe282&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/check.json&quot;,
+        &quot;sha256&quot;: &quot;9f8c97d7bd141805c0d67ef8e69b58063f4a37e7242ba8dc4e29a1e540606426&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/page-order.svg&quot;,
+        &quot;sha256&quot;: &quot;6d7f048aca74f9c7c2227cbd11dc0cb588f288576653d3c0079a330f394c52c1&quot;
+      }
+    ]
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Image-derived list cross-checked against the source; exact span/adjacency counts and a second independent Monte Carlo stream&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-22&quot;,
+    &quot;kind&quot;: &quot;computational&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Source Round 22 illustration experiment at pinned revision&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/D-illustration-dropcap/RESULTS.md&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Original LP2-07 image&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/images/lp2-07.jpg&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Original LP2-53 image&quot;,
+      &quot;url&quot;: &quot;https://jelliottdev.github.io/images/lp2-53.jpg&quot;
+    }
+  ],
+  &quot;related&quot;: [],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/red-initial-presence-order/page-order.svg&quot;,
+      &quot;caption&quot;: &quot;Fifty-eight page positions: the published total-red rule, the corrected large-initial set, and two planted controls. LP2-07 and LP2-53 contain only small red text.&quot;
+    }
+  ],
+  &quot;reader_note&quot;: &quot;The corrected large-initial pages have ordinary spacing under the tested uniform-page reference. This does not test the rune identities or rule out other ways the artwork might carry information.&quot;,
+  &quot;reader_limit&quot;: &quot;Two pages in the earlier 15-page list contain only small red text. The page-order test has narrow bounds, and its compression measure has little power on a 58-bit string.&quot;,
+  &quot;scope_summary&quot;: &quot;LP2-00–57 · 13 pages with large red initials · five page-order tails · 100000 sampled controls and exact span/run counts.&quot;,
+  &quot;article&quot;: &quot;## Result\n\n**The thirteen pages with large red initials do not have unusual spacing under this uniform-page comparison.** Their largest consecutive run is two pages; a random set of thirteen pages has a run of at least two **96.8%** of the time. Their first and last marked pages are LP2-00 and LP2-57, so their span is the full release; that cannot be unusually short. The variance of the twelve internal gaps is **12.85**; **32.8%** of 100,000 random sets have at least that much variance. This tests page placement, not whether the artwork carries a message.\n\n![The published total-red selection, corrected large-initial pages, and two planted spacing controls on the same 58-page axis.](experiments/records/red-initial-presence-order/page-order.svg)\n\nThe top row reproduces the [published total-red page list](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/D-illustration-dropcap/RESULTS.md). Its highlighted LP2-07 and LP2-53 are [small red text, not large initials](#/wiki/red-initials). The corrected row has thirteen pages. LP2-03 and LP2-33 each have two large initials; this test deliberately reduces each page to a single yes/no mark.\n\n## What was compared\n\nThe [image audit](research/red-initials-audit.csv) freezes which of the 58 LP2 pages contain a large red connected shape. The comparison draws **100,000** uniform 13-page subsets without replacement. It asks whether the actual pages have unusually variable internal gaps, a short overall span, a long run of adjacent pages, or an unusually compressible 58-bit presence string. Span and run probabilities are also counted exactly over all **3,155,581,562,280** possible 13-page subsets. Five declared tail directions are considered together; none approaches the adjusted threshold.\n\n| Measure | Observed | Comparison result |\n| --- | ---: | --- |\n| Variance of the 12 gaps | 12.85 | 32.8% of random sets are at least as variable; 67.4% are no more variable. |\n| Span, last minus first | 57 pages | All 13-page sets have a span of 57 or less. |\n| Longest consecutive run | 2 pages | 96.8% of random sets have a run of at least two. |\n| zlib size of the packed page bits | 16 bytes | 99,977 of 100,000 random sets also occupy 16 bytes; this score has almost no resolving power here. |\n\nThe comparison deliberately assumes every 13-page placement is equally likely. It is a baseline for visible spacing, **not** a model of how the manuscript was composed. A rule based on section boundaries, the identities of the initials, or two initials on one page is outside it.\n\n## Can these checks detect a planted pattern?\n\nThe lower two rows of the figure are fixed controls with the same thirteen marks. Approximately even spacing gives a very small gap-variance tail in the sampled comparison, while thirteen consecutive marks give an exact short-span and long-run probability of **46 / 3,155,581,562,280**. But both controls have low gap variance: that one statistic cannot tell even spacing from a single compact block. The evenly spaced control still compresses to 16 bytes, so the compression check would miss that visible regularity. These limitations matter when interpreting the ordinary manuscript result.\n\nThe earlier study also tested red-pixel centroids and an initial-rune string. Those are **not** reproduced here: its total-red mask includes two pages without initials, its centroids include all red marks rather than only the large shapes, and several pages have a second or later initial. A corrected identity or position test needs explicit annotation of each large initial before scoring.\n\n## Reproduce\n\nDownload the [original JPEGs](downloads/original-images.zip) if you want to repeat the image classification itself. With Python 3 and Pillow, NumPy and OpenCV installed, run `python scripts/audit_red_initials.py &gt; research/red-initials-audit.csv`. The page-order test then needs only Python&#x27;s standard library:\n\n```text\npython experiments/records/red-initial-presence-order/run.py --check\npython experiments/records/red-initial-presence-order/check.py\npython experiments/records/red-initial-presence-order/plot.py\n```\n\nThe [plan](experiments/records/red-initial-presence-order/plan.json) pins the image-audit table and analysis rules. [Results](experiments/records/red-initial-presence-order/results.json) retain every observed statistic, tail count and planted control; the [separate check](experiments/records/red-initial-presence-order/check.json) verifies the exact arithmetic and repeats the gap comparison with another random stream. This is an exploratory correction after the source classification error was seen, not a preregistered test of all ways the manuscript could encode information.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/red-initial-presence-order/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;3ee7f4163a8ec46d7f49d6c24419243d0d3827299b7a5c2cc1c297772fe11d6b&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;measurement&quot;,
+    &quot;label&quot;: &quot;Manuscript measurement&quot;,
+    &quot;description&quot;: &quot;Measures a stated feature or statistical comparison; it does not test a complete decoding rule.&quot;
+  }
 }</pre></article><article id="search-maximum-controls"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;search-maximum-controls&quot;,
   &quot;title&quot;: &quot;How does trying more keys change the best score?&quot;,
