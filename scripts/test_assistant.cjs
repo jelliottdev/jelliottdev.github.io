@@ -171,7 +171,8 @@ console.log('PASS: image-first articles retain textual findings, reader summarie
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../assistant-ui.js'),'utf8'),experimentContext);
 const totient=published.find(r=>r.id==='lp2-totient-openings');
 const scopedResult=experimentContext.experimentSearchResult(totient,['lp2-31','lp2-56']);
-assert(scopedResult.includes('Read findings, method and files'));
+assert(scopedResult.includes(experimentContext.esc(totient.title)));
+assert.equal(scopedResult.split(`href="#/experiments/${totient.id}"`).length-1,1,'Each checker card has one primary record destination');
 assert(!scopedResult.includes(experimentContext.esc(totient.scope.procedure)),'Search hits must not duplicate the full method');
 assert(!scopedResult.includes(experimentContext.esc(totient.scope.exclusions)),'Search hits must not duplicate the full exclusion list');
 assert(scopedResult.includes('Not in this record’s page scope: LP2-56.'));

@@ -16,12 +16,13 @@ function ideaSourceType(source){
 }
 function experimentSearchResult(r, requestedPages=[]){
   const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
+  const outcome=Object.hasOwn(outcomes,r.outcome)?outcomes[r.outcome]:'Finding not classified';
   return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
-    <p class="small muted">${esc(r.record_type?.label||'Research record')} · ${esc(experimentTargetSummary(r))}</p>
+    <p class="small muted">${esc(r.record_type?.label||'Research record')} · ${esc(experimentTargetSummary(r))} · ${esc(outcome)}</p>
     <p>${esc(r.reader_finding||r.finding)}</p>
     ${r.reader_limit?`<p class="small muted"><strong>Limit:</strong> ${esc(r.reader_limit)}</p>`:''}
     ${missing.length?`<p class="scope-mismatch">Not in this record’s page scope: ${missing.map(id=>esc(id.toUpperCase())).join(', ')}.</p>`:''}
-    <p class="experiment-result-action"><a href="#/experiments/${r.id}">Read findings, method and files</a></p></article>`;
+    </article>`;
 }
 function ideaCoverageNote(record,records){
   const related=record.related.map(id=>records.find(r=>r.id===id)).filter(Boolean);
