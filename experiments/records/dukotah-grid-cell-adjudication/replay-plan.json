@@ -1,0 +1,18 @@
+{
+  "schema": "liberpedia-source-replay-plan-v1",
+  "source_id": "A-04",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "classification": "Replay of an already published source result, not a prospective preregistration",
+  "question": "Can the source grid and native-pixel classifier reproduce its six disputed base-60 cell readings from the archived LP2-49–51 JPEGs?",
+  "image_sha256": {
+    "lp2-49.jpg": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335",
+    "lp2-50.jpg": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776",
+    "lp2-51.jpg": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+  },
+  "source_programs": ["grid.py", "calibrate.py", "glyphmatch.py", "pixelmatch.py", "adjudicate_all.py"],
+  "fixed_contested_indices": [25, 175, 182, 199, 215, 237],
+  "grid_cell_counts": [80, 104, 72],
+  "blind_read_gate": "At least 38 of 40 exact token readings in the source's frozen calibration record; this replay can rescore the saved reads but cannot recreate their claimed blindness.",
+  "automated_controls": "Run the original pixel matcher including render-determinism and leave-one-out checks. Compare source discrete outputs independently; do not treat the source's own script agreement as an independent reading of the JPEGs.",
+  "limits": "The source records its human visual passes, which cannot be reproduced by automation. This is image-token adjudication, not a decipherment of the 256-byte payload."
+}

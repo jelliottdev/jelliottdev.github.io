@@ -1,0 +1,13 @@
+{
+  "schema": "liberpedia-experiment-plan-amendment-v1",
+  "date": "2026-10-23",
+  "initial_frozen_plan_path": "experiments/records/wulfic-keyword-prime-layer-grid/plan-initial-frozen.json",
+  "plan_preservation": "The initial plan had already been edited in place during the input audit. Its initial contents were restored from the recorded original patch to plan-initial-frozen.json; plan.json is the corrected active plan.",
+  "initial_frozen_plan_sha256": "2f6d412a6e1c0d2c016ee549ac87aa25fc936b4cb9c8d4aa9465b6abc75fb5b6",
+  "problem_found": "The initial plan assumed that the source's historical pages/page_N/runes.txt referred to current LP2-N. An independent Unicode-safe SHA256 and nonempty-length comparison disproved this. The first shell check had incorrectly converted literal rune characters and compared empty extracts; it was invalid.",
+  "discarded_exploratory_output_sha256": "95ded7d36b195e828f3144a106a3ea8f18ea642cf4a4bc604c879b172ce2aa25",
+  "discarded_scope": "Current LP2-21–54; this was not the pinned source's manuscript input and its findings must not be used or published.",
+  "corrected_mapping": "Historical page_21–54 maps in exact order to current LP2-04–37 (current page = old page −17). Each of 34 source streams has nonzero length and its GP rune sequence matches the corresponding current page by length and SHA256. See source-gp-hashes.json.",
+  "other_correction": "The source defines 50×2+3=103 second streams, not 102. Thus the correct finite grid is 34×16×103×4=224128 scored settings.",
+  "decision": "Rerun the original fixed grid only on the corrected source-mapped pages, preserving the predeclared known-reading fixture, 49 page-wise shuffles, signs, source IoC screen, and scalar parity check. The null outcomes from the discarded run were not used to choose new parameters."
+}

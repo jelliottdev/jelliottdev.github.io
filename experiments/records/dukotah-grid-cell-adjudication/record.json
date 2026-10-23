@@ -1,0 +1,194 @@
+{
+  "id": "dukotah-grid-cell-adjudication",
+  "status": "published",
+  "title": "Which bytes are printed in the base-60 grid?",
+  "question": "Do the exact LP2-49–51 images reproduce six source-disputed base-60 token readings and the source pixel controls?",
+  "reader_question": "Can we check the disputed bytes against the printed cells?",
+  "summary": "The original image crops and pinned source pixel matcher reproduce six token readings; the source blind-read history cannot be independently recreated.",
+  "finding": "All six source-contested cell tokens reproduce (3I, 0I, 2l, 0l, 1O, 0W), matching source-majority bytes 198, 18, 167, 47, 84, 32 rather than the competing decimal column. The automated leave-one-out symbol control scores 236/237 among testable glyphs, and the saved 40-cell human calibration scores 40/40.",
+  "limitations": "A source-known replay of one image instrument. The saved human reads can be rescored but their claimed historical blindness cannot be audited. Singleton decisive glyph classes lack leave-one-out controls. This checks printed tokens, not payload decoding.",
+  "next_steps": "Inspect source-original page crops and the three extended conflict-cell corrections separately before using any candidate payload in cryptographic tests.",
+  "outcome": "supported",
+  "tags": [
+    "base 60",
+    "image transcription",
+    "source replay",
+    "LP2",
+    "payload"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-grid-cell-adjudication/replay-plan.json"
+    ],
+    "representation": "Exact source-hashed archived JPEGs and two source 256-byte candidate payloads; 256 table cells.",
+    "procedure": "Run pinned A-04 projection grid, saved-read gate, glyph metric, native-pixel matcher and all-conflict adjudicator on exact images in a disposable source-shaped directory; compare five saved outputs and independently recompute base-60 bytes.",
+    "parameters": "Six predeclared contested cells 25,175,182,199,215,237; source calibration gate at least 38/40 saved readings; source post-hoc all-eleven extension retained separately.",
+    "exclusions": "Human reading blindness, other image witnesses or rendering pipelines, changes to cryptographic methods, decipherment of the 256-byte payload."
+  },
+  "review": {
+    "reviewer": "Exact source replay and independent byte arithmetic check",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound manuscript measurement",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-grid-cell-adjudication/run.py --check && python experiments/records/dukotah-grid-cell-adjudication/plot.py",
+    "environment": "Python 3.9+, NumPy and Pillow. Original-images.zip extracted into images/ or complete checkout.",
+    "script": "experiments/records/dukotah-grid-cell-adjudication/run.py",
+    "script_sha256": "5969c09fd7298538042b5f5b729431c28cf4a6588d6e77c6d6bfd3e7d1094282",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/PREREG.md",
+        "sha256": "831bb9c5aff9d5bc0490c91a550949e5fb7760875c3d355333c1ef5a525e9b7c"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/RESULTS.md",
+        "sha256": "4347f00bb8ef07ea06b9556072b6b14beafd63641d0d0bacb73bccbc527b73d1"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/adjudication.json",
+        "sha256": "34e3efe07321b2b8d7b5072f958fea05bd86ba13ff0e96e4d97300164ff0383e"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/calibration.json",
+        "sha256": "1f2c8862ae0b16acd3394c4b33f0cc9f5c3cd37000bffe89e749054d670a40c5"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/check.py",
+        "sha256": "3420073d7739ed406712ce6a6066f4526c1356d483e8fe5f1e045fa0d048d977"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/glyphmatch.json",
+        "sha256": "9fa0c84823aa79ae87fec6db75e0d00b2899d73c8a70a43315604b2b0b114302"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/grid.json",
+        "sha256": "ade3758e4498284e8de91f6ead01ecfa9188bd888f4720da824a086c00e5ffa1"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/pixelmatch.json",
+        "sha256": "52a815198a0eed343691ed20577946b97dcf109bb47bcd70aa510d9fe1df330a"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/plot.py",
+        "sha256": "ea4e91d339fccab8421eef9749a174ef474357e027a56f932ce08b0dc8b486af"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-plan.json",
+        "sha256": "f5fc5463026dce6f32e829496476a112df73f0bca43327b5c20e292cbd99bab4"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/run.py",
+        "sha256": "5969c09fd7298538042b5f5b729431c28cf4a6588d6e77c6d6bfd3e7d1094282"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/pp49_51/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/pp49_51/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/adjudicate_all.py",
+        "sha256": "47a16e4c60ac8852200e013adc9252ff1352637e0e5278788d3aaa1159034855"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/calibrate.py",
+        "sha256": "2643824439b5f8c1f2d8ccf1fea92729287969e2d44f58e5e6a396e0c8833967"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/glyphmatch.py",
+        "sha256": "d0f1efeab852b061b22e528ed50266585a10b3dba8c2f01c2e7a8a3a5a5527ae"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/grid.py",
+        "sha256": "5353257d62c6e11841178d9cfaf17583394b9bb64ac4d45ba25487e437240140"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/montage.py",
+        "sha256": "8ebba85f0accdbc99547c2573cc06390f6be7e75187040fcd937f9458535ac8a"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/pixelmatch.py",
+        "sha256": "3959d9317ac5c08a8dd55ea17e84d6577a269569a0c2211544127f42f1b860ff"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/source/liber-primus/analysis/round18/L5-payload/visualpass.py",
+        "sha256": "5972b57af7929866a258e307a17dcba623bda56a9c918d3c39bcf1a447026099"
+      },
+      {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/adjudication.json",
+        "sha256": "392758cfb86ceca94532b4badcbe15d641814bbdaeac920e2b60d0900b4e65cd"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/calibration.json",
+        "sha256": "8dcac7a789c3061098526826d90ffa3c30428eb5ec0b5acbca347a12695dc9ec"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/glyphmatch.json",
+        "sha256": "146f1a2fcb15cb738f60b59c94891e10f9cd433dbccbdae0e554bd0cbf65a78c"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/grid.json",
+        "sha256": "ade3758e4498284e8de91f6ead01ecfa9188bd888f4720da824a086c00e5ffa1"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/pixelmatch.json",
+        "sha256": "2c4a145545cc0610b74594d8a4fd3f70b959219d14e06c4e59bbc13726faeea3"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/replay-output/source-stdout.json",
+        "sha256": "d4cbbf5ca1b0cdc195c957bedc387962b0774e96a8a02915b2d871abe54c0c79"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/six-cells.svg",
+        "sha256": "30e5d74f46c0a66bcbd0d7b2818e5cae17d0e6ec60fe986a4636c2388db2676f"
+      },
+      {
+        "path": "experiments/records/dukotah-grid-cell-adjudication/article.md",
+        "sha256": "1e655c321bfdce5d434caba145b08be15bf11cff76585603fd06c47f0ced5264"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Dukotah A-04 pixel and visual reading method",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L5-payload"
+    }
+  ],
+  "related": [
+    "grid-openpgp-literal",
+    "public-rsa-payload-e01",
+    "grid-payload-prf-source-grid"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-grid-cell-adjudication/six-cells.svg",
+      "caption": "Six original image crops, reproduced base-60 tokens and the conflicting decimal-column values."
+    }
+  ]
+}

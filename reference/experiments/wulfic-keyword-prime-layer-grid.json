@@ -1,0 +1,305 @@
+{
+  "id": "wulfic-keyword-prime-layer-grid",
+  "status": "published",
+  "title": "Keywords paired with prime-derived streams",
+  "question": "Does any source-specified keyword and prime-derived stream combination lift LP2 page text above the archived IoC candidate screen?",
+  "reader_question": "Could a keyword and a prime stream remove two cipher layers?",
+  "summary": "An adapted test of a pinned archived source grid found no setting above its IoC screen on the correctly mapped LP2 pages.",
+  "finding": "Across 224,128 keyword/stream/sign/page settings on LP2-04–37, none scored above the source IoC>1.40 screen. The maximum was 1.2902 on LP2-32. A 515-rune established reading encrypted with one declared setting was recovered exactly and scored 1.7231. In 49 seeded page-wise shuffle controls repeating the full search, 42 reached a maximum at least as high as the LP2 maximum.",
+  "limitations": "This is the exact finite source grid adapted to verified current text, not a replay of the archived script’s old results. Its directory and page-number assumptions were outdated; old page_21–54 means current LP2-04–37. A prior wrong-target exploratory run was discarded and documented. The 515-rune positive control is longer than any target page, so it does not establish equal power on short pages. IoC is not a language detector; 49 shuffles preserve page histograms but do not model every cipher. Other keywords, stream rules, phases, boundaries or layers remain outside scope. Keyword labels refer to literal source numeric arrays; the AETHEREAL array includes an extra H after TH, so a conventional re-encoding is not covered.",
+  "next_steps": "A related claim should specify both complete key streams and the page boundary/reset rule, then show a full reading that survives a whole-search comparison and a planted control.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source adaptation",
+    "keyword cipher",
+    "prime stream",
+    "two layers",
+    "index of coincidence",
+    "CABAL",
+    "DIVINITY",
+    "DEOR",
+    "MOBIUS",
+    "prime totient",
+    "combined cipher"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-keyword-prime-layer-grid/source-gp-hashes.json",
+      "experiments/records/wulfic-keyword-prime-layer-grid/input-mapping-amendment.json"
+    ],
+    "representation": "Current canonical GP29 rune streams for LP2-04–37, verified length and SHA256 identical to the archived source’s old page_21–54 rune streams. Each page is separate; no word resets.",
+    "procedure": "For each page apply all 16 source numeric keyword arrays, 103 source second streams and four keyword/stream sign pairs modulo29. Score source-normalized IoC; record each page maximum and IoC>1.40 count. Plant a complete known reading and rerun the full selection on 49 seeded within-page shuffles.",
+    "parameters": "34 pages ×16 keyword arrays ×103 second streams ×4 sign pairs =224,128 settings. Second streams: 50 prime-minus-one offsets, 50 prime offsets, cumulative prime-minus-one, linear and Fibonacci. Source IoC screen>1.40; 49 page-wise histogram-preserving shuffles, seed20261023.",
+    "exclusions": "LP2 outside pages04–37; keyword phase changes, new words, transpositions, alternate prime orders/indices, feedback, page joins, null skipping, adaptive keys, additional layers and non-IoC language scores."
+  },
+  "review": {
+    "kind": "pinned archived-source finite-grid adaptation with corrected page mapping",
+    "retested_on": "2026-10-23",
+    "reviewer": "Original/current input streams match for all34 pages by independent nonempty length and SHA256; full grid and all49 whole-search nulls reproducible; scalar checks of all34 selected winners; exact planted known-reading recovery",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-keyword-prime-layer-grid/check.py && python experiments/records/wulfic-keyword-prime-layer-grid/plot.py --check",
+    "environment": "Python3 with NumPy and Numba. The pinned source checkout is needed only to independently regenerate the archived rune hashes; the exact hashes and source link are bundled.",
+    "script": "experiments/records/wulfic-keyword-prime-layer-grid/check.py",
+    "script_sha256": "ce95fc2c62f7476b88c5755dff8c138d35d500e1c39975086f9f7dafaefbb103",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/plan.json",
+        "sha256": "d674c7af57ee7c691468c2fb812d31f09f3573001cd2dff8a2d7a0690d815a7c"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/plan-initial-frozen.json",
+        "sha256": "2f6d412a6e1c0d2c016ee549ac87aa25fc936b4cb9c8d4aa9465b6abc75fb5b6"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/input-mapping-amendment.json",
+        "sha256": "13ad53e23449a4712ca9af74ad6cc7d190e9df4c3efc3ea376aa56109357cc90"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/source-gp-hashes.json",
+        "sha256": "526e341b37fff79bb02537da26df7722250d6aedd4e9b5f10a9a617d4503ce50"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/keys.json",
+        "sha256": "d02945ed823b108fc4078b8f846686f706e0cd6a87b629e5850b64098765ebf5"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/run.py",
+        "sha256": "514603b619f838cb063d351dfdd8e02726c8fe9ff9dbcf5ca844d4a297747a03"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/check.py",
+        "sha256": "ce95fc2c62f7476b88c5755dff8c138d35d500e1c39975086f9f7dafaefbb103"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/plot.py",
+        "sha256": "e9f5a2475daf9425a50d7a44c5891aedd4d569f2c64a332365217e6c131cf3de"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/make_record.py",
+        "sha256": "1d27eec7249e997b258b30ce0a60cc704ac2f465fdc93824882318c70b14ab9d"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "text/lp2-04.txt",
+        "sha256": "c24947e19773d66cd8f2932eaecf3318920ff39655e808c2a2e548816db281ea"
+      },
+      {
+        "path": "text/lp2-05.txt",
+        "sha256": "91490bbeb9ae7dc95f3c27477f05658c479506bffb297127b9ddb36f95956314"
+      },
+      {
+        "path": "text/lp2-06.txt",
+        "sha256": "3b8013ea3b4508dd9ec61294247f9e12755dd65fb975ba7e8f7a4b37c8eaed04"
+      },
+      {
+        "path": "text/lp2-07.txt",
+        "sha256": "07adf3c3ea8501501381d755e9cb81a21f8db920bdd347bfdd618f409b64063d"
+      },
+      {
+        "path": "text/lp2-08.txt",
+        "sha256": "3dea95c50d00937e4f0067c9b0777a51a5b5534b3ade54a128f778a07cca06a4"
+      },
+      {
+        "path": "text/lp2-09.txt",
+        "sha256": "0e592a153e918b24c29ba058d112b72b64dfb6f6ee9a37242914305bdfda0cfa"
+      },
+      {
+        "path": "text/lp2-10.txt",
+        "sha256": "54bcd4606351983a307b2534749b73c79cddf18bcbda98a064a239369add8270"
+      },
+      {
+        "path": "text/lp2-11.txt",
+        "sha256": "deec86c5c2f58af1bd1071ca19e38efea45b0c98a322a277ffeba105e340e9eb"
+      },
+      {
+        "path": "text/lp2-12.txt",
+        "sha256": "40cc895ef9bd21e7681140d8973b4b266a0fb80e50f9b7446033e94f577b1186"
+      },
+      {
+        "path": "text/lp2-13.txt",
+        "sha256": "0d16d60f541c48dd41fa89c9e54f843367ac2db1a747eaf777c5764355dbf06a"
+      },
+      {
+        "path": "text/lp2-14.txt",
+        "sha256": "d0b74250d75cbd08190480518962f57665a4d4a6a4ed1ce8b6de1d246e10c93c"
+      },
+      {
+        "path": "text/lp2-15.txt",
+        "sha256": "858a2d73988ad8b74fa52d64619fb18380450799e4c132ab36a2f7c09ce3c7a8"
+      },
+      {
+        "path": "text/lp2-16.txt",
+        "sha256": "0b89aa05bb731fa62bc9535ad08ce9457303a4cfd60e0d962aa3dd07ef60a5aa"
+      },
+      {
+        "path": "text/lp2-17.txt",
+        "sha256": "0a8cf2c1a10a0b64d5190bf35f60049c1ffdacac6e722cfdeb2ec1497ed92807"
+      },
+      {
+        "path": "text/lp2-18.txt",
+        "sha256": "9a225e0f3f114304e51a3028b8c99da08c2995bff7aed7379e832fe05b988188"
+      },
+      {
+        "path": "text/lp2-19.txt",
+        "sha256": "532cd51b334ae95058a9560035fe6f936d1de831475de4f6aee02c4ceb981254"
+      },
+      {
+        "path": "text/lp2-20.txt",
+        "sha256": "f7e59000207ecb50876901fe369791c49f01fe862227dc8dd0673a7c5cbff6ce"
+      },
+      {
+        "path": "text/lp2-21.txt",
+        "sha256": "afda7b568c42de437c82f75c3b1ad439f5e42e18a90204962bf6703916e61558"
+      },
+      {
+        "path": "text/lp2-22.txt",
+        "sha256": "37759cabbf1d8ad804965a3f6d5e0565bfb96b868dd58ce1a46e0ac171d00d93"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "text/lp2-24.txt",
+        "sha256": "b74787eed7645536c57dcea638dade0496afaba134856c9bfe95ec3ecbf79771"
+      },
+      {
+        "path": "text/lp2-25.txt",
+        "sha256": "18989ca399d45802b6673766571296f7fbb2d42142bec7fa5763b47e93059cf7"
+      },
+      {
+        "path": "text/lp2-26.txt",
+        "sha256": "11a4be91efb6b2c881889f8c943432b2bc2557178b1d96de33fb857988c0aa3a"
+      },
+      {
+        "path": "text/lp2-27.txt",
+        "sha256": "8ce51d331af3e78758a2413d0d963c9d3207d0c16506c1370573a186941234fc"
+      },
+      {
+        "path": "text/lp2-28.txt",
+        "sha256": "7c89be665a275343ede07673c7ce1f5acd7eb5c4e734f87a38f5c4ddc7e51bed"
+      },
+      {
+        "path": "text/lp2-29.txt",
+        "sha256": "187879bc8e1f3af09213acf025f40c77acb9adffb15ffc38dcde8ecf93097cbd"
+      },
+      {
+        "path": "text/lp2-30.txt",
+        "sha256": "b32cb76ad191a86ab7f2f19170353e4bd4001c4b646adff42091635fb4c84461"
+      },
+      {
+        "path": "text/lp2-31.txt",
+        "sha256": "493cb51478b106dd626ff93625abaf10c9675ad221896b5206809041dfd55b68"
+      },
+      {
+        "path": "text/lp2-32.txt",
+        "sha256": "fb0c132cb2cc84803984b5297e0d64e155955cb5aff2db52ad838d9af308bedc"
+      },
+      {
+        "path": "text/lp2-33.txt",
+        "sha256": "80e0885cb1a5e8b164133fc551f973bc23ebe2a5be74ba69ba394a208d2ca6db"
+      },
+      {
+        "path": "text/lp2-34.txt",
+        "sha256": "548642b97302ae4bce3f6a1a422060393f266c01a3f904b1f67a3c659cd2e219"
+      },
+      {
+        "path": "text/lp2-35.txt",
+        "sha256": "3a302378019b96188a04633439ffb141e92ef34c04430f15b2e5e1a44ac85b1f"
+      },
+      {
+        "path": "text/lp2-36.txt",
+        "sha256": "b173df72ca491be214ebeb9934ac53db3ff3befbb4a1fcfce119c126a623b505"
+      },
+      {
+        "path": "text/lp2-37.txt",
+        "sha256": "027e433d2c6557c79ef605627c883150d705dcb5bc497e2a09a72d422b024271"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/results.json",
+        "sha256": "30922715a92fd682dada21cfdacff59e3bde31000ae27c509c33d52999bc6ac0"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-prime-layer-grid/comparison.svg",
+        "sha256": "596a855fafe99a2edff6628670ef0ab8e724680c98378281fcfc59f942b59904"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-keyword-prime-layer-grid/comparison.svg",
+      "caption": "The LP2 search maximum lies below the archived candidate screen. The planted reading crosses it; page-shuffle maxima often exceed the LP2 maximum."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned archived keyword-plus-stream source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/combined_cipher_test.py"
+    },
+    {
+      "label": "Upstream warning about archived scripts",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "lp2-prime-openings",
+    "lp2-totient-openings",
+    "wulfic-keyword-quagmire-models"
+  ],
+  "article": "# Keywords combined with a prime stream\n\nCould a familiar keyword remove one layer of LP2 while a prime-derived stream removes another? An [archived public script](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/combined_cipher_test.py) defined a finite version of that question. We ran its fixed settings on the corresponding manuscript pages with a known-reading control and a whole-search comparison.\n\n**None of the 224,128 tested settings crossed the script's IoC screen of 1.40.** The best was 1.29 on LP2-32. A planted 515-rune known reading decoded completely and scored 1.72, so the test can detect that example made with its own rules. The control is longer than any target page and does not establish equal detection power on short pages. The highest LP2 score is not an unusual search peak under our page-shuffle comparison: 42 of 49 shuffles reached at least that value.\n\n![The best LP2 IoC is 1.29, below the 1.40 source screen; a planted known reading scores 1.72.](experiments/records/wulfic-keyword-prime-layer-grid/comparison.svg)\n\n## What the script tried\n\nAt each rune position, it adds or subtracts one of **16 fixed keyword sequences** and one of **103 second streams**, modulo 29. The second streams include ordinary primes, prime minus one, cumulative prime-minus-one values, a linear count and Fibonacci values. Both signs are tried for both components. Each setting starts again at the beginning of each page. The script used the index of coincidence (IoC), a measure of repeated symbols, to screen its outputs; a high IoC alone would not establish a reading.\n\nThe named keywords are CABAL, DIVINITY, ENCRYPTION, OBSCURA, ENCRYPT, SHADOWS, DEOR, TOTIENT, MOURNFUL, VOID, AETHEREAL, BUFFERS, CARNAL, ANALOG, MOBIUS and FORM. We use their [literal source rune vectors](experiments/records/wulfic-keyword-prime-layer-grid/keys.json). Those labels are not a separate spelling check: for example, the source’s AETHEREAL vector includes both TH and a following H. A conventional re-encoding of that word is a different setting.\n\nThe source calls its inputs pages 21–54. Those names came from an older file layout. A rune-by-rune length and SHA-256 check shows they are **current LP2-04–37**, in order. This correction matters: testing today's LP2-21–54 would test different text. Our [input-mapping amendment](experiments/records/wulfic-keyword-prime-layer-grid/input-mapping-amendment.json) preserves the initial mistaken plan and records that an exploratory run on the wrong range was discarded before this result. The saved result uses only the verified mapping.\n\n## How to read the result\n\nThe result covers exactly the source's keyword arrays, 103 stream definitions, four sign choices and 34 matched pages. Its 1.40 line is a candidate screen, not a proof that all layered ciphers fail below it. We also shuffled runes *within each page* and repeated the entire search 49 times. Those controls preserve each page's rune frequencies, so they reveal how large a best score can appear after searching many settings. They do not simulate every possible cipher.\n\nThe archived script is explicitly marked untrusted by its own repository and has a broken old directory assumption. We reimplemented its finite arithmetic on verified inputs. That is a new bounded test of the archived proposal, not a claim that its original historical output was correct.\n\nThe [plan](experiments/records/wulfic-keyword-prime-layer-grid/plan.json), [saved measurements](experiments/records/wulfic-keyword-prime-layer-grid/results.json) and [reproduction script](experiments/records/wulfic-keyword-prime-layer-grid/check.py) give the exact settings. Run `python experiments/records/wulfic-keyword-prime-layer-grid/check.py` to repeat the full grid, input checks and shuffle controls.\n",
+  "article_path": "experiments/records/wulfic-keyword-prime-layer-grid/article.md",
+  "script_sha256": "ce95fc2c62f7476b88c5755dff8c138d35d500e1c39975086f9f7dafaefbb103",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "wulfic-doublet-leak-h-o",
+  "source_repo": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_paths": ["tests/test_leak.py", "tools/lpcore/leak.py", "tools/lpcore/corpus.py", "data/canonical/liber_primus_master.txt", "data/canonical/liber_primus_translation.txt"],
+  "source_test_classes": ["TestHelpers", "TestPositiveControls", "TestLeakVerdicts", "TestC14SkipNext"],
+  "manuscript_scope": "Nine source segments 7..15 over LP2-00..55. Join pages within each source segment and never compare across a segment boundary: 12,947 eligible adjacent pairs; 86 equal. This differs from the site's page-only 12,901-pair convention. Source page/line markers are preserved per rune.",
+  "checks": {
+    "H-L1": "Nonzero difference histogram over 28 GP residues against an equal-spread z rule, with source cutoff |z| 3.5.",
+    "H-L2": "Within-written-line, line-break and page-break equal pairs; page-break pairs also count as line-break. Source 2.5 percent and binomial rules.",
+    "H-L3": "Doublet positions modulo each period 2..32 with segment-relative and joined-stream clocks; source phase-size-aware union-bound p, Bonferroni .01/62.",
+    "H-L4": "Nine-segment equal-rate chi-square and 500-pair nonoverlapping window dispersion; source p>.01 and dispersion 0.5..2.",
+    "H-L5": "On fixed solved plaintext, ideal and literal two-key switch generators under DIVINITY/CIRCUMFERENCES and phi(prime)/prime key streams; compare resulting rate with 86 source doublets under source Poisson upper tail 1e-6.",
+    "O-C14": "Source skip-next-key LLR of 28 nonzero ciphertext differences using solved plaintext-difference distribution and fixed 0.19 key-repeat rate; cutoff -10 nats, plus planted skip/fresh rekey controls and disjoint solved-text halves."
+  },
+  "limits": "These are finite diagnostics, not decryption of LP2 or proof against all doublet avoidance. H-L5 uses two named key pairs and a solved-text transfer. O-C14's 0.19 repeat rate and solved-text difference model are assumptions. P-values do not correct for historical hypothesis search beyond the declared period scan."
+}

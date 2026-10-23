@@ -1,0 +1,29 @@
+{
+  "schema": "liberpedia-wulfic-legacy-combined-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "path": "tools/legacy/combined_cipher_test.py",
+    "sha256": "0ea8865ea113ca92091245430f745f508b177b936ca616b97cbc0ebab801caf6",
+    "status": "Archived and explicitly untrusted upstream; this record is an adapted exact-grid test on verified current input, not a replay of a validated historical conclusion."
+  },
+  "input": {
+    "pages": "LP2-21 through LP2-54 inclusive, separately. Original source rune strings from pages/page_N/runes.txt match each corresponding current Liberpedia text/lp2-N.txt exactly after selecting GP runes; verify this before scoring.",
+    "rune_values": "Source GP29 order. Exclude separators from cipher; retain page boundaries; key and stream positions start at zero on each page.",
+    "primes": "Ascending ordinary primes from source sieve through 100000. The required first 2050 primes fit that bound."
+  },
+  "grid": {
+    "keywords": "Exactly the 16 named, source-specified numeric GP29 arrays in KEYWORDS, including DEOR. No inferred spellings or added keys.",
+    "second_streams": "The 102 source streams: 50 consecutive prime-totient residues, 50 consecutive prime residues, one cumulative prime-totient residue, one linear index mod 29, one Fibonacci stream mod 29; each restarts per page.",
+    "signs": "Two keyword signs times two second-stream signs. Decode P_i=(C_i ± K_(i mod length) ± S_i) mod 29. All signs are source settings; no extra Vigenere phase.",
+    "candidate_count": 221952,
+    "score": "Source IoC normalized by uniform expectation 1/29. Report per-page maxima, source-threshold hits at IoC>1.4, whole-grid maximum, singleton I/A count, and best decoded prefix only as a diagnostic, not a reading.",
+    "source_gate": "IoC>1.4 is a candidate screen, not proof of English. A missing hit cannot exclude all layered ciphers."
+  },
+  "controls": {
+    "known_reading": "Encrypt one complete established reading with a fixed source keyword, stream and two signs, then require exact full recovery in the same grid and record whether IoC>1.4 captures it.",
+    "permutation": "49 seeded page-wise GP29 shuffles, each preserving the page's individual rune histogram. Repeat the entire 221952-cell selection on each shuffled corpus and compare maximum IoC and source-threshold hit counts. Seed 20261023. This is a diagnostic for search selection, not a plaintext or cipher model.",
+    "independence": "Compare fixed source keyword/stream/sign candidates to a separate scalar implementation and independently verify original/site input equality."
+  },
+  "limitations": "A two-layer additive model only. The old source script's archived status and path bug mean its historical output is not assumed reliable. Flat IoC is not a language detector; the permutation comparison is conditional on preserved page histograms and this finite grid. No alternate key phase, word reset, transposition, adaptive keyword, or extra layer is tested."
+}

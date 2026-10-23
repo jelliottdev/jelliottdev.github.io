@@ -11,21 +11,21 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 58,
+    "source_entries_reviewed": 59,
     "reproduced_subclaim": 1,
-    "partial": 32,
+    "partial": 33,
     "unsupported_source_verdict": 18,
     "blocked_exact_replay": 2,
     "source_proposal_only": 2,
     "failed_source_gate": 3,
-    "source_entries_with_published_record_link": 40,
+    "source_entries_with_published_record_link": 41,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
       "complete-executed-grid": 16,
       "replayed-with-invalid-gate": 5,
-      "partial-execution": 7
+      "partial-execution": 8
     }
   },
   "entries": [
@@ -1567,6 +1567,49 @@
           "dukotah-line-geometry-channel-replay"
         ],
         "scope": "Exact source programs on 56 original JPEGs reproduce all counts and verdicts, with only floating-point differences below 1e-12. Best planted 64-bit recovery is 55/64, below the declared 95% requirement.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "A-04",
+      "source_claim": "pp49-51's 6 contested bytes (idx 25, 175, 182, 199, 215, 237) - flagged open in Campaign VII and repeated in Campaign IX; needs a Latin/digit OCR, which the rune classifier cannot do. Never done.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "dukotah-grid-cell-adjudication",
+          "covered_subclaim": "Five exact source programs replay on original LP2-49–51 images. All outputs match: 256-cell geometry, 40/40 saved calibration reads, 236/237 eligible trailing-glyph leave-one-out matches, and six contested token/byte choices. Historical blindness cannot be independently verified."
+        }
+      ],
+      "unresolved_parts": [
+        "Saved human reads can be rescored, but their historical blindness cannot be recreated. Singleton I/i/l exemplar classes cannot be leave-one-out tested. This is printed-byte adjudication, not a payload decryption or independent human transcription.",
+        "This record executes the five image-reading programs listed in its plan. The broader ledger command also names render-only visualpass.py/compare215.py and downstream propagate.py; those extra steps are not claimed as executed by this record."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L5-payload/PREREG.md",
+        "liber-primus/analysis/round19/C1/PREREG.md",
+        "liber-primus/analysis/round19/C1/RESULTS.md",
+        "liber-primus/analysis/round19/C1/singletons.py",
+        "liber-primus/analysis/round19/C1/out_singletons.json",
+        "liber-primus/analysis/round19/C1/pixelmatch.json",
+        "liber-primus/analysis/round19/C1/adjudication.json",
+        "liber-primus/analysis/round19/C1/payload_resolved.json",
+        "liber-primus/analysis/round19/C1/payload_resolved.bin",
+        "liber-primus/analysis/round19/C1/b05_rerun.py",
+        "liber-primus/analysis/round19/C1/out_b05_rerun.json",
+        "liber-primus/analysis/round19/C1/b05_readjudicate.py",
+        "liber-primus/analysis/round19/C1/propagate.py",
+        "liber-primus/analysis/round19/C1/out_propagation.json",
+        "liber-primus/analysis/round19/C1/visualcheck.py",
+        "liber-primus/analysis/round19/C1/out_b05_readjudicated.json",
+        "liber-primus/analysis/round19/C1/out_b05_sweeprow.jsonl"
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-grid-cell-adjudication"
+        ],
+        "scope": "Five source image programs and saved source gates on three byte-pinned JPEGs. Human blindness remains unverified; historical saved reads are rescored, not recreated.",
         "wider_method_excluded": false
       }
     }

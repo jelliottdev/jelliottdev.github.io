@@ -1,0 +1,390 @@
+{
+  "id": "wulfic-doublet-leak-h-o",
+  "status": "published",
+  "title": "What separates LP2’s surviving doublets?",
+  "question": "Do six source-defined difference, boundary, periodic, clustering, key-switch or skip-next tests distinguish the 86 surviving LP2 doublets?",
+  "reader_question": "Do the surviving repeated runes reveal how LP2 was encrypted?",
+  "summary": "Pinned H/O source tests and independent pair-by-pair replay find no declared H concentration; two named key switches and a specific skip-next rule fail their source comparisons.",
+  "finding": "All 16 selected H/O source assertions pass. The independent checker recreates 12,947 within-section pairs and all 86 doublets from site pages, then recalculates all 62 period/clock rows and remaining manuscript summaries. The strongest nonzero-difference z is −2.58, line breaks hold 4/585 repeats, best period p is 0.0355 versus 0.000161 corrected line, and nine-section p is 0.721. Two named key-switch constructions yield at most 10/2,898 repeats on solved text; the specified skip-next model has LP2 LLR −21.34 below its −10 line.",
+  "limitations": "The source pairs join pages within nine sections, unlike the site's page-only 12,901-pair count. The H checks test chosen summaries and their declared selection rules, not all historical questions about doublets. H5 extrapolates from two named key pairs on solved text. O C14 assumes a 0.19 repeat parameter and solved-text difference profile. None decrypts LP2 or excludes arbitrary collision avoidance.",
+  "next_steps": "A proposed doublet-avoidance generator should specify key sequence, collision response and boundary clock, then predict both LP2's residual doublet rate and another held-out feature.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "doublets",
+    "key skipping",
+    "line breaks",
+    "periodicity"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-doublet-leak-h-o/plan.json",
+      "experiments/records/wulfic-doublet-leak-h-o/inputs.json"
+    ],
+    "representation": "Source nine-section LP2-00–55 GP29 stream with written-line and page markers, 12,947 within-section adjacent pairs; site page text independently reconstructs all pair positions and marker flags.",
+    "procedure": "Run unchanged source H and O unittest classes with synthetic controls; preserve source pair/control input ledger; independently rebuild pairs from site raw pages and recompute H L1–L5 plus O C14.",
+    "parameters": "L1 28 residues, |z|=3.5; L2 line-break 2.5% rule; L3 31 periods×2 clocks and Bonferroni .01/62; L4 nine sections and 500-pair windows; L5 two named key pairs×ideal/literal switches; O fixed repeat .19 and LLR cutoff −10.",
+    "exclusions": "Other pair-boundary conventions, unspecified or adaptive key switches, other skip rates/plaintext models, decoder outputs, later cipher layers and any mechanism lacking an independently testable output."
+  },
+  "review": {
+    "kind": "exact pinned public-source H/O assertion replay and independent site-pair/numerical checker",
+    "retested_on": "2026-10-23",
+    "reviewer": "16 selected source tests passed; every one of 12,947 pairs and all 62 period rows independently verified",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-doublet-leak-h-o/check.py && python experiments/records/wulfic-doublet-leak-h-o/plot.py --check",
+    "environment": "Python 3 standard library; optional unchanged source replay needs the pinned external Wulfic Git checkout.",
+    "script": "experiments/records/wulfic-doublet-leak-h-o/check.py",
+    "script_sha256": "750e208d46e2aba84f6f38aac8a78bda6c6ab9968365eab5b02728a45277cfb2",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/plan.json",
+        "sha256": "fcc5ccd8da7d6395b97d5f5a15b7392c0e21a8be4b4bcc7679ad7a4afd51e3a9"
+      },
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/inputs.json",
+        "sha256": "27a63263ae53b8004aa8039ddd6cdf4ccfccdf60909405bd19ff661daa3edca4"
+      },
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/replay_source.py",
+        "sha256": "aa720c42088e072ca6566c76b4df083b714d8d008d119dc8c7893a20d1f88393"
+      },
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/plot.py",
+        "sha256": "fd3205a9329117c207cddf74ec77394656ff92f17a67b1ccc674899835147877"
+      },
+      {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5"
+      },
+      {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c"
+      },
+      {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d"
+      },
+      {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f"
+      },
+      {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152"
+      },
+      {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3"
+      },
+      {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae"
+      },
+      {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e"
+      },
+      {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8"
+      },
+      {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a"
+      },
+      {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f"
+      },
+      {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1"
+      },
+      {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0"
+      },
+      {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193"
+      },
+      {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c"
+      },
+      {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6"
+      },
+      {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67"
+      },
+      {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da"
+      },
+      {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5"
+      },
+      {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2"
+      },
+      {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2"
+      },
+      {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960"
+      },
+      {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9"
+      },
+      {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7"
+      },
+      {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2"
+      },
+      {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084"
+      },
+      {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264"
+      },
+      {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c"
+      },
+      {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161"
+      },
+      {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7"
+      },
+      {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169"
+      },
+      {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/results.json",
+        "sha256": "4d21def66b174e78ba12e4d54be0857386c443d7606611757ceb31d657458a5c"
+      },
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/distribution.svg",
+        "sha256": "29d9b03ba12d92d329d021194cb050c8c24f93e8e5143a20cb2ea9f65826030a"
+      },
+      {
+        "path": "experiments/records/wulfic-doublet-leak-h-o/line-breaks.svg",
+        "sha256": "80d53ba2f0934faa26db3a8f921ed2ff5f2138e00032987042a2948cb98581a9"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-doublet-leak-h-o/distribution.svg",
+      "caption": "Every surviving equal-rune pair along the nine source sections."
+    },
+    {
+      "path": "experiments/records/wulfic-doublet-leak-h-o/line-breaks.svg",
+      "caption": "Observed line-break and within-line repeat rates against the proposed line-end rule."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Wulfic pinned H/O tests",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tests/test_leak.py"
+    },
+    {
+      "label": "Wulfic source doublet arithmetic",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/leak.py"
+    }
+  ],
+  "related": [
+    "doublet-boundaries",
+    "doublet-placement",
+    "doublet-section-residues",
+    "decoder-skip-controls"
+  ],
+  "article": "# What separates LP2’s surviving doublets?\n\n**Finding.** Wulfic's pinned H/O tests find no source-defined concentration of the **86 surviving adjacent equal-rune pairs** by other difference value, written-line break, short period or marked section. Two named key-switch constructions make too few repeats on solved text. A specific “skip to the next key value” model disagrees with LP2's nonzero differences. None of these checks identifies the encryption method.\n\nThe blue marks show where each surviving repeat occurs in nine manuscript sections, labeled by the feature used to recognize each part of the book. A section with more runes has a longer bar. The very short number-square section has no repeat; the others do not show a single concentrated pocket.\n\n![Eighty-six equal-rune pairs marked along nine proportional manuscript sections.](experiments/records/wulfic-doublet-leak-h-o/distribution.svg)\n\nLine endings were one proposed place for a special rule. Here, their repeat rate is nearly the same as elsewhere and well below that rule's 2.5% decision line.\n\n![Repeat rates within written lines and across line breaks, with the proposed line-end threshold.](experiments/records/wulfic-doublet-leak-h-o/line-breaks.svg)\n\nThe count here is **86 / 12,947 adjacent pairs**. The source joins pages *within* each of nine marked manuscript sections and never compares across a section boundary. Liberpedia's page-only doublet records use **86 / 12,901** instead. The source's **48 page-break pairs** are part of its line-break category; they should not be added again as separate opportunities. Our independent extractor reproduces every one of the source's 12,947 pair records from the site page text and its written-line markers.\n\n| Source check | Result and decision line | What that establishes |\n| --- | --- | --- |\n| **H1 · Where did missing repeats go?** | Largest departure among 28 nonzero difference bins: **z = −2.58** at residue 17; source line is absolute z of 3.5 | No single nonzero residue shows the source's proposed compensating nudge. |\n| **H2 · A rule at line ends?** | **82/12,362** within lines, **4/585** across written-line breaks, **0/48** across page breaks; source line-end rule requires at least 2.5% | The line-break rate, about 0.68%, does not rise to that rule. |\n| **H3 · A repeating phase?** | Best of periods 2–32 under two position clocks: **p = 0.0355** at period 27, joined clock; corrected line **0.000161** | No period passes the declared 62-way selection threshold. |\n| **H4 · Section clusters?** | Nine-section χ² **5.33** on 8 df, **p = 0.721**; 500-pair window dispersion **1.022**, inside the source's 0.5–2 band | Surviving pairs are not unusually uneven by either specified summary. |\n| **H5 · Two-key collision switch?** | On 2,901 solved runes, DIVINITY/CIRCUMFERENCES gives **6/2,900** repeats under the ideal rule and **10/2,898** under the literal code; φ(primes)/primes gives zero under both | Those two named switch constructions, transferred to this solved text, produce too few repeats to match LP2's source rate. |\n| **O · Skip-next-key rule?** | LP2's specified 28-bin difference log-likelihood ratio is **−21.34 nats**, below the source's **−10** exclusion line | The stated model, with a 19% key-repeat parameter and solved-text difference distribution, fails its own prediction. |\n\nThe source's **16 relevant assertions pass**, including planted controls for the H patterns and three skip-next versus fresh-rekey simulations. The O result also stays below its line when its plaintext-difference distribution is estimated from either of two disjoint solved-text subsets. These controls support the *specific* tests, not every way a cipher might suppress repeated runes. H5's “literal” implementation can leave positions unset; its eligible-pair denominator is therefore smaller and is reported separately.\n\n## Reproduce and limits\n\nThe [plan](experiments/records/wulfic-doublet-leak-h-o/plan.json) fixes all source rules and thresholds. [Inputs](experiments/records/wulfic-doublet-leak-h-o/inputs.json) preserve the pair ledger and solved-text control stream; [results](experiments/records/wulfic-doublet-leak-h-o/results.json) contain all 62 period/clock rows and numerical summaries. An independent standard-library checker re-extracts source-defined pairs from the archived page text, recalculates every row, regenerates the two named key-switch streams, and recomputes the skip-next score:\n\n```text\npython experiments/records/wulfic-doublet-leak-h-o/check.py\npython experiments/records/wulfic-doublet-leak-h-o/plot.py --check\n```\n\nFor a complete unchanged-source run, use [Wulfic's checkout at the pinned revision](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c):\n\n```text\npython experiments/records/wulfic-doublet-leak-h-o/replay_source.py --source PATH_TO_CHECKOUT\n```\n\nThe relevant source is [`tests/test_leak.py`](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tests/test_leak.py) and [`tools/lpcore/leak.py`](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/leak.py). The model assumptions matter: H5 tests only two specified key pairs, on solved text rather than unknown LP2 plaintext; O assumes its fixed 19% repeat rate and solved-text difference profile. The period correction covers the declared 62 phase scans, not all earlier ideas considered about doublets. Other transcriptions, boundary rules and multi-layer ciphers remain outside this result.\n",
+  "article_path": "experiments/records/wulfic-doublet-leak-h-o/article.md",
+  "script_sha256": "750e208d46e2aba84f6f38aac8a78bda6c6ab9968365eab5b02728a45277cfb2",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}
