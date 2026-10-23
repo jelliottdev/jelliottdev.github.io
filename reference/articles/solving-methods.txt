@@ -34,7 +34,7 @@ Allow several ciphertext symbols to represent the same plaintext symbol.
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-8 related records
+9 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -50,6 +50,8 @@ Keyword-mixed GP alphabets · Bounded solving test
 Fixed-size grouped key advance · Bounded solving test
 
 Grid prefix channels as repeating rune keys · Bounded solving test
+
+LP2-53’s red passage under two documented keys · Bounded solving test
 
 
 
@@ -191,7 +193,7 @@ Skip-count signal across planted message lengths · Control
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-5 related records
+6 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 LP2: pair the 2,883-rune sections by subtraction · Bounded solving test
@@ -201,6 +203,8 @@ The 1,894-rune section pairing · Manuscript measurement
 The three 1,433-rune section streams · Manuscript measurement
 
 The 1,814-rune section pairing · Manuscript measurement
+
+One LP2 page as another page’s key · Manuscript measurement
 
 
 
@@ -399,7 +403,7 @@ Public 2πR rune substitutions · Method replay
 Radix changes and byte encodings
 Specify how symbols become digits, integers and bytes.
 
-6 related records
+7 related records
 LP2-49–51: direct text and file-header screen · Bounded solving test
 
 LP2-49–51: fixed bit-grid barcode scan · Bounded solving test
@@ -412,6 +416,8 @@ LP2 runes packed directly as bytes · Method replay
 
 Do LP2 grid bytes track doublet gaps? · Method replay
 
+Numerical matrix lengths across LP2 sections · Manuscript measurement
+
 
 
 Bitwise combinations and XOR
@@ -421,7 +427,7 @@ Operate on explicitly encoded bits or bytes, with alignment and key rules.
 Magic squares and numerical grids
 Separate reconstructing a grid from using it as a decoding key.
 
-11 related records
+12 related records
 Magic squares: does one fixed entry determine the rest? · Manuscript measurement
 
 LP2-49–51: directional prime-path reconstruction · Manuscript measurement
@@ -444,13 +450,17 @@ LP2-16–22’s 59×59 digit count · Manuscript measurement
 
 Grid prefix channels as repeating rune keys · Bounded solving test
 
+Numerical matrix lengths across LP2 sections · Manuscript measurement
+
 
 
 Differential and cumulative decoding
 Transform changes between values with declared direction, lag, modulus and initial conditions.
 
-1 related record
+2 related records
 LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement
+
+One LP2 page as another page’s key · Manuscript measurement
 
 
 
@@ -538,17 +548,23 @@ RSA structure in 54-byte payload windows · Method replay
 Hash targets and candidate retrieval
 Define exact candidate bytes and compare the specified digest.
 
-3 related records
+4 related records
 LP2-56: hashes of preserved manuscript artifacts · Bounded solving test
 
 LP2-56: Whirlpool and Streebog-512 artifact hashes · Bounded solving test
 
 Aligned digest blocks in the 256-byte grid payload · Bounded solving test
 
+Four MD5 blocks in the printed LP2-56 target · Bounded solving test
+
 
 
 Compression and packed symbol streams
 Specify both the conversion into bytes and the format used to decode those bytes.
+
+1 related record
+Complete compression decodes of directly packed LP2 runes · Bounded solving test
+
 
 
 
@@ -609,12 +625,14 @@ Five-digit chain-addition keys · Bounded solving test
 Automatic search and language scoring
 Explore a bounded model with a scorer whose ability and false positives have been checked.
 
-3 related records
+4 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
 
 Does a rune-matched scorer improve candidate screening? · Control
+
+LP2-53’s red passage under two documented keys · Bounded solving test
 
 
 
@@ -652,7 +670,7 @@ The LP2 opening section’s lag-35 peak · Manuscript measurement
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-21 related records
+22 related records
 LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
 LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
@@ -695,12 +713,14 @@ Are the long LP2 rune repeats unusual? · Manuscript measurement
 
 Does the missing-doublet pattern resemble a lag-one filter? · Manuscript measurement
 
+Equality structure of the LP2-53 red passage · Manuscript measurement
+
 
 
 Invariants and bounded exclusions
 State the assumptions under which an operation preserves or forbids an observed property.
 
-6 related records
+7 related records
 Literal prime alphabet: affine permutations for every modulus above 109 · Alphabet-wide analysis
 
 Literal prime alphabet: quadratic permutations for every modulus above 109 · Alphabet-wide analysis
@@ -712,6 +732,8 @@ LP2 page supports: literal-prime affine maps and the two page-55 exceptions · M
 Can missing duplicate runes hide an autokey pattern? · Bounded solving test
 
 Does the doublet floor rule out every independent key? · Source or input audit
+
+Equality structure of the LP2-53 red passage · Manuscript measurement
 
 
 
@@ -772,12 +794,16 @@ LP2-49–51: zero and capital O register · Source or input audit
 Rune frequencies and distribution diagnostics
 Measure symbol counts, whole-stream coincidence and frequency entropy under declared input rules; these statistics do not identify a cipher on their own.
 
-3 related records
+5 related records
 Stored transcription corrections: LP2 word lengths and IoC · Source or input audit
 
 LP2 sections: rune collisions and adjacent repeats · Manuscript measurement
 
 JPEG byte histograms: the four-page split · Manuscript measurement
+
+One LP2 page as another page’s key · Manuscript measurement
+
+Equality structure of the LP2-53 red passage · Manuscript measurement
 
 
 
@@ -844,6 +870,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grouped-key-advance-openings
 - Grid prefix channels as repeating rune keys
   https://jelliottdev.github.io/#/experiments/grid-prefix-split-openings
+- LP2-53’s red passage under two documented keys
+  https://jelliottdev.github.io/#/experiments/lp2-53-red-known-keys
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Block and matrix transformations
@@ -948,6 +976,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/section-1433-pairing
 - The 1,814-rune section pairing
   https://jelliottdev.github.io/#/experiments/section-1814-pairing
+- One LP2 page as another page’s key
+  https://jelliottdev.github.io/#/experiments/lp2-page-pair-alignment
 - Cipher composition and ordered pipelines
   https://jelliottdev.github.io/reference/articles/method-composition.html
 - LP2-40: replay the FOR EVERY opening arithmetic
@@ -1074,6 +1104,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/rune-direct-byte-packing
 - Do LP2 grid bytes track doublet gaps?
   https://jelliottdev.github.io/#/experiments/payload-doublet-gaps
+- Numerical matrix lengths across LP2 sections
+  https://jelliottdev.github.io/#/experiments/cc-section-representation-census
 - Bitwise combinations and XOR
   https://jelliottdev.github.io/reference/articles/xor.html
 - Magic squares and numerical grids
@@ -1158,8 +1190,12 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/lp2-56-whirlpool-stribog
 - Aligned digest blocks in the 256-byte grid payload
   https://jelliottdev.github.io/#/experiments/lp2-56-aligned-digest-blocks
+- Four MD5 blocks in the printed LP2-56 target
+  https://jelliottdev.github.io/#/experiments/lp2-56-four-md5-target-blocks
 - Compression and packed symbol streams
   https://jelliottdev.github.io/reference/articles/method-compression.html
+- Complete compression decodes of directly packed LP2 runes
+  https://jelliottdev.github.io/#/experiments/rune-direct-compression
 - Language and corpus identification
   https://jelliottdev.github.io/reference/articles/method-language-identification.html
 - Could the unsolved text be another language? Eight aligned translations
@@ -1238,6 +1274,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/repeated-long-ngrams
 - Does the missing-doublet pattern resemble a lag-one filter?
   https://jelliottdev.github.io/#/experiments/lp2-filter-fingerprint-models
+- Equality structure of the LP2-53 red passage
+  https://jelliottdev.github.io/#/experiments/lp2-53-red-equality-invariants
 - Invariants and bounded exclusions
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - Literal prime alphabet: affine permutations for every modulus above 109

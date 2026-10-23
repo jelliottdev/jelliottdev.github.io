@@ -1,0 +1,168 @@
+{
+  "id": "lp2-53-red-known-keys",
+  "status": "published",
+  "title": "LP2-53’s red passage under two documented keys",
+  "question": "Does the 51-rune red passage on LP2-53 read as English under either of the two documented LP1 Vigenère keys, any key phase and either direction?",
+  "reader_question": "Has the long red passage on LP2-53 been attacked separately?",
+  "summary": "The red passage is 51 runes, beginning with the last rune on line 6. Neither documented key yielded an English-like result in 42 key/phase/sign settings, despite successful same-length reading and planted-key controls.",
+  "finding": "All nine known-reading 51-rune controls cleared the fixed English-score threshold and ranked their planted true keys first. On LP2-53’s red span, zero of 42 candidate streams cleared −5.5; the best scored −6.6881. Of 999 rune-shuffled red spans, 460 had an equal or higher best-of-42 score. The 51 red rune positions are 128–178 zero-based; parsed word lengths are 5,4,4,11,2,3,2,6,5,5,2,2.",
+  "limitations": "This checks only two known repeating keys, both signs, every phase and an English quadgram criterion. Rune shuffles are a positional control, not a model of encryption. Other keys, interrupts, transpositions, plaintext languages and hidden layers remain open.",
+  "next_steps": "A new decipherment proposal should specify its key or transform and test unchosen continuation beyond any fitted red text, with appropriate positive controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-53",
+    "red passage",
+    "rubrication",
+    "Vigenère",
+    "known keys",
+    "quadgrams",
+    "cipher phase"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-53"
+    ],
+    "representation": "Original LP2-53 JPEG color boundary; archived GP29 rune transcription. Red rune ordinals 128–178 zero-based, 51 runes. Word separators and line wraps do not advance a repeating key.",
+    "procedure": "For each of the documented Welcome and second-koan key vectors, decode the red rune indices under every phase and both signs. Score canonical GP transliteration with the pinned English quadgram model. Compare the best of all 42 against best-of-42 scores for 999 seeded rune-order shuffles. Gate first on nine solved 51-rune readings, their 200 shuffles each, and nine planted two-key encipherments.",
+    "parameters": "Two key lengths 8 and 13, 42 phase/sign settings; score threshold −5.5; 999 family-wise shuffled red controls; nine known-reading and nine planted controls.",
+    "exclusions": "No key from unsolved text, no keyskip/interrupter rules, no cross-page state, no non-English scoring, no inference from the artwork, and no general exclusion of Vigenère or other cipher families."
+  },
+  "review": {
+    "kind": "bounded source-and-corpus-controlled key test",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent full candidate/control reconstruction in check.py; color boundary visually checked against source image",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-53-red-known-keys/controls.py && python experiments/records/lp2-53-red-known-keys/run.py --check && python experiments/records/lp2-53-red-known-keys/check.py && python experiments/records/lp2-53-red-known-keys/plot.py --check",
+    "environment": "Python 3 standard library; offline; original image, page transcription, solved reading traces and quadgram model pinned by SHA-256.",
+    "script": "experiments/records/lp2-53-red-known-keys/run.py",
+    "script_sha256": "444956177ba5d9da8ae821e7d22b328386f6a0de0645046c8a608e5fc0dc3001",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/plan.json",
+        "sha256": "9175197f5b219a2dce9270e6ee9ea67d77c3e68c225e91eeb72cf16940c379d0"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/controls.py",
+        "sha256": "4be22e062ace334761c855e58fea209174b8d53febdb2bd0bad99cbb51521f40"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/run.py",
+        "sha256": "444956177ba5d9da8ae821e7d22b328386f6a0de0645046c8a608e5fc0dc3001"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/check.py",
+        "sha256": "d65fbc3646e0e2c444bff79704f3298fec458561276c7dc7b52e2063d49959bb"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/plot.py",
+        "sha256": "9a551adb84ab04f0a8da72048e024b800f17006aa401efec4fd8a1f6be1a5439"
+      },
+      {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
+        "sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"
+      },
+      {
+        "path": "experiments/records/english-scorer-controls/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/lp2-56.csv",
+        "sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/controls.json",
+        "sha256": "de81fb969172ad98dfb5a674d579e2a6cfb5fe01baf3032ddaf7737e544bb6ac"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/results.json",
+        "sha256": "68341b06d4430876d252352508aae0695505e04ef7776bf9de5c8ccf95f35cc4"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-known-keys/scores.svg",
+        "sha256": "98a61b796f82e6da6e244545e5c9b5d7d0046e3c7f14b221de566687d40b6653"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-53-red-known-keys/scores.svg",
+      "caption": "Best-of-42 manuscript score beside matched shuffle maxima and the nine known-reading controls."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Original LP2-53 page image",
+      "url": "https://jelliottdev.github.io/images/lp2-53.jpg"
+    },
+    {
+      "label": "Known LP1 key reproduction",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-known-vigenere-keys"
+    },
+    {
+      "label": "English scorer control record",
+      "url": "https://jelliottdev.github.io/#/experiments/english-scorer-controls"
+    }
+  ],
+  "related": [
+    "lp2-known-vigenere-keys",
+    "english-scorer-controls",
+    "red-initial-presence-order",
+    "lp2-53-red-equality-invariants"
+  ],
+  "article": "## Result\n\n**Neither of the two documented LP1 Vigenère keys made LP2-53’s red passage read like the archived English examples.** The best of 42 key/phase/sign settings scored **−6.69**, below the fixed **−5.5** English threshold. Its score was ordinary among matched controls: **460 of 999** shuffled red passages had an equal or higher *best-of-42* score. This is a bounded test of two keys on this passage, not a finding about every possible key or plaintext language.\n\n![The best red-passage score is near the center of shuffled-control maxima and below the scores of nine known readings.](experiments/records/lp2-53-red-known-keys/scores.svg)\n\n## What was tested\n\nThe original page changes from black to red at the **last rune of line 6**. That rune and all runes on lines 7–9 make **51 red runes**, page rune positions **128–178** when counting from zero. The archived transcription has 179 runes in total. Hyphens separate words and slashes mark line layout; the red word lengths are **5, 4, 4, 11, 2, 3, 2, 6, 5, 5, 2, 2**. In particular, the leading hyphen on the last line separates its first two runes from the preceding word.\n\nThe two keys are the rune-index sequences documented for the **Welcome** and **second koan** readings. For each key we tried every starting phase and both arithmetic directions, calculating `Pᵢ = Cᵢ ± Kᵢ (mod 29)`. Only runes advance the key; punctuation and line breaks do not. Because every phase is included, resetting the key at the red start adds no new candidate. There is no internal full stop in the red span, so a full-stop pause also adds no new candidate. This leaves **42 distinct named settings**.\n\nWe scored each result with the site's pinned English quadgram model, applying it to canonical GP transliteration. Higher values look more like that model's English training text. The controls were run before scoring the manuscript: all **nine** archived solved-reading excerpts of the same 51-rune length passed the −5.5 threshold and beat all **200** of their own seeded rune shuffles. When those nine excerpts were enciphered with one of the two keys, their true plaintext ranked first in the same 42-setting search **nine times out of nine**. These controls show that this narrow test can recognize similar plaintext if either declared key is correct; they do not prove that every valid LP2 reading must score as English.\n\nFor a family-wise comparison, we shuffled the red rune order 999 times, preserving its rune counts. Each shuffle went through the **whole 42-setting search**, and we compared its best score with the manuscript's best. This controls for choosing the nicest-looking key after seeing all 42 outputs under that shuffle model. It is not a model of the unknown encryption process.\n\n## Reproduce and limits\n\nThe [plan](experiments/records/lp2-53-red-known-keys/plan.json) pins the page image, transcription, alphabet, two-key source and scorer. Run `python experiments/records/lp2-53-red-known-keys/controls.py` to verify the quality gate, `python experiments/records/lp2-53-red-known-keys/run.py --check` to recompute all candidates and shuffles, and `python experiments/records/lp2-53-red-known-keys/check.py` for an independent reconstruction. [All 42 outputs and 999 control maxima](experiments/records/lp2-53-red-known-keys/results.json) are saved.\n\nOther keys, position-dependent schedules, interrupts, transpositions, alternate rune mappings and non-English or nonstandard plaintext remain open. The visible red passage could also have a role other than a separately encrypted English sentence.\n",
+  "article_path": "experiments/records/lp2-53-red-known-keys/article.md",
+  "script_sha256": "444956177ba5d9da8ae821e7d22b328386f6a0de0645046c8a608e5fc0dc3001",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}

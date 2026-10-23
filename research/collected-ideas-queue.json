@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 10
+    "published_followup_records": 14
   },
   "intake": [
     {
@@ -2250,7 +2250,7 @@
       "source_idea_ids": [
         "7.3"
       ],
-      "state": "needs-scope",
+      "state": "bounded-followup-recorded",
       "next_action": "Declare page pairs, alignment, arithmetic and reset rules; distinguish this direction from LP2-as-pad on external artifacts.",
       "existing_record_ids": [
         "public-lp2-as-pad"
@@ -2258,8 +2258,14 @@
       "scope_and_gates": [
         "LP2-as-pad tests the reverse direction, not page-on-page ciphertext reuse. Freeze page pairings, alignment, operation and byte/rune XOR semantics."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-page-pair-alignment"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Offsets, repetition, alternate arithmetic and verified plaintext remain untested; this is a whole-stream concentration diagnostic."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2443,7 +2449,7 @@
       "source_idea_ids": [
         "13.2"
       ],
-      "state": "needs-source-check",
+      "state": "bounded-followup-recorded",
       "next_action": "Verify the exact red-rune span and claimed count, then declare key phases, masks and untouched continuation.",
       "existing_record_ids": [
         "red-initial-presence-order"
@@ -2451,8 +2457,15 @@
       "scope_and_gates": [
         "Add LP2-53 long red passage as a specific independent target. Verify the claimed51 runes from original image, delimit the exact span, then freeze cipher/key phases and interrupter masks."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-53-red-equality-invariants",
+          "lp2-53-red-known-keys"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Other keys and encodings, and any actual plaintext, remain unresolved."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2532,14 +2545,20 @@
       "source_idea_ids": [
         "14.5"
       ],
-      "state": "needs-source-check",
+      "state": "bounded-followup-recorded",
       "next_action": "Recover the cited proposal; freeze block order and candidate inputs, distinguishing a testable construction from arbitrary permutations.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "This is a distinct speculative construction, not four established hashes. Locate the 2016 proposal and fix block boundaries, permutation and candidate byte inputs before testing."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-56-four-md5-target-blocks"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Only the frozen artifact candidate bytes were tested. Historical proposal provenance, web-page candidates and other constructions remain unresolved."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "grid-payload-digest-blocks",
         "internal-artifact-hash-matrix"

@@ -1,0 +1,12 @@
+{
+  "schema": "liberpedia-experiment-plan-v1",
+  "question": "How many of the supplied section-size matrix claims follow from each declared rune-to-number representation, and how often do the same exact lengths occur among contiguous page intervals?",
+  "source_audit": "research/source-intake/cc-matrix-counts.json",
+  "pages": "LP2-00 through LP2-39 inclusive",
+  "representations": ["runes", "prime_digits", "index_0_digits", "index_1_digits"],
+  "rune_rule": "Keep only the 29 exact GP rune characters from data/index.json, including headings; discard punctuation, whitespace and other symbols. Decimal digit counts use unpadded base-ten values and concatenate before taking length.",
+  "intervals": "All 820 contiguous, nonempty page ranges [first,last] with 0 <= first <= last <= 39, without a page-15 header exception.",
+  "listed_groups": [[0,2],[3,7],[8,14],[15,15],[16,22],[23,26],[27,31],[32,32],[33,38],[33,39],[39,39]],
+  "special_cases": "The page-15 17x17 claim excludes the first printed rune header line. The proposed page-10 printed 7 is not a rune and is not added to any stream. The suggested 16 red-rune exclusion on pages 23-26 is arithmetic only: color membership cannot be verified from these text files.",
+  "interpretation": "An exact area is a representation-length identity, not a tested route, decryption, statistical probability or evidence that the section break was authorially selected."
+}

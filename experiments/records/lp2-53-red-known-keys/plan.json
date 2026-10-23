@@ -1,0 +1,33 @@
+{
+  "schema": "liberpedia-lp2-53-red-known-keys-plan-v1",
+  "target_page": "lp2-53",
+  "target_rune_start_zero_based": 128,
+  "target_rune_stop_exclusive": 179,
+  "target_length": 51,
+  "word_lengths": [5, 4, 4, 11, 2, 3, 2, 6, 5, 5, 2, 2],
+  "source_image_sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548",
+  "source_page_json_sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b",
+  "alphabet_sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a",
+  "known_keys_plan_sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a",
+  "quadgram_model_sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+  "control_readings": [
+    ["warning", "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"],
+    ["welcome", "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"],
+    ["some-wisdom", "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"],
+    ["first-koan", "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"],
+    ["second-koan", "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"],
+    ["loss-of-divinity", "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"],
+    ["instruction", "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"],
+    ["lp2-56", "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"],
+    ["lp2-57", "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"]
+  ],
+  "key_ids": ["welcome", "second-koan"],
+  "signs": [-1, 1],
+  "phase_rule": "All zero-based phases 0 through key length minus one; reset at the red start is therefore already represented. Only runes advance the key; no internal full stop exists in the red span.",
+  "score": "Mean base-10 log probability of canonical GP transliteration quadgrams; unseen floor count 0.01; pinned model, source threshold -5.5.",
+  "score_threshold": -5.5,
+  "control_seed": 530151,
+  "control_shuffle_replicates": 200,
+  "control_gate": "At least 8 of 9 archived 51-rune reading prefixes must exceed -5.5 and outrank at least 99% of their own 200 shuffled controls; at least 8 of 9 planted two-key encipherments must rank their true plaintext first among the same 42 candidate streams. Gate before manuscript scores.",
+  "manuscript_null": "If gate passes: 999 seeded shuffles of the 51 red rune indices, apply the same 42 candidate settings, compare the best score per shuffle. This is a family-wise positional null, not a cipher model or general p-value."
+}

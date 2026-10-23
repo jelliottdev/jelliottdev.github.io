@@ -1,0 +1,137 @@
+{
+  "id": "lp2-53-red-equality-invariants",
+  "status": "published",
+  "title": "Equality structure of the LP2-53 red passage",
+  "question": "Does the 51-rune red passage on LP2-53 have the equality structure of archived decoded GP passages, and does it differ from the same page’s black text?",
+  "reader_question": "Is the red passage statistically different from the rest of its page?",
+  "summary": "The 51 red runes are flatter than every matched decoded-reading window but fall within the same-page black-text range.",
+  "finding": "Red IoC is 0.0298 with 26 distinct runes; 2,492 archived solved-reading windows have minimum IoC 0.0400 and at most 23 unique runes. Red IoC lies within 78 black-text window values on LP2-53. Its zero adjacent repeats also occur in 21.55% of 10,000 red-rune shuffles.",
+  "limitations": "The windows overlap and describe this fixed corpus, not independent probability trials. Equality statistics are necessary constraints under bijective substitution, not a decryption or proof that red and black use the same cipher.",
+  "next_steps": "A specific red-passage cipher proposal must preserve or predict the measured equality structure and produce a held-out continuation beyond a chosen phrase.",
+  "scope": {
+    "pages": [
+      "lp2-53"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-53-red-equality-invariants/plan.json"
+    ],
+    "representation": "Original LP2-53 image and pinned transcription; red rune ordinals 128–178 inclusive (last rune of line 6 plus all of lines 7–9), excluding punctuation/artwork. Eight archived decoded GP output-index sections, omitting LP2-56 hash target.",
+    "procedure": "Compute 51-rune red IoC, adjacent equal pairs and unique count; compare with all length-51 windows in eight solved GP sections and 78 same-page black-prefix windows; shuffle the red indices 10,000 times for the adjacent-repeat order control.",
+    "parameters": "51 red runes, 2,492 overlapping solved-section windows, 78 overlapping black-page windows, 10,000 seeded red shuffles.",
+    "exclusions": "Key or crib searches, alternative span boundaries, literal English-letter controls, LP2-56 hash target, external corpora and any inference of a solved message."
+  },
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2-53",
+    "red runes",
+    "index of coincidence",
+    "simple substitution",
+    "doublets",
+    "equality invariant"
+  ],
+  "related": [
+    "red-initial-presence-order",
+    "doublet-lag-profile",
+    "lp2-53-red-known-keys"
+  ],
+  "review": {
+    "reviewer": "Independent page-text and decoded-trace checker with planted rune permutation and red-shuffle replay",
+    "retested_on": "2026-10-23",
+    "kind": "computational",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-53-red-equality-invariants/run.py --check && python experiments/records/lp2-53-red-equality-invariants/check.py",
+    "environment": "Python 3 standard library; preserve original manuscript image and archived known-reading trace bytes.",
+    "script": "experiments/records/lp2-53-red-equality-invariants/run.py",
+    "script_sha256": "7a4f568a9dd3c1c19c032791dd326b6dddd09c03f230e35616e9a136e12329dd",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-53-red-equality-invariants/plan.json",
+        "sha256": "c0754a13997478ad9583f8bbbc0aabecc01a86c96f1f8fa36038013b64534068"
+      },
+      {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+      },
+      {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+      },
+      {
+        "path": "exports/readings/manifest.json",
+        "sha256": "7bc3bd91d7c99d20220b93721815d9027a487365a184f2f472b46c62e35b1a92"
+      },
+      {
+        "path": "exports/readings/first-koan.csv",
+        "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+      },
+      {
+        "path": "exports/readings/instruction.csv",
+        "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+      },
+      {
+        "path": "exports/readings/loss-of-divinity.csv",
+        "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+      },
+      {
+        "path": "exports/readings/lp2-57.csv",
+        "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+      },
+      {
+        "path": "exports/readings/second-koan.csv",
+        "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+      },
+      {
+        "path": "exports/readings/some-wisdom.csv",
+        "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+      },
+      {
+        "path": "exports/readings/warning.csv",
+        "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+      },
+      {
+        "path": "exports/readings/welcome.csv",
+        "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+      },
+      {
+        "path": "text/lp2-53.txt",
+        "sha256": "f645ad2be431c6bb14e37594f264332154c5b4529ad1ca7413692bd1a455938e"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-53-red-equality-invariants/results.json",
+        "sha256": "34f705b3aa81c199fd85810523b5b13e7bb914ee5bf8cabac6884f291fe0d9b3"
+      },
+      {
+        "path": "experiments/records/lp2-53-red-equality-invariants/equality-profile.svg",
+        "sha256": "5e1c1672590d6a7e9005dae5891a41945041f233f43e8bb025ca6a6b0acb0bf0"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "CicadaSolvers original Liber Primus page image and transcription source",
+      "url": "https://github.com/CicadaSolvers/CicadaSolvers.github.io"
+    },
+    {
+      "label": "Liberpedia LP2-53 page record with original image",
+      "url": "https://jelliottdev.github.io/#/page/lp2-53"
+    }
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-53-red-equality-invariants/equality-profile.svg",
+      "caption": "The red span is far flatter than the archived decoded windows, yet within the same-page black-text range."
+    }
+  ],
+  "article": "# The red passage on LP2-53\n\n**Question.** Does the long red passage have the equality pattern expected of an ordinary solved-text passage after a simple rune substitution, and does it differ from the black text on the same page?\n\n**Result.** Its 51 runes have an index of coincidence (IoC) of **0.0298** and **26 distinct runes**. None of **2,492** same-length windows from eight archived decoded GP passages is that flat: their lowest IoC is **0.0400** and they use at most 23 distinct runes. But the red result lies *inside* the **0.0259–0.0408** IoC range of 78 black-text windows on LP2-53. Color distinguishes the passage visually; these measurements do not establish a separate cipher.\n\n![The red span compared with matched solved and same-page black windows.](experiments/records/lp2-53-red-equality-invariants/equality-profile.svg)\n\n## The exact span\n\nThe original [LP2-53 image](images/lp2-53.jpg) shows a red **ᛏ** as the final rune of text line 6, then three complete red lines. In the archived transcription these are page rune ordinals **128–178**, inclusive: **1 + 24 + 22 + 4 = 51** runes. Punctuation, line slashes, the final dotted mark and artwork do not enter the count. This span is shared with the separately documented LP2-53 key tests; this record asks a different, key-free question.\n\n## Why equality is useful here\n\nA one-to-one substitution can rename runes, but it cannot change which positions are equal. Thus IoC, number of distinct runes and adjacent-equal pairs are **invariants** of every bijective monoalphabetic substitution. We used the `output_index` traces from eight known GP readings, excluding LP2-56’s hash-target passage, and slid a 51-rune window within each reading. These windows overlap; the counts describe the archived corpus and are not independent samples or a probability that the manuscript was produced by a cipher.\n\nThe red span has **zero adjacent equal pairs**. That alone is not surprising: every black-window control on the same page also has zero, and **2,155 of 10,000** shuffles of the red runes (21.55%) likewise have none. Shuffling keeps the red symbol counts and IoC unchanged while testing whether their observed order has an unusual immediate-repeat count.\n\nThe red span’s much lower IoC than the decoded passages makes a direct one-to-one renaming of those *particular* known-reading-style windows a poor account of its equality structure. It does **not** eliminate simple substitution of another plaintext with different statistics, nor more complex ciphers or section-specific treatment. The same-page black comparison is the clearest limit on calling the red color a separate encryption layer.\n\nRun `python experiments/records/lp2-53-red-equality-invariants/run.py --check` and `python experiments/records/lp2-53-red-equality-invariants/check.py` from the repository root. The independent checker reads the page text rather than the page JSON, rebuilds all reading windows, verifies the image hash and 51-rune span, tests substitution invariance with a planted rune permutation, and repeats all 10,000 conditional shuffles. Exact inputs and results are retained with the record.\n",
+  "article_path": "experiments/records/lp2-53-red-equality-invariants/article.md",
+  "script_sha256": "7a4f568a9dd3c1c19c032791dd326b6dddd09c03f230e35616e9a136e12329dd",
+  "record_type": {
+    "id": "measurement",
+    "label": "Manuscript measurement",
+    "description": "Measures a stated feature or statistical comparison; it does not test a complete decoding rule."
+  }
+}

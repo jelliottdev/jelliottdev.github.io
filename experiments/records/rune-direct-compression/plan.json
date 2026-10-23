@@ -1,0 +1,13 @@
+{
+  "schema": "liberpedia-rune-direct-compression-plan-v1",
+  "question": "Do any of the exact 168 previously screened rune-to-byte streams decode as a complete, bounded compressed stream?",
+  "source_record": "rune-direct-byte-packing",
+  "source_plan": "experiments/records/rune-direct-byte-packing/plan.json",
+  "source_results": "experiments/records/rune-direct-byte-packing/results.json",
+  "targets": "The same 55 nonempty LP2-00–55 pages and their joined stream, with no page or byte offset search.",
+  "encodings": ["index-5-msb", "index-5-lsb", "prime-byte"],
+  "formats": ["zlib", "gzip", "raw-deflate", "bzip2", "xz"],
+  "strict_rule": "Start at byte zero. Require decoder EOF and zero unused/trailing input bytes, and cap decompressed output at 1,048,576 bytes. Classify invalid, incomplete, trailing and output-limit separately. A valid decompression is not necessarily meaningful text.",
+  "controls": "For each format, compress a fixed synthetic message and require full recovery; reject truncated and appended-junk versions. Test the one-megabyte output limit using a synthetic expansion. Try a deterministic rune-index five-bit fixture only if an exact compression stream can be represented using indices 0–28 and zero padding.",
+  "excluded": "No scanning offsets or prefixes, guessed header bytes, alternative packing, changed page order, dictionary candidates, recursive decompression, unlimited output or language-based scoring."
+}

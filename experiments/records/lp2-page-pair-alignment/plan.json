@@ -1,0 +1,15 @@
+{
+  "schema": "liberpedia-lp2-page-pair-alignment-plan-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "question": "Do any two LP2 ciphertext pages aligned from rune zero produce an unusually concentrated direct arithmetic stream under addition or subtraction modulo 29?",
+  "idea_source": "User-supplied collected-ideas catalog item 7.3, one LP2 ciphertext page as another page's key. This is a new bounded baseline, not a replay of an attested historical run.",
+  "pages": "All 55 rune-bearing LP2-00..55 pages, excluding LP2-50; concatenate recognized GP29 runes including headings, ignoring non-runes.",
+  "pairing": "Every unordered distinct page pair (1485). Align each pair at rune zero and use the first min(page lengths) runes without repeating or wrapping either page. Direction is not duplicated: negating a subtraction stream leaves IoC unchanged.",
+  "operations": "For each aligned pair produce (A_i+B_i) mod29 and (A_i−B_i) mod29, 2970 streams in total.",
+  "statistic": "Index of coincidence IoC=sum_v f_v(f_v−1)/(N(N−1)) on each output; retain the global maximum over all 2970 streams and its pair, operation, and length. This tests unusually concentrated symbol output, not English or decryption.",
+  "control": "Exactly 256 seeded trials (Python random.Random(330129)). In each trial shuffle each of 55 pages once and reuse that shared shuffled corpus across all pairs. To hold every pair's exact compared-prefix rune histogram fixed, split each page at every observed page length no greater than its own length and shuffle within each resulting band. Retain the global maximum IoC across all 2970 outputs in each trial. Empirical one-sided global p=(1+#null_max>=observed_max)/257. Report band lengths and movement fraction.",
+  "controls": "Plant a distinct-page shifted copy to produce a constant subtraction stream with IoC 1; check operation and direction identities; independent implementation from page JSON recomputes the full observed grid and null maxima with the same frozen seed and band specification.",
+  "interpretation": "A high IoC can arise without readable text; a low/ordinary maximum only excludes this exact direct alignment statistic. Multiple-testing control is across this declared pair/operation grid only.",
+  "exclusions": "Other page orderings, offsets, reversals, interrupted or repeated page keys, longer target beyond the common prefix, alternate encodings, word boundaries, language scoring and known-opening cribs.",
+  "inputs": [{"path":"research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt","sha256":"4f386fa2084f3a2248794b3a656b2cd6aa742c3a643936ba75724c4775fbc9b6"}]
+}

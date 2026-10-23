@@ -1,0 +1,108 @@
+{
+  "id": "lp2-56-four-md5-target-blocks",
+  "status": "published",
+  "title": "Four MD5 blocks in the printed LP2-56 target",
+  "question": "Does any preserved puzzle artifact's exact MD5 digest equal a complete 16-byte block of the printed 64-byte LP2-56 target?",
+  "reader_question": "Could the LP2-56 number be four MD5 hashes?",
+  "summary": "Splits the printed LP2-56 64-byte value into four aligned 16-byte blocks and compares each with MD5 of the fixed preserved-artifact corpus.",
+  "finding": "None of the four printed 16-byte blocks matches MD5 of any of 324 distinct candidate byte strings. One digest per unique input, compared with four blocks, gives 1,296 exact comparisons; 412 names include aliases of identical bytes. First- and last-block planted controls passed, as did the independent recount.",
+  "limitations": "Only this exact byte-zero block partition, MD5 and the frozen preserved-artifact corpus were tested. It does not evaluate the unknown web page, arbitrary new inputs, modified bytes, other digests, offsets or encodings. No historical MD5-block claim is attributed or replayed.",
+  "next_steps": "Any narrower four-MD5 proposal should specify four input byte strings and their order before checking the target; an unknown-page hunt needs a justified candidate source and finite search bound.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-56",
+    "printed target",
+    "MD5",
+    "digest blocks",
+    "artifact corpus",
+    "bounded search"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-56"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-56-internal-artifact-hashes/plan.json"
+    ],
+    "representation": "The archived LP2-56 reading's 128 hexadecimal characters decoded as 64 bytes, divided into four consecutive complete 16-byte blocks; the same 412 named artifact variants and 324 unique byte strings as the frozen earlier corpus.",
+    "procedure": "Verify printed target and source-file hashes; compute MD5 once for each unique candidate byte string; compare all 16 bytes at each of four fixed block positions; independently reconstruct inputs and check planted controls.",
+    "parameters": "Four byte-zero-aligned 16-byte target blocks; MD5 only; 324 × 4 = 1,296 exact comparisons. Known MD5('abc') vector and first/last synthetic block controls.",
+    "exclusions": "Unknown web pages or other corpus inputs, byte permutations, encodings beyond the frozen variants, truncated or reversed digests, offsets, alternative hash algorithms and hypotheses about the four-part message."
+  },
+  "review": {
+    "reviewer": "Independent source-byte reconstruction and four-block MD5 checker",
+    "retested_on": "2026-10-23",
+    "kind": "bounded computational test",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-56-four-md5-target-blocks/run.py --check",
+    "environment": "Python 3 standard library; run from the Liberpedia checkout with pinned images and page data.",
+    "script": "experiments/records/lp2-56-four-md5-target-blocks/run.py",
+    "script_sha256": "38d9d69b75a890f12b13eb342d99bc9d7c99c4e71956f0a0779cdb0f4a636b19",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/plan.json",
+        "sha256": "8c3d15b2b58e5c3b7554aac2523d3b86a702d7e21d977c33573709353d376025"
+      },
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/run.py",
+        "sha256": "38d9d69b75a890f12b13eb342d99bc9d7c99c4e71956f0a0779cdb0f4a636b19"
+      },
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/check.py",
+        "sha256": "b2e84d1e381e0c37732a8cc42d4946f0d3b87270482d5c511162828e381791b7"
+      },
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/plot.py",
+        "sha256": "1ff669414b2c3272171718fd61efd44eb36df2847734a727b602b8db3a831448"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+        "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6"
+      },
+      {
+        "path": "data/pages/lp2-56.json",
+        "sha256": "be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/results.json",
+        "sha256": "7a33f842efac57b809837971f9ce0f35d4e474ddc30c8c58809441a64fb92f9c"
+      },
+      {
+        "path": "experiments/records/lp2-56-four-md5-target-blocks/blocks.svg",
+        "sha256": "7701bf3ce3ffc55f06ce23ab6b65b8a674d72e2c415cfb07acf0b2c63f49cc55"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-56-four-md5-target-blocks/blocks.svg",
+      "caption": "Four complete blocks of the printed LP2-56 target; no MD5 hit for the frozen candidate corpus."
+    }
+  ],
+  "sources": [
+    {
+      "label": "LP2-56 archived manuscript reading",
+      "url": "https://jelliottdev.github.io/#/reader/lp2-56"
+    },
+    {
+      "label": "Frozen artifact corpus and exact bytes",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-56-internal-artifact-hashes"
+    }
+  ],
+  "related": [
+    "lp2-56-internal-artifact-hashes",
+    "lp2-56-aligned-digest-blocks"
+  ],
+  "article": "# Could the LP2-56 number be four MD5 hashes?\n\nThe ending of [LP2-56](#/reader/lp2-56) prints 128 hexadecimal characters: **64 bytes**. One bounded way to read them is as four consecutive 16-byte values, the length of an MD5 digest. We compared each complete block with MD5 of the exact bytes in the preserved Liberpedia artifact corpus.\n\n**Result: none of the four blocks matched.** The corpus contains 412 named variants representing 324 distinct byte strings. We computed MD5 once per distinct input and made **1,296 exact block comparisons**. Each block had zero hits.\n\n![Four consecutive 16-byte blocks of the LP2-56 printed value, each with zero exact MD5 matches in the fixed candidate corpus.](experiments/records/lp2-56-four-md5-target-blocks/blocks.svg)\n\nThis closes only the stated construction for these inputs. It does **not** show that LP2-56 is not a sequence of MD5 values: the intended input could be a web page or other bytes absent from the corpus. Nor does it test modified encodings, another reading of the printed value, truncated digests, a different offset, or a different algorithm. If all four blocks had candidate matches, a proposed four-part explanation would still need to justify the input selection and printed order; no such ambiguity arose here.\n\n## Exact input and comparison rule\n\nThe target is the five hexadecimal runs between separators in the archived LP2-56 reading, with the terminal slash marks removed. Decoding those 128 characters gives 64 bytes. Blocks start at byte **0, 16, 32, and 48**; each occupies exactly 16 bytes. The comparison uses binary digest bytes, not their printed hexadecimal characters.\n\nThe [frozen artifact corpus](#/experiments/lp2-56-internal-artifact-hashes) consists of original page JPEGs, four precise text-encoding variants of stored page raw text and section readings, plus one resolved 256-byte grid payload. Their paths and SHA-256 hashes are pinned in its [source plan](experiments/records/lp2-56-internal-artifact-hashes/plan.json). That earlier experiment tested three 64-byte digest algorithms against the **whole** printed LP2-56 target. This record asks the distinct four-block MD5 question. The [aligned grid-payload test](#/experiments/lp2-56-aligned-digest-blocks) instead compares artifact hashes with blocks of a different, **256-byte grid payload**.\n\nThe runner verifies the printed target against the archived page text and all candidate source-file hashes. It checks MD5 of `abc` against its standard test value, then plants known MD5 digests at the first and last blocks of a synthetic 64-byte container. The independent checker rebuilds the candidate bytes, hashes them and checks all four block positions and the controls. The controls pass, including rejection of byte-reversed digest matches.\n\nRun from the repository root:\n\n```text\npython experiments/records/lp2-56-four-md5-target-blocks/run.py --check\npython experiments/records/lp2-56-four-md5-target-blocks/check.py\n```\n\nThe [plan](experiments/records/lp2-56-four-md5-target-blocks/plan.json), [results](experiments/records/lp2-56-four-md5-target-blocks/results.json) and [checker](experiments/records/lp2-56-four-md5-target-blocks/check.py) pin the bytes, bounds and outputs. This is a new test of a specific construction, **not** a replay of a claimed historical attempt.\n",
+  "article_path": "experiments/records/lp2-56-four-md5-target-blocks/article.md",
+  "script_sha256": "38d9d69b75a890f12b13eb342d99bc9d7c99c4e71956f0a0779cdb0f4a636b19",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}

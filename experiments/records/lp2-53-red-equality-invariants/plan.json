@@ -1,0 +1,69 @@
+{
+  "schema": "liberpedia-lp2-53-red-equality-invariants-plan-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "question": "How do substitution-invariant equality statistics of LP2-53’s visually delimited red passage compare with solved GP text and within-page black text?",
+  "span": {
+    "page": "lp2-53",
+    "source_image": "images/lp2-53.jpg",
+    "source_image_sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548",
+    "page_json": "data/pages/lp2-53.json",
+    "page_json_sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b",
+    "zero_based_page_rune_ordinals": [
+      128,
+      178
+    ],
+    "visual_delimitation": "Final red ᛏ at the end of one-based text line 6 (the 19th rune), followed by all runes on lines 7, 8 and 9. The span has 1+24+22+4=51 runes. Exclude punctuation, line slashes, the dotted mark after the last rune and artwork."
+  },
+  "control_corpus": "The output_index column of all eight archived decoded GP reading CSV sections except lp2-56.csv, whose target is a hash rather than prose. Slide every 51-rune window within each section; do not join separate sections. The exact CSV and manifest bytes are hashed below.",
+  "same_page_control": "All 51-rune windows wholly within LP2-53 page ordinals 0..127, the black prefix before the red start. This is 78 overlapping windows.",
+  "measures": "IoC=sum_v f_v(f_v−1)/(51*50), adjacent-equal pairs among 50 neighbors, and unique-rune count. All three are invariant under a bijective monoalphabetic rune substitution. Report red values plus distribution min/median/max and empirical positional rank among control windows; overlapping windows are descriptive, not independent trials.",
+  "order_control": "Exactly 10,000 random.Random(330153) shuffles of the 51 red indices, preserving its symbol multiset and IoC. Report the adjacent-equal count distribution and both inclusive tails; do not promote this post-target shuffle to an authorial cipher model.",
+  "interpretation": "A match to solved-text statistics is necessary but far from sufficient for a simple substitution. Outlier values are evidence about equality structure only, not proof of another cipher or a translation.",
+  "exclusions": "Key searches, crib fits, arbitrary red-span boundaries, comparison of literal English letters instead of decoded GP indices, LP2-56 hash target, external corpora and image-to-rune OCR.",
+  "inputs": [
+    {
+      "path": "images/lp2-53.jpg",
+      "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+    },
+    {
+      "path": "data/pages/lp2-53.json",
+      "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b"
+    },
+    {
+      "path": "exports/readings/manifest.json",
+      "sha256": "7bc3bd91d7c99d20220b93721815d9027a487365a184f2f472b46c62e35b1a92"
+    },
+    {
+      "path": "exports/readings/first-koan.csv",
+      "sha256": "85d24cd1ff20b94c656a006dc2cc2ac87c56df92bed6eb2e2b6f5343481ca141"
+    },
+    {
+      "path": "exports/readings/instruction.csv",
+      "sha256": "dd38992febd9db09dae394bfb1add65f39d343c146e859839b093f142b54fed8"
+    },
+    {
+      "path": "exports/readings/loss-of-divinity.csv",
+      "sha256": "695ef51d5f4fcab220b0cfe5503398c908e04b5026359e7b572b4ce6431efd24"
+    },
+    {
+      "path": "exports/readings/lp2-57.csv",
+      "sha256": "197e8df75a46d57c436438d2d6e2f40d687a7ee8ad8d1338b3beef3e68c6957d"
+    },
+    {
+      "path": "exports/readings/second-koan.csv",
+      "sha256": "8dba66bdb73a2a35749161e892989ee31f997d8ec78e058e4e140096b1215d1b"
+    },
+    {
+      "path": "exports/readings/some-wisdom.csv",
+      "sha256": "c2e6f61b2ce4eddbf65e80f687186824ae8f15734fd1c503c8ab9c43484c9994"
+    },
+    {
+      "path": "exports/readings/warning.csv",
+      "sha256": "ca41950661c32c341c9d18a4330ea25129c609efa306377cc51fc5b1cea4a121"
+    },
+    {
+      "path": "exports/readings/welcome.csv",
+      "sha256": "db1c35e54cf555ad34b22ba1dcffff9e48c056d141f917e0a730095ed4f37577"
+    }
+  ]
+}

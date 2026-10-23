@@ -1,0 +1,19 @@
+{
+  "schema": "liberpedia-lp2-56-four-md5-target-blocks-plan-v1",
+  "question": "Does the printed 64-byte LP2-56 target consist of four consecutive MD5 digests of known preserved puzzle artifacts?",
+  "candidate_plan": {
+    "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+    "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6",
+    "variants": 412,
+    "unique_byte_strings": 324
+  },
+  "printed_target": {
+    "path": "data/pages/lp2-56.json",
+    "hex": "36367763ab73783c7af284446c59466b4cd653239a311cb7116d4618dee09a8425893dc7500b464fdaf1672d7bef5e891c6e2274568926a49fb4f45132c2a8b4",
+    "bytes": 64,
+    "source_field": "reading.literal, the five hex runs each followed by a slash separator, between ampersand separators"
+  },
+  "block_rule": "Decode the printed 128 hexadecimal characters to 64 bytes. Divide at byte zero into four consecutive, non-overlapping 16-byte blocks. MD5 the exact bytes of each unique frozen candidate once and compare the full 16 output bytes with each block in printed order.",
+  "controls": "Validate MD5('abc') against the published standard value. In a synthetic 64-byte container, plant a known candidate digest at block zero and another at block three; recover both exact block indices and reject byte-reversed digests.",
+  "excluded": "No unknown web-page search, arbitrary combinations of four candidate digests, changed candidate encodings, digest truncation, sliding offsets, reversed byte order, other algorithms or claim that this replays a historical proposal."
+}
