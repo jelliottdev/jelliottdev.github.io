@@ -16,6 +16,12 @@ This invented sequence illustrates arithmetic only; it is not a manuscript readi
 
 The differences are 3, 3 and 28. Starting from 27 and cumulatively adding them modulo 29 recovers 27, 1, 4, 3. Without the initial value, there are 29 possible reconstructions differing by a constant shift. A difference stream alone has lost that information.
 
+A cumulative autokey that is just first differences
+
+One suggested rule is P[k] = C[k] − (P[0] + … + P[k−1]) mod 29, starting with an empty sum of zero. It looks as if every earlier plaintext rune affects the next one. But after each step the accumulated plaintext sum equals the current ciphertext value: S[k] = S[k−1] + P[k] = C[k]. So the rule gives P[0] = C[0] and, for every later position, P[k] = C[k] − C[k−1] mod 29. The example above produces 27, 3, 3, 28 when its initial value is retained.
+
+This identity holds only for that exact recurrence and boundary rule. Restarting the sum at a word or page gives separate difference chains; adding an initial seed, skipping an F, or using a Fibonacci recurrence changes the test. The latter is not covered by the identity.
+
 Variants and boundaries
 
 Variants include signed or absolute differences, larger lags, differences of prime values, cumulative sums, repeated differencing and two-dimensional neighbor rules. Absolute differences discard direction and are generally not invertible without extra information. A page-by-page restart also differs from carrying state across a page boundary.
@@ -58,11 +64,17 @@ What would support the rule?
 For a reversible variant, verify the inverse on complete inputs. If a rule is chosen on one segment, test an untouched continuation with the same initial-state policy. Compare the complete selection procedure with controls. A repeated difference or a short word is an observation, not by itself a cipher identification.
 
 Documented experiments
-No differential-decoding experiment is linked yet. Lag coincidences measure equality at a distance; they do not perform this decoding operation.
+The LP2 difference-stream study measures consecutive rune-index differences within pages; it does not establish readable plaintext. The LP2-54–55 reset and skip tests vary the treatment of F under ciphertext feedback. Their page range, scoring and interruption rules are narrower than a proposed manuscript-wide cumulative-autokey reading. Lag coincidences measure equality at a distance, not this decoding operation.
 
 All method families · Modular arithmetic · Alignment and resets
 
 Sources, related references, and files
+- LP2 difference-stream study
+  https://jelliottdev.github.io/#/experiments/ea-difference-independence
+- LP2-54–55 reset
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-reset
+- skip
+  https://jelliottdev.github.io/#/experiments/lp2-54-55-autokey-skip
 - Lag coincidences
   https://jelliottdev.github.io/reference/articles/rune-lag-matches.html
 - All method families
