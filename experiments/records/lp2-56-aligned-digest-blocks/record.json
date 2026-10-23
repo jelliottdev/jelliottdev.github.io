@@ -1,0 +1,103 @@
+{
+  "id": "lp2-56-aligned-digest-blocks",
+  "status": "published",
+  "title": "Aligned digest blocks in the 256-byte grid payload",
+  "question": "Does any digest of the frozen artifact corpus equal a complete aligned block of the resolved 256-byte grid payload?",
+  "reader_question": "Could the 256-byte grid contain hashes of known puzzle files or text?",
+  "summary": "Checks the frozen artifact corpus against every complete byte-zero-aligned 16-, 32- and 64-byte block under seven digest algorithms.",
+  "finding": "No digest of the 324 distinct candidate byte strings equals any complete aligned block of the 256-byte payload from LP2-49–51. The seven algorithms made 16,848 exact comparisons. All seven first-and-last-block planted controls passed.",
+  "limitations": "Only the specified candidate bytes, seven algorithms and non-overlapping blocks beginning at byte zero were tested. Sliding offsets, bit shifts, hash truncation, padding, changed encodings and other payload readings remain outside scope. The result does not identify the grid's meaning or evaluate the printed LP2-56 target as a block.",
+  "next_steps": "A more specific digest hypothesis should name its input bytes, algorithm, payload reading, block offset and comparison rule before checking the bytes. A sliding-window study needs its own bounded plan and controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "grid payload",
+    "digest blocks",
+    "hashes",
+    "byte alignment",
+    "candidate corpus",
+    "bounded search"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "The resolved 256-byte payload from the LP2-49–51 grid, divided at byte zero into non-overlapping complete blocks of 16, 32 or 64 bytes. Inputs are 412 named preserved-artifact variants representing 324 distinct byte strings.",
+    "procedure": "Verify all original candidate-file and payload hashes; hash each unique candidate once under each algorithm; compare exact output bytes with every aligned block of equal size. Independently rebuild inputs and search block-to-digest in the checker. Plant each known control digest at the first and last aligned block.",
+    "parameters": "MD5 on sixteen 16-byte blocks; SHA-256, SHA3-256 and BLAKE2s-256 on eight 32-byte blocks; SHA-512, SHA3-512 and BLAKE2b-512 on four 64-byte blocks. 324 unique inputs × 52 algorithm/block comparisons = 16,848 comparisons; 2,268 digest computations.",
+    "exclusions": "No overlapping windows, offsets other than zero, bit shifts, truncated or reversed digests, padding, additional byte transforms, other input corpora, other algorithms or alternate payload extraction."
+  },
+  "review": {
+    "reviewer": "Independent byte reconstruction, reversed search direction and seven planted first/last-block controls",
+    "retested_on": "2026-10-23",
+    "kind": "bounded computational test",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-56-aligned-digest-blocks/run.py --check",
+    "environment": "Python 3 standard library. Run from a Liberpedia checkout containing the pinned manuscript images, page data and resolved payload.",
+    "script": "experiments/records/lp2-56-aligned-digest-blocks/run.py",
+    "script_sha256": "336081c8babe35b6044ac27bca282d84a64138085119887b7cfd2b6564dd51c7",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/plan.json",
+        "sha256": "71b04a2ade775ff4d9d5c3913a974e0c9ec27bd25d12184ff80c280842870882"
+      },
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/run.py",
+        "sha256": "336081c8babe35b6044ac27bca282d84a64138085119887b7cfd2b6564dd51c7"
+      },
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/check.py",
+        "sha256": "729d53c9e20b6156aa6ee04a425fd47f73297a6fcd738a413b434f641c559f4e"
+      },
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/plot.py",
+        "sha256": "06cca8802382a521e20d5b7c23de0179027951d3e3d3a3fcbd194f7a9a12273e"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+        "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6"
+      },
+      {
+        "path": "experiments/records/rsa-window-54-source-replay/source/payload_resolved.bin",
+        "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/results.json",
+        "sha256": "87c8c9b9f535fc7c83ff7b2c7382655e75d4d1615d607254be927343ce21696e"
+      },
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/candidate-map.json",
+        "sha256": "d1dfb5eacb19216005cc7795f171119a68b64d45d3eaf11f56ffe9be417ea0d6"
+      },
+      {
+        "path": "experiments/records/lp2-56-aligned-digest-blocks/blocks.svg",
+        "sha256": "4edecc3c18a6bcfa4edfdce5114ad0960337421799749e5e230293c9e885a0dd"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-56-aligned-digest-blocks/blocks.svg",
+      "caption": "The 256-byte payload has 16 aligned 16-byte blocks, eight 32-byte blocks and four 64-byte blocks; none matched a tested candidate digest."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned grid-payload source protocol",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round28/L5/PREREG.md"
+    },
+    {
+      "label": "Frozen Liberpedia artifact corpus",
+      "url": "https://jelliottdev.github.io/#/experiments/lp2-56-internal-artifact-hashes"
+    }
+  ],
+  "related": [
+    "lp2-56-internal-artifact-hashes",
+    "rsa-window-54-source-replay"
+  ]
+}

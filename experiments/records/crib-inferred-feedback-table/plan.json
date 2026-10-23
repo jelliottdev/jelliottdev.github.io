@@ -1,0 +1,18 @@
+{
+  "schema": "liberpedia-crib-inferred-feedback-table-plan-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "question": "How much does a fixed 12-rune opening constrain an otherwise arbitrary 29-entry feedback substitution table?",
+  "input": "LP2-00..55 excluding runeless LP2-50; first 24 recognized runes including headings on each page; nine existing fixed 12-rune known-reading openings.",
+  "field": "Canonical Gematria Primus indices 0..28, all arithmetic modulo 29.",
+  "modes": [
+    "CTA: for i=1..11, P_i=C_i−f(C_(i−1)); equivalently f(C_(i−1))=C_i−P_i.",
+    "PTA: for i=1..11, P_i=C_i−f(P_(i−1)); equivalently f(P_(i−1))=C_i−P_i."
+  ],
+  "first_symbol": "P_0 is stipulated by the crib; an external primer or rule must account for it. It creates no f-table constraint.",
+  "compatibility": "The same input index must imply the same f output every time. If so, r distinct inputs are assigned and exactly 29^(29−r) full functions F29→F29 extend the partial table; otherwise zero do.",
+  "held_forward": "For a consistent opening, inspect positions 12..23 on that same page only. CTA reports individually determined positions where C_(i−1) already has an assigned table value. PTA advances from the stipulated P_11 until f(current plaintext) is first undefined; it reports only this initial chain. No future plaintext is available as a truth label, so no validation claim is made.",
+  "size": "Two modes × 55 page starts × nine openings = 990 finite crib/table-inference cases; not an enumeration of the 29^29 full functions.",
+  "controls": "Independent constraint construction from page JSON, planted known-table checks for both modes, inconsistent repeated-input controls, and exhaustive all-function comparison over F3 and F5 for synthetic cases.",
+  "exclusions": "Search over primer rules, unknown plaintext, scored English, further ciphertext layers, page shifts, alternative alphabet order, variable feedback state and claims of a verified LP2 decryption.",
+  "inputs": [{"path":"experiments/records/lp2-known-vigenere-keys/plan.json","sha256":"3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"}]
+}

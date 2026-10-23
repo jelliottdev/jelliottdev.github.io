@@ -1,0 +1,15 @@
+{
+  "schema": "liberpedia-direct-hill-feasibility-plan-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "question": "Can any invertible direct linear block map over F29 turn the first twelve runes of an unsolved LP2 page into one of nine fixed known-reading openings?",
+  "field": "Canonical GP rune indices 0..28 with arithmetic modulo the prime 29.",
+  "input": "LP2-00..55, excluding runeless LP2-50; first twelve recognized runes per page including headings; page-local origin zero, no padding or reversal.",
+  "blocks": "For dimension n in {2,3}, split the first twelve ciphertext and target indices into consecutive n-symbol column vectors. Require a single unknown invertible n by n matrix D with P_j=D C_j for every block j.",
+  "cribs": "All nine fixed 12-rune vectors in experiments/records/lp2-known-vigenere-keys/plan.json, frozen before this test.",
+  "criterion": "An exact full-opening fit exists iff all linear dependencies among the ciphertext blocks also hold among the target blocks AND their spans have equal rank. Rank-deficient fits are counted as invertible extensions, not rejected.",
+  "extension_count": "For common rank r, the number of full invertible n by n extensions is the product over j=r..n-1 of (29^n-29^j); for r=n this is one.",
+  "size": "2 dimensions × 55 page starts × 9 fixed openings = 990 complete-key feasibility cases, no matrix brute force.",
+  "controls": "Independent stacked-rank criterion, planted full-rank and deficient-rank positive cases, inconsistent and zero-input negatives, exhaustive invertible 2x2 and 3x3 matrices over F2 and F3 for small-field oracle cases.",
+  "exclusions": "Affine constants, alternative block origins or directions, row/column permutations, transposition, padding, other plaintexts, later page positions, cross-page keys and any LP magic-square interpretation.",
+  "inputs": [{"path":"experiments/records/lp2-known-vigenere-keys/plan.json","sha256":"3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"}]
+}

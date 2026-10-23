@@ -1,0 +1,28 @@
+{
+  "schema": "liberpedia-lp2-56-aligned-digest-blocks-plan-v1",
+  "question": "Does any digest of the frozen artifact corpus equal a complete aligned block of the resolved 256-byte grid payload?",
+  "candidate_plan": {
+    "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+    "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6",
+    "variants": 412,
+    "unique_byte_strings": 324
+  },
+  "payload": {
+    "path": "experiments/records/rsa-window-54-source-replay/source/payload_resolved.bin",
+    "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290",
+    "size": 256
+  },
+  "block_rules": {
+    "origin": 0,
+    "byte_order": "exact output bytes, no reversal",
+    "windows": "non-overlapping complete blocks only",
+    "lengths": [16, 32, 64]
+  },
+  "algorithms": {
+    "16": ["md5"],
+    "32": ["sha256", "sha3_256", "blake2s_256"],
+    "64": ["sha512", "sha3_512", "blake2b_512"]
+  },
+  "controls": "For each algorithm, put its digest of a fixed control input in the first and last aligned block of a synthetic 256-byte container; verify both positions and reject reversed digest bytes.",
+  "excluded": "No sliding offsets, overlapping windows, padding, extra endian forms, hex-text comparisons, altered artifact encodings, additional hash algorithms, or undocumented payload extraction rules."
+}

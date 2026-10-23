@@ -1,0 +1,137 @@
+{
+  "id": "lp2-56-whirlpool-stribog",
+  "status": "published",
+  "title": "LP2-56: Whirlpool and Streebog-512 artifact hashes",
+  "question": "Do Whirlpool or Streebog-512 digests of the previously frozen artifact bytes equal the complete LP2-56 value?",
+  "reader_question": "Have Whirlpool and Streebog been checked against page 56?",
+  "summary": "Both algorithms passed published 512-bit test vectors; neither matched LP2-56 for any of 412 frozen artifact-byte variants.",
+  "finding": "The 412 named variants contain 324 unique byte strings. Libgcrypt computed 648 unique Whirlpool/Streebog digests, then 1,236 full-value comparisons including the normal and RFC 6986 byte displays of Streebog. Zero matched the 64-byte target.",
+  "limitations": "Inputs and four text-newline rules are exactly those of the prior internal-artifact hash matrix. RFC-display reversal changes only the presentation of Streebog's digest, not the input bytes or algorithm. Other inputs, keyed or salted hashes, arbitrary byte transforms and older Whirlpool revisions remain outside scope. The tested DLL is not bundled; another libgcrypt installation must pass the same controls.",
+  "next_steps": "A further digest proposal should identify the exact new input bytes or independently justified algorithm and pin both before comparing with the full target.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-56",
+    "hash",
+    "Whirlpool",
+    "Streebog",
+    "GOST R 34.11-2012",
+    "libgcrypt",
+    "artifact bytes"
+  ],
+  "family": {
+    "id": "lp2-target-hash-inputs",
+    "title": "Candidate byte inputs for the LP2-56 value",
+    "question": "Does a precisely specified artifact and hash reproduce the printed value?",
+    "baseline": "lp2-56-internal-artifact-hashes"
+  },
+  "variant": {
+    "label": "Whirlpool and Streebog-512 on the same frozen byte corpus",
+    "changes": [
+      {
+        "field": "representation",
+        "before": "The target is LP2-56's five printed hexadecimal rows. Inputs are all 75 preserved manuscript JPEGs, all 75 raw page strings, nine joined stored literal sections (including the LP2-56 hash itself) and the 256-byte resolved grid payload. Exact source paths and hashes are in plan.json.",
+        "after": "Target: all five printed LP2-56 hexadecimal rows, totaling 64 bytes. Inputs: exactly the earlier pinned 75 manuscript JPEGs, 75 raw page strings × four byte forms, nine stored literal sections × four forms, and 256-byte resolved grid payload. Source plan SHA-256 is pinned in the new plan.",
+        "reason": "Reuse identical frozen input bytes while adding two digest algorithms."
+      },
+      {
+        "field": "procedure",
+        "before": "Freeze exact input-file hashes and text-byte rules. Hash each resulting byte stream with three independently vector-checked 512-bit algorithms. Compare the complete 64-byte digest with the printed target.",
+        "after": "Validate installed libgcrypt with a Whirlpool reference vector and two RFC 6986 Streebog-512 vectors. Hash 324 distinct byte strings once under each algorithm. Fan out to 412 named inputs; compare complete digest bytes, and for Streebog also their RFC-style byte-reversed display, with the complete target.",
+        "reason": "Run vector-checked Whirlpool and Streebog through libgcrypt, including the RFC digest-display convention."
+      },
+      {
+        "field": "parameters",
+        "before": "412 candidate variants, including four LF/CRLF terminal-newline forms for text; 3 algorithms; 1,236 comparisons and 324 distinct byte strings.",
+        "after": "324 distinct bytestrings, 412 named variants, two algorithms, 648 actual digest operations and 1,236 complete-value displayed comparisons.",
+        "reason": "Report unique hash operations and each named display comparison for the added algorithms."
+      },
+      {
+        "field": "exclusions",
+        "before": "No Whirlpool or Streebog implementation available; no remote URL bytes, historical source JPEG-byte identity, HTML, arbitrary padding, case changes, other encodings, or partial hash searches.",
+        "after": "No new artifact or encoding choices, digest prefixes, keyed/salted variants, input byte reversal, older Whirlpool-0/T revisions, or hash-to-address conversions.",
+        "reason": "State the bounds specific to this algorithm extension."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [
+      "lp2-56"
+    ],
+    "representation": "Target: all five printed LP2-56 hexadecimal rows, totaling 64 bytes. Inputs: exactly the earlier pinned 75 manuscript JPEGs, 75 raw page strings × four byte forms, nine stored literal sections × four forms, and 256-byte resolved grid payload. Source plan SHA-256 is pinned in the new plan.",
+    "procedure": "Validate installed libgcrypt with a Whirlpool reference vector and two RFC 6986 Streebog-512 vectors. Hash 324 distinct byte strings once under each algorithm. Fan out to 412 named inputs; compare complete digest bytes, and for Streebog also their RFC-style byte-reversed display, with the complete target.",
+    "parameters": "324 distinct bytestrings, 412 named variants, two algorithms, 648 actual digest operations and 1,236 complete-value displayed comparisons.",
+    "exclusions": "No new artifact or encoding choices, digest prefixes, keyed/salted variants, input byte reversal, older Whirlpool-0/T revisions, or hash-to-address conversions."
+  },
+  "review": {
+    "kind": "paired algorithm extension of pinned byte corpus",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent source-byte reconstruction and libgcrypt streaming-API checker with three primary test vectors",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-56-whirlpool-stribog/run.py && python experiments/records/lp2-56-whirlpool-stribog/check.py",
+    "environment": "Python 3 standard library plus installed libgcrypt. Tested Windows DLL: GnuPG libgcrypt 1.12.2, SHA-256 ae89cb9f0f694467eddb679c5af4429442d0d2be225b7d0db7b5fcc076f55318. Both scripts accept --libgcrypt PATH; all three vectors must pass.",
+    "script": "experiments/records/lp2-56-whirlpool-stribog/run.py",
+    "script_sha256": "4ced3d469a714efc1164d76c80b6c5535a6da7df6d11fed4ac331025caee2838",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/plan.json",
+        "sha256": "3e70d8400a64a17f19fec8e4147fdbbf54c160289ae34c85abb63303806c2c4a"
+      },
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/make_plan.py",
+        "sha256": "20f93f62c5ef37a905aa0c39c7e478d98f7412716dfbee12abd202a06cb3492c"
+      },
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/run.py",
+        "sha256": "4ced3d469a714efc1164d76c80b6c5535a6da7df6d11fed4ac331025caee2838"
+      },
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/check.py",
+        "sha256": "f98b389043fc1524d63c04e7cf7c03faa00ab62452d8976305b0bbe2587affd1"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+        "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/results.json",
+        "sha256": "56ab92c124649226cb1444eec35e649ba4ca562c69d64c2c8ef8bd42dc8ac65a"
+      },
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/cases.jsonl",
+        "sha256": "4ac406dff447460253030a139027f09d41296a9f040862aff219fa7a90dc3acc"
+      },
+      {
+        "path": "experiments/records/lp2-56-whirlpool-stribog/coverage.svg",
+        "sha256": "1c4162e16132cec5f9a57935ab5517d0d670e7cbeb75b0e308a946876095d97d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-56-whirlpool-stribog/coverage.svg",
+      "caption": "The same 412 input variants were compared under two new hash algorithms, with two documented display conventions for Streebog."
+    }
+  ],
+  "sources": [
+    {
+      "label": "RFC 6986, Streebog-512 test examples",
+      "url": "https://www.rfc-editor.org/rfc/rfc6986.html#section-10"
+    },
+    {
+      "label": "Whirlpool reference-derived test vectors in Linux cryptographic tests",
+      "url": "https://android.googlesource.com/kernel/msm/+/2d94dfc8c38edf63e91e48fd55c3a8822b6a9ced/crypto/tcrypt.h"
+    },
+    {
+      "label": "Libgcrypt digest API documentation",
+      "url": "https://gnupg.org/documentation/manuals/gcrypt/Working-with-hash-algorithms.html"
+    }
+  ],
+  "related": [
+    "lp2-56-internal-artifact-hashes",
+    "grid-high-digit-cells"
+  ]
+}

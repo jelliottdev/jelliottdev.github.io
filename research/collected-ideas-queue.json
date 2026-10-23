@@ -19,7 +19,7 @@
     "new_queue_groups": 26,
     "queued_source_ideas": 35,
     "new_experiments_run_during_intake": 0,
-    "published_followup_records": 7
+    "published_followup_records": 10
   },
   "intake": [
     {
@@ -2200,7 +2200,7 @@
       "source_idea_ids": [
         "4.5"
       ],
-      "state": "needs-rule",
+      "state": "bounded-followup-recorded",
       "next_action": "Freeze table domain, consistency constraints and held-out continuation before learning any table entries.",
       "existing_record_ids": [
         "feedback-opening-census"
@@ -2208,8 +2208,14 @@
       "scope_and_gates": [
         "No unknown lookup-table inference with contradiction tracking from predeclared cribs. Freeze table domain, allowed ambiguity, training cribs and holdout pages."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "crib-inferred-feedback-table"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Other cribs, multiple training passages, selected primers and verified held-out plaintext remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "url-structured-cribs"
       ]
@@ -2412,14 +2418,20 @@
       "source_idea_ids": [
         "12.6"
       ],
-      "state": "needs-scope",
+      "state": "bounded-followup-recorded",
       "next_action": "Freeze digest algorithms, block boundaries, candidate-byte corpus and complete match accounting.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "Retain explicit splitting of the 256 bytes into digest-sized blocks and matching a frozen candidate-input corpus. Specify block lengths/offsets, algorithms and complete comparison count."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-56-aligned-digest-blocks"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Sliding blocks, changed payload readings, other candidate bytes and other algorithms remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "four-md5-target-blocks",
         "internal-artifact-hash-matrix"
@@ -2502,10 +2514,11 @@
       ],
       "result": {
         "record_ids": [
-          "lp2-56-internal-artifact-hashes"
+          "lp2-56-internal-artifact-hashes",
+          "lp2-56-whirlpool-stribog"
         ],
         "scope": "See each published record; no whole-family exclusion.",
-        "remaining_scope": "Whirlpool/Streebog, unlisted candidate bytes and other transformations remain untested."
+        "remaining_scope": "Unlisted candidate bytes, keyed or salted constructions, other transformations and other digest algorithms remain untested."
       },
       "has_been_run": true,
       "related_queue_ids": [

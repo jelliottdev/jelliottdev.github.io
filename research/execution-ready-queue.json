@@ -9,18 +9,16 @@
   "counting": "64 reproduction-command ledger entries are source entries, not 64 independent ideas. Parameter configurations inside a command are not counted as ideas. Ready means source rules, local inputs and controls appear available; publication still requires independent replay and input-hash checks.",
   "counts": {
     "reproduction_command_entries": 64,
-    "ready_unclaimed_source_programs": 1,
+    "ready_unclaimed_source_programs": 0,
     "completed_draft_partial": 0,
-    "claimed_by_other_agent": 3,
-    "covered_or_partial": 16,
+    "claimed_by_other_agent": 2,
+    "covered_or_partial": 17,
     "umbrella_verdict_or_audit": 7,
-    "blocked_or_audit_needed": 37,
+    "blocked_or_audit_needed": 38,
     "source_entries_in_disposition_total": 64,
     "completed_draft_full": 0
   },
-  "priority_ready_source_ids": [
-    "R21-L1-SEAL"
-  ],
+  "priority_ready_source_ids": [],
   "command_audit": [
     {
       "source_id": "VERDICT-OTP-CLASS",
@@ -882,7 +880,7 @@
     },
     {
       "source_id": "R21-L1-SEAL",
-      "disposition": "ready-unclaimed",
+      "disposition": "blocked-or-input-audit-needed",
       "runnable_method": "cross-fold real-mode proxy and held-out hallucination controls",
       "reproduce_command": "cd liber-primus && python3 tests/validate.py && python3 analysis/round21/L1-seal-realmode-proxy/audit_catch.py",
       "source_evidence": [
@@ -904,11 +902,12 @@
         }
       ],
       "ledger_status": "audit",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "blocker": "Exact pinned source corpus bytes absent: data/keys/mabinogion.txt, data/kjv.txt, data/keys/welsh/welsh_mabinogion.txt. A different cached edition cannot reproduce sampled offsets. Source receipts are not an independent replay."
     },
     {
       "source_id": "R21-L2-NSKIPS-CROSSOVER-LENGTH",
-      "disposition": "claimed-by-another-agent",
+      "disposition": "record-overlap-or-partial",
       "runnable_method": "Exact 34-cell source replay is running with a resumable checkpoint in public-nskips-crossover; not yet published.",
       "reproduce_command": "cd liber-primus/analysis/round21/L2-nskips-crossover-length && python3 crossover.py  (reuses ../../round20/P2/nskips_lib.py; seed 3301; Q1-gate runs first as the Q5 kill checkpoint, then the ladder; writes nskips_crossover.json incrementally).",
       "source_evidence": [
@@ -930,7 +929,11 @@
         }
       ],
       "ledger_status": "measured",
-      "ledger_control": "passed"
+      "ledger_control": "passed",
+      "published_record_ids": [
+        "public-nskips-crossover"
+      ],
+      "note": "All 34 executable source cells replayed; this covers the implemented grid, not the omitted planned surrogate or a whole cipher family."
     },
     {
       "source_id": "R21-L3-PY27-REDUCERS",
