@@ -76,7 +76,36 @@
       "An isolated copy rerun with OPENBLAS_NUM_THREADS=1 produced the same 229 classes and byte-identical templates.npz (11.386 seconds).",
       "A separate diagnostic copy using stable argsort for template-size ordering also produced the same 229 classes and byte-identical templates.npz (5.8 seconds). This does not establish the mismatch cause."
     ],
-    "downstream_gate": "The source template-class count did not reproduce, and source read.py retains only classes covering at least 100 glyphs. Therefore the source OCR/read-line count and canon-comparison gates have not been reproduced; do not treat source transcription-dependent experiments as unblocked. Full read.py and diff.py were not run after this failed gate.",
-    "independence_limit": "The two executed scripts are label-free with respect to canonical transcription. They reproduce geometry dimensions, not rune identities. Later diff.py compares with canon and is not an independent validation of every glyph."
+    "downstream_gate": "The historical template-class count was not reproduced. The original downstream read.py and diff.py were subsequently run on the fresh 229-class instrument; their outputs, exact differences, and dependence on canonical text are recorded under downstream_original_routine. The historical artifacts remain unreproduced, but fresh fixed-code runs with pinned new outputs are possible.",
+    "independence_limit": "The two executed scripts are label-free with respect to canonical transcription. They reproduce geometry dimensions, not rune identities. Later diff.py compares with canon and is not an independent validation of every glyph.",
+    "downstream_original_routine": {
+      "source_inputs_sha256": {
+        "analysis/retranscribe/read.py": "de759139eed03c6b8c8a2aacab5384d5ab5c0af2e6ee56e9e701ab64ef20166f",
+        "analysis/retranscribe/diff.py": "ba4b08491496037a175e5c03dc5974e010dcaf7a61ea164291b972419fd35367",
+        "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+        "data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      "source_copy_check": "All four downstream source files were byte-identical to the pinned checkout in the isolated copy. No hosted image, source checkout, or canonical input was changed.",
+      "historical_226_status": "226 is a saved templates_report.json count, not a hard-coded trust gate in read.py or diff.py. read.py dynamically retains every class covering at least 100 glyphs, so the fresh 229-class rebuild selects 33 templates rather than the historical 32.",
+      "read_command": "python analysis/retranscribe/read.py",
+      "read_exit_code": 0,
+      "fresh_image_bands": 646,
+      "fresh_read_glyphs": 16237,
+      "archived_read_glyphs": 16245,
+      "read_line_count_comparison": "All 646 line-band page IDs and indices match. Glyph counts differ on 4 bands: band 91/page 8 (25 versus 27), 261/page 22 (104 versus 107), 262/page 22 (43 versus 44), and 635/page 54 (43 versus 45); 642 band glyph counts match.",
+      "read_lines_sha256": "d4067184c06ce95dcc8408160a122ba9ea73ca476747789451cd240f8a7878a2",
+      "diff_command": "python analysis/retranscribe/diff.py",
+      "diff_exit_code": 0,
+      "fresh_canon_lines": 604,
+      "fresh_canon_runes": 13136,
+      "fresh_aligned_lines": 596,
+      "fresh_equal_count_lines": 233,
+      "archived_equal_count_lines": 232,
+      "fresh_in_sample_label_fit": "5011/5229 = 95.831% after fitting 29 class-to-rune assignments on those same equal-count lines; 118 disagreements are emitted among assigned classes. The 218 nonmatches by subtraction include unassigned classes and should not be relabeled as independent transcription errors.",
+      "archived_in_sample_label_fit_percent": 96.92721336662186,
+      "diff_report_sha256": "953bf67751c45ebc02969142f876ddb00803311543b1f93cd419303820eaae99",
+      "training_provenance": "The original diff.py parses LP2 canonical rune text, selects equal-count aligned lines, builds a class-by-rune confusion matrix on those lines, optimizes a one-to-one class assignment using that matrix, then scores those same lines. It does not train on independently solved LP1 text and has no held-out evaluation set; held-out line count is 0.",
+      "interpretation": "The fixed source code completes on exact recovered JPEGs with a fresh 229-class instrument. Its raw 233 equal-count lines are close to but not identical to the archived 232. This is a fresh fixed-code rerun, not an exact replay of the historical NPZ/read-lines artifacts or an independent verification of rune identities. A source experiment may be rerun with this fresh instrument if it explicitly pins and checks these new outputs; it cannot silently inherit the archived 226-class or 96.93% receipts."
+    }
   }
 }

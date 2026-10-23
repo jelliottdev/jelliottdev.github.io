@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 from build_experiments import build
 from preflight_experiments import preflight
+from build_experiment_bundles import build as build_bundle
 
 
 class RegistryTests(unittest.TestCase):
@@ -70,6 +71,15 @@ class RegistryTests(unittest.TestCase):
             'path': path, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
         with self.assertRaisesRegex(ValueError, 'generated Python caches'):
             self.run_build(record)
+
+    def test_bundle_rejects_a_changed_reviewed_dependency(self):
+        record = self.run_build()[0]
+        verifier = self.root / 'scripts/verify_bundle.py'
+        verifier.parent.mkdir()
+        verifier.write_text('# fixture verifier', encoding='utf-8')
+        (self.root / record['reproduction']['inputs'][0]['path']).write_bytes(b'changed after validation')
+        with self.assertRaisesRegex(ValueError, 'differs from reviewed hash'):
+            build_bundle(self.root, record)
 
     def test_draft_preflight_preserves_status_and_every_site_file(self):
         self.run_build()

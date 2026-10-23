@@ -17,6 +17,9 @@ def build(root, record):
     }
     omitted = []
     members = {}
+    expected = {item['path']: item['sha256']
+                for role in ('inputs', 'outputs') for item in record['reproduction'][role]}
+    expected[record['reproduction']['script']] = record['reproduction']['script_sha256']
     for name in sorted(names):
         path = PurePosixPath(name)
         if path.is_absolute() or ".." in path.parts or "\\" in name or ":" in name:
@@ -25,6 +28,8 @@ def build(root, record):
         if not source.is_relative_to(root.resolve()):
             raise ValueError("Bundle member escapes repository: " + name)
         data = source.read_bytes()
+        if name in expected and hashlib.sha256(data).hexdigest() != expected[name]:
+            raise ValueError('Bundle dependency differs from reviewed hash: ' + name)
         shared_original = (name.startswith("images/") or
                            re.fullmatch(r"exports/sources/cicada-2014-seventh-onion/\d+\.jpg", name))
         if shared_original and path.suffix.lower() in (".jpg", ".jpeg", ".png"):
