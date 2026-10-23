@@ -258,11 +258,11 @@ function affineLagWorkedExample(){
 function experimentVisual(r,v){
   if(r.id==='block-boundary-doublets'&&v.path.endsWith('/boundaries.svg')){
     const sizes=Array.from({length:28},(_,index)=>`<option value="${index+2}">${index+2}</option>`).join('');
-    return `<figure class="experiment-figure affine-lag-figure block-boundary-figure" data-results="experiments/records/block-boundary-doublets/results.json"><figcaption><strong>Inspect the 434 placements</strong><br>Choose a block size and a shared phase. Phase zero places a boundary after every full block, counting from the start of each page.</figcaption><div class="affine-lag-controls"><label>Block size<select data-block-size>${sizes}</select></label><label>Phase<select data-block-phase></select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><p class="small muted">The size and phase search was compared with the same search on 3,000 fixed-count controls. A single appealing row is not a selected-search result.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
+    return `<figure class="experiment-figure affine-lag-figure block-boundary-figure" data-results="experiments/records/block-boundary-doublets/results.json"><figcaption><strong>Inspect the 434 placements</strong><br>Choose a block size and a shared phase. Phase zero places a boundary after every full block, counting from the start of each page.</figcaption><div class="affine-lag-controls"><label>Block size<select data-block-size disabled>${sizes}</select></label><label>Phase<select data-block-phase disabled></select></label></div><div class="affine-lag-readout" role="status">Loading the verified counts…</div><button type="button" data-figure-retry hidden style="min-height:44px">Retry counts</button><p class="small muted">The size and phase search was compared with the same search on 3,000 fixed-count controls. A single appealing row is not a selected-search result.</p><a href="${esc(v.path)}" download>Download summary figure</a></figure>`;
   }
   if(r.id==='word-internal-affine-lags'&&v.path.endsWith('/comparison.svg')){
     const choices=Array.from({length:29},(_,n)=>`<option value="${n}">${n}</option>`).join('');
-    return `${affineLagWorkedExample()}<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Actual text against a shuffled baseline</strong><br>Of 1,267 rune pairs six places apart inside words, how many fit the selected rule?</figcaption><div class="affine-lag-readout" role="status">Loading the verified counts…</div><details class="affine-lag-options"><summary>Explore other rules</summary><p>Change the coefficients in c′ = ac + b (mod 29). The highlighted rule is a = 27, b = 24.</p><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div></details><p class="small muted">The baseline shuffles runes within each word. It preserves word lengths, but it does not simulate an encryption method. <a href="${esc(v.path)}" download>Download the summary figure</a>.</p></figure>`;
+    return `${affineLagWorkedExample()}<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Actual text against a shuffled baseline</strong><br>Of 1,267 rune pairs six places apart inside words, how many fit the selected rule?</figcaption><div class="affine-lag-readout" role="status">Loading the verified counts…</div><button type="button" data-figure-retry hidden style="min-height:44px">Retry counts</button><details class="affine-lag-options"><summary>Explore other rules</summary><p>Change the coefficients in c′ = ac + b (mod 29). The highlighted rule is a = 27, b = 24.</p><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a disabled>${choices}</select></label><label>Offset b<select data-affine-b disabled>${choices}</select></label></div></details><p class="small muted">The baseline shuffles runes within each word. It preserves word lengths, but it does not simulate an encryption method. <a href="${esc(v.path)}" download>Download the summary figure</a>.</p></figure>`;
   }
   if(r.id==='word-internal-affine-all-lags'&&v.path.endsWith('/selection-null.svg')){
     return `<figure class="experiment-figure all-lag-figure"><figcaption><strong>The strongest pattern: a rune repeats five places later</strong><br>Actual manuscript count compared with the average after shuffling runes inside each word.</figcaption><div class="all-lag-bars" role="img" aria-label="Same-rune repeats five places apart: 102 in the manuscript and 60.6 on average after shuffling words."><div><span>Actual text</span><i><b style="width:92.7%"></b></i><strong>102</strong></div><div><span>Shuffled words</span><i><b style="width:55.1%"></b></i><strong>60.6</strong></div></div><p><strong>4 of 999</strong> shuffled-word searches found a pattern this strong after trying all 12 distances and 841 formulas at each distance.</p><details><summary>See the full search distribution</summary><img src="${esc(v.path)}" alt="${esc(v.caption)}" loading="lazy"></details><p class="small muted">The proposed six-rune formula is below this peak. <a href="${esc(v.path)}" download>Download the distribution chart</a>.</p></figure>`;
@@ -301,18 +301,44 @@ function experimentVisual(r,v){
   }
   return `<figure class="experiment-figure"><img src="${esc(v.path)}" alt="${esc(v.caption)}" style="width:100%;max-width:480px;height:auto" loading="lazy"><figcaption>${esc(v.caption)}</figcaption></figure>`;
 }
+function bindFigureCounts(figure,controls,initialize){
+  const readout=figure.querySelector('.affine-lag-readout'),retry=figure.querySelector('[data-figure-retry]');
+  let loading=false;
+  const load=async()=>{
+    if(loading||!figure.isConnected)return;
+    const retryHadFocus=document.activeElement===retry;
+    loading=true;controls.forEach(control=>control.disabled=true);retry.disabled=true;
+    readout.textContent='Loading the verified counts…';
+    try{
+      const response=await fetch(figure.dataset.results);
+      if(!response.ok)throw Error();
+      const data=await response.json();
+      if(!figure.isConnected)return;
+      initialize(data);controls.forEach(control=>control.disabled=false);
+      if(retryHadFocus&&(document.activeElement===retry||document.activeElement===document.body))controls[0].focus({preventScroll:true});
+      retry.hidden=true;
+    }catch{
+      if(figure.isConnected){
+        readout.textContent='The interactive counts could not load. Retry or download the saved result below.';
+        retry.hidden=false;retry.disabled=false;
+        if(retryHadFocus&&document.activeElement===document.body)retry.focus({preventScroll:true});
+      }
+    }finally{
+      loading=false;if(figure.isConnected)retry.disabled=false;
+    }
+  };
+  retry.addEventListener('click',load);
+  return load();
+}
 async function bindAffineLagFigure(){
   const figure=main.querySelector('.affine-lag-figure:not(.block-boundary-figure)');
   if(!figure)return;
   const a=figure.querySelector('[data-affine-a]'),b=figure.querySelector('[data-affine-b]');
   a.value='27';b.value='24';
-  try{
-    const response=await fetch(figure.dataset.results);
-    if(!response.ok)throw Error();
-    const data=await response.json();
-    if(!figure.isConnected)return;
-    const counts=data.affine_family.counts_by_a_b, expected=data.affine_family.word_shuffle_expected_by_a_b;
-    if(counts.length!==29||expected.length!==29)throw Error();
+  return bindFigureCounts(figure,[a,b],data=>{
+    const counts=data.affine_family?.counts_by_a_b,expected=data.affine_family?.word_shuffle_expected_by_a_b;
+    const matrix=(values,integer)=>Array.isArray(values)&&values.length===29&&values.every(row=>Array.isArray(row)&&row.length===29&&row.every(value=>Number.isFinite(value)&&value>=0&&(!integer||Number.isInteger(value))));
+    if(!matrix(counts,true)||!matrix(expected,false))throw Error();
     const all=counts.flat();
     const update=()=>{
       const multiplier=Number(a.value),offset=Number(b.value),observed=counts[multiplier][offset],mean=expected[multiplier][offset];
@@ -320,21 +346,19 @@ async function bindAffineLagFigure(){
       const scale=Math.max(80,observed,mean)*1.05;
       figure.querySelector('.affine-lag-readout').innerHTML=`<div class="affine-comparison" role="img" aria-label="Actual text: ${observed} matching pairs. Average after shuffling within words: ${mean.toFixed(1)} matching pairs."><div class="affine-comparison-row"><span>Actual text</span><div class="affine-comparison-track"><i style="width:${(observed/scale*100).toFixed(1)}%"></i></div><strong>${observed}</strong></div><div class="affine-comparison-row"><span>Shuffled words</span><div class="affine-comparison-track"><i style="width:${(mean/scale*100).toFixed(1)}%"></i></div><strong>${mean.toFixed(1)}</strong></div></div><p>This rule ranks <strong>${rank} of 841</strong> formulas checked at this distance.${multiplier===27&&offset===24?' Only <strong>3 of 2,000</strong> shuffles produced a best-rule count at least this high.':''}</p>`;
     };
-    a.addEventListener('change',update);b.addEventListener('change',update);update();
-  }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
+    update();a.addEventListener('change',update);b.addEventListener('change',update);
+  });
 }
 async function bindBlockBoundaryFigure(){
   const figure=main.querySelector('.block-boundary-figure');
   if(!figure)return;
   const size=figure.querySelector('[data-block-size]'),phase=figure.querySelector('[data-block-phase]');
   size.value='5';
-  try{
-    const response=await fetch(figure.dataset.results);
-    if(!response.ok)throw Error();
-    const data=await response.json();
-    if(!figure.isConnected)return;
+  return bindFigureCounts(figure,[size,phase],data=>{
+    const total=data.doublet_count;
+    if(!Number.isInteger(total)||total<=0||!Array.isArray(data.all_placements))throw Error();
     const rows=new Map(data.all_placements.map(row=>[`${row.size}:${row.phase}`,row]));
-    if(rows.size!==434)throw Error();
+    if(rows.size!==434||[...rows.values()].some(row=>!Number.isInteger(row.size)||row.size<2||row.size>29||!Number.isInteger(row.phase)||row.phase<0||row.phase>=row.size||!Number.isInteger(row.matches)||row.matches<0||row.matches>total||!Number.isFinite(row.expected)||!Number.isFinite(row.z)))throw Error();
     const setPhases=()=>{
       const previous=Number(phase.value);
       phase.innerHTML=Array.from({length:Number(size.value)},(_,n)=>`<option value="${n}">${n}</option>`).join('');
@@ -342,12 +366,12 @@ async function bindBlockBoundaryFigure(){
     };
     const update=()=>{
       const row=rows.get(`${size.value}:${phase.value}`);
-      figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${row.matches} doublets</strong> <span>of 86 on these edges</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${Math.min(100,row.matches/30*100).toFixed(1)}%"></span></div><p>Expected with page counts fixed: <strong>${row.expected.toFixed(1)}</strong> · Standardized excess: <strong>${row.z.toFixed(2)}</strong>.</p>`;
+      figure.querySelector('.affine-lag-readout').innerHTML=`<strong>${row.matches} doublets</strong> <span>of ${total} on these edges</span><div class="affine-lag-track" aria-hidden="true"><span style="width:${(row.matches/total*100).toFixed(1)}%"></span></div><p>Expected with page counts fixed: <strong>${row.expected.toFixed(1)}</strong> · Standardized excess: <strong>${row.z.toFixed(2)}</strong>.</p>`;
     };
-    size.addEventListener('change',()=>{setPhases();update()});phase.addEventListener('change',update);
-    setPhases();update();
-  }catch{if(figure.isConnected)figure.querySelector('.affine-lag-readout').textContent='The interactive counts could not load. Download the saved result below.';}
+    setPhases();update();size.addEventListener('change',()=>{setPhases();update()});phase.addEventListener('change',update);
+  });
 }
+
 function experimentArticle(r){
   const needsImages=r.reproduction.inputs.some(f=>/^(?:images\/.*\.(?:jpe?g|png)|exports\/sources\/cicada-2014-seventh-onion\/\d+\.jpg)$/i.test(f.path));
   const familyIds=new Set(experimentRecords.filter(x=>r.family&&x.family?.id===r.family.id).map(x=>x.id));

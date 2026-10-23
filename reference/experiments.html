@@ -61428,6 +61428,265 @@
       ]
     }
   ]
+}</pre></article><article id="round19-full-book-decoder-power"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;round19-full-book-decoder-power&quot;,
+  &quot;title&quot;: &quot;Can the decoder follow a known key through a full book?&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;question&quot;: &quot;Do the exact and permissive Round 19 decoders recover source-defined planted text at 12,956 runes when given the correct key, and separate one wrong-key control per mode?&quot;,
+  &quot;reader_question&quot;: &quot;Can this decoder stay aligned with a correct key over a full book?&quot;,
+  &quot;summary&quot;: &quot;Across eight exact source-defined full-book decodes, both decoders recovered over 99.8% of planted runes with the correct key and less than 5% under their wrong-key controls; all non-timing fields matched the archived source output. This is a decoder-power control, not an LP2 solve test.&quot;,
+  &quot;finding&quot;: &quot;At 12,956 runes, three correct-key seeds per decoder gave median exact rune recovery of 99.98% (one-draw skip rule) and 99.82% (permissive drift rule); all six passed source recovery and language-score bars. Wrong-key seed-zero controls recovered 3.77% and 4.88%. All eight source rows matched on every non-timing field.&quot;,
+  &quot;limitations&quot;: &quot;Synthetic English-derived GP29 text, source-planted keyskip with suppression 0.83, known key supplied, two beam policies and only one wrong-key control per policy. No LP2 key, ciphertext or unknown plaintext was tested; the score bar is not a calibrated false-positive probability.&quot;,
+  &quot;next_steps&quot;: &quot;Require a source-matched long-message planted recovery gate before treating a failed unknown-key search as evidence against that specific decoder.&quot;,
+  &quot;outcome&quot;: &quot;supported&quot;,
+  &quot;tags&quot;: [
+    &quot;decoder alignment&quot;,
+    &quot;full-book control&quot;,
+    &quot;known key&quot;,
+    &quot;key skipping&quot;,
+    &quot;beam search&quot;,
+    &quot;source replay&quot;
+  ],
+  &quot;family&quot;: {
+    &quot;id&quot;: &quot;decoder-alignment-controls&quot;,
+    &quot;title&quot;: &quot;Decoder alignment controls&quot;,
+    &quot;question&quot;: &quot;Can declared decoders recover planted plaintext under matching and mismatched alignment rules?&quot;,
+    &quot;baseline&quot;: &quot;decoder-skip-controls&quot;
+  },
+  &quot;variant&quot;: {
+    &quot;label&quot;: &quot;Round 19 G-BOOK exact and permissive full-length source grid&quot;,
+    &quot;changes&quot;: [
+      {
+        &quot;field&quot;: &quot;artifacts&quot;,
+        &quot;before&quot;: [
+          &quot;exports/readings/first-koan.csv&quot;,
+          &quot;exports/readings/instruction.csv&quot;,
+          &quot;exports/readings/loss-of-divinity.csv&quot;,
+          &quot;exports/readings/lp2-56.csv&quot;,
+          &quot;exports/readings/lp2-57.csv&quot;,
+          &quot;exports/readings/second-koan.csv&quot;,
+          &quot;exports/readings/some-wisdom.csv&quot;,
+          &quot;exports/readings/warning.csv&quot;,
+          &quot;exports/readings/welcome.csv&quot;
+        ],
+        &quot;after&quot;: [
+          &quot;experiments/records/round19-full-book-decoder-power/plan.json&quot;,
+          &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_book.json&quot;
+        ],
+        &quot;reason&quot;: &quot;This pinned full-book Round 19 control differs in data, length and decoder grid from the baseline.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;representation&quot;,
+        &quot;before&quot;: &quot;First min(240, available) output rune indices from all nine known-reading traces; canonical GP labels only for scoring.&quot;,
+        &quot;after&quot;: &quot;Synthetic English-derived GP29 runes using the exact pinned Self-Reliance source text and GP converter.&quot;,
+        &quot;reason&quot;: &quot;This pinned full-book Round 19 control differs in data, length and decoder grid from the baseline.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;procedure&quot;,
+        &quot;before&quot;: &quot;Plant ordinary addition, probabilistic collision skipping, value rewriting and one unrelated advance plus skipping; decode with correct/wrong deterministic key fixtures using rigid subtraction and four bounded beams.&quot;,
+        &quot;after&quot;: &quot;Run the pinned Round 19 G-BOOK source stage in an isolated copy; independently compare eight non-timing rows and recount correct-key gates and wrong-key recovery.&quot;,
+        &quot;reason&quot;: &quot;This pinned full-book Round 19 control differs in data, length and decoder grid from the baseline.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;parameters&quot;,
+        &quot;before&quot;: &quot;Nine traces, three seeds, key-value repetitions 1 and 4, 10000 slots; beam widths 16/64 crossed with skip limits 1/3; cumulative quadgram selection, normalized acceptance -5.5; 216 plants and 2160 decoder results.&quot;,
+        &quot;after&quot;: &quot;Length 12,956; one-draw keyskip suppression 0.83; modes repo_ms3 and drift_l8; three correct seeds and one wrong-key seed per mode; beam width 400.&quot;,
+        &quot;reason&quot;: &quot;This pinned full-book Round 19 control differs in data, length and decoder grid from the baseline.&quot;
+      },
+      {
+        &quot;field&quot;: &quot;exclusions&quot;,
+        &quot;before&quot;: &quot;No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.&quot;,
+        &quot;after&quot;: &quot;No unknown-key LP2 scan, other skip relations, other plaintext sources, statistical false-positive calibration or family-wide cipher exclusion.&quot;,
+        &quot;reason&quot;: &quot;This pinned full-book Round 19 control differs in data, length and decoder grid from the baseline.&quot;
+      }
+    ]
+  },
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/round19-full-book-decoder-power/plan.json&quot;,
+      &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_book.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Synthetic English-derived GP29 runes using the exact pinned Self-Reliance source text and GP converter.&quot;,
+    &quot;procedure&quot;: &quot;Run the pinned Round 19 G-BOOK source stage in an isolated copy; independently compare eight non-timing rows and recount correct-key gates and wrong-key recovery.&quot;,
+    &quot;parameters&quot;: &quot;Length 12,956; one-draw keyskip suppression 0.83; modes repo_ms3 and drift_l8; three correct seeds and one wrong-key seed per mode; beam width 400.&quot;,
+    &quot;exclusions&quot;: &quot;No unknown-key LP2 scan, other skip relations, other plaintext sources, statistical false-positive calibration or family-wide cipher exclusion.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;retrospective exact source control replay&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Independent eight-row non-timing source comparison and source-gate recount&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/round19-full-book-decoder-power/run.py --nproc 6 &amp;&amp; python experiments/records/round19-full-book-decoder-power/run.py --check &amp;&amp; python experiments/records/round19-full-book-decoder-power/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library; source and data bundled offline under MIT license; six-worker full source replay is staged in a disposable folder.&quot;,
+    &quot;script&quot;: &quot;experiments/records/round19-full-book-decoder-power/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;02ad4d8c5407c315e183aead85c299260ea328889fa2a7fa3bc926d5c7ba1f15&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/plan.json&quot;,
+        &quot;sha256&quot;: &quot;9a80f7110e05bae029dffcdd89370c997d6ac012f31cb6713b06be67b849f38d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/run.py&quot;,
+        &quot;sha256&quot;: &quot;02ad4d8c5407c315e183aead85c299260ea328889fa2a7fa3bc926d5c7ba1f15&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/check.py&quot;,
+        &quot;sha256&quot;: &quot;08be7d034543166557eee20fcb00d8f2194f3c5ec90c2cf81a7508d61c974397&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/plot.py&quot;,
+        &quot;sha256&quot;: &quot;b91a183c0b2a88e8a26b31befdf40240bbf15bf5df39ce830188071ed57d9f1a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/LICENSE&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/campaign18_skip/skipdecode.py&quot;,
+        &quot;sha256&quot;: &quot;74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round11/lib_numchannel.py&quot;,
+        &quot;sha256&quot;: &quot;6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round12/C1/feedback.py&quot;,
+        &quot;sha256&quot;: &quot;debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/constructions.py&quot;,
+        &quot;sha256&quot;: &quot;c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/driftbeam.py&quot;,
+        &quot;sha256&quot;: &quot;f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_base.json&quot;,
+        &quot;sha256&quot;: &quot;2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_book.json&quot;,
+        &quot;sha256&quot;: &quot;7cba860b701f57faba2f5d8a484df875f325c09dc613d299e4d1c0662d41a31b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/run_gates.py&quot;,
+        &quot;sha256&quot;: &quot;b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/run_stats.py&quot;,
+        &quot;sha256&quot;: &quot;77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/benchmark/plant.py&quot;,
+        &quot;sha256&quot;: &quot;88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/data/english_quadgrams.txt&quot;,
+        &quot;sha256&quot;: &quot;fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/data/keys/self_reliance.txt&quot;,
+        &quot;sha256&quot;: &quot;b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/src/lp/ciphers.py&quot;,
+        &quot;sha256&quot;: &quot;3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/src/lp/corpus.py&quot;,
+        &quot;sha256&quot;: &quot;d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/src/lp/gematria.py&quot;,
+        &quot;sha256&quot;: &quot;7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/src/lp/score.py&quot;,
+        &quot;sha256&quot;: &quot;65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/source/liber-primus/src/lp/stats.py&quot;,
+        &quot;sha256&quot;: &quot;cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/replayed-out_book.json&quot;,
+        &quot;sha256&quot;: &quot;6e2331fb036a46e196113d18dd08732794da8c11a09c194b31d56f77c135cace&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/results.json&quot;,
+        &quot;sha256&quot;: &quot;a41039849705ccb36ed0ddb24160919ac67bb96a2868928fe85dc53d9c51694f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/full-book-power.svg&quot;,
+        &quot;sha256&quot;: &quot;711c0aa2da8ae6da453cc05c938e088b653ed4066a2adfb0f5e84de4ea609272&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/round19-full-book-decoder-power/full-book-power.svg&quot;,
+      &quot;caption&quot;: &quot;Exact planted-rune recovery with the correct key and one wrong-key control for each full-length decoder mode.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Round 19 I1 source and archived G-BOOK output&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;round19-decoder-baseline-control&quot;,
+    &quot;r18-keyskip-drift-power&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;With the correct key, the two decoders recovered a median 99.98% and 99.82% of a 12,956-rune planted message. Wrong-key controls recovered less than 5%.&quot;,
+  &quot;reader_limit&quot;: &quot;This checks a known key on synthetic text. It does not find an LP2 key or show how often an unknown-key search gives false positives.&quot;,
+  &quot;scope_summary&quot;: &quot;Two decoder rules · three correct-key seeds and one wrong-key control per rule · 12,956 runes per message.&quot;,
+  &quot;article&quot;: &quot;# Can this decoder keep a known key aligned across the full book?\n\nThe [Round 19 source test](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1) encrypts **12,956 runes of known text**, deliberately skipping some key draws, then gives the correct key to two decoders. One permits the source&#x27;s one-draw skip; the other permits a broader drift rule. This is a long-message power check for the decoder, not an LP2 key search.\n\n![At full-book length, both decoders recover more than 99.8% of a planted message with the correct key; wrong-key controls recover less than 5%.](experiments/records/round19-full-book-decoder-power/full-book-power.svg)\n\n**Result:** With the correct key, median exact rune recovery was **99.98%** for the source&#x27;s exact skip rule and **99.82%** for its permissive drift rule, across three planted seeds per mode. Every correct-key run cleared the source&#x27;s 90% recovery and −5.5 language-score bars. The one wrong-key control per mode recovered **3.77%** and **4.88%**, respectively. These controls show the two decoders can follow this specific skip construction over a full-book length when given the right key. They do not establish the correct key or rule for LP2.\n\nThe exact replay matched **all eight archived source rows** on every field except elapsed wall time. It used the source&#x27;s `self_reliance.txt` English text, GP29 converter, SHA-generated key, 0.83 doublet-suppression setting and width-400 beam. The modes differ: `repo_ms3` allows up to three source-style skipped draws; `drift_l8` allows additional free drift with its source-defined cost. These are not interchangeable decoder rules. The earlier [short-message control](experiments/records/round19-decoder-baseline-control/article.md) tested six decoders at 240 and 400 runes; this record verifies the separate **12,956-rune** source arm.\n\nThis is a retrospective source replay: the eight archived outcomes were known before its [plan](experiments/records/round19-full-book-decoder-power/plan.json) was saved. It validates a long planted-message gate, not a false-positive rate for searching unknown keys or another cipher model. A readable score on synthetic English-derived text does not identify the LP2 plaintext.\n\nThe experiment ZIP includes the pinned source code and data under its MIT license. To rerun the eight decodes from the extracted folder, use `python experiments/records/round19-full-book-decoder-power/run.py --nproc 6`; the runner stages a disposable source copy and does not rewrite the archived [source output](experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_book.json). Use `python experiments/records/round19-full-book-decoder-power/run.py --check` to verify the saved replay, source rows and independently recounted gate summaries without rerunning the beam.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/round19-full-book-decoder-power/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;02ad4d8c5407c315e183aead85c299260ea328889fa2a7fa3bc926d5c7ba1f15&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;control&quot;,
+    &quot;label&quot;: &quot;Control&quot;,
+    &quot;description&quot;: &quot;Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;interruptions&quot;,
+      &quot;title&quot;: &quot;Keystream interruptions and reset rules&quot;,
+      &quot;aliases&quot;: [
+        &quot;interrupters&quot;,
+        &quot;reset&quot;,
+        &quot;pause key&quot;,
+        &quot;skip key&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;alignment&quot;,
+      &quot;title&quot;: &quot;Offsets and key alignment&quot;,
+      &quot;aliases&quot;: [
+        &quot;offset&quot;,
+        &quot;alignment&quot;,
+        &quot;key alignment&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
+      ]
+    }
+  ]
 }</pre></article><article id="round19-rsa-key-provenance"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;round19-rsa-key-provenance&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -72892,6 +73151,205 @@
         &quot;byte order&quot;,
         &quot;little endian&quot;,
         &quot;big endian&quot;
+      ]
+    }
+  ]
+}</pre></article><article id="wulfic-crib-lfsr-recurrence"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-crib-lfsr-recurrence&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Can a guessed word seed a short feedback key?&quot;,
+  &quot;question&quot;: &quot;Does a source-defined crib-derived GF(29) linear recurrence predict a language-like 128-rune continuation on 11 named unsolved LP2 pages when the key phase and J-rune parsing are corrected?&quot;,
+  &quot;reader_question&quot;: &quot;Could a guessed word reveal the key for the following runes?&quot;,
+  &quot;summary&quot;: &quot;The corrected crib rule produced 13 two-rune-validated candidate fits, but its best 128-rune continuation scored 18; 126 of 199 complete shuffled searches did at least as well. A separate post-result known-reading plant ranked first across a mixed 11-page search in all 12 mode/order cases, showing this exact screen can detect a clean positive.&quot;,
+  &quot;finding&quot;: &quot;The pinned source&#x27;s original 21-crib normalized-IoC-gated branch produced zero candidates on 174,141 placements across 11 LP2 pages and solved LP1-15. After preserving all canonical J runes and aligning the key to each crib, a 13-crib, three-direction, order-2–5 screen found 13 candidate fits across 52,527 placements on the 11 LP2 pages; additive and subtractive sign forms can represent the same decoded text. The best continuation score was 18 on LP2-05; 126/199 shared whole-search shuffled controls scored at least 18. On an unchanged decoded 226-rune LP1-14 passage containing the source crib CIRCUMFERENCE, all 12 planted mode/order cases recovered the next 128 runes exactly and ranked first at score 119 across a mixed grid with ten unchanged LP2 pages. That post-target grid replaces the original 273-rune first target, so the original 199 shuffle maxima are not calibrated to it.&quot;,
+  &quot;limitations&quot;: &quot;The original source gate scores a page containing its own guessed crib and uses a rune parser that drops J. The corrected search still covers only 13 words, feedback lengths 2–5, three arithmetic directions, 11 pages and one approximate GP bigram/trigram score. The page-frequency shuffle is not a cipher generator. The post-result positive is one known 226-rune reading under a clean page-local clock, shorter than the replaced 273-rune LP2 page, and cannot prove power against every LP2 plaintext. No LFSR family or alternate key clock is excluded.&quot;,
+  &quot;next_steps&quot;: &quot;For a new feedback claim, fix one crib, page position, recurrence and clock first, then predict text outside the crib on an independently held-out passage.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;crib dragging&quot;,
+    &quot;LFSR&quot;,
+    &quot;GF29&quot;,
+    &quot;Berlekamp-Massey&quot;,
+    &quot;feedback&quot;,
+    &quot;source replay&quot;,
+    &quot;held-out continuation&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-11&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-crib-lfsr-recurrence/plan.json&quot;,
+      &quot;experiments/records/wulfic-crib-lfsr-recurrence/inputs.json&quot;,
+      &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json&quot;,
+      &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source page-number mapping separately preserves the source&#x27;s J-dropping rune sequence on 11 LP2 pages plus solved LP1-15. Corrected scan uses canonical GP29 site arrays for the 11 LP2 pages; each source array equals its canonical counterpart with J removed.&quot;,
+    &quot;procedure&quot;: &quot;Replay the source&#x27;s original crib-drag Berlekamp-Massey and IoC gate. Separately fit the first m-2 key symbols from each selected source crib, verify the last two, predict the next 128 runes and score only that continuation; rerun the complete page/crib/mode/offset selection on 199 shared seeded page shuffles.&quot;,
+    &quot;parameters&quot;: &quot;Original 21 source cribs length&gt;=4, 3 directions and 12 mapped pages; corrected 13 source cribs length&gt;=6, 3 directions, recurrence order 2–5, all offsets leaving 128 runes, 11 LP2 pages; 199 shuffle trials seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;Other LP2 pages, other cribs, order&gt;5, non-GP alphabets, key skips/resets, unrelated recurrence laws, a trained language model, and proof of full decryption.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;retrospective source-branch replay and corrected-position bounded extension&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Exact pinned source function parity on all 12 page candidate counts, 24 full-continuation plants, a four-cell parser/phase ablation, independent page and all-199-null replay, plus independent 12-arm single-page and mixed-grid known-reading power checks&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-crib-lfsr-recurrence/extended_controls.py --check &amp;&amp; python experiments/records/wulfic-crib-lfsr-recurrence/check.py --full &amp;&amp; python experiments/records/wulfic-crib-lfsr-recurrence/power_check.py &amp;&amp; python experiments/records/wulfic-crib-lfsr-recurrence/power_grid_check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 standard library, offline; inputs.json contains both indexed page versions, and data/evidence/known-readings.json verifies the power text.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;d1a4648cf5873c444ab83714783997557148ba05ad5923b6754f61281a263643&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/plan.json&quot;,
+        &quot;sha256&quot;: &quot;f92a38e2124b58b94cd50a8b07c19d29ed9a8dbdc29a467d895bd72c4fd482e5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;ab0275434d64cf4da3d92eeba9bf3dacacaa6bca5644bf5577fe9730bf897a80&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/run.py&quot;,
+        &quot;sha256&quot;: &quot;d1a4648cf5873c444ab83714783997557148ba05ad5923b6754f61281a263643&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/check.py&quot;,
+        &quot;sha256&quot;: &quot;56e4d97ab1b1e98d71d976623af4abf57a900b1f77050ece8c521a652f1a5ee6&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/plot.py&quot;,
+        &quot;sha256&quot;: &quot;89c7310c22124b5685ae06c4781c792bdc4b27d67d68de32dad65023f0bacee9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/extended_controls.py&quot;,
+        &quot;sha256&quot;: &quot;00eeb23e2a9da423009dea27181c87c849872fef6e12c14263a2a4e61dfe588f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json&quot;,
+        &quot;sha256&quot;: &quot;7a5fa17ae0a3a6ae3540b24e03fbc3d14432f7f0609233f50fd41b4f2c9803ea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-input.json&quot;,
+        &quot;sha256&quot;: &quot;03499ffb538dd45ac4092354f0c92713819965c78db6fcd05165b1c13366d11f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power.py&quot;,
+        &quot;sha256&quot;: &quot;e83ac10a5245b54c84dba692597e58907613692f2d05d1a46a6446f5e51dc59d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power_check.py&quot;,
+        &quot;sha256&quot;: &quot;417b104a034bc3621ac5c2474a51f4685a312acecbd66671a068db9e181ef15b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;data/evidence/known-readings.json&quot;,
+        &quot;sha256&quot;: &quot;384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json&quot;,
+        &quot;sha256&quot;: &quot;70a695d3e5dea6a0addffc7f10f9a4e1c207099d8c660c7db5c8d182309f8b79&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power_grid.py&quot;,
+        &quot;sha256&quot;: &quot;9ff1a9ce8382edd3d69cc82bbe94fcca10df3bd22f161db4694099dffce4344f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power_grid_check.py&quot;,
+        &quot;sha256&quot;: &quot;be91f365a1449e1275b1aa6475969e0caf28f9e8deaae9650ee76bcdb46a6331&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/results.json&quot;,
+        &quot;sha256&quot;: &quot;96b261ab262c72316345fba7dad88cc4c97c867e4aca05c6598debf0ee462e3f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/extended-controls.json&quot;,
+        &quot;sha256&quot;: &quot;66d770970503b35ed167fbd8a29ba630412a3b5b15f62da31689ca1f83e0cc31&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-results.json&quot;,
+        &quot;sha256&quot;: &quot;786bc932d61a7d41905c81185d0b87f3109f42188da525b96c181c4b949a1f90&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/result.svg&quot;,
+        &quot;sha256&quot;: &quot;ed29551cbc8e2e39ea40b7e081634e35b3c86c19a2d4423107bce31bf50bf7fe&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/power-grid-results.json&quot;,
+        &quot;sha256&quot;: &quot;cecfe38b32ff95b398f90f9866eadeddcd75cb304567ff19779495ccbf5ef22c&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/result.svg&quot;,
+      &quot;caption&quot;: &quot;Parser and key-phase ablation, corrected LP2 search against 199 complete shuffled searches, and a separate post-result known-reading plant tested within a mixed 11-page grid.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic crib/LFSR source program&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-lfsr-singleton-constraints&quot;,
+    &quot;wulfic-separator-clock-alberti&quot;
+  ],
+  &quot;reader_finding&quot;: &quot;The best continuation from the guessed words scored no better than many shuffled pages: 126 of 199 shuffled searches matched or exceeded it. A separate planted known reading was recovered correctly.&quot;,
+  &quot;reader_limit&quot;: &quot;This covers 13 fixed words and short feedback rules on 11 pages. Other words, key clocks and feedback rules remain untested.&quot;,
+  &quot;scope_summary&quot;: &quot;11 LP2 pages · 13 fixed word guesses · three arithmetic directions · feedback lengths 2–5 · 128-rune continuations.&quot;,
+  &quot;article&quot;: &quot;# Can a guessed word reveal a repeating feedback rule?\n\n**Result:** Correcting two problems in a [public crib-and-LFSR program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py) did not produce a strong continuation on the 11 LP2 pages that program named. The best score was **18** on LP2-05; **126 of 199** shuffled-page searches scored at least as high. A separate known-reading plant scored **119** and ranked first across an 11-page mixed grid, showing that this exact search can find a clean example of the proposed rule. It does not exclude other LFSR constructions.\n\n![On a planted message, only the corrected rune reader and aligned key recover all 128 following runes. The best LP2 score is below the middle of the shuffled-search results.](experiments/records/wulfic-crib-lfsr-recurrence/result.svg)\n\nThe idea is concrete: suppose a word such as **EMERGE** appears somewhere in the ciphertext. Under an additive cipher, that guess reveals a short piece of the key. A linear feedback rule might then continue the key. We tried every placement of **13 source words**, three arithmetic directions and feedback lengths **2–5** on the source&#x27;s **11 unsolved LP2 pages**. We learned a rule from the first part of each guessed word, required it to predict the last two key values under that word, then decrypted and scored **128 runes after the word**. Those 128 runes, not the guessed word, determine the score. Across **52,527 placements**, 13 candidate fits passed the two-rune recurrence check. They are not 13 distinct key rules: the additive and subtractive directions can represent the same decoded text with negated keys. The highest score came from an EMERGE guess at LP2-05 rune 62 in the Beaufort direction.\n\nThe original program&#x27;s separate scan used **21 shorter-or-longer cribs** on 12 archived page files, including the solved LP1-15, and reported candidates only when its **29× normalized whole-page index of coincidence** exceeded 1.4 (a uniform-rune reference is about 1). We replayed **174,141 placements** and reproduced its **zero gated candidates**; the unchanged source function agreed on all 12 page counts. That zero is a fact about that program, not a sound exclusion of the proposed cipher. Its rune reader drops the manuscript&#x27;s J glyph (`ᛄ`) because it expects a different glyph (`ᛂ`), losing **1–13 runes per page**. It also starts a key inferred at a later crib as if the crib were at page position zero. A known planted message isolates the errors: the source reader and source key position recovered only **6 of 128** following runes; fixing both recovered **128 of 128**. Twelve more planted cases recovered the full continuation for every arithmetic direction at feedback lengths 2 and 3; twelve additional endpoint plants did so at lengths 4 and 5.\n\nThe comparison shuffled each LP2 page&#x27;s rune order once per trial and repeated the **entire page, word, direction and position search** with the same 199 trial seeds. Its median best score was **19**, and its highest was **40**. Page shuffling preserves rune totals but not the manuscript&#x27;s word structure, so this is a conditional search control rather than a cipher simulation. The result does not rule out another word, longer feedback, a different key start, interruptions, a better language model or a full-page plaintext revealed by other evidence.\n\n**Power check, added after the LP2 result:** The existing decoded rune text of LP1-14 contains **CIRCUMFERENCE**, one of the 13 original source words, at rune 52 with at least 128 known runes after it. We encrypted that **unchanged 226-rune reading** with planted page-local keys for all three directions and lengths 2–5. Every planted case recovered the next 128 runes exactly. On the planted page alone, the real candidate scored **119** and ranked first in all 12 searches (sharing first with an equivalent sign-form candidate in eight, not a competing plaintext). No F runes were inserted or replaced. The separate [power plan](experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json) and [single-page results](experiments/records/wulfic-crib-lfsr-recurrence/power-results.json) preserve that first check.\n\n**Full-grid power amendment, also after the LP2 result:** We replaced the first of the 11 tested page slots (LP2-11, **273 runes**) with the 226-rune known-message plant, leaving the other ten LP2 pages and the entire crib, direction and position search unchanged. Across **50,694** examined placements per planted arm, the true candidate still ranked first in all 12 mixed-grid searches. The ten unchanged pages contributed 13 eligible recurrences and a best score of 18, so none outranked or tied the planted score of 119. The [mixed-grid plan](experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json) was added after the single-page power review; [results](experiments/records/wulfic-crib-lfsr-recurrence/power-grid-results.json) give each arm&#x27;s rank and ties. This shows detection power for a clean 226-rune known reading in a grid containing ten actual LP2 pages. Because the replaced page is shorter, the **199 original LP2 shuffles are not a calibrated null for this mixed grid**; their maximum of 40 is only background context. This check cannot establish the unknown LP2 plaintext style or exclude other feedback rules.\n\nThe [original plan](experiments/records/wulfic-crib-lfsr-recurrence/plan.json) and [indexed inputs](experiments/records/wulfic-crib-lfsr-recurrence/inputs.json) preserve both the source&#x27;s rune readings and the site&#x27;s corrected readings separately. Run `python experiments/records/wulfic-crib-lfsr-recurrence/extended_controls.py --check` for the feedback-length endpoint plants, then `python experiments/records/wulfic-crib-lfsr-recurrence/check.py` for an independent check of all page findings and ten fixed null trials. Add `--full` to the latter command to repeat all 199 null trials. Run `python experiments/records/wulfic-crib-lfsr-recurrence/power_check.py` for an independent check of the known-reading plant and its source text, then `python experiments/records/wulfic-crib-lfsr-recurrence/power_grid_check.py` for an independent full-grid check. The saved [LP2 result data](experiments/records/wulfic-crib-lfsr-recurrence/results.json) includes all control maxima and the best 128-rune continuations.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-crib-lfsr-recurrence/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;d1a4648cf5873c444ab83714783997557148ba05ad5923b6754f61281a263643&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  },
+  &quot;method_topics&quot;: [
+    {
+      &quot;id&quot;: &quot;feedback&quot;,
+      &quot;title&quot;: &quot;Autokey and ciphertext feedback&quot;,
+      &quot;aliases&quot;: [
+        &quot;autokey&quot;,
+        &quot;feedback&quot;,
+        &quot;ciphertext feedback&quot;,
+        &quot;plaintext autokey&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;cribs&quot;,
+      &quot;title&quot;: &quot;Known plaintext and crib searches&quot;,
+      &quot;aliases&quot;: [
+        &quot;crib&quot;,
+        &quot;known plaintext&quot;,
+        &quot;guessed word&quot;,
+        &quot;known plaintext attack&quot;,
+        &quot;crib search&quot;
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;controls&quot;,
+      &quot;title&quot;: &quot;Null models and selection effects&quot;,
+      &quot;aliases&quot;: [
+        &quot;controls&quot;,
+        &quot;chance&quot;,
+        &quot;multiple testing&quot;,
+        &quot;null model&quot;,
+        &quot;null models&quot;
       ]
     }
   ]

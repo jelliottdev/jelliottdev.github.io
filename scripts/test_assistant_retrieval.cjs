@@ -80,3 +80,16 @@ assert.equal(ui.ideaSourceType({kind:'experiment',recordType:'historical'}),'His
 assert.equal(ui.ideaSourceType({kind:'experiment',recordType:'alphabet'}),'Alphabet-wide analysis');
 assert.equal(ui.ideaSourceType({kind:'experiment',recordType:'audit'}),'Source or input audit');
 console.log('PASS: generated method hints, named/mixed/unknown methods, pages, visible/Worker parity, full evidence budgets, audits, and malformed metadata.');
+
+for(const [query,expected] of [
+ ['Can a guessed word seed an LFSR feedback key using Berlekamp Massey?','wulfic-crib-lfsr-recurrence'],
+ ['Did the Round 19 decoder recover a full book with the known key?','round19-full-book-decoder-power']
+]){
+ assert.equal(Search.select(docs,query)[0].id,expected,'Specific source method/control queries should retrieve the matching scoped record');
+ const bucket=expected==='round19-full-book-decoder-power'?'supporting':'tests';
+ const classified=Search.classify(withPages,query);
+ assert.equal(classified[bucket][0].document.id,expected,'A control remains supporting evidence; a replay remains a method result');
+ assert(!classified[bucket==='tests'?'supporting':'tests'].some(hit=>hit.document.id===expected),'The record must not appear under the wrong evidence type');
+ assert.equal(Search.select(withPages,query)[0].id,expected,'Worker evidence and the first visible result must agree');
+}
+console.log('PASS: crib-derived feedback and full-book known-key questions reach their distinct scoped records.');

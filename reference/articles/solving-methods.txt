@@ -189,7 +189,7 @@ Rotation, hash and cuneiform keys · Method replay
 Autokey and ciphertext feedback
 Use earlier plaintext or ciphertext to update later decoding state.
 
-20 related records
+21 related records
 Ciphertext symbols and differences around LP2 doublets · Manuscript measurement
 
 Nonzero difference uniformity and order under EA-stalling keys · Manuscript measurement
@@ -229,6 +229,8 @@ Short seeds for autokey ciphers · Method replay
 GP prime values as a plaintext autokey · Bounded solving test
 
 Word boundaries as key clocks · Method replay
+
+Can a guessed word seed a short feedback key? · Method replay
 
 
 
@@ -315,7 +317,7 @@ Number-grid bytes as a key with skipped positions · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-23 related records
+24 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -362,12 +364,14 @@ Rotation, hash and cuneiform keys · Method replay
 
 Grid and onion bytes as LP2 keys · Method replay
 
+Can the decoder follow a known key through a full book? · Control
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-11 related records
+12 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 When a pair-skip decoder loses a known key · Control
@@ -389,6 +393,8 @@ Can a correct key survive skipped draws? · Control
 Can skipped key draws shift a page start? · Method replay
 
 When wrong keys cross a language-score line · Control
+
+Can the decoder follow a known key through a full book? · Control
 
 
 
@@ -959,7 +965,7 @@ Two language-scoring controls missed their frozen rules · Source or input audit
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-22 related records
+23 related records
 Does matching the opening text identify a seed? · Control
 
 LP2-39: twenty proposed red-header cribs · Bounded solving test
@@ -1003,6 +1009,8 @@ Can single-rune words pin down an LFSR key? · Method replay
 Can word cribs predict a periodic key? · Method replay
 
 Do the proposed two-time-pad regions match? · Method replay
+
+Can a guessed word seed a short feedback key? · Method replay
 
 
 
@@ -1194,7 +1202,7 @@ Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-39 related records
+41 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -1272,6 +1280,10 @@ Prime-indexed-prime and P.S. keys with a corrected IoC screen · Bounded solving
 Base32 and coordinate pointer checks · Method replay
 
 When wrong keys cross a language-score line · Control
+
+Can the decoder follow a known key through a full book? · Control
+
+Can a guessed word seed a short feedback key? · Method replay
 
 
 
@@ -1538,6 +1550,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/wulfic-lfsr-singleton-constraints
 - Short seeds for autokey ciphers
   https://jelliottdev.github.io/#/experiments/wulfic-autokey-seed-families
+- Can a guessed word seed a short feedback key?
+  https://jelliottdev.github.io/#/experiments/wulfic-crib-lfsr-recurrence
 - Seeded generators and generated keystreams
   https://jelliottdev.github.io/reference/articles/method-seeded-generators.html
 - Does matching the opening text identify a seed?
@@ -1618,6 +1632,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/r18-skip-channel-power
 - What separates LP2’s surviving doublets?
   https://jelliottdev.github.io/#/experiments/wulfic-doublet-leak-h-o
+- Can the decoder follow a known key through a full book?
+  https://jelliottdev.github.io/#/experiments/round19-full-book-decoder-power
 - Offsets and key alignment
   https://jelliottdev.github.io/reference/articles/key-alignment.html
 - LP2: pair the 2,883-rune sections by subtraction

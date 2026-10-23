@@ -1,0 +1,158 @@
+{
+  "id": "wulfic-crib-lfsr-recurrence",
+  "status": "published",
+  "title": "Can a guessed word seed a short feedback key?",
+  "question": "Does a source-defined crib-derived GF(29) linear recurrence predict a language-like 128-rune continuation on 11 named unsolved LP2 pages when the key phase and J-rune parsing are corrected?",
+  "reader_question": "Could a guessed word reveal the key for the following runes?",
+  "summary": "The corrected crib rule produced 13 two-rune-validated candidate fits, but its best 128-rune continuation scored 18; 126 of 199 complete shuffled searches did at least as well. A separate post-result known-reading plant ranked first across a mixed 11-page search in all 12 mode/order cases, showing this exact screen can detect a clean positive.",
+  "finding": "The pinned source's original 21-crib normalized-IoC-gated branch produced zero candidates on 174,141 placements across 11 LP2 pages and solved LP1-15. After preserving all canonical J runes and aligning the key to each crib, a 13-crib, three-direction, order-2–5 screen found 13 candidate fits across 52,527 placements on the 11 LP2 pages; additive and subtractive sign forms can represent the same decoded text. The best continuation score was 18 on LP2-05; 126/199 shared whole-search shuffled controls scored at least 18. On an unchanged decoded 226-rune LP1-14 passage containing the source crib CIRCUMFERENCE, all 12 planted mode/order cases recovered the next 128 runes exactly and ranked first at score 119 across a mixed grid with ten unchanged LP2 pages. That post-target grid replaces the original 273-rune first target, so the original 199 shuffle maxima are not calibrated to it.",
+  "limitations": "The original source gate scores a page containing its own guessed crib and uses a rune parser that drops J. The corrected search still covers only 13 words, feedback lengths 2–5, three arithmetic directions, 11 pages and one approximate GP bigram/trigram score. The page-frequency shuffle is not a cipher generator. The post-result positive is one known 226-rune reading under a clean page-local clock, shorter than the replaced 273-rune LP2 page, and cannot prove power against every LP2 plaintext. No LFSR family or alternate key clock is excluded.",
+  "next_steps": "For a new feedback claim, fix one crib, page position, recurrence and clock first, then predict text outside the crib on an independently held-out passage.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "crib dragging",
+    "LFSR",
+    "GF29",
+    "Berlekamp-Massey",
+    "feedback",
+    "source replay",
+    "held-out continuation"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-11",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-10",
+      "lp2-12",
+      "lp2-13",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-crib-lfsr-recurrence/plan.json",
+      "experiments/records/wulfic-crib-lfsr-recurrence/inputs.json",
+      "experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json",
+      "experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json"
+    ],
+    "representation": "Pinned source page-number mapping separately preserves the source's J-dropping rune sequence on 11 LP2 pages plus solved LP1-15. Corrected scan uses canonical GP29 site arrays for the 11 LP2 pages; each source array equals its canonical counterpart with J removed.",
+    "procedure": "Replay the source's original crib-drag Berlekamp-Massey and IoC gate. Separately fit the first m-2 key symbols from each selected source crib, verify the last two, predict the next 128 runes and score only that continuation; rerun the complete page/crib/mode/offset selection on 199 shared seeded page shuffles.",
+    "parameters": "Original 21 source cribs length>=4, 3 directions and 12 mapped pages; corrected 13 source cribs length>=6, 3 directions, recurrence order 2–5, all offsets leaving 128 runes, 11 LP2 pages; 199 shuffle trials seed 20261023.",
+    "exclusions": "Other LP2 pages, other cribs, order>5, non-GP alphabets, key skips/resets, unrelated recurrence laws, a trained language model, and proof of full decryption."
+  },
+  "review": {
+    "kind": "retrospective source-branch replay and corrected-position bounded extension",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact pinned source function parity on all 12 page candidate counts, 24 full-continuation plants, a four-cell parser/phase ablation, independent page and all-199-null replay, plus independent 12-arm single-page and mixed-grid known-reading power checks",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-crib-lfsr-recurrence/extended_controls.py --check && python experiments/records/wulfic-crib-lfsr-recurrence/check.py --full && python experiments/records/wulfic-crib-lfsr-recurrence/power_check.py && python experiments/records/wulfic-crib-lfsr-recurrence/power_grid_check.py",
+    "environment": "Python 3 standard library, offline; inputs.json contains both indexed page versions, and data/evidence/known-readings.json verifies the power text.",
+    "script": "experiments/records/wulfic-crib-lfsr-recurrence/run.py",
+    "script_sha256": "d1a4648cf5873c444ab83714783997557148ba05ad5923b6754f61281a263643",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/plan.json",
+        "sha256": "f92a38e2124b58b94cd50a8b07c19d29ed9a8dbdc29a467d895bd72c4fd482e5"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/inputs.json",
+        "sha256": "ab0275434d64cf4da3d92eeba9bf3dacacaa6bca5644bf5577fe9730bf897a80"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/run.py",
+        "sha256": "d1a4648cf5873c444ab83714783997557148ba05ad5923b6754f61281a263643"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/check.py",
+        "sha256": "56e4d97ab1b1e98d71d976623af4abf57a900b1f77050ece8c521a652f1a5ee6"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/plot.py",
+        "sha256": "89c7310c22124b5685ae06c4781c792bdc4b27d67d68de32dad65023f0bacee9"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/extended_controls.py",
+        "sha256": "00eeb23e2a9da423009dea27181c87c849872fef6e12c14263a2a4e61dfe588f"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json",
+        "sha256": "7a5fa17ae0a3a6ae3540b24e03fbc3d14432f7f0609233f50fd41b4f2c9803ea"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power-input.json",
+        "sha256": "03499ffb538dd45ac4092354f0c92713819965c78db6fcd05165b1c13366d11f"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power.py",
+        "sha256": "e83ac10a5245b54c84dba692597e58907613692f2d05d1a46a6446f5e51dc59d"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power_check.py",
+        "sha256": "417b104a034bc3621ac5c2474a51f4685a312acecbd66671a068db9e181ef15b"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json",
+        "sha256": "70a695d3e5dea6a0addffc7f10f9a4e1c207099d8c660c7db5c8d182309f8b79"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power_grid.py",
+        "sha256": "9ff1a9ce8382edd3d69cc82bbe94fcca10df3bd22f161db4694099dffce4344f"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power_grid_check.py",
+        "sha256": "be91f365a1449e1275b1aa6475969e0caf28f9e8deaae9650ee76bcdb46a6331"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/results.json",
+        "sha256": "96b261ab262c72316345fba7dad88cc4c97c867e4aca05c6598debf0ee462e3f"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/extended-controls.json",
+        "sha256": "66d770970503b35ed167fbd8a29ba630412a3b5b15f62da31689ca1f83e0cc31"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power-results.json",
+        "sha256": "786bc932d61a7d41905c81185d0b87f3109f42188da525b96c181c4b949a1f90"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/result.svg",
+        "sha256": "ed29551cbc8e2e39ea40b7e081634e35b3c86c19a2d4423107bce31bf50bf7fe"
+      },
+      {
+        "path": "experiments/records/wulfic-crib-lfsr-recurrence/power-grid-results.json",
+        "sha256": "cecfe38b32ff95b398f90f9866eadeddcd75cb304567ff19779495ccbf5ef22c"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-crib-lfsr-recurrence/result.svg",
+      "caption": "Parser and key-phase ablation, corrected LP2 search against 199 complete shuffled searches, and a separate post-result known-reading plant tested within a mixed 11-page grid."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic crib/LFSR source program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/lfsr_alberti_solver.py"
+    }
+  ],
+  "related": [
+    "wulfic-lfsr-singleton-constraints",
+    "wulfic-separator-clock-alberti"
+  ],
+  "reader_finding": "The best continuation from the guessed words scored no better than many shuffled pages: 126 of 199 shuffled searches matched or exceeded it. A separate planted known reading was recovered correctly.",
+  "reader_limit": "This covers 13 fixed words and short feedback rules on 11 pages. Other words, key clocks and feedback rules remain untested.",
+  "scope_summary": "11 LP2 pages · 13 fixed word guesses · three arithmetic directions · feedback lengths 2–5 · 128-rune continuations."
+}

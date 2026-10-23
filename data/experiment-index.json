@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 277,
+    "records": 279,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -17249,6 +17249,76 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/round19-decoder-null-bars.zip"
     },
     {
+      "id": "round19-full-book-decoder-power",
+      "title": "Can the decoder follow a known key through a full book?",
+      "question": "Do the exact and permissive Round 19 decoders recover source-defined planted text at 12,956 runes when given the correct key, and separate one wrong-key control per mode?",
+      "summary": "Across eight exact source-defined full-book decodes, both decoders recovered over 99.8% of planted runes with the correct key and less than 5% under their wrong-key controls; all non-timing fields matched the archived source output. This is a decoder-power control, not an LP2 solve test.",
+      "tags": [
+        "decoder alignment",
+        "full-book control",
+        "known key",
+        "key skipping",
+        "beam search",
+        "source replay"
+      ],
+      "finding": "With the correct key, the two decoders recovered a median 99.98% and 99.82% of a 12,956-rune planted message. Wrong-key controls recovered less than 5%.",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+      },
+      "method_topics": [
+        {
+          "id": "interruptions",
+          "title": "Keystream interruptions and reset rules",
+          "aliases": [
+            "interrupters",
+            "reset",
+            "pause key",
+            "skip key"
+          ]
+        },
+        {
+          "id": "alignment",
+          "title": "Offsets and key alignment",
+          "aliases": [
+            "offset",
+            "alignment",
+            "key alignment"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": {
+        "id": "decoder-alignment-controls",
+        "title": "Decoder alignment controls",
+        "question": "Can declared decoders recover planted plaintext under matching and mismatched alignment rules?",
+        "baseline": "decoder-skip-controls"
+      },
+      "variant_label": "Round 19 G-BOOK exact and permissive full-length source grid",
+      "pages": [],
+      "artifacts": [
+        "experiments/records/round19-full-book-decoder-power/plan.json",
+        "experiments/records/round19-full-book-decoder-power/source/liber-primus/analysis/round19/I1/out_book.json"
+      ],
+      "outcome": "supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/round19-full-book-decoder-power",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/round19-full-book-decoder-power.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/round19-full-book-decoder-power/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/round19-full-book-decoder-power.zip"
+    },
+    {
       "id": "round19-rsa-key-provenance",
       "title": "Round 19 RSA key scan: source replay and provenance",
       "question": "Does the source's expanded 23-modulus RSA scan yield a padding match, and are all 23 keys actually Cicada keys?",
@@ -20428,6 +20498,89 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-cicada-byte-key-phases.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-cicada-byte-key-phases/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-cicada-byte-key-phases.zip"
+    },
+    {
+      "id": "wulfic-crib-lfsr-recurrence",
+      "title": "Can a guessed word seed a short feedback key?",
+      "question": "Does a source-defined crib-derived GF(29) linear recurrence predict a language-like 128-rune continuation on 11 named unsolved LP2 pages when the key phase and J-rune parsing are corrected?",
+      "summary": "The corrected crib rule produced 13 two-rune-validated candidate fits, but its best 128-rune continuation scored 18; 126 of 199 complete shuffled searches did at least as well. A separate post-result known-reading plant ranked first across a mixed 11-page search in all 12 mode/order cases, showing this exact screen can detect a clean positive.",
+      "tags": [
+        "LP2",
+        "crib dragging",
+        "LFSR",
+        "GF29",
+        "Berlekamp-Massey",
+        "feedback",
+        "source replay",
+        "held-out continuation"
+      ],
+      "finding": "The best continuation from the guessed words scored no better than many shuffled pages: 126 of 199 shuffled searches matched or exceeded it. A separate planted known reading was recovered correctly.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "feedback",
+          "title": "Autokey and ciphertext feedback",
+          "aliases": [
+            "autokey",
+            "feedback",
+            "ciphertext feedback",
+            "plaintext autokey"
+          ]
+        },
+        {
+          "id": "cribs",
+          "title": "Known plaintext and crib searches",
+          "aliases": [
+            "crib",
+            "known plaintext",
+            "guessed word",
+            "known plaintext attack",
+            "crib search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-11",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-10",
+        "lp2-12",
+        "lp2-13",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-crib-lfsr-recurrence/plan.json",
+        "experiments/records/wulfic-crib-lfsr-recurrence/inputs.json",
+        "experiments/records/wulfic-crib-lfsr-recurrence/power-plan.json",
+        "experiments/records/wulfic-crib-lfsr-recurrence/power-grid-plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-crib-lfsr-recurrence",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-crib-lfsr-recurrence.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-crib-lfsr-recurrence/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-crib-lfsr-recurrence.zip"
     },
     {
       "id": "wulfic-deor-interlocking-streams",

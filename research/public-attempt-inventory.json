@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "a8a5e81d0b1d7763a37a92d14c484977a29793524f043d1455ab7cedd4cfc37c",
-    "record_count": 277
+    "sha256": "0b41b1784c4678329cba17f99395c21affebfd2c7a9eaf89d521e63a3a48ab3a",
+    "record_count": 279
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,13 +27,13 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 28,
-    "unreconciled": 103,
-    "source_entries_reviewed": 65,
-    "source_entries_pending_review": 107,
+    "unreconciled": 102,
+    "source_entries_reviewed": 66,
+    "source_entries_pending_review": 106,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 103,
+    "pending_review_without_candidate_match": 102,
     "execution_replay_states": {
-      "complete-executed-grid": 18,
+      "complete-executed-grid": 19,
       "replayed-with-invalid-gate": 6,
       "partial-execution": 11
     },
@@ -3095,9 +3095,31 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "reproduced-subclaim",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-full-book-decoder-power",
+            "covered_subclaim": "All eight 12,956-rune planted-message source decodes freshly reproduced on every non-timing field; three correct-key seeds per decoder pass the fixed recovery and score gates, with one wrong-key control per decoder."
+          }
+        ],
+        "unresolved_parts": [
+          "Only the pinned synthetic known-key construction and two decoder policies were replayed. No LP2 candidate key or complete source-wide conclusion is established.",
+          "One wrong-key control per policy is insufficient to calibrate an unknown-key search false-positive rate."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-full-book-decoder-power"
+        ],
+        "scope": "Eight source-defined G-BOOK jobs at 12,956 runes: two decoder modes, three correct-key seeds and one wrong-key control per mode.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-09",

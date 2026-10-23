@@ -11,19 +11,19 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 65,
-    "reproduced_subclaim": 2,
+    "source_entries_reviewed": 66,
+    "reproduced_subclaim": 3,
     "partial": 35,
     "unsupported_source_verdict": 18,
     "blocked_exact_replay": 3,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 46,
+    "source_entries_with_published_record_link": 47,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 18,
+      "complete-executed-grid": 19,
       "partial-execution": 11,
       "replayed-with-invalid-gate": 6
     }
@@ -1808,6 +1808,34 @@
           "round19-decoder-null-bars"
         ],
         "scope": "Exact analyse_fp tail fitting on committed score arrays: 26 fits from 34,000 saved rows, not a fresh 34,000-decode search.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "I1-08",
+      "source_claim": "The G-BOOK known-key decoder gate succeeds at full-book length under the pinned source construction.",
+      "status": "reproduced-subclaim",
+      "record_links": [
+        {
+          "record_id": "round19-full-book-decoder-power",
+          "covered_subclaim": "All eight 12,956-rune planted-message source decodes freshly reproduced on every non-timing field; three correct-key seeds per decoder pass the fixed recovery and score gates, with one wrong-key control per decoder."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/I1/run_gates.py",
+        "liber-primus/analysis/round19/I1/out_book.json"
+      ],
+      "unresolved_parts": [
+        "Only the pinned synthetic known-key construction and two decoder policies were replayed. No LP2 candidate key or complete source-wide conclusion is established.",
+        "One wrong-key control per policy is insufficient to calibrate an unknown-key search false-positive rate."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-full-book-decoder-power"
+        ],
+        "scope": "Eight source-defined G-BOOK jobs at 12,956 runes: two decoder modes, three correct-key seeds and one wrong-key control per mode.",
         "wider_method_excluded": false
       }
     }

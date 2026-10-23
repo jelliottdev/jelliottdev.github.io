@@ -63,6 +63,50 @@
       "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
       "scope": "26 mode-specific tail fits from 34,000 archived scores plus internal reserved-row block diagnostics; no fresh beam decoding.",
       "usage": "Refitting a stored score distribution is not a calibrated million-trial error guarantee. Reuse only after checking input hashes and exact decoder domain."
+    },
+    {
+      "source_ids": [
+        "B-04",
+        "RESTATE-B-04"
+      ],
+      "source_paths": [
+        "analysis/round13/B04/control.py",
+        "analysis/round13/B04/harness.py"
+      ],
+      "receipt": "research/performance/b04-g2-2026-10-23/gate-receipt.json",
+      "receipt_sha256": "7dbb68de18111abd73868dec8776e67fe5da0da6cbf7f137cbba8cfe4e22246b",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "Fresh full 1,385,600-setting source control.py G2 plant-ranking gate, with G1 hash binding. Planted SHA256-counter/mod29 configuration ranks first; 542 chunk files independently verified. This control uses the source control.py plant, not sweep.py fallback plant. No manuscript verdict.",
+      "usage": "Reuse exact completed grid only after checking source, gate, seed and target hashes. Do not rerun the full ranking gate or Stage A merely to establish prior work; wider stages remain separate."
+    },
+    {
+      "source_ids": [
+        "B-04",
+        "RESTATE-B-04"
+      ],
+      "source_paths": [
+        "analysis/round13/B04/harness.py",
+        "analysis/round13/B04/sweep.py"
+      ],
+      "receipt": "research/performance/b04-stage-a-2026-10-23/execution-receipt.json",
+      "receipt_sha256": "d44ec8c903a401b38122a0e80d18cb1269fa70578f4af2d356621ac77de629ea",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "Fresh exact Stage A: 1,385,600 decodes on first120 unsolved GP runes, offset0, full2165seed grid. Source count/best/histogram match exactly; independent checkpoint/summary/top-row checks pass. Stages B/C/D not covered by this receipt; no whole-method exclusion.",
+      "usage": "Reuse exact completed grid only after checking source, gate, seed and target hashes. Do not rerun the full ranking gate or Stage A merely to establish prior work; wider stages remain separate."
+    },
+    {
+      "source_ids": [
+        "I1-08"
+      ],
+      "source_paths": [
+        "analysis/round19/I1/run_gates.py",
+        "analysis/round19/I1/out_book.json"
+      ],
+      "receipt": "experiments/records/round19-full-book-decoder-power/results.json",
+      "receipt_sha256": "a41039849705ccb36ed0ddb24160919ac67bb96a2868928fe85dc53d9c51694f",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "Eight source-defined full-book 12,956-rune planted decoder jobs; all non-timing source fields match. Three correct-key seeds and one wrong-key control per decoder. No LP2 key search.",
+      "usage": "Reuse only for the exact source full-book synthetic known-key gate; not a B04 decoder-equivalence result or general false-positive calibration."
     }
   ]
 }

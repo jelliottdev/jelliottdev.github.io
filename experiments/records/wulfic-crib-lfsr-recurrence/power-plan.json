@@ -1,0 +1,58 @@
+{
+  "schema": "wulfic-crib-lfsr-power-plan-v1",
+  "timing": "Explicit post-target diagnostic; original plan and results are unchanged.",
+  "source": {
+    "path": "data/evidence/known-readings.json",
+    "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39",
+    "reading_id": "second-koan",
+    "page_id": "lp1-14",
+    "description": "Existing decoded rune_indices, no new English-to-rune encoding."
+  },
+  "power_input_sha256": "03499ffb538dd45ac4092354f0c92713819965c78db6fcd05165b1c13366d11f",
+  "frozen_results_sha256": "96b261ab262c72316345fba7dad88cc4c97c867e4aca05c6598debf0ee462e3f",
+  "plaintext_length": 226,
+  "crib": {
+    "name": "CIRCUMFERENCE",
+    "offset": 52,
+    "length": 13,
+    "matched_exact_source_indices": true
+  },
+  "known_continuation": {
+    "start": 65,
+    "length": 128,
+    "excludes_training_and_crib": true,
+    "no_literal_rune_replacement": true
+  },
+  "arms": {
+    "modes": [
+      "sub",
+      "add",
+      "beaufort"
+    ],
+    "orders": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "initial_key_state": [
+      3,
+      7,
+      11,
+      13,
+      17
+    ],
+    "recurrence_coefficients": [
+      2,
+      3,
+      5,
+      7,
+      11
+    ],
+    "clock": "Page-local, one key symbol per rune, first state at page index zero."
+  },
+  "search": "Use the same 13 cribs, all positions leaving 128 runes, three modes, L2..5, two-symbol crib validation, and source bigram/trigram continuation score as original corrected target.",
+  "comparison": "Compare true planted candidate score and rank among all eligible same-page candidates with the frozen 199 global 11-page shuffled-search maxima; do not resample or retune.",
+  "strong_power_gate": "For each planted mode/order arm, true candidate must exactly recover all 128 known runes, rank first in same-page search, and exceed every frozen global null maximum.",
+  "interpretation": "Failure limits this score/gate power; it is not a failed LP2 decryption nor a new null test."
+}
