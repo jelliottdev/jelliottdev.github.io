@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "0f1d14e4b948e79ccf67a2ea2c37587e36580ea03c58369d11ed5e40b85aed72",
-    "record_count": 276
+    "sha256": "e7e5bbcbebe7dd42dce23bcc871dab980e6df3124d6491feab1814a2015400da",
+    "record_count": 277
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,13 +27,13 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 28,
-    "unreconciled": 104,
-    "source_entries_reviewed": 64,
-    "source_entries_pending_review": 108,
+    "unreconciled": 103,
+    "source_entries_reviewed": 65,
+    "source_entries_pending_review": 107,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 104,
+    "pending_review_without_candidate_match": 103,
     "execution_replay_states": {
-      "complete-executed-grid": 17,
+      "complete-executed-grid": 18,
       "replayed-with-invalid-gate": 6,
       "partial-execution": 11
     },
@@ -2990,9 +2990,31 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-decoder-null-bars",
+            "covered_subclaim": "All 26 source tail-fit cells reproduce from 34,000 saved score rows. Independent arithmetic matches; reserved-row diagnostics check block sizes 10,25,50. The 34,000 decoder paths were not freshly executed."
+          }
+        ],
+        "unresolved_parts": [
+          "Million- and billion-trial Gumbel extrapolations are not empirically calibrated error rates.",
+          "Archived wrong-key beam decodes were not independently regenerated; no LP2 cipher or candidate key was tested."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-null-bars"
+        ],
+        "scope": "Exact analyse_fp tail fitting on committed score arrays: 26 fits from 34,000 saved rows, not a fresh 34,000-decode search.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-05",

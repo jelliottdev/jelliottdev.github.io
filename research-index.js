@@ -49,13 +49,16 @@
   function recordText(record){
     const pages=(record.scope?.pages||[]).flatMap(id=>[id,`${id.slice(0,3)} page ${Number(id.slice(4))}`]);
     return [record.title,record.summary,record.reader_finding||record.finding,record.family?.title,
-      ...(record.tags||[]),...(record.method_topics||[]).flatMap(topic=>[topicId(topic),...(topic?.aliases||[])]),...pages].join(' ');
+      ...(record.tags||[]),...(record.method_topics||[]).flatMap(topic=>[topicId(topic),topic?.title,...(topic?.aliases||[])]),...pages].join(' ');
   }
   const checked=record=>/^\d{4}-\d{2}-\d{2}$/.test(record.review?.retested_on||'')?record.review.retested_on:'';
   function select(records,requested){
     const value={...requested},query=pageQuery(value.q||'');
     const families=new Map(records.filter(r=>r.family).map(r=>[r.family.id,r.family.title]));
-    const topics=new Map(records.flatMap(record=>(record.method_topics||[]).map(topicId)).filter(Boolean).map(id=>[id,topicLabel(id)]));
+    const topics=new Map();
+    for(const record of records)for(const topic of record.method_topics||[]){
+      const id=topicId(topic);if(id)topics.set(id,typeof topic?.title==='string'&&topic.title.trim()?topic.title:topics.get(id)||topicLabel(id));
+    }
     if(value.family&&!families.has(value.family))value.family='';
     if(value.method&&!topics.has(value.method))value.method='';
     const matches=records.filter(record=>(!value.type||record.record_type?.id===value.type)&&

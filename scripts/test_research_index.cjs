@@ -24,6 +24,12 @@ assert.deepEqual(Index.select(records,state('sort=title-desc')).records.map(r=>r
 assert.deepEqual(Index.select(records,state('sort=recent')).records.map(r=>r.id),['a','b','d','c'],'Known dates first, then stable numeric-aware title order');
 assert.deepEqual(Index.select(records,state('q=prime+LP2+page+15&type=method&method=transposition&family=prime-reversal&outcome=inconclusive')).records.map(r=>r.id),['a','b']);
 assert.equal(Index.select(records,state('method=unknown')).state.method,'');
+const authored=fixture('authored','Source title',{method_topics:[{id:'transposition',title:'Routes and rearrangements',aliases:[]}]});
+const authoredResult=Index.select([authored,...records],state('q=Routes+and+rearrangements'));
+assert.equal(authoredResult.topics.get('transposition'),'Routes and rearrangements','Authored titles override inferred labels even beside older metadata');
+assert.deepEqual(authoredResult.records.map(r=>r.id),['authored'],'Authored method names are searchable');
+assert(Index.filters(authoredResult).includes('Routes and rearrangements'));
+assert.equal(Index.select(records,state('')).topics.get('transposition'),'Transposition','Older cached metadata retains a useful fallback');
 assert.deepEqual(Index.select(records,state('q=LP2-15–17')).records.map(r=>r.id),['d'],'Every requested page must be inside scope');
 assert.equal(Index.select(records,state('q=LP2-99')).total,0);
 assert(!Index.select(records,state('q=LP2-15')).records.some(r=>r.id==='c'),'A page mentioned in findings cannot masquerade as tested scope');

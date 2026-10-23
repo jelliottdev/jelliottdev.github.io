@@ -6,7 +6,7 @@ The proposed equation is `Cᵢ = Cᵢ₋₁ + Kᵢ(Pᵢ − 28) mod 29`. Here `C
 
 The site's solved LP1 controls contain **20 EA runes in 2,782 within-page transition positions** (0.719%). Unsolved LP2-00–55 has **86 doublets in 12,901 within-page positions** (0.667%). If the solved LP1 rate were simply carried over, it would correspond to about **92.7 EA positions** at the unsolved length. That is close to 86, but many different ciphers or text-generation rules can produce the same marginal rate.
 
-![The EA rate in solved LP1 and doublet rate in unsolved LP2 shown as two horizontal bars, 0.719 and 0.667 percent.](experiments/records/ea-frequency-control/comparison.svg)
+![Observed EA and doublet rates with illustrative Wilson ranges; the solved LP1 sample has a wider range.](experiments/records/ea-frequency-control/comparison.svg)
 
 | Source and measurement | Events | Positions | Rate |
 | --- | ---: | ---: | ---: |

@@ -11,19 +11,19 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 64,
+    "source_entries_reviewed": 65,
     "reproduced_subclaim": 2,
-    "partial": 34,
+    "partial": 35,
     "unsupported_source_verdict": 18,
     "blocked_exact_replay": 3,
     "source_proposal_only": 2,
     "failed_source_gate": 5,
-    "source_entries_with_published_record_link": 45,
+    "source_entries_with_published_record_link": 46,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
-      "complete-executed-grid": 17,
+      "complete-executed-grid": 18,
       "partial-execution": 11,
       "replayed-with-invalid-gate": 6
     }
@@ -52,7 +52,9 @@
       "whole_entry_coverage_verified": false,
       "execution_replay": {
         "state": "complete-executed-grid",
-        "record_ids": ["round19-decoder-baseline-control"],
+        "record_ids": [
+          "round19-decoder-baseline-control"
+        ],
         "scope": "Fresh 24+12 source gate cases in the linked receipt: exact plaintext paths and numerical scores within 1.1e-14, not a universal algorithm identity theorem.",
         "wider_method_excluded": false
       }
@@ -79,7 +81,9 @@
       "whole_entry_coverage_verified": false,
       "execution_replay": {
         "state": "complete-executed-grid",
-        "record_ids": ["round19-decoder-baseline-control"],
+        "record_ids": [
+          "round19-decoder-baseline-control"
+        ],
         "scope": "Source G-BASE exactly: 4 suppression settings × 2 lengths × 6 decoder modes × 7 seeds, 336 synthetic known-key decodes; source timing fields excluded.",
         "wider_method_excluded": false
       }
@@ -1775,6 +1779,37 @@
         "No independent image execution or full source-method closure."
       ],
       "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "I1-04",
+      "source_claim": "Extreme-value parameters of the wrong-key null, per decoder mode, for threshold recalibration.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "round19-decoder-null-bars",
+          "covered_subclaim": "All 26 source tail-fit cells reproduce from 34,000 saved score rows. Independent arithmetic matches; reserved-row diagnostics check block sizes 10,25,50. The 34,000 decoder paths were not freshly executed."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round19/I1/analyse_fp.py",
+        "liber-primus/analysis/round19/I1/out_fp_deep.json",
+        "liber-primus/analysis/round19/I1/out_fp_deep2.json",
+        "liber-primus/analysis/round19/I1/out_fp_curve.json",
+        "liber-primus/analysis/round19/I1/out_fp_tail.json"
+      ],
+      "unresolved_parts": [
+        "Million- and billion-trial Gumbel extrapolations are not empirically calibrated error rates.",
+        "Archived wrong-key beam decodes were not independently regenerated; no LP2 cipher or candidate key was tested."
+      ],
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-null-bars"
+        ],
+        "scope": "Exact analyse_fp tail fitting on committed score arrays: 26 fits from 34,000 saved rows, not a fresh 34,000-decode search.",
+        "wider_method_excluded": false
+      }
     }
   ],
   "next_batch": [

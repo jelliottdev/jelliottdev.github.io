@@ -1,0 +1,25 @@
+{
+  "schema": "liberpedia-round19-null-fit-replay-v1",
+  "timing": "Retrospective source replay: the pinned source's 26 fit results were inspected before this plan. The within-array split diagnostic below was fixed before its outputs were calculated.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": ["I1-04"],
+  "source_command": "python analyse_fp.py",
+  "source_inputs_sha256": {
+    "analysis/round19/I1/analyse_fp.py": "92377deb779fd38a5c88f898011655fafff86666d094ccc79ddba259b86aed67",
+    "analysis/round19/I1/out_fp_deep.json": "9610234eaa4d555386833bc6927413c5ec0241ca0985eeeaf270251e25629286",
+    "analysis/round19/I1/out_fp_deep2.json": "099b87fb551bc615a91fe2cbd79edb4197fedc27381a27ae6df097b8e5314e3d",
+    "analysis/round19/I1/out_fp_curve.json": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c",
+    "analysis/round19/I1/out_fp_tail.json": "5a68a0ab865a8ff62cd334f1c9346d0457f938bf42d580667ff9f1c8e7199c84"
+  },
+  "source_grid": "34,000 saved wrong-key score rows across real and synthetic ciphertext; 26 nonempty (null type, decoder mode) cells; source fits two block-max sizes using 40 seeded shuffles and extrapolates Gumbel maxima/bars at 10^6 and 10^9 trials.",
+  "comparison": "Replay all 26 source fit fields from the exact saved score rows and compare each non-timing value to archived out_fp_tail.json. No wrong-key beam decodes are rerun.",
+  "supplementary_diagnostic": {
+    "status": "new fixed diagnostic, not part of the historical source gate",
+    "split": "Within each source cell in source-file row order, even ordinal scores are training and odd ordinal scores are holdout.",
+    "fit": "Same two-block-size source estimator on training scores, with the source's 40 shuffles/seed 11 and formula.",
+    "heldout": "For block sizes 10, 25, 50, use 80 seeded shuffles with seed 20261023+b on the held-out scores; compare mean held-out block maximum with fitted mu+beta*(ln(b)+Euler gamma).",
+    "interpretation": "An internal split check only at observed block sizes. It cannot validate million- or billion-trial extrapolations or an LP2 cipher hypothesis."
+  },
+  "positive_checks": "Independent reference implementation of the source's seeded block partitions, fit arithmetic, and Gumbel-bar equation; exact row and fit counts checked. No language-decoder plant is claimed here.",
+  "limits": "The input score arrays are archived source outputs, not independently regenerated beam searches; tail fitting is model-dependent, and real-ciphertext wrong-key scores are not new plaintext evidence."
+}

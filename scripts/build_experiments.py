@@ -239,7 +239,7 @@ def build(root=ROOT):
             # Non-exclusive discovery hints from the authored method map. These
             # do not say that every variant of a family was tried.
             record['method_topics'] = [
-                {'id': family['id'], 'aliases': family['aliases']}
+                {'id': family['id'], 'title': family['title'], 'aliases': family['aliases']}
                 for family in types['families'] if record['id'] in family['related']
             ]
     for d in records:

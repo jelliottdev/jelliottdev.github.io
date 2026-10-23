@@ -4,6 +4,7 @@ from collections import Counter
 from fractions import Fraction
 import hashlib
 import json
+import math
 from pathlib import Path
 import random
 import re
@@ -145,22 +146,37 @@ def report():
 def figure(result):
     lp1 = result["solved_lp1"]
     unsolved = result["unsolved_lp2"]
-    upper = 1.15
-    parts = ['<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="0 0 640 260" role="img" aria-labelledby="title desc">',
+    def interval(count, total):
+        p, z = count / total, 1.9599639845
+        center = p + z*z/(2*total)
+        radius = z*math.sqrt(p*(1-p)/total + z*z/(4*total*total))
+        return ((center-radius)/(1+z*z/total), (center+radius)/(1+z*z/total))
+    x = lambda rate: 30 + rate * 100 / 1.2 * 300
+    parts = ['<svg xmlns="http://www.w3.org/2000/svg" width="360" height="402" viewBox="0 0 360 402" role="img" aria-labelledby="title desc">',
              '<title id="title">EA frequency in solved GP pages and doublets in unsolved LP2</title>',
-             '<desc id="desc">Solved LP1 has 20 EA events in 2782 within-page positions, or 0.719 percent. Unsolved LP2 has 86 doublets in 12901 positions, or 0.667 percent. The rates are close but do not identify a cipher.</desc>',
-             '<rect width="640" height="260" fill="white"/>',
-             '<g font-family="system-ui, sans-serif" fill="#263842">',
-             '<text x="20" y="30" font-size="19">EA frequency and the doublet count</text>',
-             '<text x="20" y="51" font-size="12">Different corpora and measurements; the proposed rule connects them only conditionally</text>']
+             '<desc id="desc">Solved LP1: 20 EA events in 2782 positions, 0.719 percent, with an illustrative 95 percent Wilson interval of 0.466 to 1.108 percent. Unsolved LP2: 86 doublets in 12901 positions, 0.667 percent, interval 0.540 to 0.822 percent. The calculation assumes independent draws; manuscript rune positions are dependent. Similar rates do not identify a cipher.</desc>',
+             '<rect width="360" height="402" fill="white"/>',
+             '<g font-family="Arial, Helvetica, sans-serif" fill="#263842">',
+             '<text x="18" y="28" font-size="20" font-weight="600">The solved sample is small</text>']
     for i, (label, count, total, rate, color) in enumerate([
         ("Solved LP1 · EA", lp1["ea_events"], lp1["positions"], lp1["rate"], "#285e75"),
-        ("Unsolved LP2 · equal neighbors", unsolved["equal_neighbors"], unsolved["transition_positions"], unsolved["rate"], "#a36f43")]):
-        y = 101 + 68*i
-        parts += [f'<text x="20" y="{y}" font-size="13">{label}</text>',
-                  f'<rect x="20" y="{y+10}" width="{rate*100/upper*420:.1f}" height="20" fill="{color}"/>',
-                  f'<text x="451" y="{y+26}" font-size="13">{count}/{total} · {rate*100:.3f}%</text>']
-    parts += ['<text x="20" y="244" font-size="11">Similarity of rates is not independent evidence for the running-sum equation.</text>',
+        ("Unsolved LP2 · repeated neighbors", unsolved["equal_neighbors"], unsolved["transition_positions"], unsolved["rate"], "#626e78")]):
+        y = 66 + 101*i
+        low, high = interval(count, total)
+        parts += [f'<text x="18" y="{y}" font-size="18">{label}</text>',
+                  f'<text x="18" y="{y+25}" font-size="17">{count:,} / {total:,} positions · {rate*100:.3f}%</text>',
+                  f'<line x1="{x(low):.2f}" x2="{x(high):.2f}" y1="{y+49}" y2="{y+49}" stroke="{color}" stroke-width="4"/>',
+                  f'<path d="M{x(low):.2f} {y+41}v16 M{x(high):.2f} {y+41}v16" stroke="{color}" stroke-width="2"/>',
+                  f'<circle cx="{x(rate):.2f}" cy="{y+49}" r="6" fill="{color}"/>']
+    parts += ['<line x1="30" x2="330" y1="245" y2="245" stroke="#c4cbd0"/>']
+    for tick in (0, .4, .8, 1.2):
+        px = x(tick/100)
+        parts += [f'<path d="M{px:.1f} 245v5" stroke="#626e78"/>',
+                  f'<text x="{px:.1f}" y="273" font-size="16" text-anchor="middle">{tick:g}%</text>']
+    parts += ['<text x="18" y="309" font-size="17">Points: observed rates</text>',
+              '<text x="18" y="334" font-size="17">Lines: illustrative 95% Wilson ranges</text>',
+              '<text x="18" y="367" font-size="16">Assumes independent draws.</text>',
+              '<text x="18" y="390" font-size="16">Prose does not meet that assumption.</text>',
               '</g></svg>']
     return "\n".join(parts) + "\n"
 

@@ -1,0 +1,123 @@
+{
+  "id": "round19-decoder-null-bars",
+  "title": "When wrong keys cross a language-score line",
+  "status": "published",
+  "question": "Does one language-score cutoff retain the same meaning across the source's different skip decoders?",
+  "reader_question": "Could a wrong key look convincing just because the decoder has more freedom?",
+  "summary": "The same −5.5 score line is crossed by 500 of 500 wrong keys in one permissive decoder setting, but by none of 2,000 in the repository setting. Replaying all 26 source fits confirms decoder-specific score bars; extrapolated million-trial bars remain unvalidated.",
+  "finding": "Refitting 34,000 saved wrong-key scores reproduces all 26 source fit cells. On real ciphertext, 500/500 drift_l0 wrong keys and 230/2,000 drift_l4 wrong keys exceeded −5.5, versus 0/2,000 with repo_ms3. A separate reserved-row check at block sizes 10, 25 and 50 has median absolute score errors 0.012, 0.015 and 0.016.",
+  "limitations": "Saved wrong-key decoder scores are source outputs; the 34,000 beam decodes were not rerun. The reserved-row check is internal to those arrays at small block sizes. Gumbel bars for one million or one billion trials are model extrapolations, not measured error rates. A high score is not a plaintext or an LP2 cipher identification.",
+  "next_steps": "Before interpreting any new key sweep, test planted recovery with that decoder and calibrate its complete search maximum against a matched wrong-key control.",
+  "outcome": "supported",
+  "tags": [
+    "wrong-key scores",
+    "score calibration",
+    "decoder freedom",
+    "extreme values",
+    "source replay",
+    "Gumbel fit",
+    "Round 19"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/round19-decoder-null-bars/plan.json",
+      "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_deep.json",
+      "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_deep2.json",
+      "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_curve.json"
+    ],
+    "representation": "Archived wrong-key English-score rows under real LP2 ciphertext and synthetic source controls; no plaintext candidate output is evaluated here.",
+    "procedure": "Run the pinned source fit over 34,000 saved rows; compare all 26 fit records, independently recount the fit arithmetic and test an alternating-row diagnostic at observed block sizes.",
+    "parameters": "Source samples have 240 runes and beam width 400; wrong keys use SHA256-counter seeds WRONGKEY-%08d. 13 decoder modes × real/synthetic source nulls; 500–2,000 scores per mode/null cell; source 40 seeded block partitions, two block sizes, Gumbel 1% family-wise projections to 10^6 and 10^9; diagnostic blocks 10/25/50 with 80 seeded held-out partitions.",
+    "exclusions": "Re-execution of the 34,000 source beam searches, independent validation of million/billion-trial tails, manuscript key discovery, alternative scorers, other decoders and general LP2 cipher exclusion."
+  },
+  "review": {
+    "reviewer": "Exact 26-cell source replay and independent 34,000-row arithmetic recount",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound null calibration control",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/round19-decoder-null-bars/run.py && python experiments/records/round19-decoder-null-bars/check.py && python experiments/records/round19-decoder-null-bars/plot.py --check",
+    "environment": "Python 3 standard library. The experiment ZIP includes the exact MIT-licensed source script and all archived score arrays; no external checkout is needed.",
+    "script": "experiments/records/round19-decoder-null-bars/run.py",
+    "script_sha256": "91c84136e719a87755a40326e1b847cacd43b1f6235d85463d63003acbb8758b",
+    "inputs": [
+      {
+        "path": "experiments/records/round19-decoder-null-bars/.gitattributes",
+        "sha256": "a0498b1825f14a78b7f2f2019af29f6d48ada34af6e2ee5b94469fcc771100b5"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/plan.json",
+        "sha256": "b908082f7d34074a671d6e1f47b82c8be28522f0db9a962c6b4e9b2ced45080d"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/run.py",
+        "sha256": "91c84136e719a87755a40326e1b847cacd43b1f6235d85463d63003acbb8758b"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/check.py",
+        "sha256": "063727d0b924b4ca1f8659dbd81dc09d18f76a28424b34dad1ea218c2b18de8b"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/plot.py",
+        "sha256": "cdf1b8bb8354f0a08d0de7c89b2f9b9d6260fe607f81a9dedfee832aac921a39"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/analyse_fp.py",
+        "sha256": "92377deb779fd38a5c88f898011655fafff86666d094ccc79ddba259b86aed67"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_deep.json",
+        "sha256": "9610234eaa4d555386833bc6927413c5ec0241ca0985eeeaf270251e25629286"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_deep2.json",
+        "sha256": "099b87fb551bc615a91fe2cbd79edb4197fedc27381a27ae6df097b8e5314e3d"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_curve.json",
+        "sha256": "38f71a1016c5e3ac6eacdb980101184cfa96a98700a1780eca06594d8a94a09c"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/source/liber-primus/analysis/round19/I1/out_fp_tail.json",
+        "sha256": "5a68a0ab865a8ff62cd334f1c9346d0457f938bf42d580667ff9f1c8e7199c84"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/round19-decoder-null-bars/replayed-tail.json",
+        "sha256": "36333f8209202c92ebddd40c07f938b3d719937d2b7687f450fea07d8660870f"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/results.json",
+        "sha256": "44ac76e85d8de41fb353ce84bcb5dd3151ce89b985d4e3b17612c1594b2e7202"
+      },
+      {
+        "path": "experiments/records/round19-decoder-null-bars/decoder-null-bars.svg",
+        "sha256": "cfeb014c5698a5d197dcc63ccec9018f82464c9fd2c128a22a960e03cec9d029"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 19 I1 null-fit source and saved wrong-key scores",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1"
+    }
+  ],
+  "related": [
+    "round19-decoder-baseline-control",
+    "search-maximum-controls"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/round19-decoder-null-bars/decoder-null-bars.svg",
+      "caption": "Observed wrong-key score crossings at the same source reading line under five decoder settings."
+    }
+  ],
+  "reader_finding": "Changing decoder rules changed how often wrong keys cleared the same score cutoff: 500 of 500 in one permissive setting, versus 0 of 2,000 in the repository setting. Crossing that line is not a decipherment."
+}
