@@ -1,0 +1,167 @@
+{
+  "id": "wulfic-systematic-stream-source",
+  "status": "published",
+  "title": "Prime streams and a short feedback key",
+  "question": "Do the exact executed prime-derived and two-value feedback searches in archived stream_cipher_attack.py provide a distinctive LP2 reading under the source's own score?",
+  "reader_question": "Could a prime sequence or short feedback key decode these pages?",
+  "summary": "The full pinned source searches produce many threshold hits, but complete searches on 19 shuffled versions do too. The score does not establish a reading.",
+  "finding": "On 38 matched LP2 pages, 2,964 prime-stream settings yielded 644 source-threshold hits (19 shuffled-search range 625–702). On three selected pages, all 6,365,529 two-value LFSR settings yielded 38,826 hits (shuffled range 33,694–44,833). The best stream IoC 1.140 was reached or exceeded by 16/19 controls; the best LFSR combined score was reached or exceeded by 11/19.",
+  "limitations": "The source's IoC/bigram/I-or-A-singleton score is a permissive candidate screen, not a reading test. Nineteen within-page shuffles supply only a coarse descriptive selection control and are not a cipher model. Old source page labels actually select LP2-01–38; the source-defined but uncalled Fibonacci stream and unfinished Berlekamp–Massey reconstruction are excluded. Other generator lengths, feedback clocks and page ranges remain open.",
+  "next_steps": "Specify a key rule that predicts a longer passage or untouched page before selecting another score peak.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "prime streams",
+    "LFSR",
+    "selection effect",
+    "index of coincidence"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-systematic-stream-source/plan.json",
+      "experiments/records/wulfic-systematic-stream-source/inputs.json"
+    ],
+    "representation": "Pinned source Git-object rune text using its exact GP29 alphabet and period/hyphen/bullet/space/newline word separators. Source page_18..55 maps to current LP2-01..38; separate LFSR selection is LP2-28,10,17.",
+    "procedure": "Run every entry of the source's 26-stream dictionary in three modes over every eligible source page. Run all 29^4 ordered two-value LFSR state/tap tuples in three modes over the three highest-singleton pages, including zero/singular tap cases. Preserve the source IoC, bigram and I/A singleton score and hit thresholds. Repeat the entire selected grids on 19 within-page rune shuffles.",
+    "parameters": "2,964 stream page-settings; 6,365,529 LFSR page-settings; source thresholds combined>2 or IoC>1.5 for streams, combined>3 for LFSR; shuffle seed 20261023.",
+    "exclusions": "Uncalled Fibonacci generator, incomplete Berlekamp–Massey key reconstruction, pages outside source selection, other prime rules, longer/nonlinear feedback or different alphabet/language models."
+  },
+  "review": {
+    "kind": "complete corrected-input source grid with source-function parity and selected-search controls",
+    "retested_on": "2026-10-23",
+    "reviewer": "All 26 generators and 107 zero-inclusive LFSR tuples matched pinned source functions before scoring; planted full-page recovery passed. Independent scalar checks verify all retained winners and a complete shuffled LFSR search.",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-systematic-stream-source/check.py && python experiments/records/wulfic-systematic-stream-source/plot.py --check",
+    "environment": "Python 3 with NumPy and Numba. run.py --check repeats the entire search and 19 controls. Optional gate.py and snapshot_inputs.py --source-root PATH --check compare with a checkout of the pinned Wulfic Git revision.",
+    "script": "experiments/records/wulfic-systematic-stream-source/check.py",
+    "script_sha256": "3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/plan.json",
+        "sha256": "46613d68270534bbe88a40054d51e814a88fb711a2b11613bdb3a77fa11b6c8f"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/inputs.json",
+        "sha256": "c7b42550ae238ff7ee7890bc512d430b4eb7e4c4a0f50631764c1c0eac74d7b9"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/snapshot_inputs.py",
+        "sha256": "19dc959867ac45df588e1d846e2adf3c6af67b5e11c7b43fb9c3d391931bfea3"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/engine.py",
+        "sha256": "84d580967feaae3a51e3f0cab12fe14b26b86191114d11a6d6fab828bdd743f9"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/gate.py",
+        "sha256": "c0d2526aca2b62775b207eba1bb40acfdd9f73d0d60d4a795321e65040e7634e"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/run.py",
+        "sha256": "eb168fa271fac4bb1a1cc32279ee265531bad08ed20fc5238cda1777af49322c"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/check.py",
+        "sha256": "3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/plot.py",
+        "sha256": "954674cd1041dbe9fe720984f5f20e858afaf804f90486c498c6de903cab9a06"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/make_record.py",
+        "sha256": "0f895536b80adf241a9a1fbee9f846d505ce4e87eaf513f9b140860556413d0a"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/article.md",
+        "sha256": "528b7c67143e8281141ee4319cf5a3d329e6d7a4d04065ff6d7903f49b0ddac2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/gate.json",
+        "sha256": "fe7229fa0028c46e71053fa680fa75a8bbc6ea7649ec4d498a934f102f5027ff"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/results.json",
+        "sha256": "c2a4801b6de2a88551f7a236e1e6bf74afd53cfa41e08a58f349385606bcd609"
+      },
+      {
+        "path": "experiments/records/wulfic-systematic-stream-source/comparison.svg",
+        "sha256": "024b12072d6681e000949b15589c33275b82b9916b0f8b8841242ac6ba869260"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-systematic-stream-source/comparison.svg",
+      "caption": "The manuscript's source-threshold hit counts fall inside the range from 19 complete searches on shuffled page runes."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned archived stream cipher source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py"
+    },
+    {
+      "label": "Archived legacy warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-prime-keyword-stream-families",
+    "wulfic-lfsr-singleton-constraints",
+    "wulfic-keyword-prime-layer-grid"
+  ],
+  "article": "# Prime streams and a short feedback key\n\nAn [archived solver script](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py) searches two ways of generating a rune-by-rune key: fixed sequences drawn from primes, and a key in which each new value depends on the previous two. We replayed its complete *executed* grids on the corresponding manuscript pages.\n\n**The script's threshold admits many outputs, but does not identify a reading.** On rune-shuffled versions of the same pages, complete searches also find thousands of hits. The observed best scores sit within the ranges of 19 shuffled searches. These controls show why crossing the source threshold is insufficient; shuffling is not a model of every possible cipher.\n\n![Source-threshold hit counts in the manuscript compared with complete searches on 19 shuffled versions](experiments/records/wulfic-systematic-stream-source/comparison.svg)\n\n| Source branch | Exact search | Manuscript threshold hits | Nineteen complete shuffled searches |\n| --- | ---: | ---: | ---: |\n| Prime-derived streams | 2,964 settings on 38 pages | 644 | 625–702 hits; median 662 |\n| Two-value LFSR | 6,365,529 settings on 3 pages | 38,826 | 33,694–44,833 hits; median 38,452 |\n\nThe stream branch's highest index of coincidence is **1.140**, exceeded by **16 of 19** shuffled searches. Its best combined score is exceeded by **5 of 19**. The LFSR branch's best combined score is exceeded by **11 of 19**. Nineteen controls give a coarse comparison, not a precise probability. There is no independently predicted longer passage or untouched page in the source rule.\n\nThe script calls its target list “all unsolved pages,” but its old folder names resolve differently. After its exclusions and empty-page checks, it actually reads archived `page_18` through `page_55`, corresponding to **LP2-01–38**. The two older files `page_00` and `page_02` contain no runes. The source then selects the three pages with the most visible one-rune words for the LFSR search: **LP2-28, LP2-10 and LP2-17**. Of these, LP2-28 overlaps the earlier [singleton-LFSR test](#/experiments/wulfic-lfsr-singleton-constraints), which used a different constraint solver and page set.\n\n## What the screens measure\n\nThe script tries **26 named prime-derived streams** in subtraction, addition and Beaufort directions. They include prime values, prime minus one, prime gaps and two cumulative sequences. Each begins at page position zero. The separate feedback search tries every initial pair and coefficient pair modulo 29: **29⁴** tuples on each of three pages, again in three directions. Zero coefficients and degenerate sequences are included. These parameter combinations are settings inside two method branches, not millions of independent ideas.\n\nEach decoded output receives an index of coincidence, a count of ten favored rune pairs, and credit when a visible one-rune word becomes **I** or **A**. That last component can dominate: on LP2-38, where the source parser finds only one one-rune word, matching it adds **five points** to a stream score whose hit threshold is two. The best LFSR setting on LP2-17 makes **6 of 10** one-rune words I or A; its index of coincidence is **0.976**. A partial crib fit and a selected score are not a sentence.\n\nThe source defines a Fibonacci-prime generator but never adds it to the search table. Its later Berlekamp–Massey section has a `pass` where a full key would be reconstructed. Neither is counted here as an executed decoder. Other prime streams and other feedback lengths remain outside this test.\n\n## How the replay was checked\n\nBefore scoring manuscript text, all 26 generators matched the pinned source functions at four lengths. A sample of 107 feedback tuples, including zero states and taps, matched the source's key, decoded runes, and complete score in all three directions. A synthetic known plaintext recovered exactly and passed each source screen. The optimized search then tested every declared setting. An independent scalar checker recalculates all retained winners and their full-decoding hashes and repeats one entire shuffled feedback search.\n\nThe [frozen plan](experiments/records/wulfic-systematic-stream-source/plan.json), [pinned input snapshot](experiments/records/wulfic-systematic-stream-source/inputs.json), and [results](experiments/records/wulfic-systematic-stream-source/results.json) give the exact bounds and counts. Run `python experiments/records/wulfic-systematic-stream-source/check.py` to check the saved result. Run `python experiments/records/wulfic-systematic-stream-source/run.py --check` to repeat all grids and controls; this requires Python, NumPy and Numba. With a checkout of the pinned source revision, `gate.py --source-root PATH --check` and `snapshot_inputs.py --source-root PATH --check` verify source parity and original inputs.\n\nThe historical outputs in the archived repository are not treated as verified. This is a corrected-input replay of its finite callable branches, not an exclusion of prime-based keys or LFSRs generally.\n",
+  "article_path": "experiments/records/wulfic-systematic-stream-source/article.md",
+  "script_sha256": "3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

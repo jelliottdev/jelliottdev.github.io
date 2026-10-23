@@ -1,19 +1,22 @@
-## What the source's language test can establish
+Two archived searches each report 20,480 Liber Primus decodes and no surviving candidate. Each set a positive-control rule before searching: its proposed scorer had to detect planted text **more often than the English scorer** when each was compared with its own wrong-key controls. Neither saved control meets that rule. Both programs used a different comparison to continue.
 
-An archived search scored possible Liber Primus readings with models for Latin, Greek, Old English and Enochian. Before using those models on the manuscript, its [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) set a control: **a language model had to find planted text more often than the English scorer did.**
+**Four language models.** The [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) tests Latin, Greek, Old English and Enochian models. **Zero of four** beat English on detection rate: both scorers find all 24 plants in every language. The program instead uses a standardized-score difference (*d-prime*) and passes all four.
 
-The saved controls show a tie. For **each of the four languages**, both scorers beat their own wrong-key threshold on **all 24 planted passages**. The language models worked on these plants, but they did not beat English by the plan's chosen measure. **Zero of four models passed the frozen strict-comparison rule.**
+**Matched rune spelling.** A [separate plan](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md) tests an **English** quadgram scorer adjusted for rune spelling. **Zero of three** eligible controls beat ordinary English against each scorer’s own wrong-key maximum. Latin and Greek are 24/24 under both; vowel-dropped English is 0/24 under both. The program also checks a fixed −5.5 score bar. At that bar, Latin rises from 12/24 to 19/24, so the program passes it through an OR condition.
 
-![Both scorers succeed on all 24 planted passages for each of four languages.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)
+![The four language-model controls tie English on every planted passage.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)
 
-The [control program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) used a different comparison: how far each scorer's median sits above its wrong-key scores, measured in standard deviations. On that measure, all four language models beat English. That may be a useful diagnostic, but the frozen plan did not name it as the pass rule. The program marked all four models as validated and continued.
+The two tests answer different questions. The first uses models trained for other languages. The second changes how an English model handles rune spelling; its improvement at a fixed bar does **not** turn it into a Latin or Greek language model. The saved rates show no advantage under either test’s frozen *own-null detection-rate* rule. The changed comparisons may be useful diagnostics, but they were not the declared pass criteria.
 
-The source [reports](experiments/records/dukotah-nonenglish-control-gate/source-results.json) 20,480 manuscript decodes and zero candidates above its final bar. **We did not rerun that grid here.** This audit checks the saved control rows and the source's decision logic. It shows that the reported zero is **not a control-validated exclusion under the original rule**. It does not show a non-English plaintext or refute the source's individual score calculations.
+The original [language-model program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) uses d-prime to mark four registers validated. The separate [matched-runic program](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py) uses the own-null result **or** a fixed-bar result, marking Latin validated. These are checks of the pinned plans, source decisions and saved control rows. **We did not rerun either planted simulation or either 20,480-case manuscript search.** Their reported zero survivors therefore cannot be presented as exclusions validated under their original control rules. The audits do not establish what language, if any, the unsolved pages contain.
 
-The English scorer's perfect showing on these particular plants also limits what the control could reveal: a harder, predeclared set of passages would be needed to measure an advantage in *detection rate*. The source's vowel-dropped English control does show English losing to its own-model score, but vowel-dropped English is not one of the four non-English registers tested here.
+## Check the controls
 
-## Check it
+From the repository root, run:
 
-Run `python experiments/records/dukotah-nonenglish-control-gate/check.py` and `python experiments/records/dukotah-nonenglish-control-gate/plot.py --check` from the repository root. The checker hashes the pinned source files, reads every saved control row, and applies both the frozen power comparison and the program's later comparison. The source used 24 plants and 60 wrong-key controls per register. The full source scripts, plan, saved control output and reported manuscript summary are bundled with this record under the source repository's MIT license.
+```bash
+python experiments/records/dukotah-nonenglish-control-gate/check.py
+python experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py --check
+```
 
-A follow-up would freeze a control that separates English from the other languages before looking at manuscript scores, then measure its power and calibrate the complete search against the same decision rule. That would test whether this bounded key-and-language search can detect the kind of reading it claims to exclude.
+The first checker compares all four saved language-model rows with both decision rules. The second verifies the pinned sibling source bytes and recomputes the frozen and executed decisions for Latin, Greek and vowel-dropped English. Source plans, code and saved receipts are bundled under the source repository’s MIT license. A new search would need a predeclared control that can reveal a detection-rate advantage, followed by one unchanged decision rule and a matched null for the full search.

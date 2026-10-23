@@ -50,7 +50,7 @@ META = {
     'monoalphabetic-substitution': ('partial', 'Separate complete whole-page substitution from short seeded hillclimbs; compare with existing crib-capacity and direct-affine records before a new controlled run.', ['monoalphabetic-crib-capacity']),
     'adfgvx-fractionation': ('replayed_adaptation', 'Already tested as a corrected-input bounded adaptation; source shortcuts and other fractionation layouts remain outside scope.', ['wulfic-adfgvx-fractionation']),
     'keyword-prime-double-layer': ('partial', 'The combined layer and three additional finite prime/keyword script grids have bounded replays. verify_keyword_ioc.py and any untested screen or key interpretation remain open.', ['wulfic-keyword-prime-layer-grid', 'wulfic-prime-keyword-stream-families']),
-    'autokey-feedback': ('partial', 'The keyword/two-/three-rune seed recurrences in autokey_comprehensive.py and p21_30_autokey_solver.py have one grouped bounded record. Their running-key/double-layer branches and stream_cipher_attack.py remain open; other autokey clocks are separate.', ['wulfic-autokey-seed-families', 'cumulative-autokey-literal', 'multiplicative-ciphertext-autokey']),
+    'autokey-feedback': ('partial', 'The keyword/two-/three-rune seed recurrences in autokey_comprehensive.py and p21_30_autokey_solver.py have one grouped bounded record. Their running-key/double-layer branches remain open; other autokey clocks are separate.', ['wulfic-autokey-seed-families', 'cumulative-autokey-literal', 'multiplicative-ciphertext-autokey']),
     'running-key-corpora': ('partial', 'Source LP1 key selection mixes solved and unsolved pages under old numbering. Correct source/input mapping before any original claim; genuine solved-reading and named-corpus keys have narrower existing tests.', ['solved-reading-running-key', 'emerson-running-key']),
     'periodic-crib-constraints': ('partial', 'period_crib_solve.py has a source-output replay and a separately declared held-out diagnostic whose planted-recovery gate failed. Checkpoint-dependent validators and the distinct lp_crib_drag.py model remain unexecuted.', ['wulfic-periodic-word-crib-votes', 'periodic-affine-crib-capacity']),
     'two-time-pad-cribs': ('partial', 'The three scripts’ claimed aligned-copy premises and one all-page-pair frequency screen are replayed. Their downstream crib placements were not scored after the named alignments failed; other shared-key models remain open.', ['wulfic-two-time-pad-premise', 'leo-shared-key-differences']),
@@ -68,6 +68,10 @@ META = {
 }
 
 ITEM_OVERRIDES = {
+    'stream_cipher_attack.py': ('replayed_source_bounded', ['wulfic-systematic-stream-source'],
+        'Complete executed 26-stream and two-value feedback grids replayed on corrected page identities, with 19 whole-search shuffles. Uncalled Fibonacci and incomplete key reconstruction remain outside scope.'),
+    'solve_p20.py': ('replayed_source_bounded', ['wulfic-p20-prime-position-routes'],
+        'All 58 source routes reconstructed on actual LP2-03 and compared with 199 complete shuffled searches; six-hit source score is not distinctive. Synthetic source parity covered retained routes, not every source branch.'),
     'combined_cipher_test.py': ('replayed_adaptation', ['wulfic-keyword-prime-layer-grid'],
                                 'Complete corrected-input 224,128-cell source grid is recorded; do not count the sibling scripts as covered.'),
     'p20_interlocking.py': ('replayed_source_and_amended_diagnostic', ['wulfic-deor-interlocking-streams'],

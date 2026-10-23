@@ -1,0 +1,28 @@
+{
+  "schema": "liberpedia-source-control-sibling-audit-v1",
+  "frozen_on": "2026-10-23",
+  "note": "Post hoc audit of a previously published source result. The original source PREREG is the frozen rule; this plan does not preregister a new manuscript experiment.",
+  "repository": "Dukotah/cicada3301",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_lane": "R24-C1-MATCHED-RUNIC-READJUDICATION",
+  "question": "Did the orthography-matched scorer outperform the English scorer under the source's own-register wrong-key null, as required before its B-04 re-adjudication?",
+  "source_rule": "At L=120, matched-scorer power must exceed English-scorer power on at least one of LATIN, GREEK, or EN_NOVOWEL. Power uses each scorer's own register-matched wrong-key maximum.",
+  "source_rule_witness": "source-PREREG.md section 'The control (mandatory, before real scoring)' and 'Pass / fail (frozen)'",
+  "execution_rule_witness": "source-control.py computes own-null and fixed-minus-5.5 powers, then uses their OR for matched_beats_english and control_pass",
+  "source_reported_manuscript_grid": 20480,
+  "locally_rerun_manuscript_grid": false,
+  "inputs": [
+    {"path": "source-PREREG.md", "sha256": "bfe5f57b0f31d8db354f965fcd56234613045743d97fa4e1b74c63119be41178"},
+    {"path": "source-control.py", "sha256": "9fa0f1a3fcdb6c13eace969239e81985c6d82b6fa8fefd717501dea7ccfe8a63"},
+    {"path": "source-out_control.json", "sha256": "0c1198b98059caac7c6f3e918086a20e15c6f0084fed31d0057ecca77e4da55e"},
+    {"path": "source-results.json", "sha256": "e33dfcb2a34fbcca6693bfccbcbb3929d82a4828449b99238be01d623ec0e308"},
+    {"path": "LICENSE.source", "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"}
+  ],
+  "checks": [
+    "Verify exact source Git-object bytes via SHA-256.",
+    "Confirm the frozen own-null power rule and the source program's OR replacement appear in pinned text.",
+    "Recompute the frozen and executed pass flags from every saved L=120 eligible register row; verify source's saved verdict.",
+    "Keep fixed −5.5 power visibly separate from each scorer's own-register wrong-key null power."
+  ],
+  "interpretation": "The source's 20,480-case manuscript score is reported context, not locally rerun or a validated exclusion under its frozen gate. The matched scorer corrects rune orthography within an English model; it is not itself a Latin, Greek, or Welsh language model."
+}

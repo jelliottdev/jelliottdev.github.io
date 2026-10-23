@@ -1,0 +1,133 @@
+{
+  "id": "wulfic-p20-prime-position-routes",
+  "status": "published",
+  "title": "Prime-position route search on LP2-03",
+  "question": "What does the pinned P20 prime-position split and 58-route search produce on its actual source page?",
+  "reader_question": "Does the prime-position route give a reading?",
+  "summary": "The strongest route has six source-style trigram hits; 57 of 199 complete rune-shuffle searches reach at least six.",
+  "finding": "Pinned page_20 maps to LP2-03 with 217 runes, not the 646 claimed in the source comment. Its nonprime-position stream has 170 runes. The 11-column route leads the 58 executed routes with six source-style trigram hits, a score reached or exceeded by 57/199 complete shuffled searches. The original source reports ten routes under branch-specific filters but does not establish a readable passage.",
+  "limitations": "The shuffle comparison is descriptive, not a cipher model. The source uses variable-width GP Runeglish, brief English trigram lists, and no validated full-passage criterion. Only source-retained routes passed an unmodified-script synthetic parity gate; all 58 saved manuscript routes have separate index-map reconstruction. Other pages, reading rules, languages and layouts are outside scope.",
+  "next_steps": "Propose a route from independent page evidence and test a held-out passage under a fixed reading criterion.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "prime positions",
+    "transposition",
+    "route cipher",
+    "selection effect"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-03"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-p20-prime-position-routes/plan.json"
+    ],
+    "representation": "Exact GP29 runes in Wulfic pages/page_20/runes.txt at commit bf89d3d, aligned to current LP2-03; source Runeglish output and committed Deor poem.",
+    "procedure": "Partition by prime zero-based rune position, take the 170-rune nonprime stream, choose the source's first maximal-IoC Caesar shift, and execute its 58 literal routes and branch-specific trigram screens. Retain the separate prime rune-index-value split as an audit, then compare whole-search maximums with 199 seeded full-page rune shuffles.",
+    "parameters": "One pinned source page; 29 Caesar shifts; 58 executed routes; 199 whole-search shuffles at seed 20261023.",
+    "exclusions": "No broader transposition family search, new word segmentation, other page alignment or output language, and no claim of plaintext from a trigram count."
+  },
+  "review": {
+    "kind": "pinned source replay with independently reconstructed route outputs",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pre-outcome planted route recovery and pinned-source retained-route parity; independent 58-route digest and one complete shuffled-search reconstruction",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-p20-prime-position-routes/check.py",
+    "environment": "Python 3 and NumPy for the independent checker. Optional source-root checks and full rerun use a checkout of pinned Wulfic commit bf89d3d13aad2b8f2c95ab195cf1b092f250775c.",
+    "script": "experiments/records/wulfic-p20-prime-position-routes/check.py",
+    "script_sha256": "cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/plan.json",
+        "sha256": "0aa69a88bba99fccaa557d96c44246b205ac56a6ba04811e5bc5d163485e47df"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/snapshot_inputs.py",
+        "sha256": "4074fef474df2765d49f6fb31486e0566bca8a25a22ce538f7b4867bbb662bb0"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/engine.py",
+        "sha256": "8f50dd0ffadaff29c1bb8f120f4e6c811f1b9081c0d6ddab5b758258679f692f"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/gate.py",
+        "sha256": "4c1bbaa6eef01fd8763f31f6cfc61b0e1727270425df27f3041421cf0694a38e"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/run.py",
+        "sha256": "11dcf0340bdf1e473651936dc9b34475afb9373399ccdb9e850c90c24615b10c"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/check.py",
+        "sha256": "cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/plot.py",
+        "sha256": "ee6c7507a3ec179e97e7eb512b9a9598fa5e60f4597cb02d26420a53a569fcea"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/make_record.py",
+        "sha256": "d1e49d16efa86d6b105a416caf086272e9d895ed9f0dd6c7a88863454348a6fb"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/article.md",
+        "sha256": "79e2dae9276711202815a17cc12aa2a60af17adcf56765f64c1c3ccff4f1575d"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/inputs.json",
+        "sha256": "e760b0a5b59f55f0834e11dde2d477c87068cc31320b5ded28a43b75b64914a5"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/gate.json",
+        "sha256": "67f84f054ef671d0ca012f0c6599443a8c3704d0432ccc7e17f2ec8562362c27"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/results.json",
+        "sha256": "dd00ea037a597683885586ab82e8164217d433de9ebd3261395df6802cba9c6e"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/source-run.json",
+        "sha256": "50104c75f0e75c6039a4da2098dd2abad530f02f30714dfe22accefdae7c3571"
+      },
+      {
+        "path": "experiments/records/wulfic-p20-prime-position-routes/comparison.svg",
+        "sha256": "3d6bacc439706436f5591692b88b4b23479f14f51f283766f5b6ba159cf4fce1"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-p20-prime-position-routes/comparison.svg",
+      "caption": "The best manuscript route scores six hits; 57 of 199 complete searches on shuffled runes score at least six."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic route program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p20.py"
+    },
+    {
+      "label": "Pinned Wulfic source-input warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-deor-interlocking-streams",
+    "wulfic-keyed-transposition-cohort",
+    "lp2-row-column-routes"
+  ],
+  "article": "# Do prime-position routes reveal a reading on LP2-03?\n\nThis [archived route program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p20.py) takes runes at **nonprime zero-based positions**, tries a Caesar shift, then reads that stream in 58 specified ways. The committed file called `page_20` is **LP2-03**, with **217 runes**, not the 646 stated in the program's opening comment. Its nonprime-position stream has 170 runes; the other 47 lie at prime positions.\n\n## Result\n\nThe strongest route was an 11-column reading with **six hits** on the program's short list of English trigrams. When we shuffled the same 217 runes and repeated the *entire* split, shift and route search 199 times, **57 searches reached six or more**. This comparison gives no reason to single out the six-hit route as a reading. It is a descriptive control for this search and this spelling convention, not a model of every possible cipher.\n\n![The best route has six trigram hits; 57 of 199 whole-search shuffles reached at least six.](experiments/records/wulfic-p20-prime-position-routes/comparison.svg)\n\nThe pinned program reports ten routes because nine are listed regardless of score and the 11-column route passes its `>5` gate. Its final ordering uses the *length of a formatted report string*, not a language score. The source also prints a distinct **prime rune-index-value split** (65/152); that is not the position split tested by these routes.\n\n## Why the shift and routes need care\n\nEvery Caesar shift has the same index of coincidence: renaming the 29 symbols does not change their frequency counts. The program chooses shift zero on the first equal maximum; its displayed “best shift” is therefore not independent evidence for a key. Reversal and the complete column, diagonal, keyword and Deor sorts likewise preserve symbol frequencies. Prime-position sampling, fixed-step sampling, Fibonacci positions and padded spirals can change the stream or its length, so they are reported separately.\n\nBefore scoring the manuscript, a planted 170-rune message was recovered through the two-column route and passed the source's `>5` trigram gate. The unmodified staged source agreed with our route names and IoC values for every route it retained on that plant. Our independent checker later rebuilt **all 58** manuscript route sequences and digests, including routes below the source's reporting threshold. The predeclared goal of checking *every route against the unmodified source on synthetic inputs* was not fully met: the original program exposes only retained routes, so the source-parity control covered its retained synthetic rows; independent index-map reconstruction covered the rest. This distinction is in the saved receipts.\n\n## Scope and reproduction\n\nThe runner uses the pinned Git bytes for `solve_p20.py`, `pages/page_20/runes.txt` and `data/corpora/deor_poem.txt`. It stages the source file unmodified in a temporary folder because its original Deor path differs from the committed path. Run `python experiments/records/wulfic-p20-prime-position-routes/snapshot_inputs.py --source-root PATH --check`, then `gate.py --source-root PATH --check` and `run.py --source-root PATH --check`. Run `python experiments/records/wulfic-p20-prime-position-routes/check.py` for the separate reconstruction.\n\nThe test covers those fixed routes on LP2-03 under the source's variable-length rune transliteration and trigram lists. It does not exclude other layouts, transcription choices, languages, or transposition rules. The related [Deor interlocking-stream test](#/experiments/wulfic-deor-interlocking-streams) splits on prime *rune-index values*, a different operation.\n",
+  "article_path": "experiments/records/wulfic-p20-prime-position-routes/article.md",
+  "script_sha256": "cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

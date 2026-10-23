@@ -11,9 +11,53 @@ def read(path):
     return json.loads(path.read_bytes())
 
 
+def ledger_path(path):
+    # Ledger evidence is relative to liber-primus; callers also use repo paths.
+    return path.removeprefix('liber-primus/')
+
+
 def lookup(source_id=None, source_path=None, terms='', limit=12):
     inventory = read(ROOT / 'research/public-attempt-inventory.json')
-    entry = next((r for r in inventory['entries'] if r['source_id'] == source_id), None)
+    entries = inventory['entries']
+    candidates = []
+    resolution = 'not-requested'
+    if source_id:
+        key = source_id.strip().casefold()
+        candidates = [r for r in entries if r['source_id'].casefold() == key]
+        resolution = 'exact'
+        if not candidates:
+            candidates = [r for r in entries if r['source_id'].casefold().startswith(key + '-')]
+            resolution = 'unique-prefix'
+    elif source_path:
+        candidates = [r for r in entries if any(
+            url.endswith('/' + source_path) or url.endswith('/' + ledger_path(source_path))
+            for url in r.get('source_evidence_urls', []))]
+        resolution = 'source-path'
+    if source_id or source_path:
+        if not candidates:
+            resolution = 'not-found'
+        elif len(candidates) > 1:
+            resolution = 'ambiguous'
+    entry = candidates[0] if len(candidates) == 1 else None
+    input_dependencies = []
+    candidate_ids = {r['source_id'] for r in candidates}
+    for note in sorted((ROOT / 'research').glob('*-input-dependency-*.json')):
+        dependency = read(note)
+        if dependency.get('schema') != 'internal-source-input-dependency-v1':
+            continue
+        applicable = [r for r in dependency['confirmed_dependent_source_ids']
+                      if r['source_id'] in candidate_ids or
+                      (source_path and ledger_path(r['source_path']) == ledger_path(source_path))]
+        if applicable:
+            input_dependencies.append({
+                'note': note.relative_to(ROOT).as_posix(),
+                'checked_on': dependency['checked_on'],
+                'revision': dependency['revision'],
+                'applies_to': applicable,
+                'missing_inputs': dependency['missing_inputs'],
+                'scope_note': dependency['effect'],
+                'usage': 'Recorded input check, not a fresh probe. Recheck if source or recovered files change.',
+            })
     linked = set()
     if entry:
         linked.update(x['record_id'] for x in entry.get('candidate_records', []))
@@ -45,7 +89,11 @@ def lookup(source_id=None, source_path=None, terms='', limit=12):
                          'path': path.relative_to(ROOT).as_posix()})
     hits.sort(key=lambda r: (-r['score'], r['record_id']))
     return {'warning': 'Intake candidates only. Read scope, gates and unresolved parts before assigning work.',
-            'source_entry': entry, 'matches': hits[:limit]}
+            'source_lookup': resolution,
+            'source_candidates': [{'source_id': r['source_id'], 'source_lane': r.get('source_lane'),
+                                   'reconciliation_state': r.get('reconciliation_state')}
+                                  for r in candidates] if len(candidates) > 1 else [],
+            'source_entry': entry, 'input_dependencies': input_dependencies, 'matches': hits[:limit]}
 
 
 if __name__ == '__main__':

@@ -1,0 +1,37 @@
+{
+  "schema": "internal-source-input-dependency-v1",
+  "checked_on": "2026-10-23",
+  "repository": "Dukotah/cicada3301",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "model_builder": "liber-primus/analysis/round19/I2/build_models.py",
+  "expected_input_witness": "liber-primus/analysis/round19/I2/out_build.json",
+  "missing_inputs": [
+    {
+      "path": "liber-primus/data/keys/welsh/welsh_mabinogion.txt",
+      "expected_sha256": "4b3fd9261e284a8aa653d2d84d5766aa67ab8f0f161f6102981cb0c0bbb1e237",
+      "expected_bytes": 524561,
+      "status": "absent from pinned Git tree and local source checkout",
+      "checked_alternates": [
+        {"path": "work/source-cache/corpus-input-probes-20261023/welsh-files.txt", "bytes": 538204, "sha256": "609f42b1bad8b06238bd664dfb3def02cbf1ffdb5da711c4d72c04083dc2077f"},
+        {"path": "work/source-cache/corpus-input-probes-20261023/welsh-cache.txt", "bytes": 558006, "sha256": "bd327d3fec1aca287b27988ac8c309ff2a178142a8f547c2850da77cb071bfc6"}
+      ],
+      "probe_receipt": "work/source-cache/corpus-input-probes-20261023/receipt.json"
+    },
+    {
+      "path": "liber-primus/analysis/round19/I2/models/panel.npz",
+      "status": "gitignored generated model absent from pinned Git tree and local source checkout",
+      "rebuild_blocker": "The builder requires the exact missing Welsh corpus. Different corpus bytes yield a different nine-register panel and null calibration."
+    }
+  ],
+  "confirmed_dependent_source_ids": [
+    {"source_id": "R20-SRESCOPE-B04-SURVIVORS", "source_path": "liber-primus/analysis/round20/S-RESCOPE/rescope20.py", "dependency": "imports round19/I2/adjudicate.py, which loads models/panel.npz"},
+    {"source_id": "R24-C2-EXT-SKIP-GENERATORS", "source_path": "liber-primus/analysis/round24/C2-ext-skip-generators/sweep_ext.py", "dependency": "imports round19/I2/adjudicate.py and round20/HITFN/hitfn20.py"},
+    {"source_id": "R24-C8-DATE-INDEXED-PAD", "source_path": "liber-primus/analysis/round24/C8-date-indexed-pad/run_c8.py", "dependency": "uses round20/HITFN/hitfn20.py, which calls the I2 adjudicator; its separate timestamp-only Step 0 does not require the model"}
+  ],
+  "explicit_non_dependency": {
+    "source_id": "R24-C1-MATCHED-RUNIC-READJUDICATION",
+    "source_path": "liber-primus/analysis/round24/C1-matched-runic/readjudicate.py",
+    "reason": "builds its own EN/Latin/Greek trigram panel; does not import round19/I2/adjudicate.py"
+  },
+  "effect": "Do not label saved downstream manuscript rows locally replayed under the exact I2 model until the expected training bytes or a hash-verified panel.npz is recovered. This is an input-availability blocker, not a finding about LP2 plaintext."
+}

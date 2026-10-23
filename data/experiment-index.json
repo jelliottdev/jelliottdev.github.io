@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 259,
+    "records": 261,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -2310,9 +2310,9 @@
     },
     {
       "id": "dukotah-nonenglish-control-gate",
-      "title": "A language-search control did not pass its frozen rule",
-      "question": "Did four archived non-English language controls satisfy the source’s preregistered power test?",
-      "summary": "The source reports 20,480 decodes, but its four language controls all tie the English scorer on the frozen detection-rate test. The program substituted a different comparison to proceed.",
+      "title": "Two language-scoring controls missed their frozen rules",
+      "question": "Did two archived language-scoring searches satisfy their own frozen positive-control rules?",
+      "summary": "Both sources report 20,480 manuscript decodes, but neither saved control meets its preregistered advantage-over-English test. Each program used a different comparison to proceed.",
       "tags": [
         "language models",
         "source audit",
@@ -2322,7 +2322,9 @@
         "Latin",
         "Greek",
         "Old English",
-        "Enochian"
+        "Enochian",
+        "orthography-matched scorer",
+        "vowel-dropped English"
       ],
       "family": null,
       "variant_label": null,
@@ -2330,7 +2332,10 @@
       "artifacts": [
         "experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md",
         "experiments/records/dukotah-nonenglish-control-gate/source-control.py",
-        "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json"
+        "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json",
+        "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md",
+        "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py",
+        "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-out_control.json"
       ],
       "outcome": "inconclusive",
       "retested_on": "2026-10-23",
@@ -14276,6 +14281,34 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p08-hint-grid-keys.zip"
     },
     {
+      "id": "wulfic-p20-prime-position-routes",
+      "title": "Prime-position route search on LP2-03",
+      "question": "What does the pinned P20 prime-position split and 58-route search produce on its actual source page?",
+      "summary": "The strongest route has six source-style trigram hits; 57 of 199 complete rune-shuffle searches reach at least six.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "prime positions",
+        "transposition",
+        "route cipher",
+        "selection effect"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-03"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-p20-prime-position-routes/plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-p20-prime-position-routes",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-p20-prime-position-routes.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-p20-prime-position-routes/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-p20-prime-position-routes.zip"
+    },
+    {
       "id": "wulfic-page24-prime-columnar",
       "title": "Prime positions and column readings on LP2-07",
       "question": "Does the archived zero-based prime extraction followed by column reading and GP29 shifts yield an unusual trigram score on LP2-07?",
@@ -14916,6 +14949,72 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-stage-af-unit-shifts.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-stage-af-unit-shifts/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-stage-af-unit-shifts.zip"
+    },
+    {
+      "id": "wulfic-systematic-stream-source",
+      "title": "Prime streams and a short feedback key",
+      "question": "Do the exact executed prime-derived and two-value feedback searches in archived stream_cipher_attack.py provide a distinctive LP2 reading under the source's own score?",
+      "summary": "The full pinned source searches produce many threshold hits, but complete searches on 19 shuffled versions do too. The score does not establish a reading.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "prime streams",
+        "LFSR",
+        "selection effect",
+        "index of coincidence"
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-01",
+        "lp2-02",
+        "lp2-03",
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-18",
+        "lp2-19",
+        "lp2-20",
+        "lp2-21",
+        "lp2-22",
+        "lp2-23",
+        "lp2-24",
+        "lp2-25",
+        "lp2-26",
+        "lp2-27",
+        "lp2-28",
+        "lp2-29",
+        "lp2-30",
+        "lp2-31",
+        "lp2-32",
+        "lp2-33",
+        "lp2-34",
+        "lp2-35",
+        "lp2-36",
+        "lp2-37",
+        "lp2-38"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-systematic-stream-source/plan.json",
+        "experiments/records/wulfic-systematic-stream-source/inputs.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-systematic-stream-source",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-systematic-stream-source.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-systematic-stream-source/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-systematic-stream-source.zip"
     },
     {
       "id": "wulfic-two-time-pad-premise",

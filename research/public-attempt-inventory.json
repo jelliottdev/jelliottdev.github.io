@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "c977d50d2b886216ddf81c75e000d1b19a8adc4a78af99269cc5525b88ea9716",
-    "record_count": 259
+    "sha256": "d93d7be86050d5eb11e458b1d632def41f7f80c4ae1a4ae2c9c05027ac277323",
+    "record_count": 261
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,12 +26,12 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 27,
-    "unreconciled": 108,
-    "source_entries_reviewed": 60,
-    "source_entries_pending_review": 112,
+    "candidate_overlap": 28,
+    "unreconciled": 107,
+    "source_entries_reviewed": 61,
+    "source_entries_pending_review": 111,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 108,
+    "pending_review_without_candidate_match": 107,
     "execution_replay_states": {
       "complete-executed-grid": 15,
       "replayed-with-invalid-gate": 6,
@@ -3785,9 +3785,37 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "failed-source-gate",
+      "candidate_records": [
+        {
+          "record_id": "dukotah-nonenglish-control-gate",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round24/C1-matched-runic/PREREG.md",
+                "liber-primus/analysis/round24/C1-matched-runic/control.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-nonenglish-control-gate",
+            "covered_subclaim": "The saved three eligible matched-scorer control rows tie ordinary English under the frozen own-null rule. Code instead permits a separate fixed-score-bar improvement through an OR; only Latin passes that alternative. Source logic and saved summaries independently checked; no manuscript grid rerun."
+          }
+        ],
+        "unresolved_parts": [
+          "The 24-plant simulations and wrong-key controls were not regenerated.",
+          "The reported 20,480 manuscript decodes and calibration were not locally rerun.",
+          "An orthography-matched English scorer is not a Latin or Greek language model; no plaintext language is excluded."
+        ],
+        "rejected_candidates": [],
+        "audit_note": "Saved-row and source-rule audit only. This does not add an executed manuscript grid."
+      }
     },
     {
       "source_id": "R24-C2-SKIP-BY-TWO-DECODER",

@@ -1,13 +1,13 @@
 {
   "id": "dukotah-nonenglish-control-gate",
   "status": "published",
-  "title": "A language-search control did not pass its frozen rule",
-  "question": "Did four archived non-English language controls satisfy the source’s preregistered power test?",
-  "reader_question": "Did this language search validate its non-English scorers?",
-  "summary": "The source reports 20,480 decodes, but its four language controls all tie the English scorer on the frozen detection-rate test. The program substituted a different comparison to proceed.",
-  "finding": "All four own-language models and the English scorer cleared their respective wrong-key maxima on all 24 plants per language. None satisfies the frozen requirement that the own-language model have strictly greater detection power. The program instead compared d-prime scores and marked all four validated. Its reported zero manuscript survivors is not a control-validated exclusion under the original rule.",
-  "limitations": "This independently audits the pinned plan, source decision logic and saved summary rows; it does not rerun the 24-plant simulations, their 60 wrong-key decodes per language, or the reported 20,480 manuscript decodes. The outcome does not say whether any proposed language is the plaintext.",
-  "next_steps": "Freeze a control with measurable power to distinguish the languages, then rerun the same complete search and its matched null using one unchanged decision rule.",
+  "title": "Two language-scoring controls missed their frozen rules",
+  "question": "Did two archived language-scoring searches satisfy their own frozen positive-control rules?",
+  "reader_question": "Did these language searches validate their scoring controls?",
+  "summary": "Both sources report 20,480 manuscript decodes, but neither saved control meets its preregistered advantage-over-English test. Each program used a different comparison to proceed.",
+  "finding": "Four language-specific models all tied English at 24/24 plants under the frozen own-null detection-rate rule; the program instead passed them by d-prime. A separate orthography-matched English scorer also tied ordinary English under its frozen rule on Latin, Greek and vowel-dropped English; its program passed Latin via an OR with a fixed-score-bar comparison. Neither reported zero-survivor manuscript grid is control-validated under its original rule.",
+  "limitations": "This independently checks pinned plans, decision code and saved control summaries from two source lanes. Neither planted simulation nor either reported 20,480-case manuscript grid was locally rerun. An orthography-matched English scorer is not a Latin or Greek language model; no actual plaintext language is established.",
+  "next_steps": "Freeze controls with power to reveal a detection-rate advantage and use one unchanged rule before rerunning and calibrating the complete search.",
   "outcome": "inconclusive",
   "tags": [
     "language models",
@@ -18,28 +18,33 @@
     "Latin",
     "Greek",
     "Old English",
-    "Enochian"
+    "Enochian",
+    "orthography-matched scorer",
+    "vowel-dropped English"
   ],
   "scope": {
     "pages": [],
     "artifacts": [
       "experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md",
       "experiments/records/dukotah-nonenglish-control-gate/source-control.py",
-      "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json"
+      "experiments/records/dukotah-nonenglish-control-gate/source-out_control.json",
+      "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md",
+      "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py",
+      "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-out_control.json"
     ],
-    "representation": "Pinned Dukotah R24-C1-ext plan, Python decision code, and the saved 24-plant/60-wrong-key summary for four non-English registers. No manuscript run was performed locally.",
-    "procedure": "Verify Git-object hashes; independently evaluate the strict power inequality in the plan and the d-prime inequality in the program on each saved register row; compare the validated-register lists.",
-    "parameters": "Latin, Greek, Old English and Enochian; source control length 120 runes, 24 plants and 60 wrong-key controls per language. A source-reported 20,480-case LP2 grid is contextual, not locally rerun.",
-    "exclusions": "No conclusion about actual plaintext language, the entire key family, the source’s numeric manuscript scores, other source registers, or a control with different difficulty or thresholds."
+    "representation": "Two pinned Dukotah source-control audits: R24-C1-ext four language-specific models and R24-C1 matched-runic orthography-adjusted English scorer. Each has a frozen plan, decision code and saved 24-plant control summaries. No manuscript grid was locally rerun.",
+    "procedure": "Verify source file hashes; recompute each frozen own-null power decision and the different executed decision from all eligible saved control summaries; distinguish the two scoring models and compare their source verdicts.",
+    "parameters": "R24-C1-ext: Latin, Greek, Old English and Enochian, 24 plants and 60 wrong-key controls each. R24-C1 matched: Latin, Greek and vowel-dropped English at L=120, 24 plants each. Each source reports a separate 20,480-case LP2 grid; neither grid was locally rerun.",
+    "exclusions": "No conclusion about actual plaintext language, the entire key family, numeric manuscript scores, other source registers, or changed control designs. The orthography-matched English scorer is not a language-specific model."
   },
   "review": {
     "kind": "pinned-source control-rule audit",
     "retested_on": "2026-10-23",
-    "reviewer": "Independent saved-row and source-rule checker; original simulation and manuscript grid not rerun",
+    "reviewer": "Independent saved-row and source-rule checkers for both lanes; original simulations and manuscript grids not rerun",
     "human_review": "pending"
   },
   "reproduction": {
-    "command": "python experiments/records/dukotah-nonenglish-control-gate/check.py && python experiments/records/dukotah-nonenglish-control-gate/plot.py --check",
+    "command": "python experiments/records/dukotah-nonenglish-control-gate/check.py && python experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py --check && python experiments/records/dukotah-nonenglish-control-gate/plot.py --check",
     "environment": "Python 3 standard library; source files and saved receipts from pinned Git revision are bundled.",
     "script": "experiments/records/dukotah-nonenglish-control-gate/check.py",
     "script_sha256": "e938ebad0a755bc9ecfb8eb03c5cd390fe535816e9bb84aed1a70aab01d7c34c",
@@ -90,7 +95,35 @@
       },
       {
         "path": "experiments/records/dukotah-nonenglish-control-gate/article.md",
-        "sha256": "d8cf1502ceb7c98b3fc0d459ad6f0040779a851eda8cbaa50712c275511f4505"
+        "sha256": "2b5cfbe8cbfe8bb440a0c6ac072142dbd0e8a1b7ff90b5b6b6d7fbf9e3e33f11"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/plan.json",
+        "sha256": "cbff1621b8941a2b10e784758e3c9d90881a3b50125710625c2a1e754f9d1d4c"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md",
+        "sha256": "bfe5f57b0f31d8db354f965fcd56234613045743d97fa4e1b74c63119be41178"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py",
+        "sha256": "9fa0f1a3fcdb6c13eace969239e81985c6d82b6fa8fefd717501dea7ccfe8a63"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-out_control.json",
+        "sha256": "0c1198b98059caac7c6f3e918086a20e15c6f0084fed31d0057ecca77e4da55e"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-results.json",
+        "sha256": "e33dfcb2a34fbcca6693bfccbcbb3929d82a4828449b99238be01d623ec0e308"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py",
+        "sha256": "f627e1c899e6ab2dd59faed0224c06c4460fd1ce15360e9999ecf442aab9b771"
       }
     ],
     "outputs": [
@@ -101,6 +134,10 @@
       {
         "path": "experiments/records/dukotah-nonenglish-control-gate/control-gate.svg",
         "sha256": "781d557bbeaee6429ca51dd3479b29026c9f83acaaa1f21b8572cc88c5b28116"
+      },
+      {
+        "path": "experiments/records/dukotah-nonenglish-control-gate/sibling-matched/results.json",
+        "sha256": "707fd84f4bc5be69d8a70cbde92cc8e052c6f21c8f93970c93d8eb12d89a4c63"
       }
     ]
   },
@@ -122,13 +159,21 @@
     {
       "label": "Pinned R24-C1-ext reported manuscript result",
       "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-ext-nonenglish/RESULTS.md"
+    },
+    {
+      "label": "Pinned R24-C1 matched-runic frozen plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-matched-runic/PREREG.md"
+    },
+    {
+      "label": "Pinned R24-C1 matched-runic control program and saved output",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-matched-runic/control.py"
     }
   ],
   "related": [
     "rune-matched-scorer-calibration",
     "target-sized-languages"
   ],
-  "article": "## What the source's language test can establish\n\nAn archived search scored possible Liber Primus readings with models for Latin, Greek, Old English and Enochian. Before using those models on the manuscript, its [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) set a control: **a language model had to find planted text more often than the English scorer did.**\n\nThe saved controls show a tie. For **each of the four languages**, both scorers beat their own wrong-key threshold on **all 24 planted passages**. The language models worked on these plants, but they did not beat English by the plan's chosen measure. **Zero of four models passed the frozen strict-comparison rule.**\n\n![Both scorers succeed on all 24 planted passages for each of four languages.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)\n\nThe [control program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) used a different comparison: how far each scorer's median sits above its wrong-key scores, measured in standard deviations. On that measure, all four language models beat English. That may be a useful diagnostic, but the frozen plan did not name it as the pass rule. The program marked all four models as validated and continued.\n\nThe source [reports](experiments/records/dukotah-nonenglish-control-gate/source-results.json) 20,480 manuscript decodes and zero candidates above its final bar. **We did not rerun that grid here.** This audit checks the saved control rows and the source's decision logic. It shows that the reported zero is **not a control-validated exclusion under the original rule**. It does not show a non-English plaintext or refute the source's individual score calculations.\n\nThe English scorer's perfect showing on these particular plants also limits what the control could reveal: a harder, predeclared set of passages would be needed to measure an advantage in *detection rate*. The source's vowel-dropped English control does show English losing to its own-model score, but vowel-dropped English is not one of the four non-English registers tested here.\n\n## Check it\n\nRun `python experiments/records/dukotah-nonenglish-control-gate/check.py` and `python experiments/records/dukotah-nonenglish-control-gate/plot.py --check` from the repository root. The checker hashes the pinned source files, reads every saved control row, and applies both the frozen power comparison and the program's later comparison. The source used 24 plants and 60 wrong-key controls per register. The full source scripts, plan, saved control output and reported manuscript summary are bundled with this record under the source repository's MIT license.\n\nA follow-up would freeze a control that separates English from the other languages before looking at manuscript scores, then measure its power and calibrate the complete search against the same decision rule. That would test whether this bounded key-and-language search can detect the kind of reading it claims to exclude.\n",
+  "article": "Two archived searches each report 20,480 Liber Primus decodes and no surviving candidate. Each set a positive-control rule before searching: its proposed scorer had to detect planted text **more often than the English scorer** when each was compared with its own wrong-key controls. Neither saved control meets that rule. Both programs used a different comparison to continue.\n\n**Four language models.** The [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) tests Latin, Greek, Old English and Enochian models. **Zero of four** beat English on detection rate: both scorers find all 24 plants in every language. The program instead uses a standardized-score difference (*d-prime*) and passes all four.\n\n**Matched rune spelling.** A [separate plan](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md) tests an **English** quadgram scorer adjusted for rune spelling. **Zero of three** eligible controls beat ordinary English against each scorer’s own wrong-key maximum. Latin and Greek are 24/24 under both; vowel-dropped English is 0/24 under both. The program also checks a fixed −5.5 score bar. At that bar, Latin rises from 12/24 to 19/24, so the program passes it through an OR condition.\n\n![The four language-model controls tie English on every planted passage.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)\n\nThe two tests answer different questions. The first uses models trained for other languages. The second changes how an English model handles rune spelling; its improvement at a fixed bar does **not** turn it into a Latin or Greek language model. The saved rates show no advantage under either test’s frozen *own-null detection-rate* rule. The changed comparisons may be useful diagnostics, but they were not the declared pass criteria.\n\nThe original [language-model program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) uses d-prime to mark four registers validated. The separate [matched-runic program](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py) uses the own-null result **or** a fixed-bar result, marking Latin validated. These are checks of the pinned plans, source decisions and saved control rows. **We did not rerun either planted simulation or either 20,480-case manuscript search.** Their reported zero survivors therefore cannot be presented as exclusions validated under their original control rules. The audits do not establish what language, if any, the unsolved pages contain.\n\n## Check the controls\n\nFrom the repository root, run:\n\n```bash\npython experiments/records/dukotah-nonenglish-control-gate/check.py\npython experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py --check\n```\n\nThe first checker compares all four saved language-model rows with both decision rules. The second verifies the pinned sibling source bytes and recomputes the frozen and executed decisions for Latin, Greek and vowel-dropped English. Source plans, code and saved receipts are bundled under the source repository’s MIT license. A new search would need a predeclared control that can reveal a detection-rate advantage, followed by one unchanged decision rule and a matched null for the full search.\n",
   "article_path": "experiments/records/dukotah-nonenglish-control-gate/article.md",
   "script_sha256": "e938ebad0a755bc9ecfb8eb03c5cd390fe535816e9bb84aed1a70aab01d7c34c",
   "record_type": {

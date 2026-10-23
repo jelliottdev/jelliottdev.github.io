@@ -1,0 +1,25 @@
+{
+  "schema": "internal-source-execution-gate-v1",
+  "checked_on": "2026-10-23",
+  "repository": "Dukotah/cicada3301",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_id": "R30-A2-SUBPIXEL",
+  "source_method": "Centroid/alignment measurements of repeated rune images and a bitstream classifier for a proposed subpixel positioning channel.",
+  "original_image_dependency": "liber-primus/data/relikd/p*.jpg",
+  "image_availability": "The pinned Git tree has zero entries under liber-primus/data/relikd. The scripts read this directory; a different site's JPEGs would need byte-level provenance verification before a replay.",
+  "control_evidence": [
+    {"path": "liber-primus/analysis/round30/A2-subpixel/final_control.py", "sha256": "8a61e20064dea0d9f0cab9adb8f97b9fab0ab97cdd91c859c7f376fdef1f5de9"},
+    {"path": "liber-primus/analysis/round30/A2-subpixel/final_control_results.json", "sha256": "7fab4b855cd7bad1bd8592b7ba89cb2020d276086b0d30231e78bc5e4ffc5f03"},
+    {"path": "liber-primus/analysis/round30/A2-subpixel/control.py", "sha256": "638b8d0ef1e6bb653d94631590724c37d88ddc3fea32d20587fd0ce5def8f5b2"},
+    {"path": "liber-primus/analysis/round30/A2-subpixel/control_results.json", "sha256": "0d8d59895b3c9689fff4bb7195bf80277e9e93c32d73837453244b883b583e39"}
+  ],
+  "saved_final_control": {
+    "injected_shift_px": 0.6,
+    "instances": 400,
+    "source_required_bit_accuracy": ">0.9",
+    "saved_bit_accuracy": 0.645,
+    "saved_ascii_printable": 0.06,
+    "saved_verdict": "FAILED"
+  },
+  "disposition": "Input unavailable and source's own end-to-end positive control fails. Do not publish the saved null as a control-validated exclusion; do not claim a local image replay. Revisit only if exact image bytes can be pinned and a detector with adequate planted-signal recovery is specified before interpreting LP2 results."
+}

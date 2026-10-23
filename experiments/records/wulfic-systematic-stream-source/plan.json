@@ -1,0 +1,30 @@
+{
+  "schema": "liberpedia-source-replay-plan-v1",
+  "frozen_on": "2026-10-23",
+  "id": "wulfic-systematic-stream-source",
+  "source": {
+    "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "path": "tools/legacy/stream_cipher_attack.py",
+    "git_blob": "0a588175f9a1b7537740803876d762ab542b50a7"
+  },
+  "target_rule": "Source iterates old page ordinals 0..55, excludes 1 and 3..17, then skips pages with fewer than 10 parsed runes. Exact pinned inputs leave page_18..page_55 = current LP2-01..38; page_00 and page_02 are runeless. Every page starts a new stream.",
+  "parser": "Source GP29 alphabet, with period, hyphen, bullet, ASCII space and newline splitting words. Other nonrunes do not split a word. The source scores 29*sum(f*(f-1))/(n*(n-1)) IoC; ten literal favorable GP bigrams; visible one-rune plaintext I=10 or A=24.",
+  "stream_branch": {
+    "generators": "ten totient_s0..9, ten prime_mod_s0..9, cumul_totient_s0..1, prime_gap_s0..1, prime_minus2_s0 and prime_minus3_s0: exactly the 26 entries inserted in source streams dict. Prime list is the source sieve through 100000. Fibonacci and other defined-but-uncalled functions are excluded.",
+    "directions": ["sub", "add", "beaufort"],
+    "source_hit": "combined>2.0 OR normalized IoC>1.5, where combined=IoC+0.1*(favorable bigram count)+5*(I/A singleton hits/max(total singletons,1)). Report hits and maxima, not readings."
+  },
+  "lfsr_branch": {
+    "selection": "Sort eligible source pages by descending visible singleton count, preserving ascending source-page order on ties, then take first three.",
+    "state": "all 29^4 ordered tuples (s0,s1,c0,c1), including every zero or singular tap case; k0=s0,k1=s1,k[n+2]=c0*k[n]+c1*k[n+1] mod29",
+    "directions": ["sub", "add", "beaufort"],
+    "source_hit": "combined>3.0 using the same page-level score. Retain total hits and top 10 by combined score using source tuple order for ties."
+  },
+  "controls": {
+    "pre_manuscript": "Compare optimized score/stream and hit decisions with source scalar functions on deterministic random samples covering zero taps and all three modes; plant a full known page with I/A at every source singleton position under one declared stream and one LFSR(2) tuple, requiring exact recovery and source hit.",
+    "whole_search": "Repeat the entire 26-stream and complete LFSR(2) grids on 19 deterministic within-page rune shuffles, preserving lengths and word positions, seed 20261023. Report observed maxima and exceedance counts descriptively; 19 controls have coarse tail resolution and are not a cipher null.",
+    "independent_check": "Independent scalar code reconstructs pinned page counts and every retained winner, checks first and last rows of all stream generators and randomized LFSR tuples against source functions, and recomputes saved maxima/hit counts on at least one full shuffled replicate."
+  },
+  "exclusions": "The source's sparse Berlekamp-Massey branch contains `pass` in its reconstruction path; no full key is generated and it is not counted as a tested decoder. Its function fibonacci_prime_stream is defined but never used in the main stream dict. The historical archived outputs are not accepted; this is a new corrected-input replay on pinned files. This does not rule out other prime orders, LFSR lengths, clocks, reset rules, languages or ciphers."
+}

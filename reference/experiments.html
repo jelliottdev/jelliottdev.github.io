@@ -10946,13 +10946,13 @@
 }</pre></article><article id="dukotah-nonenglish-control-gate"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;dukotah-nonenglish-control-gate&quot;,
   &quot;status&quot;: &quot;published&quot;,
-  &quot;title&quot;: &quot;A language-search control did not pass its frozen rule&quot;,
-  &quot;question&quot;: &quot;Did four archived non-English language controls satisfy the source’s preregistered power test?&quot;,
-  &quot;reader_question&quot;: &quot;Did this language search validate its non-English scorers?&quot;,
-  &quot;summary&quot;: &quot;The source reports 20,480 decodes, but its four language controls all tie the English scorer on the frozen detection-rate test. The program substituted a different comparison to proceed.&quot;,
-  &quot;finding&quot;: &quot;All four own-language models and the English scorer cleared their respective wrong-key maxima on all 24 plants per language. None satisfies the frozen requirement that the own-language model have strictly greater detection power. The program instead compared d-prime scores and marked all four validated. Its reported zero manuscript survivors is not a control-validated exclusion under the original rule.&quot;,
-  &quot;limitations&quot;: &quot;This independently audits the pinned plan, source decision logic and saved summary rows; it does not rerun the 24-plant simulations, their 60 wrong-key decodes per language, or the reported 20,480 manuscript decodes. The outcome does not say whether any proposed language is the plaintext.&quot;,
-  &quot;next_steps&quot;: &quot;Freeze a control with measurable power to distinguish the languages, then rerun the same complete search and its matched null using one unchanged decision rule.&quot;,
+  &quot;title&quot;: &quot;Two language-scoring controls missed their frozen rules&quot;,
+  &quot;question&quot;: &quot;Did two archived language-scoring searches satisfy their own frozen positive-control rules?&quot;,
+  &quot;reader_question&quot;: &quot;Did these language searches validate their scoring controls?&quot;,
+  &quot;summary&quot;: &quot;Both sources report 20,480 manuscript decodes, but neither saved control meets its preregistered advantage-over-English test. Each program used a different comparison to proceed.&quot;,
+  &quot;finding&quot;: &quot;Four language-specific models all tied English at 24/24 plants under the frozen own-null detection-rate rule; the program instead passed them by d-prime. A separate orthography-matched English scorer also tied ordinary English under its frozen rule on Latin, Greek and vowel-dropped English; its program passed Latin via an OR with a fixed-score-bar comparison. Neither reported zero-survivor manuscript grid is control-validated under its original rule.&quot;,
+  &quot;limitations&quot;: &quot;This independently checks pinned plans, decision code and saved control summaries from two source lanes. Neither planted simulation nor either reported 20,480-case manuscript grid was locally rerun. An orthography-matched English scorer is not a Latin or Greek language model; no actual plaintext language is established.&quot;,
+  &quot;next_steps&quot;: &quot;Freeze controls with power to reveal a detection-rate advantage and use one unchanged rule before rerunning and calibrating the complete search.&quot;,
   &quot;outcome&quot;: &quot;inconclusive&quot;,
   &quot;tags&quot;: [
     &quot;language models&quot;,
@@ -10963,28 +10963,33 @@
     &quot;Latin&quot;,
     &quot;Greek&quot;,
     &quot;Old English&quot;,
-    &quot;Enochian&quot;
+    &quot;Enochian&quot;,
+    &quot;orthography-matched scorer&quot;,
+    &quot;vowel-dropped English&quot;
   ],
   &quot;scope&quot;: {
     &quot;pages&quot;: [],
     &quot;artifacts&quot;: [
       &quot;experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md&quot;,
       &quot;experiments/records/dukotah-nonenglish-control-gate/source-control.py&quot;,
-      &quot;experiments/records/dukotah-nonenglish-control-gate/source-out_control.json&quot;
+      &quot;experiments/records/dukotah-nonenglish-control-gate/source-out_control.json&quot;,
+      &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md&quot;,
+      &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py&quot;,
+      &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-out_control.json&quot;
     ],
-    &quot;representation&quot;: &quot;Pinned Dukotah R24-C1-ext plan, Python decision code, and the saved 24-plant/60-wrong-key summary for four non-English registers. No manuscript run was performed locally.&quot;,
-    &quot;procedure&quot;: &quot;Verify Git-object hashes; independently evaluate the strict power inequality in the plan and the d-prime inequality in the program on each saved register row; compare the validated-register lists.&quot;,
-    &quot;parameters&quot;: &quot;Latin, Greek, Old English and Enochian; source control length 120 runes, 24 plants and 60 wrong-key controls per language. A source-reported 20,480-case LP2 grid is contextual, not locally rerun.&quot;,
-    &quot;exclusions&quot;: &quot;No conclusion about actual plaintext language, the entire key family, the source’s numeric manuscript scores, other source registers, or a control with different difficulty or thresholds.&quot;
+    &quot;representation&quot;: &quot;Two pinned Dukotah source-control audits: R24-C1-ext four language-specific models and R24-C1 matched-runic orthography-adjusted English scorer. Each has a frozen plan, decision code and saved 24-plant control summaries. No manuscript grid was locally rerun.&quot;,
+    &quot;procedure&quot;: &quot;Verify source file hashes; recompute each frozen own-null power decision and the different executed decision from all eligible saved control summaries; distinguish the two scoring models and compare their source verdicts.&quot;,
+    &quot;parameters&quot;: &quot;R24-C1-ext: Latin, Greek, Old English and Enochian, 24 plants and 60 wrong-key controls each. R24-C1 matched: Latin, Greek and vowel-dropped English at L=120, 24 plants each. Each source reports a separate 20,480-case LP2 grid; neither grid was locally rerun.&quot;,
+    &quot;exclusions&quot;: &quot;No conclusion about actual plaintext language, the entire key family, numeric manuscript scores, other source registers, or changed control designs. The orthography-matched English scorer is not a language-specific model.&quot;
   },
   &quot;review&quot;: {
     &quot;kind&quot;: &quot;pinned-source control-rule audit&quot;,
     &quot;retested_on&quot;: &quot;2026-10-23&quot;,
-    &quot;reviewer&quot;: &quot;Independent saved-row and source-rule checker; original simulation and manuscript grid not rerun&quot;,
+    &quot;reviewer&quot;: &quot;Independent saved-row and source-rule checkers for both lanes; original simulations and manuscript grids not rerun&quot;,
     &quot;human_review&quot;: &quot;pending&quot;
   },
   &quot;reproduction&quot;: {
-    &quot;command&quot;: &quot;python experiments/records/dukotah-nonenglish-control-gate/check.py &amp;&amp; python experiments/records/dukotah-nonenglish-control-gate/plot.py --check&quot;,
+    &quot;command&quot;: &quot;python experiments/records/dukotah-nonenglish-control-gate/check.py &amp;&amp; python experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py --check &amp;&amp; python experiments/records/dukotah-nonenglish-control-gate/plot.py --check&quot;,
     &quot;environment&quot;: &quot;Python 3 standard library; source files and saved receipts from pinned Git revision are bundled.&quot;,
     &quot;script&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/check.py&quot;,
     &quot;script_sha256&quot;: &quot;e938ebad0a755bc9ecfb8eb03c5cd390fe535816e9bb84aed1a70aab01d7c34c&quot;,
@@ -11035,7 +11040,35 @@
       },
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/article.md&quot;,
-        &quot;sha256&quot;: &quot;d8cf1502ceb7c98b3fc0d459ad6f0040779a851eda8cbaa50712c275511f4505&quot;
+        &quot;sha256&quot;: &quot;2b5cfbe8cbfe8bb440a0c6ac072142dbd0e8a1b7ff90b5b6b6d7fbf9e3e33f11&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/plan.json&quot;,
+        &quot;sha256&quot;: &quot;cbff1621b8941a2b10e784758e3c9d90881a3b50125710625c2a1e754f9d1d4c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md&quot;,
+        &quot;sha256&quot;: &quot;bfe5f57b0f31d8db354f965fcd56234613045743d97fa4e1b74c63119be41178&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py&quot;,
+        &quot;sha256&quot;: &quot;9fa0f1a3fcdb6c13eace969239e81985c6d82b6fa8fefd717501dea7ccfe8a63&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-out_control.json&quot;,
+        &quot;sha256&quot;: &quot;0c1198b98059caac7c6f3e918086a20e15c6f0084fed31d0057ecca77e4da55e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-results.json&quot;,
+        &quot;sha256&quot;: &quot;e33dfcb2a34fbcca6693bfccbcbb3929d82a4828449b99238be01d623ec0e308&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/LICENSE.source&quot;,
+        &quot;sha256&quot;: &quot;b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py&quot;,
+        &quot;sha256&quot;: &quot;f627e1c899e6ab2dd59faed0224c06c4460fd1ce15360e9999ecf442aab9b771&quot;
       }
     ],
     &quot;outputs&quot;: [
@@ -11046,6 +11079,10 @@
       {
         &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/control-gate.svg&quot;,
         &quot;sha256&quot;: &quot;781d557bbeaee6429ca51dd3479b29026c9f83acaaa1f21b8572cc88c5b28116&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/sibling-matched/results.json&quot;,
+        &quot;sha256&quot;: &quot;707fd84f4bc5be69d8a70cbde92cc8e052c6f21c8f93970c93d8eb12d89a4c63&quot;
       }
     ]
   },
@@ -11067,13 +11104,21 @@
     {
       &quot;label&quot;: &quot;Pinned R24-C1-ext reported manuscript result&quot;,
       &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-ext-nonenglish/RESULTS.md&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned R24-C1 matched-runic frozen plan&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-matched-runic/PREREG.md&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned R24-C1 matched-runic control program and saved output&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round24/C1-matched-runic/control.py&quot;
     }
   ],
   &quot;related&quot;: [
     &quot;rune-matched-scorer-calibration&quot;,
     &quot;target-sized-languages&quot;
   ],
-  &quot;article&quot;: &quot;## What the source&#x27;s language test can establish\n\nAn archived search scored possible Liber Primus readings with models for Latin, Greek, Old English and Enochian. Before using those models on the manuscript, its [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) set a control: **a language model had to find planted text more often than the English scorer did.**\n\nThe saved controls show a tie. For **each of the four languages**, both scorers beat their own wrong-key threshold on **all 24 planted passages**. The language models worked on these plants, but they did not beat English by the plan&#x27;s chosen measure. **Zero of four models passed the frozen strict-comparison rule.**\n\n![Both scorers succeed on all 24 planted passages for each of four languages.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)\n\nThe [control program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) used a different comparison: how far each scorer&#x27;s median sits above its wrong-key scores, measured in standard deviations. On that measure, all four language models beat English. That may be a useful diagnostic, but the frozen plan did not name it as the pass rule. The program marked all four models as validated and continued.\n\nThe source [reports](experiments/records/dukotah-nonenglish-control-gate/source-results.json) 20,480 manuscript decodes and zero candidates above its final bar. **We did not rerun that grid here.** This audit checks the saved control rows and the source&#x27;s decision logic. It shows that the reported zero is **not a control-validated exclusion under the original rule**. It does not show a non-English plaintext or refute the source&#x27;s individual score calculations.\n\nThe English scorer&#x27;s perfect showing on these particular plants also limits what the control could reveal: a harder, predeclared set of passages would be needed to measure an advantage in *detection rate*. The source&#x27;s vowel-dropped English control does show English losing to its own-model score, but vowel-dropped English is not one of the four non-English registers tested here.\n\n## Check it\n\nRun `python experiments/records/dukotah-nonenglish-control-gate/check.py` and `python experiments/records/dukotah-nonenglish-control-gate/plot.py --check` from the repository root. The checker hashes the pinned source files, reads every saved control row, and applies both the frozen power comparison and the program&#x27;s later comparison. The source used 24 plants and 60 wrong-key controls per register. The full source scripts, plan, saved control output and reported manuscript summary are bundled with this record under the source repository&#x27;s MIT license.\n\nA follow-up would freeze a control that separates English from the other languages before looking at manuscript scores, then measure its power and calibrate the complete search against the same decision rule. That would test whether this bounded key-and-language search can detect the kind of reading it claims to exclude.\n&quot;,
+  &quot;article&quot;: &quot;Two archived searches each report 20,480 Liber Primus decodes and no surviving candidate. Each set a positive-control rule before searching: its proposed scorer had to detect planted text **more often than the English scorer** when each was compared with its own wrong-key controls. Neither saved control meets that rule. Both programs used a different comparison to continue.\n\n**Four language models.** The [frozen plan](experiments/records/dukotah-nonenglish-control-gate/source-PREREG.md) tests Latin, Greek, Old English and Enochian models. **Zero of four** beat English on detection rate: both scorers find all 24 plants in every language. The program instead uses a standardized-score difference (*d-prime*) and passes all four.\n\n**Matched rune spelling.** A [separate plan](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-PREREG.md) tests an **English** quadgram scorer adjusted for rune spelling. **Zero of three** eligible controls beat ordinary English against each scorer’s own wrong-key maximum. Latin and Greek are 24/24 under both; vowel-dropped English is 0/24 under both. The program also checks a fixed −5.5 score bar. At that bar, Latin rises from 12/24 to 19/24, so the program passes it through an OR condition.\n\n![The four language-model controls tie English on every planted passage.](experiments/records/dukotah-nonenglish-control-gate/control-gate.svg)\n\nThe two tests answer different questions. The first uses models trained for other languages. The second changes how an English model handles rune spelling; its improvement at a fixed bar does **not** turn it into a Latin or Greek language model. The saved rates show no advantage under either test’s frozen *own-null detection-rate* rule. The changed comparisons may be useful diagnostics, but they were not the declared pass criteria.\n\nThe original [language-model program](experiments/records/dukotah-nonenglish-control-gate/source-control.py) uses d-prime to mark four registers validated. The separate [matched-runic program](experiments/records/dukotah-nonenglish-control-gate/sibling-matched/source-control.py) uses the own-null result **or** a fixed-bar result, marking Latin validated. These are checks of the pinned plans, source decisions and saved control rows. **We did not rerun either planted simulation or either 20,480-case manuscript search.** Their reported zero survivors therefore cannot be presented as exclusions validated under their original control rules. The audits do not establish what language, if any, the unsolved pages contain.\n\n## Check the controls\n\nFrom the repository root, run:\n\n```bash\npython experiments/records/dukotah-nonenglish-control-gate/check.py\npython experiments/records/dukotah-nonenglish-control-gate/sibling-matched/check.py --check\n```\n\nThe first checker compares all four saved language-model rows with both decision rules. The second verifies the pinned sibling source bytes and recomputes the frozen and executed decisions for Latin, Greek and vowel-dropped English. Source plans, code and saved receipts are bundled under the source repository’s MIT license. A new search would need a predeclared control that can reveal a detection-rate advantage, followed by one unchanged decision rule and a matched null for the full search.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/dukotah-nonenglish-control-gate/article.md&quot;,
   &quot;script_sha256&quot;: &quot;e938ebad0a755bc9ecfb8eb03c5cd390fe535816e9bb84aed1a70aab01d7c34c&quot;,
   &quot;record_type&quot;: {
@@ -67903,6 +67948,138 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="wulfic-p20-prime-position-routes"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-p20-prime-position-routes&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Prime-position route search on LP2-03&quot;,
+  &quot;question&quot;: &quot;What does the pinned P20 prime-position split and 58-route search produce on its actual source page?&quot;,
+  &quot;reader_question&quot;: &quot;Does the prime-position route give a reading?&quot;,
+  &quot;summary&quot;: &quot;The strongest route has six source-style trigram hits; 57 of 199 complete rune-shuffle searches reach at least six.&quot;,
+  &quot;finding&quot;: &quot;Pinned page_20 maps to LP2-03 with 217 runes, not the 646 claimed in the source comment. Its nonprime-position stream has 170 runes. The 11-column route leads the 58 executed routes with six source-style trigram hits, a score reached or exceeded by 57/199 complete shuffled searches. The original source reports ten routes under branch-specific filters but does not establish a readable passage.&quot;,
+  &quot;limitations&quot;: &quot;The shuffle comparison is descriptive, not a cipher model. The source uses variable-width GP Runeglish, brief English trigram lists, and no validated full-passage criterion. Only source-retained routes passed an unmodified-script synthetic parity gate; all 58 saved manuscript routes have separate index-map reconstruction. Other pages, reading rules, languages and layouts are outside scope.&quot;,
+  &quot;next_steps&quot;: &quot;Propose a route from independent page evidence and test a held-out passage under a fixed reading criterion.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;prime positions&quot;,
+    &quot;transposition&quot;,
+    &quot;route cipher&quot;,
+    &quot;selection effect&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-03&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-p20-prime-position-routes/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Exact GP29 runes in Wulfic pages/page_20/runes.txt at commit bf89d3d, aligned to current LP2-03; source Runeglish output and committed Deor poem.&quot;,
+    &quot;procedure&quot;: &quot;Partition by prime zero-based rune position, take the 170-rune nonprime stream, choose the source&#x27;s first maximal-IoC Caesar shift, and execute its 58 literal routes and branch-specific trigram screens. Retain the separate prime rune-index-value split as an audit, then compare whole-search maximums with 199 seeded full-page rune shuffles.&quot;,
+    &quot;parameters&quot;: &quot;One pinned source page; 29 Caesar shifts; 58 executed routes; 199 whole-search shuffles at seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;No broader transposition family search, new word segmentation, other page alignment or output language, and no claim of plaintext from a trigram count.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;pinned source replay with independently reconstructed route outputs&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pre-outcome planted route recovery and pinned-source retained-route parity; independent 58-route digest and one complete shuffled-search reconstruction&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-p20-prime-position-routes/check.py&quot;,
+    &quot;environment&quot;: &quot;Python 3 and NumPy for the independent checker. Optional source-root checks and full rerun use a checkout of pinned Wulfic commit bf89d3d13aad2b8f2c95ab195cf1b092f250775c.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/plan.json&quot;,
+        &quot;sha256&quot;: &quot;0aa69a88bba99fccaa557d96c44246b205ac56a6ba04811e5bc5d163485e47df&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/snapshot_inputs.py&quot;,
+        &quot;sha256&quot;: &quot;4074fef474df2765d49f6fb31486e0566bca8a25a22ce538f7b4867bbb662bb0&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/engine.py&quot;,
+        &quot;sha256&quot;: &quot;8f50dd0ffadaff29c1bb8f120f4e6c811f1b9081c0d6ddab5b758258679f692f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/gate.py&quot;,
+        &quot;sha256&quot;: &quot;4c1bbaa6eef01fd8763f31f6cfc61b0e1727270425df27f3041421cf0694a38e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/run.py&quot;,
+        &quot;sha256&quot;: &quot;11dcf0340bdf1e473651936dc9b34475afb9373399ccdb9e850c90c24615b10c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/check.py&quot;,
+        &quot;sha256&quot;: &quot;cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/plot.py&quot;,
+        &quot;sha256&quot;: &quot;ee6c7507a3ec179e97e7eb512b9a9598fa5e60f4597cb02d26420a53a569fcea&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;d1e49d16efa86d6b105a416caf086272e9d895ed9f0dd6c7a88863454348a6fb&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/article.md&quot;,
+        &quot;sha256&quot;: &quot;79e2dae9276711202815a17cc12aa2a60af17adcf56765f64c1c3ccff4f1575d&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;e760b0a5b59f55f0834e11dde2d477c87068cc31320b5ded28a43b75b64914a5&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/gate.json&quot;,
+        &quot;sha256&quot;: &quot;67f84f054ef671d0ca012f0c6599443a8c3704d0432ccc7e17f2ec8562362c27&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/results.json&quot;,
+        &quot;sha256&quot;: &quot;dd00ea037a597683885586ab82e8164217d433de9ebd3261395df6802cba9c6e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/source-run.json&quot;,
+        &quot;sha256&quot;: &quot;50104c75f0e75c6039a4da2098dd2abad530f02f30714dfe22accefdae7c3571&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;3d6bacc439706436f5591692b88b4b23479f14f51f283766f5b6ba159cf4fce1&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The best manuscript route scores six hits; 57 of 199 complete searches on shuffled runes score at least six.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic route program&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p20.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic source-input warning&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-deor-interlocking-streams&quot;,
+    &quot;wulfic-keyed-transposition-cohort&quot;,
+    &quot;lp2-row-column-routes&quot;
+  ],
+  &quot;article&quot;: &quot;# Do prime-position routes reveal a reading on LP2-03?\n\nThis [archived route program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/solve_p20.py) takes runes at **nonprime zero-based positions**, tries a Caesar shift, then reads that stream in 58 specified ways. The committed file called `page_20` is **LP2-03**, with **217 runes**, not the 646 stated in the program&#x27;s opening comment. Its nonprime-position stream has 170 runes; the other 47 lie at prime positions.\n\n## Result\n\nThe strongest route was an 11-column reading with **six hits** on the program&#x27;s short list of English trigrams. When we shuffled the same 217 runes and repeated the *entire* split, shift and route search 199 times, **57 searches reached six or more**. This comparison gives no reason to single out the six-hit route as a reading. It is a descriptive control for this search and this spelling convention, not a model of every possible cipher.\n\n![The best route has six trigram hits; 57 of 199 whole-search shuffles reached at least six.](experiments/records/wulfic-p20-prime-position-routes/comparison.svg)\n\nThe pinned program reports ten routes because nine are listed regardless of score and the 11-column route passes its `&gt;5` gate. Its final ordering uses the *length of a formatted report string*, not a language score. The source also prints a distinct **prime rune-index-value split** (65/152); that is not the position split tested by these routes.\n\n## Why the shift and routes need care\n\nEvery Caesar shift has the same index of coincidence: renaming the 29 symbols does not change their frequency counts. The program chooses shift zero on the first equal maximum; its displayed “best shift” is therefore not independent evidence for a key. Reversal and the complete column, diagonal, keyword and Deor sorts likewise preserve symbol frequencies. Prime-position sampling, fixed-step sampling, Fibonacci positions and padded spirals can change the stream or its length, so they are reported separately.\n\nBefore scoring the manuscript, a planted 170-rune message was recovered through the two-column route and passed the source&#x27;s `&gt;5` trigram gate. The unmodified staged source agreed with our route names and IoC values for every route it retained on that plant. Our independent checker later rebuilt **all 58** manuscript route sequences and digests, including routes below the source&#x27;s reporting threshold. The predeclared goal of checking *every route against the unmodified source on synthetic inputs* was not fully met: the original program exposes only retained routes, so the source-parity control covered its retained synthetic rows; independent index-map reconstruction covered the rest. This distinction is in the saved receipts.\n\n## Scope and reproduction\n\nThe runner uses the pinned Git bytes for `solve_p20.py`, `pages/page_20/runes.txt` and `data/corpora/deor_poem.txt`. It stages the source file unmodified in a temporary folder because its original Deor path differs from the committed path. Run `python experiments/records/wulfic-p20-prime-position-routes/snapshot_inputs.py --source-root PATH --check`, then `gate.py --source-root PATH --check` and `run.py --source-root PATH --check`. Run `python experiments/records/wulfic-p20-prime-position-routes/check.py` for the separate reconstruction.\n\nThe test covers those fixed routes on LP2-03 under the source&#x27;s variable-length rune transliteration and trigram lists. It does not exclude other layouts, transcription choices, languages, or transposition rules. The related [Deor interlocking-stream test](#/experiments/wulfic-deor-interlocking-streams) splits on prime *rune-index values*, a different operation.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-p20-prime-position-routes/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;cd597fc656c85a0a9420c4bb29b50e179ac160f2b39d5a897fa20fa4f5a58e8a&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
 }</pre></article><article id="wulfic-page24-prime-columnar"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-page24-prime-columnar&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -70252,6 +70429,172 @@
   &quot;article&quot;: &quot;# Could a restarted key also shift at every boundary?\n\n**The tested shifted-restart model still does not fit LP2.** Giving each page, line or other unit its own additive shift removes the simple rune-for-rune comparison used in the [basic restart test](#/experiments/wulfic-stage-ab-reset-alphabets). It does not remove a second property: subtract two ciphertext runes *within the same unit*, and that unit&#x27;s shift cancels. If the underlying position key restarts, equal plaintext differences at the same two positions still produce equal ciphertext differences across units.\n\n![Five shifted-restart comparisons: LP2 near the random expectation, planted controls to the right.](experiments/records/wulfic-stage-af-unit-shifts/comparison.svg)\n\nEach blue point is LP2&#x27;s full difference-match count divided by the random-rune expectation for that boundary. Gray is the conservative lower bound from planted shifted-restart encryptions. **The horizontal scale is zoomed from 0.98 to 1.08** to make the modest but consistent separation visible; it does not start at zero. None of these points is decoded text.\n\n## What was tested\n\nThis is a byte-for-byte replay of [Wulfic&#x27;s Stage AF program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_af.py) at its pinned revision. The model uses one shared key value at each position after a restart and one extra shift for each unit. It covers both additive and Beaufort directions in planted controls. For every section, paragraph, clause, line and page boundary, the statistic compares ciphertext differences between positions **2–300 runes apart within that same unit**. The complete input is **12,956 runes across 55 rune-bearing LP2 pages**.\n\nThe source tested **200 flat-rune nulls** and **100 planted encryptions for each of two plaintext sources**, Emerson essays and solved LP readings. Its anti-doublet rule was applied to controls. A test could be called excluded only where both planted sources separated from the null and LP2 fell below both predeclared five-standard-deviation lower bounds. The frozen [plan](experiments/records/wulfic-stage-af-unit-shifts/plan.json) records the exact rule and source hashes.\n\nThe page-reset case is illustrative: LP2 had **1,207,810** matching within-page differences; random controls averaged **1,208,036**. The weaker planted lower bound was **1,242,113**. The same comparison held at the other four boundaries, so the source marks all five cells **excluded under this model**. Our full source run reproduced its [results](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_results.tsv) and [controls](experiments/records/wulfic-stage-af-unit-shifts/source-stage_af_controls.tsv) byte-for-byte.\n\nThis does not rule out every resetting key. It tests a **shared position key plus one constant shift per unit**, using the source&#x27;s plaintext examples and doublet treatment. Position-dependent shifts inside a unit, nonlinear feedback, a different plaintext distribution or a different boundary rule can erase this particular difference invariant. Even if the invariant were present, it would not alone identify a decryption key.\n\n## Reproduce\n\nRun `python experiments/records/wulfic-stage-af-unit-shifts/run.py --check` and `python experiments/records/wulfic-stage-af-unit-shifts/check.py` from the repository root with NumPy installed. The [independent checker](experiments/records/wulfic-stage-af-unit-shifts/check.py) rebuilds all five partitions from Liberpedia&#x27;s page transcriptions and counts the difference collisions with a separate pure-Python method. It also encrypts a planted three-unit example in both additive and Beaufort forms and verifies that each unit&#x27;s shift cancels.\n\nFor the full upstream Monte Carlo replay, clone the [pinned source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus), check out `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`, install NumPy, and run `python experiments/records/wulfic-stage-af-unit-shifts/replay_source.py --source-dir PATH_TO_CLONE`. The wrapper hashes source code and inputs, runs in a temporary output directory, and compares both resulting tables byte-for-byte.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/wulfic-stage-af-unit-shifts/article.md&quot;,
   &quot;script_sha256&quot;: &quot;29976bc95532163c8b791bb51df9c48c31d01b0773d0c8ebcec12cfa0fc5a51b&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-systematic-stream-source"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-systematic-stream-source&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Prime streams and a short feedback key&quot;,
+  &quot;question&quot;: &quot;Do the exact executed prime-derived and two-value feedback searches in archived stream_cipher_attack.py provide a distinctive LP2 reading under the source&#x27;s own score?&quot;,
+  &quot;reader_question&quot;: &quot;Could a prime sequence or short feedback key decode these pages?&quot;,
+  &quot;summary&quot;: &quot;The full pinned source searches produce many threshold hits, but complete searches on 19 shuffled versions do too. The score does not establish a reading.&quot;,
+  &quot;finding&quot;: &quot;On 38 matched LP2 pages, 2,964 prime-stream settings yielded 644 source-threshold hits (19 shuffled-search range 625–702). On three selected pages, all 6,365,529 two-value LFSR settings yielded 38,826 hits (shuffled range 33,694–44,833). The best stream IoC 1.140 was reached or exceeded by 16/19 controls; the best LFSR combined score was reached or exceeded by 11/19.&quot;,
+  &quot;limitations&quot;: &quot;The source&#x27;s IoC/bigram/I-or-A-singleton score is a permissive candidate screen, not a reading test. Nineteen within-page shuffles supply only a coarse descriptive selection control and are not a cipher model. Old source page labels actually select LP2-01–38; the source-defined but uncalled Fibonacci stream and unfinished Berlekamp–Massey reconstruction are excluded. Other generator lengths, feedback clocks and page ranges remain open.&quot;,
+  &quot;next_steps&quot;: &quot;Specify a key rule that predicts a longer passage or untouched page before selecting another score peak.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;prime streams&quot;,
+    &quot;LFSR&quot;,
+    &quot;selection effect&quot;,
+    &quot;index of coincidence&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-systematic-stream-source/plan.json&quot;,
+      &quot;experiments/records/wulfic-systematic-stream-source/inputs.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned source Git-object rune text using its exact GP29 alphabet and period/hyphen/bullet/space/newline word separators. Source page_18..55 maps to current LP2-01..38; separate LFSR selection is LP2-28,10,17.&quot;,
+    &quot;procedure&quot;: &quot;Run every entry of the source&#x27;s 26-stream dictionary in three modes over every eligible source page. Run all 29^4 ordered two-value LFSR state/tap tuples in three modes over the three highest-singleton pages, including zero/singular tap cases. Preserve the source IoC, bigram and I/A singleton score and hit thresholds. Repeat the entire selected grids on 19 within-page rune shuffles.&quot;,
+    &quot;parameters&quot;: &quot;2,964 stream page-settings; 6,365,529 LFSR page-settings; source thresholds combined&gt;2 or IoC&gt;1.5 for streams, combined&gt;3 for LFSR; shuffle seed 20261023.&quot;,
+    &quot;exclusions&quot;: &quot;Uncalled Fibonacci generator, incomplete Berlekamp–Massey key reconstruction, pages outside source selection, other prime rules, longer/nonlinear feedback or different alphabet/language models.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;complete corrected-input source grid with source-function parity and selected-search controls&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;All 26 generators and 107 zero-inclusive LFSR tuples matched pinned source functions before scoring; planted full-page recovery passed. Independent scalar checks verify all retained winners and a complete shuffled LFSR search.&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-systematic-stream-source/check.py &amp;&amp; python experiments/records/wulfic-systematic-stream-source/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Python 3 with NumPy and Numba. run.py --check repeats the entire search and 19 controls. Optional gate.py and snapshot_inputs.py --source-root PATH --check compare with a checkout of the pinned Wulfic Git revision.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-systematic-stream-source/check.py&quot;,
+    &quot;script_sha256&quot;: &quot;3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/plan.json&quot;,
+        &quot;sha256&quot;: &quot;46613d68270534bbe88a40054d51e814a88fb711a2b11613bdb3a77fa11b6c8f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/inputs.json&quot;,
+        &quot;sha256&quot;: &quot;c7b42550ae238ff7ee7890bc512d430b4eb7e4c4a0f50631764c1c0eac74d7b9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/snapshot_inputs.py&quot;,
+        &quot;sha256&quot;: &quot;19dc959867ac45df588e1d846e2adf3c6af67b5e11c7b43fb9c3d391931bfea3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/engine.py&quot;,
+        &quot;sha256&quot;: &quot;84d580967feaae3a51e3f0cab12fe14b26b86191114d11a6d6fab828bdd743f9&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/gate.py&quot;,
+        &quot;sha256&quot;: &quot;c0d2526aca2b62775b207eba1bb40acfdd9f73d0d60d4a795321e65040e7634e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/run.py&quot;,
+        &quot;sha256&quot;: &quot;eb168fa271fac4bb1a1cc32279ee265531bad08ed20fc5238cda1777af49322c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/check.py&quot;,
+        &quot;sha256&quot;: &quot;3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/plot.py&quot;,
+        &quot;sha256&quot;: &quot;954674cd1041dbe9fe720984f5f20e858afaf804f90486c498c6de903cab9a06&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;0f895536b80adf241a9a1fbee9f846d505ce4e87eaf513f9b140860556413d0a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/article.md&quot;,
+        &quot;sha256&quot;: &quot;528b7c67143e8281141ee4319cf5a3d329e6d7a4d04065ff6d7903f49b0ddac2&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/gate.json&quot;,
+        &quot;sha256&quot;: &quot;fe7229fa0028c46e71053fa680fa75a8bbc6ea7649ec4d498a934f102f5027ff&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/results.json&quot;,
+        &quot;sha256&quot;: &quot;c2a4801b6de2a88551f7a236e1e6bf74afd53cfa41e08a58f349385606bcd609&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;024b12072d6681e000949b15589c33275b82b9916b0f8b8841242ac6ba869260&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;The manuscript&#x27;s source-threshold hit counts fall inside the range from 19 complete searches on shuffled page runes.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned archived stream cipher source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Archived legacy warning&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-prime-keyword-stream-families&quot;,
+    &quot;wulfic-lfsr-singleton-constraints&quot;,
+    &quot;wulfic-keyword-prime-layer-grid&quot;
+  ],
+  &quot;article&quot;: &quot;# Prime streams and a short feedback key\n\nAn [archived solver script](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/stream_cipher_attack.py) searches two ways of generating a rune-by-rune key: fixed sequences drawn from primes, and a key in which each new value depends on the previous two. We replayed its complete *executed* grids on the corresponding manuscript pages.\n\n**The script&#x27;s threshold admits many outputs, but does not identify a reading.** On rune-shuffled versions of the same pages, complete searches also find thousands of hits. The observed best scores sit within the ranges of 19 shuffled searches. These controls show why crossing the source threshold is insufficient; shuffling is not a model of every possible cipher.\n\n![Source-threshold hit counts in the manuscript compared with complete searches on 19 shuffled versions](experiments/records/wulfic-systematic-stream-source/comparison.svg)\n\n| Source branch | Exact search | Manuscript threshold hits | Nineteen complete shuffled searches |\n| --- | ---: | ---: | ---: |\n| Prime-derived streams | 2,964 settings on 38 pages | 644 | 625–702 hits; median 662 |\n| Two-value LFSR | 6,365,529 settings on 3 pages | 38,826 | 33,694–44,833 hits; median 38,452 |\n\nThe stream branch&#x27;s highest index of coincidence is **1.140**, exceeded by **16 of 19** shuffled searches. Its best combined score is exceeded by **5 of 19**. The LFSR branch&#x27;s best combined score is exceeded by **11 of 19**. Nineteen controls give a coarse comparison, not a precise probability. There is no independently predicted longer passage or untouched page in the source rule.\n\nThe script calls its target list “all unsolved pages,” but its old folder names resolve differently. After its exclusions and empty-page checks, it actually reads archived `page_18` through `page_55`, corresponding to **LP2-01–38**. The two older files `page_00` and `page_02` contain no runes. The source then selects the three pages with the most visible one-rune words for the LFSR search: **LP2-28, LP2-10 and LP2-17**. Of these, LP2-28 overlaps the earlier [singleton-LFSR test](#/experiments/wulfic-lfsr-singleton-constraints), which used a different constraint solver and page set.\n\n## What the screens measure\n\nThe script tries **26 named prime-derived streams** in subtraction, addition and Beaufort directions. They include prime values, prime minus one, prime gaps and two cumulative sequences. Each begins at page position zero. The separate feedback search tries every initial pair and coefficient pair modulo 29: **29⁴** tuples on each of three pages, again in three directions. Zero coefficients and degenerate sequences are included. These parameter combinations are settings inside two method branches, not millions of independent ideas.\n\nEach decoded output receives an index of coincidence, a count of ten favored rune pairs, and credit when a visible one-rune word becomes **I** or **A**. That last component can dominate: on LP2-38, where the source parser finds only one one-rune word, matching it adds **five points** to a stream score whose hit threshold is two. The best LFSR setting on LP2-17 makes **6 of 10** one-rune words I or A; its index of coincidence is **0.976**. A partial crib fit and a selected score are not a sentence.\n\nThe source defines a Fibonacci-prime generator but never adds it to the search table. Its later Berlekamp–Massey section has a `pass` where a full key would be reconstructed. Neither is counted here as an executed decoder. Other prime streams and other feedback lengths remain outside this test.\n\n## How the replay was checked\n\nBefore scoring manuscript text, all 26 generators matched the pinned source functions at four lengths. A sample of 107 feedback tuples, including zero states and taps, matched the source&#x27;s key, decoded runes, and complete score in all three directions. A synthetic known plaintext recovered exactly and passed each source screen. The optimized search then tested every declared setting. An independent scalar checker recalculates all retained winners and their full-decoding hashes and repeats one entire shuffled feedback search.\n\nThe [frozen plan](experiments/records/wulfic-systematic-stream-source/plan.json), [pinned input snapshot](experiments/records/wulfic-systematic-stream-source/inputs.json), and [results](experiments/records/wulfic-systematic-stream-source/results.json) give the exact bounds and counts. Run `python experiments/records/wulfic-systematic-stream-source/check.py` to check the saved result. Run `python experiments/records/wulfic-systematic-stream-source/run.py --check` to repeat all grids and controls; this requires Python, NumPy and Numba. With a checkout of the pinned source revision, `gate.py --source-root PATH --check` and `snapshot_inputs.py --source-root PATH --check` verify source parity and original inputs.\n\nThe historical outputs in the archived repository are not treated as verified. This is a corrected-input replay of its finite callable branches, not an exclusion of prime-based keys or LFSRs generally.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-systematic-stream-source/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;3a7be707fcbcc475148d9f44da0449175b040d40037a51ee84da0f4c3a86058b&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;replay&quot;,
     &quot;label&quot;: &quot;Method replay&quot;,
