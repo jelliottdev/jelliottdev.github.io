@@ -17,7 +17,7 @@
     "All 120 shift=0 raw-payload configurations in Part 1b duplicate Part 1 main configurations at offset zero. The two witness-corner masks contribute those same 120 cases to Part 2a.",
     "Part 2b's six majority-value rows per generator collapse to one seed, leaving 90 repeated decoder invocations within that part. Its six single-witness-alternative seeds per generator also occur in Part 2a, though Part 2a additionally tests both reductions and signs.",
     "For Part 2a specifically, hashing the full 1,664-symbol effective screen key gives 2,596 unique key/sign cases among 3,840 invocations: AES-128-CTR ignores all six contested positions, while four AES-256/ChaCha variants use only position 25. This 1,244-case reduction is measured, not inferred solely from source labels.",
-    "Other algebraic or keystream equivalences across Part 1, shifts, and Part 2b are possible; no exhaustive global unique-output count has been claimed."
+    "An exhaustive first-400-rune effective-input census found 59,948 unique decoder inputs across all 70,680 source calls. This is an exact equality reduction under the pinned beam, not a claim that the hypotheses are statistically independent."
   ],
   "timing_probe": {
     "source_cases": 120,
@@ -25,8 +25,25 @@
     "decoder_seconds_per_case": 0.06512,
     "projected_part2a_seconds": 250,
     "projected_all_70680_decoder_seconds": 4603,
-    "qualification": "Measured on this host on 2026-10-22 using two complete contested-byte masks. The full grid also generates longer keystreams and full-page reruns, so its wall time is likely higher."
+    "qualification": "Measured on this host on 2026-10-22 using two complete contested-byte masks. The full grid also generates longer keystreams and full-stream reruns, so its wall time is likely higher."
   },
-  "execution_decision": "Replay the complete 3,840-case Part 2a as one bounded record. Defer the full ~70,680-invocation replay until a long-running batch is justified. Do not equate a partial screen with validation of the source's full negative claim.",
-  "reusable_efficiency": "Generate each PRF stream once per seed/generator/reduction, hash the effective screen key, decode each unique key/sign pair once, and fan the exact score back to its source-defined case rows. Preserve source order, beam and scorer; validate the shortcut against an unchanged source sample and run controls first. Keep published source runs separate from any deduplicated computational shortcut."
+  "execution_decision": "The complete 3,840-case Part 2a is published as one bounded record. The checkpointed equivalent-input runner has completed the remaining 66,840 source head-screen calls, and a separate runner has completed the 180 rigid corners and five full-stream follow-ups. Published with the complete bounded source-grid record. These finite source checks do not cover all possible payload-derived keys.",
+  "reusable_efficiency": "Generate each PRF stream once per seed/generator/reduction, hash the effective 1,597-value screen key, decode each unique key/sign pair once, and fan the exact score back to its source-defined case rows. Preserve source order, beam and scorer; validate the shortcut against unchanged source cases and run controls first. Keep published source runs separate from any deduplicated computational shortcut.",
+  "full_screen_followup": {
+    "source_calls_all_parts": 70680,
+    "globally_unique_effective_beam_inputs": 59948,
+    "unique_scores_reused_from_complete_part2a": 2596,
+    "new_unique_scores": 57352,
+    "direct_parity_checked": "All saved Part 2a equivalence groups, 32 pilot rows and 24 direct source calls spanning reverse, Atbash, signs, offset 3301, shifts and Part 2b.",
+    "serial_400_case_probe_total_seconds": 47.8,
+    "four_process_400_case_probe_total_seconds": 25.8,
+    "census_and_parity_overhead_seconds_approx": 14,
+    "four_process_scoring_speedup_approx": 2.8,
+    "full_run_wall_seconds": 1220.8,
+    "full_run_speed_qualification": "Four-worker wall time on this host includes enumeration, saved-score parity checks and output generation; CPU contention made later batches slower than the first samples.",
+    "checkpoint": "Outside the repository under work/b05-grid-cache; 1,000-score batches; resumable by rerunning the same engine command.",
+    "record": "experiments/records/grid-payload-prf-source-grid/record.json is included in the published registry.",
+    "validation": "Independent checker passed all 66,840 remaining Cartesian cells, score-equivalent groups, pinned source hashes, 32 pilot overlaps, 120 raw/mask/shift overlaps and 90 single-byte/two-witness overlaps.",
+    "source_followups": "All 180 rigid corners were replayed (best âˆ’7.096043); the five highest first-400-rune Part 1 scores fell from âˆ’6.770531â€¦âˆ’6.862894 to âˆ’7.332706â€¦âˆ’7.222538 on the full 12,956-rune stream."
+  }
 }

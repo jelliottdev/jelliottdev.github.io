@@ -1,24 +1,29 @@
 {
   "schema": "liberpedia-public-attempt-reconciliation-v1",
-  "compiled": "2026-10-22",
+  "compiled": "2026-10-23",
   "source": {
     "repository": "Dukotah/cicada3301",
     "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
     "ledger": "../sources/dukotah-f08b20b/LEDGER.json",
     "ledger_sha256": "7718bf90fb4cc6cc0fb98464d65ab898dd0e776da33d9b056bcd908d3b60558d",
     "inventory": "research/public-attempt-inventory.json",
-    "inventory_sha256": "ee92f1873b6edbda1e4bcd286ffa867770e3f8b9ac0bdc86c4c81936fbbead60"
+    "inventory_note": "Regenerated from this reconciliation and the pinned ledger; not an independent evidence source."
   },
-  "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap.",
+  "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 29,
+    "source_entries_reviewed": 34,
     "reproduced_subclaim": 1,
-    "partial": 8,
-    "unsupported_source_verdict": 20,
-    "source_entries_with_published_record_link": 10,
+    "partial": 17,
+    "unsupported_source_verdict": 16,
+    "source_entries_with_published_record_link": 20,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
-    "whole_entry_coverage_verified": 0
+    "whole_entry_coverage_verified": 0,
+    "execution_replay_states": {
+      "replayed-with-invalid-gate": 3,
+      "complete-executed-grid": 7,
+      "partial-execution": 2
+    }
   },
   "entries": [
     {
@@ -187,7 +192,13 @@
         "liber-primus/analysis/round22/A-selfembedded-read/PREREG.md",
         "liber-primus/analysis/round22/A-selfembedded-read/RESULTS.md"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R23-A2-LINE-ACROSTIC",
@@ -205,13 +216,24 @@
         "liber-primus/analysis/round23/A2-line-acrostic/PREREG.md",
         "liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "B-04",
       "source_claim": "Derive LP2 keystreams from 2,165 Cicada-themed short seeds through hash, HMAC, AES, RC4 and ChaCha constructions, then use a skip-aware decoder.",
       "status": "unsupported-source-verdict",
-      "record_links": [],
+      "record_links": [
+        {
+          "record_id": "b04-source-seeds-opening-cribs",
+          "covered_subclaim": "New exact-crib extension over all 1,385,600 zero-offset source settings, nine fixed 12-rune readings and 55 page starts. This does not replay or validate the original English-score negative."
+        }
+      ],
       "related_but_not_overlap": [
         {
           "record_id": "seed-crib-controls",
@@ -242,6 +264,10 @@
         {
           "record_id": "grid-payload-prf-contested-masks",
           "covered_subclaim": "Part 2a: 64 alternate six-byte readings, 3,840 PRF calls and 2,596 distinct key/sign cases; first 400 runes at offset zero, forward, no Atbash."
+        },
+        {
+          "record_id": "grid-payload-prf-source-grid",
+          "covered_subclaim": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set."
         }
       ],
       "related_but_not_overlap": [
@@ -252,15 +278,23 @@
       ],
       "covered_subclaim": "Two bounded PRF-expansion corners, including contested-byte sensitivity, not the full B-05 sweep.",
       "unresolved_parts": [
-        "Remaining PRFs, offsets, directions, Atbash, full 70,680 decodes and planted avalanche controls are not closed.",
-        "Part 2a does not independently adjudicate the image readings."
+        "Other payload encodings, generators, key alignments and output languages are outside the published grid. The shuffled-text maximum is not a selection-adjusted probability bound."
       ],
       "source_evidence": [
         "liber-primus/analysis/round13/B05/PREREG.md",
         "liber-primus/analysis/round13/B05/sweep.py",
         "liber-primus/analysis/round13/B05/control_results.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "grid-payload-prf-source-grid",
+          "grid-payload-prf-contested-masks"
+        ],
+        "scope": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R17-PUBLIC-PAD",
@@ -310,7 +344,12 @@
       "source_id": "R26-A-GEN-SWEEP-FIRST-FIRE",
       "source_claim": "Sweep previously built Perl, TeX and Py2.7-derived generators with prior-dense seeds, offsets and exact/pair decoders against LP2-19.",
       "status": "unsupported-source-verdict",
-      "record_links": [],
+      "record_links": [
+        {
+          "record_id": "r26-derived-generators-opening-cribs",
+          "covered_subclaim": "New fixed-opening check over all 48,462 executable source key/preset cases, nine cribs and 55 unsolved nonempty page starts. Zero complete12-rune openings; this does not replay the original English-panel sweep."
+        }
+      ],
       "covered_subclaim": null,
       "unresolved_parts": [
         "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
@@ -364,7 +403,15 @@
         "liber-primus/analysis/round26/C/rows.jsonl",
         "liber-primus/analysis/round26/C/RESULTS.md"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [
+          "semantic-seed-screen-gate-audit"
+        ],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R28-L1-CICADAOS-PADS-DENSE-PAIR",
@@ -457,17 +504,29 @@
         "liber-primus/analysis/round16/prng/results.json",
         "liber-primus/analysis/round16/prng/RESULTS.md"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-prng-seed-sweep"
+        ],
+        "scope": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R12-C1",
       "source_claim": "Bounded k-history feedback/autokey functions on LP2.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "covered_subclaim": null,
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-multihistory-feedback",
+          "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299."
+        }
+      ],
+      "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299.",
       "unresolved_parts": [
-        "No exact local replay of the 21-function sweep, score panel or planted controls.",
-        "Other k bounds and functions remain open."
+        "Only all-equal seeds were searched for plaintext/mixed history, and the source raw-stream null is not the full selected-search null."
       ],
       "source_evidence": [
         "liber-primus/analysis/round12/C1/RESULTS.md",
@@ -484,17 +543,29 @@
           "record_id": "linear-ciphertext-feedback",
           "reason": "A doublet invariant is not its decoder."
         }
-      ]
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-multihistory-feedback"
+        ],
+        "scope": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R16-KDF",
       "source_claim": "PBKDF2, scrypt, EVP_BytesToKey and iterated-hash LP2 keys from 534 Cicada-themed secrets.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "covered_subclaim": null,
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-kdf-seed-stretch",
+          "covered_subclaim": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut."
+        }
+      ],
+      "covered_subclaim": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut.",
       "unresolved_parts": [
-        "No local replay of the 692,064 Stage-A decodes, salt/iteration grid or controls.",
-        "The English first-stage filter, other salts, secrets, offsets, KDFs and languages remain open."
+        "Other secret dictionaries, salts, iterations, offsets, languages and lengths remain outside the executed source grid. The 200 fixed-key shuffles do not calibrate the maximum over the selected search."
       ],
       "source_evidence": [
         "liber-primus/analysis/round16/KDF/PREREG.md",
@@ -503,17 +574,29 @@
         "liber-primus/analysis/round16/KDF/results_gates.json",
         "liber-primus/analysis/round16/KDF/results_summary.json"
       ],
-      "whole_entry_coverage_verified": false
+      "whole_entry_coverage_verified": false,
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-kdf-seed-stretch"
+        ],
+        "scope": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R16-scorer",
       "source_claim": "Matched runic versus old quadgram scorer on five solved pages and 200 random-keystream nulls.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "covered_subclaim": null,
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "rune-matched-scorer-calibration",
+          "covered_subclaim": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails."
+        }
+      ],
+      "covered_subclaim": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails.",
       "unresolved_parts": [
-        "No exact five-page/200-null score comparison or +3.6% sigma check.",
-        "The existing English scorer control uses different inputs."
+        "This does not establish improved error rates across arbitrary corpora, languages or selected cipher searches."
       ],
       "source_evidence": [
         "liber-primus/analysis/round16/scorer/scorer.py",
@@ -527,17 +610,29 @@
           "record_id": "english-scorer-controls",
           "reason": "Related calibration, but not established as the same five pages and 200 nulls."
         }
-      ]
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "rune-matched-scorer-calibration"
+        ],
+        "scope": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R20-N2-HAPLOGRAPHY-AUTOKEY",
       "source_claim": "Duplicate-rune merge schedules through K=40 against nonzero difference diagonals.",
-      "status": "unsupported-source-verdict",
-      "record_links": [],
-      "covered_subclaim": null,
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "haplography-diagonal-bound",
+          "covered_subclaim": "Exact duplicate-insertion invariance, manuscript difference counts and the free-count bounds for K=0..40 independently checked."
+        }
+      ],
+      "covered_subclaim": "Exact duplicate-insertion invariance, manuscript difference counts and the free-count bounds for K=0..40 independently checked.",
       "unresolved_parts": [
-        "No local replay of the source schedule, diagonal invariant or planted autokey control.",
-        "Doublet and feedback records measure other events."
+        "Missing pride.txt prevents replaying the original natural-language control and surrogate null; the replacement control is explicitly synthetic."
       ],
       "source_evidence": [
         "liber-primus/analysis/round20/N2/RESULTS.md",
@@ -659,6 +754,150 @@
         "liber-primus/analysis/round30/A1-font/"
       ],
       "whole_entry_coverage_verified": false
+    },
+    {
+      "source_id": "F-01",
+      "source_claim": "LP2-as-pad inversion — the unsolved pages are key material, not a message. Use the 12,956-rune stream (fwd/rev, ±, Atbash) as a running key against every other machine-readable Cicada object (2012/2013 fragments, the AN-END hash bytes, canon_256, onion names, PGP bodies). Finite candidate set, hours of compute, never run. Note it survives the iter-2 \"message-existence is undecidable\" finding rather than being killed by it.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-lp2-as-pad",
+          "covered_subclaim": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/F-01/PREREG.md",
+        "liber-primus/analysis/round16/F-01/RESULTS.md",
+        "liber-primus/analysis/round16/F-01/sweep.py",
+        "liber-primus/analysis/round16/F-01/results.json"
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032.",
+      "unresolved_parts": [
+        "The sixth target was skipped; the hard-coded AN END input has only 63 bytes; offsets and other constructions remain untested."
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-lp2-as-pad"
+        ],
+        "scope": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "C-02",
+      "source_claim": "FORCING: the author constrained the CIPHERTEXT so that a ciphertext-visible positional subset (line initials, page initials, word initials, or their finals) spells or encodes something. Detectable with no key at all. Motivated by round17/D-01, which proved the anti-repeat filter is machine-applied, i.e. the author demonstrably wrote a rejection sampler that enforces a ciphertext-level predicate; forcing is the hypothesis that the sampler enforced a second one.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "line-initial-layout-control",
+          "covered_subclaim": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round18/L4-forcing/PREREG.md",
+        "liber-primus/analysis/round18/L4-forcing/RESULTS.md",
+        "liber-primus/analysis/round18/L4-forcing/results_armA.json",
+        "liber-primus/analysis/round18/L4-forcing/results_armB.json",
+        "liber-primus/analysis/round18/L4-forcing/results_armC.json",
+        "liber-primus/analysis/round18/L4-forcing/results_confound_layout.json",
+        "liber-primus/analysis/round18/L4-forcing/results_power.json"
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available.",
+      "unresolved_parts": [
+        "The width-aware comparison does not identify original typesetting, and external font-width correlation remains unchecked."
+      ],
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "line-initial-layout-control"
+        ],
+        "scope": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "D-01",
+      "source_claim": "The anti-repeat hardening was applied BY HAND by a human calligrapher (asserted as fact in FINAL-SYNTHESIS.md:73-76 and load-bearing for the attribution profile), rather than by a machine.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "lp2-filter-fingerprint-models",
+          "covered_subclaim": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round17/P4_filter/RESULTS.md",
+        "liber-primus/analysis/round17/P4_filter/fingerprint.py"
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship.",
+      "unresolved_parts": [
+        "Untested generators remain open; the no-extra-effect hand-applied model cannot be separated by this battery."
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "lp2-filter-fingerprint-models"
+        ],
+        "scope": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "R12-D2",
+      "source_claim": "A load-bearing statistic is miscounted (page/segment joins double-counting, interrupters wrongly included/excluded, etc.).",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "source-independent-key-floor-audit",
+          "covered_subclaim": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round12/D2/RESULTS.md",
+        "liber-primus/analysis/round12/D2/recompute.py"
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds.",
+      "unresolved_parts": [
+        "The G3 four-corpus floor and p*=400 power claim are not computed by D2; original corpus files are unavailable."
+      ],
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "source-independent-key-floor-audit"
+        ],
+        "scope": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds.",
+        "wider_method_excluded": false
+      }
+    },
+    {
+      "source_id": "R21-L3-PY27-REDUCERS",
+      "source_claim": "The LP2 keystream was produced by a short Python 2.7 script on the author's Ubuntu 11.04-12.04 box: random.seed(<a Cicada-flavoured string literal>) reduced to a rune index by one of the three era-idiomatic Py2.7 reducers S-G3 (round20) never covered -- grb5_mod (getrandbits(5)%29), grb5_rej (getrandbits(5) rejecting 29..31), shuffle29 (repeated shuffle(range(29))) -- or by random29 (int(random()*29)) under the amd64 2-word init_by_array map, applied under the pinned soft anti-repeat filter. S-G3 covered only random29/i386-1word; this lane closes the reducer axis and the 64-bit ABI map axis SYNTHESIS 8.5 thread 2 left open.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "py27-reducer-sweep-source-audit",
+          "covered_subclaim": "All 95 saved survivors and the 45,975-seed front reconcile; direct control wiring bypasses Stage A and the source perfect-recovery count is 67, not 71."
+        }
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/RESULTS.md",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/out_poscontrol.json",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/reducers_sweep.jsonl",
+        "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/out_reducers.json"
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "All 95 saved survivors and the 45,975-seed front reconcile; direct control wiring bypasses Stage A and the source perfect-recovery count is 67, not 71.",
+      "unresolved_parts": [
+        "The reported 884,000 screening calls cannot be independently replayed without the original private panel and training corpora."
+      ]
     }
   ],
   "next_batch": [

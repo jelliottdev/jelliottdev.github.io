@@ -1,0 +1,152 @@
+{
+  "id": "py27-reducer-sweep-source-audit",
+  "status": "published",
+  "title": "Python 2.7 reducer sweep: source and control audit",
+  "question": "Does the pinned four-configuration Python 2.7 keystream sweep provide an independently reproducible negative with a validated screening gate?",
+  "reader_question": "Were the Python 2.7 random reducers tried on LP2?",
+  "summary": "The source reports 884,000 screened words and saves 95 promotions with no final-bar clearance. Those rows reconcile, but the original scoring model is unavailable and the planted controls bypass the sweep's first gate.",
+  "finding": "All 95 pinned Stage-B rows reconcile with the source aggregate; none reaches the 7.6342 final score bar. The 45,975-word proposed-seed front reconstructs. The source-reported 884,000 Stage-A tests cannot be replayed from public bytes, and the 4/4 saved positive controls do not exercise Stage A. The source prose also counts 71 perfect-recovery rows where its receipt contains 67.",
+  "limitations": "This audits saved receipts and control wiring, not the absent 884,000 first-stage scores or the original panel calibration. It makes no claim about unscreened words, other keystreams, other decoders, or other plaintext registers.",
+  "next_steps": "Provide the exact original panel model or training files; run each planted key through both the 120-rune screen and 240-rune gate; persist auditable first-stage checkpoints before repeating the full bounded sweep.",
+  "outcome": "inconclusive",
+  "tags": [
+    "PRNG",
+    "Python 2.7",
+    "MT19937",
+    "keystream",
+    "source audit",
+    "screening gate",
+    "reproducibility"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00"
+    ],
+    "artifacts": [
+      "experiments/records/py27-reducer-sweep-source-audit/source-manifest.json"
+    ],
+    "representation": "The source's canonical LP2 numeric stream; first 120 runes of LP2-00 screened and first 240 assessed after promotion. This audit inspects pinned source outputs and code, not a fresh cipher decode.",
+    "procedure": "Hash the pinned source files; independently reconcile all saved survivor rows and aggregate counts; reconstruct the proposed-seed front; inspect source call paths for the two-stage gate; inventory unavailable model inputs.",
+    "parameters": "Four pinned reducer/map configurations; source-reported 884,000 screened words; 95 saved promoted rows; screening score bar 5.0 and final score bar 7.6342.",
+    "exclusions": "No replacement panel trained on different corpora; no unverified source rerun; no inference about unsaved Stage-A scores or the other 99.99% of each nominal word space."
+  },
+  "review": {
+    "reviewer": "Pinned-source receipt reconciliation and independent source-path check",
+    "retested_on": "2026-10-23",
+    "kind": "computational source-claim audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/py27-reducer-sweep-source-audit/run.py --check && python experiments/records/py27-reducer-sweep-source-audit/check.py && python experiments/records/py27-reducer-sweep-source-audit/plot.py --check",
+    "environment": "Python 3 standard library; pinned MIT-licensed source receipts bundled locally. No model or network needed for this receipt and source-path audit.",
+    "script": "experiments/records/py27-reducer-sweep-source-audit/run.py",
+    "script_sha256": "d387a10a2a660af99e79121f149fb217768a9ca85ada07bfe280e297b9cb95bb",
+    "inputs": [
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/run.py",
+        "sha256": "d387a10a2a660af99e79121f149fb217768a9ca85ada07bfe280e297b9cb95bb"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/check.py",
+        "sha256": "4210ffb80901cfa1c10bf82909445634c8c6328d721e948ddbe6518a52a19efa"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/plot.py",
+        "sha256": "590bc8e59de99492c147d05eb2433897b6409e63702b2a88ec57662b6ea9e416"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source-manifest.json",
+        "sha256": "922f397229968ac0bdb054fa11e97187aefb9b9b38516673fc87dd68c6d120d5"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round19/I2/adjudicate.py",
+        "sha256": "3d007a7e2084954d87a595d758f6f08a49cfe93c1e5583db1856b1a432b387af"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round19/I2/build_models.py",
+        "sha256": "7c3b0a2806f9c7b2065bf46d73653703ba2185cc7ebf706bf56fb671c08bf74d"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round20/P3/seedprior20.json",
+        "sha256": "139896bfe4e85d108c42cc61c767c2f7db421ba9741b6b3b40896d55ffd89052"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/ledger.json",
+        "sha256": "72f160448b3bc8ea237964fee84a7ebe378db89939cdd1aef0ced0c255d5e5e4"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/out_poscontrol.json",
+        "sha256": "a48ca912cbb4a2b6ca7c53c767bda40636807a389b35d05aac8623e320b04d4c"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/out_reducers.json",
+        "sha256": "2e13401d9d7739e5cbebf7a2d2ba1d3063501552e1047c2938c0878a02c8fb3b"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py",
+        "sha256": "2cdcef96ff8e8936275069e23e707bf838141b5014b81fa874c3672c41181ff9"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md",
+        "sha256": "73e309b33b029f6e110e37a50351f0ea055e53b6b42082031d1f6b04cd98d570"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/reducers_sweep.jsonl",
+        "sha256": "d1a09450ccebe28c28df6507a572e6ff31830a066a2d67c0d27be7e26f9cb09a"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/RESULTS.md",
+        "sha256": "4e832bf222cd6f4d03af884e3b1337ec5550c26fce4e194c1be0b8571dcae04d"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py",
+        "sha256": "bf1ba0b62bc9d8df383ee3950b2823f0b2dbd0f938d3f6b5650522cd989c9cfe"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/results.json",
+        "sha256": "caf6d1ead75167ebd3e1bae8adac8d6ea1a0961b441b1afa043bf47a659f314e"
+      },
+      {
+        "path": "experiments/records/py27-reducer-sweep-source-audit/screen-control-gap.svg",
+        "sha256": "431870a4f01c58d98da86247db3a7979432c36a3fb961ab030da98f3125cd869"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/py27-reducer-sweep-source-audit/screen-control-gap.svg",
+      "caption": "The sweep screens 120 runes before final evaluation; its published positive control skips that first gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned R21-L3 preregistration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md"
+    },
+    {
+      "label": "Pinned R21-L3 sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py"
+    },
+    {
+      "label": "Pinned R21-L3 positive control",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py"
+    }
+  ],
+  "related": [
+    "public-prng-seed-sweep"
+  ],
+  "article": "## Finding\n\nThe pinned source reports a sweep of **884,000 seed words** across four Python 2.7-style keystream configurations. It saved **95 candidates** that passed its first screen. We can check those saved rows: they divide into **21, 25, 24 and 25** by configuration, and none clears the source's final score bar of **7.6342**. Their highest final score is **6.248**. The underlying 884,000 first-stage scores were *not* saved, so the sweep total and the claim that no omitted candidate passed remain source-reported rather than independently recomputed here.\n\nThe source's planted-key control passes **4/4** in its saved output, but it begins at the **full 240-rune evaluation**. The actual sweep first applies a **120-rune, narrower-beam screen** and promotes a word only when that score reaches **5.0**. The control never calls this screening function. It therefore shows the final evaluator can recognize its own planted text; it does **not** measure whether the first gate would pass that text. The exact model file needed to try the gate is missing from the pinned public repository, as are three of the corpus files required to rebuild it.\n\n![The actual sweep has a first screening gate that the planted control skips.](experiments/records/py27-reducer-sweep-source-audit/screen-control-gap.svg)\n\nThis is a **source-method audit**, not a new negative decryption result. The saved rows support a narrower statement: *among the 95 recorded promotions, no candidate met the published final score threshold.* They do not establish a measured false-negative rate for Stage A or a ruling on Python-derived keystreams in general.\n\n## What was in the source sweep\n\n| Rune reducer / seed map | Screened, reported | Saved promotions | Best saved final score |\n|---|---:|---:|---:|\n| `getrandbits(5) % 29`, one word | 288,000 | 21 | 6.089 |\n| Reject `getrandbits(5)` values 29–31, one word | 216,000 | 25 | 5.260 |\n| Repeated shuffle of 29 values, one word | 186,000 | 24 | 6.248 |\n| `int(random() × 29)`, two-word seed map | 194,000 | 25 | 5.341 |\n\nThe source orders **433 proposed seed words**, expands neighborhoods around its top 64, and deduplicates them to **45,975** words before a dense count from zero. We independently reconstructed that ordering from the pinned seed-prior file. The recorded screen counts are each larger than 45,975, consistent with the source's statement that it completed this front in every configuration. Because only promoted rows were persisted, their actual first-stage scores and the rest of each scan cannot be audited from the receipts alone.\n\nThere is a small but concrete reporting error: the prose says **71 of 95** promotions had both recovery fields equal to 1.000. The pinned rows contain **67**. This does not change the observed zero final-bar clearances, but it illustrates why the rows matter more than summary prose.\n\n## Scope and how to retest\n\nThe source decodes the **first 120 runes of LP2-00** for screening and the **first 240** for its final gate. Its key is a seed word passed through one of the four specified reducer/map combinations. The searched fractions of each nominal 2³²-word space are roughly **0.004–0.007%**. The two-word map is a deterministic 32-bit-to-64-bit fold used by the source, not an enumeration of all 64-bit Python hash values. Other seeds, other reducers, other cipher relations and plaintexts outside the source's scoring panel remain untested here.\n\nThe [pinned sweep code](experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py), [planted control](experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py), [saved rows](experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/reducers_sweep.jsonl) and [aggregate](experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/out_reducers.json) are included with hashes. Reconcile them without the absent model using:\n\n```text\npython experiments/records/py27-reducer-sweep-source-audit/run.py --check\npython experiments/records/py27-reducer-sweep-source-audit/check.py\npython experiments/records/py27-reducer-sweep-source-audit/plot.py --check\n```\n\nTo establish the broader negative, first restore the original `panel.npz` or its exact training inputs, then run the **complete planted control through Stage A and Stage B**. Persist each screened word's first-stage score or a verifiable checkpoint before repeating the bounded sweep. The original [preregistration](experiments/records/py27-reducer-sweep-source-audit/source/liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md) describes that intended bound; the [source manifest](experiments/records/py27-reducer-sweep-source-audit/source-manifest.json) identifies the bytes audited here.\n",
+  "article_path": "experiments/records/py27-reducer-sweep-source-audit/article.md",
+  "script_sha256": "d387a10a2a660af99e79121f149fb217768a9ca85ada07bfe280e297b9cb95bb",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

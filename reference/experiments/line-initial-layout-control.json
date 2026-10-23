@@ -1,0 +1,269 @@
+{
+  "id": "line-initial-layout-control",
+  "status": "published",
+  "title": "Do positional runes in LP2 hide a message?",
+  "question": "Do fixed rune positions or line boundaries reveal deliberate ciphertext forcing beyond the effects of physical line layout?",
+  "reader_question": "Do the first runes of lines, or other fixed positions, hide a message?",
+  "summary": "One of 21 position and boundary checks flags line initials against a flat shuffle. Reflowing shuffled text by fitted glyph widths makes that apparent anomaly ordinary; six bounded English reading families and the other checks find no supported message.",
+  "finding": "Independent parsing confirms 12,956 runes on 594 physical lines. The line-initial chi-square is 78.656 against a flat-null mean near 27, but a layout-aware reflow gives p=0.177 in the pinned source and p=0.195 in an independently seeded replay. The other nine position tests and five rejection tests do not clear their gate. Six English-reading families remain below their own best-of-family null maxima; planted controls are recovered. The layout-aware detector has 200/200 power in the two source-planted mechanisms when at least 60% of line initials are forced.",
+  "limitations": "The width model is approximate and the original typesetter is unknown; the external BabelStone font-width correlation reported by the source cannot be verified because the font file is absent from the pinned checkout. The six message families score English under a bounded keyless transform set. Boundary-rejection tests have little power with only four line-crossing doublets. Planted power applies only to the two specified synthetic mechanisms and fixed phrase; weaker or different forcing remains open. Source message-family nulls were repeated with independent per-family seed states, so sampled extrema differ from the archived serial receipt.",
+  "next_steps": "Specify any proposed reading rule, target positions, and language before looking at results; compare it with a null that recomputes line breaks and repeats the full candidate search.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "line initials",
+    "acrostics",
+    "typography",
+    "layout null",
+    "source replay",
+    "ciphertext forcing"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/line-initial-layout-control/source/krisyotam_runes.txt"
+    ],
+    "representation": "First 55 nonempty percentage-delimited segments of pinned krisyotam_runes.txt; 12,956 rune indices on 594 nonempty slash-delimited physical lines. Hyphen, period, slash and page delimiters retain the source geometry.",
+    "procedure": "Replay source C-02 Arm A (10 positional histograms), Arm B (six English-scored keyless reading families with within-family best-of-search nulls), Arm C (five position-conditioned repeat/difference checks), the post-hoc width-fit/reflow confound and planted forcing power curve. Independently parse physical lines, verify position and doublet tables, fit widths and reflow with a separate seeded simulation.",
+    "parameters": "55 pages; 594 physical lines; 29 runes; source 200,000 Arm A and C null draws per applicable test; source 5,000 layout reflows plus 2,000 independent reflows; six Arm B families and 56,376 source candidate variants; family-specific null replicate counts recorded in replay-armB.json; 200 planted streams per mechanism/fraction and 2,000 synthetic null streams; per-test gate 0.001/21.",
+    "exclusions": "Other transcripts and page ranges, ornament- or column-defined position sets, language models other than English quadgrams, transforms outside the 232 per-read identity/Atbash/shift/direction/F variants, external font validation, original typesetting software, and any complete LP2 decryption."
+  },
+  "review": {
+    "reviewer": "Independent physical-line parser, all ten positional counts and two rejection tables, source replay receipt comparison, width-aware reflow and planted forcing controls",
+    "retested_on": "2026-10-23",
+    "kind": "bounded source-method replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/line-initial-layout-control/run.py && python experiments/records/line-initial-layout-control/check.py && python experiments/records/line-initial-layout-control/plot.py",
+    "environment": "Python 3 with NumPy; bundled MIT-licensed source transcription and code; offline.",
+    "script": "experiments/records/line-initial-layout-control/run.py",
+    "script_sha256": "951fc42644c9d420e9ea019a16338f4fd3cbf3b612de2d6d09b490864fae5b9f",
+    "inputs": [
+      {
+        "path": "experiments/records/line-initial-layout-control/run.py",
+        "sha256": "951fc42644c9d420e9ea019a16338f4fd3cbf3b612de2d6d09b490864fae5b9f"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/check.py",
+        "sha256": "864cd126655cee18ab9d392dc55355b8d4ffce89ba99760845bfc30830eff931"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/plot.py",
+        "sha256": "5135cbc186643e87b156468fb4d736d2125e6213f84456569039cfc5d8e4476a"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armA.json",
+        "sha256": "adfc64aa263dbbf7a88233d198b448637a6369ff02004a2086f8a1b9c981685b"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armA.py",
+        "sha256": "41e19c2cfc5e9935cb4a0198102e74644b44b6029c9fda24dc24b3b4caacea76"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armB.json",
+        "sha256": "55fc6ef81b27f94163ef23c93b75cf676bb98a604566346efd0944afda9b28c0"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armB.py",
+        "sha256": "eacbb54fd6f8ba4aa210e9e55949f7fffbdb67276e76d69e89dc4b6d818e26a3"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armB_control.json",
+        "sha256": "3e7af7c924031bfd1b4499a0b7b944a06ce20d6c3765cb65d5b39f4b6d3354a5"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armC.json",
+        "sha256": "2316923a67ab672ed481c0b8f6c533e728d7720acc32c0d4c2564d7d1f7de66f"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_armC.py",
+        "sha256": "62a26d27715b5f7e1c09ab346bd3580836e46da053e323ccee3056c4ebaa7e28"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_confound_layout.json",
+        "sha256": "7d96995ee0ad1db3d6309247cdb72d338644acf6869c8181a06e1b08016987df"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_confound_layout.py",
+        "sha256": "fc93d451126dc5b35f27da7de2f9b4deff35d2d2eb059994fb84c2fac25395cf"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_control_power.py",
+        "sha256": "7ceca5a033ad04248a29cb947d4dffdb9bc9a3ebdc167f84a374a95969045f84"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_parse_structure.py",
+        "sha256": "638a35f55a40bd3e247d2c78f9404d2599b940453a94be3a8e361d8dcd57317b"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/original_power.json",
+        "sha256": "96a9841fb6d6c33673e5ad4827fe144ecbd4066ff333e75d79cd5b9185cc19b8"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/PREREG.md",
+        "sha256": "e9c7352a347e665bf32f2cd3ae12eeb9f156b3946db4a6d8ca3f6490dba4bc8c"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/source/RESULTS.md",
+        "sha256": "02596454a11f5daab23ce1a09d186039d50c716c94a91fccac818de214b144af"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/line-initial-layout-control/results.json",
+        "sha256": "387965ad2f85037a706951a932412d112a53922130484e9ba7fbb288add725d8"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/replay-armA.json",
+        "sha256": "2fdecebfb164c2fedcd1cd84d66064cc8e6ec5c3a7e6cd7a299c40fd997feeec"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/replay-armB.json",
+        "sha256": "08ff5940974b18c76fb0bdfe31f05e952972dd8f02e8fce776f25553c0de941b"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/replay-armC.json",
+        "sha256": "3b33196ea88c34febf6c9270e43b8cf57b5289b6a77e376a898c168922ee608c"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/replay-layout.json",
+        "sha256": "43e5e12cd7fe31a887c1b03c50ca3eb21e615848111bb44cff6d0d9c83f3c7c5"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/replay-power.json",
+        "sha256": "018a2fe5b201bc674b369c463074f43f1fb2f38d8130d02e6a0943dcc811d0f2"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/layout-control.svg",
+        "sha256": "dffaec87b851e701a0747ce878b3c557bb0a70d0014391f08f0c26fcda0942c9"
+      },
+      {
+        "path": "experiments/records/line-initial-layout-control/power-curve.svg",
+        "sha256": "ad720385ac359f5c62745ed60e2a7c07271ae1e55b696086ff31f61c94e21c8a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/line-initial-layout-control/layout-control.svg",
+      "caption": "The line-initial departure is extreme against fixed positions but ordinary after width-aware line reflow."
+    },
+    {
+      "path": "experiments/records/line-initial-layout-control/power-curve.svg",
+      "caption": "Two specified planted forcing mechanisms become reliably detectable at sixty percent of line initials."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned pre-registration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/PREREG.md"
+    },
+    {
+      "label": "Original position tests",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/armA_uniformity.py"
+    },
+    {
+      "label": "Original message tests",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/armB_message.py"
+    },
+    {
+      "label": "Original boundary tests",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/armC_rejection.py"
+    },
+    {
+      "label": "Original layout control",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/confound_layout.py"
+    },
+    {
+      "label": "Original planted-power test",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/control_power.py"
+    },
+    {
+      "label": "Pinned reported results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L4-forcing/RESULTS.md"
+    }
+  ],
+  "related": [
+    "red-initial-presence-order",
+    "block-boundary-doublets",
+    "page-join-sensitivity"
+  ],
+  "pages_note": "55 nonempty transcription pages: LP2-00–49 and LP2-51–55. The blank LP2-50 segment contributes no runes.",
+  "article": "## Finding\n\n**One of 21 pre-registered checks flagged the first rune on each physical line. The apparent signal disappears when line wrapping is included in the comparison.** The other nine position checks, six keyless reading families, and five rejection-pattern checks did not meet their declared gates in the pinned source run. Our replay independently reconstructed the 55-page input and all observed position counts, and reran the source's position, rejection, layout, and planted-message controls. The source's six-family message replay is included as a separate result file.\n\nThe conspicuous line-start result is real: its rune-frequency statistic is **78.66**, above every one of 200,000 draws from *fixed positions* in the manuscript. But line starts are not random positions. Wide rune glyphs are more likely to be pushed over a line's right margin. When shuffled text is broken into new lines using fitted glyph widths, the mean statistic rises from about **27 to 66**. The observed 78.66 falls within that distribution: **p = 0.177** in the source's 5,000 reflows, and **p = 0.195** in our separately seeded 2,000 reflows. This shows that the frequency excess alone does not establish a deliberate first-rune signal; the reflow model is an approximation, so it does not prove how the original pages were typeset.\n\n![A flat comparison makes line initials look extraordinary; reflowing the shuffled text places the observed value near the ordinary range.](experiments/records/line-initial-layout-control/layout-control.svg)\n\n## What the source tested\n\nThe pinned transcription contains **12,956 runes** on **594 physical lines** across **55 nonempty LP2 pages**. We recovered those counts, plus **2,928 hyphen-delimited words**, **219 sentence units**, **86 adjacent identical-rune pairs**, and **four pairs crossing a line**. The source's original plan had two preliminary split-count errors; the published runner corrected them before testing, without changing its gate. Each of its 21 pre-registered checks used a threshold of **0.001 ÷ 21**.\n\n| Check | What it asks | Result |\n|---|---|---|\n| Ten positions | Are the first, last, second, or penultimate runes of lines, and the edges of words, pages, and sentence units, unusually distributed? | Only **line initials** clear the fixed-position gate. All other nine are negative. |\n| Six reading families | Do line initials, per-page acrostics, diagonals, every-Nth-line initials, page edges, or word edges form an English-like message after a bounded set of rune transformations? | All six are negative against a separate *best-of-family* null. Short per-page readings look tempting by raw score but fare worse than the same search on random draws. |\n| Five rejection checks | Does the low adjacent-repeat rate change at line or word positions, or does the nonzero difference channel carry a boundary signal? | None clears the gate. The line-boundary test has only **four repeats among 539 transitions**, so its negative result has little power against subtle suppression. |\n\nThe reading families enumerate **56,376 candidate transformations** in total. That is a count of variants within six tests, not 56,376 independent ideas. Each family compares its best score with the best score obtained by running the *same search* on size-matched random manuscript draws. The source's two planted English line-initial messages, plain and Caesar-shifted, were both recovered. This checks that its English scorer can recognize a sufficiently strong message in the tested format. It does not test other languages or more complex decoding rules.\n\nFor throughput, some message-family nulls were rerun separately from a fresh seed state. Their observed searches are identical to the pinned receipt; their sampled null extrema are independent repeats, not byte-for-byte copies of the source's serial RNG stream. The result file records the actual number of null replicates for each family.\n\n## Why the line-start check changed\n\nThe source fitted relative widths for 29 runes and two separators from **539 nonfinal lines**, then used those widths to greedily reflow shuffled rune streams. Our independent fit also produces shorter variation in estimated line widths than treating every rune as equal width (**0.0828 vs 0.1063** coefficient of variation). A width-weighted expectation reduces the observed line-start departure from **78.66 to 38.73**. The source reflow and our independently seeded reflow give compatible results.\n\nOne archived precision claim needs correction: the source calls **53.5%** an “exact line-length” fit. Its code counts an existing line if its tokens fit the width budget, without checking whether the following token would also fit. A stricter resynchronised comparison matches **42.9%** of line lengths exactly; **82.5%** are within one token. That is adequate to demonstrate the flat-null confound, but it is not a reconstruction of the original typesetter. The source reports a **0.879** correlation with a BabelStone rune font; that external font file was absent from the pinned checkout and is **not independently verified here**.\n\n## What a negative can and cannot rule out\n\nThe source planted a fixed English phrase into synthetic, layout-aware streams in two ways: always write the chosen rune, or let an anti-repeat rule override a collision. With 200 trials per setting, the corrected line-start statistic detected **all** trials when at least **60%** of line initials were forced under either mechanism. At 40%, it detected **59.5%** and **46.0%**, respectively; at 20%, neither setting registered. At zero forcing, the flat statistic falsely fired in **49%** of trials, while the layout-corrected statistic fired in **0 of 200**. These are conditional powers for these two synthetic mechanisms and this phrase, not a bound on every possible hidden message.\n\n![The corrected detector sees both planted mechanisms consistently once sixty percent of line initials are forced, but has little sensitivity below forty percent.](experiments/records/line-initial-layout-control/power-curve.svg)\n\nThe tested rejection signature is especially weak at line breaks. A scheme that *prevents* additional boundary doublets can remain invisible with only four observed boundary events. The six reading searches are English-quadgram checks over identity or Atbash, 29 shifts, forward or reversed order, and keeping or dropping the F interrupter. They leave column readings, ornament-defined sets, different languages, and other transformations open.\n\n## Reproduce and inspect\n\nFrom the repository root, run the independent measurement and checker with Python 3 and NumPy:\n\n```text\npython experiments/records/line-initial-layout-control/run.py\npython experiments/records/line-initial-layout-control/check.py\npython experiments/records/line-initial-layout-control/plot.py\n```\n\nThe bundled [results](experiments/records/line-initial-layout-control/results.json) give our line-start, line-final, width-fit, planted-control, and reflow measurements. The `replay-armA.json`, `replay-armB.json`, `replay-armC.json`, `replay-layout.json`, and `replay-power.json` files retain each full source-arm replay; the corresponding original scripts, pre-registration, and pinned result receipts are in `source/`. The independent checker builds the ten position sets from a second parser and verifies the observed counts and rejection tables before comparing source receipts. To rerun all 21 source checks, use the commands in the bundled `source/RESULTS.md` at the pinned revision. Its message-family nulls are computationally expensive; inspect the included results and replicate counts first.\n",
+  "article_path": "experiments/records/line-initial-layout-control/article.md",
+  "script_sha256": "951fc42644c9d420e9ea019a16338f4fd3cbf3b612de2d6d09b490864fae5b9f",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

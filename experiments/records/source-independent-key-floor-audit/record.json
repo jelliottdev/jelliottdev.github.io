@@ -1,0 +1,192 @@
+{
+  "id": "source-independent-key-floor-audit",
+  "status": "published",
+  "title": "Does the doublet floor rule out every independent key?",
+  "question": "Does the pinned D2 source computation establish the claim that LP2's low doublet rate excludes the entire plaintext-independent additive-key class?",
+  "reader_question": "Do the missing repeats prove that an independent key cannot work?",
+  "summary": "D2's control and manuscript counts reproduce, but its code does not compute the cited English floor. The required corpus texts are absent, and the floor is an expectation under a model rather than an absolute limit on each finite output.",
+  "finding": "The pinned rune stream has 86 equal pairs in 12,901 within-page adjacencies; no cross-page join creates a pair. D2's planted-English scoring control passes. Its broad independent-key exclusion is not established by that replay: the four corpus inputs are unavailable, the B4 preregistration called for five large corpora, and an exact finite independent-key example produces below-floor outcomes with positive probability.",
+  "limitations": "The toy example tests the logic of the claimed hard floor; it does not assign an LP2 probability. Existing exact evidence strongly disagrees with an iid uniform additive key. The reported English corpus values cannot be independently recomputed without their original text bytes or a specified replacement corpus protocol.",
+  "next_steps": "Preserve or identify the exact corpus versions and rerun the stated G3 preprocessing. State a particular independent-key process and finite-sample rejection criterion before extending a negative result to other generators.",
+  "outcome": "inconclusive",
+  "tags": [
+    "doublets",
+    "independent key",
+    "source audit",
+    "null model",
+    "English corpus",
+    "sampling",
+    "D2"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/source-independent-key-floor-audit/source-manifest.json"
+    ],
+    "representation": "Pinned 29-rune source transcription of the 55 nonempty LP2 pages before AN END and PARABLE; 12,956 runes. A separate Unicode-rune parser checks the count without using source gematria code.",
+    "procedure": "Run the D2 source's planted-English control and recount; compare an independent parser; inspect B4 G3 source prerequisites and saved values; enumerate all independent uniform keys in a three-symbol logical control.",
+    "parameters": "D2's LP2 stream, per-page adjacency, 54 page joins, the B4 predeclared five-large-corpus rule, the implemented four-corpus loop, and all 3^4 keys of the finite control.",
+    "exclusions": "No new LP2 key or plaintext search. No re-estimation of the English floor without the absent source corpora. No claim that the finite control makes iid uniform keys likely on LP2."
+  },
+  "review": {
+    "reviewer": "Pinned D2 replay, independent Unicode-rune recount, source-input audit and exhaustive finite counterexample",
+    "retested_on": "2026-10-23",
+    "kind": "computational source-claim audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/source-independent-key-floor-audit/run.py --check && python experiments/records/source-independent-key-floor-audit/check.py && python experiments/records/source-independent-key-floor-audit/plot.py --check",
+    "environment": "Python 3 standard library; pinned MIT-licensed source files bundled locally. No network, API, or external corpora required for the supported D2 counts and finite control.",
+    "script": "experiments/records/source-independent-key-floor-audit/run.py",
+    "script_sha256": "b658edd3da73037a9f3aa8816ad1a7f1a9f0c545cdb228a0a8e5aa6e62e8850a",
+    "inputs": [
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/run.py",
+        "sha256": "b658edd3da73037a9f3aa8816ad1a7f1a9f0c545cdb228a0a8e5aa6e62e8850a"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/check.py",
+        "sha256": "1da3f338f285c4837707ef8e7c4b4cc8309d3d1052f35ac39ca6d84e30b27efe"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/plot.py",
+        "sha256": "096397df134d20279aad17d6f18cc8bfa0fb4e1a95e58c239b065d8d819d2542"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/plan.json",
+        "sha256": "a033c064c1182869a79b81e2d2747f4ffedf5e4816edefba526f184c761a5244"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source-manifest.json",
+        "sha256": "b09abdfbcabf04ee7cfcb9da4049a877c30a8736c7fe2c952f45cce51d0d3ec2"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round10b/B4-otp-steelman/b4_identifiability.py",
+        "sha256": "16047440109a8da4a6aed80e56b4d42c2cc76295889686471ff7dd8e2d53707e"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round10b/B4-otp-steelman/b4_results.json",
+        "sha256": "622c5d563c97feec721400a003510a224e01e182b111f1936ec6903734cfabb6"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round10b/B4-otp-steelman/PREREG.md",
+        "sha256": "72c4a18dbfc8ae7ad82aaddec1b7557c185b942bfd1679e08f0fa5b9e5c52722"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round12/D2/recompute.py",
+        "sha256": "b45b42c32bda112eef47e3a1c577998870a94be5f17ea385758e30340f456944"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round12/D2/results.json",
+        "sha256": "41d6b2034921dc74e265c9ec1bc5e66db477cb81ad790e903fb5bf139fba4c1d"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round12/D2/RESULTS.md",
+        "sha256": "d604669e79ae1f6bf236499ecf8e2ccc1584455faf8a06fda2d9dae7a95fed37"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round18/L7-redteam/c1_bars.py",
+        "sha256": "92b35b75d137a4d437d3cb49ed16a6d94aa31937cc7f48ea08f294248c8a3a4d"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round18/L7-redteam/out_c1.json",
+        "sha256": "67cc0d0ac3f20c06cab5810275ab034f0decf5c51ab2d8ea2cb009a43d3c37fc"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/round18/L7-redteam/RESULTS.md",
+        "sha256": "6e00dde9902bceae6e0910c798f90bf6c23a246757be7bf01eb1a8a3e63d5225"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/results.json",
+        "sha256": "f56354a1e227300e4846ff716077863348456a1dda777abceeeeb7abaa232db4"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/source-replay.txt",
+        "sha256": "3bdea7abf8fbe8c792e4e22ad4dcc3452c7249431e55e6abd75e1f3fa3a7d774"
+      },
+      {
+        "path": "experiments/records/source-independent-key-floor-audit/finite-key-control.svg",
+        "sha256": "9cde0e9135b6a9d569e737d6e46520a06aa4405545437fef10666040b8cffc23"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/source-independent-key-floor-audit/finite-key-control.svg",
+      "caption": "An independent-key model with an expected repeat rate of one third still yields zero repeats in 24 of 81 finite outputs."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned D2 computation and report",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/D2/recompute.py"
+    },
+    {
+      "label": "Pinned B4 preregistration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10b/B4-otp-steelman/PREREG.md"
+    },
+    {
+      "label": "Pinned B4 G3 implementation",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10b/B4-otp-steelman/b4_identifiability.py"
+    },
+    {
+      "label": "Later source correction of the reported floor",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+    }
+  ],
+  "related": [
+    "uniform-additive-doublets",
+    "ea-difference-independence",
+    "doublet-placement"
+  ]
+}

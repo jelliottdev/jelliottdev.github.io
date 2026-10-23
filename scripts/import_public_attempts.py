@@ -85,6 +85,13 @@ def build(root, ledger_bytes):
                 'rejected_candidates': review.get('rejected_inventory_candidates', []),
                 'audit_note': review.get('audit_note'),
             }
+            execution = review.get('execution_replay')
+            if execution:
+                if execution['state'] not in ('complete-executed-grid', 'replayed-with-invalid-gate', 'partial-execution'):
+                    raise ValueError('Unknown execution-replay state: ' + identifier)
+                if not set(execution.get('record_ids', [])) <= record_ids:
+                    raise ValueError('Execution replay links an unpublished record: ' + identifier)
+                rows[-1]['execution_replay'] = execution
             # Full coverage is a separate, explicit claim; none is inferred from a link.
             rows[-1]['coverage_verified'] = review.get('whole_entry_coverage_verified') is True
         if command:
@@ -109,6 +116,8 @@ def build(root, ledger_bytes):
                    'candidate_overlap': overlap_count,
                    'unreconciled': sum(row['reconciliation_state'] == 'unreconciled' for row in rows),
                    'source_entries_reviewed': reviewed_count,
+                   'execution_replay_states': dict(Counter(row['execution_replay']['state']
+                       for row in rows if row.get('execution_replay'))),
                    'verified_coverage': sum(row['coverage_verified'] for row in rows)},
         'triage_groups': {
             'shared_reproduction_command': [{'source_ids': ids, 'command': command}

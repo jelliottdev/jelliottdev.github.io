@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "c15f92b8a8b70b7eb133cd4a1ee665ae534acac413e6b2535b3e29c41a035436",
-    "record_count": 148
+    "sha256": "898d60390fd24619908000255b0bbace16167c7e952b1d0ab5555fa51ec3d2ae",
+    "record_count": 158
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,9 +26,14 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 10,
-    "unreconciled": 142,
-    "source_entries_reviewed": 29,
+    "candidate_overlap": 19,
+    "unreconciled": 135,
+    "source_entries_reviewed": 34,
+    "execution_replay_states": {
+      "complete-executed-grid": 7,
+      "partial-execution": 2,
+      "replayed-with-invalid-gate": 3
+    },
     "verified_coverage": 0
   },
   "triage_groups": {
@@ -166,10 +171,29 @@
       "source_supersedes": [],
       "source_superseded_by": null,
       "reconciliation_state": "unsupported-source-verdict",
-      "candidate_records": [],
+      "candidate_records": [
+        {
+          "record_id": "b04-source-seeds-opening-cribs",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round13/B04/harness.py",
+                "liber-primus/analysis/round13/B04/ks.py",
+                "liber-primus/analysis/round13/B04/seeds.py"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "b04-source-seeds-opening-cribs",
+            "covered_subclaim": "New exact-crib extension over all 1,385,600 zero-offset source settings, nine fixed 12-rune readings and 55 page starts. This does not replay or validate the original English-score negative."
+          }
+        ],
         "unresolved_parts": [
           "No independent replay of the 6,224,300 source decodes, language scoring and escalation of the top 150 candidates.",
           "The source's English-centered first-stage filter has measured weak or zero power for some alternate registers; its negative remains conditional even if exact counts reproduce."
@@ -216,6 +240,18 @@
               ]
             }
           ]
+        },
+        {
+          "record_id": "grid-payload-prf-source-grid",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round13/B05/PREREG.md",
+                "liber-primus/analysis/round13/B05/sweep.py"
+              ]
+            }
+          ]
         }
       ],
       "coverage_verified": false,
@@ -228,14 +264,26 @@
           {
             "record_id": "grid-payload-prf-contested-masks",
             "covered_subclaim": "Part 2a: 64 alternate six-byte readings, 3,840 PRF calls and 2,596 distinct key/sign cases; first 400 runes at offset zero, forward, no Atbash."
+          },
+          {
+            "record_id": "grid-payload-prf-source-grid",
+            "covered_subclaim": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set."
           }
         ],
         "unresolved_parts": [
-          "Remaining PRFs, offsets, directions, Atbash, full 70,680 decodes and planted avalanche controls are not closed.",
-          "Part 2a does not independently adjudicate the image readings."
+          "Other payload encodings, generators, key alignments and output languages are outside the published grid. The shuffled-text maximum is not a selection-adjusted probability bound."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "grid-payload-prf-source-grid",
+          "grid-payload-prf-contested-masks"
+        ],
+        "scope": "All 70,680 executed opening-screen configurations, 180 rigid corners, and five full-stream continuations reproduced with declared source controls. Effective-key duplicates share scores without changing the source configuration set.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -304,7 +352,7 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unsupported-source-verdict",
+      "reconciliation_state": "partial",
       "candidate_records": [
         {
           "record_id": "public-multihistory-feedback",
@@ -321,13 +369,25 @@
       ],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "public-multihistory-feedback",
+            "covered_subclaim": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299."
+          }
+        ],
         "unresolved_parts": [
-          "No exact local replay of the 21-function sweep, score panel or planted controls.",
-          "Other k bounds and functions remain open."
+          "Only all-equal seeds were searched for plaintext/mixed history, and the source raw-stream null is not the full selected-search null."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-multihistory-feedback"
+        ],
+        "scope": "All 23,520 executed multi-history configurations and 21 planted controls replay; best score -6.299.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -357,9 +417,42 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "source-independent-key-floor-audit",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round12/D2/recompute.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "source-independent-key-floor-audit",
+            "covered_subclaim": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds."
+          }
+        ],
+        "unresolved_parts": [
+          "The G3 four-corpus floor and p*=400 power claim are not computed by D2; original corpus files are unavailable."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "source-independent-key-floor-audit"
+        ],
+        "scope": "The runnable raw-transcript recount and planted English contrast replay. Exact enumeration separately clarifies expectation versus finite-output bounds.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R12-frontB",
@@ -436,9 +529,43 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "lp2-filter-fingerprint-models",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round17/P4_filter/RESULTS.md",
+                "liber-primus/analysis/round17/P4_filter/fingerprint.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "lp2-filter-fingerprint-models",
+            "covered_subclaim": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship."
+          }
+        ],
+        "unresolved_parts": [
+          "Untested generators remain open; the no-extra-effect hand-applied model cannot be separated by this battery."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "lp2-filter-fingerprint-models"
+        ],
+        "scope": "Full 200-replicate matched-model ladder and independent manuscript counts reproduce. The supported distinction is among specified generators, not machine versus human authorship.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "A-01",
@@ -648,9 +775,43 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "line-initial-layout-control",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L4-forcing/PREREG.md",
+                "liber-primus/analysis/round18/L4-forcing/RESULTS.md"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "line-initial-layout-control",
+            "covered_subclaim": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available."
+          }
+        ],
+        "unresolved_parts": [
+          "The width-aware comparison does not identify original typesetting, and external font-width correlation remains unchecked."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "line-initial-layout-control"
+        ],
+        "scope": "All 21 position/reading/boundary checks plus layout and power controls replayed with source family bounds. Independent per-family random streams repeat stochastic controls; no external font file is available.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "D-02",
@@ -829,7 +990,7 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "candidate-overlap",
+      "reconciliation_state": "partial",
       "candidate_records": [
         {
           "record_id": "public-lp2-as-pad",
@@ -845,7 +1006,28 @@
           ]
         }
       ],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "public-lp2-as-pad",
+            "covered_subclaim": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032."
+          }
+        ],
+        "unresolved_parts": [
+          "The sixth target was skipped; the hard-coded AN END input has only 63 bytes; offsets and other constructions remain untested."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-lp2-as-pad"
+        ],
+        "scope": "All 40 executed LP2-as-key pairings, the planted recovery control and top-five shuffle comparisons replay; best score -7.032.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "F-02",
@@ -1348,17 +1530,42 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unsupported-source-verdict",
-      "candidate_records": [],
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "public-kdf-seed-stretch",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round16/KDF/PREREG.md",
+                "liber-primus/analysis/round16/KDF/RESULTS.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "public-kdf-seed-stretch",
+            "covered_subclaim": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut."
+          }
+        ],
         "unresolved_parts": [
-          "No local replay of the 692,064 Stage-A decodes, salt/iteration grid or controls.",
-          "The English first-stage filter, other salts, secrets, offsets, KDFs and languages remain open."
+          "Other secret dictionaries, salts, iterations, offsets, languages and lengths remain outside the executed source grid. The 200 fixed-key shuffles do not calibrate the maximum over the selected search."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-kdf-seed-stretch"
+        ],
+        "scope": "Full 692,064-setting executed LP2 grid and the equally sized planted K2 grid reproduce, with live K1 stdout/exit checked rather than trusting the source stale-file shortcut.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1407,6 +1614,14 @@
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-prng-seed-sweep"
+        ],
+        "scope": "Executed seven-generator, 1,877-seed, four-orientation sweep: 52,556 first-120-rune decodes, best -6.347 versus -5.5; planted control recovers 120/120.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1423,7 +1638,7 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unsupported-source-verdict",
+      "reconciliation_state": "partial",
       "candidate_records": [
         {
           "record_id": "rune-matched-scorer-calibration",
@@ -1441,13 +1656,25 @@
       ],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "rune-matched-scorer-calibration",
+            "covered_subclaim": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails."
+          }
+        ],
         "unresolved_parts": [
-          "No exact five-page/200-null score comparison or +3.6% sigma check.",
-          "The existing English scorer control uses different inputs."
+          "This does not establish improved error rates across arbitrary corpora, languages or selected cipher searches."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "rune-matched-scorer-calibration"
+        ],
+        "scope": "All five known-reading scores and 200 wrong-key controls reproduce; alias collapse explains the implementation, and the noise-tightening gate fails.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1838,8 +2065,20 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
+      "reconciliation_state": "candidate-overlap",
+      "candidate_records": [
+        {
+          "record_id": "source-independent-key-floor-audit",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false
     },
     {
@@ -1855,8 +2094,20 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
+      "reconciliation_state": "candidate-overlap",
+      "candidate_records": [
+        {
+          "record_id": "source-independent-key-floor-audit",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round18/L7-redteam/RESULTS.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false
     },
     {
@@ -2063,8 +2314,21 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
+      "reconciliation_state": "candidate-overlap",
+      "candidate_records": [
+        {
+          "record_id": "typed-seed-random-opening-cribs",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/seed_sweep/string_seed_results.json",
+                "liber-primus/analysis/seed_sweep/string_seeds.py"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false
     },
     {
@@ -2595,9 +2859,36 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "py27-reducer-sweep-source-audit",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md",
+                "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py",
+                "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "py27-reducer-sweep-source-audit",
+            "covered_subclaim": "All 95 saved survivors and the 45,975-seed front reconcile; direct control wiring bypasses Stage A and the source perfect-recovery count is 67, not 71."
+          }
+        ],
+        "unresolved_parts": [
+          "The reported 884,000 screening calls cannot be independently replayed without the original private panel and training corpora."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "R21-L5-REDTEAM-SEAL",
@@ -2738,6 +3029,12 @@
         ],
         "rejected_candidates": [],
         "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md"
+      },
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -2833,6 +3130,12 @@
         ],
         "rejected_candidates": [],
         "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md"
+      },
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -3112,14 +3415,18 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unsupported-source-verdict",
+      "reconciliation_state": "partial",
       "candidate_records": [],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "haplography-diagonal-bound",
+            "covered_subclaim": "Exact duplicate-insertion invariance, manuscript difference counts and the free-count bounds for K=0..40 independently checked."
+          }
+        ],
         "unresolved_parts": [
-          "No local replay of the source schedule, diagonal invariant or planted autokey control.",
-          "Doublet and feedback records measure other events."
+          "Missing pride.txt prevents replaying the original natural-language control and surrogate null; the replacement control is explicitly synthetic."
         ],
         "rejected_candidates": [],
         "audit_note": null
@@ -3196,7 +3503,12 @@
       "candidate_records": [],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "r26-derived-generators-opening-cribs",
+            "covered_subclaim": "New fixed-opening check over all 48,462 executable source key/preset cases, nine cribs and 55 unsolved nonempty page starts. Zero complete12-rune openings; this does not replay the original English-panel sweep."
+          }
+        ],
         "unresolved_parts": [
           "The pinned source reports a partially run campaign (7,194 of 49,302 planned decodes), so neither its own full grid nor a Liberpedia replay is complete.",
           "Generator versions, corpus prior, language panel and held-out gate must be pinned before a comparable replay."
@@ -3282,6 +3594,14 @@
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [
+          "semantic-seed-screen-gate-audit"
+        ],
+        "scope": "The executed source calculation was replayed, but its acceptance or planted-control gate cannot support the source negative verdict. See the linked bounded audit.",
+        "wider_method_excluded": false
       }
     },
     {

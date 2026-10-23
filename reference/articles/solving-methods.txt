@@ -32,12 +32,14 @@ Allow several ciphertext symbols to represent the same plaintext symbol.
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-3 related records
+4 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
 
 Public 43-key Vigenère sweep · Method replay
+
+Three QuagMirror drafts and their actual stopping points · Method replay
 
 
 
@@ -105,7 +107,7 @@ Two-to-six-rune feedback and autokey screen · Method replay
 Seeded generators and generated keystreams
 Generate a stream from a bounded seed space with explicit output conversion and alignment.
 
-5 related records
+11 related records
 Does matching the opening text identify a seed? · Control
 
 Semantic-seed sweep: an unreachable screen gate · Source or input audit
@@ -115,6 +117,18 @@ Can the number-grid payload seed a rune key? · Method replay
 Do alternate grid bytes change the payload-derived key? · Method replay
 
 Seven seeded generator streams against LP2 · Method replay
+
+Can the 256-byte grid generate a reading key? · Method replay
+
+Password-derived key streams against the LP2 opening · Method replay
+
+Python 2.7 reducer sweep: source and control audit · Source or input audit
+
+B-04 cryptographic seed streams against fixed LP2 openings · Bounded solving test
+
+Older random generators against fixed LP2 openings · Bounded solving test
+
+Typed seeds and Python Random streams at LP2 page openings · Bounded solving test
 
 
 
@@ -131,12 +145,16 @@ LP2 as a running key for shorter Cicada texts · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-3 related records
+5 related records
 Can a correct key fail under the wrong alignment rule? · Control
 
 I/M rune proximity to F interruptions · Manuscript measurement
 
 Delete F runes, then test lag-13 repeats · Manuscript measurement
+
+Older random generators against fixed LP2 openings · Bounded solving test
+
+Typed seeds and Python Random streams at LP2 page openings · Bounded solving test
 
 
 
@@ -222,13 +240,19 @@ LP2-54–55: the 8×8 word arrangement · Manuscript measurement
 Grilles and positional extraction
 Select positions using a mask or indexing rule.
 
-1 related record
+2 related records
 2012 P.S. digit-block layout readings · Method replay
+
+Do positional runes in LP2 hide a message? · Method replay
 
 
 
 Acrostics and boundary-letter extraction
 Select initial, final or regularly indexed symbols from defined units.
+
+1 related record
+Do positional runes in LP2 hide a message? · Method replay
+
 
 
 Word, row, page and section boundaries
@@ -503,7 +527,7 @@ Language comparison: shorter aligned passage controls · Manuscript measurement
 Known plaintext and crib searches
 Use a declared plaintext hypothesis to constrain a defined cipher model.
 
-4 related records
+7 related records
 Does matching the opening text identify a seed? · Control
 
 LP2-39: twenty proposed red-header cribs · Bounded solving test
@@ -511,6 +535,12 @@ LP2-39: twenty proposed red-header cribs · Bounded solving test
 LP1 square: dictionary candidate space for the selected phrase · Control
 
 LP2-39: do crib-difference triplets recur elsewhere? · Manuscript measurement
+
+B-04 cryptographic seed streams against fixed LP2 openings · Bounded solving test
+
+Older random generators against fixed LP2 openings · Bounded solving test
+
+Typed seeds and Python Random streams at LP2 page openings · Bounded solving test
 
 
 
@@ -560,7 +590,7 @@ The LP2 opening section’s lag-35 peak · Manuscript measurement
 Repeats, doublets and word structure
 Test structural constraints without automatically converting them into a cipher identification.
 
-20 related records
+21 related records
 LP2-00–55: repeated trigrams against page shuffles · Manuscript measurement
 
 LP2-00–55: doublets across words, wraps and stored corrections · Manuscript measurement
@@ -601,12 +631,14 @@ Do doublets fall at particular section positions? · Manuscript measurement
 
 Are the long LP2 rune repeats unusual? · Manuscript measurement
 
+Does the missing-doublet pattern resemble a lag-one filter? · Manuscript measurement
+
 
 
 Invariants and bounded exclusions
 State the assumptions under which an operation preserves or forbids an observed property.
 
-5 related records
+6 related records
 Literal prime alphabet: affine permutations for every modulus above 109 · Alphabet-wide analysis
 
 Literal prime alphabet: quadratic permutations for every modulus above 109 · Alphabet-wide analysis
@@ -617,12 +649,14 @@ LP2 page supports: literal-prime affine maps and the two page-55 exceptions · M
 
 Can missing duplicate runes hide an autokey pattern? · Bounded solving test
 
+Does the doublet floor rule out every independent key? · Source or input audit
+
 
 
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-10 related records
+13 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -642,6 +676,12 @@ Möbius zero-mask rule against a solved LP2 page · Control
 LP1 square: dictionary candidate space for the selected phrase · Control
 
 LP2: affine patterns across twelve distances · Manuscript measurement
+
+Do positional runes in LP2 hide a message? · Method replay
+
+Does the missing-doublet pattern resemble a lag-one filter? · Manuscript measurement
+
+Python 2.7 reducer sweep: source and control audit · Source or input audit
 
 
 
@@ -728,6 +768,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/alberti-branch-arithmetic
 - Public 43-key Vigenère sweep
   https://jelliottdev.github.io/#/experiments/public-wordlist-vigenere
+- Three QuagMirror drafts and their actual stopping points
+  https://jelliottdev.github.io/#/experiments/quagmirror-variant-continuations
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Block and matrix transformations
@@ -784,6 +826,18 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/grid-payload-prf-contested-masks
 - Seven seeded generator streams against LP2
   https://jelliottdev.github.io/#/experiments/public-prng-seed-sweep
+- Can the 256-byte grid generate a reading key?
+  https://jelliottdev.github.io/#/experiments/grid-payload-prf-source-grid
+- Password-derived key streams against the LP2 opening
+  https://jelliottdev.github.io/#/experiments/public-kdf-seed-stretch
+- Python 2.7 reducer sweep: source and control audit
+  https://jelliottdev.github.io/#/experiments/py27-reducer-sweep-source-audit
+- B-04 cryptographic seed streams against fixed LP2 openings
+  https://jelliottdev.github.io/#/experiments/b04-source-seeds-opening-cribs
+- Older random generators against fixed LP2 openings
+  https://jelliottdev.github.io/#/experiments/r26-derived-generators-opening-cribs
+- Typed seeds and Python Random streams at LP2 page openings
+  https://jelliottdev.github.io/#/experiments/typed-seed-random-opening-cribs
 - Running keys from external texts
   https://jelliottdev.github.io/reference/articles/method-running-key.html
 - Emerson as an additive LP2 running key
@@ -842,6 +896,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/method-positional-extraction.html
 - 2012 P.S. digit-block layout readings
   https://jelliottdev.github.io/#/experiments/h03-ps-layout-replay
+- Do positional runes in LP2 hide a message?
+  https://jelliottdev.github.io/#/experiments/line-initial-layout-control
 - Acrostics and boundary-letter extraction
   https://jelliottdev.github.io/reference/articles/method-acrostics.html
 - Word, row, page and section boundaries
@@ -1084,6 +1140,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/doublet-section-residues
 - Are the long LP2 rune repeats unusual?
   https://jelliottdev.github.io/#/experiments/repeated-long-ngrams
+- Does the missing-doublet pattern resemble a lag-one filter?
+  https://jelliottdev.github.io/#/experiments/lp2-filter-fingerprint-models
 - Invariants and bounded exclusions
   https://jelliottdev.github.io/reference/articles/cipher-invariants.html
 - Literal prime alphabet: affine permutations for every modulus above 109
@@ -1094,6 +1152,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/literal-prime-affine-pages
 - Can missing duplicate runes hide an autokey pattern?
   https://jelliottdev.github.io/#/experiments/haplography-diagonal-bound
+- Does the doublet floor rule out every independent key?
+  https://jelliottdev.github.io/#/experiments/source-independent-key-floor-audit
 - Null models and selection effects
   https://jelliottdev.github.io/reference/articles/null-models.html
 - LP1: the 464-word table and column balance

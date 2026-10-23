@@ -1,0 +1,1239 @@
+{
+  "schema": "liberpedia-execution-ready-queue-v1",
+  "source": {
+    "repository": "Dukotah/cicada3301",
+    "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+    "ledger": "../sources/dukotah-f08b20b/LEDGER.json",
+    "ledger_sha256": "7718bf90fb4cc6cc0fb98464d65ab898dd0e776da33d9b056bcd908d3b60558d"
+  },
+  "counting": "64 reproduction-command ledger entries are source entries, not 64 independent ideas. Parameter configurations inside a command are not counted as ideas. Ready means source rules, local inputs and controls appear available; publication still requires independent replay and input-hash checks.",
+  "counts": {
+    "reproduction_command_entries": 64,
+    "ready_unclaimed_source_programs": 1,
+    "completed_draft_partial": 0,
+    "claimed_by_other_agent": 3,
+    "covered_or_partial": 16,
+    "umbrella_verdict_or_audit": 7,
+    "blocked_or_audit_needed": 37,
+    "source_entries_in_disposition_total": 64,
+    "completed_draft_full": 0
+  },
+  "priority_ready_source_ids": [
+    "R21-L1-SEAL"
+  ],
+  "command_audit": [
+    {
+      "source_id": "VERDICT-OTP-CLASS",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round10b/B4-otp-steelman/b4_results.json",
+          "sha256": "622c5d563c97feec721400a003510a224e01e182b111f1936ec6903734cfabb6"
+        },
+        {
+          "path": "liber-primus/analysis/round12/D3/RESULTS.md",
+          "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370"
+        }
+      ],
+      "ledger_status": "open",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "VERDICT-UNSOLVABLE-BY-DESIGN",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "python3 liber-primus/analysis/round12/D3/pc_derivedkey.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/D3/RESULTS.md",
+          "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370"
+        },
+        {
+          "path": "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+          "sha256": "a3107806e86e9eb28671360175c27e6aa14b28c453a04c9916bea9c8e288e8fd"
+        }
+      ],
+      "ledger_status": "superseded",
+      "ledger_control": "none"
+    },
+    {
+      "source_id": "B-04",
+      "disposition": "claimed-by-another-agent",
+      "runnable_method": "B-04 source-seed opening-crib replay is under active integration; do not count it as unclaimed.",
+      "reproduce_command": "cd liber-primus/analysis/round13/B04 && python3 sweep.py --nproc 6",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round13/B04/sweep.py",
+          "sha256": "e344ed8860cf24451e682fc4ea61f96acb9205ceeb0a93231800dab9a05b062a"
+        },
+        {
+          "path": "liber-primus/analysis/round13/B04/PREREG.md",
+          "sha256": "d2b22de7ffbf6e216c8b47a1825387d52a64a747c8c9ab10d9266dc2e191f440"
+        },
+        {
+          "path": "liber-primus/analysis/round13/B04/sweep.py",
+          "sha256": "e344ed8860cf24451e682fc4ea61f96acb9205ceeb0a93231800dab9a05b062a"
+        },
+        {
+          "path": "liber-primus/analysis/round13/B04/seeds.py",
+          "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-05",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published grid-payload-prf-source-grid replays the source-defined grid-payload PRF scope with its documented controls.",
+      "reproduce_command": "cd liber-primus/analysis/round13/B05 && python3 sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round13/B05/PREREG.md",
+          "sha256": "3a1981b9a664826927f1640ea2c6845a6539385821d344fef34dcc2257814614"
+        },
+        {
+          "path": "liber-primus/analysis/round13/B05/sweep.py",
+          "sha256": "e578c5e74c53fb86dfe704d02a34ee76fc76682589445779b93833fabaf6606a"
+        },
+        {
+          "path": "liber-primus/analysis/round13/B05/control_results.json",
+          "sha256": "f1f95543cdd8af5cb54a376c5a90d40555c8a81f5747008450cfe05a911a06d2"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-21",
+      "disposition": "input-audit-needed",
+      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
+      "reproduce_command": "see liber-primus/analysis/seed_sweep/run_full32.sh",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+          "sha256": "14c0da13f3b02ce24e0326dd5d997ff5b01897d645b554140af974d60db939b8"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-16",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "python3 liber-primus/analysis/round12/D1_redteam/rewrite_gate.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/D1_redteam/rewrite_gate.py",
+          "sha256": "3fe8113ebd9c1c3f91559934d74e0f58b206e564f0348f4567f1be9c3eca291c"
+        },
+        {
+          "path": "liber-primus/analysis/round12/D1_redteam/RESULTS.md",
+          "sha256": "84013238692a7789a34ac45f3ff7282f5646f8542715e1b665eaa5bf6c782c7c"
+        },
+        {
+          "path": "liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md",
+          "sha256": "248a2e7c76499b809e6c1668c4f12c9637845633dd2890b8703bb3d808eb35c8"
+        }
+      ],
+      "ledger_status": "eliminated",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R12-A1",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/analysis/round12/A1/pads/",
+      "reproduce_command": "cd liber-primus/analysis/round12/A1 && python3 sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/A1/RESULTS.md",
+          "sha256": "243b9ec95aa52ab515f50a1c687d7f4465a609678ec6928ff33e06457d880a84"
+        },
+        {
+          "path": "liber-primus/analysis/round12/A1/harness.py",
+          "sha256": "3a75db2937db14730e0390e83348f17634d65c2a85e93d3d2e6a517f72d38875"
+        },
+        {
+          "path": "liber-primus/analysis/round12/A1/sweep.py",
+          "sha256": "44600d8fb5b962d8a6b26862d1594e83b3be0d6516278b3cce10bfbcd3f3ab82"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R12-C1",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: public-circumference-substitutions",
+      "reproduce_command": "cd liber-primus/analysis/round12/C1 && python3 sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/C1/RESULTS.md",
+          "sha256": "e0a3665eac2a9321aeb0993d5113c37a62040efbadb21b86abb407ce0e82fede"
+        },
+        {
+          "path": "liber-primus/analysis/round12/C1/sweep.py",
+          "sha256": "0eb8799373237f30c1e589cb8a1ba59ac5e4df7228787ffecacd7c11e86481b0"
+        },
+        {
+          "path": "liber-primus/analysis/round12/C1/control.py",
+          "sha256": "c309ef3bab8f1bcbf5cc9b3dd95774bc9d804333c14b7270043c6c040edc65c3"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R12-C2",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "downloaded keytexts from fetch.sh; no source sweep defined",
+      "reproduce_command": "bash liber-primus/analysis/round12/C2/fetch.sh  # then no sweep exists yet",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/C2/fetch.sh",
+          "sha256": "a9b01609c73e59b53119628260f7e077700424c9c8575a6014744fa1ca9fbbc7"
+        }
+      ],
+      "ledger_status": "never-run",
+      "ledger_control": "none"
+    },
+    {
+      "source_id": "R12-D2",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published source-independent-key-floor-audit reproduces a limited source statistical audit; it does not complete the original independent-key floor claim.",
+      "reproduce_command": "python3 liber-primus/analysis/round12/D2/recompute.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round12/D2/recompute.py",
+          "sha256": "b45b42c32bda112eef47e3a1c577998870a94be5f17ea385758e30340f456944"
+        },
+        {
+          "path": "liber-primus/analysis/round12/D2/RESULTS.md",
+          "sha256": "d604669e79ae1f6bf236499ecf8e2ccc1584455faf8a06fda2d9dae7a95fed37"
+        },
+        {
+          "path": "liber-primus/analysis/round12/D2/recompute.py",
+          "sha256": "b45b42c32bda112eef47e3a1c577998870a94be5f17ea385758e30340f456944"
+        }
+      ],
+      "ledger_status": "eliminated",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R12-frontB",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/relikd/p45.jpg",
+      "reproduce_command": "cd liber-primus/analysis/round12/frontB && python3 run_final.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/T2/RESULTS.md",
+          "sha256": "70fd4bc08c8d9c301f4d36aebc1d1b96e694fb73123f7d7b61d9f362b25097e8"
+        },
+        {
+          "path": "liber-primus/analysis/round19/T2/out_probe.json",
+          "sha256": "6d1323ebc2d39eb5f12405ec4354b42b050c6bca704c63c76ede5930d84e88fd"
+        },
+        {
+          "path": "liber-primus/analysis/round19/T2/out_indel_score.json",
+          "sha256": "be445d40480b088833bdd815573a13d2a328b42c17812692b73c68704199e9db"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R17-PUBLIC-PAD",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "external public pad bytes for dense scan",
+      "reproduce_command": "python3 liber-primus/analysis/round17/lib_padsweep.py  # instrument gate, then each lane's sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round17/SYNTHESIS.md",
+          "sha256": "9c62c8b4243d41bcf965a1367ff9411463d1661df6a2b8c38ac2ddac95f1142c"
+        },
+        {
+          "path": "liber-primus/analysis/round17/PREREG.md",
+          "sha256": "7d9c0b5abb76be2aee806548dfc773f7c99712442ce6dec6bbf0934b35db4f20"
+        },
+        {
+          "path": "liber-primus/analysis/round17/P0_dense/RESULTS.md",
+          "sha256": "52fe8818b057f61f8dcbdc96d91113d75f81cf4e21edea9e0b477e38a4db58ce"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R17-P2-CENSUS-CORRECTION",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "python3 liber-primus/analysis/round17/P2_beacons/fetch.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round17/P2_beacons/RESULTS.md",
+          "sha256": "ad51c37d9e6faf9fa14607be5765b51aa7281c092a937c122ed877037c8e175f"
+        },
+        {
+          "path": "liber-primus/analysis/round10/L5-seed32/CENSUS.md",
+          "sha256": "14c0da13f3b02ce24e0326dd5d997ff5b01897d645b554140af974d60db939b8"
+        }
+      ],
+      "ledger_status": "superseded",
+      "ledger_control": null
+    },
+    {
+      "source_id": "D-01",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published lp2-filter-fingerprint-models replays the 200-replicate executed model ladder and independently checks rune/window/gap/line statistics; the human-versus-machine claim remains limited to tested controls.",
+      "reproduce_command": "python3 liber-primus/analysis/round17/P4_filter/fingerprint.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round17/P4_filter/fingerprint.py",
+          "sha256": "98ba3bbc24858181d5ffb1f32427b0747231da6024704ff2cf0e0b1b661718b2"
+        },
+        {
+          "path": "liber-primus/analysis/round17/P4_filter/RESULTS.md",
+          "sha256": "98e890e0d045b6e2f8fe012ed810d7a2d519f9d2f7ff7b8f73766bf690daa284"
+        },
+        {
+          "path": "liber-primus/analysis/round17/P4_filter/fingerprint.py",
+          "sha256": "98ba3bbc24858181d5ffb1f32427b0747231da6024704ff2cf0e0b1b661718b2"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed",
+      "liberpedia_record": "lp2-filter-fingerprint-models"
+    },
+    {
+      "source_id": "A-03",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "99.5 percent mapping gate missed by source control",
+      "reproduce_command": "python3 liber-primus/analysis/round16/A-03/a03_hapl_bound.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/A-03/PREREG.md",
+          "sha256": "c5fbd0afbe0187b24dce99a3fa380735144f2c812004bf06194286b31ab99f48"
+        },
+        {
+          "path": "liber-primus/analysis/round16/A-03/RESULTS.md",
+          "sha256": "778feb5d1e4f820a6fdd15531dea5748eb1db7a494834d5ede7940e184136e67"
+        },
+        {
+          "path": "liber-primus/analysis/round16/A-03/a03_hapl_bound.py",
+          "sha256": "59e243ca33b53bbf408235726b425d47a22454b56f07e8507367d17ac74070aa"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "A-04",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source image/payload prerequisites need audit",
+      "reproduce_command": "cd liber-primus/analysis/round18/L5-payload && python3 grid.py && python3 calibrate.py && python3 pixelmatch.py && python3 adjudicate_all.py && python3 visualpass.py && python3 compare215.py && python3 propagate.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L5-payload/PREREG.md",
+          "sha256": "831bb9c5aff9d5bc0490c91a550949e5fb7760875c3d355333c1ef5a525e9b7c"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C1/PREREG.md",
+          "sha256": "0fa2715a9ef007631adb708dd30814bbe82af6465b9b1456022b65b1e1dc2601"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C1/RESULTS.md",
+          "sha256": "7280c5c94f7c963b60b0c7fb4190089c6d179451c8901bc1efdeab1f7b2e3ab4"
+        }
+      ],
+      "ledger_status": "eliminated",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "A-06",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source ornament image prerequisites need audit",
+      "reproduce_command": "cd liber-primus/analysis/round18/L3-ornaments && python3 inventory.py && python3 calibrate.py && python3 controls.py && python3 read_bands.py && python3 nonrunic.py && python3 hypotheses.py && python3 h1score.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C3/RESULTS.md",
+          "sha256": "ab1040a03e4736982243ea0df42501200e839a22f31e116c7cbcd0685c5737e4"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C3/l3/bands.json",
+          "sha256": "90ceff57d9089de38e421ee7ad47656d37b987be0e93d325b07013be3ca5785e"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C3/l3/band_control.json",
+          "sha256": "38de7187277a2c4045525f3c20ee9d3836911d883d5ab93b8064b2136ed53ff2"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-02",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "Marsaglia byte corpus fetched separately",
+      "reproduce_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && python3 scripts/audit_builders.py && python3 scripts/control_offset.py && python3 scripts/sweep_offset.py --stage A1 && python3 scripts/sweep_offset.py --stage A2",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+          "sha256": "ae766bd54dd1ee65e59db5f81e4f91288f295ac0712e7eece5cfdf1c33dcace5"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+          "sha256": "4f4905b83e60ba104ec92c09b86826664d62f4edd5f0d236ed0cd8c56e25600e"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "C-02",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published line-initial-layout-control covers the available Arm A/B/C cases, layout confound and planted-power curve; external BabelStone font-width validation is absent from the pinned checkout.",
+      "reproduce_command": "cd liber-primus/analysis/round18/L4-forcing && python3 parse_structure.py && python3 armA_uniformity.py 200000 && python3 confound_layout.py 5000 && python3 armC_rejection.py 200000 && python3 armB_message.py 1000 && python3 control_power.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L4-forcing/parse_structure.py",
+          "sha256": "638a35f55a40bd3e247d2c78f9404d2599b940453a94be3a8e361d8dcd57317b"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L4-forcing/PREREG.md",
+          "sha256": "e9c7352a347e665bf32f2cd3ae12eeb9f156b3946db4a6d8ca3f6490dba4bc8c"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L4-forcing/RESULTS.md",
+          "sha256": "02596454a11f5daab23ce1a09d186039d50c716c94a91fccac818de214b144af"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L4-forcing/results_armA.json",
+          "sha256": "adfc64aa263dbbf7a88233d198b448637a6369ff02004a2086f8a1b9c981685b"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed",
+      "missing_external_validation": "corpus/E-tooling/vendor/0x676f64__Cicada-3301/iddqd/ttf/BabelStoneRunicBeorhtnoth.ttf",
+      "record_id": "line-initial-layout-control",
+      "liberpedia_record": "line-initial-layout-control"
+    },
+    {
+      "source_id": "E-01",
+      "disposition": "input-audit-needed",
+      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
+      "reproduce_command": "cd liber-primus/analysis/round18/L5-payload && python3 extract_moduli.py && python3 e01_extended.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L5-payload/PREREG.md",
+          "sha256": "831bb9c5aff9d5bc0490c91a550949e5fb7760875c3d355333c1ef5a525e9b7c"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C1/PREREG.md",
+          "sha256": "0fa2715a9ef007631adb708dd30814bbe82af6465b9b1456022b65b1e1dc2601"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C1/RESULTS.md",
+          "sha256": "7280c5c94f7c963b60b0c7fb4190089c6d179451c8901bc1efdeab1f7b2e3ab4"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "E-02",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: grid-page-order-permutations, payload-doublet-gaps",
+      "reproduce_command": "python3 liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/PREREG.md",
+          "sha256": "fab3e2035d56d91ce134b7f5c23aa05a1cec6aec6e588ad3107a2068cb8eb8c4"
+        },
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/RESULTS.md",
+          "sha256": "e401a140ab72cc1872310e75d162ca60840a9a3dc4b2d1b8c76f8ce79a9b7103"
+        },
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+          "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "F-01",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: im-near-f-markers",
+      "reproduce_command": "python3 liber-primus/analysis/round16/F-01/sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/F-01/PREREG.md",
+          "sha256": "900747ab47b114b433c2e158b2d50751104e86ffc94720ee97211db909013b3c"
+        },
+        {
+          "path": "liber-primus/analysis/round16/F-01/RESULTS.md",
+          "sha256": "e5c6405f2b8ec231912b667bcddaab3bafea5bd1895a689d366a37adeeab5f90"
+        },
+        {
+          "path": "liber-primus/analysis/round16/F-01/sweep.py",
+          "sha256": "de5ac41cbb4e770f3b78f22ff22ed69b283dd596095eb1a4e216e04c8ecbac29"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "G-01",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source JPEG image prerequisites need audit",
+      "reproduce_command": "python3 liber-primus/analysis/round18/L1-toolchain/jpeg_fingerprint.py --selftest && python3 liber-primus/analysis/round18/L1-toolchain/run_pages.py && python3 liber-primus/analysis/round18/L1-toolchain/pipeline_control.py && python3 liber-primus/analysis/round18/L1-toolchain/chain_control.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/PREREG.md",
+          "sha256": "e588fb1038f594fd2d34a01df5b6502f76f957139cdd54f19da202316f28520e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/pages_summary.json",
+          "sha256": "9a8cc7fb4ccfc4fa3dd23733eb5063714014312e69c1b58dd278b74d62a15268"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "G-02",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "WSL/GPG historical signature environment",
+      "reproduce_command": "wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/verify_all_signatures.py\" && python3 liber-primus/analysis/round18/L8-provenance/build_table_md.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.md",
+          "sha256": "744785b3984725d260087ae78dce99e3191df3ee7f4ca370a9412e3877ddf516"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/PGP-VERIFICATION-TABLE.json",
+          "sha256": "42cddc5dcd3b8f5a306c873463fef80a7359b29c567ddb3d054f956f49f498ca"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+          "sha256": "44480694edc299ffcb682b41516bdf3cd55f7e1e1b3d969944191caae197f4a1"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "PASS"
+    },
+    {
+      "source_id": "H-03",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: h03-ps-layout-replay",
+      "reproduce_command": "python3 liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/PREREG.md",
+          "sha256": "fab3e2035d56d91ce134b7f5c23aa05a1cec6aec6e588ad3107a2068cb8eb8c4"
+        },
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/RESULTS.md",
+          "sha256": "e401a140ab72cc1872310e75d162ca60840a9a3dc4b2d1b8c76f8ce79a9b7103"
+        },
+        {
+          "path": "liber-primus/analysis/round16/zeroFP/zerofp_tests.py",
+          "sha256": "26309c3c7e6072f4bf3d33bd69218c7ee51dfdf328bb44ea56a7ffd455446503"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "I-01",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "fetched historical base-rate corpus",
+      "reproduce_command": "bash liber-primus/analysis/round18/L8-provenance/fetch_baserate.sh && wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && python3 liber-primus/analysis/round18/L8-provenance/compare_keys.py\"",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/KEY-COMPARISON.json",
+          "sha256": "cded1b7b17314967c8d9e13bf23d6f592fb4b7cada92600f11dff141eb8b2799"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/RESULTS.md",
+          "sha256": "b37455a990db3d1183a1688e52e170854a66697e97279a453f3d8f6c5c4bcbb6"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "PASS"
+    },
+    {
+      "source_id": "I-03",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "external archive corpora; bitcointalk half has no control",
+      "reproduce_command": "wsl -d Ubuntu -- bash -lc \"cd /mnt/c/Users/dukot/projects/cicada3301 && bash liber-primus/analysis/round18/L8-provenance/predisclosure_search.sh && bash liber-primus/analysis/round18/L8-provenance/grep_archives.sh && bash liber-primus/analysis/round18/L8-provenance/wayback_probe.sh\"",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C3/l8/predisclosure_archives.json",
+          "sha256": "6acac3aa76d6c7d484009133ba55f049410d2792c58ca51b4e26c156d6c7d8b5"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C3/l8/cpunks_export.json",
+          "sha256": "fcf8644f479013711c850a5e635188ec10b8ecb83c4dcc8f83a306327829df76"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "PARTIAL. The metzdowd half is searched against the REAL corpus (monthly mbox files downloaded and zgrep'd locally), so its silence is a measurable bound. The bitcointalk half rests on a search index rather than a local corpus and is therefore labelled 'reported', not 'verified' — that half has no control and its negative is correspondingly weaker."
+    },
+    {
+      "source_id": "B-08",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "same Marsaglia corpus as B-02",
+      "reproduce_command": "as B-02",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+          "sha256": "ae766bd54dd1ee65e59db5f81e4f91288f295ac0712e7eece5cfdf1c33dcace5"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A1.json",
+          "sha256": "4f4905b83e60ba104ec92c09b86826664d62f4edd5f0d236ed0cd8c56e25600e"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_A2.json",
+          "sha256": "dcfd2b2ac4e5aea303cfc3edc687853077660661b4c9df4aa18b0771e55e77f4"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-11",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/relikd/p0.jpg; fetched fonts",
+      "reproduce_command": "python3 liber-primus/analysis/round18/L1-toolchain/glyph_extract.py && bash liber-primus/analysis/round18/L1-toolchain/get_fonts.sh && python3 liber-primus/analysis/round18/L1-toolchain/font_match.py && python3 liber-primus/analysis/round18/L1-toolchain/font_sheet.py && python3 liber-primus/analysis/round18/L1-toolchain/font_verdict.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/RESULTS.md",
+          "sha256": "d79fcb42ef857bdb18b0ff01e6a806be43f763ed65d61e043cbed16ea34a1840"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/runes_observed_meta.json",
+          "sha256": "ee8be082152e663c2f4e7ff16381b563c2c8d398e254a3559423b470864d4675"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L1-toolchain/font_match_results.json",
+          "sha256": "f28010c23f515964a227aa7940bc8a2f53f3e85272a46ae0829a888fb068502c"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-12",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source ornament image prerequisites need audit",
+      "reproduce_command": "cd liber-primus/analysis/round18/L3-ornaments && python3 linegeom.py && python3 linetests.py && python3 greyglyphs.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/C3/RESULTS.md",
+          "sha256": "ab1040a03e4736982243ea0df42501200e839a22f31e116c7cbcd0685c5737e4"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C3/l3/linetests.json",
+          "sha256": "54b9a829823fefeec67daad64c8646af3ec82dacb43816f040423fa49550192b"
+        },
+        {
+          "path": "liber-primus/analysis/round19/C3/l3/linegeom.json",
+          "sha256": "e0fd51010b91d07e7275cb8c609131bca8e64265b645b420cc178dffb5218950"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R16-KDF",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published public-kdf-seed-stretch replays the complete executed Stage A decode grid and its available controls; it does not cover unstaged key space.",
+      "reproduce_command": "cd liber-primus/analysis/round16/KDF && python sweep.py  # reuses round15/KDF/sweep.py + kdf.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/KDF/PREREG.md",
+          "sha256": "3a59e7c0f111d9e9ad765f87f13a25196b2601639b885757746f38f75c8a27ff"
+        },
+        {
+          "path": "liber-primus/analysis/round16/KDF/RESULTS.md",
+          "sha256": "373c34994ffacaea86f05b623899b142e95107c5eb0a9ceb3b129a946615f62d"
+        },
+        {
+          "path": "liber-primus/analysis/round16/KDF/results_A.json",
+          "sha256": "e7e1b9b3053c5e4daa09feab8f3164b79acbc4fb887875f88b4bcbc27b637a14"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R16-PRNG",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: public-prng-seed-sweep",
+      "reproduce_command": "cd liber-primus/analysis/round16/prng && python prng_sweep.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/prng/PREREG.md",
+          "sha256": "f14a565a7bb7c08c49ab6c0b3f7cc16459ebaae2000692f3ddec64a20b08a88c"
+        },
+        {
+          "path": "liber-primus/analysis/round16/prng/prng_sweep.py",
+          "sha256": "d4de5e17094f3bf6461221fc2b345717ca32c1b089222c5a5d8bc683ee4c9283"
+        },
+        {
+          "path": "liber-primus/analysis/round16/prng/results.json",
+          "sha256": "f982e35cc2866f4a2a7655063e8f3390d15ccd6629742680e190f9a1219614e8"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R16-scorer",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: rune-matched-scorer-calibration",
+      "reproduce_command": "cd liber-primus/analysis/round16/scorer && python measure.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round16/scorer/scorer.py",
+          "sha256": "4642493cab9e410b49303de1ccd19bbcbf08ddaa1869a05faadb9119d0ce98e5"
+        },
+        {
+          "path": "liber-primus/analysis/round16/scorer/measure.py",
+          "sha256": "6d874fffcaaa685150bef148736fdee5ce0011bf096e3a48f647592683e1229d"
+        },
+        {
+          "path": "liber-primus/analysis/round16/scorer/results.json",
+          "sha256": "78d744a384ec6e4eff32bcc0dfd5822cf3fd16f1a481c93299b43ac60a4f50da"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-A-LOCUS",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 a_locus.py --reps 200",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/a_locus.json",
+          "sha256": "3e738e9ff784389d611cd921295e4bd3b7c2a06960d7b0063951385a8e0f063a"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/RESULTS.md",
+          "sha256": "d8695a1db8cef84b5d53829d5a923d34735d3582932bb3307901d8733cd04eeb"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-B-DRIFT",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b_drawcount.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
+          "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/RESULTS.md",
+          "sha256": "d8695a1db8cef84b5d53829d5a923d34735d3582932bb3307901d8733cd04eeb"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-BEAM-LENGTH-POWER",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 fastbeam.py && PYTHONUTF8=1 python3 b_drawcount.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/gate_F0.json",
+          "sha256": "89b2598af00bd99cc3ae03ede4385691e4adcc3846696012f90374857850972a"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/b_drawcount.json",
+          "sha256": "9b92c25f76637deddaa79bcf7c807be7f6d70643e6c4074cdd31e335f35dd367"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/fastbeam.py",
+          "sha256": "2f61c708bdcb1bfcfeb8ecd6f10d2918648bdb3ed3ba2a770d3a02b6c31251e2"
+        }
+      ],
+      "ledger_status": "eliminated",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-DRIFT-LADDER",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b4_ladder.py --stage b4pc && PYTHONUTF8=1 python3 b4_ladder.py --stage ladder --cands 400 --nproc 6",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/b4_control.json",
+          "sha256": "660d223cb001237b264a7d9f2c16b2a1d3d1fdc102c44839e62f1cd884e6d83c"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/b4_ladder.json",
+          "sha256": "047fedd6b38959d850d71a4c0e0d54cef27fad22e71e689e6b43e4f304d784b7"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-SKIP-CHANNEL",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 b4_ladder.py --stage skipchannel",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/b5_skipchannel.json",
+          "sha256": "35b13b9a72298a7502497b467f84c7d444f5d04125141dfa121f20891ce659c9"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/fastbeam.py",
+          "sha256": "2f61c708bdcb1bfcfeb8ecd6f10d2918648bdb3ed3ba2a770d3a02b6c31251e2"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R18-L2-INFO-BUDGET",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/data/kjv.txt",
+      "reproduce_command": "cd liber-primus/analysis/round18/L2-filter-leak && PYTHONUTF8=1 python3 c_budget.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/c_budget.json",
+          "sha256": "b2eeac85b81799eabee6d62e7cd3cbb0f9fbd24ab1d9db868253dffbe1b87fd5"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L2-filter-leak/c_budget.py",
+          "sha256": "b159911369928865ddf628e5880bd11e6f22f0ee90cc97a32664395b51bf8d0e"
+        }
+      ],
+      "ledger_status": "eliminated",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "B-13-MARSAGLIA",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "fetched Marsaglia byte corpus",
+      "reproduce_command": "cd liber-primus/analysis/round18/L6-offset-marsaglia && bash scripts/fetch_marsaglia.sh && python3 scripts/verify_marsaglia.py && python3 scripts/control_marsaglia.py && python3 scripts/sweep_marsaglia.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/PREREG.md",
+          "sha256": "1c57238fe7ab16fbb369e058bcc7c025ece6ad023b34efe2404b9330cab35288"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/RESULTS.md",
+          "sha256": "ae766bd54dd1ee65e59db5f81e4f91288f295ac0712e7eece5cfdf1c33dcace5"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L6-offset-marsaglia/out/results_M.json",
+          "sha256": "8e83fd95c6855e9b11b3f79caf53ddf8f564885146c6e8c59a7c99892872ff81"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "G-09",
+      "disposition": "input-audit-needed",
+      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
+      "reproduce_command": "python3 liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/TIMESTAMP-SEED-CANDIDATES.json",
+          "sha256": "7673303a2b469223973f0aaba63e202ac10a83632020dcf9f71d797c5baa0443"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/build_seed_candidates.py",
+          "sha256": "7494bd2876ea0fce47c2a79cbcba1fd2ebb7759d3a82b5a35fc1ef667c4578b4"
+        },
+        {
+          "path": "liber-primus/analysis/round18/L8-provenance/MESSAGES.json",
+          "sha256": "44480694edc299ffcb682b41516bdf3cd55f7e1e1b3d969944191caae197f4a1"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": null
+    },
+    {
+      "source_id": "R21-L1-SEAL",
+      "disposition": "ready-unclaimed",
+      "runnable_method": "cross-fold real-mode proxy and held-out hallucination controls",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py && python3 analysis/round21/L1-seal-realmode-proxy/audit_catch.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/audit_catch.py",
+          "sha256": "f373d4239d5d5804aee3b06042c39efaabcf46615fbd0a83cc98c19712e4932f"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/PREREG.md",
+          "sha256": "ddfaddfab74f248521ab0d019de1889267426eb42a3e00eba2c0ca05ad57746e"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/RESULTS.md",
+          "sha256": "566a59b40764647678175ee18a6f4fd7a152adc548352a796045e97b4b528810"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L1-seal-realmode-proxy/catch_surface.json",
+          "sha256": "501063fdbe83d3b91a38e780ed9e1a07011145c66fb14a2aaf474bde918f6d15"
+        }
+      ],
+      "ledger_status": "audit",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R21-L2-NSKIPS-CROSSOVER-LENGTH",
+      "disposition": "claimed-by-another-agent",
+      "runnable_method": "Exact 34-cell source replay is running with a resumable checkpoint in public-nskips-crossover; not yet published.",
+      "reproduce_command": "cd liber-primus/analysis/round21/L2-nskips-crossover-length && python3 crossover.py  (reuses ../../round20/P2/nskips_lib.py; seed 3301; Q1-gate runs first as the Q5 kill checkpoint, then the ladder; writes nskips_crossover.json incrementally).",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round21/L2-nskips-crossover-length/crossover.py",
+          "sha256": "fff9c63bae48dde2ad2c940ff952c3e528ad9aeb95a20a4a280738bc7d475745"
+        },
+        {
+          "path": "analysis/round21/L2-nskips-crossover-length/nskips_crossover.json",
+          "sha256": "9f1cbf41c2dceb65fa27394dfe5a56f76206c480ee655ec0be40fea743524a8c"
+        },
+        {
+          "path": "analysis/round21/L2-nskips-crossover-length/RESULTS.md",
+          "sha256": "7f4730b41d852af6545dbf2d87367053eec334fd979446f332744c7372871569"
+        },
+        {
+          "path": "analysis/round21/L2-nskips-crossover-length/PREREG.md",
+          "sha256": "be6e5f5ba9720e0193e925c4e0ba81d31d932abd3f1531f703704346ae8f2f93"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R21-L3-PY27-REDUCERS",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Published py27-reducer-sweep-source-audit checks source configuration and control scope; it is not a complete LP2 decode-grid replay.",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py && cd analysis/round21/L3-py27-reducers-plus-64bit-map && python3 poscontrol.py && python3 sweep.py --seconds-per-config 240 --procs 5",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/sweep.py",
+          "sha256": "bf1ba0b62bc9d8df383ee3950b2823f0b2dbd0f938d3f6b5650522cd989c9cfe"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/PREREG.md",
+          "sha256": "73e309b33b029f6e110e37a50351f0ea055e53b6b42082031d1f6b04cd98d570"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/RESULTS.md",
+          "sha256": "4e832bf222cd6f4d03af884e3b1337ec5550c26fce4e194c1be0b8571dcae04d"
+        },
+        {
+          "path": "liber-primus/analysis/round21/L3-py27-reducers-plus-64bit-map/poscontrol.py",
+          "sha256": "2cdcef96ff8e8936275069e23e707bf838141b5014b81fa874c3672c41181ff9"
+        }
+      ],
+      "ledger_status": "measured",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R22-A-SELFEMBEDDED-READ",
+      "disposition": "input-audit-needed",
+      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round22/A-selfembedded-read && python3 PHASE0-GATE.py (recovery 1.000 PASS) && python3 run_sweep.py (0 family survivors -> NULL).",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round22/A-selfembedded-read/PREREG.md",
+          "sha256": "1bd1747547c02c0620728edf9024b92399c828c62e7108132899815ea1cad12b"
+        },
+        {
+          "path": "liber-primus/analysis/round22/A-selfembedded-read/RESULTS.md",
+          "sha256": "3bfc4ba035d07945b63a1743d57f07ee1aafcd1d747a8202c067c5c396fb87a5"
+        },
+        {
+          "path": "liber-primus/analysis/round22/A-selfembedded-read/ledger.json",
+          "sha256": "136304fea6643ddf7f6f8e0fc14c347e930256c5e942c4452021f7beed3318e8"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R22-D-ILLUSTRATION-DROPCAP",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: red-initial-presence-order",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round22/D-illustration-dropcap && python3 extract_illustration.py && python3 test_order.py && python3 test_illuminated_runes.py (min p=0.18, survivor=False).",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round22/D-illustration-dropcap/PREREG.md",
+          "sha256": "1cb8995c34010972850f8b7e47c231bb3ec961a8fc0fe8c3380d5c95d9015060"
+        },
+        {
+          "path": "liber-primus/analysis/round22/D-illustration-dropcap/RESULTS.md",
+          "sha256": "d1e760cdb2c353c5dcd4383a4e2162e69c3f8bf23581256cd4f05978024cfc03"
+        },
+        {
+          "path": "liber-primus/analysis/round22/D-illustration-dropcap/ledger.json",
+          "sha256": "393b3f1840c706686614a39cd992408c0cd06ff1c785a487d898936a006c6a85"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R22-R-REDTEAM",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "Read RESULTS.md; recomputed statistics are inline (Poisson/binomial P>=6, per-candidate sigma, hit-count recomputation from B's g3_results.json / ledger rows).",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round22/R-redteam/RESULTS.md",
+          "sha256": "34d191f42974a3487aafe77990e7e010d011f63e7687d20d106b08b17c448ff2"
+        },
+        {
+          "path": "liber-primus/analysis/round22/R-redteam/ledger.json",
+          "sha256": "d67983d8425e3a575fdec3ff388002474d61cfbbb68dfaaef97b045450f801bd"
+        }
+      ],
+      "ledger_status": "audit",
+      "ledger_control": "n/a-audit"
+    },
+    {
+      "source_id": "R23-A2-LINE-ACROSTIC",
+      "disposition": "input-audit-needed",
+      "runnable_method": "Command exists but exact inputs, controls, or overlap not yet cleared.",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py (5/5) && cd analysis/round23/A2-line-acrostic && python3 PHASE0-GATE.py (3/3 gates, recovery 1.000 PASS) && python3 run_sweep.py (0 family survivors -> NULL).",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round23/A2-line-acrostic/PREREG.md",
+          "sha256": "467eafe3b1ff63ce9de0d184a3f74fe3ebf2d395d0157e0450ae404c626538dc"
+        },
+        {
+          "path": "liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md",
+          "sha256": "a41d406acc2ed3b7ee464f118392fcc730a22305d4b4fedad103757db1f01e17"
+        },
+        {
+          "path": "liber-primus/analysis/round23/A2-line-acrostic/ledger.json",
+          "sha256": "733404f539563298f4a24ed6217e3423fe935546f6aadc9fd68ad3e9f4c73280"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R26-A-GEN-SWEEP-FIRST-FIRE",
+      "disposition": "claimed-by-another-agent",
+      "runnable_method": "R26-A fixed-crib generator sweep and source control audit are assigned to another agent; do not duplicate.",
+      "reproduce_command": "cd liber-primus && python3 tests/validate.py && cd analysis/round26/A && python3 sweep.py  # controls gate then sweep -> sweep.jsonl + control.json",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round26/A/sweep.py",
+          "sha256": "58dceb80f1860d843a1b5f788b2d9838a984d30c92942f64ca0db4aabfc85ebf"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "PASS (all three generators). Plant a keystream from the exact generator-under-test, encipher held-out English (self_reliance.txt L=240) under the repo keyskip1 relation, adjudicate with hitfn20(truth_idx): Perl r29 median recovery 1.000 (HIT=True, control pmax 24.90 vs bar 7.63); TeX pgf_rnd29 1.000 (HIT=True); Py2.7 grb5_mod wordsize=64 1.000 (HIT=True). control_min_recovery=1.000>=0.90 -> all validated (control.json all_controls_validated:true). Power ~1.0 on win-condition registers -> a null is a real negative."
+    },
+    {
+      "source_id": "R26-B-KEYTEXT-RUNNINGKEY-SKIPAWARE",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "33 exact source keytext files",
+      "reproduce_command": "cd analysis/round26/B && python3 control.py && python3 sweep.py && python3 finalize.py  (control.json proves recovery=1.00; sweep.jsonl holds per-decode rows; finalize.py rebuilds sweep_summary.json + honest per-page coverage from whatever rows completed).",
+      "source_evidence": [],
+      "ledger_status": "partially-run",
+      "ledger_control": "control.py plants plotinus_enneads_mackenna.txt as the running key over English self_reliance (L=240, 7 seeds, random keytext offsets), enciphered under BOTH keyskip1 and skip_by_two filters; the matched skip-aware presets recover it at median/min = 1.000/1.000 rune-index recovery (control.json). CONTROL_PASSED=True. Null is from a validated instrument."
+    },
+    {
+      "source_id": "R26-C-SEMANTIC-SEED-ZOO",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: semantic-seed-screen-gate-audit",
+      "reproduce_command": "cd analysis/round26/C && python3 build_seeds.py && python3 sweep.py",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R26-D-REDTEAM",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "analysis/round26/D/RESULTS.md",
+      "source_evidence": [],
+      "ledger_status": "audit",
+      "ledger_control": null
+    },
+    {
+      "source_id": "R27-CPORT-MT32-FULLSWEEP",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "long-running C/OpenMP source environment and state receipts",
+      "reproduce_command": "cd analysis/round27/P1-engine && python3 export_data.py && gcc -O3 -march=native -fopenmp -std=gnu17 -ffp-contract=off -o grind27 grind27.c -lm && ./grind27 --self-test && ./grind27 --drill; bash ../P2-harness/run_all.sh (acceptance); setsid launch per MONITORING.md; status: ./grind27 --status --run-dir run. Red-team: analysis/round27/R-redteam/{audit1.py,audit2.py,miniplan.json}.",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round27/P1-engine/run/STATUS.json",
+          "sha256": "e02b93913c1d201bc76e1fc13278323d1071deffb44853cd215740c855058b84"
+        },
+        {
+          "path": "liber-primus/analysis/round27/P1-engine/run/top_S2.json",
+          "sha256": "2a2f6565cebba76d45fd395a88ec985b490065e74a5378ead95021e10d95df03"
+        },
+        {
+          "path": "liber-primus/analysis/round27/P1-engine/run/HIT-CANDIDATE.json",
+          "sha256": "11c19fd91adef161908e491ca5c7c0c16d20060d5f97fccdae302cac7febe3ec"
+        }
+      ],
+      "ledger_status": "partially-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R28-L1-CICADAOS-PADS-DENSE-PAIR",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "CicadaOS raw pad binaries",
+      "reproduce_command": "analysis/round28/L1/: PREREG.md (+ dated addendum), control.py -> control.json, sweep.py -> sweep_rows.jsonl (24,080 rows) + results.json + sweep.log; RESULTS.md.",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R28-L2-CONTESTED-BYTES",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "exact contested-image byte inputs and >21M case cost require audit",
+      "reproduce_command": "analysis/round28/L2/: PREREG.md (+ Amendment 1, dated pre-run), reader.py -> reader_out.json, keysweep.py + resume_sweep.py -> sweep_rows.jsonl + sweep_summary.json, plant_control.json, null_calibration.json; RESULTS.md.",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R28-L5-PAYLOAD-MICRO",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: rsa-window-54-source-replay, h03-ps-layout-replay, payload-doublet-gaps",
+      "reproduce_command": "analysis/round28/L5/: PREREG.md (+3 dated amendments), l5_payload_micro.py, h03r_indented.py -> results.json; RESULTS.md; ledger_rows_proposed.json (this row absorbs it).",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R28-R-REDTEAM",
+      "disposition": "umbrella-verdict-or-audit",
+      "runnable_method": "Not an independent source solving program; review the component lanes.",
+      "reproduce_command": "analysis/round28/R/RESULTS.md + T1-PATCH-PROPOSALS.md + t2_hist_check.py / t3_subsumption_test.py / t4_l1_check.py + work/; analysis/round28/R-redteam/RESULTS.md (second pass).",
+      "source_evidence": [
+        {
+          "path": "analysis/round28/R-redteam/RESULTS.md",
+          "sha256": "0c0ba263a951d470009e2d03c15954b6bc1322b08985f94d5e70f28d0a45b2f5"
+        }
+      ],
+      "ledger_status": "audit",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R28-L4-UNSWEPT-GENERATORS-QUEUE",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source explicitly says DO-NOT-FIRE hold",
+      "reproduce_command": "analysis/round28/L4/BUILD.md (build + launch recipe), QUEUE.md (order, bars, ETAs, DO-NOT-FIRE hold), grind28.c, gen28.py, make_gates.py, receipts/, smoke/; chainer: analysis/round28/chain_after_s2.sh + chain.log + chainer.pid.",
+      "source_evidence": [
+        {
+          "path": "analysis/round28/sweep_plan_r28.json",
+          "sha256": "426dcb69be875b16734ad37f0bbe3580ee90e7c229b7866d34e12e9f0b678213"
+        },
+        {
+          "path": "analysis/round28/chain_after_s2.sh",
+          "sha256": "0e67d2a4d28de3216072569ac392b786a2e4426659dbb9349ac88f525f11e966"
+        },
+        {
+          "path": "liber-primus/analysis/round28/L4/run/STATUS.json",
+          "sha256": "adf4dca44d580cd92198ebcc984c2f585ac6051a831b345d5ae1660261085cc9"
+        }
+      ],
+      "ledger_status": "never-run",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R29-L1-ONION-STEGO",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source onion JPEGs, OutGuess/steghide executables, hard-coded Linux paths",
+      "reproduce_command": "analysis/round29/L1-onion3-crack/sweep_fast.py",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R30-A1-FONT",
+      "disposition": "record-overlap-or-partial",
+      "runnable_method": "Existing: image-row-coverage",
+      "reproduce_command": "analysis/round30/A1-font/font_signature.py",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R30-A2-SUBPIXEL",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "source JPEG inputs require audit",
+      "reproduce_command": "analysis/round30/A2-subpixel/",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R30-B1-BLOB-CRYPTO",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin",
+      "reproduce_command": "analysis/round30/B1-blob-crypto/",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R30-B2-RSA-GPG",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/analysis/armada_osint/artifacts/folly.bin; hard-coded developer ROOT",
+      "reproduce_command": "analysis/round30/B2-rsa-gpg/",
+      "source_evidence": [],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    },
+    {
+      "source_id": "R19-FINITE-ORNAMENT-REGISTER",
+      "disposition": "blocked-or-input-audit-needed",
+      "runnable_method": "liber-primus/analysis/round19/I2/models/testhalves.npz",
+      "reproduce_command": "cd liber-primus/analysis/round19/finite && python3 run_bands.py",
+      "source_evidence": [
+        {
+          "path": "liber-primus/analysis/round19/finite/RESULTS.md",
+          "sha256": "e8f68f14901425890596e841c442243777fbe4d5a61960933ef90ded64dc202c"
+        },
+        {
+          "path": "liber-primus/analysis/round19/finite/PREREG.md",
+          "sha256": "5f550a3ee348b1bf7ff5a61329adfca3c678fad452721409a77a43a901b01988"
+        },
+        {
+          "path": "liber-primus/analysis/round19/finite/run_bands.py",
+          "sha256": "1e8a3a872ade9b51b8ab1dc4d46eae02def6cbca48e64f058737f752f679d3c1"
+        }
+      ],
+      "ledger_status": "negative",
+      "ledger_control": "passed"
+    }
+  ]
+}

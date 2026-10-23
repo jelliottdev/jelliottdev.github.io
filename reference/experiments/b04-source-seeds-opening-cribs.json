@@ -1,0 +1,209 @@
+{
+  "id": "b04-source-seeds-opening-cribs",
+  "status": "published",
+  "title": "B-04 cryptographic seed streams against fixed LP2 openings",
+  "question": "Do the published B-04 cryptographic seed keystreams produce a fixed known-reading opening on any included LP2 page under the source key-skip rule?",
+  "reader_question": "Were the published cryptographic seed streams checked against LP2 openings?",
+  "summary": "Across 1,385,600 source-defined keystream configurations, none can produce any of nine fixed 12-rune known-reading openings at the start of one of 55 nonempty LP2-00–55 pages under the stated key-skip rule.",
+  "finding": "The longest structurally feasible opening is six runes; zero of 1,385,600 configurations match all 12 runes. This is a new fixed-crib test of source-defined candidates, separate from the source English-score sweep.",
+  "limitations": "It assumes one of nine known-reading 12-rune openings begins at one of 55 nonempty page starts. It tests zero key offset, the source B-04 keystream candidates and skip bound; it does not test other plaintexts, word resets, altered transcriptions, new seeds, or a general decryption mechanism.",
+  "next_steps": "Test different specific openings only when independently motivated, or use a separate source-defined key-offset or reset rule with its own bounded record.",
+  "outcome": "not-supported",
+  "tags": [
+    "B-04",
+    "cryptographic keystream",
+    "fixed crib",
+    "key skip",
+    "source-derived batch"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/b04-source-seeds-opening-cribs/seed-manifest.json"
+    ],
+    "representation": "Current Liberpedia GP29 rune transcription; the first 12 runes of every nonempty LP2-00–55 page, read separately. Nine fixed 12-rune openings from published reading CSVs.",
+    "procedure": "Regenerate the pinned source seed bytes through 16 source generators and five reductions. For every forward/reverse stream, sign and ciphertext-Atbash setting, exactly test whether any key-skip path can produce a fixed opening; no English score or beam pruning.",
+    "parameters": "2,165 seeds × 16 generators × 5 reductions × two directions × two signs × two Atbash states = 1,385,600 configurations; zero offset; at most three rejected draws per emitted rune; all 55 nonempty LP2 page starts; nine fixed 12-rune cribs.",
+    "exclusions": "No different seeds or hashes, nonzero offsets, independent page keys, word resets, alternative transcriptions, other plaintexts or original source English-scoring claims."
+  },
+  "review": {
+    "reviewer": "Independent exhaustive path oracle and planted key-skip positive controls",
+    "retested_on": "2026-10-23",
+    "kind": "computational replay of source-derived candidate grid",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/b04-source-seeds-opening-cribs/run.py && python experiments/records/b04-source-seeds-opening-cribs/check.py && python experiments/records/b04-source-seeds-opening-cribs/plot.py --check",
+    "environment": "Python 3.12 with cryptography package for AES-CTR and ChaCha20; pinned MIT-licensed source modules and source-derived seed manifest; no network or scorer required.",
+    "script": "experiments/records/b04-source-seeds-opening-cribs/run.py",
+    "script_sha256": "1da05405d2b18eec3908d4561f2d6182bf876c20986c8d478a88afabef9c41ef",
+    "inputs": [
+      {
+        "path": "experiments/engines/fixed_crib_skip.py",
+        "sha256": "70f1f80324b41c0307b134c119fc5489c31d2d09f7434c3c1b24a34426a65caa"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/suites/feedback-opening-census/manifest.json",
+        "sha256": "fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/run.py",
+        "sha256": "1da05405d2b18eec3908d4561f2d6182bf876c20986c8d478a88afabef9c41ef"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/check.py",
+        "sha256": "b923fd316de3db7284bc2a0265cc9bb4ece303f008c0a55c93609971a10d2029"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/plot.py",
+        "sha256": "47002272548e429a2e2d2bbb5792b6f7a22ee135d568a026ea555bf2902ed224"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/article.md",
+        "sha256": "faa62792fe706a7520c76341796f625d6bbc5fd979058dbf9f2fe4a8f46dd2de"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/page-inputs.json",
+        "sha256": "00233244627f0095c7029d41223b492f4f89db479dbf6b7dab2cc8c3932272d4"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/seed-manifest.json",
+        "sha256": "79438f5b910faf04cb3739e8bd2b50b7b762a86ead4a1a2a107a7e898860d39d"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/ks.py",
+        "sha256": "1b332b0da0cf8febf89f3d57a4dbdee09a6d5802de847610e7ae41e1e50d0edb"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/seeds.py",
+        "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/harness.py",
+        "sha256": "67ee8710d75661dfb09a9da3b07b0ddb3c6bfd2e51b2713513509d98fd3c72e1"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/PREREG.md",
+        "sha256": "d2b22de7ffbf6e216c8b47a1825387d52a64a747c8c9ab10d9266dc2e191f440"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/RESULTS.md",
+        "sha256": "3e1e6c007d1cb24c0f3149c7dc879bf3457c54117cadee6abbf53b73853c89f1"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/results.json",
+        "sha256": "c2b38781bc3222ec46293fba756467f5945abf4769a947ab348487986bee8224"
+      },
+      {
+        "path": "experiments/records/b04-source-seeds-opening-cribs/opening-prefix-funnel.svg",
+        "sha256": "23d9e8b1cd4da2aad0d23a2ff5cf9c2cba9e5a5ceef6d427babc2955880e2574"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/b04-source-seeds-opening-cribs/opening-prefix-funnel.svg",
+      "caption": "How many source configurations can structurally match at least each number of fixed opening runes; labels are exact counts."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned B-04 candidate sweep",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B04/harness.py"
+    },
+    {
+      "label": "Pinned seed dictionary",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B04/seeds.py"
+    },
+    {
+      "label": "Pinned generator and reductions",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B04/ks.py"
+    },
+    {
+      "label": "Pinned key-skip decoder",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/skipdecode.py"
+    }
+  ],
+  "related": [
+    "public-prng-seed-sweep",
+    "lp2-known-vigenere-keys"
+  ],
+  "article": "# Cryptographic seed streams against fixed LP2 openings\n\n**Finding.** We generated all **1,385,600** configurations in a published cryptographic-keystream grid and checked whether any can produce one of nine fixed, 12-rune known-reading openings at the start of the **55 nonempty pages in LP2-00–55** (LP2-50 is blank). **None reaches 12 runes.** The longest structurally possible prefix is six. This checks a new, narrow question against the published key candidates; it does not reproduce the source project's original English-scoring sweep.\n\n![Of 1,385,600 configurations, one can match six runes of a fixed opening, but none can match all twelve.](experiments/records/b04-source-seeds-opening-cribs/opening-prefix-funnel.svg)\n\n## What we tested\n\nThe [B-04 source dictionary](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B04/seeds.py) provides **2,165 distinct byte seeds**, drawn from puzzle words, numbers, addresses and other source material. The [source generator](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B04/ks.py) expands each seed through 16 byte-stream generators (including hashes, HMAC, RC4, AES-CTR and ChaCha20) and five reductions to the 29-rune alphabet. We kept the source's forward/reversed stream, both decode signs, optional Atbash on the ciphertext, and zero key offset. That is **2,165 × 16 × 5 × 2 × 2 × 2** configurations.\n\nFor each configuration we asked a fixed question: could the first 12 ciphertext runes of any included page decode to the first 12 runes of any of nine published readings? The readings were fixed before this run and their source CSV hashes are in the result file. Each page starts a fresh key stream. The solver permits **zero to three rejected key symbols** between emitted runes, exactly the key-skip rule used by the [source decoder](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/skipdecode.py). A rejected symbol is allowed only if it would have repeated the preceding ciphertext rune. We checked path existence exactly, without pruning paths by English score. For the reversed-key branch, we generated the full source-length stream before reversing it.\n\n## What happened\n\n| Longest possible prefix | Configurations |\n| --- | ---: |\n| 1 rune | 890,320 |\n| 2 runes | 469,639 |\n| 3 runes | 24,653 |\n| 4 runes | 950 |\n| 5 runes | 37 |\n| 6 runes | 1 |\n| 12 runes | **0** |\n\nThese counts give the *best* prefix across the 55 pages and nine cribs for each configuration. A one-rune match is expected often because there are many possible page-and-crib pairs; the result that matters for this bounded claim is **zero complete 12-rune openings**. This is an exact search over the declared grid, not a statistical estimate of every possible key.\n\nThe source B-04 campaign scored candidate plaintext as English on the first 120 runes of LP2-00. Our check changes both the target and the test: it searches page starts across LP2 for **nine specific openings**. Therefore the finding should be read as: *these source-defined zero-offset keystreams do not produce those openings under this structural key-skip rule*. It does not establish that LP2 begins with one of those readings, nor that the entire keystream family has been eliminated. Other plaintexts, offsets, word resets, key-construction changes, and different transcriptions remain outside this record.\n\n## Reproduce and inspect\n\nThe bundled seed manifest records the exact ordered source seed bytes. From the repository root, run:\n\n```bash\npython experiments/records/b04-source-seeds-opening-cribs/run.py\npython experiments/records/b04-source-seeds-opening-cribs/check.py\npython experiments/records/b04-source-seeds-opening-cribs/plot.py --check\n```\n\n`run.py` emits aggregate counts and a SHA-256 digest of every configuration's best prefix and full-match list; the per-configuration grid is not presented as 1.38 million separate experiments. The independent checker compares the dynamic program with exhaustive skip-path enumeration on 400 random cases and 100 constructed valid skip paths, then verifies planted no-skip and forced-skip positives. The source code copied here retains its MIT license. The experiment uses the site's current page transcription and published reading CSVs; changing those inputs requires a new run.\n",
+  "article_path": "experiments/records/b04-source-seeds-opening-cribs/article.md",
+  "script_sha256": "1da05405d2b18eec3908d4561f2d6182bf876c20986c8d478a88afabef9c41ef",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}

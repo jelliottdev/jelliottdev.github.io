@@ -1,0 +1,182 @@
+{
+  "id": "typed-seed-random-opening-cribs",
+  "status": "published",
+  "title": "Typed seeds and Python Random streams at LP2 page openings",
+  "question": "Can the pinned typed-seed Python Random streams produce one of nine fixed known-reading openings at an LP2 page start under the source's F-rune interruption choices?",
+  "reader_question": "Were words, dates and numbers tried as Python random seeds?",
+  "summary": "The pinned source's 15,408 typed-seed PRNG configurations were checked across four F-rune masks, 55 nonempty LP2-00–55 page starts and nine fixed 12-rune openings. None matched all 12 runes.",
+  "finding": "Zero of 61,632 source configuration-and-mask paths produces a complete fixed opening; the longest prefix is five runes. This is a new opening-crib check, separate from the source's LP2-00 English-score result.",
+  "limitations": "This assumes one of nine known-reading openings appears at one of the included page starts. It uses CPython 3.12 seed behavior, source-specified stream modes and first-two-F masks at zero key offset; it does not rule out other seeds, plaintexts or interruption rules.",
+  "next_steps": "Only extend this grid with a source-motivated new seed, offset or plaintext crib and keep its scope explicit.",
+  "outcome": "not-supported",
+  "tags": [
+    "typed seeds",
+    "Python Random",
+    "PRNG",
+    "interrupter",
+    "fixed crib",
+    "source-derived batch"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/typed-seed-random-opening-cribs/source/string_seeds.py"
+    ],
+    "representation": "Current GP29 transcription, first 12 decoded runes from each nonempty LP2-00–55 page, compared to nine fixed 12-rune published reading openings.",
+    "procedure": "Execute the pinned source's seed literals, date loop and six Python Random stream modes; apply two decode signs and each of four source-defined first-two-F removal masks; compare fixed openings with strict no-skip key alignment.",
+    "parameters": "1,284 typed seed entries × six modes × two signs = 15,408 source configs; four F masks each = 61,632 paths. Key length 260, zero offset; 55 page starts and nine 12-rune cribs.",
+    "exclusions": "No Python 2 string seed implementation, source English scorer, reverse key stream, key-skip filter, nonzero offsets, other pages, other cribs or arbitrary new seeds."
+  },
+  "review": {
+    "reviewer": "Independent stream-mode samples and four-mask planted plaintext controls",
+    "retested_on": "2026-10-23",
+    "kind": "computational source-derived candidate batch",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/typed-seed-random-opening-cribs/run.py && python experiments/records/typed-seed-random-opening-cribs/check.py && python experiments/records/typed-seed-random-opening-cribs/plot.py --check",
+    "environment": "CPython 3.12 standard library; pinned MIT-licensed source program. No network or English-scoring model required.",
+    "script": "experiments/records/typed-seed-random-opening-cribs/run.py",
+    "script_sha256": "d76c8fddbdf78a240f0485aee9d2255cdad4a8d2cdd7f51ff08938dd0fac123a",
+    "inputs": [
+      {
+        "path": "experiments/engines/fixed_crib_skip.py",
+        "sha256": "70f1f80324b41c0307b134c119fc5489c31d2d09f7434c3c1b24a34426a65caa"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "experiments/suites/feedback-opening-census/manifest.json",
+        "sha256": "fcfeaf271d76c37f2c5eca5a74d8949496e7638387fb80d69c50c6931e6db225"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/run.py",
+        "sha256": "d76c8fddbdf78a240f0485aee9d2255cdad4a8d2cdd7f51ff08938dd0fac123a"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/check.py",
+        "sha256": "3df194d3101043701a75c7b7b1f65fde1e5d7ebba1e6349da37ce7c6947a5319"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/plot.py",
+        "sha256": "2d8b1210a0394f712cc3151cc06e978e27fa2f3562d7001e02a275006d916221"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/article.md",
+        "sha256": "c0db6683bddd2e3fab17c7ccc81115d1bf67b74745f03e8e3eea964de73174df"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/page-inputs.json",
+        "sha256": "00233244627f0095c7029d41223b492f4f89db479dbf6b7dab2cc8c3932272d4"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/source/string_seeds.py",
+        "sha256": "e0af51c3fbdf7e10392823df4a3a4c32e863cda8428a35896881428dd92a1c39"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/source/string_seed_results.json",
+        "sha256": "8d144364967f868d082bc8ab029f7f955de96afde8cdcde337a37193ccad27c2"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/results.json",
+        "sha256": "e82b640786fe65b2eb9bedd486409de43b8c23d128d0bfb6e031fd0c19534ee1"
+      },
+      {
+        "path": "experiments/records/typed-seed-random-opening-cribs/typed-seed-opening-funnel.svg",
+        "sha256": "f5a542ba36e8e1c0be5575d3a46b1bfb8018271938c8dbb75dfcd7321808d466"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/typed-seed-random-opening-cribs/typed-seed-opening-funnel.svg",
+      "caption": "Count of source seed-and-mask paths that can match at least each number of fixed opening runes. Bars use a log scale; labels show exact counts."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned typed-seed source program",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/seed_sweep/string_seeds.py"
+    },
+    {
+      "label": "Pinned source result receipt",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/seed_sweep/string_seed_results.json"
+    }
+  ],
+  "related": [
+    "public-prng-seed-sweep",
+    "b04-source-seeds-opening-cribs"
+  ],
+  "article": "# Typed seeds and Python Random streams\n\n**Finding.** A published seed sweep tries words, byte strings, integers and dates as Python `random.Random` seeds. We generated its **15,408 seed–stream–sign configurations** and checked four source-defined F-rune interrupter choices for each. Across **55 nonempty LP2-00–55 page starts** and nine fixed, 12-rune known-reading openings, **none reaches 12 runes**. The longest match is five.\n\n![The typed-seed candidates rapidly thin from first-rune matches to no complete 12-rune opening.](experiments/records/typed-seed-random-opening-cribs/typed-seed-opening-funnel.svg)\n\n## The bounded question\n\nThe [pinned source program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/seed_sweep/string_seeds.py) specifies **1,284 typed seed values**: 68 words as strings and as bytes, 1,145 integers including the source's date grid, and three floats. Each feeds six Python Random output modes: `randrange`, `randint`, `random`, `choice`, `shuffle`, and five-bit `getrandbits`. The source tests two decode signs, making 15,408 configurations. Its decoder also tries four masks: keep or remove each of the first two F runes before the key advances.\n\nWe held the nine published 12-rune reading openings fixed and tested each against the first 12 output runes of every included page under those same interrupter choices. We used the shared exact-prefix checker with **no key skips**; the F-mask operation is the source rule here. This is a new fixed-opening test across pages, distinct from the source's original English-score test on LP2-00. It also differs from the site's separate seven-generator public PRNG sweep.\n\n| Longest opening prefix | Mask paths |\n| --- | ---: |\n| 1 rune | 39,208 |\n| 2 runes | 21,388 |\n| 3 runes | 1,000 |\n| 4 runes | 30 |\n| 5 runes | 6 |\n| 12 runes | **0** |\n\nFour mask paths per configuration give **61,632 paths**. Many paths and several Python Random output modes can coincide; those paths are not independent discoveries. The test excludes these *specific* source streams as producers of the *nine chosen openings* at the *included page starts*. It does not assume the unsolved pages must begin with those readings, and it does not rule out other seeds, plaintexts, offsets or interruption rules.\n\n## Repeat it\n\n```bash\npython experiments/records/typed-seed-random-opening-cribs/run.py\npython experiments/records/typed-seed-random-opening-cribs/check.py\npython experiments/records/typed-seed-random-opening-cribs/plot.py --check\n```\n\nThe runner executes only the seed literals, date loop and stream function extracted from the pinned MIT-licensed source file; it does not need the source's unavailable English-scoring model. `check.py` reconciles the source's 15,408-configuration count, compares each stream mode with an independently written Python Random sample, and verifies plaintext reconstruction under all four F masks and both signs. Python **3.12** seed behavior is part of this result; the copied source code does not execute a Python 2 string-seeding implementation.\n",
+  "article_path": "experiments/records/typed-seed-random-opening-cribs/article.md",
+  "script_sha256": "d76c8fddbdf78a240f0485aee9d2255cdad4a8d2cdd7f51ff08938dd0fac123a",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}

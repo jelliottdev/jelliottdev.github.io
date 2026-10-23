@@ -5,6 +5,20 @@
   "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
   "entries": [
     {
+      "source_id": "R16-KDF-SEED-STRETCH",
+      "gate": "replayed-with-archived-control-file",
+      "expected": "analysis/round15/KDF/sweep.py launches round12/D3/pc_derivedkey.py and then reads round12/D3/results.json for K1.",
+      "observed": "The D3 program prints its control measurements but does not write results.json; the sweep also does not check its subprocess return code. K1 therefore reads the pre-existing pinned JSON. A fresh minimal checkout without that file fails at K1 even though the child program exits zero.",
+      "source_run_scope": "Both K1 and K2 positive controls passed; the complete 534 x 27 x 3 x 2 x 2 x 2 x 2 Stage A LP2 grid ran on 2026-10-23 and matched the pinned winner and top-50 candidate set, allowing for a tie-order swap at ranks 46–47.",
+      "reproduction_state": "The public runner separately executes D3, requires a zero exit status, compares six live control measurements and PASS to the pinned D3 JSON, then places that pinned file where the unmodified sweep expects it. The check records the exact source quirk without treating stale JSON alone as a passed control.",
+      "record_id": "public-kdf-seed-stretch",
+      "source_paths": [
+        "liber-primus/analysis/round12/D3/pc_derivedkey.py",
+        "liber-primus/analysis/round12/D3/results.json",
+        "liber-primus/analysis/round15/KDF/sweep.py"
+      ]
+    },
+    {
       "source_id": "R26-B-KEYTEXT-RUNNINGKEY-SKIPAWARE",
       "gate": "missing-input",
       "expected": "analysis/round12/C2/texts/*.txt, described as 33 curated keytexts in round26/B/PREREG.md and read by round26/B/control.py and sweep.py",

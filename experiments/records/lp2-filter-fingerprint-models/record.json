@@ -1,0 +1,193 @@
+{
+  "id": "lp2-filter-fingerprint-models",
+  "status": "published",
+  "title": "Does the missing-doublet pattern resemble a lag-one filter?",
+  "question": "Does the unsolved LP2 stream distinguish a continuous lag-one repeat filter from tested recency, rebalancing and line-reset controls calibrated to the same repeat rate?",
+  "reader_question": "Was the repeat-avoidance rule applied to the whole rune stream?",
+  "summary": "The 86 residual adjacent repeats match a continuous lag-one-only filter better than the tested recency/rebalancing or line-reset controls. The comparison cannot distinguish computer code from a person applying the identical rule to otherwise machine-like symbols.",
+  "finding": "Independent input measurements reproduce the 86/12,955 lag-one repeat rate, 3.488% lag-2–8 equality, 0.936 window-58 chi-square per degree of freedom, and 4/86 line-crossing repeats. In the source's 200-replicate matched-control ladder, models with extra recent-symbol avoidance or window rebalancing are distinguishable and rejected; the line-reset model is also distinguishable and rejected. The no-extra-effect hand rung has combined discrimination power 0.110 and remains unresolved.",
+  "limitations": "This is a bounded comparison among specified generators, not proof of a literal machine implementation or entropy source. Controls are calibrated to the observed adjacent-repeat rate. The model ladder does not cover every human strategy; a continuous hand-applied lag-one rule on machine-like symbols is observationally equivalent here. The source counts 648 occupied slash/page line ordinals, whereas the text contains 594 nonempty physical lines.",
+  "next_steps": "A proposed alternative filter should generate streams with the same lag-one repeat rate and declare its lag profile, window balance, line-boundary behavior and power before comparing with LP2.",
+  "outcome": "supported",
+  "tags": [
+    "LP2",
+    "doublets",
+    "anti-repeat filter",
+    "matched controls",
+    "lag profile",
+    "window balance",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/lp2-filter-fingerprint-models/source/krisyotam_runes.txt"
+    ],
+    "representation": "First 55 nonempty percentage-delimited LP2 segments of pinned UTF-8 rune transcription, concatenated in page order; slash and page markers retained for line-scope comparisons. 12,956 runes, 55 pages, 594 nonempty physical lines, 648 occupied source line ordinals.",
+    "procedure": "Independently parse raw runes and reproduce lag equalities, repeat gaps, window chi-square, line-crossing doublets and page dispersion. Freshly run the pinned source fingerprint/controls script with 200 replicates, all controls calibrated to the manuscript lag-one repeat rate, and verify its gate, powered model ladder and scope test.",
+    "parameters": "29-rune alphabet; lags 1–8; windows 29/58/116/290; 200 source replicates per modeled family; six hand-model rungs plus uniform, continuous filter and line-reset controls; acceptance interval central 95%; minimum discriminator power 0.80.",
+    "exclusions": "Other transcription layers, alternative human or machine generators not in the source ladder, an exact cipher/key, the physical identity of the author or pad entropy source."
+  },
+  "review": {
+    "reviewer": "Independent raw-transcript count, lag/gap/window/line computation and fixed-seed source-control replay",
+    "retested_on": "2026-10-23",
+    "kind": "bounded source-method replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-filter-fingerprint-models/run.py && python experiments/records/lp2-filter-fingerprint-models/check.py && python experiments/records/lp2-filter-fingerprint-models/plot.py",
+    "environment": "Python 3; bundled source transcript and source receipts; NumPy required for original 200-replicate replay.",
+    "script": "experiments/records/lp2-filter-fingerprint-models/run.py",
+    "script_sha256": "12e445a49b675ba072070f1fcc863252c08d32ed1fcaca322e4861ef548e4093",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/run.py",
+        "sha256": "12e445a49b675ba072070f1fcc863252c08d32ed1fcaca322e4861ef548e4093"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/check.py",
+        "sha256": "00f0b2fef8c3bfad8912eab4376a608294198c7056a456919f06300ffaa0942b"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/plot.py",
+        "sha256": "a93aff2c0ca00b554abf45ed0d101aea01f71a1dfedad9182af9da2df8816b63"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/original_controls.py",
+        "sha256": "aca13f90ca04356c78bc9b74e0ae6542b4612af28c6c776992292eb969be29ad"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/original_fingerprint.py",
+        "sha256": "98ba3bbc24858181d5ffb1f32427b0747231da6024704ff2cf0e0b1b661718b2"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/original_real_measure.json",
+        "sha256": "1bed1745a47cbc046a54cd2b5c61f18cef22cbb15df582c93b0c9718c94254c3"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/original_results.json",
+        "sha256": "9e9af73b288e0e8045056c1c6a4d49f7d23910b8c0f4b2bc2555582c346d07ef"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/original_summarize.py",
+        "sha256": "d0b20298605a7da307f37659675011ef11375d8033693a111a449d1f6bc78420"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/PREREG-P4.md",
+        "sha256": "27c6f79dc07b207bf14c4182d15b806a9c5fb04d74f8f795e3c161a4b47500d7"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/source/RESULTS.md",
+        "sha256": "98e890e0d045b6e2f8fe012ed810d7a2d519f9d2f7ff7b8f73766bf690daa284"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/results.json",
+        "sha256": "7b481501f01d1ac96fbfe3b9b8bc86c58f7ecd01ba9b0c7538c72bade5e66c88"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/replay-source.json",
+        "sha256": "1babceb9739377ba778df02683d1798df57c609e00f61fb9b48b1b8833dacd21"
+      },
+      {
+        "path": "experiments/records/lp2-filter-fingerprint-models/filter-models.svg",
+        "sha256": "353416808e2604deefbe2116b0480c2de9f985609ebf2c08ab5c0ebfc37aaf28"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-filter-fingerprint-models/filter-models.svg",
+      "caption": "The manuscript aligns with the matched continuous lag-one control on window balance and line-crossing doublets."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned D-01 pre-registration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round17/P4_filter/PREREG-P4.md"
+    },
+    {
+      "label": "Source fingerprint code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round17/P4_filter/fingerprint.py"
+    },
+    {
+      "label": "Source matched-control code",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round17/P4_filter/controls.py"
+    },
+    {
+      "label": "Source reported results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round17/P4_filter/RESULTS.md"
+    }
+  ],
+  "related": [
+    "doublet-event-lags",
+    "block-boundary-doublets",
+    "doublet-context"
+  ],
+  "pages_note": "55 nonempty transcription pages: LP2-00–49 and LP2-51–55. The blank LP2-50 segment contributes no runes."
+}

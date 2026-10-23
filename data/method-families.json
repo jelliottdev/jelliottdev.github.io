@@ -53,7 +53,8 @@
       "related": [
         "lp2-known-vigenere-keys",
         "alberti-branch-arithmetic",
-        "public-wordlist-vigenere"
+        "public-wordlist-vigenere",
+        "quagmirror-variant-continuations"
       ],
       "description": "Change the substitution according to position in a repeated key."
     },
@@ -152,7 +153,13 @@
         "semantic-seed-screen-gate-audit",
         "grid-payload-prf-seed-corner",
         "grid-payload-prf-contested-masks",
-        "public-prng-seed-sweep"
+        "public-prng-seed-sweep",
+        "grid-payload-prf-source-grid",
+        "public-kdf-seed-stretch",
+        "py27-reducer-sweep-source-audit",
+        "b04-source-seeds-opening-cribs",
+        "r26-derived-generators-opening-cribs",
+        "typed-seed-random-opening-cribs"
       ],
       "description": "Generate a stream from a bounded seed space with explicit output conversion and alignment."
     },
@@ -186,7 +193,9 @@
       "related": [
         "decoder-skip-controls",
         "im-near-f-markers",
-        "f-delete-lag13"
+        "f-delete-lag13",
+        "r26-derived-generators-opening-cribs",
+        "typed-seed-random-opening-cribs"
       ],
       "description": "Specify when key or feedback state pauses, advances or restarts."
     },
@@ -276,7 +285,8 @@
         "positional extraction"
       ],
       "related": [
-        "h03-ps-layout-replay"
+        "h03-ps-layout-replay",
+        "line-initial-layout-control"
       ],
       "description": "Select positions using a mask or indexing rule."
     },
@@ -297,7 +307,9 @@
         "word initials",
         "line initials"
       ],
-      "related": [],
+      "related": [
+        "line-initial-layout-control"
+      ],
       "description": "Select initial, final or regularly indexed symbols from defined units."
     },
     {
@@ -613,7 +625,10 @@
         "seed-crib-controls",
         "lp2-39-header-cribs",
         "word-sum-corpus-control",
-        "crib-difference-stream-search"
+        "crib-difference-stream-search",
+        "b04-source-seeds-opening-cribs",
+        "r26-derived-generators-opening-cribs",
+        "typed-seed-random-opening-cribs"
       ],
       "description": "Use a declared plaintext hypothesis to constrain a defined cipher model."
     },
@@ -733,7 +748,8 @@
         "short-window-lag13",
         "dju-bei-cross-page",
         "doublet-section-residues",
-        "repeated-long-ngrams"
+        "repeated-long-ngrams",
+        "lp2-filter-fingerprint-models"
       ],
       "description": "Test structural constraints without automatically converting them into a cipher identification."
     },
@@ -752,7 +768,8 @@
         "literal-prime-quadratic",
         "word-reset-repetition",
         "literal-prime-affine-pages",
-        "haplography-diagonal-bound"
+        "haplography-diagonal-bound",
+        "source-independent-key-floor-audit"
       ],
       "description": "State the assumptions under which an operation preserves or forbids an observed property."
     },
@@ -778,7 +795,10 @@
         "doublet-event-shuffle",
         "mobius-zero-mask-known-page",
         "word-sum-corpus-control",
-        "word-internal-affine-all-lags"
+        "word-internal-affine-all-lags",
+        "line-initial-layout-control",
+        "lp2-filter-fingerprint-models",
+        "py27-reducer-sweep-source-audit"
       ],
       "description": "Repeat the whole selection procedure on controls, not just the final attractive candidate."
     },
@@ -1228,6 +1248,16 @@
     "public-multihistory-feedback": "replay",
     "public-lp2-as-pad": "replay",
     "haplography-diagonal-bound": "method",
-    "rune-matched-scorer-calibration": "control"
+    "rune-matched-scorer-calibration": "control",
+    "grid-payload-prf-source-grid": "replay",
+    "public-kdf-seed-stretch": "replay",
+    "source-independent-key-floor-audit": "audit",
+    "line-initial-layout-control": "replay",
+    "lp2-filter-fingerprint-models": "measurement",
+    "py27-reducer-sweep-source-audit": "audit",
+    "b04-source-seeds-opening-cribs": "method",
+    "r26-derived-generators-opening-cribs": "method",
+    "typed-seed-random-opening-cribs": "method",
+    "quagmirror-variant-continuations": "replay"
   }
 }

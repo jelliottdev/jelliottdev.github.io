@@ -1,0 +1,324 @@
+{
+  "id": "grid-payload-prf-source-grid",
+  "status": "published",
+  "title": "Can the 256-byte grid generate a reading key?",
+  "question": "Do any of the published B-05 payload-derived keystream searches pass the fixed English-score screen?",
+  "reader_question": "Could the hidden number grid generate the key for Liber Primus?",
+  "summary": "We reproduced the source's complete 70,680-case first-400-rune screen across the main grid, constant shifts, and byte variants. None passed its fixed English-score requirement.",
+  "finding": "The best main-grid score was −6.770531, the best constant-shift score −6.889604, and the best one-byte-variant score −6.744875; the required score was at least −5.5. The 180 rigid corners peaked at −7.096043. Each of the top five main-grid settings scored lower over the full unsolved stream than on the first 400 runes. All five selected full-stream continuations also stayed below the bar.",
+  "limitations": "This bounds the published first-400-rune English-model screen and its specified representations, generators, byte values, directions and offsets. It does not exclude other encodings or languages, and the shuffled-text maximum is not adjusted for selecting the best of 70,680 cases.",
+  "next_steps": "Assess any new payload reading or key generator with a fixed control and score rule before widening the search.",
+  "outcome": "not-supported",
+  "tags": [
+    "256-byte payload",
+    "number grid",
+    "derived keystream",
+    "PRF",
+    "skip-aware beam",
+    "source replay",
+    "B-05"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/grid-payload-prf-seed-corner/source-manifest.json"
+    ],
+    "representation": "Key source: the LP2-49–51 numeric grid. All 70,680 opening screens use the first 400 source runes (LP2-00 plus 138 runes of LP2-01). Five selected settings also decode the concatenated 12,956-rune unsolved stream; blank LP2-50 contributes no target runes.",
+    "procedure": "Replay the published B-05 Part 1 main grid, Part 1b constant shifts, Part 2a two-witness masks, and Part 2b one-byte variants with the source skip-aware beam and English score. Preserve all configurations; reuse scores only for identical effective decoder inputs. Check pinned source controls and full-stream follow-ups separately.",
+    "parameters": "70,680 source head-screen calls: 40,320 main-grid, 3,480 constant-shift, 3,840 two-witness-mask and 23,040 one-byte-variant. First 400 runes; beam width 120; at most three key skips; fixed English score ≥ −5.5.",
+    "exclusions": "Other byte readings, generators, transformations, languages, page ranges and key-advance rules are not tested. Passing the screen would be only a candidate, not a verified decryption."
+  },
+  "review": {
+    "reviewer": "Pinned source replay, all-generator planted controls and independent grid/overlap checker",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-payload-prf-source-grid/dedup_engine.py --run --workers 4 && python experiments/records/grid-payload-prf-source-grid/check.py && python experiments/records/grid-payload-prf-source-grid/followup.py --check && python experiments/records/grid-payload-prf-source-grid/make_figure.py --check",
+    "environment": "Python 3 with cryptography; pinned MIT-licensed source bundled with the related pilot record. The 70,680-case head screen took about 20 minutes with four workers on the test host; checkpoint file is internal and can be resumed.",
+    "script": "experiments/records/grid-payload-prf-source-grid/dedup_engine.py",
+    "script_sha256": "35f5090f5e4da39a29424c75f21b193f4187d618c1d8d3c60574e5b3939e1432",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/dedup_engine.py",
+        "sha256": "35f5090f5e4da39a29424c75f21b193f4187d618c1d8d3c60574e5b3939e1432"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/check.py",
+        "sha256": "3f2a71c502abaccf185e15d720e1a7a37714c6cea2d064bd5122eac6bad0a392"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/followup.py",
+        "sha256": "f7fdc51ab48b701d554712a35706a051eadf212b4a5790e72ddf074449a4380a"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/make_figure.py",
+        "sha256": "a74ab5be9239a7d1ea701aadd22e7be93da27b40d38149a62f56dea3d7b808b4"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/plan.json",
+        "sha256": "204f4ce0c67957f04b74042651959f4bafce3a8c1e346f72e86a99ef1d6016c7"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source-manifest.json",
+        "sha256": "922f257b3d03b538969311345cf552f456a49ffb65ef760a3cb2533429a65b43"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/LICENSE",
+        "sha256": "da00a2f25a95974e6ba5835ff9f5b99a3ea56b02b68c663b0944ff6420890d95"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/round13/B05/sweep.py",
+        "sha256": "e578c5e74c53fb86dfe704d02a34ee76fc76682589445779b93833fabaf6606a"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/round13/B05/prf.py",
+        "sha256": "b7237b35810ca4f1021e92d8793c7c99a734eee25270fb336ee0d36086bd360f"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/analysis/round13/B05/PREREG.md",
+        "sha256": "3a1981b9a664826927f1640ea2c6845a6539385821d344fef34dcc2257814614"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-contested-masks/results.json",
+        "sha256": "e2ef94fec780583586882226fecb2115585a10484c3ef4b19cb1838761f61516"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-contested-masks/cases.json",
+        "sha256": "f41fb7693ea11f642a47e0a91acc784082fc37ac00025735a25fa3cd4758c306"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-contested-masks/key-equivalence.json",
+        "sha256": "51d156ae052a96824e9103ef16f9649c07794b747d4daae282363e8f97d6f7de"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-seed-corner/results.json",
+        "sha256": "5ec6599922751b9c6492cd2bf5d5f2d3861a8b4fa9ea3207be1555620218adf9"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/results.json",
+        "sha256": "b1de7e58058d9d9d9ea89bac4abbd8bd714887d7f3cc3a818d1b3e6d13cc6e6b"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/cases.jsonl",
+        "sha256": "2c7479a42c7c651135a210a3ec806db17e7acdcdb057cee09584eb2276d20c6c"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/followup.json",
+        "sha256": "6672a22a368d560698f627870df6332a405faf2f7dd6ed209506877b1cd17165"
+      },
+      {
+        "path": "experiments/records/grid-payload-prf-source-grid/result-score.svg",
+        "sha256": "82d830db7a70fc47ba390805ea638576c4835e70c69a3b09e81b64f03daa9166"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/grid-payload-prf-source-grid/result-score.svg",
+      "caption": "Best score from each B-05 source search remains below the fixed English threshold."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned B-05 preregistration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B05/PREREG.md"
+    },
+    {
+      "label": "Pinned B-05 implementation",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B05/sweep.py"
+    },
+    {
+      "label": "Pinned generator definitions",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round13/B05/prf.py"
+    }
+  ],
+  "related": [
+    "grid-payload-prf-seed-corner",
+    "grid-payload-prf-contested-masks",
+    "decoder-skip-controls",
+    "grid-direct-bytes"
+  ],
+  "family": {
+    "id": "grid-payload-derived-keys",
+    "title": "Keys derived from the number-grid payload",
+    "question": "Does a fixed expansion of the grid payload yield a readable rune stream?",
+    "baseline": "grid-payload-prf-seed-corner"
+  },
+  "variant": {
+    "label": "Complete B-05 source grid",
+    "changes": [
+      {
+        "field": "pages",
+        "before": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51"
+        ],
+        "after": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-50",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "reason": "Complete the published opening-screen grids and separately follow five selected settings across the entire unsolved rune stream."
+      },
+      {
+        "field": "representation",
+        "before": "Key source: two 256-byte readings of the grid on LP2-49–51. Decode target: first 400 runes of the pinned stream, covering LP2-00 and the opening 138 runes of LP2-01; no other rune pages are decoded.",
+        "after": "Key source: the LP2-49–51 numeric grid. All 70,680 opening screens use the first 400 source runes (LP2-00 plus 138 runes of LP2-01). Five selected settings also decode the concatenated 12,956-rune unsolved stream; blank LP2-50 contributes no target runes.",
+        "reason": "Complete the published opening-screen grids and separately follow five selected settings across the entire unsolved rune stream."
+      },
+      {
+        "field": "procedure",
+        "before": "Run source planted controls; decode the fixed 32 keys; compare source English score against its declared threshold and 200 shuffled-head controls.",
+        "after": "Replay the published B-05 Part 1 main grid, Part 1b constant shifts, Part 2a two-witness masks, and Part 2b one-byte variants with the source skip-aware beam and English score. Preserve all configurations; reuse scores only for identical effective decoder inputs. Check pinned source controls and full-stream follow-ups separately.",
+        "reason": "Complete the published opening-screen grids and separately follow five selected settings across the entire unsolved rune stream."
+      },
+      {
+        "field": "parameters",
+        "before": "Two raw 256-byte payloads × four PRFs × two reductions × two signs; beam width 120, maximum three key skips, offset 0, forward, no Atbash.",
+        "after": "70,680 source head-screen calls: 40,320 main-grid, 3,480 constant-shift, 3,840 two-witness-mask and 23,040 one-byte-variant. First 400 runes; beam width 120; at most three key skips; fixed English score ≥ −5.5.",
+        "reason": "Complete the published opening-screen grids and separately follow five selected settings across the entire unsolved rune stream."
+      },
+      {
+        "field": "exclusions",
+        "before": "No full-page decode or replay of the full B-05 sweep; no transformed payloads, further PRFs, reversed/Atbash keys, nonzero offsets, contested-byte variants or non-English scores.",
+        "after": "Other byte readings, generators, transformations, languages, page ranges and key-advance rules are not tested. Passing the screen would be only a candidate, not a verified decryption.",
+        "reason": "Complete the published opening-screen grids and separately follow five selected settings across the entire unsolved rune stream."
+      }
+    ]
+  },
+  "pages_note": "All settings were screened on the opening 400 runes; only five settings were followed through the full unsolved stream. LP2-49–51 also supply the seed bytes.",
+  "bounds_note": "70,680 opening screens, 180 rigid opening checks, and five full-stream continuations.",
+  "article": "## Finding\n\nThe published B-05 test asks whether the hidden 256-byte grid can generate a key for the unsolved runes. We replayed its remaining fixed searches: **40,320 main-grid cases**, **3,480 constant-shift cases**, and **23,040 one-byte-variant cases**. None reached the source's required English score of **−5.5**. The strongest scores by part are shown below; a higher score is better.\n\n| Source search | Best score | Passed |\n| --- | ---: | ---: |\n| Main grid | −6.770531 | 0 |\n| Constant shifts | −6.889604 | 0 |\n| One-byte variants | −6.744875 | 0 |\n\n![Best scores from the three source searches beside the fixed English threshold.](experiments/records/grid-payload-prf-source-grid/result-score.svg)\n\nThe [separate two-witness test](experiments/records/grid-payload-prf-contested-masks/article.md) completed the source's other **3,840** head-screen calls. Together, these records cover all **70,680 predeclared B-05 head-screen calls**, with the exact source input and scoring rule.\n\nWe also replayed the source's two follow-ups. The best of **180 rigid-decoder corners** scored **−7.096043**. The five strongest main-grid settings on the first 400 runes scored **−6.771 to −6.863** there; over the full unsolved rune stream, each fell to **−7.223 to −7.333**. Thus no head-screen survivor strengthened when given more text. The [individual follow-up scores](experiments/records/grid-payload-prf-source-grid/followup.json) are saved alongside the grid.\n\n## How the replay avoids duplicate work\n\nThe source often reaches the same decoder input through different settings. For example, a short-key generator ignores grid bytes beyond its key length; a zero constant shift repeats an unshifted case. We retained **every original configuration and score** but decoded each distinct effective key once. There were **59,948** distinct key inputs across the 70,680 source calls; **2,596** had already been scored in the two-witness test.\n\nThis sharing is exact for the first 400 runes. With at most three key skips between runes, the source beam cannot read beyond the first **1,597** key values after its offset. Reversing, mirroring, shifting and applying the sign before comparing those values identifies identical decoder inputs. All saved two-witness scores agree within each duplicate group. We also compared the transformed-key decoder with direct source calls covering reverse keys, Atbash, both signs, offset 3301, constant shifts and one-byte variants.\n\nThe four source planted controls passed, as did [30 extended generator/reduction controls](experiments/records/grid-payload-prf-contested-masks/control-all.json). This result is limited to the source's English model, first 400 runes, listed payload readings and key operations. Its shuffled-text maximum is a reference, **not** a chance threshold adjusted for choosing the best of tens of thousands of cases; the fixed −5.5 requirement decides the recorded hits.\n\n## Reproduce\n\nThe [complete configuration scores](experiments/records/grid-payload-prf-source-grid/cases.jsonl), [summary](experiments/records/grid-payload-prf-source-grid/results.json), and [follow-ups](experiments/records/grid-payload-prf-source-grid/followup.json) are saved. From the repository root, Python 3 with `cryptography` runs the replay. Four worker processes use an internal checkpoint outside the published site:\n\n```text\npython experiments/records/grid-payload-prf-source-grid/dedup_engine.py --run --workers 4\npython experiments/records/grid-payload-prf-source-grid/check.py\npython experiments/records/grid-payload-prf-source-grid/followup.py --check\n```\n\nThe engine first proves parity with the completed source cases, then resumes only missing key scores. [Pinned source files](experiments/records/grid-payload-prf-seed-corner/source-manifest.json) and the MIT license are included in the reproduction bundle.\n",
+  "article_path": "experiments/records/grid-payload-prf-source-grid/article.md",
+  "script_sha256": "35f5090f5e4da39a29424c75f21b193f4187d618c1d8d3c60574e5b3939e1432",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

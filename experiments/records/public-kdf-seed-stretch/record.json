@@ -1,0 +1,230 @@
+{
+  "id": "public-kdf-seed-stretch",
+  "status": "published",
+  "title": "Password-derived key streams against the LP2 opening",
+  "question": "Do 534 source-defined secrets passed through 27 key-derivation configurations yield an English reading of the first 120 unsolved runes?",
+  "reader_question": "Could a short password be stretched into Liber Primus's key?",
+  "summary": "Replays the pinned Round 16 KDF screen with both positive gates and the full 692,064-case LP2 Stage A grid.",
+  "finding": "The planted PBKDF2 control ranked first at −4.186, but no LP2 candidate cleared the −5.500 advancement bar. The best LP2 score was −6.259 across 692,064 completed decodes.",
+  "limitations": "Only the first 120 unsolved runes and offset zero were tested. The source's 200 shuffled controls were scored with one fixed key, rather than repeating the whole search; they do not calibrate the winning score's selection probability. Other secrets, salts, recipes, languages and page-dependent keys remain untested.",
+  "next_steps": "A new proposal should name its secret bytes, derivation recipe, salt, byte-to-rune reduction, offset, sign and boundary rule before scoring a longer held-out LP2 span.",
+  "outcome": "not-supported",
+  "tags": [
+    "key derivation",
+    "PBKDF2",
+    "scrypt",
+    "running key",
+    "seed dictionary",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00"
+    ],
+    "artifacts": [
+      "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/krisyotam_runes.txt",
+      "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/keys/thematic.txt",
+      "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/pp49_51/canon_256.bin"
+    ],
+    "representation": "The first 120 rune indices of the pinned unsolved LP2 stream. Source-defined seed dictionary entries are bytes; KDF output is expanded with SHA-256 counter mode and reduced modulo 29 or by the source rejection rule.",
+    "procedure": "Run the pinned K1 expander control and the K2 planted-PBKDF2 control, then sweep the complete Stage A grid against LP2 with skip-aware beam width 400 and at most three key skips per rune.",
+    "parameters": "534 ordered secrets × 27 KDFs × 3 salts × 2 reductions × 2 signs × 2 Atbash choices × 2 key directions = 692,064 LP2 decodes. Offset zero, first 120 runes. The K2 control independently traverses the same configuration grid on a planted message.",
+    "exclusions": "Secrets outside the fixed dictionary, other KDF configurations or salts, nonzero offsets, longer page spans, different languages, page-varying construction and Stage B salt expansion."
+  },
+  "review": {
+    "reviewer": "Executable source replay with independent grid, dictionary and output checks",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-kdf-seed-stretch/run.py",
+    "environment": "Python 3 standard library; eight worker processes and a temporary source copy. Full K2 gate plus LP2 Stage A take many minutes.",
+    "script": "experiments/records/public-kdf-seed-stretch/run.py",
+    "script_sha256": "b37243c8dcb90ea7fa72ef6b7afbe4955b54e956c1f9fb31c9c2ad0220a13c9c",
+    "inputs": [
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/check.py",
+        "sha256": "a2e69b32cddbdedc806726113f3ff86bb83725002610720b3aecae35f63ffd4e"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/plot.py",
+        "sha256": "bbf820796e63061524deaf7e24b41f05a0868ac9c6c3d3ad85950491a02dd68c"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/run.py",
+        "sha256": "b37243c8dcb90ea7fa72ef6b7afbe4955b54e956c1f9fb31c9c2ad0220a13c9c"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/pp49_51/canon_256.bin",
+        "sha256": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/pp49_51/canon_256_decpref.bin",
+        "sha256": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round12/D3/original_results.json",
+        "sha256": "f4a1bf403b525eca4e1b5bd059b9f1c25b2c834a6368040df0bc93a1e22d443e"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round12/D3/pc_derivedkey.py",
+        "sha256": "a3107806e86e9eb28671360175c27e6aa14b28c453a04c9916bea9c8e288e8fd"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round12/D3/RESULTS.md",
+        "sha256": "80ebc089532a6113952477391166c4ed68906ec4b6dae03062da496edee24370"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round13/B04/seeds.py",
+        "sha256": "6921c49a2f7250633c5ac311d94cfb560251c5181051ad2f0d2aa1975d379c7a"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/kdf.py",
+        "sha256": "af53f1e4bdac90a335a8391feb35e844641dc54b2cd295cff82f3911a930ac8c"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/original_results_A.json",
+        "sha256": "e7e1b9b3053c5e4daa09feab8f3164b79acbc4fb887875f88b4bcbc27b637a14"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/original_results_gates.json",
+        "sha256": "ecc8b66c3028bd0844cf4100c7d636d6926217beddac8006d715140d9fc46008"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/original_results_summary.json",
+        "sha256": "d53acb556cfa350c91e3f08b29e5b5fc60d1692057a4f718a58640cf0c31593a"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/PREREG.md",
+        "sha256": "b4d477ee350ae1bf388fd13e0cc2e156d4566d282ad4c1ac6e7066f84e2a0614"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/sweep.py",
+        "sha256": "be7c096f167903358b53cdb81c7e749a19af2c5b03ed00c058995764b2834284"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round16/KDF/PREREG.md",
+        "sha256": "3a59e7c0f111d9e9ad765f87f13a25196b2601639b885757746f38f75c8a27ff"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round16/KDF/RESULTS.md",
+        "sha256": "373c34994ffacaea86f05b623899b142e95107c5eb0a9ceb3b129a946615f62d"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+        "sha256": "7acb899b537efdb4d0426041fcbb4a5b42d54fdda40a64e02745b3edc1f6f9c5"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/keys/armada18/cicada_koans_and_lp_sections.txt",
+        "sha256": "fd0169baa6ff302d5e0dd70d8c8f7c8adbab2a3bdae7e78788b36eef07608a4c"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt",
+        "sha256": "5c5b2dcd24b26a4b7dda3fd555bf5c3b0966bb4eb74fe39660d2b0af31d26ead"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/keys/thematic.txt",
+        "sha256": "f9db06ae01ed8437b98eeedaafe002fabab1665752b3be55c2ce5e25ba205d7f"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/k1_control_output.txt",
+        "sha256": "e47329f946f496c348b1cad64b05a4bb49ba5518bc528d2b97eed16966184f41"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/scores.svg",
+        "sha256": "816fcd349310f9e0ad4ca76597de79dc608428a1cbb934759a1f7fa2cb79bdfb"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/results_A.json",
+        "sha256": "7277ca5b1765cc1f9a33b88086e2d110307692847e0be944a8699d3cffa52aae"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/results_gates.json",
+        "sha256": "ecc8b66c3028bd0844cf4100c7d636d6926217beddac8006d715140d9fc46008"
+      },
+      {
+        "path": "experiments/records/public-kdf-seed-stretch/source/liber-primus/analysis/round15/KDF/results_summary.json",
+        "sha256": "acd7a3c149ccf0c0c7ece64091475a9398076b6aeb1b95a9b56bebc50dd98bbe"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/public-kdf-seed-stretch/scores.svg",
+      "caption": "The planted source control crosses the score requirement; the strongest LP2 candidate does not."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned KDF executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round15/KDF/sweep.py"
+    },
+    {
+      "label": "Pinned Round 16 plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/KDF/PREREG.md"
+    },
+    {
+      "label": "Pinned Round 16 results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/KDF/RESULTS.md"
+    }
+  ],
+  "related": [
+    "public-prng-seed-sweep",
+    "public-wordlist-vigenere"
+  ]
+}
