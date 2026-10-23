@@ -1,0 +1,26 @@
+{
+  "schema": "liberpedia-classical-key-schedules-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "source_keys": "experiments/records/public-wordlist-vigenere/plan.json",
+  "source_keys_sha256": "f988c9d2ec1b0040a59025253b23752721627edc081c6cc4659e6e8cb417107c",
+  "opening_vectors": "experiments/records/lp2-known-vigenere-keys/plan.json",
+  "opening_vectors_sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a",
+  "pages": "LP2-00 through LP2-55; omit runeless LP2-50 from comparisons",
+  "representation": "First 12 recognized GP29 runes per page, including headings; non-runes do not advance the key. Canonical GP order; page-local starts.",
+  "criterion": "Exact equality to each of nine predeclared 12-rune known-reading openings. Count every configuration/page/opening comparison; no English score or post-hoc crib.",
+  "arithmetic": "Subtractive Vigenere modulo 29 only; no Atbash, reversal of ciphertext, word resets, skip symbols, or added layers.",
+  "records": {
+    "rotating-folded-key-openings": {
+      "variants": ["rotate-left", "rotate-right", "fold-repeat-endpoints", "fold-skip-endpoints"],
+      "rule": "For key length k, rotate-left/right concatenates k whole-key rotations indexed q=0..k-1, forming nominal k^2 cycle. Fold-repeat-endpoints concatenates K+reverse(K); fold-skip-endpoints concatenates K+reverse(K[1:-1]). Reduce each cycle to its shortest exact period; test every phase 0..period-1. P[j]=C[j]-cycle[(j+phase) mod period] modulo 29. A named variant may duplicate another; report configuration counts and unique 12-step clocks separately."
+    },
+    "mixed-alphabet-key-openings": {
+      "variants": ["keyword-mixed-GP29"],
+      "rule": "Construct a 29-rune permutation M from first occurrences in key K followed by all unused runes in published GP order. For each ciphertext rune and key rune, look up position in M, subtract key position modulo 29, then map result through M. Test phase 0..k-1 on original K."
+    },
+    "grouped-key-advance-openings": {
+      "variants": ["group-2", "group-3", "group-4", "group-5"],
+      "rule": "For fixed group size g in 2..5, P[j]=C[j]-K[(phase+floor((j+offset)/g)) mod k] modulo 29. Test phase 0..k-1 and group boundary offset 0..g-1. No arbitrary variable group partition."
+    }
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "id": "lp2-23-red-sum-claim",
+  "status": "published",
+  "title": "LP2-23: does the red opening sum to 691?",
+  "question": "Does the archived red opening on LP2-23 share the GP sum 691 with TEST THE KNOWLEDGE?",
+  "reader_question": "Does the red text on page 23 give TEST THE KNOWLEDGE?",
+  "summary": "The stored 16-rune red opening totals 786, not 691. TEST THE KNOWLEDGE totals 691 with one TH rune and GP C for K; this does not decode the heading.",
+  "finding": "The exact archived prefix totals 786 across word sums 100,268,123 and 295. The phrase has 15 runes totaling 691; splitting its TH into two runes raises the sum to 768. Changing only archived A 97 to F 2 would make the heading 691, but no transcription correction is justified by the supplied claim.",
+  "limitations": "The original post and any alternative claimed span are absent. The image was inspected to locate the red opening, not independently re-transcribed glyph by glyph. Arithmetic depends on the stored A rune and declared GP spelling; another source or glyph adjudication would require a separate comparison. No cipher or intended wording is identified.",
+  "next_steps": "Recover the exact original proposal and rune span; adjudicate any disputed glyph from image evidence before testing a reading or operation.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-23",
+    "red heading",
+    "691",
+    "TEST THE KNOWLEDGE",
+    "prime sums",
+    "transcription sensitivity"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-23"
+    ],
+    "artifacts": [
+      "images/lp2-23.jpg"
+    ],
+    "representation": "Archived Unicode prefix before the first period, retaining 16 runes and including enlarged initial; standard GP first 29 primes; explicit K-to-C and TH spellings for the phrase.",
+    "procedure": "Recount each heading rune and word sum; encode the named phrase under one-TH and split-TH conventions; compute an explicitly hypothetical A-to-F sensitivity without correcting any source.",
+    "parameters": "One 16-rune heading; phrase encodings 15 and 16 runes; one 95-point glyph substitution sensitivity; no search or statistical significance test.",
+    "exclusions": "Other red spans, alternative source transcriptions, independent glyph adjudication, arbitrary spelling changes, a complete reading or evidence of authorial intent."
+  },
+  "review": {
+    "reviewer": "Independent prime enumeration and prefix parser with explicit integer trace",
+    "retested_on": "2026-10-23",
+    "kind": "deterministic source-claim arithmetic audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-23-red-sum-claim/run.py --check && python experiments/records/lp2-23-red-sum-claim/check.py && python experiments/records/lp2-23-red-sum-claim/plot.py --check",
+    "environment": "Python 3 standard library; original page JPEG only needed for visual source inspection.",
+    "script": "experiments/records/lp2-23-red-sum-claim/run.py",
+    "script_sha256": "4a91b55f77b13417c05a890482523a700f8580760edf071f3024fad8b042ab69",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/run.py",
+        "sha256": "4a91b55f77b13417c05a890482523a700f8580760edf071f3024fad8b042ab69"
+      },
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/check.py",
+        "sha256": "72dc444531062924547c5ac0a0da6a81727211a70b72a06b3dd7f4a2732bd3d9"
+      },
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/plot.py",
+        "sha256": "0c8a5e89aef562b27157364dd4e233d0d17f661827c220403586e6f9b874fe13"
+      },
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/plan.json",
+        "sha256": "abb1eca8c05f8d3b422d96865caef7b7f764c87454477e057af3a6f794b7e536"
+      },
+      {
+        "path": "data/index.json",
+        "sha256": "c10e910560d8e82c8209fc01eaa477671df0b20875202f601893b9ce3c6f595a"
+      },
+      {
+        "path": "text/lp2-23.txt",
+        "sha256": "ba7e3591ec2a127d2b3c29e464fb0edc63331ef01c817f5770a58353e0746692"
+      },
+      {
+        "path": "research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt",
+        "sha256": "4f386fa2084f3a2248794b3a656b2cd6aa742c3a643936ba75724c4775fbc9b6"
+      },
+      {
+        "path": "images/lp2-23.jpg",
+        "sha256": "d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/results.json",
+        "sha256": "f23de0a983f1d8737b0d135227259b21ecca552ff845e6b54c04ef2a8e19fbd8"
+      },
+      {
+        "path": "experiments/records/lp2-23-red-sum-claim/red-sums.svg",
+        "sha256": "9f2063d89d527843dfa6f6eb901716ccf4f674b7d90fdb284ba570c6f199869b"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-23-red-sum-claim/red-sums.svg",
+      "caption": "The stored heading and the two declared phrase encodings have different sums. Matching a phrase sum does not translate a heading."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Original LP2-23 page",
+      "url": "https://jelliottdev.github.io/images/lp2-23.jpg"
+    },
+    {
+      "label": "Supplied compilation, item13.3; original post not provided",
+      "url": "https://jelliottdev.github.io/research/source-archive/lp2-collected-solution-ideas-2026-10-23.txt"
+    }
+  ],
+  "related": [
+    "word-sum-corpus-control",
+    "obscura-sum-collision-control"
+  ]
+}

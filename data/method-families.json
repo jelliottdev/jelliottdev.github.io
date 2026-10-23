@@ -18,7 +18,8 @@
         "affine maps"
       ],
       "related": [
-        "lp2-alphabet-warning-prefix"
+        "lp2-alphabet-warning-prefix",
+        "mixed-alphabet-key-openings"
       ],
       "description": "Replace each rune consistently with one other symbol."
     },
@@ -54,7 +55,11 @@
         "lp2-known-vigenere-keys",
         "alberti-branch-arithmetic",
         "public-wordlist-vigenere",
-        "quagmirror-variant-continuations"
+        "quagmirror-variant-continuations",
+        "rotating-folded-key-openings",
+        "mixed-alphabet-key-openings",
+        "grouped-key-advance-openings",
+        "grid-prefix-split-openings"
       ],
       "description": "Change the substitution according to position in a repeated key."
     },
@@ -87,7 +92,9 @@
         "block cipher",
         "matrix transformation"
       ],
-      "related": [],
+      "related": [
+        "grouped-key-advance-openings"
+      ],
       "description": "Transform groups of runes together instead of treating each position independently."
     },
     {
@@ -108,7 +115,8 @@
         "lp2-fibonacci-openings",
         "lp2-panel-prime-openings",
         "lp2-totient-openings",
-        "direct-polynomial-streams"
+        "direct-polynomial-streams",
+        "decimal-chain-opening-cribs"
       ],
       "description": "Generate shifts from a declared numerical sequence."
     },
@@ -199,7 +207,8 @@
         "r26-derived-generators-opening-cribs",
         "typed-seed-random-opening-cribs",
         "grid-payload-prf-opening-cribs",
-        "py27-prior-front-opening-cribs"
+        "py27-prior-front-opening-cribs",
+        "public-nskips-crossover"
       ],
       "description": "Specify when key or feedback state pauses, advances or restarts."
     },
@@ -290,7 +299,8 @@
       ],
       "related": [
         "h03-ps-layout-replay",
-        "line-initial-layout-control"
+        "line-initial-layout-control",
+        "solved-text-selection-source-gate"
       ],
       "description": "Select positions using a mask or indexing rule."
     },
@@ -312,7 +322,8 @@
         "line initials"
       ],
       "related": [
-        "line-initial-layout-control"
+        "line-initial-layout-control",
+        "solved-text-selection-source-gate"
       ],
       "description": "Select initial, final or regularly indexed symbols from defined units."
     },
@@ -371,7 +382,8 @@
         "fehu-coordinate-triad",
         "lp1-seven-word-825-census",
         "study-here-bidirectional-pointer",
-        "obscura-sum-collision-control"
+        "obscura-sum-collision-control",
+        "lp2-23-red-sum-claim"
       ],
       "description": "Map runes or groups to numerical totals and count competing matches."
     },
@@ -465,7 +477,8 @@
         "lp1-payload-outer-ring",
         "lp2-15-totient-gap-audit",
         "grid-alternative-layouts",
-        "lp2-seven-page-square-fits"
+        "lp2-seven-page-square-fits",
+        "grid-prefix-split-openings"
       ],
       "description": "Separate reconstructing a grid from using it as a decoding key."
     },
@@ -587,7 +600,9 @@
         "hashes",
         "hash matching"
       ],
-      "related": [],
+      "related": [
+        "lp2-56-internal-artifact-hashes"
+      ],
       "description": "Define exact candidate bytes and compare the specified digest."
     },
     {
@@ -634,7 +649,13 @@
         "r26-derived-generators-opening-cribs",
         "typed-seed-random-opening-cribs",
         "grid-payload-prf-opening-cribs",
-        "py27-prior-front-opening-cribs"
+        "py27-prior-front-opening-cribs",
+        "rotating-folded-key-openings",
+        "mixed-alphabet-key-openings",
+        "grouped-key-advance-openings",
+        "lp2-23-red-sum-claim",
+        "grid-prefix-split-openings",
+        "decimal-chain-opening-cribs"
       ],
       "description": "Use a declared plaintext hypothesis to constrain a defined cipher model."
     },
@@ -804,7 +825,9 @@
         "word-internal-affine-all-lags",
         "line-initial-layout-control",
         "lp2-filter-fingerprint-models",
-        "py27-reducer-sweep-source-audit"
+        "py27-reducer-sweep-source-audit",
+        "solved-text-selection-source-gate",
+        "public-nskips-crossover"
       ],
       "description": "Repeat the whole selection procedure on controls, not just the final attractive candidate."
     },
@@ -1266,6 +1289,15 @@
     "typed-seed-random-opening-cribs": "method",
     "quagmirror-variant-continuations": "replay",
     "grid-payload-prf-opening-cribs": "method",
-    "py27-prior-front-opening-cribs": "method"
+    "py27-prior-front-opening-cribs": "method",
+    "solved-text-selection-source-gate": "audit",
+    "rotating-folded-key-openings": "method",
+    "mixed-alphabet-key-openings": "method",
+    "grouped-key-advance-openings": "method",
+    "lp2-56-internal-artifact-hashes": "method",
+    "lp2-23-red-sum-claim": "audit",
+    "grid-prefix-split-openings": "method",
+    "decimal-chain-opening-cribs": "method",
+    "public-nskips-crossover": "control"
   }
 }

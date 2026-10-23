@@ -11,17 +11,17 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 34,
+    "source_entries_reviewed": 35,
     "reproduced_subclaim": 1,
-    "partial": 17,
+    "partial": 18,
     "unsupported_source_verdict": 16,
-    "source_entries_with_published_record_link": 20,
+    "source_entries_with_published_record_link": 24,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
     "execution_replay_states": {
       "replayed-with-invalid-gate": 3,
-      "complete-executed-grid": 7,
+      "complete-executed-grid": 8,
       "partial-execution": 2
     }
   },
@@ -180,7 +180,12 @@
       "source_id": "R22-A-SELFEMBEDDED-READ",
       "source_claim": "Select every-k and diagonal/fold reads from already solved plaintext sections; the source reports a clean negative over 3,508 functions.",
       "status": "unsupported-source-verdict",
-      "record_links": [],
+      "record_links": [
+        {
+          "record_id": "solved-text-selection-source-gate",
+          "covered_subclaim": "Formal record of already independently replayed source receipts and final-gate positive-control failure; not a power-validated negative."
+        }
+      ],
       "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md",
       "covered_subclaim": "Source commands were replayed: 3,508 selections, six length-cell crossings, zero family crossings, matching the report. This is an audit of the source run, not a published independent experiment.",
       "unresolved_parts": [
@@ -204,7 +209,12 @@
       "source_id": "R23-A2-LINE-ACROSTIC",
       "source_claim": "Read first/last symbols of actual printed lines and words in solved plaintext sections; the source reports a clean negative over 48 reads.",
       "status": "unsupported-source-verdict",
-      "record_links": [],
+      "record_links": [
+        {
+          "record_id": "solved-text-selection-source-gate",
+          "covered_subclaim": "Formal record of already independently replayed source receipts and final-gate positive-control failure; not a power-validated negative."
+        }
+      ],
       "audit_note": "research/dukotah-r23-a2-source-audit-2026-10-22.md",
       "covered_subclaim": "Source commands were replayed: 48 reads, one length-cell crossing, zero family crossings, matching the report. This is an audit of the source run, not a published independent Liberpedia experiment.",
       "unresolved_parts": [
@@ -906,6 +916,34 @@
       "unresolved_parts": [
         "The reported 884,000 screening calls cannot be independently replayed without the original private panel and training corpora."
       ]
+    },
+    {
+      "source_id": "R21-L2-NSKIPS-CROSSOVER-LENGTH",
+      "source_claim": "Skip-count distinguishability across planted message lengths under exact and drift decoder rules.",
+      "status": "partial",
+      "record_links": [
+        {
+          "record_id": "public-nskips-crossover",
+          "covered_subclaim": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested."
+        }
+      ],
+      "whole_entry_coverage_verified": false,
+      "covered_subclaim": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested.",
+      "unresolved_parts": [
+        "Planned order-preserving shuffle surrogate was not executed by the source; the four register labels are English windows; skip-by-two recovery fails. Broader plants/nulls remain outside scope."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round21/L2-nskips-crossover-length/crossover.py",
+        "liber-primus/analysis/round21/L2-nskips-crossover-length/nskips_crossover.json"
+      ],
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "public-nskips-crossover"
+        ],
+        "scope": "All34 executable cells at ten lengths replay with exact seeded null samples;20 distinct distributions reused across identical calls. Exact-channel crossing lies in(3600,6000] for this single English-source plant ladder. No LP2 key or universal language-power claim is tested.",
+        "wider_method_excluded": false
+      }
     }
   ],
   "next_batch": [

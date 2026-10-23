@@ -1,0 +1,113 @@
+{
+  "id": "solved-text-selection-source-gate",
+  "status": "published",
+  "title": "Solved-text selections: what the source controls prove",
+  "question": "Did published selection and printed-line acrostic searches validate their final decision rule on planted messages?",
+  "reader_question": "Have people tried finding a message hidden in the already-decoded pages?",
+  "summary": "Two source sweeps replayed: 3,508 character/rune selections and 48 line/word reads. Zero final hits, but the planted controls only passed an earlier length-specific threshold, not the final rule.",
+  "finding": "The four planted examples clear their own length thresholds and all miss the final bars. The source therefore established that it can extract and score these planted reads, but not its claimed power to detect them at the threshold used for the manuscript. Its zero-hit result is a bounded report, not a control-validated exclusion.",
+  "limitations": "This checks the source's saved rows and the decision rule against the independently replayed output from 2026-10-22; the 1,000-shuffle nulls were not rerun for this packaging step. Its decoded source sections cover ten LP1 images, with line geometry that differs from Liberpedia's current reading exports. No LP2 unsolved text was tested.",
+  "next_steps": "Image-check the line geometry, then calibrate the maximum over the full read set by repeating the entire search on each shuffled and planted sample. A positive control must clear the same final bar used for real text.",
+  "outcome": "inconclusive",
+  "tags": [
+    "acrostics",
+    "solved text",
+    "line initials",
+    "word initials",
+    "selection functions",
+    "source replay",
+    "control gate"
+  ],
+  "family": {
+    "id": "solved-text-selection",
+    "title": "Messages selected from decoded text",
+    "question": "Does a fixed selection rule recover a second message from already-decoded text?",
+    "baseline": "solved-text-selection-source-gate"
+  },
+  "variant": {
+    "label": "Pinned R22-A character selections and R23-A2 printed-line/word acrostics",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp1-01",
+      "lp1-03",
+      "lp1-04",
+      "lp1-05",
+      "lp1-06",
+      "lp1-07",
+      "lp1-08",
+      "lp1-09",
+      "lp1-14",
+      "lp1-15"
+    ],
+    "representation": "Five decoded source sections spanning ten LP1 images. Source section order is 01, 05, 06Ã¢â‚¬â€œ09, 03Ã¢â‚¬â€œ04, 14Ã¢â‚¬â€œ15; the concatenation is not manuscript order.",
+    "procedure": "Replay and audit the pinned R22-A every-k/diagonal selections and R23-A2 first/last printed-line/word reads. Compare planted-control scores with both the length-specific bars they were tested against and the final family bars actually applied to manuscript reads.",
+    "parameters": "R22-A: 1,754 selection functions for each of letter and rune streams (3,508); R23-A2: four read types Ãƒâ€” six scopes Ãƒâ€” two directions (48). Both use seed 3301 and 1,000 source null shuffles per distinct length.",
+    "exclusions": "No new LP1 image-checked transcription, no new whole-search null or end-to-end power estimate, no LP2 ciphertext search, and no claim that all acrostic or selection methods have been excluded."
+  },
+  "review": {
+    "kind": "pinned-source replay and decision-rule audit",
+    "retested_on": "2026-10-22",
+    "reviewer": "Exact upstream script replay recorded in research/dukotah-r23-a2-source-audit-2026-10-22.md; independent receipt and threshold checker",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/solved-text-selection-source-gate/check.py",
+    "environment": "Python 3 standard library for the bundled receipt check. The original full sweeps require the pinned upstream repository and its published English quadgram model; commands and outputs are documented in research/dukotah-r23-a2-source-audit-2026-10-22.md.",
+    "script": "experiments/records/solved-text-selection-source-gate/check.py",
+    "script_sha256": "4d461f25d26a6d01218c094f616548a82c94e1278870b81080237e7f24eb2319",
+    "inputs": [
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/check.py",
+        "sha256": "4d461f25d26a6d01218c094f616548a82c94e1278870b81080237e7f24eb2319"
+      },
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/source-r22-results.json",
+        "sha256": "643212b3a873426084f87f192c90c12f081694590632f9a58dde08340bb597a0"
+      },
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/source-r23-results.json",
+        "sha256": "a9c673fa4178ba32cbf1e2fe175afc120d8247eff74bf2f53d883d11bd6f4663"
+      },
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/LICENSE.source",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/results.json",
+        "sha256": "a8643f499fbcd71e846a3dacc3292aff4821e8b0ad5db4e5cc642858c7dca6fd"
+      },
+      {
+        "path": "experiments/records/solved-text-selection-source-gate/gates.svg",
+        "sha256": "2d59c94dea8094f1f609198fb85d8f6dc39776863abb07cd74282549213b550c"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/solved-text-selection-source-gate/gates.svg",
+      "caption": "Four planted reads cleared their length-specific bars, but none reached the final threshold used on the source text."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned R22-A selection method and source",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/A-selfembedded-read/PREREG.md"
+    },
+    {
+      "label": "Pinned R23-A2 printed-line method",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round23/A2-line-acrostic/PREREG.md"
+    },
+    {
+      "label": "Pinned R23-A2 result",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round23/A2-line-acrostic/RESULTS.md"
+    }
+  ],
+  "related": [
+    "line-initial-layout-control",
+    "red-initial-presence-order"
+  ]
+}

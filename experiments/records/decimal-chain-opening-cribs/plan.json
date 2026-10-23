@@ -1,0 +1,21 @@
+{
+  "schema": "liberpedia-decimal-chain-opening-plan-v1",
+  "declared_before_ciphertext_run": "2026-10-23",
+  "inspiration": "The American Cryptogram Association GROMARK sheet specifies a five-digit primer, successive adjacent-pair addition modulo ten (first+second gives sixth, second+third gives seventh), and a separate mixed alphabet. This test isolates only that numerical stream and applies it in GP29 arithmetic; it is not the full ACA cipher or a historical LP2 replay.",
+  "source": "https://www.cryptogram.org/downloads/aca.info/ciphers/Gromark.pdf",
+  "primer": "All ordered decimal strings 00000 through 99999, including leading zeroes: 100000 cases.",
+  "recurrence": "d0..d4 are the primer digits; for i>=5, d_i=(d_{i-5}+d_{i-4}) mod 10. Generate twelve digits from each primer.",
+  "mapping": "Use each decimal digit as its integer value 0..9 in the canonical 29-rune GP index ring. For sign in {-1,+1}, P_i=(C_i+sign*d_i) mod 29.",
+  "pages": "LP2-00..55, 55 rune-bearing page starts; runeless LP2-50 contributes no comparisons. Use the first 12 recognized GP runes, including headings. Ignore non-rune marks and reset the key at each page.",
+  "openings": "The nine fixed 12-rune vectors from experiments/records/lp2-known-vigenere-keys/plan.json; no new plaintext suggestions.",
+  "criterion": "Exact equality at all 12 runes; also report the longest matching prefix and a full prefix-length histogram under all 100000 primers, two signs, 55 pages and nine openings.",
+  "size": "100000 primers x 2 signs x 55 pages x 9 openings = 99000000 logical exact comparisons, one bounded experiment.",
+  "controls": "Encrypt one fixed known opening with primer 31415 under both signs and recover that primer by the same all-primer index; independently check every count from page JSON and verify the complete primer-stream inventory digest.",
+  "exclusions": "Full GROMARK mixed alphabet, keyword construction, appended check digit, primer supplied on a ciphertext, longer or nondecimal primers, 29^5 rune primers, key offsets, other page positions, interruptions and language scoring.",
+  "inputs": [
+    {
+      "path": "experiments/records/lp2-known-vigenere-keys/plan.json",
+      "sha256": "3636812c3a3666956a6d71aae5bda236d42a5371a60814d5fb1bc5a2762e634a"
+    }
+  ]
+}

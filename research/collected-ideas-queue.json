@@ -12,13 +12,14 @@
   "counts": {
     "source_ideas": 156,
     "novelty_dispositions": {
-      "known": 120,
+      "known": 121,
       "new-extension": 17,
-      "new": 19
+      "new": 18
     },
-    "new_queue_groups": 27,
-    "queued_source_ideas": 36,
-    "new_experiments_run": 0
+    "new_queue_groups": 26,
+    "queued_source_ideas": 35,
+    "new_experiments_run_during_intake": 0,
+    "published_followup_records": 7
   },
   "intake": [
     {
@@ -2068,16 +2069,17 @@
     {
       "source_id": "16.3",
       "title": "Single-rune word constraints.",
-      "novelty": "new",
+      "novelty": "known",
       "existing_record_ids": [
-        "single-rune-null-doublets"
+        "lp2-54-header-feedback",
+        "lp2-54-header-dictionary"
       ],
       "existing_evidence": [
-        "experiments/records/single-rune-null-doublets/record.json",
-        "articles/method-cribs.html"
+        "experiments/records/lp2-54-header-feedback/record.json",
+        "experiments/records/lp2-54-header-dictionary/record.json"
       ],
-      "coverage_note": "No finite positional word-identity crib is recorded. List exact one-rune tokens by page and boundary source; score each hypothesized plaintext under a specified key/cipher with held-out predictions.",
-      "queue_id": "singleton-word-cribs"
+      "coverage_note": "A/I/O one-rune-word constraints are already used in the LP2-54 header experiments. Extending this to every visible one-rune word is untested scope, not a newly discovered idea. The unrelated source singletons.py tests grid glyph templates.",
+      "queue_id": null
     },
     {
       "source_id": "16.4",
@@ -2147,7 +2149,7 @@
         "2.6",
         "2.7"
       ],
-      "state": "needs-scope",
+      "state": "bounded-followup-recorded",
       "next_action": "Freeze one family manifest for rotating/folded endpoints, mixed-alphabet construction and grouped key advancement; retain distinct variant outputs.",
       "existing_record_ids": [
         "lp2-known-vigenere-keys",
@@ -2158,8 +2160,16 @@
         "No keyword-mixed alphabet replay. Specify keyword normalization, duplicate handling and whether both cipher and key alphabets are remapped.",
         "No variable-size grouped Vigenere rule or group schedule. Define group boundaries and key advancement exactly."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "rotating-folded-key-openings",
+          "mixed-alphabet-key-openings",
+          "grouped-key-advance-openings"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Other key dictionaries, signs, plaintexts and variable-size group schedules remain outside these fixed-opening baselines."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "alternating-alphabet-interruption-clocks"
       ]
@@ -2201,7 +2211,6 @@
       "result": null,
       "has_been_run": false,
       "related_queue_ids": [
-        "singleton-word-cribs",
         "url-structured-cribs"
       ]
     },
@@ -2211,7 +2220,7 @@
       "source_idea_ids": [
         "5.10"
       ],
-      "state": "needs-scope",
+      "state": "bounded-followup-recorded",
       "next_action": "Pin primer alphabet/range, recurrence, carry rule and boundary behavior; treat the full primer search as one bounded family.",
       "existing_record_ids": [
         "lp2-fibonacci-openings"
@@ -2219,8 +2228,14 @@
       "scope_and_gates": [
         "No Gromark/chain-addition decoding with fixed primer and recurrence. State primer digits, carry/modulus, expansion and reset boundary."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "decimal-chain-opening-cribs"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Full mixed-alphabet GROMARK, other starts/primers and unknown openings remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2371,7 +2386,7 @@
         "12.4",
         "12.12"
       ],
-      "state": "needs-rule",
+      "state": "bounded-followup-recorded",
       "next_action": "Reconstruct five class channels; explicitly resolve the odd hex-nibble packing and any direction table before a key/route test.",
       "existing_record_ids": [
         "grid-high-digit-cells"
@@ -2381,8 +2396,14 @@
         "The existing record confirms suffix string 97DEF756B98A80EB9 but does not use it as a key. It has 17 hex nibbles, not an integral byte length: choose and justify packing/padding, algorithm and target before testing.",
         "Leading 0â€“4 values as route instructions is distinct from suffix statistics. Track with prefix-split channels; freeze five-state direction table, origin, boundary handling and readout."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "grid-prefix-split-openings"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "The five-state direction mapping remains undefined; byte packing, nonrepeating keys, later offsets and other plaintexts remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2428,14 +2449,20 @@
       "source_idea_ids": [
         "13.3"
       ],
-      "state": "needs-source-check",
+      "state": "bounded-followup-recorded",
       "next_action": "Obtain the cited proposal and exact red span; check rune spelling/sums before any cipher interpretation.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "Retain the specific LP2-23 red-sum691 / TEST THE KNOWLEDGE claim for arithmetic and encoding audit. Need the source post, exact red rune range and rune encoding; a numerical match alone is not an instruction."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-23-red-sum-claim"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Original post/span and independent glyph adjudication remain missing; arithmetic audit does not identify any intended plaintext."
+      },
+      "has_been_run": true,
       "related_queue_ids": []
     },
     {
@@ -2466,15 +2493,21 @@
         "14.4",
         "14.8"
       ],
-      "state": "needs-inputs",
+      "state": "bounded-followup-recorded",
       "next_action": "Extend the existing JPEG-hash lead with a pinned text/payload/image corpus and explicit normalization/algorithm matrix; do not relabel prior JPEG checks as new.",
       "existing_record_ids": [],
       "scope_and_gates": [
         "No exact alternate-algorithm candidate grid is recorded. The attachment gives algorithm names but no input-byte list or historical result files.",
         "The checker supports this, but no archive-wide manifest/output table for original JPEGs, transcriptions, solved passages and payload bytes exists. A completed-text checksum remains conditional on a proposed complete reading."
       ],
-      "result": null,
-      "has_been_run": false,
+      "result": {
+        "record_ids": [
+          "lp2-56-internal-artifact-hashes"
+        ],
+        "scope": "See each published record; no whole-family exclusion.",
+        "remaining_scope": "Whirlpool/Streebog, unlisted candidate bytes and other transformations remain untested."
+      },
+      "has_been_run": true,
       "related_queue_ids": [
         "four-md5-target-blocks",
         "grid-payload-digest-blocks"
@@ -2607,27 +2640,6 @@
       "related_queue_ids": []
     },
     {
-      "id": "singleton-word-cribs",
-      "title": "A/I/O constraints on one-rune words",
-      "source_idea_ids": [
-        "16.3"
-      ],
-      "state": "needs-scope",
-      "next_action": "List one-rune tokens under a pinned word-boundary layer, declare cipher/key hypotheses and test held-out predictions.",
-      "existing_record_ids": [
-        "single-rune-null-doublets"
-      ],
-      "scope_and_gates": [
-        "No finite positional word-identity crib is recorded. List exact one-rune tokens by page and boundary source; score each hypothesized plaintext under a specified key/cipher with held-out predictions."
-      ],
-      "result": null,
-      "has_been_run": false,
-      "related_queue_ids": [
-        "crib-inferred-feedback-table",
-        "url-structured-cribs"
-      ]
-    },
-    {
       "id": "url-structured-cribs",
       "title": "WWW and URL-shaped output cribs",
       "source_idea_ids": [
@@ -2644,9 +2656,9 @@
       "result": null,
       "has_been_run": false,
       "related_queue_ids": [
-        "crib-inferred-feedback-table",
-        "singleton-word-cribs"
+        "crib-inferred-feedback-table"
       ]
     }
-  ]
+  ],
+  "revision_note": "A second overlap check found A/I/O constraints already used by the LP2-54 header records; source16.3 was merged back into known ideas. Counts corrected from27 to26 groups."
 }

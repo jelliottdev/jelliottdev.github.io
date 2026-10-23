@@ -1,0 +1,1092 @@
+{
+  "schema": "liberpedia-lp2-56-artifact-hash-plan-v1",
+  "question": "Do these exact preserved Liberpedia artifact bytes equal the printed LP2-56 target under three declared 512-bit digest algorithms?",
+  "target": {
+    "hex": "36367763ab73783c7af284446c59466b4cd653239a311cb7116d4618dee09a8425893dc7500b464fdaf1672d7bef5e891c6e2274568926a49fb4f45132c2a8b4",
+    "page": "lp2-56",
+    "source": "data/pages/lp2-56.json#reading.literal",
+    "bits": 512
+  },
+  "algorithms": [
+    "sha512",
+    "sha3_512",
+    "blake2b_512"
+  ],
+  "algorithm_controls": "abc vectors from standard implementations, asserted in both run.py and check.py",
+  "excluded_algorithms": {
+    "whirlpool": "Unavailable in local hashlib; not run",
+    "streebog": "Unavailable in local hashlib; not run"
+  },
+  "text_variants": [
+    {
+      "id": "exact",
+      "rule": "UTF-8 encode the stored Unicode text exactly"
+    },
+    {
+      "id": "crlf",
+      "rule": "replace each LF with CRLF, then UTF-8 encode"
+    },
+    {
+      "id": "drop-final-lf",
+      "rule": "remove one terminal LF if present, then UTF-8 encode"
+    },
+    {
+      "id": "one-final-lf",
+      "rule": "strip terminal CR/LF characters and append exactly one LF, then UTF-8 encode"
+    }
+  ],
+  "families": {
+    "image-original": "75 existing images/lp*.jpg files, exact JPEG bytes only",
+    "page-raw": "75 data/pages/lp*.json raw strings, UTF-8; two cover pages have an empty raw string",
+    "section-literal": "Nine reading.section groups; concatenate stored reading.literal strings in ascending page-ID order, preserving all printed separators and page wrap",
+    "grid-payload": "One 256-byte resolved payload, exact bytes only"
+  },
+  "pages": [
+    {
+      "id": "lp1-00",
+      "page": {
+        "path": "data/pages/lp1-00.json",
+        "sha256": "7d33e947824e8da6903d70db9ddff0d9b16d09f02a54dfcc84230d64e8bb645f",
+        "size": 2969
+      },
+      "image": {
+        "path": "images/lp1-00.jpg",
+        "sha256": "184e6f9de8695d99435c2bef4fd7e304a8a0f704dbe04439fa8bf13c4da395a7",
+        "size": 168876
+      }
+    },
+    {
+      "id": "lp1-01",
+      "page": {
+        "path": "data/pages/lp1-01.json",
+        "sha256": "5c93bc312f1608038f486d86f6560cd5635e142e9a521a1df0984c21aca7a0d0",
+        "size": 6313
+      },
+      "image": {
+        "path": "images/lp1-01.jpg",
+        "sha256": "71f4bd03c692ede630091272597d2b18702184ed32fdd1977ef0ba7306632b46",
+        "size": 1476614
+      }
+    },
+    {
+      "id": "lp1-02",
+      "page": {
+        "path": "data/pages/lp1-02.json",
+        "sha256": "8b9dcd6cd22ec846dd5d2e9307c08d2aa0598e97108f50d65a85c48c74984df7",
+        "size": 2971
+      },
+      "image": {
+        "path": "images/lp1-02.jpg",
+        "sha256": "0297572bbc2d234f84df634c6f0474011ff5df66c2ce987c3bb7aa0c635799b4",
+        "size": 175159
+      }
+    },
+    {
+      "id": "lp1-03",
+      "page": {
+        "path": "data/pages/lp1-03.json",
+        "sha256": "1d98dffa8f8a9198a627edbe54c8170f8b919cfee42f5bd63499e4ace789ced7",
+        "size": 6934
+      },
+      "image": {
+        "path": "images/lp1-03.jpg",
+        "sha256": "b8b142f9b7854ec4f240e076cad03a98a2e3e9cf7c20f1da4fcde1ed25e3be3f",
+        "size": 892759
+      }
+    },
+    {
+      "id": "lp1-04",
+      "page": {
+        "path": "data/pages/lp1-04.json",
+        "sha256": "dc070cbf19a3a399540dd040aa25467780445ec7e5623b7fe464ba6151c08642",
+        "size": 6504
+      },
+      "image": {
+        "path": "images/lp1-04.jpg",
+        "sha256": "745c6a46f67de1e5a2a9ac76175c323af82c2432e3b7483a8dc6244f8de9478f",
+        "size": 1223337
+      }
+    },
+    {
+      "id": "lp1-05",
+      "page": {
+        "path": "data/pages/lp1-05.json",
+        "sha256": "eed36ca92c0c9d32603f8746f42161819258bd2dbdf9042ab6055f9e00f48826",
+        "size": 4875
+      },
+      "image": {
+        "path": "images/lp1-05.jpg",
+        "sha256": "2db94921ae5216d8a589890495fa5432446cd3227c45fbeb4934cbb0525112f7",
+        "size": 673066
+      }
+    },
+    {
+      "id": "lp1-06",
+      "page": {
+        "path": "data/pages/lp1-06.json",
+        "sha256": "6e1d8c083d87a6ce0c7f1035599735c461038ff286dc3d48a54b2ec2cd260692",
+        "size": 6204
+      },
+      "image": {
+        "path": "images/lp1-06.jpg",
+        "sha256": "913e26462e51942f49ca3ce2e94ef56c5fb65110814442dccc02b0d88af2c5ca",
+        "size": 823807
+      }
+    },
+    {
+      "id": "lp1-07",
+      "page": {
+        "path": "data/pages/lp1-07.json",
+        "sha256": "082370c0f23c8c626bec9e892f245a64bf65053e60830c8f034ca741b4fd9797",
+        "size": 5982
+      },
+      "image": {
+        "path": "images/lp1-07.jpg",
+        "sha256": "b50c1536ea1f30847e7875835991d52951bafb599fb1ab04eb78c5c6e6c2b468",
+        "size": 823514
+      }
+    },
+    {
+      "id": "lp1-08",
+      "page": {
+        "path": "data/pages/lp1-08.json",
+        "sha256": "4bed0573a39072fd9e47993224858112c54220c396afb09ac8d2a022f98b919c",
+        "size": 6014
+      },
+      "image": {
+        "path": "images/lp1-08.jpg",
+        "sha256": "f0edba1084df9983353c11544bbf711f94ed7649edbf94b426c9b78549b64557",
+        "size": 638805
+      }
+    },
+    {
+      "id": "lp1-09",
+      "page": {
+        "path": "data/pages/lp1-09.json",
+        "sha256": "1c668d9e8b3c6082c22fee32cec43c7abee38e093135a1b8f2cbf805db5fbd1a",
+        "size": 5678
+      },
+      "image": {
+        "path": "images/lp1-09.jpg",
+        "sha256": "975cda73bbf829b2775f25beb609d34fa429728b2f2a4ce863c129b10b005089",
+        "size": 724577
+      }
+    },
+    {
+      "id": "lp1-10",
+      "page": {
+        "path": "data/pages/lp1-10.json",
+        "sha256": "62de5c58842d30d359e514450b9a6bc75020adf472dd0ccfcdbc5795c5860f9b",
+        "size": 7270
+      },
+      "image": {
+        "path": "images/lp1-10.jpg",
+        "sha256": "12ebfe421c129f2ef78d527c1630e358963da8d8dfdf9620eb977980d7967376",
+        "size": 4240957
+      }
+    },
+    {
+      "id": "lp1-11",
+      "page": {
+        "path": "data/pages/lp1-11.json",
+        "sha256": "b5d54900e6883f96c6da7f1abe2fcd7a83ded8b5686684c098383a53de2a171d",
+        "size": 6759
+      },
+      "image": {
+        "path": "images/lp1-11.jpg",
+        "sha256": "7bd11a2c9f5b512e33c9db170756e3b34cc1e29eb405373eb94957383a61be7d",
+        "size": 712733
+      }
+    },
+    {
+      "id": "lp1-12",
+      "page": {
+        "path": "data/pages/lp1-12.json",
+        "sha256": "d2d6971ef1cb0430827b347dcd6fdc018de6245112c6dcfab5b795e618889504",
+        "size": 6579
+      },
+      "image": {
+        "path": "images/lp1-12.jpg",
+        "sha256": "a5b58076e169f3f59c8a394dbef37da18226c9c4fff703df3be8dc95cf16291c",
+        "size": 703428
+      }
+    },
+    {
+      "id": "lp1-13",
+      "page": {
+        "path": "data/pages/lp1-13.json",
+        "sha256": "bd4c0fcab4fc5bdaafb929e10ac59f9b67a6ae99072de20f91286002b32dbe02",
+        "size": 6303
+      },
+      "image": {
+        "path": "images/lp1-13.jpg",
+        "sha256": "bef0fc4867c2363c835eb4f08029a1eba35c925e2f72659d7353cf8a91089e56",
+        "size": 2070134
+      }
+    },
+    {
+      "id": "lp1-14",
+      "page": {
+        "path": "data/pages/lp1-14.json",
+        "sha256": "9ba8c89ed16cb93932617e37519c5bfb543014beab081ea8dd17f4a429d20ace",
+        "size": 5277
+      },
+      "image": {
+        "path": "images/lp1-14.jpg",
+        "sha256": "de2bebe1d06421d94f3dd2b2b5f838ee4cdb5f51b07b14e880e0108f7b79c14e",
+        "size": 625668
+      }
+    },
+    {
+      "id": "lp1-15",
+      "page": {
+        "path": "data/pages/lp1-15.json",
+        "sha256": "add0203dfa99705777a748c41b7457a834dd3a2cd3c1c47d55338aceb7548f48",
+        "size": 4040
+      },
+      "image": {
+        "path": "images/lp1-15.jpg",
+        "sha256": "f163903bec1236f1c89c96343d0bd1dee610b697c3ba82514651f04c5fbee4b9",
+        "size": 426945
+      }
+    },
+    {
+      "id": "lp1-16",
+      "page": {
+        "path": "data/pages/lp1-16.json",
+        "sha256": "e5efa4b31576eab45fd30ff26ac8e650ec75300f06a2a543f1e251e50d4b5dfe",
+        "size": 4599
+      },
+      "image": {
+        "path": "images/lp1-16.jpg",
+        "sha256": "984668c680c6089b91587ef6d9eb2a1df1d2b7ee8ab3837655d3933f2adcbfbe",
+        "size": 485456
+      }
+    },
+    {
+      "id": "lp2-00",
+      "page": {
+        "path": "data/pages/lp2-00.json",
+        "sha256": "858ad414140daa43c2a300ba797ee1f3c94b8f627607b0067b2ec4a9af9d37e5",
+        "size": 33017
+      },
+      "image": {
+        "path": "images/lp2-00.jpg",
+        "sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e",
+        "size": 695525
+      }
+    },
+    {
+      "id": "lp2-01",
+      "page": {
+        "path": "data/pages/lp2-01.json",
+        "sha256": "5cce4705db3dc799e9a91ddbf18f4ad8121e5b4ab9f0f196236bf8ca4bfa5a1c",
+        "size": 33539
+      },
+      "image": {
+        "path": "images/lp2-01.jpg",
+        "sha256": "f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f",
+        "size": 667228
+      }
+    },
+    {
+      "id": "lp2-02",
+      "page": {
+        "path": "data/pages/lp2-02.json",
+        "sha256": "53025cbe1ed9477be9a4a3239b0ddc80ff08396a3d448fe662632bc63185dd8d",
+        "size": 25209
+      },
+      "image": {
+        "path": "images/lp2-02.jpg",
+        "sha256": "74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34",
+        "size": 595338
+      }
+    },
+    {
+      "id": "lp2-03",
+      "page": {
+        "path": "data/pages/lp2-03.json",
+        "sha256": "49b098fdc0b6b0371a5de77c44a57b494eea6b2d3914d5cad7bed1420d0d1189",
+        "size": 4448
+      },
+      "image": {
+        "path": "images/lp2-03.jpg",
+        "sha256": "1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117",
+        "size": 599916
+      }
+    },
+    {
+      "id": "lp2-04",
+      "page": {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9",
+        "size": 4801
+      },
+      "image": {
+        "path": "images/lp2-04.jpg",
+        "sha256": "72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6",
+        "size": 676634
+      }
+    },
+    {
+      "id": "lp2-05",
+      "page": {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14",
+        "size": 5833
+      },
+      "image": {
+        "path": "images/lp2-05.jpg",
+        "sha256": "bcef0a3b80532b25a013052ec4394ab47ab69ce675b5b3db59cbad044e7adabd",
+        "size": 667716
+      }
+    },
+    {
+      "id": "lp2-06",
+      "page": {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22",
+        "size": 4231
+      },
+      "image": {
+        "path": "images/lp2-06.jpg",
+        "sha256": "4c7dce370242c67a7b785828d75547c042717b221d9d565d7dd097834c7b25d7",
+        "size": 556991
+      }
+    },
+    {
+      "id": "lp2-07",
+      "page": {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff",
+        "size": 5399
+      },
+      "image": {
+        "path": "images/lp2-07.jpg",
+        "sha256": "91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c",
+        "size": 580968
+      }
+    },
+    {
+      "id": "lp2-08",
+      "page": {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953",
+        "size": 4777
+      },
+      "image": {
+        "path": "images/lp2-08.jpg",
+        "sha256": "6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00",
+        "size": 612380
+      }
+    },
+    {
+      "id": "lp2-09",
+      "page": {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09",
+        "size": 4608
+      },
+      "image": {
+        "path": "images/lp2-09.jpg",
+        "sha256": "b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d",
+        "size": 639920
+      }
+    },
+    {
+      "id": "lp2-10",
+      "page": {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0",
+        "size": 4595
+      },
+      "image": {
+        "path": "images/lp2-10.jpg",
+        "sha256": "1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239",
+        "size": 618194
+      }
+    },
+    {
+      "id": "lp2-11",
+      "page": {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c",
+        "size": 5645
+      },
+      "image": {
+        "path": "images/lp2-11.jpg",
+        "sha256": "26f0cb307a23dcb2adf03a70fb9c6da89746258a90fd9be5383b2757ab4aad30",
+        "size": 609111
+      }
+    },
+    {
+      "id": "lp2-12",
+      "page": {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7",
+        "size": 4572
+      },
+      "image": {
+        "path": "images/lp2-12.jpg",
+        "sha256": "6961f3f8eedba5b802fee9b40ad91fa604cd4e4394f9ba72853141ad71b19b21",
+        "size": 609412
+      }
+    },
+    {
+      "id": "lp2-13",
+      "page": {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915",
+        "size": 4646
+      },
+      "image": {
+        "path": "images/lp2-13.jpg",
+        "sha256": "3481daeed3ab2bea6effbe36eec22f74955bce87ca4b4ae8674be1d3f84ea08d",
+        "size": 619368
+      }
+    },
+    {
+      "id": "lp2-14",
+      "page": {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12",
+        "size": 3554
+      },
+      "image": {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4",
+        "size": 436699
+      }
+    },
+    {
+      "id": "lp2-15",
+      "page": {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33",
+        "size": 4974
+      },
+      "image": {
+        "path": "images/lp2-15.jpg",
+        "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5",
+        "size": 512272
+      }
+    },
+    {
+      "id": "lp2-16",
+      "page": {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60",
+        "size": 4559
+      },
+      "image": {
+        "path": "images/lp2-16.jpg",
+        "sha256": "39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d",
+        "size": 550563
+      }
+    },
+    {
+      "id": "lp2-17",
+      "page": {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018",
+        "size": 4687
+      },
+      "image": {
+        "path": "images/lp2-17.jpg",
+        "sha256": "f123b66eefa1b4409750c5ea3879bfe64728c6aa1e1398cb8fbd0fa8b1cf1f50",
+        "size": 541530
+      }
+    },
+    {
+      "id": "lp2-18",
+      "page": {
+        "path": "data/pages/lp2-18.json",
+        "sha256": "4aa47a9388a30f820dd8b15d1ea060ce18c99de5e3b143e6f29453dcf265788f",
+        "size": 4908
+      },
+      "image": {
+        "path": "images/lp2-18.jpg",
+        "sha256": "90fa414c464e86435bdb22f051f9670e886e3dd1c0b6d8954be94b86188da94b",
+        "size": 541718
+      }
+    },
+    {
+      "id": "lp2-19",
+      "page": {
+        "path": "data/pages/lp2-19.json",
+        "sha256": "8cd06d50f3b313829145a2e5bb2f4cd1891028d7fd99c0bf97fc837dc2227152",
+        "size": 5000
+      },
+      "image": {
+        "path": "images/lp2-19.jpg",
+        "sha256": "b57ec6b12cb9a505eec6a77c64ddf63bf30a1bfb44dd5cdca35d900feed1b651",
+        "size": 540260
+      }
+    },
+    {
+      "id": "lp2-20",
+      "page": {
+        "path": "data/pages/lp2-20.json",
+        "sha256": "b1b338782e8b2017940e98c6f8fc1adc5a616867f51d531b6b675c3f113abab3",
+        "size": 5012
+      },
+      "image": {
+        "path": "images/lp2-20.jpg",
+        "sha256": "1ceef52570621785a021febff39003538f810179e5767ef5279a59c0c05c9985",
+        "size": 535883
+      }
+    },
+    {
+      "id": "lp2-21",
+      "page": {
+        "path": "data/pages/lp2-21.json",
+        "sha256": "a8be9033045d4c6d967f4690cca7a31ed9462b5b27b4deb2bb5fdfe7637f00ae",
+        "size": 5043
+      },
+      "image": {
+        "path": "images/lp2-21.jpg",
+        "sha256": "c453ad16212b335a065069e9f755791b909225ed250b579eab205655e7a80c10",
+        "size": 550964
+      }
+    },
+    {
+      "id": "lp2-22",
+      "page": {
+        "path": "data/pages/lp2-22.json",
+        "sha256": "e86c1cf682a8238d3781872b0cb773b6e27bce1351d9c11b2b59c63fce6c446e",
+        "size": 3984
+      },
+      "image": {
+        "path": "images/lp2-22.jpg",
+        "sha256": "e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7",
+        "size": 512143
+      }
+    },
+    {
+      "id": "lp2-23",
+      "page": {
+        "path": "data/pages/lp2-23.json",
+        "sha256": "095a7fdbc4f832bcfd31f8caa7863a605fd159870e0c141cfb2de7e141bd4dd8",
+        "size": 4341
+      },
+      "image": {
+        "path": "images/lp2-23.jpg",
+        "sha256": "d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee",
+        "size": 484095
+      }
+    },
+    {
+      "id": "lp2-24",
+      "page": {
+        "path": "data/pages/lp2-24.json",
+        "sha256": "140841c3fc00d2b94f508990eb6356cd2ca5ecb06d30d29b7f3868d829d75f2a",
+        "size": 4673
+      },
+      "image": {
+        "path": "images/lp2-24.jpg",
+        "sha256": "62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80",
+        "size": 654761
+      }
+    },
+    {
+      "id": "lp2-25",
+      "page": {
+        "path": "data/pages/lp2-25.json",
+        "sha256": "d18027d9ef5d782cbb989ba4197b3005e13513665b3454070e35ed2aa9f5dd86",
+        "size": 4665
+      },
+      "image": {
+        "path": "images/lp2-25.jpg",
+        "sha256": "a7d6e597debff4f7c5b3516e1b02ca2e4fa5b37d972f567264ed2ec845013cff",
+        "size": 643754
+      }
+    },
+    {
+      "id": "lp2-26",
+      "page": {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d",
+        "size": 4631
+      },
+      "image": {
+        "path": "images/lp2-26.jpg",
+        "sha256": "ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7",
+        "size": 677224
+      }
+    },
+    {
+      "id": "lp2-27",
+      "page": {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505",
+        "size": 4479
+      },
+      "image": {
+        "path": "images/lp2-27.jpg",
+        "sha256": "c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e",
+        "size": 580041
+      }
+    },
+    {
+      "id": "lp2-28",
+      "page": {
+        "path": "data/pages/lp2-28.json",
+        "sha256": "b93d9dc474a71e4c47006d89ab4b400936de99a775356b9563886da05056e10f",
+        "size": 4951
+      },
+      "image": {
+        "path": "images/lp2-28.jpg",
+        "sha256": "318bb587f4dcab11b4db7ba3b8bb13b7913ca79bb409e1c987595503a22e0522",
+        "size": 542267
+      }
+    },
+    {
+      "id": "lp2-29",
+      "page": {
+        "path": "data/pages/lp2-29.json",
+        "sha256": "5df74af27b6a365ad613a60a4f4e2a0c6a782e56ff98d043a64ad600e7adaaa1",
+        "size": 5072
+      },
+      "image": {
+        "path": "images/lp2-29.jpg",
+        "sha256": "6f769f266865ddb30b0cb34e82c664a87ba409f674dc52ad3af7c85be443fb5c",
+        "size": 546105
+      }
+    },
+    {
+      "id": "lp2-30",
+      "page": {
+        "path": "data/pages/lp2-30.json",
+        "sha256": "16950039ba2598ae1c3e29ecf38872641ec20c7f892354e12178cde4116dc0e0",
+        "size": 4934
+      },
+      "image": {
+        "path": "images/lp2-30.jpg",
+        "sha256": "701b66d1fe98f730dadc5d7d8e1bc3b9a8e20547c1ffb423011f436037dba8b0",
+        "size": 539780
+      }
+    },
+    {
+      "id": "lp2-31",
+      "page": {
+        "path": "data/pages/lp2-31.json",
+        "sha256": "aa63127db3558ac29bfd79a0a22d1ee4ae9b9bb8f3088381176b6f22bca49670",
+        "size": 4950
+      },
+      "image": {
+        "path": "images/lp2-31.jpg",
+        "sha256": "0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a",
+        "size": 531046
+      }
+    },
+    {
+      "id": "lp2-32",
+      "page": {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2",
+        "size": 3974
+      },
+      "image": {
+        "path": "images/lp2-32.jpg",
+        "sha256": "c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72",
+        "size": 362637
+      }
+    },
+    {
+      "id": "lp2-33",
+      "page": {
+        "path": "data/pages/lp2-33.json",
+        "sha256": "16ffd1ab5dbf499d7663d9b4f76602f972b6a5689a85717af2c9fb73e8458193",
+        "size": 4726
+      },
+      "image": {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d",
+        "size": 525652
+      }
+    },
+    {
+      "id": "lp2-34",
+      "page": {
+        "path": "data/pages/lp2-34.json",
+        "sha256": "a9f6a46f364c100281e50071b0ea471d4f70c351ab9ddcd605f61c1ced746d2c",
+        "size": 4526
+      },
+      "image": {
+        "path": "images/lp2-34.jpg",
+        "sha256": "6f1b4c04b64ee54c689478bd3986bb6ab8a3b81f48780562094e9f248e4e87f8",
+        "size": 555050
+      }
+    },
+    {
+      "id": "lp2-35",
+      "page": {
+        "path": "data/pages/lp2-35.json",
+        "sha256": "a0040be0312311a9eaa7b707c847c9d77c1664e95c24f87c0fe684fe93a00cf6",
+        "size": 5566
+      },
+      "image": {
+        "path": "images/lp2-35.jpg",
+        "sha256": "d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa",
+        "size": 574580
+      }
+    },
+    {
+      "id": "lp2-36",
+      "page": {
+        "path": "data/pages/lp2-36.json",
+        "sha256": "0357471637a3e118f77268c03cc5e80eefa5a028ceca96b1589fa369c12cba0a",
+        "size": 4561
+      },
+      "image": {
+        "path": "images/lp2-36.jpg",
+        "sha256": "3b54a31a9e796e2c01b4e80d46e1092dee2e1142a7c61873e282078e2c776cb9",
+        "size": 511099
+      }
+    },
+    {
+      "id": "lp2-37",
+      "page": {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc",
+        "size": 5833
+      },
+      "image": {
+        "path": "images/lp2-37.jpg",
+        "sha256": "cee96d7e71b7de4d4e57237faacefad791229c153202e8224e4bedda45fb8f43",
+        "size": 503830
+      }
+    },
+    {
+      "id": "lp2-38",
+      "page": {
+        "path": "data/pages/lp2-38.json",
+        "sha256": "96bef52fb4eba981bef369d77b421552fa3a68208cec177894626fd57cc49b67",
+        "size": 5374
+      },
+      "image": {
+        "path": "images/lp2-38.jpg",
+        "sha256": "aec1898f599f57265d6422f3082a481db94a27f62230affbadee595d05077f8c",
+        "size": 519224
+      }
+    },
+    {
+      "id": "lp2-39",
+      "page": {
+        "path": "data/pages/lp2-39.json",
+        "sha256": "7999ecbb8e6383f4759e7fd1f39bfba1608b03957a921ff239aa8edfd78911da",
+        "size": 4975
+      },
+      "image": {
+        "path": "images/lp2-39.jpg",
+        "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00",
+        "size": 541379
+      }
+    },
+    {
+      "id": "lp2-40",
+      "page": {
+        "path": "data/pages/lp2-40.json",
+        "sha256": "1a70d1a957447e4fbcf0a00f90b63c78404bb3b675aad43571aa6f4d194e65b5",
+        "size": 5443
+      },
+      "image": {
+        "path": "images/lp2-40.jpg",
+        "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69",
+        "size": 746355
+      }
+    },
+    {
+      "id": "lp2-41",
+      "page": {
+        "path": "data/pages/lp2-41.json",
+        "sha256": "f8c279309b7674af96fff66f898eb8b68ff4927e96f1a99aa4855c90206ecbe2",
+        "size": 4695
+      },
+      "image": {
+        "path": "images/lp2-41.jpg",
+        "sha256": "134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2",
+        "size": 785555
+      }
+    },
+    {
+      "id": "lp2-42",
+      "page": {
+        "path": "data/pages/lp2-42.json",
+        "sha256": "c0d32a35875db77c8812995486c842684bab745be7d8e208ab5ccd8c17d769c2",
+        "size": 5088
+      },
+      "image": {
+        "path": "images/lp2-42.jpg",
+        "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6",
+        "size": 788795
+      }
+    },
+    {
+      "id": "lp2-43",
+      "page": {
+        "path": "data/pages/lp2-43.json",
+        "sha256": "1ccb547daf3ab3dfbb880856c33c9dd0bc20d8a955cdb2a2ece2c27c73c03960",
+        "size": 5042
+      },
+      "image": {
+        "path": "images/lp2-43.jpg",
+        "sha256": "dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415",
+        "size": 792166
+      }
+    },
+    {
+      "id": "lp2-44",
+      "page": {
+        "path": "data/pages/lp2-44.json",
+        "sha256": "fdaa64b159d263638e7b46d8dde1d3b6a7b725f8d6eb2cc4b21c325f30ec82a9",
+        "size": 4683
+      },
+      "image": {
+        "path": "images/lp2-44.jpg",
+        "sha256": "463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208",
+        "size": 796475
+      }
+    },
+    {
+      "id": "lp2-45",
+      "page": {
+        "path": "data/pages/lp2-45.json",
+        "sha256": "c2c73d33d05280ee0ac060f063cdb8b4584e2118b540be3bf2abc6b469bb5ee7",
+        "size": 4655
+      },
+      "image": {
+        "path": "images/lp2-45.jpg",
+        "sha256": "898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9",
+        "size": 772704
+      }
+    },
+    {
+      "id": "lp2-46",
+      "page": {
+        "path": "data/pages/lp2-46.json",
+        "sha256": "dd5ec02f9c4be4422e3291854206decb6013bd1b7934e505a0f24890e8d0fdb2",
+        "size": 4659
+      },
+      "image": {
+        "path": "images/lp2-46.jpg",
+        "sha256": "05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301",
+        "size": 782516
+      }
+    },
+    {
+      "id": "lp2-47",
+      "page": {
+        "path": "data/pages/lp2-47.json",
+        "sha256": "0efa35f4234996e915ce1b3bba07c7a195ea2562e4ff88b78b11095c9f82e084",
+        "size": 5041
+      },
+      "image": {
+        "path": "images/lp2-47.jpg",
+        "sha256": "08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8",
+        "size": 792027
+      }
+    },
+    {
+      "id": "lp2-48",
+      "page": {
+        "path": "data/pages/lp2-48.json",
+        "sha256": "4bb0a2d8306f21c9091b441f5c978882c04cb71e97771d5c2fa1869f5a2dc264",
+        "size": 5023
+      },
+      "image": {
+        "path": "images/lp2-48.jpg",
+        "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea",
+        "size": 803285
+      }
+    },
+    {
+      "id": "lp2-49",
+      "page": {
+        "path": "data/pages/lp2-49.json",
+        "sha256": "b689cbdbf8ea0b2114a6b5fdf24ca5d3ece082768461415340a6dd5662e7ba6c",
+        "size": 4162
+      },
+      "image": {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335",
+        "size": 651504
+      }
+    },
+    {
+      "id": "lp2-50",
+      "page": {
+        "path": "data/pages/lp2-50.json",
+        "sha256": "16712ebe1dd48039b9061fdec442801a61d9500122d3f7115ea242749251c161",
+        "size": 3592
+      },
+      "image": {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776",
+        "size": 581983
+      }
+    },
+    {
+      "id": "lp2-51",
+      "page": {
+        "path": "data/pages/lp2-51.json",
+        "sha256": "b236b5a791100c11486a41bb5b32ac9c4df08196cd5396914f36603604636db7",
+        "size": 4246
+      },
+      "image": {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b",
+        "size": 661727
+      }
+    },
+    {
+      "id": "lp2-52",
+      "page": {
+        "path": "data/pages/lp2-52.json",
+        "sha256": "bf647b78eee7e6014ae645bbdd3003bd653405e2d10e0dc61bf38668f1554c83",
+        "size": 4952
+      },
+      "image": {
+        "path": "images/lp2-52.jpg",
+        "sha256": "d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3",
+        "size": 792979
+      }
+    },
+    {
+      "id": "lp2-53",
+      "page": {
+        "path": "data/pages/lp2-53.json",
+        "sha256": "699319073ee8f54c047eec63c7660afccf85821581b103e62f7947414c24f80b",
+        "size": 5097
+      },
+      "image": {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548",
+        "size": 753790
+      }
+    },
+    {
+      "id": "lp2-54",
+      "page": {
+        "path": "data/pages/lp2-54.json",
+        "sha256": "7468c434f78b72ed6bed828580051e612fa1fd0de4e76df5820572fbd9d71169",
+        "size": 5418
+      },
+      "image": {
+        "path": "images/lp2-54.jpg",
+        "sha256": "dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4",
+        "size": 774295
+      }
+    },
+    {
+      "id": "lp2-55",
+      "page": {
+        "path": "data/pages/lp2-55.json",
+        "sha256": "0f4a2a0223e9a587ca65310d7eac0158282baeecd998c8769a56e8c7da4cd3b2",
+        "size": 3462
+      },
+      "image": {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba",
+        "size": 614928
+      }
+    },
+    {
+      "id": "lp2-56",
+      "page": {
+        "path": "data/pages/lp2-56.json",
+        "sha256": "be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979",
+        "size": 4851
+      },
+      "image": {
+        "path": "images/lp2-56.jpg",
+        "sha256": "a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc",
+        "size": 389813
+      }
+    },
+    {
+      "id": "lp2-57",
+      "page": {
+        "path": "data/pages/lp2-57.json",
+        "sha256": "7280faf3a70763706946653487885f44743731fb526ab87ffd8ab265e84aef00",
+        "size": 3452
+      },
+      "image": {
+        "path": "images/lp2-57.jpg",
+        "sha256": "1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b",
+        "size": 318076
+      }
+    }
+  ],
+  "sections": [
+    {
+      "id": "first-koan",
+      "pages": [
+        "lp1-06",
+        "lp1-07",
+        "lp1-08",
+        "lp1-09"
+      ]
+    },
+    {
+      "id": "instruction",
+      "pages": [
+        "lp1-16"
+      ]
+    },
+    {
+      "id": "loss-of-divinity",
+      "pages": [
+        "lp1-10",
+        "lp1-11",
+        "lp1-12",
+        "lp1-13"
+      ]
+    },
+    {
+      "id": "lp2-56",
+      "pages": [
+        "lp2-56"
+      ]
+    },
+    {
+      "id": "lp2-57",
+      "pages": [
+        "lp2-57"
+      ]
+    },
+    {
+      "id": "second-koan",
+      "pages": [
+        "lp1-14",
+        "lp1-15"
+      ]
+    },
+    {
+      "id": "some-wisdom",
+      "pages": [
+        "lp1-05"
+      ]
+    },
+    {
+      "id": "warning",
+      "pages": [
+        "lp1-01"
+      ]
+    },
+    {
+      "id": "welcome",
+      "pages": [
+        "lp1-03",
+        "lp1-04"
+      ]
+    }
+  ],
+  "payload": {
+    "path": "experiments/records/rsa-window-54-source-replay/source/payload_resolved.bin",
+    "sha256": "3b9b07d9a26e6d55c432d94d2661fdff3c2b348daed06821f2bdb23184a4b290",
+    "size": 256
+  },
+  "source_prior": "research/failed-attempts-inventory.json#deepweb-hash-against-jpegs reports 75 JPEG hashes under SHA-512/BLAKE2, but source JPEG bytes were absent from that Git tree; this manifest uses Liberpedia's independently preserved originals.",
+  "noncoverage": "No URL fetches, HTML response bodies, unknown pages, arbitrary case/encoding permutations, or digest-as-address conversions. A mismatch is scoped to the exact bytes and algorithms listed here."
+}

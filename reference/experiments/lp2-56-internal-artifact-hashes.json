@@ -1,0 +1,112 @@
+{
+  "id": "lp2-56-internal-artifact-hashes",
+  "status": "published",
+  "title": "LP2-56: hashes of preserved manuscript artifacts",
+  "question": "Does the LP2-56 512-bit value equal a hash of a declared preserved image, text or grid payload?",
+  "reader_question": "Have we tried hashing the original manuscript files against page 56?",
+  "summary": "No exact match among 1,236 SHA-512, SHA3-512 and BLAKE2b-512 comparisons of 412 declared byte variants.",
+  "finding": "The five printed rows total 128 hex digits (64 bytes). None of the 75 original JPEGs, 75 raw rune transcriptions under four newline rules, nine stored literal sections under those rules, or one resolved grid payload matches that value under the three run hash algorithms. One of the nine literal sections is LP2-56's own printed hash, not a decoded reading.",
+  "limitations": "The 412 listed variants contain 324 distinct byte strings. The source JPEG bytes used in an older reported SHA-512/BLAKE2 check were not preserved in that source; this replay uses Liberpedia's pinned originals. Whirlpool and Streebog were unavailable and were not run. Other artifacts, encodings, and transformations are outside this test.",
+  "next_steps": "A further hash proposal needs a specified input byte stream and algorithm. Pin those bytes and a known algorithm control before comparison.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-56",
+    "hash",
+    "SHA-512",
+    "SHA3-512",
+    "BLAKE2b",
+    "artifact bytes",
+    "literal sections"
+  ],
+  "family": {
+    "id": "lp2-target-hash-inputs",
+    "title": "Candidate byte inputs for the LP2-56 value",
+    "question": "Does a precisely specified artifact and hash reproduce the printed value?",
+    "baseline": "lp2-56-internal-artifact-hashes"
+  },
+  "variant": {
+    "label": "Canonical local images, transcription text, known readings and resolved grid payload",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-56"
+    ],
+    "representation": "The target is LP2-56's five printed hexadecimal rows. Inputs are all 75 preserved manuscript JPEGs, all 75 raw page strings, nine joined stored literal sections (including the LP2-56 hash itself) and the 256-byte resolved grid payload. Exact source paths and hashes are in plan.json.",
+    "procedure": "Freeze exact input-file hashes and text-byte rules. Hash each resulting byte stream with three independently vector-checked 512-bit algorithms. Compare the complete 64-byte digest with the printed target.",
+    "parameters": "412 candidate variants, including four LF/CRLF terminal-newline forms for text; 3 algorithms; 1,236 comparisons and 324 distinct byte strings.",
+    "exclusions": "No Whirlpool or Streebog implementation available; no remote URL bytes, historical source JPEG-byte identity, HTML, arbitrary padding, case changes, other encodings, or partial hash searches."
+  },
+  "review": {
+    "kind": "source-pinned local exact-byte replay",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent input and digest reconstruction in check.py",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/lp2-56-internal-artifact-hashes/run.py && python experiments/records/lp2-56-internal-artifact-hashes/check.py",
+    "environment": "Python 3 standard library; all source files are pinned by SHA-256 in plan.json.",
+    "script": "experiments/records/lp2-56-internal-artifact-hashes/run.py",
+    "script_sha256": "4a80d2b3e05290bc129dece474b86d7043747b3e0b86c852ed2fab39e6ea32cd",
+    "inputs": [
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/plan.json",
+        "sha256": "15c018ee239e2faa02cdf9e50be23e7c350851e0aa08b2d2e6780a5db78174d6"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/make_plan.py",
+        "sha256": "ede26c07b1b9641407568f71510a5d1a10fad892e1e9810513b90bbc4924a9da"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/run.py",
+        "sha256": "4a80d2b3e05290bc129dece474b86d7043747b3e0b86c852ed2fab39e6ea32cd"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/check.py",
+        "sha256": "b42c130400783d75c77e8a712f2b09074c2bdaf9e3718670d9f5fc731bbb1fa0"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/results.json",
+        "sha256": "a0727578e7293fedac76217caee42435a469a9b99537f894d218a7f3408e4ece"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/cases.jsonl",
+        "sha256": "727e4c1d44161cbcec083f16fd204d2eb7be9668fcebf064fa964edbf514b96b"
+      },
+      {
+        "path": "experiments/records/lp2-56-internal-artifact-hashes/coverage.svg",
+        "sha256": "116dc987de88512c856f8b02db6bc0534f1e133302e3de21153c2eabb903715f"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/lp2-56-internal-artifact-hashes/coverage.svg",
+      "caption": "The 412 declared input variants were compared under three 512-bit algorithms. None equaled the printed target."
+    }
+  ],
+  "sources": [
+    {
+      "label": "LP2-56 printed target and preserved image",
+      "url": "https://jelliottdev.github.io/#/reader/lp2-56"
+    },
+    {
+      "label": "Earlier public JPEG hash attempt, pinned source",
+      "url": "https://github.com/LiberPrimus/Failed-Attempts/tree/d219a8099f8d24e52496e9ee3456ed9980893884/deepweb-hash"
+    }
+  ],
+  "related": [
+    "rsa-window-54-source-replay",
+    "known-reading-languages"
+  ],
+  "article": "## Result\n\n**None of the 1,236 declared hash comparisons equals the 512-bit value printed on LP2-56.** This covers 412 byte candidates and three algorithms. Some text variants produce identical bytes, so there are **324 distinct input byte strings**. The result is a narrow check of these preserved files, not a test of every possible message, encoding or file associated with Cicada 3301.\n\n![Four input families compared under three 512-bit hashes; no exact matches.](experiments/records/lp2-56-internal-artifact-hashes/coverage.svg)\n\nThe printed target occupies **five rows totaling 128 hexadecimal characters**, or 64 bytes. It is a plausible digest length but the page does not identify a hash function or an input. Testing a digest requires both. A suggested input chosen after looking at the target creates an unbounded search, so this record fixed a finite set before computing matches.\n\n## What went into the check\n\n| Input | Byte rule | Candidates |\n| --- | --- | ---: |\n| Original manuscript images | Exact bytes of all 75 archived JPEGs | 75 |\n| Rune transcriptions | Each of the 75 stored `raw` strings encoded as UTF-8 | 300 variants |\n| Stored literal sections | Nine sections made by joining their stored `reading.literal` strings in page order | 36 variants |\n| Resolved grid payload | Exact 256-byte payload already extracted in the LP2-54 source replay | 1 |\n\nThe nine literal sections include **LP2-56's printed hash text itself**; that entry is an inventory check, not a decoded passage. The other eight are readings. The text counts include four stated byte forms per string: exact UTF-8; LF changed to CRLF; one final LF removed if present; and exactly one final LF ensured. The two cover-page rune strings are empty; they remain in the audit so the inventory is complete. No text was translated, respelled, uppercased, padded or reinterpreted as hexadecimal. Each candidate was hashed with **SHA-512, SHA3-512 and BLAKE2b-512** and compared byte for byte with the printed target.\n\nThis revisits a public proposal to hash the page JPEGs under SHA-512 and BLAKE2b. Its saved source table reports 75 values for each algorithm, but did not preserve the source JPEG bytes. This check uses Liberpedia's preserved originals, whose exact SHA-256 values are pinned in the [input plan](experiments/records/lp2-56-internal-artifact-hashes/plan.json). It adds the other declared local artifacts; it does not equate two image sets whose byte identity was not established.\n\n**Whirlpool and Streebog were not run.** No trusted implementation with a verified control vector was available in this environment. A failure to find a match among the three run algorithms says nothing about either excluded algorithm, a different file, a URL response, or an undisclosed byte transformation.\n\n## Reproduce\n\nFrom the repository root, run `python experiments/records/lp2-56-internal-artifact-hashes/run.py` to recreate the [1,236-row digest table](experiments/records/lp2-56-internal-artifact-hashes/cases.jsonl) and [summary](experiments/records/lp2-56-internal-artifact-hashes/results.json). Then run `python experiments/records/lp2-56-internal-artifact-hashes/check.py`. The checker independently reconstructs every input byte string and digest, verifies source-file hashes and standard `abc` algorithm vectors, and checks the 64-byte target extraction. Both use Python's standard library.\n",
+  "article_path": "experiments/records/lp2-56-internal-artifact-hashes/article.md",
+  "script_sha256": "4a80d2b3e05290bc129dece474b86d7043747b3e0b86c852ed2fab39e6ea32cd",
+  "record_type": {
+    "id": "method",
+    "label": "Bounded solving test",
+    "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "id": "grid-prefix-split-openings",
+  "status": "published",
+  "title": "Grid prefix channels as repeating rune keys",
+  "question": "Do suffix streams split by the grid's leading digit recover a known 12-rune opening at an LP2 page start?",
+  "reader_question": "Have the five grid-prefix groups been tried as separate keys?",
+  "summary": "Five suffix channels, three declared value mappings, both Vigenère signs and every real key phase gave no exact known opening at the start of any of 55 nonempty LP2 pages.",
+  "finding": "The channels have 60, 58, 65, 56 and 17 suffixes. Across 58,190 named page configurations and 523,710 fixed 12-rune opening comparisons, none matched. The longest partial opening prefix was three runes. The 17 group-4 hex nibbles were used as 17 values, not padded to bytes; their direct values duplicate the group-4 base-60-digit key.",
+  "limitations": "Only page-start, uninterrupted repeating-key GP29 Vigenère with two signs was tested. The nine openings are fixed known readings, not a language score. Source idea 12.12 does not give a direction table, origin or route readout, so no traversal was simulated. This does not exclude a later offset, interruption, transposition or another source-defined key derivation.",
+  "next_steps": "A route version needs a complete five-state direction table, starting cell and readout. A later-position key test should preregister its offsets and validation target.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2-49",
+    "LP2-50",
+    "LP2-51",
+    "grid",
+    "prefix channels",
+    "suffixes",
+    "Vigenère",
+    "GP29",
+    "known openings"
+  ],
+  "family": {
+    "id": "grid-prefix-channels",
+    "title": "Leading-digit channels of the LP2 grid",
+    "question": "Does splitting grid tokens by their leading digit supply a reproducible key or route?",
+    "baseline": "grid-prefix-split-openings"
+  },
+  "variant": {
+    "label": "Five manuscript-order suffix streams as repeating keys at page starts",
+    "changes": []
+  },
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "Source grid: all 256 two-character tokens from LP2-49–51 in printed sequence. Targets: first 12 rune indices on all 55 nonempty LP2-00–55 pages; nine fixed 12-rune known-reading openings. Source paths and hashes are pinned in plan.json.",
+    "procedure": "Partition tokens by leading digit 0–4, retaining suffix order. Map suffixes to base-60 digit values modulo 29 or ASCII byte values modulo 29; for group 4 also parse 17 individual hexadecimal nibbles. Use each as a repeating GP29 key under both signs at every phase. Compare first 12 output indices exactly with each fixed opening.",
+    "parameters": "Channel lengths 60/58/65/56/17; 1,058 named mapping/phase/sign settings including 34 group-4 duplicate settings; 55 target pages; nine openings; 58,190 named page cases and 523,710 exact comparisons.",
+    "exclusions": "Unspecified prefix-as-direction table and route, bytes formed from an odd nibble count, later ciphertext offsets, key skips, word resets, cross-page state, other alphabets and language scoring."
+  },
+  "review": {
+    "kind": "bounded source-inspired key test",
+    "retested_on": "2026-10-23",
+    "reviewer": "Independent complete channel and opening recount in check.py; planted odd-length wrapped-phase controls",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/grid-prefix-split-openings/run.py && python experiments/records/grid-prefix-split-openings/check.py",
+    "environment": "Python 3 standard library; frozen grid, page files, alphabet and opening traces are pinned by SHA-256 in plan.json.",
+    "script": "experiments/records/grid-prefix-split-openings/run.py",
+    "script_sha256": "3f84c8296f101204d6dca8e2f869f684c63a89629e699c480640927e8fc2c158",
+    "inputs": [
+      {
+        "path": "experiments/records/grid-prefix-split-openings/plan.json",
+        "sha256": "8f5c85e8800b5e201b68432bb02fa11c9ced75fce02355ecf4b56756798ff9d0"
+      },
+      {
+        "path": "experiments/records/grid-prefix-split-openings/make_plan.py",
+        "sha256": "cec00c43db5c0e2c354850d23f08fc1b30b31bb231ca079cf5fbf34ba7d59264"
+      },
+      {
+        "path": "experiments/records/grid-prefix-split-openings/run.py",
+        "sha256": "3f84c8296f101204d6dca8e2f869f684c63a89629e699c480640927e8fc2c158"
+      },
+      {
+        "path": "experiments/records/grid-prefix-split-openings/check.py",
+        "sha256": "2b04d218f83dd52e5a4e5fe9a5293d11ea479aa49215e81c662a6a0eeb06ede5"
+      },
+      {
+        "path": "exports/alphanumeric-grids.json",
+        "sha256": "0f5a8f360dbeebe9b13a0294e04aeef93a5332948c060f1e558c0901da406e21"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/grid-prefix-split-openings/results.json",
+        "sha256": "adaeac69073460385fe681dbd717ac6ff88db193ce5f90a79ef7a1aba7250aa1"
+      },
+      {
+        "path": "experiments/records/grid-prefix-split-openings/channels.svg",
+        "sha256": "11836a59809543dcdae6f28f0e86df8ec9f249cd65be86c8e265d0db887f541a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/grid-prefix-split-openings/channels.svg",
+      "caption": "The five manuscript-order suffix channels become rune-key candidates. The odd-length group-4 hex stream was never padded to bytes."
+    }
+  ],
+  "sources": [
+    {
+      "label": "LP2-49–51 grid transcription and source trail",
+      "url": "https://jelliottdev.github.io/#/wiki/alphanumeric-grids"
+    },
+    {
+      "label": "Earlier public study of the group-4 suffixes",
+      "url": "https://github.com/o3rynn/cicada-faw/tree/72f92e7ac8acf9b2e660e23d654107652cb00fb0"
+    }
+  ],
+  "related": [
+    "grid-high-digit-cells",
+    "lp2-known-vigenere-keys",
+    "grid-radix-reconciliation"
+  ]
+}

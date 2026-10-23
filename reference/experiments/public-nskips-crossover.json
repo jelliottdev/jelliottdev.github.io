@@ -1,0 +1,206 @@
+{
+  "id": "public-nskips-crossover",
+  "status": "published",
+  "title": "Skip-count signal across planted message lengths",
+  "question": "At what tested length does the correct-key skip count of a planted message separate from random ciphertext and key pairs under the source's exact decoder?",
+  "reader_question": "How much text is needed before a skip-count clue becomes useful?",
+  "summary": "Replays a published ten-length instrument experiment with a planted skip cipher, 300 same-length random pairs per decoder mode and a fixed 1% comparison bar.",
+  "finding": "For the exact decoder, the first separating ladder point is 6,000 runes, bracketed by a non-separating 3,600-rune point; separation persists at 9,000 and 12,956. This is a property of the planted test and its chosen null, not an LP2 decryption.",
+  "limitations": "Only one English-source plant per length was made. The random ciphertext/key null is not a model of all wrong puzzle keys, the planned shuffle surrogate was not run, and no LP2 keys were screened. The permissive drift channel has a distinct left-tail artifact; the skip-by-two mechanism fails recovery. The labels on the 6,000-rune panel are English windows, not language corpora.",
+  "next_steps": "A proposed LP2 skip rule needs an executable generator and decoder, a planted recovery control, a null matching its key search, and a held-out manuscript check. Do not transfer the 6,000-rune crossing to a different rule without measuring it.",
+  "outcome": "supported",
+  "tags": [
+    "key skips",
+    "skip count",
+    "positive control",
+    "null model",
+    "window length",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/public-nskips-crossover/source/liber-primus/data/keys/self_reliance.txt"
+    ],
+    "representation": "Source-planted GP-index ciphertexts of ten lengths from 400 through 12,956 runes, paired with their correct keystream; uniform random GP-index ciphertext and key pairs form each 300-trial null. No unsolved LP2 ciphertext is decoded.",
+    "procedure": "First reproduce the L400 and L12956 source gates; then run its ten-length ladder for exact keyskip1 and permissive drift decoders, the separate skip-by-two plant curve, and four additional 6,000-rune English-window labels. Compare correct-key skip counts with exact empirical null tails and require at least 90% planted recovery.",
+    "parameters": "Seed 3301; support 0.83; lengths 400, 600, 900, 1,200, 1,600, 2,400, 3,600, 6,000, 9,000, 12,956; 300 null decodes for each of 20 unique length/mode groups; 34 reported cells; empirical two-sided bar 0.01.",
+    "exclusions": "Other plaintext windows or distributions, other skip mechanisms or decoder transition rules, a complete key search, LP2 test pages, alternative nulls and the order-preserving shuffle surrogate mentioned in the plan."
+  },
+  "review": {
+    "reviewer": "Executable source replay with independent histogram and scope checks",
+    "retested_on": "2026-10-23",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-nskips-crossover/run.py",
+    "environment": "Python 3 standard library. Source and its inputs are bundled. The fresh replay uses six worker processes in a temporary copy; the saved-output checker is quick.",
+    "script": "experiments/records/public-nskips-crossover/run.py",
+    "script_sha256": "fb4f6725cf21171d9dce7cc54bad170d768fdd9ebf80a0f3dab02bb89619fd48",
+    "inputs": [
+      {
+        "path": "experiments/records/public-nskips-crossover/check.py",
+        "sha256": "44efdd250adb02cd8faa2f59f9d855d7be162d4f2211e5a61ee1bfcbf28bfb75"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/optimized.py",
+        "sha256": "d25829cc40ba755a60982615b4949322c3e8dfa4a7ccf369801360fd2f2014b1"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/plot.py",
+        "sha256": "b25987c9255655c40f30b9e9edefb92df07cfd64cbe650fee99ce0a62728fd7c"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/run.py",
+        "sha256": "fb4f6725cf21171d9dce7cc54bad170d768fdd9ebf80a0f3dab02bb89619fd48"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round12/C1/feedback.py",
+        "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round19/I1/constructions.py",
+        "sha256": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round19/I1/driftbeam.py",
+        "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round20/P2/nskips_lib.py",
+        "sha256": "447601425e5caa7a644fff00c3fc9623d8c82efb824a9434fbf97e5a4423853b"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round20/P2/nskips_null.json",
+        "sha256": "6549144f6f2b5240b2ac35c12edf12bfb8bd8b5bd083e057c7207ebcfbb5c276"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round20/P2/PREREG.md",
+        "sha256": "8be779c9062f6798f76b77525232f38d4b7e02d1e04a0ea4e65ea0c33477325f"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round20/P2/RESULTS.md",
+        "sha256": "c111eab3ce850a1ef55b3dd1118a2785356660e5d499dd29a3b12a7871b4502a"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/crossover.py",
+        "sha256": "fff9c63bae48dde2ad2c940ff952c3e528ad9aeb95a20a4a280738bc7d475745"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/original_nskips_crossover.json",
+        "sha256": "9f1cbf41c2dceb65fa27394dfe5a56f76206c480ee655ec0be40fea743524a8c"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/PREREG.md",
+        "sha256": "be6e5f5ba9720e0193e925c4e0ba81d31d932abd3f1531f703704346ae8f2f93"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/RESULTS.md",
+        "sha256": "7f4730b41d852af6545dbf2d87367053eec334fd979446f332744c7372871569"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/benchmark/plant.py",
+        "sha256": "88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/autokey.py",
+        "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/solve.py",
+        "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/nskips_crossover.json",
+        "sha256": "20ca84bb04b13b519b51e72898e7344b55704126a268232e23024ffe66210b2f"
+      },
+      {
+        "path": "experiments/records/public-nskips-crossover/crossover.svg",
+        "sha256": "b1350e545ad3240c39cf1f87a6b53ffdbcac73bf3b7bea559749271747c06c88"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/public-nskips-crossover/crossover.svg",
+      "caption": "The correct-key skip count first crosses the 1% wrong-key upper-tail threshold at the tested 6,000-rune point."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/crossover.py"
+    },
+    {
+      "label": "Pinned source plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/PREREG.md"
+    },
+    {
+      "label": "Pinned source finding",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/RESULTS.md"
+    }
+  ],
+  "related": [
+    "public-kdf-seed-stretch",
+    "source-independent-key-floor-audit"
+  ],
+  "article": "# How much text does a skip-count test need?\n\nOne proposed cipher model sometimes advances the key without consuming a manuscript rune. Its exact decoder permits such a skip only when the skipped key position would reproduce the previous ciphertext rune. A decoder can count those extra advances. This [published experiment](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/RESULTS.md) asks when that count can distinguish a **deliberately planted message and its correct key** from random ciphertext paired with random keys. It tests the measuring tool; it does not decode an unsolved page.\n\n## Finding\n\nFor the source's exact `keyskip1` decoder, the planted key first clears its **1% two-sided comparison bar at 6,000 runes**. It does not clear the bar at the preceding measured length, 3,600, and it still clears it at 9,000 and 12,956. Thus the observed crossing lies in **(3,600, 6,000]**, on this ten-point length ladder. This is a bound for this plant and this null model, not a universal minimum length or evidence that LP2 uses the modeled cipher.\n\n![The planted correct-key skip count crosses the wrong-key upper-tail threshold at 6,000 runes, then remains above it.](experiments/records/public-nskips-crossover/crossover.svg)\n\nAt 3,600 runes the correct-key path made **94 skips**; the 1% upper-tail threshold of the 300 wrong-key trials was **107**. At 6,000, the correct path made **198**, above a threshold of **176**. The planted plaintext was recovered with at least **99.8% agreement** at every length, so a failed comparison below 6,000 was not caused by a decoder that could not recover its own test message. A reported two-sided value of `0.000` means none of the 300 sampled null trials was as extreme; it is not a zero probability.\n\n## What was tested\n\nThe source planted one message at each of **400, 600, 900, 1,200, 1,600, 2,400, 3,600, 6,000, 9,000 and 12,956 runes**, using its fixed skip rule and seed 3301. For each length and decoder mode it compared the correct-key skip count with 300 uniform-random ciphertext and key pairs of the same length. Its criterion required both a two-sided empirical value at or below **0.01** and at least **90%** recovery of the planted message. The two endpoints were checked first: 400 did not separate, while 12,956 did. The source does not cap its doubled-tail statistic at one, so its reported `1.04` at 600 runes is not a probability.\n\nThe archive contains **34 reported cells**. Ten lengths were measured for the exact decoder and for a more permissive drift decoder, and a separate ten-length curve planted a `skip_by_two` mechanism. Four additional labels were measured at the 6,000-rune point. Those labels do **not** represent different language corpora in the executable: the plant uses English *Self-Reliance* text for all of them and changes the chosen window with the label. The script also promised an order-preserving shuffle surrogate in its plan, but only the random ciphertext/key null is executed here.\n\nThe alternate channels illustrate why a numerical separation cannot stand alone. The permissive drift decoder produces many spurious skips with random keys, so the correct key falls in its **left** tail even at short lengths; that is a different effect from the excess-skip footprint in the exact decoder. The `skip_by_two` plant never reaches the required recovery floor, so its curve cannot establish a crossover for that mechanism. Neither channel should be combined with the exact-channel crossing.\n\nThese are **single planted messages per length**, not repeated estimates of how often the method succeeds on arbitrary messages. No LP2 keys were searched, no plaintext language was inferred, and the numerical bound changes if the plant, null, decoder or threshold changes. In particular, this test does not rule out a useful shorter-window statistic or a different skip rule.\n\n## Reproduce\n\nThe bundled [result data](experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/nskips_crossover.json) retains every discrete null histogram. The [independent checker](experiments/records/public-nskips-crossover/check.py) recomputes the reported thresholds, tails, crossing and endpoint gate, then compares the replay with the pinned source result. From a Liberpedia checkout:\n\n```bash\npython experiments/records/public-nskips-crossover/check.py\npython experiments/records/public-nskips-crossover/run.py\n```\n\nThe full runner copies the source to a temporary folder. It reuses a null sample when multiple cells call the source with the **same length, decoder mode, seed and 300-trial input rule**; the source would otherwise recompute identical samples. Every resulting cell is checked against the pinned output. For the exact executable, input files and predeclared rules, inspect the [source driver](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/crossover.py), [plan](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round21/L2-nskips-crossover-length/PREREG.md), and [bundled source files](experiments/records/public-nskips-crossover/source/liber-primus/analysis/round21/L2-nskips-crossover-length/PREREG.md).\n",
+  "article_path": "experiments/records/public-nskips-crossover/article.md",
+  "script_sha256": "fb4f6725cf21171d9dce7cc54bad170d768fdd9ebf80a0f3dab02bb89619fd48",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}
