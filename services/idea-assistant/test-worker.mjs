@@ -14,7 +14,7 @@ const typedDocs=Search.experimentDocs([typed]);
 assert.deepEqual(JSON.parse(typedDocs[0].text).record_type,typed.record_type);
 const typedHandler=createHandler(async()=>typedDocs);
 let captured;
-await typedHandler(request(),{...env,AI:{run:async(model,options)=>{
+const typedResponse=await typedHandler(request(),{...env,AI:{run:async(model,options)=>{
  captured=options.messages;
  return {choices:[{message:{content:'This is a bounded test [1].'}}]};
 }}});
@@ -22,6 +22,8 @@ assert(captured[0].content.includes('bounded solving tests'));
 assert(captured[0].content.includes('source audit'));
 const supplied=JSON.parse(captured[1].content).records;
 assert.deepEqual(JSON.parse(supplied[0].text).record_type,typed.record_type);
+assert.equal((await typedResponse.json()).sources[0].recordType,'method',
+  'The Worker passes editorial type to the browser alongside complete evidence');
 assert.equal((await (await createHandler(async()=>[])(request(),env)).json()).reason,'no-matching-records');
 assert.equal((await (await handle(request('Vigenere on page 31'),env)).json()).reason,'no-matching-records');assert.equal(calls,0);
 for(const query of ['has anyone tried LP2–15','has anyone tested page #15','has anyone tested pages #15–#16']){

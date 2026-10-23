@@ -236,6 +236,12 @@ def build(root=ROOT):
             text(definition.get('label'), 'record type label')
             text(definition.get('description'), 'record type description')
             record['record_type'] = {'id': kind_id, **definition}
+            # Non-exclusive discovery hints from the authored method map. These
+            # do not say that every variant of a family was tried.
+            record['method_topics'] = [
+                {'id': family['id'], 'aliases': family['aliases']}
+                for family in types['families'] if record['id'] in family['related']
+            ]
     for d in records:
         require(all(x in ids and x != d['id'] for x in d['related']),
                 'Related IDs must name other published records')

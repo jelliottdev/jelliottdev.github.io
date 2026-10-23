@@ -68,6 +68,8 @@ META = {
 }
 
 ITEM_OVERRIDES = {
+    'p21_30_second_layer.py': ('replayed_source_bounded', ['wulfic-p21-literal-f-masks'],
+        'Complete literal-F mask bounds and fixed no-mask second-layer screens replayed on LP2-04..13, preserving source parser behavior. No page passes the singleton gate; 19 whole-search shuffles also fail. Other keys and pause semantics remain open.'),
     'stream_cipher_attack.py': ('replayed_source_bounded', ['wulfic-systematic-stream-source'],
         'Complete executed 26-stream and two-value feedback grids replayed on corrected page identities, with 19 whole-search shuffles. Uncalled Fibonacci and incomplete key reconstruction remain outside scope.'),
     'solve_p20.py': ('replayed_source_bounded', ['wulfic-p20-prime-position-routes'],

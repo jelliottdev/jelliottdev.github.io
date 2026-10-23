@@ -7,6 +7,13 @@ async function loadSupportingIndex(){
   if(!supportingIndex)supportingIndex=fetch('data/assistant-index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).catch(()=>{supportingIndex=null;return {documents:[]};});
   return supportingIndex;
 }
+function ideaSourceType(source){
+  if(source.kind!=='experiment')return 'Supporting manuscript context';
+  const labels={method:'Solving test',measurement:'Manuscript measurement',control:'Control or calibration',
+    alphabet:'Alphabet-wide analysis',audit:'Source or input audit',historical:'Historical reproduction',
+    replay:'Method replay'};
+  return Object.prototype.hasOwnProperty.call(labels,source.recordType)?labels[source.recordType]:'Research record';
+}
 function experimentSearchResult(r, requestedPages=[]){
   const missing=requestedPages.filter(id=>!r.scope.pages.includes(id));
   return `<article class="experiment-result"><h3><a href="#/experiments/${r.id}">${esc(r.title)}</a></h3>
@@ -121,7 +128,7 @@ function renderIdeaChecker(query){
       <div class="answer-prose">${AssistantMarkdown.render(data.answer,data.sources)}</div>
       <p class="small muted">AI comparison · Check the cited scope and findings.${data.cached?' Reused answer; sources unchanged.':''}</p>
       <details class="answer-sources"><summary>Sources used (${data.sources.length})</summary><ol>${data.sources.map(s=>`<li>
-        <a href="${esc(s.href)}">${esc(s.title)}</a> <span class="small muted">${s.kind==='experiment'?'Experiment record':'Supporting manuscript context'}</span>
+        <a href="${esc(s.href)}">${esc(s.title)}</a> <span class="small muted">${esc(ideaSourceType(s))}</span>
         ${s.page?` · <a href="#/reader/${esc(s.page)}">Open reader</a>`:''}
         <p class="small muted">${esc(s.excerpt||'Complete recorded scope, finding, and limitations')}</p>${sourceExcerpt(s)}</li>`).join('')}</ol></details>`;
     $('#idea-copy').onclick=async()=>{
@@ -156,17 +163,18 @@ function renderIdeaChecker(query){
   }
   function draw(searchNow,requestAI=false){
     reset();const idea=input.value.trim();shownIdea=searchNow?idea:'';refreshIdeaSupport();const {tests:matches,supporting}=searchNow?AssistantSearch.classify(documents(),idea,pages()):{tests:[],supporting:[]};
+    const canCompare=Boolean(searchNow&&idea&&AssistantSearch.select(documents(),idea,pages()).length);
     const selected=items=>items.slice(0,3).map(m=>experimentRecords.find(r=>r.id===m.document.id)).filter(Boolean)
       .map(r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])])).join('');
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>No tests have been added to this index. This does not tell us whether your technique has been tried elsewhere.</p>';
     else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
-    else results.innerHTML=`<h2>${matches.length?'Related tests':supporting.length?'Related measurements':'No matching record'}</h2>${selected(matches)}${supporting.length?`${matches.length?'<h2>Measurements and controls</h2>':''}${selected(supporting)}`:''}${matches.length>3||supporting.length>3?`<p class="small"><a href="#/experiments?browse=${encodeURIComponent(idea)}&section=browse-experiments">Browse more records</a></p>`:''}`;
-    if((matches.length||supporting.length)&&assistantEndpoint()){
+    else results.innerHTML=`<h2>${matches.length?'Related tests':supporting.length?'Related evidence':'No matching record'}</h2>${selected(matches)}${supporting.length?`${matches.length?'<h2>Other evidence</h2>':''}${selected(supporting)}`:''}${matches.length>3||supporting.length>3?`<p class="small"><a href="#/experiments?browse=${encodeURIComponent(idea)}&section=browse-experiments">Browse more records</a></p>`:''}`;
+    if((matches.length||supporting.length)&&canCompare&&assistantEndpoint()){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});
       else if(requestAI)compare(idea);
       else status.textContent='Press Check idea to compare the documented scope.';
-    } else if((matches.length||supporting.length)&&requestAI&&!assistantConfig){
+    } else if((matches.length||supporting.length)&&canCompare&&requestAI&&!assistantConfig){
       const token=++pendingConfigRequest;
       status.textContent='Preparing the comparison…';
       assistantConfigPromise.then(()=>{
@@ -174,7 +182,8 @@ function renderIdeaChecker(query){
         if(assistantEndpoint())compare(idea);
         else status.textContent='Index checked. AI comparison is unavailable; the matching records are ready.';
       });
-    } else if(searchNow&&idea)status.textContent='Index checked. No AI request was needed.';
+    } else if(searchNow&&idea)status.textContent=!canCompare&&(matches.length||supporting.length)?
+      'Read the related evidence below; no AI comparison was requested.':'Index checked. No AI request was needed.';
   }
   input.addEventListener('input',()=>{shownIdea='';reset()});
   for(const id of ['#idea-page-one','#idea-page-two'])$(id).addEventListener('change',()=>{shownIdea='';reset()});

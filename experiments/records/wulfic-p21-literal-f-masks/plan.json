@@ -1,0 +1,18 @@
+{
+  "schema": "liberpedia-source-replay-plan-v1",
+  "frozen_on": "2026-10-23",
+  "id": "wulfic-p21-literal-f-masks",
+  "source": {
+    "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "path": "tools/legacy/p21_30_second_layer.py",
+    "git_blob": "1e93873d5794bb1149826adc79c14cc76c4c830d"
+  },
+  "input_pages": "Use exact committed pages/page_21 through page_30 rune files, verified rune-for-rune against current LP2-04 through LP2-13. Preserve source keyword, mode and parse_keyword behavior, including its handling of letters that lack GP mappings. Keep source's own word separator set and singleton indexing.",
+  "original_F_mask_grid": "For each page with <=16 ciphertext F runes, enumerate all 2^F subsets, including the empty mask. At masked positions output literal GP rune 0 and do not advance the keyword counter; at other positions decrypt in the page's fixed source mode and advance. Report the no-mask baseline, count of masks making every source-visible singleton I or A when at least one singleton exists, selected best source combined score IoC*100 + bigram*0.5, and fallback best-IoC branch where no mask passes. Do not replace original keyword array, add phases or reinterpret source threshold.",
+  "second_layer": "On the standard no-mask decode only, run the source's fixed prime-index extraction, 13 widths of forward/reverse column and padded spiral readings, prime-sorted position proposal, word-order views and first-25-word magic-square order. Report exact executed counts and source gates, but recognize that full permutations preserve IoC and word-order-only permutations preserve the multiset of dictionary word matches. No new optimization loop is inferred from printed previews.",
+  "amended_control": "After complete source-defined search, repeat the entire per-page mask choice on 19 seeded full-page rune-order shuffles that keep each page's rune multiset and its visible word slots (seed 20261023). Compare selected-page count and best selected source score to the distribution of complete shuffled searches. This is a coarse descriptive reference, not a cipher model or historical source test.",
+  "preoutcome_gate": "Before scoring actual pages, verify all ten committed file hashes and source/current page rune alignment. Use a synthetic message with at least two deliberate literal F skip positions and visible singleton I/A words; encrypt it under one source keyword/mode with no accidental extra F; enumerate all source masks and verify the planted mask recovers the entire message and passes the source singleton gate. Independently compare source decrypt_with_fskip and scalar recurrence for every small mask on a second synthetic stream, including an empty mask. Verify source score and IoC calculations on the plant. If this fails, stop without manuscript findings.",
+  "checks": "Preserve a frozen input snapshot, source original-function parity on planted cases, source output receipt on exact pages, and an independent checker that recomputes mask selection and representative full second-layer outputs. Do not call source printed rankings plaintext readings.",
+  "overlap_and_limits": "The same source keywords in plain repeating-key form overlap the existing wulfic-prime-keyword-stream-families record. This scan adds the source's subset selection over literal ciphertext F positions with paused key advancement; it is not an unrelated new keyword family. Any F mask chosen after inspecting IoC/bigrams is a flexible fit. Do not generalize from its source-specific singleton and score screen to all interruptions or encryption mechanisms."
+}

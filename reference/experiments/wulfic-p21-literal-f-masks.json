@@ -1,0 +1,165 @@
+{
+  "id": "wulfic-p21-literal-f-masks",
+  "status": "published",
+  "title": "Pausing the key at selected F runes",
+  "question": "Does the pinned second-layer program find any fixed-key F-skip mask that satisfies all its singleton I/A constraints?",
+  "reader_question": "Can treating selected F runes as literal fix these keyword decodes?",
+  "summary": "None of 27,402 source-defined F masks across ten exact pages passes all one-rune-word checks; the program falls back to choosing a mask by frequency score.",
+  "finding": "Exact pinned Wulfic pages 21–30 align to LP2-04–13. The unmodified source enumerates 27,402 literal-F masks, and no page has a mask satisfying all of its singleton I/A constraints. Its 45 fixed second-layer rune routes per page on the unmasked decode also print zero gate-passing rows. Nineteen whole-selection shuffled searches likewise have zero gated pages, so this gate does not distinguish the manuscript from the stated shuffle control.",
+  "limitations": "The source keyword parser drops V in DIVINITY and contracts EO in DEOR; this replay preserves its actual arrays. The source's narrow singleton separator rule and IoC/bigram score are not a general reading test. The 19 shuffles are a coarse descriptive reference, not a cipher model. Other keys, page ranges, interruption rules or downstream layers are not tested.",
+  "next_steps": "Specify a corrected key/parser and a held-out passage test before treating an increased IoC from a selected mask as a decoding lead.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "F skip",
+    "Vigenere",
+    "singleton words",
+    "selection effect"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-p21-literal-f-masks/plan.json"
+    ],
+    "representation": "Exact source Git-object rune files pages/page_21–30, rune-aligned to current LP2-04–13; the source's word separators and keyword parser.",
+    "procedure": "For each fixed page keyword/mode, enumerate every subset of ciphertext F positions as literal, non-advancing key slots. Apply the original all-singleton I/A gate, source score or fallback IoC rank, and source-defined unmasked second-layer routes. Run 19 complete page-shuffle controls.",
+    "parameters": "Ten pages, 1–14 F positions each, 27,402 total source masks, 45 fixed rune routes per page, 19 pagewise shuffle repeats, seed 20261023.",
+    "exclusions": "Corrected keyword parse, alternate F behavior, source pages outside 21–30, word-boundary variants, other languages and uncalled prime permutation helper."
+  },
+  "review": {
+    "kind": "complete source-defined F-mask replay and selected-search control",
+    "retested_on": "2026-10-23",
+    "reviewer": "Ten Git-object/page alignments, two-pause planted recovery, 48 scalar/source parity cases, unmodified source output receipt, independent enumeration of all 27,402 observed masks and one shuffled full grid",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-p21-literal-f-masks/check.py",
+    "environment": "Python 3, NumPy and Numba. The full run, source parity and input snapshot also require a checkout of pinned Wulfic commit bf89d3d13aad2b8f2c95ab195cf1b092f250775c.",
+    "script": "experiments/records/wulfic-p21-literal-f-masks/check.py",
+    "script_sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/plan.json",
+        "sha256": "491d1c4bc57872a1bf0a04bd18fbb10968ead580157356ec892184a0969069a9"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/snapshot_inputs.py",
+        "sha256": "f4b3d7dabb259c1406a7bdad7562418e6c100fffd12fa37d068fa103008f08c6"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/gate.py",
+        "sha256": "5caf72c681e6b79373cb26cb8418c4199457d3b46b1b1e4dda14b65268279905"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/engine.py",
+        "sha256": "aef0c6cdd1aa3c4f8cbe39081163340c14be253804399c75b289e18128bce5b6"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/run.py",
+        "sha256": "770b5256a4140b64506f42ad6ade077e6e90c3a287aeaf90e333e77264b019e7"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/check.py",
+        "sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/plot.py",
+        "sha256": "d19a6bc09276806819c34817cdb62c4301ad2df78c44768304e792d68d5613ab"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/make_record.py",
+        "sha256": "0e01e09088cfd282eaf61ef3174f663c670d18489a4c369a6de8e353eeff5f0c"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/article.md",
+        "sha256": "5d9b088fe8a4781cf0fff61580ab549c3319cdedd6aa05e93eb5d2b775110abe"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/inputs.json",
+        "sha256": "e342597236b55e478de211fd8d136d270d1512a2113b9dac52de65dc61ae30ed"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/gate.json",
+        "sha256": "f9b3f8c9538ab38c5b444e0fc3160e35fa2df6d439a110a1d8e315d3edc9ec91"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/results.json",
+        "sha256": "9cc2ee640a0b870d0ff03603ee49a23888e2320021ea5d51278bbd0d66af19db"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/source-run.json",
+        "sha256": "2e57d86d4ea972f2943fa08cc15c3966911cd06f1dddaf98068e08f38946797d"
+      },
+      {
+        "path": "experiments/records/wulfic-p21-literal-f-masks/comparison.svg",
+        "sha256": "1d2826113f6439afe1f123ada793721e918a08d7522de0ce3b8fa8cec2a95c7a"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-p21-literal-f-masks/comparison.svg",
+      "caption": "Selected F masks can raise IoC on each page, but none passes the source's all-singleton I/A gate."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic second-layer program",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py"
+    },
+    {
+      "label": "Pinned legacy input warning",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-prime-keyword-stream-families",
+    "wulfic-keyed-transposition-cohort",
+    "wulfic-systematic-stream-source"
+  ],
+  "article": "# Can selected F runes rescue these fixed keyword decodes?\n\nThe [archived second-layer program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/p21_30_second_layer.py) proposes one keyword and arithmetic direction for each of ten page files. For every ciphertext F rune, it tries two possibilities: decrypt it normally, or output a literal F and **pause key advancement**. The committed files `page_21`–`page_30` match current **LP2-04–13** rune for rune.\n\n## Result\n\nAcross the ten pages, the program's bounds allow **27,402 F masks**. **None** makes every one-rune word an I or A under the program's own separator rule. The unmodified source consequently takes its fallback branch and chooses a mask by index of coincidence (IoC) on every page. That fallback is a frequency ranking, not a successful one-rune-word check.\n\n![The best-IoC F mask raises concentration on some pages, while zero of 27,402 masks passes the required word gate.](experiments/records/wulfic-p21-literal-f-masks/comparison.svg)\n\nThe source's next stage tries **45 fixed rune routes per page** on the *ordinary no-mask* decode. None crosses its printing gates. It also prints prime-word, reversed-word and first-25-word magic-square views, but does not score those word orders. Reordering whole words cannot change how many individual words match a dictionary.\n\nWe repeated the full mask selection on 19 seeded rune-order shuffles of all ten pages, keeping each page's rune inventory and visible word slots. **All 19 also produced zero pages with an all-singleton-valid mask.** That comparison shows this strict gate has little ability to distinguish the actual pages under this control; it does not provide evidence for or against other F-skip rules.\n\n## What was checked\n\nBefore using the manuscript, a planted 20-rune message with **two literal-F pauses** was recovered exactly and passed both one-rune-word checks. The source functions and a separate scalar recurrence agreed on 48 small mask/mode cases, and the compiled all-mask selector agreed on the plant. We then ran the unmodified source script against the exact committed page bytes. Its ten fallback choices match the saved scan. An independent scalar checker enumerates every manuscript mask again and reconstructs the first complete shuffled search.\n\nThe source's keyword parser is part of this result. It turns `DEOR` into three GP runes because `EO` is a digraph; it silently drops the `V` in `DIVINITY`, despite a comment that suggests `V` should map to `U`. We preserved that actual behavior. A corrected parser or a different keyword would be a new test. The source only treats period, hyphen, bullet, space and newline as word separators, so its singleton positions can differ from other transcriptions.\n\n## Reproduce and limits\n\nThe downloaded experiment contains everything needed for `python check.py` and `python plot.py`: run those commands from the extracted directory containing the scripts. To repeat the original-source parity check and full search, clone Wulfic at commit `bf89d3d` and run `python gate.py --source-root ABSOLUTE_CLONE_PATH --check` and `python run.py --source-root ABSOLUTE_CLONE_PATH --check` from the same directory. `snapshot_inputs.py --source-root ABSOLUTE_CLONE_PATH --check` additionally compares the source pages with Liberpedia's `data/pages` files, so run that check in a full Liberpedia checkout. The packaged input snapshot already records the exact Git-object hashes and page text.\n\nThis is one grouped replay of the source's **fixed ten keyword assignments and finite F-mask search**. It does not eliminate F as an interruption elsewhere, different mask semantics, other page keys, or a later decoding layer. The standard repeating-key outputs overlap the earlier [prime and keyword streams test](#/experiments/wulfic-prime-keyword-stream-families); the mask scan and the source's second-layer screens are the additions here.\n",
+  "article_path": "experiments/records/wulfic-p21-literal-f-masks/article.md",
+  "script_sha256": "de7d7577470fbd3e219649a82f5a28bdb937067380770441d5281c5def178fea",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "polyalphabetic",
+      "aliases": [
+        "Vigenere",
+        "Beaufort",
+        "repeating key",
+        "polyalphabetic",
+        "repeating key cipher",
+        "substitution",
+        "polyalphabetic substitution"
+      ]
+    },
+    {
+      "id": "interruptions",
+      "aliases": [
+        "interrupters",
+        "reset",
+        "pause key",
+        "skip key"
+      ]
+    }
+  ]
+}

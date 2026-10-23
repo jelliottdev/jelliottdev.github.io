@@ -1,0 +1,78 @@
+{
+  "schema": "liberpedia-direction-cipher-grid-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_inputs": [
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/analysis/campaign7/reading_direction.py",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/reading_direction.py",
+      "sha256": "a78fa5ce256b68fe560f21bb0de0838321fc8d1a3f4f3aa8e9ca73bcd402a0ac",
+      "bytes": 5017
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/analysis/campaign7/reading_direction_results.json",
+      "upstream_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/reading_direction_results.json",
+      "sha256": "8039afda4e799d43050e45aa44d472c346755361ab060956b0d9623367490baf",
+      "bytes": 734
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/data/krisyotam_runes.txt",
+      "upstream_path": "liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+      "bytes": 43739
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/data/english_quadgrams.txt",
+      "upstream_path": "liber-primus/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+      "bytes": 608938
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/src/lp/gematria.py",
+      "upstream_path": "liber-primus/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+      "bytes": 4283
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/src/lp/ciphers.py",
+      "upstream_path": "liber-primus/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+      "bytes": 4785
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/src/lp/score.py",
+      "upstream_path": "liber-primus/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+      "bytes": 2229
+    },
+    {
+      "path": "experiments/records/dukotah-reading-direction-cipher-grid/source/LICENSE",
+      "upstream_path": "LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59",
+      "bytes": 1839
+    }
+  ],
+  "method": "For every source page, preserve rune lines and run five orders: rows, whole reverse, alternate-row reversal, ordinal columns, ordinal columns reverse. Apply the exact source suite: direct, Atbash, 28 nonzero shifts, prime/prime-minus-one/totient streams each in two signs, and repeating DIVINITY subtraction; whole-page source GP transliteration quadgram score.",
+  "scope": "Source segmentation: 55 unsolved rune-bearing segments 0..54 = current LP2-00..49 and LP2-51..55; source segments 55,56 = solved LP2-56,57. Blank LP2-50 is not a source segment. Every rune of each page, headings included.",
+  "parameter_count": {
+    "routes": 5,
+    "cipher_settings": 37,
+    "unsolved_pages": 55,
+    "unsolved_candidates": 10175,
+    "solved_control_pages": 2
+  },
+  "source_break_score": -5.0,
+  "source_result_parity": "Compare the exact source best_all, best_unsolved and per_order_best with archived source result; three-decimal source rounding.",
+  "positive_controls": [
+    "Score both known-reading tail pages in direct row order; LP2-56 is itself enciphered, so only the direct LP2-57 Parable is required to exceed -5.0.",
+    "Encrypt one solved page by plus-seven then reverse odd lines; boustrophedon plus shift7 must restore it exactly and exceed -5.0.",
+    "A second planted source page is permuted by inverse ordinal-column order then shifted; colmajor route plus shift7 must recover the same solved page."
+  ],
+  "null_control": {
+    "rule": "49 independent within-page rune shuffles of the 55 unsolved source segments; preserve each line length and page boundary, repeat the entire five-route×37-cipher search; compare one global best over all settings per shuffle.",
+    "seed": 3301,
+    "rng": "Python 3.12 random.Random(seed), flatten each source page, shuffle its complete rune vector, then restore original line lengths in source page order; one global RNG shared across all 49 controls",
+    "replicates": 49
+  },
+  "limits": "This exact archive evaluates deterministic reading-order plus specific simple ciphers with one English model. No arbitrary paths, page concatenation, alternate keys, non-English recognition or hidden text. A null control preserves page symbols and line lengths but is not an encryption model. Original source did not use these 49 added shuffles; clearly separate archived score from added controls."
+}

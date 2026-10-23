@@ -90,13 +90,13 @@ export function createHandler(loadRecords = records) {
       const documents=await loadRecords();
       if(pages.some(p=>Number(p.slice(4))>(p.startsWith('lp1')?16:57)))return reply({error:'Choose a published manuscript page.'},400);
       const selected=AssistantSearch.select(documents,query,pages).map((d,i)=>({
-        citation:i+1,id:d.id,title:d.title,kind:d.kind,href:d.href,page:d.page,
+        citation:i+1,id:d.id,title:d.title,kind:d.kind,recordType:d.recordType,href:d.href,page:d.page,
         excerpt:d.excerpt,text:d.text
       }));
       if (!selected.length) return reply({answer:null, sources:[], reason:'no-matching-records'});
       const context = JSON.stringify(selected);
       // Exact normalized query + exact evidence + prompt version prevent stale reuse.
-      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v6-all-record-types',MODEL,query,pages,selected])));
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(['research-v7-typed-records',MODEL,query,pages,selected])));
       const key=[...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
       const cacheRequest=new Request(new URL('/answer-cache/'+key,request.url));
       const edge=globalThis.caches?.default;
