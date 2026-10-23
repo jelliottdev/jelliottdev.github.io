@@ -1,0 +1,219 @@
+{
+  "id": "public-multihistory-feedback",
+  "status": "published",
+  "title": "Two-to-six-rune feedback and autokey screen",
+  "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
+  "reader_question": "Could each rune be decoded using a key derived from the preceding runes?",
+  "summary": "A pinned public 23,520-configuration feedback sweep is rerun against LP2, with 21 planted controls and an independently recomputed winning decode.",
+  "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. All 21 planted k=3 controls recover correctly; no tested output provides a convincing English reading.",
+  "limitations": "Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities. Their wrong seeds need not converge. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
+  "next_steps": "A concrete feedback proposal should specify its recurrence, seed, boundary reset and output language before scoring; test matched planted examples and apply the same full selection to null controls.",
+  "outcome": "not-supported",
+  "tags": [
+    "autokey",
+    "feedback cipher",
+    "running key",
+    "multi-rune history",
+    "prime sums",
+    "XOR",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt"
+    ],
+    "representation": "Zero-based GP rune indices from the pinned source transcription: 12,956 unsolved runes in 55 nonempty source segments, plus their concatenation.",
+    "procedure": "For each stream, sweep seven fixed feedback functions, k=2..6, three history sources, both signs and both directions; score decoded transliteration using the pinned English quadgram table and 29 all-equal seeds for plaintext/mixed history.",
+    "parameters": "56 streams x 7 functions x 5 history lengths x 3 sources x 2 signs x 2 directions = 23,520 scored configurations. Ciphertext history ignores the seed after k; plaintext/mixed source probe eq0 through eq28. Twenty-one k=3 planted controls.",
+    "exclusions": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers."
+  },
+  "review": {
+    "reviewer": "Source executable replay with independent winning-rule and score calculation; archived source results crosschecked",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-multihistory-feedback/run.py",
+    "environment": "Python 3 standard library; pinned code and inputs are bundled. Full rerun takes several minutes.",
+    "script": "experiments/records/public-multihistory-feedback/run.py",
+    "script_sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461",
+    "inputs": [
+      {
+        "path": "experiments/records/public-multihistory-feedback/run.py",
+        "sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/check.py",
+        "sha256": "ee5d095f32ccc35f355088a720537e072ea8bd75a149d818e1f0cc80f1ee9210"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/plot.py",
+        "sha256": "e201dcb3db54eb4599536db9201b936ae59f0ee8f8acfabb9c6c6172eb0a700e"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/control.py",
+        "sha256": "c309ef3bab8f1bcbf5cc9b3dd95774bc9d804333c14b7270043c6c040edc65c3"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/feedback.py",
+        "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/sweep.py",
+        "sha256": "0eb8799373237f30c1e589cb8a1ba59ac5e4df7228787ffecacd7c11e86481b0"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/RESULTS.md",
+        "sha256": "e0a3665eac2a9321aeb0993d5113c37a62040efbadb21b86abb407ce0e82fede"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/original_results.json",
+        "sha256": "3363b586335be09ac8ca96661004a399060b0aaaf34809ffca27f753a92079fb"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-multihistory-feedback/controls.json",
+        "sha256": "0cdfa1ff5b16a5d12332b6d7a5a83f0c6f39589b424e41c0e2a98c6071c879a6"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/results.json",
+        "sha256": "9b03e53424d85f66c99a6e8c00824035b21f3a6ad1298383ed560e1f8ca2121c"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/scores.svg",
+        "sha256": "6942bf88db39d9ef88cf0235d8419da9430209ef551469256dda4517b8e40d38"
+      },
+      {
+        "path": "experiments/records/public-multihistory-feedback/feedback.svg",
+        "sha256": "c4b5bc2ea047c2f3293cf59d6c55230b79ade04877b285040cdab4e69e247dee"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/public-multihistory-feedback/scores.svg",
+      "caption": "The planted English control clears the score requirement. The strongest LP2 candidate is lower."
+    },
+    {
+      "path": "experiments/records/public-multihistory-feedback/feedback.svg",
+      "caption": "Each rule maps two to six earlier symbols into a key value used to decode the next rune."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned source executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/sweep.py"
+    },
+    {
+      "label": "Pinned source functions",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/feedback.py"
+    },
+    {
+      "label": "Pinned source results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/RESULTS.md"
+    }
+  ],
+  "related": [
+    "cumulative-autokey-literal",
+    "linear-ciphertext-feedback"
+  ]
+}

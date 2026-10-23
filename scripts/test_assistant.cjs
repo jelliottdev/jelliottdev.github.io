@@ -201,8 +201,12 @@ assert.equal(Search.experiments([tagged],'prime reverse')[0].score,
  Search.experiments([experiment],'prime reverse')[0].score,'Reordered words are not an exact phrase match');
 console.log('PASS: natural-language comparison queries reach the language measurement without becoming solve tests; phrase boosts do not stack or ignore order.');
 
-for(const query of ["English scorer", "scorer calibration", "quadgrams shuffled controls"]){
+for(const query of ["English scorer", "quadgrams shuffled controls"]){
  assert.equal(Search.supporting(liveDocs,query)[0].document.id,"english-scorer-controls",query);
+}
+for(const query of ['scorer calibration','alias collapse matched scorer','rune matched scorer']){
+ assert.equal(Search.supporting(liveDocs,query)[0].document.id,'rune-matched-scorer-calibration',query);
+ assert.equal(Search.experiments(liveDocs,query).length,0,'Scorer calibration is supporting evidence, not a cipher test');
 }
 console.log("PASS: scorer calibration queries retrieve scorer controls, distinct from language identification.");
 

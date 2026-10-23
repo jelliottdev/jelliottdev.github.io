@@ -94,6 +94,115 @@ def validate_batch(root, record):
                 and re.fullmatch(r'[0-9a-f]{64}', case['decode_sha256']), 'Invalid decoded-output hash')
 
 
+def validate_record(root, path, pages):
+    """Validate one completed record without publishing it or executing its scripts."""
+    d = json.loads(path.read_text(encoding='utf-8'))
+    require(d.get('status') in ('draft', 'published'), f'{path}: invalid status')
+    identifier = d.get('id', '')
+    require(re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
+            and path.parent.name == identifier, 'Invalid or mismatched ID')
+    for key in ('title', 'question', 'summary', 'finding', 'limitations', 'next_steps'):
+        text(d.get(key), f'{identifier}.{key}')
+    require(d.get('outcome') in ('supported', 'not-supported', 'inconclusive'), 'Invalid outcome')
+    scope = d.get('scope', {})
+    require(isinstance(scope.get('pages'), list)
+            and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
+    if 'pages_note' in d:
+        text(d['pages_note'], f'{identifier}.pages_note')
+    if 'bounds_note' in d:
+        text(d['bounds_note'], f'{identifier}.bounds_note')
+    artifacts = scope.get('artifacts', [])
+    require(isinstance(artifacts, list) and all(isinstance(x, str) for x in artifacts),
+            'Scope artifacts must be a list of local input paths')
+    require(scope['pages'] or artifacts, 'Scope needs pages or source artifacts')
+    for key in ('representation', 'procedure', 'parameters', 'exclusions'):
+        text(scope.get(key), 'scope.' + key)
+    for key in ('tags', 'related'):
+        require(isinstance(d.get(key), list)
+                and all(isinstance(x, str) and x.strip() for x in d[key]), 'Invalid ' + key)
+    review = d.get('review', {})
+    text(review.get('reviewer'), 'review.reviewer')
+    text(review.get('kind'), 'review.kind')
+    require(review.get('human_review') in ('pending', 'complete'),
+            f'{identifier}: human review must be explicitly pending or complete')
+    if review['human_review'] == 'complete':
+        text(review.get('human_reviewer'), 'review.human_reviewer')
+        text(review.get('human_findings'), 'review.human_findings')
+        human_date = datetime.date.fromisoformat(review.get('human_reviewed_on', ''))
+        require(human_date <= datetime.date.today(), 'Human review date is in the future')
+    date = datetime.date.fromisoformat(review.get('retested_on', ''))
+    require(date <= datetime.date.today(), 'Retest date is in the future')
+    reproduction = d.get('reproduction', {})
+    for key in ('command', 'environment', 'script'):
+        text(reproduction.get(key), 'reproduction.' + key)
+    require(reproduction['script'].startswith(f'experiments/records/{identifier}/'),
+            'Script must live with its record')
+    script = local(root, reproduction['script'])
+    script_bytes = script.read_bytes()
+    require(b'No experiment implemented.' not in script_bytes, 'Replace the draft script')
+    script_digest = hashlib.sha256(script_bytes).hexdigest()
+    require(script_digest == reproduction.get('script_sha256'),
+            'Script SHA-256 mismatch: retest the script and record its reviewed hash')
+    for role in ('inputs', 'outputs'):
+        entries = reproduction.get(role)
+        require(isinstance(entries, list) and entries, 'List exact ' + role)
+        for file in entries:
+            data = local(root, file.get('path')).read_bytes()
+            require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
+                    'SHA-256 mismatch: ' + str(file.get('path')))
+    validate_plan_provenance(root, identifier, reproduction)
+    validate_batch(root, d)
+    require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),
+            'Scope artifacts must be declared hashed inputs')
+    for visual in d.get('visuals', []):
+        text(visual.get('caption'), 'visual caption')
+        require(visual.get('path') in [f['path'] for f in reproduction['outputs']]
+                and re.fullmatch(r'[a-zA-Z0-9_./-]+\.(svg|png|jpg|webp)', visual['path']),
+                'Visual must be a declared image output')
+    require(isinstance(d.get('sources'), list) and d['sources'], 'Provide source references')
+    for source in d['sources']:
+        text(source.get('label'), 'source label')
+        require(isinstance(source.get('url'), str) and source['url'].startswith('https://'),
+                'Source must use HTTPS')
+    article = local(root, f'experiments/records/{identifier}/article.md').read_text(encoding='utf-8')
+    require(len(article.strip()) >= 200 and 'State one testable question.' not in article,
+            'Replace the article template with a full account')
+    d['article'] = article
+    d['article_path'] = f'experiments/records/{identifier}/article.md'
+    d['script_sha256'] = script_digest
+    return d
+
+
+def validate_family(r, by_id):
+    """Check a record's declared scope differences against its baseline."""
+    family = r.get('family')
+    if family is None:  # Older independent records remain readable.
+        return
+    require(isinstance(family, dict), 'Invalid experiment family')
+    for key in ('id', 'title', 'question', 'baseline'):
+        text(family.get(key), 'family.' + key)
+    require(re.fullmatch(r'[a-z][a-z0-9-]*', family['id']), 'Invalid family ID')
+    baseline = by_id.get(family['baseline'])
+    require(baseline and baseline.get('family') == family,
+            'Family baseline must be published with identical family metadata')
+    variant = r.get('variant', {})
+    text(variant.get('label'), 'variant.label')
+    changes = variant.get('changes')
+    require(isinstance(changes, list), 'List variant changes')
+    expected = {k for k in baseline['scope'] if baseline['scope'][k] != r['scope'][k]}
+    require(len(changes) == len(expected), 'List every scope difference exactly once')
+    seen = set()
+    for change in changes:
+        field = change.get('field')
+        require(field in expected and field not in seen, 'Invalid or duplicate changed field')
+        seen.add(field)
+        require(change.get('before') == baseline['scope'][field] and
+                change.get('after') == r['scope'][field], 'Variant comparison must match recorded scope')
+        text(change.get('reason'), 'Reason for variant')
+    require(r['id'] == family['baseline'] or expected,
+            'A variant needs a scope change; document an identical retest in the original record')
+
+
 def build(root=ROOT):
     records = []
     pages = {p['id'] for p in json.loads((root / 'data/index.json').read_text(encoding='utf-8'))['pages']}
@@ -102,79 +211,7 @@ def build(root=ROOT):
         require(d.get('status') in ('draft', 'published'), f'{path}: invalid status')
         if d['status'] == 'draft':
             continue
-        identifier = d.get('id', '')
-        require(re.fullmatch(r'[a-z][a-z0-9]*(?:-[a-z0-9]+)*', identifier)
-                and path.parent.name == identifier, 'Invalid or mismatched ID')
-        for key in ('title', 'question', 'summary', 'finding', 'limitations', 'next_steps'):
-            text(d.get(key), f'{identifier}.{key}')
-        require(d.get('outcome') in ('supported', 'not-supported', 'inconclusive'), 'Invalid outcome')
-        scope = d.get('scope', {})
-        require(isinstance(scope.get('pages'), list)
-                and all(x in pages for x in scope['pages']), 'Scope needs valid page IDs')
-        if 'pages_note' in d:
-            text(d['pages_note'], f'{identifier}.pages_note')
-        if 'bounds_note' in d:
-            text(d['bounds_note'], f'{identifier}.bounds_note')
-        artifacts = scope.get('artifacts', [])
-        require(isinstance(artifacts, list) and all(isinstance(x, str) for x in artifacts),
-                'Scope artifacts must be a list of local input paths')
-        require(scope['pages'] or artifacts, 'Scope needs pages or source artifacts')
-        for key in ('representation', 'procedure', 'parameters', 'exclusions'):
-            text(scope.get(key), 'scope.' + key)
-        for key in ('tags', 'related'):
-            require(isinstance(d.get(key), list)
-                    and all(isinstance(x, str) and x.strip() for x in d[key]), 'Invalid ' + key)
-        review = d.get('review', {})
-        text(review.get('reviewer'), 'review.reviewer')
-        text(review.get('kind'), 'review.kind')
-        require(review.get('human_review') in ('pending', 'complete'),
-                f'{identifier}: human review must be explicitly pending or complete')
-        if review['human_review'] == 'complete':
-            text(review.get('human_reviewer'), 'review.human_reviewer')
-            text(review.get('human_findings'), 'review.human_findings')
-            human_date = datetime.date.fromisoformat(review.get('human_reviewed_on', ''))
-            require(human_date <= datetime.date.today(), 'Human review date is in the future')
-        date = datetime.date.fromisoformat(review.get('retested_on', ''))
-        require(date <= datetime.date.today(), 'Retest date is in the future')
-        reproduction = d.get('reproduction', {})
-        for key in ('command', 'environment', 'script'):
-            text(reproduction.get(key), 'reproduction.' + key)
-        require(reproduction['script'].startswith(f'experiments/records/{identifier}/'),
-                'Script must live with its record')
-        script = local(root, reproduction['script'])
-        script_bytes = script.read_bytes()
-        require(b'No experiment implemented.' not in script_bytes, 'Replace the draft script')
-        script_digest = hashlib.sha256(script_bytes).hexdigest()
-        require(script_digest == reproduction.get('script_sha256'),
-                'Script SHA-256 mismatch: retest the script and record its reviewed hash')
-        for role in ('inputs', 'outputs'):
-            entries = reproduction.get(role)
-            require(isinstance(entries, list) and entries, 'List exact ' + role)
-            for file in entries:
-                data = local(root, file.get('path')).read_bytes()
-                require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
-                        'SHA-256 mismatch: ' + str(file.get('path')))
-        validate_plan_provenance(root, identifier, reproduction)
-        validate_batch(root, d)
-        require(all(a in [f['path'] for f in reproduction['inputs']] for a in artifacts),
-                'Scope artifacts must be declared hashed inputs')
-        for visual in d.get('visuals', []):
-            text(visual.get('caption'), 'visual caption')
-            require(visual.get('path') in [f['path'] for f in reproduction['outputs']]
-                    and re.fullmatch(r'[a-zA-Z0-9_./-]+\.(svg|png|jpg|webp)', visual['path']),
-                    'Visual must be a declared image output')
-        require(isinstance(d.get('sources'), list) and d['sources'], 'Provide source references')
-        for source in d['sources']:
-            text(source.get('label'), 'source label')
-            require(isinstance(source.get('url'), str) and source['url'].startswith('https://'),
-                    'Source must use HTTPS')
-        article = local(root, f'experiments/records/{identifier}/article.md').read_text(encoding='utf-8')
-        require(len(article.strip()) >= 200 and 'State one testable question.' not in article,
-                'Replace the article template with a full account')
-        d['article'] = article
-        d['article_path'] = f'experiments/records/{identifier}/article.md'
-        d['script_sha256'] = script_digest
-        records.append(d)
+        records.append(validate_record(root, path, pages))
     ids = {d['id'] for d in records}
     # Editorial record types travel with complete evidence, including offline exports.
     type_path = root / 'data/method-families.json'
@@ -193,32 +230,7 @@ def build(root=ROOT):
                 'Related IDs must name other published records')
     by_id = {r['id']: r for r in records}
     for r in records:
-        family = r.get('family')
-        if family is None:  # Older independent records remain readable.
-            continue
-        require(isinstance(family, dict), 'Invalid experiment family')
-        for key in ('id', 'title', 'question', 'baseline'):
-            text(family.get(key), 'family.' + key)
-        require(re.fullmatch(r'[a-z][a-z0-9-]*', family['id']), 'Invalid family ID')
-        baseline = by_id.get(family['baseline'])
-        require(baseline and baseline.get('family') == family,
-                'Family baseline must be published with identical family metadata')
-        variant = r.get('variant', {})
-        text(variant.get('label'), 'variant.label')
-        changes = variant.get('changes')
-        require(isinstance(changes, list), 'List variant changes')
-        expected = {k for k in baseline['scope'] if baseline['scope'][k] != r['scope'][k]}
-        require(len(changes) == len(expected), 'List every scope difference exactly once')
-        seen = set()
-        for change in changes:
-            field = change.get('field')
-            require(field in expected and field not in seen, 'Invalid or duplicate changed field')
-            seen.add(field)
-            require(change.get('before') == baseline['scope'][field] and
-                    change.get('after') == r['scope'][field], 'Variant comparison must match recorded scope')
-            text(change.get('reason'), 'Reason for variant')
-        require(r['id'] == family['baseline'] or expected,
-                'A variant needs a scope change; document an identical retest in the original record')
+        validate_family(r, by_id)
     families = {}
     for r in records:
         if r.get('family'):

@@ -1,0 +1,171 @@
+{
+  "id": "haplography-diagonal-bound",
+  "status": "published",
+  "title": "Can missing duplicate runes hide an autokey pattern?",
+  "question": "Can twenty missed adjacent duplicate runes restore the nonzero difference-diagonal unevenness predicted by one ciphertext-autokey rule?",
+  "reader_question": "Could missing repeated runes be hiding an autokey pattern in LP2?",
+  "summary": "For exact adjacent duplicate insertions, all 28 nonzero rune-difference counts are unchanged. Even an artificial 20-count allowance reaches CV 0.066 against the source's 0.40 signal bar.",
+  "finding": "The pinned transcription yields 9,640 within-word pairs, 60 doublets and nonzero difference CV 0.0608. Physical duplicate restoration leaves that CV invariant for any number of insertions. An exact upper bound allowing 20 freely allocated nonzero-diagonal additions is 0.0656; at 40 it is 0.0717. A separate checker confirms every count and the insertion identity for all 29^3 three-rune contexts.",
+  "limitations": "This bounds only exact adjacent-duplicate deletion/restoration and the specified ciphertext-autokey difference statistic. The pinned source omits pride.txt, so its English-corpus planted-control numbers and surrogate null are not exactly replayed; a declared synthetic lumpy control passes instead. The source amended its chi-square clause after its first run; the physical invariance does not depend on that clause. Other feedback rules, correlated multi-rune errors and nearly flat plaintext distributions remain outside scope.",
+  "next_steps": "A proposed alternative must state how it changes nonzero adjacent differences, or specify another feedback equation with a different measurable prediction.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "autokey",
+    "haplography",
+    "doublets",
+    "adjacent differences",
+    "source replay",
+    "bound"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/haplography-diagonal-bound/source/krisyotam_runes.txt"
+    ],
+    "representation": "First 55 nonempty '%' segments of the pinned krisyotam_runes.txt, matching source LP2-00–54 labels; within-word adjacent rune indices modulo 29.",
+    "procedure": "Compute nonzero difference-diagonal counts and CV; insert exact adjacent duplicates algebraically and via exhaustive three-rune contexts. Give an artificial adversary k=0..40 arbitrary additions to the 28 nonzero counts and compute its exact maximal CV. Plant a separate synthetic lumpy ciphertext-autokey versus uniform control.",
+    "parameters": "9,640 adjacent pairs, 60 doublets; 28 nonzero diagonals; k=0..40, with the source decision at k=20; CV signal bar 0.40, safe bar 0.30.",
+    "exclusions": "Source Pride & Prejudice-based control numbers, source surrogate null distribution, plaintext-autokey variants, other feedback equations, off-diagonal transcription errors, and plaintext distributions that are nearly uniform."
+  },
+  "review": {
+    "reviewer": "Independent parser, exact allocation bound and exhaustive local insertion check",
+    "retested_on": "2026-10-22",
+    "kind": "bounded source-method replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/haplography-diagonal-bound/run.py && python experiments/records/haplography-diagonal-bound/check.py && python experiments/records/haplography-diagonal-bound/plot.py",
+    "environment": "Python 3 standard library; bundled MIT-licensed source files; no network.",
+    "script": "experiments/records/haplography-diagonal-bound/run.py",
+    "script_sha256": "7ac4438194ca760f9a9aa7edea4561173253cf5d09220ab8b1e16b4e42593ea2",
+    "inputs": [
+      {
+        "path": "experiments/records/haplography-diagonal-bound/run.py",
+        "sha256": "7ac4438194ca760f9a9aa7edea4561173253cf5d09220ab8b1e16b4e42593ea2"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/check.py",
+        "sha256": "bfc9047dda4fa74c5b0bde55f3d143e88a78a0b592841d982b03a40ae9d087ec"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/plot.py",
+        "sha256": "a5428a76566bd8d49296b368691f70d25d125e7533377d2b0b4cb774d9e68690"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/PREREG.md",
+        "sha256": "80060bf7962a6d6bd510eebc3c3e3181089a8d61ad97bddb2336032b3b38c84c"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/RESULTS.md",
+        "sha256": "d1e9cef235d2a495de0750b95a3c002ee8d18fd731e88826f4a45daf56ee5fcc"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/original_results.json",
+        "sha256": "38adf1a7467079905a4d413978e106cdcaecda936be38029e95bcd371b802b84"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/original_run.py",
+        "sha256": "c9114dad2aebe03ab850ca0f71e8477f5b08588ac1b8e6b6c6e67aeb26be9497"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/haplography-diagonal-bound/results.json",
+        "sha256": "2e1425feb67f20ce3d8e4dda1a6e909474da3e2ef88637365cf98f1cfc1cbfd4"
+      },
+      {
+        "path": "experiments/records/haplography-diagonal-bound/diagonal-bound.svg",
+        "sha256": "d1109996edff2e351f5872f923522311e92d0ee72d079a59098edd565229f3a4"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/haplography-diagonal-bound/diagonal-bound.svg",
+      "caption": "Exact adjacent duplicates cannot change the nonzero difference counts. Even a stronger 20-count allowance stays well below the source's 0.40 signal bar."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned N2 test plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/PREREG.md"
+    },
+    {
+      "label": "Pinned N2 executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/n2_haplography_falsifier.py"
+    },
+    {
+      "label": "Pinned N2 results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/RESULTS.md"
+    }
+  ],
+  "related": [
+    "linear-ciphertext-feedback",
+    "doublet-placement"
+  ]
+}

@@ -12188,6 +12188,185 @@
       }
     },
     {
+      "id": "haplography-diagonal-bound",
+      "status": "published",
+      "title": "Can missing duplicate runes hide an autokey pattern?",
+      "question": "Can twenty missed adjacent duplicate runes restore the nonzero difference-diagonal unevenness predicted by one ciphertext-autokey rule?",
+      "reader_question": "Could missing repeated runes be hiding an autokey pattern in LP2?",
+      "summary": "For exact adjacent duplicate insertions, all 28 nonzero rune-difference counts are unchanged. Even an artificial 20-count allowance reaches CV 0.066 against the source's 0.40 signal bar.",
+      "finding": "The pinned transcription yields 9,640 within-word pairs, 60 doublets and nonzero difference CV 0.0608. Physical duplicate restoration leaves that CV invariant for any number of insertions. An exact upper bound allowing 20 freely allocated nonzero-diagonal additions is 0.0656; at 40 it is 0.0717. A separate checker confirms every count and the insertion identity for all 29^3 three-rune contexts.",
+      "limitations": "This bounds only exact adjacent-duplicate deletion/restoration and the specified ciphertext-autokey difference statistic. The pinned source omits pride.txt, so its English-corpus planted-control numbers and surrogate null are not exactly replayed; a declared synthetic lumpy control passes instead. The source amended its chi-square clause after its first run; the physical invariance does not depend on that clause. Other feedback rules, correlated multi-rune errors and nearly flat plaintext distributions remain outside scope.",
+      "next_steps": "A proposed alternative must state how it changes nonzero adjacent differences, or specify another feedback equation with a different measurable prediction.",
+      "outcome": "not-supported",
+      "tags": [
+        "LP2",
+        "autokey",
+        "haplography",
+        "doublets",
+        "adjacent differences",
+        "source replay",
+        "bound"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/haplography-diagonal-bound/source/krisyotam_runes.txt"
+        ],
+        "representation": "First 55 nonempty '%' segments of the pinned krisyotam_runes.txt, matching source LP2-00–54 labels; within-word adjacent rune indices modulo 29.",
+        "procedure": "Compute nonzero difference-diagonal counts and CV; insert exact adjacent duplicates algebraically and via exhaustive three-rune contexts. Give an artificial adversary k=0..40 arbitrary additions to the 28 nonzero counts and compute its exact maximal CV. Plant a separate synthetic lumpy ciphertext-autokey versus uniform control.",
+        "parameters": "9,640 adjacent pairs, 60 doublets; 28 nonzero diagonals; k=0..40, with the source decision at k=20; CV signal bar 0.40, safe bar 0.30.",
+        "exclusions": "Source Pride & Prejudice-based control numbers, source surrogate null distribution, plaintext-autokey variants, other feedback equations, off-diagonal transcription errors, and plaintext distributions that are nearly uniform."
+      },
+      "review": {
+        "reviewer": "Independent parser, exact allocation bound and exhaustive local insertion check",
+        "retested_on": "2026-10-22",
+        "kind": "bounded source-method replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/haplography-diagonal-bound/run.py && python experiments/records/haplography-diagonal-bound/check.py && python experiments/records/haplography-diagonal-bound/plot.py",
+        "environment": "Python 3 standard library; bundled MIT-licensed source files; no network.",
+        "script": "experiments/records/haplography-diagonal-bound/run.py",
+        "script_sha256": "7ac4438194ca760f9a9aa7edea4561173253cf5d09220ab8b1e16b4e42593ea2",
+        "inputs": [
+          {
+            "path": "experiments/records/haplography-diagonal-bound/run.py",
+            "sha256": "7ac4438194ca760f9a9aa7edea4561173253cf5d09220ab8b1e16b4e42593ea2"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/check.py",
+            "sha256": "bfc9047dda4fa74c5b0bde55f3d143e88a78a0b592841d982b03a40ae9d087ec"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/plot.py",
+            "sha256": "a5428a76566bd8d49296b368691f70d25d125e7533377d2b0b4cb774d9e68690"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/krisyotam_runes.txt",
+            "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/PREREG.md",
+            "sha256": "80060bf7962a6d6bd510eebc3c3e3181089a8d61ad97bddb2336032b3b38c84c"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/RESULTS.md",
+            "sha256": "d1e9cef235d2a495de0750b95a3c002ee8d18fd731e88826f4a45daf56ee5fcc"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/original_results.json",
+            "sha256": "38adf1a7467079905a4d413978e106cdcaecda936be38029e95bcd371b802b84"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/original_run.py",
+            "sha256": "c9114dad2aebe03ab850ca0f71e8477f5b08588ac1b8e6b6c6e67aeb26be9497"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/haplography-diagonal-bound/results.json",
+            "sha256": "2e1425feb67f20ce3d8e4dda1a6e909474da3e2ef88637365cf98f1cfc1cbfd4"
+          },
+          {
+            "path": "experiments/records/haplography-diagonal-bound/diagonal-bound.svg",
+            "sha256": "d1109996edff2e351f5872f923522311e92d0ee72d079a59098edd565229f3a4"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/haplography-diagonal-bound/diagonal-bound.svg",
+          "caption": "Exact adjacent duplicates cannot change the nonzero difference counts. Even a stronger 20-count allowance stays well below the source's 0.40 signal bar."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned N2 test plan",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/PREREG.md"
+        },
+        {
+          "label": "Pinned N2 executable",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/n2_haplography_falsifier.py"
+        },
+        {
+          "label": "Pinned N2 results",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round20/N2/RESULTS.md"
+        }
+      ],
+      "related": [
+        "linear-ciphertext-feedback",
+        "doublet-placement"
+      ],
+      "article": "## Finding\n\n**A missed repeated rune cannot change the 28 nonzero difference counts tested here.** The source asks whether about 20 instances of *haplography*—writing a doubled rune once—could make a ciphertext-autokey pattern disappear from LP2. Restoring one duplicate changes `a → x → b` into `a → x → x → b`. The old `x → b` transition remains; only the new `x → x` transition is added. Its rune difference is zero.\n\n![A duplicate insertion leaves the observed nonzero difference unevenness at 0.061. Even an artificial twenty-count allowance reaches only 0.066, compared with the source threshold of 0.40.](experiments/records/haplography-diagonal-bound/diagonal-bound.svg)\n\nWe reconstructed the source's **9,640 within-word adjacent pairs** from its pinned rune transcription and counted **60 equal-rune pairs**. The unevenness (coefficient of variation, or CV) of the 28 *nonzero* difference counts is **0.0608**. Inserting any number of exact adjacent duplicates leaves that number unchanged. This is an algebraic result, not a sampled search over insertion sites.\n\nThe source also gave a deliberately stronger, nonphysical adversary permission to add 20 counts to *any* nonzero difference. We independently bounded every such allocation: its largest possible CV is **0.0656**, still far below the source's **0.40** autokey-signal bar. At 40 additions the bound is **0.0717**. Our independent checker reconstructs the page runs by a separate parser, verifies all 41 bounds, and checks the insertion identity for every **29³** three-rune context.\n\n## What the result means\n\nFor the specific relation `c[i] = p[i] + c[i−1] + K (mod 29)`, differences between consecutive ciphertext runes mirror plaintext-rune frequencies. A strongly uneven plaintext distribution would therefore produce uneven nonzero differences. Exact deletion or restoration of a duplicated ciphertext rune **cannot hide that particular difference pattern**. This says nothing about other feedback rules, other transcription errors, or a plaintext whose frequencies were already nearly flat.\n\nThe original source reports a positive control made from *Pride and Prejudice* rune frequencies, but its checkout does not include the `pride.txt` file that its script loads. We therefore **do not claim to reproduce its reported 0.842 control CV or 0.784 separation**. Our replacement control is explicitly synthetic and lumpy: a planted ciphertext-autokey stream scores **1.316** after 20 merges, while a uniform stream scores **0.050**. It checks that the statistic can distinguish those two constructed cases; it is not a model of every possible natural language.\n\nThe source's initially frozen no-error rule included `χ² < 40`. Its later addendum sets that clause aside because the artificial adversary crosses 40 while CV remains low. Our strongest conclusion—the exact physical-insertion invariance—does not depend on either threshold. The nonphysical 20-count comparison is reported against the source's unchanged CV bar, with that rule change visible in the bundled source documents.\n\n## Reproduce\n\nFrom the repository root, with Python 3 and no additional packages:\n\n```text\npython experiments/records/haplography-diagonal-bound/run.py\npython experiments/records/haplography-diagonal-bound/check.py\npython experiments/records/haplography-diagonal-bound/plot.py\n```\n\nThe [result data](experiments/records/haplography-diagonal-bound/results.json), [pinned source transcription](experiments/records/haplography-diagonal-bound/source/krisyotam_runes.txt), and the source's original plan, code and report are bundled. The copied source is MIT-licensed. Our result covers the **single-rune duplicate insertion** mechanism and this one ciphertext-autokey diagnostic, not the whole autokey family.\n",
+      "article_path": "experiments/records/haplography-diagonal-bound/article.md",
+      "script_sha256": "7ac4438194ca760f9a9aa7edea4561173253cf5d09220ab8b1e16b4e42593ea2",
+      "record_type": {
+        "id": "method",
+        "label": "Bounded solving test",
+        "description": "Applies a fixed decoding, extraction or payload-retrieval rule to declared unsolved material, or excludes a specific direct-generation rule. Its result covers only those bounds."
+      }
+    },
+    {
       "id": "im-near-f-markers",
       "status": "published",
       "title": "I/M rune proximity to F interruptions",
@@ -31334,6 +31513,461 @@
       }
     },
     {
+      "id": "public-lp2-as-pad",
+      "status": "published",
+      "title": "LP2 as a running key for shorter Cicada texts",
+      "question": "Does the unsolved LP2 rune stream, used as a skip-aware key, recover English from five specified Cicada objects?",
+      "reader_question": "Could Liber Primus itself be the key to a shorter message?",
+      "summary": "Replays the pinned F-01 inversion: five targets, four LP2 key forms, two signs, and a planted skip-aware control.",
+      "finding": "No tested pairing passed the source's English score bar. The best of 40 decodes scored −7.032 against −5.500; the five highest scorers did not exceed their own shuffled-target maxima. A planted message was recovered exactly.",
+      "limitations": "This is a cross-artifact key test, not a direct LP2 decrypt. The pp49–51 payload was unavailable, and all keys began at offset zero. The null was calculated only for the selected top five configurations; the hard-coded 63-byte AN END sequence is not independently authenticated here.",
+      "next_steps": "A further LP2-as-key proposal should specify a verified target byte stream, its rune encoding, key offset, page boundary treatment and skip rule before searching.",
+      "outcome": "not-supported",
+      "tags": [
+        "running key",
+        "one-time pad",
+        "skip-aware decoding",
+        "Cicada cross-artifact",
+        "source replay"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/krisyotam_runes.txt",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/SOLVED-PAGES.json",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+          "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt"
+        ],
+        "representation": "The pinned source's 12,956 unsolved rune indices are key material; English targets are converted to GP rune indices and the hard-coded byte target is reduced modulo 29.",
+        "procedure": "Use the source beam decoder with up to three key skips and its English quadgram score. Sweep five targets, four LP2 key variants and two signs at offset zero; compare the selected top five with 200 target-order shuffles each.",
+        "parameters": "40 source decodes (some arithmetically equivalent); 500-rune cap on the three English-text targets, 63-byte numeric target, 200-rune LP2 prefix target; beam width 400; 100 shuffles for the planted control.",
+        "exclusions": "Absent pp49–51 payload, other key offsets, other targets and encodings, alternative boundary rules or skip models, and the reverse use of other objects as keys."
+      },
+      "review": {
+        "reviewer": "Executable replay with separate transcription, grid and source-output checks",
+        "retested_on": "2026-10-22",
+        "kind": "computational source replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/public-lp2-as-pad/run.py",
+        "environment": "Python 3 standard library. Pinned source and input files bundled; full run takes several minutes and uses a temporary copy.",
+        "script": "experiments/records/public-lp2-as-pad/run.py",
+        "script_sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c",
+        "inputs": [
+          {
+            "path": "experiments/records/public-lp2-as-pad/check.py",
+            "sha256": "3ef0a02985d5b4825004fc0d70ed5db25ea558559e241a06db9285ccc45bf4c7"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/plot.py",
+            "sha256": "c67fd482a3f0ee996e7faa4904bc632089e61f2fd9f7bca25b3c406d758d8621"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/run.py",
+            "sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+            "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round11/lib_numchannel.py",
+            "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/original_results.json",
+            "sha256": "4930202f05535fcb13ce49620181f3eb9135d814b50c72660028367e2aac21e7"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/PREREG.md",
+            "sha256": "900747ab47b114b433c2e158b2d50751104e86ffc94720ee97211db909013b3c"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/RESULTS.md",
+            "sha256": "e5c6405f2b8ec231912b667bcddaab3bafea5bd1895a689d366a37adeeab5f90"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/sweep.py",
+            "sha256": "de5ac41cbb4e770f3b78f22ff22ed69b283dd596095eb1a4e216e04c8ecbac29"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/run_stats.py",
+            "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+            "sha256": "7acb899b537efdb4d0426041fcbb4a5b42d54fdda40a64e02745b3edc1f6f9c5"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt",
+            "sha256": "5c5b2dcd24b26a4b7dda3fd555bf5c3b0966bb4eb74fe39660d2b0af31d26ead"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/krisyotam_runes.txt",
+            "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/SOLVED-PAGES.json",
+            "sha256": "cd3c6d55800375dea4d5d95f87f758ba5e832396e63fb2130f1079eb63bafc85"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/ciphers.py",
+            "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/corpus.py",
+            "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/stats.py",
+            "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/results.json",
+            "sha256": "9d8b28d687172831972cebdfab787d174dca458a4ebf6679c78568090c026019"
+          },
+          {
+            "path": "experiments/records/public-lp2-as-pad/scores.svg",
+            "sha256": "f8303ae8dc767d65b1ed0d21474aeaf4abb167d2a73a7c5948f42e70ebc7c752"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/public-lp2-as-pad/scores.svg",
+          "caption": "For each tested object, the best English score still falls short of the source's advancement bar."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned F-01 executable",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/sweep.py"
+        },
+        {
+          "label": "Pinned F-01 plan",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/PREREG.md"
+        },
+        {
+          "label": "Pinned F-01 results",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/RESULTS.md"
+        }
+      ],
+      "related": [
+        "public-prng-seed-sweep",
+        "lp2-known-vigenere-keys"
+      ],
+      "article": "# Could LP2 be the key to another Cicada text?\n\nThe usual question is how to decode Liber Primus. This public test reverses the roles: it treats the **12,956 unsolved LP2 runes as a running key** and asks whether that key reveals a shorter Cicada object. It tests specific objects and rules; it does not directly decrypt LP2.\n\n## Finding\n\n**No tested pairing produced a readable English result.** The best of 40 runs scored **−7.032** on the source's English quadgram scale, below its predeclared **−5.5** advancement bar. The five highest-scoring configurations were also compared with 200 shuffled versions of their target each; none exceeded its corresponding highest shuffle score. A planted message encrypted under the same LP2 key *was* recovered, showing that this decoder can succeed on a constructed example of its assumed mechanism.\n\n![Five target groups and their best English scores, all below the advancement bar.](experiments/records/public-lp2-as-pad/scores.svg)\n\nThe graphic shows each target's best run. Higher scores are stronger *for this English model*; the plotted values do not measure an unconditional probability that a puzzle idea is true.\n\n## What entered the test\n\nThe source's key stream was the 55 nonempty unsolved LP2 transcription segments concatenated in page order. It tested four versions of that stream: forward, reversed, rune-index Atbash (`28 − index`), and negation modulo 29. Each was used with addition and subtraction in `plaintext = (target + sign × key) mod 29`. The decoder can skip up to three key positions at a time when searching for synchronization.\n\nFive targets entered the completed run:\n\n| Target | Input to decoder | Length actually scored |\n| --- | --- | ---: |\n| 2012–13 puzzle texts | English text converted to rune indices | first 500 |\n| Five solved LP1 pages | their recorded plaintext transliterations converted to rune indices | first 500 |\n| PGP message text | English text converted to rune indices | first 500 |\n| “AN END” byte sequence | hard-coded bytes reduced modulo 29 | 63 |\n| LP2 opening | first 200 runes of LP2 tested against the LP2 key | 200 |\n\nThe source proposed a sixth target, the pages 49–51 payload, but did **not** have the payload bytes needed to run it. It therefore ran five targets × four key variants × two signs = **40 decodes**. Negating the key and changing the sign gives the same arithmetic as an unnegated key with the original sign, so some decodes are equivalent; 40 is the run count, not 40 independent hypotheses. Every run starts at key offset zero.\n\nThe “AN END” input is the **63-byte hard-coded sequence in the source script**, which labels it a SHA-512 hash. This record preserves that exact input without asserting that the bytes independently authenticate an external artifact. The text-to-rune conversion is likewise the source's conversion, not a lossless representation of the original messages.\n\n## What the control and scores mean\n\nThe source first encrypted a known English sentence with the LP2 stream, including deliberate key skips. Its beam decoder recovered the planted transliteration exactly, scoring **−4.413**. A rigid decoder using the right key but no skip search scored **−7.334**. That is a useful positive control for this implementation; it cannot prove that an unknown real message, if present, would be found under every different skip pattern or encoding.\n\nThe strongest real-target result was the 2012–13 text under the forward LP2 stream with addition: **−7.032**. For that *selected* run, 200 target-order shuffles reached a highest score of **−6.972**, slightly stronger than the observed result. The null comparison was computed for only the top five selected configurations, and the shuffled controls do not repeat the whole selection process across all target and rule choices. We therefore report the observed absence of a hit under the source's gate, rather than a universal statistical exclusion.\n\nThis replay uses the [pinned F-01 executable](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/sweep.py) and [its declared plan](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/PREREG.md). The source's result prose speaks more broadly than its executed grid in places; the figures above come from the machine-readable run and the independent accounting check.\n\n## Reproduce\n\nDownload this experiment's ZIP from the record's download control to inspect the pinned code, input texts, result, and checker. From a Liberpedia repository checkout, run:\n\n```bash\npython experiments/records/public-lp2-as-pad/check.py\npython experiments/records/public-lp2-as-pad/run.py\n```\n\nThe checker is quick. The complete source replay takes several minutes and runs in a temporary copy, so it leaves the archived result bytes intact. It verifies the complete 40-configuration grid, the positive-control gate, the LP2 rune-stream checksum, the five selected null comparisons, and substantive equality with the pinned source output (excluding elapsed wall time).\n\nThe bundled [source results](experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/results.json), [checker](experiments/records/public-lp2-as-pad/check.py), and [figure script](experiments/records/public-lp2-as-pad/plot.py) expose the exact values. The [source README and method notes](experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/PREREG.md) are preserved as evidence of what was proposed, not as broader findings of this replay.\n\n**Remaining scope:** target material other than these five objects, a verified pages 49–51 payload, other key offsets, alternative page boundaries, or using the other objects as key material would require separate tests.\n",
+      "article_path": "experiments/records/public-lp2-as-pad/article.md",
+      "script_sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "public-multihistory-feedback",
+      "status": "published",
+      "title": "Two-to-six-rune feedback and autokey screen",
+      "question": "Do seven fixed multi-rune history functions under ciphertext, plaintext or mixed feedback yield an English-like LP2 reading in the published finite grid?",
+      "reader_question": "Could each rune be decoded using a key derived from the preceding runes?",
+      "summary": "A pinned public 23,520-configuration feedback sweep is rerun against LP2, with 21 planted controls and an independently recomputed winning decode.",
+      "finding": "The source grid best is -6.299 on a 66-rune segment, below the -5.500 advancement bar. All 21 planted k=3 controls recover correctly; no tested output provides a convincing English reading.",
+      "limitations": "Plaintext and mixed history used only 29 all-equal initial states out of 29^k possibilities. Their wrong seeds need not converge. The 200 raw-stream shuffles are not a best-of-23,520 null and the best candidate is a short segment. Other feedback functions, initial states, alphabets, languages and boundaries remain open.",
+      "next_steps": "A concrete feedback proposal should specify its recurrence, seed, boundary reset and output language before scoring; test matched planted examples and apply the same full selection to null controls.",
+      "outcome": "not-supported",
+      "tags": [
+        "autokey",
+        "feedback cipher",
+        "running key",
+        "multi-rune history",
+        "prime sums",
+        "XOR",
+        "source replay"
+      ],
+      "scope": {
+        "pages": [
+          "lp2-00",
+          "lp2-01",
+          "lp2-02",
+          "lp2-03",
+          "lp2-04",
+          "lp2-05",
+          "lp2-06",
+          "lp2-07",
+          "lp2-08",
+          "lp2-09",
+          "lp2-10",
+          "lp2-11",
+          "lp2-12",
+          "lp2-13",
+          "lp2-14",
+          "lp2-15",
+          "lp2-16",
+          "lp2-17",
+          "lp2-18",
+          "lp2-19",
+          "lp2-20",
+          "lp2-21",
+          "lp2-22",
+          "lp2-23",
+          "lp2-24",
+          "lp2-25",
+          "lp2-26",
+          "lp2-27",
+          "lp2-28",
+          "lp2-29",
+          "lp2-30",
+          "lp2-31",
+          "lp2-32",
+          "lp2-33",
+          "lp2-34",
+          "lp2-35",
+          "lp2-36",
+          "lp2-37",
+          "lp2-38",
+          "lp2-39",
+          "lp2-40",
+          "lp2-41",
+          "lp2-42",
+          "lp2-43",
+          "lp2-44",
+          "lp2-45",
+          "lp2-46",
+          "lp2-47",
+          "lp2-48",
+          "lp2-49",
+          "lp2-51",
+          "lp2-52",
+          "lp2-53",
+          "lp2-54",
+          "lp2-55"
+        ],
+        "artifacts": [
+          "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt"
+        ],
+        "representation": "Zero-based GP rune indices from the pinned source transcription: 12,956 unsolved runes in 55 nonempty source segments, plus their concatenation.",
+        "procedure": "For each stream, sweep seven fixed feedback functions, k=2..6, three history sources, both signs and both directions; score decoded transliteration using the pinned English quadgram table and 29 all-equal seeds for plaintext/mixed history.",
+        "parameters": "56 streams x 7 functions x 5 history lengths x 3 sources x 2 signs x 2 directions = 23,520 scored configurations. Ciphertext history ignores the seed after k; plaintext/mixed source probe eq0 through eq28. Twenty-one k=3 planted controls.",
+        "exclusions": "Non-equal initial seeds, k outside 2..6, formulas outside the seven-source basis, state crossing other page boundaries, skip-aware decoding, different transliterations or language scorers."
+      },
+      "review": {
+        "reviewer": "Source executable replay with independent winning-rule and score calculation; archived source results crosschecked",
+        "retested_on": "2026-10-22",
+        "kind": "computational source replay",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/public-multihistory-feedback/run.py",
+        "environment": "Python 3 standard library; pinned code and inputs are bundled. Full rerun takes several minutes.",
+        "script": "experiments/records/public-multihistory-feedback/run.py",
+        "script_sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461",
+        "inputs": [
+          {
+            "path": "experiments/records/public-multihistory-feedback/run.py",
+            "sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/check.py",
+            "sha256": "ee5d095f32ccc35f355088a720537e072ea8bd75a149d818e1f0cc80f1ee9210"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/plot.py",
+            "sha256": "e201dcb3db54eb4599536db9201b936ae59f0ee8f8acfabb9c6c6172eb0a700e"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/control.py",
+            "sha256": "c309ef3bab8f1bcbf5cc9b3dd95774bc9d804333c14b7270043c6c040edc65c3"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/feedback.py",
+            "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/sweep.py",
+            "sha256": "0eb8799373237f30c1e589cb8a1ba59ac5e4df7228787ffecacd7c11e86481b0"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/RESULTS.md",
+            "sha256": "e0a3665eac2a9321aeb0993d5113c37a62040efbadb21b86abb407ce0e82fede"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/original_results.json",
+            "sha256": "3363b586335be09ac8ca96661004a399060b0aaaf34809ffca27f753a92079fb"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round11/lib_numchannel.py",
+            "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/run_stats.py",
+            "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/src/lp/stats.py",
+            "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/src/lp/ciphers.py",
+            "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/src/lp/corpus.py",
+            "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/data/krisyotam_runes.txt",
+            "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/public-multihistory-feedback/controls.json",
+            "sha256": "0cdfa1ff5b16a5d12332b6d7a5a83f0c6f39589b424e41c0e2a98c6071c879a6"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/source/analysis/round12/C1/results.json",
+            "sha256": "9b03e53424d85f66c99a6e8c00824035b21f3a6ad1298383ed560e1f8ca2121c"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/scores.svg",
+            "sha256": "6942bf88db39d9ef88cf0235d8419da9430209ef551469256dda4517b8e40d38"
+          },
+          {
+            "path": "experiments/records/public-multihistory-feedback/feedback.svg",
+            "sha256": "c4b5bc2ea047c2f3293cf59d6c55230b79ade04877b285040cdab4e69e247dee"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/public-multihistory-feedback/scores.svg",
+          "caption": "The planted English control clears the score requirement. The strongest LP2 candidate is lower."
+        },
+        {
+          "path": "experiments/records/public-multihistory-feedback/feedback.svg",
+          "caption": "Each rule maps two to six earlier symbols into a key value used to decode the next rune."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned source executable",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/sweep.py"
+        },
+        {
+          "label": "Pinned source functions",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/feedback.py"
+        },
+        {
+          "label": "Pinned source results",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/RESULTS.md"
+        }
+      ],
+      "related": [
+        "cumulative-autokey-literal",
+        "linear-ciphertext-feedback"
+      ],
+      "article": "# Multi-rune feedback and autokey\n\nA feedback cipher can derive each new key symbol from earlier symbols. [This published screen](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1/RESULTS.md) tested whether LP2 behaves that way when the key depends on the previous two to six runes.\n\n## Finding\n\n**None of the 23,520 source configurations produced a convincing English reading.** The strongest result scored **−6.299**, below the source's required **−5.500**. It came from a **66-rune segment**, not the continuous manuscript: a five-rune plaintext-history XOR rule on the reversed segment, with an all-six seed. The source program successfully recovered all **21 planted cases** at history length three and gave wrong-rule decodes much lower scores.\n\n![The planted control clears the score threshold; the highest-scoring LP2 candidate remains below it.](experiments/records/public-multihistory-feedback/scores.svg)\n\nThese are English quadgram scores; higher means the transliterated output resembles the training text more closely. The strongest short fragment is still well below the planted English sample. A score by itself would never establish a solution without a coherent continuation.\n\n## How the tested rules work\n\nAt each position, the program reads the previous *k* symbols, passes them through one of seven fixed functions, then adds or subtracts the resulting value modulo 29. The seven functions are an index sum, prime-value sum, XOR, prime-of-index-sum, prime-of-prime-sum, last-symbol difference and alternating sum. It tries three kinds of history: the visible ciphertext, the plaintext decoded so far, or the modulo-29 sum of the two. The source also tries both directions of the rune stream and both arithmetic signs.\n\n![A five-rune history is mapped to a key value, then combined with the next ciphertext rune to produce a proposed plaintext rune.](experiments/records/public-multihistory-feedback/feedback.svg)\n\nThe screen covers the **12,956-rune continuous unsolved stream** plus its **55 nonempty source segments**. For ciphertext history, symbols after the first *k* positions do not depend on the initial seed. For plaintext and mixed history, the source tries only the **29 all-equal seeds** `0…0` through `28…28` at each *k*, then keeps the best score. That is a thin slice of the possible **29^k** initial states. In particular, a wrong initial plaintext state need not “lock on” to the correct state later; the source's broader claim that a genuine autokey would necessarily reveal itself under these seeds is not established by this test.\n\nThe source's 200 shuffled controls score the raw full stream, while its reported best is selected from thousands of configurations, many on short segments. That shuffle maximum is not a full best-of-grid null. The result is therefore **no supported English reading in the executed grid**, not a statistical exclusion of every feedback cipher.\n\n## Reproduce\n\nDownload the experiment ZIP and run from its extracted folder:\n\n```sh\npython experiments/records/public-multihistory-feedback/run.py\n```\n\nIt runs the 21 planted controls before the full sweep, then checks the saved result against the separately archived source output. The independent checker reconstructs the 12,956 source rune indices and **recomputes the winning XOR/plaintext-history decode and score** without calling the source's feedback decoder. For a quick check of the packaged outputs, run `python experiments/records/public-multihistory-feedback/check.py`. The full sweep takes several minutes.\n\nThe code, transcription and scoring table are included from [Dukotah/cicada3301 revision f08b20b](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round12/C1), with the repository's license. This record matches that program's executed parameters; it does not claim to rule out other functions, alphabets, seed states or non-English plaintext.\n",
+      "article_path": "experiments/records/public-multihistory-feedback/article.md",
+      "script_sha256": "c23294775a089aab88044cdee3a6f3a17934eaeade553cbc5383afe94fd2c461",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
       "id": "public-prng-seed-sweep",
       "status": "published",
       "title": "Seven seeded generator streams against LP2",
@@ -33362,6 +33996,177 @@
         "id": "replay",
         "label": "Method replay",
         "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      }
+    },
+    {
+      "id": "rune-matched-scorer-calibration",
+      "status": "published",
+      "title": "Does a rune-matched scorer improve candidate screening?",
+      "question": "Does the pinned rune-matched quadgram model measurably improve known-reading separation and tighten 200 wrong-key scores?",
+      "reader_question": "Would scoring rune output differently help recognize a real LP reading?",
+      "summary": "Across five known readings the transformed scorer improves scores, but its 200 wrong-key controls have slightly wider rather than narrower spread. Its measured separation gain is 3.6%, not the earlier proposed 18%.",
+      "finding": "The source's five solved-page scores, 200 seed-42 random-key decodes, model size and gates reproduce exactly. The weakest known reading rises from -4.9789 to -4.7744, separation from 28.69 to 29.71 sigma; wrong-key SD rises from 0.0880 to 0.0895, failing the predeclared tightening gate. An independent model reconstruction shows the new quadgram table is exactly the original count table after K/Q->C, V->U and Z->S alias collapse.",
+      "limitations": "This is English-scorer calibration, not an unsolved-page cipher test. The 200 wrong keys are one seeded sample on A Koan; the small sampled SD change does not prove a generally noisier model. The source's claimed multi-character rune expansion is not implemented in this particular model construction. A narrative note in the original JSON says +2.9% despite its tabulated values yielding +3.6%.",
+      "next_steps": "Compare a truly rune-unit-aware language model on held-out known readings and complete wrong-key searches, with the null construction and improvement criterion fixed first.",
+      "outcome": "not-supported",
+      "tags": [
+        "scorer calibration",
+        "quadgrams",
+        "Gematria Primus",
+        "known readings",
+        "random-key controls",
+        "source replay"
+      ],
+      "scope": {
+        "pages": [],
+        "artifacts": [
+          "experiments/records/rune-matched-scorer-calibration/source/liber-primus/data/scream314_lp.md",
+          "experiments/records/rune-matched-scorer-calibration/source/liber-primus/data/english_quadgrams.txt"
+        ],
+        "representation": "Five source-decoded LP1 solved sections (A Warning, Some Wisdom, A Koan, Welcome, Circumference), and A Koan's 742-rune ciphertext parsed from the pinned markdown.",
+        "procedure": "Replay the source's old and transformed quadgram scorers on identical known texts; score 200 modulo-29 random-key A Koan decodes with Python Random(42); compare the -5.5 known-reading gate, wrong-key SD and sigma separation. Independently rebuild the count tables and scores.",
+        "parameters": "Five solved pages, 200 random-key decodes, 742 ciphertext runes, seed 42, old vs transformed English quadgram models, -5.5 known-reading gate.",
+        "exclusions": "Unsolved LP2 ciphertext, other languages, independent held-out scorer training, complete key searches, alternative null samples, or a genuinely rune-unit-aware model."
+      },
+      "review": {
+        "reviewer": "Pinned executable replay and separately implemented parser/model/null checker",
+        "retested_on": "2026-10-22",
+        "kind": "source-backed scoring calibration",
+        "human_review": "pending"
+      },
+      "reproduction": {
+        "command": "python experiments/records/rune-matched-scorer-calibration/run.py && python experiments/records/rune-matched-scorer-calibration/check.py && python experiments/records/rune-matched-scorer-calibration/plot.py",
+        "environment": "Python 3 standard library, bundled MIT-licensed source and input text, offline.",
+        "script": "experiments/records/rune-matched-scorer-calibration/run.py",
+        "script_sha256": "3c0aea216f34a7a8e86c8e442aecf6f9b4028128692a0a5477a349ce27e2d407",
+        "inputs": [
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/run.py",
+            "sha256": "3c0aea216f34a7a8e86c8e442aecf6f9b4028128692a0a5477a349ce27e2d407"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/check.py",
+            "sha256": "cd4fcf6730a75d8b8bf147a51491131b80584b66c0ed3adfed5849dd416dc7c1"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/plot.py",
+            "sha256": "186004e721701057bf06d2fca6af8532340ff2bc2a65141af585f3557002c17c"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/claimed_prior_finding.md",
+            "sha256": "e11dc56ba125a72bdd4aef3242992200de3683ac1292a6f9bb4b996b6ba05798"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/measure.py",
+            "sha256": "6d874fffcaaa685150bef148736fdee5ce0011bf096e3a48f647592683e1229d"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/original_results.json",
+            "sha256": "78d744a384ec6e4eff32bcc0dfd5822cf3fd16f1a481c93299b43ac60a4f50da"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/PREREG.md",
+            "sha256": "dda16d00f03d0629d8eb0434526d2286f518944272762ce2267e5da1fa9e1485"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/RESULTS.md",
+            "sha256": "a9491e9fa9d3209617c9119fe878543a265e0d22c4de361495a4450b6fc37690"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/analysis/round16/scorer/scorer.py",
+            "sha256": "4642493cab9e410b49303de1ccd19bbcbf08ddaa1869a05faadb9119d0ce98e5"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/data/english_quadgrams.txt",
+            "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/data/scream314_lp.md",
+            "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/autokey.py",
+            "sha256": "d2fe81256c1ea2a09c0ac2c2e71ce6a87e49cfe953f3ee3e3b5d6cebf6d90125"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/ciphers.py",
+            "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/corpus.py",
+            "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/gematria.py",
+            "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/score.py",
+            "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/solve.py",
+            "sha256": "57ec84f46c2b6b98831c11dda00642078239aac5ffce2fca5e11e12dde8e22c3"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/liber-primus/src/lp/stats.py",
+            "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/source/LICENSE",
+            "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+          }
+        ],
+        "outputs": [
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/results.json",
+            "sha256": "be452e370077d8f71d1331b3030fc7bafd48c4c5e2d67a570ef50c26afffb10b"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/solved_texts.json",
+            "sha256": "2fbf576aaabdeaabcb107b69486cb33d136ada9eac2553f49b408ab4afc103f6"
+          },
+          {
+            "path": "experiments/records/rune-matched-scorer-calibration/scorer-comparison.svg",
+            "sha256": "a580e0e09fe8ab5270177dabf0fa85411f138a8101d32c2b8b61a1c1687cdd72"
+          }
+        ]
+      },
+      "visuals": [
+        {
+          "path": "experiments/records/rune-matched-scorer-calibration/scorer-comparison.svg",
+          "caption": "The transformed model helps each known reading in this fixed comparison; the wrong-key score spread does not tighten."
+        }
+      ],
+      "sources": [
+        {
+          "label": "Pinned R16 scorer plan",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/scorer/PREREG.md"
+        },
+        {
+          "label": "Pinned model implementation",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/scorer/scorer.py"
+        },
+        {
+          "label": "Pinned measurement script",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/scorer/measure.py"
+        },
+        {
+          "label": "Pinned reported result",
+          "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/scorer/RESULTS.md"
+        }
+      ],
+      "related": [
+        "english-scorer-controls",
+        "parallel-languages"
+      ],
+      "article": "## Finding\n\n**The revised scorer raises all five known-reading scores, but its wrong-key scores do not become less variable in this test.** We replayed the pinned comparison using the same five solved pages and 200 seeded random-key decodes of *A Koan*. The revised model's weakest solved-page score rose from **−4.979 to −4.774**; both clear the source's **−5.5** recognition bar. The wrong-key score standard deviation changed from **0.0880 to 0.0895**, so the source's predeclared “less variable noise” gate fails.\n\n![Five known readings score higher under the revised model, while the observed wrong-key score spread widens slightly.](experiments/records/rune-matched-scorer-calibration/scorer-comparison.svg)\n\nThe separation between the weakest known reading and the wrong-key mean changes from **28.69 to 29.71 standard deviations**, about **3.6%**. That is a real improvement *in this particular comparison*, but much smaller than the earlier proposed **18%**. The source's saved JSON contains one narrative note saying “+2.9%”; its own tabulated values calculate to **3.6%**, consistent with its report and our replay.\n\n## What the model actually changes\n\nThe original English quadgram table contains **7,266,795** counted windows. The revised table has the same total and **68,083** distinct four-character windows. Our independent reconstruction exactly matches its scores by making only these substitutions inside each original four-letter window: **K and Q → C, V → U, Z → S**, then combining counts for windows that become identical.\n\nThe source describes the model as handling multi-character rune transliterations such as `TH`, `EO` and `NG`. Its implementation processes the four original Latin letters individually, and every resulting window remains four characters long. Thus the measured improvement is **an alias-collapse result**, not evidence that extra rune-unit expansion improved scoring. This does not invalidate the measured scores; it makes the operation precise enough to compare with a genuinely rune-unit-aware model later.\n\n## How we checked it\n\nThe bundled source script recovered the same five scored texts and generated the same **200** null decodes with seed **42**. It reproduced every saved page score, null summary and gate result. A separate checker rebuilt both quadgram tables, parsed the *A Koan* runes independently from the pinned transcription, reran the random keys and rescored all **205** texts without importing the source scorer.\n\nThis is a calibration of an English-language scoring instrument, **not a test of an unsolved-page cipher**. The null comes from one page and one set of 200 keys. A 0.0015 difference in the two sampled standard deviations does not establish that the revised model is generally noisier; it does mean this test did **not demonstrate the promised tightening**. Other languages and scoring registers need their own calibrated controls.\n\n## Reproduce\n\nFrom the repository root, using Python 3:\n\n```text\npython experiments/records/rune-matched-scorer-calibration/run.py\npython experiments/records/rune-matched-scorer-calibration/check.py\npython experiments/records/rune-matched-scorer-calibration/plot.py\n```\n\nThe [measured data](experiments/records/rune-matched-scorer-calibration/results.json), [five scored texts](experiments/records/rune-matched-scorer-calibration/solved_texts.json), original executable, manuscript transcription and quadgram table are bundled from the pinned MIT-licensed source.\n",
+      "article_path": "experiments/records/rune-matched-scorer-calibration/article.md",
+      "script_sha256": "3c0aea216f34a7a8e86c8e442aecf6f9b4028128692a0a5477a349ce27e2d407",
+      "record_type": {
+        "id": "control",
+        "label": "Control",
+        "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
       }
     },
     {

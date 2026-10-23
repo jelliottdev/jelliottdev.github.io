@@ -1,0 +1,228 @@
+{
+  "id": "public-lp2-as-pad",
+  "status": "published",
+  "title": "LP2 as a running key for shorter Cicada texts",
+  "question": "Does the unsolved LP2 rune stream, used as a skip-aware key, recover English from five specified Cicada objects?",
+  "reader_question": "Could Liber Primus itself be the key to a shorter message?",
+  "summary": "Replays the pinned F-01 inversion: five targets, four LP2 key forms, two signs, and a planted skip-aware control.",
+  "finding": "No tested pairing passed the source's English score bar. The best of 40 decodes scored −7.032 against −5.500; the five highest scorers did not exceed their own shuffled-target maxima. A planted message was recovered exactly.",
+  "limitations": "This is a cross-artifact key test, not a direct LP2 decrypt. The pp49–51 payload was unavailable, and all keys began at offset zero. The null was calculated only for the selected top five configurations; the hard-coded 63-byte AN END sequence is not independently authenticated here.",
+  "next_steps": "A further LP2-as-key proposal should specify a verified target byte stream, its rune encoding, key offset, page boundary treatment and skip rule before searching.",
+  "outcome": "not-supported",
+  "tags": [
+    "running key",
+    "one-time pad",
+    "skip-aware decoding",
+    "Cicada cross-artifact",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/public-lp2-as-pad/source/liber-primus/data/krisyotam_runes.txt",
+      "experiments/records/public-lp2-as-pad/source/liber-primus/SOLVED-PAGES.json",
+      "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+      "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt"
+    ],
+    "representation": "The pinned source's 12,956 unsolved rune indices are key material; English targets are converted to GP rune indices and the hard-coded byte target is reduced modulo 29.",
+    "procedure": "Use the source beam decoder with up to three key skips and its English quadgram score. Sweep five targets, four LP2 key variants and two signs at offset zero; compare the selected top five with 200 target-order shuffles each.",
+    "parameters": "40 source decodes (some arithmetically equivalent); 500-rune cap on the three English-text targets, 63-byte numeric target, 200-rune LP2 prefix target; beam width 400; 100 shuffles for the planted control.",
+    "exclusions": "Absent pp49–51 payload, other key offsets, other targets and encodings, alternative boundary rules or skip models, and the reverse use of other objects as keys."
+  },
+  "review": {
+    "reviewer": "Executable replay with separate transcription, grid and source-output checks",
+    "retested_on": "2026-10-22",
+    "kind": "computational source replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/public-lp2-as-pad/run.py",
+    "environment": "Python 3 standard library. Pinned source and input files bundled; full run takes several minutes and uses a temporary copy.",
+    "script": "experiments/records/public-lp2-as-pad/run.py",
+    "script_sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c",
+    "inputs": [
+      {
+        "path": "experiments/records/public-lp2-as-pad/check.py",
+        "sha256": "3ef0a02985d5b4825004fc0d70ed5db25ea558559e241a06db9285ccc45bf4c7"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/plot.py",
+        "sha256": "c67fd482a3f0ee996e7faa4904bc632089e61f2fd9f7bca25b3c406d758d8621"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/run.py",
+        "sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/original_results.json",
+        "sha256": "4930202f05535fcb13ce49620181f3eb9135d814b50c72660028367e2aac21e7"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/PREREG.md",
+        "sha256": "900747ab47b114b433c2e158b2d50751104e86ffc94720ee97211db909013b3c"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/RESULTS.md",
+        "sha256": "e5c6405f2b8ec231912b667bcddaab3bafea5bd1895a689d366a37adeeab5f90"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/sweep.py",
+        "sha256": "de5ac41cbb4e770f3b78f22ff22ed69b283dd596095eb1a4e216e04c8ecbac29"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_2012_2013_puzzle_texts.txt",
+        "sha256": "7acb899b537efdb4d0426041fcbb4a5b42d54fdda40a64e02745b3edc1f6f9c5"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/keys/armada18/cicada_pgp_messages.txt",
+        "sha256": "5c5b2dcd24b26a4b7dda3fd555bf5c3b0966bb4eb74fe39660d2b0af31d26ead"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/SOLVED-PAGES.json",
+        "sha256": "cd3c6d55800375dea4d5d95f87f758ba5e832396e63fb2130f1079eb63bafc85"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/results.json",
+        "sha256": "9d8b28d687172831972cebdfab787d174dca458a4ebf6679c78568090c026019"
+      },
+      {
+        "path": "experiments/records/public-lp2-as-pad/scores.svg",
+        "sha256": "f8303ae8dc767d65b1ed0d21474aeaf4abb167d2a73a7c5948f42e70ebc7c752"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/public-lp2-as-pad/scores.svg",
+      "caption": "For each tested object, the best English score still falls short of the source's advancement bar."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned F-01 executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/sweep.py"
+    },
+    {
+      "label": "Pinned F-01 plan",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/PREREG.md"
+    },
+    {
+      "label": "Pinned F-01 results",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/RESULTS.md"
+    }
+  ],
+  "related": [
+    "public-prng-seed-sweep",
+    "lp2-known-vigenere-keys"
+  ],
+  "article": "# Could LP2 be the key to another Cicada text?\n\nThe usual question is how to decode Liber Primus. This public test reverses the roles: it treats the **12,956 unsolved LP2 runes as a running key** and asks whether that key reveals a shorter Cicada object. It tests specific objects and rules; it does not directly decrypt LP2.\n\n## Finding\n\n**No tested pairing produced a readable English result.** The best of 40 runs scored **−7.032** on the source's English quadgram scale, below its predeclared **−5.5** advancement bar. The five highest-scoring configurations were also compared with 200 shuffled versions of their target each; none exceeded its corresponding highest shuffle score. A planted message encrypted under the same LP2 key *was* recovered, showing that this decoder can succeed on a constructed example of its assumed mechanism.\n\n![Five target groups and their best English scores, all below the advancement bar.](experiments/records/public-lp2-as-pad/scores.svg)\n\nThe graphic shows each target's best run. Higher scores are stronger *for this English model*; the plotted values do not measure an unconditional probability that a puzzle idea is true.\n\n## What entered the test\n\nThe source's key stream was the 55 nonempty unsolved LP2 transcription segments concatenated in page order. It tested four versions of that stream: forward, reversed, rune-index Atbash (`28 − index`), and negation modulo 29. Each was used with addition and subtraction in `plaintext = (target + sign × key) mod 29`. The decoder can skip up to three key positions at a time when searching for synchronization.\n\nFive targets entered the completed run:\n\n| Target | Input to decoder | Length actually scored |\n| --- | --- | ---: |\n| 2012–13 puzzle texts | English text converted to rune indices | first 500 |\n| Five solved LP1 pages | their recorded plaintext transliterations converted to rune indices | first 500 |\n| PGP message text | English text converted to rune indices | first 500 |\n| “AN END” byte sequence | hard-coded bytes reduced modulo 29 | 63 |\n| LP2 opening | first 200 runes of LP2 tested against the LP2 key | 200 |\n\nThe source proposed a sixth target, the pages 49–51 payload, but did **not** have the payload bytes needed to run it. It therefore ran five targets × four key variants × two signs = **40 decodes**. Negating the key and changing the sign gives the same arithmetic as an unnegated key with the original sign, so some decodes are equivalent; 40 is the run count, not 40 independent hypotheses. Every run starts at key offset zero.\n\nThe “AN END” input is the **63-byte hard-coded sequence in the source script**, which labels it a SHA-512 hash. This record preserves that exact input without asserting that the bytes independently authenticate an external artifact. The text-to-rune conversion is likewise the source's conversion, not a lossless representation of the original messages.\n\n## What the control and scores mean\n\nThe source first encrypted a known English sentence with the LP2 stream, including deliberate key skips. Its beam decoder recovered the planted transliteration exactly, scoring **−4.413**. A rigid decoder using the right key but no skip search scored **−7.334**. That is a useful positive control for this implementation; it cannot prove that an unknown real message, if present, would be found under every different skip pattern or encoding.\n\nThe strongest real-target result was the 2012–13 text under the forward LP2 stream with addition: **−7.032**. For that *selected* run, 200 target-order shuffles reached a highest score of **−6.972**, slightly stronger than the observed result. The null comparison was computed for only the top five selected configurations, and the shuffled controls do not repeat the whole selection process across all target and rule choices. We therefore report the observed absence of a hit under the source's gate, rather than a universal statistical exclusion.\n\nThis replay uses the [pinned F-01 executable](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/sweep.py) and [its declared plan](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/F-01/PREREG.md). The source's result prose speaks more broadly than its executed grid in places; the figures above come from the machine-readable run and the independent accounting check.\n\n## Reproduce\n\nDownload this experiment's ZIP from the record's download control to inspect the pinned code, input texts, result, and checker. From a Liberpedia repository checkout, run:\n\n```bash\npython experiments/records/public-lp2-as-pad/check.py\npython experiments/records/public-lp2-as-pad/run.py\n```\n\nThe checker is quick. The complete source replay takes several minutes and runs in a temporary copy, so it leaves the archived result bytes intact. It verifies the complete 40-configuration grid, the positive-control gate, the LP2 rune-stream checksum, the five selected null comparisons, and substantive equality with the pinned source output (excluding elapsed wall time).\n\nThe bundled [source results](experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/results.json), [checker](experiments/records/public-lp2-as-pad/check.py), and [figure script](experiments/records/public-lp2-as-pad/plot.py) expose the exact values. The [source README and method notes](experiments/records/public-lp2-as-pad/source/liber-primus/analysis/round16/F-01/PREREG.md) are preserved as evidence of what was proposed, not as broader findings of this replay.\n\n**Remaining scope:** target material other than these five objects, a verified pages 49–51 payload, other key offsets, alternative page boundaries, or using the other objects as key material would require separate tests.\n",
+  "article_path": "experiments/records/public-lp2-as-pad/article.md",
+  "script_sha256": "be380cb516f066aa670e371dccdf951a507660a2accce5ec2e6bd9a0fb53b16c",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

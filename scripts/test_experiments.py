@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from build_experiments import build
+from preflight_experiments import preflight
 
 
 class RegistryTests(unittest.TestCase):
@@ -57,6 +58,24 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(exported.exists(), 'A withdrawn record must not survive in generated individual exports')
         self.assertEqual(json.loads((self.root / 'data/experiment-index.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
+
+    def test_draft_preflight_preserves_status_and_every_site_file(self):
+        self.run_build()
+        self.record['status'] = 'draft'
+        path = self.root / 'experiments/records/test-record/record.json'
+        path.write_text(json.dumps(self.record))
+        before = {p: p.read_bytes() for p in self.root.rglob('*') if p.is_file()}
+        result = preflight(['test-record'], self.root)
+        self.assertEqual(result[0]['status'], 'draft')
+        self.assertEqual(before, {p: p.read_bytes() for p in self.root.rglob('*') if p.is_file()})
+
+    def test_draft_preflight_rejects_stale_result_hash(self):
+        self.run_build()
+        self.record['status'] = 'draft'
+        (self.root / 'experiments/records/test-record/record.json').write_text(json.dumps(self.record))
+        (self.root / self.record['reproduction']['outputs'][0]['path']).write_text('changed')
+        with self.assertRaisesRegex(ValueError, 'SHA-256 mismatch'):
+            preflight(['test-record'], self.root)
 
     def test_changed_script_or_missing_reviewed_hash_rejected(self):
         reviewed_hash = self.record['reproduction'].pop('script_sha256')

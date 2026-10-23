@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 238" role="img" aria-labelledby="title desc">
+  <title id="title">How the feedback candidates derive a key</title>
+  <desc id="desc">Two to six earlier ciphertext runes, decoded plaintext runes, or their combined values feed a fixed function. Its output is combined with the current ciphertext rune modulo 29 to suggest the next plaintext rune.</desc>
+  <rect width="760" height="238" fill="#fff"/>
+  <style>
+    text{font:14px system-ui,sans-serif;fill:#27313a}
+    .small{font-size:12px;fill:#59656e}
+    .box{fill:#f2f4f5;stroke:#b9c2c8}
+    .core{fill:#edf3f6;stroke:#7092a6}
+    .line{stroke:#687985;stroke-width:2;fill:none}
+  </style>
+  <text x="16" y="29" font-weight="600">Choose one history</text>
+  <rect class="box" x="16" y="44" width="156" height="35" rx="3"/>
+  <text x="28" y="67">Visible runes</text>
+  <rect class="box" x="16" y="87" width="156" height="35" rx="3"/>
+  <text x="28" y="110">Decoded runes</text>
+  <rect class="box" x="16" y="130" width="156" height="35" rx="3"/>
+  <text x="28" y="153">Both, added mod 29</text>
+  <path class="line" d="M172 61 H200 M172 104 H200 M172 147 H200 M200 61 V147 M200 104 H224"/>
+  <text class="small" x="218" y="81">previous 2–6</text>
+  <rect class="core" x="285" y="84" width="135" height="43" rx="3"/>
+  <text x="307" y="110">Fixed function f</text>
+  <path class="line" d="M256 104 H285 M420 105 H454"/>
+  <text class="small" x="457" y="83">key value</text>
+  <rect class="core" x="520" y="84" width="112" height="43" rx="3"/>
+  <text x="535" y="110">±, mod 29</text>
+  <path class="line" d="M486 105 H520 M632 105 H667"/>
+  <text x="670" y="110">Pᵢ</text>
+  <path class="line" d="M576 178 V127"/>
+  <text x="514" y="203">current visible rune Cᵢ</text>
+  <text class="small" x="16" y="220">The decoded rune enters the history only in the plaintext or mixed cases.</text>
+</svg>
