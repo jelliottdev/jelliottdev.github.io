@@ -1,0 +1,31 @@
+{
+  "schema": "liberpedia-source-replay-plan-v1",
+  "source_entry": "B-12",
+  "source_repository": "Dukotah/cicada3301",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "kind": "source-replay-after-source-results-reviewed; not an independent preregistration",
+  "scope": "Run the pinned Round 19 C3 linegeom.py and linetests.py unchanged on the 56 exact LP2-00..55 JPEGs and pinned canonical rune text. Compare saved source results and independently recount rows, channel screens, bit-decoder controls, and their limits.",
+  "inputs": {
+    "image_manifest": {"path": "research/source-intake/dukotah-image-input-recovery-2026-10-23.json", "sha256": "897d99d56e676c33cf24ccc9ddf2b913728e3e4e0532aee01759b1fbf2b2d7f7", "required_exact_pages": 56},
+    "analysis/round19/C3/l3/linegeom.py": "c43d895490917a654409ee264c98d99b56181991130878118b6560c64e7de442",
+    "analysis/round19/C3/l3/linetests.py": "6ceb30e4d18a29cce19a0776e64f77e414c0a866ac78babf89c201f071655aef",
+    "analysis/round19/C3/l3/reader.py": "7cfa562a6b02a435563a99ecec1cdfd6393324bb6bb7e721f4a97071e3d031df",
+    "analysis/retranscribe/read_lines.json": "aff75a8c0393a11e399dcc65bac69ce9f33fe0f42790bcdc8e990c731b81e51e",
+    "analysis/retranscribe/diff_report.json": "e3aad9a2646a4d4e52fe820114c8996514ea414d85e35b05b9feb5e709db7774",
+    "data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+  },
+  "archived_outputs": {
+    "analysis/round19/C3/l3/linegeom.json": "e0fd51010b91d07e7275cb8c609131bca8e64265b645b420cc178dffb5218950",
+    "analysis/round19/C3/l3/linetests.json": "54b9a829823fefeec67daad64c8646af3ec82dacb43816f040423fa49550192b"
+  },
+  "source_rules": {
+    "geometry_pages": "LP2-00..55, each image classified by source component-height and grouping code",
+    "bimodality_gate": "source GMM separation >=2.0 standard deviations and delta BIC >10",
+    "bit_decode": "eight image/canon channels, threshold at each channel median, 5/8 bit packings with forward/reverse and phase0..7, 2000 source-seeded shuffles per channel; source bar p<0.001",
+    "correlation_gate": "Bonferroni p<0.001/27",
+    "control_C3a": "64-bit CICADA33 plant at 0.5,1,2,3,4,6,8 times observed fill-ratio SD; require >=95% bit recovery and GMM separation >=2.0",
+    "control_C3b": "noise-free planted ASCII in bit channel must beat the same 2000-shuffle bar"
+  },
+  "interpretation_rule": "If C3a never reaches 95%, do not present a negative as excluding even a strong line-fill payload. Report observed source scans and sensitivity failure separately. Do not infer an encoder, covert-message absence, or source's general verdict beyond exact tested channels."
+}

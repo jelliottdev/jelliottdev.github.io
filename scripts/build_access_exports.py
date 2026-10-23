@@ -179,9 +179,15 @@ public_source_audits = {
  'failed-attempts-complete-output-audit.json',
  'lp1-seven-word-825-audit.json', 'lp1-word-count-audit.json',
  'dukotah-image-input-recovery-2026-10-23.json',
+ 'r18-jpeg-fingerprint-replay-2026-10-23.json',
 }
 for filename in sorted(public_source_audits):
  register('research/source-intake/'+filename,'Supplied-source audit data')
+for filename in ('audit-r18-jpeg-fingerprints.py',
+                 'vendor/dukotah-r18-l1/jpeg_fingerprint.py',
+                 'vendor/dukotah-r18-l1/pages_summary.json',
+                 'vendor/dukotah-r18-l1/LICENSE'):
+ register('research/source-intake/'+filename,'JPEG metadata reproduction')
 for crop in sorted((root / 'research/source-intake').glob('*.png')):
  register('research/source-intake/'+crop.name,'Source-image inspection crop')
 register('data/method-families.json','Idea coverage notes')

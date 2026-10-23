@@ -1,0 +1,64 @@
+{
+  "schema": "dukotah-ctfeedback-coefficient-source-replay-plan-v1",
+  "frozen_on": "2026-10-23",
+  "plan_character": "Source-read exact replay plan frozen before our full-grid run, not an independent preregistration of the published method or outcome",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_sha256": {
+    "analysis/campaign18_skip/ctfeedback_coeffs.py": "b64396dd3777d6078fca241943c8b743e5e255249e80a90ca6613e23167088a0",
+    "analysis/campaign18_skip/armada2/selfref_skip.py": "60e2db5782d8c26e36435eada3f698bc0c14bf4c3926e1f429e8c677176cb87d",
+    "analysis/campaign18_skip/armada/numeric_skip.py": "082e6f24a6ddc29fa9ea88c68e71d4a45d3de3d816e8ab2230d864cf64bee2de",
+    "analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "analysis/campaign18_skip/sweep.py": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80",
+    "analysis/run_stats.py": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+    "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "src/lp/stats.py": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2",
+    "src/lp/corpus.py": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+    "data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "data/keys/solved_plaintext.txt": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473",
+    "data/keys/self_reliance.txt": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+  },
+  "source_pages": [
+    0,
+    5,
+    20
+  ],
+  "manuscript_pages": [
+    "lp2-00",
+    "lp2-05",
+    "lp2-20"
+  ],
+  "source_page_lengths": [
+    262,
+    263,
+    269
+  ],
+  "source_domain": {
+    "coefficient_count_by_k": {
+      "1": 28,
+      "2": 840,
+      "3": 4204
+    },
+    "seeds": [
+      "const0",
+      "const1"
+    ],
+    "signs": [
+      -1,
+      1
+    ],
+    "offsets": [
+      0
+    ],
+    "beam_width": 250,
+    "max_skip": 3,
+    "total_decodes": 60864,
+    "gate": "Source plants coefficient a1=7 with seed const5, which is OUTSIDE default const0/const1 search. Run gate and report separately; require gate PASS before interpreting source pages."
+  },
+  "command": "python analysis/campaign18_skip/ctfeedback_coeffs.py --pages 0,5,20",
+  "output": "Capture complete source stdout and parse three page best scores/metas and overall verdict; this source program writes no JSON result.",
+  "comparison": "Compare source-reported rounded page best scores -6.86/-6.91/-6.89, verify gate, full source search count, and source threshold -5.2. Report any divergence in printed best coefficients and scores.",
+  "limits": "Three of 55 nonempty LP2 pages, constant seeds only, short history k1..3 with k3 last tap restricted to {0,1,28,2,27}; does not close all feedback ciphers or the omitted external-reference seed. Gate const5 is not in search grid. Full-class refutation rhetoric cannot follow from this bound.",
+  "missing_optional_input": "data/keys/campaign12/walden.txt is absent in this pinned checkout and is skipped by sweep.build_lm; --with-ref is not run."
+}

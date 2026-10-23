@@ -1,0 +1,19 @@
+{
+  "schema": "liberpedia-wulfic-stage-r-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "stage_r_sha256": "ca888f78cbdf504de69ceb3309c55a064cb890fd57fb5b19c9245228f2d29eec",
+    "fastdetect_sha256": "b98c876e2963ac257164141f0100e5cf0e034070f16628816e2544ba493530d4",
+    "detect_sha256": "fc0f0fb715e888f9ffe0ee434f786f273a0ee939ab050d54ff4e369a8f301eeb",
+    "keys_sha256": "551f5c0c4746c934b2317b22562fd95db969600dda2bfbe2a3ab7c359255cafc",
+    "people_2014_sha256": "d2e546fd4e5505a3a3aa45dc6a453fd181b2d0a4f3295361f0e754e3a40ae56b",
+    "published_candidates_sha256": "7636b6e93acc24f221ce5e7ef70419a17ff238c3a0d94becb69ece22707d1949",
+    "published_controls_sha256": "e302f6009e63ba17de950ad396be2001a2c922d047e0da83b22990efefb6a29b"
+  },
+  "input": "Pinned Stage R 25 declared Cicada number/byte sources, each mapped mod 29 and by rejection to make 50 cyclic key streams; LP2 source sections 7–15 separately and joined 7–15, using pinned source corpus and solved-LP1 unigram distribution.",
+  "search": "All 50 key streams ×10 section alignments ×3 modes sub/add/beaufort ×29 shifts = 43,500 distinct source settings. Each score averages the drift-tolerant likelihood over every cyclic key phase; none is a selected best phase. GP29 positions, epsilon0.1, rho0.02, pruning1e-12 and threshold +30 nats as source.",
+  "controls": "Source deterministic seed3301: each 50-key model, lengths729 and3316, fresh/next anti-doublet rekey, keep0.19; its own-key and wrong-key scores (200 pairs). Any own-key <+30 or wrong-key >=+30 voids the screen.",
+  "replay": "Compute exact source settings and controls using a separately written Numba sparse-forward kernel. Require numerical parity with pinned source fastdetect on fixed real LP2 cells across short/medium/long keys, all modes and boundary alignments before full run; verify all 43,500 candidate and 200 control rows against the pinned original TSVs at source 0.01-nat serialization precision. This is an accelerated reimplementation, not execution of the unmodified source main program.",
+  "limitations": "The detector uses solved-LP1 unigram frequencies and a fixed drift model. Fixed source bytes, two mappings and these ten alignments only; no other keys, language models, transformations, key schedules or plaintext interpretation. A low score does not disprove a key if the source detector has inadequate power for that input/length; control gate is limited to its planted sources and lengths."
+}

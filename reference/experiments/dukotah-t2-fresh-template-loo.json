@@ -1,0 +1,104 @@
+{
+  "id": "dukotah-t2-fresh-template-loo",
+  "status": "published",
+  "title": "Does a fresh image-template bank change T2's rune choices?",
+  "question": "When the pinned T2 single-substitution probe uses freshly rebuilt 229-class templates, does it select the same runes as its archived output on all mapped LP2 lines?",
+  "reader_question": "Can the image check find a different rune on a manuscript page?",
+  "summary": "On 604 mapped lines, the fresh bank makes exactly the same best rune choices as the archived T2 output. Its costs and selected pixel positions differ, and its comparison uses the reference reading around each tested rune.",
+  "finding": "The solved-page control passes 178/178 substitutions. Across all 604 lines and 13,121 tested positions, best rune sequences match the archive line for line; costs change on 329 lines and positions on 262. Source segments 45–54 cover LP2-45–49 and 51–55 because LP2-50 has no runes.",
+  "limitations": "This is a fresh 229-class instrument, not exact replay of the unavailable 226-class historical arrays. T2 supplies canonical line lengths and surrounding rune labels, and the unsolved-page mapping was fit to canonical LP2 lines. Splice, indel and separator controls were not rerun.",
+  "next_steps": "Adjudicate specific disputed runes directly against source image crops and rerun separate indel and separator controls before treating this as a transcription check.",
+  "outcome": "inconclusive",
+  "tags": [
+    "transcription",
+    "source replay",
+    "image analysis",
+    "template matching",
+    "held-out control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-t2-fresh-template-loo/plan.json"
+    ],
+    "representation": "58 byte-matched LP2 JPEGs, canonical rune line context, source T2 programs and an explicitly pinned fresh 229-class template bank.",
+    "procedure": "Hash-check all inputs, execute original source T2 line mapping, require its solved LP2 C1 gate, then run all 604 mapped lines. Compare compact line receipts with the pinned archived output and independently recount matches and changed measurements.",
+    "parameters": "Original T2 forced alignment and 29-label single-substitution comparison; no threshold retuning. Source C1 requires at least 90% agreement on solved LP2-56–57.",
+    "exclusions": "Historical NPZ byte replay, blind transcription, insertion/deletion tests, physical-splice controls and separator adjudication."
+  },
+  "review": {
+    "reviewer": "Independent compact line checker",
+    "retested_on": "2026-10-23",
+    "kind": "source-specific fresh-instrument variant",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-t2-fresh-template-loo/check.py && python experiments/records/dukotah-t2-fresh-template-loo/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check",
+    "environment": "Python 3.12, NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 for the full source run; standard library for compact receipt check. The full run takes several minutes.",
+    "script": "experiments/records/dukotah-t2-fresh-template-loo/run.py",
+    "script_sha256": "6e501869b29eee898f7e1b9f5f168bb663b1394979a411a6b6fcef114e601e5a",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/plan.json",
+        "sha256": "554c2fe394bf868003099799f53d1c2d1cf005235bb4584207d462fe1553997f"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/templates.npz",
+        "sha256": "55fa8fb0079753ea6d6818712261b46d290810e733e22c4f8333a8de50df2763"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/diff_report.json",
+        "sha256": "953bf67751c45ebc02969142f876ddb00803311543b1f93cd419303820eaae99"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/run.py",
+        "sha256": "6e501869b29eee898f7e1b9f5f168bb663b1394979a411a6b6fcef114e601e5a"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/check.py",
+        "sha256": "16fdd7cbba2aba9573591333cf269cf7650743fa328d7e82290b934031d5a817"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/results.json",
+        "sha256": "2cae0fd472850915fae9c513fd3425bc8437a1ff8776636866c291894423377b"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/line-results.json",
+        "sha256": "00aa4c11d830a08689ccd2403004a6c160ad41aa4766c2ae756e6e8d76452a3e"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/figure.svg",
+        "sha256": "ed806ae2c16d763c17a6c965d91849548a4493c071a5285a54bf5d23d63fe1e4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned T2 source and archived output",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2"
+    },
+    {
+      "label": "Pinned fresh template pipeline source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe"
+    }
+  ],
+  "related": [
+    "dukotah-image-template-rebuild"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-t2-fresh-template-loo/figure.svg",
+      "caption": "Best rune choices stay unchanged, while image-derived costs and positions differ on many lines."
+    }
+  ],
+  "article": "## Finding\n\n**A fresh image-template bank makes the same rune choices as the archived T2 probe on all 604 lines.** The two runs do not have identical measurements: their candidate costs differ on **329 lines**, and selected image positions differ on **262**. The ten solved LP2 lines pass the source's first control, with **178 of 178** tested positions agreeing with the documented reading.\n\n![All 604 lines retain the same best rune sequence, while costs and measured positions change on many lines.](experiments/records/dukotah-t2-fresh-template-loo/figure.svg)\n\nThis is a **fresh variant of the original substitution probe**, using the 229-class template bank rebuilt in [the image-pipeline audit](#/experiments/dukotah-image-template-rebuild). The archived T2 bank reported 226 classes, and its original arrays are unavailable. Identical rune choices do not mean that the historical image measurements were reproduced exactly.\n\n## What was tested\n\nThe [pinned T2 program](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2) aligns each manuscript line against a reference rune sequence. It then temporarily opens one position, compares the 29 possible rune labels at that position, and restores the reference labels around it. We ran its original line mapper and substitution probe on **58 byte-matched JPEGs**: LP2-00–55 and the two solved pages LP2-56–57. No thresholds or source algorithms were changed.\n\nThe solved-page control was run **before** the full probe. Those ten lines were absent from the fresh class-to-rune label fit, so this control is held out from that fit. The probe still uses each line's reference length and neighboring rune labels. Agreement on the unsolved pages therefore tests local consistency with the supplied transcription; it is **not an independent reading of those pages from pixels**.\n\n| Page group | Tested positions | Same as reference | Different choices |\n| --- | ---: | ---: | ---: |\n| LP2-00–44 | 10,951 | 10,916 | 35 |\n| LP2-45–49 and LP2-51–55 | 1,992 | 1,992 | 0 |\n| Solved LP2-56–57 | 178 | 178 | 0 |\n\nThe archived and fresh probes also agree on the *best rune sequence* for every one of the 604 lines, including the 35 positions where that sequence differs from the reference. That stability is useful evidence about this particular local substitution test. It does not settle disputed word breaks, insertions, deletions, or manuscript transcription as a whole. The source's separate physical-splice, indel and separator controls were not rerun here.\n\nThe source calls the 91-line group “segments 45–54.” Its page mapping skips runeless LP2-50: these segments correspond to manuscript pages **45–49 and 51–55**. The checker asserts that mapping for every compact row.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/dukotah-t2-fresh-template-loo/plan.json) lists the 58 image hashes, source revision, source program hashes and the fresh instrument hashes. The [compact line receipt](experiments/records/dukotah-t2-fresh-template-loo/line-results.json) preserves each line's reference and best rune indices, candidate costs and positions for both runs. The independent checker recounts all 13,121 comparisons and the source-versus-fresh differences without calling T2's scoring code:\n\n```text\npython experiments/records/dukotah-t2-fresh-template-loo/check.py\n```\n\nTo rerun the original source programs, obtain the [pinned source revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus), then use Python with NumPy, SciPy and Pillow. The wrapper checks all image, source and instrument hashes, creates an isolated temporary tree, runs the solved-page gate first and only then runs all pages. It does not alter the source checkout or saved receipts:\n\n```text\npython experiments/records/dukotah-t2-fresh-template-loo/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check\n```\n\nThe same wrapper can compare an already generated isolated source tree with the saved receipt using `--artifact-root PATH/TO/isolated/liber-primus --check`. The bundled [template bank](experiments/records/dukotah-t2-fresh-template-loo/templates.npz) and [class mapping](experiments/records/dukotah-t2-fresh-template-loo/diff_report.json) fix the *fresh* instrument exactly; they do not substitute for the missing historical NPZ.\n",
+  "article_path": "experiments/records/dukotah-t2-fresh-template-loo/article.md",
+  "script_sha256": "6e501869b29eee898f7e1b9f5f168bb663b1394979a411a6b6fcef114e601e5a",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

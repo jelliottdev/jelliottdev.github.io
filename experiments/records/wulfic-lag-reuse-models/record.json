@@ -1,0 +1,201 @@
+{
+  "id": "wulfic-lag-reuse-models",
+  "status": "published",
+  "title": "Distant key reuse and ciphertext autokeys",
+  "question": "Do fixed shifted or reflected key-reuse laws, or LP2 ciphertext used as its own key, produce a calibrated whole-lag or reused-stretch signal?",
+  "reader_question": "Could a key or ciphertext segment repeat elsewhere in LP2?",
+  "summary": "Amended-source replay of two complete forward/reverse lag searches finds no +30 detection under either declared model, with original controls and null gates passing.",
+  "finding": "After correcting only an original one-row control-array allocation in memory, all six AC/AD source result tables reproduce byte-for-byte. AC's best whole-lag, forward-stretch and reverse-stretch scores are +7.05, +19.86 and +18.23; AD's are +5.30, +22.49 and +23.16. All are below +30. AD's +5.30 whole-lag maximum has only 14 pair opportunities and an absolute +17.41 ceiling, so cannot pass at any key. The 138 AC and 184 AD planted-control rows match; both four-null gates are valid. Source/site GP29 text agrees across 12,956 positions, with selected pair-law scores independently recomputed.",
+  "limitations": "The source programs cannot run unchanged: both crash in one-row reuse controls. The in-memory shape correction is disclosed and all original tables must match before accepting a result. AC's whole-lag exclusions are calibrated only through gap 12,500 and its all-cell reused-stretch detection only from 3,000 runes; AD's corresponding bounds are 12,900 and 200. The AD maximum whole-lag score comes from an underpowered 14-pair tail. Other pair laws, word resets, changing keys, language models or later decoding layers remain untested.",
+  "next_steps": "A related proposal should state the exact pair relation, gap or stretch geometry and expected full output before testing, with a planted control at the claimed length.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "key reuse",
+    "ciphertext autokey",
+    "lag",
+    "reverse pairing"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-lag-reuse-models/source-stage_ac_lags.tsv",
+      "experiments/records/wulfic-lag-reuse-models/source-stage_ad_lags.tsv"
+    ],
+    "representation": "The source's continuous 12,956 GP29 rune values for LP2-00–55, verified identical to the site page transcription.",
+    "procedure": "Repair only AC's one-row control cumsum allocation in memory. Reproduce AC and AD full original planted-control grids, four anti-doublet null streams each, all forward lags 11 through N−11 and all eligible reverse anti-diagonals. AC tests three pair laws ×29 shifts; AD tests four ×29. Compare every generated lag, top and control TSV byte with the pinned source; independently recompute representative scores.",
+    "parameters": "AC: 12,935 forward lags, 3 relations, 29 shifts, 138 control rows, Pmax 12,500/Mmin 3,000. AD: same 12,935 lag rows, 4 relations, 29 shifts, 184 control rows, Pmax 12,900/Mmin 200. Fixed +30 positive line and −10 calibrated exclusion line; four null streams per stage. Source-provided control draws and seeds retained.",
+    "exclusions": "Different text layers, page/word resets, lag under 11, other pair laws or plaintext priors, adaptive shifts, keys with nonlinear evolution, and reused stretches shorter than each calibrated control bound."
+  },
+  "review": {
+    "kind": "pinned public-source AC/AD replay with disclosed one-line runtime repair and independent pair-score checks",
+    "retested_on": "2026-10-23",
+    "reviewer": "All six pinned tables and 322 planted-control rows reproduced byte-for-byte after in-memory source shape fix; two four-null validity gates passed; site runes and sampled source F/S scores independently checked",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-lag-reuse-models/check.py && python experiments/records/wulfic-lag-reuse-models/plot.py --check",
+    "environment": "Python 3 and NumPy. The full amended-source replay additionally needs the pinned external Wulfic checkout at the stated commit.",
+    "script": "experiments/records/wulfic-lag-reuse-models/check.py",
+    "script_sha256": "3687d625eb2beeef23960e42cb0482d9915169abc329a506172c7b82d1750c16",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/plan.json",
+        "sha256": "3d4a7e50b38cd82f97bbb6276a503a6364088d13f4ea7aae350d15f11e873011"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/replay_source.py",
+        "sha256": "9101f33679ac821173af7082f164db3de49191faf6ce7243cec9d4639217c1b3"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/prepare.py",
+        "sha256": "82a79e1d1b292e31a71e8e60a89e14d019c9dfd75d1ee04e2db88b3e97d81344"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/collect.py",
+        "sha256": "8bc4b11f5a3d3a018f4257c70eb19c2bf0c60bea16994aa6b344fc4c936832eb"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/make_results.py",
+        "sha256": "778e3b137b0ccab678086b477af5d63a2019446f247ec62669194c23d411baac"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/plot.py",
+        "sha256": "2526501bd38e78bb9560bce42eeb8bf720b2234d9cc65d495f60122ad2ea90fa"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/make_record.py",
+        "sha256": "baa0521d71eb384f2fc02475735cf4de47c93a3c6009cbff08644858c9055b53"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stream.bin",
+        "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-model.json",
+        "sha256": "42c99b8d1316ccde9bf0acfec7da44eee347f8f1185bf96d1864840f157cc182"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ac_lags.tsv",
+        "sha256": "2ee19b3ed300186514ad7a5f89ad2642dff98a27724fc5d2d18f02a5f6392402"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ac_top.tsv",
+        "sha256": "ade114aa042496045505091a2f0eefaeb589e4609abc9a156bf1ed9e1b1a0f12"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ac_controls.tsv",
+        "sha256": "7f114a2aaf7a424910d5d4c919a911c0913759e05095bcb4588c5aeafb666405"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ad_lags.tsv",
+        "sha256": "3c45d6dab3cc5fbaf86d41298734c53c79d1fcb4abd25e52c19b5b78b1aed927"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ad_top.tsv",
+        "sha256": "dc0ef34df7d0473b35f590aabf1e153e7f23d68ea7f3338734785c654327c020"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/source-stage_ad_controls.tsv",
+        "sha256": "b09a994463a110ccf8e216624401b9e3dd7c4f62856c0b27428bd8cabc045ada"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/results.json",
+        "sha256": "9119d596aee4ffd27fd3b2f7b89e62ea35a509ec5bd28f8b1f9df9e79ee59c5f"
+      },
+      {
+        "path": "experiments/records/wulfic-lag-reuse-models/comparison.svg",
+        "sha256": "6538f749ca3795734fbecee76f00c56de476ec2fd782ccc7901a4cde728fe29d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-lag-reuse-models/comparison.svg",
+      "caption": "Best whole-lag and stretch scores from both source models, each below the +30 pass line. Source control power is bounded by tested gap and stretch lengths."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic Stage AC source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ac.py"
+    },
+    {
+      "label": "Pinned Wulfic Stage AD source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_ad.py"
+    },
+    {
+      "label": "Pinned AC result table",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_ac_lags.tsv"
+    },
+    {
+      "label": "Pinned AD result table",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_ad_lags.tsv"
+    }
+  ],
+  "related": [
+    "wulfic-periodic-alphabet-lags",
+    "multiplicative-ciphertext-autokey",
+    "short-window-lag13"
+  ]
+}

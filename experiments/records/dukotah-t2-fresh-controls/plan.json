@@ -1,0 +1,38 @@
+{
+  "schema": "liberpedia-t2-fresh-controls-plan-v1",
+  "publication_status": "draft",
+  "state": "frozen-before-control-reruns",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "input_plan": "experiments/records/dukotah-t2-fresh-template-loo/plan.json",
+  "input_plan_sha256": "554c2fe394bf868003099799f53d1c2d1cf005235bb4584207d462fe1553997f",
+  "fresh_template_npz_sha256": "55fa8fb0079753ea6d6818712261b46d290810e733e22c4f8333a8de50df2763",
+  "fresh_mapping_sha256": "953bf67751c45ebc02969142f876ddb00803311543b1f93cd419303820eaae99",
+  "fresh_line_map_sha256": "4b297d8bbe59412919ab2f2d0c7b3a122993ef1a9eb7549a7f8e9e8be111a252",
+  "pre_run_clerical_amendment": "The pre-run internal plan (SHA256 c144876c9c43af679f330539880b4c77de0830ea92fbc847908edc06dbef74b1) mistyped one character of the existing fresh line-map hash and used a descriptive indel label rather than the source ledger ID. This published copy corrects the hash to the actual pre-existing file and the ID to T2-INDEL; no inputs, thresholds or outcomes changed.",
+  "fresh_probe_sha256": "26c26c3f2d47da9a960c3fedd4c324a8b8a7ec60c26c354387a0b1a0a8da8280",
+  "source_sha256": {
+    "analysis/round19/T2/PREREG.md": "a26cd3d249a1619ba4455a29dbf4845995687331e940d796abca34687415a7f4",
+    "analysis/round19/T2/splice.py": "14d6cab288b49691900da13e64f8fc636b871cf443a569b3a9f1e1738ca5196d",
+    "analysis/round19/T2/indel.py": "37b9327aebe8246d4147abf1d2e954deec6b61af3da8bf580905f7f7249edd73",
+    "analysis/round19/T2/score_indel.py": "051dda533011165585e55fa4ec2b6a7e5f5615eda9e57a76342814dfb829661e",
+    "analysis/round19/T2/adj_indel.py": "37e591afed59fd69a1499b0501ddd52f80e766528193d4630d45549635244d39",
+    "analysis/round19/T2/separators.py": "88300155d70c89c72610d15b0c3b5206c9793887132d91c9ccef3cb5a416e9ff",
+    "analysis/round19/T2/sep19.py": "f3fd4f928a0299fe6a22690c2e7ce3915b4776b6fca5b64d425c85a1248def9c",
+    "analysis/geometry/separator_audit.json": "ca4e1f9be0f83df32b14111d623f81f6b412e0effc7bb7ad91bccc22876e7ea8"
+  },
+  "stage_order": [
+    "Verify pinned fresh instrument, 58 original images, original T2 code, line map and probe outputs; copy additional source scripts only to isolated scratch tree. Give fresh probe the original script's expected out_probe.json name in scratch only.",
+    "Run original splice.py 200 with seed 3301; before dependent claims, require the previously passed C1 >= 0.90 and newly measured dense-page C2-prime recovery >= 0.50. Preserve valid-plant count and excluded glyph-width pairs, not merely requested 200.",
+    "If gate passes, run original indel.py seed 1337, score_indel.py, adj_indel.py, separators.py and sep19.py on the same fresh instrument. Preserve every raw output and independently recount gates and flags.",
+    "Audit source bound algebra and assumptions separately; do not adopt k<=1 canon-error claim solely from planted power and manually adjudicated zero flags."
+  ],
+  "registered_thresholds": {
+    "C1_solved_agreement_min": 0.9,
+    "C2prime_dense_recovery_min_for_certification_strength": 0.5,
+    "C2prime_requested_per_stratum": 200,
+    "C4_separator_deleted_count_plant_min": "8 of 10, source PREREG; inspect whether script actually executes it",
+    "C5_indel_plant": "source later extension; no preregistered acceptance threshold found in the original C1-C4 table"
+  },
+  "source_ids": ["A-01", "A-05", "B-23", "R12-frontB", "T2-INDEL"],
+  "interpretation_limit": "All controls use forced canon line context and the fresh class-to-rune mapping trained on LP2 unsolved canon count-matching lines. The solved C1 is held out from that label fit, but target-page controls are not blind image reads. A finite plant recall does not by itself bound the number of real correlated errors."
+}

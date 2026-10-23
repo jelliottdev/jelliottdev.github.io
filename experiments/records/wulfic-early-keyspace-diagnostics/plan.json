@@ -1,0 +1,15 @@
+{
+  "id": "wulfic-early-keyspace-diagnostics",
+  "source_repo": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "source_paths": ["tests/test_keyspace.py", "tools/lpcore/stats.py", "tools/lpcore/corpus.py", "data/canonical/liber_primus_master.txt", "data/canonical/liber_primus_translation.txt"],
+  "hypotheses": {
+    "C10": "Pooled LP2 unigram LLR for three mappings, three decrypt modes, mixture weights 1, .5, .25 and best of 29 constant offsets; fixed exclusion line -10 nats.",
+    "C11": "Within each source segment, (C[i]+sign*C[i-lag]) mod29 at lags 2..1000 and signs +-1; Pearson chi-square upper tail and Bonferroni alpha .01/1998.",
+    "C12": "Within source segments, off-diagonal C[i-lag],C[i] transition chi-square at lags 1..1000; Wilson-Hilferty upper tail and Bonferroni alpha .01/1000.",
+    "C13": "Pooled LP2 unigram LLR for uniform key alphabets decimal 0..9, hex 0..15, Latin A..Z 0..25 and source English Latin-letter weights, best of three decrypt modes and 29 offsets; fixed exclusion line -10 nats. Wide alphabets 60/100/256 are declared underpowered, not rejected."
+  },
+  "source_controls": "Run all 13 unchanged tests in test_keyspace.py, including planted C10/C11/C12/C13 ciphers and C12 random-stream calibration; do not count helper tests as separate empirical experiments.",
+  "manuscript_scope": "Source segments 7..15 from canonical LP2-00..55, 12,956 rune positions. Source nine segment lengths 729,1145,1729,9,1894,1021,1524,1589,3316. Section boundaries and solved-LP1 rune model are pinned source inputs; all source GP29 bytes must agree with site page stream.",
+  "interpretation_limit": "These are model-conditional distribution/lag screens, not decryption searches or proof against arbitrary English text, every ciphertext autokey, or all substitution alphabets. Corpus model, nine source segment boundaries, source thresholds and planted controls determine the claims."
+}

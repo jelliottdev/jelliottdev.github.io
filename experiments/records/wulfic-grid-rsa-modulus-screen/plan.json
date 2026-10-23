@@ -1,0 +1,43 @@
+{
+  "schema": "liberpedia-grid-rsa-screen-plan-v1",
+  "frozen_on": "2026-10-23",
+  "source_revision": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+  "input": {
+    "path": "exports/alphanumeric-grids.csv",
+    "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+  },
+  "source_sha256": {
+    "tools/run_stage_x.py": "29b1a75394a4a8b198531a52c185dac6e2a8f1661c01c2e19092a77c9a34eb1d",
+    "tools/lpcore/keys.py": "551f5c0c4746c934b2317b22562fd95db969600dda2bfbe2a3ab7c359255cafc",
+    "reference/findings/stage_x_other.tsv": "6170a181d392a91fafac49c512b21d8c9bc4e864afebdf49f557a4af305bf10a"
+  },
+  "rules": {
+    "grid_shape": [
+      32,
+      8
+    ],
+    "routes": [
+      "printed rows",
+      "columns"
+    ],
+    "integer_orders": [
+      "big",
+      "little"
+    ],
+    "literal_modulus_requirements": [
+      "exactly 2048 bits",
+      "odd",
+      "no prime divisor below 1000000"
+    ],
+    "factor_bound_exclusive": 1000000
+  },
+  "checks": [
+    "Independently parse all 256 base60 cells and construct 4 integers. Exhaust every prime below 1000000; retain each exact divisibility witness.",
+    "Run pinned original X3 component separately and compare all 4 published source rows byte-for-byte.",
+    "Separate failure of a conventional 2048-bit large-prime RSA-modulus interpretation from arbitrary weak RSA parameters or RSA ciphertext/signature interpretations."
+  ],
+  "exclusions": [
+    "No full factorization, private-key recovery, changed grid spelling, arbitrary permutations/offsets or other cryptographic interpretations.",
+    "Fixed-base Miller-Rabin is not treated as a randomized p-value; exact small factors suffice for any composite claims here."
+  ]
+}

@@ -1,0 +1,38 @@
+--- 0. CONFOUND: is the bimodality just "last line of a segment"? ---
+runes_per_line   all: sep 2.89 sigma | last-lines removed: sep 2.52 sigma
+row_height       all: sep 4.71 sigma | last-rows removed: sep 6.97 sigma
+body_per_line    all: sep 4.53 sigma | last-rows removed: sep 4.13 sigma
+fill_ratio       all: sep 0.53 sigma | last-rows removed: sep 0.32 sigma
+row_height       short pages + last rows removed: sep 7.90 sigma
+body_per_line    short pages + last rows removed: sep 3.93 sigma
+
+--- b. BIT DECODE (PASS iff p<0.001 vs size-matched shuffle null) ---
+  bit-decode fill_ratio       best   0  null mean   0.0 max   1  p=1.0000 -> FAIL
+  bit-decode left_margin      best   0  null mean   0.1 max   2  p=1.0000 -> FAIL
+  bit-decode right_margin     best   0  null mean   0.0 max   1  p=1.0000 -> FAIL
+  bit-decode row_height       best   0  null mean   0.1 max   2  p=1.0000 -> FAIL
+  bit-decode body_per_line    best   0  null mean   0.0 max   1  p=1.0000 -> FAIL
+  bit-decode sep_per_line     best   0  null mean   0.0 max   1  p=1.0000 -> FAIL
+  bit-decode runes_per_line   best   0  null mean   0.0 max   1  p=1.0000 -> FAIL
+  bit-decode words_per_line   best   0  null mean   0.1 max   3  p=1.0000 -> FAIL
+
+--- c. CORRELATION with the rune stream (Bonferroni p<3.7e-5) ---
+  runes_per_line   ~ mean_rune_idx  rho=-0.257 p=1.47e-10  PASS
+  1 / 24 correlations clear the Bonferroni bar
+BROKEN--- c2. Is runes_per_line ~ mean_rune_idx a covert channel or justification? ---
+  runes_per_line ~ mean_rune_idx        rho=-0.257 p=1.47e-10
+  runes_per_line ~ mean GLYPH WIDTH     rho=-0.653 p=8.26e-75
+  mean_rune_idx  ~ mean GLYPH WIDTH     rho=+0.367 p=9.49e-21
+  PARTIAL runes_per_line ~ mean_rune_idx | width   rho=-0.018 p=0.661
+BROKEN--- C-3a POWER CEILING: plant 64 bits in fill_ratio at k*sd separation ---
+  sep  0.5 sd  GMM  1.96 sigma  bit recovery 0.547 -> below ceiling
+  sep  1.0 sd  GMM  1.76 sigma  bit recovery 0.703 -> below ceiling
+  sep  2.0 sd  GMM  1.21 sigma  bit recovery 0.797 -> below ceiling
+  sep  3.0 sd  GMM  2.26 sigma  bit recovery 0.859 -> below ceiling
+  sep  4.0 sd  GMM  4.15 sigma  bit recovery 0.859 -> below ceiling
+  sep  6.0 sd  GMM  6.12 sigma  bit recovery 0.859 -> below ceiling
+  sep  8.0 sd  GMM  7.29 sigma  bit recovery 0.859 -> below ceiling
+BROKEN--- C-3b DECODER VALIDATION: plant real ASCII in the bit channel, noise-free ---
+  bit-decode PLANTED_ASCII    best   2  null mean   0.0 max   2  p=0.0005 -> PASS
+
+wrote linetests.json

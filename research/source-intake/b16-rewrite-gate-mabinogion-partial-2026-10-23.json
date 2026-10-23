@@ -1,0 +1,36 @@
+{
+  "schema": "liberpedia-source-intake-partial-replay-v1",
+  "source_entry": "B-16",
+  "source_repository": "Dukotah/cicada3301",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "scope": "Only the two Mabinogion key-offset rows of the four-key Round 12 D1 skip-versus-rewrite gate. This is not the complete source gate and does not validate the source's ~200-text closure verdict.",
+  "command": "python research/source-intake/check-b16-mabinogion.py",
+  "source_root": "../source-cache/dukotah-cicada3301/liber-primus",
+  "recovered_key": {
+    "path": "../source-cache/corpus-input-probes-20261023/mabinogion-current.txt",
+    "mapped_missing_source_path": "liber-primus/data/keys/mabinogion.txt",
+    "sha256": "80dc6f0d8efc8398a2d1cc8cdf17237020c881cf4fbd2412dfa37ec8be19a5ed",
+    "bytes": 617362,
+    "gp29_runes": 428228
+  },
+  "hashed_source_inputs": {
+    "analysis/round12/D1_redteam/rewrite_gate.py": "3fe8113ebd9c1c3f91559934d74e0f58b206e564f0348f4567f1be9c3eca291c",
+    "analysis/round12/D1_redteam/rewrite_gate_results.json": "b760c33c7d5962bcd49d9fbf0d0e84b3d5685b917ff718c32f15c068f098648d",
+    "analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+  },
+  "checker_sha256": "e0e6152a5c40c9a3d2677c0d6dd48d73e728ac5971f161df5ebcc937a5ad370e",
+  "plaintext_runes": 233,
+  "replay_rows": [
+    {"offset": 137, "skip_count": 2, "rewrite_count": 6, "skip_beam_score": -4.31859085074344, "rewrite_beam_score": -4.542637296145833, "rewrite_rigid_score": -4.542637296145833, "skip_plaintext_match": 1.0, "rewrite_plaintext_match": 0.9742489270386266, "archived_score_match": true},
+    {"offset": 4096, "skip_count": 11, "rewrite_count": 8, "skip_beam_score": -4.269383409413627, "rewrite_beam_score": -4.654166024062601, "rewrite_rigid_score": -4.654166024062601, "skip_plaintext_match": 0.9957081545064378, "rewrite_plaintext_match": 0.9656652360515021, "archived_score_match": true}
+  ],
+  "missing_source_key_files": [
+    "liber-primus/data/keys/king_in_yellow.txt",
+    "liber-primus/data/keys/agrippa.txt",
+    "liber-primus/data/keys/book_of_the_law.txt"
+  ],
+  "remaining_gate": "Recover the three exact root key files and their version/normalization provenance before replaying the other six source rows. Later Armada editions are not byte-identical substitutes."
+}

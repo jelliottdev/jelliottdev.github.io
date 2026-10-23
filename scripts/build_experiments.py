@@ -147,6 +147,9 @@ def validate_record(root, path, pages):
         entries = reproduction.get(role)
         require(isinstance(entries, list) and entries, 'List exact ' + role)
         for file in entries:
+            name = file.get('path', '')
+            require('__pycache__' not in name.split('/') and not name.endswith(('.pyc', '.pyo')),
+                    'Declare source files, not generated Python caches: ' + name)
             data = local(root, file.get('path')).read_bytes()
             require(hashlib.sha256(data).hexdigest() == file.get('sha256'),
                     'SHA-256 mismatch: ' + str(file.get('path')))

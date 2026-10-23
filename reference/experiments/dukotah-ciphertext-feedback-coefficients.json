@@ -1,0 +1,120 @@
+{
+  "id": "dukotah-ciphertext-feedback-coefficients",
+  "status": "published",
+  "title": "Do ciphertext-feedback coefficients decode these pages?",
+  "question": "Does the pinned three-page short-history coefficient search recover its in-domain plants and produce an English-score hit on LP2?",
+  "reader_question": "Could earlier ciphertext runes supply the next key?",
+  "summary": "The source's 60,864 full-page decodes yield no score near its signal bar on LP2-00, LP2-05 or LP2-20. Two additional plants within the default seed grid recover perfectly; two published prose maxima do not match the current pinned executable.",
+  "finding": "A 5,072-vector, two-seed, two-sign search per page produces best scores -6.90, -6.93 and -6.89 versus the source's -5.2 signal threshold. The source prose reports -6.86/-6.91/-6.89, differing on two pages from the pinned current executable. Its original const5 gate passes but lies outside the const0/const1 search; separate const0 and const1 a1=7 plants rank first among 112 one-tap rules and recover 100% of plaintext. Constant seeds make skips invisible, so these controls do not establish skip recovery.",
+  "limitations": "Three pages only; third feedback tap limited to five values, constant seeds 0/1, offset zero, one English model and beam width 250. No full-search matched null and no held-out plaintext. Neither these negative scores nor other source rhetoric excludes all feedback methods.",
+  "next_steps": "Test a new specific feedback rule with a variable-seed plant that truly exercises skips, then evaluate a held-out page and a full-search null under the same selection procedure.",
+  "outcome": "not-supported",
+  "tags": [
+    "ciphertext feedback",
+    "coefficient search",
+    "autokey",
+    "source replay",
+    "planted control",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-05",
+      "lp2-20"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-ciphertext-feedback-coefficients/plan.json",
+      "experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic-plan.json"
+    ],
+    "representation": "Source GP29 transcription of page ordinals 0, 5 and 20; 262, 263 and 269 rune indices respectively.",
+    "procedure": "Run unchanged D-04 source full default grid, parse source stdout and independently reconstruct/rescore each winning feedback term. Separately search all 112 one-tap configurations for each of two declared in-domain plants.",
+    "parameters": "28 one-tap, 840 two-tap and 4,204 three-tap coefficient vectors; const0/const1 seeds, signs +/-1, offset0, source English-scored beam width250 and max three skips; 60,864 page decodes total.",
+    "exclusions": "52 other nonempty pages, const5 and referenced-text seeds in default LP2 grid, other starts/taps/functions, variable-seed skip power and held-out plaintext verification."
+  },
+  "review": {
+    "reviewer": "Pinned-source complete-grid stdout, coefficient-count audit, independent winner feedback-term reconstruction and two in-domain planted searches",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound ciphertext-feedback replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-ciphertext-feedback-coefficients/run.py --source-root SOURCE && python experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic.py --source-root SOURCE --check && python experiments/records/dukotah-ciphertext-feedback-coefficients/check.py --source-root SOURCE --check && python experiments/records/dukotah-ciphertext-feedback-coefficients/plot.py --check",
+    "environment": "Python 3.9+, NumPy and pinned Dukotah checkout f08b20b. Source program prints its grid result; runner verifies source hashes and captures stdout.",
+    "script": "experiments/records/dukotah-ciphertext-feedback-coefficients/run.py",
+    "script_sha256": "78dcdcf1991db7e0f8c48de030a77bdcf0e6d4ae8d7212169a8243fef411648d",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/plan.json",
+        "sha256": "08ed264e9440cb7c161df43bb9f6b716ebe57df41891ddc8856da7f8b28c3e4b"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic-plan.json",
+        "sha256": "0719e82d9d7d61f37250a01fa4aeecdab70a672ad511644365e5881c0045b1e2"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/run.py",
+        "sha256": "78dcdcf1991db7e0f8c48de030a77bdcf0e6d4ae8d7212169a8243fef411648d"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic.py",
+        "sha256": "c8b7e921a0774afa339b68d8dcd1c1b422fc33d9fc38e0dc871f7fe7cd44313d"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/check.py",
+        "sha256": "df13eda839c75a19d59d791ce12f15fa34c893233cadd0fa833e37d66a9b7c22"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/plot.py",
+        "sha256": "12a51fa97e058b55dcb3a936fe89803c0e9547981e33c01c91dae6522f00ac33"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/source-replay-stdout.txt",
+        "sha256": "bf1d686e9181f1c53517a8828255091692fb18f451bcad5095b319269b24b877"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic-results.json",
+        "sha256": "82d5a9ad11e86d928f1e9bb48f13d50578ff8689ef855c2d4d1ae10e17469532"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/results.json",
+        "sha256": "19262cfc60c015706b10458c9b7d34f1b976f41efc11562cdd645dc0b516fc29"
+      },
+      {
+        "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/coefficient-feedback.svg",
+        "sha256": "65a66655900f9e609dae050778e58f623664c67e94da9e227dbc406a9c92b305"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned D-04 executable",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/ctfeedback_coeffs.py"
+    },
+    {
+      "label": "Source summary with earlier reported maxima",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md"
+    }
+  ],
+  "related": [
+    "public-multihistory-feedback",
+    "linear-ciphertext-feedback",
+    "r18-drift-ladder-replay"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-ciphertext-feedback-coefficients/coefficient-feedback.svg",
+      "caption": "In-domain planted controls score above the source signal bar; three searched manuscript pages remain far below it."
+    }
+  ],
+  "article": "# Do ciphertext-feedback coefficients reveal a reading?\n\nOne proposed cipher makes each key value depend on earlier **ciphertext** runes. In the [published D-04 source](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/ctfeedback_coeffs.py), the feedback adds up to three earlier rune values, each multiplied by a chosen coefficient modulo 29. We ran its default search unchanged and separately checked a planted example *inside* that search's seed range.\n\n## Finding\n\n![Two known-rule plants score above the source's reading bar. The best coefficients on LP2-00, LP2-05, and LP2-20 score well below it.](experiments/records/dukotah-ciphertext-feedback-coefficients/coefficient-feedback.svg)\n\nThe source checks **5,072 coefficient vectors**, two constant seed values, both addition directions and one starting offset on each of **three pages**: **60,864 full-page decodes**. Its known-rule gate passes. None of the page winners reaches its **−5.2** English-score signal bar:\n\n| Page | Best score | Coefficients | Source prose |\n| --- | ---: | --- | ---: |\n| LP2-00 | −6.90 | 14, 3, 1 | −6.86 |\n| LP2-05 | −6.93 | 12, 28, 28 | −6.91 |\n| LP2-20 | −6.89 | 2, 27, 1 | −6.89 |\n\nThe [source summary](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md) prints slightly different maxima for two pages. The current pinned executable and its independently rescored winning coefficients produce the values above. We cannot establish which earlier code or run produced the prose numbers. The bounded conclusion is unchanged: **these tested configurations do not yield a supported English reading on these three pages**.\n\n## A control inside the actual search\n\nThe source's original gate plants a rule with coefficient **7** and constant seed **5**. It recovers the planted text perfectly, but the default LP2 search uses only seeds **0 and 1**. We therefore planted the same coefficient separately under seeds 0 and 1, then checked the full one-tap search of **112 configurations** for each. In both cases, the true rule ranked **first**, recovered **100%** of the planted rune indices and scored **−4.13**; the unit-coefficient comparison scored below **−7.0**.\n\nThese plants verify that this coefficient search can recognize a known rule in its tested seed range. They **do not** validate key-skip recovery: advancing through a constant seed always returns the same value, so a skip is invisible in the ciphertext. The source's gate and our added plants mainly exercise the coefficient term and scoring.\n\n## Scope\n\nThe one-tap search uses all 28 nonzero multipliers. The two-tap search uses 840 nonzero pairs. The three-tap search uses 4,204 vectors, with the third tap restricted to **0, 1, 28, 2 or 27**. Every combination uses a source-defined English-scored beam of width 250 with at most three skips. The pages are **LP2-00, LP2-05 and LP2-20**, with 262–269 runes each; the other nonempty LP2 pages, other seeds, offsets, feedback functions and languages were not searched. The source driver prints a gate result but does not stop if the gate returns false; our captured run explicitly printed **PASS**.\n\nThe result does not exclude ciphertext feedback as a whole. Nor does a score below a historical bar establish that a proposed model is impossible. A further model would need its own specified rule, a matched positive control and a held-out reading test.\n\n## Reproduce\n\nThe [source-read plan](experiments/records/dukotah-ciphertext-feedback-coefficients/plan.json) pins the revision, exact input hashes, coefficients and target pages before our run; it is not an independent preregistration of the published method. The [added-control plan](experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic-plan.json) was frozen before its two plant results. With the [pinned source checkout](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1) as `SOURCE`:\n\n```text\npython experiments/records/dukotah-ciphertext-feedback-coefficients/run.py --source-root SOURCE\npython experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic.py --source-root SOURCE --check\npython experiments/records/dukotah-ciphertext-feedback-coefficients/check.py --source-root SOURCE --check\npython experiments/records/dukotah-ciphertext-feedback-coefficients/plot.py --check\n```\n\nThe [complete source printout](experiments/records/dukotah-ciphertext-feedback-coefficients/source-replay-stdout.txt), [planted-control rows](experiments/records/dukotah-ciphertext-feedback-coefficients/diagnostic-results.json), and [checked summary](experiments/records/dukotah-ciphertext-feedback-coefficients/results.json) are retained. The checker independently constructs each winning feedback sequence before rescoring it with the pinned decoder.\n",
+  "article_path": "experiments/records/dukotah-ciphertext-feedback-coefficients/article.md",
+  "script_sha256": "78dcdcf1991db7e0f8c48de030a77bdcf0e6d4ae8d7212169a8243fef411648d",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

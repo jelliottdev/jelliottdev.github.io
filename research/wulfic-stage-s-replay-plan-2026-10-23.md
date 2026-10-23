@@ -1,0 +1,9 @@
+# Stage S source-reconciliation plan
+
+Pinned source: Wulfic/Cicada3301-Liber_Primus commit `bf89d3d13aad2b8f2c95ab195cf1b092f250775c`, `tools/run_stage_s.py` and its checked-in dependencies. This is an internal source receipt, not a new negative experiment. Stage W already publishes the overlapping 50 raw-byte cases with a valid, different control gate.
+
+Run the unchanged Stage S full mode against the pinned checkout, redirecting only the two TSV output paths to an external temporary directory and using six workers for CPU headroom. No source scoring, key, seed, threshold, or control rule changes. Its original grid is 20 key classings × 10 alignments = 200 LP2 rows. Controls are 20 keys × 3 text lengths × 2 seeds × positive/negative = 240 rows, plus 20 shuffled-key LP2 nulls. The pass threshold is +30 nats. The predeclared gate is void if any negative or null control meets that threshold. Power for an LP2 negative is allowed only if both positives at the largest control length not exceeding that alignment reach +30 and the gate remains valid.
+
+Before interpreting the scores: compare the regenerated 200-row candidate TSV byte-for-byte against the pinned source Git object; compare every regenerated control row with the pinned source control Git object, even if checkout sparsity omits that file. Independently recompute row counts, maximum positive/negative/null values and any void control, and count LP2 rows over threshold. If the source gate is void, preserve the row evidence but make no model exclusions, regardless of positive controls or low LP2 scores.
+
+One representative longest-key control pair took ~22 seconds at 729 and 12,956 runes; one joined-text score took ~11 seconds. The full source grid is expected to take roughly 15–25 minutes on six workers. The output stays outside the web repository. No new public record is warranted if it only confirms the already documented void gate.

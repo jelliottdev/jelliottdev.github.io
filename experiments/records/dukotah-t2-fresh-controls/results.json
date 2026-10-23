@@ -1,0 +1,36 @@
+{
+  "schema": "liberpedia-t2-fresh-controls-results-v1",
+  "plan_sha256": "1a1f4ccb22c8ecadcb7825777119799bac34dd0d59daff3cc48edac70e2b7d40",
+  "file_sha256": {
+    "out_linemap.json": "4b297d8bbe59412919ab2f2d0c7b3a122993ef1a9eb7549a7f8e9e8be111a252",
+    "out_probe_fresh.json": "26c26c3f2d47da9a960c3fedd4c324a8b8a7ec60c26c354387a0b1a0a8da8280",
+    "out_splice.json": "7d39080fc1792d3cb4e308b2b6e64aa8a9b3d5bb3740b3a56c6608f40fa1c7f6",
+    "out_indel.json": "35a3a54f28fd49dafb67ed6ab4c129edc9ccc6482f76e45ab8a1a7212af7f4d1",
+    "out_indel_score.json": "46b8c129e30574654751d59b65d6690497c2e586f740e73f43530e8d3bd40f08",
+    "out_indel_adj.json": "cea7d3dcbb771a09fc5b28f62007f11c4196a7321ee6da8a35fcd6d7d4f9fc9e",
+    "out_separators.json": "9854c0603b192937939abe4438c2821cae644f07c0ae8e8d0e0b78c39f508ab2",
+    "out_sep19.json": "46fd7b00efd4fb25e3a24aa6fa16f32882b40cf3d58c43d9fb17f08bff370cea"
+  },
+  "source_ids": ["A-01", "R12-frontB", "T2-INDEL", "A-05", "B-23"],
+  "source_segment_page_mapping": "segments 45–54 map to manuscript LP2 pages 45–49 and 51–55; LP2-50 has no rune lines",
+  "prior_control": "Fresh substitution probe passed C1 178/178 on solved LP2-56/57 before these runs.",
+  "splice_by_source_stratum": {
+    "solved-LP2": {"n": 168, "det": 168, "rec": 168},
+    "dense-45-54": {"n": 189, "det": 189, "rec": 189},
+    "pages-0-44": {"n": 188, "det": 188, "rec": 188}
+  },
+  "splice_excluded_pairs": 4774,
+  "splice_total_pairs": 16184,
+  "indel_pooled": {
+    "canon_missing_rune": {"n": 604, "fired": 603, "loc": 598},
+    "canon_extra_rune": {"n": 604, "fired": 602, "loc": 588}
+  },
+  "indel_thresholds_from_solved": {"deletion": 0.0, "insertion": 0.0},
+  "indel_flags": 26,
+  "source_rule_verdicts": {"SEG": 26},
+  "separator_totals": {"canon_dash": 2764, "canon_dot": 183, "img_dash": 2767, "img_dot": 187, "lines": 604, "count_exact": 582, "pos_exact": 580},
+  "solved_separator_position_exact": "10/10 lines",
+  "old_disagreement_shortlist": "19/19 lines have equal separator counts under the source's newer classifier; this is not a manual image adjudication",
+  "unrun_registered_control": "C4 deleted-separator plant (8/10 gate)",
+  "confidence_claim_audit": "The source's k<=1 indel claim is conditional on planted one-error localization transferring to real unknown errors, independent detection, and all 26 flags being correctly dismissed by its component-count rule. Those conditions were not verified; equal component and canon counts are not a proof against offsetting insertion/deletion or merged/split glyphs. Report the measured controls and flags, not a bound on the number of true transcription errors."
+}

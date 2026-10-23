@@ -1,0 +1,400 @@
+{
+  "id": "dukotah-ornament-fresh-reader-gate",
+  "status": "published",
+  "title": "Can the rebuilt reader inspect ornament bands?",
+  "question": "Does the fresh 229-class image reader pass the source's direct solved-page control before it is used on artwork-adjacent bands?",
+  "reader_question": "Can this reader reliably read rune bands in the artwork?",
+  "summary": "The fresh image reader reaches 83.4% agreement on two held-out solved LP2 pages, below the source's 90% calibration gate. Ornament content was not evaluated with it.",
+  "finding": "Without supplied rune positions or lengths, the reader matches 82/96 positions on LP2-56 and 89/109 on LP2-57, totaling 171/205 (83.4%). The source's required 90% direct-reading gate fails. A one-rune source/site difference on LP2-57 changes site-based agreement to 172/205 (83.9%) and does not affect that verdict.",
+  "limitations": "This is a fresh 229-class variant, not the historical 226-class source replay. Its class mapping was fit to unsolved LP2 text, though the solved pages were held out. No ornament-band decoding or content hypothesis was run after the control failed.",
+  "next_steps": "Improve the raw image reader and pass a held-out solved-page control; then run the planted-band control before testing ornament-content hypotheses.",
+  "outcome": "inconclusive",
+  "tags": [
+    "ornament bands",
+    "image transcription",
+    "source variant",
+    "positive control",
+    "LP2"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-56",
+      "lp2-57"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-ornament-fresh-reader-gate/variant-plan.json"
+    ],
+    "representation": "Exact LP2-56/57 JPEGs and two pinned rune transcriptions for a direct raw-reader control; source inventory of 109 candidate bands on 39 LP2 pages only as descriptive context.",
+    "procedure": "Use original reader.py/calibrate.py raw page text-ink extraction and fresh 229-class templates plus mapping; compare full output to held-out solved runes with source SequenceMatcher scoring. Stop before band-content testing if agreement is below 90%.",
+    "parameters": "Source revision f08b20b; fresh bank SHA-256 55fa8fb0...; 33 retained templates; two solved LP2 pages; source G-A threshold 90%; no positions or lengths passed to the reader.",
+    "exclusions": "Exact historical 226-class array, five solved LP1 pages, planted-band C-2 control, ornament-content reading, and any conclusion that a hidden artwork channel exists or does not exist."
+  },
+  "review": {
+    "reviewer": "Fresh-bank raw-reader execution and independent sequence recount",
+    "retested_on": "2026-10-23",
+    "kind": "source-method variant and positive-control audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-ornament-fresh-reader-gate/run_gate.py --check && python experiments/records/dukotah-ornament-fresh-reader-gate/check.py && python experiments/records/dukotah-ornament-fresh-reader-gate/plot.py --check",
+    "environment": "Python 3.9+, NumPy, SciPy and Pillow; exact original JPEGs in images/ and declared fresh template bank and mapping. Pinned MIT source subset is bundled.",
+    "script": "experiments/records/dukotah-ornament-fresh-reader-gate/run_gate.py",
+    "script_sha256": "9283c309de4827630e5fc2a147b29c1119d9e577546a26e5e93e12c13d35cc0a",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/variant-plan.json",
+        "sha256": "82e94ebf00f4265466f82b166c6f9687ac30b9dd08b7ae506bab47c4de897d09"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/run_gate.py",
+        "sha256": "9283c309de4827630e5fc2a147b29c1119d9e577546a26e5e93e12c13d35cc0a"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/check.py",
+        "sha256": "22514d853ec6af6d155f16c72ff6786d0f2e2e0f4faf33059b25d39e227eed09"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/plot.py",
+        "sha256": "d4a688f75b5e480374fd927b561ac0a14b3e21ee3a82f499bc740e0dd00b5777"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/data/krisyotam_runes.txt",
+        "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/data/scream314_lp.md",
+        "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/calibrate.py",
+        "sha256": "c3ed1ad6f062c3cba38835e1e004704a39f5c0c0f1befbd3d454f29444de9ffb"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/controls.py",
+        "sha256": "2b04881bcd6aa5ce4b06ea335e998a8add1abe3a513543206086c9f5f11d8af9"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/inventory.json",
+        "sha256": "768913514ddd57e10dce70dda116725bb05b9fcef917d737349ae51b8ac6c82b"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/PREREG.md",
+        "sha256": "9933f8129f806935d260e7b0532df5574d378bd9905b1b582bcd0a6a2bafb806"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/reader.py",
+        "sha256": "ae62d50d623d60c60e4cd0ff7100c5e669ba48a751fb3d3c41cd59b3a1966b2c"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/analysis/round18/L3-ornaments/read_bands.py",
+        "sha256": "887038c41c6a40f5770b8679620b4c6bbf244bcc6d52cf0e5095ae4ed8c4df90"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/templates.npz",
+        "sha256": "55fa8fb0079753ea6d6818712261b46d290810e733e22c4f8333a8de50df2763"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/diff_report.json",
+        "sha256": "953bf67751c45ebc02969142f876ddb00803311543b1f93cd419303820eaae99"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/plan.json",
+        "sha256": "554c2fe394bf868003099799f53d1c2d1cf005235bb4584207d462fe1553997f"
+      },
+      {
+        "path": "research/source-intake/dukotah-transcription-instrument-rebuild-2026-10-23.json",
+        "sha256": "999ef77de610e17a49815ad86eb8b08cb03ac856d99231315ab76c0a4c8f1719"
+      },
+      {
+        "path": "images/lp2-00.jpg",
+        "sha256": "197e1e153958b9a2736b09c10eea7d8bb00e0632fd22a8d9606840becc79942e"
+      },
+      {
+        "path": "images/lp2-01.jpg",
+        "sha256": "f804fae06a68315eb6206158a2b34f55fe157c7d663fa961639fbe8dfc52a39f"
+      },
+      {
+        "path": "images/lp2-02.jpg",
+        "sha256": "74e955ebe248e6d7442e2d2cd3029951f258017987d5762f48e7897cf6611e34"
+      },
+      {
+        "path": "images/lp2-03.jpg",
+        "sha256": "1453ef27ea607c6ea378d6472c908e77c2881caba33c72d1893caddee8dc1117"
+      },
+      {
+        "path": "images/lp2-04.jpg",
+        "sha256": "72bea2bfcd4f1b8e2095f882811d0f294e329d4b1bfe68f8ed5ec726d0a1e9d6"
+      },
+      {
+        "path": "images/lp2-05.jpg",
+        "sha256": "bcef0a3b80532b25a013052ec4394ab47ab69ce675b5b3db59cbad044e7adabd"
+      },
+      {
+        "path": "images/lp2-06.jpg",
+        "sha256": "4c7dce370242c67a7b785828d75547c042717b221d9d565d7dd097834c7b25d7"
+      },
+      {
+        "path": "images/lp2-07.jpg",
+        "sha256": "91a726a7dd59c6caa4d736b9ce72ceba0a2fa827d6b69a2d4057562b9303636c"
+      },
+      {
+        "path": "images/lp2-08.jpg",
+        "sha256": "6b1026dfdfb447a5a76819883fe576254e8a47fdf1e97ecf1825166833bc6f00"
+      },
+      {
+        "path": "images/lp2-09.jpg",
+        "sha256": "b8b7ee73d51de45833b36d864cb1c9067432cb4efadcf6c319eaef94d52c929d"
+      },
+      {
+        "path": "images/lp2-10.jpg",
+        "sha256": "1716e282c1d5e8a9ff911c01621e9b195d4728c7fa55ac857176a473eaba3239"
+      },
+      {
+        "path": "images/lp2-11.jpg",
+        "sha256": "26f0cb307a23dcb2adf03a70fb9c6da89746258a90fd9be5383b2757ab4aad30"
+      },
+      {
+        "path": "images/lp2-12.jpg",
+        "sha256": "6961f3f8eedba5b802fee9b40ad91fa604cd4e4394f9ba72853141ad71b19b21"
+      },
+      {
+        "path": "images/lp2-13.jpg",
+        "sha256": "3481daeed3ab2bea6effbe36eec22f74955bce87ca4b4ae8674be1d3f84ea08d"
+      },
+      {
+        "path": "images/lp2-14.jpg",
+        "sha256": "861037ea304b4d3b347cce18d97f25146f6f318cb748e59e6140d9eeaef6abd4"
+      },
+      {
+        "path": "images/lp2-15.jpg",
+        "sha256": "5543cfce96493b86eece3195b3f5ea6e779ff41551676600b0c2479fc18c0ec5"
+      },
+      {
+        "path": "images/lp2-16.jpg",
+        "sha256": "39780578c48d318310c3bccb0bc30e96adcb5b2de6e4a965000c55465375861d"
+      },
+      {
+        "path": "images/lp2-17.jpg",
+        "sha256": "f123b66eefa1b4409750c5ea3879bfe64728c6aa1e1398cb8fbd0fa8b1cf1f50"
+      },
+      {
+        "path": "images/lp2-18.jpg",
+        "sha256": "90fa414c464e86435bdb22f051f9670e886e3dd1c0b6d8954be94b86188da94b"
+      },
+      {
+        "path": "images/lp2-19.jpg",
+        "sha256": "b57ec6b12cb9a505eec6a77c64ddf63bf30a1bfb44dd5cdca35d900feed1b651"
+      },
+      {
+        "path": "images/lp2-20.jpg",
+        "sha256": "1ceef52570621785a021febff39003538f810179e5767ef5279a59c0c05c9985"
+      },
+      {
+        "path": "images/lp2-21.jpg",
+        "sha256": "c453ad16212b335a065069e9f755791b909225ed250b579eab205655e7a80c10"
+      },
+      {
+        "path": "images/lp2-22.jpg",
+        "sha256": "e232eb4649f89125d0edeab7022cbe189185d46ccbf0823fd964b6e71e9bafe7"
+      },
+      {
+        "path": "images/lp2-23.jpg",
+        "sha256": "d31a23cb3a2e50b505e1c468ffbb0106f5353f469bb5958b87ab929fc88decee"
+      },
+      {
+        "path": "images/lp2-24.jpg",
+        "sha256": "62148ef272d17bcedf5df30f6cc9e52df127113c18c1cf57ea92c75feedfce80"
+      },
+      {
+        "path": "images/lp2-25.jpg",
+        "sha256": "a7d6e597debff4f7c5b3516e1b02ca2e4fa5b37d972f567264ed2ec845013cff"
+      },
+      {
+        "path": "images/lp2-26.jpg",
+        "sha256": "ed88f5fcdca3d1f846538caa8be979aa28cde969eb99c9464d60daa26c1f9af7"
+      },
+      {
+        "path": "images/lp2-27.jpg",
+        "sha256": "c92c972f41dd038e136d8589aa7b113e268c36f2860c279cce712cd037cb3a8e"
+      },
+      {
+        "path": "images/lp2-28.jpg",
+        "sha256": "318bb587f4dcab11b4db7ba3b8bb13b7913ca79bb409e1c987595503a22e0522"
+      },
+      {
+        "path": "images/lp2-29.jpg",
+        "sha256": "6f769f266865ddb30b0cb34e82c664a87ba409f674dc52ad3af7c85be443fb5c"
+      },
+      {
+        "path": "images/lp2-30.jpg",
+        "sha256": "701b66d1fe98f730dadc5d7d8e1bc3b9a8e20547c1ffb423011f436037dba8b0"
+      },
+      {
+        "path": "images/lp2-31.jpg",
+        "sha256": "0cb60ca12b1bf5f9fc03026314018a0d5ee73f813ac86ca4197629c60f2cb80a"
+      },
+      {
+        "path": "images/lp2-32.jpg",
+        "sha256": "c0f778187a8e9ddbfc667a65929ac567430a2e38278a2022377984ac084e5f72"
+      },
+      {
+        "path": "images/lp2-33.jpg",
+        "sha256": "13ff4c8d8ab934032a001b8c1fda16433aa44a38dd7272b3ff0dd7ac8300c62d"
+      },
+      {
+        "path": "images/lp2-34.jpg",
+        "sha256": "6f1b4c04b64ee54c689478bd3986bb6ab8a3b81f48780562094e9f248e4e87f8"
+      },
+      {
+        "path": "images/lp2-35.jpg",
+        "sha256": "d713dd913d9b835ac61f298e8c0855f5093599e348edaedef964710db8664afa"
+      },
+      {
+        "path": "images/lp2-36.jpg",
+        "sha256": "3b54a31a9e796e2c01b4e80d46e1092dee2e1142a7c61873e282078e2c776cb9"
+      },
+      {
+        "path": "images/lp2-37.jpg",
+        "sha256": "cee96d7e71b7de4d4e57237faacefad791229c153202e8224e4bedda45fb8f43"
+      },
+      {
+        "path": "images/lp2-38.jpg",
+        "sha256": "aec1898f599f57265d6422f3082a481db94a27f62230affbadee595d05077f8c"
+      },
+      {
+        "path": "images/lp2-39.jpg",
+        "sha256": "d1b7ea5a6ffb79709753e3565d1d46e05edbe3d82ca70c3ed6065d46b131bd00"
+      },
+      {
+        "path": "images/lp2-40.jpg",
+        "sha256": "3f5af995b39f94f268d4aa94825a10f2429f4a3affa1921a7f627e6d1bfcfb69"
+      },
+      {
+        "path": "images/lp2-41.jpg",
+        "sha256": "134052dd794a7d11185cc6d942de3f9839bd2b767e0845b0f059f711b269bee2"
+      },
+      {
+        "path": "images/lp2-42.jpg",
+        "sha256": "e523427112ec6259e97d1711f0420469d961324dedb7dc4eac67ecd9543729f6"
+      },
+      {
+        "path": "images/lp2-43.jpg",
+        "sha256": "dc4cf22565ccabb2b3d366eb8bd6b74520e3169133a7bd725373aad2f49ac415"
+      },
+      {
+        "path": "images/lp2-44.jpg",
+        "sha256": "463cf95229ccb6ae179cdd0fce2338df9f616da0db38813573a9fb1706846208"
+      },
+      {
+        "path": "images/lp2-45.jpg",
+        "sha256": "898b614af5473937a9abfcdc618160ba80ea44b07d4a479da4526be6e33f28d9"
+      },
+      {
+        "path": "images/lp2-46.jpg",
+        "sha256": "05538b8ebf9ed2a5716d94284a753dd26582a0227f139cc4a27dc3f07b15d301"
+      },
+      {
+        "path": "images/lp2-47.jpg",
+        "sha256": "08ed86be5561c09ce5c773d8001b290cc505436db89637d66ea0f5a15818d1c8"
+      },
+      {
+        "path": "images/lp2-48.jpg",
+        "sha256": "341da69e9d579528dd17b7659e23de210720429111dc76c512843eb1983100ea"
+      },
+      {
+        "path": "images/lp2-49.jpg",
+        "sha256": "aa3f89156756edf8b796a470a14a3db96516ad2fedf1ed98ccabc1a1cddc0335"
+      },
+      {
+        "path": "images/lp2-50.jpg",
+        "sha256": "bd6d4a3678fa37197bd43c58861273dc59604b5b68dfa20de1ec13f0704be776"
+      },
+      {
+        "path": "images/lp2-51.jpg",
+        "sha256": "2b9d60f62b2bc65d040f7ae1bc0960d5a44ca251d2730d049a618074a83e208b"
+      },
+      {
+        "path": "images/lp2-52.jpg",
+        "sha256": "d34a38f51759284f68fb916122ed6774c3b498dddb5537929355ac674453a0f3"
+      },
+      {
+        "path": "images/lp2-53.jpg",
+        "sha256": "4ec7293ba72bd52384787646d204c8a68fefaf2d22673c40d27f23812d424548"
+      },
+      {
+        "path": "images/lp2-54.jpg",
+        "sha256": "dbc2cfca46a150689e60ea83015dcd54ace81245711fefe114d6076b96412ec4"
+      },
+      {
+        "path": "images/lp2-55.jpg",
+        "sha256": "a80191592add93a86ed3868f9e4e6ba3944ec20c9ffccc7d3e221b461344beba"
+      },
+      {
+        "path": "images/lp2-56.jpg",
+        "sha256": "a4c1c9ae1246c3197fc1d7bd0155cbc97f60d4bba84a104d45f180feab1814dc"
+      },
+      {
+        "path": "images/lp2-57.jpg",
+        "sha256": "1dabc100ddbf1fc49715219636984eb6ad96a2bd8035e196c12e66db77a1077b"
+      },
+      {
+        "path": "data/pages/lp2-56.json",
+        "sha256": "be81ddc818888d846133228072e16e33c143418248924d18af5e5cdee6018979"
+      },
+      {
+        "path": "data/pages/lp2-57.json",
+        "sha256": "7280faf3a70763706946653487885f44743731fb526ab87ffd8ab265e84aef00"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/gate-results.json",
+        "sha256": "b99698f4a319c8bae0e12a5366f3714b7e548bd3309ada91ec8b17b24103acd2"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/solved-reader-gate.svg",
+        "sha256": "ff86daad1185fc44561484457ae1b50222b87e88b5d51d217fb84f3060a8e7f5"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/lp2-57-line5-crop.png",
+        "sha256": "501b90b732d63d6eb7371d38e4d45e1367f9aff67fe518a9050dbb4ff9d8050c"
+      },
+      {
+        "path": "experiments/records/dukotah-ornament-fresh-reader-gate/lp2-57-y-glyph.png",
+        "sha256": "7942ef5810b53805d4683a5c18bb47509dfd13950cacbf85778d3e122e70d745"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Dukotah L3 ornament method and control rule",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L3-ornaments"
+    }
+  ],
+  "related": [
+    "dukotah-image-template-rebuild",
+    "dukotah-t2-fresh-template-loo"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-ornament-fresh-reader-gate/solved-reader-gate.svg",
+      "caption": "The fresh reader misses the source's 90% direct-reading gate on both held-out solved LP2 pages."
+    }
+  ],
+  "article": "# Can the rebuilt reader inspect the ornament bands?\n\nThe [A-06 source method](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L3-ornaments) proposes reading artwork-adjacent bands with an image-to-rune reader. Its historical **226-class** template file is unavailable. We instead tried the same raw reader with a [freshly rebuilt 229-class bank](experiments/records/dukotah-image-template-rebuild/article.md), clearly as a **new variant**.\n\n## First, can it read known text?\n\n![The fresh raw reader matches 85.4% on LP2-56 and 81.7% on LP2-57; both miss the source's 90% gate.](experiments/records/dukotah-ornament-fresh-reader-gate/solved-reader-gate.svg)\n\nWe applied the source's page-reading code directly to the two solved LP2 images, with no supplied rune positions or line lengths. The fresh class-to-rune mapping was fitted on LP2-00–55; **neither solved page was in that fit**. The reader matched **82 of 96** compared positions on LP2-56 and **89 of 109** on LP2-57: **171 of 205, or 83.4% combined**. The source's required calibration is **90%**. It also emitted more runes than the visible text on both pages (96 versus 85; 109 versus 95).\n\nThis differs from the [T2 substitution probe](experiments/records/dukotah-t2-fresh-template-loo/article.md), which scored 178 of 178 solved-page rune choices **with the surrounding reference text and positions supplied**. That useful control does not show that the reader can independently extract a line of runes from pixels. The raw-reader result here tests that harder prerequisite.\n\nBecause the control failed, **we did not read the ornament bands or score the source's hidden-message hypotheses** with this fresh bank. The archived source inventory still gives coordinates for **109 candidate bands on 39 pages**; that is a list of image regions, not 109 decoded strings. The result says the current fresh reader is not calibrated for a negative finding about those bands. It says nothing about whether artwork contains a message.\n\n## One transcription difference\n\nAt rune 80 (zero-based) on LP2-57, the pinned source markdown has `E` in `...DIUINITE...`; Liberpedia's page text has `Y` in `...DIUINITY...`. The rune is on the fifth runic row near image coordinate **(932, 1725)**. The [original page image](images/lp2-57.jpg) and our [row crop](experiments/records/dukotah-ornament-fresh-reader-gate/lp2-57-line5-crop.png) show the **Y-shaped rune**; the raw reader also outputs `Y` there. The primary score above uses the source's own text. Using Liberpedia's reading changes only this comparison, to **172 of 205 (83.9%)**—still below the gate. Neither transcription was silently changed.\n\n## Reproduce\n\nThe [frozen variant plan](experiments/records/dukotah-ornament-fresh-reader-gate/variant-plan.json) pins the source revision, fresh bank, both canonical inputs, images and gate before any band-content reading. From the Liberpedia root, with Python, NumPy, SciPy and Pillow, plus the [original images](downloads/original-images.zip) extracted into `images/`:\n\n```text\npython experiments/records/dukotah-ornament-fresh-reader-gate/run_gate.py --check\npython experiments/records/dukotah-ornament-fresh-reader-gate/check.py\npython experiments/records/dukotah-ornament-fresh-reader-gate/plot.py --check\n```\n\nThe [full predicted and reference rune arrays](experiments/records/dukotah-ornament-fresh-reader-gate/gate-results.json) support an independent recount. This fresh-bank test cannot reproduce the source's missing historical template file or its archived ornament verdict.\n",
+  "article_path": "experiments/records/dukotah-ornament-fresh-reader-gate/article.md",
+  "script_sha256": "9283c309de4827630e5fc2a147b29c1119d9e577546a26e5e93e12c13d35cc0a",
+  "record_type": {
+    "id": "audit",
+    "label": "Source or input audit",
+    "description": "Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption."
+  }
+}

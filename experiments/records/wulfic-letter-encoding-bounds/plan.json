@@ -1,0 +1,37 @@
+{
+  "schema": "liberpedia-wulfic-q-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "test_leak_sha256": "6896fb6ecd59fbfdc1aab7e1bf6c24064c23fc10275a02a7168f0a49cf3503e6",
+    "test_stats_sha256": "7d8ae3cadefed598f3b95da96f5bd69da21612e67b786104d29ac5a8c51c8fae",
+    "leak_module_sha256": "55bcd8a14e0c8018852d616932d877f1d050afed3d212e5cf16b72b9660e6bc4",
+    "stats_module_sha256": "e6aa33990501dbe60fe5096634281f64f0d309023fb360bcaa83cad358639f18",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47"
+  },
+  "input": {
+    "manuscript": "Liberpedia text/lp2-00.txt through text/lp2-55.txt. Runes join across page and line wraps but never across the source's nine $-delimited LP2 sections; word delimiters are hyphen, period, ampersand and section mark.",
+    "plain_sample": "Solved GP29 rune words from the source's LP1 solved readings and LP2-56/57, excluding number-square cells; independently reconstruct the same words from Liberpedia's known-readings.json if text boundaries permit.",
+    "source_pair_count": 12947,
+    "source_doublet_count": 86,
+    "source_plain_runes": 2901
+  },
+  "tests": [
+    {
+      "id": "C3",
+      "model": "For fixed plaintext rune x, c_i = c_(i-1) + (p_i-x) k_i mod29 with nonzero k_i. A cipher doublet marks exactly p_i=x.",
+      "search": "All 29 possible x; first a two-sided Poisson count p value for 86 events against lambda=12,947 times the solved-plaintext rate of x, then for count-compatible x an LLR of observed initial/medial/final/sole doublet locations against solved-plaintext word positions.",
+      "source_gate": "Exclude x if count p<1e-6 or positional LLR<=-10; report the count-compatible candidates separately. Source planted marker controls on NG, IA and EA; F two-rune-word subcheck is diagnostic, not an additional general model.",
+      "limit": "Depends on LP1 solved plaintext rune frequencies and word-position profile representing the unknown LP2 plaintext; fixed x and nonzero multipliers only. Does not exclude arbitrary doublet handling."
+    },
+    {
+      "id": "C15",
+      "model": "Each used plaintext rune has one or more dedicated ciphertext runes and uses its alternatives evenly. Exactly 29 available ciphertext symbols; unused symbols are permitted.",
+      "search": "Enumerate every allocation of 29 ciphertext symbols across used solved-plaintext rune categories, including spare symbols left unused; minimize expected Pearson chi-square from a uniform 29-rune ciphertext of length 12,956.",
+      "source_gate": "Exclude this conditional family if minimum expected chi-square is at least 200. Control frequencies with an exactly flat feasible allocation must score zero; source tests the LP1 frequencies and a rare-rune smoothed sensitivity case.",
+      "limit": "Expected-frequency bound under even within-category choice and LP1 plaintext frequencies; not a fit of every stateful or uneven homophonic cipher, and not a direct decryption."
+    }
+  ],
+  "relationship": "These are two distinct simple letter-encoding proposals, grouped for source audit and plain-language explanation. Their count/search cells are not independent discoveries of a cipher. Findings and limits must remain separate."
+}

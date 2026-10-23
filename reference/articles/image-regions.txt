@@ -25,6 +25,14 @@ At a declared 400 pixels per inch, 2400 × 3600 pixels would map to 6 × 9 inche
 
 For geometric comparisons, use original pixel coordinates first. The same dimensions provide a common canvas, but do not guarantee that two drawings share an origin, scale or alignment. For example, the side-dot comparison on LP2-40–55 separately establishes equality within two fixed rectangles; the dimensions alone would not establish that result.
 
+What the LP2 JPEG files share
+
+A separate check of the 58 LP2 originals finds two JPEG metadata groups: 35 color files and 23 grayscale files. All 58 carry the same embedded profile, labeled “Artifex Software sRGB ICC Profile,” and JFIF density of 400 pixels per inch. Even the grayscale files carry that sRGB profile. The JPEG tables in both groups are consistent with quality 92 under the checker's IJG table comparison; their Huffman tables are classified as optimized.
+
+We reran the published fingerprint parser on our hosted images. Its two page groups match the source's saved summary exactly. For LP2-00–55, all 56 hosted JPEG byte hashes also match that source's pinned image manifest; the two known-reading pages match the saved metadata groups but are outside that 56-file manifest. These fields describe the files we hold. They do not establish which program encoded them, how the artwork was made, or whether paper was involved.
+
+In the full repository, run python research/source-intake/audit-r18-jpeg-fingerprints.py --check to repeat the 58-file comparison. The audit data lists each input hash and the two complete metadata vectors.
+
 Reproduce the complete inventory
 
 python -m pip install Pillow
@@ -138,6 +146,10 @@ Sources, related references, and files
   https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#jpeg
 - side-dot comparison on LP2-40–55
   https://jelliottdev.github.io/reference/articles/spirals.html#side-dot-reuse
+- published fingerprint parser
+  https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round18/L1-toolchain/jpeg_fingerprint.py
+- audit data
+  https://jelliottdev.github.io/research/source-intake/r18-jpeg-fingerprint-replay-2026-10-23.json
 - reference-data bundle; reference data
   https://jelliottdev.github.io/downloads/reference-data.zip
 - original-image bundle; original images

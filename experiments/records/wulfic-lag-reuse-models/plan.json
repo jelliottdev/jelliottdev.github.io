@@ -1,0 +1,21 @@
+{
+  "schema": "liberpedia-wulfic-acad-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "stage_ac_sha256": "1bf714c5d4f60e4b75ef297cad19cee58f99744fce6d3eaead6417828a2359ef",
+    "stage_ad_sha256": "e530fe6673dcceacb515201e96bbe9cb4cd318746df188e76f5d2e6a45fec04c",
+    "published_ac_lags_sha256": "2ee19b3ed300186514ad7a5f89ad2642dff98a27724fc5d2d18f02a5f6392402",
+    "published_ac_top_sha256": "ade114aa042496045505091a2f0eefaeb589e4609abc9a156bf1ed9e1b1a0f12",
+    "published_ac_controls_sha256": "7f114a2aaf7a424910d5d4c919a911c0913759e05095bcb4588c5aeafb666405",
+    "published_ad_lags_sha256": "3c45d6dab3cc5fbaf86d41298734c53c79d1fcb4abd25e52c19b5b78b1aed927",
+    "published_ad_top_sha256": "dc0ef34df7d0473b35f590aabf1e153e7f23d68ea7f3338734785c654327c020",
+    "published_ad_controls_sha256": "b09a994463a110ccf8e216624401b9e3dd7c4f62856c0b27428bd8cabc045ada"
+  },
+  "input": "The pinned source's 12,956-rune continuous LP2 text (source sections 7–15) and solved-LP1 unigram model. Both source stages share complete forward lag and reverse anti-diagonal scans but use different hypothesized pair laws.",
+  "stage_ac": "For all forward lags 11 through N−11 and reverse anti-diagonals with separation at least 11, score diff, sum and sumrev key-reuse laws over shifts 0–28. Whole-diagonal F and best contiguous S; PASS ≥+30. Whole-diagonal exclusion ≤−10 only through control-supported Pmax. Original control grid: 11 named periods, 6 planted stretch lengths, two plaintext sources, two orientations, 10 periodic or 25 reuse draws per cell, four flat anti-doublet nulls.",
+  "stage_ad": "The ciphertext serves as its own key at every forward lag and reverse anti-diagonal under diff, diffrev, sum and sumrev laws ×29 shifts. Same F/S thresholds and null gate. Original control grid: 13 named autokey lags, 5 planted reuse lengths, two plaintext sources, two orientations, 10 autokey or 25 reuse draws per cell, four flat anti-doublet nulls.",
+  "source_defect_and_repair": "Pinned original full and quick modes both crash during planted reuse controls: `planted_S` passes a one-row table to AC `segment_stats`, whose cumsum output is hard-coded to 29 rows. In a temporary runtime only, replace that allocation with `table.shape[0]`. No source files are edited. Already checked: all 138 AC and 184 AD source control rows reproduce exactly after this repair. Full source scans and output writers remain unchanged; exact six published TSVs must agree byte-for-byte before a replay finding is accepted.",
+  "independent_checks": "Validate canonical source runes against site export; independently recalculate declared pair combinations, score-law tables and selected forward/reverse F/S cells, including a planted fixture, rather than trusting only matching archived tables. Distinguish the two source screens; don't turn numeric setting counts into independent puzzle ideas.",
+  "limits": "Both stages use a solved-LP1 unigram model, a flat anti-doublet null and fixed pairwise rules. A positive F/S screen would require subsequent held-out plaintext recovery; a nonpassing screen excludes only calibrated source laws and bounds. If any null crosses +30, the source declares the run void, not a negative finding."
+}

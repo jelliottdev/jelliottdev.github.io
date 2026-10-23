@@ -1,0 +1,112 @@
+{
+  "id": "wulfic-grid-rsa-modulus-screen",
+  "status": "published",
+  "title": "Raw grid bytes and RSA-modulus readings",
+  "question": "Do seven byte statistics reject a uniform reference, and can four literal grid integers be conventional RSA-2048 moduli?",
+  "reader_question": "What can the raw grid bytes tell us?",
+  "summary": "All seven raw-byte statistics remain within the source uniform-reference rule. Four row/column integer readings have exact small prime divisors, so they fail the conventional large-prime RSA-modulus interpretation.",
+  "finding": "The grid has 161 distinct byte values versus 161.99957 across 100,000 uniform-reference blocks. None of seven fixed statistics rejects at 0.01/7. All four literal integer readings are divisible by 3 and 7; both big-endian readings are even, and both little-endian readings have 2,047 bits. All eleven source rows reproduce byte-for-byte.",
+  "limitations": "Passing seven statistical checks does not prove randomness or identify a cipher. The integer screen excludes only these literal conventional RSA-2048 modulus readings with large prime factors; it does not exclude weak RSA parameters, other layouts or using the bytes as RSA ciphertext or a signature.",
+  "next_steps": "A related RSA proposal should specify whether the grid is a modulus, ciphertext or signature, its byte order and any transformation; those are different tests.",
+  "outcome": "inconclusive",
+  "tags": [
+    "number grid",
+    "byte statistics",
+    "RSA modulus",
+    "small factors",
+    "uniform reference",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-49",
+      "lp2-50",
+      "lp2-51"
+    ],
+    "representation": "The 256 printed grid cells parsed as base-60 byte values, unchanged; 32 rows by 8 columns.",
+    "procedure": "Independently parse every cell, measure seven fixed byte statistics against 100,000 iid uniform blocks, and test each row/column big/little-endian integer against every prime below one million. Run original pinned X1/X3 components and compare all eleven rows.",
+    "parameters": "NumPy default_rng(3311) in 10,000-block chunks; two-sided plus-one Monte Carlo tail; 0.01/7 cutoff; four literal integers; 78,498 primes below one million.",
+    "exclusions": "No decryption, keyed transform, alternate transcription or arbitrary route; no proof of randomness, general RSA exclusion or complete factorization."
+  },
+  "review": {
+    "reviewer": "Independent scalar, incremental-prime and original-source comparison checks",
+    "retested_on": "2026-10-23",
+    "kind": "source structure measurement",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-grid-rsa-modulus-screen/run.py --check && python experiments/records/wulfic-grid-rsa-modulus-screen/check.py && python experiments/records/wulfic-grid-rsa-modulus-screen/plot.py --check",
+    "environment": "Python 3.9+ with NumPy. Optional original-source replay requires the pinned Wulfic checkout; bundled independent checks use the site grid export.",
+    "script": "experiments/records/wulfic-grid-rsa-modulus-screen/run.py",
+    "script_sha256": "e6e1d4c52756997fb666f1a3a38ed5762f9a091104870d3f1819b4785668f6c6",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/plan.json",
+        "sha256": "b81cd42a9054cd4aa56d92336310a14d8421bdc511d780c6b19463dd6fca5aff"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/amendment.json",
+        "sha256": "07d043c1ac467f619deb469b835ac052817e0495f81f135bd9475306854640f1"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/dependency-amendment.json",
+        "sha256": "89eab0fbb0b2c28bf09d7c1f36835dfeb9a66b7369894a3980f5999ac98d1dfa"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/run.py",
+        "sha256": "e6e1d4c52756997fb666f1a3a38ed5762f9a091104870d3f1819b4785668f6c6"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/check.py",
+        "sha256": "5dc70d066b15c20818b0d163a7400f12de224cb5e355672caa98c62503e7de17"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/plot.py",
+        "sha256": "53a9ec5ddb3f792d4bc026ea8a256c7640f21f9acfb5fa2b5477ef36c41e1b08"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/replay_source.py",
+        "sha256": "6000aa3dce5d57618244dbb2797aef94d8556c8b7d2aa22c3e60422592f3b393"
+      },
+      {
+        "path": "exports/alphanumeric-grids.csv",
+        "sha256": "66f717cd801223077ca6329dca6d69c4a3d017b53ce90813dc08684af6e46ae5"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/results.json",
+        "sha256": "c09fe1ab749562c03375089839f50100cfb748f4d79e0022f19799b64339acbb"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/source-x1-x3.tsv",
+        "sha256": "d2cb534131e95cf4a42f33694d20efccc5729364324ff27220671cf65d58a4ad"
+      },
+      {
+        "path": "experiments/records/wulfic-grid-rsa-modulus-screen/byte-checks.svg",
+        "sha256": "38b3a24edf589ca64c7a5f327d7e1473b946906c361c52878d1b6d9696e76d00"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned StageX1/X3 source and rules",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_x.py"
+    },
+    {
+      "label": "Pinned complete StageX other-results table",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_x_other.tsv"
+    }
+  ],
+  "related": [
+    "public-rsa-payload-e01",
+    "grid-direct-bytes",
+    "wulfic-grid-compression-source-replay"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-grid-rsa-modulus-screen/byte-checks.svg",
+      "caption": "Seven descriptive checks do not reject their reference; all four literal modulus readings have small prime factors. Neither result is a decryption."
+    }
+  ]
+}

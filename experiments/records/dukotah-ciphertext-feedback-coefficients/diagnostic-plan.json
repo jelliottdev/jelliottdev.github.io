@@ -1,0 +1,16 @@
+{
+  "schema": "dukotah-ctfeedback-in-domain-plant-plan-v1",
+  "frozen_on": "2026-10-23",
+  "status": "supplementary source-domain positive control frozen before inspecting its outcomes; source gate already known",
+  "source_replay_plan_sha256": "08ed264e9440cb7c161df43bb9f6b716ebe57df41891ddc8856da7f8b28c3e4b",
+  "purpose": "The source's original planted gate uses constant seed 5, outside the source default search's seed 0 or 1. Construct a plant within the searched seed domain and verify the complete one-tap 28 coefficient by 2 seed by 2 sign grid can rank a compatible decode.",
+  "plaintext": "THE TOTIENT FUNCTION IS SACRED AND THE PRIMES ARE SACRED KNOW THIS THAT THE INSTAR EMERGENCE IS AT HAND THE PILGRIM SHALL FIND THE SACRED TRUTH",
+  "encoder": "Use source greedy English-to-GP29 transliteration, then construct ciphertext c_i = p_i - sign*(c0 + 7*c_(i-1)) mod 29 for i>=1; first c_0=p_0-sign*c0 mod29. This is the constant-seed case of source encipher_ctfeedback: skip draws do not change a constant seed value.",
+  "plants": [
+    {"seed_constant": 0, "a1": 7, "sign": -1},
+    {"seed_constant": 1, "a1": 7, "sign": -1}
+  ],
+  "search": "For each plant, evaluate all 28 nonzero one-tap coefficients, const0/const1, signs -1/+1, offset0 with the source decode_with_coeffs and English score. Record true-rule score, plaintext-index agreement, rank/ties and best score; compare unit coefficient a1=1 under same seed/sign.",
+  "criterion": "The true rule should recover the planted plaintext indices exactly and score above source -5.2 signal threshold. Rank one or a documented score tie is desirable but not required; report rank honestly.",
+  "limits": "This is not a blind real-page test, not a control for two- or three-tap coefficients and not a test of key-skip resynchronization because constant seeds make skips observationally irrelevant."
+}

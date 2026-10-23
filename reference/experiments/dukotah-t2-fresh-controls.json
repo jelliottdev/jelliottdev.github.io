@@ -1,0 +1,126 @@
+{
+  "id": "dukotah-t2-fresh-controls",
+  "status": "published",
+  "title": "Do T2's image controls pass with the fresh template bank?",
+  "question": "With exact original LP2 images and the fresh 229-class bank, what do the pinned T2 physical-splice, planted length-error and separator programs measure?",
+  "reader_question": "How well can the image method notice a planted wrong rune?",
+  "summary": "The T2 source programs recover all 545 valid rune splices and localize 598/604 planted missing runes and 588/604 planted extra runes. They flag 26 unplanted lines; a component-count rule labels those segmentation cases, but it does not prove there are no real transcription errors. The registered separator deletion control was not implemented.",
+  "finding": "The solved substitution gate passes 178/178; dense source-segment physical-splice recovery passes 189/189 against its 50% gate. Separators match by count on 582/604 lines and by position on 580/604, including 10/10 solved lines. The 19 old disputed-count lines agree under the newer detector.",
+  "limitations": "The 229-class bank is a fresh instrument, not the unavailable historical 226-class array. Splice placements exclude 29.5% of proposed glyph-width pairs. C5 tests isolated synthetic length errors, not correlated real ones. The 26 unplanted flags are dismissed by an image-component rule, not independent rune adjudication. The source's k<=1 confidence claim and C4 separator plant gate are not established here.",
+  "next_steps": "Review image crops for the 26 flagged lines, independently test separator deletions on solved lines, and validate error-detection power against held-out realistic render changes before setting any bound on real transcription errors.",
+  "outcome": "inconclusive",
+  "tags": [
+    "transcription",
+    "source replay",
+    "image analysis",
+    "positive control",
+    "separator",
+    "indel"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-t2-fresh-controls/plan.json"
+    ],
+    "representation": "All 58 byte-matched LP2 JPEGs, source-canonical line context, pinned fresh 229-class image bank and the original T2 control scripts. Source segments 45–54 are manuscript pages 45–49 and 51–55.",
+    "procedure": "Verify source and image hashes; use pinned fresh T2 line map/probe; run unchanged source physical-splice plants and enforce its dense recovery gate; run original indel plants, scoring and component-count labels; run positional separator detector and 19-row shortlist. Independently recount raw receipts.",
+    "parameters": "Source seeds 3301 for 200 requested splice positions per stratum and 1337 for one missing plus one extra rune plant per line; source glyph-fit filter, zero indel-flag threshold calibrated from solved pages, source separator width rules.",
+    "exclusions": "Historical NPZ byte replay, blind transcription, multi-error power, manual pixel adjudication, the unimplemented C4 deleted-separator plant and any unconditional bound on true error count."
+  },
+  "review": {
+    "reviewer": "Independent control-receipt recount and conditional-claim audit",
+    "retested_on": "2026-10-23",
+    "kind": "grouped source control replay",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-t2-fresh-controls/check.py && python experiments/records/dukotah-t2-fresh-controls/run.py --source-root PATH/TO/liber-primus --site-root . --controls-only --check",
+    "environment": "Python 3.12, NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 for original source controls; Python standard library for saved-receipt checker. Full control execution takes several minutes.",
+    "script": "experiments/records/dukotah-t2-fresh-controls/run.py",
+    "script_sha256": "6bcc66cdf994d0d012ae264af015cdcd3336aae5f60b49e8816c895737b0e560",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/plan.json",
+        "sha256": "1a1f4ccb22c8ecadcb7825777119799bac34dd0d59daff3cc48edac70e2b7d40"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_linemap.json",
+        "sha256": "4b297d8bbe59412919ab2f2d0c7b3a122993ef1a9eb7549a7f8e9e8be111a252"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_probe_fresh.json",
+        "sha256": "26c26c3f2d47da9a960c3fedd4c324a8b8a7ec60c26c354387a0b1a0a8da8280"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/run.py",
+        "sha256": "6bcc66cdf994d0d012ae264af015cdcd3336aae5f60b49e8816c895737b0e560"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/check.py",
+        "sha256": "66d8de1af73c0d6e2739bae5b1afc085dff50a6ed2d7c8d1ed9c203aa2921d56"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/results.json",
+        "sha256": "20b604b6846d9e0b7d52725be50fe9bf4f0b586d24164cde3ae57dc268ce9200"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_splice.json",
+        "sha256": "7d39080fc1792d3cb4e308b2b6e64aa8a9b3d5bb3740b3a56c6608f40fa1c7f6"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_indel.json",
+        "sha256": "35a3a54f28fd49dafb67ed6ab4c129edc9ccc6482f76e45ab8a1a7212af7f4d1"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_indel_score.json",
+        "sha256": "46b8c129e30574654751d59b65d6690497c2e586f740e73f43530e8d3bd40f08"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_indel_adj.json",
+        "sha256": "cea7d3dcbb771a09fc5b28f62007f11c4196a7321ee6da8a35fcd6d7d4f9fc9e"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_separators.json",
+        "sha256": "9854c0603b192937939abe4438c2821cae644f07c0ae8e8d0e0b78c39f508ab2"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/out_sep19.json",
+        "sha256": "46fd7b00efd4fb25e3a24aa6fa16f32882b40cf3d58c43d9fb17f08bff370cea"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-controls/figure.svg",
+        "sha256": "6d504536cc8e94540804ef608d0b628bd090c8d50030710ada3008f1c8a0a537"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned T2 programs and pre-registration",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2"
+    },
+    {
+      "label": "Pinned source separator audit",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/geometry/separator_audit.json"
+    }
+  ],
+  "related": [
+    "dukotah-image-template-rebuild",
+    "dukotah-t2-fresh-template-loo"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-t2-fresh-controls/figure.svg",
+      "caption": "Strong recovery on planted single changes is measured separately from the 26 unplanted flags and missing separator control."
+    }
+  ],
+  "article": "## Finding\n\n**The original T2 control programs run on the newly pinned image templates, and their planted changes are usually found.** All **545 valid physical rune splices** were detected and read correctly. Of 604 planted missing runes, **598** were localized; of 604 planted extra runes, **588** were localized. These are strong results for these specific one-change plants. They do not establish that the manuscript has at most one transcription error.\n\n![The physical splice and planted length-error controls recover most synthetic changes, while 26 unplanted lines remain flagged and a separator plant control is missing.](experiments/records/dukotah-t2-fresh-controls/figure.svg)\n\nThis follow-up uses the [fresh 229-class image bank](#/experiments/dukotah-t2-fresh-template-loo) and the [pinned source T2 programs](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2). The original archived bank reported 226 classes; its arrays are unavailable. The source's shorthand “segments 45–54” means manuscript pages **LP2-45–49 and LP2-51–55** here, since LP2-50 has no rune lines.\n\n| Source control | What happened | What it shows |\n| --- | --- | --- |\n| C1, solved pages | 178/178 local rune choices agree | The substitution probe passes its 90% entry gate. |\n| C2′, physical splice | 545/545 valid planted runes recovered; 189/189 in source segments 45–54 | Its dense-segment recovery exceeds the registered 50% gate. |\n| C5, planted missing rune | 598/604 localized | The length probe often recovers a single missing-rune plant. |\n| C5, planted extra rune | 588/604 localized | The length probe often finds a single extra-rune plant. |\n\nThe splice code requests 200 placements in each of three groups. Some replacement runes do not fit the erased glyph span: **4,774 of 16,184** proposed slot–rune pairs were excluded, leaving 168 solved-page, 189 dense-segment and 188 other valid splices. The high recovery applies to this width-filtered sample.\n\n## What the manuscript measurements say\n\nUsing thresholds set from the solved pages, the indel program flags **26 unplanted lines**: 24 on LP2-00–44 and two on LP2-53. It flags none on the solved pages. The source then labels every flag “segmentation” using the direction of a component-count mismatch or equality with the canonical rune count. The [individual flagged rows](experiments/records/dukotah-t2-fresh-controls/out_indel_adj.json) remain available for inspection.\n\nThat classification is a **rule applied to image components**, not a ground-truth reading of every flagged rune. Equal component and reference counts cannot rule out a merged pair, a split stroke, or offsetting insertion and deletion. The source's stated 95% bound of at most one real insertion or deletion additionally assumes that synthetic single-error localization transfers to unknown real errors and that detections are independent. This replay verifies the program's plants and arithmetic, but not those assumptions. It therefore **does not certify the number of real transcription errors**.\n\nThe separator script reports exact *counts* on **582/604** lines and exact *positions* on **580/604**, including **10/10** solved lines. The **19 older disputed-count lines** now have matching counts under this newer mark classifier. Its `sep19.py` calls these “alignment” cases solely because the counts agree; that label is not an independent manual check of the pixels. The registered C4 control—delete one separator on ten solved lines and require 8/10 lower residuals—has no implementation in the pinned T2 scripts and **was not run**.\n\n## Reproduce\n\nThe [frozen plan](experiments/records/dukotah-t2-fresh-controls/plan.json) pins the source revision, image/instrument dependencies and control order. The [results](experiments/records/dukotah-t2-fresh-controls/results.json) link every raw output hash. The independent receipt checker recounts the 545 splices, 1,208 indel plants, 26 flags and separator totals from the saved rows without calling the source's image code:\n\n```text\npython experiments/records/dukotah-t2-fresh-controls/check.py\n```\n\nFor a full rerun, use Python with NumPy, SciPy and Pillow and the [pinned source revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2). The wrapper verifies source code, all 58 original JPEGs and the fresh instrument, then runs the original scripts in an isolated temporary tree. `--controls-only` uses the bundled, hash-pinned fresh line map and substitution probe; `--rebuild` recomputes those first. Both enforce the solved and dense splice gates before later controls:\n\n```text\npython experiments/records/dukotah-t2-fresh-controls/run.py --source-root PATH/TO/liber-primus --site-root . --controls-only --check\n```\n\nThe original scripts' raw [splice](experiments/records/dukotah-t2-fresh-controls/out_splice.json), [indel](experiments/records/dukotah-t2-fresh-controls/out_indel.json) and [separator](experiments/records/dukotah-t2-fresh-controls/out_separators.json) results are preserved, including the flagged cases and every tested plant. The wrapper compares parsed JSON so platform newline differences do not change the scientific result.\nWhen replaying the bundled Windows line map on a Unix host, the wrapper changes only its filesystem path separators in the temporary copy; line identities and measurements stay fixed.\n",
+  "article_path": "experiments/records/dukotah-t2-fresh-controls/article.md",
+  "script_sha256": "6bcc66cdf994d0d012ae264af015cdcd3336aae5f60b49e8816c895737b0e560",
+  "record_type": {
+    "id": "control",
+    "label": "Control",
+    "description": "Checks a search, decoder or scorer using synthetic inputs or reference text; it does not identify the cipher of an unsolved page."
+  }
+}

@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "fdc2d771fd99bf124e2618fb2b091b8867e02823afb618dbdaef2a8f96f9b374",
-    "record_count": 231
+    "sha256": "0d5e148e5ba28fb677a50573778e257315807a7bed6866b7dc4de52ffbf685d9",
+    "record_count": 242
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,16 +26,16 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 24,
-    "unreconciled": 114,
-    "source_entries_reviewed": 53,
-    "source_entries_pending_review": 119,
+    "candidate_overlap": 26,
+    "unreconciled": 109,
+    "source_entries_reviewed": 58,
+    "source_entries_pending_review": 114,
     "pending_review_with_candidate_match": 5,
-    "pending_review_without_candidate_match": 114,
+    "pending_review_without_candidate_match": 109,
     "execution_replay_states": {
-      "complete-executed-grid": 14,
-      "partial-execution": 3,
-      "replayed-with-invalid-gate": 3
+      "complete-executed-grid": 16,
+      "partial-execution": 7,
+      "replayed-with-invalid-gate": 5
     },
     "verified_coverage": 0
   },
@@ -349,13 +349,25 @@
       "source_supersedes": [],
       "source_superseded_by": null,
       "reconciliation_state": "unsupported-source-verdict",
-      "candidate_records": [],
+      "candidate_records": [
+        {
+          "record_id": "dukotah-ciphertext-feedback-coefficients",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false,
       "reviewed_subclaims": {
         "record_links": [],
         "unresolved_parts": [
-          "The pinned Round12 D1 source reports a skip positive arm and rewrite arm on four keytexts at two offsets. Its broad conclusion about every keytext null exceeds that fixed control even if the fixed test reproduces.",
-          "Recover the exact four source keytext bytes and scoring model (not committed at the source paths), then independently replay both arms, score and plaintext-match checks before marking the source gate executed here."
+          "The two exact Mabinogion offset controls now reproduce all eight archived scores and their skip/rewrite counts; internal receipt: research/source-intake/b16-rewrite-gate-mabinogion-partial-2026-10-23.json.",
+          "Other exact original keytexts remain missing from source paths. The full four-key gate and general keytext conclusion remain unverified; later editions are not substituted."
         ],
         "rejected_candidates": [],
         "audit_note": null
@@ -667,14 +679,25 @@
           {
             "record_id": "dukotah-image-template-rebuild",
             "covered_subclaim": "All four original image-template stages rerun with exact original LP2-00 through55 JPEGs as a newly hashed fresh instrument; 229 rather than226 classes and233 rather than232 count-matching lines. The rune-label score is fitted and tested on the same canon lines."
+          },
+          {
+            "record_id": "dukotah-t2-fresh-template-loo",
+            "covered_subclaim": "Fresh 229-class template variant runs original T2 line mapping and leave-one-out substitution probe: 604 lines, 13,121 slots, with source segment numbers mapped to actual image pages. All best sequences match the archived output, but costs differ."
           }
         ],
         "unresolved_parts": [
-          "The fresh arrays are not the unavailable historical NPZ artifacts. Later T2 forced alignment uses canon token count and order, so its reported604/604 coverage is a separate source claim rather than independent blind transcription.",
-          "Exact vendor73/74 images have now been recovered as hosted LP2-56/57 by source hashes; this removes the prior image-input blocker. A fresh-instrument T2 variant and held-out controls remain distinct from exact historical-array replay."
+          "Historical 226-class NPZ is unavailable. T2 supplies canonical neighbors, count and order, so its perfect held-out substitution choices are not blind extraction. The separate raw-reader ornament gate fails."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-t2-fresh-template-loo"
+        ],
+        "scope": "Fresh 229-class template variant runs original T2 line mapping and leave-one-out substitution probe: 604 lines, 13,121 slots, with source segment numbers mapped to actual image pages. All best sequences match the archived output, but costs differ.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -808,14 +831,25 @@
       "candidate_records": [],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "dukotah-t2-fresh-controls",
+            "covered_subclaim": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay."
+          }
+        ],
         "unresolved_parts": [
-          "The saved out_sep19.json has19 rows, all klass=alignment with a line-slip verdict. The narrative10/9 split comes from a separate nearby-count heuristic in sep19_proof.py, not those row labels.",
-          "T2 takes canon token order and count for forced alignment. Its source-specific separator interpretation and controls have not been replayed here; an image-template rebuild alone does not establish that all19 separator positions are correct.",
-          "Exact original solved-page vendor images are recovered, but the historical template NPZ remains unavailable; a fresh-bank T2 variant must be labeled separately."
+          "Source segment IDs are not page IDs. Count equality is not independent image adjudication; transfer assumptions needed for a confidence bound are unverified. Registered C4 deleted-separator plant was not implemented in the source."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-t2-fresh-controls"
+        ],
+        "scope": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -836,9 +870,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "failed-source-gate",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-ornament-fresh-reader-gate",
+            "covered_subclaim": "Fresh-bank raw-reader held-out solved-image control: 171/205 matched positions (83.4%), below the original 90% requirement. Band-content decoding was not run. Source E/site Y difference on LP2-57 agrees with the image as Y; alternate score is 83.9%."
+          }
+        ],
+        "unresolved_parts": [
+          "Historical 226-class reader remains unavailable. The failed fresh prerequisite supplies no negative finding about ornament content."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [
+          "dukotah-ornament-fresh-reader-gate"
+        ],
+        "scope": "Fresh-bank raw-reader held-out solved-image control: 171/205 matched positions (83.4%), below the original 90% requirement. Band-content decoding was not run. Source E/site Y difference on LP2-57 agrees with the image as Y; alternate score is 83.9%.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "B-01",
@@ -1039,18 +1094,41 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unsupported-source-verdict",
-      "candidate_records": [],
+      "reconciliation_state": "partial",
+      "candidate_records": [
+        {
+          "record_id": "dukotah-ciphertext-feedback-coefficients",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/campaign18_skip/armada2/COVERAGE-MATRIX.md"
+              ]
+            }
+          ]
+        }
+      ],
       "coverage_verified": false,
       "reviewed_subclaims": {
-        "record_links": [],
+        "record_links": [
+          {
+            "record_id": "dukotah-ciphertext-feedback-coefficients",
+            "covered_subclaim": "All 60,864 executable default grid decodes across source pages 0,5,20, two signs and constant seeds 0/1. Added same-domain planted controls recover the specified one-tap coefficient; the original gate uses out-of-domain seed 5."
+          }
+        ],
         "unresolved_parts": [
-          "The executable coefficient sets have 28 one-tap, 840 two-tap and 4,204 three-tap entries; the third tap is restricted to 0,1,28,2,27 rather than all 29 values. Default runs target only source page ordinals 0,5,20, two constant seeds 0/1, two signs and offset zero.",
-          "Its planted gate uses constant seed 5, outside the default searched 0/1 seed list; the driver calls gate() but does not stop when its boolean result is false. Additional Mabinogion input requires an explicit --with-ref run, contrary to treating narrative seed descriptions as execution proof.",
-          "No executable grid or planted cipher was run in this source-code audit. Exact source replay, page-ordinal mapping, matching-domain power checks and any extension to other pages/seeds remain pending."
+          "Three-tap coefficients remain restricted, not all 29 values. Source prose maxima differ from executable output. Other pages, nonconstant seeds, explicit reference-corpus runs and skip schedules are outside this grid."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "dukotah-ciphertext-feedback-coefficients"
+        ],
+        "scope": "All 60,864 executable default grid decodes across source pages 0,5,20, two signs and constant seeds 0/1. Added same-domain planted controls recover the specified one-tap coefficient; the original gate uses out-of-domain seed 5.",
+        "wider_method_excluded": false
       }
     },
     {
@@ -1546,9 +1624,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "failed-source-gate",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-line-geometry-channel-replay",
+            "covered_subclaim": "Exact source programs on 56 original JPEGs reproduce all counts and verdicts, with only floating-point differences below 1e-12. Best planted 64-bit recovery is 55/64, below the declared 95% requirement."
+          }
+        ],
+        "unresolved_parts": [
+          "A source PASS on tiny English fragments is not intended-message recovery. Canonical 604-line versus image 616-row alignment remains a limitation. No broad layout-channel exclusion follows."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "replayed-with-invalid-gate",
+        "record_ids": [
+          "dukotah-line-geometry-channel-replay"
+        ],
+        "scope": "Exact source programs on 56 original JPEGs reproduce all counts and verdicts, with only floating-point differences below 1e-12. Best planted 64-bit recovery is 55/64, below the declared 95% requirement.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "B-13",
@@ -1578,9 +1677,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-t2-fresh-controls",
+            "covered_subclaim": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay."
+          }
+        ],
+        "unresolved_parts": [
+          "Source segment IDs are not page IDs. Count equality is not independent image adjudication; transfer assumptions needed for a confidence bound are unverified. Registered C4 deleted-separator plant was not implemented in the source."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-t2-fresh-controls"
+        ],
+        "scope": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "B-09",
@@ -2079,9 +2199,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "r18-skip-channel-power",
+            "covered_subclaim": "Full executable B5 skip-channel experiment including forty wrong-key controls and twenty candidate controls. The beam chooses paths with an English quadgram score, so its inferred draw count is not English-independent."
+          }
+        ],
+        "unresolved_parts": [
+          "One planted key and its fitted threshold do not establish held-out power. No general keytext exclusion or English-independent channel is demonstrated."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "r18-skip-channel-power"
+        ],
+        "scope": "Full executable B5 skip-channel experiment including forty wrong-key controls and twenty candidate controls. The beam chooses paths with an English quadgram score, so its inferred draw count is not English-independent.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "R18-L2-INFO-BUDGET",
@@ -3107,9 +3248,30 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "dukotah-t2-fresh-controls",
+            "covered_subclaim": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay."
+          }
+        ],
+        "unresolved_parts": [
+          "Source segment IDs are not page IDs. Count equality is not independent image adjudication; transfer assumptions needed for a confidence bound are unverified. Registered C4 deleted-separator plant was not implemented in the source."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "dukotah-t2-fresh-controls"
+        ],
+        "scope": "Fresh-bank C2 splices, C5 insertion/deletion controls and separator checks: 1,208 plants and 26 unplanted flags; the nineteen source shortlist count classifications reproduce. This is a new 229-class variant, not historical-array replay.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "T3-PROPAGATION-MAP",

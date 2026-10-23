@@ -48,6 +48,7 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(len(records), 1)
         exported = self.root / 'reference/experiments/test-record.json'
         self.assertEqual(json.loads(exported.read_text(encoding='utf-8')), records[0])
+
         discovery = json.loads((self.root / 'data/experiment-index.json').read_text(encoding='utf-8'))
         self.assertEqual([item['id'] for item in discovery['records']], ['test-record'])
         self.assertTrue(discovery['records'][0]['record_url'].endswith('/reference/experiments/test-record.json'))
@@ -58,6 +59,17 @@ class RegistryTests(unittest.TestCase):
         self.assertFalse(exported.exists(), 'A withdrawn record must not survive in generated individual exports')
         self.assertEqual(json.loads((self.root / 'data/experiment-index.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
+
+    def test_generated_python_cache_is_not_a_reproduction_input(self):
+        record = copy.deepcopy(self.record)
+        path = 'experiments/records/test-record/__pycache__/run.cpython-312.pyc'
+        target = self.root / path
+        target.parent.mkdir()
+        target.write_bytes(b'generated cache')
+        record['reproduction']['inputs'].append({
+            'path': path, 'sha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+        with self.assertRaisesRegex(ValueError, 'generated Python caches'):
+            self.run_build(record)
 
     def test_draft_preflight_preserves_status_and_every_site_file(self):
         self.run_build()

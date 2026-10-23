@@ -1,0 +1,96 @@
+{
+  "id": "dukotah-t2-fresh-template-loo",
+  "status": "published",
+  "title": "Does a fresh image-template bank change T2's rune choices?",
+  "question": "When the pinned T2 single-substitution probe uses freshly rebuilt 229-class templates, does it select the same runes as its archived output on all mapped LP2 lines?",
+  "reader_question": "Can the image check find a different rune on a manuscript page?",
+  "summary": "On 604 mapped lines, the fresh bank makes exactly the same best rune choices as the archived T2 output. Its costs and selected pixel positions differ, and its comparison uses the reference reading around each tested rune.",
+  "finding": "The solved-page control passes 178/178 substitutions. Across all 604 lines and 13,121 tested positions, best rune sequences match the archive line for line; costs change on 329 lines and positions on 262. Source segments 45–54 cover LP2-45–49 and 51–55 because LP2-50 has no runes.",
+  "limitations": "This is a fresh 229-class instrument, not exact replay of the unavailable 226-class historical arrays. T2 supplies canonical line lengths and surrounding rune labels, and the unsolved-page mapping was fit to canonical LP2 lines. Splice, indel and separator controls were not rerun.",
+  "next_steps": "Adjudicate specific disputed runes directly against source image crops and rerun separate indel and separator controls before treating this as a transcription check.",
+  "outcome": "inconclusive",
+  "tags": [
+    "transcription",
+    "source replay",
+    "image analysis",
+    "template matching",
+    "held-out control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/dukotah-t2-fresh-template-loo/plan.json"
+    ],
+    "representation": "58 byte-matched LP2 JPEGs, canonical rune line context, source T2 programs and an explicitly pinned fresh 229-class template bank.",
+    "procedure": "Hash-check all inputs, execute original source T2 line mapping, require its solved LP2 C1 gate, then run all 604 mapped lines. Compare compact line receipts with the pinned archived output and independently recount matches and changed measurements.",
+    "parameters": "Original T2 forced alignment and 29-label single-substitution comparison; no threshold retuning. Source C1 requires at least 90% agreement on solved LP2-56–57.",
+    "exclusions": "Historical NPZ byte replay, blind transcription, insertion/deletion tests, physical-splice controls and separator adjudication."
+  },
+  "review": {
+    "reviewer": "Independent compact line checker",
+    "retested_on": "2026-10-23",
+    "kind": "source-specific fresh-instrument variant",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-t2-fresh-template-loo/check.py && python experiments/records/dukotah-t2-fresh-template-loo/run.py --source-root PATH/TO/liber-primus --site-root . --rebuild --check",
+    "environment": "Python 3.12, NumPy 2.5.4, SciPy 1.17.1 and Pillow 11.3.0 for the full source run; standard library for compact receipt check. The full run takes several minutes.",
+    "script": "experiments/records/dukotah-t2-fresh-template-loo/run.py",
+    "script_sha256": "6e501869b29eee898f7e1b9f5f168bb663b1394979a411a6b6fcef114e601e5a",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/plan.json",
+        "sha256": "554c2fe394bf868003099799f53d1c2d1cf005235bb4584207d462fe1553997f"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/templates.npz",
+        "sha256": "55fa8fb0079753ea6d6818712261b46d290810e733e22c4f8333a8de50df2763"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/diff_report.json",
+        "sha256": "953bf67751c45ebc02969142f876ddb00803311543b1f93cd419303820eaae99"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/run.py",
+        "sha256": "6e501869b29eee898f7e1b9f5f168bb663b1394979a411a6b6fcef114e601e5a"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/check.py",
+        "sha256": "16fdd7cbba2aba9573591333cf269cf7650743fa328d7e82290b934031d5a817"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/results.json",
+        "sha256": "2cae0fd472850915fae9c513fd3425bc8437a1ff8776636866c291894423377b"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/line-results.json",
+        "sha256": "00aa4c11d830a08689ccd2403004a6c160ad41aa4766c2ae756e6e8d76452a3e"
+      },
+      {
+        "path": "experiments/records/dukotah-t2-fresh-template-loo/figure.svg",
+        "sha256": "ed806ae2c16d763c17a6c965d91849548a4493c071a5285a54bf5d23d63fe1e4"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned T2 source and archived output",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/T2"
+    },
+    {
+      "label": "Pinned fresh template pipeline source",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/retranscribe"
+    }
+  ],
+  "related": [
+    "dukotah-image-template-rebuild"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-t2-fresh-template-loo/figure.svg",
+      "caption": "Best rune choices stay unchanged, while image-derived costs and positions differ on many lines."
+    }
+  ]
+}
