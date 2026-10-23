@@ -150,6 +150,24 @@ for(const record of published){
  if(family>=0)assert(family>rendered.indexOf('id="experiment-reproduce"'));
 }
 console.log('PASS: published records lead with findings; result downloads and required bundles remain accessible.');
+const summaryFixture={...published[0],id:'summary-fixture',family:null,related:[],
+ finding:'Canonical finding with <literal HTML> & exact bounds.',reader_finding:'',
+ article:`## Finding\n\n![Article-first image](${chart})\n\nFormatted **narrative** remains below.`,
+ visuals:[{path:chart,caption:'Declared chart'}],
+ reproduction:{...published[0].reproduction,outputs:[{path:chart,sha256:'fixture'}]}};
+const findingBlock=html=>html.match(/<div class="experiment-finding">([\s\S]*?)<\/div>/)[1];
+const imageFirst=experimentContext.experimentArticle(summaryFixture);
+assert.equal(findingBlock(imageFirst),'<p>'+experimentContext.esc(summaryFixture.finding)+'</p>',
+ 'Canonical finding does not depend on whether the article opens with an image');
+const mainFinding=imageFirst.slice(0,imageFirst.indexOf('id="experiment-reproduce"'));
+assert.equal((mainFinding.match(/<img /g)||[]).length,1,'The main finding has only its declared visual, not a duplicated article image');
+assert(imageFirst.includes('<strong>narrative</strong>'),'Full article keeps its formatted narrative');
+const readerFinding='Reader summary with <img src=x onerror=bad> & clear meaning.';
+const readerFirst=experimentContext.experimentArticle({...summaryFixture,reader_finding:readerFinding});
+assert.equal(findingBlock(readerFirst),'<p>'+experimentContext.esc(readerFinding)+'</p>','Authored reader finding takes priority');
+assert(!findingBlock(readerFirst).includes('<img'),'Reader summary remains literal escaped text');
+console.log('PASS: image-first articles retain textual findings, reader summaries take priority, literal HTML stays escaped, and main figures do not duplicate.');
+
 vm.runInContext(fs.readFileSync(path.join(__dirname,'../assistant-ui.js'),'utf8'),experimentContext);
 const totient=published.find(r=>r.id==='lp2-totient-openings');
 const scopedResult=experimentContext.experimentSearchResult(totient,['lp2-31','lp2-56']);
@@ -161,7 +179,7 @@ assert(!scopedResult.includes('Not in this record’s page scope: LP2-31'));
 assert(!experimentContext.experimentSearchResult(totient,['lp2-31']).includes('scope-mismatch'));
 const lagRecord=published.find(r=>r.id==='word-internal-affine-lags');
 const lagPage=experimentContext.experimentArticle(lagRecord);
-assert(lagPage.indexOf('77 times in 1,267')<lagPage.indexOf('id="experiment-scope"'),'Detailed finding belongs above scope');
+assert(lagPage.indexOf(experimentContext.esc(lagRecord.reader_finding||lagRecord.finding))<lagPage.indexOf('id="experiment-scope"'),'Canonical finding belongs above scope');
 assert(lagPage.indexOf('comparison.svg')<lagPage.indexOf('id="experiment-scope"'),'Finding figure belongs beside the finding');
 assert(lagPage.includes('LP2-00–55 · rune pairs'),'Long target lists need a compact, readable range');
 assert(!lagPage.includes('Show page list'),'The main reading path must not show a page-list disclosure');

@@ -87,7 +87,14 @@ function wikiPage(id='') {
 }
 window.matchMedia('(max-width:760px)').addEventListener('change',event=>{
  const sections=[...document.querySelectorAll('.wiki-article .wiki-section')];
- sections.forEach((section,index)=>{section.open=!event.matches||index===0});
+ const targetId=new URLSearchParams(location.hash.split('?')[1]||'').get('section');
+ const target=targetId?document.getElementById(targetId):null;
+ sections.forEach((section,index)=>{
+  // Keep the passage being used visible when a resize switches to the outline.
+  // A closed section stays closed even if an earlier deep link remains in the URL.
+  const keepOpen=section.open&&(index===0||section.contains(document.activeElement)||(target&&section.contains(target)));
+  section.open=!event.matches||Boolean(keepOpen);
+ });
 });
 function bindChoiceExplorer(){
  const figure=document.getElementById('choice-explorer');

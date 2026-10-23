@@ -1,0 +1,35 @@
+/* Source-backed worked example; no statistical reanalysis or browser rendering. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const root=path.join(__dirname,'..');
+const alphabet=JSON.parse(fs.readFileSync(path.join(root,'data/index.json'),'utf8')).alphabet;
+const byRune=new Map(alphabet.map((item,index)=>[item.rune,index]));
+const raw=fs.readFileSync(path.join(root,'text/lp2-02.txt'),'utf8');
+// Same declared split as run.py: only hyphens/full stops separate words.
+const words=raw.split(/[-.]/).map(piece=>Array.from(piece).filter(rune=>byRune.has(rune))).filter(word=>word.length);
+const word=words[3],indices=word.map(rune=>byRune.get(rune));
+assert.equal(word.length,7);
+assert.equal(raw.split('\n')[0].includes(word.join('')),true,'The example is on source line 1');
+assert.equal(indices[6],(24-2*indices[0]+29)%29);
+assert.equal(indices[0],17);assert.equal(indices[6],19);
+const context={esc:value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))};
+vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),context);
+const fixture=vm.runInContext('affineLagExample',context);
+assert.deepEqual(Array.from(fixture.runes),word,'Every displayed rune comes from the archived word');
+assert.deepEqual(Array.from(fixture.indices),indices,'The displayed numbers are zero-based alphabet indices');
+const html=context.experimentVisual({id:'word-internal-affine-lags'},{path:'experiments/records/word-internal-affine-lags/comparison.svg'});
+assert.equal((html.match(/data-example-index=/g)||[]).length,7);
+assert.equal((html.match(/class="affine-example-endpoint"/g)||[]).length,2);
+assert(html.includes('Six steps; five runes between.'));
+assert(html.includes('24 − 2 × 17 = −10'));assert(html.includes('−10 + 29 = <strong>19</strong>'));
+assert(html.includes('0–28'));assert(html.includes('prime values aren’t used'));
+assert(html.includes('one matching pair, not proof of a cipher'));
+assert(html.includes('href="#/page/lp2-02?line=1"'));
+assert(html.indexOf('affine-worked-example')<html.indexOf('data-results='),'The example precedes the aggregate chart');
+assert(!html.slice(0,html.indexOf('data-results=')).includes('<details'),'The worked example stays visible');
+const article=fs.readFileSync(path.join(root,'experiments/records/word-internal-affine-lags/article.md'),'utf8');
+assert(article.includes(word.join('')));assert(article.includes(indices.join(', ')));
+assert(article.includes('six steps apart, with five runes between'));
+console.log('PASS: seven-rune example, indices, endpoints, modulo calculation and source link match archived LP2-02; prose and native visual agree. No statistical or rendered-layout claim.');

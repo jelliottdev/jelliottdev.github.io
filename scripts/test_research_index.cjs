@@ -31,6 +31,13 @@ assert.deepEqual(authoredResult.records.map(r=>r.id),['authored'],'Authored meth
 assert(Index.filters(authoredResult).includes('Routes and rearrangements'));
 assert.equal(Index.select(records,state('')).topics.get('transposition'),'Transposition','Older cached metadata retains a useful fallback');
 assert.deepEqual(Index.select(records,state('q=LP2-15–17')).records.map(r=>r.id),['d'],'Every requested page must be inside scope');
+const gapped=fixture('gapped','Endpoint-only scope',{scope:{pages:['lp2-15','lp2-17']}});
+for(const query of ['LP2-15–LP2-17','LP2 pages 15–LP2 page 17','LP2-17—LP2-15']){
+ assert.deepEqual(Index.select([...records,gapped],state('q='+encodeURIComponent(query))).records.map(r=>r.id),['d'],
+  'A fully written range requires interior pages, not only its endpoints: '+query);
+}
+assert.deepEqual(Index.pageQuery('LP2 pages 15–LP2 page 17').pages,['lp2-15','lp2-16','lp2-17']);
+assert.deepEqual(Index.pageQuery('LP1-16–LP2-02').pages,['lp1-16','lp2-02'],'A different release is not folded into the first release’s numeric range');
 assert.equal(Index.select(records,state('q=LP2-99')).total,0);
 assert(!Index.select(records,state('q=LP2-15')).records.some(r=>r.id==='c'),'A page mentioned in findings cannot masquerade as tested scope');
 assert(!Index.select(records,state('q=LP2‑15')).records.some(r=>r.id==='c'),'Pasted Unicode hyphens retain exact page scope');

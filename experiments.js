@@ -244,6 +244,17 @@ function bindLanguageBlockFigure(){
     figure.querySelector('.language-block-rows').innerHTML=languageBlockRows(button.dataset.languageMode);
   });
 }
+// LP2-02, line 1, fourth word; checked against the archived transcription.
+const affineLagExample={runes:['ᛒ','ᛇ','ᛚ','ᛞ','ᚻ','ᛒ','ᛗ'],indices:[17,12,20,23,8,17,19]};
+function affineLagWorkedExample(){
+ return `<figure class="affine-worked-example"><figcaption><strong>What six places apart means</strong> · <a href="#/page/lp2-02?line=1">LP2-02, line 1</a></figcaption>
+ <ol class="affine-example-strip" aria-label="The seven runes in the fourth word, with alphabet indices">${affineLagExample.runes.map((rune,index)=>`<li class="${index===0||index===6?'affine-example-endpoint':''}" data-example-index="${affineLagExample.indices[index]}" aria-label="Position ${index+1}, alphabet index ${affineLagExample.indices[index]}"><span class="affine-example-position" aria-hidden="true">${index+1}</span><span class="affine-example-rune" aria-hidden="true">${esc(rune)}</span><span class="affine-example-index" aria-hidden="true">${affineLagExample.indices[index]}</span></li>`).join('')}</ol>
+ <p class="affine-example-distance">Six steps; five runes between.</p>
+ <p>The rule compares the first rune’s index, <strong>17</strong>, with the seventh rune’s index, <strong>19</strong>.</p>
+ <div class="affine-example-calculation" aria-label="24 minus 2 times 17 equals minus 10. Add 29 to get 19."><span>24 − 2 × 17 = −10</span><span>−10 + 29 = <strong>19</strong></span></div>
+ <p>Use alphabet indices <strong>0–28</strong>; prime values aren’t used. Adding 29 brings −10 back into that range.</p>
+ <p class="affine-example-note">This is one matching pair, not proof of a cipher. The full count and shuffled comparison follow.</p></figure>`;
+}
 function experimentVisual(r,v){
   if(r.id==='block-boundary-doublets'&&v.path.endsWith('/boundaries.svg')){
     const sizes=Array.from({length:28},(_,index)=>`<option value="${index+2}">${index+2}</option>`).join('');
@@ -251,7 +262,7 @@ function experimentVisual(r,v){
   }
   if(r.id==='word-internal-affine-lags'&&v.path.endsWith('/comparison.svg')){
     const choices=Array.from({length:29},(_,n)=>`<option value="${n}">${n}</option>`).join('');
-    return `<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Actual text against a shuffled baseline</strong><br>Of 1,267 rune pairs six places apart inside words, how many fit the selected rule?</figcaption><div class="affine-lag-readout" role="status">Loading the verified counts…</div><details class="affine-lag-options"><summary>Explore other rules</summary><p>Change the coefficients in c′ = ac + b (mod 29). The highlighted rule is a = 27, b = 24.</p><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div></details><p class="small muted">The baseline shuffles runes within each word. It preserves word lengths, but it does not simulate an encryption method. <a href="${esc(v.path)}" download>Download the summary figure</a>.</p></figure>`;
+    return `${affineLagWorkedExample()}<figure class="experiment-figure affine-lag-figure" data-results="experiments/records/word-internal-affine-lags/results.json"><figcaption><strong>Actual text against a shuffled baseline</strong><br>Of 1,267 rune pairs six places apart inside words, how many fit the selected rule?</figcaption><div class="affine-lag-readout" role="status">Loading the verified counts…</div><details class="affine-lag-options"><summary>Explore other rules</summary><p>Change the coefficients in c′ = ac + b (mod 29). The highlighted rule is a = 27, b = 24.</p><div class="affine-lag-controls"><label>Multiplier a<select data-affine-a>${choices}</select></label><label>Offset b<select data-affine-b>${choices}</select></label></div></details><p class="small muted">The baseline shuffles runes within each word. It preserves word lengths, but it does not simulate an encryption method. <a href="${esc(v.path)}" download>Download the summary figure</a>.</p></figure>`;
   }
   if(r.id==='word-internal-affine-all-lags'&&v.path.endsWith('/selection-null.svg')){
     return `<figure class="experiment-figure all-lag-figure"><figcaption><strong>The strongest pattern: a rune repeats five places later</strong><br>Actual manuscript count compared with the average after shuffling runes inside each word.</figcaption><div class="all-lag-bars" role="img" aria-label="Same-rune repeats five places apart: 102 in the manuscript and 60.6 on average after shuffling words."><div><span>Actual text</span><i><b style="width:92.7%"></b></i><strong>102</strong></div><div><span>Shuffled words</span><i><b style="width:55.1%"></b></i><strong>60.6</strong></div></div><p><strong>4 of 999</strong> shuffled-word searches found a pattern this strong after trying all 12 distances and 841 formulas at each distance.</p><details><summary>See the full search distribution</summary><img src="${esc(v.path)}" alt="${esc(v.caption)}" loading="lazy"></details><p class="small muted">The proposed six-rune formula is below this peak. <a href="${esc(v.path)}" download>Download the distribution chart</a>.</p></figure>`;
@@ -345,8 +356,7 @@ function experimentArticle(r){
   const sections=[['experiment-finding','Finding'],['experiment-reproduce','Files'],...(r.family?[['experiment-family','Related tests']]:[]),['experiment-sources','Sources']];
   const sectionLinks=sections.map(([id,label])=>`<a href="#/experiments/${esc(r.id)}?section=${id}" data-anchor="${id}">${esc(label)}</a>`).join('');
   const accountFiles=[r.reproduction.script,r.article_path,...r.reproduction.inputs.map(f=>f.path),...r.reproduction.outputs.map(f=>f.path)];
-  const articleFinding=r.article.match(/^## Finding\s*\n\s*\n([^\n]+(?:\n(?!\n)[^\n]+)*)/m);
-  const findingHTML=articleFinding?renderExperimentMarkdown(articleFinding[1],accountFiles):`<p>${esc(r.finding)}</p>`;
+  const findingHTML=`<p>${esc(r.reader_finding||r.finding)}</p>`;
   const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
   return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.reader_question||r.question)}</p>

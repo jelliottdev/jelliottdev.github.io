@@ -39,7 +39,7 @@
   }
   function pageQuery(query){
     const pages=[];
-    const text=query.replace(/\blp\s*([12])(?:[\s:·\-‐‑–—−]*page\s*)?[\s:#·\-‐‑–—−]*(\d{1,2})(?:\s*[‐‑–—−-]\s*(\d{1,2}))?\b/gi,(_,release,start,end)=>{
+    const text=query.replace(/\blp\s*([12])(?:[\s:·\-‐‑–—−]*pages?\s*)?[\s:#·\-‐‑–—−]*(\d{1,2})(?:\s*[‐‑–—−-]\s*(?:lp\s*\1(?:[\s:·\-‐‑–—−]*pages?\s*)?[\s:#·\-‐‑–—−]*)?(\d{1,2}))?\b/gi,(_,release,start,end)=>{
       const a=Number(start),b=end===undefined?a:Number(end);
       for(let n=Math.min(a,b);n<=Math.max(a,b);n++)pages.push(`lp${release}-${String(n).padStart(2,'0')}`);
       return ' ';

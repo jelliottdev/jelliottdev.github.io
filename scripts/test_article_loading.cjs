@@ -17,13 +17,14 @@ for(const query of ['Atbash','φ(n)','circumference','dots','padding','impose no
 async function checkNavigationRace(oldRequestFails){
  const pending=new Map();
  const main={innerHTML:'',focus(){},querySelector(){return {textContent:this.innerHTML}}};
+ const bodyClasses=new Set(['reader-search-open']),readerToggle={setAttribute(key,value){this[key]=value}};
  const sandbox={
   db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},optionalLoads:{},main,renderId:0,URLSearchParams,ResearchIndex:require('../research-index.js'),
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
   window:{scrollTo(){},matchMedia:()=>({addEventListener(){}})},
-  document:{body:{classList:{toggle(){},remove(){}}},addEventListener(){},
-   querySelectorAll(){return []},getElementById(){return null}},
+  document:{body:{classList:{toggle(){},remove(key){bodyClasses.delete(key)}}},addEventListener(){},
+   querySelectorAll(){return []},getElementById(id){return id==='reader-search-toggle'?readerToggle:null}},
   fetch:url=>new Promise((resolve,reject)=>pending.set(url,{resolve,reject})),
  };
  vm.createContext(sandbox);
@@ -36,6 +37,8 @@ async function checkNavigationRace(oldRequestFails){
  vm.runInContext(app.slice(start,end),sandbox);
  vm.runInContext('wikiPage=id=>db.articles.find(a=>a.id===id).html',sandbox);
  const older=vm.runInContext('route()',sandbox);
+ assert(!bodyClasses.has('reader-search-open'),'Routing away clears the compact reader search state');
+ assert.equal(readerToggle['aria-expanded'],'false');
  await new Promise(resolve=>setImmediate(resolve));
  sandbox.location.hash='#/wiki/newer';
  const newer=vm.runInContext('route()',sandbox);
@@ -96,6 +99,13 @@ async function checkNavigationRace(oldRequestFails){
  sandbox.location.hash='#/research?q=prime';
  await vm.runInContext('route()',sandbox);
  assert.equal(scrolls.at(-1),320,'The production router restores a remembered directory position');
+ const errorFocus=[];main.focus=options=>errorFocus.push(options.preventScroll);
+ sandbox.location.hash='#/wiki/not-in-index';scrolls.length=0;
+ await vm.runInContext('route()',sandbox);
+ assert(main.innerHTML.includes('Page unavailable'));
+ assert.equal(sandbox.document.title,'Page unavailable — Liberpedia');
+ assert.deepEqual(errorFocus,[true],'Failed navigation focuses the visible error instead of a removed link');
+ assert.equal(scrolls.at(-1),0,'The error is brought into view after failed navigation');
 
 }
 async function main(){

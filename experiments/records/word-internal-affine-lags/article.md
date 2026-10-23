@@ -2,6 +2,12 @@
 
 The relation **c′ = 24 − 2c (mod 29)** appears **77 times in 1,267 eligible pairs**, compared with **44.8 expected** when runes are shuffled within each word. It ranks first among 841 affine maps at lag six; only **3 of 2,000 shuffles** reached 77 matches after choosing their best map.
 
+## What six places apart means
+
+The fourth word on [LP2-02, line 1](#/page/lp2-02?line=1) is `ᛒᛇᛚᛞᚻᛒᛗ`. Its alphabet indices are **17, 12, 20, 23, 8, 17, 19**. Compare positions **1 and 7**: six steps apart, with five runes between them.
+
+The rule gives **24 − 2 × 17 = −10**. Adding 29 gives **19**, the seventh rune’s index. This calculation uses alphabet indices **0–28**; prime values aren’t used. This is one matching pair, not proof of a cipher. The full count is compared with shuffled words below.
+
 ![Observed lag-six count compared with fixed-map and best-of-841 word-shuffle means.](experiments/records/word-internal-affine-lags/comparison.svg)
 
 This is a reproducible pattern in the archived transcription. It is **not a recovered encryption rule**. The formula and lag were supplied after exploration; the 841-map comparison does not account for trying other lags, word rules, page subsets, or formula families. The simple 1-in-29 reference would predict 43.7 matches, but it ignores each word's rune composition, so the within-word shuffle is the more relevant comparison here.
