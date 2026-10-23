@@ -1,0 +1,67 @@
+{
+  "schema": "liberpedia-longkey-skip-beam-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_files": [
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/armada20/pgp_english_prose.txt",
+      "sha256": "c1f3faab4857085424b45283cd31892cc79f99abc80abeee6f860cb94f437115"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/armada20/taoteching.txt",
+      "sha256": "1cc10d95b0dcd8513a35ad31cc86ea818445a901d6e27c4d0e148b8a43fd3a9d"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/armada20/thomas.txt",
+      "sha256": "3ac8292e7f68a8e9cf8766eda8c0686fae1eb76f473720606cee50933ac5697a"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/campaign7/c1_skipkey.py",
+      "sha256": "f1d0e1155fa9fdfed98d982e785603d45a8306f13c712286361cbad388c19abc"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/campaign7/c1_skipkey_results.json",
+      "sha256": "d427d2c9b3d2b446038207d4233df26000083bf2f7be743f42cf01dcde7df1ba"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/analysis/run_stats.py",
+      "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/LICENSE",
+      "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/src/lp/corpus.py",
+      "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/src/lp/gematria.py",
+      "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/src/lp/score.py",
+      "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+    },
+    {
+      "path": "experiments/records/dukotah-longkey-skip-beam/source/src/lp/stats.py",
+      "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+    }
+  ],
+  "frozen_before": "local full source grid rerun; archived result and exploratory 85-rune plant outcomes were already known",
+  "question": "Can the source-specific 1-or-2 advance beam with three named long keys recover a complete LP2 page?",
+  "exact_executable_rule": "For every ciphertext rune, every beam state may advance key position by 1 or 2, without requiring a doublet collision. Decoder keeps highest incremental score per key position and prunes globally to 120 states. Final winner uses source normalized quadgram score; source threshold >−5.0.",
+  "source_prose_caveat": "The source calls this a doublet-avoiding cipher, but its executable decoder does not restrict extra advances to would-be ciphertext doublets. Result is for the executable unconstrained beam only.",
+  "manuscript_grid": "Rerun original source program in isolated temporary copy: six longest rune-bearing unsolved source pages, source page indices chosen by descending length with index tie order; three committed key texts (Tao Te Ching, Gospel of Thomas, Cicada PGP prose); offsets 0, floor(key length/4), floor(key length/2); 54 page/key/offset settings. Compare full source best/top and threshold. Store all54 decoded scores, output lengths and hashes in addition to source top15.",
+  "positive_controls": "For each of three texts and three source offsets, plant the GP29 documented LP2-56 reading at length85 and its deterministic repeated prefix at length273. Two encryption schedules: normal advance1 and collision skip (advance2 only if proposed output repeats previous ciphertext). Decode with source beam120. Record full text equality and score>−5.0 separately; do not use an English-like score as evidence of exact recovery. Plant construction and planned lengths fixed before manuscript rerun.",
+  "null_control": "No manuscript-rune shuffle control if the collision-skip positive fails exact recovery; source score threshold will be reported as a screen, not a calibrated probability.",
+  "corpus": "Pinned krisyotam rune-only 57 segments; source indices 0–49 map to LP2-00–49, source 50–56 to LP2-51–57. The source filters out the rune-free LP2-50 transcription segment.",
+  "limits": "Only three fixed texts, three coarse offsets and six longest pages; no arbitrary keys, all offsets, or collision-only decoder. Beam prunes and merges states; source score may accept incorrect reconstructions. Not a test of all running-key ciphers."
+}

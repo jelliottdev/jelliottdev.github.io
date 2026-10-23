@@ -1,0 +1,38 @@
+{
+  "schema": "liberpedia-internal-source-replay-plan-v1",
+  "date": "2026-10-23",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "B-22",
+    "J-01"
+  ],
+  "branch": "analysis/campaign18_skip/payload_skip.py",
+  "scope": "Exact source per-page 256-byte payload skip-aware beam branch; four byte streams (two raw payload files forward and reverse), two signs, two Atbash flags, 55 nonempty rune segments, offset zero; 880 cells. Raw bytes modulo 29. Source uses beam width 320, max skipped keys 3, source model and quadgram. No whole-corpus branch is executed by this script.",
+  "target_success": "Source output score_norm greater than -5.5; reproduce source best score/setting, hit count, and each whole-page decoded path with independent row receipt. Report full-search maximum, not a universal key exclusion.",
+  "pretarget_controls": {
+    "source_generic_positive": "skipdecode.gate produced 212/212 planted rune recovery, beam score -4.154, rigid score -7.236; exact gate then crashes because Git lacks data/keys/mabinogion.txt, so source wrong-key condition is unresolved",
+    "payload_specific": "All 8 forward/reversed source payloads × signs recovered full 85-rune known LP2-56 reading, each score -4.461648582243903; source sweep beam and skipdecode.beam_decode had identical paths and scores. Atbash mode is equivalent after applying inverse Atbash to planted ciphertext.",
+    "long_plant": "A 277-rune repeated known-reading synthetic with canon_256, sign -1, supp 0.83, seed 3301 recovered 277/277 in 0.117 sec; source cell runtime upper sample ~0.17 sec. This is a power diagnostic, not an independent natural plaintext.",
+    "wrong_key": "Exact generic wrong-key source gate cannot complete because data/keys/mabinogion.txt absent. Do not claim full source gate passes."
+  },
+  "expected_runtime_seconds_upper_rough": 150,
+  "source_code_and_inputs_sha256": {
+    "liber-primus/analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "liber-primus/analysis/campaign18_skip/sweep.py": "3c86fe9d17b6f4245a02f40ff45daf07a148fce9519c2f574420b21a7d5d1e80",
+    "liber-primus/analysis/campaign18_skip/payload_skip.py": "7b8d5de1752a2a51f4d60fc8a9fc4ae321fd030354ce6da7273a246b86ae93d8",
+    "liber-primus/analysis/run_stats.py": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+    "liber-primus/src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "liber-primus/src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "liber-primus/src/lp/stats.py": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2",
+    "liber-primus/src/lp/corpus.py": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+    "liber-primus/data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "liber-primus/data/krisyotam_runes.txt": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "liber-primus/data/keys/self_reliance.txt": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0",
+    "liber-primus/data/keys/solved_plaintext.txt": "821cb3c89872bc33114055c9cdf81c7b38b33d3ac5711eaf753eeebaeefc6473",
+    "liber-primus/analysis/pp49_51/canon_256.bin": "4c8dc85531d256793a6d0d318b8845869b4983e672077b094ed955bde92226d5",
+    "liber-primus/analysis/pp49_51/canon_256_decpref.bin": "0a3aa3c813eddcf7f99ef9794c0e790f2a3fd86ea810a100d7113eb1beebacbd"
+  },
+  "known_reading_sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30",
+  "source_limitation": "For page lengths over 256 the script tiles the payload enough to reach initial page length, and source sweep.beam pads zeros for search branches exceeding supplied key length. This is source-exact behavior, not an indefinitely repeated payload model.",
+  "before_target": "Frozen after source and synthetic controls, before replaying manuscript target pages."
+}

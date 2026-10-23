@@ -1,0 +1,42 @@
+{
+  "status": "frozen-before-manuscript-scan",
+  "question": "With only the unreachable raw-IoC screen repaired to 29 times raw coincidence, what do the called PIP and P.S.-number source grids yield on their verified original page inputs?",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "path": "tools/legacy/structural_analysis.py",
+    "git_blob": "19e2236a0e23422586e27637a94c05c6d4334760",
+    "sha256": "ee79e29a8dad9553567f36e8e192ceb1d2ef1dda19354a709759168226f04acf"
+  },
+  "input_manifest": {
+    "path": "experiments/records/wulfic-structural-pip-ps-normalized/input-audit.json",
+    "sha256": "65cf173c76db3aaee9e1b415a53032db7cb45caf56e88221c22804d0b3fe57ce"
+  },
+  "page_scope": "Pinned source page_21 through page_54 inclusive, mapping exactly to LP2-04 through LP2-37. Use the same GP29 rune map and separator-defined word lengths as the source. Each pinned source flat stream and word-length vector matches the corresponding hosted page record.",
+  "source_rules": {
+    "gp_alphabet": "The 29 Unicode rune-to-index assignments in pinned structural_analysis.py (copied into run.py).",
+    "pip_prime_limit": 1000000,
+    "pip_n_limit": 50000,
+    "pip_definition": "Sieve primes through 1,000,000. For successive n from zero up to min(50000,prime_count)-1, append primes[primes[n]-1] if that index is in range; reduce each result modulo 29.",
+    "pip_offsets": "range(0,min(1000,len(pip_key)-page_rune_count)); upper bound excluded, exactly as source.",
+    "ps_number": "104127906589199853598278987395943189564044251069556756437392269523726824238529590817398343903703744757648634152034234993571087136311",
+    "ps_encodings": ["single decimal digits", "successive nonoverlapping digit pairs modulo 29", "base-29 digits of whole integer, most significant first"],
+    "ps_offsets": "range(0,min(50,len(encoded_key)-page_rune_count)); upper bound excluded, exactly as source. No padding or key cycling.",
+    "directions": ["sub: C-K", "add: C+K", "beaufort: K-C"],
+    "singleton_prefilter": "For every visible source-style one-rune word, its decoded index must be I=10 or A=24.",
+    "original_hit_gate": "Raw IoC >1.3; impossible because raw IoC is at most one. Retained as an audited source defect, not used to judge keys.",
+    "amended_hit_gate": "29 × raw IoC >1.3, a clearly labeled correction. This does not alter any generator, page, offset, direction, or singleton rule.",
+    "source_english_score": "Not used for decisions in the source: called only after hit and not part of the IoC ordering. No replacement language score is introduced.",
+    "excluded": "The source's partial 7×7 square is printed but not searched. Its page-pair/rune-count and later incomplete recovery sections are separate."
+  },
+  "evaluation": {
+    "primary": "Maximum normalized IoC across every singleton-admissible candidate from both called branches and all target pages. Keep branch/page maxima, admissible counts and gate counts.",
+    "control": "199 whole-search shuffles: independently shuffle each target page's flat rune indices while preserving its length and total rune counts; retain original source-style word-length positions; rerun every applicable generator, offset, direction and singleton gate. Use one Python random.Random(20261023), trials and pages in ascending order. Compare observed global maximum with all control global maxima and report (1+number controls at least observed)/200 descriptively.",
+    "caution": "Shuffles are a control for selection, not an encryption model; a score or threshold hit is not plaintext. Do not call a negative result proof against prime-indexed-prime or P.S. keys generally."
+  },
+  "prerun_checks": [
+    "Source function parity: compare copied GP mapping, decrypt directions, singleton rule, raw coincidence and all key generators to the exact pinned source on fixed synthetic vectors.",
+    "Known-message plants: encrypt GP-indexed LP1-10 known text segments with each generator and all three directions at fixed offset 3, append one-rune I and A words, and require full exact recovery, singleton pass, and amended gate pass.",
+    "Confirm source page flat streams and word lengths equal hosted records and print exact eligible grid sizes before evaluating LP2 scores."
+  ]
+}

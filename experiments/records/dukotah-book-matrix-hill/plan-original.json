@@ -1,0 +1,31 @@
+{
+  "schema": "liberpedia-book-matrix-hill-plan-v1",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/hill5_magic.py",
+  "source_sha256": "05681e933c73c0de7a058bfe74b65b61c1dd92daf53a08b5933544e288daf1f7",
+  "matrix_json_sha256": "aa390479d0d304552e43fa9b35e64c908aacb763bab676edcb0a374c16cf4647",
+  "timing": "Retrospective replay: archived source results were inspected before this plan. The corrected-cell arm and shared null were fixed before their outputs were calculated; neither is an independent prospective discovery test.",
+  "inputs": {
+    "source_rune_text_sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce",
+    "source_quadgrams_sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "source_gp_sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "site_lp2_15_json_sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33",
+    "known_lp2_56_csv_sha256": "5f6b0b2f9f543d7f1c0320c04cf3ad848a04e07ec899ed7faa473db382292f30"
+  },
+  "source_grid": {
+    "matrices": ["M1_1033", "M2_3301", "M3_4x4", "M1_phi", "M2_phi", "M3_phi"],
+    "operations": ["M", "MT", "Minv", "MTinv"],
+    "targets": "55 rune-bearing LP2-00–55 pages, excluding runeless LP2-50, plus their concatenation; block origin zero on each target, discard final incomplete block",
+    "field": "GP29 indices modulo 29; matrix left-multiplies consecutive column-vector blocks",
+    "score": "Pinned source log10 English-quadgram mean on concatenated GP transliteration; its declared flag is score > -5.0",
+    "selection": "Maximum over all 24 matrix-operation pairs and 56 targets; retain complete per-pair and per-target scores"
+  },
+  "corrected_input_arm": "Replace only M3_4x4 row4 col4 source value 820 with LP2-15 image/site value 1820. Recalculate M, MT, Minv, MTinv on the same 56 targets. Do not silently alter M3_phi, whose source derivation is not specified.",
+  "controls": [
+    "Verify source 55-page rune arrays match site LP2-00–55 after skipping LP2-50.",
+    "Independently verify literal source matrices, mod29 inverses, transpose identities, and all matrix products on small deterministic vectors.",
+    "For every invertible operation, encode the known LP2-56 GP reading with its inverse, decode the entire completed blocks and demand exact recovery plus source-score passage; include first and final block checks.",
+    "Preserve one common seeded shuffle of each of the 55 source pages per trial; repeat the complete 24-arm/56-target selection for 199 trials with seed 3301. This is a conditional order null, not a cipher model. Reuse each trial's shuffled pages for every arm and for the corrected-cell sensitivity."
+  ],
+  "exclusions": "Other block origins, matrix construction hypotheses, affine offsets, nonlinear ciphers, alternate plaintext languages, missing-rune hypotheses and visual interpretations. The source 4x4 array is not accepted as a verified magic square; the one-cell correction is a bounded input audit."
+}

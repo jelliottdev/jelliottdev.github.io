@@ -1,0 +1,47 @@
+"""Compact source-gate and whole-search-control visual."""
+import argparse
+import json
+from pathlib import Path
+
+HERE=Path(__file__).resolve().parent
+
+
+def make_svg():
+    r=json.loads((HERE/'results.json').read_text(encoding='utf-8'))
+    best=r['observed']['global_best']['normalized_ioc']
+    above=r['controls_at_least_observed']
+    assert r['observed']['above_1_3']==0 and len(r['controls'])==199
+    ratio=round(280*above/199,2)
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="320" height="274" viewBox="0 0 320 274" role="img" aria-labelledby="title desc">
+<title id="title">The source gate is impossible; the corrected search finds no distinctive hit</title>
+<desc id="desc">Raw coincidence cannot exceed 1, but the source asks for above 1.3. After multiplying by 29, the best candidate scores {best:.2f}, below 1.3. In {above} of 199 shuffled whole searches, the maximum is at least as high as the observed maximum.</desc>
+<rect width="320" height="274" fill="#f5f6f7"/>
+<text x="16" y="28" font-family="Arial,sans-serif" font-size="19" font-weight="700" fill="#20252a">What the search found</text>
+<text x="16" y="47" font-family="Arial,sans-serif" font-size="13" fill="#59636b">34 LP2 pages · PIP and P.S. source grids</text>
+<rect x="12" y="62" width="296" height="62" rx="5" fill="#fff" stroke="#cbd2d7"/>
+<text x="24" y="84" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#30383e">Original source gate</text>
+<text x="24" y="109" font-family="Arial,sans-serif" font-size="16" fill="#a44839">max possible 1.00</text>
+<text x="183" y="109" font-family="Arial,sans-serif" font-size="14" fill="#4f5961">needs &gt;1.30</text>
+<rect x="12" y="132" width="296" height="62" rx="5" fill="#fff" stroke="#cbd2d7"/>
+<text x="24" y="154" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#30383e">Corrected gate (×29)</text>
+<text x="24" y="179" font-family="Arial,sans-serif" font-size="16" fill="#2b5870">best {best:.2f}</text>
+<text x="183" y="179" font-family="Arial,sans-serif" font-size="14" fill="#4f5961">needs &gt;1.30</text>
+<text x="16" y="218" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#30383e">Shuffled whole searches</text>
+<rect x="16" y="228" width="280" height="14" fill="#d9dfe3"/>
+<rect x="16" y="228" width="{ratio}" height="14" fill="#5b7887"/>
+<text x="16" y="262" font-family="Arial,sans-serif" font-size="13" fill="#30383e">{above} of 199 scored at least as high as LP2.</text>
+</svg>
+'''.encode('utf-8')
+
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
+    path=HERE/'comparison.svg';payload=make_svg()
+    if a.check:
+        assert path.read_bytes()==payload
+        print('Visual matches saved results.')
+    else:
+        path.write_bytes(payload);print(path)
+
+
+if __name__=='__main__': main()
