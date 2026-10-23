@@ -5,7 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from build_experiments import build
+from build_experiments import build, CHECKER_FIELDS
 from preflight_experiments import preflight
 from build_experiment_bundles import build as build_bundle
 
@@ -55,10 +55,24 @@ class RegistryTests(unittest.TestCase):
         self.assertTrue(discovery['records'][0]['record_url'].endswith('/reference/experiments/test-record.json'))
         self.assertNotIn('article', discovery['records'][0])
         self.assertNotIn('reproduction', discovery['records'][0])
+        checker_bytes = (self.root / 'data/checker-records.json').read_bytes()
+        checker = json.loads(checker_bytes)
+        self.assertEqual(checker['schema'], 'liberpedia-checker-records-v1')
+        self.assertEqual(checker['registry_sha256'], hashlib.sha256(
+            (self.root / 'data/experiments.json').read_bytes()).hexdigest())
+        self.assertEqual(checker['records'], [{key: record[key] for key in CHECKER_FIELDS
+                                              if key in record} for record in records])
+        self.assertEqual(checker['records'][0]['scope'], records[0]['scope'])
+        self.assertEqual(checker['records'][0]['article'], records[0]['article'])
+        self.assertNotIn('reproduction', checker['records'][0])
+        self.assertNotIn('sources', checker['records'][0])
+        self.run_build()
+        self.assertEqual((self.root / 'data/checker-records.json').read_bytes(), checker_bytes)
         self.record['status'] = 'draft'
         self.assertEqual(self.run_build(), [])
         self.assertFalse(exported.exists(), 'A withdrawn record must not survive in generated individual exports')
         self.assertEqual(json.loads((self.root / 'data/experiment-index.json').read_text())['records'], [])
+        self.assertEqual(json.loads((self.root / 'data/checker-records.json').read_text())['records'], [])
         self.assertNotIn('Fixture', (self.root / 'reference/experiments.html').read_text(encoding='utf-8'))
 
     def test_generated_python_cache_is_not_a_reproduction_input(self):

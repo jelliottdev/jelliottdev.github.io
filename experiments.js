@@ -3,7 +3,7 @@ let experimentRecords, experimentRecordsPromise, assistantConfig, assistantConfi
 let experimentSupportStarted=false;
 let ideaCoveragePending=true,methodFamilyPending=true,reportedAttemptsPending=true;
 let methodRecordKinds={}, methodRecordKindById={};
-let researchRecords,researchRecordsPromise;
+let researchRecords,researchRecordsPromise,checkerRecords,checkerRecordsPromise;
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 const assistantEndpoint=()=>typeof assistantConfig?.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
@@ -46,6 +46,39 @@ async function ensureExperimentRecords() {
     experimentRecords=await experimentRecordsPromise;
   }
   return experimentRecords;
+}
+function validCheckerPayload(data){
+ const strings=values=>Array.isArray(values)&&values.every(value=>typeof value==='string');
+ const text=value=>typeof value==='string'&&value.trim().length>0;
+ const ids=new Set(),types=['method','replay','measurement','control','alphabet','audit','historical'];
+ return data?.schema==='liberpedia-checker-records-v1'&&/^[a-f0-9]{64}$/.test(data.registry_sha256||'')&&
+  Array.isArray(data.records)&&data.records.every(record=>{
+   if(!record||typeof record.id!=='string'||!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(record.id)||ids.has(record.id))return false;
+   ids.add(record.id);
+   return record.status==='published'&&['title','question','summary','finding','limitations','article'].every(key=>text(record[key]))&&
+    types.includes(record.record_type?.id)&&text(record.record_type?.label)&&text(record.record_type?.description)&&
+    strings(record.tags)&&Array.isArray(record.method_topics)&&record.method_topics.every(topic=>
+     topic&&text(topic.id)&&text(topic.title)&&strings(topic.aliases))&&
+    record.scope&&strings(record.scope.pages)&&record.scope.pages.every(id=>/^lp[12]-\d{2}$/.test(id))&&
+    (!Object.hasOwn(record.scope,'artifacts')||strings(record.scope.artifacts))&&
+    ['representation','procedure','parameters','exclusions'].every(key=>text(record.scope[key]))&&
+    ['supported','not-supported','inconclusive'].includes(record.outcome)&&
+    (!record.family||['id','title','question','baseline'].every(key=>text(record.family[key])))&&
+    (!record.variant||text(record.variant.label))&&
+    ['reader_finding','reader_limit'].every(key=>!Object.hasOwn(record,key)||text(record[key]));
+  });
+}
+async function ensureCheckerRecords(){
+ if(experimentRecords)return experimentRecords;
+ if(checkerRecords)return checkerRecords;
+ checkerRecordsPromise??=fetch('data/checker-records.json').then(async response=>{
+  if(!response.ok)throw Error('The idea-checker records could not be loaded. Please retry.');
+  const data=await response.json();
+  if(!validCheckerPayload(data))throw Error('The idea-checker records have an invalid format. Please retry.');
+  return data.records;
+ }).catch(error=>{checkerRecordsPromise=null;throw error});
+ checkerRecords=await checkerRecordsPromise;
+ return checkerRecords;
 }
 async function experimentsPage(id, version, query='') {
   stopExperimentAI();

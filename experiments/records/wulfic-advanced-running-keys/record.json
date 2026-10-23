@@ -1,0 +1,205 @@
+{
+  "id": "wulfic-advanced-running-keys",
+  "status": "published",
+  "title": "Four archived texts as running keys",
+  "question": "Does the source’s adaptive four-text running-key search identify a supported output on its 18 priority pages?",
+  "reader_question": "Could Liber AL, solved text, Emerson or Deor be the key to these pages?",
+  "summary": "The best source result was matched or beaten by 41 of 49 complete shuffled searches. The adaptive selector recovered a complete known message at a sampled offset but missed it between sampling points.",
+  "finding": "Exact Wulfic method 5 retained 72 candidates from 18 pages and four key corpora. The top was LP2-08 with Liber AL offset 2,688, source rank score 117.86; 41/49 full-grid page shuffles met or exceeded it. Four on-grid full 209-rune plants recovered; four off-grid plants failed. The complete 72-candidate synthetic grid ranked its on-grid plant first.",
+  "limitations": "The source samples key offsets every 100 positions, then refines only around the best coincidence and only in its chosen direction. An unchanged known reading planted at offset 137 was missed for every text. Its English-substring/visible-word score and within-page rune-order shuffles are conditional heuristics, not a cipher model. Other text editions, offsets, layers, boundaries and representations remain open.",
+  "next_steps": "Specify a text edition and offset or a more complete offset selector before testing a new claim; show full-message recovery at sampled and unsampled positions and a held-out readable prediction.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "running key",
+    "Liber AL",
+    "Self-Reliance",
+    "Deor",
+    "selection effect"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-26",
+      "lp2-27",
+      "lp2-32",
+      "lp2-37"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-advanced-running-keys/plan.json"
+    ],
+    "representation": "Exact pinned source rune files for global pages21–34,43,44,49,54 matched to LP2-04–17,26–27,32,37; three exact committed text corpora plus the authored SolvedLP literal.",
+    "procedure": "Replay the source method-5 100-step offset/direction screen, ±100 one-direction refinement, word-plus-coincidence ranking; test four corpus plants on and off the sampling grid, one complete synthetic grid, and 49 whole-grid page shuffles.",
+    "parameters": "18 pages × 4 source texts = 72 returned page/text candidates, each selected from its exact adaptive offset search; 49 full 72-candidate controls.",
+    "exclusions": "Other source branches, unsampled offsets not promoted by the source, other corpora/editions, resets, interruptions, alternate scoring and complete decryptors."
+  },
+  "review": {
+    "kind": "exact-source branch replay with whole-message power-limit audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned Git byte identity, source function execution, independent full-selector/score reconstruction, 8 plants and 49 whole-grid controls",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-advanced-running-keys/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check && python experiments/records/wulfic-advanced-running-keys/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT && python experiments/records/wulfic-advanced-running-keys/plot.py --check",
+    "environment": "Python 3 standard library plus a Git checkout containing pinned Wulfic revision bf89d3d13aad2b8f2c95ab195cf1b092f250775c. Unlicensed upstream script/texts remain external and are verified by Git blob SHA-256.",
+    "script": "experiments/records/wulfic-advanced-running-keys/check.py",
+    "script_sha256": "1f3dc458acebd54fddea36f11c5b3537a93e1b767f27fc2d34f743884d5d5b57",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/plan.json",
+        "sha256": "afd115deec76ae6323314d61dc8327a32465ca915c8ccccb14474844079b05e0"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/plan.py",
+        "sha256": "8e321c5638a333b21bf425ff23235580fa35ac9433b407130393b02633848920"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/run.py",
+        "sha256": "cc72f23e5f815829afee0eada23a321219909726311d2912a91bcc7b130c8a22"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/check.py",
+        "sha256": "1f3dc458acebd54fddea36f11c5b3537a93e1b767f27fc2d34f743884d5d5b57"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/plot.py",
+        "sha256": "131c621e9320c3b67526507c3f7cc39158dde5f27d1a13a195fe871f76a4581d"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/article.md",
+        "sha256": "d07302c3fd72d4b7032cdacbfb1d61b8961a72a918cce180808a971e692b9a3d"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/pages/lp2-14.json",
+        "sha256": "9753dad053376b6c0ae5363ca18e5568d65c2139775df407a1eb46b5f99f4e12"
+      },
+      {
+        "path": "data/pages/lp2-15.json",
+        "sha256": "18b9f55e3a4485b3561da4b81137be01064e8771c34c79da72c15f3f46a26c33"
+      },
+      {
+        "path": "data/pages/lp2-16.json",
+        "sha256": "17be22bb1de60643e5be9921b6bf403d3080f4117210f180b78a8030c2015b60"
+      },
+      {
+        "path": "data/pages/lp2-17.json",
+        "sha256": "59e7e37c1936dbc5f9debd02c5a6d7725ee3bcff5ea3d849ecfa5687f1f04018"
+      },
+      {
+        "path": "data/pages/lp2-26.json",
+        "sha256": "1c20f159cd45fb9cf70498003d5dca8ea630bd5c80c7e625ed27efdc421ba75d"
+      },
+      {
+        "path": "data/pages/lp2-27.json",
+        "sha256": "a1c271d738bc57b34403df5dbcc21f008d43aea93d0af62c9259f1b9b5719505"
+      },
+      {
+        "path": "data/pages/lp2-32.json",
+        "sha256": "4a3490d8fdaa7eef73a854898f7af0605fd35f2903c359b50766d2ca99dab2e2"
+      },
+      {
+        "path": "data/pages/lp2-37.json",
+        "sha256": "8ebe97ebe021780cf374c37803baaf8a5fac9da9524c5f014aac820ec816dfcc"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      },
+      {
+        "path": "data/pages/lp1-06.json",
+        "sha256": "6e1d8c083d87a6ce0c7f1035599735c461038ff286dc3d48a54b2ec2cd260692"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/control-results.json",
+        "sha256": "391fd2db0d860c09b56b40a24d43221dccdc1406b5152c9617b78ab650b8affa"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/results.json",
+        "sha256": "f6dfdcdf43fae879b6d49d13b3aba02fe051e818b26d98f3a03a625e340ed2eb"
+      },
+      {
+        "path": "experiments/records/wulfic-advanced-running-keys/comparison.svg",
+        "sha256": "3fbb6018c2440a0b3a07abf2ad30a5a5665e484023242470b8ff8c3dbeca8561"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-advanced-running-keys/comparison.svg",
+      "caption": "Complete known-reading recovery on and off the source offset grid, with manuscript and full-search shuffle scores."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned advanced cipher source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py"
+    },
+    {
+      "label": "Pinned legacy-source caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-p21-running-key-layers",
+    "wulfic-liber-al-offset-sweep",
+    "solved-reading-running-key"
+  ],
+  "reader_finding": "This program found no established reading using its four proposed key texts. Its best manuscript score was matched or beaten by 41 of 49 shuffled searches. More importantly, it missed the same known message for all four texts when that message began between its sampled offsets.",
+  "reader_limit": "The search samples every hundredth text position, then refines around only one selected candidate. These results do not rule out the key texts at other offsets or under different selection rules."
+}

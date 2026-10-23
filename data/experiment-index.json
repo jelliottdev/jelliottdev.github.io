@@ -2,7 +2,7 @@
   "schema": "liberpedia-experiment-discovery-v1",
   "usage": "Discovery only. Fetch record_url and compare the complete scope, findings, limitations and review before claiming an idea was tested. No match means no matching documented record here, not proof that an idea is new.",
   "counts": {
-    "records": 285,
+    "records": 287,
     "batch_suites": 1,
     "batch_configurations": 1856
   },
@@ -20568,6 +20568,92 @@
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-adfgvx-fractionation.zip"
     },
     {
+      "id": "wulfic-advanced-running-keys",
+      "title": "Four archived texts as running keys",
+      "question": "Does the source’s adaptive four-text running-key search identify a supported output on its 18 priority pages?",
+      "summary": "The best source result was matched or beaten by 41 of 49 complete shuffled searches. The adaptive selector recovered a complete known message at a sampled offset but missed it between sampling points.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "running key",
+        "Liber AL",
+        "Self-Reliance",
+        "Deor",
+        "selection effect"
+      ],
+      "finding": "This program found no established reading using its four proposed key texts. Its best manuscript score was matched or beaten by 41 of 49 shuffled searches. More importantly, it missed the same known message for all four texts when that message began between its sampled offsets.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "running-key",
+          "title": "Running keys from external texts",
+          "aliases": [
+            "running key",
+            "book key",
+            "running keys"
+          ]
+        },
+        {
+          "id": "automatic-search",
+          "title": "Automatic search and language scoring",
+          "aliases": [
+            "hill climbing",
+            "simulated annealing",
+            "genetic algorithm",
+            "brute force",
+            "automatic search",
+            "beam search"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13",
+        "lp2-14",
+        "lp2-15",
+        "lp2-16",
+        "lp2-17",
+        "lp2-26",
+        "lp2-27",
+        "lp2-32",
+        "lp2-37"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-advanced-running-keys/plan.json"
+      ],
+      "outcome": "inconclusive",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-advanced-running-keys",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-advanced-running-keys.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-advanced-running-keys/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-advanced-running-keys.zip"
+    },
+    {
       "id": "wulfic-autokey-seed-families",
       "title": "Short seeds for autokey ciphers",
       "question": "Do the pinned source keyword, two-rune, or three-rune autokey seeds pass their one-rune and IoC screens on the selected LP2 pages?",
@@ -21553,6 +21639,81 @@
       "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-keyed-transposition-cohort.json",
       "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-keyed-transposition-cohort/article.md",
       "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-keyed-transposition-cohort.zip"
+    },
+    {
+      "id": "wulfic-keyword-lfsr",
+      "title": "Keyword-seeded register shifts",
+      "question": "Do the archived ten page keywords, register lengths and tap patterns produce a source-reported candidate?",
+      "summary": "None of 400 source settings on LP2-04–13 passed the program’s normalized coincidence cutoff; a complete known-reading plant passed and recovered exactly.",
+      "tags": [
+        "LP2",
+        "source replay",
+        "LFSR",
+        "keyword",
+        "feedback",
+        "Vigenere"
+      ],
+      "finding": "None of the 400 tested keyword-seeded register settings produced an output that passed the program’s language screen. The search did recover a complete 209-rune known message under one of those settings.",
+      "record_type": {
+        "id": "replay",
+        "label": "Method replay",
+        "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+      },
+      "method_topics": [
+        {
+          "id": "feedback",
+          "title": "Autokey and ciphertext feedback",
+          "aliases": [
+            "autokey",
+            "feedback",
+            "ciphertext feedback",
+            "plaintext autokey"
+          ]
+        },
+        {
+          "id": "seeded",
+          "title": "Seeded generators and generated keystreams",
+          "aliases": [
+            "PRNG",
+            "seed",
+            "generated keystream"
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Null models and selection effects",
+          "aliases": [
+            "controls",
+            "chance",
+            "multiple testing",
+            "null model",
+            "null models"
+          ]
+        }
+      ],
+      "family": null,
+      "variant_label": null,
+      "pages": [
+        "lp2-04",
+        "lp2-05",
+        "lp2-06",
+        "lp2-07",
+        "lp2-08",
+        "lp2-09",
+        "lp2-10",
+        "lp2-11",
+        "lp2-12",
+        "lp2-13"
+      ],
+      "artifacts": [
+        "experiments/records/wulfic-keyword-lfsr/plan.json"
+      ],
+      "outcome": "not-supported",
+      "retested_on": "2026-10-23",
+      "url": "https://jelliottdev.github.io/#/experiments/wulfic-keyword-lfsr",
+      "record_url": "https://jelliottdev.github.io/reference/experiments/wulfic-keyword-lfsr.json",
+      "article_url": "https://jelliottdev.github.io/experiments/records/wulfic-keyword-lfsr/article.md",
+      "bundle_url": "https://jelliottdev.github.io/downloads/experiments/wulfic-keyword-lfsr.zip"
     },
     {
       "id": "wulfic-keyword-prime-layer-grid",

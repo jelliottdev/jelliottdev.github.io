@@ -8,6 +8,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Preserve exact evidence and lexical text; detail/download dependencies stay separate.
+CHECKER_FIELDS = ('id', 'status', 'title', 'question', 'summary', 'tags', 'record_type',
+                  'family', 'variant', 'scope', 'outcome', 'finding', 'limitations',
+                  'article', 'method_topics', 'reader_finding', 'reader_limit')
+
+
+def checker_payload(records, registry_bytes):
+    return {
+        'schema': 'liberpedia-checker-records-v1',
+        'registry_sha256': hashlib.sha256(registry_bytes).hexdigest(),
+        'records': [{key: record[key] for key in CHECKER_FIELDS if key in record}
+                    for record in records],
+    }
+
 
 def require(value, message):
     if not value:
@@ -255,9 +269,13 @@ def build(root=ROOT):
             require(f['id'] not in families or families[f['id']] == f,
                     'Conflicting family metadata')
             families[f['id']] = f
-    (root / 'data/experiments.json').write_text(json.dumps({
-        'schema': 'liberpedia-experiments-v1', 'records': records
-    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+    registry_text = json.dumps({'schema': 'liberpedia-experiments-v1', 'records': records},
+                               ensure_ascii=False, indent=2) + '\n'
+    (root / 'data/experiments.json').write_text(registry_text, encoding='utf-8', newline='\n')
+    (root / 'data/checker-records.json').write_text(
+        json.dumps(checker_payload(records, registry_text.encode('utf-8')),
+                   ensure_ascii=False, separators=(',', ':')) + '\n',
+        encoding='utf-8', newline='\n')
     # Discovery stays small; a selected record retains its complete scope and evidence.
     base = 'https://jelliottdev.github.io/'
     export_dir = root / 'reference/experiments'

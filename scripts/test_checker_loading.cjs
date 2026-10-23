@@ -4,7 +4,7 @@ const root=path.join(__dirname,'..'),Search=require('../assistant-search.js');
 const record={id:'prime-example',status:'published',title:'Prime stream test',question:'Does a prime stream recover text?',
  summary:'Prime stream opening test',tags:['prime stream'],scope:{pages:['lp2-15'],representation:'runes',procedure:'fixed subtraction',parameters:'one key',exclusions:'other keys'},
  finding:'Technical finding for exact evidence',reader_finding:'Plain result for readers',limitations:'Technical limits for exact evidence',reader_limit:'Other keys remain open.',
- outcome:'not-supported',record_type:{id:'method',label:'Solving test'},related:[],method_topics:[]};
+ article:'Exact article lexical text',outcome:'not-supported',record_type:{id:'method',label:'Solving test',description:'A finite test'},related:[],method_topics:[]};
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 function harness(query=''){
  let elements=new Map(),html='',registryCalls=0,apiCalls=0;const pending=[];
@@ -14,7 +14,7 @@ function harness(query=''){
   document:{activeElement:null},$:id=>elements.get(id),
   fetch:(url,options)=>{
    if(options?.method==='POST'){apiCalls++;return Promise.resolve({ok:false,status:503,json:async()=>({})})}
-   assert.equal(url,'data/experiments.json','Only the unchanged complete evidence registry loads during readiness');
+   assert.equal(url,'data/checker-records.json','Cold readiness uses the dedicated evidence payload');
    registryCalls++;return new Promise((resolve,reject)=>pending.push({resolve,reject}));
   }};
  context.main={set innerHTML(value){
@@ -29,7 +29,7 @@ function harness(query=''){
  vm.createContext(context);vm.runInContext(fs.readFileSync(path.join(root,'experiments.js'),'utf8'),context);
  vm.runInContext(fs.readFileSync(path.join(root,'assistant-ui.js'),'utf8'),context);
  vm.runInContext("startExperimentSupport=()=>{};assistantConfig={endpoint:'https://mock.example/ask'};methodFamilyPending=false;ideaCoveragePending=false;reportedAttemptsPending=false;",context);
- const $=id=>elements.get('#'+id),okay=records=>({ok:true,json:async()=>({records})});
+ const $=id=>elements.get('#'+id),okay=records=>({ok:true,json:async()=>({schema:'liberpedia-checker-records-v1',registry_sha256:'a'.repeat(64),records})});
  return {context,$,pending,okay,get registryCalls(){return registryCalls},get apiCalls(){return apiCalls},query};
 }
 (async()=>{
@@ -39,10 +39,14 @@ function harness(query=''){
  assert(h.$('idea-submit').disabled);assert(h.$('idea-status').textContent.includes('Loading research records'));
  assert(!h.$('experiment-results').innerHTML.includes('No matching'),'Pending data is never an empty archive');
  h.$('experiment-form').onsubmit({preventDefault(){}});assert.equal(h.apiCalls,0,'Forced submit cannot send an early API request');
- const shared=h.context.ensureExperimentRecords();assert.equal(h.registryCalls,1,'Other consumers share the same registry fetch');
+ h.context.coverageFixture={id:'prime-notes',title:'Prime stream notes',phrases:['prime stream'],related:['prime-example'],status:'Partially covered',guide:'prime-guide',coverage:'A fixed key',needed:'Choose a rule',next_test:'Other keys'};
+ vm.runInContext('ideaCoverageRecords=[coverageFixture]',h.context);
+ const shared=h.context.ensureCheckerRecords();assert.equal(h.registryCalls,1,'Other consumers share the same registry fetch');
  h.pending[0].resolve(h.okay([record]));await shared;await flush();
  assert.equal(h.$('experiment-query'),input,'Completion never replaces the input');assert.equal(input.value,'prime stream LP2-15');
  assert.equal(h.context.document.activeElement,input);assert(!h.$('idea-submit').disabled);assert.equal(h.apiCalls,0,'Readiness does not request AI');
+ assert(vm.runInContext('experimentRecords===undefined',h.context),'Cold checker must not fill the detail cache');
+ assert(h.$('idea-coverage').innerHTML.includes('href="#/experiments/prime-example"'),'Coverage links use checker-local titles without a full registry');
  assert(h.$('experiment-results').innerHTML.includes(record.reader_finding));assert(h.$('experiment-results').innerHTML.includes(record.reader_limit));
  assert(!h.$('experiment-results').innerHTML.includes(record.finding),'Visible cards prefer reader text');
  assert(h.$('experiment-results').innerHTML.includes('<strong>Limit:</strong>'));

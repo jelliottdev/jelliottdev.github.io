@@ -1,0 +1,200 @@
+{
+  "id": "wulfic-keyword-lfsr",
+  "status": "published",
+  "title": "Keyword-seeded register shifts",
+  "question": "Do the archived ten page keywords, register lengths and tap patterns produce a source-reported candidate?",
+  "reader_question": "Could an archived keyword seed a feedback shift register that decrypts these pages?",
+  "summary": "None of 400 source settings on LP2-04–13 passed the program’s normalized coincidence cutoff; a complete known-reading plant passed and recovered exactly.",
+  "finding": "The exact source grid is 10 pages × 5 register lengths × 4 tap lists × 2 subtraction directions. The highest manuscript normalized 29×IoC was 1.097, below the source reporting gate of greater than 1.20. Zero of 199 complete page-shuffle searches passed the same gate. The first-koan plant recovered 209 of 209 runes and ranked first across 400 cases.",
+  "limitations": "A gated non-result is not a significance test or a general exclusion of feedback ciphers. The source gate and English-substring score were calibrated only by one clean 209-rune plant. This covers the ten fixed keywords, four specified tap lists, lengths 4–8, two directions and uninterrupted page-local clocks; other states, clocks, encodings and layers remain untested.",
+  "next_steps": "For a distinct register proposal, specify seed, taps, clock and transform before reading output; require complete known-message recovery and an untouched manuscript check.",
+  "outcome": "not-supported",
+  "tags": [
+    "LP2",
+    "source replay",
+    "LFSR",
+    "keyword",
+    "feedback",
+    "Vigenere"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-keyword-lfsr/plan.json"
+    ],
+    "representation": "Exact committed Wulfic rune files for old pages 21–30, matched rune for rune to current LP2-04–13.",
+    "procedure": "Replay the source keyword-seeded LFSR, strict normalized-IoC reporting gate, complete planted known-reading search, and 199 whole-grid page-shuffle controls.",
+    "parameters": "400 source settings, 396 distinct manuscript decoded outputs, 199 complete page-shuffle searches.",
+    "exclusions": "Other states/taps, other pages, interruption or reset rules, layered ciphers and alternate score gates."
+  },
+  "review": {
+    "kind": "bounded source-function replay with full-message recovery gate",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact pinned source function; independent 400-case arithmetic, source/site parity and full-grid controls",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-keyword-lfsr/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check && python experiments/records/wulfic-keyword-lfsr/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT && python experiments/records/wulfic-keyword-lfsr/plot.py --check",
+    "environment": "Python 3 standard library plus exact public Wulfic Git checkout at bf89d3d13aad2b8f2c95ab195cf1b092f250775c; original unlicensed source read by SHA-256-verified Git blob, not bundled.",
+    "script": "experiments/records/wulfic-keyword-lfsr/check.py",
+    "script_sha256": "ac7ad76130084f0e08e5aeb53e994b79515fbe8fc927f86a5ae54197cd6e475c",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/plan.json",
+        "sha256": "057ad4e6a714b5fa10f67a34c1095c216200ce248063070bb16acb57be1a9431"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/plan.py",
+        "sha256": "13c3201171be025ae320b4f0239584e14e16358c68e498129dfb8577afef7ed2"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/run.py",
+        "sha256": "ac6b6d07f57e37800584d06318c22f46e056ec3689b8271744b3c59cfd340bea"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/check.py",
+        "sha256": "ac7ad76130084f0e08e5aeb53e994b79515fbe8fc927f86a5ae54197cd6e475c"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/plot.py",
+        "sha256": "fdf3d546fdfdc88ef55e54ec6c63e746113c7fe347b7f6b698d0f5551d0d8864"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/article.md",
+        "sha256": "b7e3889c0b15ad2a263fa2f6e47256a1446ad5c632ddfb30235ad9d5bb3bc028"
+      },
+      {
+        "path": "data/pages/lp2-04.json",
+        "sha256": "023cfbd4629ec330bc07b4a726c2656d6cfb37bbf2ee3bcfb1c8dcba397706a9"
+      },
+      {
+        "path": "data/pages/lp2-05.json",
+        "sha256": "a249bd57c80488da59330e84b3f74fe76a82590a587043bf620e04730721df14"
+      },
+      {
+        "path": "data/pages/lp2-06.json",
+        "sha256": "77ce953caa9a635b3b0bd5878d495a3d686b7e5ce958c5dde923a84c56891d22"
+      },
+      {
+        "path": "data/pages/lp2-07.json",
+        "sha256": "ed799ab5a62b996130d74b10a66ca8e77d3b607916a67598580fea030fd326ff"
+      },
+      {
+        "path": "data/pages/lp2-08.json",
+        "sha256": "9ea47b22390ead3d9a92c60fa952d35ab90577cfd6377666d8d29035717a5953"
+      },
+      {
+        "path": "data/pages/lp2-09.json",
+        "sha256": "6a863242e68bec98923ce3d60dac74ead94d1ada670643dc1696d52d078cbb09"
+      },
+      {
+        "path": "data/pages/lp2-10.json",
+        "sha256": "f8b49d23802c102f06804394fdf5d409f4521a8dd088d982d1b8cd62c61d86a0"
+      },
+      {
+        "path": "data/pages/lp2-11.json",
+        "sha256": "01a1e076430a799387960c9dedc5c1248cd460a75c11818659216aeaada80d6c"
+      },
+      {
+        "path": "data/pages/lp2-12.json",
+        "sha256": "b4bf4c6152cd7a297b8cdce884a8be97a9ec99794c66a7256e8b7b5bf04193e7"
+      },
+      {
+        "path": "data/pages/lp2-13.json",
+        "sha256": "019c1da09ca2175cd250915585606668d91cacb1de2fefb148fdb4de9de0d915"
+      },
+      {
+        "path": "data/evidence/known-readings.json",
+        "sha256": "384e8963a7a239c28cb3d054feb10c6f738bcf3d13c0add211c393ee43c06b39"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/control-results.json",
+        "sha256": "6f09e27dcf97bc62fe986f7c0696d9940f808cd0f92b343e9d7257745171d6d4"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/results.json",
+        "sha256": "f923e94c536e29e7c0c0b933333ecf64b84302b396b392e26057cabfe486de17"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-lfsr/comparison.svg",
+        "sha256": "601ea452f2ebb821e8a518b4d242108a5660156459c5b35e4df297fc0dffa99f"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-keyword-lfsr/comparison.svg",
+      "caption": "Best coincidence per page versus the source reporting gate; the full known-reading control cleared it."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned advanced cipher source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py"
+    },
+    {
+      "label": "Pinned legacy-source caveat",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/README.md"
+    }
+  ],
+  "related": [
+    "wulfic-lfsr-singleton-constraints",
+    "wulfic-crib-lfsr-recurrence",
+    "wulfic-keyword-ramp"
+  ],
+  "reader_finding": "None of the 400 tested keyword-seeded register settings produced an output that passed the program’s language screen. The search did recover a complete 209-rune known message under one of those settings.",
+  "reader_limit": "This covers the ten fixed keywords and specified register rules on LP2-04–13. Passing the screen would not by itself establish a reading, and other feedback rules remain open.",
+  "article": "# A keyword that feeds a shifting register\n\nThe archived [advanced cipher program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/legacy/advanced_cipher_solver.py) tries a keyword-seeded *linear feedback shift register* on ten manuscript pages. **None of its 400 settings crossed the program's reporting cutoff** on LP2-04–13. The best normalized coincidence value on any page was **1.10**, below the required **greater than 1.20**. This is a result for the source's fixed keywords and register rules, not for every feedback cipher.\n\n![Each page's highest normalized coincidence value is below the source gate of 1.20; a known-reading control reached 2.06.](experiments/records/wulfic-keyword-lfsr/comparison.svg)\n\nThe keyword gives the first register values. At each rune, the register emits its first value as the key, then calculates a new value from selected positions before shifting. With `CABAL` as `5, 24, 17, 24, 20` and taps at zero-based positions 1 and 4, the key starts `5, 24, 17, 24, 20, 15…`; the new value `15` is `(24 + 20) mod 29`. The program tries register lengths **4–8**, four tap lists at each length, and two directions of subtraction. Each page starts its own register.\n\nWe tested the reporting rule on a full message first. A **209-rune established reading** was encrypted with one of the declared CABAL settings. The same 400-case search recovered every rune, cleared the coincidence cutoff at **2.06**, and ranked the correct case first. This shows that the gate can find a clean in-family message. It does not prove the gate would catch a noisy, interrupted, differently encoded, or layered message.\n\nThe archived page files 21–30 match the current LP2-04–13 rune arrays exactly. The 400 source settings yielded **396 distinct decoded outputs**, because four pairs of settings coincide on particular pages; they are still one method family. The source reports and English-substring-scores an output only after its whole-page normalized `29 × IoC` exceeds 1.20. **Zero** manuscript outputs cleared that rule. In **199** complete searches over independently shuffled pages, zero outputs cleared it there too. With no reported scores on either side, the shuffles do not provide a useful score-ranking or significance claim. They only show that this cutoff is stringent for these page lengths and frequencies.\n\nThe [plan](experiments/records/wulfic-keyword-lfsr/plan.json) fixes the ten pages, 400 settings, full-message control and whole-search shuffle procedure. The [results](experiments/records/wulfic-keyword-lfsr/results.json) retain the coincidence measurement and decoded-output digest for every setting; the separate [control result](experiments/records/wulfic-keyword-lfsr/control-results.json) was written before the manuscript scan. The related [keyword-ramp](#/experiments/wulfic-keyword-ramp) and [crib-inferred recurrence](#/experiments/wulfic-crib-lfsr-recurrence) tests use different key clocks.\n\nFrom the full checkout or experiment bundle, supply an exact checkout of the pinned public Wulfic revision separately:\n\n```text\npython experiments/records/wulfic-keyword-lfsr/run.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT --check\npython experiments/records/wulfic-keyword-lfsr/check.py --source-root PATH_TO_PINNED_WULFIC_CHECKOUT\npython experiments/records/wulfic-keyword-lfsr/plot.py --check\n```\n\nThe source checkout does not provide a license, so its script is not copied into the bundle. The runner imports only the SHA-256-verified Git blob. The independent checker rebuilds the register, both decryption directions, all 400 outputs, the planted reading and all 199 shuffled searches without importing the producer.\n",
+  "article_path": "experiments/records/wulfic-keyword-lfsr/article.md",
+  "script_sha256": "ac7ad76130084f0e08e5aeb53e994b79515fbe8fc927f86a5ae54197cd6e475c",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "feedback",
+      "title": "Autokey and ciphertext feedback",
+      "aliases": [
+        "autokey",
+        "feedback",
+        "ciphertext feedback",
+        "plaintext autokey"
+      ]
+    },
+    {
+      "id": "seeded",
+      "title": "Seeded generators and generated keystreams",
+      "aliases": [
+        "PRNG",
+        "seed",
+        "generated keystream"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Null models and selection effects",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}
