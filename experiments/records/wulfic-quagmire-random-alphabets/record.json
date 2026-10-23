@@ -1,0 +1,161 @@
+{
+  "id": "wulfic-quagmire-random-alphabets",
+  "status": "published",
+  "title": "Random Quagmire alphabet families on LP2",
+  "question": "Do the specified random-alphabet Quagmire mixtures yield rune counts as even as LP2's under six key-value distributions?",
+  "reader_question": "Do random Quagmire alphabets fit LP2's rune frequencies?",
+  "summary": "Exact Stage U replay finds 20 powered exclusions and four untestable settings across six key-value distributions, tied/independent alphabet variants and pooled/sectioned analyses.",
+  "finding": "All source model and calibration gates pass. Twenty of 24 settings meet its strict raw and anti-doublet-adjusted lower-tail exclusion rule with power on at least 18/20 flat-key controls. Four uniform A–Z settings are untestable because their positive-control power is insufficient. No plaintext or key is produced.",
+  "limitations": "This is a frequency screen for the source's random-alphabet Quagmire model and six key distributions. A–Z settings remain open under the source rule. Deterministic keyword alphabets, other key distributions or boundary rules, exact key order and layered ciphers are outside scope.",
+  "next_steps": "A surviving Quagmire proposal needs a fixed key-value distribution, alphabet construction and further prediction beyond a favorable frequency statistic, with same-family controls.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "Quagmire",
+    "alphabet substitution",
+    "frequency analysis",
+    "control power"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv"
+    ],
+    "representation": "Canonical 29-rune LP2-00–55 stream; pooled across 12,956 runes or grouped into source sections 7–9 and 11–15 for a separate fresh-alphabet statistic.",
+    "procedure": "Run pinned Stage U's G1 model calibration, G2 flat-key power and G3 same-family false-exclusion checks, then score all 24 LP2 settings. Independently rebuild both manuscript chi-square statistics and audit each source verdict.",
+    "parameters": "Six declared key-value distributions x two tied/independent alphabet variants x pooled/sectioned statistics; 100,000 model draws per reference; 200 anti-doublet-factor ciphers per statistic; 20 power and 20 same-family controls per setting; raw and adjusted P<=0.0001, power>=18/20.",
+    "exclusions": "Other key distributions, nonrandom or named alphabets, key-order recovery, alternative boundaries, layers and decryption quality."
+  },
+  "review": {
+    "kind": "exact public-source Stage U replay with independent manuscript and verdict checks",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source table reproduced byte-for-byte; 80 rows, all G1/G2/G3 and LP2 decisions audited; site page text independently reproduces pooled and sectioned chi-square statistics",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-quagmire-random-alphabets/run.py --check && python experiments/records/wulfic-quagmire-random-alphabets/plot.py --check",
+    "environment": "Bundled checks use Python 3 standard library. Optional full source replay requires NumPy and a pinned external checkout; its simulations may take several minutes.",
+    "script": "experiments/records/wulfic-quagmire-random-alphabets/run.py",
+    "script_sha256": "c84813f55a383cf2f5f3bfb0d41fe7ab92f236d89ebde55a1c64049489b69dc1",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/plan.json",
+        "sha256": "768ab7d1581d0e32b969ac4334b90f9b70b842b18c1f34879aac2f5e7ea212a4"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/check.py",
+        "sha256": "92cf26b4614066dfdfa1d601ff5ac0215c279abe563e142e374798aa16939e54"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/plot.py",
+        "sha256": "92db92a293886c935281d69daf1a09c47edac2662f17d900202770ff0aa7614c"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/replay_source.py",
+        "sha256": "40887553a7867fb469df5db11bd7b885fbfdcf0ad4e3acce45a9205d28978631"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/make_record.py",
+        "sha256": "b7600c26f2937711b4d137255b5f6d14581d0b99aec27871baf2dd362363dd09"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv",
+        "sha256": "587adb02f61f1b7e6ee627ddf04f1bce51409d5ba9eb0b3ce4ed5f86a8037ed4"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/results.json",
+        "sha256": "c6ccf9200f8c1be44810c484dd0824d4f1518d5d38dd3cb59779ba2838ed3768"
+      },
+      {
+        "path": "experiments/records/wulfic-quagmire-random-alphabets/comparison.svg",
+        "sha256": "ad0b2e6254bd544351ae1dd0f811f36646329ef3ae558edc0c0ea8921e7cf1cb"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-quagmire-random-alphabets/comparison.svg",
+      "caption": "Powered exclusions for six key-value distributions, each under four source alphabet/section combinations; the uniform A–Z combination lacks power."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic Stage U source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_u.py"
+    },
+    {
+      "label": "Pinned published Stage U results",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_u_results.tsv"
+    },
+    {
+      "label": "Pinned Quagmire model",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/quagmire.py"
+    }
+  ],
+  "related": [
+    "wulfic-position-alphabet-flatness-bound",
+    "wulfic-position-alphabet-long-keys",
+    "quagmirror-six-rune-replay",
+    "wulfic-keyword-quagmire-models"
+  ]
+}

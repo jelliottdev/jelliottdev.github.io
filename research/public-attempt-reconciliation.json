@@ -11,14 +11,14 @@
   },
   "interpretation": "One row is one source ledger entry, which may bundle several subclaims. A linked record verifies only the exact subclaim named on that link. 'unsupported-source-verdict' means Liberpedia has not established the source's whole-entry conclusion, not that the source's underlying result is false. 'blocked-exact-replay', 'source-proposal-only' and 'failed-source-gate' are reviewed source states, not completed negative experiments. No row asserts full source-entry coverage; shared evidence files alone never establish overlap. Execution replay is a separate axis: completing the published executable grid does not validate an earlier broader plan or rule out the wider method. A replayed invalid gate is counted as an audit, never a successful negative experiment.",
   "counts": {
-    "source_entries_reviewed": 44,
+    "source_entries_reviewed": 45,
     "reproduced_subclaim": 1,
     "partial": 23,
-    "unsupported_source_verdict": 17,
+    "unsupported_source_verdict": 18,
     "blocked_exact_replay": 1,
     "source_proposal_only": 1,
     "failed_source_gate": 1,
-    "source_entries_with_published_record_link": 29,
+    "source_entries_with_published_record_link": 30,
     "source_entries_with_source_replay_audit_only": 2,
     "false_candidate_links_rejected": 3,
     "whole_entry_coverage_verified": 0,
@@ -1204,6 +1204,30 @@
         "scope": "F0-gated correct-key planted recovery across six source lengths through 12,956 runes and a full-length wrong-key control; source B.3 exact grid.",
         "wider_method_excluded": false
       }
+    },
+    {
+      "source_id": "A-03",
+      "source_claim": "The image-classifier doublet counts bound missed doubled runes at K<=26, below 93 needed for the stated autokey floor.",
+      "status": "unsupported-source-verdict",
+      "record_links": [
+        {
+          "record_id": "a03-haplography-source-gate",
+          "covered_subclaim": "Pinned classifier receipts, source agreement gate, doublet-count arithmetic and the logical insufficiency of the proposed K<=26 error bound; not a fresh image transcription."
+        }
+      ],
+      "unresolved_parts": [
+        "The archived image agreement 99.4146% misses the 99.5% declared gate. The arithmetic-only planted-K control does not measure glyph detection sensitivity or false classifications.",
+        "Observed image-minus-canon surplus 26 cannot cap hidden merges without a measured classifier error model. The 93-merge finite counterexample demonstrates underdetermination, not empirical evidence for those errors.",
+        "No full historical image-instrument artifact replay, held-out glyph adjudication or general autokey exclusion is established by this audit."
+      ],
+      "source_evidence": [
+        "liber-primus/analysis/round16/A-03/PREREG.md",
+        "liber-primus/analysis/round16/A-03/a03_hapl_bound.py",
+        "liber-primus/analysis/round16/A-03/results.json",
+        "liber-primus/analysis/round10/L1-template/diff3_report.json",
+        "liber-primus/analysis/round10/L1-template/doublet_final.log"
+      ],
+      "whole_entry_coverage_verified": false
     }
   ],
   "next_batch": [

@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "d1e19fecab9ca6b3ea709127dce05cfec663f734aafe37bc786409de26f6136a",
-    "record_count": 222
+    "sha256": "94c8d164c72044fc9eab0a8b5915b1f1273dcac5ecffe92f55d9f4bb898652e5",
+    "record_count": 226
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -26,12 +26,12 @@
       "superseded": 3
     },
     "with_reproduction_command": 64,
-    "candidate_overlap": 23,
-    "unreconciled": 123,
-    "source_entries_reviewed": 44,
-    "source_entries_pending_review": 128,
+    "candidate_overlap": 24,
+    "unreconciled": 122,
+    "source_entries_reviewed": 45,
+    "source_entries_pending_review": 127,
     "pending_review_with_candidate_match": 5,
-    "pending_review_without_candidate_match": 123,
+    "pending_review_without_candidate_match": 122,
     "execution_replay_states": {
       "complete-executed-grid": 13,
       "partial-execution": 2,
@@ -684,9 +684,37 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
-      "candidate_records": [],
-      "coverage_verified": false
+      "reconciliation_state": "unsupported-source-verdict",
+      "candidate_records": [
+        {
+          "record_id": "a03-haplography-source-gate",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round16/A-03/PREREG.md",
+                "liber-primus/analysis/round16/A-03/a03_hapl_bound.py"
+              ]
+            }
+          ]
+        }
+      ],
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "a03-haplography-source-gate",
+            "covered_subclaim": "Pinned classifier receipts, source agreement gate, doublet-count arithmetic and the logical insufficiency of the proposed K<=26 error bound; not a fresh image transcription."
+          }
+        ],
+        "unresolved_parts": [
+          "The archived image agreement 99.4146% misses the 99.5% declared gate. The arithmetic-only planted-K control does not measure glyph detection sensitivity or false classifications.",
+          "Observed image-minus-canon surplus 26 cannot cap hidden merges without a measured classifier error model. The 93-merge finite counterexample demonstrates underdetermination, not empirical evidence for those errors.",
+          "No full historical image-instrument artifact replay, held-out glyph adjudication or general autokey exclusion is established by this audit."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      }
     },
     {
       "source_id": "A-04",

@@ -1,0 +1,168 @@
+{
+  "id": "wulfic-keyword-quagmire-models",
+  "status": "published",
+  "title": "Named keyword Quagmire alphabets on LP2",
+  "question": "Do the source's named keyword alphabets and six key distributions produce LP2's whole-book rune frequencies?",
+  "reader_question": "Do named keyword alphabets fit LP2's rune frequencies?",
+  "summary": "Exact Stage V replay checks 68 named alphabets in all source-defined triples against six key-value distributions. No combination reaches the source's positive-lead threshold.",
+  "finding": "The source calibration gate passes and there are no +10 leads. Four key distributions have all 314,432 combinations both control-powered and below the source's −10 exclusion cutoff. Hexadecimal digits leave 135 powered non-exclusions; uniform A–Z leaves 10,197, while 272,640 A–Z combinations lack power. No plaintext or key is recovered.",
+  "limitations": "This is a unigram frequency screen of fixed named alphabets and independent key-value distributions, not a decryption. It does not test arbitrary keywords, actual key order, alternative boundaries, non-independent keys or layered ciphers. Raw source exclusions must not be confused with control-powered exclusions.",
+  "next_steps": "A surviving proposal needs a specific keyword, key sequence and a prediction of rune order or plaintext beyond the observed frequency profile.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "source replay",
+    "Quagmire",
+    "keyword alphabets",
+    "frequency analysis",
+    "control power"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-50",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv"
+    ],
+    "representation": "Canonical GP29 LP2-00–55 stream represented by its pooled 12,956-rune frequency vector.",
+    "procedure": "Rerun pinned Stage V's G1 same-family model controls and G2 flat-key power screen, then audit all source family summaries and listed survivors. Independently reconstruct the site manuscript rune vector.",
+    "parameters": "34 source-specified keywords yield 68 distinct alphabets including identity and inverse forms. All 68^3 alphabet triples for each of six key-value distributions, maximizing over three sign modes and 29 offsets; −10 exclusion, +10 lead, and at least 18/20 G2 flat-key exclusions for power.",
+    "exclusions": "Other keywords or alphabet constructions, dependent or ordered keys, page-specific resets, alternate statistics and sequence-level decryption."
+  },
+  "review": {
+    "kind": "exact public-source Stage V replay with independent manuscript and verdict audit",
+    "retested_on": "2026-10-23",
+    "reviewer": "Pinned source result reproduced byte-for-byte over 10,357 rows; all G1/G2 family and survivor verdicts audited; site pages independently reproduce the 29-rune input counts",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/wulfic-keyword-quagmire-models/run.py --check && python experiments/records/wulfic-keyword-quagmire-models/plot.py --check",
+    "environment": "Bundled checks use Python 3 standard library. Optional full source replay requires NumPy and a pinned external checkout.",
+    "script": "experiments/records/wulfic-keyword-quagmire-models/run.py",
+    "script_sha256": "a3389d5d4977eafee39d9430e3e04825f655776fdd1f51de1f29efa958b3f079",
+    "inputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/plan.json",
+        "sha256": "045ed69a36d34c2bad31aae03084fdb034fdae4d52e4ea245a998717cf854c29"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/check.py",
+        "sha256": "4be24efaffd0ed47b3d502a1eb6606227ff9b34ed9749fe2c9d9b7838b7a192e"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/plot.py",
+        "sha256": "7c70dd38ca993339e6b4fc2a073bdbd10adf5b73a54fd287828c57add44d72ee"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/replay_source.py",
+        "sha256": "a5ad7f57f3ce575d5bab6c978fbb6e56410cf6bb5d2bbcfaf2237b5664c3df99"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/make_record.py",
+        "sha256": "22ff9576949e57c81ffcc8f6b97234fa743415a9b419fa4f1635e466407d2b12"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv",
+        "sha256": "16a893aba72e07400ac9197fc46a51230f2f000a989ee444edf90cc21829a4c3"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/results.json",
+        "sha256": "1c9c35e9f2e7ea075441c93ddb2acd3e238934dbfb25af004ab5feca57542a66"
+      },
+      {
+        "path": "experiments/records/wulfic-keyword-quagmire-models/comparison.svg",
+        "sha256": "eeadd67c39648167bf4dbd8fb032adfe6751d1c30eae867dc04e538ea5c6d53d"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/wulfic-keyword-quagmire-models/comparison.svg",
+      "caption": "Control-qualified outcomes for six key-value distributions. Each bar represents 314,432 alphabet combinations within one bounded screen; tiny hex survivors are listed exactly in the article."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned Wulfic Stage V source",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_v.py"
+    },
+    {
+      "label": "Pinned published Stage V results",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_v_results.tsv"
+    },
+    {
+      "label": "Pinned Quagmire model",
+      "url": "https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/quagmire.py"
+    }
+  ],
+  "related": [
+    "wulfic-position-alphabet-flatness-bound",
+    "quagmirror-six-rune-replay",
+    "wulfic-quagmire-random-alphabets"
+  ],
+  "article": "# Do named keyword alphabets fit LP2?\n\nWulfic's Stage V builds substitution alphabets from **34 specified words and phrases**, including `DIVINITY`, `KNOW THIS`, `CICADA`, and the known parable. After collapsing duplicates, those give **68 distinct alphabets**. The test checks every source-defined choice of plaintext, ciphertext and key alphabet for each of six key-value distributions. It scores **whole LP2 rune frequencies**; it does not assemble or read a plaintext sentence.\n\n**Finding:** the source's calibration gate passes, but **no tested member reaches its +10 lead threshold**. For English-rune, prime-value, English Latin-letter and decimal-digit key distributions, every named-alphabet combination is both control-powered and below the source's −10 exclusion cutoff. Hexadecimal digits leave **135** powered combinations above that cutoff; uniform A–Z leaves **10,197**. Neither group supplies a reading or a positive lead. Many A–Z combinations lack enough control power, so they remain untestable.\n\n![Control-qualified outcomes for six named-alphabet key distributions](experiments/records/wulfic-keyword-quagmire-models/comparison.svg)\n\nEach family has **314,432 alphabet combinations**. That is the size of one bounded search, **not** a count of independent solving ideas. The chart shows the share of each family that is both below the exclusion cutoff and powerful enough to judge, above the cutoff with power, or untestable. Hexadecimal's 135 powered survivors are too small to distinguish at the chart's scale; their exact count remains in the data.\n\n## How the screen works\n\nThe source considers an identity alphabet and each keyword alphabet or its inverse. It combines three of those alphabets, tries its three arithmetic sign modes and all 29 constant offsets, then keeps the best **single-rune frequency** score for each combination. Six declared key-value distributions come from English runes, their prime values, English Latin letters, decimal digits, hexadecimal digits and uniform A–Z letters.\n\nBefore looking at LP2, the source tested **50 generated messages per family** under their own model; none fell below the −10 cutoff. For each alphabet combination, at least **18 of 20** flat-key controls must fall below the cutoff before a low LP2 score counts as a *powered exclusion*. The source's raw “excluded” count also includes some combinations without that power. We keep those in the untestable part of the chart. This distinction matters especially for uniform A–Z.\n\nThe [source result table](experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv) contains the gate results, six family summaries, and **10,332** listed powered non-exclusions. Those listings are candidates within this frequency screen, not decoded messages. The highest LP2 score is **+6.51**, below the source's +10 lead rule. A different keyword set, a non-independent key sequence, another alphabet construction, page-specific resets or layered encryption remains outside this test.\n\n## Reproduce\n\nThe bundled checker independently counts the **12,956** LP2 runes from Liberpedia's page files, audits all source gate and family summaries, and checks every listed survivor against its cutoff and power label:\n\n```text\npython experiments/records/wulfic-keyword-quagmire-models/run.py --check\npython experiments/records/wulfic-keyword-quagmire-models/plot.py --check\n```\n\nWe also reran the [pinned source program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_v.py): all **10,357 rows match its published table byte-for-byte**. The [plan](experiments/records/wulfic-keyword-quagmire-models/plan.json) fixes its inputs, key rules and thresholds. With a matching external checkout and NumPy, repeat that source computation in a temporary output file:\n\n```text\npython experiments/records/wulfic-keyword-quagmire-models/replay_source.py PATH_TO_WULFIC_CLONE\n```\n",
+  "article_path": "experiments/records/wulfic-keyword-quagmire-models/article.md",
+  "script_sha256": "a3389d5d4977eafee39d9430e3e04825f655776fdd1f51de1f29efa958b3f079",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  }
+}

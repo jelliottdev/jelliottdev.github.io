@@ -1,0 +1,26 @@
+{
+  "schema": "liberpedia-wulfic-stage-i-title-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "source_script": "tools/run_stage_i.py",
+    "source_script_sha256": "7582b46f446338780ed4e3c4429bf3b70a2e1feed061d11ef4cc7f5a2fc962d6",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47",
+    "vocabulary_source_sha256": {
+      "emerson_essays.txt": "a56d5bb419a8c28c4e0187a937c01991ea953817c036ee7f7f835ea2084c03a0",
+      "self_reliance.txt": "db053efa73dbd6f7569a6b4459c292ce1e84e755415592de2a9d1db4d1c0cae6",
+      "liber_al_vel_legis.txt": "aeadc7374e1aa34342763e3740515c92bfda5902f57b56067a06501bb0cbff66",
+      "deor_poem.txt": "be03dbfbc8d02dd6348611c973dd38ba3960c7d06833461783876546171fd143"
+    }
+  },
+  "input": "First nine GP29 runes on LP2-15, preserving the visible four-rune/five-rune word split, plus its printed 4x4 square.",
+  "key_sources": "Five specified 16-number sequences: absolute distance of Fibonacci-indexed primes from 3301 (the printed cells in source spiral order), Fibonacci-indexed primes, each prime minus one, Fibonacci index plus one, and the Fibonacci index.",
+  "grid": "Take the first nine values in source outward or inward order; reduce modulo 29; decode with C-K, C+K, or K-C. This gives 5 x 2 x 3 = 30 complete two-word outputs, no chosen prefixes.",
+  "decision": "A case passes only if both complete words, using the exact source GP spelling, occur in the source vocabulary derived from the solved translation and four pinned English corpora.",
+  "control": "20,000 seeded uniform-random nine-rune keys under the source subtraction rule, evaluated against the same two-word vocabulary gate. Zero observed hits estimates rarity but does not validate the vocabulary as a cryptographic detector.",
+  "limitations": "The screen covers only those 30 sequences, the fixed 4+5 header and the source vocabulary. It does not test alternate start positions, square routes, word spelling rules or the body text, and cannot exclude an unrelated cipher.",
+  "inputs": [
+    {"path": "experiments/records/wulfic-square-title-vocabulary/source-title-output.txt", "sha256": "eae981bb33e25acdfa86a9c61cae865a60a89df679dc01ad2c45ed16240d18fe"}
+  ]
+}

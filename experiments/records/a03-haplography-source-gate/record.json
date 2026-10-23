@@ -1,0 +1,89 @@
+{
+  "id": "a03-haplography-source-gate",
+  "status": "published",
+  "title": "Does the A-03 image audit bound missed doubled runes?",
+  "question": "Does the source's preserved image-count audit satisfy its declared controls and justify K≤26 missed doublets?",
+  "reader_question": "Could missed doubled runes explain the repeat deficit?",
+  "summary": "The published counts and arithmetic reproduce, but the source misses its image agreement gate and its arithmetic-only planted control does not measure image detection. The observed excess of 26 pairs is not an upper bound on hidden merges.",
+  "finding": "The classifier reports 99.4146% agreement against a 99.5% gate. Its source code loads 13,381 component rows but does not process them in the K control. The saved counts give 108−82=26 excess image pairs and a stated threshold of 93 additional pairs; without a measured error bound, the first number cannot cap the latter.",
+  "limitations": "This is an audit of saved source receipts and inference, not an independent reading of the source images or a test of every autokey variant. A constructed error assignment shows logical possibility, not empirical plausibility.",
+  "next_steps": "Validate image classifier sensitivity by inserting or removing known doubled glyphs in held-out page images, then estimate detection and false-positive uncertainty before claiming a bound on missed glyphs.",
+  "outcome": "inconclusive",
+  "tags": [
+    "source audit",
+    "transcription",
+    "haplography",
+    "doublets",
+    "autokey",
+    "positive control"
+  ],
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/a03-haplography-source-gate/plan.json"
+    ],
+    "representation": "Pinned Dukotah Round10 classifier output, log and Round16/A-03 source receipt, not original image pixels.",
+    "procedure": "Hash-check six source files, parse classifier agreement and count log, recompute the source threshold and arithmetic K control, inspect whether source code actually reprocesses glyph rows, and give a finite nonnegative error assignment with the same observed surplus.",
+    "parameters": "Source image agreement gate 99.5%; source comparison floor 1.38%; source counts as preserved at f08b20b.",
+    "exclusions": "No fresh image transcription, no measured classifier error rate for merged glyphs, no general autokey exclusion."
+  },
+  "review": {
+    "reviewer": "Independent receipt and arithmetic checker",
+    "retested_on": "2026-10-23",
+    "kind": "source-gate audit",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/a03-haplography-source-gate/run.py --source-root PATH/TO/liber-primus --check && python experiments/records/a03-haplography-source-gate/check.py --source-root PATH/TO/liber-primus",
+    "environment": "Python 3.9+ standard library and the pinned f08b20b Dukotah source checkout.",
+    "script": "experiments/records/a03-haplography-source-gate/run.py",
+    "script_sha256": "ae93f785a93cf203fd522cda9e2de14e87a3407a9348396bc55a1774793b442d",
+    "inputs": [
+      {
+        "path": "experiments/records/a03-haplography-source-gate/plan.json",
+        "sha256": "75a7da01f89c8f393a078bc680487985498e7088979dcbbf6eb129bcb94465b1"
+      },
+      {
+        "path": "experiments/records/a03-haplography-source-gate/run.py",
+        "sha256": "ae93f785a93cf203fd522cda9e2de14e87a3407a9348396bc55a1774793b442d"
+      },
+      {
+        "path": "experiments/records/a03-haplography-source-gate/check.py",
+        "sha256": "4a3b065ad8200ec70bd8e7497eedcb6639df9b1ac9ca746f612d8fac1520063f"
+      },
+      {
+        "path": "experiments/records/a03-haplography-source-gate/plot.py",
+        "sha256": "1c0d81e30272de50a07dbd925880f12454d88fac187e7ed87682cf10e9ea091c"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/a03-haplography-source-gate/results.json",
+        "sha256": "0151ee80b5db4bcb8fba91f4047a29e79c288c8bfccc2ceae4791e86e6e394d3"
+      },
+      {
+        "path": "experiments/records/a03-haplography-source-gate/gate-audit.svg",
+        "sha256": "f1bb4228e41701651b8a47a010977ececec3bc0c67891868c7722ce90bf5126b"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned A-03 source, plan and result",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03"
+    },
+    {
+      "label": "Pinned image classifier output",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L1-template"
+    }
+  ],
+  "related": [
+    "haplography-diagonal-bound"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/a03-haplography-source-gate/gate-audit.svg",
+      "caption": "The declared image agreement gate fails; a measured excess is not a cap on hidden reading errors."
+    }
+  ]
+}

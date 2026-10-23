@@ -1,0 +1,21 @@
+{
+  "schema": "liberpedia-wulfic-stage-u-plan-v1",
+  "source": {
+    "repository": "https://github.com/Wulfic/Cicada3301-Liber_Primus",
+    "commit": "bf89d3d13aad2b8f2c95ab195cf1b092f250775c",
+    "source_script": "tools/run_stage_u.py",
+    "source_script_sha256": "89e2377ecbea04a6a4699950589b6ffebf7ef0707d9daace69c038fb7498e469",
+    "quagmire_module_sha256": "b8dfb95a688c21ec51a0896b9e0dd309574fa7eaffb6619273a0ea03247cc2b3",
+    "master_sha256": "df7eaaa0c92243946803a7a90a7bfdcb36c0eba73f964f3a093c238ab01a5746",
+    "translation_sha256": "adce48cfea746fd5add5071c85a34a998a546ca94c009bcd796cd3e699cc1c47"
+  },
+  "model": "Quagmire-style c=pi2(pi1(p)+pi3(k)) on GP29. Source evaluates independent pi3 versus pi3 tied to pi1, each with six declared random key-value distributions.",
+  "manuscript": "LP2-00–55 canonical 12,956-rune stream. Pooled statistic uses one alphabet set; eight-section statistic uses source sections 7–9 and 11–15, omitting its nine-rune section 10, with fresh alphabets per section.",
+  "grid": "Six key-value distributions x two alphabet-relationship variants x pooled/sectioned statistics = 24 settings. Both raw and anti-doublet-adjusted lower-tail P must be <=0.0001 for exclusion.",
+  "controls": "G1 checks independent-alphabet mean noncentrality within 3%; G2 requires exclusion on >=18/20 flat-key ciphers for each cell; G3 voids the run if any of 20 own-family ciphers per cell is falsely excluded. The anti-doublet factor is calibrated using 200 flat-key ciphers per statistic.",
+  "draws": "100,000 seeded model alphabet draws for each LP2 and each control reference. A quick five-control/2,000-draw run is only a preflight and never scores LP2.",
+  "limitations": "This is a model-family frequency screen, not a decryption or a test of all Quagmire schemes. Other key distributions, dependent alphabets, deterministic keywords, segmentation, layers and nonstationary keys are outside scope.",
+  "inputs": [
+    {"path": "experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv", "sha256": "587adb02f61f1b7e6ee627ddf04f1bce51409d5ba9eb0b3ce4ed5f86a8037ed4"}
+  ]
+}

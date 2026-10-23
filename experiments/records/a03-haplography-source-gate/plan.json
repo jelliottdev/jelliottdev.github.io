@@ -1,0 +1,26 @@
+{
+  "schema": "liberpedia-frozen-plan-v1",
+  "source": "Dukotah/cicada3301",
+  "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_id": "A-03",
+  "question": "Do the preserved Round16/A-03 inputs satisfy its stated image agreement and planted-merge gates, and does its arithmetic establish the claimed upper bound K<=26?",
+  "input_sha256": {
+    "analysis/round16/A-03/a03_hapl_bound.py": "59e243ca33b53bbf408235726b425d47a22454b56f07e8507367d17ac74070aa",
+    "analysis/round16/A-03/PREREG.md": "c5fbd0afbe0187b24dce99a3fa380735144f2c812004bf06194286b31ab99f48",
+    "analysis/round16/A-03/results.json": "a7e713b254a3c47c3df1412c1d9ec32dc826b81e4212df0599c54db209905314",
+    "analysis/round10/L1-template/read4.json": "41242e6562c99f4f2b3aa6e9cee375c8f2fac190899e5cc8bf5c973d6c9c8a32",
+    "analysis/round10/L1-template/diff3_report.json": "0c8d1677f051f389274c3c662276be10271d56ec6c9aa1105995fcef5d48431d",
+    "analysis/round10/L1-template/doublet_final.log": "91c0b6be70fba1a6b9ad4be859262953eb470e32c1a4d7c13baf47d4b3b1724c"
+  },
+  "fixed_rules": {
+    "agreement_gate_percent": 99.5,
+    "source_image_doublets": 108,
+    "source_canon_perline_doublets": 82,
+    "source_canon_continuous_doublets": 86,
+    "source_pairs_continuous": 12955,
+    "source_autokey_floor_percent": 1.38,
+    "reported_K_bound": 26
+  },
+  "audit": "Verify pinned file hashes, parse source receipt and classifier summary, recompute reported arithmetic, inspect whether the planted-K calculation changes any classified glyphs, and test whether an observed surplus logically upper-bounds hidden merges.",
+  "excluded": ["No new image classification or independent glyph reading", "No general exclusion of autokey, OTP or other cipher mechanisms"]
+}

@@ -1,4 +1,100 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Experiments — Liberpedia</title><body><a href="../index.html#/experiments">Have we tried it?</a><main><h1>Experiment records</h1><article id="alberti-branch-arithmetic"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Experiments — Liberpedia</title><body><a href="../index.html#/experiments">Have we tried it?</a><main><h1>Experiment records</h1><article id="a03-haplography-source-gate"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;a03-haplography-source-gate&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Does the A-03 image audit bound missed doubled runes?&quot;,
+  &quot;question&quot;: &quot;Does the source&#x27;s preserved image-count audit satisfy its declared controls and justify K≤26 missed doublets?&quot;,
+  &quot;reader_question&quot;: &quot;Could missed doubled runes explain the repeat deficit?&quot;,
+  &quot;summary&quot;: &quot;The published counts and arithmetic reproduce, but the source misses its image agreement gate and its arithmetic-only planted control does not measure image detection. The observed excess of 26 pairs is not an upper bound on hidden merges.&quot;,
+  &quot;finding&quot;: &quot;The classifier reports 99.4146% agreement against a 99.5% gate. Its source code loads 13,381 component rows but does not process them in the K control. The saved counts give 108−82=26 excess image pairs and a stated threshold of 93 additional pairs; without a measured error bound, the first number cannot cap the latter.&quot;,
+  &quot;limitations&quot;: &quot;This is an audit of saved source receipts and inference, not an independent reading of the source images or a test of every autokey variant. A constructed error assignment shows logical possibility, not empirical plausibility.&quot;,
+  &quot;next_steps&quot;: &quot;Validate image classifier sensitivity by inserting or removing known doubled glyphs in held-out page images, then estimate detection and false-positive uncertainty before claiming a bound on missed glyphs.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;source audit&quot;,
+    &quot;transcription&quot;,
+    &quot;haplography&quot;,
+    &quot;doublets&quot;,
+    &quot;autokey&quot;,
+    &quot;positive control&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/a03-haplography-source-gate/plan.json&quot;
+    ],
+    &quot;representation&quot;: &quot;Pinned Dukotah Round10 classifier output, log and Round16/A-03 source receipt, not original image pixels.&quot;,
+    &quot;procedure&quot;: &quot;Hash-check six source files, parse classifier agreement and count log, recompute the source threshold and arithmetic K control, inspect whether source code actually reprocesses glyph rows, and give a finite nonnegative error assignment with the same observed surplus.&quot;,
+    &quot;parameters&quot;: &quot;Source image agreement gate 99.5%; source comparison floor 1.38%; source counts as preserved at f08b20b.&quot;,
+    &quot;exclusions&quot;: &quot;No fresh image transcription, no measured classifier error rate for merged glyphs, no general autokey exclusion.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;reviewer&quot;: &quot;Independent receipt and arithmetic checker&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;kind&quot;: &quot;source-gate audit&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/a03-haplography-source-gate/run.py --source-root PATH/TO/liber-primus --check &amp;&amp; python experiments/records/a03-haplography-source-gate/check.py --source-root PATH/TO/liber-primus&quot;,
+    &quot;environment&quot;: &quot;Python 3.9+ standard library and the pinned f08b20b Dukotah source checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/a03-haplography-source-gate/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;ae93f785a93cf203fd522cda9e2de14e87a3407a9348396bc55a1774793b442d&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/plan.json&quot;,
+        &quot;sha256&quot;: &quot;75a7da01f89c8f393a078bc680487985498e7088979dcbbf6eb129bcb94465b1&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/run.py&quot;,
+        &quot;sha256&quot;: &quot;ae93f785a93cf203fd522cda9e2de14e87a3407a9348396bc55a1774793b442d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/check.py&quot;,
+        &quot;sha256&quot;: &quot;4a3b065ad8200ec70bd8e7497eedcb6639df9b1ac9ca746f612d8fac1520063f&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/plot.py&quot;,
+        &quot;sha256&quot;: &quot;1c0d81e30272de50a07dbd925880f12454d88fac187e7ed87682cf10e9ea091c&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/results.json&quot;,
+        &quot;sha256&quot;: &quot;0151ee80b5db4bcb8fba91f4047a29e79c288c8bfccc2ceae4791e86e6e394d3&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/gate-audit.svg&quot;,
+        &quot;sha256&quot;: &quot;f1bb4228e41701651b8a47a010977ececec3bc0c67891868c7722ce90bf5126b&quot;
+      }
+    ]
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned A-03 source, plan and result&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned image classifier output&quot;,
+      &quot;url&quot;: &quot;https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round10/L1-template&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;haplography-diagonal-bound&quot;
+  ],
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/a03-haplography-source-gate/gate-audit.svg&quot;,
+      &quot;caption&quot;: &quot;The declared image agreement gate fails; a measured excess is not a cap on hidden reading errors.&quot;
+    }
+  ],
+  &quot;article&quot;: &quot;## Finding\n\n**The published A-03 counts reproduce, but they do not establish its claimed limit of 26 missed doubled runes.** The image classifier agrees with the reference transcription at **99.415%**, below the source&#x27;s **99.5%** gate. Its “planted merges” control adds a number to a formula; it does not insert doubled glyphs into an image and ask the classifier to find them.\n\n![The classifier misses its declared agreement gate; 26 observed excess pairs are not a bound on hidden merges.](experiments/records/a03-haplography-source-gate/gate-audit.svg)\n\nThe source reports **108** adjacent-equal image classifications and **82** in the line-by-line reference text, an excess of **26**. It also calculates that **93** additional pairs would reach its stated 1.38% autokey comparison floor. Both subtractions are correct. The leap from “26 observed excess pairs” to “at most 26 transcription merges” needs a measured limit on missed doublets and false image classifications. Neither the source&#x27;s arithmetic control nor these aggregate counts supplies one. A finite error assignment with 93 true merges, 93 missed image doublets, and 26 false positive image doublets produces the same observed excess. That example establishes the logical gap; it is **not** a claim that those errors occurred.\n\nThe source&#x27;s 7/999 adjacent-equal counts on its count-exact subset are also reproduced from its saved result. A line can have the correct total component count while offsetting one missed component with one extra component. Equality on that subset does not by itself prove there were zero merges.\n\n## What was checked\n\nWe pinned the [A-03 source program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03/a03_hapl_bound.py), its [pre-registered rule](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round16/A-03/PREREG.md), saved result, and the Round10 classifier receipts by SHA-256. The independent checker rereads the receipt counts, recomputes the 1.38% threshold and the arithmetic control, and verifies the source program loads—but does not subsequently process—the component rows. It likewise cites the older doublet log without parsing it. This is an audit of preserved source output and its inference, **not** an independent image transcription.\n\nThe [related duplicate-insertion experiment](#/experiments/haplography-diagonal-bound) answers a different question: whether restoring exact adjacent duplicates changes a particular nonzero-difference statistic. It does not validate A-03&#x27;s image-based estimate of how many duplicates were missed. This audit does not identify a cipher or show that autokey succeeds.\n\n## Reproduce\n\nWith Python 3 and the pinned [source revision](https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1):\n\n```text\npython experiments/records/a03-haplography-source-gate/run.py --source-root PATH/TO/liber-primus --check\npython experiments/records/a03-haplography-source-gate/check.py --source-root PATH/TO/liber-primus\n```\n\nThe [plan](experiments/records/a03-haplography-source-gate/plan.json) lists every consumed source hash; the [results](experiments/records/a03-haplography-source-gate/results.json) preserve the counts and the finite counterexample.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/a03-haplography-source-gate/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;ae93f785a93cf203fd522cda9e2de14e87a3407a9348396bc55a1774793b442d&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;audit&quot;,
+    &quot;label&quot;: &quot;Source or input audit&quot;,
+    &quot;description&quot;: &quot;Checks image provenance, extraction or input coverage against a declared reference; it does not establish a decryption.&quot;
+  }
+}</pre></article><article id="alberti-branch-arithmetic"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;alberti-branch-arithmetic&quot;,
   &quot;title&quot;: &quot;Alberti branch proposal: LP2-39 row and modulo-31 arithmetic&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -60383,6 +60479,173 @@
     &quot;label&quot;: &quot;Method replay&quot;,
     &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
   }
+}</pre></article><article id="wulfic-keyword-quagmire-models"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-keyword-quagmire-models&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Named keyword Quagmire alphabets on LP2&quot;,
+  &quot;question&quot;: &quot;Do the source&#x27;s named keyword alphabets and six key distributions produce LP2&#x27;s whole-book rune frequencies?&quot;,
+  &quot;reader_question&quot;: &quot;Do named keyword alphabets fit LP2&#x27;s rune frequencies?&quot;,
+  &quot;summary&quot;: &quot;Exact Stage V replay checks 68 named alphabets in all source-defined triples against six key-value distributions. No combination reaches the source&#x27;s positive-lead threshold.&quot;,
+  &quot;finding&quot;: &quot;The source calibration gate passes and there are no +10 leads. Four key distributions have all 314,432 combinations both control-powered and below the source&#x27;s −10 exclusion cutoff. Hexadecimal digits leave 135 powered non-exclusions; uniform A–Z leaves 10,197, while 272,640 A–Z combinations lack power. No plaintext or key is recovered.&quot;,
+  &quot;limitations&quot;: &quot;This is a unigram frequency screen of fixed named alphabets and independent key-value distributions, not a decryption. It does not test arbitrary keywords, actual key order, alternative boundaries, non-independent keys or layered ciphers. Raw source exclusions must not be confused with control-powered exclusions.&quot;,
+  &quot;next_steps&quot;: &quot;A surviving proposal needs a specific keyword, key sequence and a prediction of rune order or plaintext beyond the observed frequency profile.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;Quagmire&quot;,
+    &quot;keyword alphabets&quot;,
+    &quot;frequency analysis&quot;,
+    &quot;control power&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;Canonical GP29 LP2-00–55 stream represented by its pooled 12,956-rune frequency vector.&quot;,
+    &quot;procedure&quot;: &quot;Rerun pinned Stage V&#x27;s G1 same-family model controls and G2 flat-key power screen, then audit all source family summaries and listed survivors. Independently reconstruct the site manuscript rune vector.&quot;,
+    &quot;parameters&quot;: &quot;34 source-specified keywords yield 68 distinct alphabets including identity and inverse forms. All 68^3 alphabet triples for each of six key-value distributions, maximizing over three sign modes and 29 offsets; −10 exclusion, +10 lead, and at least 18/20 G2 flat-key exclusions for power.&quot;,
+    &quot;exclusions&quot;: &quot;Other keywords or alphabet constructions, dependent or ordered keys, page-specific resets, alternate statistics and sequence-level decryption.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage V replay with independent manuscript and verdict audit&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pinned source result reproduced byte-for-byte over 10,357 rows; all G1/G2 family and survivor verdicts audited; site pages independently reproduce the 29-rune input counts&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-keyword-quagmire-models/run.py --check &amp;&amp; python experiments/records/wulfic-keyword-quagmire-models/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Bundled checks use Python 3 standard library. Optional full source replay requires NumPy and a pinned external checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;a3389d5d4977eafee39d9430e3e04825f655776fdd1f51de1f29efa958b3f079&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/plan.json&quot;,
+        &quot;sha256&quot;: &quot;045ed69a36d34c2bad31aae03084fdb034fdae4d52e4ea245a998717cf854c29&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/check.py&quot;,
+        &quot;sha256&quot;: &quot;4be24efaffd0ed47b3d502a1eb6606227ff9b34ed9749fe2c9d9b7838b7a192e&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/plot.py&quot;,
+        &quot;sha256&quot;: &quot;7c70dd38ca993339e6b4fc2a073bdbd10adf5b73a54fd287828c57add44d72ee&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;a5ad7f57f3ce575d5bab6c978fbb6e56410cf6bb5d2bbcfaf2237b5664c3df99&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;22ff9576949e57c81ffcc8f6b97234fa743415a9b419fa4f1635e466407d2b12&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv&quot;,
+        &quot;sha256&quot;: &quot;16a893aba72e07400ac9197fc46a51230f2f000a989ee444edf90cc21829a4c3&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/results.json&quot;,
+        &quot;sha256&quot;: &quot;1c9c35e9f2e7ea075441c93ddb2acd3e238934dbfb25af004ab5feca57542a66&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;eeadd67c39648167bf4dbd8fb032adfe6751d1c30eae867dc04e538ea5c6d53d&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Control-qualified outcomes for six key-value distributions. Each bar represents 314,432 alphabet combinations within one bounded screen; tiny hex survivors are listed exactly in the article.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage V source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_v.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned published Stage V results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_v_results.tsv&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Quagmire model&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/quagmire.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-position-alphabet-flatness-bound&quot;,
+    &quot;quagmirror-six-rune-replay&quot;,
+    &quot;wulfic-quagmire-random-alphabets&quot;
+  ],
+  &quot;article&quot;: &quot;# Do named keyword alphabets fit LP2?\n\nWulfic&#x27;s Stage V builds substitution alphabets from **34 specified words and phrases**, including `DIVINITY`, `KNOW THIS`, `CICADA`, and the known parable. After collapsing duplicates, those give **68 distinct alphabets**. The test checks every source-defined choice of plaintext, ciphertext and key alphabet for each of six key-value distributions. It scores **whole LP2 rune frequencies**; it does not assemble or read a plaintext sentence.\n\n**Finding:** the source&#x27;s calibration gate passes, but **no tested member reaches its +10 lead threshold**. For English-rune, prime-value, English Latin-letter and decimal-digit key distributions, every named-alphabet combination is both control-powered and below the source&#x27;s −10 exclusion cutoff. Hexadecimal digits leave **135** powered combinations above that cutoff; uniform A–Z leaves **10,197**. Neither group supplies a reading or a positive lead. Many A–Z combinations lack enough control power, so they remain untestable.\n\n![Control-qualified outcomes for six named-alphabet key distributions](experiments/records/wulfic-keyword-quagmire-models/comparison.svg)\n\nEach family has **314,432 alphabet combinations**. That is the size of one bounded search, **not** a count of independent solving ideas. The chart shows the share of each family that is both below the exclusion cutoff and powerful enough to judge, above the cutoff with power, or untestable. Hexadecimal&#x27;s 135 powered survivors are too small to distinguish at the chart&#x27;s scale; their exact count remains in the data.\n\n## How the screen works\n\nThe source considers an identity alphabet and each keyword alphabet or its inverse. It combines three of those alphabets, tries its three arithmetic sign modes and all 29 constant offsets, then keeps the best **single-rune frequency** score for each combination. Six declared key-value distributions come from English runes, their prime values, English Latin letters, decimal digits, hexadecimal digits and uniform A–Z letters.\n\nBefore looking at LP2, the source tested **50 generated messages per family** under their own model; none fell below the −10 cutoff. For each alphabet combination, at least **18 of 20** flat-key controls must fall below the cutoff before a low LP2 score counts as a *powered exclusion*. The source&#x27;s raw “excluded” count also includes some combinations without that power. We keep those in the untestable part of the chart. This distinction matters especially for uniform A–Z.\n\nThe [source result table](experiments/records/wulfic-keyword-quagmire-models/source-stage_v_results.tsv) contains the gate results, six family summaries, and **10,332** listed powered non-exclusions. Those listings are candidates within this frequency screen, not decoded messages. The highest LP2 score is **+6.51**, below the source&#x27;s +10 lead rule. A different keyword set, a non-independent key sequence, another alphabet construction, page-specific resets or layered encryption remains outside this test.\n\n## Reproduce\n\nThe bundled checker independently counts the **12,956** LP2 runes from Liberpedia&#x27;s page files, audits all source gate and family summaries, and checks every listed survivor against its cutoff and power label:\n\n```text\npython experiments/records/wulfic-keyword-quagmire-models/run.py --check\npython experiments/records/wulfic-keyword-quagmire-models/plot.py --check\n```\n\nWe also reran the [pinned source program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_v.py): all **10,357 rows match its published table byte-for-byte**. The [plan](experiments/records/wulfic-keyword-quagmire-models/plan.json) fixes its inputs, key rules and thresholds. With a matching external checkout and NumPy, repeat that source computation in a temporary output file:\n\n```text\npython experiments/records/wulfic-keyword-quagmire-models/replay_source.py PATH_TO_WULFIC_CLONE\n```\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-keyword-quagmire-models/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;a3389d5d4977eafee39d9430e3e04825f655776fdd1f51de1f29efa958b3f079&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
 }</pre></article><article id="wulfic-local-codebook-invariants"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
   &quot;id&quot;: &quot;wulfic-local-codebook-invariants&quot;,
   &quot;status&quot;: &quot;published&quot;,
@@ -62387,6 +62650,282 @@
   &quot;article&quot;: &quot;# Could earlier Cicada bytes select LP2&#x27;s substitution alphabet?\n\nOne proposed way to use another file as a key is to let **each byte select a hidden rune alphabet**. The same byte selects the same alphabet whenever it returns. Wulfic&#x27;s Stage W tests that model without guessing the alphabets: it asks whether runes under a repeated byte label show the repetitions expected of text. It checks five specified byte streams at every source phase, once for each of nine marked sections and once across the joined text of **LP2-00–55**.\n\n**Finding:** the source&#x27;s control gate passes. None of its **50 key/alignment settings** reaches the +30-nat detection threshold. **Twelve** have enough positive-control power to exclude this exact model; **38** are untestable, so their low LP2 scores do not count as exclusions. The best LP2 score is **+0.84**, using source byte file `page_17.bin` against the section covering **LP2-23–26**; that setting is untestable. No reading is produced.\n\n![Stage W decisions for five key sources, ten alignments per source](experiments/records/wulfic-position-alphabet-long-keys/comparison.svg)\n\nThe figure&#x27;s “Page 17/21/43” labels name [byte files in the source repository](https://github.com/Wulfic/Cicada3301-Liber_Primus/tree/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/outguess), **not** manuscript pages LP2-17/21/43. Their origin as puzzle payloads has not been independently verified here. The marked sections follow the [`$` boundaries in the source transcription](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/data/canonical/liber_primus_master.txt). We checked its rune sequence against Liberpedia&#x27;s page text: all **56** LP2 pages match rune for rune. Relevant boundaries are: section 11, the last 150 runes of LP2-15 through LP2-22; section 12, LP2-23–26; and section 15, LP2-40–55. Section 10 contains only the first nine runes of LP2-15, so these sections are not always whole-page ranges.\n\n| Source byte stream | Excluded alignments | Untestable |\n| --- | --- | ---: |\n| Wisdom hint | Joined LP2-00–55; LP2-40–55 | 8 |\n| Wisdom hint, reversed | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_17.bin` | Joined LP2-00–55; LP2-40–55 | 8 |\n| Source file `page_21.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n| Source file `page_43.bin` | Joined LP2-00–55; LP2-15 (after first nine runes)–22; LP2-40–55 | 7 |\n\nThese are **five source keys under one method**, evaluated at ten alignments. They are not fifty unrelated solving ideas. The [complete candidate table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_candidates.tsv) gives every score, phase and verdict.\n\n## Why the controls matter\n\nThe score uses rune repetitions within each byte-selected class. It averages a likelihood ratio over **all possible starting phases** of the named byte key; the best individual phase is shown separately in the table, but it is **not** the decision score. The source regards a mean score of at least **+30 nats** as a hit.\n\nFor each key and alignment, Stage W makes five synthetic messages encrypted by that exact kind of byte-selected alphabet and five flat negative messages made with an unrelated additive key. It also scores one LP2 stream against each shuffled key. If any flat negative or shuffled-key null reaches +30, the whole run is void. The highest such negative here is **+0.64**. A specific key/alignment is called excluded only if **all five** same-length positives reach +30 while LP2 does not. This is why the many short sections remain untestable, even though their LP2 scores are low. The [control table](experiments/records/wulfic-position-alphabet-long-keys/source-stage_w_controls.tsv) shows all **505** controls.\n\nThe earlier Stage S used the same LP2 score but its original negative-control design made that run void. We regenerated just the **50 Stage S LP2 scores** that Stage W requires. Each row matches the corresponding row in the pinned source&#x27;s full 200-row Stage S table, and all 50 agree with the Stage W candidates. This numerical dependency does **not** revive Stage S&#x27;s invalid conclusion; Stage W&#x27;s own corrected controls decide what can be said here.\n\nThe result applies to these raw byte streams, their source-defined phase search and a key that stays in step. Skips, resets, another key source, a changing alphabet or an additional cipher layer are outside the tested model.\n\n## Reproduce\n\nFrom the Liberpedia repository root, Python&#x27;s standard library checks the three bundled tables, recalculates all source verdicts and verifies the figure:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/run.py --check\npython experiments/records/wulfic-position-alphabet-long-keys/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-position-alphabet-long-keys/plan.json) pins the source revision, byte-file hashes, all settings and the decision rules. The two Stage W tables were regenerated with the unmodified [pinned Stage W program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_w.py) and match its published source files **byte-for-byte**. The Stage S subset was regenerated with the [pinned score function](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_s.py). To repeat the full calculation from a matching external checkout with NumPy:\n\n```text\npython experiments/records/wulfic-position-alphabet-long-keys/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThat wrapper verifies the pinned inputs, regenerates the Stage S dependency and the two Stage W tables in a temporary directory, then compares them byte-for-byte with the bundled files. The source code remains in its original repository.\n&quot;,
   &quot;article_path&quot;: &quot;experiments/records/wulfic-position-alphabet-long-keys/article.md&quot;,
   &quot;script_sha256&quot;: &quot;993bece5d05a4c5f2d384e676a3e6ead76d505a7b9290fd43d2e90c7a8df09df&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-quagmire-random-alphabets"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-quagmire-random-alphabets&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;Random Quagmire alphabet families on LP2&quot;,
+  &quot;question&quot;: &quot;Do the specified random-alphabet Quagmire mixtures yield rune counts as even as LP2&#x27;s under six key-value distributions?&quot;,
+  &quot;reader_question&quot;: &quot;Do random Quagmire alphabets fit LP2&#x27;s rune frequencies?&quot;,
+  &quot;summary&quot;: &quot;Exact Stage U replay finds 20 powered exclusions and four untestable settings across six key-value distributions, tied/independent alphabet variants and pooled/sectioned analyses.&quot;,
+  &quot;finding&quot;: &quot;All source model and calibration gates pass. Twenty of 24 settings meet its strict raw and anti-doublet-adjusted lower-tail exclusion rule with power on at least 18/20 flat-key controls. Four uniform A–Z settings are untestable because their positive-control power is insufficient. No plaintext or key is produced.&quot;,
+  &quot;limitations&quot;: &quot;This is a frequency screen for the source&#x27;s random-alphabet Quagmire model and six key distributions. A–Z settings remain open under the source rule. Deterministic keyword alphabets, other key distributions or boundary rules, exact key order and layered ciphers are outside scope.&quot;,
+  &quot;next_steps&quot;: &quot;A surviving Quagmire proposal needs a fixed key-value distribution, alphabet construction and further prediction beyond a favorable frequency statistic, with same-family controls.&quot;,
+  &quot;outcome&quot;: &quot;inconclusive&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2&quot;,
+    &quot;source replay&quot;,
+    &quot;Quagmire&quot;,
+    &quot;alphabet substitution&quot;,
+    &quot;frequency analysis&quot;,
+    &quot;control power&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-00&quot;,
+      &quot;lp2-01&quot;,
+      &quot;lp2-02&quot;,
+      &quot;lp2-03&quot;,
+      &quot;lp2-04&quot;,
+      &quot;lp2-05&quot;,
+      &quot;lp2-06&quot;,
+      &quot;lp2-07&quot;,
+      &quot;lp2-08&quot;,
+      &quot;lp2-09&quot;,
+      &quot;lp2-10&quot;,
+      &quot;lp2-11&quot;,
+      &quot;lp2-12&quot;,
+      &quot;lp2-13&quot;,
+      &quot;lp2-14&quot;,
+      &quot;lp2-15&quot;,
+      &quot;lp2-16&quot;,
+      &quot;lp2-17&quot;,
+      &quot;lp2-18&quot;,
+      &quot;lp2-19&quot;,
+      &quot;lp2-20&quot;,
+      &quot;lp2-21&quot;,
+      &quot;lp2-22&quot;,
+      &quot;lp2-23&quot;,
+      &quot;lp2-24&quot;,
+      &quot;lp2-25&quot;,
+      &quot;lp2-26&quot;,
+      &quot;lp2-27&quot;,
+      &quot;lp2-28&quot;,
+      &quot;lp2-29&quot;,
+      &quot;lp2-30&quot;,
+      &quot;lp2-31&quot;,
+      &quot;lp2-32&quot;,
+      &quot;lp2-33&quot;,
+      &quot;lp2-34&quot;,
+      &quot;lp2-35&quot;,
+      &quot;lp2-36&quot;,
+      &quot;lp2-37&quot;,
+      &quot;lp2-38&quot;,
+      &quot;lp2-39&quot;,
+      &quot;lp2-40&quot;,
+      &quot;lp2-41&quot;,
+      &quot;lp2-42&quot;,
+      &quot;lp2-43&quot;,
+      &quot;lp2-44&quot;,
+      &quot;lp2-45&quot;,
+      &quot;lp2-46&quot;,
+      &quot;lp2-47&quot;,
+      &quot;lp2-48&quot;,
+      &quot;lp2-49&quot;,
+      &quot;lp2-50&quot;,
+      &quot;lp2-51&quot;,
+      &quot;lp2-52&quot;,
+      &quot;lp2-53&quot;,
+      &quot;lp2-54&quot;,
+      &quot;lp2-55&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv&quot;
+    ],
+    &quot;representation&quot;: &quot;Canonical 29-rune LP2-00–55 stream; pooled across 12,956 runes or grouped into source sections 7–9 and 11–15 for a separate fresh-alphabet statistic.&quot;,
+    &quot;procedure&quot;: &quot;Run pinned Stage U&#x27;s G1 model calibration, G2 flat-key power and G3 same-family false-exclusion checks, then score all 24 LP2 settings. Independently rebuild both manuscript chi-square statistics and audit each source verdict.&quot;,
+    &quot;parameters&quot;: &quot;Six declared key-value distributions x two tied/independent alphabet variants x pooled/sectioned statistics; 100,000 model draws per reference; 200 anti-doublet-factor ciphers per statistic; 20 power and 20 same-family controls per setting; raw and adjusted P&lt;=0.0001, power&gt;=18/20.&quot;,
+    &quot;exclusions&quot;: &quot;Other key distributions, nonrandom or named alphabets, key-order recovery, alternative boundaries, layers and decryption quality.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage U replay with independent manuscript and verdict checks&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Pinned source table reproduced byte-for-byte; 80 rows, all G1/G2/G3 and LP2 decisions audited; site page text independently reproduces pooled and sectioned chi-square statistics&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-quagmire-random-alphabets/run.py --check &amp;&amp; python experiments/records/wulfic-quagmire-random-alphabets/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Bundled checks use Python 3 standard library. Optional full source replay requires NumPy and a pinned external checkout; its simulations may take several minutes.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;c84813f55a383cf2f5f3bfb0d41fe7ab92f236d89ebde55a1c64049489b69dc1&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/plan.json&quot;,
+        &quot;sha256&quot;: &quot;768ab7d1581d0e32b969ac4334b90f9b70b842b18c1f34879aac2f5e7ea212a4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/check.py&quot;,
+        &quot;sha256&quot;: &quot;92cf26b4614066dfdfa1d601ff5ac0215c279abe563e142e374798aa16939e54&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/plot.py&quot;,
+        &quot;sha256&quot;: &quot;92db92a293886c935281d69daf1a09c47edac2662f17d900202770ff0aa7614c&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;40887553a7867fb469df5db11bd7b885fbfdcf0ad4e3acce45a9205d28978631&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;b7600c26f2937711b4d137255b5f6d14581d0b99aec27871baf2dd362363dd09&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv&quot;,
+        &quot;sha256&quot;: &quot;587adb02f61f1b7e6ee627ddf04f1bce51409d5ba9eb0b3ce4ed5f86a8037ed4&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/results.json&quot;,
+        &quot;sha256&quot;: &quot;c6ccf9200f8c1be44810c484dd0824d4f1518d5d38dd3cb59779ba2838ed3768&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;ad0b2e6254bd544351ae1dd0f811f36646329ef3ae558edc0c0ea8921e7cf1cb&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Powered exclusions for six key-value distributions, each under four source alphabet/section combinations; the uniform A–Z combination lacks power.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage U source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_u.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned published Stage U results&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_u_results.tsv&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned Quagmire model&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/quagmire.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-position-alphabet-flatness-bound&quot;,
+    &quot;wulfic-position-alphabet-long-keys&quot;,
+    &quot;quagmirror-six-rune-replay&quot;,
+    &quot;wulfic-keyword-quagmire-models&quot;
+  ],
+  &quot;article&quot;: &quot;# Do random Quagmire alphabets fit LP2&#x27;s rune frequencies?\n\nA Quagmire-style cipher can relabel plaintext runes, add a key value modulo 29, then relabel the output again. Wulfic&#x27;s Stage U asks a limited question about that family: **if those relabellings are random**, would the resulting ciphertext usually have rune counts as even as LP2&#x27;s?\n\n**Finding:** the source&#x27;s simulation gates pass. Of **24 declared settings**, **20 are excluded** at its strict frequency threshold. The other **four**, all using a uniformly chosen letter from A–Z as the key value, lack enough positive-control power and are **untestable** under the source rule. None is a decryption, and an untestable setting is not support for its cipher.\n\n![Six Quagmire key-value families with twenty excluded and four untestable settings](experiments/records/wulfic-quagmire-random-alphabets/comparison.svg)\n\nThe source fixes **six key-value distributions**: English rune values, their prime values, English Latin-letter frequencies, uniformly chosen decimal digits, uniformly chosen hex digits, and uniformly chosen A–Z letters. Each is checked with an independent key alphabet or one tied to the plaintext alphabet. Each of those is checked on the joined **12,956 LP2 runes** and on eight marked sections with fresh alphabets, for **6 × 2 × 2 = 24** settings. The sectioned statistic leaves out the nine-rune header section on LP2-15, as declared in the [source program](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_u.py).\n\n## What an exclusion means\n\nFor each setting, the source draws **100,000 random alphabet combinations** and asks how often their expected bias would permit LP2&#x27;s low chi-square value. It requires the probability to be at most **0.0001** both before and after its declared anti-doublet adjustment. It first checks the simulation against known generated ciphers. All six model checks passed; none of the **20 same-family controls per setting** was falsely excluded. A setting can be called excluded only if the rule also rejects at least **18 of 20** flat-key controls. The four A–Z settings fail that power requirement. The [complete 80-row result table](experiments/records/wulfic-quagmire-random-alphabets/source-stage_u_results.tsv) retains every gate and setting.\n\nThis result is narrower than “Quagmire was tried.” It uses only overall rune counts and six specified key-value distributions. It says nothing about exact key order, a deterministic keyword alphabet, a different key distribution, another segmentation, or a second cipher layer. Stage T&#x27;s [independent-random-alphabet bound](#/experiments/wulfic-position-alphabet-flatness-bound) concerns a different model; its warning that a flat *Latin-square* key can escape that bound remains valid. Stage U tests particular Quagmire mixtures with their own controls rather than inheriting Stage T&#x27;s exclusion.\n\n## Reproduce\n\nThe standard-library checker reads Liberpedia&#x27;s page runes independently, confirms the two manuscript chi-square statistics, and checks all **24** source control/decision rows:\n\n```text\npython experiments/records/wulfic-quagmire-random-alphabets/run.py --check\npython experiments/records/wulfic-quagmire-random-alphabets/plot.py --check\n```\n\nThe [plan](experiments/records/wulfic-quagmire-random-alphabets/plan.json) fixes the source revision and simulation rules. To rerun the entire pinned source calculation with NumPy, use:\n\n```text\npython experiments/records/wulfic-quagmire-random-alphabets/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nWe ran the unchanged program and compared its generated table with the [pinned source result](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/reference/findings/stage_u_results.tsv): all **80 rows match byte-for-byte**. The optional wrapper regenerates the table in a temporary file. The full run takes substantially longer than the bundled checks.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-quagmire-random-alphabets/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;c84813f55a383cf2f5f3bfb0d41fe7ab92f236d89ebde55a1c64049489b69dc1&quot;,
+  &quot;record_type&quot;: {
+    &quot;id&quot;: &quot;replay&quot;,
+    &quot;label&quot;: &quot;Method replay&quot;,
+    &quot;description&quot;: &quot;Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading.&quot;
+  }
+}</pre></article><article id="wulfic-square-title-vocabulary"><pre style="white-space:pre-wrap;overflow-wrap:anywhere">{
+  &quot;id&quot;: &quot;wulfic-square-title-vocabulary&quot;,
+  &quot;status&quot;: &quot;published&quot;,
+  &quot;title&quot;: &quot;LP2-15 square-derived title keys&quot;,
+  &quot;question&quot;: &quot;Do five specified number sequences from the LP2-15 square turn its nine-rune heading into two complete words under fixed GP29 arithmetic?&quot;,
+  &quot;reader_question&quot;: &quot;Does the LP2-15 square decode its short heading?&quot;,
+  &quot;summary&quot;: &quot;Exact Stage I title replay checks 30 complete two-word outputs from five square-derived key sequences, both directions and three arithmetic signs; none passes the source vocabulary gate.&quot;,
+  &quot;finding&quot;: &quot;The pinned source reports 0/30 complete two-word vocabulary passes. Its 20,000 seeded random nine-rune subtraction keys also yield zero passes. Independent site-text arithmetic reproduces every candidate output; optional full source replay reproduces the vocabulary verdicts and control byte-for-byte.&quot;,
+  &quot;limitations&quot;: &quot;A strict vocabulary miss for these 30 fixed candidates cannot exclude other square routes, shifts, spelling conventions, keys, vocabularies or a different cipher on the LP2-15 body. Zero hits in 20,000 random keys does not mean a zero chance probability.&quot;,
+  &quot;next_steps&quot;: &quot;A new square-title proposal should fix its traversal, key conversion, arithmetic and full two-word prediction before checking the heading, then make an additional prediction beyond those nine runes.&quot;,
+  &quot;outcome&quot;: &quot;not-supported&quot;,
+  &quot;tags&quot;: [
+    &quot;LP2-15&quot;,
+    &quot;source replay&quot;,
+    &quot;number square&quot;,
+    &quot;Fibonacci&quot;,
+    &quot;title crib&quot;,
+    &quot;search bounds&quot;
+  ],
+  &quot;scope&quot;: {
+    &quot;pages&quot;: [
+      &quot;lp2-15&quot;
+    ],
+    &quot;artifacts&quot;: [
+      &quot;experiments/records/wulfic-square-title-vocabulary/source-title-output.txt&quot;
+    ],
+    &quot;representation&quot;: &quot;First nine archived LP2-15 runes with the visible 4+5 word boundary, and its printed 16-value number square. GP29 zero-based indices.&quot;,
+    &quot;procedure&quot;: &quot;Run only the pinned Stage I title function; independently derive all five 16-value sequences, compare the constructed cell-value set with the printed panel and recalculate all 30 two-word outputs from Liberpedia page text.&quot;,
+    &quot;parameters&quot;: &quot;Five declared sequences x outward/inward x ciphertext-key, ciphertext+key and key-ciphertext, modulo 29; first nine key values; complete two-word vocabulary gate; 20,000 seeded random-key controls.&quot;,
+    &quot;exclusions&quot;: &quot;Alternate source routes, key starts, body text, vocabulary, GP spelling, punctuation choices and additional cipher layers.&quot;
+  },
+  &quot;review&quot;: {
+    &quot;kind&quot;: &quot;exact public-source Stage I title-function replay with independent site-text arithmetic&quot;,
+    &quot;retested_on&quot;: &quot;2026-10-23&quot;,
+    &quot;reviewer&quot;: &quot;Thirty decoded pairs independently reproduced; pinned source title output including 20,000-key control reproduced byte-for-byte&quot;,
+    &quot;human_review&quot;: &quot;pending&quot;
+  },
+  &quot;reproduction&quot;: {
+    &quot;command&quot;: &quot;python experiments/records/wulfic-square-title-vocabulary/run.py --check &amp;&amp; python experiments/records/wulfic-square-title-vocabulary/plot.py --check&quot;,
+    &quot;environment&quot;: &quot;Bundled checks use Python 3 standard library. Optional vocabulary/control replay needs NumPy and the external pinned source checkout.&quot;,
+    &quot;script&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/run.py&quot;,
+    &quot;script_sha256&quot;: &quot;c6abd83c138a7aa4e0c1a407c023b3d9733f9037e39a951d2895bc71b9f27994&quot;,
+    &quot;inputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/plan.json&quot;,
+        &quot;sha256&quot;: &quot;61471206ced0e4add4a4811c13f0aaa62f953defef30cadc44014065a6ed543d&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/check.py&quot;,
+        &quot;sha256&quot;: &quot;d5bf3dc23078fb15435f7b6e272ffc2d47a15236b230280e6fbea9892305ef29&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/plot.py&quot;,
+        &quot;sha256&quot;: &quot;5f2caad03419900984b0323e6f4b8dbeb0d74bf1d0c659975b21e1bfd908b77a&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/replay_source.py&quot;,
+        &quot;sha256&quot;: &quot;c1987c75258c453a216fc62ad8adc56c17961a70d9e6d34d367db66534d47d32&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/make_record.py&quot;,
+        &quot;sha256&quot;: &quot;c4eac50574ebea1e703e87dfcb3dc137c9274f717c14be7be747b7a950825c34&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/source-title-output.txt&quot;,
+        &quot;sha256&quot;: &quot;eae981bb33e25acdfa86a9c61cae865a60a89df679dc01ad2c45ed16240d18fe&quot;
+      }
+    ],
+    &quot;outputs&quot;: [
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/results.json&quot;,
+        &quot;sha256&quot;: &quot;05aa2621f327c15143bb415a31ab0982c1cc11604cf21a3367261ff2ed716bf4&quot;
+      },
+      {
+        &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/comparison.svg&quot;,
+        &quot;sha256&quot;: &quot;26028c0e959ebee2a7f01fbff53021e9988bee9b5a70f3f5717f373ce4061594&quot;
+      }
+    ]
+  },
+  &quot;visuals&quot;: [
+    {
+      &quot;path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/comparison.svg&quot;,
+      &quot;caption&quot;: &quot;Five source number sequences, two directions and three arithmetic rules produce 30 complete heading candidates; none passes the source&#x27;s two-word vocabulary gate.&quot;
+    }
+  ],
+  &quot;sources&quot;: [
+    {
+      &quot;label&quot;: &quot;Pinned Wulfic Stage I source&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_i.py&quot;
+    },
+    {
+      &quot;label&quot;: &quot;Pinned square construction&quot;,
+      &quot;url&quot;: &quot;https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/lpcore/stats.py&quot;
+    }
+  ],
+  &quot;related&quot;: [
+    &quot;wulfic-native-key-streams&quot;,
+    &quot;lp2-15-totient-gap-audit&quot;,
+    &quot;lp2-15-mobius-panel&quot;
+  ],
+  &quot;article&quot;: &quot;# Does the LP2-15 number square decode its short heading?\n\nThe [LP2-15](#/reader/lp2-15) heading has **two words, four and five runes long**, followed by a 4×4 number square. Wulfic&#x27;s Stage I asks a narrow question: if the square&#x27;s construction supplies a nine-number key, can a fixed arithmetic operation turn the **whole heading** into two words in a declared vocabulary?\n\n**Finding:** none of the **30 complete outputs** passes that two-word test. This closes the tested combination of five square-derived number sequences, two reading directions and three arithmetic rules. It does **not** rule out other routes through the square, another spelling convention, or a cipher on the body text.\n\n![The LP2-15 heading tested under five keys, two directions and three operations](experiments/records/wulfic-square-title-vocabulary/comparison.svg)\n\nThe five sequences are the printed cell values in the source&#x27;s spiral order, Fibonacci-indexed primes, those primes minus one, their one-based Fibonacci indices, and the Fibonacci indices themselves. Each is read outward or inward. The first nine values, reduced modulo 29, are applied as ciphertext minus key, ciphertext plus key, or key minus ciphertext. The original **4 + 5 word boundary** stays fixed. The [source-defined vocabulary](https://github.com/Wulfic/Cicada3301-Liber_Primus/blob/bf89d3d13aad2b8f2c95ab195cf1b092f250775c/tools/run_stage_i.py) uses the solved translation and four pinned English texts, converted to GP rune spellings.\n\nThe source also tried **20,000** seeded random nine-rune subtraction keys against the same two-word gate and observed **zero** passes. That is an empirical control, not a zero probability: the vocabulary is a deliberately strict screen, and it cannot by itself decide whether a decoded phrase is meaningful. The [full 30-line source output](experiments/records/wulfic-square-title-vocabulary/source-title-output.txt) shows every complete candidate without selecting attractive fragments.\n\n## Reproduce\n\nThe bundled standard-library check independently reads Liberpedia&#x27;s LP2-15 rune text, reconstructs the Fibonacci and prime sequences, verifies that the sixteen calculated cell values match the printed square&#x27;s set, and recalculates all **30** outputs:\n\n```text\npython experiments/records/wulfic-square-title-vocabulary/run.py --check\npython experiments/records/wulfic-square-title-vocabulary/plot.py --check\n```\n\nThe vocabulary decisions and 20,000-key control come from the pinned source. Recompute them from its original translation and corpora, without copying those texts into Liberpedia:\n\n```text\npython experiments/records/wulfic-square-title-vocabulary/replay_source.py PATH_TO_WULFIC_CLONE\n```\n\nThe wrapper checks the source revision and input hashes, then compares the source output **byte-for-byte**. The [plan](experiments/records/wulfic-square-title-vocabulary/plan.json) records the exact bounds and exclusions.\n&quot;,
+  &quot;article_path&quot;: &quot;experiments/records/wulfic-square-title-vocabulary/article.md&quot;,
+  &quot;script_sha256&quot;: &quot;c6abd83c138a7aa4e0c1a407c023b3d9733f9037e39a951d2895bc71b9f27994&quot;,
   &quot;record_type&quot;: {
     &quot;id&quot;: &quot;replay&quot;,
     &quot;label&quot;: &quot;Method replay&quot;,
