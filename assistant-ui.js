@@ -24,7 +24,7 @@ function experimentSearchResult(r, requestedPages=[]){
 }
 function ideaCoverageNote(record){
   const related=record.related.map(id=>experimentRecords.find(r=>r.id===id)).filter(Boolean);
-  return `<details class="experiment-browse-family"><summary>${esc(record.title)} <span class="small muted">${esc(record.status)}</span></summary>
+  return `<details class="experiment-browse-family"><summary><span>${esc(record.title)}</span><span class="small muted">${esc(record.status)}</span></summary>
     <p><a href="#/wiki/${esc(record.guide)}">Read the method guide</a></p><p>${esc(record.coverage)}</p><p><strong>To make a testable version:</strong> ${esc(record.needed)}</p>
     <p><strong>Proposed extension — not run:</strong> ${esc(record.next_test)}</p>
     <p class="small muted">Related records have narrower scopes; these links do not establish that your proposal was tested.</p>
@@ -56,17 +56,13 @@ function reportedAttemptView(query=''){
 
 function renderIdeaChecker(query){
   const params=new URLSearchParams(location.hash.split('?')[1]||'');
-  const chosen=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)).slice(0,2);
-  const options=selected=>'<option value="">Any page</option>'+db.pages.map(p=>`<option value="${p.id}" ${selected===p.id?'selected':''}>${p.id.toUpperCase()}${p.title?' · '+esc(p.title):''}</option>`).join('');
+  const legacyPages=(params.get('pages')||'').split(',').filter(id=>db.pages.some(p=>p.id===id)&&!AssistantSearch.pageIds(query).includes(id));
+  if(query&&legacyPages.length)query+=' on '+legacyPages.map(id=>id.toUpperCase()).join(' and ');
   main.innerHTML=head('Have we tried it?','Check an idea against published tests')+`<article class="reading-width idea-checker">
+    <p class="idea-index-link"><a href="#/research">Browse the research index</a></p>
     <form id="experiment-form">
       <label for="experiment-query">What would you try?</label>
       <textarea id="experiment-query" rows="3" maxlength="1500" required placeholder="For example: reverse the prime values within each row of LP2-15, keeping word boundaries">${esc(query)}</textarea>
-      <details class="idea-pages" ${chosen.length?'open':''}><summary>Specify pages <span class="muted">(optional)</span></summary>
-        <div class="idea-page-fields"><div><label for="idea-page-one">Page</label><select id="idea-page-one">${options(chosen[0])}</select></div>
-        <div><label for="idea-page-two">Second page</label><select id="idea-page-two">${options(chosen[1])}</select></div></div>
-        <p class="small muted">Page numbers start at zero in each release. Related techniques tested on other pages can still appear.</p>
-      </details>
       <div class="idea-actions"><button id="idea-submit" type="submit">Check idea</button><button id="idea-cancel" type="button" hidden>Stop waiting</button><span id="idea-status" class="small muted" role="status"></span></div>
       <p id="idea-privacy" class="idea-privacy small muted" ${assistantEndpoint()?'':'hidden'}>Questions are processed by Cloudflare. Don’t include private information.</p>
     </form>
@@ -74,10 +70,7 @@ function renderIdeaChecker(query){
     <section id="experiment-answer" aria-label="Experiment comparison"></section>
     <section id="idea-coverage" aria-label="Idea coverage"></section>
     <section id="reported-attempts" aria-label="Earlier reported approaches"></section>
-    <details class="experiment-guide"><summary>What does a match mean?</summary>
-      <p>A match points to related work. Check the record’s pages, method, bounds, and exclusions before treating it as the same test. No match means this index has no matching record; it does not mean the idea is new.</p>
-      <p>Browse <a href="#/wiki/solving-methods">method guides</a>, <a href="#/wiki/reported-attempts">earlier reported approaches</a>, or the <a href="#/wiki/research-coverage">coverage overview</a> for work beyond completed experiments.</p>
-    </details>${footer()}</article>`;
+    ${footer()}</article>`;
   const input=$('#experiment-query'),answer=$('#experiment-answer'),results=$('#experiment-results'),submit=$('#idea-submit'),status=$('#idea-status'),cancel=$('#idea-cancel');
   let shownIdea='',pendingConfigRequest=0;
   refreshIdeaSupport=()=>{
@@ -87,29 +80,7 @@ function renderIdeaChecker(query){
     $('#idea-coverage').innerHTML=ideaCoverageView(shownIdea);
     $('#reported-attempts').innerHTML=reportedAttemptView(shownIdea);
   };
-  const filterArchive=(save=false)=>{
-    const browse=$('#experiment-browse-query');if(!browse)return;
-    const query=browse.value.trim();
-    if(save){
-      const state=new URLSearchParams(location.hash.split('?')[1]||'');
-      if(query){state.set('browse',query);state.set('section','browse-experiments')}
-      else{state.delete('browse');state.delete('section')}
-      history.replaceState(null,'',`#/experiments${state.size?'?'+state:''}`);
-    }
-    let visible=0;
-    for(const section of results.querySelectorAll('.experiment-browse-section')){
-      let sectionVisible=0;
-      for(const family of section.querySelectorAll('.experiment-browse-family')){
-        family.hidden=Boolean(query)&&!WikiSearch.has(family.dataset.search,query);
-        if(!family.hidden){visible++;sectionVisible++;}
-      }
-      section.hidden=sectionVisible===0;
-      if(query&&sectionVisible) section.open=true;
-    }
-    $('#experiment-browse-status').textContent=query?(visible?`${visible} matching ${visible===1?'family':'families'}. Open a family to inspect its records.`:'No published record matches these terms. Try a shorter method name or page ID.'):'';
-  };
-  results.addEventListener('input',event=>{if(event.target.id==='experiment-browse-query')filterArchive(true)});
-  const pages=()=>[...new Set([$('#idea-page-one').value,$('#idea-page-two').value].filter(Boolean))].sort();
+  const pages=()=>AssistantSearch.pageIds(input.value.trim());
   const experimentDocuments=AssistantSearch.experimentDocs(experimentRecords);
   const documents=()=>experimentDocuments;
   const cacheKey=()=>JSON.stringify([input.value.trim().replace(/\s+/g,' '),pages(),
@@ -167,8 +138,8 @@ function renderIdeaChecker(query){
     const selected=items=>items.slice(0,3).map(m=>experimentRecords.find(r=>r.id===m.document.id)).filter(Boolean)
       .map(r=>experimentSearchResult(r,[...new Set([...pages(),...AssistantSearch.pageIds(idea)])])).join('');
     if(!experimentRecords.length)results.innerHTML='<h2>No experiment records published yet</h2><p>No tests have been added to this index. This does not tell us whether your technique has been tried elsewhere.</p>';
-    else if(!searchNow||!idea)results.innerHTML=experimentBrowse(experimentRecords);
-    else results.innerHTML=`<h2>${matches.length?'Related tests':supporting.length?'Related evidence':'No matching record'}</h2>${selected(matches)}${supporting.length?`${matches.length?'<h2>Other evidence</h2>':''}${selected(supporting)}`:''}${matches.length>3||supporting.length>3?`<p class="small"><a href="#/experiments?browse=${encodeURIComponent(idea)}&section=browse-experiments">Browse more records</a></p>`:''}`;
+    else if(!searchNow||!idea)results.innerHTML='';
+    else results.innerHTML=`<h2>${matches.length?'Related tests':supporting.length?'Related evidence':'No matching record'}</h2>${!matches.length&&!supporting.length?'<p>This index doesn’t cover every past attempt. <a href="#/research">Browse the research index</a>.</p>':''}${selected(matches)}${supporting.length?`${matches.length?'<h2>Other evidence</h2>':''}${selected(supporting)}`:''}${matches.length>3||supporting.length>3?`<p class="small"><a href="#/research?q=${encodeURIComponent(idea)}">Browse more records</a></p>`:''}`;
     if((matches.length||supporting.length)&&canCompare&&assistantEndpoint()){
       const cached=ideaAnswers.get(cacheKey());
       if(cached&&cached.until>Date.now())showAnswer({...cached.data,cached:true});
@@ -186,13 +157,9 @@ function renderIdeaChecker(query){
       'Read the related evidence below; no AI comparison was requested.':'Index checked. No AI request was needed.';
   }
   input.addEventListener('input',()=>{shownIdea='';reset()});
-  for(const id of ['#idea-page-one','#idea-page-two'])$(id).addEventListener('change',()=>{shownIdea='';reset()});
   input.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();if(!submit.disabled)$('#experiment-form').requestSubmit();}});
   cancel.onclick=()=>{pendingConfigRequest++;stopExperimentAI();busy(false);answer.innerHTML='<p class="small muted">Stopped waiting. You can read the records below.</p>';status.textContent='';};
-  $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});if(pages().length)p.set('pages',pages().join(','));history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
+  $('#experiment-form').onsubmit=e=>{e.preventDefault();if(submit.disabled)return;const p=new URLSearchParams({q:input.value.trim()});history.replaceState(null,'','#/experiments?'+p);draw(true,true);};
   draw(Boolean(query));
-  if(!query&&params.get('browse')){
-    const browse=$('#experiment-browse-query');
-    if(browse){browse.value=params.get('browse');filterArchive()}
-  }
+
 }

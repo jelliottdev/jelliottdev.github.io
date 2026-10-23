@@ -18,7 +18,7 @@ async function checkNavigationRace(oldRequestFails){
  const pending=new Map();
  const main={innerHTML:'',focus(){},querySelector(){return {textContent:this.innerHTML}}};
  const sandbox={
-  db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},optionalLoads:{},main,renderId:0,URLSearchParams,
+  db:{articles:[{id:'older'},{id:'newer'}]},unavailableData:{},optionalLoads:{},main,renderId:0,URLSearchParams,ResearchIndex:require('../research-index.js'),
   location:{hash:'#/wiki/older'},closeSearchSuggestions(){},setNavigation(){},
   stopExperimentAI(){},esc:String,
   window:{scrollTo(){},matchMedia:()=>({addEventListener(){}})},
@@ -79,6 +79,23 @@ async function checkNavigationRace(oldRequestFails){
  await vm.runInContext('route()',sandbox);
  assert.equal(main.innerHTML,'Topics','A missing target must not break the page');
  assert.deepEqual(events,[]);
+ let directoryQuery,recordID;
+ sandbox.history={replaceState(a,b,href){sandbox.location.hash=href}};
+ sandbox.researchIndexPage=async(version,params)=>{directoryQuery=params.get('q');main.innerHTML='Research index'};
+ sandbox.location.hash='#/experiments?browse=prime%20shift&section=browse-experiments';
+ await vm.runInContext('route()',sandbox);
+ assert.equal(directoryQuery,'prime shift');
+ assert.equal(sandbox.location.hash,'#/research?q=prime+shift','Legacy archive links route to the research directory');
+ sandbox.experimentsPage=async id=>{recordID=id;main.innerHTML='Record'};
+ sandbox.location.hash='#/experiments/fixed-rule';
+ await vm.runInContext('route()',sandbox);
+ assert.equal(recordID,'fixed-rule','Direct experiment routes remain unchanged');
+ const ordinaryQuery=main.querySelector.bind(main),scrolls=[];
+ main.querySelector=selector=>selector==='.research-index'?{dataset:{researchState:'#/research?q=prime'}}:ordinaryQuery(selector);
+ sandbox.window.scrollY=320;sandbox.window.scrollTo=(x,y)=>scrolls.push(y);
+ sandbox.location.hash='#/research?q=prime';
+ await vm.runInContext('route()',sandbox);
+ assert.equal(scrolls.at(-1),320,'The production router restores a remembered directory position');
 
 }
 async function main(){

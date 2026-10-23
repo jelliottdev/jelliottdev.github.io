@@ -1,0 +1,222 @@
+{
+  "id": "round19-decoder-baseline-control",
+  "title": "When a pair-skip decoder loses a known key",
+  "status": "published",
+  "question": "Can a decoder built for paired skipped draws recover text encrypted with the source's one-draw skip rule, even when it has the correct key?",
+  "reader_question": "Could the wrong skip rule make a correct key look wrong?",
+  "summary": "In 336 source-defined planted decodes, the matched decoder recovers all runes at the stated baseline while the pair-skip decoder loses most of them despite receiving the same correct key. This is a decoder-power control, not a test of LP2's cipher.",
+  "finding": "At suppression 0.83, median exact rune recovery is 100% with the matching decoder at both 240 and 400 runes, versus 37.9% and 41.2% with the pair-skip decoder. All 336 non-timing replay rows and 48 cell summaries match the pinned source output.",
+  "limitations": "Synthetic known-key ciphertext from one English-derived source; no LP2 ciphertext or unknown-key search. A failure under one alignment rule cannot exclude other rules. Source score bar -5.5 is not a calibrated family-wide error rate.",
+  "next_steps": "Use each proposed skip rule's own planted recovery gate before interpreting a manuscript key search.",
+  "outcome": "supported",
+  "tags": [
+    "decoder alignment",
+    "key skipping",
+    "planted control",
+    "source replay",
+    "known key",
+    "beam search"
+  ],
+  "family": {
+    "id": "decoder-alignment-controls",
+    "title": "Decoder alignment controls",
+    "question": "Can declared decoders recover planted plaintext under matching and mismatched alignment rules?",
+    "baseline": "decoder-skip-controls"
+  },
+  "variant": {
+    "label": "Round 19 G-BASE six-decoder source grid",
+    "changes": [
+      {
+        "field": "artifacts",
+        "before": [
+          "exports/readings/first-koan.csv",
+          "exports/readings/instruction.csv",
+          "exports/readings/loss-of-divinity.csv",
+          "exports/readings/lp2-56.csv",
+          "exports/readings/lp2-57.csv",
+          "exports/readings/second-koan.csv",
+          "exports/readings/some-wisdom.csv",
+          "exports/readings/warning.csv",
+          "exports/readings/welcome.csv"
+        ],
+        "after": [
+          "experiments/records/round19-decoder-baseline-control/plan.json",
+          "experiments/records/round19-decoder-baseline-control/original-plan-before-bundle.json"
+        ],
+        "reason": "Pinned Round 19 G-BASE replay uses its source-defined controls and bundled source inputs."
+      },
+      {
+        "field": "representation",
+        "before": "First min(240, available) output rune indices from all nine known-reading traces; canonical GP labels only for scoring.",
+        "after": "Synthetic English-derived GP29 rune ciphertext, correct source key supplied to each decoder.",
+        "reason": "Pinned Round 19 G-BASE replay uses its source-defined controls and bundled source inputs."
+      },
+      {
+        "field": "procedure",
+        "before": "Plant ordinary addition, probabilistic collision skipping, value rewriting and one unrelated advance plus skipping; decode with correct/wrong deterministic key fixtures using rigid subtraction and four bounded beams.",
+        "after": "Replay source G-BASE: four suppression settings, two lengths, six decoder modes, seven seeds; compare every non-timing row and independently recount all 48 cells.",
+        "reason": "Pinned Round 19 G-BASE replay uses its source-defined controls and bundled source inputs."
+      },
+      {
+        "field": "parameters",
+        "before": "Nine traces, three seeds, key-value repetitions 1 and 4, 10000 slots; beam widths 16/64 crossed with skip limits 1/3; cumulative quadgram selection, normalized acceptance -5.5; 216 plants and 2160 decoder results.",
+        "after": "Source revision f08b20b; lengths 240/400; suppression 0/.4/.83/1; beam width 400; source score bar -5.5 and 90% rune-recovery gate.",
+        "reason": "Pinned Round 19 G-BASE replay uses its source-defined controls and bundled source inputs."
+      },
+      {
+        "field": "exclusions",
+        "before": "No manuscript cipher identification, general recovery guarantee, language identification, uniform-pad assumption, key search or calibrated false-positive probability.",
+        "after": "Real LP2 ciphertext, unknown-key search, source G-FIX/G-COST and G-FP grids, other skip models or independent language calibration.",
+        "reason": "Pinned Round 19 G-BASE replay uses its source-defined controls and bundled source inputs."
+      }
+    ]
+  },
+  "scope": {
+    "pages": [],
+    "artifacts": [
+      "experiments/records/round19-decoder-baseline-control/plan.json",
+      "experiments/records/round19-decoder-baseline-control/original-plan-before-bundle.json"
+    ],
+    "representation": "Synthetic English-derived GP29 rune ciphertext, correct source key supplied to each decoder.",
+    "procedure": "Replay source G-BASE: four suppression settings, two lengths, six decoder modes, seven seeds; compare every non-timing row and independently recount all 48 cells.",
+    "parameters": "Source revision f08b20b; lengths 240/400; suppression 0/.4/.83/1; beam width 400; source score bar -5.5 and 90% rune-recovery gate.",
+    "exclusions": "Real LP2 ciphertext, unknown-key search, source G-FIX/G-COST and G-FP grids, other skip models or independent language calibration."
+  },
+  "review": {
+    "reviewer": "Exact source-row parity and independent cell recount",
+    "retested_on": "2026-10-23",
+    "kind": "source-bound decoder control",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/round19-decoder-baseline-control/run.py --check && python experiments/records/round19-decoder-baseline-control/plot.py --check",
+    "environment": "Python 3 standard library. The ZIP includes the exact pinned MIT-licensed source, Self-Reliance text, English quadgram model and archived output; full 336-case rerun uses run.py --nproc 6.",
+    "script": "experiments/records/round19-decoder-baseline-control/run.py",
+    "script_sha256": "2e665f82790966c8aa5850699ab0f658aaa3f2c516d19a4f83802aa269d67007",
+    "inputs": [
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/plan.json",
+        "sha256": "21205fbac009d09a6ee36b6bf6050aa2f2eff6bef392154684a7bef7494f5d2e"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/original-plan-before-bundle.json",
+        "sha256": "5ee0a7e13bf77f52cbc6562cbb8967bf29b79f75d26ace7bef71e2a04bce2852"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/run.py",
+        "sha256": "2e665f82790966c8aa5850699ab0f658aaa3f2c516d19a4f83802aa269d67007"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/check.py",
+        "sha256": "043a792ff5bb210272088f72cf7ad203dc194d063ac6e3603f2679e8d9c3026d"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/plot.py",
+        "sha256": "e71025c6e7487a231b203ec5e0eac719a9649f30e4ba3ce9882738281e5963f7"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/campaign18_skip/skipdecode.py",
+        "sha256": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round11/lib_numchannel.py",
+        "sha256": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round12/C1/feedback.py",
+        "sha256": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round19/I1/constructions.py",
+        "sha256": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round19/I1/driftbeam.py",
+        "sha256": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round19/I1/out_base.json",
+        "sha256": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/round19/I1/run_gates.py",
+        "sha256": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/analysis/run_stats.py",
+        "sha256": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/benchmark/plant.py",
+        "sha256": "88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/data/english_quadgrams.txt",
+        "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/data/keys/self_reliance.txt",
+        "sha256": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/src/lp/ciphers.py",
+        "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/src/lp/corpus.py",
+        "sha256": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/src/lp/gematria.py",
+        "sha256": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/src/lp/score.py",
+        "sha256": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/liber-primus/src/lp/stats.py",
+        "sha256": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/source/LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "research/control-preflights/i1-2026-10-23.json",
+        "sha256": "1967d7701d6fbd316b819c11871f19af895d599f9e0146be58597ffc9e98b814"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/out_base.json",
+        "sha256": "cef175128dbd407c74d2c7c5829ab05f3d6020cb1539e848cc9bf24745f48387"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/results.json",
+        "sha256": "4a9439f30145db91d89f77dc4abad2be9a5363d6a0e586fcedcce86309d7c04d"
+      },
+      {
+        "path": "experiments/records/round19-decoder-baseline-control/decoder-baseline.svg",
+        "sha256": "3941a0c186c0f11c576feaaa50a578d1320edb453b4cac83302e2dbb4d510d71"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Pinned Round 19 I1 source and G-BASE grid",
+      "url": "https://github.com/Dukotah/cicada3301/tree/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round19/I1"
+    }
+  ],
+  "related": [
+    "decoder-skip-controls",
+    "r18-keyskip-drift-power",
+    "rejection-channel-information"
+  ],
+  "visuals": [
+    {
+      "path": "experiments/records/round19-decoder-baseline-control/decoder-baseline.svg",
+      "caption": "Exact rune recovery with the correct key under matched and mismatched skip rules."
+    }
+  ]
+}

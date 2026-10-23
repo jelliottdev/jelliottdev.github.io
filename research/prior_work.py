@@ -59,6 +59,16 @@ def lookup(source_id=None, source_path=None, terms='', limit=12):
                 'usage': 'Recorded input check, not a fresh probe. Recheck if source or recovered files change.',
             })
     execution_gates = []
+    shared_controls = []
+    control_path = ROOT / 'research/shared-control-register.json'
+    if control_path.exists():
+        register = read(control_path)
+        if register.get('schema') == 'internal-shared-control-register-v1':
+            for row in register['entries']:
+                if (set(row['source_ids']) & candidate_ids or
+                    source_path and any(ledger_path(path) == ledger_path(source_path)
+                                        for path in row.get('source_paths', []))):
+                    shared_controls.append(row)
     source_audits = []
     audit_path = ROOT / 'research/source-audit-register.json'
     if audit_path.exists():
@@ -122,7 +132,7 @@ def lookup(source_id=None, source_path=None, terms='', limit=12):
                                   for r in candidates] if len(candidates) > 1 else [],
             'source_entry': entry, 'input_dependencies': input_dependencies,
             'execution_gates': execution_gates, 'source_audits': source_audits,
-            'matches': hits[:limit]}
+            'shared_controls': shared_controls, 'matches': hits[:limit]}
 
 
 if __name__ == '__main__':

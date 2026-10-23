@@ -1,0 +1,30 @@
+{
+  "schema": "liberpedia-r22-g3-pointer-replay-v1",
+  "timing": "Retrospective source replay; source saved target result was inspected before this plan. The source rules themselves are pinned.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_id": "R22-B-TURTLE-SPATIAL-RENDER:G3",
+  "source_program_sha256": "4be87c9de880ed58a10398c7cd40be72d4505f73dfc58d5105227fc467ad67e5",
+  "source_results_sha256": "12687c59e64143e69ce61313c6e1eb3801d5d7aca202ae2d592c2ada01b46b86",
+  "original_scratch_plan_sha256": "abe9a8e7ac7acb29fc821fe4118a0e4838aefcfa2a0d80804c2d7436cecf455e",
+  "input_sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252",
+  "source_site_utf8_rune_sha256": "79b14e630946b64cdca838f328e73904f506df576d15e21fcb46271d4b4c8040",
+  "source_rune_count": 12956,
+  "streams": [
+    "value",
+    "pi",
+    "phi"
+  ],
+  "metrics": [
+    "v2_16",
+    "v3_56",
+    "b32_lowentropy_run",
+    "latlon_regex",
+    "coord_pair_rate"
+  ],
+  "null_replicates": 200,
+  "seed_start": 3301,
+  "source_calls": "3 streams x 5 metric-specific null calls x 200 shuffles = 3000 source metrics calls; the local runner shares each seeded shuffle across the five metrics but returns the same 15 means and maxima",
+  "flag": "lowentropy real>200-shuffle maximum and >=16; or latlon_regex real>200-shuffle maximum",
+  "plant": "300 GP indices from Random(3301), replace positions120..151 inclusive with32 index-zero values; compare lowentropy against 200 seeded shuffles",
+  "excluded": "Additional mod-M framings and ASCII-coordinate parses mentioned in PREREG are not implemented by pinned g3 program; arbitrary pointers and address validity checks are excluded."
+}

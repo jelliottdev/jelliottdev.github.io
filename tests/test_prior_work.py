@@ -122,6 +122,18 @@ class SourceLookupTests(unittest.TestCase):
         self.assertFalse(result['source_audits'][0]['independently_replayed_by_audit'])
         self.assertEqual(prior_work.lookup(source_id='missing')['source_audits'], [])
 
+    def test_shared_control_is_reusable_only_for_matching_source(self):
+        self.write('shared-control-register.json', {
+            'schema': 'internal-shared-control-register-v1', 'entries': [{
+                'source_ids': [self.entries[1]['source_id']],
+                'source_paths': ['pinned/control.py'],
+                'scope': 'Exact planted-message recovery, not a manuscript result.',
+            }],
+        })
+        self.assertEqual(len(prior_work.lookup(source_id='r24-c2-ext')['shared_controls']), 1)
+        self.assertEqual(len(prior_work.lookup(source_path='liber-primus/pinned/control.py')['shared_controls']), 1)
+        self.assertEqual(prior_work.lookup(source_id=self.entries[0]['source_id'])['shared_controls'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

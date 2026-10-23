@@ -9,8 +9,8 @@
   },
   "registry_snapshot": {
     "path": "data/experiments.json",
-    "sha256": "89ef984bf5d2ca66e000f92b2200dff58fa09c8c250e6370e40b2b2b593f785d",
-    "record_count": 272
+    "sha256": "0f1d14e4b948e79ccf67a2ea2c37587e36580ea03c58369d11ed5e40b85aed72",
+    "record_count": 276
   },
   "usage": "Internal source reconciliation. Entries are research units, not deduplicated solving ideas. Source status labels are unverified claims. Candidate links locate related source material; they do not prove a replay or complete coverage. Compare rules, inputs and bounds before changing coverage_verified.",
   "counts": {
@@ -27,15 +27,15 @@
     },
     "with_reproduction_command": 64,
     "candidate_overlap": 28,
-    "unreconciled": 106,
-    "source_entries_reviewed": 62,
-    "source_entries_pending_review": 110,
+    "unreconciled": 104,
+    "source_entries_reviewed": 64,
+    "source_entries_pending_review": 108,
     "pending_review_with_candidate_match": 4,
-    "pending_review_without_candidate_match": 106,
+    "pending_review_without_candidate_match": 104,
     "execution_replay_states": {
-      "complete-executed-grid": 15,
+      "complete-executed-grid": 17,
       "replayed-with-invalid-gate": 6,
-      "partial-execution": 10
+      "partial-execution": 11
     },
     "verified_coverage": 0
   },
@@ -2917,9 +2917,31 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "partial",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-decoder-baseline-control",
+            "covered_subclaim": "A linked fresh control receipt runs source G-EQ on 24 and G-EQ2 on 12 seeded synthetic cases. All 36 plaintext paths match; maximum score difference is 1.0658141036401503e-14. The 336-case G-BASE record uses that calibrated decoder but is a separate source grid."
+          }
+        ],
+        "unresolved_parts": [
+          "The finite parity gate is reproduced; universal bit-identical scores are not established because the measured score delta is nonzero at floating-point precision.",
+          "Other parameters, decoder modes and any LP2 key-search conclusion are outside this gate."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-baseline-control"
+        ],
+        "scope": "Fresh 24+12 source gate cases in the linked receipt: exact plaintext paths and numerical scores within 1.1e-14, not a universal algorithm identity theorem.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-02",
@@ -3014,9 +3036,31 @@
       ],
       "source_supersedes": [],
       "source_superseded_by": null,
-      "reconciliation_state": "unreconciled",
+      "reconciliation_state": "reproduced-subclaim",
       "candidate_records": [],
-      "coverage_verified": false
+      "coverage_verified": false,
+      "reviewed_subclaims": {
+        "record_links": [
+          {
+            "record_id": "round19-decoder-baseline-control",
+            "covered_subclaim": "The full 336-case source G-BASE planted grid is replayed with all non-timing rows and 48 summaries matched. At 240 runes and suppression 0.83 the matched decoder recovers 100% at score -4.303, while the pair decoder recovers 37.9% at -6.631; the 400-rune contrast is 100% versus 41.2%."
+          }
+        ],
+        "unresolved_parts": [
+          "This is a known-key synthetic baseline counterexample; no LP2 ciphertext, unknown key or other skip mechanism is excluded.",
+          "G-FIX, G-COST and G-FP source grids are separate units and remain unreplayed here."
+        ],
+        "rejected_candidates": [],
+        "audit_note": null
+      },
+      "execution_replay": {
+        "state": "complete-executed-grid",
+        "record_ids": [
+          "round19-decoder-baseline-control"
+        ],
+        "scope": "Source G-BASE exactly: 4 suppression settings × 2 lengths × 6 decoder modes × 7 seeds, 336 synthetic known-key decodes; source timing fields excluded.",
+        "wider_method_excluded": false
+      }
     },
     {
       "source_id": "I1-08",
@@ -3566,6 +3610,18 @@
       "reconciliation_state": "partial",
       "candidate_records": [
         {
+          "record_id": "dukotah-g3-pointer-framings",
+          "reasons": [
+            {
+              "kind": "shared_source_file",
+              "paths": [
+                "liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md",
+                "liber-primus/analysis/round22/B-turtle-spatial-render/g3_results.json"
+              ]
+            }
+          ]
+        },
+        {
           "record_id": "lp2-turtle-spatial-replay",
           "reasons": [
             {
@@ -3585,15 +3641,28 @@
           {
             "record_id": "lp2-turtle-spatial-replay",
             "covered_subclaim": "G1 turtle construction: all 72 fixed paths, 200 seeded shuffled controls each (14,400 null paths), the same six initial shape-stat screens, and the two planted-shape controls. The source reports zero figures crossing its later flag gate."
+          },
+          {
+            "record_id": "dukotah-g3-pointer-framings",
+            "covered_subclaim": "Complete implemented G3 grid: three number streams, five measurements and 200 seeded shuffles per measurement. Source metrics match; an independent checker verifies all 600 repeated-symbol controls. Base32 counts are length-only, the digit-only latitude/longitude parser cannot fire, and coordinate pair rate is not a flag. No broader pointer exclusion."
           }
         ],
         "unresolved_parts": [
-          "G3 base32, onion and coordinate-pointer framings are not part of the Liberpedia replay.",
           "The source's 2,000-sample-plus-normal-tail refinements were inspected in its ledger, not independently regenerated. Its closure and caging statistics duplicate the same ratio; floating-point ties and a sampled crossing produce small source/replay differences.",
-          "The 12,956-rune source path includes Liberpedia LP2-55 because blank LP2-50 is omitted by source segment numbering."
+          "The 12,956-rune source path includes Liberpedia LP2-55 because blank LP2-50 is omitted by source segment numbering.",
+          "Additional mod-M and ASCII-coordinate framings in the written preregistration are not implemented by the source G3 program and are not covered by this replay."
         ],
         "rejected_candidates": [],
         "audit_note": null
+      },
+      "execution_replay": {
+        "state": "partial-execution",
+        "record_ids": [
+          "lp2-turtle-spatial-replay",
+          "dukotah-g3-pointer-framings"
+        ],
+        "scope": "G1 72-path initial screen and full implemented G3 pointer-screen grid; later G1 tail refinements and unimplemented written pointer proposals remain separate.",
+        "wider_method_excluded": false
       }
     },
     {

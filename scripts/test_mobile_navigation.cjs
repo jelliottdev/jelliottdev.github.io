@@ -36,37 +36,26 @@ const base=process.env.WIKI_BASE_URL||'http://127.0.0.1:8765/';
    assert.equal(await page.locator('#search').inputValue(),'Atbash',
     'Returning to search restores the query that produced those results');
 
-   await page.goto(base+'#/experiments');
-   await page.waitForSelector('#browse-experiments > summary');
-   await page.locator('#browse-experiments > summary').click();
-   await page.waitForSelector('#experiment-browse-query',{state:'visible'});
-   const browse=page.locator('#experiment-browse-query');
+   await page.goto(base+'#/research');
+   await page.waitForSelector('#research-query');
+   const browse=page.locator('#research-query');
    await browse.fill('LP2-15');
-   await page.waitForFunction(()=>location.hash.includes('browse=LP2-15'));
-   assert.match(new URL(page.url()).hash,/browse=LP2-15/);
-   assert.match(new URL(page.url()).hash,/section=browse-experiments/);
-   const matching=page.locator('.experiment-browse-family:visible');
+   await page.waitForFunction(()=>location.hash.includes('q=LP2-15'));
+   const matching=page.locator('.research-record');
    const count=await matching.count();
-   assert(count>0,'The published archive must have a matching LP2-15 family');
-   const family=matching.first();
-   const summary=family.locator('summary');
-   if(width===320)await summary.tap();
-   else{await summary.focus();await page.keyboard.press('Enter')}
-   assert.equal(await family.getAttribute('open'),'');
-   const record=family.locator('h3 a').first();
+   assert(count>0,'The research directory must contain LP2-15 records');
+   const record=matching.locator('h2 a').first();
+   await record.scrollIntoViewIfNeeded();
+   const previousScroll=await page.evaluate(()=>scrollY);
    if(width===320)await record.tap();
    else{await record.focus();await page.keyboard.press('Enter')}
    await page.waitForURL(/#\/experiments\/[^?]+$/);
-   await page.waitForSelector('.experiment-scope');
+   await page.waitForSelector('.experiment-article');
    await page.goBack();
-   await page.waitForSelector('#experiment-browse-query');
-   assert.equal(await browse.inputValue(),'LP2-15',
-    'Browser Back must restore the archive filter');
-   assert.equal(await matching.count(),count,
-    'Browser Back must restore the same filtered family set');
-   const heading=await page.locator('#browse-experiments').boundingBox();
-   assert(heading.y>=-2&&heading.y<844,
-    'Browser Back must return near the filtered archive, not the top of the idea form');
+   await page.waitForSelector('#research-query');
+   assert.equal(await browse.inputValue(),'LP2-15','Browser Back restores the directory query');
+   assert.equal(await matching.count(),count,'Browser Back restores the same matching records');
+   assert(Math.abs(await page.evaluate(()=>scrollY)-previousScroll)<4,'Browser Back restores the directory scroll position');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${width}px overflow`);
    if(process.env.SCREENSHOT_PATH&&width===320)await page.screenshot({path:process.env.SCREENSHOT_PATH,fullPage:false});
    await page.close();

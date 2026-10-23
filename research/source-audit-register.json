@@ -2,7 +2,7 @@
   "schema": "internal-source-audit-register-v1",
   "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
   "as_of": "2026-10-23",
-  "usage": "Source audit only. No manuscript execution or source verdict independently reproduced by this register. Cohort names are scheduling hints, not disjoint experiments or coverage. Unresolved ledger count is not decremented by this audit.",
+  "usage": "The original three batch receipts are source audits, not executions. Subsequent replay links on individual rows state only the verified subclaim. Cohort names are scheduling hints, not disjoint experiments; no synthetic decoder control excludes an LP2 cipher.",
   "entry_count": 110,
   "receipts": [
     {
@@ -480,12 +480,17 @@
       "cohort": "decoder-instrument",
       "receipt": "research/source-audits/batch-2-2026-10-23.json",
       "source_branch": "Source test_driftbeam compares driftbeam keyskip1 max_free0 to skipdecode over 24+12 cases; out_eq reports zero path mismatch and max score delta ~1e-14.",
-      "source_gate": "Source equivalence gates G-EQ/G-EQ2 pass; independent local parity not yet replayed.",
+      "source_gate": "Fresh local G-EQ/G-EQ2 replay: 24+12 seeded cases, zero plaintext-path mismatches; maximum numerical score delta 1.0658141036401503e-14.",
       "input_availability": "Test script and out_eq Git blobs via prefix-adjusted paths, both cached by resolved object.",
-      "existing_coverage": "r18-keyskip-drift-power and r18-drift-ladder-replay verify related planted behavior, not all 36 source equivalence cases.",
-      "unresolved": "Source parity receipt can be replayed without LP2 search.",
-      "next_action": "Share one decoder-gate batch with I1-07/I1-04 before future expensive scans.",
-      "independently_replayed_by_audit": false
+      "existing_coverage": "research/control-preflights/i1-2026-10-23.json reproduces this finite 36-case gate; round19-decoder-baseline-control links it as an input and separately replays G-BASE.",
+      "unresolved": "Finite path parity is not a universal bit-identity theorem: floating-point scores differ by up to 1.1e-14. Other parameters and LP2 searches remain outside scope.",
+      "next_action": "Use the finite parity gate as a decoder prerequisite; audit broader I1 power and null gates separately.",
+      "independently_replayed_by_audit": false,
+      "subsequent_replay": {
+        "record": "round19-decoder-baseline-control",
+        "receipt": "research/control-preflights/i1-2026-10-23.json",
+        "scope": "Finite G-EQ 24 and G-EQ2 12 synthetic cases only."
+      }
     },
     {
       "source_id": "I1-02",
@@ -557,13 +562,17 @@
       "batch": 2,
       "cohort": "decoder-instrument",
       "receipt": "research/source-audits/batch-2-2026-10-23.json",
-      "source_branch": "out_base compares keyskip2/pair and source baseline skip_by_two plants; source says pair breaks its baseline case (-6.631/37.9%).",
-      "source_gate": "Source planted baseline failure is itself the gate finding; not a general pair-decoder failure.",
+      "source_branch": "out_base G-BASE gives six decoder modes the correct key for source one-draw keyskip plants; the pair-skip mode loses the suppression-0.83 baseline (-6.631/37.9% at L240).",
+      "source_gate": "All 336 synthetic known-key decodes replayed; all 48 summaries and every non-timing source row match. This is a specific mismatched-rule control, not a general pair-decoder failure.",
       "input_availability": "out_base JSON cached; underlying source generator/test script recoverable from Git.",
-      "existing_coverage": "decoder-skip-controls and r18-keyskip-drift-power test distinct constructions, not this exact baseline row.",
-      "unresolved": "Need exact plant parameters and source path before parity replay.",
-      "next_action": "Fold into one decoder-gate batch with I1-01, not a standalone solve record.",
-      "independently_replayed_by_audit": false
+      "existing_coverage": "round19-decoder-baseline-control replays the complete 4×2×6×7 G-BASE grid with bundled source and independent summaries; older decoder-skip-controls and r18-keyskip-drift-power cover other plants.",
+      "unresolved": "No LP2 ciphertext, unknown key, or other skip mechanism is excluded. I1 G-FIX, G-COST and G-FP are separate unreplayed grids.",
+      "next_action": "Use this counterexample when choosing a decoder; calibrate other skip rules separately.",
+      "independently_replayed_by_audit": false,
+      "subsequent_replay": {
+        "record": "round19-decoder-baseline-control",
+        "scope": "Source G-BASE 336 synthetic known-key decodes and 48 summaries, excluding timing."
+      }
     },
     {
       "source_id": "I1-08",

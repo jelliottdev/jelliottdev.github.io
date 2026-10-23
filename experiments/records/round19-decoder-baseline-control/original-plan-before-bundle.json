@@ -1,0 +1,25 @@
+{
+  "schema": "liberpedia-source-control-replay-v1",
+  "timing": "Retrospective replay plan: published source results were inspected before this plan was written.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": ["I1-07"],
+  "source_command": "python run_gates.py --stage base --nproc 6 --nseed 7",
+  "source_inputs_sha256": {
+    "analysis/round19/I1/run_gates.py": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+    "analysis/round19/I1/driftbeam.py": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+    "analysis/round19/I1/constructions.py": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35",
+    "analysis/round19/I1/out_base.json": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+    "data/keys/self_reliance.txt": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+  },
+  "fixed_grid": {
+    "suppressions": [0.0, 0.4, 0.83, 1.0],
+    "lengths": [240, 400],
+    "modes": ["repo_ms3", "exact_ms8", "pair_ms8", "drift_l0", "drift_l8", "drift_l16"],
+    "seeds": [0, 1, 2, 3, 4, 5, 6],
+    "cases": 336,
+    "known_key": true,
+    "beam_width": 400
+  },
+  "comparison": "Every non-timing source row and cell summary; order-independent by length, suppression, mode and seed.",
+  "limits": "Synthetic known-key decoder-power calibration only. No LP2 ciphertext or unknown-key search is tested."
+}

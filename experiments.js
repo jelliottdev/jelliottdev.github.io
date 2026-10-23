@@ -3,6 +3,7 @@ let experimentRecords, experimentRecordsPromise, assistantConfig, assistantConfi
 let experimentSupportStarted=false;
 let ideaCoveragePending=true,methodFamilyPending=true,reportedAttemptsPending=true;
 let methodRecordKinds={}, methodRecordKindById={};
+let researchRecords,researchRecordsPromise;
 const outcomes = {'supported':'Supported within scope','not-supported':'Not supported within scope','inconclusive':'Inconclusive'};
 function stopExperimentAI(){experimentRequest?.abort();experimentRequest=null;}
 const assistantEndpoint=()=>typeof assistantConfig?.endpoint==='string'&&assistantConfig.endpoint.startsWith('https://')?assistantConfig.endpoint:null;
@@ -29,8 +30,7 @@ function startExperimentSupport(){
  load('data/reported-attempts.json','entries').then(records=>{reportedAttemptRecords=records}).catch(()=>{reportedAttemptsUnavailable=true}).finally(()=>{reportedAttemptsPending=false;refreshExperimentSupportUI()});
  assistantConfigPromise=read('data/assistant.json').catch(()=>({})).then(config=>{assistantConfig=config;refreshExperimentSupportUI()});
 }
-async function experimentsPage(id, version, query='') {
-  stopExperimentAI();
+async function ensureExperimentRecords() {
   if (!experimentRecords) {
     experimentRecordsPromise??=fetch('data/experiments.json').then(async response=>{
       if (!response.ok) throw Error('The experiment index could not be loaded. Please retry.');
@@ -40,6 +40,11 @@ async function experimentsPage(id, version, query='') {
     }).catch(error=>{experimentRecordsPromise=null;throw error});
     experimentRecords=await experimentRecordsPromise;
   }
+  return experimentRecords;
+}
+async function experimentsPage(id, version, query='') {
+  stopExperimentAI();
+  await ensureExperimentRecords();
   if (version !== renderId) return;
   if (id) {
     const record = experimentRecords.find(r => r.id === id);
@@ -55,6 +60,22 @@ async function experimentsPage(id, version, query='') {
   renderIdeaChecker(query);
   startExperimentSupport();
 }
+async function ensureResearchRecords(){
+  if(experimentRecords)return experimentRecords;
+  if(researchRecords)return researchRecords;
+  researchRecordsPromise??=fetch('data/experiment-index.json').then(async response=>{
+    if(!response.ok)throw Error('The research index could not be loaded. Please retry.');
+    const data=await response.json();
+    if(!Array.isArray(data.records))throw Error('The research index has an invalid format.');
+    const complete=data.records.every(record=>typeof record.finding==='string'&&record.record_type?.id&&
+      Array.isArray(record.method_topics)&&Array.isArray(record.pages));
+    if(!complete)return ensureExperimentRecords();
+    return data.records.map(record=>({...record,status:'published',
+      scope:{pages:record.pages,artifacts:record.artifacts||[]},review:{retested_on:record.retested_on}}));
+  }).catch(error=>{researchRecordsPromise=null;throw error});
+  researchRecords=await researchRecordsPromise;
+  return researchRecords;
+}
 
 // Group related records without merging their findings or scopes.
 function experimentGroups(records, render){
@@ -65,26 +86,42 @@ function experimentGroups(records, render){
     return `<section class="experiment-family">${f?`<h3>${esc(f.title)}</h3><p>${esc(f.question)}</p>`:''}${group.map(render).join('')}</section>`;
   }).join('');
 }
-function experimentBrowse(records){
-  const title=group=>group[0].family?.title||group[0].title;
-  const familyKey=record=>record.family?.id||record.id;
-  const solvingFamilies=new Set(records.filter(r=>['method','replay'].includes(r.record_type?.id)).map(familyKey));
-  const primary=records.filter(r=>solvingFamilies.has(familyKey(r)));
-  const supporting=records.filter(r=>!solvingFamilies.has(familyKey(r)));
-  const groups=items=>{const families=new Map();for(const record of items){const key=record.family?.id||record.id;if(!families.has(key))families.set(key,[]);families.get(key).push(record);}return [...families.values()];};
-  const cards=items=>`<div class="experiment-browser">${groups(items).sort((a,b)=>title(a).localeCompare(title(b))).map(group=>{
-      const family=group[0].family;
-      const members=[...group].sort((a,b)=>Number(b.id===family?.baseline)-Number(a.id===family?.baseline)||a.title.localeCompare(b.title));
-      const searchable=[title(group),family?.question||'',...members.flatMap(record=>[record.title,record.summary,record.scope?.procedure||'',...(record.scope?.pages||[]),...(record.tags||[])])].join(' ');
-      return `<details class="experiment-browse-family" data-search="${esc(searchable)}"><summary><span>${esc(title(group))}</span><span class="small muted">${members.length} ${members.length===1?'record':'records'}</span></summary>
-        ${family?`<p class="small muted">${esc(family.question)}</p>`:''}
-        <ul>${members.map(record=>`<li><h3><a href="#/experiments/${record.id}">${esc(record.title)}</a></h3>
-          <p class="small muted">${esc(record.record_type?.label||'Experiment')} · ${esc(outcomes[record.outcome]||record.outcome||'Outcome unavailable')}</p>
-          ${family&&record.variant?.label?`<p class="small muted">${esc(record.variant.label)}</p>`:''}
-          <p>${esc(record.finding)}</p></li>`).join('')}</ul></details>`;
-    }).join('')}</div>`;
-  const params=new URLSearchParams(location.hash.split('?')[1]||'');
-  return `<details id="browse-experiments" class="experiment-archive" ${params.get('section')==='browse-experiments'||params.has('browse')?'open':''}><summary><span>Browse published research</span><span class="small muted">${records.length} records</span></summary><div class="experiment-archive-body"><div class="experiment-browse-filter"><label for="experiment-browse-query">Find a published record</label><input id="experiment-browse-query" type="search" placeholder="Method or page, such as LP2-15" autocomplete="off"><p id="experiment-browse-status" class="small muted" role="status"></p></div><details class="experiment-browse-section"><summary><h3>Solving tests</h3><span class="small muted">${groups(primary).length} groups</span></summary>${cards(primary)}</details><details class="experiment-browse-section"><summary><h3>Measurements, controls and source checks</h3><span class="small muted">${groups(supporting).length} groups</span></summary><p class="small muted">These records provide context; they do not test a decoding rule.</p>${cards(supporting)}</details><p class="small muted experiment-browse-caveat">Each finding applies to its stated bounds. <a href="#/wiki/first-experiment?section=outcomes">Reading the outcomes</a></p></div></details>`;
+async function researchIndexPage(version,params=new URLSearchParams()) {
+  stopExperimentAI();
+  const records=await ensureResearchRecords();
+  if(version!==renderId)return;
+  let result=ResearchIndex.select(records,ResearchIndex.state(params));
+  main.innerHTML=head('Research index','Published tests, measurements and source checks')+`<article class="research-index" data-research-state="${esc(ResearchIndex.href(result.state))}">
+    <p class="research-index-actions"><a href="#/experiments">Check an idea</a> · <a href="#/wiki/solving-methods">Method guides</a></p>
+    ${ResearchIndex.filters(result)}
+    <p id="research-family-context" class="research-family-context"${result.state.family?'':' hidden'}>${ResearchIndex.familyContext(result)}</p>
+    <div class="research-list-tools"><p id="research-count" role="status">${esc(ResearchIndex.summary(result))}</p><button id="research-reset" type="button" data-research-reset>Clear filters</button></div>
+    <div id="research-results">${ResearchIndex.results(result)}</div>${footer()}</article>`;
+  const article=main.querySelector('.research-index'),form=$('#research-filters');
+  const fields={q:$('#research-query'),type:$('#research-type'),method:$('#research-method'),outcome:$('#research-outcome'),sort:$('#research-sort')};
+  const sync=()=>{
+    article.dataset.researchState=ResearchIndex.href(result.state);
+    history.replaceState(null,'',article.dataset.researchState);
+    $('#research-count').textContent=ResearchIndex.summary(result);
+    $('#research-family-context').innerHTML=ResearchIndex.familyContext(result);$('#research-family-context').hidden=!result.state.family;
+    $('#research-reset').hidden=(!result.state.family&&!Object.entries(fields).some(([key,field])=>field.value&&(key!=='sort'||field.value!=='title')));
+  };
+  const draw=(clearFamily=false)=>{
+    ResearchIndex.remember(main,window.scrollY);
+    const params=new URLSearchParams(Object.entries(fields).map(([key,field])=>[key,field.value]));
+    if(result.state.family&&clearFamily!==true)params.set('family',result.state.family);
+    result=ResearchIndex.select(records,ResearchIndex.state(params));
+    $('#research-results').innerHTML=ResearchIndex.results(result);sync();
+  };
+  form.addEventListener('submit',event=>{event.preventDefault();draw()});
+  fields.q.addEventListener('input',draw);
+  for(const key of ['type','method','outcome','sort'])fields[key].addEventListener('change',draw);
+  article.addEventListener('click',event=>{
+    if(!event.target.closest('[data-research-reset]'))return;
+    for(const [key,field] of Object.entries(fields))field.value=key==='sort'?'title':'';
+    draw(true);fields.q.focus();
+  });
+  sync();
 }
 function experimentFamily(r){
   if(!r.family)return '';
@@ -311,7 +348,7 @@ function experimentArticle(r){
   const articleFinding=r.article.match(/^## Finding\s*\n\s*\n([^\n]+(?:\n(?!\n)[^\n]+)*)/m);
   const findingHTML=articleFinding?renderExperimentMarkdown(articleFinding[1],accountFiles):`<p>${esc(r.finding)}</p>`;
   const checked=esc(r.scope_summary||`${experimentTargetSummary(r)}. ${r.bounds_note||r.scope.parameters}`);
-  return head(r.title,esc(r.record_type?.label||'Research record'),'Research records')+`<article class="reading-width experiment-article">
+  return head(r.title,esc(r.record_type?.label||'Research record'),'Research index','#/research')+`<article class="reading-width experiment-article">
     <p class="lede">${esc(r.reader_question||r.question)}</p>
     <nav class="section-nav experiment-section-nav" aria-label="Experiment sections">${sectionLinks}</nav>
     <section aria-labelledby="experiment-finding"><h2 id="experiment-finding">What we found</h2><div class="experiment-finding">${findingHTML}</div>

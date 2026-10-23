@@ -277,6 +277,9 @@ def build(root=ROOT):
         discovery.append({
             'id': identifier, 'title': record['title'], 'question': record['question'],
             'summary': record['summary'], 'tags': record['tags'],
+            'finding': record.get('reader_finding') or record['finding'],
+            'record_type': record.get('record_type'),
+            'method_topics': record.get('method_topics', []),
             'family': record.get('family'), 'variant_label': record.get('variant', {}).get('label'),
             'pages': record['scope']['pages'], 'artifacts': record['scope'].get('artifacts', []),
             'outcome': record['outcome'], 'retested_on': record['review']['retested_on'],

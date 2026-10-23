@@ -1,0 +1,96 @@
+{
+  "schema": "liberpedia-campaign7-grid-key-source-replay-v1",
+  "timing": "Retrospective: pinned source results had already been inspected before this plan; controls and local replay procedure are now fixed.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "CampaignVII-A2-tokenpad",
+    "CampaignVII-A2-altbase",
+    "CampaignVII-B2-onion-xor"
+  ],
+  "source_paths_and_sha256": [
+    {
+      "path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/a2_tokenpad.py",
+      "sha256": "ece101a84c8c4a71b50cd585bf1f40e1394b3974550c5b4c549e2ed2d084b38b"
+    },
+    {
+      "path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/a2_altbase.py",
+      "sha256": "c7e9dbd1f833523a7350b4374e546c4c3e3d8ea10673d791b0f8d412b8bc86f8"
+    },
+    {
+      "path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/liber-primus/analysis/campaign7/b2_onion_xor.py",
+      "sha256": "b787d97ad4b6a97b3ef43cc5380e26c73053b03522b87f833490fe7d03917ac9"
+    },
+    {
+      "path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/sources/community/scream314_liber_primus.md",
+      "sha256": "0f7545d470f2056b45b5de2c8c116ecdea66969fdca6be57ccbd8e591e40ee92"
+    },
+    {
+      "path": "corpus/H-branch-recovery/recovered/claude_master-roadmap-libra-qk527u/sources/community/scream314_2014.md",
+      "sha256": "d2e546fd4e5505a3a3aa45dc6a453fd181b2d0a4f3295361f0e754e3a40ae56b"
+    },
+    {
+      "path": "liber-primus/data/krisyotam_runes.txt",
+      "sha256": "5e0003aa7f7dde3b238d17c5f964790dbf6bf9db5edacc4a5ec0bad81c6f4bce"
+    },
+    {
+      "path": "liber-primus/data/english_quadgrams.txt",
+      "sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062"
+    },
+    {
+      "path": "liber-primus/src/lp/ciphers.py",
+      "sha256": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f"
+    }
+  ],
+  "input_manifest_sha256": "cfff529ad74cfa2b0daf962952da48037ae75386d721187ba12deb1528e19f3d",
+  "index_stream_sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252",
+  "model_path": "experiments/records/dukotah-grid-as-key-campaign7/source/liber-primus/data/english_quadgrams.txt",
+  "model_sha256": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+  "source_pages": "55 nonempty source LP2 segments = site LP2-00..49 plus51..55; append concatenated 12956-rune WHOLE for each key",
+  "arms": {
+    "A2_tokenpad": [
+      "p49",
+      "p50",
+      "p51",
+      "p49+50+51",
+      "p49+51",
+      "p51+50+49_rev",
+      "xor_49_51",
+      "xor_49_50",
+      "xor_50_51"
+    ],
+    "A2_altbase": {
+      "bases": [
+        59,
+        60,
+        62,
+        64
+      ],
+      "keys_per_base": [
+        "p49",
+        "p51",
+        "all",
+        "49+51"
+      ]
+    },
+    "B2_onion_xor": [
+      "token^onion2",
+      "onion2",
+      "token^onion3",
+      "onion3",
+      "token^onion4",
+      "onion4",
+      "onion2^3^4",
+      "token^onion2^3^4"
+    ]
+  },
+  "case_count": 14784,
+  "formula": "For each source-named byte/value stream K, reduce every value mod29 and repeat from index0 for every target; sign=-1,+1; Atbash off/on; F interrupter off/on. No-interrupter p=(atbash(c) if chosen else c)+sign*K[i] mod29. Interrupter branch leaves source F unchanged and does not consume K.",
+  "score": "source Quadgram.score_norm on GP Latin labels, threshold strict score > -5.2; negative only if all source operators and controls pass",
+  "forensics": "B2 exact XOR: archived A2 token256 against 3 onion256 streams, onion2^3^4 and token^onion2^3^4. Report source entropy bits, printable ratio32..126, first8 bytes and distinct count. No entropy-only hit predicate.",
+  "positive_control": "For each of 8 sign/Atbash/interrupter operator branches use fixed known English GP plaintext repeated to120 runes under archived A2 all256 key; for interrupter arms replace any plaintext rune whose encrypted rune would be F with literal F so the source skip clock is invertible. Require exact full-120-rune recovery and score>-5.2. Test B2 XOR identity with planted known256 bytes.",
+  "input_difference": "A2_tokenpad hard-coded archived256 SHA0a3a..., while A2_altbase base60 raw-token decode SHA3b9b...; do not substitute one for other. Base62/64 can exceed255 but source still reduces mod29.",
+  "exclusions": "Other token edits, key offsets, reset clocks, nonperiodic keys, key-skip beams and unseen onion hex; prior grid records cover different operations.",
+  "page_lengths_sha256": "7e128b6736f4c00c78b700749656a33222f9242d93891f69c28bc2da0bc0136e",
+  "pre_screen_amendment": "Added exact page boundary input to frozen plan before local target scoring; page arrays independently match source.",
+  "post_review_audit_amendment": "After reviewing the already computed replay, disclosed literal-F substitutions in planted interrupter controls; added their counts and full-message hashes, read-only replay mode, and complete candidate-plaintext digests. No LP2 target grid, source score, threshold or best-case outcome changed."
+}

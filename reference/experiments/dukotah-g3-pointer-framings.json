@@ -1,0 +1,209 @@
+{
+  "id": "dukotah-g3-pointer-framings",
+  "status": "published",
+  "title": "Base32 and coordinate pointer checks",
+  "question": "Does the pinned G3 base32 and coordinate-pointer program flag any of three LP2 number streams beyond its shuffled controls?",
+  "reader_question": "Do rune-derived number streams reveal an address?",
+  "summary": "The source’s repeated-symbol pointer flag is reproducibly negative for all three streams. Its base32 match counts depend only on stream length, and its latitude/longitude regex cannot match a digit-only string.",
+  "finding": "Longest low-entropy runs were 16, 10 and 16 against 200-shuffle maxima 22, 15 and 22. A planted 32-symbol run was detected. All 15 measurements and 3,000 source null calls reproduce, but this only tests a narrow repeated-symbol signal.",
+  "limitations": "Every modulo-32 character is valid base32, making the 809 and 231 regex counts fixed by stream length, not address evidence. The digit concatenation supplies no period or separator for the lat/long regex. Coordinate-pair rate never triggers a flag. The source implementation omits additional framings mentioned in its preregistration. Plan timing is retrospective.",
+  "next_steps": "A pointer claim should fix the character encoding and boundary rule, verify a valid planted address or coordinate survives the detector, and compare the identical search against a matched null.",
+  "outcome": "inconclusive",
+  "tags": [
+    "LP2",
+    "number stream",
+    "base32",
+    "onion address",
+    "coordinates",
+    "prime values",
+    "prime indices",
+    "totient",
+    "source replay"
+  ],
+  "scope": {
+    "pages": [
+      "lp2-00",
+      "lp2-01",
+      "lp2-02",
+      "lp2-03",
+      "lp2-04",
+      "lp2-05",
+      "lp2-06",
+      "lp2-07",
+      "lp2-08",
+      "lp2-09",
+      "lp2-10",
+      "lp2-11",
+      "lp2-12",
+      "lp2-13",
+      "lp2-14",
+      "lp2-15",
+      "lp2-16",
+      "lp2-17",
+      "lp2-18",
+      "lp2-19",
+      "lp2-20",
+      "lp2-21",
+      "lp2-22",
+      "lp2-23",
+      "lp2-24",
+      "lp2-25",
+      "lp2-26",
+      "lp2-27",
+      "lp2-28",
+      "lp2-29",
+      "lp2-30",
+      "lp2-31",
+      "lp2-32",
+      "lp2-33",
+      "lp2-34",
+      "lp2-35",
+      "lp2-36",
+      "lp2-37",
+      "lp2-38",
+      "lp2-39",
+      "lp2-40",
+      "lp2-41",
+      "lp2-42",
+      "lp2-43",
+      "lp2-44",
+      "lp2-45",
+      "lp2-46",
+      "lp2-47",
+      "lp2-48",
+      "lp2-49",
+      "lp2-51",
+      "lp2-52",
+      "lp2-53",
+      "lp2-54",
+      "lp2-55"
+    ],
+    "artifacts": [
+      "experiments/records/dukotah-g3-pointer-framings/input-indices.bin",
+      "experiments/records/dukotah-g3-pointer-framings/source-results.json",
+      "experiments/records/dukotah-g3-pointer-framings/plan.json"
+    ],
+    "representation": "Source 12,956-rune unsolved stream equals site LP2-00–49 and LP2-51–55 rune for rune; index-zero F retained.",
+    "procedure": "Map GP rune indices to prime value, one-based prime index or prime totient. Apply source modulo-32 base32 and decimal concatenation metrics, then compare 200 seed-3301+k histogram-preserving shuffles for every stream/metric. Replay original saved outputs and an independent low-entropy detector.",
+    "parameters": "3 streams × 5 metrics × 200 source null calls = 3,000 source measurements, plus 15 real measurements and one planted low-entropy control.",
+    "exclusions": "No real onion address validation, alternate base32/byte grouping, punctuation insertion, other moduli, page resets, turtle paths or undeclared pointers."
+  },
+  "review": {
+    "kind": "retrospective exact-source replay with independent detector and site parity",
+    "retested_on": "2026-10-23",
+    "reviewer": "Exact source output, independent 600 low-entropy control checks and source/site rune parity",
+    "human_review": "pending"
+  },
+  "reproduction": {
+    "command": "python experiments/records/dukotah-g3-pointer-framings/run.py --check && python experiments/records/dukotah-g3-pointer-framings/check.py && python experiments/records/dukotah-g3-pointer-framings/plot.py",
+    "environment": "Python 3 standard library; runs offline using bundled GP index stream and source result. Optional --check-site requires the site page JSON files.",
+    "script": "experiments/records/dukotah-g3-pointer-framings/run.py",
+    "script_sha256": "2d9d758d57a400f711f0f8904edfed81ef220be0ba634f8bfdf907ad682d5903",
+    "inputs": [
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/plan.json",
+        "sha256": "001fee5ae39f815084ae8902ad098954179fa93b135ae49dc17a2d381ab4d2f7"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/check.py",
+        "sha256": "6b9f86454d10240ddb096c247e48dd97e55b0aba8e13565a18cfbdf9d75eb475"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/plot.py",
+        "sha256": "29b4454945637574806de92bc8336df76996ff2e718f3342d76a4eabc0b6502d"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/source-g3_coord_decode.py",
+        "sha256": "4be87c9de880ed58a10398c7cd40be72d4505f73dfc58d5105227fc467ad67e5"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/source-results.json",
+        "sha256": "12687c59e64143e69ce61313c6e1eb3801d5d7aca202ae2d592c2ada01b46b86"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/source-LICENSE",
+        "sha256": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/input-indices.bin",
+        "sha256": "73473a68c3fc4296f16009716d7fee18c9c102173e6e70d090c9494cc5bd9252"
+      }
+    ],
+    "outputs": [
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/results.json",
+        "sha256": "018e5fa8140019fbb3f504cfd95a7607fddd146c74df9b7cbad099d5fc2dab2c"
+      },
+      {
+        "path": "experiments/records/dukotah-g3-pointer-framings/lowentropy.svg",
+        "sha256": "30b15acab2cf8ce2da4f0db1b582801921f3878f7a5d1fb6e4cab70282b1edc8"
+      }
+    ]
+  },
+  "visuals": [
+    {
+      "path": "experiments/records/dukotah-g3-pointer-framings/lowentropy.svg",
+      "caption": "Observed repeated-symbol run is shorter than the maximum of 200 shuffled controls for all three mapped number streams."
+    }
+  ],
+  "sources": [
+    {
+      "label": "Pinned G3 program",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/g3_coord_decode.py"
+    },
+    {
+      "label": "Pinned source result",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/g3_results.json"
+    },
+    {
+      "label": "Pinned preregistration",
+      "url": "https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md"
+    }
+  ],
+  "related": [
+    "lp2-turtle-spatial-replay",
+    "totient-map-route"
+  ],
+  "article": "# Base32 and coordinate pointer checks\n\n**Result:** The source's only workable pointer flag did not fire. Its longest repeated-symbol run was **16** characters for prime values, **10** for prime indices and **16** for totients. The largest of 200 shuffled controls reached **22, 15 and 22** respectively. A 32-symbol planted run *did* fire, so this test can detect that kind of conspicuous repetition.\n\n![Observed repeated-symbol run beside the maximum of 200 shuffled controls for each number stream.](experiments/records/dukotah-g3-pointer-framings/lowentropy.svg)\n\nThe [pinned G3 program](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/g3_coord_decode.py) takes the 12,956 runes of 55 nonempty LP2 pages, including F, and reads each rune as its prime value, one-based prime index or prime totient. It maps each value modulo 32 to a base32 character and also concatenates its decimal digits. We reproduced all **15 measured values** and **3,000 source null calls** (three streams × five measurements × 200 seeded shuffles) against the [source's saved output](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/g3_results.json). The source and this site's page transcriptions give the same rune sequence, one rune at a time.\n\nThe other reported counts do not test what their labels suggest. **Every** character produced by the modulo-32 mapping is in the base32 alphabet. A 12,956-character stream therefore contains exactly floor(12,956 ÷ 16) = **809** nonoverlapping 16-character matches and floor(12,956 ÷ 56) = **231** 56-character matches, whatever the rune order. These matches do not validate an onion address. The decimal string contains only digits, while the latitude/longitude pattern requires a decimal point and a separator; its count must be zero. The program also reports the fraction of plausible integer coordinate pairs, but that quantity never enters its pointer-flag decision.\n\nThe [source preregistration](https://github.com/Dukotah/cicada3301/blob/f08b20b632d91209ddbaa747e8e2f23df0c78ba1/liber-primus/analysis/round22/B-turtle-spatial-render/PREREG.md) describes additional mod-M and ASCII-coordinate readings. Those are not executed in `g3_coord_decode.py`. This replay therefore says **no unusually long repeated-symbol run under the implemented mapping and shuffle control**. It does not exclude other coordinate encodings, valid onion addresses, or a sparse pointer built with another rule. The earlier [turtle-path replay](#/experiments/lp2-turtle-spatial-replay) covers the separate drawing test from the same source lane.\n\nThe saved [plan](experiments/records/dukotah-g3-pointer-framings/plan.json) records the exact source revision, inputs, seed schedule and controls. The source's target results were already visible before our plan was written, so this is a **retrospective replay**, not a newly preregistered discovery. Run `python experiments/records/dukotah-g3-pointer-framings/run.py --check --check-site` and `python experiments/records/dukotah-g3-pointer-framings/check.py` from the repository root to verify the source output and an independent detector implementation. The bundled `input-indices.bin` and `source-results.json` let the same checks run offline; `--check-site` additionally compares all 55 current page records.\n",
+  "article_path": "experiments/records/dukotah-g3-pointer-framings/article.md",
+  "script_sha256": "2d9d758d57a400f711f0f8904edfed81ef220be0ba634f8bfdf907ad682d5903",
+  "record_type": {
+    "id": "replay",
+    "label": "Method replay",
+    "description": "Reconstructs a supplied proposed method and its choices; reproduction is not independent confirmation of a reading."
+  },
+  "method_topics": [
+    {
+      "id": "number-streams",
+      "aliases": [
+        "prime shifts",
+        "Fibonacci",
+        "totient sequence",
+        "arithmetic keystream",
+        "numerical sequence"
+      ]
+    },
+    {
+      "id": "radix",
+      "aliases": [
+        "binary",
+        "base 60",
+        "hexadecimal",
+        "base conversion",
+        "byte order",
+        "little endian",
+        "big endian"
+      ]
+    },
+    {
+      "id": "controls",
+      "aliases": [
+        "controls",
+        "chance",
+        "multiple testing",
+        "null model",
+        "null models"
+      ]
+    }
+  ]
+}

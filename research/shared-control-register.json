@@ -1,0 +1,53 @@
+{
+  "schema": "internal-shared-control-register-v1",
+  "as_of": "2026-10-23",
+  "entries": [
+    {
+      "source_ids": [
+        "I1-01",
+        "I1-03",
+        "I1-06",
+        "I1-09",
+        "R19-I3-NULLS",
+        "R20-P3-PANELMAX-SEEDPRIOR-DRIFT",
+        "R20-HITFN-RECOVERY-GATE"
+      ],
+      "source_paths": [
+        "analysis/round19/I1/driftbeam.py",
+        "analysis/round19/I1/run_gates.py"
+      ],
+      "receipt": "research/control-preflights/i1-2026-10-23.json",
+      "receipt_sha256": "1967d7701d6fbd316b819c11871f19af895d599f9e0146be58597ffc9e98b814",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "Fresh 36-case decoder path parity (score delta at most 1.1e-14) and one 240-rune skip-by-two plant. Stored 2,100 G-FIX and 34,000 wrong-key rows were counted, not independently rescored. This is finite parity, not universal bit identity or an I2/P3/HITFN model gate.",
+      "usage": "Reuse only after checking source/input/model hashes. Recorded control evidence, not a fresh probe or cipher exclusion."
+    },
+    {
+      "source_ids": ["I1-07"],
+      "source_paths": [
+        "analysis/round19/I1/run_gates.py",
+        "analysis/round19/I1/constructions.py",
+        "analysis/round19/I1/out_base.json"
+      ],
+      "receipt": "experiments/records/round19-decoder-baseline-control/results.json",
+      "receipt_sha256": "4a9439f30145db91d89f77dc4abad2be9a5363d6a0e586fcedcce86309d7c04d",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "All 336 G-BASE synthetic known-key decodes, 48 independent cell summaries, and non-timing row parity. At suppression 0.83 and 240 runes the matched decoder recovers 100% while the mismatched pair-skip decoder recovers 37.9%. No LP2 candidate is scored.",
+      "usage": "A decoder alignment counterexample for the named one-draw plant; not a general pair-skip failure or an LP2 cipher exclusion."
+    },
+    {
+      "source_ids": [
+        "B-04"
+      ],
+      "source_paths": [
+        "analysis/round13/B04/control.py",
+        "analysis/round13/B04/harness.py"
+      ],
+      "receipt": "research/control-preflights/b04-2026-10-23.json",
+      "receipt_sha256": "b169b132ef2099f60ba611bd23de8b51cfa8f8e38202decc9df6aca98848a8b8",
+      "revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+      "scope": "Fresh G1 and a complete 233-rune dictionary-key plant pass. This receipt does not replay the 1,385,600-case G2 rank test or any LP2 target search.",
+      "usage": "Reuse only after checking source/input/model hashes. Recorded control evidence, not a fresh probe or cipher exclusion."
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "liberpedia-source-control-replay-v1",
+  "timing": "Retrospective replay plan: published source results were inspected before this plan was written.",
+  "source_revision": "f08b20b632d91209ddbaa747e8e2f23df0c78ba1",
+  "source_ids": [
+    "I1-07"
+  ],
+  "source_command": "python run_gates.py --stage base --nproc 6 --nseed 7",
+  "source_inputs_sha256": {
+    "analysis/round19/I1/run_gates.py": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+    "analysis/round19/I1/driftbeam.py": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+    "analysis/round19/I1/constructions.py": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35",
+    "analysis/round19/I1/out_base.json": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+    "data/keys/self_reliance.txt": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0"
+  },
+  "fixed_grid": {
+    "suppressions": [
+      0.0,
+      0.4,
+      0.83,
+      1.0
+    ],
+    "lengths": [
+      240,
+      400
+    ],
+    "modes": [
+      "repo_ms3",
+      "exact_ms8",
+      "pair_ms8",
+      "drift_l0",
+      "drift_l8",
+      "drift_l16"
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "cases": 336,
+    "known_key": true,
+    "beam_width": 400
+  },
+  "comparison": "Every non-timing source row and cell summary; order-independent by length, suppression, mode and seed.",
+  "limits": "Synthetic known-key decoder-power calibration only. No LP2 ciphertext or unknown-key search is tested.",
+  "packaging_amendment": "Added after the 336-case replay to make the exact pinned MIT source and model available in the experiment ZIP. Grid and results are unchanged; original-plan-before-bundle.json preserves the pre-amendment plan.",
+  "bundled_source_files_sha256": {
+    "liber-primus/analysis/campaign18_skip/skipdecode.py": "74c47d170a9cb1966ff78d7448f6081dfab3bcc928f032603add3f76dae2e1ff",
+    "liber-primus/analysis/round11/lib_numchannel.py": "6d1821ab27dd0093bc10f070df1a8040473b27e71b5a72e2bea9796ec0faeab5",
+    "liber-primus/analysis/round12/C1/feedback.py": "debb2db843f884d0abf6d064e56389523c8cb050f1e7dcd817a3d5942ea1fb66",
+    "liber-primus/analysis/round19/I1/constructions.py": "c3e882cd2741a9fb64973d55bd2b9f26b0c3a09fe5114f38e4d8f07ba053db35",
+    "liber-primus/analysis/round19/I1/driftbeam.py": "f3808e22417360de4fa0b2b9b1a610dc2d1f7397204ef305d377105e59a67223",
+    "liber-primus/analysis/round19/I1/out_base.json": "2fa938964602a0ed87a17dc4b60ce6d0066e3c9f68daf83486688993a3da880a",
+    "liber-primus/analysis/round19/I1/run_gates.py": "b888f9f169d67cd89dc05079e1a8bfdb5ec2aa43c4afeab126f079e81beca113",
+    "liber-primus/analysis/run_stats.py": "77537de12b5ed2c86c78b41fe1ab2e568e1615f1fcd26b08e9f717d68f10f7d0",
+    "liber-primus/benchmark/plant.py": "88d2a57227642a80e9e64474860875992bb9641bd00821ee2172e05e1008c25d",
+    "liber-primus/data/english_quadgrams.txt": "fb82963d1fc4a64b9fc6121f8ca88139fd5b15083dddc9a59f8b14bdb8fe4062",
+    "liber-primus/data/keys/self_reliance.txt": "b2f3dbd3866e0bec5ae41ac29df09b537c2ef18fa1b88678966587b824ca92f0",
+    "liber-primus/src/lp/ciphers.py": "3367d9b13a371e88ff86e060c85d9cc5cdb211b0de6a4ff6f4b8b9577204e70f",
+    "liber-primus/src/lp/corpus.py": "d4d2ec496a8ffc9241d70c9583bf8c95b457de2b7cee3609b3c2a4e693fb9d68",
+    "liber-primus/src/lp/gematria.py": "7b4f5c30137741ab3c33638fb91076c4b1f228229dc3634ba2e6ef232cd47f04",
+    "liber-primus/src/lp/score.py": "65fc04f0fbdec9cda7ec10ee3f01ce00fee7b581a237bdce747a731967c7f790",
+    "liber-primus/src/lp/stats.py": "cdf88ad7d06126c01ff8f4aec1aa374bfdbdd2bbd52c7a38103509077cafb7c2",
+    "LICENSE": "b307b73dfb7059dc968926d61cf00b9b130131c7f81d0d156fca5d136bbadc59"
+  },
+  "original_plan_sha256": "5ee0a7e13bf77f52cbc6562cbb8967bf29b79f75d26ace7bef71e2a04bce2852"
+}

@@ -42,7 +42,7 @@ Two letter-encoding bounds on LP2 · Bounded solving test
 Repeating-key and polyalphabetic ciphers
 Change the substitution according to position in a repeated key.
 
-29 related records
+31 related records
 LP2-00–55: two known Vigenère keys and nine openings · Bounded solving test
 
 Alberti branch proposal: LP2-39 row and modulo-31 arithmetic · Source or input audit
@@ -101,6 +101,10 @@ Word boundaries as key clocks · Method replay
 
 A rotating alphabet with a separator clock · Method replay
 
+Rotation, hash and cuneiform keys · Method replay
+
+Grid and onion bytes as LP2 keys · Method replay
+
 
 
 Fractionation and coordinate alphabets
@@ -137,7 +141,7 @@ Keys, sequences and state
 Arithmetic keystreams
 Generate shifts from a declared numerical sequence.
 
-19 related records
+21 related records
 LP2-00–55: prime-minus-one shifts and known openings · Bounded solving test
 
 LP2-00–55: ordinary primes instead of primes minus one · Bounded solving test
@@ -175,6 +179,10 @@ Reading directions followed by simple ciphers · Method replay
 GP prime values as a plaintext autokey · Bounded solving test
 
 Prime-indexed-prime and P.S. keys with a corrected IoC screen · Bounded solving test
+
+Base32 and coordinate pointer checks · Method replay
+
+Rotation, hash and cuneiform keys · Method replay
 
 
 
@@ -307,8 +315,10 @@ Number-grid bytes as a key with skipped positions · Method replay
 Keystream interruptions and reset rules
 Specify when key or feedback state pauses, advances or restarts.
 
-20 related records
+23 related records
 Can a correct key fail under the wrong alignment rule? · Control
+
+When a pair-skip decoder loses a known key · Control
 
 I/M rune proximity to F interruptions · Manuscript measurement
 
@@ -348,13 +358,19 @@ Long-key search with optional skipped positions · Method replay
 
 Number-grid bytes as a key with skipped positions · Method replay
 
+Rotation, hash and cuneiform keys · Method replay
+
+Grid and onion bytes as LP2 keys · Method replay
+
 
 
 Offsets and key alignment
 Search starting positions and a bounded set of alignment changes.
 
-9 related records
+10 related records
 Can a correct key fail under the wrong alignment rule? · Control
+
+When a pair-skip decoder loses a known key · Control
 
 LP2: pair the 2,883-rune sections by subtraction · Bounded solving test
 
@@ -661,7 +677,7 @@ Public 2πR rune substitutions · Method replay
 Radix changes and byte encodings
 Specify how symbols become digits, integers and bytes.
 
-16 related records
+18 related records
 LP2-49–51: direct text and file-header screen · Bounded solving test
 
 LP2-49–51: fixed bit-grid barcode scan · Bounded solving test
@@ -694,17 +710,23 @@ Grid bytes as ciphertext or rune pointers · Method replay
 
 Number-grid bytes as a key with skipped positions · Method replay
 
+Base32 and coordinate pointer checks · Method replay
+
+Grid and onion bytes as LP2 keys · Method replay
+
 
 
 Bitwise combinations and XOR
 Operate on explicitly encoded bits or bytes, with alignment and key rules.
 
-3 related records
+4 related records
 Archived byte streams against the LP2 number grid · Method replay
 
 Do the onion cookies reveal text by XOR? · Method replay
 
 Grid bytes as ciphertext or rune pointers · Method replay
+
+Grid and onion bytes as LP2 keys · Method replay
 
 
 
@@ -884,7 +906,7 @@ Do the onion cookies reveal text by XOR? · Method replay
 Hash targets and candidate retrieval
 Define exact candidate bytes and compare the specified digest.
 
-5 related records
+6 related records
 LP2-56: hashes of preserved manuscript artifacts · Bounded solving test
 
 LP2-56: Whirlpool and Streebog-512 artifact hashes · Bounded solving test
@@ -894,6 +916,8 @@ Aligned digest blocks in the 256-byte grid payload · Bounded solving test
 Four MD5 blocks in the printed LP2-56 target · Bounded solving test
 
 Do the manuscript JPEGs hash to the deep-web target? · Bounded solving test
+
+Rotation, hash and cuneiform keys · Method replay
 
 
 
@@ -1005,8 +1029,10 @@ Number-grid bytes as a key with skipped positions · Method replay
 Alternative alphabets and symbolic notations
 Define a symbol inventory and an encoding rule before interpreting resemblance.
 
-1 related record
+2 related records
 Do line or word lengths carry a message? · Bounded solving test
+
+Rotation, hash and cuneiform keys · Method replay
 
 
 
@@ -1166,7 +1192,7 @@ Repeating-byte-alphabet invariant on the LP2 grid · Method replay
 Null models and selection effects
 Repeat the whole selection procedure on controls, not just the final attractive candidate.
 
-36 related records
+38 related records
 How does trying more keys change the best score? · Control
 
 Would an English scorer accept other languages? · Control
@@ -1205,6 +1231,8 @@ Where could a repeat filter act? · Method replay
 
 Can a correct key survive skipped draws? · Control
 
+When a pair-skip decoder loses a known key · Control
+
 Can a simple cipher imitate LP2's rare repeated runes? · Control
 
 What can an entropy budget tell us? · Source or input audit
@@ -1238,6 +1266,8 @@ Number panels as Hill-cipher keys · Method replay
 Long-key search with optional skipped positions · Method replay
 
 Prime-indexed-prime and P.S. keys with a corrected IoC screen · Bounded solving test
+
+Base32 and coordinate pointer checks · Method replay
 
 
 
@@ -1410,6 +1440,10 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/dukotah-word-boundary-key-clocks
 - A rotating alphabet with a separator clock
   https://jelliottdev.github.io/#/experiments/wulfic-separator-clock-alberti
+- Rotation, hash and cuneiform keys
+  https://jelliottdev.github.io/#/experiments/dukotah-fixed-numeric-keys
+- Grid and onion bytes as LP2 keys
+  https://jelliottdev.github.io/#/experiments/dukotah-grid-as-key-campaign7
 - Fractionation and coordinate alphabets
   https://jelliottdev.github.io/reference/articles/method-fractionation.html
 - Does the fractionation reversal undo its own shuffle?
@@ -1458,6 +1492,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/#/experiments/gp-prime-plaintext-feedback
 - Prime-indexed-prime and P.S. keys with a corrected IoC screen
   https://jelliottdev.github.io/#/experiments/wulfic-structural-pip-ps-normalized
+- Base32 and coordinate pointer checks
+  https://jelliottdev.github.io/#/experiments/dukotah-g3-pointer-framings
 - Autokey and ciphertext feedback
   https://jelliottdev.github.io/reference/articles/method-feedback.html
 - Ciphertext symbols and differences around LP2 doublets
@@ -1558,6 +1594,8 @@ Sources, related references, and files
   https://jelliottdev.github.io/reference/articles/interruptions.html
 - Can a correct key fail under the wrong alignment rule?
   https://jelliottdev.github.io/#/experiments/decoder-skip-controls
+- When a pair-skip decoder loses a known key
+  https://jelliottdev.github.io/#/experiments/round19-decoder-baseline-control
 - I/M rune proximity to F interruptions
   https://jelliottdev.github.io/#/experiments/im-near-f-markers
 - Delete F runes, then test lag-13 repeats
